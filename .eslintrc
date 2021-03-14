@@ -92,18 +92,9 @@
         "before": true,
         "after": true
       }
-    ],
+    ]
   },
   "globals": {
-    "CapsulePosts": true,
-    "CapsuleUser": true,
-    "CapsuleWrite": true,
-    "CapsuleIpc": true,
-    "CapsuleCrypto": true,
-    "CapsuleDate": true,
-    "md5": true,
-    "BLAKE2s": true,
-    "EasyMDE": true,
   },
   "ignorePatterns": [
     "/.eslintrc.js",
