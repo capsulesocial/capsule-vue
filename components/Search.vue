@@ -1,5 +1,5 @@
 <template>
-  <article class="rounded-full bg-gray-100 w-3/5 m-4 flex flex-start">
+  <article class="rounded-full bg-gray-100 m-4 flex flex-start">
     <button type="submit" class="px-4" @click="submitSearch()">
       <SearchIcon />
     </button>

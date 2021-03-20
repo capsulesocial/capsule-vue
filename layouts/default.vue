@@ -1,13 +1,13 @@
 <template>
-  <div class="px-32">
+  <div>
     <Header class="pb-2 sticky top-0" />
 
-    <div class="flex">
+    <div class="grid grid-cols-4">
       <!-- Left Nav Menu -->
-      <Navigation class="w-1/5 text-gray-500 h-12 sticky top-0" />
+      <Navigation class="text-gray-500 h-12 sticky top-0 pl-6" />
 
       <!-- Main Content -->
-      <Nuxt class="w-3/5 border overscroll-contain" />
+      <Nuxt class="border overscroll-contain col-span-2 w-full" />
 
       <!-- Right Explore Menu -->
       <Explore />
