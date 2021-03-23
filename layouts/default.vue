@@ -2,15 +2,15 @@
   <div>
     <Header class="pb-2 sticky top-0" />
 
-    <div class="grid grid-cols-4">
+    <div class="lg:grid lg:grid-cols-4">
       <!-- Left Nav Menu -->
-      <Navigation class="text-gray-500 h-12 sticky top-0 pl-6" />
+      <Navigation />
 
       <!-- Main Content -->
       <Nuxt class="border overscroll-contain col-span-2 w-full" />
 
       <!-- Right Explore Menu -->
-      <Explore />
+      <Explore class="hidden lg:block" />
     </div>
   </div>
 </template>

@@ -2,7 +2,7 @@
   <section class="grid grid-cols-4 p-4">
     <CapsuleIcon class="py-4 pl-6" />
     <SearchBar class="col-span-2" />
-    <article class="flex items-center justify-between ml-2">
+    <article class="hidden lg:flex items-center justify-between ml-2">
       <nuxt-link to="/profile">Username</nuxt-link>
       <button class="bg-gray-200 rounded-full w-12 h-12 focus:outline-none">
         <BookmarksIcon class="ml-4" />
