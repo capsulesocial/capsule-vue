@@ -9,5 +9,8 @@ module.exports = {
         primary: '#6fa786'
       }
     }
-  }
+  },
+  plugins: [
+    require('@tailwindcss/typography')
+  ]
 }
