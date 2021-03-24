@@ -67,7 +67,8 @@
         <span v-else class="font-semibold">Help</span>
       </nuxt-link>
       <button
-        class="bg-primary w-48 mt-5 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg shadow-lg"
+        class="bg-primary w-48 mt-5 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg shadow-lg focus:outline-none"
+        @click="toggle()"
       >
         Write Post
       </button>
@@ -98,7 +99,9 @@
         />
         <DiscoverIcon v-else class="stroke-current text-gray-400" />
       </nuxt-link>
-      <PencilIcon />
+      <button @click="toggle()" class="focus:outline-none">
+        <PencilIcon />
+      </button>
       <NotificationsIcon class="fill-gray-400 text-gray-400" />
       <nuxt-link to="/messages">
         <MessagesIcon
@@ -112,11 +115,14 @@
 </template>
 
 <script>
+import { mapMutations } from "vuex";
+
 import HomeIcon from "@/components/icons/Home";
 import DiscoverIcon from "@/components/icons/Discover";
 import PencilIcon from "@/components/icons/Pencil";
 import NotificationsIcon from "@/components/icons/MobileNotifications";
 import MessagesIcon from "@/components/icons/Messages";
+
 export default {
   components: {
     HomeIcon,
@@ -124,6 +130,11 @@ export default {
     PencilIcon,
     NotificationsIcon,
     MessagesIcon
+  },
+  methods: {
+    ...mapMutations({
+      toggle: "toggleCompose"
+    })
   }
 };
 </script>

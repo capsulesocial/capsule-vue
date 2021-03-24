@@ -1,31 +1,38 @@
 <template>
-  <div>
+  <section>
+    <article
+      v-if="this.$store.state.isComposing === true"
+      class="w-full h-screen z-30 bg-gray-100 absolute"
+    >
+      <PostEditor class="z-40" />
+    </article>
+
     <Header class="pb-2 sticky top-0" />
 
     <div class="lg:grid lg:grid-cols-4">
       <!-- Left Nav Menu -->
       <Navigation />
-
       <!-- Main Content -->
       <Nuxt class="border overscroll-contain col-span-2 w-full" />
-
       <!-- Right Explore Menu -->
       <Explore class="hidden lg:block" />
     </div>
-  </div>
+  </section>
 </template>
 
 <script>
 import Navigation from "@/components/Navigation";
 import Explore from "@/components/Explore";
 import Header from "@/components/Header";
+import PostEditor from "@/components/PostEditor";
 
 export default {
   setup() {},
   components: {
     Navigation,
     Explore,
-    Header
+    Header,
+    PostEditor
   }
 };
 </script>
