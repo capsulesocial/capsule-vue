@@ -3,7 +3,7 @@
     <!-- Header and close button -->
     <article class="flex items-center px-5 pt-5">
       <h3 class="text-center font-bold text-xl flex-grow pl-4">Create Post</h3>
-      <button @click="toggle()" class="focus:outline-none flex-grow-0">
+      <button @click="updateStore()" class="focus:outline-none flex-grow-0">
         <CloseIcon />
       </button>
     </article>
@@ -74,13 +74,16 @@ import CloseIcon from "@/components/icons/Close";
 export default {
   data() {
     return {
-      title: "",
-      subtitle: "",
-      input: "# hello world",
+      title: this.$store.state.draft.title,
+      subtitle: this.$store.state.draft.subtitle,
+      input: this.$store.state.draft.content,
       mobileState: "edit"
     };
   },
   computed: {
+    draft() {
+      return this.$store.state.draft;
+    },
     compiledMarkdown: function() {
       return marked(this.input);
     }
@@ -90,20 +93,30 @@ export default {
   },
   methods: {
     ...mapMutations({
-      toggle: "toggleCompose"
+      toggle: "toggleCompose",
+      updateDraft: "updateDraft"
     }),
     toggleComposeState: function(state) {
       this.mobileState = state;
     },
     update: _.debounce(function(e) {
-      this.input = DOMPurify.sanitize(e.target.value, {
+      let clean = DOMPurify.sanitize(e.target.value, {
         USE_PROFILES: { html: true, svg: true }
       });
+      this.input = clean;
     }, 300),
     post: function() {
       console.log("title: " + this.title);
       console.log("subtitle: " + this.subtitle);
       console.log("content: " + this.input);
+    },
+    updateStore: function() {
+      this.$store.commit("updateDraft", {
+        title: this.title,
+        subtitle: this.subtitle,
+        content: this.input
+      });
+      this.toggle();
     }
   }
 };
