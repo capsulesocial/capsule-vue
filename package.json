@@ -11,6 +11,7 @@
   "dependencies": {
     "@tailwindcss/typography": "^0.4.0",
     "core-js": "^3.8.3",
+    "dompurify": "^2.2.7",
     "nuxt": "^2.14.12"
   },
   "devDependencies": {

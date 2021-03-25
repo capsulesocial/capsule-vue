@@ -67,8 +67,8 @@
 
 <script>
 import { mapMutations } from "vuex";
-const _ = require("lodash");
-
+import _ from "lodash";
+import DOMPurify from "dompurify";
 import CloseIcon from "@/components/icons/Close";
 
 export default {
@@ -96,7 +96,9 @@ export default {
       this.mobileState = state;
     },
     update: _.debounce(function(e) {
-      this.input = e.target.value;
+      this.input = DOMPurify.sanitize(e.target.value, {
+        USE_PROFILES: { html: true, svg: true }
+      });
     }, 300),
     post: function() {
       console.log("title: " + this.title);
