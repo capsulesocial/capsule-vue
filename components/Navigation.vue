@@ -83,7 +83,7 @@
 
     <!-- Mobile -->
     <div
-      class="fixed lg:hidden bottom-0 h-12 w-full flex flex-row justify-around"
+      class="fixed lg:hidden bottom-0 h-12 w-full flex flex-row justify-around mb-4 items-end"
     >
       <nuxt-link to="/home">
         <HomeIcon
@@ -99,8 +99,11 @@
         />
         <DiscoverIcon v-else class="stroke-current text-gray-400" />
       </nuxt-link>
-      <button @click="toggle()" class="focus:outline-none">
-        <PencilIcon />
+      <button
+        @click="toggle()"
+        class="focus:outline-none bg-primary p-3 rounded-full"
+      >
+        <PencilIcon class="fill-current text-white" />
       </button>
       <NotificationsIcon class="fill-gray-400 text-gray-400" />
       <nuxt-link to="/messages">

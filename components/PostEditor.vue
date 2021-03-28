@@ -1,5 +1,5 @@
 <template>
-  <section class="w-full h-screen bg-white lg:rounded-lg lg:shadow-xl">
+  <section class="w-full h-screen bg-white">
     <!-- Header and close button -->
     <article class="flex items-center px-5 pt-5">
       <h3 class="text-center font-bold text-xl flex-grow pl-4">Create Post</h3>
@@ -32,7 +32,7 @@
         v-if="this.mobileState === 'edit'"
         :value="input"
         @input="update"
-        class="w-full border p-1"
+        class="w-full border p-1 h-64"
       ></textarea>
       <div v-else v-html="compiledMarkdown" class="prose"></div>
     </article>
@@ -42,7 +42,7 @@
       <textarea
         :value="input"
         @input="update"
-        class="w-full border p-1"
+        class="w-full border p-1 h-64"
       ></textarea>
       <div v-html="compiledMarkdown" class="prose text-black pl-4"></div>
       <span class="bottom-0 fixed m-5 p-5 right-0">

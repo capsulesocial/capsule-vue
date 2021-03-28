@@ -5,7 +5,7 @@
     height="26.205"
     viewBox="0 0 23.784 26.205"
   >
-    <g>
+    <g transform="translate(1 1)">
       <path
         d="M3 10.472L13.892 2l10.892 8.472v13.312a2.42 2.42 0 0 1-2.42 2.42H5.42A2.42 2.42 0 0 1 3 23.784z"
         class="home-icon"
