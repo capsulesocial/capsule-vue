@@ -13,7 +13,7 @@
       <!-- Left Nav Menu -->
       <Navigation />
       <!-- Main Content -->
-      <Nuxt class="border overscroll-contain col-span-2 w-full" />
+      <Nuxt class="overscroll-contain col-span-2 w-full px-4" />
       <!-- Right Explore Menu -->
       <Explore class="hidden lg:block" />
     </div>
@@ -24,10 +24,9 @@
 import Navigation from "@/components/Navigation";
 import Explore from "@/components/Explore";
 import Header from "@/components/Header";
-import PostEditor from "@/components/PostEditor";
+import PostEditor from "@/components/post/Editor";
 
 export default {
-  setup() {},
   components: {
     Navigation,
     Explore,
