@@ -94,7 +94,8 @@ export default {
   methods: {
     ...mapMutations({
       toggle: "toggleCompose",
-      updateDraft: "updateDraft"
+      updateDraft: "updateDraft",
+      sendPost: "sendPost"
     }),
     toggleComposeState: function(state) {
       this.mobileState = state;
@@ -106,9 +107,14 @@ export default {
       this.input = clean;
     }, 300),
     post: function() {
-      console.log("title: " + this.title);
-      console.log("subtitle: " + this.subtitle);
-      console.log("content: " + this.input);
+      let date = new Date().toLocaleString();
+      this.sendPost({
+        title: this.title,
+        subtitle: this.subtitle,
+        content: marked(this.input),
+        id: this.$store.state.user.posts.length,
+        timestamp: date
+      });
     },
     updateStore: function() {
       this.$store.commit("updateDraft", {

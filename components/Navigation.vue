@@ -35,17 +35,21 @@
         >
         <span v-else class="font-semibold">Messages</span>
       </nuxt-link>
-      <nuxt-link
-        to="/profile"
+
+      <!-- profile -->
+      <div
         class="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-semibold"
       >
         <span
-          v-if="this.$route.path === '/profile'"
+          v-if="this.$route.params.id === this.$store.state.user.id"
           class="font-bold text-primary"
           >Profile</span
         >
-        <span v-else class="font-semibold">Profile</span>
-      </nuxt-link>
+        <nuxt-link :to="$store.state.user.id" v-else class="font-semibold">
+          Profile
+        </nuxt-link>
+      </div>
+
       <nuxt-link
         to="/settings"
         class="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-semibold"
@@ -101,7 +105,7 @@
       </nuxt-link>
       <button
         @click="toggle()"
-        class="focus:outline-none bg-primary p-3 rounded-full"
+        class="focus:outline-none bg-primary p-3 rounded-full shadow-lg"
       >
         <PencilIcon class="fill-current text-white" />
       </button>

@@ -1,5 +1,10 @@
 <template>
-  <div>
+  <section>
+    <!-- Header -->
+    <article>
+      <h1 class="2xl">Profile of {{ this.$store.state.user.username }}</h1>
+    </article>
+
     <article v-for="post in this.$store.state.user.posts" :key="post.id">
       <nuxt-link :to="$store.state.user.id + '/' + post.id">
         <PostCard
@@ -10,7 +15,7 @@
         />
       </nuxt-link>
     </article>
-  </div>
+  </section>
 </template>
 
 <script>
