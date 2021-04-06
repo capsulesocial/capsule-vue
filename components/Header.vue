@@ -1,7 +1,14 @@
 <template>
   <section class="grid grid-cols-4 p-4 bg-white">
     <CapsuleIcon class="py-4 pl-6" />
-    <SearchBar class="col-span-2" />
+    <SearchBar v-if="this.$route.path !== '/settings'" class="col-span-2" />
+    <article v-else class="col-span-3 lg:col-span-2 flex justify-between">
+      <button @click="$router.go(-1)" class="focus:outline-none">
+        <BackButton />
+      </button>
+      <h2 class="text-2xl pt-4">Account Settings</h2>
+      <span></span>
+    </article>
     <article class="hidden lg:flex items-center justify-between ml-2">
       <span v-if="this.$route.params.id === this.$store.state.user.id">{{
         this.$store.state.user.username
@@ -9,15 +16,22 @@
       <nuxt-link v-else :to="$store.state.user.id">{{
         this.$store.state.user.username
       }}</nuxt-link>
-      <button class="bg-gray-200 rounded-full w-12 h-12 focus:outline-none">
-        <BookmarksIcon class="ml-4" />
+      <button
+        class="bg-gray-200 rounded-full w-12 h-12 focus:outline-none flex justify-center"
+      >
+        <BookmarksIcon class="self-center" />
       </button>
-      <button class="bg-gray-200 rounded-full w-12 h-12 focus:outline-none">
-        <NotificationsIcon class="ml-3" />
+      <button
+        class="bg-gray-200 rounded-full w-12 h-12 focus:outline-none flex justify-center"
+      >
+        <NotificationsIcon class="self-center" />
       </button>
-      <button class="bg-gray-200 rounded-full w-12 h-12 focus:outline-none">
-        <SettingsIcon class="ml-3" />
-      </button>
+      <nuxt-link
+        to="/settings"
+        class="bg-gray-200 rounded-full w-12 h-12 flex justify-center"
+      >
+        <SettingsIcon class="self-center" />
+      </nuxt-link>
     </article>
   </section>
 </template>
@@ -28,6 +42,8 @@ import BookmarksIcon from "@/components/icons/Bookmarks";
 import NotificationsIcon from "@/components/icons/Notifications";
 import SettingsIcon from "@/components/icons/Settings";
 import SearchBar from "@/components/Search";
+import BackButton from "@/components/icons/BackChevron";
+
 export default {
   setup() {},
   components: {
@@ -35,7 +51,8 @@ export default {
     SearchBar,
     SettingsIcon,
     NotificationsIcon,
-    BookmarksIcon
+    BookmarksIcon,
+    BackButton
   }
 };
 </script>

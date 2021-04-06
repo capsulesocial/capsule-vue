@@ -7,7 +7,7 @@
   >
     <path
       fill="none"
-      stroke="#2c3150"
+      stroke="#000"
       stroke-linecap="round"
       stroke-linejoin="round"
       stroke-width="2.5px"

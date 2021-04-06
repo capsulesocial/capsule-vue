@@ -2,7 +2,7 @@
   <nav>
     <!-- Desktop -->
     <div
-      class="hidden lg:flex px-2 flex-col text-gray-500 h-12 sticky top-0 pl-6"
+      class="hidden lg:flex px-2 flex-col text-gray-500 h-12 sticky top-0 pl-6 lg:fixed lg:pt-24"
     >
       <nuxt-link
         to="/home"
@@ -87,7 +87,7 @@
 
     <!-- Mobile -->
     <div
-      class="fixed lg:hidden bottom-0 h-12 w-full flex flex-row justify-around mb-4 items-end"
+      class="fixed lg:hidden bottom-0 h-12 w-full flex flex-row justify-around pb-4 pt-2 items-end bg-white"
     >
       <nuxt-link to="/home">
         <HomeIcon

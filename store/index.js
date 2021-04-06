@@ -8,6 +8,7 @@ export const state = () => ({
   user: {
     id: "tombrady",
     username: "Tom Brady",
+    email: "tb12@nfl.com",
     posts: [
       {
         id: "0",
@@ -29,7 +30,15 @@ export const mutations = {
     state.draft = input
   },
   sendPost(state, post) {
-    console.log(post);
     state.user.posts.push(post);
+  },
+  updateUsername(state, username) {
+    state.user.username = username
+  },
+  updateID(state, id) {
+    state.user.id = id
+  },
+  updateEmail(state, email) {
+    state.user.email = email
   }
 }

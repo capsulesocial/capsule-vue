@@ -5,17 +5,6 @@
     height="26.033"
     viewBox="0 0 26.033 26.033"
   >
-    <defs>
-      <style>
-        .settingsIcon {
-          fill: none;
-          stroke: #2c3150;
-          stroke-linecap: round;
-          stroke-linejoin: round;
-          stroke-width: 2.5px;
-        }
-      </style>
-    </defs>
     <g id="Group_287" transform="translate(1.25 1.25)">
       <path
         id="Path_1"
@@ -32,3 +21,13 @@
     </g>
   </svg>
 </template>
+
+<style>
+.settingsIcon {
+  fill: none;
+  stroke: #000000;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2.5px;
+}
+</style>

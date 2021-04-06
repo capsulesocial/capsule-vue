@@ -1,6 +1,8 @@
 <template>
   <section>
-    <button @click="$router.go(-1)">Back</button>
+    <button @click="$router.go(-1)" class="focus:outline-none">
+      <BackButton />
+    </button>
     <article class="p-5 text-center">
       <h1 class="text-4xl">{{ this.post.title }}</h1>
       <h2 class="text-2xl">{{ this.post.subtitle }}</h2>
@@ -14,11 +16,15 @@
 </template>
 
 <script>
+import BackButton from "@/components/icons/BackChevron";
 export default {
   data() {
     return {
       post: this.$store.state.user.posts[this.$route.params.post]
     };
+  },
+  components: {
+    BackButton
   }
 };
 </script>

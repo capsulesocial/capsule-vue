@@ -115,6 +115,10 @@ export default {
         id: this.$store.state.user.posts.length,
         timestamp: date
       });
+      this.toggle();
+      this.title = "";
+      this.subtitle = "";
+      this.input = "# Hello World";
     },
     updateStore: function() {
       this.$store.commit("updateDraft", {
