@@ -111,7 +111,7 @@ export default {
       this.sendPost({
         title: this.title,
         subtitle: this.subtitle,
-        content: marked(this.input),
+        content: this.input,
         id: this.$store.state.user.posts.length,
         timestamp: date
       });

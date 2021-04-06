@@ -87,7 +87,7 @@
 
     <!-- Mobile -->
     <div
-      class="fixed lg:hidden bottom-0 h-12 w-full flex flex-row justify-around pb-4 pt-2 items-end bg-white"
+      class="fixed lg:hidden bottom-0 h-12 w-full flex flex-row justify-around pb-4 pt-2 items-end bg-white z-50"
     >
       <nuxt-link to="/home">
         <HomeIcon

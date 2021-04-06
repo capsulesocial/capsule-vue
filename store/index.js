@@ -14,7 +14,7 @@ export const state = () => ({
         id: "0",
         title: "I won my 7th Super Bowl!",
         subtitle: "Still playing in the NFL at the age of 43",
-        content: '<h3 id="i-d-like-to-thank-my-favorite-teammates-" > I&#39;d like to thank my favorite teammates:</h3><ul><li>Gronk</li><li>Antonio Brown</li></ul><p><img src="https://sportshub.cbsistatic.com/i/r/2021/02/08/e6469274-926d-4b2e-a8e5-c1fadf5b30ec/thumbnail/1200x675/49d05b504125f6231b231b684ef09407/tom-brady-buccaneers-trophy.jpg" alt="Tom Brady Victory"></p>',
+        content: '# 2020 Season - Tampa Bay \n #### Thomas Edward Patrick Brady Jr. (born August 3, 1977) is an American football quarterback for the Tampa Bay Buccaneers of the National Football League(NFL).He spent his first 20 seasons with the New England Patriots, where he was a central contributor to the franchise\'s dynasty from 2001 to 2019. Brady is widely considered to be the greatest quarterback of all time![Brady Wins](https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Bucs_WFT_223_%2850833097576%29.jpg/440px-Bucs_WFT_223_%2850833097576%29.jpg "Optional title") ## Super Bowl Championships \n * 2021 \n * 2018 \n * 2016 \n * 2014 \n * 2003 \n * 2001',
         views: 1294,
         timestamp: new Date().toLocaleString()
       }

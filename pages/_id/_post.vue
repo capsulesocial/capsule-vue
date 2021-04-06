@@ -10,13 +10,17 @@
     </article>
 
     <article>
-      <div v-html="this.post.content" class="prose text-black pl-4"></div>
+      <div
+        v-html="this.compileMarkdown(this.post.content)"
+        class="prose text-black pl-4"
+      ></div>
     </article>
   </section>
 </template>
 
 <script>
 import BackButton from "@/components/icons/BackChevron";
+import markdown from "@/mixins/markdown.js";
 export default {
   data() {
     return {
@@ -25,6 +29,7 @@ export default {
   },
   components: {
     BackButton
-  }
+  },
+  mixins: [markdown]
 };
 </script>

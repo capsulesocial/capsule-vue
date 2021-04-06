@@ -19,4 +19,9 @@ $ yarn start
 $ yarn generate
 ```
 
-For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
+### Dependencies:
+
+- [Nuxt.js docs](https://nuxtjs.org) - Vue Framework
+- [TailwindCSS](https://tailwindcss.com) - CSS Framework
+- [Marked.js](https://marked.js.org/) - markdown parsing
+- [DOMPurify](https://github.com/cure53/DOMPurify) - sanitize HTML output
