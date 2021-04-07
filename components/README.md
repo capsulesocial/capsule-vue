@@ -1,12 +1,16 @@
 # COMPONENT CATALOG
 
-### **/post/Card**
+### **/post/Actions**
+
+Used in:
+
+- /\_id/\_post
+- /components/post/Card
 
 #### _Props_
 
 - post: takes in the post object. Required for displaying title, subtitle, views, timestamp. Modifies the likes and comments arrays
 - authorID: Used for creating the link to route to the author's profile.
-- authorUsername: Used to display the author's username on the card.
 
 #### _Methods_
 

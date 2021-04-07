@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="pb-16 lg:pb-5">
     <button @click="$router.go(-1)" class="focus:outline-none">
       <BackButton />
     </button>
@@ -22,10 +22,11 @@
 
     <!-- Comments -->
     <article>
-      <div v-for="comment in this.post.comments" :key="comment.id">
-        <span>{{ comment.authorID }}</span>
-        {{ comment.content }}
-      </div>
+      <PostActions
+        :post="this.post"
+        :authorID="this.$route.params.id"
+        :isCommenting="true"
+      />
     </article>
   </section>
 </template>
@@ -33,6 +34,8 @@
 <script>
 import BackButton from "@/components/icons/BackChevron";
 import markdown from "@/mixins/markdown.js";
+import PostActions from "@/components/post/Actions";
+
 export default {
   data() {
     return {
@@ -40,7 +43,8 @@ export default {
     };
   },
   components: {
-    BackButton
+    BackButton,
+    PostActions
   },
   mixins: [markdown]
 };
