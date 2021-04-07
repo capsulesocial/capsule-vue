@@ -1,14 +1,11 @@
 <template>
   <div>
     <article v-for="post in this.$store.state.user.posts" :key="post.id">
-      <nuxt-link :to="$store.state.user.id + '/' + post.id">
-        <PostCard
-          :title="post.title"
-          :subtitle="post.subtitle"
-          :views="post.views"
-          :username="$store.state.user.username"
-        />
-      </nuxt-link>
+      <PostCard
+        :post="post"
+        :authorID="$store.state.user.id"
+        :authorUsername="$store.state.user.username"
+      />
     </article>
   </div>
 </template>

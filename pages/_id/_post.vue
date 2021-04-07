@@ -6,7 +6,10 @@
     <article class="p-5 text-center">
       <h1 class="text-4xl">{{ this.post.title }}</h1>
       <h2 class="text-2xl">{{ this.post.subtitle }}</h2>
-      <p>Posted by {{ this.$route.params.id }} on {{ this.post.timestamp }}</p>
+      <p>
+        Posted by {{ this.$route.params.id }} on
+        {{ this.post.timestamp.toLocaleString() }}
+      </p>
     </article>
 
     <article>

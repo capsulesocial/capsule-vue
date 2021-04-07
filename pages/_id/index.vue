@@ -1,19 +1,21 @@
 <template>
   <section>
     <!-- Header -->
-    <article>
-      <h1 class="2xl">Profile of {{ this.$store.state.user.username }}</h1>
+    <article class="pb-5">
+      <h1 class="text-3xl text-center">
+        {{ this.currentUser.username }}
+      </h1>
+      <h3 class="text-xl text-center text-gray-800">
+        @{{ this.currentUser.id }}
+      </h3>
     </article>
 
-    <article v-for="post in this.$store.state.user.posts" :key="post.id">
-      <nuxt-link :to="$store.state.user.id + '/' + post.id">
-        <PostCard
-          :title="post.title"
-          :subtitle="post.subtitle"
-          :views="post.views"
-          :username="$store.state.user.username"
-        />
-      </nuxt-link>
+    <article v-for="post in currentUser.posts" :key="post.id">
+      <PostCard
+        :post="post"
+        :authorID="$route.params.id"
+        :authorUsername="currentUser.username"
+      />
     </article>
   </section>
 </template>
@@ -21,8 +23,17 @@
 <script>
 import PostCard from "@/components/post/Card";
 export default {
+  data() {
+    return {
+      currentUser: null
+    };
+  },
   components: {
     PostCard
+  },
+  async created() {
+    // The user in which I am currently viewing
+    this.currentUser = this.$store.state.user;
   }
 };
 </script>
