@@ -22,7 +22,7 @@
 
     <article class="border-t flex justify-around p-2 text-gray-600">
       <button @click="handleHeart()" class="flex focus:outline-none">
-        <HeartIcon :isActive="this.isHeart" class="mr-2 fill-none" /> Heart
+        <HeartIcon :isActive="this.isHeart()" class="mr-2 fill-none" /> Heart
       </button>
       <button @click="handleComment()" class="flex focus:outline-none">
         <CommentIcon class="mr-2" /> Comment
@@ -33,6 +33,14 @@
     </article>
 
     <article v-if="isCommenting">
+      <p
+        v-for="comment in this.post.comments"
+        :key="comment.id"
+        class="text-base px-2"
+      >
+        <span class="text-gray-700">@{{ comment.authorID }}:</span>
+        {{ comment.content }}
+      </p>
       <textarea
         class="leading-normal resize-vertical border-b w-full h-20 font-medium focus:outline-none p-2"
         name="body"
@@ -63,7 +71,6 @@ import InfoIcon from "@/components/icons/Info";
 export default {
   data() {
     return {
-      isHeart: true,
       isCommenting: false,
       comment: ""
     };
@@ -89,8 +96,14 @@ export default {
     InfoIcon
   },
   methods: {
+    isHeart() {
+      return this.post.likes.indexOf(this.$store.state.user.id) > -1;
+    },
     handleHeart() {
-      this.isHeart = !this.isHeart;
+      this.$store.commit("handleHeart", {
+        postID: this.post.id,
+        authorID: this.authorID
+      });
     },
     handleComment() {
       this.isCommenting = !this.isCommenting;
@@ -99,7 +112,11 @@ export default {
       console.log("Share");
     },
     sendComment() {
-      console.log(this.comment);
+      this.$store.commit("postComment", {
+        postID: this.post.id,
+        authorID: this.$store.state.user.id,
+        content: this.comment
+      });
     }
   }
 };

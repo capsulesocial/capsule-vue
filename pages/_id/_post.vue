@@ -12,11 +12,20 @@
       </p>
     </article>
 
+    <!-- Content -->
     <article>
       <div
         v-html="this.compileMarkdown(this.post.content)"
         class="prose text-black pl-4"
       ></div>
+    </article>
+
+    <!-- Comments -->
+    <article>
+      <div v-for="comment in this.post.comments" :key="comment.id">
+        <span>{{ comment.authorID }}</span>
+        {{ comment.content }}
+      </div>
     </article>
   </section>
 </template>
