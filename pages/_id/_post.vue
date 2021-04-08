@@ -1,6 +1,6 @@
 <template>
   <section class="pb-16 lg:pb-5">
-    <button @click="$router.go(-1)" class="focus:outline-none">
+    <button @click="$router.go(-1)" class="focus:outline-none -mx-4 fixed">
       <BackButton />
     </button>
     <article class="p-5 text-center">
@@ -39,7 +39,7 @@ import PostActions from "@/components/post/Actions";
 export default {
   data() {
     return {
-      post: this.$store.state.user.posts[this.$route.params.post]
+      post: this.$store.state.posts[this.$route.params.post]
     };
   },
   components: {

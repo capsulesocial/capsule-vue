@@ -10,7 +10,7 @@
       </h3>
     </article>
 
-    <article v-for="post in currentUser.posts" :key="post.id">
+    <article v-for="post in this.userPosts()" :key="post.id">
       <PostCard
         :post="post"
         :authorID="$route.params.id"
@@ -34,6 +34,16 @@ export default {
   async created() {
     // The user in which I am currently viewing
     this.currentUser = this.$store.state.user;
+  },
+  methods: {
+    userPosts: function() {
+      let posts = [];
+      var p = this.$store.state.posts;
+      for (var i = 0; i < p.length; i++) {
+        if (p[i].authorID == this.currentUser.id) posts.push(p[i]);
+      }
+      return posts;
+    }
   }
 };
 </script>

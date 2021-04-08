@@ -112,10 +112,11 @@ export default {
         title: this.title,
         subtitle: this.subtitle,
         content: this.input,
-        id: this.$store.state.user.posts.length,
+        id: this.$store.state.posts.length.toString(),
         timestamp: date,
         comments: [],
-        likes: []
+        likes: [],
+        authorID: this.$store.state.user.id
       });
       this.toggle();
       this.title = "";
