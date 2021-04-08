@@ -30,7 +30,9 @@
       <div class="flex justify-between">
         <span class="flex items-center pl-2 text-gray-800">
           <InfoIcon />
-          <p class="text-xs md:text-sm pt-px pl-2">Markdown is supported.</p>
+          <p class="text-xs md:text-sm pt-px pl-2">
+            Markdown is NOT currently supported in comments.
+          </p>
         </span>
         <button
           class="m-2 p-2 bg-primary text-white font-bold hover:bg-green-600 rounded-lg shadow-lg focus:outline-none"
@@ -40,6 +42,8 @@
         </button>
       </div>
     </article>
+
+    <input :id="this.$props.post.id" type="hidden" value="" />
   </section>
 </template>
 
@@ -90,7 +94,15 @@ export default {
       this.commentStatus = !this.commentStatus;
     },
     handleShare() {
-      console.log("Share");
+      var url = document.getElementById(this.$props.post.id);
+      url.type = "text";
+      url.value =
+        document.location.origin + "/" + this.authorID + "/" + this.post.id;
+      url.select();
+      url.setSelectionRange(0, 99999);
+      document.execCommand("copy");
+      url.type = "hidden";
+      alert("URL Copied to Clipboard!");
     },
     sendComment() {
       this.$store.commit("postComment", {
