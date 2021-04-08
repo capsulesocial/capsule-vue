@@ -46,8 +46,8 @@ export default {
   methods: {
     userPosts: function() {
       let posts = [];
-      var p = this.$store.state.posts;
-      for (var i = 0; i < p.length; i++) {
+      let p = this.$store.state.posts;
+      for (let i = 0; i < p.length; i++) {
         if (p[i].authorID == this.currentUser.id) posts.push(p[i]);
       }
       return posts;

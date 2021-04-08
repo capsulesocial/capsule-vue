@@ -26,9 +26,30 @@
       <p class="text-sm text-gray-500">By Username</p>
     </article>
 
+    <div class="w-full lg:w-1/2 flex justify-around text-primary px-2">
+      <button @click="testButton('\n* ')"><ListIcon /></button>
+      <button @click="testButton('**', true)"><BoldIcon /></button>
+      <button @click="testButton('*', true)"><ItalicIcon /></button>
+      <button @click="testButton('\n```\n', true)"><CodeIcon /></button>
+      <button @click="testButton('\n# ')">H1</button>
+      <button @click="testButton('\n## ')">H2</button>
+      <button @click="testButton('\n### ')">H3</button>
+      <button @click="testButton('\n> ')">
+        <QuoteIcon />
+      </button>
+      <button @click="testButton('\n1. ')">1.</button>
+      <button @click="testButton('[title](https://www.example.com)')">
+        <LinkIcon />
+      </button>
+      <button @click="testButton('![alt text](https://picsum.photos/200)')">
+        <ImageIcon />
+      </button>
+    </div>
+
     <!-- Mobile Editor -->
     <article class="m-5 lg:hidden">
       <textarea
+        ref="ta"
         v-if="this.mobileState === 'edit'"
         :value="input"
         @input="update"
@@ -40,6 +61,7 @@
     <!-- Desktop Editor -->
     <article class="mt-5 hidden lg:grid grid-cols-2">
       <textarea
+        ref="ta"
         :value="input"
         @input="update"
         class="w-full border p-1 h-64"
@@ -55,7 +77,7 @@
       </span>
     </article>
 
-    <article class="lg:hidden fixed bottom-0 w-full">
+    <article class="lg:hidden fixed bottom-0 w-full pb-20">
       <div class="grid grid-cols-3">
         <button @click="toggleComposeState('edit')">Edit</button>
         <button @click="toggleComposeState('preview')">Preview</button>
@@ -70,6 +92,13 @@ import { mapMutations } from "vuex";
 import _ from "lodash";
 import DOMPurify from "dompurify";
 import CloseIcon from "@/components/icons/Close";
+import BoldIcon from "@/components/icons/md/Bold";
+import CodeIcon from "@/components/icons/md/Code";
+import ItalicIcon from "@/components/icons/md/Italic";
+import ListIcon from "@/components/icons/md/List";
+import LinkIcon from "@/components/icons/md/Link";
+import ImageIcon from "@/components/icons/md/Image";
+import QuoteIcon from "@/components/icons/md/Quote";
 
 export default {
   data() {
@@ -89,8 +118,16 @@ export default {
     }
   },
   components: {
-    CloseIcon
+    CloseIcon,
+    BoldIcon,
+    CodeIcon,
+    ItalicIcon,
+    ListIcon,
+    LinkIcon,
+    ImageIcon,
+    QuoteIcon
   },
+  mounted() {},
   methods: {
     ...mapMutations({
       toggle: "toggleCompose",
@@ -130,6 +167,26 @@ export default {
         content: this.input
       });
       this.toggle();
+    },
+    testButton: function(md, wrap) {
+      let ta = this.$refs.ta,
+        cursorStart = ta.selectionStart,
+        cursorEnd = ta.selectionEnd,
+        selectedText = this.input.substring(cursorStart, cursorEnd);
+      if (wrap) {
+        this.input =
+          this.input.substring(0, cursorStart) +
+          md +
+          selectedText +
+          md +
+          this.input.substring(cursorEnd);
+      } else {
+        this.input =
+          this.input.substring(0, cursorStart) +
+          md +
+          selectedText +
+          this.input.substring(cursorEnd);
+      }
     }
   }
 };
