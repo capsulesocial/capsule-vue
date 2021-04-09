@@ -27,17 +27,17 @@
     </article>
 
     <div class="w-full lg:w-1/2 flex justify-around text-primary px-2">
-      <button @click="testButton('\n* ')"><ListIcon /></button>
       <button @click="testButton('**', true)"><BoldIcon /></button>
       <button @click="testButton('*', true)"><ItalicIcon /></button>
-      <button @click="testButton('\n```\n', true)"><CodeIcon /></button>
+      <button @click="testButton('\n* ')"><ListIcon /></button>
+      <button @click="testButton('\n1. ')">1.</button>
       <button @click="testButton('\n# ')">H1</button>
       <button @click="testButton('\n## ')">H2</button>
       <button @click="testButton('\n### ')">H3</button>
       <button @click="testButton('\n> ')">
         <QuoteIcon />
       </button>
-      <button @click="testButton('\n1. ')">1.</button>
+      <button @click="testButton('\n```\n', true)"><CodeIcon /></button>
       <button @click="testButton('[title](https://www.example.com)')">
         <LinkIcon />
       </button>
@@ -47,7 +47,7 @@
     </div>
 
     <!-- Mobile Editor -->
-    <article class="m-5 lg:hidden">
+    <article class="m-5 lg:hidden pb-32">
       <textarea
         ref="ta"
         v-if="this.mobileState === 'edit'"
@@ -77,11 +77,33 @@
       </span>
     </article>
 
-    <article class="lg:hidden fixed bottom-0 w-full pb-20">
-      <div class="grid grid-cols-3">
-        <button @click="toggleComposeState('edit')">Edit</button>
-        <button @click="toggleComposeState('preview')">Preview</button>
-        <button @click="post()">Publish</button>
+    <article class="lg:hidden fixed bottom-0 w-full pb-20 bg-white">
+      <div class="grid grid-cols-3 px-2">
+        <button @click="toggleComposeState('edit')" class="focus:outline-none">
+          <span
+            v-if="mobileState === 'edit'"
+            class="font-bold text-primary text-xl"
+            >Edit</span
+          >
+          <span v-else class="text-xl">Edit</span>
+        </button>
+        <button
+          @click="toggleComposeState('preview')"
+          class="focus:outline-none"
+        >
+          <span
+            v-if="mobileState === 'preview'"
+            class="font-bold text-primary text-xl"
+            >Preview</span
+          >
+          <span v-else class="text-xl">Preview</span>
+        </button>
+        <button
+          @click="post()"
+          class="text-xl text-white rounded-full bg-primary focus:outline-none"
+        >
+          Publish
+        </button>
       </div>
     </article>
   </section>
