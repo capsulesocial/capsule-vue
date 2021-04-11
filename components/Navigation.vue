@@ -109,13 +109,22 @@
       >
         <PencilIcon class="fill-current text-white" />
       </button>
-      <NotificationsIcon class="fill-gray-400 text-gray-400" />
-      <nuxt-link to="/messages">
-        <MessagesIcon
-          v-if="this.$route.path === '/messages'"
+
+      <!-- <NotificationsIcon class="fill-gray-400 text-gray-400" /> -->
+      <ProfileIcon
+        v-if="this.$route.params.id === this.$store.state.user.id"
+        class="stroke-current text-primary"
+      />
+      <nuxt-link v-else :to="$store.state.user.id">
+        <ProfileIcon class="stroke-current text-gray-400" />
+      </nuxt-link>
+
+      <nuxt-link to="/settings">
+        <SettingsIcon
+          v-if="this.$route.path === '/settings'"
           class="text-primary"
         />
-        <MessagesIcon v-else class="fill-gray-400 text-gray-400" />
+        <SettingsIcon v-else class="fill-gray-400 text-gray-400" />
       </nuxt-link>
     </div>
   </nav>
@@ -129,6 +138,8 @@ import DiscoverIcon from "@/components/icons/Discover";
 import PencilIcon from "@/components/icons/Pencil";
 import NotificationsIcon from "@/components/icons/MobileNotifications";
 import MessagesIcon from "@/components/icons/Messages";
+import ProfileIcon from "@/components/icons/Profile";
+import SettingsIcon from "@/components/icons/Settings";
 
 export default {
   components: {
@@ -136,7 +147,9 @@ export default {
     DiscoverIcon,
     PencilIcon,
     NotificationsIcon,
-    MessagesIcon
+    MessagesIcon,
+    ProfileIcon,
+    SettingsIcon
   },
   methods: {
     ...mapMutations({

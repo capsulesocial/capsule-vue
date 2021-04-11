@@ -66,7 +66,7 @@
         @input="update"
         class="w-full border p-1 h-64"
       ></textarea>
-      <div v-html="compiledMarkdown" class="prose text-black pl-4"></div>
+      <div v-html="compiledMarkdown" class="prose pl-4"></div>
       <span class="bottom-0 fixed m-5 p-5 right-0">
         <button
           @click="post()"

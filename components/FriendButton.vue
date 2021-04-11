@@ -1,15 +1,15 @@
 <template>
-  <div>
+  <button @click="handleFollow">
     <div
       v-if="isFollowing"
-      class="bg-red-500 self-center rounded-full shadow-lg p-4"
+      class="bg-white self-center rounded-full shadow-lg p-4 border border-primary"
     >
-      <span class="text-white text-bold"><UnfollowIcon /></span>
+      <span class="text-primary text-bold"><UnfollowIcon /></span>
     </div>
     <div v-else class="bg-primary self-center rounded-full shadow-lg p-4">
       <span class="text-white text-bold"><FollowIcon /></span>
     </div>
-  </div>
+  </button>
 </template>
 
 <script>
@@ -21,11 +21,22 @@ export default {
     isFollowing: {
       type: Boolean,
       default: false
+    },
+    userID: {
+      type: String,
+      default: null
     }
   },
   components: {
     FollowIcon,
     UnfollowIcon
+  },
+  methods: {
+    handleFollow: function() {
+      if (this.userID) {
+        this.$store.commit("handleFollow", this.userID);
+      }
+    }
   }
 };
 </script>

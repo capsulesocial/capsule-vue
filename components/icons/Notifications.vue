@@ -1,13 +1,17 @@
 <template>
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="20.754"
-    height="25.294"
-    viewBox="0 0 20.754 25.294"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    class="feather feather-bell"
   >
-    <path
-      d="M16.377 29.044a2.6 2.6 0 0 0 2.594-2.594h-5.188a2.6 2.6 0 0 0 2.594 2.594zm7.783-7.783v-6.485c0-3.982-2.114-7.316-5.837-8.2V5.7a1.946 1.946 0 0 0-3.891 0v.882c-3.71.882-5.837 4.2-5.837 8.2v6.486L6 23.856v1.3h20.754v-1.3zm-2.594 1.3H11.189v-7.785c0-3.217 1.959-5.837 5.189-5.837s5.189 2.62 5.189 5.837z"
-      transform="translate(-6 -3.75)"
-    />
+    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
   </svg>
 </template>

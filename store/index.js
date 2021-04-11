@@ -10,7 +10,9 @@ export const state = () => ({
     username: "Tom Brady",
     email: "tb12@nfl.com",
     posts: ["0"],
-    likes: []
+    likes: [],
+    followers: [],
+    following: []
   },
   posts: [
     {
@@ -61,6 +63,18 @@ export const mutations = {
   postComment(state, data) {
     let targetPost = state.posts.find(e => e.id === data.postID)
     targetPost.comments.push({ id: targetPost.comments.length, authorID: data.authorID, content: data.content })
+  },
+  handleFollow(state, userID) {
+    console.log(userID)
+    // Update current user following list
+    if (state.user.following.indexOf(userID)) {
+      // Add
+      state.user.following.push(userID)
+    } else {
+      // Remove 
+      state.user.following = state.user.following.filter(e => e !== userID)
+    }
+    // TODO: Update target user followers list
   },
   handleHeart(state, data) {
     let targetPost = state.posts.find(e => e.id === data.postID) // post object

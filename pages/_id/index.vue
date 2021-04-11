@@ -11,7 +11,10 @@
         </h3>
       </div>
       <button @click="toggleFriend" class="rounded-full focus:outline-none">
-        <FriendButton :isFollowing="this.isFollowing" />
+        <FriendButton
+          :isFollowing="this.isFollowing"
+          :userID="currentUser.id"
+        />
       </button>
     </article>
 
