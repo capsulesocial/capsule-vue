@@ -1,7 +1,7 @@
 <template>
   <section>
     <article class="grid grid-cols-2 gap-2 border p-2 rounded">
-      <h4 class="text-lg bold">Username</h4>
+      <h4 class="text-lg bold">Name</h4>
       <input
         type="text"
         v-model="newUsername"
