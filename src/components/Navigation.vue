@@ -79,9 +79,9 @@
       <div
         class="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-semibold"
       >
-        <button>
+        <nuxt-link to="/auth">
           Log Out
-        </button>
+        </nuxt-link>
       </div>
     </div>
 

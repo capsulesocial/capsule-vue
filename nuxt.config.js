@@ -1,6 +1,11 @@
-export default {
+module.exports = {
   // Global page headers: https://go.nuxtjs.dev/config-head
+  srcDir: 'src/',
+  generate: {
+    dir: ".app"
+  },
   ssr: false,
+  telemetry: false,
   head: {
     title: 'capsule-frontend',
     htmlAttrs: {

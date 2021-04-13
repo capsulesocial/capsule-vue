@@ -1,8 +1,9 @@
-
-
 const defaultTheme = require('tailwindcss/defaultTheme')
 
 module.exports = {
+  future: {
+    purgeLayersByDefault: true
+  },
   theme: {
     extend: {
       colors: {

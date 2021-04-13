@@ -98,8 +98,10 @@
           type="button"
           class="bg-primary hover:bg-green-600 text-white w-full py-2.5 rounded-lg text-sm shadow-sm font-semibold text-center inline-block h-10 focus:outline-none"
         >
-          <span v-if="!isLogin" class="inline-block">Sign Up</span>
-          <span v-else class="inline-block">Sign In</span>
+          <nuxt-link to="/">
+            <span v-if="!isLogin" class="inline-block">Sign Up</span>
+            <span v-else class="inline-block">Sign In</span>
+          </nuxt-link>
         </button>
       </div>
       <div class="px-10 py-5 grid grid-cols-2 gap-1">
