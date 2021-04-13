@@ -1,22 +1,102 @@
 {
   "name": "capsule-vue",
+  "productName": "Capsule Client",
   "version": "1.0.0",
+  "description": "Electron application using Nuxt.js to serve the Capsule Social Application",
+  "author": {
+    "name": "Capsule Social",
+    "email": "jack@capsule.social",
+    "url": "https://capsule.social"
+  },
   "private": true,
+  "main": "main.js",
+  "license": "GNU GENERAL PUBLIC LICENSE",
+  "build": {
+    "files": [
+      "**/*",
+      "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}",
+      "!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}",
+      "!**/node_modules/*.d.ts",
+      "!**/node_modules/.bin",
+      "!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}",
+      "!.editorconfig",
+      "!**/._*",
+      "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}",
+      "!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}",
+      "!**/{appveyor.yml,.travis.yml,circle.yml}",
+      "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}",
+      "!**/.nuxt/**",
+      "!**/build/**",
+      "!**/mainprocess/**",
+      "!**/src/**",
+      "!main.mainprocess.js",
+      "!main.dev.js",
+      "!main.dev.js.map",
+      "!webpack.config.js",
+      "!.gitignore",
+      "!nuxt.config.js",
+      "!package-lock.json",
+      "!README.md"
+    ],
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "deleteAppDataOnUninstall": true,
+      "perMachine": true,
+      "include": "build/installer.nsh"
+    },
+    "afterSign": "build/afterSignHook.js",
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "provisioningProfile": "build/embedded.provisionprofile",
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "entitlements": "build/entitlements.mac.plist"
+    },
+    "mas": {
+      "hardenedRuntime": false,
+      "provisioningProfile": "build/embedded.provisionprofile",
+      "entitlements": "build/entitlements.mas.plist",
+      "entitlementsInherit": "build/entitlements.mas.inherit.plist",
+      "gatekeeperAssess": false,
+      "asarUnpack": []
+    }
+  },
   "scripts": {
-    "dev": "nuxt",
-    "build": "nuxt build",
-    "start": "nuxt start",
-    "generate": "nuxt generate"
+    "dev": "webpack --mode=development && electron ./main.dev.js",
+    "build:win:64": "nuxt build && webpack && electron-builder --win --x64",
+    "build:win:32": "nuxt build && webpack && electron-builder --win --x32",
+    "build:win:both": "nuxt build && webpack && electron-builder --win --x32 --x64",
+    "build:mac:dmg": "nuxt build && webpack && CSC_NAME=\"CERTIFICATE NAME (***********)\" appleId='apple@developer.id' appleIdPassword='application password' electron-builder",
+    "build:mac:store": "nuxt build && webpack && CSC_NAME=\"CERTIFICATE NAME (***********)\" electron-builder && bash build/resignAndPackage.sh"
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.4.0",
     "core-js": "^3.8.3",
     "dompurify": "^2.2.7",
     "marked": "^2.0.1",
-    "nuxt": "^2.14.12"
+    "nuxt": "^2.14.12",
+    "electron-serve": "^0.4.1"
   },
   "devDependencies": {
+    "@babel/runtime-corejs2": "^7.8.0",
+    "core-js": "^3.8.3",
+    "cross-env": "^6.0.3",
+    "electron": "^7.1.8",
+    "electron-builder": "^21.2.0",
+    "electron-devtools-installer": "^2.2.4",
+    "electron-notarize": "^0.2.1",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10",
     "@nuxtjs/eslint-config": "^6.0.0",
+    "eslint": "^7.21.0",
     "@nuxtjs/tailwindcss": "^3.4.2",
     "babel-eslint": "^10.1.0"
   }
