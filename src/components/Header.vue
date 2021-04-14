@@ -6,7 +6,12 @@
     </article>
 
     <!-- Middle: Sticky above content -->
-    <SearchBar v-if="this.$route.path !== '/settings'" class="col-span-2" />
+    <article v-if="this.$route.path !== '/settings'" class="col-span-2 flex">
+      <button @click="$router.go(-1)" class="focus:outline-none">
+        <BackButton class="ml-4" />
+      </button>
+      <SearchBar class="h-12 w-full" />
+    </article>
     <article v-else class="col-span-3 lg:col-span-2 flex justify-between">
       <button @click="$router.go(-1)" class="focus:outline-none">
         <BackButton />

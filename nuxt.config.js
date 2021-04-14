@@ -37,6 +37,7 @@ module.exports = {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    { src: "@/plugins/api.js" }
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -50,6 +51,7 @@ module.exports = {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
+    "@nuxtjs/axios"
   ],
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

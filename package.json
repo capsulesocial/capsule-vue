@@ -78,26 +78,27 @@
     "build:mac:store": "nuxt build && webpack && CSC_NAME=\"CERTIFICATE NAME (***********)\" electron-builder && bash build/resignAndPackage.sh"
   },
   "dependencies": {
+    "@nuxtjs/axios": "^5.13.1",
     "@tailwindcss/typography": "^0.4.0",
     "core-js": "^3.8.3",
     "dompurify": "^2.2.7",
+    "electron-serve": "^0.4.1",
     "marked": "^2.0.1",
-    "nuxt": "^2.14.12",
-    "electron-serve": "^0.4.1"
+    "nuxt": "^2.14.12"
   },
   "devDependencies": {
     "@babel/runtime-corejs2": "^7.8.0",
+    "@nuxtjs/eslint-config": "^6.0.0",
+    "@nuxtjs/tailwindcss": "^3.4.2",
+    "babel-eslint": "^10.1.0",
     "core-js": "^3.8.3",
     "cross-env": "^6.0.3",
     "electron": "^7.1.8",
     "electron-builder": "^21.2.0",
     "electron-devtools-installer": "^2.2.4",
     "electron-notarize": "^0.2.1",
-    "webpack": "^4.41.5",
-    "webpack-cli": "^3.3.10",
-    "@nuxtjs/eslint-config": "^6.0.0",
     "eslint": "^7.21.0",
-    "@nuxtjs/tailwindcss": "^3.4.2",
-    "babel-eslint": "^10.1.0"
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10"
   }
 }

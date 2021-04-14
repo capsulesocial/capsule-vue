@@ -98,10 +98,10 @@
           type="button"
           class="bg-primary hover:bg-green-600 text-white w-full py-2.5 rounded-lg text-sm shadow-sm font-semibold text-center inline-block h-10 focus:outline-none"
         >
-          <nuxt-link to="/">
+          <button @click="verify">
             <span v-if="!isLogin" class="inline-block">Sign Up</span>
             <span v-else class="inline-block">Sign In</span>
-          </nuxt-link>
+          </button>
         </button>
       </div>
       <div class="px-10 py-5 grid grid-cols-2 gap-1">
@@ -155,6 +155,10 @@ export default {
   methods: {
     toggleFormType: function() {
       this.isLogin = !this.isLogin;
+    },
+    verify: async function() {
+      const res = await this.$api.auth.login("email", "password");
+      console.log(res);
     }
   }
 };
