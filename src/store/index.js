@@ -41,6 +41,9 @@ export const state = () => ({
 })
 
 export const mutations = {
+  startSession(state, user) {
+    state.user = user
+  },
   toggleCompose(state) {
     state.isComposing = !state.isComposing
   },

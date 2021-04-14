@@ -40,6 +40,7 @@
           >Name</label
         >
         <input
+          v-model="name"
           v-if="!isLogin"
           type="text"
           placeholder="Tom Brady"
@@ -51,6 +52,7 @@
           >ID</label
         >
         <input
+          v-model="id"
           type="text"
           placeholder="tombrady"
           id="id"
@@ -64,6 +66,7 @@
           >Contact</label
         >
         <input
+          v-model="email"
           v-if="!isLogin"
           type="email"
           placeholder="tb12@nfl.com"
@@ -76,6 +79,7 @@
           >Password</label
         >
         <input
+          v-model="password"
           type="password"
           placeholder="************"
           id="loginPassword"
@@ -88,6 +92,7 @@
           >Confirm Password</label
         >
         <input
+          v-model="confirmPassword"
           v-if="!isLogin"
           type="password"
           placeholder="************"
@@ -97,11 +102,10 @@
         <button
           type="button"
           class="bg-primary hover:bg-green-600 text-white w-full py-2.5 rounded-lg text-sm shadow-sm font-semibold text-center inline-block h-10 focus:outline-none"
+          @click="verify"
         >
-          <button @click="verify">
-            <span v-if="!isLogin" class="inline-block">Sign Up</span>
-            <span v-else class="inline-block">Sign In</span>
-          </button>
+          <span v-if="!isLogin" class="inline-block">Sign Up</span>
+          <span v-else class="inline-block">Sign In</span>
         </button>
       </div>
       <div class="px-10 py-5 grid grid-cols-2 gap-1">
@@ -128,6 +132,7 @@
       <div v-else class="flex justify-center">
         <label class="items-center p-5 text-gray-600 inline-flex">
           <input
+            v-model="consent"
             type="checkbox"
             class="form-checkbox h-4 w-4 text-primary"
             checked
@@ -146,7 +151,13 @@ export default {
   layout: "unauth",
   data() {
     return {
-      isLogin: true
+      isLogin: true,
+      name: null,
+      id: null,
+      email: null,
+      password: null,
+      confirmPassword: null,
+      consent: true
     };
   },
   components: {
@@ -157,8 +168,33 @@ export default {
       this.isLogin = !this.isLogin;
     },
     verify: async function() {
-      const res = await this.$api.auth.login("email", "password");
-      console.log(res);
+      if (this.isLogin) {
+        const res = await this.$api.auth.login(this.id, this.password);
+        if (res) {
+          // this.$store.state.setSession(res.user)
+        } else alert("Invalid login!");
+      } else {
+        // Registration
+        if (!this.consent) {
+          alert("Please accept the Terms & Conditions");
+          return;
+        }
+        if (this.password === this.confirmPassword) {
+          const res = await this.$api.auth.register({
+            id: this.id,
+            username: this.name,
+            email: this.email,
+            password: this.password,
+            likes: [],
+            followers: [],
+            following: []
+          });
+        } else {
+          alert("Password mismatch!");
+          return;
+        }
+      }
+      this.$router.push("/");
     }
   }
 };
