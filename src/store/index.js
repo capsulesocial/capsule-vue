@@ -68,7 +68,6 @@ export const mutations = {
     targetPost.comments.push({ id: targetPost.comments.length, authorID: data.authorID, content: data.content })
   },
   handleFollow(state, userID) {
-    console.log(userID)
     // Update current user following list
     if (state.user.following.indexOf(userID)) {
       // Add

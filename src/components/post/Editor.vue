@@ -166,6 +166,10 @@ export default {
       this.input = clean;
     }, 300),
     post: function() {
+      if (this.title === "") {
+        alert("Missing title!");
+        return;
+      }
       let date = new Date().toLocaleString();
       this.sendPost({
         title: this.title,
@@ -181,6 +185,7 @@ export default {
       this.title = "";
       this.subtitle = "";
       this.input = "# Hello World";
+      this.$router.push(this.$store.state.user.id);
     },
     updateStore: function() {
       this.$store.commit("updateDraft", {

@@ -1,5 +1,5 @@
 <template>
-  <button @click="handleFollow">
+  <button @click="handleFollow" class="focus:outline-none rounded-full">
     <div
       v-if="isFollowing"
       class="bg-white self-center rounded-full shadow-lg p-4 border border-primary"

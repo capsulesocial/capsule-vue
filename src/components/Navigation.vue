@@ -76,12 +76,28 @@
       >
         Write Post
       </button>
+
       <div
-        class="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-semibold"
+        class="flex flex-col items-center fixed bottom-0 mb-4"
+        @click="toggleProfileActions"
       >
-        <nuxt-link to="/auth">
-          Log Out
-        </nuxt-link>
+        <!-- Actions tab -->
+        <div class="flex flex-col py-2" v-if="isProfileActions">
+          <nuxt-link
+            :to="$store.state.user.id"
+            v-if="this.$route.params.id !== this.$store.state.user.id"
+            >Visit Profile</nuxt-link
+          >
+          <nuxt-link to="/auth" class=" ">
+            Sign Out
+          </nuxt-link>
+        </div>
+        <button class="block flex items-center focus:outline-none">
+          <ProfileIcon />
+          <span class="pl-2 group text-base leading-6 font-semibold">
+            {{ this.$store.state.user.username }}
+          </span>
+        </button>
       </div>
     </div>
 
@@ -142,6 +158,11 @@ import ProfileIcon from "@/components/icons/Profile";
 import SettingsIcon from "@/components/icons/Settings";
 
 export default {
+  data() {
+    return {
+      isProfileActions: false
+    };
+  },
   components: {
     HomeIcon,
     DiscoverIcon,
@@ -154,7 +175,10 @@ export default {
   methods: {
     ...mapMutations({
       toggle: "toggleCompose"
-    })
+    }),
+    toggleProfileActions: function() {
+      this.isProfileActions = !this.isProfileActions;
+    }
   }
 };
 </script>

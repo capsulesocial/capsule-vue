@@ -110,14 +110,20 @@
       </div>
       <div class="px-10 py-5 grid grid-cols-2 gap-1">
         <button
-          class="h-12 border text-gray-600 w-full py-2.5 rounded-lg focus:outline-none focus:border-primary focus:text-primary"
+          class="flex items-center justify-center h-12 border text-gray-600 w-full py-2.5 rounded-lg focus:outline-none focus:border-primary focus:text-primary"
         >
-          Twitter
+          <TwitterIcon class="mr-2" />
+          <span class="text-xl">
+            Twitter
+          </span>
         </button>
         <button
-          class="h-12 border text-gray-600 w-full py-2.5 rounded-lg focus:outline-none focus:border-primary focus:text-primary"
+          class="flex items-center justify-center h-12 border text-gray-600 w-full py-2.5 rounded-lg focus:outline-none focus:border-primary focus:text-primary"
         >
-          GitHub
+          <GitHubIcon class="mr-2" />
+          <span class="text-xl">
+            GitHub
+          </span>
         </button>
       </div>
       <div
@@ -147,6 +153,8 @@
 
 <script>
 import CapsuleIcon from "@/components/icons/Capsule";
+import TwitterIcon from "@/components/icons/brands/Twitter";
+import GitHubIcon from "@/components/icons/brands/GitHub";
 export default {
   layout: "unauth",
   data() {
@@ -161,7 +169,9 @@ export default {
     };
   },
   components: {
-    CapsuleIcon
+    CapsuleIcon,
+    TwitterIcon,
+    GitHubIcon
   },
   methods: {
     toggleFormType: function() {
