@@ -108,24 +108,6 @@
           <span v-else class="inline-block">Sign In</span>
         </button>
       </div>
-      <div class="px-10 py-5 grid grid-cols-2 gap-1">
-        <button
-          class="flex items-center justify-center h-12 border text-gray-600 w-full py-2.5 rounded-lg focus:outline-none focus:border-primary focus:text-primary"
-        >
-          <TwitterIcon class="mr-2" />
-          <span class="text-xl">
-            Twitter
-          </span>
-        </button>
-        <button
-          class="flex items-center justify-center h-12 border text-gray-600 w-full py-2.5 rounded-lg focus:outline-none focus:border-primary focus:text-primary"
-        >
-          <GitHubIcon class="mr-2" />
-          <span class="text-xl">
-            GitHub
-          </span>
-        </button>
-      </div>
       <div
         class="text-center whitespace-nowrap flex justify-between text-sm p-5 text-gray-600"
         v-if="isLogin"
@@ -153,8 +135,7 @@
 
 <script>
 import CapsuleIcon from "@/components/icons/Capsule";
-import TwitterIcon from "@/components/icons/brands/Twitter";
-import GitHubIcon from "@/components/icons/brands/GitHub";
+
 export default {
   layout: "unauth",
   data() {
@@ -169,9 +150,7 @@ export default {
     };
   },
   components: {
-    CapsuleIcon,
-    TwitterIcon,
-    GitHubIcon
+    CapsuleIcon
   },
   methods: {
     toggleFormType: function() {

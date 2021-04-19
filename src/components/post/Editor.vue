@@ -2,52 +2,64 @@
   <section class="w-full h-screen bg-white">
     <!-- Header and close button -->
     <article class="flex items-center px-5 pt-5">
-      <h3 class="text-center font-bold text-xl flex-grow pl-4">Create Post</h3>
+      <h3 class="text-center font-bold text-xl flex-grow pl-4 text-primary">
+        Create Post
+      </h3>
       <button @click="updateStore()" class="focus:outline-none flex-grow-0">
         <CloseIcon />
       </button>
     </article>
 
-    <!-- Title declaration -->
-    <article class="border rounded-lg p-5 text-black m-5 shadow-lg">
-      <input
-        v-model="title"
-        type="text"
-        placeholder="Enter Title"
-        class="focus:outline-none text-xl w-full placeholder-gray-800 pb-2"
-      />
-
-      <input
-        v-model="subtitle"
-        type="text"
-        placeholder="Enter Subtitle"
-        class="focus:outline-none text-lg w-full placeholder-gray-600 pb-2"
-      />
-      <p class="text-sm text-gray-500">By Username</p>
-    </article>
-
-    <div class="w-full lg:w-1/2 flex justify-around text-primary px-2">
-      <button @click="testButton('**', true)"><BoldIcon /></button>
-      <button @click="testButton('*', true)"><ItalicIcon /></button>
-      <button @click="testButton('\n* ')"><ListIcon /></button>
-      <button @click="testButton('\n1. ')">1.</button>
-      <button @click="testButton('\n# ')">H1</button>
-      <button @click="testButton('\n## ')">H2</button>
-      <button @click="testButton('\n### ')">H3</button>
-      <button @click="testButton('\n> ')">
-        <QuoteIcon />
-      </button>
-      <button @click="testButton('\n```\n', true)"><CodeIcon /></button>
-      <button @click="testButton('[title](https://www.example.com)')">
-        <LinkIcon />
-      </button>
-      <button @click="testButton('![alt text](https://picsum.photos/200)')">
-        <ImageIcon />
-      </button>
-    </div>
-
     <!-- Mobile Editor -->
     <article class="m-5 lg:hidden pb-32">
+      <div class="w-full">
+        <!-- Title declaration -->
+        <div
+          class="flex flex-col items-center"
+          v-if="this.mobileState === 'edit'"
+        >
+          <label for="title" class="text-gray-800 italic">Title</label>
+          <input
+            v-model="title"
+            type="text"
+            placeholder="Enter Title"
+            class="border-b text-center text-4xl focus:outline-none text-xl w-full placeholder-gray-800 pb-2"
+          />
+          <label for="subtitle" class="text-gray-800 italic">Subtitle:</label>
+          <input
+            v-model="subtitle"
+            type="text"
+            placeholder="Enter Subtitle"
+            class="border-b text-center text-2xl focus:outline-none text-xl w-full placeholder-gray-800 pb-2"
+          />
+          <p class="text-sm text-gray-500 py-4">
+            By: {{ this.$store.state.user.username }}
+          </p>
+        </div>
+      </div>
+      <div
+        class="w-full flex justify-around text-primary px-2"
+        v-if="this.mobileState === 'edit'"
+      >
+        <button @click="testButton('**', true)"><BoldIcon /></button>
+        <button @click="testButton('*', true)"><ItalicIcon /></button>
+        <button @click="testButton('\n* ')"><ListIcon /></button>
+        <button @click="testButton('\n1. ')">1.</button>
+        <button @click="testButton('\n# ')">H1</button>
+        <button @click="testButton('\n## ')">H2</button>
+        <button @click="testButton('\n### ')">H3</button>
+        <button @click="testButton('\n> ')">
+          <QuoteIcon />
+        </button>
+        <button @click="testButton('\n```\n', true)"><CodeIcon /></button>
+        <button @click="testButton('[title](https://www.example.com)')">
+          <LinkIcon />
+        </button>
+        <button @click="testButton('![alt text](https://picsum.photos/200)')">
+          <ImageIcon />
+        </button>
+      </div>
+
       <textarea
         ref="ta"
         v-if="this.mobileState === 'edit'"
@@ -55,18 +67,74 @@
         @input="update"
         class="w-full border p-1 h-64"
       ></textarea>
-      <div v-else v-html="compiledMarkdown" class="prose"></div>
+      <div v-else>
+        <h2 class="text-4xl text-center">{{ this.title }}</h2>
+        <h4 class="text-2xl text-center">{{ this.subtitle }}</h4>
+        <h6 class="text-sm text-gray-500 py-4 text-center">
+          By: {{ this.$store.state.user.username }}
+        </h6>
+        <div v-html="compiledMarkdown" class="prose"></div>
+      </div>
     </article>
 
     <!-- Desktop Editor -->
     <article class="mt-5 hidden lg:grid grid-cols-2">
-      <textarea
-        ref="ta"
-        :value="input"
-        @input="update"
-        class="w-full border p-1 h-64"
-      ></textarea>
-      <div v-html="compiledMarkdown" class="prose pl-4"></div>
+      <div class="px-5">
+        <!-- Title declaration -->
+        <div class="flex flex-col items-center">
+          <label for="title" class="text-gray-800 italic">Title</label>
+          <input
+            v-model="title"
+            type="text"
+            placeholder="Enter Title"
+            class="border-b text-center text-4xl focus:outline-none text-xl w-full placeholder-gray-800 pb-2"
+          />
+          <label for="subtitle" class="text-gray-800 italic">Subtitle:</label>
+          <input
+            v-model="subtitle"
+            type="text"
+            placeholder="Enter Subtitle"
+            class="border-b text-center text-2xl focus:outline-none text-xl w-full placeholder-gray-800 pb-2"
+          />
+          <p class="text-sm text-gray-500 py-4">
+            By: {{ this.$store.state.user.username }}
+          </p>
+        </div>
+        <div class="w-full flex justify-around text-primary px-2">
+          <button @click="testButton('**', true)"><BoldIcon /></button>
+          <button @click="testButton('*', true)"><ItalicIcon /></button>
+          <button @click="testButton('\n* ')"><ListIcon /></button>
+          <button @click="testButton('\n1. ')">1.</button>
+          <button @click="testButton('\n# ')">H1</button>
+          <button @click="testButton('\n## ')">H2</button>
+          <button @click="testButton('\n### ')">H3</button>
+          <button @click="testButton('\n> ')">
+            <QuoteIcon />
+          </button>
+          <button @click="testButton('\n```\n', true)"><CodeIcon /></button>
+          <button @click="testButton('[title](https://www.example.com)')">
+            <LinkIcon />
+          </button>
+          <button @click="testButton('![alt text](https://picsum.photos/200)')">
+            <ImageIcon />
+          </button>
+        </div>
+        <textarea
+          ref="ta"
+          :value="input"
+          @input="update"
+          class="w-full border p-1 h-64"
+        ></textarea>
+      </div>
+
+      <div class="border rounded-lg p-5 text-black m-5 shadow-lg">
+        <h2 class="text-4xl text-center">{{ this.title }}</h2>
+        <h4 class="text-2xl text-center">{{ this.subtitle }}</h4>
+        <h6 class="text-sm text-gray-500 py-4 text-center">
+          By: {{ this.$store.state.user.username }}
+        </h6>
+        <div v-html="compiledMarkdown" class="prose pl-4"></div>
+      </div>
       <span class="bottom-0 fixed m-5 p-5 right-0">
         <button
           @click="post()"
@@ -77,6 +145,7 @@
       </span>
     </article>
 
+    <!-- Mobile Toggle for Edit / Preview -->
     <article class="lg:hidden fixed bottom-0 w-full pb-20 bg-white">
       <div class="grid grid-cols-3 px-2">
         <button @click="toggleComposeState('edit')" class="focus:outline-none">
@@ -100,7 +169,7 @@
         </button>
         <button
           @click="post()"
-          class="text-xl text-white rounded-full bg-primary focus:outline-none"
+          class="bg-primary w-24 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg shadow-lg focus:outline-none"
         >
           Publish
         </button>
