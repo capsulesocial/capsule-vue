@@ -72,8 +72,9 @@
   "scripts": {
     "dev": "webpack --mode=development && electron ./main.dev.js",
     "build:win:64": "nuxt build && webpack && electron-builder --win --x64",
-    "build:win:32": "nuxt build && webpack && electron-builder --win --x32",
-    "build:win:both": "nuxt build && webpack && electron-builder --win --x32 --x64",
+    "build:win:32": "nuxt build && webpack && electron-builder --win --x64",
+    "build:win:both": "nuxt build && webpack && electron-builder --win --x64",
+    "build:mac:64": "nuxt build && webpack && export CSC_IDENTITY_AUTO_DISCOVERY=false && electron-builder --mac --x64",
     "build:mac:dmg": "nuxt build && webpack && CSC_NAME=\"CERTIFICATE NAME (***********)\" appleId='apple@developer.id' appleIdPassword='application password' electron-builder",
     "build:mac:store": "nuxt build && webpack && CSC_NAME=\"CERTIFICATE NAME (***********)\" electron-builder && bash build/resignAndPackage.sh"
   },
