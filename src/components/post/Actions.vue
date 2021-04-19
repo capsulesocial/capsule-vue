@@ -5,10 +5,37 @@
         <HeartIcon :isActive="this.isHeart()" class="mr-2 fill-none" /> Heart
       </button>
       <button @click="handleComment()" class="flex focus:outline-none">
-        <CommentIcon class="mr-2" /> Comment
+        <CommentIcon class="mr-2 fill-primary" /> Comment
       </button>
-      <button @click="handleShare()" class="flex focus:outline-none">
-        <ShareIcon class="mr-2" /> Share
+      <button
+        @click="handleReaction('agree')"
+        class="stroke-current focus:outline-none"
+      >
+        <AgreeIcon
+          v-if="this.emotion === 'agree'"
+          class="text-white bg-primary rounded-full"
+        />
+        <AgreeIcon v-else />
+      </button>
+      <button
+        @click="handleReaction('neutral')"
+        class="stroke-current focus:outline-none"
+      >
+        <NeutralIcon
+          v-if="this.emotion === 'neutral'"
+          class="text-white bg-primary rounded-full"
+        />
+        <NeutralIcon v-else />
+      </button>
+      <button
+        @click="handleReaction('disagree')"
+        class="stroke-current focus:outline-none"
+      >
+        <DisagreeIcon
+          v-if="this.emotion === 'disagree'"
+          class="text-white bg-primary rounded-full"
+        />
+        <DisagreeIcon v-else />
       </button>
     </article>
 
@@ -16,8 +43,11 @@
       <p
         v-for="comment in this.post.comments"
         :key="comment.id"
-        class="text-base px-2"
+        class="text-base px-2 py-1"
       >
+        <AgreeIcon v-if="comment.emotion === 'agree'" class="inline" />
+        <NeutralIcon v-if="comment.emotion === 'neutral'" class="inline" />
+        <DisagreeIcon v-if="comment.emotion === 'disagree'" class="inline" />
         <span class="text-gray-700">@{{ comment.authorID }}:</span>
         {{ comment.content }}
       </p>
@@ -50,14 +80,17 @@
 <script>
 import HeartIcon from "@/components/icons/Heart";
 import CommentIcon from "@/components/icons/Comment";
-import ShareIcon from "@/components/icons/Share";
 import InfoIcon from "@/components/icons/Info";
+import AgreeIcon from "@/components/icons/Agree";
+import DisagreeIcon from "@/components/icons/Disagree";
+import NeutralIcon from "@/components/icons/Neutral";
 
 export default {
   data() {
     return {
       comment: "",
-      commentStatus: this.isCommenting
+      commentStatus: this.isCommenting,
+      emotion: null
     };
   },
   props: {
@@ -77,8 +110,10 @@ export default {
   components: {
     HeartIcon,
     CommentIcon,
-    ShareIcon,
-    InfoIcon
+    InfoIcon,
+    AgreeIcon,
+    DisagreeIcon,
+    NeutralIcon
   },
   methods: {
     isHeart() {
@@ -93,23 +128,17 @@ export default {
     handleComment() {
       this.commentStatus = !this.commentStatus;
     },
-    handleShare() {
-      var url = document.getElementById(this.$props.post.id);
-      url.type = "text";
-      url.value =
-        document.location.origin + "/" + this.authorID + "/" + this.post.id;
-      url.select();
-      url.setSelectionRange(0, 99999);
-      document.execCommand("copy");
-      url.type = "hidden";
-      alert("URL Copied to Clipboard!");
-    },
     sendComment() {
       this.$store.commit("postComment", {
         postID: this.post.id,
         authorID: this.$store.state.user.id,
-        content: this.comment
+        content: this.comment,
+        emotion: this.emotion
       });
+    },
+    handleReaction(reaction) {
+      this.emotion = reaction;
+      this.commentStatus = true;
     }
   }
 };
