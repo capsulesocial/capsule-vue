@@ -23,7 +23,17 @@
     <!-- Top Right -->
     <article class="hidden lg:flex items-center justify-between ml-2">
       <div class="flex">
+        <nuxt-link
+          v-if="
+            this.$route.path !== '/' + this.$store.state.user.id + '/bookmarks'
+          "
+          :to="this.$store.state.user.id + '/bookmarks'"
+          class="bg-gray-200 rounded-full w-12 h-12 focus:outline-none flex justify-center"
+        >
+          <BookmarksIcon class="self-center" />
+        </nuxt-link>
         <button
+          v-else
           class="bg-gray-200 rounded-full w-12 h-12 focus:outline-none flex justify-center"
         >
           <BookmarksIcon class="self-center" />

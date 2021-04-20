@@ -188,7 +188,7 @@ export default {
             username: this.name,
             email: this.email,
             password: this.password,
-            likes: [],
+            bookmarks: [],
             followers: [],
             following: []
           });

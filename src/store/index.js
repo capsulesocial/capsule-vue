@@ -1,8 +1,8 @@
 export const state = () => ({
   isComposing: false,
   draft: {
-    title: "",
-    subtitle: "",
+    title: "Title",
+    subtitle: "Subtitle",
     content: "# hello world",
   },
   user: {
@@ -10,7 +10,7 @@ export const state = () => ({
     username: "Tom Brady",
     email: "tb12@nfl.com",
     posts: ["0"],
-    likes: [],
+    bookmarks: [],
     followers: [],
     following: []
   },
@@ -24,7 +24,7 @@ export const state = () => ({
       views: 1294,
       timestamp: new Date(),
       comments: [{ id: "0", authorID: "gronk", content: "Nice!", emotion: "agree" }],
-      likes: []
+      bookmarks: []
     },
     {
       id: "1",
@@ -35,7 +35,7 @@ export const state = () => ({
       views: 1,
       timestamp: new Date(),
       comments: [{ id: "0", authorID: "tombrady", content: "You are my favorite teammate!", emotion: "agree" }],
-      likes: []
+      bookmarks: []
     },
   ]
 })
@@ -78,16 +78,16 @@ export const mutations = {
     }
     // TODO: Update target user followers list
   },
-  handleHeart(state, data) {
+  handleBookmark(state, data) {
     let targetPost = state.posts.find(e => e.id === data.postID) // post object
-    if (targetPost.likes.indexOf(state.user.id) === -1) {
+    if (targetPost.bookmarks.indexOf(state.user.id) === -1) {
       // add like
-      targetPost.likes.push(state.user.id)
-      state.user.likes.push(data.postID)
+      targetPost.bookmarks.push(state.user.id)
+      state.user.bookmarks.push(data.postID)
     } else {
       // remove like
-      targetPost.likes = targetPost.likes.filter(e => e !== state.user.id)
-      state.user.likes = state.user.likes.filter(e => e !== data.postID)
+      targetPost.bookmarks = targetPost.bookmarks.filter(e => e !== state.user.id)
+      state.user.bookmarks = state.user.bookmarks.filter(e => e !== data.postID)
     }
   }
 }

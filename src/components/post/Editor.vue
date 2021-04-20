@@ -80,26 +80,6 @@
     <!-- Desktop Editor -->
     <article class="mt-5 hidden lg:grid grid-cols-2">
       <div class="px-5">
-        <!-- Title declaration -->
-        <div class="flex flex-col items-center">
-          <label for="title" class="text-gray-800 italic">Title</label>
-          <input
-            v-model="title"
-            type="text"
-            placeholder="Enter Title"
-            class="border-b text-center text-4xl focus:outline-none text-xl w-full placeholder-gray-800 pb-2"
-          />
-          <label for="subtitle" class="text-gray-800 italic">Subtitle:</label>
-          <input
-            v-model="subtitle"
-            type="text"
-            placeholder="Enter Subtitle"
-            class="border-b text-center text-2xl focus:outline-none text-xl w-full placeholder-gray-800 pb-2"
-          />
-          <p class="text-sm text-gray-500 py-4">
-            By: {{ this.$store.state.user.username }}
-          </p>
-        </div>
         <div class="w-full flex justify-around text-primary px-2">
           <button @click="testButton('**', true)"><BoldIcon /></button>
           <button @click="testButton('*', true)"><ItalicIcon /></button>
@@ -128,9 +108,24 @@
       </div>
 
       <div class="border rounded-lg p-5 text-black m-5 shadow-lg">
-        <h2 class="text-4xl text-center">{{ this.title }}</h2>
-        <h4 class="text-2xl text-center">{{ this.subtitle }}</h4>
-        <h6 class="text-sm text-gray-500 py-4 text-center">
+        <!-- Title declaration -->
+        <div class="flex flex-col items-center">
+          <label for="title" class="hidden">Title</label>
+          <input
+            v-model="title"
+            type="text"
+            placeholder="Enter Title"
+            class="text-4xl focus:outline-none text-xl w-full placeholder-gray-500 pb-2"
+          />
+          <label for="subtitle" class="hidden">Subtitle:</label>
+          <input
+            v-model="subtitle"
+            type="text"
+            placeholder="Enter Subtitle"
+            class="text-2xl focus:outline-none text-xl w-full placeholder-gray-500 pb-2"
+          />
+        </div>
+        <h6 class="text-sm text-gray-500 pb-4">
           By: {{ this.$store.state.user.username }}
         </h6>
         <div v-html="compiledMarkdown" class="prose pl-4"></div>
@@ -247,12 +242,12 @@ export default {
         id: this.$store.state.posts.length.toString(),
         timestamp: date,
         comments: [],
-        likes: [],
+        bookmarks: [],
         authorID: this.$store.state.user.id
       });
       this.toggle();
-      this.title = "";
-      this.subtitle = "";
+      this.title = "Title";
+      this.subtitle = "Subtitle";
       this.input = "# Hello World";
       this.$router.push(this.$store.state.user.id);
     },

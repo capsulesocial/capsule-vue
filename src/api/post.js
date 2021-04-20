@@ -7,7 +7,7 @@ export default ({ app }) => ({
   // Returns post object associated with content id 
   getPost(id) { },
   // Adds OR removes user ID of person who liked the post
-  handleHeart(userID, postID) { },
+  handleBookmark(userID, postID) { },
   // Adds comment to post
   addComment(postID, comment) { }
 })

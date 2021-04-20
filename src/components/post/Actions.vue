@@ -1,40 +1,45 @@
 <template>
   <section>
     <article class="border-t flex justify-around p-2 text-gray-600">
-      <button @click="handleHeart()" class="flex focus:outline-none">
-        <HeartIcon :isActive="this.isHeart()" class="mr-2 fill-none" /> Heart
+      <button @click="handleBookmark()" class="flex focus:outline-none">
+        <BookmarkIcon :isActive="this.isBookmark()" class="mr-2 fill-none" />
       </button>
       <button @click="handleComment()" class="flex focus:outline-none">
-        <CommentIcon class="mr-2 fill-primary" /> Comment
+        <CommentIcon class="mr-2 fill-primary" />
       </button>
       <button
         @click="handleReaction('agree')"
         class="stroke-current focus:outline-none"
       >
-        <AgreeIcon
-          v-if="this.emotion === 'agree'"
-          class="text-white bg-primary rounded-full"
-        />
+        <AgreeIcon v-if="this.emotion === 'agree'" class="text-primary" />
         <AgreeIcon v-else />
       </button>
-      <button
+      <!-- <button
         @click="handleReaction('neutral')"
         class="stroke-current focus:outline-none"
       >
-        <NeutralIcon
-          v-if="this.emotion === 'neutral'"
-          class="text-white bg-primary rounded-full"
-        />
+        <NeutralIcon v-if="this.emotion === 'neutral'" class="text-primary" />
         <NeutralIcon v-else />
+      </button> -->
+      <button
+        @click="handleReaction('thinking')"
+        class="stroke-current focus:outline-none"
+      >
+        <span
+          v-if="this.emotion === 'thinking'"
+          class="text-2xl border border-primary rounded-full p-1"
+          >🤔</span
+        >
+        <span v-else class="text-2xl">🤔</span>
+
+        <!-- <NeutralIcon v-if="this.emotion === 'neutral'" class="text-primary" />
+        <NeutralIcon v-else /> -->
       </button>
       <button
         @click="handleReaction('disagree')"
         class="stroke-current focus:outline-none"
       >
-        <DisagreeIcon
-          v-if="this.emotion === 'disagree'"
-          class="text-white bg-primary rounded-full"
-        />
+        <DisagreeIcon v-if="this.emotion === 'disagree'" class="text-primary" />
         <DisagreeIcon v-else />
       </button>
     </article>
@@ -46,7 +51,8 @@
         class="text-base px-2 py-1"
       >
         <AgreeIcon v-if="comment.emotion === 'agree'" class="inline" />
-        <NeutralIcon v-if="comment.emotion === 'neutral'" class="inline" />
+        <!-- <NeutralIcon v-if="comment.emotion === 'neutral'" class="inline" /> -->
+        <span v-if="comment.emotion === 'thinking'">🤔</span>
         <DisagreeIcon v-if="comment.emotion === 'disagree'" class="inline" />
         <span class="text-gray-700">@{{ comment.authorID }}:</span>
         {{ comment.content }}
@@ -78,7 +84,7 @@
 </template>
 
 <script>
-import HeartIcon from "@/components/icons/Heart";
+import BookmarkIcon from "@/components/icons/Bookmark";
 import CommentIcon from "@/components/icons/Comment";
 import InfoIcon from "@/components/icons/Info";
 import AgreeIcon from "@/components/icons/Agree";
@@ -108,7 +114,7 @@ export default {
     }
   },
   components: {
-    HeartIcon,
+    BookmarkIcon,
     CommentIcon,
     InfoIcon,
     AgreeIcon,
@@ -116,11 +122,11 @@ export default {
     NeutralIcon
   },
   methods: {
-    isHeart() {
-      return this.post.likes.indexOf(this.$store.state.user.id) > -1;
+    isBookmark() {
+      return this.post.bookmarks.indexOf(this.$store.state.user.id) > -1;
     },
-    handleHeart() {
-      this.$store.commit("handleHeart", {
+    handleBookmark() {
+      this.$store.commit("handleBookmark", {
         postID: this.post.id,
         authorID: this.authorID
       });
