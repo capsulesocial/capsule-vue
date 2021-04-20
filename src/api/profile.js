@@ -1,4 +1,4 @@
-export default axios => ({
+export default ({ app }) => ({
   // Check if a user ID exists in USERS collection
   checkID(id) { },
   // Adds a post to the user profile posts object

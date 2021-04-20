@@ -1,4 +1,4 @@
-export default axios => ({
+export default ({ app }) => ({
   updateID(id, newID) { },
   updateUsername(id, username) { },
   updateEmail(id, email) { },

@@ -1,4 +1,4 @@
-export default axios => ({
+export default ({ app }) => ({
   // POST a post to IPFS
   sendPost() {
     // Call addPost in profile.js

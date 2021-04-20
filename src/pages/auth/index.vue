@@ -157,11 +157,25 @@ export default {
       this.isLogin = !this.isLogin;
     },
     verify: async function() {
+      let pwCheck = this.$quality.password(this.password);
+      let idCheck = this.$quality.id(this.id);
+      if (pwCheck !== true) {
+        alert(pwCheck);
+        return;
+      }
+      if (idCheck !== true) {
+        alert(idCheck);
+        return;
+      }
+
+      // Login
       if (this.isLogin) {
         const res = await this.$api.auth.login(this.id, this.password);
         if (res) {
           // this.$store.state.setSession(res.user)
-        } else alert("Invalid login!");
+        } else {
+          alert("Invalid login!");
+        }
       } else {
         // Registration
         if (!this.consent) {
@@ -178,6 +192,7 @@ export default {
             followers: [],
             following: []
           });
+          console.log(res);
         } else {
           alert("Password mismatch!");
           return;

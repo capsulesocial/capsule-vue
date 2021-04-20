@@ -1,7 +1,9 @@
 # PLUGINS
 
-**This directory is not required, you can delete it if you don't want to use it.**
+## /api.js
 
-This directory contains Javascript plugins that you want to run before mounting the root Vue.js application.
+- Handles all IPFS-specific HTTP requests.
 
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/guide/plugins).
+## /quality.js
+
+- Contains all quality rules for checking user inputs

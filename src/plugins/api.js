@@ -6,10 +6,10 @@ import Settings from "@/api/settings"
 export default (context, inject) => {
   // Initialize API factories
   const factories = {
-    auth: Auth(context.$axios),
-    post: Post(context.$axios),
-    profile: Profile(context.$axios),
-    settings: Settings(context.$axios)
+    auth: Auth(context),
+    post: Post(context),
+    profile: Profile(context),
+    settings: Settings(context)
   }
 
   // Inject $api
