@@ -103,10 +103,10 @@ export default {
       if (this.newUsername !== "") {
         this.$store.commit("updateUsername", this.newUsername);
       }
-      if (this.newID !== "") {
+      if (this.newID !== "" && this.$quality.id(this.newID)) {
         this.$store.commit("updateID", this.newID);
       }
-      if (this.newEmail !== "") {
+      if (this.newEmail !== "" && this.$quality.email(this.newEmail)) {
         this.$store.commit("updateEmail", this.newEmail);
       }
     }

@@ -28,15 +28,25 @@ export default ({ app }, inject) => {
       return "ID must be <= 25 characters"
     } else if (input.search(/\s/) != -1) {
       return "ID must not contain a space!"
-    } else if (!/^[a-zA-Z]+$/.test(input)) {
-      return "ID must only contain letters"
+    } else if (!/^[a-zA-Z0-9]+$/.test(input)) {
+      return "ID must only contain numbers and letters"
+    }
+    else return true
+  }
+
+  const email = (input) => {
+    if (input === "" || input === null) {
+      return "Missing Email!"
+    } else if (!/\S+@\S+\.\S+/.test(input)) {
+      return "Invalid email syntax!"
     }
     else return true
   }
 
   const qualityRules = {
     password: password,
-    id: id
+    id: id,
+    email: email
   }
   inject('quality', qualityRules)
 }

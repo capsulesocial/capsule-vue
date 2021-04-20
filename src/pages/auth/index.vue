@@ -182,6 +182,10 @@ export default {
           alert("Please accept the Terms & Conditions");
           return;
         }
+        if (this.$quality.email(this.email) !== true) {
+          alert("Invalid email!");
+          return;
+        }
         if (this.password === this.confirmPassword) {
           const res = await this.$api.auth.register({
             id: this.id,
