@@ -1,8 +1,8 @@
 <template>
-  <section class="border">
+  <article class="border">
     <!-- Post Preview Link -->
-    <article class="mb-2 flex justify-between items-center p-2">
-      <nuxt-link :to="this.authorID">
+    <div class="mb-2 flex justify-between items-center p-2">
+      <nuxt-link :to="'/' + this.authorID">
         <h5 class="text-base">{{ this.authorUsername }}</h5>
         <h6 class="text-sm text-gray-600">
           {{ this.post.timestamp.toLocaleString() }}
@@ -17,19 +17,19 @@
           <MoreIcon />
         </button>
       </div>
-    </article>
+    </div>
 
-    <article class="p-2">
-      <nuxt-link :to="this.authorID + '/' + this.post.id">
+    <div class="p-2">
+      <nuxt-link :to="'/' + this.authorID + '/' + this.post.id">
         <h3 class="text-xl font-bold">{{ this.post.title }}</h3>
         <h4 class="text-lg italic">{{ this.post.subtitle }}</h4>
       </nuxt-link>
-    </article>
+    </div>
 
-    <article>
+    <div>
       <PostActions :post="this.post" :authorID="this.authorID" />
-    </article>
-  </section>
+    </div>
+  </article>
 </template>
 
 <script>

@@ -1,9 +1,5 @@
 <template>
   <section>
-    <h1 class="text-3xl py-2">
-      Library of Bookmarks by {{ this.$route.params.id }}
-    </h1>
-
     <div v-for="p in this.getBookmarkList()" :key="p.id">
       <PostCard :post="p" :authorID="p.authorID" :authorUsername="p.authorID" />
     </div>

@@ -6,60 +6,37 @@
     >
       <nuxt-link
         to="/home"
-        class="group flex items-center px-2 py-2 text-base leading-6"
+        class="group flex items-center px-2 py-2 text-base leading-6 font-semibold"
       >
-        <span v-if="this.$route.path === '/home'" class="font-bold text-primary"
-          >Home</span
-        >
-        <span v-else class="font-semibold">Home</span>
+        Home
       </nuxt-link>
       <nuxt-link
         to="/discover"
         class="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-semibold"
       >
-        <span
-          v-if="this.$route.path === '/discover'"
-          class="font-bold text-primary"
-          >Discover</span
-        >
-        <span v-else class="font-semibold">Discover</span>
+        Discover
       </nuxt-link>
       <nuxt-link
         to="/messages"
         class="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-semibold"
       >
-        <span
-          v-if="this.$route.path === '/messages'"
-          class="font-bold text-primary"
-          >Messages</span
-        >
-        <span v-else class="font-semibold">Messages</span>
+        Messages
       </nuxt-link>
 
       <!-- profile -->
-      <div
+
+      <nuxt-link
+        :to="'/' + $store.state.user.id"
         class="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-semibold"
       >
-        <span
-          v-if="this.$route.params.id === this.$store.state.user.id"
-          class="font-bold text-primary"
-          >Profile</span
-        >
-        <nuxt-link :to="$store.state.user.id" v-else class="font-semibold">
-          Profile
-        </nuxt-link>
-      </div>
+        Profile
+      </nuxt-link>
 
       <nuxt-link
         to="/settings"
         class="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-semibold"
       >
-        <span
-          v-if="this.$route.path === '/settings'"
-          class="font-bold text-primary"
-          >Settings</span
-        >
-        <span v-else class="font-semibold">Settings</span>
+        Settings
       </nuxt-link>
       <nuxt-link
         to="/help"
@@ -83,11 +60,7 @@
       >
         <!-- Actions tab -->
         <div class="flex flex-col py-2" v-if="isProfileActions">
-          <nuxt-link
-            :to="$store.state.user.id"
-            v-if="this.$route.params.id !== this.$store.state.user.id"
-            >Visit Profile</nuxt-link
-          >
+          <nuxt-link :to="'/' + $store.state.user.id">Visit Profile</nuxt-link>
           <nuxt-link to="/auth" class=" ">
             Sign Out
           </nuxt-link>

@@ -1,23 +1,5 @@
 <template>
   <section>
-    <!-- Header -->
-    <article class="pb-5 flex justify-between">
-      <div>
-        <h1 class="text-3xl text-center">
-          {{ this.currentUser.username }}
-        </h1>
-        <h3 class="text-xl text-center text-gray-800">
-          @{{ this.currentUser.id }}
-        </h3>
-      </div>
-      <button @click="toggleFriend" class="rounded-full focus:outline-none">
-        <FriendButton
-          :isFollowing="this.isFollowing"
-          :userID="currentUser.id"
-        />
-      </button>
-    </article>
-
     <article v-for="post in this.userPosts()" :key="post.id">
       <PostCard
         :post="post"
@@ -30,21 +12,17 @@
 
 <script>
 import PostCard from "@/components/post/Card";
-import FriendButton from "@/components/FriendButton";
+
 export default {
   data() {
-    return {
-      currentUser: null,
-      isFollowing: true
-    };
+    return {};
   },
-  components: {
-    PostCard,
-    FriendButton
-  },
-  async created() {
-    // The user in which I am currently viewing
-    this.currentUser = this.$store.state.user;
+  components: { PostCard },
+  props: {
+    currentUser: {
+      type: Object,
+      default: null
+    }
   },
   methods: {
     userPosts: function() {
@@ -54,9 +32,6 @@ export default {
         if (p[i].authorID == this.currentUser.id) posts.push(p[i]);
       }
       return posts;
-    },
-    toggleFriend: function() {
-      this.isFollowing = !this.isFollowing;
     }
   }
 };

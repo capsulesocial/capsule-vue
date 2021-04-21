@@ -35,3 +35,14 @@ export default {
   }
 };
 </script>
+
+<style>
+a.nuxt-link-active {
+  font-weight: italic;
+}
+
+a.nuxt-link-exact-active {
+  font-weight: bold;
+  color: #6fa786;
+}
+</style>
