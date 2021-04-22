@@ -29,26 +29,12 @@
       />
     </article>
 
-    <article class="px-5 py-5 grid grid-cols-2 gap-1 mt-5">
-      <button
-        class="flex items-center justify-center h-12 border text-gray-600 w-full py-2.5 rounded-lg focus:outline-none focus:border-primary focus:text-primary"
-      >
-        <TwitterIcon class="mr-2" />
-        <span class="text-xl">
-          Twitter
-        </span>
-      </button>
-      <button
-        class="flex items-center justify-center h-12 border text-gray-600 w-full py-2.5 rounded-lg focus:outline-none focus:border-primary focus:text-primary"
-      >
-        <GitHubIcon class="mr-2" />
-        <span class="text-xl">
-          GitHub
-        </span>
-      </button>
+    <article class="grid grid-cols-1 gap-5 mt-5">
+      <VerifySocial platform="twitter" />
+      <VerifySocial platform="github" />
     </article>
 
-    <article class="mt-8">
+    <article class="mt-5">
       <label for="password" class="text-lg bold">
         Current Password <span class="text-primary">*</span>
       </label>
@@ -87,8 +73,7 @@
 </template>
 
 <script>
-import TwitterIcon from "@/components/icons/brands/Twitter";
-import GitHubIcon from "@/components/icons/brands/GitHub";
+import VerifySocial from "@/components/VerifySocial";
 export default {
   data() {
     return {
@@ -112,8 +97,7 @@ export default {
     }
   },
   components: {
-    TwitterIcon,
-    GitHubIcon
+    VerifySocial
   }
 };
 </script>

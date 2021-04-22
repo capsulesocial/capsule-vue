@@ -7,4 +7,9 @@ export default ({ app }) => ({
     // Add actionID to targetID.followers
     // Add targetID to actionID.following
   },
+  verifySocial(id, platform, handle) {
+    console.log("ID: " + id)
+    console.log("Platform: " + platform)
+    console.log("Handle: " + handle)
+  }
 });
