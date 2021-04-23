@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <main>
     Capsule Social
-  </div>
+  </main>
 </template>
 
 <script>

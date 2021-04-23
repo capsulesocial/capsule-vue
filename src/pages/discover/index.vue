@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <main>
     Discover
-  </div>
+  </main>
 </template>

@@ -47,12 +47,7 @@
         >
         <span v-else class="font-semibold">Help</span>
       </nuxt-link>
-      <button
-        class="bg-primary w-48 mt-5 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg shadow-lg focus:outline-none"
-        @click="toggle()"
-      >
-        Write Post
-      </button>
+      <BrandedButton text="Write Post" :action="toggle" class="mt-5 w-48" />
 
       <div
         class="flex flex-col items-center fixed bottom-0 mb-4"
@@ -129,6 +124,7 @@ import NotificationsIcon from "@/components/icons/MobileNotifications";
 import MessagesIcon from "@/components/icons/Messages";
 import ProfileIcon from "@/components/icons/Profile";
 import SettingsIcon from "@/components/icons/Settings";
+import BrandedButton from "@/components/BrandedButton";
 
 export default {
   data() {
@@ -143,7 +139,8 @@ export default {
     NotificationsIcon,
     MessagesIcon,
     ProfileIcon,
-    SettingsIcon
+    SettingsIcon,
+    BrandedButton
   },
   methods: {
     ...mapMutations({

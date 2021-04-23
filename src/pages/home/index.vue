@@ -1,13 +1,13 @@
 <template>
-  <div>
-    <article v-for="post in this.$store.state.posts" :key="post.contentAddress">
+  <main>
+    <div v-for="post in this.$store.state.posts" :key="post.contentAddress">
       <PostCard
         :post="post"
         :authorID="post.authorID"
         :authorUsername="post.authorID"
       />
-    </article>
-  </div>
+    </div>
+  </main>
 </template>
 
 <script>

@@ -131,12 +131,7 @@
         <div v-html="compiledMarkdown" class="prose pl-4"></div>
       </div>
       <span class="bottom-0 fixed m-5 p-5 right-0">
-        <button
-          @click="post()"
-          class="bg-primary w-48 mt-5 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg shadow-lg focus:outline-none"
-        >
-          Publish
-        </button>
+        <BrandedButton text="Publish" :action="post" />
       </span>
     </article>
 
@@ -162,12 +157,7 @@
           >
           <span v-else class="text-xl">Preview</span>
         </button>
-        <button
-          @click="post()"
-          class="bg-primary w-24 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg shadow-lg focus:outline-none"
-        >
-          Publish
-        </button>
+        <BrandedButton text="Publish" :action="post" />
       </div>
     </article>
   </section>
@@ -185,6 +175,7 @@ import ListIcon from "@/components/icons/md/List";
 import LinkIcon from "@/components/icons/md/Link";
 import ImageIcon from "@/components/icons/md/Image";
 import QuoteIcon from "@/components/icons/md/Quote";
+import BrandedButton from "@/components/BrandedButton";
 
 export default {
   data() {
@@ -211,7 +202,8 @@ export default {
     ListIcon,
     LinkIcon,
     ImageIcon,
-    QuoteIcon
+    QuoteIcon,
+    BrandedButton
   },
   mounted() {},
   methods: {

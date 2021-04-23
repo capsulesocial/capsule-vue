@@ -1,16 +1,14 @@
 <template>
-  <section
-    class="min-h-screen bg-gray-100 flex flex-col justify-center sm:py-12"
-  >
-    <article class="self-center mb-5">
+  <main class="min-h-screen bg-gray-100 flex flex-col justify-center sm:py-12">
+    <div class="self-center mb-5">
       <CapsuleIcon />
-    </article>
+    </div>
 
     <!-- Login -->
-    <article
+    <section
       class="bg-white mx-auto lg:w-full lg:max-w-md rounded shadow-lg divide-y divide-gray-200"
     >
-      <div class="flex justify-around">
+      <article class="flex justify-around">
         <span
           v-if="isLogin"
           class="text-primary p-5 inline-block border-b-2 border-primary font-bold"
@@ -29,9 +27,9 @@
         <button @click="toggleFormType" class="focus:outline-none" v-else>
           Sign Up
         </button>
-      </div>
+      </article>
 
-      <div class="px-10 py-6">
+      <article class="px-10 py-6">
         <!-- Register: Name -->
         <label
           v-if="!isLogin"
@@ -99,16 +97,13 @@
           id="confirmPassword"
           class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full focus:outline-none focus:border-primary"
         />
-        <button
-          type="button"
-          class="bg-primary hover:bg-green-600 text-white w-full py-2.5 rounded-lg text-sm shadow-sm font-semibold text-center inline-block h-10 focus:outline-none"
-          @click="verify"
-        >
-          <span v-if="!isLogin" class="inline-block">Sign Up</span>
-          <span v-else class="inline-block">Sign In</span>
-        </button>
-      </div>
-      <div
+        <BrandedButton
+          :text="isLogin ? 'Sign In' : 'Sign Up'"
+          :action="verify"
+          class="w-full"
+        />
+      </article>
+      <article
         class="text-center whitespace-nowrap flex justify-between text-sm p-5 text-gray-600"
         v-if="isLogin"
       >
@@ -116,8 +111,8 @@
           Forgot Password
         </button>
         <button class="px-4 py-2 focus:outline-none">Help</button>
-      </div>
-      <div v-else class="flex justify-center">
+      </article>
+      <article v-else class="flex justify-center">
         <label class="items-center p-5 text-gray-600 inline-flex">
           <input
             v-model="consent"
@@ -128,13 +123,14 @@
             >I agree to the Terms and Conditions
           </span>
         </label>
-      </div>
-    </article>
-  </section>
+      </article>
+    </section>
+  </main>
 </template>
 
 <script>
 import CapsuleIcon from "@/components/icons/Capsule";
+import BrandedButton from "@/components/BrandedButton";
 
 export default {
   layout: "unauth",
@@ -150,7 +146,8 @@ export default {
     };
   },
   components: {
-    CapsuleIcon
+    CapsuleIcon,
+    BrandedButton
   },
   methods: {
     toggleFormType: function() {

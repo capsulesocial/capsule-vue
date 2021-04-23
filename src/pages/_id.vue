@@ -1,7 +1,7 @@
 <template>
-  <section>
+  <main>
     <!-- Header -->
-    <article class="pb-5 flex justify-between">
+    <header class="pb-5 flex justify-between">
       <div>
         <h1 class="text-3xl text-center">
           {{ this.currentUser.username }}
@@ -40,13 +40,13 @@
           :userID="currentUser.id"
         />
       </button>
-    </article>
+    </header>
 
-    <article>
+    <div>
       <p class="italic text-gray-700 px-5 text-center">
         {{ this.currentUser.bio }}
       </p>
-    </article>
+    </div>
 
     <nav class="flex flex-row justify-around py-2">
       <nuxt-link
@@ -63,7 +63,7 @@
     </nav>
 
     <nuxt-child :currentUser="this.currentUser" />
-  </section>
+  </main>
 </template>
 
 <script>

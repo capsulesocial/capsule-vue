@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <main>
     Messages
-  </div>
+  </main>
 </template>
