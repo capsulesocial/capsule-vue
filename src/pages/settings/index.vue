@@ -29,6 +29,22 @@
       />
     </article>
 
+    <article class="pt-5">
+      <label for="bio" class="text-lg bold">Bio:</label>
+      <textarea
+        id="bio"
+        :maxlength="maxCharBio"
+        :value="bio"
+        @input="bio = $event.target.value"
+        @keyup="checkBio()"
+        rows="4"
+        class="w-full border focus:border-primary focus:outline-none p-1 resize-none"
+      ></textarea>
+      <p class="text-xs text-right">
+        {{ this.checkBio() }} Characters Remaining
+      </p>
+    </article>
+
     <article class="grid grid-cols-1 gap-5 mt-5">
       <VerifySocial platform="twitter" />
       <VerifySocial platform="github" />
@@ -41,17 +57,19 @@
       <input
         id="password"
         type="password"
-        class="w-full border rounded-full focus:outline-none p-2"
+        class="w-full border rounded-full focus:outline-none p-2 focus:border-primary"
       />
 
       <label for="newPassword" class="text-lg bold pt-2">New Password</label>
       <input
         id="newPassword"
         type="password"
-        class="w-full border rounded-full focus:outline-none p-2"
+        class="w-full border rounded-full focus:outline-none p-2 focus:border-primary"
       />
 
-      <label for="confirmPassword" class="text-lg bold pt-2"
+      <label
+        for="confirmPassword"
+        class="text-lg bold pt-2 focus:border-primary"
         >Confirm Password</label
       >
       <input
@@ -73,16 +91,25 @@
 </template>
 
 <script>
+import _ from "lodash";
+import DOMPurify from "dompurify";
 import VerifySocial from "@/components/VerifySocial";
+
 export default {
   data() {
     return {
       newUsername: "",
       newID: "",
-      newEmail: ""
+      newEmail: "",
+      bio: this.$store.state.user.bio,
+      maxCharBio: 256
     };
   },
   methods: {
+    checkBio() {
+      let charCount = this.bio.length;
+      return this.maxCharBio - charCount;
+    },
     updateSettings() {
       // Run quality rules before saving
       if (this.newUsername !== "") {
@@ -90,6 +117,9 @@ export default {
       }
       if (this.newID !== "" && this.$quality.id(this.newID)) {
         this.$store.commit("updateID", this.newID);
+      }
+      if (this.bio !== this.$store.state.user.bio && this.checkBio() > 0) {
+        this.$store.commit("updateBio", this.bio);
       }
       if (this.newEmail !== "" && this.$quality.email(this.newEmail)) {
         this.$store.commit("updateEmail", this.newEmail);

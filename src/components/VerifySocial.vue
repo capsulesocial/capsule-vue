@@ -57,6 +57,16 @@ export default {
       default: ""
     }
   },
+  mounted() {
+    let socials = this.$store.state.user.socials;
+    for (let s in socials) {
+      console.log(socials[s]);
+      if (socials[s].platform === this.$props.platform) {
+        this.isActive = true;
+        this.handle = socials[s].username;
+      }
+    }
+  },
   methods: {
     toggleVerify() {
       this.isActive = !this.isActive;
@@ -67,6 +77,10 @@ export default {
         this.$props.platform,
         this.handle
       );
+      this.$store.commit("addSocial", {
+        platform: this.$props.platform,
+        username: this.handle
+      });
     }
   },
   components: {

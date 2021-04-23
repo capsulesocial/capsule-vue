@@ -9,6 +9,8 @@ export const state = () => ({
     id: "tombrady",
     username: "Tom Brady",
     email: "tb12@nfl.com",
+    bio: "Quarterback for the Tampa Bay Buccaneers. Former New England Patriots QB and Pick #199 in the NFL Draft",
+    socials: [{ "platform": "twitter", "username": "TomBrady" }],
     posts: ["0"],
     bookmarks: [],
     followers: [],
@@ -62,6 +64,12 @@ export const mutations = {
   },
   updateEmail(state, email) {
     state.user.email = email
+  },
+  updateBio(state, bio) {
+    state.user.bio = bio
+  },
+  addSocial(state, social) {
+    state.user.socials.push(social);
   },
   postComment(state, data) {
     let targetPost = state.posts.find(e => e.id === data.postID)

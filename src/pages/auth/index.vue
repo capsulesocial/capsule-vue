@@ -192,6 +192,8 @@ export default {
             username: this.name,
             email: this.email,
             password: this.password,
+            bio: "",
+            socials: [],
             bookmarks: [],
             followers: [],
             following: []
