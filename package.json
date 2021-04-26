@@ -71,10 +71,8 @@
   },
   "scripts": {
     "dev": "webpack --mode=development && electron ./main.dev.js",
-    "build:win:64": "nuxt build && webpack && electron-builder --win --x64",
-    "build:win:32": "nuxt build && webpack && electron-builder --win --x64",
-    "build:win:both": "nuxt build && webpack && electron-builder --win --x64",
-    "build:mac:64": "nuxt build && webpack && export CSC_IDENTITY_AUTO_DISCOVERY=false && electron-builder --mac --x64",
+    "build:win": "nuxt build && webpack && electron-builder --win --x64",
+    "build:mac": "nuxt build && webpack && export CSC_IDENTITY_AUTO_DISCOVERY=false && electron-builder --mac --x64",
     "build:mac:dmg": "nuxt build && webpack && CSC_NAME=\"CERTIFICATE NAME (***********)\" appleId='apple@developer.id' appleIdPassword='application password' electron-builder",
     "build:mac:store": "nuxt build && webpack && CSC_NAME=\"CERTIFICATE NAME (***********)\" electron-builder && bash build/resignAndPackage.sh"
   },
@@ -94,7 +92,7 @@
     "babel-eslint": "^10.1.0",
     "core-js": "^3.8.3",
     "cross-env": "^6.0.3",
-    "electron": "^7.1.8",
+    "electron": "^12.0.5",
     "electron-builder": "^21.2.0",
     "electron-devtools-installer": "^3.1.1",
     "electron-notarize": "^0.2.1",
