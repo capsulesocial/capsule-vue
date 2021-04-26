@@ -1,5 +1,6 @@
 <template>
   <article class="flex flex-row">
+    <!-- Unverified -->
     <button
       v-if="!this.isActive"
       @click="toggleVerify()"
@@ -12,10 +13,7 @@
       </span>
     </button>
     <div v-else class="h-12 w-full flex justify-between items-center">
-      <button @click="toggleVerify()" class="focus:outline-none">
-        ❌
-      </button>
-      <div>
+      <div v-if="!this.isVerified">
         <label for="handle"
           >Enter your {{ this.$props.platform }} handle:
           <span class="text-primary">@</span>
@@ -28,13 +26,30 @@
           class="text-primary border-b border-primary focus:outline-none"
         />
       </div>
+      <div v-else>
+        <span
+          >({{ this.handle }}) {{ this.$props.platform }} account has been
+          verified</span
+        >
+      </div>
       <button
+        v-if="!this.isVerified"
         @click="verifySocial()"
         class="flex bg-primary hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg shadow-lg focus:outline-none"
       >
         <span class="mr-2">Verify</span>
         <TwitterIcon v-if="this.$props.platform === 'twitter'" />
         <GitHubIcon v-if="this.$props.platform === 'github'" />
+      </button>
+      <button
+        v-else
+        @click="removeSocial()"
+        class="flex bg-white border border-red-500 hover:bg-red-200  font-bold py-2 px-4 rounded-lg shadow-lg focus:outline-none"
+      >
+        <TwitterIcon v-if="this.$props.platform === 'twitter'" />
+        <GitHubIcon v-if="this.$props.platform === 'github'" />
+        <span class="mx-2">Remove</span>
+        ❌
       </button>
     </div>
   </article>
@@ -48,7 +63,8 @@ export default {
   data() {
     return {
       isActive: false,
-      handle: ""
+      handle: "",
+      isVerified: false
     };
   },
   props: {
@@ -60,9 +76,9 @@ export default {
   mounted() {
     let socials = this.$store.state.user.socials;
     for (let s in socials) {
-      console.log(socials[s]);
       if (socials[s].platform === this.$props.platform) {
         this.isActive = true;
+        this.isVerified = true;
         this.handle = socials[s].username;
       }
     }
@@ -81,6 +97,18 @@ export default {
         platform: this.$props.platform,
         username: this.handle
       });
+      this.isVerified = true;
+    },
+    removeSocial() {
+      this.$api.settings.removeSocial(
+        this.$store.state.user.id,
+        this.$props.platform
+      );
+      this.$store.commit("removeSocial", {
+        platform: this.$props.platform
+      });
+      this.isVerified = false;
+      this.isActive = false;
     }
   },
   components: {

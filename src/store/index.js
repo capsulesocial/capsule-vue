@@ -71,6 +71,9 @@ export const mutations = {
   addSocial(state, social) {
     state.user.socials.push(social);
   },
+  removeSocial(state, social) {
+    state.user.socials = state.user.socials.filter(p => p.platform !== social.platform)
+  },
   postComment(state, data) {
     let targetPost = state.posts.find(e => e.id === data.postID)
     targetPost.comments.push({ id: targetPost.comments.length, authorID: data.authorID, content: data.content, emotion: data.emotion })

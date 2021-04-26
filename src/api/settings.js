@@ -11,5 +11,8 @@ export default ({ app }) => ({
     console.log("ID: " + id)
     console.log("Platform: " + platform)
     console.log("Handle: " + handle)
+  },
+  removeSocial(id, platform) {
+    console.log("Removing the " + platform + " account of " + id)
   }
 });
