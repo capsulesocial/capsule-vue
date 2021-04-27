@@ -34,11 +34,11 @@
       >
         <span
           v-if="this.emotion === 'agree'"
-          class="text-2xl border-2 border-primary rounded-lg p-1 "
+          class="text-xl border-2 border-primary rounded-lg p-1 "
         >
           👍
         </span>
-        <span v-else class="text-2xl"> 👍 </span>
+        <span v-else class="text-xl"> 👍 </span>
       </button>
       <button
         @click="handleReaction('thinking')"
@@ -46,11 +46,11 @@
       >
         <span
           v-if="this.emotion === 'thinking'"
-          class="text-2xl border-2 border-primary rounded-lg p-1 "
+          class="text-xl border-2 border-primary rounded-lg p-1 "
         >
           🤔
         </span>
-        <span v-else class="text-2xl"> 🤔 </span>
+        <span v-else class="text-xl"> 🤔 </span>
       </button>
       <button
         @click="handleReaction('disagree')"
@@ -58,11 +58,11 @@
       >
         <span
           v-if="this.emotion === 'disagree'"
-          class="text-2xl border-2 border-primary rounded-lg p-1 "
+          class="text-xl border-2 border-primary rounded-lg p-1 "
         >
           👎
         </span>
-        <span v-else class="text-2xl"> 👎 </span>
+        <span v-else class="text-xl"> 👎 </span>
       </button>
     </article>
 

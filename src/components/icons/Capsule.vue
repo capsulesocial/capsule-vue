@@ -6,7 +6,6 @@
       height="52.472"
       viewBox="0 0 52.471 52.472"
     >
-      <defs></defs>
       <g id="Logo" transform="translate(0)">
         <g id="Capsule" transform="translate(-16.048 -16.564)">
           <path
