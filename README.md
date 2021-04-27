@@ -13,11 +13,9 @@ $ yarn dev
 
 # build production electron app, delivered to /dist
 # MacOS
-$ yarn build:mac:dmg
-$ yarn build:mac:store
+$ yarn build:mac
 # Windows
-$ yarn build:win:32
-$ yarn build:win:64
+$ yarn build:win
 ```
 
 ### Folder Structure
