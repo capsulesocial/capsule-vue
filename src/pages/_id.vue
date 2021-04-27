@@ -75,7 +75,7 @@ export default {
   data() {
     return {
       currentUser: null,
-      isFollowing: true
+      isFollowing: false
     };
   },
   components: {
@@ -85,11 +85,31 @@ export default {
   },
   async created() {
     // The user in which I am currently viewing
-    this.currentUser = this.$store.state.user;
+    // Check if this is my profile
+    if (this.$route.params.id === this.$store.state.user.id) {
+      this.currentUser = this.$store.state.user;
+    }
+    // Get user profile
+    // this.currentUser = this.$api.profile.getProfile(this.$route.params.id)
+    let l = this.$store.state.userList;
+    for (let p = 0; p < l.length; p++) {
+      if (l[p].id === this.$route.params.id) {
+        this.currentUser = l[p];
+      }
+    }
+    // Check if I am following currentUser
+    let followingList = this.$store.state.user.following;
+    for (let i = 0; i < followingList.length; i++) {
+      if (followingList[i] === this.$store.state.user.id) {
+        this.isFollowing = true;
+        break;
+      }
+    }
   },
   methods: {
     toggleFriend: function() {
       this.isFollowing = !this.isFollowing;
+      this.$store.commit("handleFollow", this.currentUser.id);
     },
     openWindow(url) {
       if (process.client) {

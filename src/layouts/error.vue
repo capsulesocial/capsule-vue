@@ -21,7 +21,7 @@ export default {
   components: [BrandedButton],
   methods: {
     goBack: function() {
-      this.$router.push(-1);
+      this.$router.push("/");
     }
   }
 };

@@ -170,6 +170,7 @@ export default {
         const res = await this.$api.auth.login(this.id, this.password);
         if (res) {
           // this.$store.state.setSession(res.user)
+          this.$router.push("/");
         } else {
           alert("Invalid login!");
         }
@@ -184,24 +185,27 @@ export default {
           return;
         }
         if (this.password === this.confirmPassword) {
-          const res = await this.$api.auth.register({
+          let account = {
             id: this.id,
             username: this.name,
             email: this.email,
             password: this.password,
             bio: "",
+            posts: [],
             socials: [],
             bookmarks: [],
             followers: [],
             following: []
-          });
-          console.log(res);
+          };
+          const res = await this.$api.auth.register(account);
+          account.password = null;
+          this.$store.commit("startSession", account);
+          this.$router.push("/settings");
         } else {
           alert("Password mismatch!");
           return;
         }
       }
-      this.$router.push("/");
     }
   }
 };

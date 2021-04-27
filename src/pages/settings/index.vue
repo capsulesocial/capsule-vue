@@ -1,7 +1,7 @@
 <template>
   <main>
     <section>
-      <article class="grid grid-cols-2 gap-2 border p-2 rounded">
+      <article class="grid grid-cols-2 gap-2 border p-2 rounded-lg">
         <label for="newUsername" class="text-lg bold">Name</label>
         <input
           id="newUsername"
@@ -31,7 +31,7 @@
       </article>
 
       <article class="pt-5">
-        <label for="bio" class="text-lg bold">Bio:</label>
+        <label for="bio" class="text-sm bold text-primary">Bio:</label>
         <textarea
           id="bio"
           :maxlength="maxCharBio"
@@ -39,7 +39,7 @@
           @input="bio = $event.target.value"
           @keyup="checkBio()"
           rows="4"
-          class="w-full border focus:border-primary focus:outline-none p-1 resize-none"
+          class="w-full border rounded-lg focus:border-primary focus:outline-none p-1 resize-none"
         ></textarea>
         <p class="text-xs text-right">
           {{ this.checkBio() }} Characters Remaining
@@ -76,7 +76,7 @@
         <input
           id="confirmPassword"
           type="password"
-          class="w-full border rounded-full focus:outline-none p-2"
+          class="w-full border rounded-full focus:outline-none p-2 focus:border-primary"
         />
       </article>
 
@@ -122,6 +122,8 @@ export default {
       if (this.newEmail !== "" && this.$quality.email(this.newEmail)) {
         this.$store.commit("updateEmail", this.newEmail);
       }
+      alert("settings updated!");
+      this.$router.push("/" + this.$store.state.user.id);
     }
   },
   components: {

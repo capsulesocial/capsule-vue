@@ -1,14 +1,14 @@
 <template>
   <main>
-    <nav class="flex flex-row justify-between p-5">
+    <nav class="flex flex-col lg:flex-row justify-between p-5">
       <div class="flex items-center">
         <span class="mr-5"><CapsuleIcon /></span>
         <span class="text-3xl">Capsule Social</span>
       </div>
 
       <section>
-        <span>Join the Community</span>
-        <div class="flex items-center">
+        <p class="text-center">Join the Community</p>
+        <div class="flex items-center justify-center">
           <a href="https://twitter.com/capsule_social" target="_blank">
             <TwitterIcon />
           </a>

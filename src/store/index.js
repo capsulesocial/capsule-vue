@@ -5,24 +5,39 @@ export const state = () => ({
     subtitle: "Subtitle",
     content: "# hello world",
   },
-  user: {
-    id: "tombrady",
-    username: "Tom Brady",
-    email: "tb12@nfl.com",
-    bio: "Quarterback for the Tampa Bay Buccaneers. Former New England Patriots QB and Pick #199 in the NFL Draft",
-    socials: [{ "platform": "twitter", "username": "TomBrady" }],
-    posts: ["0"],
-    bookmarks: [],
-    followers: [],
-    following: []
-  },
+  userList: [
+    {
+      id: "tombrady",
+      username: "Tom Brady",
+      email: "tb12@nfl.com",
+      bio: "Quarterback for the Tampa Bay Buccaneers. Former New England Patriots QB and Pick #199 in the NFL Draft",
+      socials: [{ "platform": "twitter", "username": "TomBrady" }],
+      posts: ["0"],
+      bookmarks: [],
+      followers: [],
+      following: []
+
+    },
+    {
+      id: "gronk",
+      username: "Rob Gronkowski",
+      email: "rg87@nfl.com",
+      bio: "Creator of the Gronk Spike",
+      socials: [{ "platform": "twitter", "username": "gronk" }],
+      posts: ["1"],
+      bookmarks: [],
+      followers: [],
+      following: []
+    }
+  ],
+  user: null,
   posts: [
     {
       id: "0",
       authorID: "tombrady",
       title: "I won my 7th Super Bowl!!",
       subtitle: "Still playing in the NFL at the age of 43",
-      content: '# 2020 Season - Tampa Bay \n #### Thomas Edward Patrick Brady Jr. (born August 3, 1977) is an American football quarterback for the Tampa Bay Buccaneers of the National Football League(NFL).He spent his first 20 seasons with the New England Patriots, where he was a central contributor to the franchise\'s dynasty from 2001 to 2019. Brady is widely considered to be the greatest quarterback of all time![Brady Wins](https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Bucs_WFT_223_%2850833097576%29.jpg/440px-Bucs_WFT_223_%2850833097576%29.jpg "Optional title") ## Super Bowl Championships \n * 2021 \n * 2018 \n * 2016 \n * 2014 \n * 2003 \n * 2001',
+      content: '# 2020 Season - Tampa Bay \n #### Thomas Edward Patrick Brady Jr. (born August 3, 1977) is an American football quarterback for the Tampa Bay Buccaneers of the National Football League(NFL).He spent his first 20 seasons with the New England Patriots, where he was a central contributor to the franchise\'s dynasty from 2001 to 2019. Brady is widely considered to be the greatest quarterback of all time![Brady Wins](https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Bucs_WFT_223_%2850833097576%29.jpg/440px-Bucs_WFT_223_%2850833097576%29.jpg "Optional title") \n ## Super Bowl Championships \n * 2021 \n * 2018 \n * 2016 \n * 2014 \n * 2003 \n * 2001',
       views: 1294,
       timestamp: new Date(),
       comments: [{ id: "0", authorID: "gronk", content: "Nice!", emotion: "agree" }],
@@ -80,13 +95,15 @@ export const mutations = {
   },
   handleFollow(state, userID) {
     // Update current user following list
-    if (state.user.following.indexOf(userID)) {
-      // Add
-      state.user.following.push(userID)
-    } else {
-      // Remove 
-      state.user.following = state.user.following.filter(e => e !== userID)
+    for (let f = 0; f < state.user.following.length; f++) {
+      if (state.user.following[f] === userID) {
+        // Unfollow
+        state.user.following = state.user.following.filter(e => e !== userID)
+        return
+      }
     }
+    // Follow
+    state.user.following.push(userID)
     // TODO: Update target user followers list
   },
   handleBookmark(state, data) {

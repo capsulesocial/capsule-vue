@@ -1,10 +1,16 @@
 <template>
   <section>
     <article class="border-t flex justify-around p-2 text-gray-600">
-      <button @click="handleBookmark()" class="flex focus:outline-none">
+      <button
+        @click="handleBookmark()"
+        class="flex focus:outline-none hover:text-primary"
+      >
         <BookmarkIcon :isActive="this.isBookmark()" class="mr-2 fill-none" />
       </button>
-      <button @click="handleComment()" class="flex focus:outline-none">
+      <button
+        @click="handleComment()"
+        class="flex focus:outline-none hover:text-primary"
+      >
         <CommentIcon class="mr-2 fill-primary" />
       </button>
       <!-- <button
@@ -34,7 +40,7 @@
       >
         <span
           v-if="this.emotion === 'agree'"
-          class="text-xl border-2 border-primary rounded-lg p-1 "
+          class="text-xl border-2 border-primary rounded-lg p-1"
         >
           👍
         </span>
