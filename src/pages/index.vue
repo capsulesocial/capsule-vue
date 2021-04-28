@@ -1,6 +1,6 @@
 <template>
-  <main>
-    <nav class="flex flex-col lg:flex-row justify-between p-5">
+  <main class="bg-gray-100 h-full">
+    <nav class="flex flex-row flex-wrap justify-between p-5">
       <div class="flex items-center">
         <span class="mr-5"><CapsuleIcon /></span>
         <h1 class="text-3xl italic font-bold">Capsule Social</h1>

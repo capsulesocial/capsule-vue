@@ -1,5 +1,8 @@
 <template>
-  <section v-if="this.$store.state.user !== null" class="font-serif">
+  <section
+    v-if="this.$store.state.user !== null"
+    class="font-serif bg-white h-auto"
+  >
     <article
       v-if="this.$store.state.isComposing === true"
       class="w-full h-screen z-30 bg-gray-100 absolute"

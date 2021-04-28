@@ -145,6 +145,11 @@ export default {
       consent: true
     };
   },
+  created() {
+    if (this.$store.state.user !== null) {
+      this.$router.push("/home");
+    }
+  },
   components: {
     CapsuleIcon,
     BrandedButton
