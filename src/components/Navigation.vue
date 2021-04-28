@@ -56,9 +56,9 @@
         <!-- Actions tab -->
         <div class="flex flex-col py-2" v-if="isProfileActions">
           <nuxt-link :to="'/' + $store.state.user.id">Visit Profile</nuxt-link>
-          <nuxt-link to="/auth" class=" ">
+          <button @click="signOut" class="focus:outline-none">
             Sign Out
-          </nuxt-link>
+          </button>
         </div>
         <button class="block flex items-center focus:outline-none">
           <ProfileIcon />
@@ -144,10 +144,15 @@ export default {
   },
   methods: {
     ...mapMutations({
-      toggle: "toggleCompose"
+      toggle: "toggleCompose",
+      logout: "startSession"
     }),
     toggleProfileActions: function() {
       this.isProfileActions = !this.isProfileActions;
+    },
+    signOut() {
+      this.logout(null);
+      this.$router.push("/");
     }
   }
 };

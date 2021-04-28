@@ -1,0 +1,16 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+/* add fonts here */
+@font-face {
+  font-family: "Plex-Sans";
+  font-weight: 500;
+  src: url(../fonts/IBMPlexSans-Regular.woff2) format("woff2");
+}
+
+@font-face {
+  font-family: "Plex-Serif";
+  font-weight: 500;
+  src: url(../fonts/IBMPlexSerif-Regular.woff2) format("woff2");
+}

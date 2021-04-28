@@ -34,7 +34,11 @@
           </button>
         </span>
       </div>
-      <button @click="toggleFriend" class="rounded-full focus:outline-none">
+      <button
+        v-if="this.$store.state.user.id !== currentUser.id"
+        @click="toggleFriend"
+        class="rounded-full focus:outline-none"
+      >
         <FriendButton
           :isFollowing="this.isFollowing"
           :userID="currentUser.id"
@@ -43,7 +47,7 @@
     </header>
 
     <div>
-      <p class="italic text-gray-700 px-5 text-center">
+      <p class="italic text-gray-700">
         {{ this.currentUser.bio }}
       </p>
     </div>

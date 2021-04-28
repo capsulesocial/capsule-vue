@@ -50,6 +50,10 @@ module.exports = {
     '@nuxtjs/tailwindcss',
   ],
 
+  tailwindcss: {
+    cssPath: "~/assets/css/tailwind.css"
+  },
+
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     "@nuxtjs/axios"

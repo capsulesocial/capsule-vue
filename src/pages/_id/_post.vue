@@ -1,9 +1,9 @@
 <template>
   <section class="pb-16 lg:pb-5">
-    <article class="p-5 text-center">
+    <article class="p-5">
       <h1 class="text-4xl">{{ this.post.title }}</h1>
       <h2 class="text-2xl">{{ this.post.subtitle }}</h2>
-      <p>
+      <p class="font-sans">
         Posted by {{ this.$route.params.id }} on
         {{ this.post.timestamp.toLocaleString() }}
       </p>

@@ -3,7 +3,7 @@
     <nav class="flex flex-col lg:flex-row justify-between p-5">
       <div class="flex items-center">
         <span class="mr-5"><CapsuleIcon /></span>
-        <span class="text-3xl">Capsule Social</span>
+        <h1 class="text-3xl italic font-bold">Capsule Social</h1>
       </div>
 
       <section>

@@ -100,12 +100,7 @@
             Markdown is NOT currently supported in comments.
           </p>
         </span>
-        <button
-          class="m-2 p-2 bg-primary text-white font-bold hover:bg-green-600 rounded-lg shadow-lg focus:outline-none"
-          @click="sendComment()"
-        >
-          Submit
-        </button>
+        <BrandedButton text="Submit" :action="sendComment" class="m-2 p-2" />
       </div>
     </article>
 
@@ -120,7 +115,7 @@ import InfoIcon from "@/components/icons/Info";
 import AgreeIcon from "@/components/icons/Agree";
 import DisagreeIcon from "@/components/icons/Disagree";
 import NeutralIcon from "@/components/icons/Neutral";
-
+import BrandedButton from "@/components/BrandedButton";
 export default {
   data() {
     return {
@@ -149,7 +144,8 @@ export default {
     InfoIcon,
     AgreeIcon,
     DisagreeIcon,
-    NeutralIcon
+    NeutralIcon,
+    BrandedButton
   },
   methods: {
     isBookmark() {

@@ -1,6 +1,6 @@
 <template>
   <main>
-    <section>
+    <section class="font-sans">
       <article class="grid grid-cols-2 gap-2 border p-2 rounded-lg">
         <label for="newUsername" class="text-lg bold">Name</label>
         <input

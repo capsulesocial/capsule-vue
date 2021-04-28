@@ -29,7 +29,7 @@
         </button>
       </article>
 
-      <article class="px-10 py-6">
+      <article class="px-10 py-6 font-sans">
         <!-- Register: Name -->
         <label
           v-if="!isLogin"
@@ -43,7 +43,7 @@
           type="text"
           placeholder="Tom Brady"
           id="name"
-          class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full focus:outline-none focus:border-primary text-primary"
+          class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full focus:outline-none focus:border-primary text-primary font-sans"
         />
         <!-- Sign in + Register: ID -->
         <label for="id" class="font-semibold text-sm text-gray-600 pb-1 block"
@@ -54,7 +54,7 @@
           type="text"
           placeholder="tombrady"
           id="id"
-          class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full focus:outline-none focus:border-primary text-primary"
+          class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full focus:outline-none focus:border-primary text-primary font-sans"
         />
         <!-- Register: Contact -->
         <label
@@ -69,7 +69,7 @@
           type="email"
           placeholder="tb12@nfl.com"
           id="contact"
-          class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full focus:outline-none focus:border-primary text-primary"
+          class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full focus:outline-none focus:border-primary text-primary font-sans"
         />
         <label
           for="password"
@@ -104,7 +104,7 @@
         />
       </article>
       <article
-        class="text-center whitespace-nowrap flex justify-between text-sm p-5 text-gray-600"
+        class="text-center whitespace-nowrap flex justify-between text-sm p-5 text-gray-600 font-sans"
         v-if="isLogin"
       >
         <button class="px-4 py-2 focus:outline-none">
@@ -119,7 +119,7 @@
             type="checkbox"
             class="form-checkbox h-4 w-4 text-primary"
             checked
-          /><span class="ml-2 text-gray-700"
+          /><span class="ml-2 text-gray-700 font-sans"
             >I agree to the Terms and Conditions
           </span>
         </label>
