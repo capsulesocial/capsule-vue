@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section v-if="this.$store.state.user !== null">
     <article
       v-if="this.$store.state.isComposing === true"
       class="w-full h-screen z-30 bg-gray-100 absolute"
@@ -32,6 +32,13 @@ export default {
     Explore,
     Header,
     PostEditor
+  },
+  created() {
+    if (this.$store.state.user === null) {
+      alert("Please sign in!");
+      this.$router.push("/auth");
+      return;
+    }
   }
 };
 </script>

@@ -4,7 +4,7 @@
       {{ this.$props.error["statusCode"] }}: {{ this.$props.error["message"] }}
     </h1>
     <h6 class="text-xl text-center p-10">
-      😰 We're so sorry... This is embarrasing 😓
+      😰 We're so sorry... An error has occurred 😓
     </h6>
     <div class="flex justify-center">
       <BrandedButton text="Return" :action="goBack" class="w-64" />
@@ -19,6 +19,11 @@ export default {
   props: ["error"],
   layout: "error",
   components: [BrandedButton],
+  created() {
+    if (this.$store.state.user === null) {
+      this.$router.push("/auth");
+    }
+  },
   methods: {
     goBack: function() {
       this.$router.push("/");

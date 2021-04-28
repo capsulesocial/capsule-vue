@@ -19,7 +19,21 @@ export default {
   methods: {
     getBookmarkList: function() {
       let res = [];
-      let bookmarkList = this.$store.state.user.bookmarks;
+      // Get list of bookmarked posts by visited profile
+      // let targetProfile = this.$api.profile.getProfile(this.$route.params.id)
+      let targetProfile = {};
+      if (this.$route.params.id === this.$store.state.user.id) {
+        targetProfile = this.$store.state.user;
+      } else {
+        for (let p = 0; p < this.$store.state.userList.length; p++) {
+          if (this.$store.state.userList[p].id === this.$route.params.id) {
+            targetProfile = this.$store.state.userList[p];
+            break;
+          }
+        }
+      }
+
+      let bookmarkList = targetProfile.bookmarks;
       let postList = this.$store.state.posts;
       // Loop through list of bookmarks on a profile
       for (let i = 0; i < bookmarkList.length; i++) {
