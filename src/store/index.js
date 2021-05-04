@@ -55,7 +55,7 @@ export const state = () => ({
       tags: ['patriots', 'GOAT'],
       comments: [{ id: "0", authorID: "tombrady", content: "You are my favorite teammate!", emotion: "agree" }],
       bookmarks: []
-    },
+    }
   ],
   tags: [
     {
@@ -128,6 +128,16 @@ export const mutations = {
     targetPost.comments.push({ id: targetPost.comments.length, authorID: data.authorID, content: data.content, emotion: data.emotion })
   },
   handleFollow(state, userID) {
+    // Adds to target user followers list
+    for (let i = 0; i < state.userList.length; i++) {
+      if (state.userList[i].id === userID) {
+        if (state.userList[i].followers.indexOf(state.user.id) === -1) {
+          state.userList[i].followers.push(state.user.id)
+        } else {
+          state.userList[i].followers = state.userList[i].followers.filter(e => e !== state.user.id)
+        }
+      }
+    }
     // Update current user following list
     for (let f = 0; f < state.user.following.length; f++) {
       if (state.user.following[f] === userID) {
@@ -138,7 +148,7 @@ export const mutations = {
     }
     // Follow
     state.user.following.push(userID)
-    // TODO: Update target user followers list
+
   },
   handleBookmark(state, data) {
     let targetPost = state.posts.find(e => e.id === data.postID) // post object

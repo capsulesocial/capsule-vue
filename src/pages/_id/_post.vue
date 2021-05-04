@@ -1,27 +1,59 @@
 <template>
-  <section class="pb-16 lg:pb-5">
-    <article class="p-5">
-      <h1 class="text-4xl">{{ this.post.title }}</h1>
-      <h2 class="text-2xl">{{ this.post.subtitle }}</h2>
-      <p class="font-sans">
-        Posted by {{ this.$route.params.id }} on
-        {{ this.post.timestamp.toLocaleString() }}
-      </p>
+  <section class="pb-16 lg:pb-5 m-5">
+    <article>
+      <div class="flex justify-between">
+        <p class="font-sans text-sm inline">
+          Posted on
+          {{ this.post.timestamp.toLocaleString() }}
+        </p>
+        <span class="flex">
+          <h6
+            v-for="t in this.post.tags"
+            :key="t"
+            class="text-primary italic pr-2"
+          >
+            #{{ t }}
+          </h6>
+        </span>
+      </div>
+
+      <h1 class="text-5xl font-serif capitalize">{{ this.post.title }}</h1>
+      <h2 class="text-3xl font-serif text-gray-600">
+        {{ this.post.subtitle }}
+      </h2>
+      <div class="flex justify-between pt-5">
+        <p class="font-sans text-sm uppercase">
+          Written by
+          <nuxt-link
+            :to="'/' + this.$route.params.id"
+            class="text-primary underline"
+            >{{ this.$route.params.id }}</nuxt-link
+          >
+        </p>
+        <div class="flex">
+          <span class="flex pr-4"
+            ><CommentIcon class="inline mr-1" />{{
+              this.post.comments.length
+            }}</span
+          >
+          <span class="flex"
+            ><BookmarkIcon class="inline mr-1" />{{
+              this.post.bookmarks.length
+            }}</span
+          >
+        </div>
+      </div>
     </article>
 
-    <article class="flex flex-row px-5">
-      <h6 v-for="t in this.post.tags" :key="t" class="text-primary italic pr-2">
-        #{{ t }}
-      </h6>
-    </article>
+    <hr class="style-two my-5" />
 
     <!-- Content -->
-    <article>
-      <div
-        v-html="this.compileMarkdown(this.post.content)"
-        class="prose text-black pl-4"
-      ></div>
-    </article>
+    <div
+      v-html="this.compileMarkdown(this.post.content)"
+      class="prose lg:prose-lg max-w-none text-black pl-4 font-serif"
+    ></div>
+
+    <AuthorCard :authorID="this.$route.params.id" />
 
     <!-- Comments -->
     <article>
@@ -29,6 +61,7 @@
         :post="this.post"
         :authorID="this.$route.params.id"
         :isCommenting="true"
+        class="mt-5"
       />
     </article>
   </section>
@@ -37,6 +70,9 @@
 <script>
 import markdown from "@/mixins/markdown.js";
 import PostActions from "@/components/post/Actions";
+import AuthorCard from "@/components/AuthorCard";
+import CommentIcon from "@/components/icons/Comment";
+import BookmarkIcon from "@/components/icons/Bookmark";
 
 export default {
   data() {
@@ -44,9 +80,26 @@ export default {
       post: this.$store.state.posts[this.$route.params.post]
     };
   },
+  layout: "reader",
   components: {
-    PostActions
+    PostActions,
+    AuthorCard,
+    CommentIcon,
+    BookmarkIcon
   },
   mixins: [markdown]
 };
 </script>
+
+<style>
+hr {
+  border: 0;
+  height: 1px;
+  background-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 0.75),
+    rgba(0, 0, 0, 0)
+  );
+}
+</style>

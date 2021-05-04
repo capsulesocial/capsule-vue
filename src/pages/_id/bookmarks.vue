@@ -1,5 +1,13 @@
 <template>
   <section>
+    <h3 class="text-xl">
+      Bookmarks of
+      <nuxt-link
+        :to="'/' + this.$route.params.id"
+        class="text-primary underline"
+        >{{ this.$route.params.id }}</nuxt-link
+      >.
+    </h3>
     <div v-for="p in this.getBookmarkList()" :key="p.id">
       <PostCard :post="p" :authorID="p.authorID" :authorUsername="p.authorID" />
     </div>
