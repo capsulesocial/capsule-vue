@@ -9,6 +9,12 @@
       </p>
     </article>
 
+    <article class="flex flex-row px-5">
+      <h6 v-for="t in this.post.tags" :key="t" class="text-primary italic pr-2">
+        #{{ t }}
+      </h6>
+    </article>
+
     <!-- Content -->
     <article>
       <div

@@ -14,23 +14,20 @@
     <article class="m-5 lg:hidden pb-32">
       <div class="w-full">
         <!-- Title declaration -->
-        <div
-          class="flex flex-col items-center"
-          v-if="this.mobileState === 'edit'"
-        >
-          <label for="title" class="text-gray-800 italic">Title</label>
+        <div class="flex flex-col" v-if="this.mobileState === 'edit'">
+          <label for="title" class="text-gray-800 italic">Title:</label>
           <input
             v-model="title"
             type="text"
             placeholder="Enter Title"
-            class="border-b text-center text-4xl focus:outline-none text-xl w-full placeholder-gray-800 pb-2"
+            class="border-b text-4xl focus:outline-none text-xl w-full placeholder-gray-800 pb-2"
           />
           <label for="subtitle" class="text-gray-800 italic">Subtitle:</label>
           <input
             v-model="subtitle"
             type="text"
             placeholder="Enter Subtitle"
-            class="border-b text-center text-2xl focus:outline-none text-xl w-full placeholder-gray-800 pb-2"
+            class="border-b text-2xl focus:outline-none text-xl w-full placeholder-gray-800 pb-2"
           />
           <p class="text-sm text-gray-500 py-4">
             By: {{ this.$store.state.user.username }}
@@ -41,21 +38,21 @@
         class="w-full flex justify-around text-primary px-2"
         v-if="this.mobileState === 'edit'"
       >
-        <button @click="testButton('**', true)"><BoldIcon /></button>
-        <button @click="testButton('*', true)"><ItalicIcon /></button>
-        <button @click="testButton('\n* ')"><ListIcon /></button>
-        <button @click="testButton('\n1. ')">1.</button>
-        <button @click="testButton('\n# ')">H1</button>
-        <button @click="testButton('\n## ')">H2</button>
-        <button @click="testButton('\n### ')">H3</button>
-        <button @click="testButton('\n> ')">
+        <button @click="addMarkdown('**', true)"><BoldIcon /></button>
+        <button @click="addMarkdown('*', true)"><ItalicIcon /></button>
+        <button @click="addMarkdown('\n* ')"><ListIcon /></button>
+        <button @click="addMarkdown('\n1. ')">1.</button>
+        <button @click="addMarkdown('\n# ')">H1</button>
+        <button @click="addMarkdown('\n## ')">H2</button>
+        <button @click="addMarkdown('\n### ')">H3</button>
+        <button @click="addMarkdown('\n> ')">
           <QuoteIcon />
         </button>
-        <button @click="testButton('\n```\n', true)"><CodeIcon /></button>
-        <button @click="testButton('[title](https://www.example.com)')">
+        <button @click="addMarkdown('\n```\n', true)"><CodeIcon /></button>
+        <button @click="addMarkdown('[title](https://www.example.com)')">
           <LinkIcon />
         </button>
-        <button @click="testButton('![alt text](https://picsum.photos/200)')">
+        <button @click="addMarkdown('![alt text](https://picsum.photos/200)')">
           <ImageIcon />
         </button>
       </div>
@@ -68,9 +65,9 @@
         class="w-full border p-1 h-64"
       ></textarea>
       <div v-else>
-        <h2 class="text-4xl text-center">{{ this.title }}</h2>
-        <h4 class="text-2xl text-center">{{ this.subtitle }}</h4>
-        <h6 class="text-sm text-gray-500 py-4 text-center">
+        <h2 class="text-4xl">{{ this.title }}</h2>
+        <h4 class="text-2xl">{{ this.subtitle }}</h4>
+        <h6 class="text-sm text-gray-500 py-4">
           By: {{ this.$store.state.user.username }}
         </h6>
         <div v-html="compiledMarkdown" class="prose"></div>
@@ -81,21 +78,23 @@
     <article class="mt-5 hidden lg:grid grid-cols-2">
       <div class="px-5">
         <div class="w-full flex justify-around text-primary px-2">
-          <button @click="testButton('**', true)"><BoldIcon /></button>
-          <button @click="testButton('*', true)"><ItalicIcon /></button>
-          <button @click="testButton('\n* ')"><ListIcon /></button>
-          <button @click="testButton('\n1. ')">1.</button>
-          <button @click="testButton('\n# ')">H1</button>
-          <button @click="testButton('\n## ')">H2</button>
-          <button @click="testButton('\n### ')">H3</button>
-          <button @click="testButton('\n> ')">
+          <button @click="addMarkdown('**', true)"><BoldIcon /></button>
+          <button @click="addMarkdown('*', true)"><ItalicIcon /></button>
+          <button @click="addMarkdown('\n* ')"><ListIcon /></button>
+          <button @click="addMarkdown('\n1. ')">1.</button>
+          <button @click="addMarkdown('\n# ')">H1</button>
+          <button @click="addMarkdown('\n## ')">H2</button>
+          <button @click="addMarkdown('\n### ')">H3</button>
+          <button @click="addMarkdown('\n> ')">
             <QuoteIcon />
           </button>
-          <button @click="testButton('\n```\n', true)"><CodeIcon /></button>
-          <button @click="testButton('[title](https://www.example.com)')">
+          <button @click="addMarkdown('\n```\n', true)"><CodeIcon /></button>
+          <button @click="addMarkdown('[title](https://www.example.com)')">
             <LinkIcon />
           </button>
-          <button @click="testButton('![alt text](https://picsum.photos/200)')">
+          <button
+            @click="addMarkdown('![alt text](https://picsum.photos/200)')"
+          >
             <ImageIcon />
           </button>
         </div>
@@ -130,13 +129,55 @@
         </h6>
         <div v-html="compiledMarkdown" class="prose pl-4"></div>
       </div>
-      <span class="bottom-0 fixed m-5 p-5 right-0">
-        <BrandedButton text="Publish" :action="post" />
-      </span>
+      <footer
+        class="bottom-0 fixed m-5 p-5 w-full flex flex-row justify-between font-sans"
+      >
+        <div class="flex items-center border rounded-full border-primary">
+          <span class=" rounded-full pl-4 bg-white shadow-lg text-primary">
+            <label for="tag" class="hidden" value="Enter hashtags"></label
+            >#<input
+              v-model="tag"
+              type="text"
+              placeholder="tag"
+              class="focus:outline-none w-32 pr-1 py-2"
+            />
+            <button
+              @click="addTag"
+              class="border border-white rounded-full px-4 py-2 bg-primary focus:outline-none"
+            >
+              <span class="text-white">+</span>
+            </button>
+          </span>
+          <span v-for="t in this.tags" :key="t" class="mx-2">
+            <h6 class="inline text-primary">#{{ t }}</h6>
+            <button @click="removeTag(t)" class="text-red-600">x</button></span
+          >
+        </div>
+        <BrandedButton text="Publish" :action="post" class="mr-10" />
+      </footer>
     </article>
 
     <!-- Mobile Toggle for Edit / Preview -->
     <article class="lg:hidden fixed bottom-0 w-full pb-20 bg-white">
+      <div class="px-5 py-2">
+        <label for="tag" class="hidden" value="Enter hashtags"></label>#<input
+          v-model="tag"
+          type="text"
+          placeholder="tag"
+          class="focus:outline-none w-24 pr-1 py-2 border-b border-primary"
+        />
+        <button
+          @click="addTag"
+          class="focus:outline-none bg-primary rounded-full text-white px-2"
+        >
+          <span class="">+</span>
+        </button>
+        <span v-for="t in this.tags" :key="t" class="mx-2">
+          <h6 class="inline text-primary">#{{ t }}</h6>
+          <button @click="removeTag(t)" class="text-red-600">x</button></span
+        >
+      </div>
+
       <div class="grid grid-cols-3 px-2">
         <button @click="toggleComposeState('edit')" class="focus:outline-none">
           <span
@@ -183,7 +224,9 @@ export default {
       title: this.$store.state.draft.title,
       subtitle: this.$store.state.draft.subtitle,
       input: this.$store.state.draft.content,
-      mobileState: "edit"
+      mobileState: "edit",
+      tags: [],
+      tag: ""
     };
   },
   computed: {
@@ -221,6 +264,19 @@ export default {
       });
       this.input = clean;
     }, 300),
+    addTag: function(tag) {
+      if (this.tag !== "") {
+        this.tags.push(this.tag);
+        this.tag = "";
+      }
+    },
+    removeTag: function(tag) {
+      // Remove
+      const index = this.tags.indexOf(tag);
+      if (index > -1) {
+        this.tags.splice(index, 1);
+      }
+    },
     post: function() {
       if (this.title === "") {
         alert("Missing title!");
@@ -233,6 +289,7 @@ export default {
         content: this.input,
         id: this.$store.state.posts.length.toString(),
         timestamp: date,
+        tags: this.tags,
         comments: [],
         bookmarks: [],
         authorID: this.$store.state.user.id
@@ -241,6 +298,7 @@ export default {
       this.title = "Title";
       this.subtitle = "Subtitle";
       this.input = "# Hello World";
+      this.tags = [];
       this.$router.push(this.$store.state.user.id);
     },
     updateStore: function() {
@@ -251,7 +309,7 @@ export default {
       });
       this.toggle();
     },
-    testButton: function(md, wrap) {
+    addMarkdown: function(md, wrap) {
       let ta = this.$refs.ta,
         cursorStart = ta.selectionStart,
         cursorEnd = ta.selectionEnd,
