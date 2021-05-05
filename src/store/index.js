@@ -3,7 +3,7 @@ export const state = () => ({
   draft: {
     title: "Title",
     subtitle: "Subtitle",
-    content: "# hello world",
+    content: "Hello\n\nI am honored to participate in this project",
   },
   userList: [
     {

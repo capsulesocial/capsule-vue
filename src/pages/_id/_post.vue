@@ -50,7 +50,7 @@
     <!-- Content -->
     <div
       v-html="this.compileMarkdown(this.post.content)"
-      class="prose lg:prose-lg max-w-none text-black pl-4 font-serif"
+      class="prose lg:prose-lg max-w-none text-black pl-4 font-serif content"
     ></div>
 
     <AuthorCard :authorID="this.$route.params.id" />
@@ -101,5 +101,9 @@ hr {
     rgba(0, 0, 0, 0.75),
     rgba(0, 0, 0, 0)
   );
+}
+.content {
+  text-align: justify;
+  text-justify: inter-word;
 }
 </style>
