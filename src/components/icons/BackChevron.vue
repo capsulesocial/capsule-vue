@@ -1,14 +1,43 @@
 <template>
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="16.5"
-    height="27.188"
-    viewBox="0 0 16.5 27.188"
-  >
-    <path
-      fill="#6fa786"
-      d="M2.371 15.185l12.1-12.1a1.494 1.494 0 0 1 2.113 0L18 4.5a1.494 1.494 0 0 1 0 2.111l-9.59 9.634L18 25.877a1.494 1.494 0 0 1 0 2.111L16.583 29.4a1.494 1.494 0 0 1-2.113 0L2.371 17.3a1.494 1.494 0 0 1 0-2.115z"
-      transform="translate(-1.933 -2.648)"
-    />
-  </svg>
+  <div>
+    <svg
+      v-if="this.$props.size === 'large'"
+      xmlns="http://www.w3.org/2000/svg"
+      width="64"
+      height="64"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="#6fa786"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="feather feather-chevron-left"
+    >
+      <polyline points="15 18 9 12 15 6"></polyline>
+    </svg>
+    <svg
+      v-else
+      xmlns="http://www.w3.org/2000/svg"
+      width="16.5"
+      height="27.188"
+      viewBox="0 0 16.5 27.188"
+    >
+      <path
+        fill="#6fa786"
+        d="M2.371 15.185l12.1-12.1a1.494 1.494 0 0 1 2.113 0L18 4.5a1.494 1.494 0 0 1 0 2.111l-9.59 9.634L18 25.877a1.494 1.494 0 0 1 0 2.111L16.583 29.4a1.494 1.494 0 0 1-2.113 0L2.371 17.3a1.494 1.494 0 0 1 0-2.115z"
+        transform="translate(-1.933 -2.648)"
+      />
+    </svg>
+  </div>
 </template>
+
+<script>
+export default {
+  props: {
+    size: {
+      type: String,
+      default: "md"
+    }
+  }
+};
+</script>

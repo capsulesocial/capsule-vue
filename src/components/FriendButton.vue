@@ -7,9 +7,9 @@
     >
       <div
         v-if="iFollow()"
-        class="bg-white self-center rounded-full shadow-lg p-4 border border-primary"
+        class="bg-red-200 self-center rounded-full shadow-lg p-4 border border-black"
       >
-        <span class="text-primary text-bold"><UnfollowIcon /></span>
+        <span class="text-black text-bold"><UnfollowIcon /></span>
       </div>
       <div v-else class="bg-primary self-center rounded-full shadow-lg p-4">
         <span class="text-white text-bold"><FollowIcon /></span>

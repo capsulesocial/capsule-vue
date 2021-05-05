@@ -125,6 +125,12 @@
         </label>
       </article>
     </section>
+
+    <BrandedButton
+      class="fixed bottom-0 m-5"
+      text="Admin Bypass (for development)"
+      :action="adminBypass"
+    />
   </main>
 </template>
 
@@ -169,7 +175,6 @@ export default {
         alert(idCheck);
         return;
       }
-
       // Login
       if (this.isLogin) {
         const res = await this.$api.auth.login(this.id, this.password);
@@ -211,6 +216,22 @@ export default {
           return;
         }
       }
+    },
+    adminBypass: function() {
+      let account = {
+        id: "admin",
+        username: "admin",
+        email: "admin@admin.com",
+        password: "password123",
+        bio: "This is your bio",
+        posts: [],
+        socials: [],
+        bookmarks: [],
+        followers: [],
+        following: []
+      };
+      this.$store.commit("startSession", account);
+      this.$router.push("/settings");
     }
   }
 };
