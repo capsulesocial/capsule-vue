@@ -4,6 +4,24 @@ Capsule Vue.js front-end, to be integrated into main client codebase.
 
 ## Build Setup
 
+#### To deploy a Web app
+
+```bash
+# install dependencies
+$ yarn install
+
+# Development: Serve with hot reload on http://localhost:3000
+$ yarn web
+
+# Production: Build
+$ yarn build:web
+
+#Production: Launch Server
+$ yarn start
+```
+
+#### To deploy an Electron App (Mac/Windows)
+
 ```bash
 # install dependencies
 $ yarn install

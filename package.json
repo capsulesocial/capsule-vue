@@ -70,7 +70,10 @@
     }
   },
   "scripts": {
+    "web": "nuxt",
+    "start": "nuxt start", 
     "dev": "webpack --mode=development && electron ./main.dev.js",
+    "build:web": "nuxt build",
     "build:win": "nuxt build && webpack && electron-builder --win --x64",
     "build:mac": "nuxt build && webpack && export CSC_IDENTITY_AUTO_DISCOVERY=false && electron-builder --mac --x64",
     "build:mac:dmg": "nuxt build && webpack && CSC_NAME=\"CERTIFICATE NAME (***********)\" appleId='apple@developer.id' appleIdPassword='application password' electron-builder",
