@@ -12,7 +12,7 @@
             :key="t"
             class="text-primary italic pr-2"
           >
-            #{{ t }}
+            <nuxt-link :to="'/tag/' + t">#{{ t }}</nuxt-link>
           </h6>
         </span>
       </div>
