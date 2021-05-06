@@ -1,27 +1,20 @@
 <template>
-  <!-- <article
-    class=" rounded-lg h-32 p-5 bg-contain bg-center bg-no-repeat shadow-lg bg-opacity-50"
-    :style="{ backgroundImage: `url(${this.$props.bgImage})` }"
-  >
-    <h4 class="text-xl text-white">
-      <span class="bg-primary rounded-full px-2 py-1">{{
-        this.$props.text
-      }}</span>
-    </h4>
-  </article> -->
   <article
     class="transition duration-500 ease-in-out transform hover:scale-110 relative overflow-hidden h-40 rounded-lg shadow-lg"
   >
-    <img
-      :src="this.$props.bgImage"
-      :alt="this.$props.text"
-      class="opacity-50 absolute left-0 top-0 width-full height-auto"
-    />
-    <h4 class="text-2xl relative p-5">
-      <span class="bg-primary rounded-full px-4 py-1 text-white">{{
-        this.$props.text
-      }}</span>
-    </h4>
+    <nuxt-link :to="'/discover/' + this.$props.text">
+      <img
+        :src="this.$props.bgImage"
+        :alt="this.$props.text"
+        class="opacity-50 absolute left-0 top-0 width-full height-auto object-fill"
+      />
+      <h4 class="text-xl relative p-5">
+        <span
+          class="font-extrabold bg-primary rounded-full px-4 py-1 text-white capitalize"
+          >{{ this.$props.text }}</span
+        >
+      </h4>
+    </nuxt-link>
   </article>
 </template>
 
@@ -30,7 +23,7 @@ export default {
   props: {
     text: {
       type: String,
-      default: "Text"
+      default: "No Title"
     },
     bgImage: {
       type: String,

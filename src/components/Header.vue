@@ -1,5 +1,5 @@
 <template>
-  <section class="grid grid-cols-4 p-4 bg-white">
+  <section class="grid grid-cols-4 p-4 bg-white z-10">
     <!-- Top Left: Logo -->
     <article>
       <CapsuleIcon class="py-4 pl-6" />
