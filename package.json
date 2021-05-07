@@ -71,7 +71,7 @@
   },
   "scripts": {
     "web": "nuxt",
-    "start": "nuxt start", 
+    "start": "nuxt start",
     "dev": "webpack --mode=development && electron ./main.dev.js",
     "build:web": "nuxt build",
     "build:win": "nuxt build && webpack && electron-builder --win --x64",
@@ -85,6 +85,7 @@
     "core-js": "^3.8.3",
     "dompurify": "^2.2.7",
     "electron-serve": "^0.4.1",
+    "ipfs": "^0.54.5",
     "marked": "^2.0.1",
     "nuxt": "^2.14.12"
   },

@@ -283,8 +283,8 @@ export default {
         alert("Missing title!");
         return;
       }
-      let date = new Date().toLocaleString();
-      this.sendPost({
+      let date = new Date();
+      let p = {
         title: this.title,
         subtitle: this.subtitle,
         content: this.input,
@@ -294,6 +294,10 @@ export default {
         comments: [],
         bookmarks: [],
         authorID: this.$store.state.user.id
+      };
+      this.$api.post.sendPost(p).then(cid => {
+        p.id = cid;
+        this.sendPost(p);
       });
       this.toggle();
       this.title = "Title";
