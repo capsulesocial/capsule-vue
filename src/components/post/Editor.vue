@@ -217,6 +217,7 @@ import LinkIcon from "@/components/icons/md/Link";
 import ImageIcon from "@/components/icons/md/Image";
 import QuoteIcon from "@/components/icons/md/Quote";
 import BrandedButton from "@/components/BrandedButton";
+import markdown from "@/mixins/markdown.js";
 
 export default {
   data() {
@@ -234,7 +235,7 @@ export default {
       return this.$store.state.draft;
     },
     compiledMarkdown: function() {
-      return marked(this.input);
+      return this.compileMarkdown(this.input);
     }
   },
   components: {
@@ -329,6 +330,7 @@ export default {
           this.input.substring(cursorEnd);
       }
     }
-  }
+  },
+  mixins: [markdown]
 };
 </script>

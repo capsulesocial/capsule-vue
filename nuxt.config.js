@@ -19,16 +19,7 @@ module.exports = {
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ],
-    script: [
-      {
-        type: 'module',
-        src: 'https://unpkg.com/marked@0.3.6'
-      },
-      {
-        type: 'module',
-        src: 'https://unpkg.com/lodash@4.16.0'
-      }
-    ]
+    script: []
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
