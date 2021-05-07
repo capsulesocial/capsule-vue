@@ -8,11 +8,10 @@
         :alt="this.$props.text"
         class="opacity-50 absolute left-0 top-0 width-full height-auto object-fill"
       />
-      <h4 class="text-xl relative p-5">
-        <span
-          class="font-extrabold bg-primary rounded-full px-4 py-1 text-white capitalize"
-          >{{ this.$props.text }}</span
-        >
+      <h4 class="text-2xl relative p-5">
+        <span class="font-extrabold rounded-full px-4 py-1 capitalize">{{
+          this.$props.text
+        }}</span>
       </h4>
     </nuxt-link>
   </article>

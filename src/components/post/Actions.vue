@@ -13,62 +13,17 @@
       >
         <CommentIcon class="mr-2 fill-primary" />
       </button>
-      <!-- <button
-        @click="handleReaction('agree')"
-        class="stroke-current focus:outline-none"
-      >
-        <AgreeIcon v-if="this.emotion === 'agree'" class="text-primary" />
+      <button @click="handleReaction('agree')" class="focus:outline-none">
+        <AgreeIcon v-if="this.emotion === 'agree'" />
         <AgreeIcon v-else />
-      </button> -->
-      <!-- <button
-        @click="handleReaction('neutral')"
-        class="stroke-current focus:outline-none"
-      >
-        <NeutralIcon v-if="this.emotion === 'neutral'" class="text-primary" />
+      </button>
+      <button @click="handleReaction('neutral')" class="focus:outline-none">
+        <NeutralIcon v-if="this.emotion === 'neutral'" />
         <NeutralIcon v-else />
-      </button> -->
-      <!-- <button
-        @click="handleReaction('disagree')"
-        class="stroke-current focus:outline-none"
-      >
-        <DisagreeIcon v-if="this.emotion === 'disagree'" class="text-primary" />
+      </button>
+      <button @click="handleReaction('disagree')" class="focus:outline-none">
+        <DisagreeIcon v-if="this.emotion === 'disagree'" />
         <DisagreeIcon v-else />
-      </button> -->
-      <button
-        @click="handleReaction('agree')"
-        class="stroke-current focus:outline-none"
-      >
-        <span
-          v-if="this.emotion === 'agree'"
-          class="text-xl border-2 border-primary rounded-lg p-1"
-        >
-          👍
-        </span>
-        <span v-else class="text-xl"> 👍 </span>
-      </button>
-      <button
-        @click="handleReaction('thinking')"
-        class="stroke-current focus:outline-none"
-      >
-        <span
-          v-if="this.emotion === 'thinking'"
-          class="text-xl border-2 border-primary rounded-lg p-1 "
-        >
-          🤔
-        </span>
-        <span v-else class="text-xl"> 🤔 </span>
-      </button>
-      <button
-        @click="handleReaction('disagree')"
-        class="stroke-current focus:outline-none"
-      >
-        <span
-          v-if="this.emotion === 'disagree'"
-          class="text-xl border-2 border-primary rounded-lg p-1 "
-        >
-          👎
-        </span>
-        <span v-else class="text-xl"> 👎 </span>
       </button>
     </article>
 
@@ -78,12 +33,9 @@
         :key="comment.id"
         class="text-base px-2 py-1"
       >
-        <!-- <AgreeIcon v-if="comment.emotion === 'agree'" class="inline" /> -->
-        <!-- <NeutralIcon v-if="comment.emotion === 'neutral'" class="inline" /> -->
-        <!-- <DisagreeIcon v-if="comment.emotion === 'disagree'" class="inline" /> -->
-        <span v-if="comment.emotion === 'agree'"> 👍 </span>
-        <span v-if="comment.emotion === 'thinking'"> 🤔 </span>
-        <span v-if="comment.emotion === 'disagree'"> 👎 </span>
+        <AgreeIcon v-if="comment.emotion === 'agree'" class="inline" />
+        <NeutralIcon v-if="comment.emotion === 'neutral'" class="inline" />
+        <DisagreeIcon v-if="comment.emotion === 'disagree'" class="inline" />
         <span class="text-gray-700">@{{ comment.authorID }}:</span>
         {{ comment.content }}
       </p>

@@ -3,40 +3,14 @@
     <h1 class="text-4xl">Categories</h1>
 
     <section class="grid grid-cols-1 gap-5 md:grid-cols-2 m-5">
-      <DiscoverCard
-        text="technology"
-        :bgImage="require('@/assets/images/discover/technology.png')"
-      />
-      <DiscoverCard
-        text="crypto"
-        :bgImage="require('@/assets/images/discover/crypto.png')"
-      />
-      <DiscoverCard
-        text="politics"
-        :bgImage="require('@/assets/images/discover/politics.jpeg')"
-      />
-      <DiscoverCard
-        text="US-World"
-        :bgImage="require('@/assets/images/discover/us-world.jpeg')"
-      />
-      <DiscoverCard
-        text="science"
-        :bgImage="require('@/assets/images/discover/science.png')"
-      />
-      <DiscoverCard
-        text="environment"
-        :bgImage="require('@/assets/images/discover/environment.png')"
-      />
-      <DiscoverCard
-        text="food & drink"
-        :bgImage="require('@/assets/images/discover/food-drink.jpeg')"
-      />
-      <DiscoverCard
-        text="culture"
-        :bgImage="require('@/assets/images/discover/culture.jpeg')"
-      />
-      <DiscoverCard />
-      <DiscoverCard />
+      <DiscoverCard text="technology" />
+      <DiscoverCard text="crypto" />
+      <DiscoverCard text="politics" />
+      <DiscoverCard text="US-World" />
+      <DiscoverCard text="science" />
+      <DiscoverCard text="environment" />
+      <DiscoverCard text="food & drink" />
+      <DiscoverCard text="culture" />
     </section>
   </main>
 </template>
