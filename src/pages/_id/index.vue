@@ -38,21 +38,30 @@
       <p class="text-sm italic py-2">{{ this.currentUser.bio }}</p>
     </article>
 
-    <article class="font-sans flex flex-row justify-between">
+    <article class="font-sans flex flex-row mt-3">
       <nuxt-link
         :to="'/' + this.currentUser.id + '/followers'"
-        class="border-b border-primary"
-        >Followers: {{ this.currentUser.followers.length }}</nuxt-link
+        class="border-b hover:border-primary text-gray-700"
+        ><span class="text-primary">{{
+          this.currentUser.followers.length
+        }}</span>
+        Followers</nuxt-link
       >
       <nuxt-link
         :to="'/' + this.currentUser.id + '/following'"
-        class="border-b border-primary"
-        >Following: {{ this.currentUser.following.length }}</nuxt-link
-      >
+        class="border-b hover:border-primary mx-4 text-gray-700"
+        ><span class="text-primary">{{
+          this.currentUser.following.length
+        }}</span>
+        Following
+      </nuxt-link>
       <nuxt-link
         :to="'/' + this.currentUser.id + '/bookmarks'"
-        class="border-b border-primary"
-        >Bookmarks: {{ this.currentUser.bookmarks.length }}</nuxt-link
+        class="border-b hover:border-primary text-gray-700"
+        ><span class="text-primary">{{
+          this.currentUser.bookmarks.length
+        }}</span>
+        Bookmarks</nuxt-link
       >
     </article>
     <div class="mt-5">

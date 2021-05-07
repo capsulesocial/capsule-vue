@@ -1,6 +1,8 @@
 <template>
   <section v-if="this.targetUser !== null">
-    <article>Authors who follow {{ this.$route.params.id }}</article>
+    <article>
+      <PageTitle :title="'Followers of ' + this.targetUser.username" />
+    </article>
     <article>
       <div v-for="i in this.targetUser['followers']" :key="i">
         <nuxt-link class="text-primary underline" :to="'/' + i">{{
@@ -12,11 +14,15 @@
 </template>
 
 <script>
+import PageTitle from "@/components/PageTitle";
 export default {
   data() {
     return {
       targetUser: null
     };
+  },
+  components: {
+    PageTitle
   },
   async created() {
     if (this.$route.params.id === this.$store.state.user.id) {

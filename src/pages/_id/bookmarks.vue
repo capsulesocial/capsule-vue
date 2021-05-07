@@ -1,13 +1,8 @@
 <template>
   <section>
-    <h3 class="text-xl">
-      Bookmarks of
-      <nuxt-link
-        :to="'/' + this.$route.params.id"
-        class="text-primary underline"
-        >{{ this.$route.params.id }}</nuxt-link
-      >.
-    </h3>
+    <article>
+      <PageTitle :title="'Bookmarks of ' + this.$route.params.id" />
+    </article>
     <div v-for="p in this.getBookmarkList()" :key="p.id">
       <PostCard :post="p" :authorID="p.authorID" :authorUsername="p.authorID" />
     </div>
@@ -16,13 +11,15 @@
 
 <script>
 import PostCard from "@/components/post/Card";
+import PageTitle from "@/components/PageTitle";
 
 export default {
   data() {
     return {};
   },
   components: {
-    PostCard
+    PostCard,
+    PageTitle
   },
   methods: {
     getBookmarkList: function() {
