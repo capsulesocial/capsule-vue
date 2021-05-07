@@ -1,8 +1,20 @@
+const IPFS = require('ipfs')
+// import IPFS from 'ipfs'
+
 export default ({ app }) => ({
-  // POST a post to IPFS
-  sendPost() {
+  // Send post to IPFS
+  async sendPost(post) {
+    const node = await IPFS.create()
+    const version = await node.version()
+    console.log('IPFS version: ', version.version)
+    const fileAdded = await node.add({
+      path: post.title,
+      content: JSON.stringify(post)
+    })
+    console.log('Added file:', fileAdded.path, fileAdded.cid)
+    console.log('Content Address: ', fileAdded.cid.string)
+    return fileAdded.cid.string
     // Call addPost in profile.js
-    // Send post to IPFS
   },
   // Returns post object associated with content id 
   getPost(id) { },

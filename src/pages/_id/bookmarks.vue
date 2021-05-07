@@ -42,7 +42,6 @@ export default {
       let postList = this.$store.state.posts;
       // Loop through list of bookmarks on a profile
       for (let i = 0; i < bookmarkList.length; i++) {
-        // console.log(bookmarkList[i]);
         // Find post object and add it to result
         for (let j = 0; j < postList.length; j++) {
           if (postList[j].id === bookmarkList[i]) {

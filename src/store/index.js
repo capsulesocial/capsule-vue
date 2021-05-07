@@ -87,7 +87,6 @@ export const mutations = {
     state.user.posts.push(post.id)
     state.posts.push(post);
     // Add post to tags
-    console.log(state.tags.length)
     // 1. Check if the tag exists yet
     // 1a. IF tag exists, add CID
     // 1b. ELSE add new tag to post.tags with CID
