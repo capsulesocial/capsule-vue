@@ -1,6 +1,8 @@
 <template>
   <main>
-    <h1 class="text-4xl">Categories</h1>
+    <h1 class="text-4xl">
+      Categories
+    </h1>
 
     <section class="grid grid-cols-1 gap-5 md:grid-cols-2 m-5">
       <DiscoverCard text="technology" />
@@ -16,10 +18,10 @@
 </template>
 
 <script>
-import DiscoverCard from "@/components/DiscoverCard";
+import DiscoverCard from '@/components/DiscoverCard'
 export default {
   components: {
-    DiscoverCard
-  }
-};
+    DiscoverCard,
+  },
+}
 </script>

@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 const _IS_DEV_MODE_ = process.env.NODE_ENV === 'DEV' ? true : false;
 
 const path = require("path");

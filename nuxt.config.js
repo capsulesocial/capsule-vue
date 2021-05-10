@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 module.exports = {
   // Global page headers: https://go.nuxtjs.dev/config-head
   srcDir: 'src/',

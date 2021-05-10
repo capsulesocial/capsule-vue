@@ -1,8 +1,8 @@
-const marked = require('marked');
+const marked = require('marked')
 export default {
   methods: {
-    compileMarkdown(input) {
+    compileMarkdown (input) {
       return marked(input)
-    }
-  }
-};
+    },
+  },
+}

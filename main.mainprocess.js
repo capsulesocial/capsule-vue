@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 const { app } = require("electron");
 import { _IS_DEV_MODE_ } from './mainprocess/core';
 import { Menu, custom_menu } from './mainprocess/menu';

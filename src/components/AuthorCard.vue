@@ -4,15 +4,18 @@
     class="border rounded-lg bg-gray-200 p-5 shadow-xl my-5 flex flex-row justify-between"
   >
     <div>
-      <h6 class="text-sm italic">About the Author:</h6>
+      <h6 class="text-sm italic">
+        About the Author:
+      </h6>
       <h4 class="text-lg inline">
         {{ this.currentUser.username }}
       </h4>
       <nuxt-link
         :to="'/' + this.currentUser.id"
         class="text-sm text-primary underline inline"
-        >@{{ this.currentUser.id }}</nuxt-link
       >
+        @{{ this.currentUser.id }}
+      </nuxt-link>
       <p class="italic text-sm text-gray-700">
         {{ this.currentUser.bio }}
       </p>
@@ -23,41 +26,41 @@
 </template>
 
 <script>
-import FriendButton from "@/components/FriendButton";
+import FriendButton from '@/components/FriendButton'
 
 export default {
-  data() {
-    return {
-      currentUser: null
-    };
-  },
   components: {
-    FriendButton
+    FriendButton,
   },
-  async created() {
+  data () {
+    return {
+      currentUser: null,
+    }
+  },
+  created () {
     // The user in which I am currently viewing
     // Check if this is my profile
     if (this.$route.params.id === this.$store.state.user.id) {
-      this.currentUser = this.$store.state.user;
+      this.currentUser = this.$store.state.user
     }
     // Get user profile
     // this.currentUser = this.$api.profile.getProfile(this.$route.params.id)
-    let l = this.$store.state.userList;
+    const l = this.$store.state.userList
     for (let p = 0; p < l.length; p++) {
       if (l[p].id === this.$route.params.id) {
-        this.currentUser = l[p];
+        this.currentUser = l[p]
       }
     }
   },
   methods: {
-    toggleFriend: function() {
-      this.$store.commit("handleFollow", this.currentUser.id);
+    toggleFriend () {
+      this.$store.commit('handleFollow', this.currentUser.id)
     },
-    openWindow(url) {
+    openWindow (url) {
       if (process.client) {
-        window.open(url, "_blank");
+        window.open(url, '_blank')
       }
-    }
-  }
-};
+    },
+  },
+}
 </script>

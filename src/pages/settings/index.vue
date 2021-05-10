@@ -5,8 +5,8 @@
         <label for="newUsername" class="text-lg bold">Name</label>
         <input
           id="newUsername"
-          type="text"
           v-model="newUsername"
+          type="text"
           :placeholder="this.$store.state.user.username"
           class="focus:outline-none"
         />
@@ -14,8 +14,8 @@
         <label for="newID" class="text-lg bold">ID</label>
         <input
           id="newID"
-          type="text"
           v-model.trim="newID"
+          type="text"
           :placeholder="this.$store.state.user.id"
           class="focus:outline-none"
         />
@@ -23,8 +23,8 @@
         <label for="newEmail" class="text-lg bold">Contact</label>
         <input
           id="newEmail"
-          type="email"
           v-model="newEmail"
+          type="email"
           :placeholder="this.$store.state.user.email"
           class="focus:outline-none"
         />
@@ -36,10 +36,10 @@
           id="bio"
           :maxlength="maxCharBio"
           :value="bio"
-          @input="bio = $event.target.value"
-          @keyup="checkBio()"
           rows="4"
           class="w-full border rounded-lg focus:border-primary focus:outline-none p-1 resize-none"
+          @input="bio = $event.target.value"
+          @keyup="checkBio()"
         ></textarea>
         <p class="text-xs text-right">
           {{ this.checkBio() }} Characters Remaining
@@ -71,8 +71,9 @@
         <label
           for="confirmPassword"
           class="text-lg bold pt-2 focus:border-primary"
-          >Confirm Password</label
         >
+          Confirm Password
+        </label>
         <input
           id="confirmPassword"
           type="password"
@@ -88,47 +89,45 @@
 </template>
 
 <script>
-import _ from "lodash";
-import DOMPurify from "dompurify";
-import VerifySocial from "@/components/VerifySocial";
-import BrandedButton from "@/components/BrandedButton";
+import VerifySocial from '@/components/VerifySocial'
+import BrandedButton from '@/components/BrandedButton'
 
 export default {
-  data() {
-    return {
-      newUsername: "",
-      newID: "",
-      newEmail: "",
-      bio: this.$store.state.user.bio,
-      maxCharBio: 256
-    };
-  },
-  methods: {
-    checkBio() {
-      let charCount = this.bio.length;
-      return this.maxCharBio - charCount;
-    },
-    updateSettings() {
-      // Run quality rules before saving
-      if (this.newUsername !== "") {
-        this.$store.commit("updateUsername", this.newUsername);
-      }
-      if (this.newID !== "" && this.$quality.id(this.newID)) {
-        this.$store.commit("updateID", this.newID);
-      }
-      if (this.bio !== this.$store.state.user.bio && this.checkBio() > 0) {
-        this.$store.commit("updateBio", this.bio);
-      }
-      if (this.newEmail !== "" && this.$quality.email(this.newEmail)) {
-        this.$store.commit("updateEmail", this.newEmail);
-      }
-      alert("settings updated!");
-      this.$router.push("/" + this.$store.state.user.id);
-    }
-  },
   components: {
     VerifySocial,
-    BrandedButton
-  }
-};
+    BrandedButton,
+  },
+  data () {
+    return {
+      newUsername: '',
+      newID: '',
+      newEmail: '',
+      bio: this.$store.state.user.bio,
+      maxCharBio: 256,
+    }
+  },
+  methods: {
+    checkBio () {
+      const charCount = this.bio.length
+      return this.maxCharBio - charCount
+    },
+    updateSettings () {
+      // Run quality rules before saving
+      if (this.newUsername !== '') {
+        this.$store.commit('updateUsername', this.newUsername)
+      }
+      if (this.newID !== '' && this.$quality.id(this.newID)) {
+        this.$store.commit('updateID', this.newID)
+      }
+      if (this.bio !== this.$store.state.user.bio && this.checkBio() > 0) {
+        this.$store.commit('updateBio', this.bio)
+      }
+      if (this.newEmail !== '' && this.$quality.email(this.newEmail)) {
+        this.$store.commit('updateEmail', this.newEmail)
+      }
+      alert('Settings updated!')
+      this.$router.push('/' + this.$store.state.user.id)
+    },
+  },
+}
 </script>

@@ -28,26 +28,26 @@
 </template>
 
 <script>
-import CapsuleIcon from "@/components/icons/Capsule";
-import TwitterIcon from "@/components/icons/brands/Twitter";
-import DiscordIcon from "@/components/icons/brands/Discord";
-import BrandedButton from "@/components/BrandedButton";
+import CapsuleIcon from '@/components/icons/Capsule'
+import TwitterIcon from '@/components/icons/brands/Twitter'
+import DiscordIcon from '@/components/icons/brands/Discord'
+import BrandedButton from '@/components/BrandedButton'
 export default {
-  layout: "landing",
   components: {
     CapsuleIcon,
     TwitterIcon,
     DiscordIcon,
-    BrandedButton
+    BrandedButton,
   },
+  layout: 'landing',
   methods: {
-    handleCTA: function() {
+    handleCTA () {
       if (this.$store.state.user === null) {
-        this.$router.push("/auth");
+        this.$router.push('/auth')
       } else {
-        this.$router.push("/home");
+        this.$router.push('/home')
       }
-    }
-  }
-};
+    },
+  },
+}
 </script>

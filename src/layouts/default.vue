@@ -24,26 +24,25 @@
 </template>
 
 <script>
-import Navigation from "@/components/Navigation";
-import Explore from "@/components/Explore";
-import Header from "@/components/Header";
-import PostEditor from "@/components/post/Editor";
+import Navigation from '@/components/Navigation'
+import Explore from '@/components/Explore'
+import Header from '@/components/Header'
+import PostEditor from '@/components/post/Editor'
 
 export default {
   components: {
     Navigation,
     Explore,
     Header,
-    PostEditor
+    PostEditor,
   },
-  created() {
+  created () {
     if (this.$store.state.user === null) {
-      alert("Please sign in!");
-      this.$router.push("/auth");
-      return;
+      alert('Please sign in!')
+      this.$router.push('/auth')
     }
-  }
-};
+  },
+}
 </script>
 
 <style>

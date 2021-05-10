@@ -7,16 +7,24 @@
 
     <!-- Middle: Sticky above content -->
     <article v-if="this.$route.path !== '/settings'" class="col-span-2 flex">
-      <button @click="$router.go(-1)" class="focus:outline-none flex-none">
+      <button
+        class="focus:outline-none flex-none"
+        @click="$router.go(-1)"
+      >
         <BackButton />
       </button>
       <SearchBar class="h-12 w-full flex-grow" />
     </article>
     <article v-else class="col-span-3 lg:col-span-2 flex justify-between">
-      <button @click="$router.go(-1)" class="focus:outline-none">
+      <button
+        class="focus:outline-none"
+        @click="$router.go(-1)"
+      >
         <BackButton />
       </button>
-      <h2 class="text-2xl pt-4">Account Settings</h2>
+      <h2 class="text-2xl pt-4">
+        Account Settings
+      </h2>
       <span></span>
     </article>
 
@@ -58,12 +66,12 @@
 </template>
 
 <script>
-import CapsuleIcon from "@/components/icons/Capsule";
-import BookmarksIcon from "@/components/icons/Bookmarks";
-import NotificationsIcon from "@/components/icons/Notifications";
-import SettingsIcon from "@/components/icons/Settings";
-import SearchBar from "@/components/Search";
-import BackButton from "@/components/icons/BackChevron";
+import CapsuleIcon from '@/components/icons/Capsule'
+import BookmarksIcon from '@/components/icons/Bookmarks'
+import NotificationsIcon from '@/components/icons/Notifications'
+import SettingsIcon from '@/components/icons/Settings'
+import SearchBar from '@/components/Search'
+import BackButton from '@/components/icons/BackChevron'
 
 export default {
   components: {
@@ -72,7 +80,7 @@ export default {
     SettingsIcon,
     NotificationsIcon,
     BookmarksIcon,
-    BackButton
-  }
-};
+    BackButton,
+  },
+}
 </script>

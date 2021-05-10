@@ -22,12 +22,12 @@ export default {
   props: {
     text: {
       type: String,
-      default: "No Title"
+      default: 'No Title',
     },
     bgImage: {
       type: String,
-      default: require("@/assets/images/discover/404.jpeg")
-    }
-  }
-};
+      default: require('@/assets/images/discover/404.jpeg'),
+    },
+  },
+}
 </script>

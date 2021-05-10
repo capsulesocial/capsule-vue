@@ -42,9 +42,12 @@
         to="/help"
         class="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-semibold"
       >
-        <span v-if="this.$route.path === '/help'" class="font-bold text-primary"
-          >Help</span
+        <span
+          v-if="this.$route.path === '/help'"
+          class="font-bold text-primary"
         >
+          Help
+        </span>
         <span v-else class="font-semibold">Help</span>
       </nuxt-link>
       <BrandedButton text="Write Post" :action="toggle" class="mt-5 w-48" />
@@ -54,9 +57,11 @@
         @click="toggleProfileActions"
       >
         <!-- Actions tab -->
-        <div class="flex flex-col py-2" v-if="isProfileActions">
-          <nuxt-link :to="'/' + $store.state.user.id">Visit Profile</nuxt-link>
-          <button @click="signOut" class="focus:outline-none">
+        <div v-if="isProfileActions" class="flex flex-col py-2">
+          <nuxt-link :to="'/' + $store.state.user.id">
+            Visit Profile
+          </nuxt-link>
+          <button class="focus:outline-none" @click="signOut">
             Sign Out
           </button>
         </div>
@@ -88,13 +93,12 @@
         <DiscoverIcon v-else class="stroke-current text-gray-400" />
       </nuxt-link>
       <button
-        @click="toggle()"
         class="focus:outline-none bg-primary p-3 rounded-full shadow-lg"
+        @click="toggle()"
       >
         <PencilIcon class="fill-current text-white" />
       </button>
 
-      <!-- <NotificationsIcon class="fill-gray-400 text-gray-400" /> -->
       <ProfileIcon
         v-if="this.$route.params.id === this.$store.state.user.id"
         class="stroke-current text-primary"
@@ -115,45 +119,41 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
+import { mapMutations } from 'vuex'
 
-import HomeIcon from "@/components/icons/Home";
-import DiscoverIcon from "@/components/icons/Discover";
-import PencilIcon from "@/components/icons/Pencil";
-import NotificationsIcon from "@/components/icons/MobileNotifications";
-import MessagesIcon from "@/components/icons/Messages";
-import ProfileIcon from "@/components/icons/Profile";
-import SettingsIcon from "@/components/icons/Settings";
-import BrandedButton from "@/components/BrandedButton";
+import HomeIcon from '@/components/icons/Home'
+import DiscoverIcon from '@/components/icons/Discover'
+import PencilIcon from '@/components/icons/Pencil'
+import ProfileIcon from '@/components/icons/Profile'
+import SettingsIcon from '@/components/icons/Settings'
+import BrandedButton from '@/components/BrandedButton'
 
 export default {
-  data() {
-    return {
-      isProfileActions: false
-    };
-  },
   components: {
     HomeIcon,
     DiscoverIcon,
     PencilIcon,
-    NotificationsIcon,
-    MessagesIcon,
     ProfileIcon,
     SettingsIcon,
-    BrandedButton
+    BrandedButton,
+  },
+  data () {
+    return {
+      isProfileActions: false,
+    }
   },
   methods: {
     ...mapMutations({
-      toggle: "toggleCompose",
-      logout: "startSession"
+      toggle: 'toggleCompose',
+      logout: 'startSession',
     }),
-    toggleProfileActions: function() {
-      this.isProfileActions = !this.isProfileActions;
+    toggleProfileActions () {
+      this.isProfileActions = !this.isProfileActions
     },
-    signOut() {
-      this.logout(null);
-      this.$router.push("/");
-    }
-  }
-};
+    signOut () {
+      this.logout(null)
+      this.$router.push('/')
+    },
+  },
+}
 </script>

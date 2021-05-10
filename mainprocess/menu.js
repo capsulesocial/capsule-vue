@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 const isMac = process.platform === "darwin";
 const { app, Menu } = require("electron");
 

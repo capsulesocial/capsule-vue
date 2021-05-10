@@ -5,7 +5,7 @@
       <h3 class="text-center font-bold text-xl flex-grow pl-4 text-primary">
         Create Post
       </h3>
-      <button @click="updateStore()" class="focus:outline-none flex-grow-0">
+      <button class="focus:outline-none flex-grow-0" @click="updateStore()">
         <CloseIcon />
       </button>
     </article>
@@ -14,7 +14,7 @@
     <article class="m-5 lg:hidden pb-32">
       <div class="w-full">
         <!-- Title declaration -->
-        <div class="flex flex-col" v-if="this.mobileState === 'edit'">
+        <div v-if="this.mobileState === 'edit'" class="flex flex-col">
           <label for="title" class="text-gray-800 italic">Title:</label>
           <input
             v-model="title"
@@ -35,20 +35,36 @@
         </div>
       </div>
       <div
-        class="w-full flex justify-around text-primary px-2"
         v-if="this.mobileState === 'edit'"
+        class="w-full flex justify-around text-primary px-2"
       >
-        <button @click="addMarkdown('**', true)"><BoldIcon /></button>
-        <button @click="addMarkdown('*', true)"><ItalicIcon /></button>
-        <button @click="addMarkdown('\n* ')"><ListIcon /></button>
-        <button @click="addMarkdown('\n1. ')">1.</button>
-        <button @click="addMarkdown('\n# ')">H1</button>
-        <button @click="addMarkdown('\n## ')">H2</button>
-        <button @click="addMarkdown('\n### ')">H3</button>
+        <button @click="addMarkdown('**', true)">
+          <BoldIcon />
+        </button>
+        <button @click="addMarkdown('*', true)">
+          <ItalicIcon />
+        </button>
+        <button @click="addMarkdown('\n* ')">
+          <ListIcon />
+        </button>
+        <button @click="addMarkdown('\n1. ')">
+          1.
+        </button>
+        <button @click="addMarkdown('\n# ')">
+          H1
+        </button>
+        <button @click="addMarkdown('\n## ')">
+          H2
+        </button>
+        <button @click="addMarkdown('\n### ')">
+          H3
+        </button>
         <button @click="addMarkdown('\n> ')">
           <QuoteIcon />
         </button>
-        <button @click="addMarkdown('\n```\n', true)"><CodeIcon /></button>
+        <button @click="addMarkdown('\n```\n', true)">
+          <CodeIcon />
+        </button>
         <button @click="addMarkdown('[title](https://www.example.com)')">
           <LinkIcon />
         </button>
@@ -58,19 +74,23 @@
       </div>
 
       <textarea
-        ref="ta"
         v-if="this.mobileState === 'edit'"
+        ref="ta"
         :value="input"
-        @input="update"
         class="w-full border p-1 h-64"
+        @input="update"
       ></textarea>
       <div v-else>
-        <h2 class="text-4xl">{{ this.title }}</h2>
-        <h4 class="text-2xl">{{ this.subtitle }}</h4>
+        <h2 class="text-4xl">
+          {{ this.title }}
+        </h2>
+        <h4 class="text-2xl">
+          {{ this.subtitle }}
+        </h4>
         <h6 class="text-sm text-gray-500 py-4">
           By: {{ this.$store.state.user.username }}
         </h6>
-        <div v-html="compiledMarkdown" class="prose"></div>
+        <div class="prose" v-html="compiledMarkdown"></div>
       </div>
     </article>
 
@@ -78,17 +98,33 @@
     <article class="mt-5 hidden lg:grid grid-cols-2">
       <div class="px-5">
         <div class="w-full flex justify-around text-primary px-2">
-          <button @click="addMarkdown('**', true)"><BoldIcon /></button>
-          <button @click="addMarkdown('*', true)"><ItalicIcon /></button>
-          <button @click="addMarkdown('\n* ')"><ListIcon /></button>
-          <button @click="addMarkdown('\n1. ')">1.</button>
-          <button @click="addMarkdown('\n# ')">H1</button>
-          <button @click="addMarkdown('\n## ')">H2</button>
-          <button @click="addMarkdown('\n### ')">H3</button>
+          <button @click="addMarkdown('**', true)">
+            <BoldIcon />
+          </button>
+          <button @click="addMarkdown('*', true)">
+            <ItalicIcon />
+          </button>
+          <button @click="addMarkdown('\n* ')">
+            <ListIcon />
+          </button>
+          <button @click="addMarkdown('\n1. ')">
+            1.
+          </button>
+          <button @click="addMarkdown('\n# ')">
+            H1
+          </button>
+          <button @click="addMarkdown('\n## ')">
+            H2
+          </button>
+          <button @click="addMarkdown('\n### ')">
+            H3
+          </button>
           <button @click="addMarkdown('\n> ')">
             <QuoteIcon />
           </button>
-          <button @click="addMarkdown('\n```\n', true)"><CodeIcon /></button>
+          <button @click="addMarkdown('\n```\n', true)">
+            <CodeIcon />
+          </button>
           <button @click="addMarkdown('[title](https://www.example.com)')">
             <LinkIcon />
           </button>
@@ -101,8 +137,8 @@
         <textarea
           ref="ta"
           :value="input"
-          @input="update"
           class="w-full border p-1 h-64"
+          @input="update"
         ></textarea>
       </div>
 
@@ -127,31 +163,30 @@
         <h6 class="text-sm text-gray-500 pb-4">
           By: {{ this.$store.state.user.username }}
         </h6>
-        <div v-html="compiledMarkdown" class="prose pl-4"></div>
+        <div class="prose pl-4" v-html="compiledMarkdown"></div>
       </div>
       <footer
         class="bottom-0 fixed m-5 p-5 w-full flex flex-row justify-between font-sans"
       >
         <div class="flex items-center border rounded-full border-primary">
           <span class=" rounded-full pl-4 bg-white shadow-lg text-primary">
-            <label for="tag" class="hidden" value="Enter hashtags"></label
-            >#<input
+            <label for="tag" class="hidden" value="Enter hashtags"></label>
+            #<input
               v-model="tag"
               type="text"
               placeholder="tag"
               class="focus:outline-none w-32 pr-1 py-2"
             />
             <button
-              @click="addTag"
               class="border border-white rounded-full px-4 py-2 bg-primary focus:outline-none"
+              @click="addTag"
             >
               <span class="text-white">+</span>
             </button>
           </span>
           <span v-for="t in this.tags" :key="t" class="mx-2">
             <h6 class="inline text-primary">#{{ t }}</h6>
-            <button @click="removeTag(t)" class="text-red-600">x</button></span
-          >
+            <button @click="removeTag(t)">❌</button></span>
         </div>
         <BrandedButton text="Publish" :action="post" class="mr-10" />
       </footer>
@@ -167,35 +202,32 @@
           class="focus:outline-none w-24 pr-1 py-2 border-b border-primary"
         />
         <button
-          @click="addTag"
           class="focus:outline-none bg-primary rounded-full text-white px-2"
+          @click="addTag"
         >
           <span class="">+</span>
         </button>
         <span v-for="t in this.tags" :key="t" class="mx-2">
           <h6 class="inline text-primary">#{{ t }}</h6>
-          <button @click="removeTag(t)" class="text-red-600">x</button></span
-        >
+          <button @click="removeTag(t)">❌</button></span>
       </div>
 
       <div class="grid grid-cols-3 px-2">
-        <button @click="toggleComposeState('edit')" class="focus:outline-none">
+        <button class="focus:outline-none" @click="toggleComposeState('edit')">
           <span
             v-if="mobileState === 'edit'"
             class="font-bold text-primary text-xl"
-            >Edit</span
-          >
+          >Edit</span>
           <span v-else class="text-xl">Edit</span>
         </button>
         <button
-          @click="toggleComposeState('preview')"
           class="focus:outline-none"
+          @click="toggleComposeState('preview')"
         >
           <span
             v-if="mobileState === 'preview'"
             class="font-bold text-primary text-xl"
-            >Preview</span
-          >
+          >Preview</span>
           <span v-else class="text-xl">Preview</span>
         </button>
         <BrandedButton text="Publish" :action="post" />
@@ -205,39 +237,21 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
-import _ from "lodash";
-import DOMPurify from "dompurify";
-import CloseIcon from "@/components/icons/Close";
-import BoldIcon from "@/components/icons/md/Bold";
-import CodeIcon from "@/components/icons/md/Code";
-import ItalicIcon from "@/components/icons/md/Italic";
-import ListIcon from "@/components/icons/md/List";
-import LinkIcon from "@/components/icons/md/Link";
-import ImageIcon from "@/components/icons/md/Image";
-import QuoteIcon from "@/components/icons/md/Quote";
-import BrandedButton from "@/components/BrandedButton";
-import markdown from "@/mixins/markdown.js";
+import { mapMutations } from 'vuex'
+import _ from 'lodash'
+import DOMPurify from 'dompurify'
+import CloseIcon from '@/components/icons/Close'
+import BoldIcon from '@/components/icons/md/Bold'
+import CodeIcon from '@/components/icons/md/Code'
+import ItalicIcon from '@/components/icons/md/Italic'
+import ListIcon from '@/components/icons/md/List'
+import LinkIcon from '@/components/icons/md/Link'
+import ImageIcon from '@/components/icons/md/Image'
+import QuoteIcon from '@/components/icons/md/Quote'
+import BrandedButton from '@/components/BrandedButton'
+import markdown from '@/mixins/markdown.js'
 
 export default {
-  data() {
-    return {
-      title: this.$store.state.draft.title,
-      subtitle: this.$store.state.draft.subtitle,
-      input: this.$store.state.draft.content,
-      mobileState: "edit",
-      tags: [],
-      tag: ""
-    };
-  },
-  computed: {
-    draft() {
-      return this.$store.state.draft;
-    },
-    compiledMarkdown: function() {
-      return this.compileMarkdown(this.input);
-    }
-  },
   components: {
     CloseIcon,
     BoldIcon,
@@ -247,44 +261,63 @@ export default {
     LinkIcon,
     ImageIcon,
     QuoteIcon,
-    BrandedButton
+    BrandedButton,
   },
-  mounted() {},
+  mixins: [markdown],
+  data () {
+    return {
+      title: this.$store.state.draft.title,
+      subtitle: this.$store.state.draft.subtitle,
+      input: this.$store.state.draft.content,
+      mobileState: 'edit',
+      tags: [],
+      tag: '',
+    }
+  },
+  computed: {
+    draft () {
+      return this.$store.state.draft
+    },
+    compiledMarkdown () {
+      return this.compileMarkdown(this.input)
+    },
+  },
   methods: {
     ...mapMutations({
-      toggle: "toggleCompose",
-      updateDraft: "updateDraft",
-      sendPost: "sendPost"
+      toggle: 'toggleCompose',
+      updateDraft: 'updateDraft',
+      sendPost: 'sendPost',
     }),
-    toggleComposeState: function(state) {
-      this.mobileState = state;
+    toggleComposeState (state) {
+      this.mobileState = state
     },
-    update: _.debounce(function(e) {
-      let clean = DOMPurify.sanitize(e.target.value, {
-        USE_PROFILES: { html: true, svg: true }
-      });
-      this.input = clean;
+    update: _.debounce(function (e) {
+      const clean = DOMPurify.sanitize(e.target.value, {
+        USE_PROFILES: { html: true, svg: true },
+      })
+      // eslint-disable-next-line no-invalid-this
+      this.input = clean
     }, 300),
-    addTag: function(tag) {
-      if (this.tag !== "") {
-        this.tags.push(this.tag);
-        this.tag = "";
+    addTag (tag) {
+      if (this.tag !== '') {
+        this.tags.push(this.tag)
+        this.tag = ''
       }
     },
-    removeTag: function(tag) {
+    removeTag (tag) {
       // Remove
-      const index = this.tags.indexOf(tag);
+      const index = this.tags.indexOf(tag)
       if (index > -1) {
-        this.tags.splice(index, 1);
+        this.tags.splice(index, 1)
       }
     },
-    post: function() {
-      if (this.title === "") {
-        alert("Missing title!");
-        return;
+    post () {
+      if (this.title === '') {
+        alert('Missing title!')
+        return
       }
-      let date = new Date();
-      let p = {
+      const date = new Date()
+      const p = {
         title: this.title,
         subtitle: this.subtitle,
         content: this.input,
@@ -293,48 +326,47 @@ export default {
         tags: this.tags,
         comments: [],
         bookmarks: [],
-        authorID: this.$store.state.user.id
-      };
-      this.$api.post.sendPost(p).then(cid => {
-        p.id = cid;
-        this.sendPost(p);
-      });
-      this.toggle();
-      this.title = "Title";
-      this.subtitle = "Subtitle";
-      this.input = "# Hello World";
-      this.tags = [];
-      this.$router.push(this.$store.state.user.id);
+        authorID: this.$store.state.user.id,
+      }
+      this.$api.post.sendPost(p).then((cid) => {
+        p.id = cid
+        this.sendPost(p)
+      })
+      this.toggle()
+      this.title = 'Title'
+      this.subtitle = 'Subtitle'
+      this.input = '# Hello World'
+      this.tags = []
+      this.$router.push(this.$store.state.user.id)
     },
-    updateStore: function() {
-      this.$store.commit("updateDraft", {
+    updateStore () {
+      this.$store.commit('updateDraft', {
         title: this.title,
         subtitle: this.subtitle,
-        content: this.input
-      });
-      this.toggle();
+        content: this.input,
+      })
+      this.toggle()
     },
-    addMarkdown: function(md, wrap) {
-      let ta = this.$refs.ta,
-        cursorStart = ta.selectionStart,
-        cursorEnd = ta.selectionEnd,
-        selectedText = this.input.substring(cursorStart, cursorEnd);
+    addMarkdown (md, wrap) {
+      const ta = this.$refs.ta
+      const cursorStart = ta.selectionStart
+      const cursorEnd = ta.selectionEnd
+      const selectedText = this.input.substring(cursorStart, cursorEnd)
       if (wrap) {
         this.input =
           this.input.substring(0, cursorStart) +
           md +
           selectedText +
           md +
-          this.input.substring(cursorEnd);
+          this.input.substring(cursorEnd)
       } else {
         this.input =
           this.input.substring(0, cursorStart) +
           md +
           selectedText +
-          this.input.substring(cursorEnd);
+          this.input.substring(cursorEnd)
       }
-    }
+    },
   },
-  mixins: [markdown]
-};
+}
 </script>

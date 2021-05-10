@@ -11,10 +11,10 @@
 </template>
 
 <script>
-import PostCard from "@/components/post/Card";
+import PostCard from '@/components/post/Card'
 export default {
   components: {
-    PostCard
-  }
-};
+    PostCard,
+  },
+}
 </script>

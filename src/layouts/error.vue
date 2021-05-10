@@ -13,21 +13,26 @@
 </template>
 
 <script>
-import BrandedButton from "@/components/BrandedButton";
+import BrandedButton from '@/components/BrandedButton'
 
 export default {
-  props: ["error"],
-  layout: "error",
   components: [BrandedButton],
-  created() {
+  layout: 'error',
+  props: {
+    error: {
+      type: Object,
+      default: null,
+    },
+  },
+  created () {
     if (this.$store.state.user === null) {
-      this.$router.push("/auth");
+      this.$router.push('/auth')
     }
   },
   methods: {
-    goBack: function() {
-      this.$router.push("/");
-    }
-  }
-};
+    goBack () {
+      this.$router.push('/')
+    },
+  },
+}
 </script>

@@ -13,16 +13,16 @@
 </template>
 
 <script>
-import SearchIcon from "@/components/icons/Search";
+import SearchIcon from '@/components/icons/Search'
 
 export default {
-  data() {
-    return {
-      keyword: ""
-    };
-  },
   components: {
-    SearchIcon
-  }
-};
+    SearchIcon,
+  },
+  data () {
+    return {
+      keyword: '',
+    }
+  },
+}
 </script>

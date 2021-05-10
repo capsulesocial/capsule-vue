@@ -6,7 +6,6 @@
     "es2021": true
   },
   "extends": [
-    "eslint:recommended",
     "@nuxtjs"
   ],
   "parserOptions": {
@@ -15,17 +14,19 @@
     "parser": "babel-eslint"
   },
   "rules": {
+    "vue/attribute-hyphenation": 0,
+    "vue/no-v-html": 0,
+    "vue/html-self-closing": 0,
+    "vue/this-in-template": 0,
     "indent": [
-      "error",
-      "tab"
+      "error"
     ],
     "linebreak-style": [
       "error",
       "unix"
     ],
     "quotes": [
-      "error",
-      "backtick"
+      "error"
     ],
     "semi": [
       "error",
@@ -77,7 +78,7 @@
       2,
       "always-multiline"
     ],
-    "consistent-this": "error",
+    "consistent-this": "off",
     "func-style": [
       "error",
       "declaration",

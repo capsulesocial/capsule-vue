@@ -2,8 +2,8 @@
   <div class="rounded-full">
     <button
       v-if="$store.state.user.id !== targetUser.id"
-      @click="toggleFriend"
       class="rounded-full focus:outline-none"
+      @click="toggleFriend"
     >
       <div
         v-if="iFollow()"
@@ -19,34 +19,34 @@
 </template>
 
 <script>
-import FollowIcon from "@/components/icons/Follow";
-import UnfollowIcon from "@/components/icons/Unfollow";
+import FollowIcon from '@/components/icons/Follow'
+import UnfollowIcon from '@/components/icons/Unfollow'
 
 export default {
+  components: {
+    FollowIcon,
+    UnfollowIcon,
+  },
   props: {
     targetUser: {
       type: Object,
-      default: null
-    }
-  },
-  components: {
-    FollowIcon,
-    UnfollowIcon
+      default: null,
+    },
   },
   methods: {
-    iFollow: function() {
+    iFollow () {
       // Check if I am following currentUser
-      let followingList = this.$store.state.user.following;
+      const followingList = this.$store.state.user.following
       for (let i = 0; i < followingList.length; i++) {
         if (followingList[i] === this.$route.params.id) {
-          return true;
+          return true
         }
       }
-      return false;
+      return false
     },
-    toggleFriend: function() {
-      this.$store.commit("handleFollow", this.targetUser.id);
-    }
-  }
-};
+    toggleFriend () {
+      this.$store.commit('handleFollow', this.targetUser.id)
+    },
+  },
+}
 </script>

@@ -3,7 +3,6 @@
     <div class="self-center mb-5">
       <CapsuleIcon />
     </div>
-
     <!-- Login -->
     <section
       class="bg-white mx-auto lg:w-full lg:max-w-md rounded shadow-lg divide-y divide-gray-200"
@@ -15,7 +14,11 @@
         >
           Sign In
         </span>
-        <button @click="toggleFormType" class="focus:outline-none" v-else>
+        <button
+          v-if="!isLogin"
+          class="focus:outline-none"
+          @click="toggleFormType"
+        >
           Sign In
         </button>
         <span
@@ -24,7 +27,11 @@
         >
           Sign Up
         </span>
-        <button @click="toggleFormType" class="focus:outline-none" v-else>
+        <button
+          v-else
+          class="focus:outline-none"
+          @click="toggleFormType"
+        >
           Sign Up
         </button>
       </article>
@@ -35,68 +42,65 @@
           v-if="!isLogin"
           for="name"
           class="font-semibold text-sm text-gray-600 pb-1 block"
-          >Name</label
-        >
+        >Name</label>
         <input
-          v-model="name"
           v-if="!isLogin"
+          id="name"
+          v-model="name"
           type="text"
           placeholder="Tom Brady"
-          id="name"
           class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full focus:outline-none focus:border-primary text-primary font-sans"
-        />
-        <!-- Sign in + Register: ID -->
-        <label for="id" class="font-semibold text-sm text-gray-600 pb-1 block"
-          >ID</label
         >
+        <!-- Sign in + Register: ID -->
+        <label
+          for="id"
+          class="font-semibold text-sm text-gray-600 pb-1 block"
+        >ID</label>
         <input
+          id="id"
           v-model="id"
           type="text"
           placeholder="tombrady"
-          id="id"
           class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full focus:outline-none focus:border-primary text-primary font-sans"
-        />
+        >
         <!-- Register: Contact -->
         <label
           v-if="!isLogin"
           for="contact"
           class="font-semibold text-sm text-gray-600 pb-1 block"
-          >Contact</label
-        >
+        >Contact</label>
         <input
-          v-model="email"
           v-if="!isLogin"
+          id="contact"
+          v-model="email"
           type="email"
           placeholder="tb12@nfl.com"
-          id="contact"
           class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full focus:outline-none focus:border-primary text-primary font-sans"
-        />
+        >
         <label
           for="password"
           class="font-semibold text-sm text-gray-600 pb-1 block"
-          >Password</label
-        >
+        >Password</label>
         <input
+          id="loginPassword"
           v-model="password"
           type="password"
           placeholder="************"
-          id="loginPassword"
           class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full focus:outline-none focus:border-primary"
-        />
+        >
         <label
           v-if="!isLogin"
           for="confirmPassword"
           class="font-semibold text-sm text-gray-600 pb-1 block"
-          >Confirm Password</label
-        >
+        >Confirm Password</label>
         <input
-          v-model="confirmPassword"
           v-if="!isLogin"
+          id="confirmPassword"
+          v-model="confirmPassword"
           type="password"
           placeholder="************"
-          id="confirmPassword"
           class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full focus:outline-none focus:border-primary"
-        />
+        >
         <BrandedButton
           :text="isLogin ? 'Sign In' : 'Sign Up'"
           :action="verify"
@@ -104,13 +108,15 @@
         />
       </article>
       <article
-        class="text-center whitespace-nowrap flex justify-between text-sm p-5 text-gray-600 font-sans"
         v-if="isLogin"
+        class="text-center whitespace-nowrap flex justify-between text-sm p-5 text-gray-600 font-sans"
       >
         <button class="px-4 py-2 focus:outline-none">
           Forgot Password
         </button>
-        <button class="px-4 py-2 focus:outline-none">Help</button>
+        <button class="px-4 py-2 focus:outline-none">
+          Help
+        </button>
       </article>
       <article v-else class="flex justify-center">
         <label class="items-center p-5 text-gray-600 inline-flex">
@@ -119,8 +125,9 @@
             type="checkbox"
             class="form-checkbox h-4 w-4 text-primary"
             checked
-          /><span class="ml-2 text-gray-700 font-sans"
-            >I agree to the Terms and Conditions
+          ><span
+            class="ml-2 text-gray-700 font-sans"
+          >I agree to the Terms and Conditions
           </span>
         </label>
       </article>
@@ -135,12 +142,16 @@
 </template>
 
 <script>
-import CapsuleIcon from "@/components/icons/Capsule";
-import BrandedButton from "@/components/BrandedButton";
+import CapsuleIcon from '@/components/icons/Capsule'
+import BrandedButton from '@/components/BrandedButton'
 
 export default {
-  layout: "unauth",
-  data() {
+  components: {
+    CapsuleIcon,
+    BrandedButton,
+  },
+  layout: 'unauth',
+  data () {
     return {
       isLogin: true,
       name: null,
@@ -148,91 +159,86 @@ export default {
       email: null,
       password: null,
       confirmPassword: null,
-      consent: true
-    };
-  },
-  created() {
-    if (this.$store.state.user !== null) {
-      this.$router.push("/home");
+      consent: true,
     }
   },
-  components: {
-    CapsuleIcon,
-    BrandedButton
+  created () {
+    if (this.$store.state.user !== null) {
+      this.$router.push('/home')
+    }
   },
   methods: {
-    toggleFormType: function() {
-      this.isLogin = !this.isLogin;
+    toggleFormType () {
+      this.isLogin = !this.isLogin
     },
-    verify: async function() {
-      let pwCheck = this.$quality.password(this.password);
-      let idCheck = this.$quality.id(this.id);
+    async verify () {
+      const pwCheck = this.$quality.password(this.password)
+      const idCheck = this.$quality.id(this.id)
       if (pwCheck !== true) {
-        alert(pwCheck);
-        return;
+        alert(pwCheck)
+        return
       }
       if (idCheck !== true) {
-        alert(idCheck);
-        return;
+        alert(idCheck)
+        return
       }
       // Login
       if (this.isLogin) {
-        const res = await this.$api.auth.login(this.id, this.password);
+        const res = await this.$api.auth.login(this.id, this.password)
         if (res) {
           // this.$store.state.setSession(res.user)
-          this.$router.push("/");
+          this.$router.push('/')
         } else {
-          alert("Invalid login!");
+          alert('Invalid login!')
         }
       } else {
         // Registration
         if (!this.consent) {
-          alert("Please accept the Terms & Conditions");
-          return;
+          alert('Please accept the Terms & Conditions')
+          return
         }
         if (this.$quality.email(this.email) !== true) {
-          alert("Invalid email!");
-          return;
+          alert('Invalid email!')
+          return
         }
         if (this.password === this.confirmPassword) {
-          let account = {
+          const account = {
             id: this.id,
             username: this.name,
             email: this.email,
             password: this.password,
-            bio: "",
+            bio: '',
             posts: [],
             socials: [],
             bookmarks: [],
             followers: [],
-            following: []
-          };
-          const res = await this.$api.auth.register(account);
-          account.password = null;
-          this.$store.commit("startSession", account);
-          this.$router.push("/settings");
+            following: [],
+          }
+          // const res = await this.$api.auth.register(account)
+          account.password = null
+          this.$store.commit('startSession', account)
+          this.$router.push('/settings')
         } else {
-          alert("Password mismatch!");
-          return;
+          alert('Password mismatch!')
         }
       }
     },
-    adminBypass: function() {
-      let account = {
-        id: "admin",
-        username: "admin",
-        email: "admin@admin.com",
-        password: "password123",
-        bio: "This is your bio",
+    adminBypass () {
+      const account = {
+        id: 'admin',
+        username: 'admin',
+        email: 'admin@admin.com',
+        password: 'password123',
+        bio: 'This is your bio',
         posts: [],
         socials: [],
         bookmarks: [],
         followers: [],
-        following: []
-      };
-      this.$store.commit("startSession", account);
-      this.$router.push("/settings");
-    }
-  }
-};
+        following: [],
+      }
+      this.$store.commit('startSession', account)
+      this.$router.push('/settings')
+    },
+  },
+}
 </script>
