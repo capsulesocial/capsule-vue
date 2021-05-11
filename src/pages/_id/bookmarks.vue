@@ -1,7 +1,7 @@
 <template>
   <section>
     <article>
-      <PageTitle :title="'Bookmarks of ' + this.$route.params.id" />
+      <ProfileHeader :currentUser="this.currentUser" />
     </article>
     <div v-for="p in this.getBookmarkList()" :key="p.id">
       <PostCard :post="p" :authorID="p.authorID" :authorUsername="p.authorID" />
@@ -11,15 +11,32 @@
 
 <script>
 import PostCard from '@/components/post/Card'
-import PageTitle from '@/components/PageTitle'
+import ProfileHeader from '@/components/ProfileHeader'
 
 export default {
   components: {
     PostCard,
-    PageTitle,
+    ProfileHeader,
   },
   data () {
-    return {}
+    return {
+      currentUser: null,
+    }
+  },
+  created () {
+    // The user in which I am currently viewing
+    // Check if this is my profile
+    if (this.$route.params.id === this.$store.state.user.id) {
+      this.currentUser = this.$store.state.user
+    }
+    // Get user profile
+    // this.currentUser = this.$api.profile.getProfile(this.$route.params.id)
+    const l = this.$store.state.userList
+    for (let p = 0; p < l.length; p++) {
+      if (l[p].id === this.$route.params.id) {
+        this.currentUser = l[p]
+      }
+    }
   },
   methods: {
     getBookmarkList () {

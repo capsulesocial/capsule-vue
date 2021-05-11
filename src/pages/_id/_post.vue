@@ -44,10 +44,13 @@
                 this.post.comments.length
               }}
             </span>
-            <span class="flex">
-              <BookmarkIcon class="inline mr-1" />
+            <button
+              class="flex focus:outline-none hover:text-primary"
+              @click="handleBookmark()"
+            >
+              <BookmarkIcon :isActive="this.isBookmark()" class="inline mr-1" />
               {{ this.post.bookmarks.length }}
-            </span>
+            </button>
           </div>
         </div>
       </article>
@@ -110,6 +113,17 @@ export default {
         this.post = this.$store.state.posts[p]
       }
     }
+  },
+  methods: {
+    isBookmark () {
+      return this.post.bookmarks.includes(this.$store.state.user.id)
+    },
+    handleBookmark () {
+      this.$store.commit('handleBookmark', {
+        postID: this.post.id,
+        authorID: this.$route.params.id,
+      })
+    },
   },
 }
 </script>

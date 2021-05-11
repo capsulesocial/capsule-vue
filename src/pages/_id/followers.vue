@@ -1,7 +1,7 @@
 <template>
   <section v-if="this.targetUser !== null">
     <article>
-      <PageTitle :title="'Followers of ' + this.targetUser.username" />
+      <ProfileHeader :currentUser="this.targetUser" />
     </article>
     <article>
       <div v-for="i in this.targetUser['followers']" :key="i">
@@ -14,10 +14,11 @@
 </template>
 
 <script>
-import PageTitle from '@/components/PageTitle'
+import ProfileHeader from '@/components/ProfileHeader'
+
 export default {
   components: {
-    PageTitle,
+    ProfileHeader,
   },
   data () {
     return {
