@@ -1,7 +1,9 @@
 /* eslint-disable prefer-const */
 <template>
   <section>
-    <h2 class="text-2xl">#{{ this.$route.params.tag }}</h2>
+    <h2 class="text-2xl">
+      #{{ this.$route.params.tag }}
+    </h2>
     <div v-for="p in this.posts" :key="p.contentAddress">
       <PostCard :post="p" :authorID="p.authorID" :authorUsername="p.authorID" />
     </div>
@@ -22,9 +24,9 @@ export default {
   },
   created () {
     // Fetch posts with tag
-    for (let p of this.$store.state.tags) {
+    for (const p of this.$store.state.tags) {
       if (p.tag === this.tag) {
-        for (let c of p.posts) {
+        for (const c of p.posts) {
           // Fetch specific post
           this.findPost(c)
         }
@@ -33,9 +35,9 @@ export default {
   },
   methods: {
     findPost (pID) {
-      for (let p in this.$store.state.posts) {
-        if (p === pID) {
-          this.posts.push(this.$store.state.posts[p]);
+      for (const p in this.$store.state.posts) {
+        if (this.$store.state.posts[p].id === pID) {
+          this.posts.push(this.$store.state.posts[p])
         }
       }
     },

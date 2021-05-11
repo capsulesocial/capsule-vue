@@ -6,49 +6,39 @@
     >
       <nuxt-link
         to="/home"
-        class="group flex items-center px-2 py-2 text-base leading-6 font-semibold"
+        class="group flex items-center px-2 py-2 text-base leading-6 font-semibold m-2"
       >
+        <HomeIcon class="mr-2" />
         Home
       </nuxt-link>
       <nuxt-link
         to="/discover"
-        class="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-semibold"
+        class="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-semibold m-2"
       >
+        <DiscoverIcon class="mr-2" />
         Discover
       </nuxt-link>
       <nuxt-link
-        to="/messages"
-        class="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-semibold"
+        :to="'/' + $store.state.user.id + '/bookmarks'"
+        class="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-semibold m-2"
       >
-        Messages
+        <BookmarksIcon class="mr-2" />
+        Bookmarks
       </nuxt-link>
-
       <!-- profile -->
-
       <nuxt-link
         :to="'/' + $store.state.user.id"
-        class="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-semibold"
+        class="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-semibold m-2"
       >
+        <ProfileIcon class="mr-2" />
         Profile
-      </nuxt-link>
-
-      <nuxt-link
-        to="/settings"
-        class="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-semibold"
-      >
-        Settings
       </nuxt-link>
       <nuxt-link
         to="/help"
-        class="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-semibold"
+        class="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-semibold m-2"
       >
-        <span
-          v-if="this.$route.path === '/help'"
-          class="font-bold text-primary"
-        >
-          Help
-        </span>
-        <span v-else class="font-semibold">Help</span>
+        <HelpIcon class="mr-2" />
+        Help
       </nuxt-link>
       <BrandedButton text="Write Post" :action="toggle" class="mt-5 w-48" />
 
@@ -127,6 +117,8 @@ import PencilIcon from '@/components/icons/Pencil'
 import ProfileIcon from '@/components/icons/Profile'
 import SettingsIcon from '@/components/icons/Settings'
 import BrandedButton from '@/components/BrandedButton'
+import BookmarksIcon from '@/components/icons/Bookmarks'
+import HelpIcon from '@/components/icons/Help'
 
 export default {
   components: {
@@ -136,6 +128,8 @@ export default {
     ProfileIcon,
     SettingsIcon,
     BrandedButton,
+    BookmarksIcon,
+    HelpIcon,
   },
   data () {
     return {

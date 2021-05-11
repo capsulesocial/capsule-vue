@@ -1,23 +1,24 @@
 <template>
   <main class="w-full grid grid-cols-1 lg:grid-cols-6">
     <div>
-      <button
-        class="focus:outline-none fixed lg:inset-y-0 bottom-0 lg:bottom-1/2 left-0 m-5 rounded-full px-2 py-1 bg-white"
-        @click="$router.go(-1)"
-      >
-        <BackButton class="hidden lg:block" size="large" />
-        <BackButton class="lg:hidden" />
-      </button>
     </div>
     <Nuxt class="col-span-4" />
-    <div></div>
+    <div>
+      <button
+        class="focus:outline-none fixed bottom-0 lg:top-0 right-0 m-5 rounded-full border border-2 border-primary bg-white w-10 h-10"
+        @click="$router.go(-1)"
+      >
+        <CloseButton class="hidden lg:block" size="large" />
+        <CloseButton class="lg:hidden" />
+      </button>
+    </div>
   </main>
 </template>
 
 <script>
-import BackButton from '@/components/icons/BackChevron'
+import CloseButton from '@/components/icons/Close'
 
 export default {
-  components: { BackButton },
+  components: { CloseButton },
 }
 </script>
