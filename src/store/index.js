@@ -170,4 +170,8 @@ export const mutations = {
       state.user.bookmarks = state.user.bookmarks.filter(e => e !== data.postID)
     }
   },
+  addView (state, postID) {
+    const targetPost = state.posts.find(p => p.id === postID)
+    targetPost.views += 1
+  },
 }

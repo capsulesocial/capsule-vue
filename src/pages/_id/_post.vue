@@ -113,6 +113,7 @@ export default {
         this.post = this.$store.state.posts[p]
       }
     }
+    this.$store.commit('addView', this.post.id)
   },
   methods: {
     isBookmark () {
