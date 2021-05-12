@@ -327,6 +327,7 @@ export default {
         comments: [],
         bookmarks: [],
         authorID: this.$store.state.user.id,
+        views: 0,
       }
       this.$api.post.sendPost(p).then((cid) => {
         p.id = cid
