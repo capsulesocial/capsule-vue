@@ -37,6 +37,7 @@
             >
               {{ this.$route.params.id }}
             </nuxt-link>
+            <span class="text-xs italic block text-gray-600">{{ this.post.views }} views</span>
           </p>
           <div class="flex">
             <span class="flex pr-4">
