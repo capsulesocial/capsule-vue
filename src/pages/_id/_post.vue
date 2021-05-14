@@ -1,16 +1,9 @@
-/* eslint-disable vue/attribute-hyphenation */
-/* eslint-disable vue/no-v-html */
-/* eslint-disable vue/html-self-closing */
-/* eslint-disable vue/this-in-template */
 <template>
   <div>
     <section v-if="this.post !== null" class="pb-16 lg:pb-5 m-5">
       <article>
         <div class="flex justify-between">
-          <p class="font-sans text-sm inline">
-            Posted on
-            {{ this.post.timestamp.toLocaleString() }}
-          </p>
+          <span class="text-sm block text-gray-600 italic">{{ this.post.views }} views</span>
           <span class="flex">
             <h6
               v-for="t in this.post.tags"
@@ -29,7 +22,7 @@
           {{ this.post.subtitle }}
         </h2>
         <div class="flex justify-between pt-5">
-          <p class="font-sans text-sm uppercase">
+          <p class="font-sans uppercase">
             Written by
             <nuxt-link
               :to="'/' + this.$route.params.id"
@@ -37,7 +30,9 @@
             >
               {{ this.$route.params.id }}
             </nuxt-link>
-            <span class="text-xs italic block text-gray-600">{{ this.post.views }} views</span>
+            <span class="font-sans text-sm text-gray-700 block">
+              {{ this.post.timestamp.toLocaleDateString() }}
+            </span>
           </p>
           <div class="flex">
             <span class="flex pr-4">

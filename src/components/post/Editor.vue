@@ -1,5 +1,5 @@
 <template>
-  <section class="w-full h-screen bg-white">
+  <section class="w-full h-auto bg-white">
     <!-- Header and close button -->
     <article class="flex items-center px-5 pt-5">
       <h3 class="text-center font-bold text-xl flex-grow pl-4 text-primary">

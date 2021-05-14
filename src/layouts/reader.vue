@@ -1,5 +1,5 @@
 <template>
-  <main class="w-full grid grid-cols-1 lg:grid-cols-6">
+  <main class="w-full grid grid-cols-1 lg:grid-cols-6 bg-white h-auto">
     <div>
     </div>
     <Nuxt class="col-span-4" />

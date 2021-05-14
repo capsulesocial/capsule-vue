@@ -1,11 +1,11 @@
 <template>
   <section
     v-if="this.$store.state.user !== null"
-    class="font-serif bg-white h-auto"
+    class="font-serif bg-white h-full"
   >
     <article
       v-if="this.$store.state.isComposing === true"
-      class="w-full h-screen z-30 bg-gray-100 absolute"
+      class="w-full h-screen z-30 bg-white absolute"
     >
       <PostEditor class="z-40" />
     </article>
