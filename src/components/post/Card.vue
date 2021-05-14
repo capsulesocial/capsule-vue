@@ -1,7 +1,7 @@
 <template>
-  <article class="border">
+  <article class="border rounded-lg my-2 card">
     <!-- Post Preview Link -->
-    <div class="mb-2 flex justify-between items-center p-2">
+    <div class="mb-2 flex justify-between items-center pt-4 px-8">
       <nuxt-link :to="'/' + this.authorID">
         <h5 class="text-base hover:text-primary">
           {{ this.authorUsername }}
@@ -22,7 +22,7 @@
       </div>
     </div>
 
-    <div class="p-2 hover:text-primary">
+    <div class="pb-4 px-8 hover:text-primary">
       <nuxt-link :to="'/' + this.authorID + '/' + this.post.id">
         <h3 class="text-xl font-bold">
           {{ this.post.title }}
@@ -87,3 +87,9 @@ export default {
   },
 }
 </script>
+
+<style>
+.card {
+  background-color: rgba(50, 50, 50, 0.1);
+}
+</style>

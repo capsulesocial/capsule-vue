@@ -47,7 +47,7 @@
     <article class="font-sans flex flex-row mt-3">
       <nuxt-link
         :to="'/' + this.currentUser.id"
-        class="border-b hover:border-primary text-gray-700"
+        class="border-b hover:border-primary text-gray-700 mr-4"
       >
         <span class="text-primary">
           {{ this.currentUser.posts.length }}
@@ -56,7 +56,7 @@
       </nuxt-link>
       <nuxt-link
         :to="'/' + this.currentUser.id + '/followers'"
-        class="border-b hover:border-primary text-gray-700 mx-4"
+        class="border-b hover:border-primary text-gray-700 mr-4"
       >
         <span class="text-primary">
           {{ this.currentUser.followers.length }}
@@ -65,7 +65,7 @@
       </nuxt-link>
       <nuxt-link
         :to="'/' + this.currentUser.id + '/following'"
-        class="border-b hover:border-primary text-gray-700 mx-4"
+        class="border-b hover:border-primary text-gray-700 mr-4"
       >
         <span class="text-primary">
           {{ this.currentUser.following.length }}
