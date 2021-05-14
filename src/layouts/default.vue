@@ -38,7 +38,6 @@ export default {
   },
   created () {
     if (this.$store.state.user === null) {
-      alert('Please sign in!')
       this.$router.push('/auth')
     }
   },

@@ -1,18 +1,23 @@
+/* eslint-disable no-console */
 const IPFS = require('ipfs')
-// import IPFS from 'ipfs'
 
 export default ({ app }) => ({
+
   // Send post to IPFS
   async sendPost (post) {
     const node = await IPFS.create()
     const version = await node.version()
-    // eslint-disable-next-line no-console
     console.log('IPFS version: ', version.version)
     const fileAdded = await node.add({
       path: post.title,
       content: JSON.stringify(post),
     })
-    return fileAdded.cid.string
+    const cid = fileAdded.cid.string
+    for await (const chunk of node.cat(cid)) {
+      console.info(chunk)
+    }
+    await node.stop()
+    return cid
     // Call addPost in profile.js
   },
 

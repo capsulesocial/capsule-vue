@@ -89,12 +89,11 @@
 </template>
 
 <script>
-import VerifySocial from '@/components/VerifySocial'
 import BrandedButton from '@/components/BrandedButton'
 
 export default {
   components: {
-    VerifySocial,
+    VerifySocial: () => import('@/components/VerifySocial/'),
     BrandedButton,
   },
   data () {
