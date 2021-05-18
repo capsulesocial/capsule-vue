@@ -56,7 +56,7 @@ export const state = () => ({
       subtitle: "Tom brady is the GOAT",
       content: 'I like to win football games playing with my best friend **Tom Brady**',
       views: 1,
-      timestamp: new Date('May 16, 2021 01:51:00'),
+      timestamp: new Date('May 16, 2021 08:51:00'),
       tags: [
         'patriots',
         'GOAT',

@@ -1,45 +1,53 @@
 <template>
   <main>
-    <nav class="flex flex-row justify-around border bg-secondary bg-opacity-25 py-2 px-4">
-      <button
-        v-if="this.algorithm !== 'NEW'"
-        class="font-sans py-2 px-4 focus:outline-none uppercase rounded-full bg-gray-100 text-gray-800"
-        @click="sortFeed('NEW')"
-      >
-        New
-      </button>
-      <span
-        v-else
-        class="font-sans py-2 px-4 focus:outline-none uppercase rounded-full bg-primary text-white shadow-lg"
-      >
-        New
-      </span>
-      <button
-        v-if="this.algorithm !== 'TOP'"
-        class="font-sans py-2 px-4 focus:outline-none uppercase rounded-full bg-gray-100 text-gray-800"
-        @click="sortFeed('TOP')"
-      >
-        Top
-      </button>
-      <span
-        v-else
-        class="font-sans py-2 px-4 focus:outline-none uppercase rounded-full bg-primary text-white shadow-lg"
-      >
-        Top
-      </span>
-      <button
-        v-if="this.algorithm !== 'FOLLOWING'"
-        class="font-sans py-2 px-4 focus:outline-none uppercase rounded-full bg-gray-100 text-gray-800"
-        @click="sortFeed('FOLLOWING')"
-      >
-        following
-      </button>
-      <span
-        v-else
-        class="font-sans py-2 px-4 focus:outline-none uppercase rounded-full bg-primary text-white shadow-lg"
-      >
-        following
-      </span>
+    <nav class="flex flex-row border bg-secondary bg-opacity-25 py-2 px-4 pl-8">
+      <div class="flex items-center mr-6">
+        <button
+          v-if="this.algorithm !== 'NEW'"
+          class="font-sans py-2 px-4 focus:outline-none uppercase rounded-lg bg-gray-100 text-gray-800"
+          @click="sortFeed('NEW')"
+        >
+          New
+        </button>
+        <span
+          v-else
+          class="font-sans py-2 px-4 focus:outline-none uppercase rounded-lg bg-primary text-white shadow-lg"
+        >
+          New
+        </span>
+      </div>
+
+      <div class="flex items-center mr-6">
+        <button
+          v-if="this.algorithm !== 'TOP'"
+          class="font-sans py-2 px-4 focus:outline-none uppercase rounded-lg bg-gray-100 text-gray-800"
+          @click="sortFeed('TOP')"
+        >
+          Top
+        </button>
+        <span
+          v-else
+          class="font-sans py-2 px-4 focus:outline-none uppercase rounded-lg bg-primary text-white shadow-lg"
+        >
+          Top
+        </span>
+      </div>
+
+      <div class="flex items-center mr-6">
+        <button
+          v-if="this.algorithm !== 'FOLLOWING'"
+          class="font-sans py-2 px-4 focus:outline-none uppercase rounded-lg bg-gray-100 text-gray-800"
+          @click="sortFeed('FOLLOWING')"
+        >
+          following
+        </button>
+        <span
+          v-else
+          class="font-sans py-2 px-4 focus:outline-none uppercase rounded-lg bg-primary text-white shadow-lg"
+        >
+          following
+        </span>
+      </div>
     </nav>
     <div v-for="post in this.posts" :key="post.contentAddress">
       <PostCard

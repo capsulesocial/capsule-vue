@@ -2,19 +2,6 @@
   <div>
     <section v-if="this.post !== null" class="pb-16 lg:pb-5 m-5">
       <article>
-        <div class="flex justify-between">
-          <span class="text-sm block text-gray-600 italic">{{ this.post.views }} views</span>
-          <span class="flex">
-            <h6
-              v-for="t in this.post.tags"
-              :key="t"
-              class="text-primary italic pr-2"
-            >
-              <nuxt-link :to="'/tag/' + t">#{{ t }}</nuxt-link>
-            </h6>
-          </span>
-        </div>
-
         <h1 class="text-5xl font-serif capitalize">
           {{ this.post.title }}
         </h1>
@@ -34,20 +21,7 @@
               {{ this.$helpers.formatDate(this.post.timestamp) }}
             </span>
           </p>
-          <div class="flex">
-            <span class="flex pr-4">
-              <CommentIcon class="inline mr-1" />{{
-                this.post.comments.length
-              }}
-            </span>
-            <button
-              class="flex focus:outline-none hover:text-primary"
-              @click="handleBookmark()"
-            >
-              <BookmarkIcon :isActive="this.isBookmark()" class="inline mr-1" />
-              {{ this.post.bookmarks.length }}
-            </button>
-          </div>
+          <span class="text-sm block text-gray-600 italic">{{ this.post.views }} views</span>
         </div>
       </article>
 
@@ -63,6 +37,16 @@
         :authorID="this.$route.params.id"
       />
 
+      <!-- Tags -->
+      <article>
+        <TagCard
+          v-for="t in this.post.tags"
+          :key="t"
+          class="mr-2"
+          :tag="t"
+        />
+      </article>
+
       <!-- Comments -->
       <article>
         <PostActions
@@ -70,6 +54,7 @@
           :authorID="this.$route.params.id"
           :isCommenting="true"
           class="mt-5"
+          :tags="this.post.tags"
         />
       </article>
     </section>
@@ -83,15 +68,13 @@
 import markdown from '@/mixins/markdown.js'
 import PostActions from '@/components/post/Actions'
 import AuthorCard from '@/components/AuthorCard'
-import CommentIcon from '@/components/icons/Comment'
-import BookmarkIcon from '@/components/icons/Bookmark'
+import TagCard from '@/components/Tag'
 
 export default {
   components: {
     PostActions,
     AuthorCard,
-    CommentIcon,
-    BookmarkIcon,
+    TagCard,
   },
   mixins: [markdown],
   layout: 'reader',
