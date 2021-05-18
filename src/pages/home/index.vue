@@ -1,6 +1,6 @@
 <template>
   <main>
-    <nav class="flex flex-row border bg-secondary bg-opacity-25 py-2 px-4 pl-8">
+    <nav class="flex flex-row border bg-secondary bg-opacity-25 py-2 px-4 pl-5">
       <div class="flex items-center mr-6">
         <button
           v-if="this.algorithm !== 'NEW'"
@@ -16,7 +16,6 @@
           New
         </span>
       </div>
-
       <div class="flex items-center mr-6">
         <button
           v-if="this.algorithm !== 'TOP'"
@@ -32,7 +31,6 @@
           Top
         </span>
       </div>
-
       <div class="flex items-center mr-6">
         <button
           v-if="this.algorithm !== 'FOLLOWING'"

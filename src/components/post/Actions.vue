@@ -1,9 +1,10 @@
 <template>
   <section>
-    <article class="flex justify-between px-8 p-2 text-gray-600">
-      <div class="flex">
+    <article class="flex justify-between text-gray-600">
+      <!-- Bookmark, comment, share icons -->
+      <div class="flex pt-2">
         <button
-          class="flex focus:outline-none hover:text-primary mr-4"
+          class="flex focus:outline-none hover:text-primary mr-4 -ml-1"
           @click="handleBookmark()"
         >
           <BookmarkIcon :isActive="this.isBookmark()" class="mr-2 fill-none" />
@@ -28,16 +29,16 @@
       </div>
     </article>
 
-    <article v-if="commentStatus" class="border-t border-b py-2 mt-2 mx-4">
+    <article v-if="commentStatus" class="border-t border-b py-2 mt-2">
       <div class="flex items-center">
         <div class="p-1 border-2 rounded-full">
           <ProfileIcon class="w-6 h-6" />
         </div>
-        <div class="flex bg-white border-2 rounded-xl m-1 p-1  w-full">
+        <div class="flex bg-white border-2 rounded-xl my-1 p-1 ml-2  w-full">
           <input
             v-model="comment"
             type="text"
-            class="leading-normal resize-vertical w-full focus:outline-none p-1"
+            class="leading-normal resize-vertical w-full focus:outline-none py-1 px-2"
             name="body"
             placeholder="Write a Comment..."
           />
@@ -51,7 +52,7 @@
         </div>
       </div>
     </article>
-    <article v-if="commentStatus" class="px-4 py-2">
+    <article v-if="commentStatus" class="pt-2">
       <div
         v-for="c in this.filterComments()"
         :key="c.id"
@@ -75,7 +76,7 @@
           <span v-if="c.timestamp" class="text-gray-600 text-xs">
             {{ $helpers.formatDate(c.timestamp) }}
           </span>
-          <p class="text-sm px-2 py-1">
+          <p class="text-sm py-1">
             {{ c.content }}
           </p>
         </div>
