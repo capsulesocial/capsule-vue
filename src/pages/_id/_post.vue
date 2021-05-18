@@ -31,7 +31,7 @@
               {{ this.$route.params.id }}
             </nuxt-link>
             <span class="font-sans text-sm text-gray-700 block">
-              {{ this.post.timestamp.toLocaleDateString() }}
+              {{ this.$helpers.formatDate(this.post.timestamp) }}
             </span>
           </p>
           <div class="flex">

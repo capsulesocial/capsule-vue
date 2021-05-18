@@ -1,6 +1,7 @@
 <template>
   <button
-    class="transition duration-500 ease-in-out transform hover:scale-110 bg-primary hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg shadow-lg focus:outline-none"
+    :class="this.size"
+    class="transition duration-500 ease-in-out transform hover:scale-110 bg-primary hover:bg-green-600 text-white font-bold rounded-lg shadow-lg focus:outline-none"
     @click="this.$props.action"
   >
     <span class="font-sans">
@@ -16,6 +17,10 @@ export default {
       type: String,
       default: 'Text',
     },
+    thin: {
+      type: Boolean,
+      default: false,
+    },
     action: {
       type: Function,
       default () {
@@ -23,6 +28,11 @@ export default {
         console.log('Button Clicked')
       },
     },
+  },
+  data () {
+    return {
+      size: !this.$props.thin ? 'py-2 px-4' : 'py-1 px-2',
+    }
   },
 }
 </script>
