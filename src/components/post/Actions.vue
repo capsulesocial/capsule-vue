@@ -20,8 +20,10 @@
       <div>
         <button
           class="flex focus:outline-none hover:text-primary"
+          @click="handleShare()"
         >
           <SendIcon class="mr-2 fill-primary" />
+          {{ this.post.shares }}
         </button>
       </div>
     </article>
@@ -171,6 +173,18 @@ export default {
         return p1.timestamp - p0.timestamp
       })
       return comments
+    },
+    handleShare () {
+      this.$store.commit('addShare', this.post.id)
+      const url = document.getElementById(this.$props.post.id)
+      url.type = 'text'
+      url.value =
+        document.location.origin + '/' + this.authorID + '/' + this.post.id
+      url.select()
+      url.setSelectionRange(0, 99999)
+      document.execCommand('copy')
+      url.type = 'hidden'
+      alert('URL Copied to Clipboard!')
     },
   },
 }

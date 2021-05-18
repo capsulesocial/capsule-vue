@@ -17,9 +17,7 @@
       </nuxt-link>
       <div class="flex">
         <span v-if="this.showMoreMenu">
-          <button class="flex focus:outline-none" @click="handleShare()">
-            <ShareIcon class="mr-2" />
-          </button>
+          <ShareIcon class="mr-2" />
         </span>
         <button class="hover:text-primary" @click="toggleMoreMenu">
           <MoreIcon />
@@ -77,17 +75,6 @@ export default {
   methods: {
     toggleMoreMenu () {
       this.showMoreMenu = !this.showMoreMenu
-    },
-    handleShare () {
-      const url = document.getElementById(this.$props.post.id)
-      url.type = 'text'
-      url.value =
-        document.location.origin + '/' + this.authorID + '/' + this.post.id
-      url.select()
-      url.setSelectionRange(0, 99999)
-      document.execCommand('copy')
-      url.type = 'hidden'
-      alert('URL Copied to Clipboard!')
     },
     getFullName (id) {
       if (this.$store.state.user.id === id) {

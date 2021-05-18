@@ -21,7 +21,27 @@
               {{ this.$helpers.formatDate(this.post.timestamp) }}
             </span>
           </p>
-          <span class="text-sm block text-gray-600 italic">{{ this.post.views }} views</span>
+          <div class="flex">
+            <button
+              class="flex focus:outline-none hover:text-primary mr-4"
+              @click="handleBookmark()"
+            >
+              <BookmarkIcon :isActive="this.isBookmark()" class="mr-2 fill-none" />
+              {{ this.post.bookmarks.length }}
+            </button>
+            <span class="flex mr-4">
+              <CommentIcon class="mr-2 fill-primary" />
+              {{ this.post.comments.length }}
+            </span>
+            <button
+              class="flex focus:outline-none hover:text-primary"
+              @click="handleShare()"
+            >
+              <SendIcon class="mr-2 fill-primary" />
+              {{ this.post.shares }}
+            </button>
+            <!-- <span class="text-sm block text-gray-600 italic">{{ this.post.views }} views</span> -->
+          </div>
         </div>
       </article>
 
@@ -69,12 +89,18 @@ import markdown from '@/mixins/markdown.js'
 import PostActions from '@/components/post/Actions'
 import AuthorCard from '@/components/AuthorCard'
 import TagCard from '@/components/Tag'
+import BookmarkIcon from '@/components/icons/Bookmark'
+import CommentIcon from '@/components/icons/Comment'
+import SendIcon from '@/components/icons/Send'
 
 export default {
   components: {
     PostActions,
     AuthorCard,
     TagCard,
+    BookmarkIcon,
+    CommentIcon,
+    SendIcon,
   },
   mixins: [markdown],
   layout: 'reader',
@@ -103,6 +129,18 @@ export default {
         postID: this.post.id,
         authorID: this.$route.params.id,
       })
+    },
+    handleShare () {
+      this.$store.commit('addShare', this.post.id)
+      const url = document.getElementById(this.post.id)
+      url.type = 'text'
+      url.value =
+        document.location.origin + '/' + this.post.authorID + '/' + this.post.id
+      url.select()
+      url.setSelectionRange(0, 99999)
+      document.execCommand('copy')
+      url.type = 'hidden'
+      alert('URL Copied to Clipboard!')
     },
   },
 }

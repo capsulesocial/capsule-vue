@@ -328,6 +328,7 @@ export default {
         bookmarks: [],
         authorID: this.$store.state.user.id,
         views: 0,
+        shares: 0,
       }
       this.$api.post.sendPost(p).then((cid) => {
         p.id = cid
