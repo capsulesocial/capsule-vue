@@ -65,6 +65,7 @@ export default {
   },
   created () {
     this.posts.push(...this.$store.state.posts)
+    this.sortFeed(this.algorithm)
   },
   methods: {
     sortFeed (a) {
@@ -73,7 +74,7 @@ export default {
       this.algorithm = a
       if (a === 'NEW') {
         this.posts.sort((p0, p1) => {
-          return p0.views - p1.views
+          return p1.timestamp - p0.timestamp
         })
       } else if (a === 'TOP') {
         this.posts.sort((p0, p1) => {

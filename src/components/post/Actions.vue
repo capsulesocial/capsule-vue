@@ -51,7 +51,7 @@
     </article>
     <article v-if="commentStatus" class="px-4 py-2">
       <div
-        v-for="c in this.post.comments"
+        v-for="c in this.filterComments()"
         :key="c.id"
         class="flex py-1"
       >
@@ -164,6 +164,13 @@ export default {
       } else {
         return id
       }
+    },
+    filterComments () {
+      const cList = this.post.comments
+      const comments = cList.slice().sort((p0, p1) => {
+        return p1.timestamp - p0.timestamp
+      })
+      return comments
     },
   },
 }
