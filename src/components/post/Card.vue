@@ -19,7 +19,7 @@
         <span v-if="this.showMoreMenu">
           <ShareIcon class="mr-2" />
         </span>
-        <button class="hover:text-primary" @click="toggleMoreMenu">
+        <button class="hover:text-primary focus:outline-none" @click="toggleMoreMenu">
           <MoreIcon />
         </button>
       </div>

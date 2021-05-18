@@ -35,10 +35,9 @@
           <ProfileIcon class="w-6 h-6" />
         </div>
         <div class="flex bg-white border-2 rounded-xl my-1 p-1 ml-2  w-full">
-          <input
+          <textarea
             v-model="comment"
-            type="text"
-            class="leading-normal resize-vertical w-full focus:outline-none py-1 px-2"
+            class="leading-normal resize-vertical overflow-y-auto w-full focus:outline-none py-1 px-2"
             name="body"
             placeholder="Write a Comment..."
           />

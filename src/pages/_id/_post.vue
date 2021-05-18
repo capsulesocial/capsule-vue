@@ -21,7 +21,7 @@
               {{ this.$helpers.formatDate(this.post.timestamp) }}
             </span>
           </p>
-          <div class="flex">
+          <div class="flex items-center">
             <button
               class="flex focus:outline-none hover:text-primary mr-4"
               @click="handleBookmark()"
@@ -29,10 +29,10 @@
               <BookmarkIcon :isActive="this.isBookmark()" class="mr-2 fill-none" />
               {{ this.post.bookmarks.length }}
             </button>
-            <span class="flex mr-4">
+            <button class="flex mr-4">
               <CommentIcon class="mr-2 fill-primary" />
               {{ this.post.comments.length }}
-            </span>
+            </button>
             <button
               class="flex focus:outline-none hover:text-primary"
               @click="handleShare()"
