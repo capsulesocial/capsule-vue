@@ -20,7 +20,6 @@
         {{ this.currentUser.bio }}
       </p>
     </div>
-
     <FriendButton :targetUser="currentUser" />
   </div>
 </template>

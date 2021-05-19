@@ -1,7 +1,7 @@
 <template>
   <span>
     <button
-      class="text-white uppercase focus:outline-none rounded-lg m-1 p-2 transition duration-500 ease-in-out transform hover:scale-110"
+      class="text-white uppercase focus:outline-none rounded-lg mr-1 mb-1 p-2 transition duration-500 ease-in-out transform hover:scale-110"
       :class="colors[getRandomColor()]"
       @click="$router.push('/tag/' + tag)"
     >

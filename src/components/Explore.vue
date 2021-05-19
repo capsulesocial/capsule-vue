@@ -9,7 +9,6 @@
       <TagCard
         v-for="t in this.$store.state.tags"
         :key="t.tag"
-        class="m-2"
         :tag="t.tag"
       />
     </div>

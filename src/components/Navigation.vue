@@ -66,7 +66,7 @@
 
     <!-- Mobile -->
     <div
-      class="fixed lg:hidden bottom-0 h-12 w-full flex flex-row justify-around pb-4 pt-2 items-end bg-white z-50"
+      class="fixed lg:hidden bottom-0 h-16 w-full flex flex-row justify-around pb-4 pt-2 items-end bg-white z-50"
     >
       <nuxt-link to="/home">
         <HomeIcon
@@ -83,7 +83,7 @@
         <DiscoverIcon v-else class="stroke-current text-gray-400" />
       </nuxt-link>
       <button
-        class="focus:outline-none bg-primary p-3 rounded-full shadow-lg"
+        class="focus:outline-none bg-primary p-4 rounded-full shadow-lg"
         @click="toggle()"
       >
         <PencilIcon class="fill-current text-white" />

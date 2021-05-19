@@ -16,7 +16,7 @@
       <!-- Left Nav Menu -->
       <Navigation />
       <!-- Main Content -->
-      <Nuxt class="overscroll-contain col-span-2 w-full px-4" />
+      <Nuxt class="overscroll-contain col-span-2 w-full px-4 mb-20 lg:mb-5" />
       <!-- Right Explore Menu -->
       <Explore v-if="this.$route.name !== 'settings'" class="hidden lg:block" />
     </div>

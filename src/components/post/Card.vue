@@ -8,7 +8,7 @@
             {{ getFullName(this.authorID) }}
           </h4>
           <h5 class="text-base hover:text-primary mx-2 text-gray-700">
-            @{{ this.authorUsername }}
+            @{{ this.authorID }}
           </h5>
         </div>
         <h6 class="text-sm text-gray-600">

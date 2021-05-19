@@ -53,10 +53,6 @@
         v-html="this.compileMarkdown(this.post.content)"
       ></div>
 
-      <AuthorCard
-        :authorID="this.$route.params.id"
-      />
-
       <!-- Tags -->
       <article>
         <TagCard
@@ -66,6 +62,10 @@
           :tag="t"
         />
       </article>
+
+      <AuthorCard
+        :authorID="this.$route.params.id"
+      />
 
       <!-- Comments -->
       <article>
