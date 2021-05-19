@@ -1,0 +1,117 @@
+<template>
+  <div>
+    <div class="flex">
+      <div class="flex-shrink-0">
+        <span class="p-1 border-2 rounded-full block">
+          <ProfileIcon class="w-6 h-6" />
+        </span>
+      </div>
+      <div class="flex-1 leading-relaxed ml-2">
+        <strong class="text-black font-bold bold mr-1 font-serif">
+          {{ getFullName(comment.authorID) }}
+        </strong>
+        <span class="text-gray-700 text-sm mr-2 font-serif">
+          @{{ comment.authorID }}
+        </span>
+        <span v-if="comment.timestamp" class="text-gray-600 text-xs font-sans">
+          {{ $helpers.formatDate(comment.timestamp) }}
+        </span>
+        <p class="text-sm py-1 font-sans">
+          {{ comment.content }}
+        </p>
+      </div>
+    </div>
+    <div class="ml-10 pl-1">
+      <button
+        class="font-sans text-xs focus:outline-none"
+        @click="isReplying = !isReplying"
+      >
+        {{ this.comment.replies.length }} Replies
+      </button>
+
+      <!-- Active state -->
+      <div v-if="isReplying" class="border-l pl-2">
+        <!-- Reply Input box -->
+        <div class="flex border rounded-full my-1">
+          <input v-model="reply" type="text" placeholder="Reply.." class="pl-4 py-1 focus:outline-none text-sm w-full rounded-full">
+          <BrandedButton :thin="true" class="text-xs rounded-full m-1" text="Reply" :action="sendReply" />
+        </div>
+        <!-- List replies -->
+        <div v-for="r in this.comment.replies" :key="r.id" class="pt-1">
+          <div class="flex">
+            <div class="flex-shrink-0">
+              <span class="p-1 border-2 rounded-full block">
+                <ProfileIcon class="w-6 h-6" />
+              </span>
+            </div>
+            <div class="flex-1 leading-relaxed ml-2">
+              <strong class="text-black font-bold bold mr-1 font-serif">
+                {{ getFullName(r.authorID) }}
+              </strong>
+              <span class="text-gray-700 text-sm mr-2 font-serif">
+                @{{ r.authorID }}
+              </span>
+              <span v-if="r.timestamp" class="text-gray-600 text-xs font-sans">
+                {{ $helpers.formatDate(r.timestamp) }}
+              </span>
+              <p class="text-sm py-1 font-sans">
+                {{ r.content }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import ProfileIcon from '@/components/icons/Person'
+import BrandedButton from '@/components/BrandedButton'
+
+export default {
+  components: {
+    ProfileIcon,
+    BrandedButton,
+  },
+  props: {
+    comment: {
+      type: Object,
+      default: null,
+    },
+    postID: {
+      type: String,
+      default: null,
+    },
+  },
+  data () {
+    return {
+      isReplying: false,
+      reply: '',
+    }
+  },
+  methods: {
+    getFullName (id) {
+      if (this.$store.state.user.id === id) {
+        return this.$store.state.user.username
+      }
+      const list = this.$store.state.userList
+      const name = list.find(x => x.id === id)
+      if (name) {
+        return name.username
+      } else {
+        return id
+      }
+    },
+    sendReply () {
+      this.$store.commit('commentReply', {
+        postID: this.$props.postID,
+        commentID: this.$props.comment.id,
+        authorID: this.$store.state.user.id,
+        content: this.reply,
+        timestamp: new Date(),
+      })
+    },
+  },
+}
+</script>

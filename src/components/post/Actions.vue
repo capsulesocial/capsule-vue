@@ -42,48 +42,27 @@
             name="body"
             placeholder="Write a Comment..."
           />
-          <BrandedButton
-            v-if="this.comment !== ''"
-            text="Post"
-            :action="sendComment"
-            :thin="true"
-            class="text-sm"
-          />
+          <span class="relative">
+            <BrandedButton
+              v-if="this.comment !== ''"
+              text="Post"
+              :action="sendComment"
+              :thin="true"
+              class="text-sm absolute bottom-0 right-0"
+            />
+          </span>
         </div>
       </div>
     </article>
     <article v-if="commentStatus" class="pt-2">
-      <div
+      <Comment
         v-for="c in this.filterComments()"
         :key="c.id"
         class="py-1"
+        :comment="c"
+        :postID="post.id"
       >
-        <div class="flex">
-          <div class="flex-shrink-0">
-            <span class="p-1 border-2 rounded-full block">
-              <ProfileIcon class="w-6 h-6" />
-            </span>
-          </div>
-          <div class="flex-1 leading-relaxed ml-2">
-            <strong class="text-black font-bold bold mr-1  font-serif">
-              {{ getFullName(c.authorID) }}
-            </strong>
-            <span class="text-gray-700 text-sm mr-2 font-serif">
-              @{{ c.authorID }}
-            </span>
-            <span v-if="c.timestamp" class="text-gray-600 text-xs font-sans">
-              {{ $helpers.formatDate(c.timestamp) }}
-            </span>
-            <p class="text-sm py-1 font-sans">
-              {{ c.content }}
-            </p>
-          </div>
-        </div>
-        <div class="ml-10 pl-1 font-sans">
-          <button>[+]</button>
-          <button>reply</button>
-        </div>
-      </div>
+      </Comment>
     </article>
 
     <input :id="this.$props.post.id" type="hidden" value="" />
@@ -96,6 +75,7 @@ import CommentIcon from '@/components/icons/Comment'
 import BrandedButton from '@/components/BrandedButton'
 import SendIcon from '@/components/icons/Send'
 import ProfileIcon from '@/components/icons/Person'
+import Comment from '@/components/post/Comment'
 
 export default {
   components: {
@@ -104,6 +84,7 @@ export default {
     BrandedButton,
     SendIcon,
     ProfileIcon,
+    Comment,
   },
   props: {
     isCommenting: {
@@ -153,18 +134,6 @@ export default {
     handleReaction (reaction) {
       this.emotion = reaction
       this.commentStatus = true
-    },
-    getFullName (id) {
-      if (this.$store.state.user.id === id) {
-        return this.$store.state.user.username
-      }
-      const list = this.$store.state.userList
-      const name = list.find(x => x.id === id)
-      if (name) {
-        return name.username
-      } else {
-        return id
-      }
     },
     filterComments () {
       const cList = this.post.comments

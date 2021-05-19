@@ -138,6 +138,11 @@ export const mutations = {
     const targetPost = state.posts.find(e => e.id === data.postID)
     targetPost.comments.push({ id: targetPost.comments.length, authorID: data.authorID, content: data.content, emotion: data.emotion, timestamp: data.timestamp, replies: data.replies })
   },
+  commentReply (state, data) {
+    const targetPost = state.posts.find(e => e.id === data.postID)
+    const targetComment = targetPost.comments.find(c => c.id === data.commentID)
+    targetComment.replies.push({ id: targetComment.replies.length, authorID: data.authorID, content: data.content, timestamp: data.timestamp })
+  },
   handleFollow (state, userID) {
     // Adds to target user followers list
     for (let i = 0; i < state.userList.length; i++) {
