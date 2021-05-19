@@ -95,7 +95,7 @@ import BookmarkIcon from '@/components/icons/Bookmark'
 import CommentIcon from '@/components/icons/Comment'
 import BrandedButton from '@/components/BrandedButton'
 import SendIcon from '@/components/icons/Send'
-import ProfileIcon from '@/components/icons/Profile'
+import ProfileIcon from '@/components/icons/Person'
 
 export default {
   components: {

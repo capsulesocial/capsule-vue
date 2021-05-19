@@ -2,18 +2,23 @@
   <article class="border rounded-lg my-2 card p-5">
     <!-- Post Preview Link -->
     <div class="mb-2 flex justify-between items-center">
-      <nuxt-link :to="'/' + this.authorID">
-        <div class="flex items-center">
-          <h4 class="text-bold text-lg">
+      <nuxt-link :to="'/' + this.authorID" class="flex">
+        <div class="mr-2">
+          <div class="p-1 border-2 rounded-full">
+            <ProfileIcon class="w-6 h-6" />
+          </div>
+        </div>
+        <div class="flex items-center flex-wrap mr-2">
+          <h4 class="text-bold text-lg mr-2">
             {{ getFullName(this.authorID) }}
           </h4>
-          <h5 class="text-base hover:text-primary mx-2 text-gray-700">
+          <h5 class="text-base hover:text-primary text-gray-700 mr-2">
             @{{ this.authorID }}
           </h5>
+          <h6 class="text-sm text-gray-600">
+            {{ this.$helpers.formatDate(this.post.timestamp) }}
+          </h6>
         </div>
-        <h6 class="text-sm text-gray-600">
-          {{ this.$helpers.formatDate(this.post.timestamp) }}
-        </h6>
       </nuxt-link>
       <div class="flex">
         <span v-if="this.showMoreMenu">
@@ -46,12 +51,14 @@
 import PostActions from '@/components/post/Actions'
 import MoreIcon from '@/components/icons/More'
 import ShareIcon from '@/components/icons/Share'
+import ProfileIcon from '@/components/icons/Person'
 
 export default {
   components: {
     PostActions,
     MoreIcon,
     ShareIcon,
+    ProfileIcon,
   },
   props: {
     post: {
