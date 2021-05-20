@@ -73,11 +73,11 @@
         </div>
       </div>
     </article>
-    <article v-if="commentStatus" class="pt-2">
+    <article v-if="commentStatus" class="pt-3">
       <Comment
         v-for="c in this.filterComments()"
         :key="c.id"
-        class="py-1"
+        class="py-2"
         :comment="c"
         :postID="post.id"
       >

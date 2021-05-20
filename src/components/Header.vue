@@ -13,15 +13,29 @@
       >
         <BackButton />
       </button>
+      <button
+        class="focus:outline-none"
+        @click="$router.go(1)"
+      >
+        <ForwardButton />
+      </button>
       <SearchBar class="h-12 w-full flex-grow" />
     </article>
     <article v-else class="col-span-3 lg:col-span-2 flex justify-between">
-      <button
-        class="focus:outline-none"
-        @click="$router.go(-1)"
-      >
-        <BackButton />
-      </button>
+      <div class="flex">
+        <button
+          class="focus:outline-none"
+          @click="$router.go(-1)"
+        >
+          <BackButton />
+        </button>
+        <button
+          class="focus:outline-none"
+          @click="$router.go(1)"
+        >
+          <ForwardButton />
+        </button>
+      </div>
       <h2 class="text-2xl pt-4">
         Account Settings
       </h2>
@@ -71,7 +85,8 @@ import BookmarksIcon from '@/components/icons/Bookmarks'
 import NotificationsIcon from '@/components/icons/Notifications'
 import SettingsIcon from '@/components/icons/Settings'
 import SearchBar from '@/components/Search'
-import BackButton from '@/components/icons/BackChevron'
+import BackButton from '@/components/icons/ChevronLeft'
+import ForwardButton from '@/components/icons/ChevronRight'
 
 export default {
   components: {
@@ -81,6 +96,7 @@ export default {
     NotificationsIcon,
     BookmarksIcon,
     BackButton,
+    ForwardButton,
   },
 }
 </script>

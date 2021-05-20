@@ -16,7 +16,7 @@
         <span v-if="comment.timestamp" class="text-gray-600 text-xs font-sans">
           {{ $helpers.formatDate(comment.timestamp) }}
         </span>
-        <p class="text-sm py-1 font-sans">
+        <p class="text-base py-1 font-sans">
           {{ comment.content }}
         </p>
       </div>
@@ -30,11 +30,25 @@
       </button>
 
       <!-- Active state -->
-      <div v-if="isReplying" class="border-l pl-2">
+      <div v-if="isReplying" class="border-l pl-2 mr-5">
         <!-- Reply Input box -->
-        <div class="flex border rounded-full my-1">
-          <input v-model="reply" type="text" placeholder="Reply.." class="pl-4 py-1 focus:outline-none text-sm w-full rounded-full">
-          <BrandedButton :thin="true" class="text-xs rounded-full m-1" text="Reply" :action="sendReply" />
+        <div class="flex bg-white border-2 rounded-xl my-1 p-1 ml-5  w-full">
+          <textarea
+            v-model="reply"
+            type="text"
+            placeholder="Reply.."
+            class="leading-normal resize-vertical overflow-y-auto w-full focus:outline-none py-1 px-2 font-serif text-sm"
+          >
+          </textarea>
+          <span class="relative">
+            <BrandedButton
+              v-if="this.reply !== ''"
+              text="Post"
+              :action="sendReply"
+              :thin="true"
+              class="text-sm absolute bottom-0 right-0"
+            />
+          </span>
         </div>
         <!-- List replies -->
         <div v-for="r in this.comment.replies" :key="r.id" class="pt-1">
@@ -111,6 +125,7 @@ export default {
         content: this.reply,
         timestamp: new Date(),
       })
+      this.reply = ''
     },
   },
 }

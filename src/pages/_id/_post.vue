@@ -54,7 +54,7 @@
       ></div>
 
       <!-- Tags -->
-      <article>
+      <article class="mt-5">
         <TagCard
           v-for="t in this.post.tags"
           :key="t"
