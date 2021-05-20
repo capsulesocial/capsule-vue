@@ -12,19 +12,38 @@
         </button>
         <button
           class="flex focus:outline-none hover:text-primary"
+          :class="this.isCommenting ? 'text-primary' : ''"
           @click="handleComment()"
         >
           <CommentIcon class="mr-2 fill-primary" />
           <span class="font-sans">{{ this.post.comments.length }}</span>
         </button>
       </div>
-      <div>
+      <!-- Share to Socials -->
+      <div class="flex flex-row-reverse">
         <button
           class="flex focus:outline-none hover:text-primary"
-          @click="handleShare()"
+          :class="this.showSocialShares ? 'text-primary' : ''"
+          @click="showSocialShares = !showSocialShares"
         >
-          <SendIcon class="mr-2 fill-primary" />
+          <SendIcon class="mr-2" />
           <span class="font-sans">{{ this.post.shares }}</span>
+        </button>
+        <!-- Twitter -->
+        <button
+          v-if="showSocialShares"
+          class="flex focus:outline-none hover:text-primary"
+          @click="handleShare('TWITTER')"
+        >
+          <TwitterIcon class="mx-2" />
+        </button>
+        <!-- Copy URL Link -->
+        <button
+          v-if="this.showSocialShares"
+          class="flex focus:outline-none hover:text-primary"
+          @click="handleShare('URL')"
+        >
+          <LinkIcon />
         </button>
       </div>
     </article>
@@ -76,6 +95,8 @@ import BrandedButton from '@/components/BrandedButton'
 import SendIcon from '@/components/icons/Send'
 import ProfileIcon from '@/components/icons/Person'
 import Comment from '@/components/post/Comment'
+import TwitterIcon from '@/components/icons/brands/Twitter'
+import LinkIcon from '@/components/icons/Link'
 
 export default {
   components: {
@@ -85,6 +106,8 @@ export default {
     SendIcon,
     ProfileIcon,
     Comment,
+    TwitterIcon,
+    LinkIcon,
   },
   props: {
     isCommenting: {
@@ -105,6 +128,7 @@ export default {
       comment: '',
       commentStatus: this.isCommenting,
       emotion: null,
+      showSocialShares: false,
     }
   },
   methods: {
@@ -142,17 +166,22 @@ export default {
       })
       return comments
     },
-    handleShare () {
+    handleShare (type) {
       this.$store.commit('addShare', this.post.id)
       const url = document.getElementById(this.$props.post.id)
       url.type = 'text'
       url.value =
         document.location.origin + '/' + this.authorID + '/' + this.post.id
-      url.select()
-      url.setSelectionRange(0, 99999)
-      document.execCommand('copy')
-      url.type = 'hidden'
-      alert('URL Copied to Clipboard!')
+      if (type === 'URL') {
+        url.select()
+        url.setSelectionRange(0, 99999)
+        document.execCommand('copy')
+        url.type = 'hidden'
+        alert('URL Copied to Clipboard!')
+      }
+      if (type === 'TWITTER') {
+        window.open('https://twitter.com/share?url=' + encodeURIComponent(url.value) + '&text=' + '📰 ' + this.post.title + '\n 🔏 ' + this.post.authorID + ' on @CapsuleSoc 🔗')
+      }
     },
   },
 }

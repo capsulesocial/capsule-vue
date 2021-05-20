@@ -21,10 +21,7 @@
         </div>
       </nuxt-link>
       <div class="flex">
-        <span v-if="this.showMoreMenu">
-          <ShareIcon class="mr-2" />
-        </span>
-        <button class="hover:text-primary focus:outline-none" @click="toggleMoreMenu">
+        <button class="hover:text-primary focus:outline-none">
           <MoreIcon />
         </button>
       </div>
@@ -50,14 +47,12 @@
 <script>
 import PostActions from '@/components/post/Actions'
 import MoreIcon from '@/components/icons/More'
-import ShareIcon from '@/components/icons/Share'
 import ProfileIcon from '@/components/icons/Person'
 
 export default {
   components: {
     PostActions,
     MoreIcon,
-    ShareIcon,
     ProfileIcon,
   },
   props: {
@@ -75,14 +70,9 @@ export default {
     },
   },
   data () {
-    return {
-      showMoreMenu: false,
-    }
+    return {}
   },
   methods: {
-    toggleMoreMenu () {
-      this.showMoreMenu = !this.showMoreMenu
-    },
     getFullName (id) {
       if (this.$store.state.user.id === id) {
         return this.$store.state.user.username

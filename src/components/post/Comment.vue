@@ -10,9 +10,9 @@
         <strong class="text-black font-bold bold mr-1 font-serif">
           {{ getFullName(comment.authorID) }}
         </strong>
-        <span class="text-gray-700 text-sm mr-2 font-serif">
+        <nuxt-link :to="'/' + comment.authorID" class="text-gray-700 text-sm mr-2 font-serif">
           @{{ comment.authorID }}
-        </span>
+        </nuxt-link>
         <span v-if="comment.timestamp" class="text-gray-600 text-xs font-sans">
           {{ $helpers.formatDate(comment.timestamp) }}
         </span>
