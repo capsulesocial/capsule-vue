@@ -138,7 +138,7 @@ export default {
   },
   methods: {
     ...mapMutations({
-      toggle: 'toggleCompose',
+      toggle: 'draft/toggleCompose',
       logout: 'startSession',
     }),
     toggleProfileActions () {

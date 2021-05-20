@@ -6,6 +6,10 @@
         <h1 class="text-3xl italic font-bold">Capsule Social</h1>
       </div>
 
+      <button @click="testState">
+        Test
+      </button>
+
       <section>
         <p class="text-center">Join the Community</p>
         <div class="flex items-center justify-center">
@@ -47,6 +51,9 @@ export default {
       } else {
         this.$router.push('/home')
       }
+    },
+    testState () {
+      this.$store.commit('posts/changeTest', 'Jack')
     },
   },
 }

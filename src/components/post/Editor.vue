@@ -276,7 +276,7 @@ export default {
   },
   computed: {
     draft () {
-      return this.$store.state.draft
+      return this.$store.state.draft.draft
     },
     compiledMarkdown () {
       return this.compileMarkdown(this.input)
@@ -284,8 +284,8 @@ export default {
   },
   methods: {
     ...mapMutations({
-      toggle: 'toggleCompose',
-      updateDraft: 'updateDraft',
+      toggle: 'draft/toggleCompose',
+      updateDraft: 'draft/updateDraft',
       sendPost: 'sendPost',
     }),
     toggleComposeState (state) {
@@ -342,10 +342,11 @@ export default {
       this.$router.push(this.$store.state.user.id)
     },
     updateStore () {
-      this.$store.commit('updateDraft', {
+      this.$store.commit('draft/updateDraft', {
         title: this.title,
         subtitle: this.subtitle,
         content: this.input,
+        tags: this.tags,
       })
       this.toggle()
     },

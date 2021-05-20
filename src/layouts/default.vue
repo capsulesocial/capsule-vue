@@ -4,7 +4,7 @@
     class="font-serif bg-white h-full"
   >
     <article
-      v-if="this.$store.state.isComposing === true"
+      v-if="this.$store.state.draft.isComposing === true"
       class="w-full h-screen z-30 bg-white absolute"
     >
       <PostEditor class="z-40" />
