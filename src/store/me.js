@@ -16,8 +16,8 @@ export const mutations = {
   startSession (state, user) {
     state.user = user
   },
-  sendPost (state, post) {
-    state.user.posts.push(post.id)
+  sendPost (state, postID) {
+    state.user.posts.push(postID)
   },
   updateUsername (state, username) {
     state.user.username = username

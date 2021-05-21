@@ -35,9 +35,9 @@ export default {
   },
   methods: {
     findPost (pID) {
-      for (const p in this.$store.state.posts.posts) {
-        if (this.$store.state.posts.posts[p].id === pID) {
-          this.posts.push(this.$store.state.posts.posts[p])
+      for (const p in this.$store.state.posts) {
+        if (this.$store.state.posts[p].id === pID) {
+          this.posts.push(this.$store.state.posts[p])
         }
       }
     },

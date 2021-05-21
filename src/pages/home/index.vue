@@ -70,13 +70,13 @@ export default {
     }
   },
   created () {
-    this.posts.push(...this.$store.state.posts.posts)
+    this.posts.push(...this.$store.state.posts)
     this.sortFeed(this.algorithm)
   },
   methods: {
     sortFeed (a) {
       this.posts = []
-      this.posts.push(...this.$store.state.posts.posts)
+      this.posts.push(...this.$store.state.posts)
       this.algorithm = a
       if (a === 'NEW') {
         this.posts.sort((p0, p1) => {

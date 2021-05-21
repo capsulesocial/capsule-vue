@@ -56,7 +56,7 @@ export default {
       }
 
       const bookmarkList = targetProfile.bookmarks
-      const postList = this.$store.state.posts.posts
+      const postList = this.$store.state.posts
       // Loop through list of bookmarks on a profile
       for (let i = 0; i < bookmarkList.length; i++) {
         // Find post object and add it to result

@@ -21,8 +21,7 @@ export const state = () => ({
 
 export const mutations = {
   sendPost (state, post) {
-    state.posts.push(post)
-    // Add post to tags
+    // Add post tags
     // 1. Check if the tag exists yet
     // 1a. IF tag exists, add CID
     // 1b. ELSE add new tag to post.tags with CID

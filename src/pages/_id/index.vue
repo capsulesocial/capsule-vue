@@ -49,7 +49,7 @@ export default {
   methods: {
     userPosts () {
       const posts = []
-      const p = this.$store.state.posts.posts
+      const p = this.$store.state.posts
       for (let i = 0; i < p.length; i++) {
         if (p[i].authorID === this.currentUser.id) {
           posts.push(p[i])

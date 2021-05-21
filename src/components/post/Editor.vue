@@ -286,7 +286,6 @@ export default {
     ...mapMutations({
       toggle: 'draft/toggleCompose',
       updateDraft: 'draft/updateDraft',
-      sendPost: 'sendPost',
     }),
     toggleComposeState (state) {
       this.mobileState = state
@@ -321,7 +320,7 @@ export default {
         title: this.title,
         subtitle: this.subtitle,
         content: this.input,
-        id: this.$store.state.posts.posts.length.toString(),
+        id: this.$store.state.posts.length.toString(),
         timestamp: date,
         tags: this.tags,
         comments: [],
@@ -332,8 +331,11 @@ export default {
       }
       this.$api.post.sendPost(p).then((cid) => {
         p.id = cid
-        this.sendPost(p)
+        this.$store.commit('posts/sendPost', p)
+        this.$store.commit('tags/sendPost', p)
+        this.$store.commit('me/sendPost', p.id)
       })
+      // this.$store.state.tags.sendPost(p)
       this.toggle()
       this.title = 'Title'
       this.subtitle = 'Subtitle'
