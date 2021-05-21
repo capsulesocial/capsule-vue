@@ -335,7 +335,6 @@ export default {
         this.$store.commit('tags/sendPost', p)
         this.$store.commit('me/sendPost', p.id)
       })
-      // this.$store.state.tags.sendPost(p)
       this.toggle()
       this.title = 'Title'
       this.subtitle = 'Subtitle'

@@ -24,7 +24,7 @@ export default {
   },
   created () {
     // Fetch posts with tag
-    for (const p of this.$store.state.tags.tags) {
+    for (const p of this.$store.state.tags) {
       if (p.tag === this.tag) {
         for (const c of p.posts) {
           // Fetch specific post
