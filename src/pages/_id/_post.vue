@@ -113,25 +113,25 @@ export default {
     // Fetch post from IPFS,
     // currently fetching from localstorage
     // eslint-disable-next-line prefer-const
-    for (let p in this.$store.state.posts) {
-      if (this.$store.state.posts[p].id === this.$route.params.post) {
-        this.post = this.$store.state.posts[p]
+    for (let p in this.$store.state.posts.posts) {
+      if (this.$store.state.posts.posts[p].id === this.$route.params.post) {
+        this.post = this.$store.state.posts.posts[p]
       }
     }
-    this.$store.commit('addView', this.post.id)
+    this.$store.commit('posts/addView', this.post.id)
   },
   methods: {
     isBookmark () {
-      return this.post.bookmarks.includes(this.$store.state.user.id)
+      return this.post.bookmarks.includes(this.$store.state.me.user.id)
     },
     handleBookmark () {
-      this.$store.commit('handleBookmark', {
+      this.$store.commit('me/handleBookmark', {
         postID: this.post.id,
         authorID: this.$route.params.id,
       })
     },
     handleShare () {
-      this.$store.commit('addShare', this.post.id)
+      this.$store.commit('posts/addShare', this.post.id)
       const url = document.getElementById(this.post.id)
       url.type = 'text'
       url.value =

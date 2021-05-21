@@ -26,12 +26,12 @@ export default {
   created () {
     // The user in which I am currently viewing
     // Check if this is my profile
-    if (this.$route.params.id === this.$store.state.user.id) {
-      this.currentUser = this.$store.state.user
+    if (this.$route.params.id === this.$store.state.me.user.id) {
+      this.currentUser = this.$store.state.me.user
     }
     // Get user profile
     // this.currentUser = this.$api.profile.getProfile(this.$route.params.id)
-    const l = this.$store.state.userList
+    const l = this.$store.state.authors.userList
     for (let p = 0; p < l.length; p++) {
       if (l[p].id === this.$route.params.id) {
         this.currentUser = l[p]
@@ -44,19 +44,19 @@ export default {
       // Get list of bookmarked posts by visited profile
       // let targetProfile = this.$api.profile.getProfile(this.$route.params.id)
       let targetProfile = {}
-      if (this.$route.params.id === this.$store.state.user.id) {
-        targetProfile = this.$store.state.user
+      if (this.$route.params.id === this.$store.state.me.user.id) {
+        targetProfile = this.$store.state.me.user
       } else {
-        for (let p = 0; p < this.$store.state.userList.length; p++) {
-          if (this.$store.state.userList[p].id === this.$route.params.id) {
-            targetProfile = this.$store.state.userList[p]
+        for (let p = 0; p < this.$store.state.authors.userList.length; p++) {
+          if (this.$store.state.authors.userList[p].id === this.$route.params.id) {
+            targetProfile = this.$store.state.authors.userList[p]
             break
           }
         }
       }
 
       const bookmarkList = targetProfile.bookmarks
-      const postList = this.$store.state.posts
+      const postList = this.$store.state.posts.posts
       // Loop through list of bookmarks on a profile
       for (let i = 0; i < bookmarkList.length; i++) {
         // Find post object and add it to result

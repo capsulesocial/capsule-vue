@@ -5,11 +5,6 @@
         <span class="mr-5"><CapsuleIcon /></span>
         <h1 class="text-3xl italic font-bold">Capsule Social</h1>
       </div>
-
-      <button @click="testState">
-        Test
-      </button>
-
       <section>
         <p class="text-center">Join the Community</p>
         <div class="flex items-center justify-center">
@@ -46,14 +41,11 @@ export default {
   layout: 'landing',
   methods: {
     handleCTA () {
-      if (this.$store.state.user === null) {
+      if (this.$store.state.me.user === null) {
         this.$router.push('/auth')
       } else {
         this.$router.push('/home')
       }
-    },
-    testState () {
-      this.$store.commit('posts/changeTest', 'Jack')
     },
   },
 }

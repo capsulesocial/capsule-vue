@@ -133,10 +133,10 @@ export default {
   },
   methods: {
     isBookmark () {
-      return this.post.bookmarks.includes(this.$store.state.user.id)
+      return this.post.bookmarks.includes(this.$store.state.me.user.id)
     },
     handleBookmark () {
-      this.$store.commit('handleBookmark', {
+      this.$store.commit('me/handleBookmark', {
         postID: this.post.id,
         authorID: this.authorID,
       })
@@ -145,9 +145,9 @@ export default {
       this.commentStatus = !this.commentStatus
     },
     sendComment () {
-      this.$store.commit('postComment', {
+      this.$store.commit('posts/postComment', {
         postID: this.post.id,
-        authorID: this.$store.state.user.id,
+        authorID: this.$store.state.me.user.id,
         content: this.comment,
         emotion: this.emotion,
         timestamp: new Date(),
@@ -167,7 +167,7 @@ export default {
       return comments
     },
     handleShare (type) {
-      this.$store.commit('addShare', this.post.id)
+      this.$store.commit('posts/addShare', this.post.id)
       const url = document.getElementById(this.$props.post.id)
       url.type = 'text'
       url.value =

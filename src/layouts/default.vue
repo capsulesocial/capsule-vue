@@ -1,10 +1,10 @@
 <template>
   <section
-    v-if="this.$store.state.user !== null"
+    v-if="this.$store.state.me.user !== null"
     class="font-serif bg-white h-full"
   >
     <article
-      v-if="this.$store.state.draft.isComposing === true"
+      v-if="this.$store.state.draft.draft.isComposing === true"
       class="w-full h-screen z-30 bg-white absolute"
     >
       <PostEditor class="z-40" />
@@ -37,7 +37,7 @@ export default {
     PostEditor,
   },
   created () {
-    if (this.$store.state.user === null) {
+    if (this.$store.state.me.user === null) {
       this.$router.push('/auth')
     }
   },

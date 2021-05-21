@@ -163,7 +163,7 @@ export default {
     }
   },
   created () {
-    if (this.$store.state.user !== null) {
+    if (this.$store.state.me.user !== null) {
       this.$router.push('/home')
     }
   },
@@ -186,7 +186,6 @@ export default {
       if (this.isLogin) {
         const res = await this.$api.auth.login(this.id, this.password)
         if (res) {
-          // this.$store.state.setSession(res.user)
           this.$router.push('/')
         } else {
           alert('Invalid login!')
@@ -216,7 +215,7 @@ export default {
           }
           // const res = await this.$api.auth.register(account)
           account.password = null
-          this.$store.commit('startSession', account)
+          this.$store.commit('me/startSession', account)
           this.$router.push('/settings')
         } else {
           alert('Password mismatch!')
@@ -236,7 +235,7 @@ export default {
         followers: [],
         following: [],
       }
-      this.$store.commit('startSession', account)
+      this.$store.commit('me/startSession', account)
       this.$router.push('/settings')
     },
   },

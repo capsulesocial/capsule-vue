@@ -30,7 +30,7 @@
             class="border-b text-2xl focus:outline-none text-xl w-full placeholder-gray-800 pb-2"
           />
           <p class="text-sm text-gray-500 py-4">
-            By: {{ this.$store.state.user.username }}
+            By: {{ this.$store.state.me.user.username }}
           </p>
         </div>
       </div>
@@ -88,7 +88,7 @@
           {{ this.subtitle }}
         </h4>
         <h6 class="text-sm text-gray-500 py-4">
-          By: {{ this.$store.state.user.username }}
+          By: {{ this.$store.state.me.user.username }}
         </h6>
         <div class="prose" v-html="compiledMarkdown"></div>
       </div>
@@ -161,7 +161,7 @@
           />
         </div>
         <h6 class="text-sm text-gray-500 pb-4">
-          By: {{ this.$store.state.user.username }}
+          By: {{ this.$store.state.me.user.username }}
         </h6>
         <div class="prose pl-4" v-html="compiledMarkdown"></div>
       </div>
@@ -266,9 +266,9 @@ export default {
   mixins: [markdown],
   data () {
     return {
-      title: this.$store.state.draft.title,
-      subtitle: this.$store.state.draft.subtitle,
-      input: this.$store.state.draft.content,
+      title: this.$store.state.draft.draft.title,
+      subtitle: this.$store.state.draft.draft.subtitle,
+      input: this.$store.state.draft.draft.content,
       mobileState: 'edit',
       tags: [],
       tag: '',
@@ -276,7 +276,7 @@ export default {
   },
   computed: {
     draft () {
-      return this.$store.state.draft.draft
+      return this.$store.state.draft.draft.draft
     },
     compiledMarkdown () {
       return this.compileMarkdown(this.input)
@@ -321,12 +321,12 @@ export default {
         title: this.title,
         subtitle: this.subtitle,
         content: this.input,
-        id: this.$store.state.posts.length.toString(),
+        id: this.$store.state.posts.posts.length.toString(),
         timestamp: date,
         tags: this.tags,
         comments: [],
         bookmarks: [],
-        authorID: this.$store.state.user.id,
+        authorID: this.$store.state.me.user.id,
         views: 0,
         shares: 0,
       }
@@ -339,7 +339,7 @@ export default {
       this.subtitle = 'Subtitle'
       this.input = '# Hello World'
       this.tags = []
-      this.$router.push(this.$store.state.user.id)
+      this.$router.push(this.$store.state.me.user.id)
     },
     updateStore () {
       this.$store.commit('draft/updateDraft', {

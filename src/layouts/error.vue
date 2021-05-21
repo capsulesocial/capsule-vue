@@ -25,7 +25,7 @@ export default {
     },
   },
   created () {
-    if (this.$store.state.user === null) {
+    if (this.$store.state.me.user === null) {
       this.$router.push('/auth')
     }
   },

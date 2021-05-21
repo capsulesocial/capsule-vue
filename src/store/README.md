@@ -1,10 +1,50 @@
 # STORE
 
-**This directory is not required, you can delete it if you don't want to use it.**
+Check out [the documentation](https://nuxtjs.org/guide/vuex-store) for usage on Vuex Store
 
-This directory contains your Vuex Store files.
-Vuex Store option is implemented in the Nuxt.js framework.
+#### authors.js
+**Mutations:**
+- handleFollow
+**States:**
+- userList []
 
-Creating a file in this directory automatically activates the option in the framework.
+#### posts.js
+**Mutations:**
+-addShare
+-addView
+-handleBookmark
+-sendPost
+-postComment
+-commentReply
+**States:**
+- posts []
 
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/guide/vuex-store).
+#### tags.js
+**Mutations:**
+-sendPost
+**States:**
+- tags []
+
+
+#### draft.js
+**Mutations:**
+- toggleCompose
+- updateDraft
+**States:**
+isComposing bool
+draft {}
+
+
+#### me.js
+**Mutations:**
+- handleBookmark
+- startSession
+- sendPost
+- updateUsername
+- updateID
+- updateBio
+- addSocial
+- removeSocial
+- handleFollow
+**States:**
+- user {} (set on Login)

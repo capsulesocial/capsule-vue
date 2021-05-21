@@ -19,7 +19,7 @@
         Discover
       </nuxt-link>
       <nuxt-link
-        :to="'/' + $store.state.user.id + '/bookmarks'"
+        :to="'/' + $store.state.me.user.id + '/bookmarks'"
         class="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-semibold m-2"
       >
         <BookmarksIcon class="mr-2" />
@@ -27,7 +27,7 @@
       </nuxt-link>
       <!-- profile -->
       <nuxt-link
-        :to="'/' + $store.state.user.id"
+        :to="'/' + $store.state.me.user.id"
         class="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-semibold m-2"
       >
         <ProfileIcon class="mr-2" />
@@ -48,7 +48,7 @@
       >
         <!-- Actions tab -->
         <div v-if="isProfileActions" class="flex flex-col py-2">
-          <nuxt-link :to="'/' + $store.state.user.id">
+          <nuxt-link :to="'/' + $store.state.me.user.id">
             Visit Profile
           </nuxt-link>
           <button class="focus:outline-none" @click="signOut">
@@ -58,7 +58,7 @@
         <button class="block flex items-center focus:outline-none">
           <ProfileIcon />
           <span class="pl-2 group text-base leading-6 font-semibold">
-            {{ this.$store.state.user.username }}
+            {{ this.$store.state.me.user.username }}
           </span>
         </button>
       </div>
@@ -90,10 +90,10 @@
       </button>
 
       <ProfileIcon
-        v-if="this.$route.params.id === this.$store.state.user.id"
+        v-if="this.$route.params.id === this.$store.state.me.user.id"
         class="stroke-current text-primary"
       />
-      <nuxt-link v-else :to="$store.state.user.id">
+      <nuxt-link v-else :to="$store.state.me.user.id">
         <ProfileIcon class="stroke-current text-gray-400" />
       </nuxt-link>
 

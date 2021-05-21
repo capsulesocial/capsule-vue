@@ -7,7 +7,7 @@
         Trending Tags
       </h3>
       <TagCard
-        v-for="t in this.$store.state.tags"
+        v-for="t in this.$store.state.tags.tags"
         :key="t.tag"
         :tag="t.tag"
       />

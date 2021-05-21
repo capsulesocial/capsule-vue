@@ -1,7 +1,7 @@
 <template>
   <div class="rounded-full">
     <button
-      v-if="$store.state.user.id !== targetUser.id"
+      v-if="$store.state.me.user.id !== targetUser.id"
       class="rounded-full focus:outline-none"
       @click="toggleFriend"
     >
@@ -36,7 +36,7 @@ export default {
   methods: {
     iFollow () {
       // Check if I am following currentUser
-      const followingList = this.$store.state.user.following
+      const followingList = this.$store.state.me.user.following
       for (let i = 0; i < followingList.length; i++) {
         if (followingList[i] === this.$route.params.id) {
           return true
@@ -45,7 +45,7 @@ export default {
       return false
     },
     toggleFriend () {
-      this.$store.commit('handleFollow', this.targetUser.id)
+      this.$store.commit('me/handleFollow', this.targetUser.id)
     },
   },
 }

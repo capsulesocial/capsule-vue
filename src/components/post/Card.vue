@@ -74,10 +74,10 @@ export default {
   },
   methods: {
     getFullName (id) {
-      if (this.$store.state.user.id === id) {
-        return this.$store.state.user.username
+      if (this.$store.state.me.user.id === id) {
+        return this.$store.state.me.user.username
       }
-      const list = this.$store.state.userList
+      const list = this.$store.state.authors.userList
       const name = list.find(x => x.id === id)
       if (name) {
         return name.username

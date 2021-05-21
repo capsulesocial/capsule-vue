@@ -24,12 +24,12 @@ export default {
     }
   },
   created () {
-    if (this.$route.params.id === this.$store.state.user.id) {
-      this.targetUser = this.$store.state.user
+    if (this.$route.params.id === this.$store.state.me.user.id) {
+      this.targetUser = this.$store.state.me.user
     } else {
       // Get user profile
       // this.targetUser = this.$api.profile.getProfile(this.$route.params.id)
-      const l = this.$store.state.userList
+      const l = this.$store.state.authors.userList
       for (let p = 0; p < l.length; p++) {
         if (l[p].id === this.$route.params.id) {
           this.targetUser = l[p]

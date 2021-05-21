@@ -70,13 +70,13 @@ export default {
     }
   },
   created () {
-    this.posts.push(...this.$store.state.posts)
+    this.posts.push(...this.$store.state.posts.posts)
     this.sortFeed(this.algorithm)
   },
   methods: {
     sortFeed (a) {
       this.posts = []
-      this.posts.push(...this.$store.state.posts)
+      this.posts.push(...this.$store.state.posts.posts)
       this.algorithm = a
       if (a === 'NEW') {
         this.posts.sort((p0, p1) => {
@@ -89,7 +89,7 @@ export default {
       } else if (a === 'FOLLOWING') {
         const fList = []
         const res = []
-        fList.push(...this.$store.state.user.following)
+        fList.push(...this.$store.state.me.user.following)
         for (const p in this.posts) {
           if (fList.includes(this.posts[p].authorID)) {
             res.push(this.posts[p])
