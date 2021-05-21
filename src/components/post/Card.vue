@@ -74,8 +74,8 @@ export default {
   },
   methods: {
     getFullName (id) {
-      if (this.$store.state.me.user.id === id) {
-        return this.$store.state.me.user.username
+      if (this.$store.state.me.id === id) {
+        return this.$store.state.me.username
       }
       const list = this.$store.state.authors
       const name = list.find(x => x.id === id)

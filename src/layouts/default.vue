@@ -1,6 +1,6 @@
 <template>
   <section
-    v-if="this.$store.state.me.user !== null"
+    v-if="this.$store.state.me !== null"
     class="font-serif bg-white h-full"
   >
     <article
@@ -37,7 +37,7 @@ export default {
     PostEditor,
   },
   created () {
-    if (this.$store.state.me.user === null) {
+    if (this.$store.state.me.id === '') {
       this.$router.push('/auth')
     }
   },

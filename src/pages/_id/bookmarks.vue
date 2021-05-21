@@ -26,8 +26,8 @@ export default {
   created () {
     // The user in which I am currently viewing
     // Check if this is my profile
-    if (this.$route.params.id === this.$store.state.me.user.id) {
-      this.currentUser = this.$store.state.me.user
+    if (this.$route.params.id === this.$store.state.me.id) {
+      this.currentUser = this.$store.state.me
     }
     // Get user profile
     // this.currentUser = this.$api.profile.getProfile(this.$route.params.id)
@@ -44,8 +44,8 @@ export default {
       // Get list of bookmarked posts by visited profile
       // let targetProfile = this.$api.profile.getProfile(this.$route.params.id)
       let targetProfile = {}
-      if (this.$route.params.id === this.$store.state.me.user.id) {
-        targetProfile = this.$store.state.me.user
+      if (this.$route.params.id === this.$store.state.me.id) {
+        targetProfile = this.$store.state.me
       } else {
         for (let p = 0; p < this.$store.state.authors.length; p++) {
           if (this.$store.state.authors[p].id === this.$route.params.id) {

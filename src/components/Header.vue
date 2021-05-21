@@ -47,9 +47,9 @@
       <div class="flex">
         <nuxt-link
           v-if="
-            this.$route.path !== '/' + this.$store.state.me.user.id + '/bookmarks'
+            this.$route.path !== '/' + this.$store.state.me.id + '/bookmarks'
           "
-          :to="this.$store.state.me.user.id + '/bookmarks'"
+          :to="this.$store.state.me.id + '/bookmarks'"
           class="bg-gray-200 rounded-full w-12 h-12 focus:outline-none flex justify-center"
         >
           <BookmarksIcon class="self-center" />

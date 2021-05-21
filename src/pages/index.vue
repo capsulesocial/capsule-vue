@@ -41,7 +41,7 @@ export default {
   layout: 'landing',
   methods: {
     handleCTA () {
-      if (this.$store.state.me.user === null) {
+      if (this.$store.state.me.id === '') {
         this.$router.push('/auth')
       } else {
         this.$router.push('/home')

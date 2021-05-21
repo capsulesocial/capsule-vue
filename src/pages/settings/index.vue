@@ -7,7 +7,7 @@
           id="newUsername"
           v-model="newUsername"
           type="text"
-          :placeholder="this.$store.state.me.user.username"
+          :placeholder="this.$store.state.me.username"
           class="focus:outline-none"
         />
 
@@ -16,7 +16,7 @@
           id="newID"
           v-model.trim="newID"
           type="text"
-          :placeholder="this.$store.state.me.user.id"
+          :placeholder="this.$store.state.me.id"
           class="focus:outline-none"
         />
 
@@ -25,7 +25,7 @@
           id="newEmail"
           v-model="newEmail"
           type="email"
-          :placeholder="this.$store.state.me.user.email"
+          :placeholder="this.$store.state.me.email"
           class="focus:outline-none"
         />
       </article>
@@ -101,7 +101,7 @@ export default {
       newUsername: '',
       newID: '',
       newEmail: '',
-      bio: this.$store.state.me.user.bio,
+      bio: this.$store.state.me.bio,
       maxCharBio: 256,
     }
   },
@@ -118,14 +118,14 @@ export default {
       if (this.newID !== '' && this.$quality.id(this.newID)) {
         this.$store.commit('me/updateID', this.newID)
       }
-      if (this.bio !== this.$store.state.me.user.bio && this.checkBio() > 0) {
+      if (this.bio !== this.$store.state.me.bio && this.checkBio() > 0) {
         this.$store.commit('me/updateBio', this.bio)
       }
       if (this.newEmail !== '' && this.$quality.email(this.newEmail)) {
         this.$store.commit('me/updateEmail', this.newEmail)
       }
       alert('Settings updated!')
-      this.$router.push('/' + this.$store.state.me.user.id)
+      this.$router.push('/' + this.$store.state.me.id)
     },
   },
 }

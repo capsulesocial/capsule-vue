@@ -89,7 +89,7 @@ export default {
       } else if (a === 'FOLLOWING') {
         const fList = []
         const res = []
-        fList.push(...this.$store.state.me.user.following)
+        fList.push(...this.$store.state.me.following)
         for (const p in this.posts) {
           if (fList.includes(this.posts[p].authorID)) {
             res.push(this.posts[p])

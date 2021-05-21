@@ -26,8 +26,8 @@ export default {
     }
   },
   created () {
-    if (this.$route.params.id === this.$store.state.me.user.id) {
-      this.targetUser = this.$store.state.me.user
+    if (this.$route.params.id === this.$store.state.me.id) {
+      this.targetUser = this.$store.state.me
     } else {
       // Get user profile
       // this.targetUser = this.$api.profile.getProfile(this.$route.params.id)

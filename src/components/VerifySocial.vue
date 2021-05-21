@@ -79,7 +79,7 @@ export default {
     }
   },
   mounted () {
-    const socials = this.$store.state.me.user.socials
+    const socials = this.$store.state.me.socials
     for (const s in socials) {
       if (socials[s].platform === this.$props.platform) {
         this.isActive = true
@@ -94,7 +94,7 @@ export default {
     },
     verifySocial (platform, handle) {
       this.$api.settings.verifySocial(
-        this.$store.state.me.user.id,
+        this.$store.state.me.id,
         this.$props.platform,
         this.handle,
       )
@@ -106,7 +106,7 @@ export default {
     },
     removeSocial () {
       this.$api.settings.removeSocial(
-        this.$store.state.me.user.id,
+        this.$store.state.me.id,
         this.$props.platform,
       )
       this.$store.commit('me/removeSocial', {

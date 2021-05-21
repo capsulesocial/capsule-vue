@@ -133,18 +133,18 @@ export default {
   },
   methods: {
     isBookmark () {
-      return this.post.bookmarks.includes(this.$store.state.me.user.id)
+      return this.post.bookmarks.includes(this.$store.state.me.id)
     },
     handleBookmark () {
       this.$store.commit('me/handleBookmark', {
         postID: this.post.id,
         authorID: this.authorID,
-        userID: this.$store.state.me.user.id,
+        userID: this.$store.state.me.id,
       })
       this.$store.commit('posts/handleBookmark', {
         postID: this.post.id,
         authorID: this.authorID,
-        userID: this.$store.state.me.user.id,
+        userID: this.$store.state.me.id,
       })
     },
     handleComment () {
@@ -153,7 +153,7 @@ export default {
     sendComment () {
       this.$store.commit('posts/postComment', {
         postID: this.post.id,
-        authorID: this.$store.state.me.user.id,
+        authorID: this.$store.state.me.id,
         content: this.comment,
         emotion: this.emotion,
         timestamp: new Date(),

@@ -30,7 +30,7 @@
             class="border-b text-2xl focus:outline-none text-xl w-full placeholder-gray-800 pb-2"
           />
           <p class="text-sm text-gray-500 py-4">
-            By: {{ this.$store.state.me.user.username }}
+            By: {{ this.$store.state.me.username }}
           </p>
         </div>
       </div>
@@ -88,7 +88,7 @@
           {{ this.subtitle }}
         </h4>
         <h6 class="text-sm text-gray-500 py-4">
-          By: {{ this.$store.state.me.user.username }}
+          By: {{ this.$store.state.me.username }}
         </h6>
         <div class="prose" v-html="compiledMarkdown"></div>
       </div>
@@ -161,7 +161,7 @@
           />
         </div>
         <h6 class="text-sm text-gray-500 pb-4">
-          By: {{ this.$store.state.me.user.username }}
+          By: {{ this.$store.state.me.username }}
         </h6>
         <div class="prose pl-4" v-html="compiledMarkdown"></div>
       </div>
@@ -325,7 +325,7 @@ export default {
         tags: this.tags,
         comments: [],
         bookmarks: [],
-        authorID: this.$store.state.me.user.id,
+        authorID: this.$store.state.me.id,
         views: 0,
         shares: 0,
       }
@@ -340,7 +340,7 @@ export default {
       this.subtitle = 'Subtitle'
       this.input = '# Hello World'
       this.tags = []
-      this.$router.push(this.$store.state.me.user.id)
+      this.$router.push(this.$store.state.me.id)
     },
     updateStore () {
       this.$store.commit('draft/updateDraft', {

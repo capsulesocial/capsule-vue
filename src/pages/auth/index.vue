@@ -163,7 +163,7 @@ export default {
     }
   },
   created () {
-    if (this.$store.state.me.user !== null) {
+    if (this.$store.state.me.id !== '') {
       this.$router.push('/home')
     }
   },
@@ -206,12 +206,6 @@ export default {
             username: this.name,
             email: this.email,
             password: this.password,
-            bio: '',
-            posts: [],
-            socials: [],
-            bookmarks: [],
-            followers: [],
-            following: [],
           }
           // const res = await this.$api.auth.register(account)
           account.password = null
@@ -228,12 +222,6 @@ export default {
         username: 'admin',
         email: 'admin@admin.com',
         password: 'password123',
-        bio: 'This is your bio',
-        posts: [],
-        socials: [],
-        bookmarks: [],
-        followers: [],
-        following: [],
       }
       this.$store.commit('me/startSession', account)
       this.$router.push('/settings')

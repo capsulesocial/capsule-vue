@@ -39,8 +39,8 @@ export default {
   created () {
     // The user in which I am currently viewing
     // Check if this is my profile
-    if (this.$route.params.id === this.$store.state.me.user.id) {
-      this.currentUser = this.$store.state.me.user
+    if (this.$route.params.id === this.$store.state.me.id) {
+      this.currentUser = this.$store.state.me
     }
     // Get user profile
     // this.currentUser = this.$api.profile.getProfile(this.$route.params.id)
@@ -56,7 +56,7 @@ export default {
       this.$store.commit('me/handleFollow', this.currentUser.id)
       this.$store.commit('authors/handleFollow',
         {
-          me: this.$store.state.me.user.id,
+          me: this.$store.state.me.id,
           targetUser: this.currentUser.id,
         })
     },

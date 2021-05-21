@@ -122,7 +122,7 @@ export default {
   },
   methods: {
     isBookmark () {
-      return this.post.bookmarks.includes(this.$store.state.me.user.id)
+      return this.post.bookmarks.includes(this.$store.state.me.id)
     },
     handleBookmark () {
       this.$store.commit('me/handleBookmark', {
