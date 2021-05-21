@@ -46,6 +46,11 @@ export default {
     },
     toggleFriend () {
       this.$store.commit('me/handleFollow', this.targetUser.id)
+      this.$store.commit('authors/handleFollow',
+        {
+          me: this.$store.state.me.user.id,
+          targetUser: this.targetUser.id,
+        })
     },
   },
 }

@@ -5,14 +5,11 @@ export const state = () => ({
 
 export const mutations = {
   handleBookmark (state, data) {
-    const targetPost = state.posts.find(e => e.id === data.postID) // post object
-    if (!targetPost.bookmarks.includes(state.user.id)) {
-      // add like
-      targetPost.bookmarks.push(state.user.id)
+    if (!state.user.bookmarks.includes(data.postID)) {
+      // Add bookmark
       state.user.bookmarks.push(data.postID)
     } else {
-      // remove like
-      targetPost.bookmarks = targetPost.bookmarks.filter(e => e !== state.user.id)
+      // Remove bookmark
       state.user.bookmarks = state.user.bookmarks.filter(e => e !== data.postID)
     }
   },

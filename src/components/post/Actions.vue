@@ -139,6 +139,12 @@ export default {
       this.$store.commit('me/handleBookmark', {
         postID: this.post.id,
         authorID: this.authorID,
+        userID: this.$store.state.me.user.id,
+      })
+      this.$store.commit('posts/handleBookmark', {
+        postID: this.post.id,
+        authorID: this.authorID,
+        userID: this.$store.state.me.user.id,
       })
     },
     handleComment () {

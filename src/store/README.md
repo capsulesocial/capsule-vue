@@ -6,7 +6,6 @@ Check out [the documentation](https://nuxtjs.org/guide/vuex-store) for usage on 
 **Mutations:**
 - handleFollow
 **States:**
-- userList []
 
 #### posts.js
 **Mutations:**

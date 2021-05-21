@@ -77,7 +77,7 @@ export default {
       if (this.$store.state.me.user.id === id) {
         return this.$store.state.me.user.username
       }
-      const list = this.$store.state.authors.userList
+      const list = this.$store.state.authors
       const name = list.find(x => x.id === id)
       if (name) {
         return name.username

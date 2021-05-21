@@ -29,7 +29,7 @@ export default {
     } else {
       // Get user profile
       // this.targetUser = this.$api.profile.getProfile(this.$route.params.id)
-      const l = this.$store.state.authors.userList
+      const l = this.$store.state.authors
       for (let p = 0; p < l.length; p++) {
         if (l[p].id === this.$route.params.id) {
           this.targetUser = l[p]

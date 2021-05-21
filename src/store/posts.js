@@ -48,14 +48,12 @@ export const mutations = {
   },
   handleBookmark (state, data) {
     const targetPost = state.posts.find(e => e.id === data.postID) // post object
-    if (!targetPost.bookmarks.includes(state.user.id)) {
+    if (!targetPost.bookmarks.includes(data.userID)) {
       // add like
-      targetPost.bookmarks.push(state.user.id)
-      state.user.bookmarks.push(data.postID)
+      targetPost.bookmarks.push(data.userID)
     } else {
       // remove like
-      targetPost.bookmarks = targetPost.bookmarks.filter(e => e !== state.user.id)
-      state.user.bookmarks = state.user.bookmarks.filter(e => e !== data.postID)
+      targetPost.bookmarks = targetPost.bookmarks.filter(e => e !== data.userID)
     }
   },
   sendPost (state, post) {

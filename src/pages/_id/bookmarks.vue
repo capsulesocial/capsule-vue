@@ -31,7 +31,7 @@ export default {
     }
     // Get user profile
     // this.currentUser = this.$api.profile.getProfile(this.$route.params.id)
-    const l = this.$store.state.authors.userList
+    const l = this.$store.state.authors
     for (let p = 0; p < l.length; p++) {
       if (l[p].id === this.$route.params.id) {
         this.currentUser = l[p]
@@ -47,9 +47,9 @@ export default {
       if (this.$route.params.id === this.$store.state.me.user.id) {
         targetProfile = this.$store.state.me.user
       } else {
-        for (let p = 0; p < this.$store.state.authors.userList.length; p++) {
-          if (this.$store.state.authors.userList[p].id === this.$route.params.id) {
-            targetProfile = this.$store.state.authors.userList[p]
+        for (let p = 0; p < this.$store.state.authors.length; p++) {
+          if (this.$store.state.authors[p].id === this.$route.params.id) {
+            targetProfile = this.$store.state.authors[p]
             break
           }
         }
