@@ -266,18 +266,15 @@ export default {
   mixins: [markdown],
   data () {
     return {
-      title: this.$store.state.draft.draft.title,
-      subtitle: this.$store.state.draft.draft.subtitle,
-      input: this.$store.state.draft.draft.content,
+      title: this.$store.state.draft.title,
+      subtitle: this.$store.state.draft.subtitle,
+      input: this.$store.state.draft.content,
       mobileState: 'edit',
       tags: [],
       tag: '',
     }
   },
   computed: {
-    draft () {
-      return this.$store.state.draft.draft.draft
-    },
     compiledMarkdown () {
       return this.compileMarkdown(this.input)
     },
