@@ -1,11 +1,36 @@
 export default ({ app }) => ({
-  updateID (id, newID) {
+  startSession (authorID) {
+    // Return the author object
+    return authorID
+  },
+  sendPost (postID) {
+    // Passing in ID of post to be added to author posts array
+    // I can pass you the updated array to override
+    return postID
+  },
+  addBookmark (postID) {
+    // postID: new post that is being added
+    // Jack can also pass in the updated bookmarks list with postID added
+    return postID
+  },
+  removeBookmark (postID) {
+    // postID: new post that is being added
+    // Jack can also pass in the updated bookmarks list with postID removed
+    return postID
+  },
+  updateUsername (authorID, username) {
     return false
   },
-  updateUsername (id, username) {
+  updateID (authorID, newID) {
     return false
   },
-  updateEmail (id, email) {
+  updateEmail (authorID, email) {
+    return false
+  },
+  updateBio (authorID, bio) {
+    return false
+  },
+  verifySocial (authorID, platform, handle) {
     return false
   },
   updateFollowStatus (actionID, targetID) {
@@ -14,9 +39,7 @@ export default ({ app }) => ({
     // Add targetID to actionID.following
     return false
   },
-  verifySocial (id, platform, handle) {
-    return false
-  },
+
   removeSocial (id, platform) {
     return false
   },

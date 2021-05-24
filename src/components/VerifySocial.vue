@@ -93,11 +93,6 @@ export default {
       this.isActive = !this.isActive
     },
     verifySocial (platform, handle) {
-      this.$api.settings.verifySocial(
-        this.$store.state.me.id,
-        this.$props.platform,
-        this.handle,
-      )
       this.$store.commit('me/addSocial', {
         platform: this.$props.platform,
         username: this.handle,

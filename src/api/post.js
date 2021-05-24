@@ -29,8 +29,16 @@ export default ({ app }) => ({
   handleBookmark (userID, postID) {
     return false
   },
+  addView (postID) {
+    return false
+  },
   // Adds comment to post
-  addComment (postID, comment) {
+  addComment (postID, authorID, comment, emotion, timestamp, replies) {
+    // Return commentID
+    return false
+  },
+  addReply (postID, authorID, commentID, reply, timestamp) {
+    // Return replyID
     return false
   },
 })

@@ -10,7 +10,6 @@ export const state = () => ([
     bookmarks: [],
     followers: [],
     following: [],
-
   },
   {
     id: 'gronk',
@@ -28,6 +27,7 @@ export const state = () => ([
 export const mutations = {
   handleFollow (state, data) {
     // Adds to target user followers list
+    this.$api.authors.handleFollow(data.me, data.targetUser)
     for (let i = 0; i < state.length; i++) {
       if (state[i].id === data.targetUser) {
         if (!state[i].followers.includes(data.me)) {
