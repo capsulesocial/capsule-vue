@@ -1,4 +1,4 @@
-export default ({ app }) => ({
+export default ({ app }, node) => ({
   // POST newly created account to IPFS
   register (payload) {
     return payload
@@ -11,8 +11,9 @@ export default ({ app }) => ({
     return res
   },
   // Ends user session
-  logout () {
+  async logout () {
     // Set currentUser to null
+    await node.stop()
   },
   forgotPassword (email) {
     return email

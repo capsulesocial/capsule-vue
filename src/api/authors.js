@@ -1,4 +1,4 @@
-export default ({ app }) => ({
+export default ({ app }, node) => ({
   handleFollow (actionUserID, targetUserID) {
     return false
   },

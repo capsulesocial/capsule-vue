@@ -1,4 +1,4 @@
-export default ({ app }) => ({
+export default ({ app }, node) => ({
   // Check if a user ID exists in USERS collection
   checkID (id) {
     return false

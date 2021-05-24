@@ -317,7 +317,7 @@ export default {
         title: this.title,
         subtitle: this.subtitle,
         content: this.input,
-        id: this.$store.state.posts.length.toString(),
+        id: null,
         timestamp: date,
         tags: this.tags,
         comments: [],
@@ -326,7 +326,6 @@ export default {
         views: 0,
         shares: 0,
       }
-      // this.$store.commit('posts/sendPost', p)
       this.$api.post.sendPost(p).then((cid) => {
         p.id = cid
         this.$store.commit('posts/sendPost', p)

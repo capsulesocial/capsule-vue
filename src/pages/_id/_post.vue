@@ -109,16 +109,11 @@ export default {
       post: null,
     }
   },
-  created () {
+  async created () {
     // Fetch post from IPFS,
-    // currently fetching from localstorage
-    // eslint-disable-next-line prefer-const
-    for (let p in this.$store.state.posts) {
-      if (this.$store.state.posts[p].id === this.$route.params.post) {
-        this.post = this.$store.state.posts[p]
-      }
-    }
-    this.$store.commit('posts/addView', this.post.id)
+    const ipfsPost = await this.$api.post.getPost(this.$route.params.post)
+    const p = JSON.parse(ipfsPost)
+    this.post = p
   },
   methods: {
     isBookmark () {

@@ -1,4 +1,4 @@
-export default ({ app }) => ({
+export default ({ app }, node) => ({
   startSession (authorID) {
     // Return the author object
     return authorID
