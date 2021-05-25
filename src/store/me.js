@@ -20,6 +20,9 @@ export const mutations = {
     state.email = author.email
     state.password = author.password
   },
+  endSession (state) {
+    state = {}
+  },
   sendPost (state, postID) {
     this.$api.settings.sendPost(postID)
     state.posts.push(postID)

@@ -2,44 +2,38 @@
   <nav>
     <!-- Desktop -->
     <div
-      class="hidden lg:flex px-2 flex-col text-gray-500 h-12 sticky top-0 pl-6 lg:fixed lg:pt-24"
+      class="hidden lg:flex px-2 flex-col h-12 sticky top-0 pl-6 lg:fixed lg:pt-24 font-sans"
     >
       <nuxt-link
         to="/home"
-        class="group flex items-center px-2 py-2 text-base leading-6 font-semibold m-2"
+        class="group flex items-center px-2 py-2 text-base leading-6 font-semibold m-2 text-xl"
       >
         <HomeIcon class="mr-2" />
         Home
       </nuxt-link>
       <nuxt-link
         to="/discover"
-        class="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-semibold m-2"
+        class="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-semibold m-2 text-xl"
       >
         <DiscoverIcon class="mr-2" />
         Discover
       </nuxt-link>
-      <nuxt-link
-        :to="'/' + $store.state.me.id + '/bookmarks'"
-        class="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-semibold m-2"
-      >
-        <BookmarksIcon class="mr-2" />
-        Bookmarks
-      </nuxt-link>
       <!-- profile -->
       <nuxt-link
         :to="'/' + $store.state.me.id"
-        class="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-semibold m-2"
+        class="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-semibold m-2 text-xl"
       >
         <ProfileIcon class="mr-2" />
         Profile
       </nuxt-link>
       <nuxt-link
-        to="/help"
-        class="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-semibold m-2"
+        :to="'/' + $store.state.me.id + '/bookmarks'"
+        class="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-semibold m-2 text-xl"
       >
-        <HelpIcon class="mr-2" />
-        Help
+        <BookmarksIcon class="mr-2" />
+        Bookmarks
       </nuxt-link>
+
       <BrandedButton text="Write Post" :action="toggle" class="mt-5 w-48" />
 
       <div
@@ -51,9 +45,6 @@
           <nuxt-link :to="'/' + $store.state.me.id">
             Visit Profile
           </nuxt-link>
-          <button class="focus:outline-none" @click="signOut">
-            Sign Out
-          </button>
         </div>
         <button class="block flex items-center focus:outline-none">
           <ProfileIcon />
@@ -118,7 +109,6 @@ import ProfileIcon from '@/components/icons/Person'
 import SettingsIcon from '@/components/icons/Settings'
 import BrandedButton from '@/components/BrandedButton'
 import BookmarksIcon from '@/components/icons/Bookmarks'
-import HelpIcon from '@/components/icons/Help'
 
 export default {
   components: {
@@ -129,7 +119,6 @@ export default {
     SettingsIcon,
     BrandedButton,
     BookmarksIcon,
-    HelpIcon,
   },
   data () {
     return {
@@ -139,14 +128,9 @@ export default {
   methods: {
     ...mapMutations({
       toggle: 'draft/toggleCompose',
-      logout: 'startSession',
     }),
     toggleProfileActions () {
       this.isProfileActions = !this.isProfileActions
-    },
-    signOut () {
-      this.logout(null)
-      this.$router.push('/')
     },
   },
 }
