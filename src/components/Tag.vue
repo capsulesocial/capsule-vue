@@ -1,11 +1,15 @@
 <template>
   <span>
     <button
-      class="text-white uppercase focus:outline-none rounded-lg mr-1 mb-1 p-2 transition duration-500 ease-in-out transform hover:scale-110"
-      :class="colors[getRandomColor()]"
+      class="bg-white shadow focus:outline-none rounded-lg mr-1 mb-1 p-2 transition duration-500 ease-in-out transform hover:scale-110"
       @click="$router.push('/tag/' + tag)"
     >
-      {{ tag }}
+      <span
+        class="text-lg"
+        :class="colors[getRandomColor()]"
+      >
+        #{{ tag }}
+      </span>
     </button>
   </span>
 </template>
@@ -21,13 +25,13 @@ export default {
   data () {
     return {
       colors: [
-        'bg-red-500',
-        'bg-yellow-500',
-        'bg-blue-500',
-        'bg-indigo-500',
-        'bg-purple-500',
-        'bg-pink-500',
-        'bg-gray-500',
+        'text-red-500',
+        'text-yellow-500',
+        'text-blue-500',
+        'text-indigo-500',
+        'text-purple-500',
+        'text-pink-500',
+        'text-gray-500',
       ],
     }
   },

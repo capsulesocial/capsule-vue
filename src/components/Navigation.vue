@@ -27,6 +27,13 @@
         Profile
       </nuxt-link>
       <nuxt-link
+        to="/messages"
+        class="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-semibold m-2 text-xl"
+      >
+        <InboxIcon class="mr-2" />
+        Messages
+      </nuxt-link>
+      <nuxt-link
         :to="'/' + $store.state.me.id + '/bookmarks'"
         class="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-semibold m-2 text-xl"
       >
@@ -109,6 +116,7 @@ import ProfileIcon from '@/components/icons/Person'
 import SettingsIcon from '@/components/icons/Settings'
 import BrandedButton from '@/components/BrandedButton'
 import BookmarksIcon from '@/components/icons/Bookmarks'
+import InboxIcon from '@/components/icons/Inbox'
 
 export default {
   components: {
@@ -119,6 +127,7 @@ export default {
     SettingsIcon,
     BrandedButton,
     BookmarksIcon,
+    InboxIcon,
   },
   data () {
     return {

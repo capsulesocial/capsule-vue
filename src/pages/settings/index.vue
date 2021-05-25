@@ -96,6 +96,7 @@ export default {
     VerifySocial: () => import('@/components/VerifySocial/'),
     BrandedButton,
   },
+  layout: 'Extended',
   data () {
     return {
       newUsername: '',
