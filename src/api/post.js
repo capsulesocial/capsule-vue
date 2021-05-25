@@ -9,11 +9,7 @@ export default ({ app }, node) => ({
       content: JSON.stringify(post),
     })
     const cid = fileAdded.cid.string
-    // for await (const chunk of node.cat(cid)) {
-    //   console.info(chunk.toString())
-    // }
     return cid
-    // Call addPost in profile.js
   },
 
   // Returns post object associated with content id
@@ -22,7 +18,7 @@ export default ({ app }, node) => ({
     for await (const chunk of node.cat(cid)) {
       content += chunk.toString()
     }
-    return content
+    return JSON.parse(content)
   },
   // Adds OR removes user ID of person who liked the post
   handleBookmark (userID, postID) {

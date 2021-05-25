@@ -112,7 +112,7 @@ export default {
   async created () {
     // Fetch post from IPFS,
     const ipfsPost = await this.$api.post.getPost(this.$route.params.post)
-    const p = JSON.parse(ipfsPost)
+    const p = ipfsPost
     this.post = p
   },
   methods: {

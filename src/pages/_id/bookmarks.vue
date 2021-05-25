@@ -3,7 +3,7 @@
     <article>
       <ProfileHeader :currentUser="this.currentUser" />
     </article>
-    <div v-for="p in this.getBookmarkList()" :key="p.id">
+    <div v-for="p in this.posts" :key="p.id">
       <PostCard :post="p" :authorID="p.authorID" :authorUsername="p.authorID" />
     </div>
   </section>
@@ -21,6 +21,7 @@ export default {
   data () {
     return {
       currentUser: null,
+      posts: [],
     }
   },
   created () {
@@ -37,10 +38,10 @@ export default {
         this.currentUser = l[p]
       }
     }
+    this.getBookmarkList()
   },
   methods: {
-    getBookmarkList () {
-      const res = []
+    async getBookmarkList () {
       // Get list of bookmarked posts by visited profile
       // let targetProfile = this.$api.profile.getProfile(this.$route.params.id)
       let targetProfile = {}
@@ -54,19 +55,14 @@ export default {
           }
         }
       }
-
       const bookmarkList = targetProfile.bookmarks
-      const postList = this.$store.state.posts
       // Loop through list of bookmarks on a profile
       for (let i = 0; i < bookmarkList.length; i++) {
         // Find post object and add it to result
-        for (let j = 0; j < postList.length; j++) {
-          if (postList[j].id === bookmarkList[i]) {
-            res.push(postList[j])
-          }
-        }
+        const post = await this.$api.post.getPost(bookmarkList[i])
+        post.id = bookmarkList[i]
+        this.posts.push(post)
       }
-      return res
     },
   },
 }

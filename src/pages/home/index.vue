@@ -70,13 +70,18 @@ export default {
     }
   },
   created () {
-    this.posts.push(...this.$store.state.posts)
     this.sortFeed(this.algorithm)
   },
   methods: {
-    sortFeed (a) {
+    async sortFeed (a) {
       this.posts = []
-      this.posts.push(...this.$store.state.posts)
+      for (const p in this.$store.state.posts) {
+        if (p) {
+          const post = await this.$api.post.getPost(this.$store.state.posts[p])
+          post.id = this.$store.state.posts[p]
+          this.posts.push(post)
+        }
+      }
       this.algorithm = a
       if (a === 'NEW') {
         this.posts.sort((p0, p1) => {

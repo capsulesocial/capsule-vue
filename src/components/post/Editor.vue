@@ -328,7 +328,7 @@ export default {
       }
       this.$api.post.sendPost(p).then((cid) => {
         p.id = cid
-        this.$store.commit('posts/sendPost', p)
+        this.$store.commit('posts/sendPost', p.id)
         this.$store.commit('tags/sendPost', p)
         this.$store.commit('me/sendPost', p.id)
       })

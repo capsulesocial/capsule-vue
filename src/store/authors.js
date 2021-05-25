@@ -6,7 +6,7 @@ export const state = () => ([
     email: 'tb12@nfl.com',
     bio: 'Quarterback for the Tampa Bay Buccaneers. Former New England Patriots QB and Pick #199 in the NFL Draft',
     socials: [{ platform: 'twitter', username: 'TomBrady' }],
-    posts: ['0'],
+    posts: ['QmQpJL3fWF4XvWx15VfW6fV3qgTXm9Y86oN9PChhfbMfPe'],
     bookmarks: [],
     followers: [],
     following: [],

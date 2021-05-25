@@ -7,7 +7,7 @@
       </nuxt-link>
     </div>
 
-    <article v-for="post in this.userPosts()" :key="post.id">
+    <article v-for="post in this.posts" :key="post.id">
       <PostCard
         :post="post"
         :authorID="$route.params.id"
@@ -29,6 +29,7 @@ export default {
   data () {
     return {
       currentUser: null,
+      posts: [],
     }
   },
   created () {
@@ -45,17 +46,16 @@ export default {
         this.currentUser = l[p]
       }
     }
+    this.userPosts()
   },
   methods: {
-    userPosts () {
-      const posts = []
-      const p = this.$store.state.posts
+    async userPosts () {
+      const p = this.$store.state.me.posts
       for (let i = 0; i < p.length; i++) {
-        if (p[i].authorID === this.currentUser.id) {
-          posts.push(p[i])
-        }
+        const post = await this.$api.post.getPost(p[i])
+        post.id = p[i]
+        this.posts.push(post)
       }
-      return posts
     },
   },
 }

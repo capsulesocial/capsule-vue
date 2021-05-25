@@ -1,20 +1,22 @@
+/* eslint-disable array-bracket-newline */
 /* eslint-disable no-shadow */
+// eslint-disable-next-line array-bracket-newline
 export const state = () => ([
-  {
-    tag: 'patriots',
-    posts: [
-      '0',
-      '1',
-    ],
-  },
-  {
-    tag: 'victory',
-    posts: ['0'],
-  },
-  {
-    tag: 'GOAT',
-    posts: ['1'],
-  },
+  // {
+  //   tag: 'patriots',
+  //   posts: [
+  //     '0',
+  //     '1',
+  //   ],
+  // },
+  // {
+  //   tag: 'victory',
+  //   posts: ['0'],
+  // },
+  // {
+  //   tag: 'GOAT',
+  //   posts: ['1'],
+  // },
 ])
 
 export const mutations = {
