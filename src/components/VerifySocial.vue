@@ -35,7 +35,7 @@
       </div>
       <button
         v-if="!this.isVerified"
-        class="flex bg-primary hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg shadow-lg focus:outline-none"
+        class="flex bg-primary hover:bg-third text-white font-bold py-2 px-4 rounded-lg shadow-lg focus:outline-none"
         @click="verifySocial()"
       >
         <span class="mr-2">Verify</span>

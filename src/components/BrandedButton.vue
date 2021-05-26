@@ -1,7 +1,7 @@
 <template>
   <button
     :class="this.size"
-    class="transition duration-500 ease-in-out transform hover:scale-110 bg-primary hover:bg-green-600 text-white font-bold rounded-lg shadow-lg focus:outline-none"
+    class="transition duration-500 ease-in-out transform hover:scale-110 bg-primary hover:bg-third text-white font-bold rounded-lg shadow-lg focus:outline-none"
     @click="this.$props.action"
   >
     <span class="font-sans">

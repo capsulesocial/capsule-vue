@@ -25,19 +25,18 @@ export default {
   data () {
     return {
       colors: [
-        'text-red-500',
-        'text-yellow-500',
-        'text-blue-500',
-        'text-indigo-500',
-        'text-purple-500',
-        'text-pink-500',
-        'text-gray-500',
+        'text-primary',
+        'text-secondary',
+        'text-teal',
+        'text-ocean',
+        'text-fourth',
+        'text-fifth',
       ],
     }
   },
   methods: {
     getRandomColor () {
-      let i = ((Math.random() * 6) % 6)
+      let i = (Math.random() * 5) % 5
       i = Math.round(i)
       return i
     },

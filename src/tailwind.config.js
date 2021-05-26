@@ -8,13 +8,22 @@ module.exports = {
   },
   theme: {
     fontFamily: {
-      sans: ['Plex-Sans'], // Tech Info: username,password,email, #likes
-      serif: ['Plex-Serif'] // Content: post,text,title
+      sans: ['NotoSans-Medium'],
     },
     extend: {
       colors: {
-        primary: '#6fa786',
-        secondary: '#71C9AE'
+        primary: '#1E566C', // Dark Teal
+        secondary: '#367589', // Moss Teal
+        teal: '#216B6A', //Teal
+        ocean: '#89B8CA', // Ocean Blue
+        fourth: '#1C478B', // Dark Blue
+        fifth: '#1F7DAD', // Light Blue
+        gray1: '#EEEEEE',
+        gray2: '#DDDDDD',
+        gray3: '#BBBBBB',
+        gray4: '#888888',
+        gray5: '#777777',
+        gray6: '#454545',
       }
     }
   },

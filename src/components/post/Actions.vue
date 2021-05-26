@@ -57,7 +57,7 @@
         <div class="flex bg-white border-2 rounded-xl my-1 p-1 ml-5  w-full">
           <textarea
             v-model="comment"
-            class="leading-normal resize-vertical overflow-y-auto w-full focus:outline-none py-1 px-2 font-serif"
+            class="leading-normal resize-vertical overflow-y-auto w-full focus:outline-none py-1 px-2"
             name="body"
             placeholder="Write a Comment..."
           />

@@ -1,7 +1,7 @@
 <template>
   <section
     v-if="this.$store.state.me !== null"
-    class="font-serif bg-white h-full"
+    class="bg-white h-full"
   >
     <article
       v-if="this.$store.state.draft.isComposing === true"
@@ -16,7 +16,7 @@
       <!-- Left Nav Menu -->
       <Navigation />
       <!-- Main Content -->
-      <Nuxt class="overscroll-contain col-span-3 w-full px-4 mb-20 lg:mb-5" />
+      <Nuxt class="overscroll-contain col-span-3 w-full px-4 mb-20 lg:mb-5 pr-16" />
     </div>
   </section>
 </template>
@@ -46,7 +46,8 @@ a.nuxt-link-active {
 }
 
 a.nuxt-link-exact-active {
+  background-color: #89B8CA;
   font-weight: bold;
-  color: #6fa786;
+  color: #1E566C;
 }
 </style>

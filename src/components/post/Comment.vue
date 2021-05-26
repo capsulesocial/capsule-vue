@@ -7,10 +7,10 @@
         </span>
       </div>
       <div class="flex-1 leading-relaxed ml-2">
-        <strong class="text-black font-bold bold mr-1 font-serif">
+        <strong class="text-black font-bold bold mr-1">
           {{ getFullName(comment.authorID) }}
         </strong>
-        <nuxt-link :to="'/' + comment.authorID" class="text-gray-700 text-sm mr-2 font-serif">
+        <nuxt-link :to="'/' + comment.authorID" class="text-gray-700 text-sm mr-2">
           @{{ comment.authorID }}
         </nuxt-link>
         <span v-if="comment.timestamp" class="text-gray-600 text-xs font-sans">
@@ -37,7 +37,7 @@
             v-model="reply"
             type="text"
             placeholder="Reply.."
-            class="leading-normal resize-vertical overflow-y-auto w-full focus:outline-none py-1 px-2 font-serif text-sm"
+            class="leading-normal resize-vertical overflow-y-auto w-full focus:outline-none py-1 px-2 text-sm"
           >
           </textarea>
           <span class="relative">
@@ -59,10 +59,10 @@
               </span>
             </div>
             <div class="flex-1 leading-relaxed ml-2">
-              <strong class="text-black font-bold bold mr-1 font-serif">
+              <strong class="text-black font-bold bold mr-1">
                 {{ getFullName(r.authorID) }}
               </strong>
-              <span class="text-gray-700 text-sm mr-2 font-serif">
+              <span class="text-gray-700 text-sm mr-2">
                 @{{ r.authorID }}
               </span>
               <span v-if="r.timestamp" class="text-gray-600 text-xs font-sans">

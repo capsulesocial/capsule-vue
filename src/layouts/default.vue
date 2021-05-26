@@ -1,7 +1,7 @@
 <template>
   <section
     v-if="this.$store.state.me !== null"
-    class="font-serif bg-white h-full"
+    class="bg-white h-full"
   >
     <article
       v-if="this.$store.state.draft.isComposing === true"
@@ -50,7 +50,14 @@ a.nuxt-link-active {
 }
 
 a.nuxt-link-exact-active {
+  background-color: #89B8CA;
   font-weight: bold;
-  color: #6fa786;
+  color: #1E566C;
+  border-radius: 0.5rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+
 }
 </style>

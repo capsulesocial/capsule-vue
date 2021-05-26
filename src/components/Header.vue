@@ -26,7 +26,7 @@
     </article>
 
     <!-- Top Right -->
-    <article class="relative hidden lg:flex items-center justify-between ml-2">
+    <article class="relative hidden lg:flex items-center justify-end ml-2">
       <div class="flex">
         <span>
           <button

@@ -2,10 +2,10 @@
   <div>
     <section v-if="this.post !== null" class="pb-16 lg:pb-5 m-5">
       <article>
-        <h1 class="text-5xl font-serif capitalize">
+        <h1 class="text-5xl capitalize">
           {{ this.post.title }}
         </h1>
-        <h2 class="text-3xl font-serif text-gray-600">
+        <h2 class="text-3xl text-gray-600">
           {{ this.post.subtitle }}
         </h2>
         <div class="flex justify-between pt-5">
@@ -49,7 +49,7 @@
 
       <!-- Content -->
       <div
-        class="prose lg:prose-lg max-w-none text-black pl-4 font-serif content"
+        class="prose lg:prose-lg max-w-none text-black pl-4 content"
         v-html="this.compileMarkdown(this.post.content)"
       ></div>
 
