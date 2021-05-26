@@ -2,7 +2,7 @@
   <nav>
     <!-- Desktop -->
     <div
-      class="hidden lg:flex px-2 flex-col h-12 sticky top-0 pl-6 lg:fixed lg:pt-24 font-sans"
+      class="hidden lg:flex px-2 flex-col h-12 sticky top-0 pl-6 lg:fixed lg:pt-24 lg:mt-12 font-sans"
     >
       <nuxt-link
         to="/home"
@@ -41,25 +41,7 @@
         Bookmarks
       </nuxt-link>
 
-      <BrandedButton text="Write Post" :action="toggle" class="mt-5 w-48" />
-
-      <div
-        class="flex flex-col items-center fixed bottom-0 mb-4"
-        @click="toggleProfileActions"
-      >
-        <!-- Actions tab -->
-        <div v-if="isProfileActions" class="flex flex-col py-2">
-          <nuxt-link :to="'/' + $store.state.me.id">
-            Visit Profile
-          </nuxt-link>
-        </div>
-        <button class="block flex items-center focus:outline-none">
-          <ProfileIcon />
-          <span class="pl-2 group text-base leading-6 font-semibold">
-            {{ this.$store.state.me.username }}
-          </span>
-        </button>
-      </div>
+      <BrandedButton text="Write Post" :action="toggle" class="mt-5 w-48 px-12 py-4" />
     </div>
 
     <!-- Mobile -->

@@ -55,39 +55,39 @@
       <div v-if="showMore" class="absolute mt-64 z-10 bg-white shadow-lg rounded-lg w-full">
         <nuxt-link
           to="/settings"
-          class="w-full flex p-2 items-center justify-between"
+          class="w-full p-2 grid grid-cols-4 items-center"
         >
           <span class="bg-gray-200 rounded-full w-12 h-12 flex justify-center">
             <SettingsIcon class="self-center" />
           </span>
-          <h5 class="text-base font-sans">
+          <h5 class="text-base font-sans justify-self-start col-span-2">
             Settings
           </h5>
-          <ForwardButton />
+          <ForwardButton class="justify-self-end" />
         </nuxt-link>
         <nuxt-link
           to="/help"
-          class="w-full flex p-2 items-center justify-between"
+          class="w-full p-2 grid grid-cols-4 items-center"
         >
           <span class="bg-gray-200 rounded-full w-12 h-12 flex justify-center">
             <HelpIcon class="self-center" />
           </span>
-          <h5 class="text-base font-sans">
+          <h5 class="text-base font-sans justify-self-start col-span-2">
             Help & Support
           </h5>
-          <ForwardButton />
+          <ForwardButton class="justify-self-end" />
         </nuxt-link>
         <button
-          class="w-full flex p-2 items-center justify-between"
+          class="w-full p-2 grid grid-cols-4 items-center"
           @click="logout"
         >
           <span class="bg-gray-200 rounded-full w-12 h-12 flex justify-center">
             <LogoutIcon class="self-center" />
           </span>
-          <h5 class="text-base font-sans">
+          <h5 class="text-base font-sans justify-self-start col-span-2">
             Log Out
           </h5>
-          <ForwardButton />
+          <span></span>
         </button>
       </div>
     </article>

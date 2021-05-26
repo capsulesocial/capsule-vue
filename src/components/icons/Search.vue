@@ -2,10 +2,10 @@
   <svg
     xmlns="http://www.w3.org/2000/svg"
     xmlns:xlink="http://www.w3.org/1999/xlink"
-    width="32"
-    height="24"
+    width="28"
+    height="21"
   >
-    <g transform="matrix(0.03125 0 0 0.03125 0 0)">
+    <g transform="matrix(0.02734375 0 0 0.02734375 0 0)">
       <g transform="matrix(1.5 0 0 1.5 128 0)"></g>
       <path
         transform="matrix(1.5 0 0 1.5 128 0)"
