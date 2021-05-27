@@ -9,6 +9,7 @@ module.exports = {
   theme: {
     fontFamily: {
       sans: ['NotoSans-Medium'],
+      bold: ['NotoSans-Bold']
     },
     extend: {
       colors: {

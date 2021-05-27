@@ -12,7 +12,7 @@
 
     <Header class="pb-2 sticky top-0" />
 
-    <div class="lg:grid lg:grid-cols-4">
+    <div class="lg:grid lg:grid-cols-4 mr-2">
       <!-- Left Nav Menu -->
       <Navigation />
       <!-- Main Content -->
@@ -39,15 +39,3 @@ export default {
   },
 }
 </script>
-
-<style>
-a.nuxt-link-active {
-  font-weight: italic;
-}
-
-a.nuxt-link-exact-active {
-  background-color: #89B8CA;
-  font-weight: bold;
-  color: #1E566C;
-}
-</style>

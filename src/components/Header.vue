@@ -30,21 +30,21 @@
       <div class="flex">
         <span>
           <button
-            class="bg-gray-200 rounded-full w-12 h-12 focus:outline-none flex justify-center"
+            class="bg-gray-200 rounded-full w-12 h-12 focus:outline-none flex justify-center shadow-lg"
           >
             <SearchIcon class="self-center" />
           </button>
         </span>
         <span class="px-2">
           <button
-            class="bg-gray-200 rounded-full w-12 h-12 focus:outline-none flex justify-center"
+            class="bg-gray-200 rounded-full w-12 h-12 focus:outline-none flex justify-center shadow-lg"
           >
             <NotificationsIcon class="self-center" />
           </button>
         </span>
         <span>
           <button
-            class="bg-gray-200 rounded-full w-12 h-12 focus:outline-none flex justify-center"
+            class="bg-gray-200 rounded-full w-12 h-12 focus:outline-none flex justify-center shadow-lg"
             @click="showMore = !showMore"
           >
             <DownIcon class="self-center" />

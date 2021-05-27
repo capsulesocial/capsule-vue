@@ -6,14 +6,14 @@
     >
       <nuxt-link
         to="/home"
-        class="group flex items-center px-2 py-2 text-base leading-6 font-semibold m-2 text-xl"
+        class="nav group flex items-center px-2 py-2 text-base leading-6 font-bold m-2 text-xl"
       >
         <HomeIcon class="mr-2" />
         Home
       </nuxt-link>
       <nuxt-link
         to="/discover"
-        class="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-semibold m-2 text-xl"
+        class="nav mt-1 group flex items-center px-2 py-2 text-base leading-6 font-bold m-2 text-xl"
       >
         <DiscoverIcon class="mr-2" />
         Discover
@@ -21,21 +21,21 @@
       <!-- profile -->
       <nuxt-link
         :to="'/' + $store.state.me.id"
-        class="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-semibold m-2 text-xl"
+        class="nav mt-1 group flex items-center px-2 py-2 text-base leading-6 font-bold m-2 text-xl"
       >
         <ProfileIcon class="mr-2" />
         Profile
       </nuxt-link>
       <nuxt-link
         to="/messages"
-        class="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-semibold m-2 text-xl"
+        class="nav mt-1 group flex items-center px-2 py-2 text-base leading-6 font-bold m-2 text-xl"
       >
         <InboxIcon class="mr-2" />
         Messages
       </nuxt-link>
       <nuxt-link
         :to="'/' + $store.state.me.id + '/bookmarks'"
-        class="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-semibold m-2 text-xl"
+        class="nav mt-1 group flex items-center px-2 py-2 text-base leading-6 font-bold m-2 text-xl"
       >
         <BookmarksIcon class="mr-2" />
         Bookmarks
@@ -126,3 +126,19 @@ export default {
   },
 }
 </script>
+
+<style>
+a.nuxt-link-active {
+  font-weight: italic;
+}
+
+a.nuxt-link-exact-active.nav {
+  background-color: rgba(70,115,113, 0.09);
+  font-weight: bold;
+  color: #1E566C;
+  border-radius: 0.5rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-right: 1rem;
+}
+</style>

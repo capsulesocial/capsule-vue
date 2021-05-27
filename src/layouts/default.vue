@@ -43,21 +43,3 @@ export default {
   },
 }
 </script>
-
-<style>
-a.nuxt-link-active {
-  font-weight: italic;
-}
-
-a.nuxt-link-exact-active {
-  background-color: #89B8CA;
-  font-weight: bold;
-  color: #1E566C;
-  border-radius: 0.5rem;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-
-}
-</style>
