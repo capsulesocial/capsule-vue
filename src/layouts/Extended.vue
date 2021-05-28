@@ -10,13 +10,13 @@
       <PostEditor class="z-40" />
     </article>
 
-    <Header class="pb-2 sticky top-0" />
+    <Header class="sticky top-0" />
 
     <div class="lg:grid lg:grid-cols-4 mr-2">
       <!-- Left Nav Menu -->
       <Navigation />
       <!-- Main Content -->
-      <Nuxt class="overscroll-contain col-span-3 w-full px-4 mb-20 lg:mb-5 pr-16" />
+      <Nuxt class="overscroll-contain col-span-3 w-full px-4 mb-20 lg:mb-5 pr-16 border-l border-gray1" />
     </div>
   </section>
 </template>
