@@ -1,7 +1,7 @@
 /* eslint-disable prefer-const */
 <template>
-  <section>
-    <h2 class="text-2xl">
+  <section class="pt-4">
+    <h2 class="text-2xl uppercase">
       #{{ this.$route.params.tag }}
     </h2>
     <div v-for="p in this.posts" :key="p.contentAddress">

@@ -132,7 +132,7 @@ a.nuxt-link-active {
   font-weight: italic;
 }
 
-a.nuxt-link-exact-active.nav {
+a.nuxt-link-exact-active.nav, a:hover {
   background-color: rgba(70,115,113, 0.09);
   font-weight: bold;
   color: #1E566C;

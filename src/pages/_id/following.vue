@@ -1,5 +1,5 @@
 <template>
-  <section v-if="this.targetUser !== null">
+  <section v-if="this.targetUser !== null" class="px-4">
     <ProfileHeader :currentUser="this.targetUser" />
     <article>
       <div v-for="i in this.targetUser['following']" :key="i">

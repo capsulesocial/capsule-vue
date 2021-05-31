@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="px-4">
     <ProfileHeader :currentUser="this.currentUser" />
     <div class="mt-5">
       <nuxt-link :to="'/' + this.currentUser.id" class="text-xl">

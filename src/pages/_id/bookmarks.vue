@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="px-4">
     <article>
       <ProfileHeader :currentUser="this.currentUser" />
     </article>

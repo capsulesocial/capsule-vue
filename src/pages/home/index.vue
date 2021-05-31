@@ -47,7 +47,11 @@
         </span>
       </div>
     </nav>
-    <div v-for="post in this.posts" :key="post.contentAddress">
+    <div
+      v-for="post in this.posts"
+      :key="post.contentAddress"
+      class="mx-4"
+    >
       <PostCard
         :post="post"
         :authorID="post.authorID"

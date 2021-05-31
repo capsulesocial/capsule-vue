@@ -31,6 +31,12 @@ export default {
   components: {
     FriendButton,
   },
+  props: {
+    authorID: {
+      type: String,
+      default: null,
+    },
+  },
   data () {
     return {
       currentUser: null,
@@ -39,32 +45,17 @@ export default {
   created () {
     // The user in which I am currently viewing
     // Check if this is my profile
-    if (this.$route.params.id === this.$store.state.me.id) {
+    if (this.$props.authorID === this.$store.state.me.id) {
       this.currentUser = this.$store.state.me
     }
     // Get user profile
-    // this.currentUser = this.$api.profile.getProfile(this.$route.params.id)
+    // this.currentUser = this.$api.profile.getProfile(this.$props.authorID)
     const l = this.$store.state.authors
     for (let p = 0; p < l.length; p++) {
-      if (l[p].id === this.$route.params.id) {
+      if (l[p].id === this.$props.authorID) {
         this.currentUser = l[p]
       }
     }
-  },
-  methods: {
-    toggleFriend () {
-      this.$store.commit('me/handleFollow', this.currentUser.id)
-      this.$store.commit('authors/handleFollow',
-        {
-          me: this.$store.state.me.id,
-          targetUser: this.currentUser.id,
-        })
-    },
-    openWindow (url) {
-      if (process.client) {
-        window.open(url, '_blank')
-      }
-    },
   },
 }
 </script>

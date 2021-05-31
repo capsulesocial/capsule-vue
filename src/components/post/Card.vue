@@ -1,5 +1,5 @@
 <template>
-  <article class="border rounded-lg my-2 card p-5">
+  <article class="shadow rounded-lg my-2 card p-5">
     <!-- Post Preview Link -->
     <div class="mb-2 flex justify-between items-center">
       <nuxt-link :to="'/' + this.authorID" class="flex">
