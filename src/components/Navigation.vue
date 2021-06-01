@@ -6,42 +6,52 @@
     >
       <nuxt-link
         to="/home"
-        class="nav group flex items-center px-2 py-2 text-base leading-6 font-bold m-2 text-xl"
+        class="nav group flex items-center px-2 py-2 text-base leading-6  m-2 text-xl"
       >
         <HomeIcon class="mr-2" />
-        Home
+        <strong>
+          Home
+        </strong>
       </nuxt-link>
       <nuxt-link
         to="/discover"
-        class="nav mt-1 group flex items-center px-2 py-2 text-base leading-6 font-bold m-2 text-xl"
+        class="nav mt-1 group flex items-center px-2 py-2 text-base leading-6 m-2 text-xl"
       >
         <DiscoverIcon class="mr-2" />
-        Discover
+        <strong>
+          Discover
+        </strong>
       </nuxt-link>
       <!-- profile -->
       <nuxt-link
         :to="'/' + $store.state.me.id"
-        class="nav mt-1 group flex items-center px-2 py-2 text-base leading-6 font-bold m-2 text-xl"
+        class="nav mt-1 group flex items-center px-2 py-2 text-base leading-6 m-2 text-xl"
       >
         <ProfileIcon class="mr-2" />
-        Profile
+        <strong>
+          Profile
+        </strong>
       </nuxt-link>
       <nuxt-link
         to="/messages"
-        class="nav mt-1 group flex items-center px-2 py-2 text-base leading-6 font-bold m-2 text-xl"
+        class="nav mt-1 group flex items-center px-2 py-2 text-base leading-6 m-2 text-xl"
       >
         <InboxIcon class="mr-2" />
-        Messages
+        <strong>
+          Messages
+        </strong>
       </nuxt-link>
       <nuxt-link
         :to="'/' + $store.state.me.id + '/bookmarks'"
-        class="nav mt-1 group flex items-center px-2 py-2 text-base leading-6 font-bold m-2 text-xl"
+        class="nav mt-1 group flex items-center px-2 py-2 text-base leading-6 m-2 text-xl"
       >
         <BookmarksIcon class="mr-2" />
-        Bookmarks
+        <strong>
+          Bookmarks
+        </strong>
       </nuxt-link>
 
-      <BrandedButton text="Write Post" :action="toggle" class="mt-5 w-48 px-12 py-4" />
+      <BrandedButton text="Write Post" :action="toggle" class="mt-5 w-48 px-12 py-4 mt-16" />
     </div>
 
     <!-- Mobile -->
@@ -132,10 +142,10 @@ a.nuxt-link-active {
   font-weight: italic;
 }
 
-a.nuxt-link-exact-active.nav, a:hover {
-  background-color: rgba(70,115,113, 0.09);
+a.nuxt-link-exact-active.nav {
+  background-color: rgba(64, 124, 131, 0.09);
   font-weight: bold;
-  color: #1E566C;
+  color: #407c83;
   border-radius: 0.5rem;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;

@@ -1,50 +1,53 @@
 <template>
   <section>
-    <article class="flex justify-between text-gray-600 pt-2">
+    <article class="flex pt-2">
       <!-- Bookmark, comment, share icons -->
-      <div class="flex">
-        <button
-          class="flex focus:outline-none hover:text-primary mr-4 -ml-1"
-          @click="handleBookmark()"
-        >
-          <BookmarkIcon :isActive="this.isBookmark()" class="mr-2 fill-none" />
-          <span class="font-sans">{{ this.post.bookmarks.length }}</span>
-        </button>
-        <button
-          class="flex focus:outline-none hover:text-primary"
-          :class="this.isCommenting ? 'text-primary' : ''"
-          @click="handleComment()"
-        >
-          <CommentIcon class="mr-2 fill-primary" />
-          <span class="font-sans">{{ this.post.comments.length }}</span>
-        </button>
-      </div>
+      <button
+        class="flex focus:outline-none hover:text-primary mr-4 -ml-1"
+        @click="handleBookmark()"
+      >
+        <BookmarkIcon :isActive="this.isBookmark()" class="mr-2 fill-none" />
+        <span class="font-sans">{{ this.post.bookmarks.length }}</span>
+      </button>
+      <button
+        class="flex focus:outline-none hover:text-primary mr-4"
+        :class="this.isCommenting ? 'text-primary' : ''"
+        @click="handleComment()"
+      >
+        <CommentIcon class="mr-2 fill-primary" />
+        <span class="font-sans">{{ this.post.comments.length }}</span>
+      </button>
       <!-- Share to Socials -->
-      <div class="flex flex-row-reverse">
+      <div class="flex relative">
         <button
-          class="flex focus:outline-none hover:text-primary"
+          class="flex focus:outline-none hover:text-primary mr-4"
           :class="this.showSocialShares ? 'text-primary' : ''"
           @click="showSocialShares = !showSocialShares"
         >
           <SendIcon class="mr-2" />
           <span class="font-sans">{{ this.post.shares }}</span>
         </button>
-        <!-- Twitter -->
-        <button
+        <div
           v-if="showSocialShares"
-          class="flex focus:outline-none hover:text-primary"
-          @click="handleShare('TWITTER')"
+          class="absolute flex flex-col mt-8 bg-white border-l border-r border-b rounded-lg p-1 rounded-t-none"
         >
-          <TwitterIcon class="mx-2" />
-        </button>
-        <!-- Copy URL Link -->
-        <button
-          v-if="this.showSocialShares"
-          class="flex focus:outline-none hover:text-primary"
-          @click="handleShare('URL')"
-        >
-          <LinkIcon />
-        </button>
+          <!-- Twitter -->
+          <button
+            class="flex focus:outline-none hover:text-primary"
+            @click="handleShare('TWITTER')"
+          >
+            <TwitterIcon class="p-1" />
+            <span class="text-xs self-center">Twitter</span>
+          </button>
+          <!-- Copy URL Link -->
+          <button
+            class="flex focus:outline-none hover:text-primary"
+            @click="handleShare('URL')"
+          >
+            <LinkIcon class="p-1" />
+            <span class="text-xs self-center">Copy URL</span>
+          </button>
+        </div>
       </div>
     </article>
 

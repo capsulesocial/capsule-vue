@@ -21,7 +21,7 @@
       />
     </section>
 
-    <section class="mt-5">
+    <section class="mt-3">
       <h2 class="text-4xl font-bold">
         Featured Categories
       </h2>
@@ -33,6 +33,7 @@
           v-for="c in this.categories"
           :key="c"
           :text="c"
+          :bgImage="require('@/assets/images/discover/' + c + '/' + c + '.jpg')"
         />
       </div>
     </section>
@@ -69,7 +70,7 @@ export default {
         'technology',
         'crypto',
         'politics',
-        'US-World',
+        'US-world',
         'science',
         'environment',
         'food & drink',

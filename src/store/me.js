@@ -5,6 +5,8 @@ export const state = () => ({
   email: '',
   password: '',
   bio: 'Default bio.',
+  location: '',
+  website: '',
   posts: [],
   socials: [],
   bookmarks: [],

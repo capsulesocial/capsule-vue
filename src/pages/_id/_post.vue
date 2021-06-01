@@ -5,7 +5,7 @@
         <h1 class="text-5xl capitalize">
           {{ this.post.title }}
         </h1>
-        <h2 class="text-3xl text-gray-600">
+        <h2 class="text-3xl text-subtitle">
           {{ this.post.subtitle }}
         </h2>
         <div class="flex justify-between pt-5">

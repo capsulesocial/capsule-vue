@@ -9,15 +9,12 @@
           </div>
         </div>
         <div class="flex items-center flex-wrap mr-2">
-          <h4 class="text-bold text-lg mr-2">
+          <h4 class="text-bold mr-2">
             {{ getFullName(this.authorID) }}
           </h4>
-          <h5 class="text-base hover:text-primary text-gray-700 mr-2">
+          <h5 class="hover:text-primary text-subtitle mr-2">
             @{{ this.authorID }}
           </h5>
-          <h6 class="text-sm text-gray-600">
-            {{ this.$helpers.formatDate(this.post.timestamp) }}
-          </h6>
         </div>
       </nuxt-link>
       <div class="flex">
@@ -29,18 +26,21 @@
 
     <div class="hover:text-primary">
       <nuxt-link :to="'/' + this.authorID + '/' + this.post.id">
-        <h3 class="text-lg font-bold">
+        <h3 class="text-base font-bold">
           {{ this.post.title }}
         </h3>
-        <h4 class="text-sm italic">
+        <h4 class="text-subtitle pt-2 text-sm">
           {{ this.post.subtitle }}
         </h4>
       </nuxt-link>
     </div>
 
-    <div>
-      <PostActions :post="this.post" :authorID="this.authorID" />
+    <div class="pt-2">
+      <h6 class="text-xs text-subtitle">
+        {{ this.$helpers.formatDate(this.post.timestamp) }}
+      </h6>
     </div>
+    <PostActions :post="this.post" :authorID="this.authorID" />
   </article>
 </template>
 

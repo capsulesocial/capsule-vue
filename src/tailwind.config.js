@@ -25,6 +25,7 @@ module.exports = {
         gray4: '#888888',
         gray5: '#777777',
         gray6: '#454545',
+        subtitle: '#868686',
       }
     }
   },
