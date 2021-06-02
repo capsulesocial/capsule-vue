@@ -5,21 +5,9 @@ export const mutations = {
   sendPost (state, post) {
     state.push(post)
   },
-  addShare (state, postID) {
-    // const targetPost = this.$api.post.getPost(postID)
-    const targetPost = state.find(p => p.id === postID)
-    targetPost.shares += 1
-  },
-  addView (state, postID) {
-    // const targetPost = this.$api.post.getPost(postID)
-    const targetPost = state.find(p => p.id === postID)
-    targetPost.views += 1
-    this.$api.post.addView(postID)
-  },
-  handleBookmark (state, data) {
-    this.$api.post.handleBookmark(data.userID, data.postID)
-    // const targetPost = this.$api.post.getPost(postID)
-    const targetPost = state.find(e => e.id === data.postID) // post object
+  async handleBookmark (state, data) {
+    const targetPost = await this.$api.post.handleBookmark(data.userID, data.postID)
+    // const targetPost = state.find(e => e.id === data.postID) // post object
     if (!targetPost.bookmarks.includes(data.userID)) {
       // add like
       targetPost.bookmarks.push(data.userID)

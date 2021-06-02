@@ -29,15 +29,15 @@ export const mutations = {
     this.$api.settings.sendPost(postID)
     state.posts.push(postID)
   },
-  handleBookmark (state, data) {
-    if (!state.bookmarks.includes(data.postID)) {
+  handleBookmark (state, postID) {
+    if (!state.bookmarks.includes(postID)) {
       // Add bookmark
-      this.$api.settings.addBookmark(data.postID)
-      state.bookmarks.push(data.postID)
+      this.$api.settings.addBookmark(postID)
+      state.bookmarks.push(postID)
     } else {
       // Remove bookmark
-      this.$api.settings.removeBookmark(data.postID)
-      state.bookmarks = state.bookmarks.filter(e => e !== data.postID)
+      this.$api.settings.removeBookmark(postID)
+      state.bookmarks = state.bookmarks.filter(e => e !== postID)
     }
   },
   updateUsername (state, username) {

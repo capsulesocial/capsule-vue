@@ -35,12 +35,23 @@
       </nuxt-link>
     </div>
 
-    <div class="pt-2">
-      <h6 class="text-xs text-subtitle">
+    <div class="pt-2 flex justify-between">
+      <h6 class="text-xs text-subtitle self-center">
         {{ this.$helpers.formatDate(this.post.timestamp) }}
       </h6>
+      <div class="flex">
+        <BookmarkButton :post="this.post" class="mr-2 fill-primary" />
+        <Share :post="this.post" class="mr-2 fill-primary" />
+        <button
+          class="flex focus:outline-none hover:text-primary"
+          :class="this.showComments ? 'text-primary' : ''"
+          @click="showComments = !showComments"
+        >
+          <CommentIcon class="fill-primary" />
+        </button>
+      </div>
     </div>
-    <PostActions :post="this.post" :authorID="this.authorID" />
+    <PostActions v-if="this.showComments" :post="this.post" :authorID="this.authorID" />
   </article>
 </template>
 
@@ -48,12 +59,18 @@
 import PostActions from '@/components/post/Actions'
 import MoreIcon from '@/components/icons/More'
 import ProfileIcon from '@/components/icons/Person'
+import BookmarkButton from '@/components/post/BookmarkButton'
+import Share from '@/components/post/Share'
+import CommentIcon from '@/components/icons/Comment'
 
 export default {
   components: {
     PostActions,
     MoreIcon,
     ProfileIcon,
+    BookmarkButton,
+    Share,
+    CommentIcon,
   },
   props: {
     post: {
@@ -70,7 +87,9 @@ export default {
     },
   },
   data () {
-    return {}
+    return {
+      showComments: false,
+    }
   },
   methods: {
     getFullName (id) {

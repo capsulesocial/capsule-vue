@@ -91,10 +91,10 @@ export default {
         this.posts.sort((p0, p1) => {
           return p1.timestamp - p0.timestamp
         })
-      } else if (a === 'TOP') {
-        this.posts.sort((p0, p1) => {
-          return p1.views - p0.views
-        })
+      // } else if (a === 'TOP') {
+      //   this.posts.sort((p0, p1) => {
+      //     return p1.views - p0.views
+      //   })
       } else if (a === 'FOLLOWING') {
         const fList = []
         const res = []

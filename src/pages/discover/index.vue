@@ -75,6 +75,7 @@ export default {
         'environment',
         'food & drink',
         'culture',
+        'education',
       ],
     }
   },

@@ -22,25 +22,8 @@
             </span>
           </p>
           <div class="flex items-center">
-            <button
-              class="flex focus:outline-none hover:text-primary mr-4"
-              @click="handleBookmark()"
-            >
-              <BookmarkIcon :isActive="this.isBookmark()" class="mr-2 fill-none" />
-              {{ this.post.bookmarks.length }}
-            </button>
-            <button class="flex mr-4">
-              <CommentIcon class="mr-2 fill-primary" />
-              {{ this.post.comments.length }}
-            </button>
-            <button
-              class="flex focus:outline-none hover:text-primary"
-              @click="handleShare()"
-            >
-              <SendIcon class="mr-2 fill-primary" />
-              {{ this.post.shares }}
-            </button>
-            <!-- <span class="text-sm block text-gray-600 italic">{{ this.post.views }} views</span> -->
+            <BookmarkButton :post="this.post" />
+            <ShareButton :post="this.post" />
           </div>
         </div>
       </article>
@@ -68,6 +51,10 @@
       />
 
       <!-- Comments -->
+      <article class="flex flex-row justify-end">
+        <BookmarkButton :post="this.post" />
+        <ShareButton :post="this.post" />
+      </article>
       <article>
         <PostActions
           :post="this.post"
@@ -79,7 +66,7 @@
       </article>
     </section>
     <section v-else>
-      404 Post not found!
+      Post not found 😵‍💫
     </section>
   </div>
 </template>
@@ -89,18 +76,16 @@ import markdown from '@/mixins/markdown.js'
 import PostActions from '@/components/post/Actions'
 import AuthorCard from '@/components/AuthorCard'
 import TagCard from '@/components/Tag'
-import BookmarkIcon from '@/components/icons/Bookmark'
-import CommentIcon from '@/components/icons/Comment'
-import SendIcon from '@/components/icons/Send'
+import BookmarkButton from '@/components/post/BookmarkButton'
+import ShareButton from '@/components/post/Share'
 
 export default {
   components: {
     PostActions,
     AuthorCard,
     TagCard,
-    BookmarkIcon,
-    CommentIcon,
-    SendIcon,
+    BookmarkButton,
+    ShareButton,
   },
   mixins: [markdown],
   layout: 'reader',
@@ -113,18 +98,10 @@ export default {
     // Fetch post from IPFS,
     const ipfsPost = await this.$api.post.getPost(this.$route.params.post)
     const p = ipfsPost
+    p.id = this.$route.params.post
     this.post = p
   },
   methods: {
-    isBookmark () {
-      return this.post.bookmarks.includes(this.$store.state.me.id)
-    },
-    handleBookmark () {
-      this.$store.commit('me/handleBookmark', {
-        postID: this.post.id,
-        authorID: this.$route.params.id,
-      })
-    },
     handleShare () {
       this.$store.commit('posts/addShare', this.post.id)
       const url = document.getElementById(this.post.id)

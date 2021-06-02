@@ -1,58 +1,7 @@
 <template>
   <section>
-    <article class="flex pt-2">
-      <!-- Bookmark, comment, share icons -->
-      <button
-        class="flex focus:outline-none hover:text-primary mr-4 -ml-1"
-        @click="handleBookmark()"
-      >
-        <BookmarkIcon :isActive="this.isBookmark()" class="mr-2 fill-none" />
-        <span class="font-sans">{{ this.post.bookmarks.length }}</span>
-      </button>
-      <button
-        class="flex focus:outline-none hover:text-primary mr-4"
-        :class="this.isCommenting ? 'text-primary' : ''"
-        @click="handleComment()"
-      >
-        <CommentIcon class="mr-2 fill-primary" />
-        <span class="font-sans">{{ this.post.comments.length }}</span>
-      </button>
-      <!-- Share to Socials -->
-      <div class="flex relative">
-        <button
-          class="flex focus:outline-none hover:text-primary mr-4"
-          :class="this.showSocialShares ? 'text-primary' : ''"
-          @click="showSocialShares = !showSocialShares"
-        >
-          <SendIcon class="mr-2" />
-          <span class="font-sans">{{ this.post.shares }}</span>
-        </button>
-        <div
-          v-if="showSocialShares"
-          class="absolute flex flex-col mt-8 bg-white border-l border-r border-b rounded-lg p-1 rounded-t-none"
-        >
-          <!-- Twitter -->
-          <button
-            class="flex focus:outline-none hover:text-primary"
-            @click="handleShare('TWITTER')"
-          >
-            <TwitterIcon class="p-1" />
-            <span class="text-xs self-center">Twitter</span>
-          </button>
-          <!-- Copy URL Link -->
-          <button
-            class="flex focus:outline-none hover:text-primary"
-            @click="handleShare('URL')"
-          >
-            <LinkIcon class="p-1" />
-            <span class="text-xs self-center">Copy URL</span>
-          </button>
-        </div>
-      </div>
-    </article>
-
     <!-- Post a Comment -->
-    <article v-if="commentStatus" class="border-t border-b py-5 mt-5">
+    <article class="border-t border-b py-5 mt-5">
       <div class="flex items-center">
         <div class="p-1 border-2 rounded-full">
           <ProfileIcon class="w-6 h-6" />
@@ -76,7 +25,7 @@
         </div>
       </div>
     </article>
-    <article v-if="commentStatus" class="pt-3">
+    <article class="pt-3">
       <Comment
         v-for="c in this.filterComments()"
         :key="c.id"
@@ -86,37 +35,21 @@
       >
       </Comment>
     </article>
-
-    <input :id="this.$props.post.id" type="hidden" value="" />
   </section>
 </template>
 
 <script>
-import BookmarkIcon from '@/components/icons/Bookmark'
-import CommentIcon from '@/components/icons/Comment'
 import BrandedButton from '@/components/BrandedButton'
-import SendIcon from '@/components/icons/Send'
 import ProfileIcon from '@/components/icons/Person'
 import Comment from '@/components/post/Comment'
-import TwitterIcon from '@/components/icons/brands/Twitter'
-import LinkIcon from '@/components/icons/Link'
 
 export default {
   components: {
-    BookmarkIcon,
-    CommentIcon,
     BrandedButton,
-    SendIcon,
     ProfileIcon,
     Comment,
-    TwitterIcon,
-    LinkIcon,
   },
   props: {
-    isCommenting: {
-      type: Boolean,
-      default: false,
-    },
     post: {
       type: Object,
       default: null,
@@ -129,51 +62,34 @@ export default {
   data () {
     return {
       comment: '',
-      commentStatus: this.isCommenting,
+      comments: this.post.comments,
       emotion: null,
       showSocialShares: false,
     }
   },
   methods: {
-    isBookmark () {
-      return this.post.bookmarks.includes(this.$store.state.me.id)
-    },
-    handleBookmark () {
-      this.$store.commit('me/handleBookmark', {
-        postID: this.post.id,
-        authorID: this.authorID,
-        userID: this.$store.state.me.id,
-      })
-      this.$store.commit('posts/handleBookmark', {
-        postID: this.post.id,
-        authorID: this.authorID,
-        userID: this.$store.state.me.id,
-      })
-    },
-    handleComment () {
-      this.commentStatus = !this.commentStatus
-    },
     sendComment () {
-      this.$store.commit('posts/postComment', {
+      const c = {
         postID: this.post.id,
         authorID: this.$store.state.me.id,
         content: this.comment,
         emotion: this.emotion,
         timestamp: new Date(),
         replies: [],
-      })
+      }
+      // this.$store.commit('posts/postComment', c)
+      this.comments.push(c)
+      this.filterComments()
       this.comment = ''
     },
     handleReaction (reaction) {
       this.emotion = reaction
-      this.commentStatus = true
     },
     filterComments () {
-      const cList = this.post.comments
-      const comments = cList.slice().sort((p0, p1) => {
+      const cList = this.comments.slice().sort((p0, p1) => {
         return p1.timestamp - p0.timestamp
       })
-      return comments
+      return cList
     },
     handleShare (type) {
       this.$store.commit('posts/addShare', this.post.id)

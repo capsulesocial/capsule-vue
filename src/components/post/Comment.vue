@@ -51,7 +51,7 @@
           </span>
         </div>
         <!-- List replies -->
-        <div v-for="r in this.comment.replies" :key="r.id" class="pt-1">
+        <div v-for="r in this.filterReplies()" :key="r.id" class="pt-1">
           <div class="flex">
             <div class="flex-shrink-0">
               <span class="p-1 border-2 rounded-full block">
@@ -102,6 +102,7 @@ export default {
     return {
       isReplying: false,
       reply: '',
+      replies: this.comment.replies,
     }
   },
   methods: {
@@ -118,14 +119,23 @@ export default {
       }
     },
     sendReply () {
-      this.$store.commit('posts/commentReply', {
+      const r = {
         postID: this.$props.postID,
         commentID: this.$props.comment.id,
         authorID: this.$store.state.me.id,
         content: this.reply,
         timestamp: new Date(),
-      })
+      }
+      // this.$store.commit('posts/commentReply', r)
+      this.replies.push(r)
+      this.filterReplies()
       this.reply = ''
+    },
+    filterReplies () {
+      const rList = this.replies.slice().sort((p0, p1) => {
+        return p1.timestamp - p0.timestamp
+      })
+      return rList
     },
   },
 }

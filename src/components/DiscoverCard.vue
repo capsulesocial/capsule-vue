@@ -6,7 +6,7 @@
       <img
         :src="this.$props.bgImage"
         :alt="this.$props.text"
-        class="opacity-50 absolute left-0 top-0 width-full height-auto object-fill"
+        class="opacity-75 absolute left-0 top-0 width-full height-auto object-fill"
       />
       <div class="flex flex-col font-sans p-4">
         <h4 class="text-lg text-white font-extrabold capitalize">
