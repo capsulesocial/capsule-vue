@@ -40,7 +40,7 @@
         {{ this.$helpers.formatDate(this.post.timestamp) }}
       </h6>
       <div class="flex">
-        <BookmarkButton :post="this.post" class="mr-2 fill-primary" />
+        <BookmarkButton :postID="this.post.id" class="mr-2 fill-primary" />
         <Share :post="this.post" class="mr-2 fill-primary" />
         <button
           class="flex focus:outline-none hover:text-primary"
@@ -107,10 +107,3 @@ export default {
   },
 }
 </script>
-
-<style>
-.card {
-  /* background-color: rgba(50, 50, 50, 0.1); */
-  /* padding: 20px; */
-}
-</style>

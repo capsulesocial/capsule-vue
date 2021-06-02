@@ -22,7 +22,7 @@
             </span>
           </p>
           <div class="flex items-center">
-            <BookmarkButton :post="this.post" />
+            <BookmarkButton :postID="this.$route.params.post" />
             <ShareButton :post="this.post" />
           </div>
         </div>
@@ -51,10 +51,6 @@
       />
 
       <!-- Comments -->
-      <article class="flex flex-row justify-end">
-        <BookmarkButton :post="this.post" />
-        <ShareButton :post="this.post" />
-      </article>
       <article>
         <PostActions
           :post="this.post"

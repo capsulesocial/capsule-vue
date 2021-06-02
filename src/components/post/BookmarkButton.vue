@@ -15,23 +15,23 @@ export default {
     BookmarkIcon,
   },
   props: {
-    post: {
-      type: Object,
+    postID: {
+      type: String,
       default: null,
     },
   },
   data () {
     return {
       // isBookmarked: this.post.bookmarks.includes(this.$store.state.me.id),
-      isBookmarked: this.$store.state.me.bookmarks.includes(this.post.id),
+      isBookmarked: this.$store.state.me.bookmarks.includes(this.postID),
     }
   },
   methods: {
     handleBookmark () {
-      this.$store.commit('me/handleBookmark', this.post.id)
+      this.$store.commit('me/handleBookmark', this.postID)
       this.isBookmarked = !this.isBookmarked
       // this.$store.commit('posts/handleBookmark', {
-      //   postID: this.post.id,
+      //   postID: this.postID,
       //   userID: this.$store.state.me.id,
       // })
       // const p = await this.$api.post.handleBookmark(this.$store.state.me.id, this.post.id)

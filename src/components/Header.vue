@@ -30,21 +30,21 @@
       <div class="flex">
         <span>
           <button
-            class="bg-gray-200 rounded-full w-10 h-10 focus:outline-none flex justify-center shadow-lg"
+            class="bg-gray1 rounded-full w-10 h-10 focus:outline-none flex justify-center shadow-lg"
           >
             <SearchIcon class="self-center" />
           </button>
         </span>
         <span class="px-2">
           <button
-            class="bg-gray-200 rounded-full w-10 h-10 focus:outline-none flex justify-center shadow-lg"
+            class="bg-gray1 rounded-full w-10 h-10 focus:outline-none flex justify-center shadow-lg"
           >
             <NotificationsIcon class="self-center" />
           </button>
         </span>
         <span>
           <button
-            class="bg-gray-200 rounded-full w-10 h-10 focus:outline-none flex justify-center shadow-lg"
+            class="bg-gray1 rounded-full w-10 h-10 focus:outline-none flex justify-center shadow-lg"
             @click="showMore = !showMore"
           >
             <DownIcon class="self-center" />
@@ -57,7 +57,7 @@
           to="/settings"
           class="w-full p-2 grid grid-cols-4 items-center"
         >
-          <span class="bg-gray-200 rounded-full w-12 h-12 flex justify-center">
+          <span class="bg-gray1 rounded-full w-10 h-10 flex justify-center">
             <SettingsIcon class="self-center" />
           </span>
           <h5 class="text-base font-sans justify-self-start col-span-2">
@@ -69,7 +69,7 @@
           to="/help"
           class="w-full p-2 grid grid-cols-4 items-center"
         >
-          <span class="bg-gray-200 rounded-full w-12 h-12 flex justify-center">
+          <span class="bg-gray1 rounded-full w-10 h-10 flex justify-center">
             <HelpIcon class="self-center" />
           </span>
           <h5 class="text-base font-sans justify-self-start col-span-2">
@@ -81,7 +81,7 @@
           class="w-full p-2 grid grid-cols-4 items-center"
           @click="logout"
         >
-          <span class="bg-gray-200 rounded-full w-12 h-12 flex justify-center">
+          <span class="bg-gray1 rounded-full w-10 h-10 flex justify-center">
             <LogoutIcon class="self-center" />
           </span>
           <h5 class="text-base font-sans justify-self-start col-span-2">
