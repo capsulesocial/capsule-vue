@@ -8,6 +8,7 @@
     >
       <TwitterIcon v-if="this.$props.platform === 'twitter'" class="mr-2" />
       <GitHubIcon v-if="this.$props.platform === 'github'" class="mr-2" />
+      <ExternalURLIcon v-if="this.$props.platform === 'website'" class="mr-2" />
       <span class="text-xl">
         {{ this.$props.platform.toUpperCase() }}
       </span>
@@ -17,8 +18,8 @@
         <label
           for="handle"
         >
-          Enter your {{ this.$props.platform }} handle:
-          <span class="text-primary">@</span>
+          Enter your {{ this.$props.platform }}
+          <span v-if="this.$props.platform !== 'website'">handle: @</span><span v-else>URL:</span>
         </label>
         <input
           id="handle"
@@ -41,6 +42,7 @@
         <span class="mr-2">Verify</span>
         <TwitterIcon v-if="this.$props.platform === 'twitter'" />
         <GitHubIcon v-if="this.$props.platform === 'github'" />
+        <ExternalURLIcon v-if="this.$props.platform === 'website'" />
       </button>
       <button
         v-else
@@ -49,8 +51,9 @@
       >
         <TwitterIcon v-if="this.$props.platform === 'twitter'" />
         <GitHubIcon v-if="this.$props.platform === 'github'" />
+        <ExternalURLIcon v-if="this.$props.platform === 'website'" />
         <span class="mx-2">Remove</span>
-        ❌
+        <XIcon />
       </button>
     </div>
   </article>
@@ -59,11 +62,15 @@
 <script>
 import TwitterIcon from '@/components/icons/brands/Twitter'
 import GitHubIcon from '@/components/icons/brands/GitHub'
+import ExternalURLIcon from '@/components/icons/ExternalURL'
+import XIcon from '@/components/icons/X'
 
 export default {
   components: {
     TwitterIcon,
     GitHubIcon,
+    ExternalURLIcon,
+    XIcon,
   },
   props: {
     platform: {

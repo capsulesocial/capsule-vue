@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mt-3">
     <!-- Name, socials, follow, bio -->
     <article class="flex flex-row justify-between">
       <div>
@@ -30,7 +30,14 @@
             class="focus:outline-none text-primary"
             @click="openWindow('https://github.com/' + s.username)"
           >
-            <GitHubIcon v-if="s.platform === 'github'" />
+            <GitHubIcon />
+          </button>
+          <button
+            v-if="s.platform === 'website'"
+            class="focus:outline-none text-primary"
+            @click="openWindow(s.username)"
+          >
+            <ExternalURLIcon />
           </button>
         </span>
       </div>
@@ -89,12 +96,14 @@
 import TwitterIcon from '@/components/icons/brands/Twitter'
 import GitHubIcon from '@/components/icons/brands/GitHub'
 import FriendButton from '@/components/FriendButton'
+import ExternalURLIcon from '@/components/icons/ExternalURL'
 
 export default {
   components: {
     TwitterIcon,
     GitHubIcon,
     FriendButton,
+    ExternalURLIcon,
   },
   props: {
     currentUser: {

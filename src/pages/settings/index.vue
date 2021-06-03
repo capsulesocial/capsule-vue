@@ -49,6 +49,7 @@
       <article class="grid grid-cols-1 gap-5 mt-5">
         <VerifySocial platform="twitter" />
         <VerifySocial platform="github" />
+        <VerifySocial platform="website" />
       </article>
 
       <article class="mt-5">

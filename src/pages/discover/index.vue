@@ -76,6 +76,7 @@ export default {
         'food & drink',
         'culture',
         'education',
+        'philosophy',
       ],
     }
   },

@@ -19,14 +19,14 @@
       </nuxt-link>
       <div class="flex">
         <button class="hover:text-primary focus:outline-none">
-          <MoreIcon />
+          <XIcon />
         </button>
       </div>
     </div>
 
     <div class="hover:text-primary">
       <nuxt-link :to="'/' + this.authorID + '/' + this.post.id">
-        <h3 class="text-base font-bold">
+        <h3 class="text-base font-bold capitalize">
           {{ this.post.title }}
         </h3>
         <h4 class="text-subtitle pt-2 text-sm">
@@ -57,7 +57,7 @@
 
 <script>
 import PostActions from '@/components/post/Actions'
-import MoreIcon from '@/components/icons/More'
+import XIcon from '@/components/icons/X'
 import ProfileIcon from '@/components/icons/Person'
 import BookmarkButton from '@/components/post/BookmarkButton'
 import Share from '@/components/post/Share'
@@ -66,7 +66,7 @@ import CommentIcon from '@/components/icons/Comment'
 export default {
   components: {
     PostActions,
-    MoreIcon,
+    XIcon,
     ProfileIcon,
     BookmarkButton,
     Share,

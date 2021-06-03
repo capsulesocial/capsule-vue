@@ -60,7 +60,7 @@ export default {
       const url = document.getElementById(this.$props.post.id)
       url.type = 'text'
       url.value =
-        document.location.origin + '/' + this.authorID + '/' + this.post.id
+        document.location.origin + '/' + this.post.authorID + '/' + this.post.id
       if (type === 'URL') {
         url.select()
         url.setSelectionRange(0, 99999)
