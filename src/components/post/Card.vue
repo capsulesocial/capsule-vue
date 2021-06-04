@@ -6,8 +6,8 @@
         <div class="mr-2">
           <img
             v-if="this.author.avatar !== null"
-            :src="this.author.avatar"
-            class="w-8 h-8 rounded-full"
+            :src="this.avatar"
+            class="w-8 h-8 rounded-lg"
           />
           <ProfileIcon v-else class="w-8 h-8 border-2 rounded-full" />
         </div>
@@ -85,6 +85,7 @@ export default {
     return {
       showComments: false,
       author: null,
+      avatar: null,
     }
   },
   created () {
@@ -96,20 +97,12 @@ export default {
     if (a) {
       this.author = a
     }
-  },
-  methods: {
-    getFullName (id) {
-      if (this.$store.state.me.id === id) {
-        return this.$store.state.me.username
-      }
-      const list = this.$store.state.authors
-      const name = list.find(x => x.id === id)
-      if (name) {
-        return name.username
-      } else {
-        return id
-      }
-    },
+
+    if (this.author.avatar !== null) {
+      this.$api.settings.downloadAvatar(this.author.avatar).then((image) => {
+        this.avatar = image
+      })
+    }
   },
 }
 </script>

@@ -3,6 +3,18 @@ export default ({ app }, node) => ({
     // Return the author object
     return authorID
   },
+  async uploadAvatar (image) {
+    const fileAdded = await node.add(image)
+    const cid = fileAdded.cid.string
+    return cid
+  },
+  async downloadAvatar (cid) {
+    let content = ''
+    for await (const chunk of node.cat(cid)) {
+      content += chunk.toString()
+    }
+    return content
+  },
   sendPost (postID) {
     // Passing in ID of post to be added to author posts array
     // I can pass you the updated array to override

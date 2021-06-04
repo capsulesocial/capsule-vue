@@ -3,8 +3,12 @@
     <!-- Name, socials, follow, bio -->
     <article class="flex flex-row justify-between">
       <div class="flex items-center">
-        <img v-if="this.currentUser.avatar !== null" :src="this.currentUser.avatar" class="w-10 h-10 rounded-full" />
-        <h3 class="text-3xl px-2">
+        <img
+          v-if="this.currentUser.avatar !== null"
+          :src="this.avatar"
+          class="w-10 h-10 rounded-lg mr-2"
+        />
+        <h3 class="text-3xl pr-2">
           {{ this.currentUser.username }}
         </h3>
         <h5 class="text-xl text-gray-700">
@@ -111,6 +115,18 @@ export default {
       type: Object,
       default: null,
     },
+  },
+  data () {
+    return {
+      avatar: null,
+    }
+  },
+  created () {
+    if (this.currentUser.avatar !== null) {
+      this.$api.settings.downloadAvatar(this.currentUser.avatar).then((image) => {
+        this.avatar = image
+      })
+    }
   },
   methods: {
     openWindow (url) {

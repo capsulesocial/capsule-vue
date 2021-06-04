@@ -54,7 +54,7 @@
           name="file"
           type="file"
           accept="image/*"
-          @change="uploadImage"
+          @change="handleImage"
         >
         <img :src="profilePic" />
       </article>
@@ -144,14 +144,24 @@ export default {
     }
   },
   methods: {
-    uploadImage (e) {
+    handleImage (e) {
       const image = e.target.files[0]
       const reader = new FileReader()
       reader.readAsDataURL(image)
       reader.onload = (i) => {
-        this.profilePic = i.target.result
-        this.$store.commit('me/updateAvatar', this.profilePic)
+        this.uploadImage(i.target.result)
       }
+    },
+    uploadImage (image) {
+      this.$api.settings.uploadAvatar(image).then((cid) => {
+        this.$store.commit('me/updateAvatar', cid)
+        this.downloadImage(cid)
+      })
+    },
+    downloadImage (cid) {
+      this.$api.settings.downloadAvatar(cid).then((image) => {
+        this.profilePic = image
+      })
     },
     checkBio () {
       const charCount = this.bio.length

@@ -10,7 +10,7 @@ export const state = () => ([
     bookmarks: [],
     followers: [],
     following: [],
-    avatar: null,
+    avatar: 'QmPeLzasGfmCXFvrCT2Su5NhABvguwpvxdHTsk8TXsx1vm',
     location: '',
   },
   {
