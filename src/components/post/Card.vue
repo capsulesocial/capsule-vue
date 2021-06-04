@@ -2,18 +2,21 @@
   <article class="shadow rounded-lg my-2 card p-5">
     <!-- Post Preview Link -->
     <div class="mb-2 flex justify-between items-center">
-      <nuxt-link :to="'/' + this.authorID" class="flex">
+      <nuxt-link :to="'/' + this.post.authorID" class="flex">
         <div class="mr-2">
-          <div class="p-1 border-2 rounded-full">
-            <ProfileIcon class="w-6 h-6" />
-          </div>
+          <img
+            v-if="this.author.avatar !== null"
+            :src="this.author.avatar"
+            class="w-8 h-8 rounded-full"
+          />
+          <ProfileIcon v-else class="w-8 h-8 border-2 rounded-full" />
         </div>
         <div class="flex items-center flex-wrap mr-2">
           <h4 class="text-bold mr-2">
-            {{ getFullName(this.authorID) }}
+            {{ this.author.username }}
           </h4>
           <h5 class="hover:text-primary text-subtitle mr-2">
-            @{{ this.authorID }}
+            @{{ this.post.authorID }}
           </h5>
         </div>
       </nuxt-link>
@@ -25,7 +28,7 @@
     </div>
 
     <div class="hover:text-primary">
-      <nuxt-link :to="'/' + this.authorID + '/' + this.post.id">
+      <nuxt-link :to="'/' + this.post.authorID + '/' + this.post.id">
         <h3 class="text-base font-bold capitalize">
           {{ this.post.title }}
         </h3>
@@ -51,7 +54,7 @@
         </button>
       </div>
     </div>
-    <PostActions v-if="this.showComments" :post="this.post" :authorID="this.authorID" />
+    <PostActions v-if="this.showComments" :post="this.post" />
   </article>
 </template>
 
@@ -77,18 +80,21 @@ export default {
       type: Object,
       default: null,
     },
-    authorID: {
-      type: String,
-      default: null,
-    },
-    authorUsername: {
-      type: String,
-      default: null,
-    },
   },
   data () {
     return {
       showComments: false,
+      author: null,
+    }
+  },
+  created () {
+    if (this.$store.state.me.id === this.post.authorID) {
+      this.author = this.$store.state.me
+    }
+    const list = this.$store.state.authors
+    const a = list.find(x => x.id === this.post.authorID)
+    if (a) {
+      this.author = a
     }
   },
   methods: {

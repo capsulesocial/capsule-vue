@@ -100,6 +100,10 @@ export default {
       this.isActive = !this.isActive
     },
     verifySocial (platform, handle) {
+      if (this.$props.platform === 'website' && !this.$quality.validateURL(this.handle)) {
+        alert('Check URL!')
+        return
+      }
       this.$store.commit('me/addSocial', {
         platform: this.$props.platform,
         username: this.handle,

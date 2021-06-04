@@ -10,6 +10,8 @@ export const state = () => ([
     bookmarks: [],
     followers: [],
     following: [],
+    avatar: null,
+    location: '',
   },
   {
     id: 'gronk',
@@ -21,6 +23,9 @@ export const state = () => ([
     bookmarks: [],
     followers: [],
     following: [],
+    avatar: null,
+    location: '',
+
   },
 ])
 

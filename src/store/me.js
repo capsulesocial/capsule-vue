@@ -11,6 +11,7 @@ export const state = () => ({
   bookmarks: [],
   followers: [],
   following: [],
+  avatar: null,
 })
 
 export const mutations = {
@@ -55,6 +56,10 @@ export const mutations = {
     this.$api.settings.updateBio(state.id, bio)
     state.bio = bio
   },
+  updateLocation (state, location) {
+    // this.$api.settings.updateLocation(state.id, location)
+    state.location = location
+  },
   addSocial (state, social) {
     this.$api.settings.verifySocial(state.id, social.platform, social.username)
     state.socials.push(social)
@@ -75,5 +80,8 @@ export const mutations = {
     // Follow
     state.following.push(userID)
     this.$api.settings.updateFollowStatus(state.id, userID)
+  },
+  updateAvatar (state, image) {
+    state.avatar = image
   },
 }

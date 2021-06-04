@@ -2,8 +2,9 @@
   <div class="mt-3">
     <!-- Name, socials, follow, bio -->
     <article class="flex flex-row justify-between">
-      <div>
-        <h3 class="text-3xl">
+      <div class="flex items-center">
+        <img v-if="this.currentUser.avatar !== null" :src="this.currentUser.avatar" class="w-10 h-10 rounded-full" />
+        <h3 class="text-3xl px-2">
           {{ this.currentUser.username }}
         </h3>
         <h5 class="text-xl text-gray-700">

@@ -45,10 +45,22 @@ export default ({ app }, inject) => {
     }
   }
 
+  const validateURL = (url) => {
+    // URL starting with http://, https://, or www.
+    const regex = /^((https?:\/\/(www\.)?|www\.)[a-zA-Z0-9][\w+\d+&@\-#/%?=~_|!:,.;+]*)$/gi
+    return regex.test(url)
+  }
+
+  const validate = (input) => {
+    return true
+  }
+
   const qualityRules = {
     password,
     id,
     email,
+    validateURL,
+    validate,
   }
   inject('quality', qualityRules)
 }

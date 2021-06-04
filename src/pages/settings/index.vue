@@ -1,37 +1,70 @@
 <template>
   <main>
-    <section class="font-sans">
-      <article class="grid grid-cols-2 gap-2 border p-2 rounded-lg">
-        <label for="newUsername" class="text-lg bold">Name</label>
-        <input
-          id="newUsername"
-          v-model="newUsername"
-          type="text"
-          :placeholder="this.$store.state.me.username"
-          class="focus:outline-none"
-        />
+    <section>
+      <article class="pt-4">
+        <!-- General Settings (Username, ID, Email) -->
+        <h2 class="text-2xl bold text-primary">
+          General Settings
+        </h2>
+        <div class="grid grid-cols-2 gap-2 border rounded-lg p-4">
+          <label for="newUsername" class="text-lg bold">Name</label>
+          <input
+            id="newUsername"
+            v-model="newUsername"
+            type="text"
+            :placeholder="this.$store.state.me.username"
+            class="focus:outline-none"
+          />
 
-        <label for="newID" class="text-lg bold">ID</label>
-        <input
-          id="newID"
-          v-model.trim="newID"
-          type="text"
-          :placeholder="this.$store.state.me.id"
-          class="focus:outline-none"
-        />
+          <label for="newID" class="text-lg bold">ID</label>
+          <input
+            id="newID"
+            v-model.trim="newID"
+            type="text"
+            :placeholder="this.$store.state.me.id"
+            class="focus:outline-none"
+          />
 
-        <label for="newEmail" class="text-lg bold">Contact</label>
-        <input
-          id="newEmail"
-          v-model="newEmail"
-          type="email"
-          :placeholder="this.$store.state.me.email"
-          class="focus:outline-none"
-        />
+          <label for="newEmail" class="text-lg bold">Contact</label>
+          <input
+            id="newEmail"
+            v-model="newEmail"
+            type="email"
+            :placeholder="this.$store.state.me.email"
+            class="focus:outline-none"
+          />
+
+          <label for="location" class="text-lg bold">Location</label>
+          <input
+            id="location"
+            v-model="location"
+            type="text"
+            :placeholder="this.$store.state.me.location === '' ? 'Enter Location' : this.$store.state.me.location"
+            class="focus:outline-none"
+          />
+        </div>
       </article>
 
-      <article class="pt-5">
-        <label for="bio" class="text-sm bold text-primary">Bio:</label>
+      <!-- Profile Picture Upload -->
+      <article class="pt-4">
+        <label for="profile_pic">Upload Profile Picture</label>
+        <input
+          id="file-input"
+          ref="uploadedPic"
+          name="file"
+          type="file"
+          accept="image/*"
+          @change="uploadImage"
+        >
+        <img :src="profilePic" />
+      </article>
+
+      <article class="pt-4">
+        <label for="bio">
+          <h2 class="text-2xl bold text-primary">
+            Bio:
+          </h2>
+        </label>
         <textarea
           id="bio"
           :maxlength="maxCharBio"
@@ -46,14 +79,20 @@
         </p>
       </article>
 
-      <article class="grid grid-cols-1 gap-5 mt-5">
+      <article class="grid grid-cols-1 gap-4">
+        <h2 class="text-2xl bold text-primary">
+          Social Links
+        </h2>
         <VerifySocial platform="twitter" />
         <VerifySocial platform="github" />
         <VerifySocial platform="website" />
       </article>
 
-      <article class="mt-5">
-        <label for="password" class="text-lg bold">
+      <article class="pt-4">
+        <h2 class="text-2xl bold text-primary">
+          Change Password
+        </h2>
+        <label for="password" class="text-sm py-2">
           Current Password <span class="text-primary">*</span>
         </label>
         <input
@@ -62,19 +101,14 @@
           class="w-full border rounded-full focus:outline-none p-2 focus:border-primary"
         />
 
-        <label for="newPassword" class="text-lg bold pt-2">New Password</label>
+        <label for="newPassword" class="text-sm py-2">New Password</label>
         <input
           id="newPassword"
           type="password"
           class="w-full border rounded-full focus:outline-none p-2 focus:border-primary"
         />
 
-        <label
-          for="confirmPassword"
-          class="text-lg bold pt-2 focus:border-primary"
-        >
-          Confirm Password
-        </label>
+        <label for="confirmPassword" class="text-sm py-2">Confirm Password</label>
         <input
           id="confirmPassword"
           type="password"
@@ -82,7 +116,7 @@
         />
       </article>
 
-      <article class="pt-5 text-right">
+      <article class="text-right pt-4">
         <BrandedButton text="Save Changes" :action="updateSettings" />
       </article>
     </section>
@@ -101,13 +135,24 @@ export default {
   data () {
     return {
       newUsername: '',
+      profilePic: null,
       newID: '',
       newEmail: '',
+      location: '',
       bio: this.$store.state.me.bio,
       maxCharBio: 256,
     }
   },
   methods: {
+    uploadImage (e) {
+      const image = e.target.files[0]
+      const reader = new FileReader()
+      reader.readAsDataURL(image)
+      reader.onload = (i) => {
+        this.profilePic = i.target.result
+        this.$store.commit('me/updateAvatar', this.profilePic)
+      }
+    },
     checkBio () {
       const charCount = this.bio.length
       return this.maxCharBio - charCount
@@ -125,6 +170,9 @@ export default {
       }
       if (this.newEmail !== '' && this.$quality.email(this.newEmail)) {
         this.$store.commit('me/updateEmail', this.newEmail)
+      }
+      if (this.location !== this.$store.state.me.location && this.$quality.validate(this.location)) {
+        this.$store.commit('me/updateLocation', this.location)
       }
       alert('Settings updated!')
       this.$router.push('/' + this.$store.state.me.id)
