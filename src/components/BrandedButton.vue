@@ -1,5 +1,6 @@
 <template>
   <button
+    :disabled="this.$props.disabled"
     :class="this.size"
     class="transition duration-500 ease-in-out transform hover:scale-110 bg-primary hover:bg-third text-white font-bold rounded-lg shadow-lg focus:outline-none"
     @click="this.$props.action"
@@ -26,6 +27,10 @@ export default {
       default () {
         return null
       },
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
   data () {

@@ -1,135 +1,180 @@
 <template>
   <main>
-    <section>
-      <article class="pt-4">
-        <!-- General Settings (Username, ID, Email) -->
-        <h2 class="text-2xl bold text-primary">
-          General Settings
+    <section class="grid grid-cols-3">
+      <article class="flex flex-col w-full">
+        <h2 class="border-b-2 text-2xl bold pl-4 font-bold">
+          Settings
         </h2>
-        <div class="grid grid-cols-2 gap-2 border rounded-lg p-4">
-          <label for="newUsername" class="text-lg bold">Name</label>
+        <button class="flex flex-row justify-between px-4 py-2 mt-2" @click="changeTab('account')">
+          Account Information
+          <ChevronRight />
+        </button>
+        <button class="flex flex-row justify-between px-4 py-2" @click="changeTab('password')">
+          Password Update
+          <ChevronRight />
+        </button>
+        <button class="flex flex-row justify-between px-4 py-2" @click="changeTab('social')">
+          Social Accounts
+          <ChevronRight />
+        </button>
+      </article>
+
+      <article v-if="this.tab === 'account'" class="col-span-2 border-l">
+        <!-- General Settings (Username, ID, Email) -->
+        <h2 class="border-b-2 text-2xl bold pl-4 font-bold">
+          Account Information
+        </h2>
+        <div class="p-4 flex flex-col">
+          <label for="profile_pic" class="text-sm text-gray5">Edit your profile:</label>
+          <button
+            class="self-center mb-2 text-xs text-gray4"
+            @click="$refs.uploadedPic.click()"
+          >
+            <img
+              v-if="this.$store.state.me.avatar !== null"
+              :src="this.profilePic"
+              class="w-32 h-32 rounded-lg"
+            />
+            <UploadAvatar v-else class="w-32 h-32 rounded-lg" />
+            Change Avatar
+          </button>
           <input
-            id="newUsername"
-            v-model="newUsername"
-            type="text"
-            :placeholder="this.$store.state.me.username"
-            class="focus:outline-none"
+            id="file-input"
+            ref="uploadedPic"
+            class="hidden"
+            name="file"
+            type="file"
+            accept="image/*"
+            @change="handleImage"
+          >
+          <div class="flex flex-col">
+            <label for="newUsername" class="hidden">Enter Name</label>
+            <input
+              id="newUsername"
+              v-model="newUsername"
+              type="text"
+              :placeholder="this.$store.state.me.username"
+              class="focus:outline-none border-b-2 w-64 text-xl mb-4 text-primary focus:border-primary"
+            />
+
+            <label for="newID" class="hidden">Enter ID</label>
+            <input
+              id="newID"
+              v-model.trim="newID"
+              type="text"
+              :placeholder="this.$store.state.me.id"
+              class="focus:outline-none border-b-2 w-64 text-xl mb-4 text-primary focus:border-primary"
+            />
+
+            <label for="newEmail" class="hidden">Enter email</label>
+            <input
+              id="newEmail"
+              v-model="newEmail"
+              type="email"
+              :placeholder="this.$store.state.me.email"
+              class="focus:outline-none border-b-2 w-64 text-xl mb-4 text-primary focus:border-primary"
+            />
+
+            <label for="location" class="hidden">Enter location</label>
+            <input
+              id="location"
+              v-model="location"
+              type="text"
+              :placeholder="this.$store.state.me.location === '' ? 'Enter Location' : this.$store.state.me.location"
+              class="focus:outline-none border-b-2 w-64 text-xl mb-4 text-primary focus:border-primary"
+            />
+          </div>
+          <label for="bio">
+            <h2 class="text-2xl bold text-primary">
+              Bio:
+            </h2>
+          </label>
+          <textarea
+            id="bio"
+            :maxlength="maxCharBio"
+            :value="bio"
+            rows="4"
+            class="w-full border-b-2 focus:border-primary focus:outline-none p-1 resize-none text-gray5 focus:text-primary"
+            @input="bio = $event.target.value"
+            @keyup="checkBio()"
+          ></textarea>
+          <p class="text-xs text-right text-gray5">
+            {{ this.checkBio() }} Characters Remaining
+          </p>
+        </div>
+      </article>
+
+      <article v-if="this.tab === 'password'" class="col-span-2 border-l">
+        <h2 class="border-b-2 text-2xl bold pl-4 font-bold">
+          Change Password
+        </h2>
+        <div class="flex flex-col p-4">
+          <p class="text-gray5 mb-4">
+            Choose a strong password to protect your account:
+          </p>
+
+          <label for="password" class="hidden">Current Password</label>
+          <input
+            id="password"
+            type="password"
+            class="w-full border rounded-lg focus:outline-none px-4 py-2 focus:border-primary"
+            placeholder="Current Password"
           />
 
-          <label for="newID" class="text-lg bold">ID</label>
+          <nuxt-link to="/help" class="text-right text-primary mb-2">
+            Forgot Password?
+          </nuxt-link>
+
+          <label for="newPassword" class="hidden">New Password</label>
           <input
-            id="newID"
-            v-model.trim="newID"
-            type="text"
-            :placeholder="this.$store.state.me.id"
-            class="focus:outline-none"
+            id="newPassword"
+            type="password"
+            class="w-full border rounded-lg focus:outline-none px-4 py-2 focus:border-primary mb-2"
+            placeholder="New Password"
           />
 
-          <label for="newEmail" class="text-lg bold">Contact</label>
+          <label for="confirmPassword" class="hidden">Confirm Password</label>
           <input
-            id="newEmail"
-            v-model="newEmail"
-            type="email"
-            :placeholder="this.$store.state.me.email"
-            class="focus:outline-none"
-          />
-
-          <label for="location" class="text-lg bold">Location</label>
-          <input
-            id="location"
-            v-model="location"
-            type="text"
-            :placeholder="this.$store.state.me.location === '' ? 'Enter Location' : this.$store.state.me.location"
-            class="focus:outline-none"
+            id="confirmPassword"
+            type="password"
+            class="w-full border rounded-lg focus:outline-none px-4 py-2 focus:border-primary"
+            placeholder="Confirm Password"
           />
         </div>
       </article>
 
-      <!-- Profile Picture Upload -->
-      <article class="pt-4">
-        <label for="profile_pic">Upload Profile Picture</label>
-        <input
-          id="file-input"
-          ref="uploadedPic"
-          name="file"
-          type="file"
-          accept="image/*"
-          @change="handleImage"
-        >
-        <img :src="profilePic" />
-      </article>
-
-      <article class="pt-4">
-        <label for="bio">
-          <h2 class="text-2xl bold text-primary">
-            Bio:
-          </h2>
-        </label>
-        <textarea
-          id="bio"
-          :maxlength="maxCharBio"
-          :value="bio"
-          rows="4"
-          class="w-full border rounded-lg focus:border-primary focus:outline-none p-1 resize-none"
-          @input="bio = $event.target.value"
-          @keyup="checkBio()"
-        ></textarea>
-        <p class="text-xs text-right">
-          {{ this.checkBio() }} Characters Remaining
-        </p>
-      </article>
-
-      <article class="grid grid-cols-1 gap-4">
-        <h2 class="text-2xl bold text-primary">
+      <article v-if="this.tab === 'social'" class="col-span-2 border-l">
+        <h2 class="border-b-2 text-2xl bold pl-4 font-bold">
           Social Links
         </h2>
-        <VerifySocial platform="twitter" />
-        <VerifySocial platform="github" />
-        <VerifySocial platform="website" />
-      </article>
-
-      <article class="pt-4">
-        <h2 class="text-2xl bold text-primary">
-          Change Password
-        </h2>
-        <label for="password" class="text-sm py-2">
-          Current Password <span class="text-primary">*</span>
-        </label>
-        <input
-          id="password"
-          type="password"
-          class="w-full border rounded-full focus:outline-none p-2 focus:border-primary"
-        />
-
-        <label for="newPassword" class="text-sm py-2">New Password</label>
-        <input
-          id="newPassword"
-          type="password"
-          class="w-full border rounded-full focus:outline-none p-2 focus:border-primary"
-        />
-
-        <label for="confirmPassword" class="text-sm py-2">Confirm Password</label>
-        <input
-          id="confirmPassword"
-          type="password"
-          class="w-full border rounded-full focus:outline-none p-2 focus:border-primary"
-        />
-      </article>
-
-      <article class="text-right pt-4">
-        <BrandedButton text="Save Changes" :action="updateSettings" />
+        <p class="text-gray5 m-4">
+          Link your social media accounts:
+        </p>
+        <VerifySocial platform="twitter" class="mx-4 my-2" />
+        <VerifySocial platform="github" class="mx-4 my-2 pb-2" />
+        <p class="text-gray5 p-4 border-t">
+          Link your professional account:
+        </p>
+        <VerifySocial platform="website" class="mx-4 mb-4" />
       </article>
     </section>
+    <div class="text-right pt-4">
+      <BrandedButton text="Save Changes" :action="updateSettings" :disabled="this.hasChanged()" :class="this.hasChanged() ? '' : 'opacity-50'" />
+    </div>
   </main>
 </template>
 
 <script>
 import BrandedButton from '@/components/BrandedButton'
+import ChevronRight from '@/components/icons/ChevronRight'
+import UploadAvatar from '@/components/icons/UploadAvatar'
 
 export default {
   components: {
     VerifySocial: () => import('@/components/VerifySocial/'),
     BrandedButton,
+    ChevronRight,
+    UploadAvatar,
   },
   layout: 'Extended',
   data () {
@@ -141,9 +186,32 @@ export default {
       location: '',
       bio: this.$store.state.me.bio,
       maxCharBio: 256,
+      tab: '',
+    }
+  },
+  created () {
+    if (this.$store.state.me.avatar !== null) {
+      this.$api.settings.downloadAvatar(this.$store.state.me.avatar).then((image) => {
+        this.profilePic = image
+      })
     }
   },
   methods: {
+    hasChanged () {
+      if (
+        this.newUsername !== '' ||
+        this.newID !== '' ||
+        this.newEmail !== '' ||
+        this.location !== '' ||
+        this.bio !== this.$store.state.me.bio
+      ) {
+        return true
+      }
+      return false
+    },
+    changeTab (tab) {
+      this.tab = tab
+    },
     handleImage (e) {
       const image = e.target.files[0]
       const reader = new FileReader()

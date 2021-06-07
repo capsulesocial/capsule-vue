@@ -1,5 +1,5 @@
 <template>
-  <main>
+  <main class="px-4">
     <section>
       <article class="flex justify-between mb-1 items-center mt-3">
         <h2 class="text-4xl font-bold">

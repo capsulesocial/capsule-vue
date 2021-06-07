@@ -1,24 +1,26 @@
 <template>
-  <article class="flex flex-row">
+  <article>
     <!-- Unverified -->
-    <button
-      v-if="!this.isActive"
-      class="flex items-center justify-center h-12 border text-gray-600 w-full py-2.5 rounded-lg focus:outline-none hover:border-primary hover:text-primary"
-      @click="toggleVerify()"
-    >
-      <TwitterIcon v-if="this.$props.platform === 'twitter'" class="mr-2" />
-      <GitHubIcon v-if="this.$props.platform === 'github'" class="mr-2" />
-      <ExternalURLIcon v-if="this.$props.platform === 'website'" class="mr-2" />
-      <span class="text-xl">
+    <div v-if="!this.isActive" class="flex justify-between text-gray5">
+      <div class="flex flex-row items-center text-xl">
+        <TwitterIcon v-if="this.$props.platform === 'twitter'" class="mr-4" />
+        <GitHubIcon v-if="this.$props.platform === 'github'" class="mr-4" />
+        <ExternalURLIcon v-if="this.$props.platform === 'website'" class="mr-4" />
         {{ this.$props.platform.toUpperCase() }}
-      </span>
-    </button>
+      </div>
+      <button
+        class="focus:outline-none text-primary font-bold"
+        @click="toggleVerify()"
+      >
+        Connect
+      </button>
+    </div>
+
     <div v-else class="h-12 w-full flex justify-between items-center">
       <div v-if="!this.isVerified">
         <label
           for="handle"
         >
-          Enter your {{ this.$props.platform }}
           <span v-if="this.$props.platform !== 'website'">handle: @</span><span v-else>URL:</span>
         </label>
         <input

@@ -52,7 +52,11 @@
         </span>
       </div>
       <!-- Dropdown menu -->
-      <div v-if="showMore" class="absolute mt-64 z-10 bg-white shadow-lg rounded-lg w-full">
+      <div
+        v-if="showMore"
+        class="absolute mt-64 z-10 bg-white shadow-lg rounded-lg w-full"
+        @click="showMore = !showMore"
+      >
         <nuxt-link
           to="/settings"
           class="w-full p-2 grid grid-cols-4 items-center"

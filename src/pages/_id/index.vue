@@ -50,7 +50,7 @@ export default {
   },
   methods: {
     async userPosts () {
-      const p = this.$store.state.me.posts
+      const p = this.currentUser.posts
       for (let i = 0; i < p.length; i++) {
         const post = await this.$api.post.getPost(p[i])
         post.id = p[i]

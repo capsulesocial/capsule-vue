@@ -16,7 +16,7 @@
       <!-- Left Nav Menu -->
       <Navigation />
       <!-- Main Content -->
-      <Nuxt class="overscroll-contain col-span-3 w-full px-4 mb-20 lg:mb-5 pr-16 border-l border-gray1" />
+      <Nuxt class="overscroll-contain col-span-3 w-full mb-20 lg:mb-5 pr-16 border-l border-gray1" />
     </div>
   </section>
 </template>
