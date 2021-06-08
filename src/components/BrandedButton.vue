@@ -30,7 +30,7 @@ export default {
   },
   data () {
     return {
-      size: !this.$props.thin ? 'py-2 px-4' : 'py-1 px-2',
+      size: !this.$props.thin ? 'py-2 px-4' : 'py-1 px-4',
     }
   },
 }
