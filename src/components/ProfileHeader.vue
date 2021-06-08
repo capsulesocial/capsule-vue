@@ -47,7 +47,7 @@
         </span>
       </div>
 
-      <FriendButton :targetUser="currentUser" />
+      <FriendButton :authorID="currentUser.id" />
     </article>
 
     <article>

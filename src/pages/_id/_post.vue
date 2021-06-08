@@ -29,7 +29,10 @@
       </article>
 
       <hr class="style-two my-5">
-
+      <img
+        v-if="this.featuredPhoto !== null"
+        :src="this.featuredPhoto"
+      >
       <!-- Content -->
       <div
         class="prose lg:prose-lg max-w-none text-black pl-4 content"
@@ -88,6 +91,7 @@ export default {
   data () {
     return {
       post: null,
+      featuredPhoto: null,
     }
   },
   async created () {
@@ -96,6 +100,11 @@ export default {
     const p = ipfsPost
     p.id = this.$route.params.post
     this.post = p
+    if (this.post.featuredPhotoCID !== null) {
+      this.$api.settings.downloadAvatar(this.post.featuredPhotoCID).then((image) => {
+        this.featuredPhoto = image
+      })
+    }
   },
   methods: {
     handleShare () {

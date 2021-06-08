@@ -163,6 +163,29 @@
         <h6 class="text-sm text-gray-500 pb-4">
           By: {{ this.$store.state.me.username }}
         </h6>
+        <!-- Upload Featured Image -->
+        <button @click="$refs.featuredPhoto.click()">
+          <input
+            id="featured-photo"
+            ref="featuredPhoto"
+            class="hidden"
+            name="photo"
+            type="file"
+            accept="image/*"
+            @change="handleImage"
+          >
+          <img
+            v-if="this.featuredPhoto !== null"
+            :src="this.featuredPhoto"
+          >
+          <div
+            v-else
+            class="flex justify-center items-center text-gray5"
+          >
+            <CameraIcon class="mr-2" />
+            Featured Photo
+          </div>
+        </button>
         <div class="prose pl-4" v-html="compiledMarkdown"></div>
       </div>
       <footer
@@ -241,6 +264,7 @@ import { mapMutations } from 'vuex'
 import _ from 'lodash'
 import DOMPurify from 'dompurify'
 import CloseIcon from '@/components/icons/Close'
+import CameraIcon from '@/components/icons/Camera'
 import BoldIcon from '@/components/icons/md/Bold'
 import CodeIcon from '@/components/icons/md/Code'
 import ItalicIcon from '@/components/icons/md/Italic'
@@ -262,6 +286,7 @@ export default {
     ImageIcon,
     QuoteIcon,
     BrandedButton,
+    CameraIcon,
   },
   mixins: [markdown],
   data () {
@@ -272,6 +297,8 @@ export default {
       mobileState: 'edit',
       tags: [],
       tag: '',
+      featuredPhoto: null,
+      featuredPhotoCID: null,
     }
   },
   computed: {
@@ -307,6 +334,25 @@ export default {
         this.tags.splice(index, 1)
       }
     },
+    handleImage (e) {
+      const image = e.target.files[0]
+      const reader = new FileReader()
+      reader.readAsDataURL(image)
+      reader.onload = (i) => {
+        this.uploadImage(i.target.result)
+      }
+    },
+    uploadImage (image) {
+      this.$api.settings.uploadAvatar(image).then((cid) => {
+        this.featuredPhotoCID = cid
+        this.downloadImage(cid)
+      })
+    },
+    downloadImage (cid) {
+      this.$api.settings.downloadAvatar(cid).then((image) => {
+        this.featuredPhoto = image
+      })
+    },
     post () {
       if (this.title === '') {
         alert('Missing title!')
@@ -323,6 +369,7 @@ export default {
         comments: [],
         bookmarks: [],
         authorID: this.$store.state.me.id,
+        featuredPhotoCID: this.featuredPhotoCID,
       }
       this.$api.post.sendPost(p).then((cid) => {
         p.id = cid

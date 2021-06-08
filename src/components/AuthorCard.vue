@@ -28,7 +28,7 @@
         {{ this.author.bio }}
       </p>
     </div>
-    <FriendButton :targetUser="author" />
+    <FriendButton :authorID="author.id" />
   </div>
 </template>
 

@@ -1,7 +1,7 @@
 <template>
   <span>
     <button
-      class="bg-white shadow focus:outline-none rounded-full mr-4 mb-2 px-2 py-1 transition duration-500 ease-in-out transform hover:scale-110"
+      class="bg-white shadow focus:outline-none rounded-full mr-4 px-2 py-1 transition duration-500 ease-in-out transform hover:scale-110"
       @click="$router.push('/tag/' + tag)"
     >
       <span
