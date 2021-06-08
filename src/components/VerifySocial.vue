@@ -6,7 +6,7 @@
         <TwitterIcon v-if="this.$props.platform === 'twitter'" class="mr-4" />
         <GitHubIcon v-if="this.$props.platform === 'github'" class="mr-4" />
         <ExternalURLIcon v-if="this.$props.platform === 'website'" class="mr-4" />
-        {{ this.$props.platform.toUpperCase() }}
+        <span class="capitalize">{{ this.$props.platform.toUpperCase() }}</span>
       </div>
       <button
         class="focus:outline-none text-primary font-bold"

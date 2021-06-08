@@ -5,15 +5,27 @@
         <h2 class="border-b-2 text-2xl bold pl-4 font-bold">
           Settings
         </h2>
-        <button class="flex flex-row justify-between px-4 py-2 mt-2" @click="changeTab('account')">
+        <button
+          class="flex flex-row justify-between px-4 py-2 focus:outline-none"
+          :class="this.isActiveTab('account') ? 'bg-gray1' : ''"
+          @click="changeTab('account')"
+        >
           Account Information
           <ChevronRight />
         </button>
-        <button class="flex flex-row justify-between px-4 py-2" @click="changeTab('password')">
+        <button
+          class="flex flex-row justify-between px-4 py-2 focus:outline-none"
+          :class="this.isActiveTab('password') ? 'bg-gray1' : ''"
+          @click="changeTab('password')"
+        >
           Password Update
           <ChevronRight />
         </button>
-        <button class="flex flex-row justify-between px-4 py-2" @click="changeTab('social')">
+        <button
+          class="flex flex-row justify-between px-4 py-2 focus:outline-none"
+          :class="this.isActiveTab('social') ? 'bg-gray1' : ''"
+          @click="changeTab('social')"
+        >
           Social Accounts
           <ChevronRight />
         </button>
@@ -159,7 +171,7 @@
       </article>
     </section>
     <div class="text-right pt-4">
-      <BrandedButton text="Save Changes" :action="updateSettings" :disabled="this.hasChanged()" :class="this.hasChanged() ? '' : 'opacity-50'" />
+      <BrandedButton text="Save Changes" :action="this.updateSettings" :class="this.hasChanged() ? '' : 'opacity-50'" />
     </div>
   </main>
 </template>
@@ -197,6 +209,13 @@ export default {
     }
   },
   methods: {
+    isActiveTab (t) {
+      if (t === this.tab) {
+        return true
+      } else {
+        return false
+      }
+    },
     hasChanged () {
       if (
         this.newUsername !== '' ||
@@ -236,6 +255,10 @@ export default {
       return this.maxCharBio - charCount
     },
     updateSettings () {
+      if (this.hasChanged() === false) {
+        alert('Nothing to update!')
+        return
+      }
       // Run quality rules before saving
       if (this.newUsername !== '') {
         this.$store.commit('me/updateUsername', this.newUsername)
