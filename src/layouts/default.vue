@@ -14,7 +14,7 @@
 
     <div class="lg:grid lg:grid-cols-4">
       <!-- Left Nav Menu -->
-      <Navigation />
+      <Navigation class="flex flex-row-reverse pr-8" />
       <!-- Main Content -->
       <Nuxt class="overscroll-contain col-span-2 w-full mb-20 lg:mb-5 border-l border-r border-gray1" />
       <!-- Right Explore Menu -->

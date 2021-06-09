@@ -2,21 +2,16 @@
 /* eslint-disable no-shadow */
 // eslint-disable-next-line array-bracket-newline
 export const state = () => ([
-  // {
-  //   tag: 'patriots',
-  //   posts: [
-  //     '0',
-  //     '1',
-  //   ],
-  // },
-  // {
-  //   tag: 'victory',
-  //   posts: ['0'],
-  // },
-  // {
-  //   tag: 'GOAT',
-  //   posts: ['1'],
-  // },
+  {
+    tag: 'patriots',
+    posts: [
+      'QmayJvVDP4PUsLJDtassNAY8YXoQ5iv8T5Z15psxgWvWbx',
+    ],
+  },
+  {
+    tag: 'NFL',
+    posts: ['QmayJvVDP4PUsLJDtassNAY8YXoQ5iv8T5Z15psxgWvWbx'],
+  },
 ])
 
 export const mutations = {

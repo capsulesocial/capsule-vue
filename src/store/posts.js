@@ -1,5 +1,5 @@
 /* eslint-disable no-shadow */
-export const state = () => (['QmQpJL3fWF4XvWx15VfW6fV3qgTXm9Y86oN9PChhfbMfPe'])
+export const state = () => (['QmayJvVDP4PUsLJDtassNAY8YXoQ5iv8T5Z15psxgWvWbx'])
 
 export const mutations = {
   sendPost (state, post) {
