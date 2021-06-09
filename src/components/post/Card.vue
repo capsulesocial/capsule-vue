@@ -6,7 +6,7 @@
         <img
           v-if="this.author.avatar !== null"
           :src="this.avatar"
-          class="w-8 h-8 rounded-lg mr-2"
+          class="w-8 h-8 rounded-lg mr-2 object-cover"
         />
         <ProfileIcon v-else class="w-8 h-8 border-2 rounded-full mr-2" />
         <h4 class="text-bold mr-2 self-center">
@@ -43,7 +43,7 @@
           <img
             v-if="this.featuredPhoto !== null"
             :src="this.featuredPhoto"
-            class="w-24 h-24 rounded"
+            class="w-24 h-24 rounded object-cover object-top"
           >
         </div>
       </nuxt-link>

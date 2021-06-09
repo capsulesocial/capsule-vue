@@ -45,7 +45,7 @@
             <img
               v-if="this.$store.state.me.avatar !== null"
               :src="this.profilePic"
-              class="w-32 h-32 rounded-lg"
+              class="w-32 h-32 rounded-lg object-cover"
             />
             <UploadAvatar v-else class="w-32 h-32 rounded-lg" />
             Change Avatar

@@ -1,9 +1,9 @@
 <template>
-  <section class="grid grid-cols-4 px-4 py-2 bg-white z-10 border-b border-gray1">
+  <header class="grid grid-cols-4 px-4 py-2 bg-white z-10 border-b border-gray1">
     <!-- Top Left: Logo -->
-    <article>
-      <CapsuleIcon class="py-4 pl-6" />
-    </article>
+    <div class="flex flex-row-reverse">
+      <CapsuleIcon class="py-4 lg:pr-48" />
+    </div>
 
     <article class="col-span-3 lg:col-span-2 flex justify-between">
       <div class="flex">
@@ -26,7 +26,7 @@
     </article>
 
     <!-- Top Right -->
-    <article class="relative hidden lg:flex items-center justify-end ml-2">
+    <article class="relative hidden lg:flex items-center justify-start ml-2 ml-6">
       <div class="flex">
         <span>
           <button
@@ -95,7 +95,7 @@
         </button>
       </div>
     </article>
-  </section>
+  </header>
 </template>
 
 <script>

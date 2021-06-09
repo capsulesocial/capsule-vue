@@ -7,7 +7,7 @@
       <img
         v-if="this.author.avatar !== null"
         :src="this.avatar"
-        class="w-12 h-12 rounded-lg"
+        class="w-12 h-12 rounded-lg object-cover"
       />
       <ProfileIcon v-else class="w-10 h-10 border-2 rounded-full" />
     </div>

@@ -6,7 +6,7 @@
         <img
           v-if="this.currentUser.avatar !== null"
           :src="this.avatar"
-          class="w-10 h-10 rounded-lg mr-2"
+          class="w-10 h-10 rounded-lg mr-2 object-cover"
         />
         <h3 class="text-3xl pr-2">
           {{ this.currentUser.username }}
