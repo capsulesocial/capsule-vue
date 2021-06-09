@@ -1,17 +1,16 @@
 <template>
-  <span>
-    <button
-      class="bg-white shadow focus:outline-none rounded-full mr-4 px-2 py-1 transition duration-500 ease-in-out transform hover:scale-110"
-      @click="$router.push('/tag/' + tag)"
+  <button
+    class=" focus:outline-none  mr-4 my-1 px-2 py-1 transition duration-500 ease-in-out transform hover:scale-110"
+    :class="this.$props.theme === 'colors' ? 'bg-white shadow rounded-full' : 'bg-gray1 text-gray5 rounded-lg'"
+    @click="$router.push('/tag/' + tag)"
+  >
+    <span
+      class="font-bold"
+      :class="this.$props.theme === 'colors' ? colors[getRandomColor()] : 'text-gray5'"
     >
-      <span
-        class="text-lg font-bold"
-        :class="colors[getRandomColor()]"
-      >
-        #{{ tag }}
-      </span>
-    </button>
-  </span>
+      #{{ tag }}
+    </span>
+  </button>
 </template>
 
 <script>
@@ -20,6 +19,10 @@ export default {
     tag: {
       type: String,
       default: '',
+    },
+    theme: {
+      type: String,
+      default: 'colors',
     },
   },
   data () {

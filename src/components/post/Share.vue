@@ -28,7 +28,7 @@
         <span class="text-xs self-center">Copy URL</span>
       </button>
     </div>
-    <input :id="this.$props.post.id" type="hidden" value="" />
+    <input :id="this.$props.post.id" type="hidden" value="" class="hidden" />
   </div>
 </template>
 
@@ -71,6 +71,8 @@ export default {
       if (type === 'TWITTER') {
         window.open('https://twitter.com/share?url=' + encodeURIComponent(url.value) + '&text=' + '📰 ' + this.post.title + '\n 🔏 ' + this.post.authorID + ' on @CapsuleSoc 🔗')
       }
+      // Close Dropdown
+      this.showSocialShares = false
     },
   },
 }

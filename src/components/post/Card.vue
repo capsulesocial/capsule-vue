@@ -55,6 +55,7 @@
           v-for="t in this.post.tags"
           :key="t"
           :tag="t"
+          theme="gray"
         />
       </div>
       <div class="flex">
