@@ -32,7 +32,7 @@
       <img
         v-if="this.featuredPhoto !== null"
         :src="this.featuredPhoto"
-      >
+      />
       <!-- Content -->
       <div
         class="prose lg:prose-lg max-w-none text-black pl-4 content"

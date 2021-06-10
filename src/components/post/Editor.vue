@@ -177,7 +177,7 @@
           <img
             v-if="this.featuredPhoto !== null"
             :src="this.featuredPhoto"
-          >
+          />
           <div
             v-else
             class="flex justify-center items-center text-gray5"

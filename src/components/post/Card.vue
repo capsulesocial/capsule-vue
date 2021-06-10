@@ -44,7 +44,7 @@
             v-if="this.featuredPhoto !== null"
             :src="this.featuredPhoto"
             class="w-24 h-24 rounded object-cover object-top"
-          >
+          />
         </div>
       </nuxt-link>
     </div>
