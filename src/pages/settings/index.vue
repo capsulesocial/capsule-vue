@@ -170,7 +170,7 @@
         <VerifySocial platform="website" class="mx-4 mb-4" />
       </article>
     </section>
-    <div class="text-right pt-4">
+    <div v-if="this.tab !== ''" class="text-right pt-4">
       <BrandedButton text="Save Changes" :action="this.updateSettings" :class="this.hasChanged() ? '' : 'opacity-50'" />
     </div>
   </main>
