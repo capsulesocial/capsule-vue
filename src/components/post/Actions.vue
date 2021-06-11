@@ -3,7 +3,12 @@
     <!-- Post a Comment -->
     <article class="border-t border-b py-5 mt-5">
       <div class="flex items-center">
-        <div class="p-1 border-2 rounded-full">
+        <img
+          v-if="this.myAvatar !== null"
+          :src="this.myAvatar"
+          class="w-10 h-10 rounded-lg object-cover"
+        />
+        <div v-else class="p-1 border-2 rounded-full">
           <ProfileIcon class="w-6 h-6" />
         </div>
         <div class="flex bg-white border-2 rounded-xl my-1 p-1 ml-5  w-full">
@@ -61,6 +66,14 @@ export default {
       comments: this.post.comments,
       emotion: null,
       showSocialShares: false,
+      myAvatar: null,
+    }
+  },
+  created () {
+    if (this.$store.state.me.avatar !== null) {
+      this.$api.settings.downloadAvatar(this.$store.state.me.avatar).then((image) => {
+        this.myAvatar = image
+      })
     }
   },
   methods: {
@@ -68,6 +81,7 @@ export default {
       const c = {
         postID: this.post.id,
         authorID: this.$store.state.me.id,
+        authorAvatarCID: this.$store.state.me.avatar,
         content: this.comment,
         emotion: this.emotion,
         timestamp: new Date(),
