@@ -7,6 +7,7 @@ export const state = () => ({
   bio: 'Default bio.',
   location: '',
   posts: [],
+  reposts: [],
   socials: [],
   bookmarks: [],
   followers: [],
@@ -28,6 +29,15 @@ export const mutations = {
   sendPost (state, postID) {
     this.$api.settings.sendPost(postID)
     state.posts.push(postID)
+  },
+  handleRepost (state, postID) {
+    if (!state.reposts.includes(postID)) {
+      this.$api.settings.addRepost(postID)
+      state.reposts.push(postID)
+    } else {
+      this.$api.settings.removeRepost(postID)
+      state.reposts = state.reposts.filter(e => e !== postID)
+    }
   },
   handleBookmark (state, postID) {
     if (!state.bookmarks.includes(postID)) {

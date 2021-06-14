@@ -30,6 +30,12 @@ export default ({ app }, node) => ({
     // Jack can also pass in the updated bookmarks list with postID removed
     return postID
   },
+  addRepost (postID) {
+    return postID
+  },
+  removeRepost (postID) {
+    return postID
+  },
   updateUsername (authorID, username) {
     return false
   },

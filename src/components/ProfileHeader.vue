@@ -86,12 +86,21 @@
       </nuxt-link>
       <nuxt-link
         :to="'/' + this.currentUser.id + '/bookmarks'"
-        class="border-b hover:border-primary text-gray-700"
+        class="border-b hover:border-primary text-gray-700 mr-4"
       >
         <span class="text-primary">
           {{ this.currentUser.bookmarks.length }}
         </span>
         Bookmarks
+      </nuxt-link>
+      <nuxt-link
+        :to="'/' + this.currentUser.id + '/reposts'"
+        class="border-b hover:border-primary text-gray-700"
+      >
+        <span class="text-primary">
+          {{ this.currentUser.reposts.length }}
+        </span>
+        Reposts
       </nuxt-link>
     </article>
   </div>

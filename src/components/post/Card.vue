@@ -50,7 +50,7 @@
     </div>
 
     <div class="pt-2 flex justify-between">
-      <div class="flex">
+      <div class="flex flex-row flex-wrap">
         <TagCard
           v-for="t in this.post.tags"
           :key="t"
