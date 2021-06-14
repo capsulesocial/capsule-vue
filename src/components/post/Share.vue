@@ -16,8 +16,9 @@
         class="flex focus:outline-none hover:text-primary"
         @click="handleShare('REPOST')"
       >
-        <RepostIcon class="p-1" />
-        <span class="text-xs self-center">Repost</span>
+        <RepostIcon :isActive="this.isReposted" />
+        <span v-if="!this.isReposted" class="text-xs self-center">Repost</span>
+        <span v-else class="text-xs self-center">Undo</span>
       </button>
       <!-- Twitter -->
       <button
@@ -62,6 +63,7 @@ export default {
   data () {
     return {
       showSocialShares: false,
+      isReposted: this.$store.state.me.reposts.includes(this.$props.post.id),
     }
   },
   methods: {
@@ -81,6 +83,7 @@ export default {
         window.open('https://twitter.com/share?url=' + encodeURIComponent(url.value) + '&text=' + '📰 ' + this.post.title + '\n 🔏 ' + this.post.authorID + ' on @CapsuleSoc 🔗')
       } else if (type === 'REPOST') {
         this.$store.commit('me/handleRepost', this.$props.post.id)
+        this.isReposted = !this.isReposted
       }
       // Close Dropdown
       this.showSocialShares = false
