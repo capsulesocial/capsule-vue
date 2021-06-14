@@ -385,7 +385,8 @@ export default {
         avatar: this.$store.state.me.avatar,
       }
       // Use profCID for IPNS
-      var profCID = new String()
+      // eslint-disable-next-line no-unused-vars
+      let profCID = ''
       this.$api.post.sendPost(p).then((cid) => {
         p.id = cid
         // this.$store.commit('posts/sendPost', p.id)

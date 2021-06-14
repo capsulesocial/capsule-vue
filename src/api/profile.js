@@ -20,5 +20,5 @@ export default ({ app }, node) => ({
     })
     const cid = profileAdded.cid.string
     return cid
-  }
+  },
 })
