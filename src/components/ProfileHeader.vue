@@ -60,6 +60,7 @@
       <nuxt-link
         :to="'/' + this.currentUser.id"
         class="border-b hover:border-primary text-gray-700 mr-4"
+        :class="this.$route.name === 'id' ? 'border-primary' : ''"
       >
         <span class="text-primary">
           {{ this.currentUser.posts.length }}
@@ -69,6 +70,7 @@
       <nuxt-link
         :to="'/' + this.currentUser.id + '/followers'"
         class="border-b hover:border-primary text-gray-700 mr-4"
+        :class="this.$route.name === 'id-followers' ? 'border-primary' : ''"
       >
         <span class="text-primary">
           {{ this.currentUser.followers.length }}
@@ -78,6 +80,7 @@
       <nuxt-link
         :to="'/' + this.currentUser.id + '/following'"
         class="border-b hover:border-primary text-gray-700 mr-4"
+        :class="this.$route.name === 'id-following' ? 'border-primary' : ''"
       >
         <span class="text-primary">
           {{ this.currentUser.following.length }}
@@ -87,6 +90,7 @@
       <nuxt-link
         :to="'/' + this.currentUser.id + '/bookmarks'"
         class="border-b hover:border-primary text-gray-700 mr-4"
+        :class="this.$route.name === 'id-bookmarks' ? 'border-primary' : ''"
       >
         <span class="text-primary">
           {{ this.currentUser.bookmarks.length }}
@@ -96,6 +100,7 @@
       <nuxt-link
         :to="'/' + this.currentUser.id + '/reposts'"
         class="border-b hover:border-primary text-gray-700"
+        :class="this.$route.name === 'id-reposts' ? 'border-primary' : ''"
       >
         <span class="text-primary">
           {{ this.currentUser.reposts.length }}
