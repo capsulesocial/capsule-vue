@@ -371,12 +371,20 @@ export default {
         authorID: this.$store.state.me.id,
         featuredPhotoCID: this.featuredPhotoCID,
       }
+      // Use profCID for IPNS
+      // eslint-disable-next-line no-unused-vars
+      let profCID = ''
       this.$api.post.sendPost(p).then((cid) => {
         p.id = cid
         // this.$store.commit('posts/sendPost', p.id)
         this.$store.commit('posts/sendPost', p)
         this.$store.commit('tags/sendPost', p)
         this.$store.commit('me/sendPost', p.id)
+        const profile = this.$store.state.me
+        profile.password = null
+        this.$api.profile.sendProfile(profile).then((pcid) => {
+          profCID = pcid
+        })
       })
       this.toggle()
       this.title = 'Title'

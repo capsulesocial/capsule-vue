@@ -11,4 +11,14 @@ export default ({ app }, node) => ({
   getProfile (id) {
     return false
   },
+
+  // Send a user profile object to IPFS
+  async sendProfile (profile) {
+    const profileAdded = await node.add({
+      path: profile.id,
+      content: JSON.stringify(profile),
+    })
+    const cid = profileAdded.cid.string
+    return cid
+  },
 })
