@@ -42,12 +42,12 @@
             <NotificationsIcon class="self-center" />
           </button>
         </span>
-        <span>
+        <span class="dropdown">
           <button
-            class="bg-gray1 rounded-full w-10 h-10 focus:outline-none flex justify-center shadow-lg"
-            @click="showMore = !showMore"
+            class="bg-gray1 rounded-full w-10 h-10 focus:outline-none flex justify-center shadow-lg dropdown"
+            @click="toggleDropdown"
           >
-            <DownIcon class="self-center" />
+            <DownIcon class="self-center dropdown" />
           </button>
         </span>
       </div>
@@ -55,7 +55,7 @@
       <div
         v-if="showMore"
         class="absolute mt-64 z-10 bg-white shadow-lg rounded-lg w-full"
-        @click="showMore = !showMore"
+        @click.stop="toggleDropdown"
       >
         <nuxt-link
           to="/settings"
@@ -126,10 +126,20 @@ export default {
       showMore: false,
     }
   },
+  mounted () {
+    window.addEventListener('click', (e) => {
+      if (!e.target.parentNode.classList.contains('dropdown')) {
+        this.showMore = false
+      }
+    }, false)
+  },
   methods: {
     logout () {
       this.$store.commit('me/endSession')
       this.$router.push('/')
+    },
+    toggleDropdown () {
+      this.showMore = !this.showMore
     },
   },
 }

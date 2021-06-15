@@ -1,9 +1,9 @@
 <template>
   <div class="flex relative">
     <button
-      class="flex focus:outline-none hover:text-primary"
+      class="flex focus:outline-none hover:text-primary toggle"
       :class="this.showSocialShares ? 'text-primary' : ''"
-      @click="showSocialShares = !showSocialShares"
+      @click.stop="toggleDropdown"
     >
       <SendIcon class="mr-2" />
     </button>
@@ -11,15 +11,6 @@
       v-if="showSocialShares"
       class="absolute flex flex-col mt-8 bg-white border-l border-r border-b rounded-lg p-1 rounded-t-none"
     >
-      <!-- Repost -->
-      <button
-        class="flex focus:outline-none hover:text-primary"
-        @click="handleShare('REPOST')"
-      >
-        <RepostIcon :isActive="this.isReposted" />
-        <span v-if="!this.isReposted" class="text-xs self-center">Repost</span>
-        <span v-else class="text-xs self-center">Undo</span>
-      </button>
       <!-- Twitter -->
       <button
         class="flex focus:outline-none hover:text-primary"
@@ -45,14 +36,12 @@
 import SendIcon from '@/components/icons/Send'
 import TwitterIcon from '@/components/icons/brands/Twitter'
 import LinkIcon from '@/components/icons/Link'
-import RepostIcon from '@/components/icons/Repost'
 
 export default {
   components: {
     SendIcon,
     TwitterIcon,
     LinkIcon,
-    RepostIcon,
   },
   props: {
     post: {
@@ -63,8 +52,14 @@ export default {
   data () {
     return {
       showSocialShares: false,
-      isReposted: this.$store.state.me.reposts.includes(this.$props.post.id),
     }
+  },
+  mounted () {
+    window.addEventListener('click', (e) => {
+      if (!e.target.parentNode.classList.contains('toggle')) {
+        this.showSocialShares = false
+      }
+    }, false)
   },
   methods: {
     handleShare (type) {
@@ -81,12 +76,12 @@ export default {
         alert('URL Copied to Clipboard!')
       } else if (type === 'TWITTER') {
         window.open('https://twitter.com/share?url=' + encodeURIComponent(url.value) + '&text=' + '📰 ' + this.post.title + '\n 🔏 ' + this.post.authorID + ' on @CapsuleSoc 🔗')
-      } else if (type === 'REPOST') {
-        this.$store.commit('me/handleRepost', this.$props.post.id)
-        this.isReposted = !this.isReposted
       }
       // Close Dropdown
       this.showSocialShares = false
+    },
+    toggleDropdown () {
+      this.showSocialShares = !this.showSocialShares
     },
   },
 }

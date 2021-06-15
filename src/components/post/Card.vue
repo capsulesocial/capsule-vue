@@ -59,15 +59,16 @@
         />
       </div>
       <div class="flex">
-        <BookmarkButton :postID="this.post.id" class="mr-2 fill-primary self-center" />
-        <Share :post="this.post" class="mr-2 fill-primary self-center" />
         <button
-          class="flex focus:outline-none hover:text-primary self-center"
+          class="flex focus:outline-none hover:text-primary self-center mr-2"
           :class="this.showComments ? 'text-primary' : ''"
           @click="showComments = !showComments"
         >
           <CommentIcon class="fill-primary" />
         </button>
+        <Share :post="this.post" class="fill-primary self-center" />
+        <BookmarkButton :postID="this.post.id" class="fill-primary self-center" />
+        <RepostButton :postID="this.post.id" class="fill-primary self-center" />
       </div>
     </div>
     <PostActions v-if="this.showComments" :post="this.post" />
@@ -79,6 +80,7 @@ import PostActions from '@/components/post/Actions'
 import XIcon from '@/components/icons/X'
 import ProfileIcon from '@/components/icons/Person'
 import BookmarkButton from '@/components/post/BookmarkButton'
+import RepostButton from '@/components/post/RepostButton'
 import Share from '@/components/post/Share'
 import CommentIcon from '@/components/icons/Comment'
 import TagCard from '@/components/Tag'
@@ -92,6 +94,7 @@ export default {
     Share,
     CommentIcon,
     TagCard,
+    RepostButton,
   },
   props: {
     post: {
