@@ -371,19 +371,6 @@ export default {
         authorID: this.$store.state.me.id,
         featuredPhotoCID: this.featuredPhotoCID,
       }
-      const profile = {
-        id: this.$store.state.me.id,
-        username: this.$store.state.me.username,
-        email: this.$store.state.me.email,
-        bio: this.$store.state.me.bio,
-        location: this.$store.state.me.location,
-        posts: this.$store.state.me.posts,
-        socials: this.$store.state.me.socials,
-        bookmarks: this.$store.state.me.bookmarks,
-        followers: this.$store.state.me.followers,
-        following: this.$store.state.me.following,
-        avatar: this.$store.state.me.avatar,
-      }
       // Use profCID for IPNS
       // eslint-disable-next-line no-unused-vars
       let profCID = ''
@@ -393,6 +380,8 @@ export default {
         this.$store.commit('posts/sendPost', p)
         this.$store.commit('tags/sendPost', p)
         this.$store.commit('me/sendPost', p.id)
+        const profile = this.$store.state.me
+        profile.password = null
         this.$api.profile.sendProfile(profile).then((pcid) => {
           profCID = pcid
         })

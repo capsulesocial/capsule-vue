@@ -210,19 +210,8 @@ export default {
           // const res = await this.$api.auth.register(account)
           account.password = null
           this.$store.commit('me/startSession', account)
-          const profile = {
-            id: this.$store.state.me.id,
-            username: this.$store.state.me.username,
-            email: this.$store.state.me.email,
-            bio: this.$store.state.me.bio,
-            location: this.$store.state.me.location,
-            posts: this.$store.state.me.posts,
-            socials: this.$store.state.me.socials,
-            bookmarks: this.$store.state.me.bookmarks,
-            followers: this.$store.state.me.followers,
-            following: this.$store.state.me.following,
-            avatar: this.$store.state.me.avatar,
-          }
+          const profile = this.$store.state.me
+          profile.password = null
           // eslint-disable-next-line no-unused-vars
           let profCID = ''
           this.$api.profile.sendProfile(profile).then((pcid) => {
