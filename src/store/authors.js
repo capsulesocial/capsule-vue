@@ -7,6 +7,7 @@ export const state = () => ([
     bio: 'Quarterback for the Tampa Bay Buccaneers. Former New England Patriots QB and Pick #199 in the NFL Draft.',
     location: 'The Gym',
     posts: ['QmayJvVDP4PUsLJDtassNAY8YXoQ5iv8T5Z15psxgWvWbx'],
+    reposts: [],
     socials: [],
     bookmarks: [],
     followers: [],
