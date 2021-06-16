@@ -1,6 +1,6 @@
 <template>
   <main>
-    <section class="grid grid-cols-3">
+    <section class="md:grid md:grid-cols-3">
       <article class="flex flex-col w-full">
         <h2 class="border-b-2 text-2xl bold pl-4 font-bold">
           Settings

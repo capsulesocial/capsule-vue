@@ -11,7 +11,7 @@
     </article>
 
     <!-- Mobile Editor -->
-    <article class="m-5 lg:hidden pb-32">
+    <article class="m-5 lg:hidden pb-48">
       <div class="w-full">
         <!-- Title declaration -->
         <div v-if="this.mobileState === 'edit'" class="flex flex-col">
@@ -32,6 +32,29 @@
           <p class="text-sm text-gray-500 py-4">
             By: {{ this.$store.state.me.username }}
           </p>
+          <!-- Upload Featured Image -->
+          <button class="pb-2" @click="$refs.featuredPhoto.click()">
+            <input
+              id="featured-photo"
+              ref="featuredPhoto"
+              class="hidden"
+              name="photo"
+              type="file"
+              accept="image/*"
+              @change="handleImage"
+            >
+            <img
+              v-if="this.featuredPhoto !== null"
+              :src="this.featuredPhoto"
+            />
+            <div
+              v-else
+              class="flex justify-center items-center text-gray5"
+            >
+              <CameraIcon class="mr-2" />
+              Featured Photo
+            </div>
+          </button>
         </div>
       </div>
       <div

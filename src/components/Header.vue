@@ -1,11 +1,10 @@
 <template>
   <header class="grid grid-cols-4 px-4 py-2 bg-white z-10 border-b border-gray1">
     <!-- Top Left: Logo -->
-    <div class="flex flex-row-reverse">
+    <div class="flex lg:flex-row-reverse">
       <CapsuleIcon class="py-4 lg:pr-48" />
     </div>
-
-    <article class="col-span-3 lg:col-span-2 flex justify-between">
+    <article class="col-span-3 md:col-span-2 flex justify-between">
       <div class="flex">
         <button
           class="focus:outline-none"

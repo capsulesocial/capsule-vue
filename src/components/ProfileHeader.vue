@@ -56,7 +56,7 @@
       </p>
     </article>
 
-    <article class="font-sans flex flex-row mt-3">
+    <article class="font-sans flex flex-col md:flex-row mt-3">
       <nuxt-link
         :to="'/' + this.currentUser.id"
         class="border-b hover:border-primary text-gray-700 mr-4"

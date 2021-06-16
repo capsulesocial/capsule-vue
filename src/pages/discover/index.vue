@@ -1,7 +1,7 @@
 <template>
   <main class="px-4">
     <section>
-      <article class="flex justify-between mb-1 items-center mt-3">
+      <article class="flex flex-col md:flex-row justify-between mb-1 items-center mt-3">
         <h2 class="text-4xl font-bold">
           Featured Hashtags
         </h2>
@@ -21,21 +21,23 @@
       />
     </section>
 
-    <section class="mt-3">
-      <h2 class="text-4xl font-bold">
-        Featured Categories
-      </h2>
-      <p class="text-gray4 mb-5 text-xl">
-        Read more of what you love by browsing top categories
-      </p>
-      <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+    <section>
+      <article class="mt-3">
+        <h2 class="text-4xl font-bold">
+          Featured Categories
+        </h2>
+        <p class="text-gray4 mb-5 text-xl">
+          Read more of what you love by browsing top categories
+        </p>
+      </article>
+      <article class="grid grid-cols-2 gap-4 md:grid-cols-4">
         <DiscoverCard
           v-for="c in this.categories"
           :key="c"
           :text="c"
           :bgImage="require('@/assets/images/discover/' + c + '/' + c + '.jpg')"
         />
-      </div>
+      </article>
     </section>
   </main>
 </template>
