@@ -211,7 +211,6 @@ export default {
           account.password = null
           this.$store.commit('me/startSession', account)
           const profile = this.$store.state.me
-          profile.password = null
           // eslint-disable-next-line no-unused-vars
           let profCID = ''
           this.$api.profile.sendProfile(profile).then((pcid) => {

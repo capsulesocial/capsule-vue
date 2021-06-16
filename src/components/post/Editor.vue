@@ -381,7 +381,6 @@ export default {
         this.$store.commit('tags/sendPost', p)
         this.$store.commit('me/sendPost', p.id)
         const profile = this.$store.state.me
-        profile.password = null
         this.$api.profile.sendProfile(profile).then((pcid) => {
           profCID = pcid
         })
