@@ -2,31 +2,47 @@
   <section>
     <!-- Post a Comment -->
     <article class="border-t border-b py-5 mt-5">
-      <div class="flex items-center">
+      <!-- Select emotion -->
+      <div class="flex items-start">
         <img
           v-if="this.myAvatar !== null"
           :src="this.myAvatar"
-          class="w-10 h-10 rounded-lg object-cover"
+          class="w-10 h-10 rounded-lg object-cover mt-1"
         />
-        <div v-else class="p-1 border-2 rounded-full">
+        <span v-else class="p-1 border-2 rounded-full mt-1">
           <ProfileIcon class="w-6 h-6" />
-        </div>
-        <div class="flex bg-white border-2 rounded-xl my-1 p-1 ml-5  w-full">
-          <textarea
-            v-model="comment"
-            class="leading-normal resize-vertical overflow-y-auto w-full focus:outline-none py-1 px-2"
-            name="body"
-            placeholder="Write a Comment..."
-          />
-          <span class="relative">
-            <BrandedButton
-              v-if="this.comment !== ''"
-              text="Post"
-              :action="sendComment"
-              :thin="true"
-              class="text-sm absolute bottom-0 right-0"
-            />
-          </span>
+        </span>
+        <div class="flex bg-white border-2 rounded-xl my-1 p-1 ml-5 w-full">
+          <div class="flip-container relative overflow-hidden w-full h-24" :class="this.showEmotions ? 'flip' : ''">
+            <div class="flipper flex flex-row absolute">
+              <!-- Type comment -->
+              <div class="front w-full">
+                <textarea
+                  v-model="comment"
+                  class="leading-normal resize-none overflow-y-auto w-full h-24 pl-2 pt-1 pr-12 focus:outline-none"
+                  name="body"
+                  placeholder="Write a Comment..."
+                />
+                <div class="relative">
+                  <span class="absolute bottom-0 right-0 flex flex-col">
+                    <button class="mb-4" @click="showEmotions = !showEmotions">Flip</button>
+                    <BrandedButton
+                      text="Post"
+                      :action="sendComment"
+                      :thin="true"
+                      class="text-sm mb-2"
+                      :class="this.comment !== '' ? '' : 'opacity-50'"
+                    />
+                  </span>
+                </div>
+                <!-- <img :src="require('@/assets/images/brand/paper4.svg')" class="inline" />
+                <img :src="require('@/assets/images/brand/paper4.svg')" class="inline" />  -->
+              </div>
+              <div class="back w-full">
+                <button @click="showEmotions = !showEmotions">Flip</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </article>
@@ -67,6 +83,7 @@ export default {
       emotion: null,
       showSocialShares: false,
       myAvatar: null,
+      showEmotions: false,
     }
   },
   created () {
@@ -121,3 +138,41 @@ export default {
   },
 }
 </script>
+
+<style>
+/* entire container, keeps perspective */
+.flip-container {
+  perspective: 1000px;
+}
+.flip-container.flip .flipper {
+  transform: rotateY(180deg);
+}
+
+/* flip speed goes here */
+.flipper {
+  transition: 0.6s;
+  transform-style: preserve-3d;
+  position: relative;
+}
+
+/* hide back of pane during swap */
+.front, .back {
+  backface-visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* front pane, placed above back */
+.front {
+  z-index: 2;
+  /* for firefox 31 */
+  transform: rotateY(0deg);
+}
+
+/* back, initially hidden pane */
+.back {
+  transform: rotateY(180deg);
+}
+
+</style>
