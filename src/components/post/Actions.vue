@@ -12,14 +12,14 @@
         <span v-else class="p-1 border-2 rounded-full mt-1">
           <ProfileIcon class="w-6 h-6" />
         </span>
-        <div class="flex bg-white border-2 rounded-xl my-1 p-1 ml-5 w-full">
-          <div class="flip-container relative overflow-hidden w-full h-24" :class="this.showEmotions ? 'flip' : ''">
+        <div class="flex bg-white shadow-xl rounded-xl p-3 ml-5 w-full">
+          <div class="flip-container relative border-2 shadow-inner rounded-xl overflow-hidden w-full h-24" :class="this.showEmotions ? 'flip' : ''">
             <div class="flipper flex flex-row absolute">
               <!-- Type comment -->
               <div class="front w-full">
                 <textarea
                   v-model="comment"
-                  class="leading-normal resize-none overflow-y-auto w-full h-24 pl-2 pt-1 pr-12 focus:outline-none"
+                  class="leading-normal resize-none overflow-y-auto w-full h-24 pl-2 pt-1 pr-16 focus:outline-none"
                   name="body"
                   placeholder="Write a Comment..."
                 />
@@ -30,7 +30,7 @@
                       text="Post"
                       :action="sendComment"
                       :thin="true"
-                      class="text-sm mb-2"
+                      class="text-sm mb-4 mr-2"
                       :class="this.comment !== '' ? '' : 'opacity-50'"
                     />
                   </span>
@@ -38,8 +38,13 @@
                 <!-- <img :src="require('@/assets/images/brand/paper4.svg')" class="inline" />
                 <img :src="require('@/assets/images/brand/paper4.svg')" class="inline" />  -->
               </div>
-              <div class="back w-full">
-                <button @click="showEmotions = !showEmotions">Flip</button>
+              <div class="back w-full px-1">
+                <p class="text-sm text-gray4 italic">
+                  What's your response?
+                </p>
+                <button @click="showEmotions = !showEmotions">
+                  Flip
+                </button>
               </div>
             </div>
           </div>
@@ -47,6 +52,7 @@
       </div>
     </article>
     <article class="pt-3">
+      Filter: {{ this.$props.filter }}
       <Comment
         v-for="c in this.filterComments()"
         :key="c.id"
@@ -73,6 +79,10 @@ export default {
   props: {
     post: {
       type: Object,
+      default: null,
+    },
+    filter: {
+      type: String,
       default: null,
     },
   },

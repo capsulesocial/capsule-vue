@@ -25,7 +25,7 @@
     </article>
 
     <!-- Top Right -->
-    <article class="relative hidden lg:flex items-center justify-start ml-2 ml-6">
+    <article class="relative hidden lg:flex items-center justify-start ml-6">
       <div class="flex">
         <span>
           <button
@@ -44,16 +44,17 @@
         <span class="dropdown">
           <button
             class="bg-gray1 rounded-full w-10 h-10 focus:outline-none flex justify-center shadow-lg dropdown"
-            @click="toggleDropdown"
+            @click.stop="toggleDropdown"
           >
-            <DownIcon class="self-center dropdown" />
+            <DownIcon v-if="!showMore" class="self-center dropdown" />
+            <UpIcon v-else class="self-center dropdown" />
           </button>
         </span>
       </div>
       <!-- Dropdown menu -->
       <div
         v-if="showMore"
-        class="absolute mt-64 z-10 bg-white shadow-lg rounded-lg w-full"
+        class="absolute mt-64 z-10 bg-white shadow-lg rounded-lg w-64 -ml-4"
         @click.stop="toggleDropdown"
       >
         <nuxt-link
@@ -104,6 +105,7 @@ import SettingsIcon from '@/components/icons/Settings'
 import BackButton from '@/components/icons/ChevronLeft'
 import ForwardButton from '@/components/icons/ChevronRight'
 import DownIcon from '@/components/icons/ChevronDown'
+import UpIcon from '@/components/icons/ChevronUp'
 import SearchIcon from '@/components/icons/Search'
 import HelpIcon from '@/components/icons/Help'
 import LogoutIcon from '@/components/icons/Logout'
@@ -117,6 +119,7 @@ export default {
     ForwardButton,
     SearchIcon,
     DownIcon,
+    UpIcon,
     HelpIcon,
     LogoutIcon,
   },

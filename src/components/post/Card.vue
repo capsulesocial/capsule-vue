@@ -50,14 +50,6 @@
     </div>
 
     <div class="pt-2 flex justify-between">
-      <div class="flex flex-row flex-wrap">
-        <TagCard
-          v-for="t in this.post.tags"
-          :key="t"
-          :tag="t"
-          theme="gray"
-        />
-      </div>
       <div class="flex">
         <button
           class="flex focus:outline-none hover:text-primary self-center mr-2"
@@ -70,8 +62,36 @@
         <BookmarkButton :postID="this.post.id" class="fill-primary self-center" />
         <RepostButton :postID="this.post.id" class="fill-primary self-center" />
       </div>
+      <div v-if="this.showComments" class="flex ">
+        <h6>Filter Comments </h6>
+        <div class="relative">
+          <button class="toggle focus:outline-none flex justify-center shadow-lg rounded-lg px-4 ml-4 text-sm w-32" @click.stop="showFilter = !showFilter">
+            <span v-if="this.filter === null" class="toggle">None</span>
+            <span v-else class="toggle capitalize">{{ this.filter }}</span>
+            <ChevronUp v-if="this.showFilter" :downsize="true" />
+            <ChevronDown v-else :downsize="true" />
+          </button>
+          <ul v-if="this.showFilter" class="absolute bg-white z-10 shadow-lg rounded-lg py-1 ml-4 w-32">
+            <button class="w-full" @click="setCommentFilter('agree')">
+              <li class="text-left pl-2">
+                Agree
+              </li>
+            </button>
+            <button class="w-full" @click="setCommentFilter('disagree')">
+              <li class="text-left pl-2">
+                Disagree
+              </li>
+            </button>
+            <button class="w-full" @click="setCommentFilter('neutral')">
+              <li class="text-left pl-2">
+                Neutral
+              </li>
+            </button>
+          </ul>
+        </div>
+      </div>
     </div>
-    <PostActions v-if="this.showComments" :post="this.post" />
+    <PostActions v-if="this.showComments" :post="this.post" :filter="this.filter" />
   </article>
 </template>
 
@@ -83,7 +103,8 @@ import BookmarkButton from '@/components/post/BookmarkButton'
 import RepostButton from '@/components/post/RepostButton'
 import Share from '@/components/post/Share'
 import CommentIcon from '@/components/icons/Comment'
-import TagCard from '@/components/Tag'
+import ChevronUp from '@/components/icons/ChevronUp'
+import ChevronDown from '@/components/icons/ChevronDown'
 
 export default {
   components: {
@@ -93,8 +114,9 @@ export default {
     BookmarkButton,
     Share,
     CommentIcon,
-    TagCard,
     RepostButton,
+    ChevronUp,
+    ChevronDown,
   },
   props: {
     post: {
@@ -105,6 +127,8 @@ export default {
   data () {
     return {
       showComments: false,
+      showFilter: false,
+      filter: null,
       author: null,
       avatar: null,
       featuredPhoto: null,
@@ -131,6 +155,18 @@ export default {
         this.featuredPhoto = image
       })
     }
+    // Set filter dropdown event handler
+    window.addEventListener('click', (e) => {
+      if (e.target.parentNode.classList === undefined || !e.target.parentNode.classList.contains('toggle')) {
+        this.showFilter = false
+      }
+    }, false)
+  },
+  methods: {
+    setCommentFilter (reaction) {
+      this.filter = reaction
+      this.showFilter = false
+    },
   },
 }
 </script>
