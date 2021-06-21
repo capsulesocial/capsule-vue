@@ -1,7 +1,7 @@
 <template>
   <section>
     <!-- Post a Comment -->
-    <article class="border-t border-b py-5 mt-5">
+    <article class="py-5">
       <!-- Select emotion -->
       <div class="flex items-start">
         <img
@@ -45,14 +45,16 @@
                 <button @click="showEmotions = !showEmotions">
                   Flip
                 </button>
+                <button v-for="r in this.$store.state.config.reactions" :key="r.label" @click="setEmotion(r)">
+                  {{ r.label }}
+                </button>
               </div>
             </div>
           </div>
         </div>
       </div>
     </article>
-    <article class="pt-3">
-      Filter: {{ this.$props.filter }}
+    <article>
       <Comment
         v-for="c in this.filterComments()"
         :key="c.id"
@@ -104,6 +106,10 @@ export default {
     }
   },
   methods: {
+    setEmotion (r) {
+      this.emotion = r.label
+      this.showEmotions = false
+    },
     sendComment () {
       const c = {
         postID: this.post.id,
@@ -118,12 +124,23 @@ export default {
       this.comments.push(c)
       this.filterComments()
       this.comment = ''
+      this.emotion = null
     },
     handleReaction (reaction) {
       this.emotion = reaction
     },
     filterComments () {
-      const cList = this.comments.slice().sort((p0, p1) => {
+      let cList = []
+      if (this.$props.filter === null) {
+        cList = this.comments
+      } else {
+        for (const c in this.comments) {
+          if (this.comments[c].emotion === this.$props.filter) {
+            cList.push(this.comments[c])
+          }
+        }
+      }
+      cList = cList.slice().sort((p0, p1) => {
         return p1.timestamp - p0.timestamp
       })
       return cList

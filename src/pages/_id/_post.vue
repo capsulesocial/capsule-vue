@@ -54,13 +54,37 @@
       />
 
       <!-- Comments -->
-      <article>
+      <article class="pt-5">
+        <!-- Choose reaction -->
+        <div class="flex">
+          <h6>Filter Comments</h6>
+          <div class="relative">
+            <button class="toggle focus:outline-none flex justify-center shadow-lg rounded-lg px-4 ml-4 text-sm w-32" @click.stop="showFilter = !showFilter">
+              <span v-if="this.filter === null" class="toggle">All</span>
+              <span v-else class="toggle capitalize">{{ this.filter }}</span>
+              <ChevronUp v-if="this.showFilter" :downsize="true" />
+              <ChevronDown v-else :downsize="true" />
+            </button>
+            <ul v-if="this.showFilter" class="absolute bg-white z-10 shadow-lg rounded-lg py-1 ml-4 w-32">
+              <button class="w-full" @click="setCommentFilter(null)">
+                <li class="text-left pl-2">
+                  All
+                </li>
+              </button>
+              <button v-for="r in this.$store.state.config.reactions" :key="r.label" class="w-full" @click="setCommentFilter(r.label)">
+                <li class="text-left pl-2">
+                  {{ r.label }}
+                </li>
+              </button>
+            </ul>
+          </div>
+        </div>
         <PostActions
           :post="this.post"
           :authorID="this.$route.params.id"
           :isCommenting="true"
-          class="mt-5"
           :tags="this.post.tags"
+          :filter="this.filter"
         />
       </article>
     </section>
@@ -77,6 +101,8 @@ import AuthorCard from '@/components/AuthorCard'
 import TagCard from '@/components/Tag'
 import BookmarkButton from '@/components/post/BookmarkButton'
 import ShareButton from '@/components/post/Share'
+import ChevronUp from '@/components/icons/ChevronUp'
+import ChevronDown from '@/components/icons/ChevronDown'
 
 export default {
   components: {
@@ -85,6 +111,8 @@ export default {
     TagCard,
     BookmarkButton,
     ShareButton,
+    ChevronUp,
+    ChevronDown,
   },
   mixins: [markdown],
   layout: 'reader',
@@ -92,6 +120,8 @@ export default {
     return {
       post: null,
       featuredPhoto: null,
+      showFilter: false,
+      filter: null,
     }
   },
   async created () {
@@ -107,6 +137,10 @@ export default {
     }
   },
   methods: {
+    setCommentFilter (reaction) {
+      this.filter = reaction
+      this.showFilter = false
+    },
     handleShare () {
       this.$store.commit('posts/addShare', this.post.id)
       const url = document.getElementById(this.post.id)
