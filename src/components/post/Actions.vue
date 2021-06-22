@@ -12,7 +12,11 @@
         <span v-else class="p-1 border-2 rounded-full mt-1">
           <ProfileIcon class="w-6 h-6" />
         </span>
-        <div class="flex bg-white shadow-xl rounded-xl p-3 ml-5 w-full">
+        <div class="flex bg-white shadow-xl rounded-xl p-3 ml-5 w-full relative overflow-hidden">
+          <div class="absolute flex flex-row -mt-12 -ml-12">
+            <img v-if="this.emotion !== null" :src="require('@/assets/images/backgrounds/' + this.emotion.toLowerCase() + '.png')" />
+            <img v-if="this.emotion !== null" :src="require('@/assets/images/backgrounds/' + this.emotion.toLowerCase() + '.png')" />
+          </div>
           <div class="flip-container relative border-2 shadow-inner rounded-xl overflow-hidden w-full h-24" :class="this.showEmotions ? 'flip' : ''">
             <div class="flipper flex flex-row absolute">
               <!-- Type comment -->
@@ -35,8 +39,6 @@
                     />
                   </span>
                 </div>
-                <!-- <img :src="require('@/assets/images/brand/paper4.svg')" class="inline" />
-                <img :src="require('@/assets/images/brand/paper4.svg')" class="inline" />  -->
               </div>
               <div class="back w-full px-1">
                 <p class="text-sm text-gray4 italic">
@@ -96,6 +98,7 @@ export default {
       showSocialShares: false,
       myAvatar: null,
       showEmotions: false,
+      commentBackground: '@/assets/images/brand/paper4.svg',
     }
   },
   created () {

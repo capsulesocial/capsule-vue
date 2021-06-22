@@ -1,9 +1,28 @@
 export const state = () => ({
   reactions: {
+    joy: {
+      label: 'Joy',
+      image: '',
+    },
+    anger: {
+      label: 'Anger',
+      image: '',
+    },
+    fear: {
+      label: 'Fear',
+      image: '',
+    },
+    trust: {
+      label: 'Trust',
+      image: '',
+    },
+    vigilance: {
+      label: 'Vigilance',
+      image: '',
+    },
     agree: {
       label: 'Agree',
       image: '',
-      background: '',
     },
     disagree: {
       label: 'Disagree',
