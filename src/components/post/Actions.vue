@@ -15,7 +15,9 @@
         <div class="flex bg-white shadow-xl rounded-xl p-3 ml-5 w-full relative overflow-hidden">
           <div class="absolute flex flex-row -mt-12 -ml-12">
             <img v-if="this.emotion !== null" :src="require('@/assets/images/backgrounds/' + this.emotion.toLowerCase() + '.png')" />
+            <img v-else :src="require('@/assets/images/backgrounds/paper.png')" />
             <img v-if="this.emotion !== null" :src="require('@/assets/images/backgrounds/' + this.emotion.toLowerCase() + '.png')" />
+            <img v-else :src="require('@/assets/images/backgrounds/paper.png')" />
           </div>
           <div class="flip-container relative border-2 shadow-inner rounded-xl overflow-hidden w-full h-24" :class="this.showEmotions ? 'flip' : ''">
             <div class="flipper flex flex-row absolute">
@@ -40,7 +42,7 @@
                   </span>
                 </div>
               </div>
-              <div class="back w-full px-1">
+              <div class="back w-full px-1 bg-white h-24">
                 <p class="text-sm text-gray4 italic">
                   What's your response?
                 </p>

@@ -56,27 +56,33 @@
       <!-- Comments -->
       <article class="pt-5">
         <!-- Choose reaction -->
-        <div class="flex">
-          <h6>Filter Comments</h6>
-          <div class="relative">
-            <button class="toggle focus:outline-none flex justify-center shadow-lg rounded-lg px-4 ml-4 text-sm w-32" @click.stop="showFilter = !showFilter">
-              <span v-if="this.filter === null" class="toggle">All</span>
-              <span v-else class="toggle capitalize">{{ this.filter }}</span>
-              <ChevronUp v-if="this.showFilter" :downsize="true" />
-              <ChevronDown v-else :downsize="true" />
-            </button>
-            <ul v-if="this.showFilter" class="absolute bg-white z-10 shadow-lg rounded-lg py-1 ml-4 w-32">
-              <button class="w-full" @click="setCommentFilter(null)">
-                <li class="text-left pl-2">
-                  All
-                </li>
+        <div class="flex flex-row justify-between">
+          <div class="flex items-center">
+            <BookmarkButton :postID="this.$route.params.post" />
+            <ShareButton :post="this.post" class="z-20" />
+          </div>
+          <div class="flex">
+            <h6>Filter Comments</h6>
+            <div class="relative flex">
+              <button class="toggle focus:outline-none flex justify-center shadow-lg rounded-lg px-4 ml-4 text-sm w-32" @click.stop="showFilter = !showFilter">
+                <span v-if="this.filter === null" class="toggle">All</span>
+                <span v-else class="toggle capitalize">{{ this.filter }}</span>
+                <ChevronUp v-if="this.showFilter" :downsize="true" />
+                <ChevronDown v-else :downsize="true" />
               </button>
-              <button v-for="r in this.$store.state.config.reactions" :key="r.label" class="w-full" @click="setCommentFilter(r.label)">
-                <li class="text-left pl-2">
-                  {{ r.label }}
-                </li>
-              </button>
-            </ul>
+              <ul v-if="this.showFilter" class="absolute bg-white z-10 shadow-lg rounded-lg py-1 ml-4 w-32">
+                <button class="w-full" @click="setCommentFilter(null)">
+                  <li class="text-left pl-2">
+                    All
+                  </li>
+                </button>
+                <button v-for="r in this.$store.state.config.reactions" :key="r.label" class="w-full" @click="setCommentFilter(r.label)">
+                  <li class="text-left pl-2">
+                    {{ r.label }}
+                  </li>
+                </button>
+              </ul>
+            </div>
           </div>
         </div>
         <PostActions

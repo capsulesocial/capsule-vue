@@ -58,9 +58,8 @@
         >
           <CommentIcon class="fill-primary" />
         </button>
-        <Share :post="this.post" class="fill-primary self-center" />
+        <Share :post="this.post" class="fill-primary self-center z-20" />
         <BookmarkButton :postID="this.post.id" class="fill-primary self-center" />
-        <RepostButton :postID="this.post.id" class="fill-primary self-center" />
       </div>
       <div v-if="this.showComments" class="flex">
         <h6>Filter Comments </h6>
@@ -95,7 +94,6 @@ import PostActions from '@/components/post/Actions'
 import XIcon from '@/components/icons/X'
 import ProfileIcon from '@/components/icons/Person'
 import BookmarkButton from '@/components/post/BookmarkButton'
-import RepostButton from '@/components/post/RepostButton'
 import Share from '@/components/post/Share'
 import CommentIcon from '@/components/icons/Comment'
 import ChevronUp from '@/components/icons/ChevronUp'
@@ -109,7 +107,6 @@ export default {
     BookmarkButton,
     Share,
     CommentIcon,
-    RepostButton,
     ChevronUp,
     ChevronDown,
   },

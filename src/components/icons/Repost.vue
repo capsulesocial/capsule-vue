@@ -2,6 +2,7 @@
   <span>
     <svg
       v-if="!isActive"
+      :class="this.$props.shrink ? 'p-1' : ''"
       xmlns="http://www.w3.org/2000/svg"
       width="24"
       height="24"
@@ -17,9 +18,9 @@
       <polyline points="7 23 3 19 7 15"></polyline>
       <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
     </svg>
-
     <svg
       v-else
+      :class="this.$props.shrink ? 'p-1' : ''"
       xmlns="http://www.w3.org/2000/svg"
       width="24"
       height="24"
@@ -35,7 +36,6 @@
       <polyline points="7 23 3 19 7 15"></polyline>
       <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
     </svg>
-
   </span>
 </template>
 
@@ -43,6 +43,10 @@
 export default {
   props: {
     isActive: {
+      type: Boolean,
+      default: false,
+    },
+    shrink: {
       type: Boolean,
       default: false,
     },

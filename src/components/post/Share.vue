@@ -9,15 +9,24 @@
     </button>
     <div
       v-if="showSocialShares"
-      class="absolute flex flex-col mt-8 bg-white border-l border-r border-b rounded-lg p-1 rounded-t-none"
+      class="absolute flex flex-col mt-8 bg-white border-l border-r border-b rounded-lg p-1 rounded-t-none w-40 pl-2"
     >
+      <!-- Repost -->
+      <button
+        class="flex focus:outline-none hover:text-primary"
+        @click="handleRepost()"
+      >
+        <RepostIcon :isActive="this.isReposted" :shrink="true" />
+        <span v-if="this.isReposted" class="text-sm self-center text-primary">Undo Repost</span>
+        <span v-else class="text-sm self-center">Repost to Feed</span>
+      </button>
       <!-- Twitter -->
       <button
         class="flex focus:outline-none hover:text-primary"
         @click="handleShare('TWITTER')"
       >
         <TwitterIcon class="p-1" />
-        <span class="text-xs self-center">Twitter</span>
+        <span class="text-sm">Share on Twitter</span>
       </button>
       <!-- Copy URL Link -->
       <button
@@ -25,7 +34,7 @@
         @click="handleShare('URL')"
       >
         <LinkIcon class="p-1" />
-        <span class="text-xs self-center">Link</span>
+        <span class="text-sm self-center">Copy Link</span>
       </button>
     </div>
     <input :id="this.$props.post.id" type="hidden" value="" class="hidden" />
@@ -36,12 +45,14 @@
 import SendIcon from '@/components/icons/Send'
 import TwitterIcon from '@/components/icons/brands/Twitter'
 import LinkIcon from '@/components/icons/Link'
+import RepostIcon from '@/components/icons/Repost'
 
 export default {
   components: {
     SendIcon,
     TwitterIcon,
     LinkIcon,
+    RepostIcon,
   },
   props: {
     post: {
@@ -52,6 +63,7 @@ export default {
   data () {
     return {
       showSocialShares: false,
+      isReposted: this.$store.state.me.reposts.includes(this.$props.post.id),
     }
   },
   mounted () {
@@ -62,6 +74,15 @@ export default {
     }, false)
   },
   methods: {
+    handleRepost () {
+      this.$store.commit('me/handleRepost', this.$props.post.id)
+      this.isReposted = !this.isReposted
+      if (this.isReposted) {
+        alert('Reposted!')
+      } else {
+        alert('Repost Removed!')
+      }
+    },
     handleShare (type) {
       // this.$store.commit('posts/addShare', this.post.id)
       const url = document.getElementById(this.$props.post.id)
