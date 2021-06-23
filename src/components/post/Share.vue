@@ -68,7 +68,7 @@ export default {
   },
   mounted () {
     window.addEventListener('click', (e) => {
-      if (e.target.parentNode.classList === undefined || !e.target.parentNode.classList.contains('toggle')) {
+      if (e.target.parentNode === null || e.target.parentNode.classList === undefined || !e.target.parentNode.classList.contains('toggle')) {
         this.showSocialShares = false
       }
     }, false)

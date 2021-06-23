@@ -51,7 +51,7 @@ export default ({ app }, inject) => {
     return regex.test(url)
   }
 
-  const validate = (input) => {
+  const text = (input) => {
     return true
   }
 
@@ -60,7 +60,7 @@ export default ({ app }, inject) => {
     id,
     email,
     validateURL,
-    validate,
+    text,
   }
   inject('quality', qualityRules)
 }

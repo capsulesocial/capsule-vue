@@ -2,8 +2,8 @@
   <section>
     <!-- Post a Comment -->
     <article class="py-5">
-      <!-- Select emotion -->
       <div class="flex items-start">
+        <!-- Profile Photo / Avatar -->
         <img
           v-if="this.myAvatar !== null"
           :src="this.myAvatar"
@@ -12,12 +12,20 @@
         <span v-else class="p-1 border-2 rounded-full mt-1">
           <ProfileIcon class="w-6 h-6" />
         </span>
+        <!-- Comment box Container -->
         <div class="flex bg-white shadow-xl rounded-xl p-3 ml-5 w-full relative overflow-hidden">
-          <div class="absolute flex flex-row -mt-12 -ml-12">
-            <img v-if="this.emotion !== null" :src="require('@/assets/images/backgrounds/' + this.emotion.toLowerCase() + '.png')" />
-            <img v-else :src="require('@/assets/images/backgrounds/paper.png')" />
-            <img v-if="this.emotion !== null" :src="require('@/assets/images/backgrounds/' + this.emotion.toLowerCase() + '.png')" />
-            <img v-else :src="require('@/assets/images/backgrounds/paper.png')" />
+          <!-- Background image -->
+          <div class="absolute flex flex-row -mt-3 -ml-3 w-full">
+            <img
+              v-if="this.emotion !== null"
+              :src="require('@/assets/images/backgrounds/' + this.emotion.toLowerCase() + '.png')"
+              class="w-full"
+            />
+            <span v-else class="flex flex-row">
+              <img :src="require('@/assets/images/backgrounds/paper.png')" />
+              <img :src="require('@/assets/images/backgrounds/paper.png')" />
+              <img :src="require('@/assets/images/backgrounds/paper.png')" />
+            </span>
           </div>
           <div class="flip-container relative border-2 shadow-inner rounded-xl overflow-hidden w-full h-24" :class="this.showEmotions ? 'flip' : ''">
             <div class="flipper flex flex-row absolute">
@@ -43,6 +51,7 @@
                 </div>
               </div>
               <div class="back w-full px-1 bg-white h-24">
+                <!-- Select Reaction -->
                 <p class="text-sm text-gray4 italic">
                   What's your response?
                 </p>
@@ -64,9 +73,7 @@
         :key="c.id"
         class="py-2"
         :comment="c"
-        :postID="post.id"
-      >
-      </Comment>
+      />
     </article>
   </section>
 </template>
@@ -116,20 +123,25 @@ export default {
       this.showEmotions = false
     },
     sendComment () {
-      const c = {
-        postID: this.post.id,
-        authorID: this.$store.state.me.id,
-        authorAvatarCID: this.$store.state.me.avatar,
-        content: this.comment,
-        emotion: this.emotion,
-        timestamp: new Date(),
-        replies: [],
+      // Check comment quality
+      if (this.comment === '' || !this.$quality.text(this.comment)) {
+        alert('invalid comment!')
+      } else {
+        const c = {
+          postID: this.post.id,
+          authorID: this.$store.state.me.id,
+          authorAvatarCID: this.$store.state.me.avatar,
+          content: this.comment,
+          emotion: this.emotion,
+          timestamp: new Date(),
+          replies: [],
+        }
+        // this.$store.commit('posts/postComment', c)
+        this.comments.push(c)
+        this.filterComments()
+        this.comment = ''
+        this.emotion = null
       }
-      // this.$store.commit('posts/postComment', c)
-      this.comments.push(c)
-      this.filterComments()
-      this.comment = ''
-      this.emotion = null
     },
     handleReaction (reaction) {
       this.emotion = reaction

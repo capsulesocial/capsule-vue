@@ -46,7 +46,6 @@
           </button>
         </span>
       </div>
-
       <FriendButton :authorID="currentUser.id" />
     </article>
 

@@ -1,6 +1,8 @@
 <template>
   <div>
+    <!-- Component that displays a posted comment -->
     <div class="flex">
+      <!-- Avatar -->
       <div class="flex-shrink-0">
         <img
           v-if="this.avatar !== null"
@@ -11,6 +13,7 @@
           <ProfileIcon class="w-6 h-6" />
         </span>
       </div>
+      <!-- Content -->
       <div class="flex-1 leading-relaxed ml-2">
         <strong class="text-black font-bold bold mr-1">
           {{ getFullName(comment.authorID) }}
@@ -26,6 +29,7 @@
         </p>
       </div>
     </div>
+    <!-- Reply button -->
     <div class="ml-10 pl-1">
       <button
         class="font-sans text-xs focus:outline-none"
@@ -34,7 +38,7 @@
         {{ this.comment.replies.length }} Replies
       </button>
 
-      <!-- Active state -->
+      <!-- Active reply state -->
       <div v-if="isReplying" class="border-l pl-2 mr-5">
         <!-- Reply Input box -->
         <div class="flex bg-white border-2 rounded-xl my-1 p-1 ml-5  w-full">
@@ -84,10 +88,6 @@ export default {
       type: Object,
       default: null,
     },
-    postID: {
-      type: String,
-      default: null,
-    },
   },
   data () {
     return {
@@ -118,18 +118,22 @@ export default {
       }
     },
     sendReply () {
-      const r = {
-        postID: this.$props.postID,
-        commentID: this.$props.comment.id,
-        authorID: this.$store.state.me.id,
-        authorAvatarCID: this.$store.state.me.avatar,
-        content: this.reply,
-        timestamp: new Date(),
+      if (this.comment === '' || !this.$quality.text(this.reply)) {
+        alert('Invalid reply!')
+      } else {
+        const r = {
+          postID: this.$props.comment.postID,
+          commentID: this.$props.comment.id,
+          authorID: this.$store.state.me.id,
+          authorAvatarCID: this.$store.state.me.avatar,
+          content: this.reply,
+          timestamp: new Date(),
+        }
+        // this.$store.commit('posts/commentReply', r)
+        this.replies.push(r)
+        this.filterReplies()
+        this.reply = ''
       }
-      // this.$store.commit('posts/commentReply', r)
-      this.replies.push(r)
-      this.filterReplies()
-      this.reply = ''
     },
     filterReplies () {
       const rList = this.replies.slice().sort((p0, p1) => {

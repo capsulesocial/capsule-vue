@@ -1,6 +1,6 @@
 <template>
   <article class="shadow rounded-lg my-2 card p-5">
-    <!-- Post Preview Link -->
+    <!-- Post Preview Header: Avatar, name, username -->
     <div class="flex justify-between items-center">
       <nuxt-link :to="'/' + this.post.authorID" class="flex">
         <img
@@ -26,6 +26,7 @@
       {{ this.$helpers.formatDate(this.post.timestamp) }}
     </h6>
 
+    <!-- Preview Content -->
     <div class="hover:text-primary">
       <nuxt-link
         :to="'/' + this.post.authorID + '/' + this.post.id"
@@ -49,6 +50,7 @@
       </nuxt-link>
     </div>
 
+    <!-- Actions -->
     <div class="pt-2 flex justify-between">
       <div class="flex">
         <button
@@ -149,7 +151,7 @@ export default {
     }
     // Set filter dropdown event handler
     window.addEventListener('click', (e) => {
-      if (e.target.parentNode.classList === undefined || !e.target.parentNode.classList.contains('toggle')) {
+      if (e.target.parentNode === null || e.target.parentNode.classList === undefined || !e.target.parentNode.classList.contains('toggle')) {
         this.showFilter = false
       }
     }, false)

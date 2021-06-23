@@ -345,7 +345,9 @@ export default {
       this.input = clean
     }, 300),
     addTag (tag) {
-      if (this.tag !== '') {
+      if (this.tag === '' || !this.$quality.text(this.tag)) {
+        alert('Invalid tag!')
+      } else {
         this.tags.push(this.tag)
         this.tag = ''
       }
@@ -377,43 +379,45 @@ export default {
       })
     },
     post () {
-      if (this.title === '') {
-        alert('Missing title!')
-        return
-      }
-      const date = new Date()
-      const p = {
-        title: this.title,
-        subtitle: this.subtitle,
-        content: this.input,
-        id: null,
-        timestamp: date,
-        tags: this.tags,
-        comments: [],
-        bookmarks: [],
-        authorID: this.$store.state.me.id,
-        featuredPhotoCID: this.featuredPhotoCID,
-      }
-      // Use profCID for IPNS
-      // eslint-disable-next-line no-unused-vars
-      let profCID = ''
-      this.$api.post.sendPost(p).then((cid) => {
-        p.id = cid
-        // this.$store.commit('posts/sendPost', p.id)
-        this.$store.commit('posts/sendPost', p.id)
-        this.$store.commit('tags/sendPost', p)
-        this.$store.commit('me/sendPost', p.id)
-        const profile = this.$store.state.me
-        this.$api.profile.sendProfile(profile).then((pcid) => {
-          profCID = pcid
+      if (this.title === '' || !this.$quality.text(this.title)) {
+        alert('Invalid title!')
+      } else if (this.subtitle === '' || !this.$quality.text(this.subtitle)) {
+        alert('Invalid subtitle!')
+      } else {
+        const date = new Date()
+        const p = {
+          title: this.title,
+          subtitle: this.subtitle,
+          content: this.input,
+          id: null,
+          timestamp: date,
+          tags: this.tags,
+          comments: [],
+          bookmarks: [],
+          authorID: this.$store.state.me.id,
+          featuredPhotoCID: this.featuredPhotoCID,
+        }
+        // Use profCID for IPNS
+        // eslint-disable-next-line no-unused-vars
+        let profCID = ''
+        this.$api.post.sendPost(p).then((cid) => {
+          p.id = cid
+          // this.$store.commit('posts/sendPost', p.id)
+          this.$store.commit('posts/sendPost', p.id)
+          this.$store.commit('tags/sendPost', p)
+          this.$store.commit('me/sendPost', p.id)
+          const profile = this.$store.state.me
+          this.$api.profile.sendProfile(profile).then((pcid) => {
+            profCID = pcid
+          })
         })
-      })
-      this.toggle()
-      this.title = 'Title'
-      this.subtitle = 'Subtitle'
-      this.input = '# Hello World'
-      this.tags = []
-      this.$router.push(this.$store.state.me.id)
+        this.toggle()
+        this.title = 'Title'
+        this.subtitle = 'Subtitle'
+        this.input = '# Hello World'
+        this.tags = []
+        this.$router.push(this.$store.state.me.id)
+      }
     },
     updateStore () {
       this.$store.commit('draft/updateDraft', {

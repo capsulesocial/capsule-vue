@@ -2,7 +2,6 @@
   <div v-if="$store.state.me.id !== authorID">
     <!-- Button with ICON -->
     <button
-      v-if="this.$props.layout === 'icon'"
       class="rounded-full focus:outline-none"
       @click="toggleFriend"
     >
@@ -14,22 +13,6 @@
       </div>
       <div v-else class="bg-primary self-center rounded-full shadow-lg p-3">
         <span class="text-white text-bold"><FollowIcon /></span>
-      </div>
-    </button>
-    <!-- Button with TEXT -->
-    <button
-      v-if="this.$props.layout === 'text'"
-      class="rounded-full focus:outline-none"
-      @click="toggleFriend"
-    >
-      <div
-        v-if="iFollow()"
-        class="bg-red-200 self-center rounded-full shadow-lg p-3 border border-black"
-      >
-        <span class="text-black text-bold">Unfollow</span>
-      </div>
-      <div v-else class="bg-primary self-center rounded-full shadow-lg p-3">
-        <span class="text-white text-bold">Follow</span>
       </div>
     </button>
   </div>
@@ -48,10 +31,6 @@ export default {
     authorID: {
       type: String,
       default: null,
-    },
-    layout: {
-      type: String,
-      default: 'icon',
     },
   },
   methods: {

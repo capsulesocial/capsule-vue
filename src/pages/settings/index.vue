@@ -272,7 +272,7 @@ export default {
       if (this.newEmail !== '' && this.$quality.email(this.newEmail)) {
         this.$store.commit('me/updateEmail', this.newEmail)
       }
-      if (this.location !== this.$store.state.me.location && this.$quality.validate(this.location)) {
+      if (this.location !== this.$store.state.me.location && this.$quality.text(this.location)) {
         this.$store.commit('me/updateLocation', this.location)
       }
       alert('Settings updated!')

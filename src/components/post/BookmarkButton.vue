@@ -41,7 +41,6 @@ export default {
       //   this.isBookmarked = false
       // }
     },
-
   },
 }
 </script>
