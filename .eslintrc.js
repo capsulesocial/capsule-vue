@@ -1,4 +1,4 @@
-{
+module.exports = {
   "root": true,
   "env": {
     "node": true,
@@ -6,13 +6,8 @@
     "es2021": true
   },
   "extends": [
-    "@nuxtjs"
+    "@nuxtjs/eslint-config-typescript"
   ],
-  "parserOptions": {
-    "ecmaVersion": 12,
-    "sourceType": "module",
-    "parser": "babel-eslint"
-  },
   "rules": {
     "vue/attribute-hyphenation": 0,
     "vue/no-v-html": 0,
