@@ -1,8 +1,5 @@
 <template>
   <section class="px-4">
-    <article>
-      <ProfileHeader :currentUser="this.currentUser" />
-    </article>
     <div v-for="p in this.posts" :key="p.id">
       <PostCard :post="p" :authorID="p.authorID" :authorUsername="p.authorID" />
     </div>
@@ -11,12 +8,10 @@
 
 <script>
 import PostCard from '@/components/post/Card'
-import ProfileHeader from '@/components/ProfileHeader'
 
 export default {
   components: {
     PostCard,
-    ProfileHeader,
   },
   data () {
     return {

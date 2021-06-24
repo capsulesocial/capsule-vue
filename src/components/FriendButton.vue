@@ -1,32 +1,24 @@
 <template>
   <div v-if="$store.state.me.id !== authorID">
-    <!-- Button with ICON -->
     <button
       class="rounded-full focus:outline-none"
       @click="toggleFriend"
     >
       <div
         v-if="iFollow()"
-        class="bg-red-200 self-center rounded-full shadow-lg p-3 border border-black"
+        class="bg-red-200 rounded-lg shadow-lg px-2 py-1"
       >
-        <span class="text-black text-bold"><UnfollowIcon /></span>
+        <span class="text-black text-bold text-sm">Unfollow</span>
       </div>
-      <div v-else class="bg-primary self-center rounded-full shadow-lg p-3">
-        <span class="text-white text-bold"><FollowIcon /></span>
+      <div v-else class="bg-primary rounded-lg shadow-lg px-2 py-1">
+        <span class="text-white text-bold text-sm">Follow</span>
       </div>
     </button>
   </div>
 </template>
 
 <script>
-import FollowIcon from '@/components/icons/Follow'
-import UnfollowIcon from '@/components/icons/Unfollow'
-
 export default {
-  components: {
-    FollowIcon,
-    UnfollowIcon,
-  },
   props: {
     authorID: {
       type: String,

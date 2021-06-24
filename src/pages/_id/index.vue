@@ -1,12 +1,5 @@
 <template>
   <section class="px-4">
-    <ProfileHeader :currentUser="this.currentUser" />
-    <div class="mt-5">
-      <nuxt-link :to="'/' + this.currentUser.id" class="text-xl">
-        Posts
-      </nuxt-link>
-    </div>
-
     <article v-for="post in this.posts" :key="post.id">
       <PostCard
         :post="post"
@@ -19,12 +12,10 @@
 
 <script>
 import PostCard from '@/components/post/Card'
-import ProfileHeader from '@/components/ProfileHeader'
 
 export default {
   components: {
     PostCard,
-    ProfileHeader,
   },
   data () {
     return {

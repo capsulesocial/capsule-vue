@@ -1,6 +1,5 @@
 <template>
   <section v-if="this.targetUser !== null" class="px-4">
-    <ProfileHeader :currentUser="this.targetUser" />
     <article>
       <div v-for="i in this.targetUser['following']" :key="i">
         <nuxt-link class="text-primary underline" :to="'/' + i">
@@ -12,12 +11,8 @@
 </template>
 
 <script>
-import ProfileHeader from '@/components/ProfileHeader'
 
 export default {
-  components: {
-    ProfileHeader,
-  },
   data () {
     return {
       targetUser: null,

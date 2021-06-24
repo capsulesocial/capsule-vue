@@ -10,6 +10,7 @@ export const state = () => ({
   reposts: [],
   socials: [],
   bookmarks: [],
+  categories: [],
   followers: [],
   following: [],
   avatar: null,
@@ -24,6 +25,7 @@ export const mutations = {
     state.password = author.password
   },
   endSession (state) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     state = {}
   },
   sendPost (state, postID) {

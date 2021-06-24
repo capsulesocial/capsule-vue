@@ -214,6 +214,7 @@ export default {
           // eslint-disable-next-line no-unused-vars
           let profCID = ''
           this.$api.profile.sendProfile(profile).then((pcid) => {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             profCID = pcid
           })
           this.$router.push('/settings')
