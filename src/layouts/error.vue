@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import BrandedButton from '@/components/BrandedButton'
+import BrandedButton from '@/components/BrandedButton.vue'
 
 export default {
   components: [BrandedButton],

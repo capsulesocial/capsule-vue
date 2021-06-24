@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import PostCard from '@/components/post/Card'
+import PostCard from '@/components/post/Card.vue'
 
 export default {
   components: {

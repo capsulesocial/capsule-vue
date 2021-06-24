@@ -43,8 +43,8 @@
 </template>
 
 <script>
-import DiscoverCard from '@/components/DiscoverCard'
-import TagCard from '@/components/Tag'
+import DiscoverCard from '@/components/DiscoverCard.vue'
+import TagCard from '@/components/Tag.vue'
 
 export default {
   components: {

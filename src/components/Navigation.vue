@@ -101,14 +101,14 @@
 <script>
 import { mapMutations } from 'vuex'
 
-import HomeIcon from '@/components/icons/Home'
-import DiscoverIcon from '@/components/icons/Discover'
-import PencilIcon from '@/components/icons/Pencil'
-import ProfileIcon from '@/components/icons/Person'
-import SettingsIcon from '@/components/icons/Settings'
-import BrandedButton from '@/components/BrandedButton'
-import BookmarksIcon from '@/components/icons/Bookmarks'
-import InboxIcon from '@/components/icons/Inbox'
+import HomeIcon from '@/components/icons/Home.vue'
+import DiscoverIcon from '@/components/icons/Discover.vue'
+import PencilIcon from '@/components/icons/Pencil.vue'
+import ProfileIcon from '@/components/icons/Person.vue'
+import SettingsIcon from '@/components/icons/Settings.vue'
+import BrandedButton from '@/components/BrandedButton.vue'
+import BookmarksIcon from '@/components/icons/Bookmarks.vue'
+import InboxIcon from '@/components/icons/Inbox.vue'
 
 export default {
   components: {

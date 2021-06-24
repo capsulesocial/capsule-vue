@@ -99,16 +99,16 @@
 </template>
 
 <script>
-import CapsuleIcon from '@/components/icons/Capsule'
-import NotificationsIcon from '@/components/icons/Notifications'
-import SettingsIcon from '@/components/icons/Settings'
-import BackButton from '@/components/icons/ChevronLeft'
-import ForwardButton from '@/components/icons/ChevronRight'
-import DownIcon from '@/components/icons/ChevronDown'
-import UpIcon from '@/components/icons/ChevronUp'
-import SearchIcon from '@/components/icons/Search'
-import HelpIcon from '@/components/icons/Help'
-import LogoutIcon from '@/components/icons/Logout'
+import CapsuleIcon from '@/components/icons/Capsule.vue'
+import NotificationsIcon from '@/components/icons/Notifications.vue'
+import SettingsIcon from '@/components/icons/Settings.vue'
+import BackButton from '@/components/icons/ChevronLeft.vue'
+import ForwardButton from '@/components/icons/ChevronRight.vue'
+import DownIcon from '@/components/icons/ChevronDown.vue'
+import UpIcon from '@/components/icons/ChevronUp.vue'
+import SearchIcon from '@/components/icons/Search.vue'
+import HelpIcon from '@/components/icons/Help.vue'
+import LogoutIcon from '@/components/icons/Logout.vue'
 
 export default {
   components: {

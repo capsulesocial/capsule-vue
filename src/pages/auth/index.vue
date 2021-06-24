@@ -142,8 +142,8 @@
 </template>
 
 <script>
-import CapsuleIcon from '@/components/icons/Capsule'
-import BrandedButton from '@/components/BrandedButton'
+import CapsuleIcon from '@/components/icons/Capsule.vue'
+import BrandedButton from '@/components/BrandedButton.vue'
 
 export default {
   components: {

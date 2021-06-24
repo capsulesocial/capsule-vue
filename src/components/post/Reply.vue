@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import ProfileIcon from '@/components/icons/Person'
+import ProfileIcon from '@/components/icons/Person.vue'
 
 export default {
   components: {

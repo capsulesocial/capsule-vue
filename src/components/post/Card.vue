@@ -92,14 +92,14 @@
 </template>
 
 <script>
-import PostActions from '@/components/post/Actions'
-import XIcon from '@/components/icons/X'
-import ProfileIcon from '@/components/icons/Person'
-import BookmarkButton from '@/components/post/BookmarkButton'
-import Share from '@/components/post/Share'
-import CommentIcon from '@/components/icons/Comment'
-import ChevronUp from '@/components/icons/ChevronUp'
-import ChevronDown from '@/components/icons/ChevronDown'
+import PostActions from '@/components/post/Actions.vue'
+import XIcon from '@/components/icons/X.vue'
+import ProfileIcon from '@/components/icons/Person.vue'
+import BookmarkButton from '@/components/post/BookmarkButton.vue'
+import Share from '@/components/post/Share.vue'
+import CommentIcon from '@/components/icons/Comment.vue'
+import ChevronUp from '@/components/icons/ChevronUp.vue'
+import ChevronDown from '@/components/icons/ChevronDown.vue'
 
 export default {
   components: {

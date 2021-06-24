@@ -177,13 +177,13 @@
 </template>
 
 <script>
-import BrandedButton from '@/components/BrandedButton'
-import ChevronRight from '@/components/icons/ChevronRight'
-import UploadAvatar from '@/components/icons/UploadAvatar'
+import BrandedButton from '@/components/BrandedButton.vue'
+import ChevronRight from '@/components/icons/ChevronRight.vue'
+import UploadAvatar from '@/components/icons/UploadAvatar.vue'
 
 export default {
   components: {
-    VerifySocial: () => import('@/components/VerifySocial/'),
+    VerifySocial: () => import('@/components/VerifySocial.vue'),
     BrandedButton,
     ChevronRight,
     UploadAvatar,

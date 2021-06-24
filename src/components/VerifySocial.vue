@@ -62,10 +62,10 @@
 </template>
 
 <script>
-import TwitterIcon from '@/components/icons/brands/Twitter'
-import GitHubIcon from '@/components/icons/brands/GitHub'
-import ExternalURLIcon from '@/components/icons/ExternalURL'
-import XIcon from '@/components/icons/X'
+import TwitterIcon from '@/components/icons/brands/Twitter.vue'
+import GitHubIcon from '@/components/icons/brands/GitHub.vue'
+import ExternalURLIcon from '@/components/icons/ExternalURL.vue'
+import XIcon from '@/components/icons/X.vue'
 
 export default {
   components: {

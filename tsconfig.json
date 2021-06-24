@@ -14,12 +14,12 @@
     "strict": true,
     "noEmit": true,
     "baseUrl": ".",
+    "checkJs": true,
+    "noImplicitAny": false,
+    "allowSyntheticDefaultImports": true,
     "paths": {
-      "~/*": [
-        "./*"
-      ],
       "@/*": [
-        "./*"
+        "src/*"
       ]
     },
     "types": [
@@ -27,6 +27,7 @@
       "@nuxt/types"
     ]
   },
+  "include": ["./src/**/*", "vue-shim.d.ts"],
   "exclude": [
     "node_modules"
   ]

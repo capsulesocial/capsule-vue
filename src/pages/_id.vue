@@ -126,10 +126,10 @@
 </template>
 
 <script>
-import TwitterIcon from '@/components/icons/brands/Twitter'
-import GitHubIcon from '@/components/icons/brands/GitHub'
-import FriendButton from '@/components/FriendButton'
-import ExternalURLIcon from '@/components/icons/ExternalURL'
+import TwitterIcon from '@/components/icons/brands/Twitter.vue'
+import GitHubIcon from '@/components/icons/brands/GitHub.vue'
+import FriendButton from '@/components/FriendButton.vue'
+import ExternalURLIcon from '@/components/icons/ExternalURL.vue'
 
 export default {
   components: {

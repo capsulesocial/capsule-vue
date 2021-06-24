@@ -79,9 +79,9 @@
 </template>
 
 <script>
-import BrandedButton from '@/components/BrandedButton'
-import ProfileIcon from '@/components/icons/Person'
-import Comment from '@/components/post/Comment'
+import BrandedButton from '@/components/BrandedButton.vue'
+import ProfileIcon from '@/components/icons/Person.vue'
+import Comment from '@/components/post/Comment.vue'
 
 export default {
   components: {

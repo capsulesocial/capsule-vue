@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import BookmarkIcon from '@/components/icons/Bookmark'
+import BookmarkIcon from '@/components/icons/Bookmark.vue'
 
 export default {
   components: {

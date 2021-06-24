@@ -33,8 +33,8 @@
 </template>
 
 <script>
-import FriendButton from '@/components/FriendButton'
-import ProfileIcon from '@/components/icons/Person'
+import FriendButton from '@/components/FriendButton.vue'
+import ProfileIcon from '@/components/icons/Person.vue'
 
 export default {
   components: {

@@ -24,10 +24,10 @@
 </template>
 
 <script>
-import Navigation from '@/components/Navigation'
-import Explore from '@/components/Explore'
-import Header from '@/components/Header'
-import PostEditor from '@/components/post/Editor'
+import Navigation from '@/components/Navigation.vue'
+import Explore from '@/components/Explore.vue'
+import Header from '@/components/Header.vue'
+import PostEditor from '@/components/post/Editor.vue'
 
 export default {
   components: {

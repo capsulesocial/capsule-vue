@@ -42,10 +42,10 @@
 </template>
 
 <script>
-import SendIcon from '@/components/icons/Send'
-import TwitterIcon from '@/components/icons/brands/Twitter'
-import LinkIcon from '@/components/icons/Link'
-import RepostIcon from '@/components/icons/Repost'
+import SendIcon from '@/components/icons/Send.vue'
+import TwitterIcon from '@/components/icons/brands/Twitter.vue'
+import LinkIcon from '@/components/icons/Link.vue'
+import RepostIcon from '@/components/icons/Repost.vue'
 
 export default {
   components: {

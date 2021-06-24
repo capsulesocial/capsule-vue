@@ -63,6 +63,7 @@ module.exports = {
     "array-bracket-newline": "error",
     "array-bracket-spacing": "error",
     "array-element-newline": "error",
+    "no-unused-vars": false,
     "block-spacing": "error",
     "camelcase": "error",
     "brace-style": [

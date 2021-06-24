@@ -101,14 +101,14 @@
 </template>
 
 <script>
-import markdown from '@/mixins/markdown.js'
-import PostActions from '@/components/post/Actions'
-import AuthorCard from '@/components/AuthorCard'
-import TagCard from '@/components/Tag'
-import BookmarkButton from '@/components/post/BookmarkButton'
-import ShareButton from '@/components/post/Share'
-import ChevronUp from '@/components/icons/ChevronUp'
-import ChevronDown from '@/components/icons/ChevronDown'
+import markdown from '@/mixins/markdown.js.vue'
+import PostActions from '@/components/post/Actions.vue'
+import AuthorCard from '@/components/AuthorCard.vue'
+import TagCard from '@/components/Tag.vue'
+import BookmarkButton from '@/components/post/BookmarkButton.vue'
+import ShareButton from '@/components/post/Share.vue'
+import ChevronUp from '@/components/icons/ChevronUp.vue'
+import ChevronDown from '@/components/icons/ChevronDown.vue'
 
 export default {
   components: {

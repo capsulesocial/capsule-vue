@@ -27,10 +27,10 @@
 </template>
 
 <script>
-import CapsuleIcon from '@/components/icons/Capsule'
-import TwitterIcon from '@/components/icons/brands/Twitter'
-import DiscordIcon from '@/components/icons/brands/Discord'
-import BrandedButton from '@/components/BrandedButton'
+import CapsuleIcon from '@/components/icons/Capsule.vue'
+import TwitterIcon from '@/components/icons/brands/Twitter.vue'
+import DiscordIcon from '@/components/icons/brands/Discord.vue'
+import BrandedButton from '@/components/BrandedButton.vue'
 export default {
   components: {
     CapsuleIcon,
