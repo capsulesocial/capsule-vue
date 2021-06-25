@@ -101,7 +101,7 @@
 </template>
 
 <script>
-import markdown from '@/mixins/markdown.js.vue'
+import markdown from '@/mixins/markdown.js'
 import PostActions from '@/components/post/Actions.vue'
 import AuthorCard from '@/components/AuthorCard.vue'
 import TagCard from '@/components/Tag.vue'

@@ -296,7 +296,7 @@ import LinkIcon from '@/components/icons/md/Link.vue'
 import ImageIcon from '@/components/icons/md/Image.vue'
 import QuoteIcon from '@/components/icons/md/Quote.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
-import markdown from '@/mixins/markdown.js.vue'
+import markdown from '@/mixins/markdown.js'
 
 export default {
   components: {

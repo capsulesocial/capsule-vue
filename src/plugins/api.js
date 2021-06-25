@@ -1,8 +1,8 @@
-import Auth from '@/api/auth.vue'
-import Post from '@/api/post.vue'
-import Profile from '@/api/profile.vue'
-import Settings from '@/api/settings.vue'
-import Authors from '@/api/authors.vue'
+import Auth from '@/api/auth'
+import Post from '@/api/post'
+import Profile from '@/api/profile'
+import Settings from '@/api/settings'
+import Authors from '@/api/authors'
 const IPFS = require('ipfs')
 
 export default async (context, inject) => {
