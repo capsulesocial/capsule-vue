@@ -38,7 +38,6 @@ export default Vue.extend({
   },
   created () {
     if (this.$store.state.session.cid === '') {
-      console.log('ROUTER PUSH')
       this.$router.push('/auth')
     }
   },

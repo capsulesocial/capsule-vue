@@ -15,7 +15,7 @@ export interface Posts {
 
 export const state = (): Posts => ({
   tags: [],
-  recent: []
+  recent: ['QmaagP2Ufibw7sYa2gQiNLjW9T3YR2ajvJEptsWnuL5r72']
 })
 
 export const postsMutationType = {

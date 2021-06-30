@@ -28,10 +28,6 @@
 
     <!-- Preview Content -->
     <div class="hover:text-primary">
-      <!-- <nuxt-link
-        :to="'/' + this.post.authorCID + '/' + this.post.id"
-        class="flex justify-between"
-      > -->
       <nuxt-link
         :to="'/post/' + this.post.id"
         class="flex justify-between"
@@ -134,29 +130,25 @@ export default Vue.extend({
     }
   },
   async created () {
-    console.log(this.$props.post)
-    if (this.$store.state.session.cid === this.post.authorCID) {
+    if (this.$store.state.session.cid === this.$props.post.authorCID) {
       // Viewing own post
       this.author = this.$store.state.session
     }
-    this.author = await this.$getProfile(this.post.authorCID)
-    // const list = this.$store.state.authors
-    // const a = list.find(x => x.id === this.post.authorID)
-    // if (a) {
-    //   this.author = a
-    // }
-    // Populate Avatar
-    if (this.author.avatar !== '') {
-      this.$getPhoto(this.author.avatar).then((image) => {
-        this.avatar = image
-      })
-    }
-    // Populate Featured Photo
-    if (this.post.featuredPhotoCID !== null) {
-      this.$getPhoto(this.post.featuredPhotoCID).then((image) => {
-        this.featuredPhoto = image
-      })
-    }
+    this.$getProfile(this.$props.post.authorCID).then((profile) => {
+      // Populate Avatar
+      this.author = profile
+      if (profile.avatar !== '') {
+        this.$getPhoto(profile.avatar).then((image) => {
+          this.avatar = image
+        })
+      }
+      // Populate Featured Photo
+      if (this.post.featuredPhotoCID !== null) {
+        this.$getPhoto(this.post.featuredPhotoCID).then((image) => {
+          this.featuredPhoto = image
+        })
+      }
+    })
     // Set filter dropdown event handler
     window.addEventListener('click', (e: any): void => {
       if (!e.target) return

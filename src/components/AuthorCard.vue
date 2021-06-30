@@ -66,7 +66,6 @@ export default Vue.extend({
     // Get user profile
     this.$getProfile(this.$props.authorCID).then((profile) => {
       this.author = profile
-      console.log(this.author)
       // Get Author Avatar
       // @ts-ignore
       if (this.author.avatar !== '') {

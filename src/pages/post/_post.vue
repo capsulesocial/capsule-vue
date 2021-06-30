@@ -110,19 +110,7 @@ import BookmarkButton from '@/components/post/BookmarkButton.vue'
 import ShareButton from '@/components/post/Share.vue'
 import ChevronUp from '@/components/icons/ChevronUp.vue'
 import ChevronDown from '@/components/icons/ChevronDown.vue'
-
-declare interface Post {
-  id: string,
-  authorID: string,
-  title: string,
-  subtitle: string,
-  content: string,
-  featuredPhotoCID: string,
-  tags: string[],
-  timestamp: Date,
-  comments: Object,
-  bookmarks: string[],
-}
+import { Post } from '~/interfaces/Post'
 
 export default Vue.extend({
   components: {
@@ -147,16 +135,16 @@ export default Vue.extend({
   },
   async created () {
     // Fetch post from IPFS,
-    const ipfsPost = await this.$getPost(this.$route.params.post)
-    const p = ipfsPost
-    p.id = this.$route.params.post
-    this.post = p
-    this.content = marked(this.post.content)
-    if (this.post.featuredPhotoCID !== null) {
-      this.$getPhoto(this.post.featuredPhotoCID).then((image) => {
-        this.featuredPhoto = image
-      })
-    }
+    this.$getPost(this.$route.params.post).then((p: Post) => {
+      p.id = this.$route.params.post
+      this.post = p
+      this.content = marked(p.content)
+      if (p.featuredPhotoCID !== null) {
+        this.$getPhoto(p.featuredPhotoCID).then((image) => {
+          this.featuredPhoto = image
+        })
+      }
+    })
   },
   methods: {
     setCommentFilter (reaction) {

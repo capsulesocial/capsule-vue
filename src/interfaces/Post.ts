@@ -13,5 +13,4 @@ export interface Post {
   timestamp: Date,
   comments: any[],
   bookmarks: string[],
-
 }
