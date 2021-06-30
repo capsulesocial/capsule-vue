@@ -7,10 +7,11 @@
   </button>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import BookmarkIcon from '@/components/icons/Bookmark.vue'
 
-export default {
+export default Vue.extend({
   components: {
     BookmarkIcon,
   },
@@ -23,7 +24,14 @@ export default {
   data () {
     return {
       // isBookmarked: this.post.bookmarks.includes(this.$store.state.me.id),
-      isBookmarked: this.$store.state.me.bookmarks.includes(this.postID),
+      isBookmarked: false,
+    }
+  },
+  created () {
+    const bookmarks = this.$store.state.me.bookmarks
+    if(!bookmarks) return
+    if (bookmarks.includes(this.postID)) {
+      this.isBookmarked = true
     }
   },
   methods: {
@@ -42,5 +50,5 @@ export default {
       // }
     },
   },
-}
+})
 </script>

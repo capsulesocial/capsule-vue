@@ -5,7 +5,7 @@
       <!-- Avatar -->
       <div class="flex-shrink-0">
         <img
-          v-if="this.avatar !== null"
+          v-if="this.avatar !== ''"
           :src="this.avatar"
           class="w-10 h-10 rounded-lg object-cover"
         />
@@ -22,7 +22,7 @@
           @{{ comment.authorID }}
         </nuxt-link>
         <span v-if="comment.timestamp" class="text-gray-600 text-xs font-sans">
-          {{ $helpers.formatDate(comment.timestamp) }}
+          {{ $formatDate(comment.timestamp) }}
         </span>
         <p class="text-base py-1 font-sans">
           {{ comment.content }}
@@ -94,12 +94,12 @@ export default {
       isReplying: false,
       reply: '',
       replies: this.comment.replies,
-      avatar: null,
+      avatar: '',
     }
   },
   created () {
     if (this.$props.comment.authorAvatarCID !== null) {
-      this.$api.settings.downloadAvatar(this.$props.comment.authorAvatarCID).then((image) => {
+      this.$getPhoto(this.$props.comment.authorAvatarCID).then((image) => {
         this.avatar = image
       })
     }
@@ -118,14 +118,15 @@ export default {
       }
     },
     sendReply () {
-      if (this.comment === '' || !this.$quality.text(this.reply)) {
+      if (this.comment === '' || !this.$qualityText(this.reply)) {
         alert('Invalid reply!')
       } else {
         const r = {
           postID: this.$props.comment.postID,
           commentID: this.$props.comment.id,
-          authorID: this.$store.state.me.id,
-          authorAvatarCID: this.$store.state.me.avatar,
+          authorID: this.$store.state.session.id,
+          authorCID: this.$store.state.session.cid,
+          authorAvatarCID: this.$store.state.session.avatar,
           content: this.reply,
           timestamp: new Date(),
         }

@@ -38,7 +38,7 @@ export default {
   },
   methods: {
     async findPost (pID) {
-      const p = await this.$api.post.getPost(pID)
+      const p = await this.$getPost(pID)
       p.id = pID
       this.posts.push(p)
     },

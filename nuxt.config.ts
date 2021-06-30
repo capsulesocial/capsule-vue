@@ -1,6 +1,7 @@
 /* eslint-disable */
+import type { NuxtConfig } from '@nuxt/types'
 
-module.exports = {
+const config: NuxtConfig = {
   // Global page headers: https://go.nuxtjs.dev/config-head
   srcDir: 'src/',
   generate: {
@@ -31,8 +32,9 @@ module.exports = {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     { src: "@/plugins/api.js" },
-    { src: "@/plugins/quality.js" },
-    { src: "@/plugins/helpers.js" },
+    { src: "@/plugins/quality.ts" },
+    { src: "@/plugins/helpers.ts" },
+    { src: "@/plugins/ipfs.ts" },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -58,3 +60,5 @@ module.exports = {
   build: {
   }
 }
+
+export default config 

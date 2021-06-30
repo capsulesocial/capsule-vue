@@ -4,7 +4,7 @@
     <section class="flex flex-row justify-between">
       <article class="flex items-center">
         <img
-          v-if="this.currentUser.avatar !== null"
+          v-if="this.currentUser.avatar !== '' && this.currentUser.avatar !== null"
           :src="this.avatar"
           class="w-16 h-16 rounded-lg mr-4 object-cover"
         />
@@ -21,7 +21,7 @@
           <div class="flex flex-row">
             <!-- Categories, following, followers -->
             <nuxt-link
-              :to="'/' + this.currentUser.id + '/categories'"
+              :to="'/' + this.$route.params.id + '/categories'"
             >
               <!-- {{ this.currentUser.categories.length }} -->0
               <span class="text-gray5">
@@ -29,7 +29,7 @@
               </span>
             </nuxt-link>
             <nuxt-link
-              :to="'/' + this.currentUser.id + '/followers'"
+              :to="'/' + this.$route.params.id + '/followers'"
               class="pl-4"
             >
               {{ this.currentUser.followers.length }}
@@ -38,7 +38,7 @@
               </span>
             </nuxt-link>
             <nuxt-link
-              :to="'/' + this.currentUser.id + '/following'"
+              :to="'/' + this.$route.params.id + '/following'"
               class="pl-4"
             >
               {{ this.currentUser.following.length }}
@@ -51,7 +51,7 @@
       </article>
       <div class="flex items-center">
       </div>
-      <FriendButton :authorID="currentUser.id" />
+      <FriendButton :authorCID="currentUser.cid" />
     </section>
 
     <section>
@@ -91,28 +91,28 @@
 
     <section class="flex flex-col md:flex-row w-full justify-between border-b">
       <nuxt-link
-        :to="'/' + this.currentUser.id"
+        :to="'/' + this.$route.params.id"
         class="text-gray5 font-bold px-2 pb-1"
-        :class="this.$route.name === 'id' ? 'border-primary border-b-2' : ''"
+        :class="this.$route.name === 'cid' ? 'border-primary border-b-2' : ''"
       >
         Posts
       </nuxt-link>
       <nuxt-link
-        :to="'/' + this.currentUser.id + '/comments'"
+        :to="'/' + this.$route.params.id + '/comments'"
         class="text-gray5 font-bold px-2 pb-1"
         :class="this.$route.name === 'id-comments' ? 'border-primary border-b-2' : ''"
       >
         Comments
       </nuxt-link>
       <nuxt-link
-        :to="'/' + this.currentUser.id + '/bookmarks'"
+        :to="'/' + this.$route.params.id + '/bookmarks'"
         class="text-gray5 font-bold px-2 pb-1"
         :class="this.$route.name === 'id-bookmarks' ? 'border-primary border-b-2' : ''"
       >
         Bookmarks
       </nuxt-link>
       <nuxt-link
-        :to="'/' + this.currentUser.id + '/reposts'"
+        :to="'/' + this.$route.params.id + '/reposts'"
         class="text-gray5 font-bold px-2 pb-1"
         :class="this.$route.name === 'id-reposts' ? 'border-primary border-b-2' : ''"
       >
@@ -125,13 +125,14 @@
   </main>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import TwitterIcon from '@/components/icons/brands/Twitter.vue'
 import GitHubIcon from '@/components/icons/brands/GitHub.vue'
 import FriendButton from '@/components/FriendButton.vue'
 import ExternalURLIcon from '@/components/icons/ExternalURL.vue'
 
-export default {
+export default Vue.extend({
   components: {
     TwitterIcon,
     GitHubIcon,
@@ -141,32 +142,30 @@ export default {
   // layout: 'Extended',
   data () {
     return {
-      avatar: null,
-      currentUser: null,
+      avatar: '',
+      currentUser: {},
       posts: [],
     }
   },
-  created () {
+  async created () {
     // The user in which I am currently viewing
     // Check if this is my profile
-    if (this.$route.params.id === this.$store.state.me.id) {
-      this.currentUser = this.$store.state.me
+    if (this.$route.params.id === this.$store.state.session.cid) {
+      this.currentUser = this.$store.state.session
     }
     // Get user profile
-    // this.currentUser = this.$api.profile.getProfile(this.$route.params.id)
-    const l = this.$store.state.authors
-    for (let p = 0; p < l.length; p++) {
-      if (l[p].id === this.$route.params.id) {
-        this.currentUser = l[p]
-      }
-    }
-    // Get avatar
-    if (this.currentUser.avatar !== null) {
-      this.$api.settings.downloadAvatar(this.currentUser.avatar).then((image) => {
-        this.avatar = image
-      })
-    }
-    this.userPosts()
+    this.$getProfile(this.$route.params.id).then((profile) => {
+      this.currentUser = profile
+        if (!this.currentUser) return
+        // @ts-ignore
+        if (this.currentUser.avatar !== '') {
+          // @ts-ignore
+          this.$getPhoto(this.currentUser.avatar).then((image) => {
+            this.avatar = image
+          })
+        }
+        this.userPosts()
+    })
   },
   methods: {
     openWindow (url) {
@@ -175,13 +174,17 @@ export default {
       }
     },
     async userPosts () {
+      // @ts-ignore
       const p = this.currentUser.posts
-      for (let i = 0; i < p.length; i++) {
-        const post = await this.$api.post.getPost(p[i])
-        post.id = p[i]
-        this.posts.push(post)
+      if (p.length > 0) {
+        for (let i = 0; i < p.length; i++) {
+          const post = await this.$getPost(p[i])
+          post.id = p[i]
+          // @ts-ignore
+          this.posts.push(post)
+        }
       }
     },
   },
-}
+})
 </script>

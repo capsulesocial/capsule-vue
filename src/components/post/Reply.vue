@@ -18,7 +18,7 @@
         @{{ reply.authorID }}
       </span>
       <span v-if="reply.timestamp" class="text-gray-600 text-xs font-sans">
-        {{ $helpers.formatDate(reply.timestamp) }}
+        {{ $formatDate(reply.timestamp) }}
       </span>
       <p class="text-sm py-1 font-sans">
         {{ reply.content }}
@@ -27,10 +27,11 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import ProfileIcon from '@/components/icons/Person.vue'
 
-export default {
+export default Vue.extend({
   components: {
     ProfileIcon,
   },
@@ -47,7 +48,7 @@ export default {
   },
   created () {
     if (this.$props.reply.authorAvatarCID !== null) {
-      this.$api.settings.downloadAvatar(this.$props.reply.authorAvatarCID).then((image) => {
+      this.$getPhoto(this.$props.reply.authorAvatarCID).then((image) => {
         this.avatar = image
       })
     }
@@ -66,5 +67,5 @@ export default {
       }
     },
   },
-}
+})
 </script>

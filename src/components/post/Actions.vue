@@ -5,7 +5,7 @@
       <div class="flex items-start">
         <!-- Profile Photo / Avatar -->
         <img
-          v-if="this.myAvatar !== null"
+          v-if="this.myAvatar !== ''"
           :src="this.myAvatar"
           class="w-10 h-10 rounded-lg object-cover mt-1"
         />
@@ -78,12 +78,13 @@
   </section>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 import ProfileIcon from '@/components/icons/Person.vue'
 import Comment from '@/components/post/Comment.vue'
 
-export default {
+export default Vue.extend({
   components: {
     BrandedButton,
     ProfileIcon,
@@ -102,17 +103,16 @@ export default {
   data () {
     return {
       comment: '',
-      comments: this.post.comments,
+      comments: [],
       emotion: null,
-      showSocialShares: false,
-      myAvatar: null,
+      myAvatar: '',
       showEmotions: false,
       commentBackground: '@/assets/images/brand/paper4.svg',
     }
   },
   created () {
-    if (this.$store.state.me.avatar !== null) {
-      this.$api.settings.downloadAvatar(this.$store.state.me.avatar).then((image) => {
+    if (this.$store.state.session.avatar !== '') {
+      this.$getPhoto(this.$store.state.session.avatar).then((image) => {
         this.myAvatar = image
       })
     }
@@ -124,20 +124,20 @@ export default {
     },
     sendComment () {
       // Check comment quality
-      if (this.comment === '' || !this.$quality.text(this.comment)) {
+      if (this.comment === '' || !this.$qualityText(this.comment)) {
         alert('invalid comment!')
       } else {
         const c = {
           postID: this.post.id,
-          authorID: this.$store.state.me.id,
-          authorAvatarCID: this.$store.state.me.avatar,
+          authorID: this.$store.state.session.id,
+          authorAvatarCID: this.$store.state.session.avatar,
           content: this.comment,
           emotion: this.emotion,
           timestamp: new Date(),
           replies: [],
         }
         // this.$store.commit('posts/postComment', c)
-        this.comments.push(c)
+        this.$props.post.comments.push(c)
         this.filterComments()
         this.comment = ''
         this.emotion = null
@@ -149,38 +149,23 @@ export default {
     filterComments () {
       let cList = []
       if (this.$props.filter === null) {
-        cList = this.comments
+        cList = this.$props.post.comments
       } else {
-        for (const c in this.comments) {
-          if (this.comments[c].emotion === this.$props.filter) {
-            cList.push(this.comments[c])
+        for (const c in this.$props.comments) {
+          if (this.$props.post.comments[c].emotion === this.$props.filter) {
+            // @ts-ignore
+            cList.push(this.$props.post.comments[c])
           }
         }
       }
+      if (!cList) return this.$props.post.comments
       cList = cList.slice().sort((p0, p1) => {
         return p1.timestamp - p0.timestamp
       })
       return cList
     },
-    handleShare (type) {
-      this.$store.commit('posts/addShare', this.post.id)
-      const url = document.getElementById(this.$props.post.id)
-      url.type = 'text'
-      url.value =
-        document.location.origin + '/' + this.post.authorID + '/' + this.post.id
-      if (type === 'URL') {
-        url.select()
-        url.setSelectionRange(0, 99999)
-        document.execCommand('copy')
-        url.type = 'hidden'
-        alert('URL Copied to Clipboard!')
-      }
-      if (type === 'TWITTER') {
-        window.open('https://twitter.com/share?url=' + encodeURIComponent(url.value) + '&text=' + '📰 ' + this.post.title + '\n 🔏 ' + this.post.authorID + ' on @CapsuleSoc 🔗')
-      }
-    },
   },
-}
+})
 </script>
 
 <style>

@@ -30,7 +30,6 @@ Check out [the documentation](https://nuxtjs.org/guide/vuex-store) for usage on 
 - toggleCompose
 - updateDraft
 **States:**
-isComposing bool
 draft {}
 
 

@@ -141,11 +141,15 @@
   </main>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
+import { mapMutations } from 'vuex'
+import { MutationType, namespace as sessionStoreNamespace, SessionState } from '~/store/session'
+
 import CapsuleIcon from '@/components/icons/Capsule.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 
-export default {
+export default Vue.extend({
   components: {
     CapsuleIcon,
     BrandedButton,
@@ -155,25 +159,32 @@ export default {
     return {
       isLogin: true,
       name: null,
-      id: null,
-      email: null,
-      password: null,
+      id: '',
+      email: '',
+      password: '',
       confirmPassword: null,
       consent: true,
     }
   },
-  created () {
-    if (this.$store.state.me.id !== '') {
+  mounted () {
+    if (this.$store.state.session.cid !== '') {
+      console.log('ROUTER PUSH /home')
       this.$router.push('/home')
     }
   },
   methods: {
+    ...mapMutations(sessionStoreNamespace, {
+      changeCID: MutationType.CHANGE_CID,
+      changeID: MutationType.CHANGE_ID,
+      changeName: MutationType.CHANGE_NAME,
+      changeEmail: MutationType.CHANGE_EMAIL
+    }),
     toggleFormType () {
       this.isLogin = !this.isLogin
     },
     async verify () {
-      const pwCheck = this.$quality.password(this.password)
-      const idCheck = this.$quality.id(this.id)
+      const pwCheck = this.$qualityPassword(this.password)
+      const idCheck = this.$qualityID(this.id)
       if (pwCheck !== true) {
         alert(pwCheck)
         return
@@ -184,55 +195,56 @@ export default {
       }
       // Login
       if (this.isLogin) {
-        const res = await this.$api.auth.login(this.id, this.password)
-        if (res) {
-          this.$router.push('/')
-        } else {
-          alert('Invalid login!')
-        }
+        alert('Authentication not supported yet!')
+        return
       } else {
         // Registration
         if (!this.consent) {
           alert('Please accept the Terms & Conditions')
           return
         }
-        if (this.$quality.email(this.email) !== true) {
+        if (this.$qualityEmail(this.email) !== true) {
           alert('Invalid email!')
           return
         }
         if (this.password === this.confirmPassword) {
           const account = {
+            cid: '',
             id: this.id,
-            username: this.name,
+            name: this.name,
             email: this.email,
-            password: this.password,
+            password: '',
+            bio: 'Default bio.',
+            location: '',
+            posts: [],
+            reposts: [],
+            socials: [],
+            bookmarks: [],
+            categories: [],
+            followers: [],
+            following: [],
+            avatar: null,
           }
-          // const res = await this.$api.auth.register(account)
-          account.password = null
-          this.$store.commit('me/startSession', account)
-          const profile = this.$store.state.me
-          // eslint-disable-next-line no-unused-vars
-          let profCID = ''
-          this.$api.profile.sendProfile(profile).then((pcid) => {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            profCID = pcid
+          this.$sendProfile(account).then((cid) => {
+            account.cid = cid
+            this.changeCID(cid)
+            this.changeID(this.id)
+            this.changeName(this.name)
+            this.changeEmail(this.email)
+            this.$router.push('/settings')
           })
-          this.$router.push('/settings')
         } else {
           alert('Password mismatch!')
         }
       }
     },
     adminBypass () {
-      const account = {
-        id: 'admin',
-        username: 'admin',
-        email: 'admin@admin.com',
-        password: 'password123',
-      }
-      this.$store.commit('me/startSession', account)
+      this.changeCID('Qmdors4fRHTT6ut6BAjNHEARxfbnBwHSbyz7BaD4oJPwzZ')
+      this.changeID('admin')
+      this.changeName('Capsule Admin')
+      this.changeEmail('admin@admin.com')
       this.$router.push('/settings')
     },
   },
-}
+})
 </script>

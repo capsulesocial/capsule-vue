@@ -2,13 +2,13 @@
   <div class="flex relative">
     <button
       class="flex focus:outline-none hover:text-primary toggle"
-      :class="this.showSocialShares ? 'text-primary' : ''"
+      :class="showSocialShares ? 'text-primary' : ''"
       @click.stop="toggleDropdown"
     >
       <SendIcon class="mr-2" />
     </button>
     <div
-      v-if="showSocialShares"
+      v-if="this.showSocialShares"
       class="absolute flex flex-col mt-8 bg-white border-l border-r border-b rounded-lg p-1 rounded-t-none w-40 pl-2"
     >
       <!-- Repost -->
@@ -41,13 +41,14 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import SendIcon from '@/components/icons/Send.vue'
 import TwitterIcon from '@/components/icons/brands/Twitter.vue'
 import LinkIcon from '@/components/icons/Link.vue'
 import RepostIcon from '@/components/icons/Repost.vue'
 
-export default {
+export default Vue.extend({
   components: {
     SendIcon,
     TwitterIcon,
@@ -63,11 +64,19 @@ export default {
   data () {
     return {
       showSocialShares: false,
-      isReposted: this.$store.state.me.reposts.includes(this.$props.post.id),
+      isReposted: false,
+    }
+  },
+  created () {
+    let reposts = this.$store.state.me.reposts
+    if(!reposts) return
+    if(reposts.includes(this.$props.post.id)) {
+      this.isReposted = true
     }
   },
   mounted () {
-    window.addEventListener('click', (e) => {
+    window.addEventListener('click', (e: any): void => {
+      if(!e.target) return
       if (e.target.parentNode === null || e.target.parentNode.classList === undefined || !e.target.parentNode.classList.contains('toggle')) {
         this.showSocialShares = false
       }
@@ -105,5 +114,5 @@ export default {
       this.showSocialShares = !this.showSocialShares
     },
   },
-}
+})
 </script>

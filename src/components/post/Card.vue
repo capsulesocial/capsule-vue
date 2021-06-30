@@ -1,16 +1,16 @@
 <template>
-  <article class="shadow rounded-lg my-2 card p-5">
-    <!-- Post Preview Header: Avatar, name, username -->
+  <article v-if="this.author" class="shadow rounded-lg my-2 card p-5">
+    <!-- Post Preview Header: Avatar, name -->
     <div class="flex justify-between items-center">
-      <nuxt-link :to="'/' + this.post.authorID" class="flex">
+      <nuxt-link :to="'/' + this.post.authorCID" class="flex">
         <img
-          v-if="this.author.avatar !== null"
+          v-if="this.avatar !== ''"
           :src="this.avatar"
           class="w-8 h-8 rounded-lg mr-2 object-cover"
         />
         <ProfileIcon v-else class="w-8 h-8 border-2 rounded-full mr-2" />
         <h4 class="text-bold mr-2 self-center">
-          {{ this.author.username }}
+          {{ this.author.name }}
         </h4>
         <h5 class="hover:text-primary text-subtitle mr-2 self-center">
           @{{ this.post.authorID }}
@@ -23,13 +23,17 @@
 
     <!-- Timestamp -->
     <h6 class="text-xs text-subtitle self-center ml-10 mb-2">
-      {{ this.$helpers.formatDate(this.post.timestamp) }}
+      {{ this.$formatDate(this.post.timestamp) }}
     </h6>
 
     <!-- Preview Content -->
     <div class="hover:text-primary">
+      <!-- <nuxt-link
+        :to="'/' + this.post.authorCID + '/' + this.post.id"
+        class="flex justify-between"
+      > -->
       <nuxt-link
-        :to="'/' + this.post.authorID + '/' + this.post.id"
+        :to="'/post/' + this.post.id"
         class="flex justify-between"
       >
         <div>
@@ -91,7 +95,8 @@
   </article>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import PostActions from '@/components/post/Actions.vue'
 import XIcon from '@/components/icons/X.vue'
 import ProfileIcon from '@/components/icons/Person.vue'
@@ -101,7 +106,7 @@ import CommentIcon from '@/components/icons/Comment.vue'
 import ChevronUp from '@/components/icons/ChevronUp.vue'
 import ChevronDown from '@/components/icons/ChevronDown.vue'
 
-export default {
+export default Vue.extend({
   components: {
     PostActions,
     XIcon,
@@ -124,33 +129,37 @@ export default {
       showFilter: false,
       filter: null,
       author: null,
-      avatar: null,
+      avatar: '',
       featuredPhoto: null,
     }
   },
-  created () {
-    if (this.$store.state.me.id === this.post.authorID) {
-      this.author = this.$store.state.me
+  async created () {
+    console.log(this.$props.post)
+    if (this.$store.state.session.cid === this.post.authorCID) {
+      // Viewing own post
+      this.author = this.$store.state.session
     }
-    const list = this.$store.state.authors
-    const a = list.find(x => x.id === this.post.authorID)
-    if (a) {
-      this.author = a
-    }
+    this.author = await this.$getProfile(this.post.authorCID)
+    // const list = this.$store.state.authors
+    // const a = list.find(x => x.id === this.post.authorID)
+    // if (a) {
+    //   this.author = a
+    // }
     // Populate Avatar
-    if (this.author.avatar !== null) {
-      this.$api.settings.downloadAvatar(this.author.avatar).then((image) => {
+    if (this.author.avatar !== '') {
+      this.$getPhoto(this.author.avatar).then((image) => {
         this.avatar = image
       })
     }
     // Populate Featured Photo
     if (this.post.featuredPhotoCID !== null) {
-      this.$api.settings.downloadAvatar(this.post.featuredPhotoCID).then((image) => {
+      this.$getPhoto(this.post.featuredPhotoCID).then((image) => {
         this.featuredPhoto = image
       })
     }
     // Set filter dropdown event handler
-    window.addEventListener('click', (e) => {
+    window.addEventListener('click', (e: any): void => {
+      if (!e.target) return
       if (e.target.parentNode === null || e.target.parentNode.classList === undefined || !e.target.parentNode.classList.contains('toggle')) {
         this.showFilter = false
       }
@@ -162,5 +171,5 @@ export default {
       this.showFilter = false
     },
   },
-}
+})
 </script>
