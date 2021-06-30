@@ -1,4 +1,5 @@
 import { Tag } from '@/interfaces/Tag'
+import { Comment } from '@/interfaces/Comment'
 
 export interface Post {
   cid: string,
@@ -11,6 +12,6 @@ export interface Post {
   featuredPhotoCID: string,
   tags: Tag[],
   timestamp: Date,
-  comments: any[],
+  comments: Comment[],
   bookmarks: string[],
 }

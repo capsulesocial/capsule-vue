@@ -26,7 +26,6 @@ export default {
     },
     bgImage: {
       type: String,
-      default: require('@/assets/images/discover/404.jpeg'),
     },
   },
 }

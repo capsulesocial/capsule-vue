@@ -68,7 +68,7 @@
       </div>
     </article>
     <article>
-      <Comment
+      <CommentCard
         v-for="c in this.filterComments()"
         :key="c.id"
         class="py-2"
@@ -80,15 +80,18 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { Comment } from '@/interfaces/Comment'
+import { Post } from '@/interfaces/Post'
 import BrandedButton from '@/components/BrandedButton.vue'
 import ProfileIcon from '@/components/icons/Person.vue'
-import Comment from '@/components/post/Comment.vue'
+import CommentCard from '@/components/post/Comment.vue'
+
 
 export default Vue.extend({
   components: {
     BrandedButton,
     ProfileIcon,
-    Comment,
+    CommentCard,
   },
   props: {
     post: {
@@ -101,10 +104,11 @@ export default Vue.extend({
     },
   },
   data () {
+    let comments: Comment[] = []
     return {
       comment: '',
-      comments: [],
-      emotion: null,
+      comments,
+      emotion: '',
       myAvatar: '',
       showEmotions: false,
       commentBackground: '@/assets/images/brand/paper4.svg',
@@ -127,9 +131,9 @@ export default Vue.extend({
       if (this.comment === '' || !this.$qualityText(this.comment)) {
         alert('invalid comment!')
       } else {
-        const c = {
+        const c:Comment = {
           postID: this.post.id,
-          authorID: this.$store.state.session.id,
+          authorCID: this.$store.state.session.cid,
           authorAvatarCID: this.$store.state.session.avatar,
           content: this.comment,
           emotion: this.emotion,
@@ -140,27 +144,26 @@ export default Vue.extend({
         this.$props.post.comments.push(c)
         this.filterComments()
         this.comment = ''
-        this.emotion = null
+        this.emotion = ''
       }
     },
     handleReaction (reaction) {
       this.emotion = reaction
     },
     filterComments () {
-      let cList = []
+      let cList: Comment[] = []
       if (this.$props.filter === null) {
         cList = this.$props.post.comments
       } else {
         for (const c in this.$props.comments) {
           if (this.$props.post.comments[c].emotion === this.$props.filter) {
-            // @ts-ignore
             cList.push(this.$props.post.comments[c])
           }
         }
       }
       if (!cList) return this.$props.post.comments
       cList = cList.slice().sort((p0, p1) => {
-        return p1.timestamp - p0.timestamp
+        return p1.timestamp.getTime() - p0.timestamp.getTime()
       })
       return cList
     },
