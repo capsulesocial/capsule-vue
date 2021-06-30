@@ -230,8 +230,8 @@
               <span class="text-white">+</span>
             </button>
           </span>
-          <span v-for="t in this.tags" :key="t" class="mx-2">
-            <h6 class="inline text-primary">#{{ t }}</h6>
+          <span v-for="t in this.tags" :key="t.name" class="mx-2">
+            <h6 class="inline text-primary">#{{ t['name'] }}</h6>
             <button @click="removeTag(t)">❌</button></span>
         </div>
         <BrandedButton text="Publish" :action="post" class="mr-10" />
@@ -253,7 +253,7 @@
         >
           <span class="">+</span>
         </button>
-        <span v-for="t in this.tags" :key="t" class="mx-2">
+        <span v-for="t in this.tags" :key="t.name" class="mx-2">
           <h6 class="inline text-primary">#{{ t }}</h6>
           <button @click="removeTag(t)">❌</button></span>
       </div>
@@ -304,6 +304,7 @@ import QuoteIcon from '@/components/icons/md/Quote.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 import markdown from '@/mixins/markdown.js'
 import { Post } from '@/interfaces/Post'
+import { Tag } from '@/interfaces/Tag'
 
 export default Vue.extend({
   components: {
@@ -326,7 +327,7 @@ export default Vue.extend({
     } else {
       input = ''
     }
-    let tags: string[] = []
+    let tags: Tag[] = []
     return {
       title: this.$store.state.draft.title,
       subtitle: this.$store.state.draft.subtitle,
@@ -368,11 +369,15 @@ export default Vue.extend({
       })
       this.input = clean
     }, 300),
-    addTag (tag): void {
+    addTag (): void {
       if (this.tag === '' || !this.$qualityText(this.tag)) {
         alert('Invalid tag!')
       } else {
-        this.tags.push(this.tag)
+        let t: Tag = {
+          name: this.tag,
+          posts: '',
+        }
+        this.tags.push(t)
         this.tag = ''
       }
     },
@@ -411,11 +416,12 @@ export default Vue.extend({
         alert('Invalid subtitle!')
       } else {
         const date = new Date()
-        const p = {
+        const p: Post = {
           title: this.title,
           subtitle: this.subtitle,
           content: this.input,
           cid: '',
+          id: '',
           timestamp: date,
           tags: this.tags,
           comments: [],
@@ -424,26 +430,34 @@ export default Vue.extend({
           authorCID: this.$store.state.session.cid,
           featuredPhotoCID: this.featuredPhotoCID,
         }
+        // sending post to IPFS. Returns Content Address
         this.$sendPost(p).then((cid) => {
           console.log('Post CID: ', cid)
           p.cid = cid
           // this.$store.commit('posts/sendPost', p.id)
-          this.$store.commit('posts/sendPost', p.cid)
-          this.$store.commit('tags/sendPost', p)
+          // this.$store.commit('posts/sendPost', p.cid)
+          // this.$store.commit('tags/sendPost', p)
           // this.$store.commit('posts/addTag', p.tags)
-          this.addTag(p.tags)
+          // for (let t in p.tags) {
+          //   console.log(t)
+          //   this.addTag(p.tags)
+          // }
+          // Adding post to local profile object
           this.addPost(cid)
           let profile = this.$store.state.session
+          // Sending updated profile to IPFS.
+          // Returns updated content address 
           this.$sendProfile(profile).then((pcid) => {
             this.changeCID(pcid)
+            // Reset draft & redirect
+            this.toggleDraftMode()
+            this.title = 'Title'
+            this.subtitle = 'Subtitle'
+            this.input = '# Hello World'
+            this.tags = []
+            this.$router.push('/post/' + cid)
           })
         })
-        this.toggleDraftMode()
-        this.title = 'Title'
-        this.subtitle = 'Subtitle'
-        this.input = '# Hello World'
-        this.tags = []
-        this.$router.push(this.$store.state.session.cid)
       }
     },
     updateStore (): void {

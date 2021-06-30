@@ -43,9 +43,9 @@
       <article class="mt-5">
         <TagCard
           v-for="t in this.post.tags"
-          :key="t"
+          :key="t.name"
           class="mr-2"
-          :tag="t"
+          :tag="t.name"
         />
       </article>
 

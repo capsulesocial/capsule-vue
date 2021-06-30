@@ -1,4 +1,5 @@
 import type { Plugin } from '@nuxt/types'
+import { Post } from '~/interfaces/Post'
 const IPFS = require('ipfs')
 
 declare module 'vue/types/vue' {
@@ -41,7 +42,7 @@ const ipfsPlugin: Plugin = async(_context, inject) => {
     }
 
   // Send post to IPFS
-  const sendPost: sender = async (content) => {
+  const sendPost: sender = async (content: Post) => {
     const postAdded = await node.add({
       path: content.title,
       content: JSON.stringify(content)

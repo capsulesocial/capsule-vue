@@ -1,6 +1,7 @@
 import { Tag } from '@/interfaces/Tag'
 
 export interface Post {
+  cid: string,
   id: string,
   authorID: string,
   authorCID: string,
