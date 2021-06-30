@@ -98,7 +98,8 @@
   </header>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import CapsuleIcon from '@/components/icons/Capsule.vue'
 import NotificationsIcon from '@/components/icons/Notifications.vue'
 import SettingsIcon from '@/components/icons/Settings.vue'
@@ -110,7 +111,7 @@ import SearchIcon from '@/components/icons/Search.vue'
 import HelpIcon from '@/components/icons/Help.vue'
 import LogoutIcon from '@/components/icons/Logout.vue'
 
-export default {
+export default Vue.extend({
   components: {
     CapsuleIcon,
     SettingsIcon,
@@ -129,7 +130,8 @@ export default {
     }
   },
   mounted () {
-    window.addEventListener('click', (e) => {
+    window.addEventListener('click', (e: any): void => {
+      if (!e.target) return
       if (e.target.parentNode === null || e.target.parentNode.classList === undefined || !e.target.parentNode.classList.contains('dropdown')) {
         this.showMore = false
       }
@@ -144,5 +146,5 @@ export default {
       this.showMore = !this.showMore
     },
   },
-}
+})
 </script>

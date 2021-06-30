@@ -18,18 +18,12 @@ export default {
       targetUser: null,
     }
   },
-  created () {
+  async created () {
     if (this.$route.params.id === this.$store.state.me.id) {
       this.targetUser = this.$store.state.me
     } else {
       // Get user profile
-      // this.targetUser = this.$api.profile.getProfile(this.$route.params.id)
-      const l = this.$store.state.authors
-      for (let p = 0; p < l.length; p++) {
-        if (l[p].id === this.$route.params.id) {
-          this.targetUser = l[p]
-        }
-      }
+      this.targetUser = await this.$getProfile(this.$route.params.id)
     }
   },
 }

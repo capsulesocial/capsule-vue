@@ -15,47 +15,39 @@ export default {
   },
   data () {
     return {
-      currentUser: null,
+    currentUser: {},
       posts: [],
     }
   },
-  created () {
+  async created () {
     // The user in which I am currently viewing
     // Check if this is my profile
     if (this.$route.params.id === this.$store.state.me.id) {
       this.currentUser = this.$store.state.me
     }
     // Get user profile
-    // this.currentUser = this.$api.profile.getProfile(this.$route.params.id)
-    const l = this.$store.state.authors
-    for (let p = 0; p < l.length; p++) {
-      if (l[p].id === this.$route.params.id) {
-        this.currentUser = l[p]
-      }
-    }
+    this.currentUser = await this.$getProfile(this.$route.params.id)
     this.getBookmarkList()
   },
   methods: {
     async getBookmarkList () {
       // Get list of bookmarked posts by visited profile
-      // let targetProfile = this.$api.profile.getProfile(this.$route.params.id)
+      // let targetProfile = this.$getProfile(this.$route.params.id)
       let targetProfile = {}
-      if (this.$route.params.id === this.$store.state.me.id) {
-        targetProfile = this.$store.state.me
+      if (this.$route.params.id === this.$store.state.session.cid) {
+        targetProfile = this.$store.state.session
       } else {
-        for (let p = 0; p < this.$store.state.authors.length; p++) {
-          if (this.$store.state.authors[p].id === this.$route.params.id) {
-            targetProfile = this.$store.state.authors[p]
-            break
-          }
-        }
+        this.$getProfile(this.$route.params.id).then((profile) => {
+          targetProfile = profile
+        })
       }
       const bookmarkList = targetProfile.bookmarks
       // Loop through list of bookmarks on a profile
       for (let i = 0; i < bookmarkList.length; i++) {
         // Find post object and add it to result
-        const post = await this.$api.post.getPost(bookmarkList[i])
+        const post = await this.$getPost(bookmarkList[i])
         post.id = bookmarkList[i]
+        // @ts-ignore
         this.posts.push(post)
       }
     },

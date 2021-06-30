@@ -1,35 +1,17 @@
 /* eslint-disable no-shadow */
-export const state = () => ({
-  id: '',
-  username: '',
-  email: '',
-  password: '',
-  bio: 'Default bio.',
-  location: '',
-  posts: [],
-  reposts: [],
-  socials: [],
-  bookmarks: [],
-  categories: [],
-  followers: [],
-  following: [],
-  avatar: null,
-})
+export const state = () => ({})
 
 export const mutations = {
   startSession (state, author) {
-    this.$api.settings.startSession(author.id)
-    state.id = author.id
-    state.username = author.username
-    state.email = author.email
-    state.password = author.password
+    state = author
+    console.log(state)
   },
   endSession (state) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     state = {}
   },
   sendPost (state, postID) {
-    this.$api.settings.sendPost(postID)
+    // this.$api.settings.sendPost(postID)
     state.posts.push(postID)
   },
   handleRepost (state, postID) {

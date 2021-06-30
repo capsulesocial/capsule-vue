@@ -4,19 +4,22 @@
     class="border rounded-lg bg-gray-200 p-5 shadow-xl my-5 flex flex-row"
   >
     <div class="flex-shrink-0">
+      <ProfileIcon
+        v-if="this.author.avatar === '' || this.author.avatar === null"
+        class="w-10 h-10 border-2 rounded-full"
+      />
       <img
-        v-if="this.author.avatar !== null"
+        v-else
         :src="this.avatar"
         class="w-12 h-12 rounded-lg object-cover"
       />
-      <ProfileIcon v-else class="w-10 h-10 border-2 rounded-full" />
     </div>
     <div class="mx-4">
       <h6 class="text-sm italic">
         About the Author:
       </h6>
       <h4 class="text-lg inline">
-        {{ this.author.username }}
+        {{ this.author.name }}
       </h4>
       <nuxt-link
         :to="'/' + this.author.id"
@@ -32,47 +35,48 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import FriendButton from '@/components/FriendButton.vue'
 import ProfileIcon from '@/components/icons/Person.vue'
 
-export default {
+export default Vue.extend({
   components: {
     FriendButton,
     ProfileIcon,
   },
   props: {
-    authorID: {
+    authorCID: {
       type: String,
       default: null,
     },
   },
   data () {
     return {
-      author: null,
-      avatar: null,
+      author: {},
+      avatar: '',
     }
   },
-  created () {
+  async created () {
     // The user in which I am currently viewing
     // Check if this is my profile
-    if (this.$props.authorID === this.$store.state.me.id) {
+    if (this.$props.authorCID === this.$store.state.session.cid) {
       this.author = this.$store.state.me
     }
     // Get user profile
-    // this.author = this.$api.profile.getProfile(this.$props.authorID)
-    const l = this.$store.state.authors
-    for (let p = 0; p < l.length; p++) {
-      if (l[p].id === this.$props.authorID) {
-        this.author = l[p]
+    this.$getProfile(this.$props.authorCID).then((profile) => {
+      this.author = profile
+      console.log(this.author)
+      // Get Author Avatar
+      // @ts-ignore
+      if (this.author.avatar !== '') {
+      // @ts-ignore
+        this.$getPhoto(this.author.avatar).then((image) => {
+          this.avatar = image
+        })
       }
-    }
-    // Get Author Avatar
-    if (this.author.avatar !== null) {
-      this.$api.settings.downloadAvatar(this.author.avatar).then((image) => {
-        this.avatar = image
-      })
-    }
+    })
+
   },
-}
+})
 </script>

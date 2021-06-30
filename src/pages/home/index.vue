@@ -61,9 +61,11 @@
   </main>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import PostCard from '@/components/post/Card.vue'
-export default {
+
+export default Vue.extend({
   components: {
     PostCard,
   },
@@ -81,9 +83,11 @@ export default {
       this.posts = []
       for (const p in this.$store.state.posts) {
         if (p) {
-          const post = await this.$api.post.getPost(this.$store.state.posts[p])
-          post.id = this.$store.state.posts[p]
-          this.posts.push(post)
+          this.$getPost(this.$store.state.posts[p]).then((post) => {
+            post.id = this.$store.state.posts[p]
+            // @ts-ignore
+            this.posts.push(post)
+          })
         }
       }
       this.algorithm = a
@@ -108,5 +112,5 @@ export default {
       }
     },
   },
-}
+})
 </script>

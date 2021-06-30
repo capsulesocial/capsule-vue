@@ -1,5 +1,5 @@
 <template>
-  <div v-if="$store.state.me.id !== authorID">
+  <div v-if="$store.state.session.cid !== authorCID">
     <button
       class="rounded-full focus:outline-none"
       @click="toggleFriend"
@@ -20,7 +20,7 @@
 <script>
 export default {
   props: {
-    authorID: {
+    authorCID: {
       type: String,
       default: null,
     },
@@ -28,7 +28,7 @@ export default {
   methods: {
     iFollow () {
       // Check if I am following currentUser
-      const followingList = this.$store.state.me.following
+      const followingList = this.$store.state.session.following
       for (let i = 0; i < followingList.length; i++) {
         if (followingList[i] === this.$route.params.id) {
           return true
@@ -37,12 +37,12 @@ export default {
       return false
     },
     toggleFriend () {
-      this.$store.commit('me/handleFollow', this.authorID)
-      this.$store.commit('authors/handleFollow',
-        {
-          me: this.$store.state.me.id,
-          targetUser: this.authorID,
-        })
+      // this.$store.commit('me/handleFollow', this.authorID)
+      // this.$store.commit('authors/handleFollow',
+      //   {
+      //     me: this.$store.state.session.cid,
+      //     targetUser: this.authorID,
+      //   })
     },
   },
 }

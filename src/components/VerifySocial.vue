@@ -61,13 +61,14 @@
   </article>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import TwitterIcon from '@/components/icons/brands/Twitter.vue'
 import GitHubIcon from '@/components/icons/brands/GitHub.vue'
 import ExternalURLIcon from '@/components/icons/ExternalURL.vue'
 import XIcon from '@/components/icons/X.vue'
 
-export default {
+export default Vue.extend({
   components: {
     TwitterIcon,
     GitHubIcon,
@@ -88,7 +89,7 @@ export default {
     }
   },
   mounted () {
-    const socials = this.$store.state.me.socials
+    const socials = this.$store.state.session.socials
     for (const s in socials) {
       if (socials[s].platform === this.$props.platform) {
         this.isActive = true
@@ -102,7 +103,7 @@ export default {
       this.isActive = !this.isActive
     },
     verifySocial (platform, handle) {
-      if (this.$props.platform === 'website' && !this.$quality.validateURL(this.handle)) {
+      if (this.$props.platform === 'website' && !this.$qualityURL(this.handle)) {
         alert('Check URL!')
         return
       }
@@ -113,10 +114,10 @@ export default {
       this.isVerified = true
     },
     removeSocial () {
-      this.$api.settings.removeSocial(
-        this.$store.state.me.id,
-        this.$props.platform,
-      )
+      // this.$api.settings.removeSocial(
+      //   this.$store.state.me.id,
+      //   this.$props.platform,
+      // )
       this.$store.commit('me/removeSocial', {
         platform: this.$props.platform,
       })
@@ -124,5 +125,5 @@ export default {
       this.isActive = false
     },
   },
-}
+})
 </script>

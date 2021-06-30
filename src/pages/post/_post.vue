@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="this.post">
     <section v-if="this.post !== null" class="pb-16 lg:pb-5 m-5">
       <article>
         <h1 class="text-5xl capitalize">
@@ -36,22 +36,20 @@
       <!-- Content -->
       <div
         class="prose lg:prose-lg max-w-none text-black pl-4 content"
-        v-html="this.compileMarkdown(this.post.content)"
+        v-html="this.content"
       ></div>
 
       <!-- Tags -->
       <article class="mt-5">
         <TagCard
           v-for="t in this.post.tags"
-          :key="t"
+          :key="t.name"
           class="mr-2"
-          :tag="t"
+          :tag="t.name"
         />
       </article>
 
-      <AuthorCard
-        :authorID="this.$route.params.id"
-      />
+      <AuthorCard :authorCID="this.post.authorCID" />
 
       <!-- Comments -->
       <article class="pt-5">
@@ -87,7 +85,7 @@
         </div>
         <PostActions
           :post="this.post"
-          :authorID="this.$route.params.id"
+          :authorID="this.post.authorCID"
           :isCommenting="true"
           :tags="this.post.tags"
           :filter="this.filter"
@@ -97,12 +95,14 @@
     <section v-else>
       Post not found 😵‍💫
     </section>
+
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import markdown from '@/mixins/markdown.js'
+import marked from 'marked'
 import PostActions from '@/components/post/Actions.vue'
 import AuthorCard from '@/components/AuthorCard.vue'
 import TagCard from '@/components/Tag.vue'
@@ -139,6 +139,7 @@ export default Vue.extend({
   data () {
     return {
       post: {},
+      content: '',
       featuredPhoto: null,
       showFilter: false,
       filter: null,
@@ -150,6 +151,7 @@ export default Vue.extend({
     const p = ipfsPost
     p.id = this.$route.params.post
     this.post = p
+    this.content = marked(this.post.content)
     if (this.post.featuredPhotoCID !== null) {
       this.$getPhoto(this.post.featuredPhotoCID).then((image) => {
         this.featuredPhoto = image
