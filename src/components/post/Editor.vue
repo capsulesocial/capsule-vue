@@ -30,7 +30,7 @@
             class="border-b text-2xl focus:outline-none text-xl w-full placeholder-gray-800 pb-2"
           />
           <p class="text-sm text-gray-500 py-4">
-            By: {{ this.$store.state.me.username }}
+            By: {{ this.$store.state.session.username }}
           </p>
           <!-- Upload Featured Image -->
           <button class="pb-2" @click="$refs.featuredPhoto.click()">
@@ -111,7 +111,7 @@
           {{ this.subtitle }}
         </h4>
         <h6 class="text-sm text-gray-500 py-4">
-          By: {{ this.$store.state.me.username }}
+          By: {{ this.$store.state.session.name }}
         </h6>
         <div class="prose" v-html="compiledMarkdown"></div>
       </div>
@@ -184,7 +184,7 @@
           />
         </div>
         <h6 class="text-sm text-gray-500 pb-4">
-          By: {{ this.$store.state.me.username }}
+          By: {{ this.$store.state.session.name }}
         </h6>
         <!-- Upload Featured Image -->
         <button @click="$refs.featuredPhoto.click()">
@@ -445,6 +445,7 @@ export default Vue.extend({
           // Adding post to local profile object
           this.addPost(cid)
           let profile = this.$store.state.session
+          console.log(cid)
           // Sending updated profile to IPFS.
           // Returns updated content address 
           this.$sendProfile(profile).then((pcid) => {

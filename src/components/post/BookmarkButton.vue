@@ -28,7 +28,7 @@ export default Vue.extend({
     }
   },
   created () {
-    const bookmarks = this.$store.state.me.bookmarks
+    const bookmarks = this.$store.state.session.bookmarks
     if(!bookmarks) return
     if (bookmarks.includes(this.postID)) {
       this.isBookmarked = true
@@ -36,7 +36,7 @@ export default Vue.extend({
   },
   methods: {
     handleBookmark () {
-      this.$store.commit('me/handleBookmark', this.postID)
+      // this.$store.commit('me/handleBookmark', this.postID)
       this.isBookmarked = !this.isBookmarked
       // this.$store.commit('posts/handleBookmark', {
       //   postID: this.postID,

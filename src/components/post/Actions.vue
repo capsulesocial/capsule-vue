@@ -17,7 +17,7 @@
           <!-- Background image -->
           <div class="absolute flex flex-row -mt-3 -ml-3 w-full">
             <img
-              v-if="this.emotion !== null"
+              v-if="this.emotion !== ''"
               :src="require('@/assets/images/backgrounds/' + this.emotion.toLowerCase() + '.png')"
               class="w-full"
             />
@@ -81,7 +81,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Comment } from '@/interfaces/Comment'
-import { Post } from '@/interfaces/Post'
 import BrandedButton from '@/components/BrandedButton.vue'
 import ProfileIcon from '@/components/icons/Person.vue'
 import CommentCard from '@/components/post/Comment.vue'

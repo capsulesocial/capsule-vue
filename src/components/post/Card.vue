@@ -3,12 +3,12 @@
     <!-- Post Preview Header: Avatar, name -->
     <div class="flex justify-between items-center">
       <nuxt-link :to="'/' + this.post.authorCID" class="flex">
+        <ProfileIcon v-if="this.avatar === ''" class="w-8 h-8 border-2 rounded-full mr-2" />
         <img
-          v-if="this.avatar !== ''"
+          v-else
           :src="this.avatar"
           class="w-8 h-8 rounded-lg mr-2 object-cover"
         />
-        <ProfileIcon v-else class="w-8 h-8 border-2 rounded-full mr-2" />
         <h4 class="text-bold mr-2 self-center">
           {{ this.author.name }}
         </h4>
@@ -135,9 +135,11 @@ export default Vue.extend({
       this.author = this.$store.state.session
     }
     this.$getProfile(this.$props.post.authorCID).then((profile) => {
+      console.log(profile)
       // Populate Avatar
       this.author = profile
       if (profile.avatar !== '') {
+        console.log(profile.avatar)
         this.$getPhoto(profile.avatar).then((image) => {
           this.avatar = image
         })

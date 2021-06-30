@@ -61,7 +61,7 @@ export default Vue.extend({
     // The user in which I am currently viewing
     // Check if this is my profile
     if (this.$props.authorCID === this.$store.state.session.cid) {
-      this.author = this.$store.state.me
+      this.author = this.$store.state.session
     }
     // Get user profile
     this.$getProfile(this.$props.authorCID).then((profile) => {

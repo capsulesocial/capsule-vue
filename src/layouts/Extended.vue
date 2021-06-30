@@ -1,8 +1,5 @@
 <template>
-  <section
-    v-if="this.$store.state.me !== ''"
-    class="bg-white h-full"
-  >
+  <section class="bg-white h-full">
     <article
       v-if="this.$store.state.settings.draftMode === true"
       class="w-full h-screen z-30 bg-white absolute"

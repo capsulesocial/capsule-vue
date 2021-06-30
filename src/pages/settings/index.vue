@@ -92,7 +92,7 @@
               id="location"
               v-model="location"
               type="text"
-              :placeholder="this.$store.state.session.location === '' ? 'Enter Location' : this.$store.state.me.location"
+              :placeholder="this.$store.state.session.location === '' ? 'Enter Location' : this.$store.state.session.location"
               class="focus:outline-none border-b-2 w-64 text-xl mb-4 text-primary focus:border-primary"
             />
           </div>

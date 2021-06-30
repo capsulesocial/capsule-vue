@@ -22,8 +22,8 @@ export default {
   async created () {
     // The user in which I am currently viewing
     // Check if this is my profile
-    if (this.$route.params.id === this.$store.state.me.id) {
-      this.currentUser = this.$store.state.me
+    if (this.$route.params.id === this.$store.state.session.cid) {
+      this.currentUser = this.$store.state.session
     }
     // Get user profile
     this.currentUser = await this.$getProfile(this.$route.params.id)

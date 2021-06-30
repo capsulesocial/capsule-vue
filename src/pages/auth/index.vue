@@ -223,7 +223,7 @@ export default Vue.extend({
             categories: [],
             followers: [],
             following: [],
-            avatar: null,
+            avatar: '',
           }
           this.$sendProfile(account).then((cid) => {
             account.cid = cid

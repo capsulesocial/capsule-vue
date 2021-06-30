@@ -118,9 +118,9 @@ export default Vue.extend({
       //   this.$store.state.me.id,
       //   this.$props.platform,
       // )
-      this.$store.commit('me/removeSocial', {
-        platform: this.$props.platform,
-      })
+      // this.$store.commit('me/removeSocial', {
+      //   platform: this.$props.platform,
+      // })
       this.isVerified = false
       this.isActive = false
     },

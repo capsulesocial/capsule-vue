@@ -16,7 +16,9 @@
 import BrandedButton from '@/components/BrandedButton.vue'
 
 export default {
-  components: [BrandedButton],
+  components: {
+    BrandedButton
+  },
   layout: 'error',
   props: {
     error: {
@@ -25,7 +27,7 @@ export default {
     },
   },
   created () {
-    if (this.$store.state.me.id === '') {
+    if (this.$store.state.session.cid === '') {
       this.$router.push('/auth')
     }
   },

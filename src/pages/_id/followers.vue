@@ -19,8 +19,8 @@ export default {
     }
   },
   async created () {
-    if (this.$route.params.id === this.$store.state.me.id) {
-      this.targetUser = this.$store.state.me
+    if (this.$route.params.id === this.$store.state.session.cid) {
+      this.targetUser = this.$store.state.session
     } else {
       // Get user profile
       this.targetUser = await this.$getProfile(this.$route.params.id)

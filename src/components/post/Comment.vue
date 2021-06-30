@@ -106,8 +106,8 @@ export default {
   },
   methods: {
     getFullName (id) {
-      if (this.$store.state.me.id === id) {
-        return this.$store.state.me.username
+      if (this.$store.state.session.id === id) {
+        return this.$store.state.session.name
       }
       const list = this.$store.state.authors
       const name = list.find(x => x.id === id)

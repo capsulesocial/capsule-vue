@@ -68,7 +68,7 @@ export default Vue.extend({
     }
   },
   created () {
-    let reposts = this.$store.state.me.reposts
+    let reposts = this.$store.state.session.reposts
     if(!reposts) return
     if(reposts.includes(this.$props.post.id)) {
       this.isReposted = true
