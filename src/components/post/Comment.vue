@@ -78,70 +78,70 @@ import BrandedButton from '@/components/BrandedButton.vue'
 import Reply from '@/components/post/Reply.vue'
 
 export default {
-  components: {
-    ProfileIcon,
-    BrandedButton,
-    Reply,
-  },
-  props: {
-    comment: {
-      type: Object,
-      default: null,
-    },
-  },
-  data () {
-    return {
-      isReplying: false,
-      reply: '',
-      replies: this.comment.replies,
-      avatar: '',
-    }
-  },
-  created () {
-    if (this.$props.comment.authorAvatarCID !== null) {
-      this.$getPhoto(this.$props.comment.authorAvatarCID).then((image) => {
-        this.avatar = image
-      })
-    }
-  },
-  methods: {
-    getFullName (id) {
-      if (this.$store.state.session.id === id) {
-        return this.$store.state.session.name
-      }
-      const list = this.$store.state.authors
-      const name = list.find(x => x.id === id)
-      if (name) {
-        return name.username
-      } else {
-        return id
-      }
-    },
-    sendReply () {
-      if (this.comment === '' || !this.$qualityText(this.reply)) {
-        alert('Invalid reply!')
-      } else {
-        const r = {
-          postID: this.$props.comment.postID,
-          commentID: this.$props.comment.id,
-          authorID: this.$store.state.session.id,
-          authorCID: this.$store.state.session.cid,
-          authorAvatarCID: this.$store.state.session.avatar,
-          content: this.reply,
-          timestamp: new Date(),
-        }
-        // this.$store.commit('posts/commentReply', r)
-        this.replies.push(r)
-        this.filterReplies()
-        this.reply = ''
-      }
-    },
-    filterReplies () {
-      const rList = this.replies.slice().sort((p0, p1) => {
-        return p1.timestamp - p0.timestamp
-      })
-      return rList
-    },
-  },
+	components: {
+		ProfileIcon,
+		BrandedButton,
+		Reply,
+	},
+	props: {
+		comment: {
+			type: Object,
+			default: null,
+		},
+	},
+	data () {
+		return {
+			isReplying: false,
+			reply: ``,
+			replies: this.comment.replies,
+			avatar: ``,
+		}
+	},
+	created () {
+		if (this.$props.comment.authorAvatarCID !== null) {
+			this.$getPhoto(this.$props.comment.authorAvatarCID).then((image) => {
+				this.avatar = image
+			})
+		}
+	},
+	methods: {
+		getFullName (id) {
+			if (this.$store.state.session.id === id) {
+				return this.$store.state.session.name
+			}
+			const list = this.$store.state.authors
+			const name = list.find(x => x.id === id)
+			if (name) {
+				return name.username
+			} else {
+				return id
+			}
+		},
+		sendReply () {
+			if (this.comment === `` || !this.$qualityText(this.reply)) {
+				alert(`Invalid reply!`)
+			} else {
+				const r = {
+					postID: this.$props.comment.postID,
+					commentID: this.$props.comment.id,
+					authorID: this.$store.state.session.id,
+					authorCID: this.$store.state.session.cid,
+					authorAvatarCID: this.$store.state.session.avatar,
+					content: this.reply,
+					timestamp: new Date(),
+				}
+				// this.$store.commit('posts/commentReply', r)
+				this.replies.push(r)
+				this.filterReplies()
+				this.reply = ``
+			}
+		},
+		filterReplies () {
+			const rList = this.replies.slice().sort((p0, p1) => {
+				return p1.timestamp - p0.timestamp
+			})
+			return rList
+		},
+	},
 }
 </script>

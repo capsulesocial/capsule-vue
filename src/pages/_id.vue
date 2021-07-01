@@ -133,58 +133,60 @@ import FriendButton from '@/components/FriendButton.vue'
 import ExternalURLIcon from '@/components/icons/ExternalURL.vue'
 
 export default Vue.extend({
-  components: {
-    TwitterIcon,
-    GitHubIcon,
-    FriendButton,
-    ExternalURLIcon,
-  },
-  // layout: 'Extended',
-  data () {
-    return {
-      avatar: '',
-      currentUser: {},
-      posts: [],
-    }
-  },
-  async created () {
-    // The user in which I am currently viewing
-    // Check if this is my profile
-    if (this.$route.params.id === this.$store.state.session.cid) {
-      this.currentUser = this.$store.state.session
-    }
-    // Get user profile
-    this.$getProfile(this.$route.params.id).then((profile) => {
-      this.currentUser = profile
-        if (!this.currentUser) return
-        // @ts-ignore
-        if (this.currentUser.avatar !== '') {
-          // @ts-ignore
-          this.$getPhoto(this.currentUser.avatar).then((image) => {
-            this.avatar = image
-          })
-        }
-        this.userPosts()
-    })
-  },
-  methods: {
-    openWindow (url) {
-      if (process.client) {
-        window.open(url, '_blank')
-      }
-    },
-    async userPosts () {
-      // @ts-ignore
-      const p = this.currentUser.posts
-      if (p.length > 0) {
-        for (let i = 0; i < p.length; i++) {
-          const post = await this.$getPost(p[i])
-          post.id = p[i]
-          // @ts-ignore
-          this.posts.push(post)
-        }
-      }
-    },
-  },
+	components: {
+		TwitterIcon,
+		GitHubIcon,
+		FriendButton,
+		ExternalURLIcon,
+	},
+	// layout: 'Extended',
+	data () {
+		return {
+			avatar: ``,
+			currentUser: {},
+			posts: [],
+		}
+	},
+	async created () {
+		// The user in which I am currently viewing
+		// Check if this is my profile
+		if (this.$route.params.id === this.$store.state.session.cid) {
+			this.currentUser = this.$store.state.session
+		}
+		// Get user profile
+		this.$getProfile(this.$route.params.id).then((profile) => {
+			this.currentUser = profile
+			if (!this.currentUser) {
+				return
+			}
+			// @ts-ignore
+			if (this.currentUser.avatar !== ``) {
+				// @ts-ignore
+				this.$getPhoto(this.currentUser.avatar).then((image) => {
+					this.avatar = image
+				})
+			}
+			this.userPosts()
+		})
+	},
+	methods: {
+		openWindow (url) {
+			if (process.client) {
+				window.open(url, `_blank`)
+			}
+		},
+		async userPosts () {
+			// @ts-ignore
+			const p = this.currentUser.posts
+			if (p.length > 0) {
+				for (let i = 0; i < p.length; i++) {
+					const post = await this.$getPost(p[i])
+					post.id = p[i]
+					// @ts-ignore
+					this.posts.push(post)
+				}
+			}
+		},
+	},
 })
 </script>

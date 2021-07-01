@@ -112,39 +112,41 @@ import HelpIcon from '@/components/icons/Help.vue'
 import LogoutIcon from '@/components/icons/Logout.vue'
 
 export default Vue.extend({
-  components: {
-    CapsuleIcon,
-    SettingsIcon,
-    NotificationsIcon,
-    BackButton,
-    ForwardButton,
-    SearchIcon,
-    DownIcon,
-    UpIcon,
-    HelpIcon,
-    LogoutIcon,
-  },
-  data () {
-    return {
-      showMore: false,
-    }
-  },
-  mounted () {
-    window.addEventListener('click', (e: any): void => {
-      if (!e.target) return
-      if (e.target.parentNode === null || e.target.parentNode.classList === undefined || !e.target.parentNode.classList.contains('dropdown')) {
-        this.showMore = false
-      }
-    }, false)
-  },
-  methods: {
-    logout () {
-      this.$store.commit('me/endSession')
-      this.$router.push('/')
-    },
-    toggleDropdown () {
-      this.showMore = !this.showMore
-    },
-  },
+	components: {
+		CapsuleIcon,
+		SettingsIcon,
+		NotificationsIcon,
+		BackButton,
+		ForwardButton,
+		SearchIcon,
+		DownIcon,
+		UpIcon,
+		HelpIcon,
+		LogoutIcon,
+	},
+	data () {
+		return {
+			showMore: false,
+		}
+	},
+	mounted () {
+		window.addEventListener(`click`, (e: any): void => {
+			if (!e.target) {
+				return
+			}
+			if (e.target.parentNode === null || e.target.parentNode.classList === undefined || !e.target.parentNode.classList.contains(`dropdown`)) {
+				this.showMore = false
+			}
+		}, false)
+	},
+	methods: {
+		logout () {
+			this.$store.commit(`me/endSession`)
+			this.$router.push(`/`)
+		},
+		toggleDropdown () {
+			this.showMore = !this.showMore
+		},
+	},
 })
 </script>

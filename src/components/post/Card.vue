@@ -3,7 +3,10 @@
     <!-- Post Preview Header: Avatar, name -->
     <div class="flex justify-between items-center">
       <nuxt-link :to="'/' + this.post.authorCID" class="flex">
-        <ProfileIcon v-if="this.avatar === ''" class="w-8 h-8 border-2 rounded-full mr-2" />
+        <ProfileIcon
+          v-if="this.avatar === ''"
+          class="w-8 h-8 border-2 rounded-full mr-2"
+        />
         <img
           v-else
           :src="this.avatar"
@@ -28,10 +31,7 @@
 
     <!-- Preview Content -->
     <div class="hover:text-primary">
-      <nuxt-link
-        :to="'/post/' + this.post.id"
-        class="flex justify-between"
-      >
+      <nuxt-link :to="'/post/' + this.post.id" class="flex justify-between">
         <div>
           <h3 class="text-base font-bold capitalize">
             {{ this.post.title }}
@@ -61,24 +61,38 @@
           <CommentIcon class="fill-primary" />
         </button>
         <Share :post="this.post" class="fill-primary self-center z-20" />
-        <BookmarkButton :postID="this.post.id" class="fill-primary self-center" />
+        <BookmarkButton
+          :postID="this.post.id"
+          class="fill-primary self-center"
+        />
       </div>
       <div v-if="this.showComments" class="flex">
-        <h6>Filter Comments </h6>
+        <h6>Filter Comments</h6>
         <div class="relative">
-          <button class="toggle focus:outline-none flex justify-center shadow-lg rounded-lg px-4 ml-4 text-sm w-32" @click.stop="showFilter = !showFilter">
+          <button
+            class="toggle focus:outline-none flex justify-center shadow-lg rounded-lg px-4 ml-4 text-sm w-32"
+            @click.stop="showFilter = !showFilter"
+          >
             <span v-if="this.filter === null" class="toggle">All</span>
             <span v-else class="toggle capitalize">{{ this.filter }}</span>
             <ChevronUp v-if="this.showFilter" :downsize="true" />
             <ChevronDown v-else :downsize="true" />
           </button>
-          <ul v-if="this.showFilter" class="absolute bg-white z-10 shadow-lg rounded-lg py-1 ml-4 w-32">
+          <ul
+            v-if="this.showFilter"
+            class="absolute bg-white z-10 shadow-lg rounded-lg py-1 ml-4 w-32"
+          >
             <button class="w-full" @click="setCommentFilter(null)">
               <li class="text-left pl-2">
                 All
               </li>
             </button>
-            <button v-for="r in this.$store.state.config.reactions" :key="r.label" class="w-full" @click="setCommentFilter(r.label)">
+            <button
+              v-for="r in this.$store.state.config.reactions"
+              :key="r.label"
+              class="w-full"
+              @click="setCommentFilter(r.label)"
+            >
               <li class="text-left pl-2">
                 {{ r.label }}
               </li>
@@ -87,83 +101,97 @@
         </div>
       </div>
     </div>
-    <PostActions v-if="this.showComments" :post="this.post" :filter="this.filter" />
+    <PostActions
+      v-if="this.showComments"
+      :post="this.post"
+      :filter="this.filter"
+    />
   </article>
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import PostActions from '@/components/post/Actions.vue'
-import XIcon from '@/components/icons/X.vue'
-import ProfileIcon from '@/components/icons/Person.vue'
-import BookmarkButton from '@/components/post/BookmarkButton.vue'
-import Share from '@/components/post/Share.vue'
-import CommentIcon from '@/components/icons/Comment.vue'
-import ChevronUp from '@/components/icons/ChevronUp.vue'
-import ChevronDown from '@/components/icons/ChevronDown.vue'
+import Vue from "vue"
+import PostActions from "@/components/post/Actions.vue"
+import XIcon from "@/components/icons/X.vue"
+import ProfileIcon from "@/components/icons/Person.vue"
+import BookmarkButton from "@/components/post/BookmarkButton.vue"
+import Share from "@/components/post/Share.vue"
+import CommentIcon from "@/components/icons/Comment.vue"
+import ChevronUp from "@/components/icons/ChevronUp.vue"
+import ChevronDown from "@/components/icons/ChevronDown.vue"
 
 export default Vue.extend({
-  components: {
-    PostActions,
-    XIcon,
-    ProfileIcon,
-    BookmarkButton,
-    Share,
-    CommentIcon,
-    ChevronUp,
-    ChevronDown,
-  },
-  props: {
-    post: {
-      type: Object,
-      default: null,
-    },
-  },
-  data () {
-    return {
-      showComments: false,
-      showFilter: false,
-      filter: null,
-      author: null,
-      avatar: '',
-      featuredPhoto: null,
-    }
-  },
-  async created () {
-    if (this.$store.state.session.cid === this.$props.post.authorCID) {
-      // Viewing own post
-      this.author = this.$store.state.session
-    }
-    this.$getProfile(this.$props.post.authorCID).then((profile) => {
-      console.log(profile)
-      // Populate Avatar
-      this.author = profile
-      if (profile.avatar !== '') {
-        console.log(profile.avatar)
-        this.$getPhoto(profile.avatar).then((image) => {
-          this.avatar = image
-        })
-      }
-      // Populate Featured Photo
-      if (this.post.featuredPhotoCID !== null) {
-        this.$getPhoto(this.post.featuredPhotoCID).then((image) => {
-          this.featuredPhoto = image
-        })
-      }
-    })
-    // Set filter dropdown event handler
-    window.addEventListener('click', (e: any): void => {
-      if (!e.target) return
-      if (e.target.parentNode === null || e.target.parentNode.classList === undefined || !e.target.parentNode.classList.contains('toggle')) {
-        this.showFilter = false
-      }
-    }, false)
-  },
-  methods: {
-    setCommentFilter (reaction) {
-      this.filter = reaction
-      this.showFilter = false
-    },
-  },
+	components: {
+		PostActions,
+		XIcon,
+		ProfileIcon,
+		BookmarkButton,
+		Share,
+		CommentIcon,
+		ChevronUp,
+		ChevronDown,
+	},
+	props: {
+		post: {
+			type: Object,
+			default: null,
+		},
+	},
+	data () {
+		return {
+			showComments: false,
+			showFilter: false,
+			filter: null,
+			author: null,
+			avatar: ``,
+			featuredPhoto: null,
+		}
+	},
+	async created () {
+		if (this.$store.state.session.cid === this.$props.post.authorCID) {
+			// Viewing own post
+			this.author = this.$store.state.session
+		}
+		this.$getProfile(this.$props.post.authorCID).then((profile) => {
+			console.log(profile)
+			// Populate Avatar
+			this.author = profile
+			if (profile.avatar !== ``) {
+				console.log(profile.avatar)
+				this.$getPhoto(profile.avatar).then((image) => {
+					this.avatar = image
+				})
+			}
+			// Populate Featured Photo
+			if (this.post.featuredPhotoCID !== null) {
+				this.$getPhoto(this.post.featuredPhotoCID).then((image) => {
+					this.featuredPhoto = image
+				})
+			}
+		})
+		// Set filter dropdown event handler
+		window.addEventListener(
+			`click`,
+			(e: any): void => {
+				if (!e.target) {
+					return
+				}
+				if (
+					e.target.parentNode === null ||
+					e.target.parentNode.classList === undefined ||
+					!e.target.parentNode.classList.contains(`toggle`)
+				) {
+					this.showFilter = false
+				}
+			},
+			false,
+		)
+	},
+	methods: {
+		setCommentFilter (reaction) {
+			this.filter = reaction
+			this.showFilter = false
+		},
+	},
 })
 </script>

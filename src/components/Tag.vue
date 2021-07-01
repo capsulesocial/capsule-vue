@@ -15,34 +15,34 @@
 
 <script>
 export default {
-  props: {
-    tag: {
-      type: String,
-      default: '',
-    },
-    theme: {
-      type: String,
-      default: 'colors',
-    },
-  },
-  data () {
-    return {
-      colors: [
-        'text-primary',
-        'text-secondary',
-        'text-teal',
-        'text-ocean',
-        'text-fourth',
-        'text-fifth',
-      ],
-    }
-  },
-  methods: {
-    getRandomColor () {
-      let i = (Math.random() * 5) % 5
-      i = Math.round(i)
-      return i
-    },
-  },
+	props: {
+		tag: {
+			type: String,
+			default: ``,
+		},
+		theme: {
+			type: String,
+			default: `colors`,
+		},
+	},
+	data () {
+		return {
+			colors: [
+				`text-primary`,
+				`text-secondary`,
+				`text-teal`,
+				`text-ocean`,
+				`text-fourth`,
+				`text-fifth`,
+			],
+		}
+	},
+	methods: {
+		getRandomColor () {
+			let i = (Math.random() * 5) % 5
+			i = Math.round(i)
+			return i
+		},
+	},
 }
 </script>

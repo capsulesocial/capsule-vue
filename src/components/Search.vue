@@ -16,13 +16,13 @@
 import SearchIcon from '@/components/icons/Search.vue'
 
 export default {
-  components: {
-    SearchIcon,
-  },
-  data () {
-    return {
-      keyword: '',
-    }
-  },
+	components: {
+		SearchIcon,
+	},
+	data () {
+		return {
+			keyword: ``,
+		}
+	},
 }
 </script>

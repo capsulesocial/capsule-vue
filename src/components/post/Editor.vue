@@ -285,8 +285,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapMutations, mapActions } from 'vuex'
-import { actionType, namespace as settingStoreNamespace, SettingState } from '~/store/settings'
-import { MutationType, namespace as sessionStoreNamespace, SessionState } from '~/store/session'
 // import { postsMutationType, namespace as postsStoreNamespace, Posts} from '~/store/posts'
 
 import _ from 'lodash'
@@ -305,195 +303,197 @@ import BrandedButton from '@/components/BrandedButton.vue'
 import markdown from '@/mixins/markdown.js'
 import { Post } from '@/interfaces/Post'
 import { Tag } from '@/interfaces/Tag'
+import { MutationType, namespace as sessionStoreNamespace, SessionState } from '~/store/session'
+import { actionType, namespace as settingStoreNamespace, SettingState } from '~/store/settings'
 
 export default Vue.extend({
-  components: {
-    CloseIcon,
-    BoldIcon,
-    CodeIcon,
-    ItalicIcon,
-    ListIcon,
-    LinkIcon,
-    ImageIcon,
-    QuoteIcon,
-    BrandedButton,
-    CameraIcon,
-  },
-  mixins: [markdown],
-  data () {
-    let input: string
-    if (this.$store.state.draft.content !== '') {
-      input = this.$store.state.draft.content
-    } else {
-      input = ''
-    }
-    let tags: Tag[] = []
-    return {
-      title: this.$store.state.draft.title,
-      subtitle: this.$store.state.draft.subtitle,
-      input,
-      mobileState: 'edit',
-      tags,
-      tag: '',
-      featuredPhoto: null,
-      featuredPhotoCID: '',
-    }
-  },
-  computed: {
-    compiledMarkdown (): string {
-      const md = marked(this.input)
-      return md
-    },
-  },
-  methods: {
-    ...mapActions(settingStoreNamespace, {
-      toggleDraftMode: actionType.TOGGLE_DRAFT_MODE
-    }),
-    ...mapMutations({
-      toggle: 'draft/toggleCompose',
-      updateDraft: 'draft/updateDraft',
-    }),
-    ...mapMutations(sessionStoreNamespace, {
-      addPost: MutationType.ADD_POST,
-      changeCID: MutationType.CHANGE_CID,
-    }),
-    // ...mapMutations(postsStoreNamespace, {
-    //   addTag: postsMutationType.ADD_TAG,
-    // }),
-    toggleComposeState (state): void {
-      this.mobileState = state
-    },
-    update: _.debounce(function (this: any, e): void {
-      const clean: string = DOMPurify.sanitize(e.target.value, {
-        USE_PROFILES: { html: true, svg: true },
-      })
-      this.input = clean
-    }, 300),
-    addTag (): void {
-      if (this.tag === '' || !this.$qualityText(this.tag)) {
-        alert('Invalid tag!')
-      } else {
-        let t: Tag = {
-          name: this.tag,
-          posts: '',
-        }
-        this.tags.push(t)
-        this.tag = ''
-      }
-    },
-    removeTag (tag): void {
-      // Remove
-      const index = this.tags.indexOf(tag)
-      if (index > -1) {
-        this.tags.splice(index, 1)
-      }
-    },
-    handleImage (e): void {
-      const image = e.target.files[0]
-      const reader = new FileReader()
-      reader.readAsDataURL(image)
-      reader.onload = (i) => {
-        if (i.target !== null) {
-          this.uploadImage(i.target.result)
-        }
-      }
-    },
-    uploadImage (image): void {
-      this.$sendPhoto(image).then((cid) => {
-        this.featuredPhotoCID = cid
-        this.downloadImage(cid)
-      })
-    },
-    downloadImage (cid): void {
-      this.$getPhoto(cid).then((image) => {
-        this.featuredPhoto = image
-      })
-    },
-    post (): void {
-      if (this.title === '' || !this.$qualityText(this.title)) {
-        alert('Invalid title!')
-      } else if (this.subtitle === '' || !this.$qualityText(this.subtitle)) {
-        alert('Invalid subtitle!')
-      } else {
-        const date = new Date()
-        const p: Post = {
-          title: this.title,
-          subtitle: this.subtitle,
-          content: this.input,
-          cid: '',
-          id: '',
-          timestamp: date,
-          tags: this.tags,
-          comments: [],
-          bookmarks: [],
-          authorID: this.$store.state.session.id,
-          authorCID: this.$store.state.session.cid,
-          featuredPhotoCID: this.featuredPhotoCID,
-        }
-        // sending post to IPFS. Returns Content Address
-        this.$sendPost(p).then((cid) => {
-          console.log('Post CID: ', cid)
-          p.cid = cid
-          // this.$store.commit('posts/sendPost', p.id)
-          // this.$store.commit('posts/sendPost', p.cid)
-          // this.$store.commit('tags/sendPost', p)
-          // this.$store.commit('posts/addTag', p.tags)
-          // for (let t in p.tags) {
-          //   console.log(t)
-          //   this.addTag(p.tags)
-          // }
-          // Adding post to local profile object
-          this.addPost(cid)
-          let profile = this.$store.state.session
-          console.log(cid)
-          // Sending updated profile to IPFS.
-          // Returns updated content address 
-          this.$sendProfile(profile).then((pcid) => {
-            this.changeCID(pcid)
-            // Reset draft & redirect
-            this.toggleDraftMode()
-            this.title = 'Title'
-            this.subtitle = 'Subtitle'
-            this.input = '# Hello World'
-            this.tags = []
-            this.$router.push('/post/' + cid)
-          })
-        })
-      }
-    },
-    updateStore (): void {
-      this.$store.commit('draft/updateDraft', {
-        title: this.title,
-        subtitle: this.subtitle,
-        content: this.input,
-        tags: this.tags,
-      })
-      this.toggleDraftMode()
-    },
-    addMarkdown (md, wrap): void {
-      if (this.$refs.ta !== undefined) {
-        const ta = this.$refs.ta as HTMLInputElement
-        const cursorStart: number | null = ta.selectionStart
-        const cursorEnd: number | null = ta.selectionEnd
-        if (cursorStart !== null && cursorEnd !== null) {
-          const selectedText = this.input.substring(cursorStart, cursorEnd)
-          if (wrap) {
-            this.input =
+	components: {
+		CloseIcon,
+		BoldIcon,
+		CodeIcon,
+		ItalicIcon,
+		ListIcon,
+		LinkIcon,
+		ImageIcon,
+		QuoteIcon,
+		BrandedButton,
+		CameraIcon,
+	},
+	mixins: [markdown],
+	data () {
+		let input: string
+		if (this.$store.state.draft.content !== ``) {
+			input = this.$store.state.draft.content
+		} else {
+			input = ``
+		}
+		const tags: Tag[] = []
+		return {
+			title: this.$store.state.draft.title,
+			subtitle: this.$store.state.draft.subtitle,
+			input,
+			mobileState: `edit`,
+			tags,
+			tag: ``,
+			featuredPhoto: null,
+			featuredPhotoCID: ``,
+		}
+	},
+	computed: {
+		compiledMarkdown (): string {
+			const md = marked(this.input)
+			return md
+		},
+	},
+	methods: {
+		...mapActions(settingStoreNamespace, {
+			toggleDraftMode: actionType.TOGGLE_DRAFT_MODE,
+		}),
+		...mapMutations({
+			toggle: `draft/toggleCompose`,
+			updateDraft: `draft/updateDraft`,
+		}),
+		...mapMutations(sessionStoreNamespace, {
+			addPost: MutationType.ADD_POST,
+			changeCID: MutationType.CHANGE_CID,
+		}),
+		// ...mapMutations(postsStoreNamespace, {
+		//   addTag: postsMutationType.ADD_TAG,
+		// }),
+		toggleComposeState (state): void {
+			this.mobileState = state
+		},
+		update: _.debounce(function (this: any, e): void {
+			const clean: string = DOMPurify.sanitize(e.target.value, {
+				USE_PROFILES: { html: true, svg: true },
+			})
+			this.input = clean
+		}, 300),
+		addTag (): void {
+			if (this.tag === `` || !this.$qualityText(this.tag)) {
+				alert(`Invalid tag!`)
+			} else {
+				const t: Tag = {
+					name: this.tag,
+					posts: ``,
+				}
+				this.tags.push(t)
+				this.tag = ``
+			}
+		},
+		removeTag (tag): void {
+			// Remove
+			const index = this.tags.indexOf(tag)
+			if (index > -1) {
+				this.tags.splice(index, 1)
+			}
+		},
+		handleImage (e): void {
+			const image = e.target.files[0]
+			const reader = new FileReader()
+			reader.readAsDataURL(image)
+			reader.onload = (i) => {
+				if (i.target !== null) {
+					this.uploadImage(i.target.result)
+				}
+			}
+		},
+		uploadImage (image): void {
+			this.$sendPhoto(image).then((cid) => {
+				this.featuredPhotoCID = cid
+				this.downloadImage(cid)
+			})
+		},
+		downloadImage (cid): void {
+			this.$getPhoto(cid).then((image) => {
+				this.featuredPhoto = image
+			})
+		},
+		post (): void {
+			if (this.title === `` || !this.$qualityText(this.title)) {
+				alert(`Invalid title!`)
+			} else if (this.subtitle === `` || !this.$qualityText(this.subtitle)) {
+				alert(`Invalid subtitle!`)
+			} else {
+				const date = new Date()
+				const p: Post = {
+					title: this.title,
+					subtitle: this.subtitle,
+					content: this.input,
+					cid: ``,
+					id: ``,
+					timestamp: date,
+					tags: this.tags,
+					comments: [],
+					bookmarks: [],
+					authorID: this.$store.state.session.id,
+					authorCID: this.$store.state.session.cid,
+					featuredPhotoCID: this.featuredPhotoCID,
+				}
+				// sending post to IPFS. Returns Content Address
+				this.$sendPost(p).then((cid) => {
+					console.log(`Post CID: `, cid)
+					p.cid = cid
+					// this.$store.commit('posts/sendPost', p.id)
+					// this.$store.commit('posts/sendPost', p.cid)
+					// this.$store.commit('tags/sendPost', p)
+					// this.$store.commit('posts/addTag', p.tags)
+					// for (let t in p.tags) {
+					//   console.log(t)
+					//   this.addTag(p.tags)
+					// }
+					// Adding post to local profile object
+					this.addPost(cid)
+					const profile = this.$store.state.session
+					console.log(cid)
+					// Sending updated profile to IPFS.
+					// Returns updated content address
+					this.$sendProfile(profile).then((pcid) => {
+						this.changeCID(pcid)
+						// Reset draft & redirect
+						this.toggleDraftMode()
+						this.title = `Title`
+						this.subtitle = `Subtitle`
+						this.input = `# Hello World`
+						this.tags = []
+						this.$router.push(`/post/` + cid)
+					})
+				})
+			}
+		},
+		updateStore (): void {
+			this.$store.commit(`draft/updateDraft`, {
+				title: this.title,
+				subtitle: this.subtitle,
+				content: this.input,
+				tags: this.tags,
+			})
+			this.toggleDraftMode()
+		},
+		addMarkdown (md, wrap): void {
+			if (this.$refs.ta !== undefined) {
+				const ta = this.$refs.ta as HTMLInputElement
+				const cursorStart: number | null = ta.selectionStart
+				const cursorEnd: number | null = ta.selectionEnd
+				if (cursorStart !== null && cursorEnd !== null) {
+					const selectedText = this.input.substring(cursorStart, cursorEnd)
+					if (wrap) {
+						this.input =
               this.input.substring(0, cursorStart) +
               md +
               selectedText +
               md +
               this.input.substring(cursorEnd)
-          } else {
-            this.input =
+					} else {
+						this.input =
               this.input.substring(0, cursorStart) +
               md +
               selectedText +
               this.input.substring(cursorEnd)
-          }
-        }
-      }
-    },
-  },
+					}
+				}
+			}
+		},
+	},
 })
 </script>

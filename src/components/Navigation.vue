@@ -101,7 +101,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapActions } from 'vuex'
-import { actionType, namespace as settingStoreNamespace, SettingState } from '~/store/settings'
 
 import HomeIcon from '@/components/icons/Home.vue'
 import DiscoverIcon from '@/components/icons/Discover.vue'
@@ -111,31 +110,32 @@ import SettingsIcon from '@/components/icons/Settings.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 import BookmarksIcon from '@/components/icons/Bookmarks.vue'
 import InboxIcon from '@/components/icons/Inbox.vue'
+import { actionType, namespace as settingStoreNamespace, SettingState } from '~/store/settings'
 
 export default Vue.extend({
-  components: {
-    HomeIcon,
-    DiscoverIcon,
-    PencilIcon,
-    ProfileIcon,
-    SettingsIcon,
-    BrandedButton,
-    BookmarksIcon,
-    InboxIcon,
-  },
-  data () {
-    return {
-      isProfileActions: false,
-    }
-  },
-  methods: {
-    ...mapActions(settingStoreNamespace, {
-      toggleDraftMode: actionType.TOGGLE_DRAFT_MODE
-    }),
-    toggleProfileActions () {
-      this.isProfileActions = !this.isProfileActions
-    },
-  },
+	components: {
+		HomeIcon,
+		DiscoverIcon,
+		PencilIcon,
+		ProfileIcon,
+		SettingsIcon,
+		BrandedButton,
+		BookmarksIcon,
+		InboxIcon,
+	},
+	data () {
+		return {
+			isProfileActions: false,
+		}
+	},
+	methods: {
+		...mapActions(settingStoreNamespace, {
+			toggleDraftMode: actionType.TOGGLE_DRAFT_MODE,
+		}),
+		toggleProfileActions () {
+			this.isProfileActions = !this.isProfileActions
+		},
+	},
 })
 </script>
 

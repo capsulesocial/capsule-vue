@@ -47,40 +47,40 @@ import DiscoverCard from '@/components/DiscoverCard.vue'
 import TagCard from '@/components/Tag.vue'
 
 export default {
-  components: {
-    DiscoverCard,
-    TagCard,
-  },
-  layout: 'Extended',
-  data () {
-    return {
-      tagCategory: 'trending',
-      tags: [
-        'jack',
-        'pancakes',
-        'biking',
-        'reddit',
-        'crypto',
-        'lizardpeople',
-        'LEGOs',
-        'aspen',
-        'clock',
-        'sunset',
-        'beef',
-      ],
-      categories: [
-        'technology',
-        'crypto',
-        'politics',
-        'US-world',
-        'science',
-        'environment',
-        'food & drink',
-        'culture',
-        'education',
-        'philosophy',
-      ],
-    }
-  },
+	components: {
+		DiscoverCard,
+		TagCard,
+	},
+	layout: `Extended`,
+	data () {
+		return {
+			tagCategory: `trending`,
+			tags: [
+				`jack`,
+				`pancakes`,
+				`biking`,
+				`reddit`,
+				`crypto`,
+				`lizardpeople`,
+				`LEGOs`,
+				`aspen`,
+				`clock`,
+				`sunset`,
+				`beef`,
+			],
+			categories: [
+				`technology`,
+				`crypto`,
+				`politics`,
+				`US-world`,
+				`science`,
+				`environment`,
+				`food & drink`,
+				`culture`,
+				`education`,
+				`philosophy`,
+			],
+		}
+	},
 }
 </script>

@@ -36,46 +36,45 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import FriendButton from '@/components/FriendButton.vue'
-import ProfileIcon from '@/components/icons/Person.vue'
+import Vue from "vue"
+import FriendButton from "@/components/FriendButton.vue"
+import ProfileIcon from "@/components/icons/Person.vue"
 
 export default Vue.extend({
-  components: {
-    FriendButton,
-    ProfileIcon,
-  },
-  props: {
-    authorCID: {
-      type: String,
-      default: null,
-    },
-  },
-  data () {
-    return {
-      author: {},
-      avatar: '',
-    }
-  },
-  async created () {
-    // The user in which I am currently viewing
-    // Check if this is my profile
-    if (this.$props.authorCID === this.$store.state.session.cid) {
-      this.author = this.$store.state.session
-    }
-    // Get user profile
-    this.$getProfile(this.$props.authorCID).then((profile) => {
-      this.author = profile
-      // Get Author Avatar
-      // @ts-ignore
-      if (this.author.avatar !== '') {
-      // @ts-ignore
-        this.$getPhoto(this.author.avatar).then((image) => {
-          this.avatar = image
-        })
-      }
-    })
-
-  },
+	components: {
+		FriendButton,
+		ProfileIcon,
+	},
+	props: {
+		authorCID: {
+			type: String,
+			default: null,
+		},
+	},
+	data () {
+		return {
+			author: {},
+			avatar: ``,
+		}
+	},
+	async created () {
+		// The user in which I am currently viewing
+		// Check if this is my profile
+		if (this.$props.authorCID === this.$store.state.session.cid) {
+			this.author = this.$store.state.session
+		}
+		// Get user profile
+		this.$getProfile(this.$props.authorCID).then((profile) => {
+			this.author = profile
+			// Get Author Avatar
+			// @ts-ignore
+			if (this.author.avatar !== ``) {
+				// @ts-ignore
+				this.$getPhoto(this.author.avatar).then((image) => {
+					this.avatar = image
+				})
+			}
+		})
+	},
 })
 </script>

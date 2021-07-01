@@ -25,17 +25,17 @@ import Header from '@/components/Header.vue'
 import PostEditor from '@/components/post/Editor.vue'
 
 export default Vue.extend({
-  components: {
-    Navigation,
-    Header,
-    PostEditor,
-  },
-  created () {
-    console.log(this.$store.state.session.cid)
-    if (this.$store.state.session.cid === '') {
-      console.log('ROUTER PUSH')
-      this.$router.push('/auth')
-    }
-  },
+	components: {
+		Navigation,
+		Header,
+		PostEditor,
+	},
+	created () {
+		console.log(this.$store.state.session.cid)
+		if (this.$store.state.session.cid === ``) {
+			console.log(`ROUTER PUSH`)
+			this.$router.push(`/auth`)
+		}
+	},
 })
 </script>

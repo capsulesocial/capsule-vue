@@ -179,125 +179,126 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapMutations } from 'vuex'
-import { MutationType, namespace as sessionStoreNamespace, SessionState } from '~/store/session'
 
 import BrandedButton from '@/components/BrandedButton.vue'
 import ChevronRight from '@/components/icons/ChevronRight.vue'
 import UploadAvatar from '@/components/icons/UploadAvatar.vue'
+import { MutationType, namespace as sessionStoreNamespace, SessionState } from '~/store/session'
 
 export default Vue.extend({
-  components: {
-    VerifySocial: () => import('@/components/VerifySocial.vue'),
-    BrandedButton,
-    ChevronRight,
-    UploadAvatar,
-  },
-  layout: 'Extended',
-  data () {
-    return {
-      newName: '',
-      profilePic: null,
-      newID: '',
-      newEmail: '',
-      location: '',
-      bio: this.$store.state.session.bio,
-      maxCharBio: 256,
-      tab: '',
-    }
-  },
-  created () {
-    if (this.$store.state.session.avatar !== "") {
-      this.$getPhoto(this.$store.state.session.avatar).then((image) => {
-        this.profilePic = image
-      })
-    }
-  },
-  methods: {
-    ...mapMutations(sessionStoreNamespace, {
-      changeCID: MutationType.CHANGE_CID,
-      changeID: MutationType.CHANGE_ID,
-      changeName: MutationType.CHANGE_NAME,
-      changeEmail: MutationType.CHANGE_EMAIL,
-      changeAvatar: MutationType.CHANGE_AVATAR,
-      changeBio: MutationType.CHANGE_BIO,
-      changeLocation: MutationType.CHANGE_LOCATION
-    }),
-    isActiveTab (t) {
-      if (t === this.tab) {
-        return true
-      } else {
-        return false
-      }
-    },
-    hasChanged () {
-      if (
-        this.newName !== '' ||
-        this.newID !== '' ||
-        this.newEmail !== '' ||
-        this.location !== '' ||
+	components: {
+		VerifySocial: () => import(`@/components/VerifySocial.vue`),
+		BrandedButton,
+		ChevronRight,
+		UploadAvatar,
+	},
+	layout: `Extended`,
+	data () {
+		return {
+			newName: ``,
+			profilePic: null,
+			newID: ``,
+			newEmail: ``,
+			location: ``,
+			bio: this.$store.state.session.bio,
+			maxCharBio: 256,
+			tab: ``,
+		}
+	},
+	created () {
+		if (this.$store.state.session.avatar !== ``) {
+			this.$getPhoto(this.$store.state.session.avatar).then((image) => {
+				this.profilePic = image
+			})
+		}
+	},
+	methods: {
+		...mapMutations(sessionStoreNamespace, {
+			changeCID: MutationType.CHANGE_CID,
+			changeID: MutationType.CHANGE_ID,
+			changeName: MutationType.CHANGE_NAME,
+			changeEmail: MutationType.CHANGE_EMAIL,
+			changeAvatar: MutationType.CHANGE_AVATAR,
+			changeBio: MutationType.CHANGE_BIO,
+			changeLocation: MutationType.CHANGE_LOCATION,
+		}),
+		isActiveTab (t) {
+			if (t === this.tab) {
+				return true
+			} else {
+				return false
+			}
+		},
+		hasChanged () {
+			if (
+				this.newName !== `` ||
+        this.newID !== `` ||
+        this.newEmail !== `` ||
+        this.location !== `` ||
         this.bio !== this.$store.state.session.bio
-      ) {
-        return true
-      }
-      return false
-    },
-    changeTab (tab) {
-      this.tab = tab
-    },
-    handleImage (e) {
-      const image = e.target.files[0]
-      const reader = new FileReader()
-      reader.readAsDataURL(image)
-      reader.onload = (i) => {
-        if(i.target !== null)
-          this.uploadImage(i.target.result)
-      }
-    },
-    uploadImage (image) {
-      this.$sendPhoto(image).then((cid) => {
-        this.changeAvatar(cid)
-        this.downloadImage(cid)
-      })
-      this.$sendProfile(this.$store.state.session).then((cid) => {
-        this.changeCID(cid)
-      })
-    },
-    downloadImage (cid) {
-      this.$getPhoto(cid).then((image) => {
-        this.profilePic = image
-      })
-    },
-    checkBio () {
-      const charCount = this.bio.length
-      return this.maxCharBio - charCount
-    },
-    updateSettings () {
-      if (this.hasChanged() === false) {
-        alert('Nothing to update!')
-        return
-      }
-      // Run quality rules before saving
-      if (this.newName !== '') {
-        this.changeName(this.newName)
-      }
-      if (this.newID !== '' && this.$qualityID(this.newID)) {
-        this.changeID(this.newID)
-      }
-      if (this.bio !== this.$store.state.session.bio && this.checkBio() > 0) {
-        this.changeBio(this.bio)
-      }
-      if (this.newEmail !== '' && this.$qualityEmail(this.newEmail)) {
-        this.changeEmail(this.newEmail)
-      }
-      if (this.location !== this.$store.state.session.location && this.$qualityText(this.location)) {
-        this.changeLocation(this.location)
-      }
-      this.$sendProfile(this.$store.state.session).then((cid) => {
-        this.changeCID(cid)
-      })
-      alert('Settings updated!')
-      this.$router.push('/' + this.$store.state.session.cid)
-    },
-  },
+			) {
+				return true
+			}
+			return false
+		},
+		changeTab (tab) {
+			this.tab = tab
+		},
+		handleImage (e) {
+			const image = e.target.files[0]
+			const reader = new FileReader()
+			reader.readAsDataURL(image)
+			reader.onload = (i) => {
+				if (i.target !== null) {
+					this.uploadImage(i.target.result)
+				}
+			}
+		},
+		uploadImage (image) {
+			this.$sendPhoto(image).then((cid) => {
+				this.changeAvatar(cid)
+				this.downloadImage(cid)
+			})
+			this.$sendProfile(this.$store.state.session).then((cid) => {
+				this.changeCID(cid)
+			})
+		},
+		downloadImage (cid) {
+			this.$getPhoto(cid).then((image) => {
+				this.profilePic = image
+			})
+		},
+		checkBio () {
+			const charCount = this.bio.length
+			return this.maxCharBio - charCount
+		},
+		updateSettings () {
+			if (this.hasChanged() === false) {
+				alert(`Nothing to update!`)
+				return
+			}
+			// Run quality rules before saving
+			if (this.newName !== ``) {
+				this.changeName(this.newName)
+			}
+			if (this.newID !== `` && this.$qualityID(this.newID)) {
+				this.changeID(this.newID)
+			}
+			if (this.bio !== this.$store.state.session.bio && this.checkBio() > 0) {
+				this.changeBio(this.bio)
+			}
+			if (this.newEmail !== `` && this.$qualityEmail(this.newEmail)) {
+				this.changeEmail(this.newEmail)
+			}
+			if (this.location !== this.$store.state.session.location && this.$qualityText(this.location)) {
+				this.changeLocation(this.location)
+			}
+			this.$sendProfile(this.$store.state.session).then((cid) => {
+				this.changeCID(cid)
+			})
+			alert(`Settings updated!`)
+			this.$router.push(`/` + this.$store.state.session.cid)
+		},
+	},
 })
 </script>

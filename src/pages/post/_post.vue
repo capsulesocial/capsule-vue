@@ -95,7 +95,6 @@
     <section v-else>
       Post not found 😵‍💫
     </section>
-
   </div>
 </template>
 
@@ -113,45 +112,45 @@ import ChevronDown from '@/components/icons/ChevronDown.vue'
 import { Post } from '~/interfaces/Post'
 
 export default Vue.extend({
-  components: {
-    PostActions,
-    AuthorCard,
-    TagCard,
-    BookmarkButton,
-    ShareButton,
-    ChevronUp,
-    ChevronDown,
-  },
-  mixins: [markdown],
-  layout: 'reader',
-  data () {
-    return {
-      post: {},
-      content: '',
-      featuredPhoto: null,
-      showFilter: false,
-      filter: null,
-    }
-  },
-  async created () {
-    // Fetch post from IPFS,
-    this.$getPost(this.$route.params.post).then((p: Post) => {
-      p.id = this.$route.params.post
-      this.post = p
-      this.content = marked(p.content)
-      if (p.featuredPhotoCID !== null) {
-        this.$getPhoto(p.featuredPhotoCID).then((image) => {
-          this.featuredPhoto = image
-        })
-      }
-    })
-  },
-  methods: {
-    setCommentFilter (reaction) {
-      this.filter = reaction
-      this.showFilter = false
-    },
-  },
+	components: {
+		PostActions,
+		AuthorCard,
+		TagCard,
+		BookmarkButton,
+		ShareButton,
+		ChevronUp,
+		ChevronDown,
+	},
+	mixins: [markdown],
+	layout: `reader`,
+	data () {
+		return {
+			post: {},
+			content: ``,
+			featuredPhoto: null,
+			showFilter: false,
+			filter: null,
+		}
+	},
+	async created () {
+		// Fetch post from IPFS,
+		this.$getPost(this.$route.params.post).then((p: Post) => {
+			p.id = this.$route.params.post
+			this.post = p
+			this.content = marked(p.content)
+			if (p.featuredPhotoCID !== null) {
+				this.$getPhoto(p.featuredPhotoCID).then((image) => {
+					this.featuredPhoto = image
+				})
+			}
+		})
+	},
+	methods: {
+		setCommentFilter (reaction) {
+			this.filter = reaction
+			this.showFilter = false
+		},
+	},
 })
 </script>
 

@@ -16,25 +16,25 @@
 import BrandedButton from '@/components/BrandedButton.vue'
 
 export default {
-  components: {
-    BrandedButton
-  },
-  layout: 'error',
-  props: {
-    error: {
-      type: Object,
-      default: null,
-    },
-  },
-  created () {
-    if (this.$store.state.session.cid === '') {
-      this.$router.push('/auth')
-    }
-  },
-  methods: {
-    goBack () {
-      this.$router.push('/')
-    },
-  },
+	components: {
+		BrandedButton,
+	},
+	layout: `error`,
+	props: {
+		error: {
+			type: Object,
+			default: null,
+		},
+	},
+	created () {
+		if (this.$store.state.session.cid === ``) {
+			this.$router.push(`/auth`)
+		}
+	},
+	methods: {
+		goBack () {
+			this.$router.push(`/`)
+		},
+	},
 }
 </script>

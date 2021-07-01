@@ -13,18 +13,18 @@
 <script>
 
 export default {
-  data () {
-    return {
-      targetUser: null,
-    }
-  },
-  async created () {
-    if (this.$route.params.id === this.$store.state.session.cid) {
-      this.targetUser = this.$store.state.session
-    } else {
-      // Get user profile
-      this.targetUser = await this.$getProfile(this.$route.params.id)
-    }
-  },
+	data () {
+		return {
+			targetUser: null,
+		}
+	},
+	async created () {
+		if (this.$route.params.id === this.$store.state.session.cid) {
+			this.targetUser = this.$store.state.session
+		} else {
+			// Get user profile
+			this.targetUser = await this.$getProfile(this.$route.params.id)
+		}
+	},
 }
 </script>

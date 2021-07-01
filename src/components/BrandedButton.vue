@@ -12,26 +12,26 @@
 
 <script>
 export default {
-  props: {
-    text: {
-      type: String,
-      default: 'Text',
-    },
-    thin: {
-      type: Boolean,
-      default: false,
-    },
-    action: {
-      type: Function,
-      default () {
-        return null
-      },
-    },
-  },
-  data () {
-    return {
-      size: !this.$props.thin ? 'py-2 px-4' : 'py-1 px-4',
-    }
-  },
+	props: {
+		text: {
+			type: String,
+			default: `Text`,
+		},
+		thin: {
+			type: Boolean,
+			default: false,
+		},
+		action: {
+			type: Function,
+			default () {
+				return null
+			},
+		},
+	},
+	data () {
+		return {
+			size: !this.$props.thin ? `py-2 px-4` : `py-1 px-4`,
+		}
+	},
 }
 </script>

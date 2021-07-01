@@ -14,9 +14,7 @@
       <strong class="text-black font-bold bold mr-1">
         {{ getFullName(reply.authorID) }}
       </strong>
-      <span class="text-gray-700 text-sm mr-2">
-        @{{ reply.authorID }}
-      </span>
+      <span class="text-gray-700 text-sm mr-2"> @{{ reply.authorID }} </span>
       <span v-if="reply.timestamp" class="text-gray-600 text-xs font-sans">
         {{ $formatDate(reply.timestamp) }}
       </span>
@@ -28,44 +26,44 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import ProfileIcon from '@/components/icons/Person.vue'
+import Vue from "vue"
+import ProfileIcon from "@/components/icons/Person.vue"
 
 export default Vue.extend({
-  components: {
-    ProfileIcon,
-  },
-  props: {
-    reply: {
-      type: Object,
-      default: null,
-    },
-  },
-  data () {
-    return {
-      avatar: '',
-    }
-  },
-  created () {
-    if (this.$props.reply.authorAvatarCID !== null) {
-      this.$getPhoto(this.$props.reply.authorAvatarCID).then((image) => {
-        this.avatar = image
-      })
-    }
-  },
-  methods: {
-    getFullName (id) {
-      if (this.$store.state.session.id === id) {
-        return this.$store.state.session.name
-      }
-      const list = this.$store.state.authors
-      const name = list.find(x => x.id === id)
-      if (name) {
-        return name.username
-      } else {
-        return id
-      }
-    },
-  },
+	components: {
+		ProfileIcon,
+	},
+	props: {
+		reply: {
+			type: Object,
+			default: null,
+		},
+	},
+	data () {
+		return {
+			avatar: ``,
+		}
+	},
+	created () {
+		if (this.$props.reply.authorAvatarCID !== null) {
+			this.$getPhoto(this.$props.reply.authorAvatarCID).then((image) => {
+				this.avatar = image
+			})
+		}
+	},
+	methods: {
+		getFullName (id) {
+			if (this.$store.state.session.id === id) {
+				return this.$store.state.session.name
+			}
+			const list = this.$store.state.authors
+			const name = list.find(x => x.id === id)
+			if (name) {
+				return name.username
+			} else {
+				return id
+			}
+		},
+	},
 })
 </script>

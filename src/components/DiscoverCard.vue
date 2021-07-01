@@ -19,14 +19,14 @@
 
 <script>
 export default {
-  props: {
-    text: {
-      type: String,
-      default: 'No Title',
-    },
-    bgImage: {
-      type: String,
-    },
-  },
+	props: {
+		text: {
+			type: String,
+			default: `No Title`,
+		},
+		bgImage: {
+			type: String,
+		},
+	},
 }
 </script>
