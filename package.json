@@ -78,7 +78,7 @@
     "build:mac": "nuxt build && webpack && export CSC_IDENTITY_AUTO_DISCOVERY=false && electron-builder --mac --x64",
     "build:mac:dmg": "nuxt build && webpack && CSC_NAME=\"CERTIFICATE NAME (***********)\" appleId='apple@developer.id' appleIdPassword='application password' electron-builder",
     "build:mac:store": "nuxt build && webpack && CSC_NAME=\"CERTIFICATE NAME (***********)\" electron-builder && bash build/resignAndPackage.sh",
-    "lint": "eslint --ext .ts,.js,.vue ."
+    "lint": "eslint -c .eslintrc.js --ext .ts,.js,.vue ."
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.13.1",
