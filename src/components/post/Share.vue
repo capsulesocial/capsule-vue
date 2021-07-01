@@ -94,18 +94,21 @@ export default Vue.extend({
     },
     handleShare (type) {
       // this.$store.commit('posts/addShare', this.post.id)
-      const url = document.getElementById(this.$props.post.id)
-      url.type = 'text'
-      url.value =
-        document.location.origin + '/' + this.post.authorID + '/' + this.post.id
-      if (type === 'URL') {
-        url.select()
-        url.setSelectionRange(0, 99999)
-        document.execCommand('copy')
-        url.type = 'hidden'
-        alert('URL Copied to Clipboard!')
-      } else if (type === 'TWITTER') {
-        window.open('https://twitter.com/share?url=' + encodeURIComponent(url.value) + '&text=' + '📰 ' + this.post.title + '\n 🔏 ' + this.post.authorID + ' on @CapsuleSoc 🔗')
+      let shareElement = document.createElement('textarea')
+      shareElement.value = `${document.location.origin}/${this.post.authorID}/${this.post.id}`
+      shareElement.style.opacity = '0'
+      document.body.appendChild(shareElement)
+      switch (type) {
+      case 'URL':
+        shareElement.focus()
+        shareElement.select()
+        let copied = document.execCommand('copy')
+        alert(copied? 'Copied' : 'Not copied')
+        document.body.removeChild(shareElement)
+        break
+      case 'TWITTER':
+        window.open('https://twitter.com/share?url=' + encodeURIComponent(shareElement.value) + '&text=' + '📰 ' + this.post.title + '\n 🔏 ' + this.post.authorID + ' on @CapsuleSoc 🔗')
+        break
       }
       // Close Dropdown
       this.showSocialShares = false
