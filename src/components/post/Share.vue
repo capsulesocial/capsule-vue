@@ -107,6 +107,7 @@ export default Vue.extend({
         document.body.removeChild(shareElement)
         break
       case 'TWITTER':
+        // TODO: The below line constitutes a security risk and should be rewritten to use templating/stronger sanitization on the post title and authorID fields. The URI field should be double-checked as well.
         window.open('https://twitter.com/share?url=' + encodeURIComponent(shareElement.value) + '&text=' + '📰 ' + this.post.title + '\n 🔏 ' + this.post.authorID + ' on @CapsuleSoc 🔗')
         break
       }
