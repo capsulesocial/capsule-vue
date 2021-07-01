@@ -22,4 +22,4 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm -g install eslint
-    - run: eslint -c .eslintrc.js src/*/*.vue src/*/*/*.vue src/*/*.js src/*/*/*.js src/*/*.ts src/*/*/*.ts
+    - run: npm run lint
