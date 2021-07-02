@@ -2,7 +2,11 @@ import type { Plugin } from '@nuxt/types'
 import { Post } from '~/interfaces/Post'
 const IPFS = require(`ipfs`)
 
-declare module `vue/types/vue` {
+type sender = (content: any) => Promise<string>
+type getter = (cid: string) => any
+
+// eslint-disable-next-line quotes
+declare module 'vue/types/vue' {
   interface Vue {
     $sendProfile: sender,
     $getProfile: getter,
@@ -12,9 +16,6 @@ declare module `vue/types/vue` {
     $sendPhoto: sender,
   }
 }
-
-type sender = (content: any) => Promise<string>
-type getter = (cid: string) => Promise<any>
 
 const ipfsPlugin: Plugin = async (_context, inject) => {
 	const node = await IPFS.create()
@@ -64,17 +65,19 @@ const ipfsPlugin: Plugin = async (_context, inject) => {
 	const sendPhoto: sender = async (content) => {
 		const photoAdded = await node.add(content)
 		const cid = photoAdded.cid.string
-		console.log(`Photo CID:`, cid)
 		return cid
 	}
 
 	// Get photo
 	const getPhoto: getter = async (cid) => {
-		if (cid === null || cid === ``) {return}
-		let content = ``
+		if (cid === null || cid === ``) {
+			return
+		}
+		let content: string = ``
 		for await (const chunk of node.cat(cid)) {
 			content += chunk.toString()
 		}
+		// eslint-disable-next-line consistent-return
 		return content
 	}
 

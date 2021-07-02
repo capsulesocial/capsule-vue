@@ -132,7 +132,6 @@
         </label>
       </article>
     </section>
-
     <BrandedButton
       class="fixed bottom-0 m-5"
       text="Admin Bypass (for development)"
@@ -147,7 +146,7 @@ import { mapMutations } from 'vuex'
 
 import CapsuleIcon from '@/components/icons/Capsule.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
-import { MutationType, namespace as sessionStoreNamespace, SessionState } from '~/store/session'
+import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
 
 export default Vue.extend({
 	components: {
@@ -168,7 +167,6 @@ export default Vue.extend({
 	},
 	mounted () {
 		if (this.$store.state.session.cid !== ``) {
-			console.log(`ROUTER PUSH /home`)
 			this.$router.push(`/home`)
 		}
 	},
@@ -182,7 +180,7 @@ export default Vue.extend({
 		toggleFormType () {
 			this.isLogin = !this.isLogin
 		},
-		async verify () {
+		verify () {
 			const pwCheck = this.$qualityPassword(this.password)
 			const idCheck = this.$qualityID(this.id)
 			if (pwCheck !== true) {

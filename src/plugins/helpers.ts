@@ -3,7 +3,8 @@ import type { Plugin } from '@nuxt/types'
 type dateString = (date: Date, preformattedDate: any, hideYear: boolean | null) => string
 type dateFormat = (input: object | Date) => string
 
-declare module `vue/types/vue` {
+// eslint-disable-next-line quotes
+declare module 'vue/types/vue' {
   interface Vue {
     $getFormat: dateString,
     $formatDate: dateFormat
@@ -11,18 +12,18 @@ declare module `vue/types/vue` {
 }
 
 const MONTH_NAMES = [
-	'January',
-	'February',
-	'March',
-	'April',
-	'May',
-	'June',
-	'July',
-	'August',
-	'September',
-	'October',
-	'November',
-	'December',
+	`January`,
+	`February`,
+	`March`,
+	`April`,
+	`May`,
+	`June`,
+	`July`,
+	`August`,
+	`September`,
+	`October`,
+	`November`,
+	`December`,
 ]
 
 const getFormat: dateString = (date, preformattedDate = false, hideYear = false) => {

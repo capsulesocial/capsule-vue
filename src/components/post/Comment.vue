@@ -4,14 +4,17 @@
     <div class="flex">
       <!-- Avatar -->
       <div class="flex-shrink-0">
+        <span
+          v-if="this.avatar === '' || this.avatar === null"
+          class="p-1 border-2 rounded-full block"
+        >
+          <ProfileIcon class="w-6 h-6" />
+        </span>
         <img
-          v-if="this.avatar !== ''"
+          v-else
           :src="this.avatar"
           class="w-10 h-10 rounded-lg object-cover"
         />
-        <span v-else class="p-1 border-2 rounded-full block">
-          <ProfileIcon class="w-6 h-6" />
-        </span>
       </div>
       <!-- Content -->
       <div class="flex-1 leading-relaxed ml-2">

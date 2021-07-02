@@ -4,14 +4,17 @@
     <article class="py-5">
       <div class="flex items-start">
         <!-- Profile Photo / Avatar -->
+        <span
+          v-if="this.myAvatar === '' || this.myAvatar === null"
+          class="p-1 border-2 rounded-full mt-1"
+        >
+          <ProfileIcon class="w-6 h-6" />
+        </span>
         <img
-          v-if="this.myAvatar !== ''"
+          v-else
           :src="this.myAvatar"
           class="w-10 h-10 rounded-lg object-cover mt-1"
         />
-        <span v-else class="p-1 border-2 rounded-full mt-1">
-          <ProfileIcon class="w-6 h-6" />
-        </span>
         <!-- Comment box Container -->
         <div
           class="flex bg-white shadow-xl rounded-xl p-3 ml-5 w-full relative overflow-hidden"

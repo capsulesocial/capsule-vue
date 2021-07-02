@@ -7,7 +7,8 @@ type Email = (input: string) => string | boolean
 type URL = (url: string) => boolean
 type Text = (input: string) => boolean
 
-declare module `vue/types/vue` {
+// eslint-disable-next-line quotes
+declare module 'vue/types/vue' {
   interface Vue {
     $qualityPassword: Password,
     $qualityID: Id,
@@ -37,7 +38,6 @@ const qualityPassword: Password = (input) => {
 }
 
 const qualityID: Id = (input) => {
-	console.log(`qualityID`)
 	if (input === `` || input === null) {
 		return `Missing ID!`
 	}
@@ -73,7 +73,11 @@ const qualityURL: URL = (url) => {
 }
 
 const qualityText: Text = (input) => {
-	return true
+	if (input) {
+		return true
+	} else {
+		return false
+	}
 }
 
 const qualityPlugin: Plugin = (_context, inject) => {
