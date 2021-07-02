@@ -3,14 +3,14 @@
     <!-- Post Preview Header: Avatar, name -->
     <div class="flex justify-between items-center">
       <nuxt-link :to="'/' + this.post.authorCID" class="flex">
-        <ProfileIcon
-          v-if="this.avatar === ''"
-          class="w-8 h-8 border-2 rounded-full mr-2"
-        />
         <img
-          v-else
+          v-if="this.avatar === ''"
           :src="this.avatar"
           class="w-8 h-8 rounded-lg mr-2 object-cover"
+        />
+        <ProfileIcon
+          v-else
+          class="w-8 h-8 border-2 rounded-full mr-2"
         />
         <h4 class="text-bold mr-2 self-center">
           {{ this.author.name }}

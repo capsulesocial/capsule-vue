@@ -43,7 +43,7 @@
             @click="$refs.uploadedPic.click()"
           >
             <img
-              v-if="this.$store.state.session.avatar !== null"
+              v-if="this.$store.state.session.avatar !== ''"
               :src="this.profilePic"
               class="w-32 h-32 rounded-lg object-cover"
             />
