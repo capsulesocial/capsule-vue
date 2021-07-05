@@ -21,5 +21,5 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: npm -g install eslint
-    - run: npm run lint
+    - run: yarn add @nuxtjs/eslint-config-typescript eslint typescript
+    - run: yarn run lint
