@@ -3,11 +3,7 @@
   "productName": "Capsule Client",
   "version": "1.0.0",
   "description": "Electron application using Nuxt.js to serve the Capsule Social Application",
-  "author": {
-    "name": "Capsule Social",
-    "email": "jack@capsule.social",
-    "url": "https://capsule.social"
-  },
+  "author": "Capsule Social <jack@capsule.social> (https://capsule.social)",
   "private": true,
   "main": "main.js",
   "license": "GNU GENERAL PUBLIC LICENSE",
@@ -88,7 +84,8 @@
     "electron-serve": "^0.4.1",
     "ipfs": "^0.54.5",
     "marked": "^2.0.1",
-    "nuxt": "^2.14.12"
+    "nuxt": "^2.14.12",
+    "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.14.7",
@@ -106,5 +103,6 @@
     "eslint": "^7.21.0",
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10"
-  }
+  },
+  "repository": "https://github.com/capsulesocial/capsule-vue"
 }

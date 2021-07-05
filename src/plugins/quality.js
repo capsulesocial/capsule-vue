@@ -1,7 +1,10 @@
+const zxcvbn = require('zxcvbn')
+
 export default ({ app }, inject) => {
   const password = (input) => {
     // let reg = /^.*(?=.{8,50})(?=.*[a-zA-Z])(?=.*\d)(?=.*[!#$%&? "]).*$/
     // return (reg.test(input))
+    var result = zxcvbn(input)
     if (input === '' || input === null) {
       return 'Missing password!'
     } else if (input.length < 8) {
@@ -14,6 +17,9 @@ export default ({ app }, inject) => {
       return 'Password must contain a letter!'
     } else if (input.search(/\s/) !== -1) {
       return 'Password must not contain a space!'
+    } else if (result.score < 2) {
+      // If password is too weak according to zxcvbn, print warning + the first suggestion
+      return 'Password is too weak!\n' + result.feedback.warning + '\n' + result.feedback.suggestions[0]
     } else {
       return true
     }
