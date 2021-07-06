@@ -65,6 +65,15 @@ export default ({ app }, inject) => {
     return getFormat(date)
   }
 
+  function hexEncode (str) {
+    var result = []
+    for (var n = 0, l = str.length; n < l; n++) {
+      var hex = Number(str.charCodeAt(n)).toString(16);
+      result.push(hex)
+    }
+    return result.join('');
+  }
+
   async function hkdf (password, peerIDPublicKey) {
     const ec = new TextEncoder()
 
@@ -98,6 +107,7 @@ export default ({ app }, inject) => {
   const helpers = {
     formatDate,
     hkdf,
+    hexEncode,
   }
   inject('helpers', helpers)
 }
