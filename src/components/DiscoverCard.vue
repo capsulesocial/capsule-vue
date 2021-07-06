@@ -4,6 +4,7 @@
   >
     <nuxt-link :to="'/discover/' + this.$props.text">
       <img
+        v-if="this.$props.bgImage !== ``"
         :src="this.$props.bgImage"
         :alt="this.$props.text"
         class="opacity-75 absolute left-0 top-0 object-cover h-40 w-full "
@@ -19,15 +20,15 @@
 
 <script>
 export default {
-  props: {
-    text: {
-      type: String,
-      default: 'No Title',
-    },
-    bgImage: {
-      type: String,
-      default: require('@/assets/images/discover/404.jpeg'),
-    },
-  },
+	props: {
+		text: {
+			type: String,
+			default: `No Title`,
+		},
+		bgImage: {
+			type: String,
+			default: ``,
+		},
+	},
 }
 </script>

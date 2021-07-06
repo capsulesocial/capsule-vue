@@ -132,7 +132,6 @@
         </label>
       </article>
     </section>
-
     <BrandedButton
       class="fixed bottom-0 m-5"
       text="Admin Bypass (for development)"
@@ -141,98 +140,108 @@
   </main>
 </template>
 
-<script>
-import CapsuleIcon from '@/components/icons/Capsule'
-import BrandedButton from '@/components/BrandedButton'
+<script lang="ts">
+import Vue from 'vue'
+import { mapMutations } from 'vuex'
 
-export default {
-  components: {
-    CapsuleIcon,
-    BrandedButton,
-  },
-  layout: 'unauth',
-  data () {
-    return {
-      isLogin: true,
-      name: null,
-      id: null,
-      email: null,
-      password: null,
-      confirmPassword: null,
-      consent: true,
-    }
-  },
-  created () {
-    if (this.$store.state.me.id !== '') {
-      this.$router.push('/home')
-    }
-  },
-  methods: {
-    toggleFormType () {
-      this.isLogin = !this.isLogin
-    },
-    async verify () {
-      const pwCheck = this.$quality.password(this.password)
-      const idCheck = this.$quality.id(this.id)
-      if (pwCheck !== true) {
-        alert(pwCheck)
-        return
-      }
-      if (idCheck !== true) {
-        alert(idCheck)
-        return
-      }
-      // Login
-      if (this.isLogin) {
-        const res = await this.$api.auth.login(this.id, this.password)
-        if (res) {
-          this.$router.push('/')
-        } else {
-          alert('Invalid login!')
-        }
-      } else {
-        // Registration
-        if (!this.consent) {
-          alert('Please accept the Terms & Conditions')
-          return
-        }
-        if (this.$quality.email(this.email) !== true) {
-          alert('Invalid email!')
-          return
-        }
-        if (this.password === this.confirmPassword) {
-          const account = {
-            id: this.id,
-            username: this.name,
-            email: this.email,
-            password: this.password,
-          }
-          // const res = await this.$api.auth.register(account)
-          account.password = null
-          this.$store.commit('me/startSession', account)
-          const profile = this.$store.state.me
-          // eslint-disable-next-line no-unused-vars
-          let profCID = ''
-          this.$api.profile.sendProfile(profile).then((pcid) => {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            profCID = pcid
-          })
-          this.$router.push('/settings')
-        } else {
-          alert('Password mismatch!')
-        }
-      }
-    },
-    adminBypass () {
-      const account = {
-        id: 'admin',
-        username: 'admin',
-        email: 'admin@admin.com',
-        password: 'password123',
-      }
-      this.$store.commit('me/startSession', account)
-      this.$router.push('/settings')
-    },
-  },
-}
+import CapsuleIcon from '@/components/icons/Capsule.vue'
+import BrandedButton from '@/components/BrandedButton.vue'
+import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
+
+export default Vue.extend({
+	components: {
+		CapsuleIcon,
+		BrandedButton,
+	},
+	layout: `unauth`,
+	data () {
+		return {
+			isLogin: true,
+			name: null,
+			id: ``,
+			email: ``,
+			password: ``,
+			confirmPassword: null,
+			consent: true,
+		}
+	},
+	mounted () {
+		if (this.$store.state.session.cid !== ``) {
+			this.$router.push(`/home`)
+		}
+	},
+	methods: {
+		...mapMutations(sessionStoreNamespace, {
+			changeCID: MutationType.CHANGE_CID,
+			changeID: MutationType.CHANGE_ID,
+			changeName: MutationType.CHANGE_NAME,
+			changeEmail: MutationType.CHANGE_EMAIL,
+		}),
+		toggleFormType () {
+			this.isLogin = !this.isLogin
+		},
+		verify () {
+			const pwCheck = this.$qualityPassword(this.password)
+			const idCheck = this.$qualityID(this.id)
+			if (pwCheck !== true) {
+				alert(pwCheck)
+				return
+			}
+			if (idCheck !== true) {
+				alert(idCheck)
+				return
+			}
+			// Login
+			if (this.isLogin) {
+				alert(`Authentication not supported yet!`)
+			} else {
+				// Registration
+				if (!this.consent) {
+					alert(`Please accept the Terms & Conditions`)
+					return
+				}
+				if (this.$qualityEmail(this.email) !== true) {
+					alert(`Invalid email!`)
+					return
+				}
+				if (this.password === this.confirmPassword) {
+					const account = {
+						cid: ``,
+						id: this.id,
+						name: this.name,
+						email: this.email,
+						password: ``,
+						bio: `Default bio.`,
+						location: ``,
+						posts: [],
+						reposts: [],
+						socials: [],
+						bookmarks: [],
+						categories: [],
+						followers: [],
+						following: [],
+						avatar: ``,
+					}
+					this.$sendProfile(account).then((cid) => {
+						account.cid = cid
+						this.changeCID(cid)
+						this.changeID(this.id)
+						this.changeName(this.name)
+						this.changeEmail(this.email)
+						this.$router.push(`/settings`)
+					})
+				} else {
+					alert(`Password mismatch!`)
+				}
+			}
+		},
+		adminBypass () {
+			this.changeCID(`Qmdors4fRHTT6ut6BAjNHEARxfbnBwHSbyz7BaD4oJPwzZ`)
+			this.changeID(`admin`)
+			this.changeName(`Capsule Admin`)
+			this.changeEmail(`admin@admin.com`)
+			this.$router.push(`/settings`)
+		},
+	},
+})
 </script>

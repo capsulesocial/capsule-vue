@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="this.post">
     <section v-if="this.post !== null" class="pb-16 lg:pb-5 m-5">
       <article>
         <h1 class="text-5xl capitalize">
@@ -18,7 +18,7 @@
               {{ this.$route.params.id }}
             </nuxt-link>
             <span class="font-sans text-sm text-gray-700 block">
-              {{ this.$helpers.formatDate(this.post.timestamp) }}
+              {{ this.$formatDate(this.post.timestamp) }}
             </span>
           </p>
           <div class="flex items-center">
@@ -36,22 +36,20 @@
       <!-- Content -->
       <div
         class="prose lg:prose-lg max-w-none text-black pl-4 content"
-        v-html="this.compileMarkdown(this.post.content)"
+        v-html="this.content"
       ></div>
 
       <!-- Tags -->
       <article class="mt-5">
         <TagCard
           v-for="t in this.post.tags"
-          :key="t"
+          :key="t.name"
           class="mr-2"
-          :tag="t"
+          :tag="t.name"
         />
       </article>
 
-      <AuthorCard
-        :authorID="this.$route.params.id"
-      />
+      <AuthorCard :authorCID="this.post.authorCID" />
 
       <!-- Comments -->
       <article class="pt-5">
@@ -87,7 +85,7 @@
         </div>
         <PostActions
           :post="this.post"
-          :authorID="this.$route.params.id"
+          :authorID="this.post.authorCID"
           :isCommenting="true"
           :tags="this.post.tags"
           :filter="this.filter"
@@ -100,67 +98,60 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import markdown from '@/mixins/markdown.js'
-import PostActions from '@/components/post/Actions'
-import AuthorCard from '@/components/AuthorCard'
-import TagCard from '@/components/Tag'
-import BookmarkButton from '@/components/post/BookmarkButton'
-import ShareButton from '@/components/post/Share'
-import ChevronUp from '@/components/icons/ChevronUp'
-import ChevronDown from '@/components/icons/ChevronDown'
+import marked from 'marked'
+import PostActions from '@/components/post/Actions.vue'
+import AuthorCard from '@/components/AuthorCard.vue'
+import TagCard from '@/components/Tag.vue'
+import BookmarkButton from '@/components/post/BookmarkButton.vue'
+import ShareButton from '@/components/post/Share.vue'
+import ChevronUp from '@/components/icons/ChevronUp.vue'
+import ChevronDown from '@/components/icons/ChevronDown.vue'
+import { Post } from '~/interfaces/Post'
 
-export default {
-  components: {
-    PostActions,
-    AuthorCard,
-    TagCard,
-    BookmarkButton,
-    ShareButton,
-    ChevronUp,
-    ChevronDown,
-  },
-  mixins: [markdown],
-  layout: 'reader',
-  data () {
-    return {
-      post: null,
-      featuredPhoto: null,
-      showFilter: false,
-      filter: null,
-    }
-  },
-  async created () {
-    // Fetch post from IPFS,
-    const ipfsPost = await this.$api.post.getPost(this.$route.params.post)
-    const p = ipfsPost
-    p.id = this.$route.params.post
-    this.post = p
-    if (this.post.featuredPhotoCID !== null) {
-      this.$api.settings.downloadAvatar(this.post.featuredPhotoCID).then((image) => {
-        this.featuredPhoto = image
-      })
-    }
-  },
-  methods: {
-    setCommentFilter (reaction) {
-      this.filter = reaction
-      this.showFilter = false
-    },
-    handleShare () {
-      this.$store.commit('posts/addShare', this.post.id)
-      const url = document.getElementById(this.post.id)
-      url.type = 'text'
-      url.value =
-        document.location.origin + '/' + this.post.authorID + '/' + this.post.id
-      url.select()
-      url.setSelectionRange(0, 99999)
-      document.execCommand('copy')
-      url.type = 'hidden'
-      alert('URL Copied to Clipboard!')
-    },
-  },
-}
+export default Vue.extend({
+	components: {
+		PostActions,
+		AuthorCard,
+		TagCard,
+		BookmarkButton,
+		ShareButton,
+		ChevronUp,
+		ChevronDown,
+	},
+	mixins: [markdown],
+	layout: `reader`,
+	data () {
+		return {
+			post: {},
+			content: ``,
+			featuredPhoto: null,
+			showFilter: false,
+			filter: null,
+		}
+	},
+	created () {
+		// Fetch post from IPFS,
+		this.$getPost(this.$route.params.post).then((p: Post) => {
+			p.id = this.$route.params.post
+			this.post = p
+			this.content = marked(p.content)
+			if (p.featuredPhotoCID !== null) {
+				this.$getPhoto(p.featuredPhotoCID).then((image) => {
+					this.featuredPhoto = image
+				})
+			}
+		})
+	},
+	methods: {
+		setCommentFilter (reaction) {
+			this.filter = reaction
+			this.showFilter = false
+		},
+	},
+})
 </script>
 
 <style>

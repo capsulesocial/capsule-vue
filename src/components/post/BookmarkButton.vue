@@ -7,40 +7,50 @@
   </button>
 </template>
 
-<script>
-import BookmarkIcon from '@/components/icons/Bookmark'
+<script lang="ts">
+import Vue from "vue"
+import BookmarkIcon from "@/components/icons/Bookmark.vue"
 
-export default {
-  components: {
-    BookmarkIcon,
-  },
-  props: {
-    postID: {
-      type: String,
-      default: null,
-    },
-  },
-  data () {
-    return {
-      // isBookmarked: this.post.bookmarks.includes(this.$store.state.me.id),
-      isBookmarked: this.$store.state.me.bookmarks.includes(this.postID),
-    }
-  },
-  methods: {
-    handleBookmark () {
-      this.$store.commit('me/handleBookmark', this.postID)
-      this.isBookmarked = !this.isBookmarked
-      // this.$store.commit('posts/handleBookmark', {
-      //   postID: this.postID,
-      //   userID: this.$store.state.me.id,
-      // })
-      // const p = await this.$api.post.handleBookmark(this.$store.state.me.id, this.post.id)
-      // if (p.bookmarks.includes(this.$store.state.me.id)) {
-      //   this.isBookmarked = true
-      // } else {
-      //   this.isBookmarked = false
-      // }
-    },
-  },
-}
+export default Vue.extend({
+	components: {
+		BookmarkIcon,
+	},
+	props: {
+		postID: {
+			type: String,
+			default: null,
+		},
+	},
+	data () {
+		return {
+			// isBookmarked: this.post.bookmarks.includes(this.$store.state.me.id),
+			isBookmarked: false,
+		}
+	},
+	created () {
+		const bookmarks = this.$store.state.session.bookmarks
+		if (!bookmarks) {
+			return
+		}
+		if (bookmarks.includes(this.postID)) {
+			this.isBookmarked = true
+		}
+	},
+	methods: {
+		handleBookmark () {
+			// this.$store.commit('me/handleBookmark', this.postID)
+			this.isBookmarked = !this.isBookmarked
+			// this.$store.commit('posts/handleBookmark', {
+			//   postID: this.postID,
+			//   userID: this.$store.state.me.id,
+			// })
+			// const p = await this.$api.post.handleBookmark(this.$store.state.me.id, this.post.id)
+			// if (p.bookmarks.includes(this.$store.state.me.id)) {
+			//   this.isBookmarked = true
+			// } else {
+			//   this.isBookmarked = false
+			// }
+		},
+	},
+})
 </script>

@@ -78,7 +78,7 @@
     "build:mac": "nuxt build && webpack && export CSC_IDENTITY_AUTO_DISCOVERY=false && electron-builder --mac --x64",
     "build:mac:dmg": "nuxt build && webpack && CSC_NAME=\"CERTIFICATE NAME (***********)\" appleId='apple@developer.id' appleIdPassword='application password' electron-builder",
     "build:mac:store": "nuxt build && webpack && CSC_NAME=\"CERTIFICATE NAME (***********)\" electron-builder && bash build/resignAndPackage.sh",
-    "lint": "eslint --ext .ts,.js,.vue ."
+    "lint": "yarn eslint -c .eslintrc.js --ext .ts,.js,.vue ."
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.13.1",
@@ -105,6 +105,7 @@
     "electron-notarize": "^0.2.1",
     "eslint": "^7.21.0",
     "webpack": "^4.41.5",
-    "webpack-cli": "^3.3.10"
+    "webpack-cli": "^3.3.10",
+    "typescript": "^4.3.5"
   }
 }

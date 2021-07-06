@@ -16,9 +16,9 @@
 </template>
 
 <script>
-import CloseButton from '@/components/icons/Close'
+import CloseButton from '@/components/icons/Close.vue'
 
 export default {
-  components: { CloseButton },
+	components: { CloseButton },
 }
 </script>

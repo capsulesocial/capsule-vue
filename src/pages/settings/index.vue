@@ -43,7 +43,7 @@
             @click="$refs.uploadedPic.click()"
           >
             <img
-              v-if="this.$store.state.me.avatar !== null"
+              v-if="this.$store.state.session.avatar !== ''"
               :src="this.profilePic"
               class="w-32 h-32 rounded-lg object-cover"
             />
@@ -60,12 +60,12 @@
             @change="handleImage"
           >
           <div class="flex flex-col">
-            <label for="newUsername" class="hidden">Enter Name</label>
+            <label for="newName" class="hidden">Enter Name</label>
             <input
-              id="newUsername"
-              v-model="newUsername"
+              id="newName"
+              v-model="newName"
               type="text"
-              :placeholder="this.$store.state.me.username"
+              :placeholder="this.$store.state.session.name"
               class="focus:outline-none border-b-2 w-64 text-xl mb-4 text-primary focus:border-primary"
             />
 
@@ -74,7 +74,7 @@
               id="newID"
               v-model.trim="newID"
               type="text"
-              :placeholder="this.$store.state.me.id"
+              :placeholder="this.$store.state.session.id"
               class="focus:outline-none border-b-2 w-64 text-xl mb-4 text-primary focus:border-primary"
             />
 
@@ -83,7 +83,7 @@
               id="newEmail"
               v-model="newEmail"
               type="email"
-              :placeholder="this.$store.state.me.email"
+              :placeholder="this.$store.state.session.email"
               class="focus:outline-none border-b-2 w-64 text-xl mb-4 text-primary focus:border-primary"
             />
 
@@ -92,7 +92,7 @@
               id="location"
               v-model="location"
               type="text"
-              :placeholder="this.$store.state.me.location === '' ? 'Enter Location' : this.$store.state.me.location"
+              :placeholder="this.$store.state.session.location === '' ? 'Enter Location' : this.$store.state.session.location"
               class="focus:outline-none border-b-2 w-64 text-xl mb-4 text-primary focus:border-primary"
             />
           </div>
@@ -176,108 +176,129 @@
   </main>
 </template>
 
-<script>
-import BrandedButton from '@/components/BrandedButton'
-import ChevronRight from '@/components/icons/ChevronRight'
-import UploadAvatar from '@/components/icons/UploadAvatar'
+<script lang="ts">
+import Vue from 'vue'
+import { mapMutations } from 'vuex'
 
-export default {
-  components: {
-    VerifySocial: () => import('@/components/VerifySocial/'),
-    BrandedButton,
-    ChevronRight,
-    UploadAvatar,
-  },
-  layout: 'Extended',
-  data () {
-    return {
-      newUsername: '',
-      profilePic: null,
-      newID: '',
-      newEmail: '',
-      location: '',
-      bio: this.$store.state.me.bio,
-      maxCharBio: 256,
-      tab: '',
-    }
-  },
-  created () {
-    if (this.$store.state.me.avatar !== null) {
-      this.$api.settings.downloadAvatar(this.$store.state.me.avatar).then((image) => {
-        this.profilePic = image
-      })
-    }
-  },
-  methods: {
-    isActiveTab (t) {
-      if (t === this.tab) {
-        return true
-      } else {
-        return false
-      }
-    },
-    hasChanged () {
-      if (
-        this.newUsername !== '' ||
-        this.newID !== '' ||
-        this.newEmail !== '' ||
-        this.location !== '' ||
-        this.bio !== this.$store.state.me.bio
-      ) {
-        return true
-      }
-      return false
-    },
-    changeTab (tab) {
-      this.tab = tab
-    },
-    handleImage (e) {
-      const image = e.target.files[0]
-      const reader = new FileReader()
-      reader.readAsDataURL(image)
-      reader.onload = (i) => {
-        this.uploadImage(i.target.result)
-      }
-    },
-    uploadImage (image) {
-      this.$api.settings.uploadAvatar(image).then((cid) => {
-        this.$store.commit('me/updateAvatar', cid)
-        this.downloadImage(cid)
-      })
-    },
-    downloadImage (cid) {
-      this.$api.settings.downloadAvatar(cid).then((image) => {
-        this.profilePic = image
-      })
-    },
-    checkBio () {
-      const charCount = this.bio.length
-      return this.maxCharBio - charCount
-    },
-    updateSettings () {
-      if (this.hasChanged() === false) {
-        alert('Nothing to update!')
-        return
-      }
-      // Run quality rules before saving
-      if (this.newUsername !== '') {
-        this.$store.commit('me/updateUsername', this.newUsername)
-      }
-      if (this.newID !== '' && this.$quality.id(this.newID)) {
-        this.$store.commit('me/updateID', this.newID)
-      }
-      if (this.bio !== this.$store.state.me.bio && this.checkBio() > 0) {
-        this.$store.commit('me/updateBio', this.bio)
-      }
-      if (this.newEmail !== '' && this.$quality.email(this.newEmail)) {
-        this.$store.commit('me/updateEmail', this.newEmail)
-      }
-      if (this.location !== this.$store.state.me.location && this.$quality.text(this.location)) {
-        this.$store.commit('me/updateLocation', this.location)
-      }
-      alert('Settings updated!')
-      this.$router.push('/' + this.$store.state.me.id)
-    },
-  },
-}
+import BrandedButton from '@/components/BrandedButton.vue'
+import ChevronRight from '@/components/icons/ChevronRight.vue'
+import UploadAvatar from '@/components/icons/UploadAvatar.vue'
+import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
+
+export default Vue.extend({
+	components: {
+		VerifySocial: () => import(`@/components/VerifySocial.vue`),
+		BrandedButton,
+		ChevronRight,
+		UploadAvatar,
+	},
+	layout: `Extended`,
+	data () {
+		return {
+			newName: ``,
+			profilePic: null,
+			newID: ``,
+			newEmail: ``,
+			location: ``,
+			bio: this.$store.state.session.bio,
+			maxCharBio: 256,
+			tab: ``,
+		}
+	},
+	created () {
+		if (this.$store.state.session.avatar !== ``) {
+			this.$getPhoto(this.$store.state.session.avatar).then((image) => {
+				this.profilePic = image
+			})
+		}
+	},
+	methods: {
+		...mapMutations(sessionStoreNamespace, {
+			changeCID: MutationType.CHANGE_CID,
+			changeID: MutationType.CHANGE_ID,
+			changeName: MutationType.CHANGE_NAME,
+			changeEmail: MutationType.CHANGE_EMAIL,
+			changeAvatar: MutationType.CHANGE_AVATAR,
+			changeBio: MutationType.CHANGE_BIO,
+			changeLocation: MutationType.CHANGE_LOCATION,
+		}),
+		isActiveTab (t) {
+			if (t === this.tab) {
+				return true
+			} else {
+				return false
+			}
+		},
+		hasChanged () {
+			if (
+				this.newName !== `` ||
+        this.newID !== `` ||
+        this.newEmail !== `` ||
+        this.location !== `` ||
+        this.bio !== this.$store.state.session.bio
+			) {
+				return true
+			}
+			return false
+		},
+		changeTab (tab) {
+			this.tab = tab
+		},
+		handleImage (e) {
+			const image = e.target.files[0]
+			const reader = new FileReader()
+			reader.readAsDataURL(image)
+			reader.onload = (i) => {
+				if (i.target !== null) {
+					this.uploadImage(i.target.result)
+				}
+			}
+		},
+		uploadImage (image) {
+			this.$sendPhoto(image).then((cid) => {
+				this.changeAvatar(cid)
+				this.downloadImage(cid)
+			})
+			this.$sendProfile(this.$store.state.session).then((cid) => {
+				this.changeCID(cid)
+			})
+		},
+		downloadImage (cid) {
+			this.$getPhoto(cid).then((image) => {
+				this.profilePic = image
+			})
+		},
+		checkBio () {
+			const charCount = this.bio.length
+			return this.maxCharBio - charCount
+		},
+		updateSettings () {
+			if (this.hasChanged() === false) {
+				alert(`Nothing to update!`)
+				return
+			}
+			// Run quality rules before saving
+			if (this.newName !== ``) {
+				this.changeName(this.newName)
+			}
+			if (this.newID !== `` && this.$qualityID(this.newID)) {
+				this.changeID(this.newID)
+			}
+			if (this.bio !== this.$store.state.session.bio && this.checkBio() > 0) {
+				this.changeBio(this.bio)
+			}
+			if (this.newEmail !== `` && this.$qualityEmail(this.newEmail)) {
+				this.changeEmail(this.newEmail)
+			}
+			if (this.location !== this.$store.state.session.location && this.$qualityText(this.location)) {
+				this.changeLocation(this.location)
+			}
+			this.$sendProfile(this.$store.state.session).then((cid) => {
+				this.changeCID(cid)
+			})
+			alert(`Settings updated!`)
+			this.$router.push(`/` + this.$store.state.session.cid)
+		},
+	},
+})
 </script>

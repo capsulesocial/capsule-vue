@@ -35,11 +35,11 @@
 
 <script>
 export default {
-  props: {
-    downsize: {
-      type: Boolean,
-      default: false,
-    },
-  },
+	props: {
+		downsize: {
+			type: Boolean,
+			default: false,
+		},
+	},
 }
 </script>
