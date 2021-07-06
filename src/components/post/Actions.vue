@@ -171,7 +171,7 @@ export default Vue.extend({
 			if (this.$props.filter === null) {
 				cList = this.$props.post.comments
 			} else {
-				for (const c in this.$props.comments) {
+				for (const c in this.$props.post.comments) {
 					if (this.$props.post.comments[c].emotion === this.$props.filter) {
 						cList.push(this.$props.post.comments[c])
 					}

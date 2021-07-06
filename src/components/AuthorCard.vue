@@ -1,11 +1,8 @@
 <template>
-  <div
-    v-if="this.author"
-    class="border rounded-lg bg-gray-200 p-5 shadow-xl my-5 flex flex-row"
-  >
+  <div class="border rounded-lg bg-gray-200 p-5 shadow-xl my-5 flex flex-row">
     <div class="flex-shrink-0">
       <ProfileIcon
-        v-if="this.author.avatar === '' || this.author.avatar === null"
+        v-if="this.avatar === ``"
         class="w-10 h-10 border-2 rounded-full"
       />
       <img
@@ -19,19 +16,20 @@
         About the Author:
       </h6>
       <h4 class="text-lg inline">
-        {{ this.author.name }}
+        {{ this.name }}
       </h4>
       <nuxt-link
-        :to="'/' + this.author.id"
+        :to="'/' + this.$props.authorCID"
         class="text-sm text-primary underline inline"
       >
-        @{{ this.author.id }}
+        @{{ this.id }}
       </nuxt-link>
       <p class="italic text-sm text-gray-700">
-        {{ this.author.bio }}
+        {{ this.bio }}
       </p>
     </div>
-    <FriendButton :authorID="author.id" />
+    <FriendButton :authorID="this.$props.authorCID" />
+    <span class="hidden"> {{ getProfileInfo() }}</span>
   </div>
 </template>
 
@@ -53,28 +51,21 @@ export default Vue.extend({
 	},
 	data () {
 		return {
-			author: {},
+			name: ``,
+			id: ``,
+			bio: ``,
 			avatar: ``,
 		}
 	},
-	created () {
-		// The user in which I am currently viewing
-		// Check if this is my profile
-		if (this.$props.authorCID === this.$store.state.session.cid) {
-			this.author = this.$store.state.session
-		}
-		// Get user profile
-		this.$getProfile(this.$props.authorCID).then((profile) => {
-			this.author = profile
-			// Get Author Avatar
-			// @ts-ignore
-			if (this.author.avatar !== ``) {
-				// @ts-ignore
-				this.$getPhoto(this.author.avatar).then((image) => {
-					this.avatar = image
-				})
-			}
-		})
+	methods: {
+		getProfileInfo () {
+			this.$getProfile(this.$props.authorCID).then((p) => {
+				p.cid = this.$props.authorCID
+				this.name = p.name
+				this.id = p.id
+				this.bio = p.bio
+			})
+		},
 	},
 })
 </script>

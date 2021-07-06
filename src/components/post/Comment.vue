@@ -19,10 +19,10 @@
       <!-- Content -->
       <div class="flex-1 leading-relaxed ml-2">
         <strong class="text-black font-bold bold mr-1">
-          {{ getFullName(comment.authorID) }}
+          {{ this.name }}
         </strong>
-        <nuxt-link :to="'/' + comment.authorID" class="text-gray-700 text-sm mr-2">
-          @{{ comment.authorID }}
+        <nuxt-link :to="'/' + this.$props.comment.authorCID" class="text-gray-700 text-sm mr-2">
+          @{{ this.id }}
         </nuxt-link>
         <span v-if="comment.timestamp" class="text-gray-600 text-xs font-sans">
           {{ $formatDate(comment.timestamp) }}
@@ -98,27 +98,20 @@ export default {
 			reply: ``,
 			replies: this.comment.replies,
 			avatar: ``,
+			name: ``,
+			id: ``,
 		}
 	},
 	created () {
-		if (this.$props.comment.authorAvatarCID !== null) {
-			this.$getPhoto(this.$props.comment.authorAvatarCID).then((image) => {
-				this.avatar = image
-			})
-		}
+		this.getProfileInfo()
 	},
 	methods: {
-		getFullName (id) {
-			if (this.$store.state.session.id === id) {
-				return this.$store.state.session.name
-			}
-			const list = this.$store.state.authors
-			const name = list.find(x => x.id === id)
-			if (name) {
-				return name.username
-			} else {
-				return id
-			}
+		getProfileInfo () {
+			this.$getProfile(this.$props.comment.authorCID).then((p) => {
+				p.cid = this.$props.comment.authorCID
+				this.name = p.name
+				this.id = p.id
+			})
 		},
 		sendReply () {
 			if (this.comment === `` || !this.$qualityText(this.reply)) {
