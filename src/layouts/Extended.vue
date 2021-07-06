@@ -31,9 +31,7 @@ export default Vue.extend({
 		PostEditor,
 	},
 	created () {
-		console.log(this.$store.state.session.cid)
 		if (this.$store.state.session.cid === ``) {
-			console.log(`ROUTER PUSH`)
 			this.$router.push(`/auth`)
 		}
 	},

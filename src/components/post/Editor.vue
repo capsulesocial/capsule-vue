@@ -433,7 +433,7 @@ export default Vue.extend({
 				}
 				// sending post to IPFS. Returns Content Address
 				this.$sendPost(p).then((cid) => {
-					console.log(`Post CID: `, cid)
+					// eslint-disable-next-line no-console
 					p.cid = cid
 					// this.$store.commit('posts/sendPost', p.id)
 					// this.$store.commit('posts/sendPost', p.cid)
@@ -446,7 +446,6 @@ export default Vue.extend({
 					// Adding post to local profile object
 					this.addPost(cid)
 					const profile = this.$store.state.session
-					console.log(cid)
 					// Sending updated profile to IPFS.
 					// Returns updated content address
 					this.$sendProfile(profile).then((pcid) => {

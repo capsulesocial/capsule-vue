@@ -1,10 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-shadow */
 export const state = () => ({})
 
 export const mutations = {
 	startSession (state, author) {
 		state = author
-		console.log(state)
 	},
 	endSession (state) {
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
