@@ -65,8 +65,39 @@ export default ({ app }, inject) => {
     return getFormat(date)
   }
 
+  async function hkdf (password, peerIDPublicKey) {
+    const ec = new TextEncoder()
+
+    const key = await window.crypto.subtle.importKey(
+      'raw',
+      ec.encode(password),
+      'HKDF',
+      false,
+      [
+        'deriveBits',
+        'deriveKey',
+      ],
+    )
+
+    const derivedKey = await window.crypto.subtle.deriveBits({
+      name: 'HKDF',
+      hash: 'SHA-256',
+      info: ec.encode('CapsuleBlogchainAuth'),
+      salt: ec.encode(peerIDPublicKey),
+    }, key, 512)
+
+    const keyval = new Uint8Array(derivedKey)
+    const hexval = Buffer.from(keyval).toString('hex')
+
+    return {
+      hp0: hexval.slice(0, 64),
+      hp1: hexval.slice(64),
+    }
+  }
+
   const helpers = {
     formatDate,
+    hkdf,
   }
   inject('helpers', helpers)
 }
