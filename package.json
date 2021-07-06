@@ -3,7 +3,11 @@
   "productName": "Capsule Client",
   "version": "1.0.0",
   "description": "Electron application using Nuxt.js to serve the Capsule Social Application",
-  "author": "Capsule Social <jack@capsule.social> (https://capsule.social)",
+  "author": {
+    "name": "Capsule Social",
+    "email": "jack@capsule.social",
+    "url": "https://capsule.social"
+  },
   "private": true,
   "main": "main.js",
   "license": "GNU GENERAL PUBLIC LICENSE",
