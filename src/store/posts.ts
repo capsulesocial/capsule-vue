@@ -1,5 +1,6 @@
-import type { Context } from '@nuxt/types'
-import type { GetterTree, MutationTree } from 'vuex'
+/* eslint-disable no-shadow */
+// import type { Context } from '@nuxt/types'
+import type { MutationTree } from 'vuex'
 
 import { Tag } from '@/interfaces/Tag'
 
@@ -20,10 +21,14 @@ export const postsMutationType = {
 }
 
 export const mutations: MutationTree<Posts> = {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	[postsMutationType.ADD_TAG]: (state, newTag: string[]) => {
 		for (const t in newTag) {
-			console.log(t)
+			if (t) {
+				// eslint-disable-next-line no-console
+				console.log(t)
+				// state.tags.push(newTag)
+			}
 		}
-		// state.tags.push(newTag)
 	},
 }

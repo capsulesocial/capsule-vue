@@ -303,8 +303,8 @@ import BrandedButton from '@/components/BrandedButton.vue'
 import markdown from '@/mixins/markdown.js'
 import { Post } from '@/interfaces/Post'
 import { Tag } from '@/interfaces/Tag'
-import { MutationType, namespace as sessionStoreNamespace, SessionState } from '~/store/session'
-import { actionType, namespace as settingStoreNamespace, SettingState } from '~/store/settings'
+import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
+import { actionType, namespace as settingStoreNamespace } from '~/store/settings'
 
 export default Vue.extend({
 	components: {
@@ -321,7 +321,7 @@ export default Vue.extend({
 	},
 	mixins: [markdown],
 	data () {
-		let input: string
+		let input: string = ``
 		if (this.$store.state.draft.content !== ``) {
 			input = this.$store.state.draft.content
 		} else {
@@ -367,6 +367,7 @@ export default Vue.extend({
 			const clean: string = DOMPurify.sanitize(e.target.value, {
 				USE_PROFILES: { html: true, svg: true },
 			})
+			// eslint-disable-next-line no-invalid-this
 			this.input = clean
 		}, 300),
 		addTag (): void {

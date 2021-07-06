@@ -132,7 +132,7 @@ export default Vue.extend({
 			filter: null,
 		}
 	},
-	async created () {
+	created () {
 		// Fetch post from IPFS,
 		this.$getPost(this.$route.params.post).then((p: Post) => {
 			p.id = this.$route.params.post

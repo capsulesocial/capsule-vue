@@ -32,11 +32,13 @@ export default Vue.extend({
 		await this.$getProfile(this.$route.params.id).then((profile) => {
 			this.currentUser = profile
 			for (const p in profile.posts) {
-				this.$getPost(profile.posts[p]).then((post: Post) => {
-					post.id = profile.posts[p]
-					post.cid = profile.posts[p]
-					this.posts.push(post)
-				})
+				if (profile.posts[p]) {
+					this.$getPost(profile.posts[p]).then((post: Post) => {
+						post.id = profile.posts[p]
+						post.cid = profile.posts[p]
+						this.posts.push(post)
+					})
+				}
 			}
 		})
 	},

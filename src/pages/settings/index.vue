@@ -183,7 +183,7 @@ import { mapMutations } from 'vuex'
 import BrandedButton from '@/components/BrandedButton.vue'
 import ChevronRight from '@/components/icons/ChevronRight.vue'
 import UploadAvatar from '@/components/icons/UploadAvatar.vue'
-import { MutationType, namespace as sessionStoreNamespace, SessionState } from '~/store/session'
+import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
 
 export default Vue.extend({
 	components: {

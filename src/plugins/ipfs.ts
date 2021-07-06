@@ -21,6 +21,7 @@ const ipfsPlugin: Plugin = async (_context, inject) => {
 	const node = await IPFS.create()
 	const version = await node.version()
 
+	// eslint-disable-next-line no-console
 	console.log(`IPFS version: `, version.version)
 
 	// Send a user profile object to IPFS

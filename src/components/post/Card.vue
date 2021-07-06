@@ -147,17 +147,15 @@ export default Vue.extend({
 			featuredPhoto: null,
 		}
 	},
-	async created () {
+	created () {
 		if (this.$store.state.session.cid === this.$props.post.authorCID) {
 			// Viewing own post
 			this.author = this.$store.state.session
 		}
 		this.$getProfile(this.$props.post.authorCID).then((profile) => {
-			console.log(profile)
 			// Populate Avatar
 			this.author = profile
 			if (profile.avatar !== ``) {
-				console.log(profile.avatar)
 				this.$getPhoto(profile.avatar).then((image) => {
 					this.avatar = image
 				})

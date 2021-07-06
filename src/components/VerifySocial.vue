@@ -102,7 +102,7 @@ export default Vue.extend({
 		toggleVerify () {
 			this.isActive = !this.isActive
 		},
-		verifySocial (platform, handle) {
+		verifySocial () {
 			if (this.$props.platform === `website` && !this.$qualityURL(this.handle)) {
 				alert(`Check URL!`)
 				return

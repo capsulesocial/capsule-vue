@@ -147,7 +147,7 @@ export default Vue.extend({
 			posts: [],
 		}
 	},
-	async created () {
+	created () {
 		// The user in which I am currently viewing
 		// Check if this is my profile
 		if (this.$route.params.id === this.$store.state.session.cid) {

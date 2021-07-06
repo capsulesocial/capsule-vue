@@ -77,7 +77,7 @@ export default Vue.extend({
 		this.sortFeed(this.algorithm)
 	},
 	methods: {
-		async sortFeed (a) {
+		sortFeed (a) {
 			this.posts = []
 			// Get list of posts
 			for (const p in this.$store.state.posts.recent) {

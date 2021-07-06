@@ -44,7 +44,6 @@ export default Vue.extend({
 		}),
 		updateName () {
 			this.changeCID(this.text)
-			console.log(this.text)
 		},
 	},
 })

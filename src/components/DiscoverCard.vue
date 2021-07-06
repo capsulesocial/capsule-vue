@@ -4,6 +4,7 @@
   >
     <nuxt-link :to="'/discover/' + this.$props.text">
       <img
+        v-if="this.$props.bgImage !== ``"
         :src="this.$props.bgImage"
         :alt="this.$props.text"
         class="opacity-75 absolute left-0 top-0 object-cover h-40 w-full "
@@ -26,6 +27,7 @@ export default {
 		},
 		bgImage: {
 			type: String,
+			default: ``,
 		},
 	},
 }

@@ -57,7 +57,7 @@ export default Vue.extend({
 			avatar: ``,
 		}
 	},
-	async created () {
+	created () {
 		// The user in which I am currently viewing
 		// Check if this is my profile
 		if (this.$props.authorCID === this.$store.state.session.cid) {
