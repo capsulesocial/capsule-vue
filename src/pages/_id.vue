@@ -12,7 +12,7 @@
           <!-- Name Username, Follow button -->
           <div class="flex flex-row items-center">
             <h3 class="text-2xl pr-4">
-              {{ this.currentUser.username }}
+              {{ this.currentUser.name }}
             </h3>
             <h5 class="text-xl text-gray-700">
               @{{ this.currentUser.id }}
