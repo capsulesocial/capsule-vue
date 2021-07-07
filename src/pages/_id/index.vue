@@ -33,9 +33,9 @@ export default Vue.extend({
 			this.currentUser = profile
 			for (const p in profile.posts) {
 				if (profile.posts[p]) {
-					this.$getPost(profile.posts[p]).then((post: Post) => {
-						post.id = profile.posts[p]
-						post.cid = profile.posts[p]
+					this.$getPost(profile.posts[p].cid).then((post: Post) => {
+						post.id = profile.posts[p].id
+						post.cid = profile.posts[p].cid
 						this.posts.push(post)
 					})
 				}
