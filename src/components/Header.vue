@@ -110,6 +110,8 @@ import UpIcon from '@/components/icons/ChevronUp.vue'
 import SearchIcon from '@/components/icons/Search.vue'
 import HelpIcon from '@/components/icons/Help.vue'
 import LogoutIcon from '@/components/icons/Logout.vue'
+import { mapMutations } from 'vuex'
+import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
 
 export default Vue.extend({
 	components: {
@@ -140,8 +142,11 @@ export default Vue.extend({
 		}, false)
 	},
 	methods: {
+		...mapMutations(sessionStoreNamespace, {
+			endSession: MutationType.LOGOUT,
+		}),
 		logout () {
-			this.$store.commit(`me/endSession`)
+			this.endSession()
 			this.$router.push(`/`)
 		},
 		toggleDropdown () {

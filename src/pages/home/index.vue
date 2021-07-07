@@ -82,8 +82,8 @@ export default Vue.extend({
 			// Get list of posts
 			for (const p in this.$store.state.posts.recent) {
 				if (p) {
-					this.$getPost(this.$store.state.posts.recent[p]).then((post: Post) => {
-						post.id = this.$store.state.posts.recent[p]
+					this.$getPost(this.$store.state.posts.recent[p].cid).then((post: Post) => {
+						post.cid = this.$store.state.posts.recent[p].cid
 						this.posts.push(post)
 					})
 				}

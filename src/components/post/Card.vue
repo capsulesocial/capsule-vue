@@ -4,7 +4,7 @@
     <div class="flex justify-between items-center">
       <nuxt-link :to="'/' + this.post.authorCID" class="flex">
         <img
-          v-if="this.avatar === ''"
+          v-if="this.avatar === ``"
           :src="this.avatar"
           class="w-8 h-8 rounded-lg mr-2 object-cover"
         />
@@ -31,7 +31,7 @@
 
     <!-- Preview Content -->
     <div class="hover:text-primary">
-      <nuxt-link :to="'/post/' + this.post.id" class="flex justify-between">
+      <nuxt-link :to="'/post/' + this.post.cid" class="flex justify-between">
         <div>
           <h3 class="text-base font-bold capitalize">
             {{ this.post.title }}
@@ -42,7 +42,7 @@
         </div>
         <div class="ml-2">
           <img
-            v-if="this.featuredPhoto !== null"
+            v-if="this.featuredPhoto !== ``"
             :src="this.featuredPhoto"
             class="w-32 h-24 rounded object-cover object-top"
           />
@@ -62,7 +62,7 @@
         </button>
         <Share :post="this.post" class="fill-primary self-center z-20" />
         <BookmarkButton
-          :postID="this.post.id"
+          :postID="this.post.cid"
           class="fill-primary self-center"
         />
       </div>
@@ -146,7 +146,7 @@ export default Vue.extend({
 			authorID: ``,
 			authorCID: ``,
 			avatar: ``,
-			featuredPhoto: null,
+			featuredPhoto: ``,
 		}
 	},
 	created () {
@@ -167,7 +167,7 @@ export default Vue.extend({
 				})
 			}
 			// Populate Featured Photo
-			if (this.post.featuredPhotoCID !== null) {
+			if (this.post.featuredPhotoCID !== ``) {
 				this.$getPhoto(this.post.featuredPhotoCID).then((image) => {
 					this.featuredPhoto = image
 				})

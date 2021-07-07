@@ -3,21 +3,22 @@
 import type { MutationTree } from 'vuex'
 
 import { Tag } from '@/interfaces/Tag'
-
+import { Post } from '@/interfaces/Post'
 export const namespace = `posts`
 
 export interface Posts {
   tags: Tag[],
-  recent: string[]
+  recent: Post[]
 }
 
 export const state = (): Posts => ({
 	tags: [],
-	recent: [`QmaagP2Ufibw7sYa2gQiNLjW9T3YR2ajvJEptsWnuL5r72`],
+	recent: [],
 })
 
 export const postsMutationType = {
 	ADD_TAG: `addTag`,
+	ADD_POST: `addPost`,
 }
 
 export const mutations: MutationTree<Posts> = {
@@ -30,5 +31,8 @@ export const mutations: MutationTree<Posts> = {
 				// state.tags.push(newTag)
 			}
 		}
+	},
+	[postsMutationType.ADD_POST]: (state, newPost: Post) => {
+		state.recent.push(newPost)
 	},
 }

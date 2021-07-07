@@ -37,6 +37,7 @@ export const MutationType = {
 	CHANGE_BIO: `updateBio`,
 	CHANGE_LOCATION: `updateLocation`,
 	ADD_POST: `addPost`,
+	LOGOUT: `logout`,
 }
 
 export const mutations: MutationTree<Profile> = {
@@ -63,6 +64,27 @@ export const mutations: MutationTree<Profile> = {
 	},
 	[MutationType.ADD_POST]: (state, newPost: Post) => {
 		state.posts.push(newPost)
+	},
+	[MutationType.LOGOUT]: (state) => {
+		// eslint-disable-next-line
+		state = {
+			cid: ``,
+			id: ``,
+			name: ``,
+			email: ``,
+			password: ``,
+			bio: `Default bio.`,
+			location: ``,
+			posts: [],
+			reposts: [],
+			socials: [],
+			bookmarks: [],
+			categories: [],
+			followers: [],
+			following: [],
+			avatar: ``,
+			comments: [],
+		}
 	},
 }
 

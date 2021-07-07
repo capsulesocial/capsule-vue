@@ -445,6 +445,7 @@ export default Vue.extend({
 					//   this.addTag(p.tags)
 					// }
 					// Adding post to local profile object
+					this.$store.commit(`posts/addPost`, p)
 					this.addPost(p)
 					const profile: Profile = this.$store.state.session
 					// Sending updated profile to IPFS.

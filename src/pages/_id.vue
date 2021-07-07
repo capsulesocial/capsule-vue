@@ -32,7 +32,7 @@
               :to="'/' + this.$route.params.id + '/followers'"
               class="pl-4"
             >
-              {{ this.currentUser.followers.length }}
+              <!-- {{ this.currentUser.followers.length }} -->0
               <span class="text-gray5">
                 Followers
               </span>
@@ -41,7 +41,7 @@
               :to="'/' + this.$route.params.id + '/following'"
               class="pl-4"
             >
-              {{ this.currentUser.following.length }}
+              <!-- {{ this.currentUser.following.length }} -->0
               <span class="text-gray5">
                 Following
               </span>
