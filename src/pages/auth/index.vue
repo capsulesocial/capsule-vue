@@ -143,10 +143,10 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapMutations } from 'vuex'
-
 import CapsuleIcon from '@/components/icons/Capsule.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
+import { Profile } from '~/interfaces/Profile'
 
 export default Vue.extend({
 	components: {
@@ -157,7 +157,7 @@ export default Vue.extend({
 	data () {
 		return {
 			isLogin: true,
-			name: null,
+			name: ``,
 			id: ``,
 			email: ``,
 			password: ``,
@@ -205,7 +205,7 @@ export default Vue.extend({
 					return
 				}
 				if (this.password === this.confirmPassword) {
-					const account = {
+					const account: Profile = {
 						cid: ``,
 						id: this.id,
 						name: this.name,
@@ -218,6 +218,7 @@ export default Vue.extend({
 						socials: [],
 						bookmarks: [],
 						categories: [],
+						comments: [],
 						followers: [],
 						following: [],
 						avatar: ``,

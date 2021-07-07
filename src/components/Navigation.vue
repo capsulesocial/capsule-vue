@@ -1,9 +1,7 @@
 <template>
   <nav>
     <!-- Desktop -->
-    <div
-      class="hidden lg:flex px-2 flex-col h-12 sticky top-0 pl-6 lg:fixed lg:pt-24 lg:mt-12 font-sans"
-    >
+    <div class="hidden lg:flex px-2 flex-col h-12 sticky top-0 pl-6 lg:fixed lg:pt-24 lg:mt-12 font-sans">
       <nuxt-link
         to="/home"
         class="nav group flex items-center px-2 py-2 text-base leading-6  m-2 text-xl"
@@ -55,9 +53,7 @@
     </div>
 
     <!-- Mobile -->
-    <div
-      class="fixed lg:hidden bottom-0 h-16 w-full flex flex-row justify-around pb-4 pt-2 items-end bg-white z-50"
-    >
+    <div class="fixed lg:hidden bottom-0 h-16 w-full flex flex-row justify-around pb-4 pt-2 items-end bg-white z-50">
       <nuxt-link to="/home">
         <HomeIcon
           v-if="this.$route.path === '/home'"
@@ -78,7 +74,6 @@
       >
         <PencilIcon class="fill-current text-white" />
       </button>
-
       <ProfileIcon
         v-if="this.$route.params.id === this.$store.state.session.cid"
         class="stroke-current text-primary"
@@ -86,7 +81,6 @@
       <nuxt-link v-else :to="$store.state.session.cid">
         <ProfileIcon class="stroke-current text-gray-400" />
       </nuxt-link>
-
       <nuxt-link to="/settings">
         <SettingsIcon
           v-if="this.$route.path === '/settings'"

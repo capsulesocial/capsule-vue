@@ -1,5 +1,5 @@
 <template>
-  <article v-if="this.author" class="shadow rounded-lg my-2 card p-5">
+  <article class="shadow rounded-lg my-2 card p-5">
     <!-- Post Preview Header: Avatar, name -->
     <div class="flex justify-between items-center">
       <nuxt-link :to="'/' + this.post.authorCID" class="flex">
@@ -13,7 +13,7 @@
           class="w-8 h-8 border-2 rounded-full mr-2"
         />
         <h4 class="text-bold mr-2 self-center">
-          {{ this.author.name }}
+          {{ this.authorName }}
         </h4>
         <h5 class="hover:text-primary text-subtitle mr-2 self-center">
           @{{ this.post.authorID }}
@@ -142,7 +142,9 @@ export default Vue.extend({
 			showComments: false,
 			showFilter: false,
 			filter: null,
-			author: null,
+			authorName: ``,
+			authorID: ``,
+			authorCID: ``,
 			avatar: ``,
 			featuredPhoto: null,
 		}
@@ -150,11 +152,15 @@ export default Vue.extend({
 	created () {
 		if (this.$store.state.session.cid === this.$props.post.authorCID) {
 			// Viewing own post
-			this.author = this.$store.state.session
+			this.authorName = this.$store.state.session.name
+			this.authorID = this.$store.state.session.id
+			this.authorCID = this.$store.state.session.cid
 		}
 		this.$getProfile(this.$props.post.authorCID).then((profile) => {
 			// Populate Avatar
-			this.author = profile
+			this.authorName = profile.name
+			this.authorID = profile.id
+			this.authorCID = profile.cid
 			if (profile.avatar !== ``) {
 				this.$getPhoto(profile.avatar).then((image) => {
 					this.avatar = image

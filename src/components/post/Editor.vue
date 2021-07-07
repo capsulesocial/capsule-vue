@@ -303,6 +303,7 @@ import BrandedButton from '@/components/BrandedButton.vue'
 import markdown from '@/mixins/markdown.js'
 import { Post } from '@/interfaces/Post'
 import { Tag } from '@/interfaces/Tag'
+import { Profile } from '@/interfaces/Profile'
 import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
 import { actionType, namespace as settingStoreNamespace } from '~/store/settings'
 
@@ -444,8 +445,8 @@ export default Vue.extend({
 					//   this.addTag(p.tags)
 					// }
 					// Adding post to local profile object
-					this.addPost(cid)
-					const profile = this.$store.state.session
+					this.addPost(p)
+					const profile: Profile = this.$store.state.session
 					// Sending updated profile to IPFS.
 					// Returns updated content address
 					this.$sendProfile(profile).then((pcid) => {

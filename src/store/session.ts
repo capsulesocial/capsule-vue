@@ -2,28 +2,12 @@
 // import type { Context } from '@nuxt/types'
 import type { GetterTree, MutationTree } from 'vuex'
 import type { RootState } from './index'
+import { Profile } from '~/interfaces/Profile'
+import { Post } from '~/interfaces/Post'
 
 export const namespace = `session`
 
-export interface SessionState {
-  cid: string,
-  id: string,
-  name: string,
-  email: string,
-  password: string,
-  bio: string,
-  location: string
-  posts: string[],
-  reposts: [],
-  socials: [],
-  bookmarks: [],
-  categories: [],
-  followers: [],
-  following: [],
-  avatar: string
-}
-
-export const state = (): SessionState => ({
+export const state = (): Profile => ({
 	cid: ``,
 	id: ``,
 	name: ``,
@@ -39,9 +23,10 @@ export const state = (): SessionState => ({
 	followers: [],
 	following: [],
 	avatar: ``,
+	comments: [],
 })
 
-export const getters: GetterTree<SessionState, RootState> = {}
+export const getters: GetterTree<Profile, RootState> = {}
 
 export const MutationType = {
 	CHANGE_CID: `updateCID`,
@@ -54,7 +39,7 @@ export const MutationType = {
 	ADD_POST: `addPost`,
 }
 
-export const mutations: MutationTree<SessionState> = {
+export const mutations: MutationTree<Profile> = {
 	[MutationType.CHANGE_CID]: (state, newCID: string) => {
 		state.cid = newCID
 	},
@@ -76,7 +61,7 @@ export const mutations: MutationTree<SessionState> = {
 	[MutationType.CHANGE_LOCATION]: (state, newLocation: string) => {
 		state.location = newLocation
 	},
-	[MutationType.ADD_POST]: (state, newPost: string) => {
+	[MutationType.ADD_POST]: (state, newPost: Post) => {
 		state.posts.push(newPost)
 	},
 }
