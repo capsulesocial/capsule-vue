@@ -95,9 +95,34 @@ export default ({ app }, inject) => {
     }
   }
 
+  async function encryptData (key, data) {
+    const ec = new TextEncoder()
+    const nonce = window.crypto.getRandomValues(new Uint8Array(12))
+
+    const derivedKey = await window.crypto.subtle.importKey(
+      'raw',
+      ec.encode(key),
+      { name: 'AES-GCM' },
+      false,
+      [
+        'encrypt',
+        'decrypt',
+      ],
+    )
+
+    const encryptedData = await window.crypto.subtle.encrypt({
+      name: 'AES-GCM',
+      iv: nonce,
+      tagLength: 128,
+    }, derivedKey, ec.encode(data))
+
+    return encryptedData
+  }
+
   const helpers = {
     formatDate,
     hkdf,
+    encryptData,
   }
   inject('helpers', helpers)
 }
