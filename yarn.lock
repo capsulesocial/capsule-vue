@@ -12971,6 +12971,11 @@ schema-utils@^3.0.0:
     ajv "^6.12.5"
     ajv-keywords "^3.5.2"
 
+scrypt-wasm@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/scrypt-wasm/-/scrypt-wasm-0.1.1.tgz#35940c1e9310de5de102ea231bf5e3d4bc1b0f3e"
+  integrity sha512-lNqHZI3VPrlx4kzZkTQtvKWAsS2GdHVbrA8CCZavjlEcfPrcS3TML3bFFVtAsV+bntO5oTi6H0qTR3OANWtqyA==
+
 scule@^0.2.1:
   version "0.2.1"
   resolved "https://registry.npmjs.org/scule/-/scule-0.2.1.tgz"

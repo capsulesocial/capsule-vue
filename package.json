@@ -89,6 +89,7 @@
     "ipfs": "^0.54.5",
     "marked": "^2.0.1",
     "nuxt": "^2.14.12",
+    "scrypt-wasm": "^0.1.1",
     "zxcvbn": "^4.4.2"
   },
   "devDependencies": {

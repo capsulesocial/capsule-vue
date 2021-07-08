@@ -1,6 +1,12 @@
+import {getEncryptedPeerIDPrivateKey} from "../plugins/crypto.js"
 export default ({ app }, node) => ({
   // POST newly created account to IPFS
-  register (payload) {
+  async register (payload) {
+    const peerIDPrivateKey = await node.key.export('self', 'password')
+    const peerID = await node.id()
+    const peerIDPublicKey = peerID.publicKey
+    var res = await getEncryptedPeerIDPrivateKey(payload, peerIDPrivateKey, peerIDPublicKey)
+
     return payload
     // Returns newly created user object
   },

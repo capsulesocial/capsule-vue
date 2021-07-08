@@ -207,7 +207,7 @@ export default {
             email: this.email,
             password: this.password,
           }
-          // const res = await this.$api.auth.register(account)
+          const res = await this.$api.auth.register(account)
           account.password = null
           this.$store.commit('me/startSession', account)
           const profile = this.$store.state.me

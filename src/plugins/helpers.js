@@ -65,74 +65,9 @@ export default ({ app }, inject) => {
     return getFormat(date)
   }
 
-  function hexEncode (str) {
-    var result = []
-    for (var n = 0, l = str.length; n < l; n++) {
-      var hex = Number(str.charCodeAt(n)).toString(16);
-      result.push(hex)
-    }
-    return result.join('');
-  }
-
-  async function hkdf (password, peerIDPublicKey) {
-    const ec = new TextEncoder()
-
-    const key = await window.crypto.subtle.importKey(
-      'raw',
-      ec.encode(password),
-      'HKDF',
-      false,
-      [
-        'deriveBits',
-        'deriveKey',
-      ],
-    )
-
-    const derivedKey = await window.crypto.subtle.deriveBits({
-      name: 'HKDF',
-      hash: 'SHA-256',
-      info: ec.encode('CapsuleBlogchainAuth'),
-      salt: ec.encode(peerIDPublicKey),
-    }, key, 512)
-
-    const keyval = new Uint8Array(derivedKey)
-    const hexval = Buffer.from(keyval).toString('hex')
-
-    return {
-      hp0: hexval.slice(0, 64),
-      hp1: hexval.slice(64),
-    }
-  }
-
-  async function encryptData (key, data) {
-    const ec = new TextEncoder()
-    const nonce = window.crypto.getRandomValues(new Uint8Array(12))
-
-    const derivedKey = await window.crypto.subtle.importKey(
-      'raw',
-      ec.encode(key),
-      { name: 'AES-GCM' },
-      false,
-      [
-        'encrypt',
-        'decrypt',
-      ],
-    )
-
-    const encryptedData = await window.crypto.subtle.encrypt({
-      name: 'AES-GCM',
-      iv: nonce,
-      tagLength: 128,
-    }, derivedKey, ec.encode(data))
-
-    return encryptedData
-  }
 
   const helpers = {
     formatDate,
-    hkdf,
-    hexEncode,
-    encryptData,
   }
   inject('helpers', helpers)
 }
