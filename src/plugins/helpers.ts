@@ -3,7 +3,6 @@ import type { Plugin } from '@nuxt/types'
 type dateString = (date: Date, preformattedDate: any, hideYear: boolean | null) => string
 type dateFormat = (input: object | Date) => string
 
-// eslint-disable-next-line quotes
 declare module 'vue/types/vue' {
   interface Vue {
     $getFormat: dateString,

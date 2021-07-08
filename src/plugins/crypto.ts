@@ -1,14 +1,22 @@
+import { Profile, PrivateKey } from '../interfaces/Profile'
+import type { Plugin } from '@nuxt/types'
 
-  function hexEncode (str) {
-    var result = []
-    for (var n = 0, l = str.length; n < l; n++) {
-      var hex = Number(str.charCodeAt(n)).toString(16);
-      result.push(hex)
+declare module 'vue/types/vue' {
+  interface Vue {
+    $getEncryptedPeerIDPrivateKey: PrivateKey
+  }
+}
+
+
+  function hexEncode (str: string) {
+    var result = '';
+    for (var i=0; i<str.length; i++) {
+      result += str.charCodeAt(i).toString(16);
     }
-    return result.join('');
+    return result;
   }
 
-  async function hkdf (password, peerIDPublicKey) {
+  async function hkdf (password: string, peerIDPublicKey: string) {
     const ec = new TextEncoder()
 
     const key = await window.crypto.subtle.importKey(
@@ -38,7 +46,7 @@
     }
   }
 
-  async function encryptData (key, data, nonce) {
+  async function encryptData (key: string, data: string, nonce: Uint8Array) {
     const ec = new TextEncoder()
     console.log("dereivedkey", typeof(key), key)
 
@@ -62,16 +70,16 @@
     return encryptedData
   }
 
-  async function scrypt(str, salt) {
+  async function scrypt(str: string, salt: string) {
     const dklen = 8
-    var hashedStr
+    var hashedStr = ""
     await import('scrypt-wasm').then((wasm)=>{
       hashedStr = wasm.scrypt(hexEncode(str), hexEncode(salt), 32768, 8, 1, dklen)
     })
     return hashedStr
   }
 
-  async function getEncryptedPeerIDPrivateKey (payload, peerIDPrivateKey, peerIDPublicKey) {
+  async function getEncryptedPeerIDPrivateKey (payload: Profile, peerIDPrivateKey: string, peerIDPublicKey: string) {
     //HKDF(key: userPassword, info: "CapsuleBlogchainAuth", salt: peerIDPublicKey)
     const hps = await hkdf (payload.password, peerIDPublicKey) 
     const hp = Object.values(hps)
@@ -85,3 +93,8 @@
   }
 
   export {getEncryptedPeerIDPrivateKey}
+  // const cryptoPlugin: Plugin = (_context, inject) => {
+  //   inject(`getEncryptedPeerIDPrivateKey`, getEncryptedPeerIDPrivateKey)
+  // }
+  
+  // export default cryptoPlugin
