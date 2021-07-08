@@ -6,6 +6,7 @@ const IPFS = require(`ipfs`)
 // eslint-disable-next-line quotes
 declare module 'vue/types/vue' {
   interface Vue {
+		$getNode: () => any,
     $sendProfile: (content: Profile) => Promise<string>,
     $getProfile: (cid: string) => Promise<Profile>,
     $sendPost: (content: Post) => Promise<string>,
@@ -21,6 +22,11 @@ const ipfsPlugin: Plugin = async (_context, inject) => {
 
 	// eslint-disable-next-line no-console
 	console.log(`IPFS version: `, version.version)
+
+	// Exports IPFS node instance
+	const getNode = () => {
+		return node
+	}
 
 	// Send a user profile object to IPFS
 	const sendProfile: ((content: Profile) => Promise<string>) = async (content) => {
@@ -79,7 +85,7 @@ const ipfsPlugin: Plugin = async (_context, inject) => {
 		// eslint-disable-next-line consistent-return
 		return content
 	}
-
+	inject(`getNode`, getNode)
 	inject(`sendProfile`, sendProfile)
 	inject(`sendPost`, sendPost)
 	inject(`getPost`, getPost)
@@ -87,5 +93,4 @@ const ipfsPlugin: Plugin = async (_context, inject) => {
 	inject(`getPhoto`, getPhoto)
 	inject(`getProfile`, getProfile)
 }
-
 export default ipfsPlugin

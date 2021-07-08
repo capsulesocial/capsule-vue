@@ -31,11 +31,11 @@
         </p>
       </article>
       <article class="grid grid-cols-2 gap-4 md:grid-cols-4">
-        <DiscoverCard
+        <CategoryCard
           v-for="c in this.categories"
           :key="c"
           :text="c"
-          :bgImage="require('@/assets/images/discover/' + c + '/' + c + '.jpg')"
+          :bgImage="require('@/assets/images/category/' + c + '/' + c + '.jpg')"
         />
       </article>
     </section>
@@ -43,12 +43,12 @@
 </template>
 
 <script>
-import DiscoverCard from '@/components/DiscoverCard.vue'
+import CategoryCard from '@/components/CategoryCard.vue'
 import TagCard from '@/components/Tag.vue'
 
 export default {
 	components: {
-		DiscoverCard,
+		CategoryCard,
 		TagCard,
 	},
 	layout: `Extended`,

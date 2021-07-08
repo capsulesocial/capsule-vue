@@ -51,7 +51,13 @@
       </article>
       <div class="flex items-center">
       </div>
-      <FriendButton :authorCID="currentUser.cid" />
+      <nuxt-link
+        v-if="this.$store.state.session.cid === this.$route.params.id"
+        to="/settings"
+      >
+        <SettingsIcon />
+      </nuxt-link>
+      <FriendButton v-else :authorCID="currentUser.cid" />
     </section>
 
     <section>
@@ -131,6 +137,7 @@ import TwitterIcon from '@/components/icons/brands/Twitter.vue'
 import GitHubIcon from '@/components/icons/brands/GitHub.vue'
 import FriendButton from '@/components/FriendButton.vue'
 import ExternalURLIcon from '@/components/icons/ExternalURL.vue'
+import SettingsIcon from '@/components/icons/Settings.vue'
 
 export default Vue.extend({
 	components: {
@@ -138,6 +145,7 @@ export default Vue.extend({
 		GitHubIcon,
 		FriendButton,
 		ExternalURLIcon,
+		SettingsIcon,
 	},
 	// layout: 'Extended',
 	data () {
