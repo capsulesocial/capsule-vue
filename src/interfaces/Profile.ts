@@ -19,3 +19,9 @@ export interface Profile {
   following: string[],
   followers: string[],
 }
+
+export interface PrivateKey {
+  encryptedPeerIDPrivateKey: string,
+  hp1: string,
+  nonce: Uint8Array,
+}

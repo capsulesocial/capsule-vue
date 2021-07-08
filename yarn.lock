@@ -12932,6 +12932,11 @@ schema-utils@^3.0.0:
     ajv "^6.12.5"
     ajv-keywords "^3.5.2"
 
+scrypt-wasm@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/scrypt-wasm/-/scrypt-wasm-0.1.1.tgz#35940c1e9310de5de102ea231bf5e3d4bc1b0f3e"
+  integrity sha512-lNqHZI3VPrlx4kzZkTQtvKWAsS2GdHVbrA8CCZavjlEcfPrcS3TML3bFFVtAsV+bntO5oTi6H0qTR3OANWtqyA==
+
 scule@^0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/scule/-/scule-0.2.1.tgz#0c1dc847b18e07219ae9a3832f2f83224e2079dc"
@@ -15234,3 +15239,8 @@ yocto-queue@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
+
+zxcvbn@^4.4.2:
+  version "4.4.2"
+  resolved "https://registry.yarnpkg.com/zxcvbn/-/zxcvbn-4.4.2.tgz#28ec17cf09743edcab056ddd8b1b06262cc73c30"
+  integrity sha1-KOwXzwl0PtyrBW3dixsGJizHPDA=

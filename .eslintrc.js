@@ -17,7 +17,6 @@ module.exports = {
 		"indent": ["error", "tab"],
 		"linebreak-style": ["error", "unix"],
 		"quotes": ["error", "backtick"],
-		"semi": ["error", "never"],
 		"no-var": "error",
 		"array-callback-return": "error",
 		"consistent-return": "error",
