@@ -7,15 +7,6 @@ declare module 'vue/types/vue' {
   }
 }
 
-
-  function hexEncode (str: string) {
-    var result = '';
-    for (var i=0; i<str.length; i++) {
-      result += str.charCodeAt(i).toString(16);
-    }
-    return result;
-  }
-
   async function hkdf (password: string, peerIDPublicKey: string) {
     const ec = new TextEncoder()
 
@@ -74,7 +65,7 @@ declare module 'vue/types/vue' {
     const dklen = 8
     var hashedStr = ""
     await import('scrypt-wasm').then((wasm)=>{
-      hashedStr = wasm.scrypt(hexEncode(str), hexEncode(salt), 32768, 8, 1, dklen)
+      hashedStr = wasm.scrypt(str, salt, 32768, 8, 1, dklen)
     })
     return hashedStr
   }
