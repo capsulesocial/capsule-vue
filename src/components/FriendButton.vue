@@ -1,20 +1,18 @@
 <template>
-  <div v-if="$store.state.session.cid !== authorCID">
-    <button
-      class="rounded-full focus:outline-none"
-      @click="toggleFriend"
+  <button
+    class="rounded-full focus:outline-none"
+    @click="toggleFriend"
+  >
+    <div
+      v-if="iFollow()"
+      class="bg-red-200 rounded-lg shadow-lg px-2 py-1"
     >
-      <div
-        v-if="iFollow()"
-        class="bg-red-200 rounded-lg shadow-lg px-2 py-1"
-      >
-        <span class="text-black text-bold text-sm">Unfollow</span>
-      </div>
-      <div v-else class="bg-primary rounded-lg shadow-lg px-2 py-1">
-        <span class="text-white text-bold text-sm">Follow</span>
-      </div>
-    </button>
-  </div>
+      <span class="text-black text-bold text-sm">Unfollow</span>
+    </div>
+    <div v-else class="bg-primary rounded-lg shadow-lg px-2 py-1">
+      <span class="text-white text-bold text-sm">Follow</span>
+    </div>
+  </button>
 </template>
 
 <script>
