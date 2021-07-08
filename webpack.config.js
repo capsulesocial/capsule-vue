@@ -16,7 +16,8 @@ var config = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.ts$/, 
+        loader: 'ts-loader',  
         type: 'javascript/esm',
         include: [
           path.resolve(__dirname, "mainprocess")
