@@ -98,51 +98,60 @@
   </header>
 </template>
 
-<script>
-import CapsuleIcon from '@/components/icons/Capsule'
-import NotificationsIcon from '@/components/icons/Notifications'
-import SettingsIcon from '@/components/icons/Settings'
-import BackButton from '@/components/icons/ChevronLeft'
-import ForwardButton from '@/components/icons/ChevronRight'
-import DownIcon from '@/components/icons/ChevronDown'
-import UpIcon from '@/components/icons/ChevronUp'
-import SearchIcon from '@/components/icons/Search'
-import HelpIcon from '@/components/icons/Help'
-import LogoutIcon from '@/components/icons/Logout'
+<script lang="ts">
+import Vue from 'vue'
+import CapsuleIcon from '@/components/icons/Capsule.vue'
+import NotificationsIcon from '@/components/icons/Notifications.vue'
+import SettingsIcon from '@/components/icons/Settings.vue'
+import BackButton from '@/components/icons/ChevronLeft.vue'
+import ForwardButton from '@/components/icons/ChevronRight.vue'
+import DownIcon from '@/components/icons/ChevronDown.vue'
+import UpIcon from '@/components/icons/ChevronUp.vue'
+import SearchIcon from '@/components/icons/Search.vue'
+import HelpIcon from '@/components/icons/Help.vue'
+import LogoutIcon from '@/components/icons/Logout.vue'
+import { mapMutations } from 'vuex'
+import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
 
-export default {
-  components: {
-    CapsuleIcon,
-    SettingsIcon,
-    NotificationsIcon,
-    BackButton,
-    ForwardButton,
-    SearchIcon,
-    DownIcon,
-    UpIcon,
-    HelpIcon,
-    LogoutIcon,
-  },
-  data () {
-    return {
-      showMore: false,
-    }
-  },
-  mounted () {
-    window.addEventListener('click', (e) => {
-      if (e.target.parentNode === null || e.target.parentNode.classList === undefined || !e.target.parentNode.classList.contains('dropdown')) {
-        this.showMore = false
-      }
-    }, false)
-  },
-  methods: {
-    logout () {
-      this.$store.commit('me/endSession')
-      this.$router.push('/')
-    },
-    toggleDropdown () {
-      this.showMore = !this.showMore
-    },
-  },
-}
+export default Vue.extend({
+	components: {
+		CapsuleIcon,
+		SettingsIcon,
+		NotificationsIcon,
+		BackButton,
+		ForwardButton,
+		SearchIcon,
+		DownIcon,
+		UpIcon,
+		HelpIcon,
+		LogoutIcon,
+	},
+	data () {
+		return {
+			showMore: false,
+		}
+	},
+	mounted () {
+		window.addEventListener(`click`, (e: any): void => {
+			if (!e.target) {
+				return
+			}
+			if (e.target.parentNode === null || e.target.parentNode.classList === undefined || !e.target.parentNode.classList.contains(`dropdown`)) {
+				this.showMore = false
+			}
+		}, false)
+	},
+	methods: {
+		...mapMutations(sessionStoreNamespace, {
+			endSession: MutationType.LOGOUT,
+		}),
+		logout () {
+			this.endSession()
+			this.$router.push(`/`)
+		},
+		toggleDropdown () {
+			this.showMore = !this.showMore
+		},
+	},
+})
 </script>

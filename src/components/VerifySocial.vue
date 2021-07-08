@@ -61,68 +61,69 @@
   </article>
 </template>
 
-<script>
-import TwitterIcon from '@/components/icons/brands/Twitter'
-import GitHubIcon from '@/components/icons/brands/GitHub'
-import ExternalURLIcon from '@/components/icons/ExternalURL'
-import XIcon from '@/components/icons/X'
+<script lang="ts">
+import Vue from 'vue'
+import TwitterIcon from '@/components/icons/brands/Twitter.vue'
+import GitHubIcon from '@/components/icons/brands/GitHub.vue'
+import ExternalURLIcon from '@/components/icons/ExternalURL.vue'
+import XIcon from '@/components/icons/X.vue'
 
-export default {
-  components: {
-    TwitterIcon,
-    GitHubIcon,
-    ExternalURLIcon,
-    XIcon,
-  },
-  props: {
-    platform: {
-      type: String,
-      default: '',
-    },
-  },
-  data () {
-    return {
-      isActive: false,
-      handle: '',
-      isVerified: false,
-    }
-  },
-  mounted () {
-    const socials = this.$store.state.me.socials
-    for (const s in socials) {
-      if (socials[s].platform === this.$props.platform) {
-        this.isActive = true
-        this.isVerified = true
-        this.handle = socials[s].username
-      }
-    }
-  },
-  methods: {
-    toggleVerify () {
-      this.isActive = !this.isActive
-    },
-    verifySocial (platform, handle) {
-      if (this.$props.platform === 'website' && !this.$quality.validateURL(this.handle)) {
-        alert('Check URL!')
-        return
-      }
-      this.$store.commit('me/addSocial', {
-        platform: this.$props.platform,
-        username: this.handle,
-      })
-      this.isVerified = true
-    },
-    removeSocial () {
-      this.$api.settings.removeSocial(
-        this.$store.state.me.id,
-        this.$props.platform,
-      )
-      this.$store.commit('me/removeSocial', {
-        platform: this.$props.platform,
-      })
-      this.isVerified = false
-      this.isActive = false
-    },
-  },
-}
+export default Vue.extend({
+	components: {
+		TwitterIcon,
+		GitHubIcon,
+		ExternalURLIcon,
+		XIcon,
+	},
+	props: {
+		platform: {
+			type: String,
+			default: ``,
+		},
+	},
+	data () {
+		return {
+			isActive: false,
+			handle: ``,
+			isVerified: false,
+		}
+	},
+	mounted () {
+		const socials = this.$store.state.session.socials
+		for (const s in socials) {
+			if (socials[s].platform === this.$props.platform) {
+				this.isActive = true
+				this.isVerified = true
+				this.handle = socials[s].username
+			}
+		}
+	},
+	methods: {
+		toggleVerify () {
+			this.isActive = !this.isActive
+		},
+		verifySocial () {
+			if (this.$props.platform === `website` && !this.$qualityURL(this.handle)) {
+				alert(`Check URL!`)
+				return
+			}
+			this.$store.commit(`me/addSocial`, {
+				platform: this.$props.platform,
+				username: this.handle,
+			})
+			this.isVerified = true
+		},
+		removeSocial () {
+			// this.$api.settings.removeSocial(
+			//   this.$store.state.me.id,
+			//   this.$props.platform,
+			// )
+			// this.$store.commit('me/removeSocial', {
+			//   platform: this.$props.platform,
+			// })
+			this.isVerified = false
+			this.isActive = false
+		},
+	},
+})
 </script>

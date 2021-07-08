@@ -52,61 +52,65 @@
       :key="post.contentAddress"
       class="mx-4"
     >
-      <PostCard
-        :post="post"
-        :authorID="post.authorID"
-        :authorUsername="post.authorID"
-      />
+      <PostCard :post="post" />
     </div>
   </main>
 </template>
 
-<script>
-import PostCard from '@/components/post/Card'
-export default {
-  components: {
-    PostCard,
-  },
-  data () {
-    return {
-      algorithm: 'NEW',
-      posts: [],
-    }
-  },
-  created () {
-    this.sortFeed(this.algorithm)
-  },
-  methods: {
-    async sortFeed (a) {
-      this.posts = []
-      for (const p in this.$store.state.posts) {
-        if (p) {
-          const post = await this.$api.post.getPost(this.$store.state.posts[p])
-          post.id = this.$store.state.posts[p]
-          this.posts.push(post)
-        }
-      }
-      this.algorithm = a
-      if (a === 'NEW') {
-        this.posts.sort((p0, p1) => {
-          return p1.timestamp - p0.timestamp
-        })
-      // } else if (a === 'TOP') {
-      //   this.posts.sort((p0, p1) => {
-      //     return p1.views - p0.views
-      //   })
-      } else if (a === 'FOLLOWING') {
-        const fList = []
-        const res = []
-        fList.push(...this.$store.state.me.following)
-        for (const p in this.posts) {
-          if (fList.includes(this.posts[p].authorID)) {
-            res.push(this.posts[p])
-          }
-        }
-        this.posts = res
-      }
-    },
-  },
-}
+<script lang="ts">
+import Vue from 'vue'
+import PostCard from '@/components/post/Card.vue'
+import { Post } from '~/interfaces/Post'
+
+export default Vue.extend({
+	components: {
+		PostCard,
+	},
+	data () {
+		const posts: Post[] = []
+		return {
+			algorithm: `NEW`,
+			posts,
+		}
+	},
+	created () {
+		this.sortFeed(this.algorithm)
+	},
+	methods: {
+		sortFeed (a) {
+			this.posts = []
+			// Get list of posts
+			for (const p in this.$store.state.posts.recent) {
+				if (p) {
+					this.$getPost(this.$store.state.posts.recent[p].cid).then((post: Post) => {
+						post.cid = this.$store.state.posts.recent[p].cid
+						this.posts.push(post)
+					})
+				}
+			}
+			this.algorithm = a
+			// Sort by time
+			if (a === `NEW`) {
+				this.posts.sort((p0, p1) => {
+					return p1.timestamp.getTime() - p0.timestamp.getTime()
+				})
+				// } else if (a === 'TOP') {
+				//   this.posts.sort((p0, p1) => {
+				//     return p1.views - p0.views
+				//   })
+			} else if (a === `FOLLOWING`) {
+				// Get list of accounts being followed
+				const fList: string[] = []
+				const res: Post[] = []
+				fList.push(...this.$store.state.session.following)
+				for (const p in this.posts) {
+					if (fList.includes(this.posts[p].authorID)) {
+						res.push(this.posts[p])
+					}
+				}
+				this.posts = res
+			}
+		},
+	},
+})
 </script>

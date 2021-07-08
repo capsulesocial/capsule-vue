@@ -1,53 +1,46 @@
 <template>
   <section class="px-4">
     <article v-for="post in this.posts" :key="post.id">
-      <PostCard
-        :post="post"
-        :authorID="$route.params.id"
-        :authorUsername="currentUser.username"
-      />
+      <PostCard :post="post" />
     </article>
   </section>
 </template>
 
-<script>
-import PostCard from '@/components/post/Card'
+<script lang="ts">
+import Vue from 'vue'
+import PostCard from '@/components/post/Card.vue'
+import { Post } from '~/interfaces/Post'
 
-export default {
-  components: {
-    PostCard,
-  },
-  data () {
-    return {
-      currentUser: null,
-      posts: [],
-    }
-  },
-  created () {
-    // The user in which I am currently viewing
-    // Check if this is my profile
-    if (this.$route.params.id === this.$store.state.me.id) {
-      this.currentUser = this.$store.state.me
-    }
-    // Get user profile
-    // this.currentUser = this.$api.profile.getProfile(this.$route.params.id)
-    const l = this.$store.state.authors
-    for (let p = 0; p < l.length; p++) {
-      if (l[p].id === this.$route.params.id) {
-        this.currentUser = l[p]
-      }
-    }
-    this.userPosts()
-  },
-  methods: {
-    async userPosts () {
-      const p = this.currentUser.posts
-      for (let i = 0; i < p.length; i++) {
-        const post = await this.$api.post.getPost(p[i])
-        post.id = p[i]
-        this.posts.push(post)
-      }
-    },
-  },
-}
+export default Vue.extend({
+	components: {
+		PostCard,
+	},
+	data () {
+		const posts: Post[] = []
+		return {
+			currentUser: {},
+			posts,
+		}
+	},
+	async created () {
+		// The user in which I am currently viewing
+		// Check if this is my profile
+		if (this.$route.params.id === this.$store.state.session.cid) {
+			this.currentUser = this.$store.state.session
+		}
+		// Get user profile
+		await this.$getProfile(this.$route.params.id).then((profile) => {
+			this.currentUser = profile
+			for (const p in profile.posts) {
+				if (profile.posts[p]) {
+					this.$getPost(profile.posts[p].cid).then((post: Post) => {
+						post.id = profile.posts[p].id
+						post.cid = profile.posts[p].cid
+						this.posts.push(post)
+					})
+				}
+			}
+		})
+	},
+})
 </script>

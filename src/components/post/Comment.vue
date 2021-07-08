@@ -4,25 +4,28 @@
     <div class="flex">
       <!-- Avatar -->
       <div class="flex-shrink-0">
+        <span
+          v-if="this.avatar === '' || this.avatar === null"
+          class="p-1 border-2 rounded-full block"
+        >
+          <ProfileIcon class="w-6 h-6" />
+        </span>
         <img
-          v-if="this.avatar !== null"
+          v-else
           :src="this.avatar"
           class="w-10 h-10 rounded-lg object-cover"
         />
-        <span v-else class="p-1 border-2 rounded-full block">
-          <ProfileIcon class="w-6 h-6" />
-        </span>
       </div>
       <!-- Content -->
       <div class="flex-1 leading-relaxed ml-2">
         <strong class="text-black font-bold bold mr-1">
-          {{ getFullName(comment.authorID) }}
+          {{ this.name }}
         </strong>
-        <nuxt-link :to="'/' + comment.authorID" class="text-gray-700 text-sm mr-2">
-          @{{ comment.authorID }}
+        <nuxt-link :to="'/' + this.$props.comment.authorCID" class="text-gray-700 text-sm mr-2">
+          @{{ this.id }}
         </nuxt-link>
         <span v-if="comment.timestamp" class="text-gray-600 text-xs font-sans">
-          {{ $helpers.formatDate(comment.timestamp) }}
+          {{ $formatDate(comment.timestamp) }}
         </span>
         <p class="text-base py-1 font-sans">
           {{ comment.content }}
@@ -73,74 +76,68 @@
 </template>
 
 <script>
-import ProfileIcon from '@/components/icons/Person'
-import BrandedButton from '@/components/BrandedButton'
-import Reply from '@/components/post/Reply'
+import ProfileIcon from '@/components/icons/Person.vue'
+import BrandedButton from '@/components/BrandedButton.vue'
+import Reply from '@/components/post/Reply.vue'
 
 export default {
-  components: {
-    ProfileIcon,
-    BrandedButton,
-    Reply,
-  },
-  props: {
-    comment: {
-      type: Object,
-      default: null,
-    },
-  },
-  data () {
-    return {
-      isReplying: false,
-      reply: '',
-      replies: this.comment.replies,
-      avatar: null,
-    }
-  },
-  created () {
-    if (this.$props.comment.authorAvatarCID !== null) {
-      this.$api.settings.downloadAvatar(this.$props.comment.authorAvatarCID).then((image) => {
-        this.avatar = image
-      })
-    }
-  },
-  methods: {
-    getFullName (id) {
-      if (this.$store.state.me.id === id) {
-        return this.$store.state.me.username
-      }
-      const list = this.$store.state.authors
-      const name = list.find(x => x.id === id)
-      if (name) {
-        return name.username
-      } else {
-        return id
-      }
-    },
-    sendReply () {
-      if (this.comment === '' || !this.$quality.text(this.reply)) {
-        alert('Invalid reply!')
-      } else {
-        const r = {
-          postID: this.$props.comment.postID,
-          commentID: this.$props.comment.id,
-          authorID: this.$store.state.me.id,
-          authorAvatarCID: this.$store.state.me.avatar,
-          content: this.reply,
-          timestamp: new Date(),
-        }
-        // this.$store.commit('posts/commentReply', r)
-        this.replies.push(r)
-        this.filterReplies()
-        this.reply = ''
-      }
-    },
-    filterReplies () {
-      const rList = this.replies.slice().sort((p0, p1) => {
-        return p1.timestamp - p0.timestamp
-      })
-      return rList
-    },
-  },
+	components: {
+		ProfileIcon,
+		BrandedButton,
+		Reply,
+	},
+	props: {
+		comment: {
+			type: Object,
+			default: null,
+		},
+	},
+	data () {
+		return {
+			isReplying: false,
+			reply: ``,
+			replies: this.comment.replies,
+			avatar: ``,
+			name: ``,
+			id: ``,
+		}
+	},
+	created () {
+		this.getProfileInfo()
+	},
+	methods: {
+		getProfileInfo () {
+			this.$getProfile(this.$props.comment.authorCID).then((p) => {
+				p.cid = this.$props.comment.authorCID
+				this.name = p.name
+				this.id = p.id
+			})
+		},
+		sendReply () {
+			if (this.comment === `` || !this.$qualityText(this.reply)) {
+				alert(`Invalid reply!`)
+			} else {
+				const r = {
+					postID: this.$props.comment.postID,
+					commentID: this.$props.comment.id,
+					authorID: this.$store.state.session.id,
+					authorCID: this.$store.state.session.cid,
+					authorAvatarCID: this.$store.state.session.avatar,
+					content: this.reply,
+					timestamp: new Date(),
+				}
+				// this.$store.commit('posts/commentReply', r)
+				this.replies.push(r)
+				this.filterReplies()
+				this.reply = ``
+			}
+		},
+		filterReplies () {
+			const rList = this.replies.slice().sort((p0, p1) => {
+				return p1.timestamp - p0.timestamp
+			})
+			return rList
+		},
+	},
 }
 </script>

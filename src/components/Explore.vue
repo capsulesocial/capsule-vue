@@ -16,11 +16,11 @@
 </template>
 
 <script>
-import TagCard from '@/components/Tag'
+import TagCard from '@/components/Tag.vue'
 
 export default {
-  components: {
-    TagCard,
-  },
+	components: {
+		TagCard,
+	},
 }
 </script>

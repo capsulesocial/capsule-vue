@@ -36,11 +36,11 @@
 
 <script>
 export default {
-  props: {
-    isActive: {
-      type: Boolean,
-      default: false,
-    },
-  },
+	props: {
+		isActive: {
+			type: Boolean,
+			default: false,
+		},
+	},
 }
 </script>
