@@ -11,11 +11,8 @@
         <div class="flex justify-between pt-5">
           <p class="font-sans uppercase">
             Written by
-            <nuxt-link
-              :to="'/' + this.$route.params.id"
-              class="text-primary underline"
-            >
-              {{ this.$route.params.id }}
+            <nuxt-link :to="'/' + this.author.cid" class="text-primary underline">
+              {{ this.author.id }}
             </nuxt-link>
             <span class="font-sans text-sm text-gray-700 block">
               {{ this.$formatDate(this.post.timestamp) }}
@@ -48,8 +45,13 @@
           :tag="t.name"
         />
       </article>
-
-      <AuthorCard :authorCID="this.post.authorCID" />
+      <AuthorCard
+        :authorCID="this.post.authorCID"
+        :authorAvatar="this.authorAvatar"
+        :authorName="this.author.name"
+        :authorId="this.author.id"
+        :authorBio="this.author.bio"
+      />
 
       <!-- Comments -->
       <article class="pt-5">
@@ -110,6 +112,7 @@ import ShareButton from '@/components/post/Share.vue'
 import ChevronUp from '@/components/icons/ChevronUp.vue'
 import ChevronDown from '@/components/icons/ChevronDown.vue'
 import { Post } from '~/interfaces/Post'
+import { Profile } from '~/interfaces/Profile'
 
 export default Vue.extend({
 	components: {
@@ -126,6 +129,8 @@ export default Vue.extend({
 	data () {
 		return {
 			post: {},
+			author: {},
+			authorAvatar: ``,
 			content: ``,
 			featuredPhoto: null,
 			showFilter: false,
@@ -138,11 +143,21 @@ export default Vue.extend({
 			p.id = this.$route.params.post
 			this.post = p
 			this.content = marked(p.content)
-			if (p.featuredPhotoCID !== null) {
+			// Get featured photo
+			if (p.featuredPhotoCID !== ``) {
 				this.$getPhoto(p.featuredPhotoCID).then((image) => {
 					this.featuredPhoto = image
 				})
 			}
+			// Get author profile
+			this.$getProfile(p.authorCID).then((profile: Profile) => {
+				this.author = profile
+				if (profile.avatar.length > 1) {
+					this.$getPhoto(profile.avatar).then((avatar) => {
+						this.authorAvatar = avatar
+					})
+				}
+			})
 		})
 	},
 	methods: {

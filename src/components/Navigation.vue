@@ -70,7 +70,7 @@
       </nuxt-link>
       <button
         class="focus:outline-none bg-primary p-4 rounded-full shadow-lg"
-        @click="toggle()"
+        @click="toggleDraftMode()"
       >
         <PencilIcon class="fill-current text-white" />
       </button>

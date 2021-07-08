@@ -215,7 +215,7 @@
         class="bottom-0 fixed m-5 p-5 w-full flex flex-row justify-between font-sans"
       >
         <div class="flex items-center border rounded-full border-primary">
-          <span class=" rounded-full pl-4 bg-white shadow-lg text-primary">
+          <span class="rounded-full pl-4 bg-white shadow-lg text-primary">
             <label for="tag" class="hidden" value="Enter hashtags"></label>
             #<input
               v-model="tag"
@@ -223,13 +223,13 @@
               placeholder="tag"
               class="focus:outline-none w-32 pr-1 py-2"
             />
-            <button
-              class="border border-white rounded-full px-4 py-2 bg-primary focus:outline-none"
-              @click="addTag"
-            >
-              <span class="text-white">+</span>
-            </button>
           </span>
+          <button
+            class="rounded-full bg-primary border border-white p-2 focus:outline-none"
+            @click="addTag"
+          >
+            <span class="text-white"><PlusIcon /></span>
+          </button>
           <span v-for="t in this.tags" :key="t.name" class="mx-2">
             <h6 class="inline text-primary">#{{ t['name'] }}</h6>
             <button @click="removeTag(t)">❌</button></span>
@@ -240,18 +240,18 @@
 
     <!-- Mobile Toggle for Edit / Preview -->
     <article class="lg:hidden fixed bottom-0 w-full pb-20 bg-white">
-      <div class="px-5 py-2">
+      <div class="px-5 py-2 flex items-center">
         <label for="tag" class="hidden" value="Enter hashtags"></label>#<input
           v-model="tag"
           type="text"
           placeholder="tag"
-          class="focus:outline-none w-24 pr-1 py-2 border-b border-primary"
+          class="focus:outline-none w-24 px-1 py-2 border-b border-primary"
         />
         <button
-          class="focus:outline-none bg-primary rounded-full text-white px-2"
+          class="focus:outline-none bg-primary rounded-full text-white p-1"
           @click="addTag"
         >
-          <span class="">+</span>
+          <span class=""><PlusIcon /></span>
         </button>
         <span v-for="t in this.tags" :key="t.name" class="mx-2">
           <h6 class="inline text-primary">#{{ t }}</h6>
@@ -300,6 +300,7 @@ import LinkIcon from '@/components/icons/md/Link.vue'
 import ImageIcon from '@/components/icons/md/Image.vue'
 import QuoteIcon from '@/components/icons/md/Quote.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
+import PlusIcon from '@/components/icons/Plus.vue'
 import markdown from '@/mixins/markdown.js'
 import { Post } from '@/interfaces/Post'
 import { Tag } from '@/interfaces/Tag'
@@ -319,6 +320,7 @@ export default Vue.extend({
 		QuoteIcon,
 		BrandedButton,
 		CameraIcon,
+		PlusIcon,
 	},
 	mixins: [markdown],
 	data () {

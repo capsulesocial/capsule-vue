@@ -31,22 +31,31 @@
         />
         <div class="px-4 w-full flex items-center">
           <span>
-            <h4>
+            <h4 class="text-lg capitalize">
               {{ this.$props.text }}
             </h4>
-            <h5>
-              0 Members
+            <h5 class="text-gray5 text-sm">
+              0 members
             </h5>
           </span>
         </div>
       </nuxt-link>
-      <button class=" px-3 text-2xl bg-primary rounded-full text-white self-center">+</button>
+      <div class="flex items-center">
+        <button class="border border-white rounded-full p-2 bg-primary shadow-lg focus:outline-none">
+          <span class="text-white"><PlusIcon /></span>
+        </button>
+      </div>
     </div>
   </article>
 </template>
 
 <script>
+import PlusIcon from '@/components/icons/Plus.vue'
+
 export default {
+	components: {
+		PlusIcon,
+	},
 	props: {
 		text: {
 			type: String,

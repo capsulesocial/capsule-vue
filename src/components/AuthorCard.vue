@@ -1,14 +1,14 @@
 <template>
   <div class="border rounded-lg bg-gray-200 p-5 shadow-xl my-5 flex flex-row">
     <div class="flex-shrink-0">
-      <ProfileIcon
-        v-if="this.avatar === ``"
-        class="w-10 h-10 border-2 rounded-full"
-      />
       <img
-        v-else
-        :src="this.avatar"
+        v-if="this.$props.authorAvatar !== ``"
+        :src="this.$props.authorAvatar"
         class="w-12 h-12 rounded-lg object-cover"
+      />
+      <ProfileIcon
+        v-else
+        class="w-10 h-10 border-2 rounded-full"
       />
     </div>
     <div class="mx-4">
@@ -16,20 +16,19 @@
         About the Author:
       </h6>
       <h4 class="text-lg inline">
-        {{ this.name }}
+        {{ this.$props.authorName }}
       </h4>
       <nuxt-link
         :to="'/' + this.$props.authorCID"
         class="text-sm text-primary underline inline"
       >
-        @{{ this.id }}
+        @{{ this.$props.authorId }}
       </nuxt-link>
       <p class="italic text-sm text-gray-700">
-        {{ this.bio }}
+        {{ this.$props.authorBio }}
       </p>
     </div>
     <FriendButton :authorID="this.$props.authorCID" />
-    <span class="hidden"> {{ getProfileInfo() }}</span>
   </div>
 </template>
 
@@ -48,23 +47,21 @@ export default Vue.extend({
 			type: String,
 			default: null,
 		},
-	},
-	data () {
-		return {
-			name: ``,
-			id: ``,
-			bio: ``,
-			avatar: ``,
-		}
-	},
-	methods: {
-		getProfileInfo () {
-			this.$getProfile(this.$props.authorCID).then((p) => {
-				p.cid = this.$props.authorCID
-				this.name = p.name
-				this.id = p.id
-				this.bio = p.bio
-			})
+		authorAvatar: {
+			type: String,
+			default: ``,
+		},
+		authorName: {
+			type: String,
+			default: ``,
+		},
+		authorId: {
+			type: String,
+			default: ``,
+		},
+		authorBio: {
+			type: String,
+			default: ``,
 		},
 	},
 })

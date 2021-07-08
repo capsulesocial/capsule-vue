@@ -255,12 +255,12 @@ export default Vue.extend({
 			}
 		},
 		uploadImage (image) {
-			this.$sendPhoto(image).then((cid) => {
-				this.changeAvatar(cid)
-				this.downloadImage(cid)
-			})
-			this.$sendProfile(this.$store.state.session).then((cid) => {
-				this.changeCID(cid)
+			this.$sendPhoto(image).then((avatarCID) => {
+				this.changeAvatar(avatarCID)
+				this.downloadImage(avatarCID)
+				this.$sendProfile(this.$store.state.session).then((cid) => {
+					this.changeCID(cid)
+				})
 			})
 		},
 		downloadImage (cid) {

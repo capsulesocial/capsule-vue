@@ -4,7 +4,7 @@
     <div class="flex justify-between items-center">
       <nuxt-link :to="'/' + this.post.authorCID" class="flex">
         <img
-          v-if="this.avatar === ``"
+          v-if="this.avatar !== ``"
           :src="this.avatar"
           class="w-8 h-8 rounded-lg mr-2 object-cover"
         />
