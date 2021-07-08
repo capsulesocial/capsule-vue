@@ -7,14 +7,6 @@ declare module 'vue/types/vue' {
 	}
 }
 
-function hexEncode (str: string) {
-	let result: string = ``
-	for (let i = 0; i < str.length; i++) {
-		result += str.charCodeAt(i).toString(16)
-	}
-	return result
-}
-
 async function hkdf (password: string, peerIDPublicKey: string) {
 	const ec = new TextEncoder()
 	const key = await window.crypto.subtle.importKey(
@@ -66,10 +58,12 @@ async function encryptData (key: string, data: string, nonce: Uint8Array) {
 }
 
 async function scrypt (str: string, salt: string) {
+	const enc = new TextEncoder()
+	const hexSalt = Buffer.from(enc.encode(salt)).toString(`hex`)
 	const dklen = 8
 	let hashedStr = ``
 	await import(`scrypt-wasm`).then((wasm) => {
-		hashedStr = wasm.scrypt(str, hexEncode(salt), 32768, 8, 1, dklen)
+		hashedStr = wasm.scrypt(str, hexSalt, 32768, 8, 1, dklen)
 	})
 	return hashedStr
 }
