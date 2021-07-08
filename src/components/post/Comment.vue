@@ -103,16 +103,16 @@ export default {
 		}
 	},
 	created () {
-		this.getProfileInfo()
+		this.$getProfile(this.$props.comment.authorCID).then((p) => {
+			p.cid = this.$props.comment.authorCID
+			this.name = p.name
+			this.id = p.id
+		})
+		this.$getPhoto(this.$props.comment.authorAvatarCID).then((avatar) => {
+			this.avatar = avatar
+		})
 	},
 	methods: {
-		getProfileInfo () {
-			this.$getProfile(this.$props.comment.authorCID).then((p) => {
-				p.cid = this.$props.comment.authorCID
-				this.name = p.name
-				this.id = p.id
-			})
-		},
 		sendReply () {
 			if (this.comment === `` || !this.$qualityText(this.reply)) {
 				alert(`Invalid reply!`)
