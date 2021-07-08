@@ -1,20 +1,21 @@
 import { getEncryptedPeerIDPrivateKey } from "../plugins/crypto.js"
-export default ({ app }, node) => ({
+
+export default ({ app: _app }, node) => ({
 	// POST newly created account to IPFS
 	async register (payload) {
 		const peerIDPrivateKey = await node.key.export(`self`, `password`)
 		const peerID = await node.id()
 		const peerIDPublicKey = peerID.publicKey
-		const res = await getEncryptedPeerIDPrivateKey(payload, peerIDPrivateKey, peerIDPublicKey)
-
+		const _res = await getEncryptedPeerIDPrivateKey(payload, peerIDPrivateKey, peerIDPublicKey)
+		console.log(_res)
 		return payload
 		// Returns newly created user object
 	},
 	// Verify login attempt
-	login (email, password) {
-		const res = null
+	login (_email, _password) {
+		const _res = null
 		// Returns user object if successful
-		return res
+		return _res
 	},
 	// Ends user session
 	async logout () {
@@ -24,7 +25,7 @@ export default ({ app }, node) => ({
 	forgotPassword (email) {
 		return email
 	},
-	resetPassword (password, passwordConfirmation, resetToken) {
+	resetPassword (_password, _passwordConfirmation, _resetToken) {
 		alert(`password reset!`)
 	},
 })

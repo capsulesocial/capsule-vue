@@ -1,23 +1,22 @@
-import type { Plugin } from '@nuxt/types'
 import { Profile, PrivateKey } from '../interfaces/Profile'
 
-declare module `vue/types/vue` {
-  interface Vue {
-    $getEncryptedPeerIDPrivateKey: PrivateKey
-  }
+// eslint-disable-next-line quotes
+declare module 'vue/types/vue' {
+	interface Vue {
+		$getEncryptedPeerIDPrivateKey: PrivateKey
+	}
 }
 
 async function hkdf (password: string, peerIDPublicKey: string) {
 	const ec = new TextEncoder()
-
 	const key = await window.crypto.subtle.importKey(
-		'raw',
+		`raw`,
 		ec.encode(password),
-		'HKDF',
+		`HKDF`,
 		false,
 		[
-			'deriveBits',
-			'deriveKey',
+			`deriveBits`,
+			`deriveKey`,
 		],
 	)
 
@@ -39,16 +38,15 @@ async function hkdf (password: string, peerIDPublicKey: string) {
 
 async function encryptData (key: string, data: string, nonce: Uint8Array) {
 	const ec = new TextEncoder()
-	console.log(`dereivedkey`, typeof (key), key)
-
+	console.log(`derived key`, typeof (key), key)
 	const derivedKey = await window.crypto.subtle.importKey(
-		'raw',
+		`raw`,
 		ec.encode(key),
 		{ name: `AES-GCM` },
 		false,
 		[
-			'encrypt',
-			'decrypt',
+			`encrypt`,
+			`decrypt`,
 		],
 	)
 	console.log(`encrypteddata`)
@@ -63,7 +61,7 @@ async function encryptData (key: string, data: string, nonce: Uint8Array) {
 
 async function scrypt (str: string, salt: string) {
 	const dklen = 8
-	var hashedStr = ``
+	let hashedStr = ``
 	await import(`scrypt-wasm`).then((wasm) => {
 		hashedStr = wasm.scrypt(str, salt, 32768, 8, 1, dklen)
 	})
@@ -79,8 +77,8 @@ async function getEncryptedPeerIDPrivateKey (payload: Profile, peerIDPrivateKey:
 	// encryptedPeerIDPrivateKey = AES-GCM(key: peerIDEncryptionKey, plaintext: peerIDPrivateKey, nonce: nonce)
 	const nonce = window.crypto.getRandomValues(new Uint8Array(12))
 	const encryptedPeerIDPrivateKey = await encryptData(peerIDEncryptionKey, peerIDPrivateKey, nonce)
-	return { encryptedPeerIDPrivateKey: encryptedPeerIDPrivateKey, hp1: hp[1], nonce}
-  }
+	return { encryptedPeerIDPrivateKey, hp1: hp[1], nonce }
+}
 
 export { getEncryptedPeerIDPrivateKey }
 // const cryptoPlugin: Plugin = (_context, inject) => {
