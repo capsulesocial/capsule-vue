@@ -3,7 +3,7 @@ import type { Plugin } from '@nuxt/types'
 type dateString = (date: Date, preformattedDate: any, hideYear: boolean | null) => string
 type dateFormat = (input: object | Date) => string
 
-declare module 'vue/types/vue' {
+declare module `vue/types/vue` {
   interface Vue {
     $getFormat: dateString,
     $formatDate: dateFormat
