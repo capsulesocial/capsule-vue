@@ -22,6 +22,15 @@ const ipfsPlugin: Plugin = async (_context, inject) => {
 	// eslint-disable-next-line no-console
 	console.log(`IPFS version: `, version.version)
 
+	const getNodePrivateKey: (() => Promise<string>) = async () => {
+		const privateKey = await node.key.export(`self`, `password`)
+		return privateKey
+	}
+
+	const getNodePublicKey: (() => Promise<string>) = async () => {
+		const publicKey = await node.id()
+		return publicKey
+	}
 	// Send a user profile object to IPFS
 	const sendProfile: ((content: Profile) => Promise<string>) = async (content) => {
 		const profileAdded = await node.add({
@@ -80,6 +89,8 @@ const ipfsPlugin: Plugin = async (_context, inject) => {
 		return content
 	}
 
+	inject(`getNodePrivateKey`, getNodePrivateKey)
+	inject(`getNodePublicKey`, getNodePublicKey)
 	inject(`sendProfile`, sendProfile)
 	inject(`sendPost`, sendPost)
 	inject(`getPost`, getPost)

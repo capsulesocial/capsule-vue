@@ -1,10 +1,18 @@
-import { Profile, PrivateKey } from '../interfaces/Profile'
-
+import { Profile } from '../interfaces/Profile'
+import { PrivateKey } from '../interfaces/PrivateKey'
 // eslint-disable-next-line quotes
 declare module 'vue/types/vue' {
 	interface Vue {
 		$getEncryptedPeerIDPrivateKey: PrivateKey
 	}
+}
+
+function hexEncode (str: string) {
+	let result: string = ``
+	for (let i = 0; i < str.length; i++) {
+		result += str.charCodeAt(i).toString(16)
+	}
+	return result
 }
 
 async function hkdf (password: string, peerIDPublicKey: string) {
@@ -38,7 +46,6 @@ async function hkdf (password: string, peerIDPublicKey: string) {
 
 async function encryptData (key: string, data: string, nonce: Uint8Array) {
 	const ec = new TextEncoder()
-	console.log(`derived key`, typeof (key), key)
 	const derivedKey = await window.crypto.subtle.importKey(
 		`raw`,
 		ec.encode(key),
@@ -49,7 +56,6 @@ async function encryptData (key: string, data: string, nonce: Uint8Array) {
 			`decrypt`,
 		],
 	)
-	console.log(`encrypteddata`)
 	const encryptedData = await window.crypto.subtle.encrypt({
 		name: `AES-GCM`,
 		iv: nonce,
@@ -63,7 +69,7 @@ async function scrypt (str: string, salt: string) {
 	const dklen = 8
 	let hashedStr = ``
 	await import(`scrypt-wasm`).then((wasm) => {
-		hashedStr = wasm.scrypt(str, salt, 32768, 8, 1, dklen)
+		hashedStr = wasm.scrypt(str, hexEncode(salt), 32768, 8, 1, dklen)
 	})
 	return hashedStr
 }
@@ -81,8 +87,3 @@ async function getEncryptedPeerIDPrivateKey (payload: Profile, peerIDPrivateKey:
 }
 
 export { getEncryptedPeerIDPrivateKey }
-// const cryptoPlugin: Plugin = (_context, inject) => {
-//   inject(`getEncryptedPeerIDPrivateKey`, getEncryptedPeerIDPrivateKey)
-// }
-
-// export default cryptoPlugin
