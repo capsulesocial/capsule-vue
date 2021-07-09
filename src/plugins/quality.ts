@@ -22,7 +22,7 @@ declare module 'vue/types/vue' {
 const qualityPassword: Password = (input) => {
 	const result = zxcvbn(input)
 	if (result.score < 3) {
-		return `Password is too weak!\n` + result.feedback.warning + `\n` + result.feedback.suggestions[0]
+		return `Password is too weak! \n ${result.feedback.warning} \n ${result.feedback.suggestions[0]}`
 	}
 	return true
 }
