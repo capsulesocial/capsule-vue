@@ -1,4 +1,5 @@
 import type { Plugin } from '@nuxt/types'
+const zxcvbn = require(`zxcvbn`)
 
 // Declare types of functions
 type Password = (input: string) => string | boolean
@@ -21,6 +22,7 @@ declare module 'vue/types/vue' {
 const qualityPassword: Password = (input) => {
 	// let reg = /^.*(?=.{8,50})(?=.*[a-zA-Z])(?=.*\d)(?=.*[!#$%&? "]).*$/
 	// return (reg.test(input))
+	const result = zxcvbn(input)
 	if (input === `` || input === null) {
 		return `Missing password!`
 	} if (input.length < 8) {
@@ -33,6 +35,8 @@ const qualityPassword: Password = (input) => {
 		return `Password must contain a letter!`
 	} if (input.search(/\s/) !== -1) {
 		return `Password must not contain a space!`
+	} if (result.score < 2) {
+		return `Password is too weak!\n` + result.feedback.warning + `\n` + result.feedback.suggestions[0]
 	}
 	return true
 }
