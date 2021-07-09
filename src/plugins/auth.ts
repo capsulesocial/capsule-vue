@@ -6,7 +6,7 @@ import { getEncryptedPeerIDPrivateKey } from "./crypto"
 // eslint-disable-next-line quotes
 declare module 'vue/types/vue' {
 	interface Vue {
-		$register: (payload: Profile, peerIDPrivateKey: string, peerIDPublicKey: string) => PrivateKey
+		$register: (payload: Profile, peerIDPrivateKey: string, peerIDPublicKey: string) => Promise<PrivateKey>,
 	}
 }
 
