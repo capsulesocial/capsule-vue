@@ -1,11 +1,14 @@
 <template>
-  <section class="bg-white h-full">
-    <article
+  <main
+    :class="this.$store.state.settings.darkMode ? 'bg-lightBG' : 'bg-darkBG'"
+    class="h-full"
+  >
+    <div
       v-if="this.$store.state.settings.draftMode === true"
-      class="w-full h-screen z-30 bg-white absolute"
+      class="w-full h-full z-30 bg-white absolute"
     >
       <PostEditor class="z-40" />
-    </article>
+    </div>
 
     <Header class="sticky top-0" />
 
@@ -15,7 +18,8 @@
       <!-- Main Content -->
       <Nuxt class="overscroll-contain col-span-3 w-full mb-20 lg:mb-5 md:pr-16 border-l border-gray1" />
     </div>
-  </section>
+    <ColorMode class="fixed bottom-0 right-0 m-5" />
+  </main>
 </template>
 
 <script lang="ts">
@@ -23,12 +27,14 @@ import Vue from 'vue'
 import Navigation from '@/components/Navigation.vue'
 import Header from '@/components/Header.vue'
 import PostEditor from '@/components/post/Editor.vue'
+import ColorMode from '@/components/ColorMode.vue'
 
 export default Vue.extend({
 	components: {
 		Navigation,
 		Header,
 		PostEditor,
+		ColorMode,
 	},
 	created () {
 		if (this.$store.state.session.cid === ``) {

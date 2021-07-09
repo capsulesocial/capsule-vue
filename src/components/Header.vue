@@ -1,11 +1,17 @@
 <template>
-  <header class="grid grid-cols-4 px-4 py-2 bg-white z-10 border-b border-gray1">
+  <header
+    :class="this.$store.state.settings.darkMode ? 'bg-lightBG' : 'bg-darkBG'"
+    class="grid grid-cols-4 px-4 py-2 z-10 border-b border-gray1"
+  >
     <!-- Top Left: Logo -->
     <div class="flex lg:flex-row-reverse">
       <CapsuleIcon class="py-4 lg:pr-48" />
     </div>
     <article class="col-span-3 md:col-span-2 flex justify-between">
-      <div class="flex">
+      <div
+        class="flex"
+        :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+      >
         <button
           class="focus:outline-none"
           @click="$router.go(-1)"

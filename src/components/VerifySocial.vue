@@ -1,7 +1,11 @@
 <template>
   <article>
     <!-- Unverified -->
-    <div v-if="!this.isActive" class="flex justify-between text-gray5">
+    <div
+      v-if="!this.isActive"
+      :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+      class="flex justify-between"
+    >
       <div class="flex flex-row items-center text-xl">
         <TwitterIcon v-if="this.$props.platform === 'twitter'" class="mr-4" />
         <GitHubIcon v-if="this.$props.platform === 'github'" class="mr-4" />
@@ -9,7 +13,8 @@
         <span class="capitalize">{{ this.$props.platform.toUpperCase() }}</span>
       </div>
       <button
-        class="focus:outline-none text-primary font-bold"
+        :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+        class="focus:outline-none font-bold"
         @click="toggleVerify()"
       >
         Connect
@@ -20,6 +25,7 @@
       <div v-if="!this.isVerified">
         <label
           for="handle"
+          :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
         >
           <span v-if="this.$props.platform !== 'website'">handle: @</span><span v-else>URL:</span>
         </label>
@@ -28,7 +34,8 @@
           v-model="handle"
           type="text"
           placeholder="handle"
-          class="text-primary border-b border-primary focus:outline-none"
+          :class="this.$store.state.settings.darkMode ? 'bg-lightBG text-lightPrimaryText border-lightBorder' : 'bg-darkBG text-darkPrimaryText border-darkBorder'"
+          class="border-b focus:outline-none"
         />
       </div>
       <div v-else>
@@ -38,7 +45,8 @@
       </div>
       <button
         v-if="!this.isVerified"
-        class="flex bg-primary hover:bg-third text-white font-bold py-2 px-4 rounded-lg shadow-lg focus:outline-none"
+        :class="this.$store.state.settings.darkMode ? 'bg-lightButtonBG text-lightButtonText hover:bg-lightActive' : 'bg-darkButtonBG text-darkButtonText hover:bg-darkActive'"
+        class="flex font-bold py-2 px-4 rounded-lg shadow-lg focus:outline-none"
         @click="verifySocial()"
       >
         <span class="mr-2">Verify</span>

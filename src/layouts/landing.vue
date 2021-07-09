@@ -1,11 +1,18 @@
 <template>
-  <section class="emoji-cursor w-full h-screen">
+  <main class="emoji-cursor w-full h-screen">
     <Nuxt />
-  </section>
+    <ColorMode class="fixed bottom-0 right-0 m-5" />
+  </main>
 </template>
 
 <script>
-export default {}
+import Vue from 'vue'
+import ColorMode from '@/components/ColorMode.vue'
+export default Vue.extend({
+	components: {
+		ColorMode,
+	},
+})
 </script>
 
 <style>

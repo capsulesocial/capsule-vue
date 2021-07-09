@@ -9,23 +9,27 @@
     </button>
     <div
       v-if="this.showSocialShares"
-      class="absolute flex flex-col mt-8 bg-white border-l border-r border-b rounded-lg p-1 rounded-t-none w-40 pl-2"
+      :class="this.$store.state.settings.darkMode ? 'bg-lightBG text-lightPrimaryText border-lightBorder' : 'bg-darkBG text-darkPrimaryText border-darkBorder'"
+      class="absolute flex flex-col mt-8 border-l border-r border-b rounded-lg p-1 rounded-t-none w-40 pl-2"
     >
       <!-- Repost -->
       <button
-        class="flex focus:outline-none hover:text-primary"
+        :class="this.$store.state.settings.darkMode ? 'hover:text-lightActive' : 'hover:text-darkActive'"
+        class="flex focus:outline-none"
         @click="handleRepost()"
       >
         <RepostIcon :isActive="this.isReposted" :shrink="true" />
         <span
           v-if="this.isReposted"
-          class="text-sm self-center text-primary"
+          :class="this.$store.state.settings.darkMode ? 'text-lightActive' : 'text-darkActive'"
+          class="text-sm self-center"
         >Undo Repost</span>
         <span v-else class="text-sm self-center">Repost to Feed</span>
       </button>
       <!-- Twitter -->
       <button
-        class="flex focus:outline-none hover:text-primary"
+        :class="this.$store.state.settings.darkMode ? 'hover:text-lightActive' : 'hover:text-darkActive'"
+        class="flex focus:outline-none"
         @click="handleShare('TWITTER')"
       >
         <TwitterIcon class="p-1" />
@@ -33,7 +37,8 @@
       </button>
       <!-- Copy URL Link -->
       <button
-        class="flex focus:outline-none hover:text-primary"
+        :class="this.$store.state.settings.darkMode ? 'hover:text-lightActive' : 'hover:text-darkActive'"
+        class="flex focus:outline-none"
         @click="handleShare('URL')"
       >
         <LinkIcon class="p-1" />

@@ -11,14 +11,30 @@
       </span>
     </div>
     <div class="flex-1 leading-relaxed ml-2">
-      <strong class="text-black font-bold bold mr-1">
+      <strong
+        :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+        class="font-bold bold mr-1"
+      >
         {{ getFullName(reply.authorID) }}
       </strong>
-      <span class="text-gray-700 text-sm mr-2"> @{{ reply.authorID }} </span>
-      <span v-if="reply.timestamp" class="text-gray-600 text-xs font-sans">
+      <nuxt-link
+        :to="this.$props.reply.authorCID"
+        :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+        class="text-sm mr-2"
+      >
+        @{{ reply.authorID }}
+      </nuxt-link>
+      <span
+        v-if="reply.timestamp"
+        class="text-xs"
+        :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+      >
         {{ $formatDate(reply.timestamp) }}
       </span>
-      <p class="text-sm py-1 font-sans">
+      <p
+        :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+        class="text-sm py-1"
+      >
         {{ reply.content }}
       </p>
     </div>

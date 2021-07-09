@@ -1,5 +1,8 @@
 <template>
-  <article class="shadow rounded-lg my-2 card p-5">
+  <article
+    class="shadow rounded-lg my-2 card p-5"
+    :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText border border-darkBorder'"
+  >
     <!-- Post Preview Header: Avatar, name -->
     <div class="flex justify-between items-center">
       <nuxt-link :to="'/' + this.post.authorCID" class="flex">
@@ -12,20 +15,32 @@
           v-else
           class="w-8 h-8 border-2 rounded-full mr-2"
         />
-        <h4 class="text-bold mr-2 self-center">
+        <h4
+          :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+          class="text-bold mr-2 self-center"
+        >
           {{ this.authorName }}
         </h4>
-        <h5 class="hover:text-primary text-subtitle mr-2 self-center">
+        <h5
+          :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+          class=" mr-2 self-center"
+        >
           @{{ this.post.authorID }}
         </h5>
       </nuxt-link>
-      <button class="hover:text-primary focus:outline-none">
+      <button
+        :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText hover:text-lightActive ' : 'text-darkPrimaryText hover:text-darkActive'"
+        class="focus:outline-none"
+      >
         <XIcon />
       </button>
     </div>
 
     <!-- Timestamp -->
-    <h6 class="text-xs text-subtitle self-center ml-10 mb-2">
+    <h6
+      :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+      class="text-xs self-center ml-10 mb-2"
+    >
       {{ this.$formatDate(this.post.timestamp) }}
     </h6>
 
@@ -33,10 +48,16 @@
     <div class="hover:text-primary">
       <nuxt-link :to="'/post/' + this.post.cid" class="flex justify-between">
         <div>
-          <h3 class="text-base font-bold capitalize">
+          <h3
+            :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+            class="text-base font-bold capitalize"
+          >
             {{ this.post.title }}
           </h3>
-          <h4 class="text-subtitle pt-2 text-sm">
+          <h4
+            :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+            class="pt-2 text-sm"
+          >
             {{ this.post.subtitle }}
           </h4>
         </div>
@@ -54,22 +75,28 @@
     <div class="pt-2 flex justify-between">
       <div class="flex">
         <button
-          class="flex focus:outline-none hover:text-primary self-center mr-2"
-          :class="this.showComments ? 'text-primary' : ''"
+          class="flex focus:outline-none self-center mr-2"
+          :class="this.getStyles()"
           @click="showComments = !showComments"
         >
           <CommentIcon class="fill-primary" />
         </button>
-        <Share :post="this.post" class="fill-primary self-center z-20" />
+        <Share
+          :post="this.post"
+          :class="this.$store.state.settings.darkMode ? 'fill-lightActive' : 'fill-darkActive'"
+          class="fill-primary self-center z-20"
+        />
         <BookmarkButton
           :postID="this.post.cid"
-          class="fill-primary self-center"
+          :class="this.$store.state.settings.darkMode ? 'fill-lightActive' : 'fill-darkActive'"
+          class="self-center"
         />
       </div>
       <div v-if="this.showComments" class="flex">
         <h6>Filter Comments</h6>
         <div class="relative">
           <button
+            :class="this.$store.state.settings.darkMode ? 'border border-lightBorder' : 'border border-darkBorder'"
             class="toggle focus:outline-none flex justify-center shadow-lg rounded-lg px-4 ml-4 text-sm w-32"
             @click.stop="showFilter = !showFilter"
           >
@@ -80,7 +107,8 @@
           </button>
           <ul
             v-if="this.showFilter"
-            class="absolute bg-white z-10 shadow-lg rounded-lg py-1 ml-4 w-32"
+            :class="this.$store.state.settings.darkMode ? 'bg-lightBG text-lightSecondaryText' : 'bg-darkBG text-darkSecondaryText border-darkBorder'"
+            class="absolute z-10 shadow-lg rounded-lg py-1 ml-4 w-32"
           >
             <button class="w-full" @click="setCommentFilter(null)">
               <li class="text-left pl-2">
@@ -192,6 +220,19 @@ export default Vue.extend({
 		)
 	},
 	methods: {
+		getStyles (): string {
+			let res = ``
+			if (this.showComments && this.$store.state.settings.darkMode) {
+				res += `text-lightActive`
+			} else if (this.showComments && !this.$store.state.settings.darkMode) {
+				res += `text-darkActive`
+			} else if (!this.showComments && this.$store.state.settings.darkMode) {
+				res += `hover:text-lightActive`
+			} else if (!this.showComments && !this.$store.state.settings.darkMode) {
+				res += `hover:text-darkActive`
+			}
+			return res
+		},
 		setCommentFilter (reaction) {
 			this.filter = reaction
 			this.showFilter = false
