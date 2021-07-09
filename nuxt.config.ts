@@ -34,6 +34,7 @@ const config: NuxtConfig = {
     { src: "@/plugins/quality.ts" },
     { src: "@/plugins/helpers.ts" },
     { src: "@/plugins/ipfs.ts" },
+    { src: "@/plugins/auth.ts" },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -60,4 +61,4 @@ const config: NuxtConfig = {
   }
 }
 
-export default config 
+export default config

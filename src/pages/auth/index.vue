@@ -180,7 +180,7 @@ export default Vue.extend({
 		toggleFormType () {
 			this.isLogin = !this.isLogin
 		},
-		verify () {
+		async verify () {
 			const pwCheck = this.$qualityPassword(this.password)
 			const idCheck = this.$qualityID(this.id)
 			if (pwCheck !== true) {
@@ -223,6 +223,11 @@ export default Vue.extend({
 						following: [],
 						avatar: ``,
 					}
+					const node = this.$getNode()
+					const [peerIDPrivateKey, peerID] = await Promise.all([node.key.export(`self`, `password`), node.id()])
+					const peerIDPublicKey = peerID.publicKey
+					const _res = await this.$register(account, peerIDPrivateKey, peerIDPublicKey)
+					console.log(_res)
 					this.$sendProfile(account).then((cid) => {
 						account.cid = cid
 						this.changeCID(cid)

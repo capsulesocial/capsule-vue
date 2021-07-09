@@ -6,7 +6,7 @@ const IPFS = require(`ipfs`)
 // eslint-disable-next-line quotes
 declare module 'vue/types/vue' {
   interface Vue {
-		$getNode: () => any,
+    $getNode: () => any,
     $sendProfile: (content: Profile) => Promise<string>,
     $getProfile: (cid: string) => Promise<Profile>,
     $sendPost: (content: Post) => Promise<string>,
