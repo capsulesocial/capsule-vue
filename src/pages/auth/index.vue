@@ -224,8 +224,7 @@ export default Vue.extend({
 						avatar: ``,
 					}
 					const node = this.$getNode()
-					const peerIDPrivateKey = await node.key.export(`self`, `password`)
-					const peerID = await node.id()
+					const [peerIDPrivateKey, peerID] = await Promise.all([node.key.export(`self`, `password`), node.id()])
 					const peerIDPublicKey = peerID.publicKey
 					const _res = await this.$register(account, peerIDPrivateKey, peerIDPublicKey)
 					console.log(_res)

@@ -61,10 +61,8 @@ async function scrypt (str: string, salt: string) {
 	const enc = new TextEncoder()
 	const hexSalt = Buffer.from(enc.encode(salt)).toString(`hex`)
 	const dklen = 8
-	let hashedStr = ``
-	await import(`scrypt-wasm`).then((wasm) => {
-		hashedStr = wasm.scrypt(str, hexSalt, 32768, 8, 1, dklen)
-	})
+	const wasm = await import(`scrypt-wasm`)
+	const hashedStr = wasm.scrypt(str, hexSalt, 32768, 8, 1, dklen)
 	return hashedStr
 }
 
