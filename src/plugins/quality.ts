@@ -20,28 +20,8 @@ declare module 'vue/types/vue' {
 }
 
 const qualityPassword: Password = (input) => {
-	// let reg = /^.*(?=.{8,50})(?=.*[a-zA-Z])(?=.*\d)(?=.*[!#$%&? "]).*$/
-	// return (reg.test(input))
 	const result = zxcvbn(input)
-	if (input === `` || input === null) {
-		return `Missing password!`
-	}
-	if (input.length < 8) {
-		return `Password must be > 8 characters!`
-	}
-	if (input.length > 50) {
-		return `Password must be <= 50 characters!`
-	}
-	if (input.search(/\d/) === -1) {
-		return `Password must contain a number!`
-	}
-	if (input.search(/[a-zA-Z]/) === -1) {
-		return `Password must contain a letter!`
-	}
-	if (input.search(/\s/) !== -1) {
-		return `Password must not contain a space!`
-	}
-	if (result.score < 2) {
+	if (result.score < 3) {
 		return `Password is too weak!\n` + result.feedback.warning + `\n` + result.feedback.suggestions[0]
 	}
 	return true
