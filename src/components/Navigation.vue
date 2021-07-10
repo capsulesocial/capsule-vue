@@ -1,7 +1,10 @@
 <template>
   <nav>
     <!-- Desktop -->
-    <div class="hidden lg:flex px-2 flex-col h-12 sticky top-0 pl-6 lg:fixed lg:pt-24 lg:mt-12 font-sans">
+    <div
+      :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+      class="hidden lg:flex px-2 flex-col h-12 sticky top-0 pl-6 lg:fixed lg:pt-24 lg:mt-12 font-sans"
+    >
       <nuxt-link
         to="/home"
         class="nav group flex items-center px-2 py-2 text-base leading-6  m-2 text-xl"

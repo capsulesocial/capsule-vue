@@ -18,13 +18,24 @@
       </div>
       <!-- Content -->
       <div class="flex-1 leading-relaxed ml-2">
-        <strong class="text-black font-bold bold mr-1">
+        <strong
+          :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+          class="font-bold bold mr-1"
+        >
           {{ this.name }}
         </strong>
-        <nuxt-link :to="'/' + this.$props.comment.authorCID" class="text-gray-700 text-sm mr-2">
+        <nuxt-link
+          :to="'/' + this.$props.comment.authorCID"
+          :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+          class="text-gray-700 text-sm mr-2"
+        >
           @{{ this.id }}
         </nuxt-link>
-        <span v-if="comment.timestamp" class="text-gray-600 text-xs font-sans">
+        <span
+          v-if="comment.timestamp"
+          :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+          class="text-xs font-sans"
+        >
           {{ $formatDate(comment.timestamp) }}
         </span>
         <p class="text-base py-1 font-sans">
@@ -44,11 +55,15 @@
       <!-- Active reply state -->
       <div v-if="isReplying" class="border-l pl-2 mr-5">
         <!-- Reply Input box -->
-        <div class="flex bg-white border-2 rounded-xl my-1 p-1 ml-5  w-full">
+        <div
+          :class="this.$store.state.settings.darkMode ? 'bg-lightBG text-lightPrimaryText border-lightBorder' : 'bg-darkBG text-darkPrimaryText border-darkBorder'"
+          class="flex border-2 rounded-xl my-1 p-1 ml-5  w-full"
+        >
           <textarea
             v-model="reply"
             type="text"
             placeholder="Reply.."
+            :class="this.$store.state.settings.darkMode ? 'bg-lightBG text-lightPrimaryText' : 'bg-darkBG text-darkPrimaryText'"
             class="leading-normal resize-vertical overflow-y-auto w-full focus:outline-none py-1 px-2 text-sm"
           >
           </textarea>

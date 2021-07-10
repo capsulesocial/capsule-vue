@@ -1,5 +1,7 @@
 <template>
-  <main class="min-h-screen bg-gray-100 flex flex-col md:justify-center py-10">
+  <main
+    class="min-h-screen flex flex-col md:justify-center py-10"
+  >
     <div class="self-center mb-5">
       <CapsuleIcon />
     </div>

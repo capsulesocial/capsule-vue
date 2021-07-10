@@ -2,16 +2,25 @@
   <main class="px-4">
     <section>
       <article class="flex flex-col md:flex-row justify-between mb-1 items-center mt-3">
-        <h2 class="text-4xl font-bold">
+        <h2
+          :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+          class="text-4xl font-bold"
+        >
           Featured Hashtags
         </h2>
-        <select class="bg-white border border-gray3 text-gray4 rounded-lg text-lg px-2 py-2 focus:outline-none self-center">
+        <select
+          :class="this.$store.state.settings.darkMode ? 'bg-lightBG border-lightBorder text-lightSecondaryText' : 'bg-darkBG border-darkBorder text-darkSecondaryText'"
+          class="border rounded-lg text-lg px-2 py-2 focus:outline-none self-center"
+        >
           <option>Trending</option>
           <option>Top This Week</option>
           <option>All Time</option>
         </select>
       </article>
-      <p class="text-gray4 mb-5 text-xl">
+      <p
+        :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+        class="mb-5 text-xl"
+      >
         Find and join conversations on any topic
       </p>
       <TagCard
@@ -23,10 +32,16 @@
 
     <section>
       <article class="mt-3">
-        <h2 class="text-4xl font-bold">
+        <h2
+          :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+          class="text-4xl font-bold"
+        >
           Featured Categories
         </h2>
-        <p class="text-gray4 mb-5 text-xl">
+        <p
+          :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+          class="mb-5 text-xl"
+        >
           Read more of what you love by browsing top categories
         </p>
       </article>

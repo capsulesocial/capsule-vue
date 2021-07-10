@@ -1,20 +1,36 @@
 <template>
   <div v-if="this.post">
-    <section v-if="this.post !== null" class="pb-16 lg:pb-5 m-5">
+    <section v-if="this.post !== {}" class="pb-16 lg:pb-5 m-5">
       <article>
-        <h1 class="text-5xl capitalize">
+        <h1
+          :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+          class="text-5xl capitalize"
+        >
           {{ this.post.title }}
         </h1>
-        <h2 class="text-3xl text-subtitle">
+        <h2
+          :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+          class="text-3xl text-subtitle"
+        >
           {{ this.post.subtitle }}
         </h2>
         <div class="flex justify-between pt-5">
-          <p class="font-sans uppercase">
+          <p
+            :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+            class="font-sans uppercase"
+          >
             Written by
-            <nuxt-link :to="'/' + this.author.cid" class="text-primary underline">
-              {{ this.author.id }}
+            <nuxt-link
+              :to="'/' + this.author.cid"
+              :class="this.$store.state.settings.darkMode ? 'text-lightActive' : 'text-darkActive'"
+              class="underline"
+            >
+              {{ this.author.name }}
             </nuxt-link>
-            <span class="font-sans text-sm text-gray-700 block">
+            <span
+              :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+              class="font-sans text-sm block"
+            >
               {{ this.$formatDate(this.post.timestamp) }}
             </span>
           </p>
@@ -25,14 +41,17 @@
         </div>
       </article>
 
-      <hr class="style-two my-5">
+      <hr v-if="this.$store.state.settings.darkMode" class="style-two my-5">
+      <hr v-else class="style-one my-5">
+
       <img
         v-if="this.featuredPhoto !== null"
         :src="this.featuredPhoto"
       />
       <!-- Content -->
       <div
-        class="prose lg:prose-lg max-w-none text-black pl-4 content"
+        :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+        class="prose lg:prose-lg max-w-none pl-4 content"
         v-html="this.content"
       ></div>
 
@@ -63,14 +82,21 @@
           </div>
           <div class="flex">
             <h6>Filter Comments</h6>
-            <div class="relative flex">
-              <button class="toggle focus:outline-none flex justify-center shadow-lg rounded-lg px-4 ml-4 text-sm w-32" @click.stop="showFilter = !showFilter">
+            <div class="relative">
+              <button
+                class="toggle focus:outline-none flex justify-center shadow-lg rounded-lg px-4 ml-4 text-sm w-32"
+                @click.stop="showFilter = !showFilter"
+              >
                 <span v-if="this.filter === null" class="toggle">All</span>
                 <span v-else class="toggle capitalize">{{ this.filter }}</span>
                 <ChevronUp v-if="this.showFilter" :downsize="true" />
                 <ChevronDown v-else :downsize="true" />
               </button>
-              <ul v-if="this.showFilter" class="absolute bg-white z-10 shadow-lg rounded-lg py-1 ml-4 w-32">
+              <ul
+                v-if="this.showFilter"
+                :class="this.$store.state.settings.darkMode ? 'bg-lightBG text-lightSecondaryText' : 'bg-darkBG text-darkSecondaryText border-darkBorder'"
+                class="absolute z-10 shadow-lg rounded-lg py-1 ml-4 w-32"
+              >
                 <button class="w-full" @click="setCommentFilter(null)">
                   <li class="text-left pl-2">
                     All
@@ -159,6 +185,23 @@ export default Vue.extend({
 				}
 			})
 		})
+		// Set filter dropdown event handler
+		window.addEventListener(
+			`click`,
+			(e: any): void => {
+				if (!e.target) {
+					return
+				}
+				if (
+					e.target.parentNode === null ||
+					e.target.parentNode.classList === undefined ||
+					!e.target.parentNode.classList.contains(`toggle`)
+				) {
+					this.showFilter = false
+				}
+			},
+			false,
+		)
 	},
 	methods: {
 		setCommentFilter (reaction) {
@@ -170,13 +213,23 @@ export default Vue.extend({
 </script>
 
 <style>
-hr {
+hr.style-two {
   border: 0;
   height: 1px;
   background-image: linear-gradient(
     to right,
     rgba(0, 0, 0, 0),
     rgba(0, 0, 0, 0.75),
+    rgba(0, 0, 0, 0)
+  );
+}
+hr.style-one {
+  border: 0;
+  height: 1px;
+  background-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0),
+    rgba(255, 255, 255, 0.75),
     rgba(0, 0, 0, 0)
   );
 }

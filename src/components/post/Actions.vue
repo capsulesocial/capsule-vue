@@ -48,6 +48,7 @@
                   class="leading-normal resize-none overflow-y-auto w-full h-24 pl-2 pt-1 pr-16 focus:outline-none"
                   name="body"
                   placeholder="Write a Comment..."
+                  :class="this.$store.state.settings.darkMode ? 'bg-lightBG text-lightPrimaryText' : 'bg-darkBG text-darkPrimaryText'"
                 />
                 <div class="relative">
                   <span class="absolute bottom-0 right-0 flex flex-col">
@@ -64,9 +65,15 @@
                   </span>
                 </div>
               </div>
-              <div class="back w-full px-1 bg-white h-24">
+              <div
+                :class="this.$store.state.settings.darkMode ? 'bg-lightBG text-lightPrimaryText' : 'bg-darkBG text-darkPrimaryText'"
+                class="back w-full px-1 h-24"
+              >
                 <!-- Select Reaction -->
-                <p class="text-sm text-gray4 italic">
+                <p
+                  :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+                  class="text-sm italic"
+                >
                   What's your response?
                 </p>
                 <button @click="showEmotions = !showEmotions">
