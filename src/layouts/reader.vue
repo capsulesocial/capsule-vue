@@ -1,5 +1,8 @@
 <template>
-  <main class="w-full grid grid-cols-1 lg:grid-cols-6 bg-white h-auto">
+  <main
+    :class="this.$store.state.settings.darkMode ? 'bg-lightBG text-lightPrimaryText' : 'bg-darkBG text-darkPrimaryText'"
+    class="w-full grid grid-cols-1 lg:grid-cols-6 h-auto"
+  >
     <div>
     </div>
     <Nuxt class="col-span-4" />
@@ -12,13 +15,19 @@
         <CloseButton class="lg:hidden" />
       </button>
     </div>
+    <!-- Toggle Light / Dark Mode -->
+    <ColorMode class="fixed bottom-0 right-0 m-5" />
   </main>
 </template>
 
 <script>
 import CloseButton from '@/components/icons/Close.vue'
+import ColorMode from '@/components/ColorMode.vue'
 
 export default {
-	components: { CloseButton },
+	components: {
+		CloseButton,
+		ColorMode,
+	},
 }
 </script>

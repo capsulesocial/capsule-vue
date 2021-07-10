@@ -34,6 +34,7 @@ module.exports = {
         lightButtonBG: '#1E566C',
         lightButtonText: '#FFFFFF',
         lightActive: '#1E566C',
+        lightAuthorCard: '#E5E7EB',
         darkBG: '#000000',
         darkPrimaryText: '#FFFFFF',
         darkSecondaryText: '#EEEEEE',
@@ -42,6 +43,7 @@ module.exports = {
         darkButtonBG: '#1F7DAD',
         darkButtonText: '#FFFFFF',
         darkActive: '#367589',
+        darkAuthorCard: '#777777',
       }
     }
   },

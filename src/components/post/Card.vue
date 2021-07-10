@@ -96,7 +96,6 @@
         <h6>Filter Comments</h6>
         <div class="relative">
           <button
-            :class="this.$store.state.settings.darkMode ? 'border border-lightBorder' : 'border border-darkBorder'"
             class="toggle focus:outline-none flex justify-center shadow-lg rounded-lg px-4 ml-4 text-sm w-32"
             @click.stop="showFilter = !showFilter"
           >

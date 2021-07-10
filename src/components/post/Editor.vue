@@ -1,8 +1,11 @@
 <template>
-  <section class="w-full h-auto bg-white">
+  <section
+    class="w-full h-auto"
+    :class="this.$store.state.settings.darkMode ? 'bg-lightBG text-lightPrimaryText' : 'bg-darkBG text-darkPrimaryText'"
+  >
     <!-- Header and close button -->
     <article class="flex items-center px-5 pt-5">
-      <h3 class="text-center font-bold text-xl flex-grow pl-4 text-primary">
+      <h3 class="text-center font-bold text-xl flex-grow pl-4">
         Create Post
       </h3>
       <button class="focus:outline-none flex-grow-0" @click="updateStore()">
@@ -15,22 +18,35 @@
       <div class="w-full">
         <!-- Title declaration -->
         <div v-if="this.mobileState === 'edit'" class="flex flex-col">
-          <label for="title" class="text-gray-800 italic">Title:</label>
+          <label
+            for="title"
+            :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+            class="italic text-sm"
+          >Title:</label>
           <input
             v-model="title"
             type="text"
             placeholder="Enter Title"
-            class="border-b text-4xl focus:outline-none text-xl w-full placeholder-gray-800 pb-2"
+            :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'bg-darkBG text-darkPrimaryText'"
+            class="border-b text-4xl focus:outline-none text-xl w-full pb-2"
           />
-          <label for="subtitle" class="text-gray-800 italic">Subtitle:</label>
+          <label
+            for="subtitle"
+            :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+            class="italic pt-2 text-sm"
+          >Subtitle:</label>
           <input
             v-model="subtitle"
             type="text"
             placeholder="Enter Subtitle"
-            class="border-b text-2xl focus:outline-none text-xl w-full placeholder-gray-800 pb-2"
+            :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'bg-darkBG text-darkPrimaryText'"
+            class="border-b text-2xl focus:outline-none text-xl w-full pb-2"
           />
-          <p class="text-sm text-gray-500 py-4">
-            By: {{ this.$store.state.session.username }}
+          <p
+            :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+            class="text-sm py-4"
+          >
+            By: {{ this.$store.state.session.name }}
           </p>
           <!-- Upload Featured Image -->
           <button class="pb-2" @click="$refs.featuredPhoto.click()">
@@ -49,7 +65,8 @@
             />
             <div
               v-else
-              class="flex justify-center items-center text-gray5"
+              :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+              class="flex justify-center items-center"
             >
               <CameraIcon class="mr-2" />
               Featured Photo
@@ -59,6 +76,7 @@
       </div>
       <div
         v-if="this.mobileState === 'edit'"
+        :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
         class="w-full flex justify-around text-primary px-2"
       >
         <button @click="addMarkdown('**', true)">
@@ -100,17 +118,27 @@
         v-if="this.mobileState === 'edit'"
         ref="ta"
         :value="input"
+        :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText border-lightBorder bg-lightBG' : 'text-darkPrimaryText border-darkBorder bg-darkBG focus:outline-none'"
         class="w-full border p-1 h-64"
         @input="update"
       ></textarea>
       <div v-else>
-        <h2 class="text-4xl">
+        <h2
+          :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+          class="text-4xl"
+        >
           {{ this.title }}
         </h2>
-        <h4 class="text-2xl">
+        <h4
+          :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+          class="text-2xl"
+        >
           {{ this.subtitle }}
         </h4>
-        <h6 class="text-sm text-gray-500 py-4">
+        <h6
+          :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+          class="text-sm py-4"
+        >
           By: {{ this.$store.state.session.name }}
         </h6>
         <div class="prose" v-html="compiledMarkdown"></div>
@@ -120,7 +148,10 @@
     <!-- Desktop Editor -->
     <article class="mt-5 hidden lg:grid grid-cols-2">
       <div class="px-5">
-        <div class="w-full flex justify-around text-primary px-2">
+        <div
+          :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+          class="w-full flex justify-around px-2"
+        >
           <button @click="addMarkdown('**', true)">
             <BoldIcon />
           </button>
@@ -160,12 +191,13 @@
         <textarea
           ref="ta"
           :value="input"
+          :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText border-lightBorder bg-lightBG' : 'text-darkPrimaryText border-darkBorder bg-darkBG focus:outline-none'"
           class="w-full border p-1 h-64"
           @input="update"
         ></textarea>
       </div>
 
-      <div class="border rounded-lg p-5 text-black m-5 shadow-lg">
+      <div class="border rounded-lg p-5 m-5 shadow-lg">
         <!-- Title declaration -->
         <div class="flex flex-col items-center">
           <label for="title" class="hidden">Title</label>
@@ -173,21 +205,29 @@
             v-model="title"
             type="text"
             placeholder="Enter Title"
-            class="text-4xl focus:outline-none text-xl w-full placeholder-gray-500 pb-2"
+            :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText bg-lightBG placeholder-lightSecondaryText' : 'text-darkPrimaryText bg-darkBG placeholder-darkSecondaryText'"
+            class="text-4xl focus:outline-none text-xl w-full pb-2"
           />
           <label for="subtitle" class="hidden">Subtitle:</label>
           <input
             v-model="subtitle"
             type="text"
             placeholder="Enter Subtitle"
-            class="text-2xl focus:outline-none text-xl w-full placeholder-gray-500 pb-2"
+            :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText bg-lightBG placeholder-lightSecondaryText' : 'text-darkPrimaryText bg-darkBG placeholder-darkSecondaryText'"
+            class="text-2xl focus:outline-none text-xl w-full pb-2"
           />
         </div>
-        <h6 class="text-sm text-gray-500 pb-4">
+        <h6
+          :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+          class="text-sm pb-4"
+        >
           By: {{ this.$store.state.session.name }}
         </h6>
         <!-- Upload Featured Image -->
-        <button @click="$refs.featuredPhoto.click()">
+        <button
+          :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+          @click="$refs.featuredPhoto.click()"
+        >
           <input
             id="featured-photo"
             ref="featuredPhoto"
@@ -203,25 +243,38 @@
           />
           <div
             v-else
-            class="flex justify-center items-center text-gray5"
+            class="flex justify-center items-center"
           >
             <CameraIcon class="mr-2" />
             Featured Photo
           </div>
         </button>
-        <div class="prose pl-4" v-html="compiledMarkdown"></div>
+        <!-- Content -->
+        <div
+          :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+          class="prose pt-3"
+          v-html="compiledMarkdown"
+        ></div>
       </div>
+      <!-- Bottom footer: Tags and Publish button -->
       <footer
-        class="bottom-0 fixed m-5 p-5 w-full flex flex-row justify-between font-sans"
+        class="bottom-0 fixed m-5 p-5 w-full flex flex-row justify-between"
       >
-        <div class="flex items-center border rounded-full border-primary">
-          <span class="rounded-full pl-4 bg-white shadow-lg text-primary">
+        <div
+          :class="this.$store.state.settings.darkMode ? 'border-lightBorder bg-lightBG' : 'border-darkBorder bg-darkBG'"
+          class="flex items-center border rounded-full"
+        >
+          <span
+            :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+            class="rounded-full pl-4 shadow-lg"
+          >
             <label for="tag" class="hidden" value="Enter hashtags"></label>
             #<input
               v-model="tag"
               type="text"
               placeholder="tag"
-              class="focus:outline-none w-32 pr-1 py-2"
+              :class="this.$store.state.settings.darkMode ? 'bg-lightBG text-lightPrimaryText placeholder-lightSecondaryText' : 'bg-darkBG  text-darkPrimaryText placeholder-darkSecondaryText'"
+              class="focus:outline-none w-32 pr-1 py-2 pl-1"
             />
           </span>
           <button
@@ -231,7 +284,7 @@
             <span class="text-white"><PlusIcon /></span>
           </button>
           <span v-for="t in this.tags" :key="t.name" class="mx-2">
-            <h6 class="inline text-primary">#{{ t['name'] }}</h6>
+            <h6 class="inline">#{{ t['name'] }}</h6>
             <button @click="removeTag(t)">❌</button></span>
         </div>
         <BrandedButton text="Publish" :action="post" class="mr-10" />
