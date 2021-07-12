@@ -212,7 +212,7 @@ export default Vue.extend({
 						id: this.id,
 						name: this.name,
 						email: this.email,
-						password: ``,
+						password: this.password,
 						bio: `Default bio.`,
 						location: ``,
 						posts: [],
@@ -230,6 +230,7 @@ export default Vue.extend({
 					const peerIDPublicKey = peerID.publicKey
 					const _res = await this.$register(account, peerIDPrivateKey, peerIDPublicKey)
 					console.log(_res)
+					account.password = ``
 					this.$sendProfile(account).then((cid) => {
 						account.cid = cid
 						this.changeCID(cid)
