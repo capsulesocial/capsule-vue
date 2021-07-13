@@ -16,7 +16,12 @@
                 Messages
               </div>
               <div
-                class="flex items-center justify-center ml-2 text-xs h-5 w-5 text-white bg-red-500 rounded-full font-medium"
+                :class="
+                  this.$store.state.settings.darkMode
+                    ? 'text-lightOnPrimaryText bg-lightPrimary'
+                    : 'text-darkOnPrimaryText bg-darkPrimary'
+                "
+                class="flex items-center justify-center ml-2 text-xs h-5 w-5 rounded-full font-medium"
               >
                 5
               </div>
@@ -47,9 +52,17 @@
           </div>
           <div class="mt-2">
             <div class="flex flex-col -mx-4">
-              <div class="relative flex flex-row items-center p-4">
+              <!-- Contact button (active) -->
+              <div
+                :class="
+                  this.$store.state.settings.darkMode
+                    ? 'text-lightOnSurfaceVariantText bg-lightSurfaceVariant'
+                    : 'text-darkOnSurfaceVariantText bg-darkSurfaceVariant'
+                "
+                class="relative flex flex-row items-center p-4 my-2 rounded-lg"
+              >
                 <div
-                  class="absolute text-xs text-gray-500 right-0 top-0 mr-4 mt-3"
+                  class="absolute text-xs right-0 top-0 mr-4 mt-3"
                 >
                   5 min
                 </div>
@@ -63,14 +76,15 @@
                     Debitis, doloribus?
                   </div>
                 </div>
-                <div class="flex-shrink-0 ml-2 self-end mb-1">
-                  <span
-                    class="flex items-center justify-center h-5 w-5 bg-red-500 text-white text-xs rounded-full"
-                  >5</span>
-                </div>
               </div>
+              <!-- Contact Button (Inactive) -->
               <div
-                class="flex flex-row items-center p-4 bg-gradient-to-r from-red-100 to-transparent border-l-2 border-red-500"
+                :class="
+                  this.$store.state.settings.darkMode
+                    ? 'text-lightOnSurfaceText bg-lightSurface'
+                    : 'text-darkOnSurfaceVariantText bg-darkSurface'
+                "
+                class="flex flex-row items-center p-4 my-2 rounded-lg shadow-lg"
               >
                 <img class="w-10 h-10 rounded-lg flex-shrink-0 m-2" />
                 <div class="flex flex-col flex-grow ml-3">
@@ -78,7 +92,6 @@
                     <div class="text-sm font-medium">
                       Jack Dishman
                     </div>
-                    <div class="h-2 w-2 rounded-full bg-green-500 ml-2"></div>
                   </div>
                   <div class="text-xs truncate w-40">
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit.
@@ -104,7 +117,14 @@
             <!-- Message #1 -->
             <div class="flex items-end p-4">
               <img class="w-10 h-10 rounded-lg flex-shrink-0 m-2" />
-              <div class="m-2 pt-4 px-2 border rounded-lg">
+              <div
+                :class="
+                  this.$store.state.settings.darkMode
+                    ? 'text-lightOnSurfaceText bg-lightSurface'
+                    : 'text-darkOnSurfaceVariantText bg-darkSurface'
+                "
+                class="m-2 pt-4 px-2 rounded-lg"
+              >
                 <p>
                   Hey! How are you? It's been a while since we last spoke. I saw
                   your Capsule post and want to hear more about your thoughts on
@@ -119,7 +139,14 @@
             <!-- Message #2 -->
             <div class="flex flex-row-reverse items-end">
               <img class="w-10 h-10 rounded-lg flex-shrink-0 m-2" />
-              <div class="m-2 pt-4 px-2 border rounded-lg">
+              <div
+                :class="
+                  this.$store.state.settings.darkMode
+                    ? 'text-lightOnSurfaceText bg-lightSurface'
+                    : 'text-darkOnSurfaceVariantText bg-darkSurface'
+                "
+                class="m-2 pt-4 px-2 rounded-lg"
+              >
                 <p>
                   Pangea is a mindset.
                 </p>
@@ -131,7 +158,14 @@
             <!-- Message #3 -->
             <div class="flex flex-row-reverse items-end">
               <img class="w-10 h-10 rounded-lg flex-shrink-0 m-2" />
-              <div class="m-2 pt-4 px-2 border rounded-lg">
+              <div
+                :class="
+                  this.$store.state.settings.darkMode
+                    ? 'text-lightOnSurfaceText bg-lightSurface'
+                    : 'text-darkOnSurfaceVariantText bg-darkSurface'
+                "
+                class="m-2 pt-4 px-2 rounded-lg"
+              >
                 <p>
                   Do you know what I mean?
                 </p>
@@ -143,7 +177,14 @@
             <!-- Message #4 -->
             <div class="flex items-end p-4">
               <img class="w-10 h-10 rounded-lg flex-shrink-0 m-2" />
-              <div class="m-2 pt-4 px-2 border rounded-lg">
+              <div
+                :class="
+                  this.$store.state.settings.darkMode
+                    ? 'text-lightOnSurfaceText bg-lightSurface'
+                    : 'text-darkOnSurfaceVariantText bg-darkSurface'
+                "
+                class="m-2 pt-4 px-2 rounded-lg"
+              >
                 <p>
                   No clue what you're talking about, bro....
                 </p>
@@ -155,7 +196,14 @@
             <!-- Message #5 -->
             <div class="flex items-end p-4">
               <img class="w-10 h-10 rounded-lg flex-shrink-0 m-2" />
-              <div class="m-2 pt-4 px-2 border rounded-lg">
+              <div
+                :class="
+                  this.$store.state.settings.darkMode
+                    ? 'text-lightOnSurfaceText bg-lightSurface'
+                    : 'text-darkOnSurfaceVariantText bg-darkSurface'
+                "
+                class="m-2 pt-4 px-2 rounded-lg"
+              >
                 <p>
                   But I respect your opinion!
                 </p>

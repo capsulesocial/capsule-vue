@@ -11,7 +11,7 @@ export interface SettingState {
 }
 
 export const state = (): SettingState => ({
-	darkMode: false,
+	darkMode: true,
 	draftMode: false,
 })
 

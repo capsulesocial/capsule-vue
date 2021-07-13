@@ -1,6 +1,6 @@
 <template>
   <article
-    class="shadow rounded-lg my-2 card p-5"
+    class="shadow rounded-lg my-2 p-5 w-full md:max-w-xl"
     :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText border border-darkBorder'"
   >
     <!-- Post Preview Header: Avatar, name -->
@@ -9,24 +9,36 @@
         <img
           v-if="this.avatar !== ``"
           :src="this.avatar"
-          class="w-8 h-8 rounded-lg mr-2 object-cover"
+          class="w-12 h-12 rounded-lg object-cover"
         />
         <ProfileIcon
           v-else
-          class="w-8 h-8 border-2 rounded-full mr-2"
+          class="w-12 h-12 border-2 rounded-full"
         />
-        <h4
-          :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-          class="text-bold mr-2 self-center"
-        >
-          {{ this.authorName }}
-        </h4>
-        <h5
-          :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-          class=" mr-2 self-center"
-        >
-          @{{ this.post.authorID }}
-        </h5>
+        <div class="ml-4">
+          <!-- Name, ID -->
+          <div class="flex items-center">
+            <h4
+              :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+              class="text-bold mr-2 text-lg"
+            >
+              {{ this.authorName }}
+            </h4>
+            <h5
+              :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+              class="mr-2"
+            >
+              @{{ this.post.authorID }}
+            </h5>
+          </div>
+          <!-- Timestamp -->
+          <h6
+            :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+            class="text-xs mb-2"
+          >
+            {{ this.$formatDate(this.post.timestamp) }}
+          </h6>
+        </div>
       </nuxt-link>
       <button
         :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText hover:text-lightActive ' : 'text-darkPrimaryText hover:text-darkActive'"
@@ -36,16 +48,8 @@
       </button>
     </div>
 
-    <!-- Timestamp -->
-    <h6
-      :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-      class="text-xs self-center ml-10 mb-2"
-    >
-      {{ this.$formatDate(this.post.timestamp) }}
-    </h6>
-
     <!-- Preview Content -->
-    <div class="hover:text-primary">
+    <div class="my-2">
       <nuxt-link :to="'/post/' + this.post.cid" class="flex justify-between">
         <div>
           <h3
