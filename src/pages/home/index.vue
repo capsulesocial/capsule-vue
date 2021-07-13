@@ -1,5 +1,7 @@
 <template>
-  <main>
+  <section
+    :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText bg-lightBG' : 'text-darkPrimaryText bg-darkBG'"
+  >
     <nav class="flex flex-row border bg-secondary bg-opacity-25 py-2 px-4 pl-5">
       <div class="flex items-center mr-6">
         <button
@@ -54,7 +56,7 @@
     >
       <PostCard :post="post" />
     </div>
-  </main>
+  </section>
 </template>
 
 <script lang="ts">

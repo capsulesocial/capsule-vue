@@ -2,8 +2,8 @@
   <nav>
     <!-- Desktop -->
     <div
-      :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-      class="hidden lg:flex px-2 flex-col h-12 sticky top-0 pl-6 lg:fixed lg:pt-24 lg:mt-12 font-sans"
+      :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText bg-lightBG' : 'text-darkPrimaryText bg-darkBG'"
+      class="hidden lg:flex px-2 flex-col h-screen sticky top-0 pl-6 lg:fixed lg:pt-24 lg:mt-12"
     >
       <nuxt-link
         to="/home"
