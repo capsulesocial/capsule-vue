@@ -1,13 +1,13 @@
 <template>
   <header
     :class="this.$store.state.settings.darkMode ? 'bg-lightBG' : 'bg-darkBG'"
-    class="grid grid-cols-4 px-4 py-2 z-10 border-b border-gray1"
+    class="w-full flex justify-center z-10 border-b py-4"
   >
     <!-- Top Left: Logo -->
-    <div class="flex lg:flex-row-reverse">
-      <CapsuleIcon class="py-4 lg:pr-48" />
+    <div class="md:mx-8 pr-1">
+      <CapsuleIcon />
     </div>
-    <article class="col-span-3 md:col-span-2 flex justify-between">
+    <article class="flex justify-between md:min-w-max md:max-w-3xl w-full xl:pl-24">
       <div
         class="flex"
         :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
@@ -31,7 +31,7 @@
     </article>
 
     <!-- Top Right -->
-    <article class="relative hidden lg:flex items-center justify-start ml-6">
+    <article class="relative hidden md:flex items-center">
       <div class="flex">
         <span>
           <button

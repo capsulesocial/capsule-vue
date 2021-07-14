@@ -1,11 +1,11 @@
 <template>
   <main
     :class="this.$store.state.settings.darkMode ? 'bg-lightBG text-lightPrimaryText' : 'bg-darkBG text-darkPrimaryText'"
-    class="w-full grid grid-cols-1 lg:grid-cols-6 h-auto"
+    class="h-full"
   >
-    <div>
+    <div class="flex justify-center">
+      <Nuxt class="md:max-w-3xl md:min-w-max" />
     </div>
-    <Nuxt class="col-span-4" />
     <div>
       <button
         class="focus:outline-none fixed bottom-0 lg:top-0 right-0 m-5 rounded-full border border-2 border-primary bg-white w-10 h-10"
@@ -25,6 +25,7 @@ import CloseButton from '@/components/icons/Close.vue'
 import ColorMode from '@/components/ColorMode.vue'
 
 export default {
+	name: `ReaderLayout`,
 	components: {
 		CloseButton,
 		ColorMode,

@@ -3,60 +3,92 @@
     <!-- Desktop -->
     <div
       :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText bg-lightBG' : 'text-darkPrimaryText bg-darkBG'"
-      class="hidden lg:flex px-2 flex-col h-screen sticky top-0 pl-6 lg:fixed lg:pt-24 lg:mt-12"
+      class="hidden md:flex flex-col px-2  h-screen sticky top-0 xl:pl-6 md:fixed md:pt-24 xl:mt-12"
     >
       <nuxt-link
         to="/home"
-        class="nav group flex items-center px-2 py-2 text-base leading-6  m-2 text-xl"
+        class="nav group flex items-center p-2 text-base leading-6 m-2 text-xl"
       >
-        <HomeIcon class="mr-2" />
-        <strong>
+        <span
+          :class="this.getStyles('home')"
+          class="p-2 rounded-full"
+        >
+          <HomeIcon />
+        </span>
+        <strong class="hidden xl:block ml-2">
           Home
         </strong>
       </nuxt-link>
       <nuxt-link
         to="/discover"
-        class="nav mt-1 group flex items-center px-2 py-2 text-base leading-6 m-2 text-xl"
+        class="nav group flex items-center p-2 text-base leading-6 m-2 text-xl"
       >
-        <DiscoverIcon class="mr-2" />
-        <strong>
+        <span
+          :class="this.getStyles('discover')"
+          class="p-2 rounded-full"
+        >
+          <DiscoverIcon />
+        </span>
+        <strong class="hidden xl:block ml-2">
           Discover
         </strong>
       </nuxt-link>
       <!-- profile -->
       <nuxt-link
         :to="'/' + $store.state.session.cid"
-        class="nav mt-1 group flex items-center px-2 py-2 text-base leading-6 m-2 text-xl"
+        class="nav group flex items-center p-2 text-base leading-6 m-2 text-xl"
       >
-        <ProfileIcon class="mr-2" />
-        <strong>
+        <span
+          :class="this.getStyles(this.$store.state.session.cid)"
+          class="p-2 rounded-full"
+        >
+          <ProfileIcon />
+        </span>
+        <strong class="hidden xl:block ml-2">
           Profile
         </strong>
       </nuxt-link>
       <nuxt-link
         to="/messages"
-        class="nav mt-1 group flex items-center px-2 py-2 text-base leading-6 m-2 text-xl"
+        class="nav group flex items-center p-2 text-base leading-6 m-2 text-xl"
       >
-        <InboxIcon class="mr-2" />
-        <strong>
+        <span
+          :class="this.getStyles('messages')"
+          class="p-2 rounded-full"
+        >
+          <InboxIcon />
+        </span>
+        <strong class="hidden xl:block ml-2">
           Messages
         </strong>
       </nuxt-link>
       <nuxt-link
         :to="'/' + $store.state.session.cid + '/bookmarks'"
-        class="nav mt-1 group flex items-center px-2 py-2 text-base leading-6 m-2 text-xl"
+        class="nav group flex items-center p-2 text-base leading-6 m-2 text-xl"
       >
-        <BookmarksIcon class="mr-2" />
-        <strong>
+        <span
+          :class="this.getStyles('id-bookmarks')"
+          class="p-2 rounded-full"
+        >
+          <BookmarksIcon />
+        </span>
+        <strong class="hidden xl:block ml-2">
           Bookmarks
         </strong>
       </nuxt-link>
-
-      <BrandedButton text="Write Post" :action="toggleDraftMode" class="mt-5 w-48 px-12 py-4 mt-16" />
+      <div class="nav group flex items-center p-2 text-base leading-6 m-2 text-xl" @click="toggleDraftMode">
+        <span
+          :class="this.$store.state.settings.darkMode ? 'text-lightOnPrimaryText bg-lightPrimary' : 'text-darkOnPrimary bg-darkPrimary'"
+          class="xl:hidden p-2 rounded-full"
+        >
+          <PencilIcon class="fill-current" />
+        </span>
+      </div>
+      <BrandedButton text="Write Post" :action="toggleDraftMode" class="hidden xl:block mt-5 w-48 px-12 py-4 mt-16" />
     </div>
 
     <!-- Mobile -->
-    <div class="fixed lg:hidden bottom-0 h-16 w-full flex flex-row justify-around pb-4 pt-2 items-end bg-white z-50">
+    <div class="fixed md:hidden bottom-0 h-16 w-full flex flex-row justify-around pb-4 pt-2 items-end bg-white z-50">
       <nuxt-link to="/home">
         <HomeIcon
           v-if="this.$route.path === '/home'"
@@ -132,22 +164,22 @@ export default Vue.extend({
 		toggleProfileActions () {
 			this.isProfileActions = !this.isProfileActions
 		},
+		getStyles (tab: string): string {
+			let res = ``
+			// Check if current tab
+			if (this.$route.name === tab || (this.$route.name === `id` && tab === this.$store.state.session.cid)) {
+				// Check dark mode
+				if (this.$store.state.settings.darkMode) {
+					res += `text-lightOnPrimaryText bg-lightPrimary shadow-lg`
+				} else {
+					res += `text-darkOnPrimary bg-darkPrimary`
+				}
+			}
+			return res
+		},
 	},
 })
 </script>
 
 <style>
-a.nuxt-link-active {
-  font-weight: italic;
-}
-
-a.nuxt-link-exact-active.nav {
-  background-color: rgba(64, 124, 131, 0.09);
-  font-weight: bold;
-  color: #407c83;
-  border-radius: 0.5rem;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  padding-right: 1rem;
-}
 </style>

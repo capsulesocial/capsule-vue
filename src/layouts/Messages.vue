@@ -10,11 +10,13 @@
       <PostEditor class="z-40" />
     </div>
 
-    <div class="lg:grid lg:grid-cols-4">
+    <Header class="fixed top-0" />
+
+    <div class="flex justify-center">
       <!-- Left Nav Menu -->
-      <Navigation class="flex flex-row-reverse md:pr-8" />
+      <Navigation class="flex lg:pr-0 xl:pr-8" />
       <!-- Main Content -->
-      <Nuxt class="col-span-3 w-full mb-20 lg:mb-0 md:pr-16 border-l" />
+      <Nuxt class="border-l md:ml-24 xl:ml-64 md:min-w-max md:max-w-3xl" />
     </div>
     <ColorMode class="fixed bottom-0 right-0 m-5" />
   </main>
@@ -23,12 +25,14 @@
 <script lang="ts">
 import Vue from 'vue'
 import Navigation from '@/components/Navigation.vue'
+import Header from '@/components/Header.vue'
 import PostEditor from '@/components/post/Editor.vue'
 import ColorMode from '@/components/ColorMode.vue'
 
 export default Vue.extend({
 	components: {
 		Navigation,
+		Header,
 		PostEditor,
 		ColorMode,
 	},

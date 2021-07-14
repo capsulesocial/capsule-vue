@@ -1,6 +1,6 @@
 <template>
   <article
-    class="shadow rounded-lg my-2 p-5 w-full md:max-w-xl"
+    class="shadow rounded-lg my-2 p-5 w-full"
     :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText border border-darkBorder'"
   >
     <!-- Post Preview Header: Avatar, name -->

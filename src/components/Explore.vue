@@ -1,8 +1,6 @@
 <template>
-  <aside class="fixed right-0 pr-10 w-1/4">
-    <div
-      class="font-sans mx-4"
-    >
+  <aside>
+    <div>
       <h3 class="text-2xl underline italic p-2">
         Trending Tags
       </h3>
