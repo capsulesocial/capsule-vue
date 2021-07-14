@@ -1,5 +1,5 @@
 <template>
-  <main>
+  <main class="w-full">
     <section class="md:grid md:grid-cols-3">
       <article
         :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
@@ -228,7 +228,6 @@ export default Vue.extend({
 		ChevronRight,
 		UploadAvatar,
 	},
-	layout: `Extended`,
 	data () {
 		return {
 			newName: ``,

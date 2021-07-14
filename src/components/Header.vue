@@ -4,12 +4,12 @@
     class="w-full flex justify-center z-10 border-b py-4"
   >
     <!-- Top Left: Logo -->
-    <div class="md:mx-8 pr-1">
-      <CapsuleIcon />
+    <div class="md:ml-8 xl:mr-24 xl:ml-0">
+      <CapsuleIcon class="mr-2" />
     </div>
-    <article class="flex justify-between md:min-w-max md:max-w-3xl w-full xl:pl-24">
+    <article class="flex justify-between md:min-w-max md:max-w-2xl w-full xl:pl-24">
       <div
-        class="flex"
+        class="flex md:pl-8 xl:pl-0"
         :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
       >
         <button

@@ -159,7 +159,6 @@ export default Vue.extend({
 		ExternalURLIcon,
 		SettingsIcon,
 	},
-	layout: `Extended`,
 	data () {
 		return {
 			avatar: ``,

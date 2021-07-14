@@ -66,7 +66,6 @@ export default {
 		CategoryCard,
 		TagCard,
 	},
-	layout: `Extended`,
 	data () {
 		return {
 			tagCategory: `trending`,

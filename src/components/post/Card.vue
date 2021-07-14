@@ -4,8 +4,8 @@
     :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText border border-darkBorder'"
   >
     <!-- Post Preview Header: Avatar, name -->
-    <div class="flex justify-between items-center">
-      <nuxt-link :to="'/' + this.post.authorCID" class="flex">
+    <div class="flex justify-between">
+      <nuxt-link :to="'/' + this.post.authorCID" class="flex items-center">
         <img
           v-if="this.avatar !== ``"
           :src="this.avatar"
@@ -42,7 +42,7 @@
       </nuxt-link>
       <button
         :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText hover:text-lightActive ' : 'text-darkPrimaryText hover:text-darkActive'"
-        class="focus:outline-none"
+        class="focus:outline-none self-start"
       >
         <XIcon />
       </button>

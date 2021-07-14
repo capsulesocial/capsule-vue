@@ -7,12 +7,10 @@
     >
       <nuxt-link
         to="/home"
-        class="nav group flex items-center p-2 text-base leading-6 m-2 text-xl"
+        :class="this.getStyles('home')"
+        class="nav group flex items-center p-2 text-base leading-6 m-2 text-xl rounded-xl"
       >
-        <span
-          :class="this.getStyles('home')"
-          class="p-2 rounded-full"
-        >
+        <span class="p-2">
           <HomeIcon />
         </span>
         <strong class="hidden xl:block ml-2">
@@ -21,12 +19,10 @@
       </nuxt-link>
       <nuxt-link
         to="/discover"
-        class="nav group flex items-center p-2 text-base leading-6 m-2 text-xl"
+        :class="this.getStyles('discover')"
+        class="nav group flex items-center p-2 text-base leading-6 m-2 text-xl rounded-xl"
       >
-        <span
-          :class="this.getStyles('discover')"
-          class="p-2 rounded-full"
-        >
+        <span class="p-2">
           <DiscoverIcon />
         </span>
         <strong class="hidden xl:block ml-2">
@@ -36,12 +32,10 @@
       <!-- profile -->
       <nuxt-link
         :to="'/' + $store.state.session.cid"
-        class="nav group flex items-center p-2 text-base leading-6 m-2 text-xl"
+        :class="this.getStyles(this.$store.state.session.cid)"
+        class="nav group flex items-center p-2 text-base leading-6 m-2 text-xl rounded-xl"
       >
-        <span
-          :class="this.getStyles(this.$store.state.session.cid)"
-          class="p-2 rounded-full"
-        >
+        <span class="p-2">
           <ProfileIcon />
         </span>
         <strong class="hidden xl:block ml-2">
@@ -50,12 +44,10 @@
       </nuxt-link>
       <nuxt-link
         to="/messages"
-        class="nav group flex items-center p-2 text-base leading-6 m-2 text-xl"
+        :class="this.getStyles('messages')"
+        class="nav group flex items-center p-2 text-base leading-6 m-2 text-xl rounded-xl"
       >
-        <span
-          :class="this.getStyles('messages')"
-          class="p-2 rounded-full"
-        >
+        <span class="p-2">
           <InboxIcon />
         </span>
         <strong class="hidden xl:block ml-2">
@@ -64,12 +56,10 @@
       </nuxt-link>
       <nuxt-link
         :to="'/' + $store.state.session.cid + '/bookmarks'"
-        class="nav group flex items-center p-2 text-base leading-6 m-2 text-xl"
+        :class="this.getStyles('id-bookmarks')"
+        class="nav group flex items-center p-2 text-base leading-6 m-2 text-xl rounded-xl"
       >
-        <span
-          :class="this.getStyles('id-bookmarks')"
-          class="p-2 rounded-full"
-        >
+        <span class="p-2">
           <BookmarksIcon />
         </span>
         <strong class="hidden xl:block ml-2">
@@ -170,7 +160,7 @@ export default Vue.extend({
 			if (this.$route.name === tab || (this.$route.name === `id` && tab === this.$store.state.session.cid)) {
 				// Check dark mode
 				if (this.$store.state.settings.darkMode) {
-					res += `text-lightOnPrimaryText bg-lightPrimary shadow-lg`
+					res += `text-lightPrimary bg-lightPrimary shadow-lg bg-opacity-25`
 				} else {
 					res += `text-darkOnPrimary bg-darkPrimary`
 				}

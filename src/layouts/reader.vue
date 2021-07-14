@@ -8,7 +8,7 @@
     </div>
     <div>
       <button
-        class="focus:outline-none fixed bottom-0 lg:top-0 right-0 m-5 rounded-full border border-2 border-primary bg-white w-10 h-10"
+        class="focus:outline-none fixed bottom-0 lg:top-0 right-0 mb-20 m-5 rounded-full border border-2 border-primary bg-white w-10 h-10"
         @click="$router.go(-1)"
       >
         <CloseButton class="hidden lg:block" size="large" />
@@ -16,7 +16,7 @@
       </button>
     </div>
     <!-- Toggle Light / Dark Mode -->
-    <ColorMode class="fixed bottom-0 right-0 m-5" />
+    <ColorMode class="fixed bottom-0 right-0 m-5 mr-6" />
   </main>
 </template>
 
