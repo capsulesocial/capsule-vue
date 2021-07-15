@@ -2,7 +2,7 @@
   <nav>
     <!-- Desktop -->
     <div
-      :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText bg-lightBG' : 'text-darkPrimaryText bg-darkBG'"
+      :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText bg-lightBG' : 'text-darkSecondaryText bg-darkBG'"
       class="hidden md:flex flex-col px-2  h-screen sticky top-0 xl:pl-6 md:fixed md:pt-24 xl:mt-12"
     >
       <nuxt-link
@@ -68,7 +68,7 @@
       </nuxt-link>
       <div
         :class="this.$store.state.settings.darkMode ? 'text-lightOnPrimaryText bg-lightPrimary' : 'text-darkOnPrimary bg-darkPrimary'"
-        class="xl:hidden group flex items-center p-2 text-base leading-6 m-2 text-xl rounded-xl"
+        class="xl:hidden group flex items-center p-2 text-base leading-6 m-2 mt-16 text-xl rounded-xl"
         @click="toggleDraftMode"
       >
         <span
@@ -163,9 +163,9 @@ export default Vue.extend({
 			if (this.$route.name === tab || (this.$route.name === `id` && tab === this.$store.state.session.cid)) {
 				// Check dark mode
 				if (this.$store.state.settings.darkMode) {
-					res += `text-lightPrimaryText bg-lightPrimary shadow-lg bg-opacity-25`
+					res += `text-lightPrimary bg-lightPrimary shadow-lg bg-opacity-25`
 				} else {
-					res += `text-darkOnPrimary bg-darkPrimary bg-opacity-75`
+					res += `text-darkOnPrimaryText bg-darkPrimary bg-opacity-50`
 				}
 			}
 			return res

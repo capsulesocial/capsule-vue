@@ -40,7 +40,7 @@
             </div>
           </div>
           <div class="mt-2">
-            <div class="flex flex-col -mx-4">
+            <div class="flex flex-col -mx-4 w-64">
               <!-- Name & Contact card / button (active) -->
               <div
                 :class="
@@ -48,15 +48,13 @@
                     ? 'text-lightPrimaryText bg-lightPrimary bg-opacity-25'
                     : 'text-darkPrimaryText bg-darkPrimary bg-opacity-75'
                 "
-                class="relative flex flex-row items-center p-4 my-2 rounded-lg"
+                class="relative flex flex-row items-center py-4 pl-2 my-2 rounded-lg"
               >
-                <div
-                  class="absolute text-xs right-0 top-0 mr-4 mt-3"
-                >
+                <div class="absolute text-xs right-0 top-0 mr-4 mt-4">
                   5 min
                 </div>
                 <img class="w-10 h-10 rounded-lg flex-shrink-0 m-2" />
-                <div class="flex flex-col flex-grow ml-3">
+                <div class="flex flex-col flex-grow ml-2">
                   <div class="text-sm font-bold">
                     Jack Dishman
                   </div>
@@ -73,14 +71,15 @@
                     ? 'text-lightOnSurfaceText bg-lightSurface'
                     : 'text-darkOnSurfaceVariantText bg-darkSurface'
                 "
-                class="flex flex-row items-center p-4 my-2 rounded-lg shadow-lg"
+                class="relative flex flex-row items-center py-4 pl-2 my-2 rounded-lg shadow-lg"
               >
+                <div class="absolute text-xs right-0 top-0 mr-4 mt-4">
+                  1 day ago
+                </div>
                 <img class="w-10 h-10 rounded-lg flex-shrink-0 m-2" />
-                <div class="flex flex-col flex-grow ml-3">
-                  <div class="flex items-center">
-                    <div class="text-sm font-medium">
-                      Jack Dishman
-                    </div>
+                <div class="flex flex-col flex-grow ml-2">
+                  <div class="text-sm font-bold">
+                    Jack Dishman
                   </div>
                   <div class="text-xs truncate w-40">
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit.
@@ -115,7 +114,7 @@
                     ? 'bg-lightSecondary shadow-lg bg-opacity-25'
                     : 'bg-darkSecondary bg-opacity-75'
                 "
-                class="m-2 pt-4 px-2 rounded-lg"
+                class="my-2 ml-2 mr-12 pt-4 px-2 rounded-lg"
               >
                 <p>
                   Hey! How are you? It's been a while since we last spoke. I saw
@@ -137,7 +136,7 @@
                     ? 'bg-lightSurfaceVariant bg-opacity-25'
                     : 'text-darkOnSurfaceVariantText bg-darkSurface'
                 "
-                class="m-2 pt-4 px-2 rounded-lg"
+                class="my-2 mr-2 ml-12 pt-4 px-2 rounded-lg"
               >
                 <p>
                   Pangea is a mindset.

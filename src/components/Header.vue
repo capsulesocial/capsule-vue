@@ -35,21 +35,21 @@
       <div class="flex">
         <span>
           <button
-            class="bg-gray1 rounded-full w-10 h-10 focus:outline-none flex justify-center shadow-lg"
+            class="bg-gray1 rounded-full w-8 h-8 focus:outline-none flex justify-center shadow-lg"
           >
             <SearchIcon class="self-center" />
           </button>
         </span>
         <span class="px-2">
           <button
-            class="bg-gray1 rounded-full w-10 h-10 focus:outline-none flex justify-center shadow-lg"
+            class="bg-gray1 rounded-full w-8 h-8 focus:outline-none flex justify-center shadow-lg"
           >
             <NotificationsIcon class="self-center" />
           </button>
         </span>
         <span class="dropdown">
           <button
-            class="bg-gray1 rounded-full w-10 h-10 focus:outline-none flex justify-center shadow-lg dropdown"
+            class="bg-gray1 rounded-full w-8 h-8 focus:outline-none flex justify-center shadow-lg dropdown"
             @click.stop="toggleDropdown"
           >
             <DownIcon v-if="!showMore" class="self-center dropdown" />

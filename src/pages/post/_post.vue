@@ -89,8 +89,8 @@
               >
                 <span v-if="this.filter === null" class="toggle">All</span>
                 <span v-else class="toggle capitalize">{{ this.filter }}</span>
-                <ChevronUp v-if="this.showFilter" :downsize="true" />
-                <ChevronDown v-else :downsize="true" />
+                <ChevronUp v-if="this.showFilter" />
+                <ChevronDown v-else />
               </button>
               <ul
                 v-if="this.showFilter"
