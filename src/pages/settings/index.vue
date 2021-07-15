@@ -32,6 +32,14 @@
           Social Accounts
           <ChevronRight />
         </button>
+        <button
+          class="flex flex-row justify-between px-4 py-2 focus:outline-none"
+          :class="this.getStyles('display')"
+          @click="changeTab('display')"
+        >
+          Display Themes
+          <ChevronRight />
+        </button>
       </article>
 
       <article v-if="this.tab === 'account'" class="col-span-2 border-l">
@@ -187,7 +195,7 @@
           />
         </div>
       </article>
-
+      <!-- Social Links -->
       <article v-if="this.tab === 'social'" class="col-span-2 border-l">
         <h2
           :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
@@ -205,6 +213,26 @@
         </p>
         <VerifySocial platform="website" class="mx-4 mb-4" />
       </article>
+      <!-- Display Themes -->
+      <article v-if="this.tab === 'display'" class="col-span-2 border-l">
+        <h2
+          :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+          class="border-b-2 text-2xl bold pl-4 font-bold"
+        >
+          Choose a Theme
+        </h2>
+        <div class="flex items-center">
+          <p class="m-4" :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'">
+            Toggle {{ this.$store.state.settings.darkMode ? 'night' : 'day' }} mode:
+          </p>
+          <ColorMode class="text-5xl" />
+        </div>
+        <div class="flex items-center">
+          <p class="m-4" :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'">
+            Auto-detect dark mode:
+          </p>
+        </div>
+      </article>
     </section>
     <div v-if="this.tab !== ''" class="text-right pt-4">
       <BrandedButton text="Save Changes" :action="this.updateSettings" :class="this.hasChanged() ? '' : 'opacity-50'" />
@@ -219,6 +247,7 @@ import { mapMutations } from 'vuex'
 import BrandedButton from '@/components/BrandedButton.vue'
 import ChevronRight from '@/components/icons/ChevronRight.vue'
 import UploadAvatar from '@/components/icons/UploadAvatar.vue'
+import ColorMode from '@/components/ColorMode.vue'
 import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
 
 export default Vue.extend({
@@ -227,6 +256,7 @@ export default Vue.extend({
 		BrandedButton,
 		ChevronRight,
 		UploadAvatar,
+		ColorMode,
 	},
 	data () {
 		return {
@@ -245,6 +275,11 @@ export default Vue.extend({
 			this.$getPhoto(this.$store.state.session.avatar).then((image) => {
 				this.profilePic = image
 			})
+		}
+		// Check for dark mode
+		const prefersDarkMode = window.matchMedia(`(prefers-color-scheme: dark)`).matches
+		if (prefersDarkMode) {
+			this.$store.commit(`settings/changeDarkMode`, this.$store.state.settings.darkMode)
 		}
 	},
 	methods: {

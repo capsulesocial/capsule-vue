@@ -1,63 +1,52 @@
 <template>
-  <section
+  <div
     :class="
       this.$store.state.settings.darkMode
         ? 'text-lightPrimaryText bg-lightBG'
         : 'text-darkPrimaryText bg-darkBG'
     "
   >
-    <!-- component -->
-    <div class="flex flex-row h-screen pt-12">
-      <div class="flex flex-row w-96 flex-shrink-0 p-4">
+    <section class="flex flex-row h-screen pt-12">
+      <article class="flex flex-row w-96 flex-shrink-0 p-4">
         <div class="flex flex-col w-full h-full pl-4 pr-4 py-4 -mr-4">
+          <!-- Left Column: Messages list -->
           <div class="flex flex-row items-center">
-            <div class="flex flex-row items-center">
-              <div class="text-xl font-semibold">
+            <span class="flex flex-row items-center">
+              <h3 class="text-xl font-semibold">
                 Messages
-              </div>
-              <div
+              </h3>
+              <h6
+                :class="
+                  this.$store.state.settings.darkMode
+                    ? 'text-lightOnSecondaryText bg-lightSecondary'
+                    : 'text-darkOnSecondaryText bg-darkSecondary'
+                "
+                class="flex items-center justify-center h-6 w-6 ml-2 text-sm rounded-full shadow-lg"
+              >
+                5
+              </h6>
+            </span>
+            <div class="ml-auto">
+              <button
                 :class="
                   this.$store.state.settings.darkMode
                     ? 'text-lightOnPrimaryText bg-lightPrimary'
                     : 'text-darkOnPrimaryText bg-darkPrimary'
                 "
-                class="flex items-center justify-center ml-2 text-xs h-5 w-5 rounded-full font-medium"
+                class="flex items-center justify-center p-2 rounded-full"
               >
-                5
-              </div>
-            </div>
-            <div class="ml-auto">
-              <button
-                class="flex items-center justify-center h-7 w-7 rounded-full"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="feather feather-mail"
-                >
-                  <path
-                    d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
-                  ></path>
-                  <polyline points="22,6 12,13 2,6"></polyline>
-                </svg>
+                <MailIcon />
               </button>
             </div>
           </div>
           <div class="mt-2">
             <div class="flex flex-col -mx-4">
-              <!-- Contact button (active) -->
+              <!-- Name & Contact card / button (active) -->
               <div
                 :class="
                   this.$store.state.settings.darkMode
-                    ? 'text-lightOnSurfaceVariantText bg-lightSurfaceVariant'
-                    : 'text-darkOnSurfaceVariantText bg-darkSurfaceVariant'
+                    ? 'text-lightPrimaryText bg-lightPrimary bg-opacity-25'
+                    : 'text-darkPrimaryText bg-darkPrimary bg-opacity-75'
                 "
                 class="relative flex flex-row items-center p-4 my-2 rounded-lg"
               >
@@ -68,7 +57,7 @@
                 </div>
                 <img class="w-10 h-10 rounded-lg flex-shrink-0 m-2" />
                 <div class="flex flex-col flex-grow ml-3">
-                  <div class="text-sm font-medium">
+                  <div class="text-sm font-bold">
                     Jack Dishman
                   </div>
                   <div class="text-xs truncate w-40">
@@ -102,10 +91,13 @@
             </div>
           </div>
         </div>
-      </div>
-      <div class="flex flex-col h-full w-full px-4 py-6">
+      </article>
+      <!-- Right column -->
+      <article
+        class="flex flex-col h-full w-full px-4 py-6"
+      >
         <!-- Header for selected chat -->
-        <div class="p-4 border-b flex">
+        <div class="p-4 flex">
           <img class="w-10 h-10 rounded-lg" />
           <span class="pl-2">
             <h4 class="text-lg font-bold">Jack Dishman</h4>
@@ -120,8 +112,8 @@
               <div
                 :class="
                   this.$store.state.settings.darkMode
-                    ? 'text-lightOnSurfaceText bg-lightSurface'
-                    : 'text-darkOnSurfaceVariantText bg-darkSurface'
+                    ? 'bg-lightSecondary shadow-lg bg-opacity-25'
+                    : 'bg-darkSecondary bg-opacity-75'
                 "
                 class="m-2 pt-4 px-2 rounded-lg"
               >
@@ -142,7 +134,7 @@
               <div
                 :class="
                   this.$store.state.settings.darkMode
-                    ? 'text-lightOnSurfaceText bg-lightSurface'
+                    ? 'bg-lightSurfaceVariant bg-opacity-25'
                     : 'text-darkOnSurfaceVariantText bg-darkSurface'
                 "
                 class="m-2 pt-4 px-2 rounded-lg"
@@ -155,95 +147,30 @@
                 </h6>
               </div>
             </div>
-            <!-- Message #3 -->
-            <div class="flex flex-row-reverse items-end">
-              <img class="w-10 h-10 rounded-lg flex-shrink-0 m-2" />
-              <div
-                :class="
-                  this.$store.state.settings.darkMode
-                    ? 'text-lightOnSurfaceText bg-lightSurface'
-                    : 'text-darkOnSurfaceVariantText bg-darkSurface'
-                "
-                class="m-2 pt-4 px-2 rounded-lg"
-              >
-                <p>
-                  Do you know what I mean?
-                </p>
-                <h6 class="text-xs text-right p-4">
-                  10:03 AM
-                </h6>
-              </div>
-            </div>
-            <!-- Message #4 -->
-            <div class="flex items-end p-4">
-              <img class="w-10 h-10 rounded-lg flex-shrink-0 m-2" />
-              <div
-                :class="
-                  this.$store.state.settings.darkMode
-                    ? 'text-lightOnSurfaceText bg-lightSurface'
-                    : 'text-darkOnSurfaceVariantText bg-darkSurface'
-                "
-                class="m-2 pt-4 px-2 rounded-lg"
-              >
-                <p>
-                  No clue what you're talking about, bro....
-                </p>
-                <h6 class="text-xs text-right p-4">
-                  10:43 AM
-                </h6>
-              </div>
-            </div>
-            <!-- Message #5 -->
-            <div class="flex items-end p-4">
-              <img class="w-10 h-10 rounded-lg flex-shrink-0 m-2" />
-              <div
-                :class="
-                  this.$store.state.settings.darkMode
-                    ? 'text-lightOnSurfaceText bg-lightSurface'
-                    : 'text-darkOnSurfaceVariantText bg-darkSurface'
-                "
-                class="m-2 pt-4 px-2 rounded-lg"
-              >
-                <p>
-                  But I respect your opinion!
-                </p>
-                <h6 class="text-xs text-right p-4">
-                  10:00 AM
-                </h6>
-              </div>
-            </div>
           </div>
         </div>
         <!-- Start of comment bar -->
         <div class="flex flex-row items-center">
           <div
-            class="flex flex-row items-center w-full border rounded-3xl h-10 px-2"
+            :class="
+              this.$store.state.settings.darkMode
+                ? 'text-lightPrimaryText bg-lightBG border-lightBorder'
+                : 'text-darkPrimaryText bg-darkBG border-darkBorder'
+            "
+            class="flex flex-row items-center w-full border rounded-xl h-10 px-2"
           >
             <button
-              class="flex items-center justify-center h-10 w-10 text-gray-400 ml-1"
+              class="flex items-center justify-center h-10 w-10 ml-1"
             >
-              <svg
-                class="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"
-                ></path>
-              </svg>
+              <AttachmentIcon />
             </button>
             <div class="w-full">
               <input
                 type="text"
                 :class="
                   this.$store.state.settings.darkMode
-                    ? 'text-lightPrimaryText bg-lightBG border-lightBorder'
-                    : 'text-darkPrimaryText bg-darkBG border-darkBorder'
+                    ? 'text-lightPrimaryText placeholder-lightSecondaryText bg-lightBG border-lightBorder'
+                    : 'text-darkPrimaryText placeholder-darkSecondaryText bg-darkBG border-darkBorder'
                 "
                 class="border-t border-b w-full focus:outline-none text-sm h-10 flex items-center"
                 placeholder="Type your message...."
@@ -251,38 +178,30 @@
             </div>
             <div class="flex flex-row">
               <button
-                class="flex items-center justify-center h-10 w-8 text-gray-400"
-              ></button>
-              <button
-                class="flex items-center justify-center h-10 w-8 text-gray-400 ml-1 mr-2"
+                class="flex items-center justify-center h-10 w-8 ml-1 mr-2"
               >
-                <svg
-                  class="w-5 h-5 transform rotate-90 -mr-px"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                  ></path>
-                </svg>
+                <SendIcon />
               </button>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
+      </article>
+    </section>
+  </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue"
+import MailIcon from '@/components/icons/Mail.vue'
+import AttachmentIcon from '@/components/icons/Attachment.vue'
+import SendIcon from '@/components/icons/Send.vue'
 
 export default Vue.extend({
+	components: {
+		MailIcon,
+		AttachmentIcon,
+		SendIcon,
+	},
 	layout: `Messages`,
 })
 </script>

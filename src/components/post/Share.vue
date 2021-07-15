@@ -51,7 +51,7 @@
 
 <script lang="ts">
 import Vue from "vue"
-import SendIcon from "@/components/icons/Send.vue"
+import SendIcon from "@/components/icons/Share.vue"
 import TwitterIcon from "@/components/icons/brands/Twitter.vue"
 import LinkIcon from "@/components/icons/Link.vue"
 import RepostIcon from "@/components/icons/Repost.vue"

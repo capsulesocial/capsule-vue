@@ -1,7 +1,7 @@
 <template>
   <button
     :class="this.getStyles()"
-    class="transition duration-500 ease-in-out transform hover:scale-110font-bold rounded-lg shadow-lg focus:outline-none"
+    class="transition duration-500 ease-in-out transform hover:scale-110 font-bold rounded-xl shadow-lg focus:outline-none"
     @click="this.$props.action"
   >
     <span class="font-sans">

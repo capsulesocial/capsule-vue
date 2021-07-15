@@ -18,7 +18,6 @@
       <!-- Main Content -->
       <Nuxt class="border-l md:ml-24 xl:ml-64 md:min-w-max md:max-w-3xl" />
     </div>
-    <ColorMode class="fixed bottom-0 right-0 m-5" />
   </main>
 </template>
 
@@ -27,14 +26,12 @@ import Vue from 'vue'
 import Navigation from '@/components/Navigation.vue'
 import Header from '@/components/Header.vue'
 import PostEditor from '@/components/post/Editor.vue'
-import ColorMode from '@/components/ColorMode.vue'
 
 export default Vue.extend({
 	components: {
 		Navigation,
 		Header,
 		PostEditor,
-		ColorMode,
 	},
 	created () {
 		if (this.$store.state.session.cid === ``) {

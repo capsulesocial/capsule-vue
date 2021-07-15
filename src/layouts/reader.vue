@@ -15,20 +15,16 @@
         <CloseButton class="lg:hidden" />
       </button>
     </div>
-    <!-- Toggle Light / Dark Mode -->
-    <ColorMode class="fixed bottom-0 right-0 m-5 mr-6" />
   </main>
 </template>
 
 <script>
 import CloseButton from '@/components/icons/Close.vue'
-import ColorMode from '@/components/ColorMode.vue'
 
 export default {
 	name: `ReaderLayout`,
 	components: {
 		CloseButton,
-		ColorMode,
 	},
 }
 </script>
