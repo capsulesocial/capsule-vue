@@ -17,7 +17,9 @@ declare module 'vue/types/vue' {
 }
 
 const ipfsPlugin: Plugin = async (_context, inject) => {
-	const node = await IPFS.create()
+	const node = await IPFS.create({
+		init: { algorithm: `ed25519` },
+	})
 	const version = await node.version()
 
 	// eslint-disable-next-line no-console
