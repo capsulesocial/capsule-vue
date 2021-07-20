@@ -1,6 +1,6 @@
 <template>
-  <div v-if="this.post">
-    <section v-if="this.post !== {}" class="pb-16 lg:pb-5 m-5">
+  <div v-if="this.post" class="w-full">
+    <section v-if="this.post !== {}" class="pb-16 md:pb-5 md:pl-5 m-5">
       <article>
         <h1
           :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
@@ -51,7 +51,7 @@
       <!-- Content -->
       <div
         :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-        class="prose lg:prose-lg max-w-none pl-4 content"
+        class="prose lg:prose-lg max-w-none content"
         v-html="this.content"
       ></div>
 
@@ -151,7 +151,6 @@ export default Vue.extend({
 		ChevronDown,
 	},
 	mixins: [markdown],
-	layout: `reader`,
 	data () {
 		return {
 			post: {},

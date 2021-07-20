@@ -66,18 +66,18 @@
           Bookmarks
         </strong>
       </nuxt-link>
-      <div
+      <nuxt-link
+        to="/post"
         :class="this.$store.state.settings.darkMode ? 'text-lightOnPrimaryText bg-lightPrimary' : 'text-darkOnPrimary bg-darkPrimary'"
         class="xl:hidden group flex items-center p-2 text-base leading-6 m-2 mt-16 text-xl rounded-xl"
-        @click="toggleDraftMode"
       >
         <span
           class="p-2"
         >
           <PencilIcon class="fill-current" />
         </span>
-      </div>
-      <BrandedButton text="Write Post" :action="toggleDraftMode" class="hidden xl:block mt-5 w-48 px-12 py-4 mt-16" />
+      </nuxt-link>
+      <BrandedButton text="Write Post" :action="redirect" class="hidden xl:block mt-5 w-48 px-12 py-4 mt-16" />
     </div>
 
     <!-- Mobile -->
@@ -96,12 +96,12 @@
         />
         <DiscoverIcon v-else class="stroke-current text-gray-400" />
       </nuxt-link>
-      <button
+      <nuxt-link
+        to="/post"
         class="focus:outline-none bg-primary p-4 rounded-full shadow-lg"
-        @click="toggleDraftMode()"
       >
         <PencilIcon class="fill-current text-white" />
-      </button>
+      </nuxt-link>
       <ProfileIcon
         v-if="this.$route.params.id === this.$store.state.session.cid"
         class="stroke-current text-primary"
@@ -156,6 +156,10 @@ export default Vue.extend({
 		}),
 		toggleProfileActions () {
 			this.isProfileActions = !this.isProfileActions
+		},
+		redirect () {
+			this.$router.push(`/post`)
+			console.log(`redirect`)
 		},
 		getStyles (tab: string): string {
 			let res = ``

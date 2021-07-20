@@ -40,7 +40,7 @@ module.exports = {
         lightOnPrimaryText: '#FFFFFF',
         lightOnSecondaryText: '#000000',
         lightOnSurfaceText: '#000000',
-        lightOnSurfaceVariantText: '#C2C2C2',
+        lightOnSurfaceVariantText: '#000000',
         lightBorder: '#777777',
         lightDialog: '#EEEEEE',
         lightButtonBG: '#1E566C',

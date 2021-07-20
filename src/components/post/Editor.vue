@@ -1,231 +1,55 @@
 <template>
   <section
-    class="w-full h-auto"
+    class="w-full h-auto mt-16 pt-2 border-l border-r"
     :class="this.$store.state.settings.darkMode ? 'bg-lightBG text-lightPrimaryText' : 'bg-darkBG text-darkPrimaryText'"
   >
     <!-- Header and close button -->
-    <article class="flex items-center px-5 pt-5">
-      <h3 class="text-center font-bold text-xl flex-grow pl-4">
-        Create Post
-      </h3>
-      <button class="focus:outline-none flex-grow-0" @click="updateStore()">
-        <CloseIcon />
-      </button>
-    </article>
-
-    <!-- Mobile Editor -->
-    <article class="m-5 lg:hidden pb-48">
-      <div class="w-full">
-        <!-- Title declaration -->
-        <div v-if="this.mobileState === 'edit'" class="flex flex-col">
-          <label
-            for="title"
-            :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-            class="italic text-sm"
-          >Title:</label>
-          <input
-            v-model="title"
-            type="text"
-            placeholder="Enter Title"
-            :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'bg-darkBG text-darkPrimaryText'"
-            class="border-b text-4xl focus:outline-none text-xl w-full pb-2"
-          />
-          <label
-            for="subtitle"
-            :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-            class="italic pt-2 text-sm"
-          >Subtitle:</label>
-          <input
-            v-model="subtitle"
-            type="text"
-            placeholder="Enter Subtitle"
-            :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'bg-darkBG text-darkPrimaryText'"
-            class="border-b text-2xl focus:outline-none text-xl w-full pb-2"
-          />
-          <p
-            :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-            class="text-sm py-4"
-          >
-            By: {{ this.$store.state.session.name }}
-          </p>
-          <!-- Upload Featured Image -->
-          <button class="pb-2" @click="$refs.featuredPhoto.click()">
-            <input
-              id="featured-photo"
-              ref="featuredPhoto"
-              class="hidden"
-              name="photo"
-              type="file"
-              accept="image/*"
-              @change="handleImage"
-            >
-            <img
-              v-if="this.featuredPhoto !== null"
-              :src="this.featuredPhoto"
-            />
-            <div
-              v-else
-              :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-              class="flex justify-center items-center"
-            >
-              <CameraIcon class="mr-2" />
-              Featured Photo
-            </div>
-          </button>
-        </div>
-      </div>
-      <div
-        v-if="this.mobileState === 'edit'"
-        :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-        class="w-full flex justify-around text-primary px-2"
-      >
-        <button @click="addMarkdown('**', true)">
-          <BoldIcon />
-        </button>
-        <button @click="addMarkdown('*', true)">
-          <ItalicIcon />
-        </button>
-        <button @click="addMarkdown('\n* ')">
-          <ListIcon />
-        </button>
-        <button @click="addMarkdown('\n1. ')">
-          1.
-        </button>
-        <button @click="addMarkdown('\n# ')">
-          H1
-        </button>
-        <button @click="addMarkdown('\n## ')">
-          H2
-        </button>
-        <button @click="addMarkdown('\n### ')">
-          H3
-        </button>
-        <button @click="addMarkdown('\n> ')">
-          <QuoteIcon />
-        </button>
-        <button @click="addMarkdown('\n```\n', true)">
-          <CodeIcon />
-        </button>
-        <button @click="addMarkdown('[title](https://www.example.com)')">
-          <LinkIcon />
-        </button>
-        <button @click="addMarkdown('![alt text](https://picsum.photos/200)')">
-          <ImageIcon />
-        </button>
-      </div>
-
-      <textarea
-        v-if="this.mobileState === 'edit'"
-        ref="ta"
-        :value="input"
-        :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText border-lightBorder bg-lightBG' : 'text-darkPrimaryText border-darkBorder bg-darkBG focus:outline-none'"
-        class="w-full border p-1 h-64"
-        @input="update"
-      ></textarea>
-      <div v-else>
-        <h2
-          :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-          class="text-4xl"
-        >
-          {{ this.title }}
-        </h2>
-        <h4
-          :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-          class="text-2xl"
-        >
-          {{ this.subtitle }}
-        </h4>
+    <article
+      :class="this.$store.state.settings.darkMode ? 'text-lightOnSurfaceVariantText bg-lightSurfaceVariant bg-opacity-25' : 'text-darkOnSurfaceVariantText bg-darkSurfaceVariant bg-opacity-75'"
+      class="flex items-center justify-between p-5 border-b"
+    >
+      <div class="flex items-center">
+        <h3 class="font-bold text-2xl pr-4">
+          New Post
+        </h3>
         <h6
-          :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-          class="text-sm py-4"
-        >
-          By: {{ this.$store.state.session.name }}
-        </h6>
-        <div class="prose" v-html="compiledMarkdown"></div>
+          :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryVariant' : 'text-darkPrimaryVariant'"
+        >Category</h6>
       </div>
+      <h6>Saved to drafts</h6>
     </article>
 
-    <!-- Desktop Editor -->
-    <article class="mt-5 hidden lg:grid grid-cols-2">
-      <div class="px-5">
-        <div
-          :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-          class="w-full flex justify-around px-2"
-        >
-          <button @click="addMarkdown('**', true)">
-            <BoldIcon />
-          </button>
-          <button @click="addMarkdown('*', true)">
-            <ItalicIcon />
-          </button>
-          <button @click="addMarkdown('\n* ')">
-            <ListIcon />
-          </button>
-          <button @click="addMarkdown('\n1. ')">
-            1.
-          </button>
-          <button @click="addMarkdown('\n# ')">
-            H1
-          </button>
-          <button @click="addMarkdown('\n## ')">
-            H2
-          </button>
-          <button @click="addMarkdown('\n### ')">
-            H3
-          </button>
-          <button @click="addMarkdown('\n> ')">
-            <QuoteIcon />
-          </button>
-          <button @click="addMarkdown('\n```\n', true)">
-            <CodeIcon />
-          </button>
-          <button @click="addMarkdown('[title](https://www.example.com)')">
-            <LinkIcon />
-          </button>
-          <button
-            @click="addMarkdown('![alt text](https://picsum.photos/200)')"
-          >
-            <ImageIcon />
-          </button>
-        </div>
-        <textarea
-          ref="ta"
-          :value="input"
-          :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText border-lightBorder bg-lightBG' : 'text-darkPrimaryText border-darkBorder bg-darkBG focus:outline-none'"
-          class="w-full border p-1 h-64"
-          @input="update"
-        ></textarea>
-      </div>
-
-      <div class="border rounded-lg p-5 m-5 shadow-lg">
-        <!-- Title declaration -->
-        <div class="flex flex-col items-center">
-          <label for="title" class="hidden">Title</label>
-          <input
-            v-model="title"
-            type="text"
-            placeholder="Enter Title"
-            :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText bg-lightBG placeholder-lightSecondaryText' : 'text-darkPrimaryText bg-darkBG placeholder-darkSecondaryText'"
-            class="text-4xl focus:outline-none text-xl w-full pb-2"
-          />
-          <label for="subtitle" class="hidden">Subtitle:</label>
-          <input
-            v-model="subtitle"
-            type="text"
-            placeholder="Enter Subtitle"
-            :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText bg-lightBG placeholder-lightSecondaryText' : 'text-darkPrimaryText bg-darkBG placeholder-darkSecondaryText'"
-            class="text-2xl focus:outline-none text-xl w-full pb-2"
-          />
-        </div>
+    <!-- Title, subtitle, author -->
+    <article class="p-5 flex justify-between">
+      <div>
+        <label for="title" class="hidden">Title</label>
+        <input
+          v-model="title"
+          type="text"
+          placeholder="Enter Title"
+          :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText bg-lightBG placeholder-lightSecondaryText' : 'text-darkPrimaryText bg-darkBG placeholder-darkSecondaryText'"
+          class="text-4xl focus:outline-none text-xl w-full pb-2"
+        />
+        <label for="subtitle" class="hidden">Subtitle:</label>
+        <input
+          v-model="subtitle"
+          type="text"
+          placeholder="Enter Subtitle"
+          :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText bg-lightBG placeholder-lightSecondaryText' : 'text-darkPrimaryText bg-darkBG placeholder-darkSecondaryText'"
+          class="text-2xl focus:outline-none text-xl w-full pb-2"
+        />
         <h6
           :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
           class="text-sm pb-4"
         >
           By: {{ this.$store.state.session.name }}
         </h6>
+      </div>
+      <div>
         <!-- Upload Featured Image -->
         <button
-          :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+          class="rounded-lg px-4 py-2"
+          :class="this.$store.state.settings.darkMode ? 'bg-lightSecondary text-lightOnSecondaryText' : 'bg-darkSecondary text-darkOnSecondaryText'"
           @click="$refs.featuredPhoto.click()"
         >
           <input
@@ -237,36 +61,113 @@
             accept="image/*"
             @change="handleImage"
           >
-          <img
-            v-if="this.featuredPhoto !== null"
-            :src="this.featuredPhoto"
-          />
           <div
-            v-else
-            class="flex justify-center items-center"
+            class="flex justify-center items-center focus:outline-none"
           >
             <CameraIcon class="mr-2" />
-            Featured Photo
+            <span class="w-32">Featured Photo</span>
           </div>
         </button>
-        <!-- Content -->
+      </div>
+    </article>
+
+    <article class="px-5">
+      <img
+        v-if="this.featuredPhoto !== null"
+        :src="this.featuredPhoto"
+      />
+    </article>
+
+    <article class="p-5">
+      <!-- Preview Content -->
+      <div
+        v-if="showPreview"
+        class="preview w-full"
+        @click="showPreview = false"
+      >
+        <div class="flex items-center h-12 border-b">
+          <PencilIcon />
+          <p class="pl-2">
+            Post preview: Click to Edit
+          </p>
+        </div>
         <div
-          :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-          class="prose pt-3"
+          class="prose preview w-full h-64"
           v-html="compiledMarkdown"
         ></div>
       </div>
+      <!-- Show Editor -->
+      <!-- <div v-else class="editor">
+        <div
+          :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+          class="w-full flex editor h-12"
+        >
+          <button class="p-2 editor" @click="addMarkdown('**', true)">
+            <BoldIcon class="editor" />
+          </button>
+          <button class="p-2 editor" @click="addMarkdown('*', true)">
+            <ItalicIcon class="editor" />
+          </button>
+          <button class="p-2 editor" @click="addMarkdown('\n* ')">
+            <ListIcon class="editor" />
+          </button>
+          <button class="p-2 editor" @click="addMarkdown('\n1. ')">
+            1.
+          </button>
+          <button class="p-2 editor" @click="addMarkdown('\n# ')">
+            H1
+          </button>
+          <button class="p-2 editor" @click="addMarkdown('\n## ')">
+            H2
+          </button>
+          <button class="p-2 editor" @click="addMarkdown('\n### ')">
+            H3
+          </button>
+          <button class="p-2 editor" @click="addMarkdown('\n> ')">
+            <QuoteIcon class="editor" />
+          </button>
+          <button class="px-2 editor" @click="addMarkdown('\n```\n', true)">
+            <CodeIcon class="editor" />
+          </button>
+          <button class="p-2 editor" @click="addMarkdown('[title](https://www.example.com)')">
+            <LinkIcon class="editor" />
+          </button>
+          <button
+            class="px-2 editor"
+            @click="addMarkdown('![alt text](https://picsum.photos/200)')"
+          >
+            <ImageIcon class="editor" />
+          </button>
+        </div> -->
+        <!-- Text area -->
+        <!-- <textarea
+          ref="ta"
+          :value="input"
+          :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText border-lightBorder bg-lightBG' : 'text-darkPrimaryText border-darkBorder bg-darkBG focus:outline-none'"
+          class="w-full border-t border-b h-64 focus:outline-none"
+          @input="update"
+        ></textarea> -->
+        <VueSimplemde v-model="input" :sanitize="true" :highlight="false" :configs=" { spellChecker: false }" />
+        <!-- <h6> {{ this.input.length }} characters</h6> -->
+      <!-- </div> -->
+    </article>
+
+    <article class="flex">
       <!-- Bottom footer: Tags and Publish button -->
+      <footer v-if="this.showPreview === true" class="w-full p-5">
+        <TagCard v-for="t in this.tags" :key="t.name" :tag="t.name" />
+      </footer>
       <footer
-        class="bottom-0 fixed m-5 p-5 w-full flex flex-row justify-between"
+        v-else
+        class="editor w-full p-5 flex flex-row justify-between"
       >
         <div
           :class="this.$store.state.settings.darkMode ? 'border-lightBorder bg-lightBG' : 'border-darkBorder bg-darkBG'"
-          class="flex items-center border rounded-full"
+          class="editor flex flex-nowrap overflow-x-auto items-center border rounded-full"
         >
           <span
             :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-            class="rounded-full pl-4 shadow-lg"
+            class="editor flex flex-no-wrap items-center rounded-full pl-4"
           >
             <label for="tag" class="hidden" value="Enter hashtags"></label>
             #<input
@@ -274,63 +175,25 @@
               type="text"
               placeholder="tag"
               :class="this.$store.state.settings.darkMode ? 'bg-lightBG text-lightPrimaryText placeholder-lightSecondaryText' : 'bg-darkBG  text-darkPrimaryText placeholder-darkSecondaryText'"
-              class="focus:outline-none w-32 pr-1 py-2 pl-1"
+              class="editor focus:outline-none w-32 pr-1 py-2 pl-1"
             />
           </span>
           <button
-            class="rounded-full bg-primary border border-white p-2 focus:outline-none"
+            class="editor rounded-full bg-primary border border-white p-2 focus:outline-none"
             @click="addTag"
           >
-            <span class="text-white"><PlusIcon /></span>
+            <span class="editor text-white"><PlusIcon class="editor" /></span>
           </button>
-          <span v-for="t in this.tags" :key="t.name" class="mx-2">
-            <h6 class="inline">#{{ t['name'] }}</h6>
-            <button @click="removeTag(t)">❌</button></span>
+          <span v-for="t in this.tags" :key="t.name" class="editor flex flex-no-wrap items-center mx-2">
+            <h6 class="editor inline">#{{ t['name'] }}</h6>
+            <button class="editor ml-1" @click="removeTag(t)">❌</button></span>
         </div>
-        <BrandedButton text="Publish" :action="post" class="mr-10" />
       </footer>
-    </article>
-
-    <!-- Mobile Toggle for Edit / Preview -->
-    <article class="lg:hidden fixed bottom-0 w-full pb-20 bg-white">
-      <div class="px-5 py-2 flex items-center">
-        <label for="tag" class="hidden" value="Enter hashtags"></label>#<input
-          v-model="tag"
-          type="text"
-          placeholder="tag"
-          class="focus:outline-none w-24 px-1 py-2 border-b border-primary"
-        />
-        <button
-          class="focus:outline-none bg-primary rounded-full text-white p-1"
-          @click="addTag"
-        >
-          <span class=""><PlusIcon /></span>
-        </button>
-        <span v-for="t in this.tags" :key="t.name" class="mx-2">
-          <h6 class="inline text-primary">#{{ t }}</h6>
-          <button @click="removeTag(t)">❌</button></span>
-      </div>
-
-      <div class="grid grid-cols-3 px-2">
-        <button class="focus:outline-none" @click="toggleComposeState('edit')">
-          <span
-            v-if="mobileState === 'edit'"
-            class="font-bold text-primary text-xl"
-          >Edit</span>
-          <span v-else class="text-xl">Edit</span>
-        </button>
-        <button
-          class="focus:outline-none"
-          @click="toggleComposeState('preview')"
-        >
-          <span
-            v-if="mobileState === 'preview'"
-            class="font-bold text-primary text-xl"
-          >Preview</span>
-          <span v-else class="text-xl">Preview</span>
-        </button>
-        <BrandedButton text="Publish" :action="post" />
-      </div>
+      <BrandedButton
+        text="Publish"
+        :action="post"
+        class="editor preview justify-self-end w-32 h-12 self-center mr-5"
+      />
     </article>
   </section>
 </template>
@@ -343,17 +206,19 @@ import { mapMutations, mapActions } from 'vuex'
 import _ from 'lodash'
 import DOMPurify from 'dompurify'
 import marked from 'marked'
-import CloseIcon from '@/components/icons/Close.vue'
+
 import CameraIcon from '@/components/icons/Camera.vue'
-import BoldIcon from '@/components/icons/md/Bold.vue'
-import CodeIcon from '@/components/icons/md/Code.vue'
-import ItalicIcon from '@/components/icons/md/Italic.vue'
-import ListIcon from '@/components/icons/md/List.vue'
-import LinkIcon from '@/components/icons/md/Link.vue'
-import ImageIcon from '@/components/icons/md/Image.vue'
-import QuoteIcon from '@/components/icons/md/Quote.vue'
+// import BoldIcon from '@/components/icons/md/Bold.vue'
+// import CodeIcon from '@/components/icons/md/Code.vue'
+// import ItalicIcon from '@/components/icons/md/Italic.vue'
+// import ListIcon from '@/components/icons/md/List.vue'
+// import LinkIcon from '@/components/icons/md/Link.vue'
+// import ImageIcon from '@/components/icons/md/Image.vue'
+// import QuoteIcon from '@/components/icons/md/Quote.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 import PlusIcon from '@/components/icons/Plus.vue'
+import PencilIcon from '@/components/icons/Pencil.vue'
+import TagCard from '@/components/Tag.vue'
 import markdown from '@/mixins/markdown.js'
 import { Post } from '@/interfaces/Post'
 import { Tag } from '@/interfaces/Tag'
@@ -363,17 +228,18 @@ import { actionType, namespace as settingStoreNamespace } from '~/store/settings
 
 export default Vue.extend({
 	components: {
-		CloseIcon,
-		BoldIcon,
-		CodeIcon,
-		ItalicIcon,
-		ListIcon,
-		LinkIcon,
-		ImageIcon,
-		QuoteIcon,
+		// BoldIcon,
+		// CodeIcon,
+		// ItalicIcon,
+		// ListIcon,
+		// LinkIcon,
+		// ImageIcon,
+		// QuoteIcon,
 		BrandedButton,
 		CameraIcon,
 		PlusIcon,
+		PencilIcon,
+		TagCard,
 	},
 	mixins: [markdown],
 	data () {
@@ -388,6 +254,7 @@ export default Vue.extend({
 			title: this.$store.state.draft.title,
 			subtitle: this.$store.state.draft.subtitle,
 			input,
+			showPreview: false,
 			mobileState: `edit`,
 			tags,
 			tag: ``,
@@ -401,6 +268,12 @@ export default Vue.extend({
 			return md
 		},
 	},
+	// mounted () {
+	// 	window.addEventListener(`mousedown`, this.previewHandler)
+	// },
+	// beforeDestroy () {
+	// 	window.removeEventListener(`mousedown`, this.previewHandler)
+	// },
 	methods: {
 		...mapActions(settingStoreNamespace, {
 			toggleDraftMode: actionType.TOGGLE_DRAFT_MODE,
@@ -491,14 +364,6 @@ export default Vue.extend({
 				this.$sendPost(p).then((cid) => {
 					// eslint-disable-next-line no-console
 					p.cid = cid
-					// this.$store.commit('posts/sendPost', p.id)
-					// this.$store.commit('posts/sendPost', p.cid)
-					// this.$store.commit('tags/sendPost', p)
-					// this.$store.commit('posts/addTag', p.tags)
-					// for (let t in p.tags) {
-					//   console.log(t)
-					//   this.addTag(p.tags)
-					// }
 					// Adding post to local profile object
 					this.$store.commit(`posts/addPost`, p)
 					this.addPost(p)
@@ -548,6 +413,26 @@ export default Vue.extend({
               selectedText +
               this.input.substring(cursorEnd)
 					}
+				}
+			}
+		},
+		previewHandler (e: any): void {
+			if (!e.target) {
+				return
+			}
+			if (this.showPreview === false) {
+				if (e.target.parentNode === null ||
+          e.target.parentNode.classList === undefined ||
+          !e.target.parentNode.classList.contains(`editor`)) {
+					this.showPreview = true
+				}
+			}
+			if (this.showPreview === true) {
+				if (e.target.parentNode === null ||
+          e.target.parentNode.classList === undefined ||
+          e.target.parentNode.classList.contains(`preview`)) {
+					e.stopPropagation()
+					this.showPreview = false
 				}
 			}
 		},

@@ -27,6 +27,7 @@ const config: NuxtConfig = {
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
+    'simplemde/dist/simplemde.min.css',
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
@@ -35,6 +36,7 @@ const config: NuxtConfig = {
     { src: "@/plugins/helpers.ts" },
     { src: "@/plugins/ipfs.ts" },
     { src: "@/plugins/auth.ts" },
+    { src: '@/plugins/mde.ts' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

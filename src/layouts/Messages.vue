@@ -3,13 +3,6 @@
     :class="this.$store.state.settings.darkMode ? 'bg-lightBG' : 'bg-darkBG'"
     class="h-screen"
   >
-    <div
-      v-if="this.$store.state.settings.draftMode === true"
-      class="w-full h-full z-30 bg-white absolute"
-    >
-      <PostEditor class="z-40" />
-    </div>
-
     <Header class="fixed top-0" />
 
     <div class="flex justify-center">
@@ -25,13 +18,11 @@
 import Vue from 'vue'
 import Navigation from '@/components/Navigation.vue'
 import Header from '@/components/Header.vue'
-import PostEditor from '@/components/post/Editor.vue'
 
 export default Vue.extend({
 	components: {
 		Navigation,
 		Header,
-		PostEditor,
 	},
 	created () {
 		if (this.$store.state.session.cid === ``) {

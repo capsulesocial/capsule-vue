@@ -1,26 +1,25 @@
 <template>
   <main
     :class="this.$store.state.settings.darkMode ? 'bg-lightBG' : 'bg-darkBG'"
-    class="h-full p-0 m-0"
+    class=""
   >
-    <Header class="sticky top-0" />
-    <div class="flex justify-center min-h-full">
-      <!-- Left Nav Menu -->
-      <Navigation class="flex lg:pr-0 xl:pr-8" />
+    <div class="fixed top-0 flex justify-center w-full border-b">
+      <Header class="w-full md:min-w-max md:max-w-4xl border-none" />
+    </div>
+
+    <div class="flex justify-center">
       <!-- Main Content -->
-      <Nuxt class="mb-20 md:mb-5 border-l md:ml-24 xl:ml-64 md:min-w-max md:max-w-3xl" />
+      <Nuxt class="md:min-w-max md:max-w-4xl" />
     </div>
   </main>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import Navigation from '@/components/Navigation.vue'
 import Header from '@/components/Header.vue'
 
 export default Vue.extend({
 	components: {
-		Navigation,
 		Header,
 	},
 	created () {

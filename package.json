@@ -92,6 +92,7 @@
     "nuxt": "^2.14.12",
     "scrypt-wasm": "^0.1.1",
     "ts-loader": "^8.2.0",
+    "vue-simplemde": "^2.0.0",
     "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
