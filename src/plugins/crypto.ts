@@ -36,7 +36,7 @@ async function hkdf (password: string, salt: string) {
 	}
 }
 
-async function encryptData (key: string, data: string, nonce: Uint8Array) {
+async function encryptData (key: string, data: Uint8Array, nonce: Uint8Array) {
 	const ec = new TextEncoder()
 	const derivedKey = await window.crypto.subtle.importKey(
 		`raw`,
@@ -52,7 +52,7 @@ async function encryptData (key: string, data: string, nonce: Uint8Array) {
 		name: `AES-GCM`,
 		iv: nonce,
 		tagLength: 128,
-	}, derivedKey, ec.encode(data))
+	}, derivedKey, data)
 
 	return encryptedData
 }
@@ -66,7 +66,7 @@ async function scrypt (str: string, salt: string) {
 	return hashedStr
 }
 
-async function getEncryptedPeerIDPrivateKey (payload: Profile, peerIDPrivateKey: string) {
+async function getEncryptedPeerIDPrivateKey (payload: Profile, peerIDPrivateKey: Uint8Array) {
 	// HKDF(key: userPassword, info: "CapsuleBlogchainAuth", salt: peerIDPublicKey)
 	const hps = await hkdf(payload.password, payload.id)
 	const hp = Object.values(hps)
