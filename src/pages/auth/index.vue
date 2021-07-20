@@ -226,9 +226,9 @@ export default Vue.extend({
 						avatar: ``,
 					}
 					const node = this.$getNode()
-					const [peerIDPrivateKey, peerID] = await Promise.all([node.key.export(`self`, `password`), node.id()])
-					const peerIDPublicKey = peerID.publicKey
-					const _res = await this.$register(account, peerIDPrivateKey, peerIDPublicKey)
+					// Export private key: encrypt it using AES-GCM (for Ed25519 keys)
+					const peerIDPrivateKey = await node.key.export(`self`, `password`)
+					const _res = await this.$register(account, peerIDPrivateKey)
 					console.log(_res)
 					account.password = ``
 					this.$sendProfile(account).then((cid) => {
