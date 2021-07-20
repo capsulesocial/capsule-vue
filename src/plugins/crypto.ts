@@ -7,7 +7,7 @@ declare module 'vue/types/vue' {
 	}
 }
 
-async function hkdf (password: string, peerIDPublicKey: string) {
+async function hkdf (password: string, salt: string) {
 	const ec = new TextEncoder()
 	const key = await window.crypto.subtle.importKey(
 		`raw`,
@@ -24,7 +24,7 @@ async function hkdf (password: string, peerIDPublicKey: string) {
 		name: `HKDF`,
 		hash: `SHA-256`,
 		info: ec.encode(`CapsuleBlogchainAuth`),
-		salt: ec.encode(peerIDPublicKey),
+		salt: ec.encode(salt),
 	}, key, 512)
 
 	const keyval = new Uint8Array(derivedKey)
@@ -66,9 +66,9 @@ async function scrypt (str: string, salt: string) {
 	return hashedStr
 }
 
-async function getEncryptedPeerIDPrivateKey (payload: Profile, peerIDPrivateKey: string, peerIDPublicKey: string) {
+async function getEncryptedPeerIDPrivateKey (payload: Profile, peerIDPrivateKey: string) {
 	// HKDF(key: userPassword, info: "CapsuleBlogchainAuth", salt: peerIDPublicKey)
-	const hps = await hkdf(payload.password, peerIDPublicKey)
+	const hps = await hkdf(payload.password, payload.id)
 	const hp = Object.values(hps)
 	// peerIDEncryptionKey = SCRYPT (pw: hp0, salt: "CapsuleBlogchainAuth-${username}", N=2^15, r=8, p=1)
 	const peerIDEncryptionKey = await scrypt(hp[0], `CapsuleBlogchainAuth-` + payload.id)
