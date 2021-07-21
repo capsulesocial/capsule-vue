@@ -2,6 +2,36 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+@layer base {
+  .editable h1 {
+    @apply text-2xl
+  }
+  .editable h2 {
+    @apply text-xl
+  }
+  .editable h3 {
+    @apply text-lg
+  }
+  .editable a {
+    @apply text-primary
+  }
+  .medium-editor-toolbar {
+    @apply bg-white border rounded-xl
+  }
+  blockquote {
+    @apply pl-2 border-l-2 border-primary
+  }
+  .medium-toolbar-arrow-under:after {
+    @apply border-primary bg-white
+  }
+  .medium-editor-anchor-preview {
+    @apply bg-white
+  }
+  .medium-editor-anchor-preview a {
+    @apply border
+  }
+}
+
 /* Noto Sans */
 @font-face {
   font-family: "NotoSans-Black";

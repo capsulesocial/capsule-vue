@@ -1,6 +1,6 @@
 <template>
   <section
-    class="w-full h-auto mt-16 pt-2 border-l border-r"
+    class="w-full h-auto border-l border-r"
     :class="this.$store.state.settings.darkMode ? 'bg-lightBG text-lightPrimaryText' : 'bg-darkBG text-darkPrimaryText'"
   >
     <!-- Header and close button -->
@@ -14,9 +14,14 @@
         </h3>
         <h6
           :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryVariant' : 'text-darkPrimaryVariant'"
-        >Category</h6>
+        >
+          Category
+        </h6>
       </div>
-      <h6>Saved to drafts</h6>
+      <button class="flex items-center" @click="updateStore">
+        Save and Close
+        <CloseIcon class="ml-2" />
+      </button>
     </article>
 
     <!-- Title, subtitle, author -->
@@ -78,96 +83,27 @@
       />
     </article>
 
-    <article class="p-5">
-      <!-- Preview Content -->
+    <!-- WYSIWYG -->
+    <article class="px-5">
       <div
-        v-if="showPreview"
-        class="preview w-full"
-        @click="showPreview = false"
-      >
-        <div class="flex items-center h-12 border-b">
-          <PencilIcon />
-          <p class="pl-2">
-            Post preview: Click to Edit
-          </p>
-        </div>
-        <div
-          class="prose preview w-full h-64"
-          v-html="compiledMarkdown"
-        ></div>
-      </div>
-      <!-- Show Editor -->
-      <!-- <div v-else class="editor">
-        <div
-          :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-          class="w-full flex editor h-12"
-        >
-          <button class="p-2 editor" @click="addMarkdown('**', true)">
-            <BoldIcon class="editor" />
-          </button>
-          <button class="p-2 editor" @click="addMarkdown('*', true)">
-            <ItalicIcon class="editor" />
-          </button>
-          <button class="p-2 editor" @click="addMarkdown('\n* ')">
-            <ListIcon class="editor" />
-          </button>
-          <button class="p-2 editor" @click="addMarkdown('\n1. ')">
-            1.
-          </button>
-          <button class="p-2 editor" @click="addMarkdown('\n# ')">
-            H1
-          </button>
-          <button class="p-2 editor" @click="addMarkdown('\n## ')">
-            H2
-          </button>
-          <button class="p-2 editor" @click="addMarkdown('\n### ')">
-            H3
-          </button>
-          <button class="p-2 editor" @click="addMarkdown('\n> ')">
-            <QuoteIcon class="editor" />
-          </button>
-          <button class="px-2 editor" @click="addMarkdown('\n```\n', true)">
-            <CodeIcon class="editor" />
-          </button>
-          <button class="p-2 editor" @click="addMarkdown('[title](https://www.example.com)')">
-            <LinkIcon class="editor" />
-          </button>
-          <button
-            class="px-2 editor"
-            @click="addMarkdown('![alt text](https://picsum.photos/200)')"
-          >
-            <ImageIcon class="editor" />
-          </button>
-        </div> -->
-        <!-- Text area -->
-        <!-- <textarea
-          ref="ta"
-          :value="input"
-          :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText border-lightBorder bg-lightBG' : 'text-darkPrimaryText border-darkBorder bg-darkBG focus:outline-none'"
-          class="w-full border-t border-b h-64 focus:outline-none"
-          @input="update"
-        ></textarea> -->
-        <VueSimplemde v-model="input" :sanitize="true" :highlight="false" :configs=" { spellChecker: false }" />
-        <!-- <h6> {{ this.input.length }} characters</h6> -->
-      <!-- </div> -->
+        :v-model="this.input"
+        class="editable focus:outline-none h-64 border-t border-b py-5"
+      ></div>
     </article>
 
     <article class="flex">
       <!-- Bottom footer: Tags and Publish button -->
-      <footer v-if="this.showPreview === true" class="w-full p-5">
-        <TagCard v-for="t in this.tags" :key="t.name" :tag="t.name" />
-      </footer>
       <footer
-        v-else
-        class="editor w-full p-5 flex flex-row justify-between"
+        class="w-full p-5 flex flex-row justify-between"
       >
+        <TagCard v-for="t in this.tags" :key="t.name" :tag="t.name" />
         <div
           :class="this.$store.state.settings.darkMode ? 'border-lightBorder bg-lightBG' : 'border-darkBorder bg-darkBG'"
-          class="editor flex flex-nowrap overflow-x-auto items-center border rounded-full"
+          class="flex flex-nowrap overflow-x-auto items-center border rounded-full"
         >
           <span
             :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-            class="editor flex flex-no-wrap items-center rounded-full pl-4"
+            class="flex flex-no-wrap items-center rounded-full pl-4"
           >
             <label for="tag" class="hidden" value="Enter hashtags"></label>
             #<input
@@ -175,24 +111,24 @@
               type="text"
               placeholder="tag"
               :class="this.$store.state.settings.darkMode ? 'bg-lightBG text-lightPrimaryText placeholder-lightSecondaryText' : 'bg-darkBG  text-darkPrimaryText placeholder-darkSecondaryText'"
-              class="editor focus:outline-none w-32 pr-1 py-2 pl-1"
+              class="focus:outline-none w-32 pr-1 py-2 pl-1"
             />
           </span>
           <button
-            class="editor rounded-full bg-primary border border-white p-2 focus:outline-none"
+            class="rounded-full bg-primary border border-white p-2 focus:outline-none"
             @click="addTag"
           >
-            <span class="editor text-white"><PlusIcon class="editor" /></span>
+            <span class="text-white"><PlusIcon /></span>
           </button>
-          <span v-for="t in this.tags" :key="t.name" class="editor flex flex-no-wrap items-center mx-2">
-            <h6 class="editor inline">#{{ t['name'] }}</h6>
-            <button class="editor ml-1" @click="removeTag(t)">❌</button></span>
+          <span v-for="t in this.tags" :key="t.name" class="flex flex-no-wrap items-center mx-2">
+            <h6 class="inline">#{{ t['name'] }}</h6>
+            <button class="ml-1" @click="removeTag(t)">❌</button></span>
         </div>
       </footer>
       <BrandedButton
         text="Publish"
         :action="post"
-        class="editor preview justify-self-end w-32 h-12 self-center mr-5"
+        class="preview justify-self-end w-32 h-12 self-center mr-5"
       />
     </article>
   </section>
@@ -205,21 +141,15 @@ import { mapMutations, mapActions } from 'vuex'
 
 import _ from 'lodash'
 import DOMPurify from 'dompurify'
-import marked from 'marked'
+import MediumEditor from 'medium-editor'
+import Turndown from 'turndown'
 
 import CameraIcon from '@/components/icons/Camera.vue'
-// import BoldIcon from '@/components/icons/md/Bold.vue'
-// import CodeIcon from '@/components/icons/md/Code.vue'
-// import ItalicIcon from '@/components/icons/md/Italic.vue'
-// import ListIcon from '@/components/icons/md/List.vue'
-// import LinkIcon from '@/components/icons/md/Link.vue'
-// import ImageIcon from '@/components/icons/md/Image.vue'
-// import QuoteIcon from '@/components/icons/md/Quote.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 import PlusIcon from '@/components/icons/Plus.vue'
-import PencilIcon from '@/components/icons/Pencil.vue'
 import TagCard from '@/components/Tag.vue'
-import markdown from '@/mixins/markdown.js'
+import CloseIcon from '@/components/icons/Close.vue'
+
 import { Post } from '@/interfaces/Post'
 import { Tag } from '@/interfaces/Tag'
 import { Profile } from '@/interfaces/Profile'
@@ -228,20 +158,12 @@ import { actionType, namespace as settingStoreNamespace } from '~/store/settings
 
 export default Vue.extend({
 	components: {
-		// BoldIcon,
-		// CodeIcon,
-		// ItalicIcon,
-		// ListIcon,
-		// LinkIcon,
-		// ImageIcon,
-		// QuoteIcon,
 		BrandedButton,
 		CameraIcon,
 		PlusIcon,
-		PencilIcon,
 		TagCard,
+		CloseIcon,
 	},
-	mixins: [markdown],
 	data () {
 		let input: string = ``
 		if (this.$store.state.draft.content !== ``) {
@@ -260,20 +182,22 @@ export default Vue.extend({
 			tag: ``,
 			featuredPhoto: null,
 			featuredPhotoCID: ``,
+			editor: MediumEditor,
+			turndownService: Turndown,
 		}
 	},
-	computed: {
-		compiledMarkdown (): string {
-			const md = marked(this.input)
-			return md
-		},
+	mounted () {
+		this.editor = new MediumEditor(`.editable`, {
+			spellcheck: false,
+			placeholder: {
+				text: `Click to edit`,
+			},
+			paste: {
+				cleanPastedHTML: true,
+			},
+		})
+		this.turndownService = new Turndown()
 	},
-	// mounted () {
-	// 	window.addEventListener(`mousedown`, this.previewHandler)
-	// },
-	// beforeDestroy () {
-	// 	window.removeEventListener(`mousedown`, this.previewHandler)
-	// },
 	methods: {
 		...mapActions(settingStoreNamespace, {
 			toggleDraftMode: actionType.TOGGLE_DRAFT_MODE,
@@ -286,9 +210,6 @@ export default Vue.extend({
 			addPost: MutationType.ADD_POST,
 			changeCID: MutationType.CHANGE_CID,
 		}),
-		// ...mapMutations(postsStoreNamespace, {
-		//   addTag: postsMutationType.ADD_TAG,
-		// }),
 		toggleComposeState (state): void {
 			this.mobileState = state
 		},
@@ -340,6 +261,9 @@ export default Vue.extend({
 			})
 		},
 		post (): void {
+			// eslint-disable-next-line
+      // this.input = this.turndownService.turndown(this.editor.getContent())
+			this.input = this.editor.getContent()
 			if (this.title === `` || !this.$qualityText(this.title)) {
 				alert(`Invalid title!`)
 			} else if (this.subtitle === `` || !this.$qualityText(this.subtitle)) {
@@ -369,14 +293,14 @@ export default Vue.extend({
 					this.addPost(p)
 					const profile: Profile = this.$store.state.session
 					// Sending updated profile to IPFS.
-					// Returns updated content address
+					// Returns upd ated content address
 					this.$sendProfile(profile).then((pcid) => {
 						this.changeCID(pcid)
 						// Reset draft & redirect
 						this.toggleDraftMode()
-						this.title = `Title`
-						this.subtitle = `Subtitle`
-						this.input = `# Hello World`
+						this.title = ``
+						this.subtitle = ``
+						this.input = ``
 						this.tags = []
 						this.$router.push(`/post/` + cid)
 					})
@@ -384,58 +308,27 @@ export default Vue.extend({
 			}
 		},
 		updateStore (): void {
+			this.input = this.editor.getContent()
 			this.$store.commit(`draft/updateDraft`, {
 				title: this.title,
 				subtitle: this.subtitle,
 				content: this.input,
 				tags: this.tags,
 			})
-			this.toggleDraftMode()
-		},
-		addMarkdown (md, wrap): void {
-			if (this.$refs.ta !== undefined) {
-				const ta = this.$refs.ta as HTMLInputElement
-				const cursorStart: number | null = ta.selectionStart
-				const cursorEnd: number | null = ta.selectionEnd
-				if (cursorStart !== null && cursorEnd !== null) {
-					const selectedText = this.input.substring(cursorStart, cursorEnd)
-					if (wrap) {
-						this.input =
-              this.input.substring(0, cursorStart) +
-              md +
-              selectedText +
-              md +
-              this.input.substring(cursorEnd)
-					} else {
-						this.input =
-              this.input.substring(0, cursorStart) +
-              md +
-              selectedText +
-              this.input.substring(cursorEnd)
-					}
-				}
-			}
-		},
-		previewHandler (e: any): void {
-			if (!e.target) {
-				return
-			}
-			if (this.showPreview === false) {
-				if (e.target.parentNode === null ||
-          e.target.parentNode.classList === undefined ||
-          !e.target.parentNode.classList.contains(`editor`)) {
-					this.showPreview = true
-				}
-			}
-			if (this.showPreview === true) {
-				if (e.target.parentNode === null ||
-          e.target.parentNode.classList === undefined ||
-          e.target.parentNode.classList.contains(`preview`)) {
-					e.stopPropagation()
-					this.showPreview = false
-				}
-			}
+			this.$router.go(-1)
 		},
 	},
 })
 </script>
+
+<style>
+.medium-toolbar-arrow-under:after {
+  border-color: #242424 transparent transparent transparent
+}
+.medium-toolbar-arrow-over:before {
+  border-color: transparent transparent #242424 transparent
+}
+.medium-editor-anchor-preview a  {
+  color: red;
+}
+</style>

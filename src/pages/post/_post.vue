@@ -51,7 +51,7 @@
       <!-- Content -->
       <div
         :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-        class="prose lg:prose-lg max-w-none content"
+        class="prose prose-red max-w-none content"
         v-html="this.content"
       ></div>
 

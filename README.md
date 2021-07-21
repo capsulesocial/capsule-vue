@@ -47,5 +47,6 @@ $ yarn build:win
 - [Nuxt.js docs](https://nuxtjs.org) - Vue Framework
 - [TailwindCSS](https://tailwindcss.com) - CSS Framework
 - [Marked.js](https://marked.js.org/) - markdown parsing
+- [Medium Editor](https://github.com/yabwe/medium-editor) - WYSIWYG editor
 - [DOMPurify](https://github.com/cure53/DOMPurify) - sanitize HTML output
 - [electron-nuxt](https://github.com/webspaceteam/electron-nuxt) - Electron scripts
