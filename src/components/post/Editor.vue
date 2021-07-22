@@ -87,8 +87,10 @@
     <article class="px-5">
       <div
         :v-model="this.input"
-        class="editable focus:outline-none h-64 border-t border-b py-5"
-      ></div>
+        class="editable prose focus:outline-none border-t border-b py-5"
+        v-html="this.$store.state.draft.content"
+      >
+      </div>
     </article>
 
     <article class="flex">
@@ -96,7 +98,7 @@
       <footer
         class="w-full p-5 flex flex-row justify-between"
       >
-        <TagCard v-for="t in this.tags" :key="t.name" :tag="t.name" />
+        <TagCard v-for="t in this.$store.state.draft.tags" :key="t.name" :tag="t.name" />
         <div
           :class="this.$store.state.settings.darkMode ? 'border-lightBorder bg-lightBG' : 'border-darkBorder bg-darkBG'"
           class="flex flex-nowrap overflow-x-auto items-center border rounded-full"
@@ -120,7 +122,7 @@
           >
             <span class="text-white"><PlusIcon /></span>
           </button>
-          <span v-for="t in this.tags" :key="t.name" class="flex flex-no-wrap items-center mx-2">
+          <span v-for="t in this.$store.state.draft.tags" :key="t.name" class="flex flex-no-wrap items-center mx-2">
             <h6 class="inline">#{{ t['name'] }}</h6>
             <button class="ml-1" @click="removeTag(t)">❌</button></span>
         </div>
@@ -136,7 +138,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapMutations, mapActions } from 'vuex'
+import { mapMutations } from 'vuex'
 // import { postsMutationType, namespace as postsStoreNamespace, Posts} from '~/store/posts'
 
 import _ from 'lodash'
@@ -154,7 +156,7 @@ import { Post } from '@/interfaces/Post'
 import { Tag } from '@/interfaces/Tag'
 import { Profile } from '@/interfaces/Profile'
 import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
-import { actionType, namespace as settingStoreNamespace } from '~/store/settings'
+// import { actionType, namespace as settingStoreNamespace } from '~/store/settings'
 
 export default Vue.extend({
 	components: {
@@ -171,14 +173,12 @@ export default Vue.extend({
 		} else {
 			input = ``
 		}
-		const tags: Tag[] = []
 		return {
 			title: this.$store.state.draft.title,
 			subtitle: this.$store.state.draft.subtitle,
 			input,
 			showPreview: false,
 			mobileState: `edit`,
-			tags,
 			tag: ``,
 			featuredPhoto: null,
 			featuredPhotoCID: ``,
@@ -199,9 +199,6 @@ export default Vue.extend({
 		this.turndownService = new Turndown()
 	},
 	methods: {
-		...mapActions(settingStoreNamespace, {
-			toggleDraftMode: actionType.TOGGLE_DRAFT_MODE,
-		}),
 		...mapMutations({
 			toggle: `draft/toggleCompose`,
 			updateDraft: `draft/updateDraft`,
@@ -228,16 +225,13 @@ export default Vue.extend({
 					name: this.tag,
 					posts: ``,
 				}
-				this.tags.push(t)
+				this.$store.commit(`draft/addTag`, t)
 				this.tag = ``
 			}
 		},
-		removeTag (tag): void {
+		removeTag (t): void {
 			// Remove
-			const index = this.tags.indexOf(tag)
-			if (index > -1) {
-				this.tags.splice(index, 1)
-			}
+			this.$store.commit(`draft/removeTag`, t)
 		},
 		handleImage (e): void {
 			const image = e.target.files[0]
@@ -269,15 +263,14 @@ export default Vue.extend({
 			} else if (this.subtitle === `` || !this.$qualityText(this.subtitle)) {
 				alert(`Invalid subtitle!`)
 			} else {
-				const date = new Date()
 				const p: Post = {
 					title: this.title,
 					subtitle: this.subtitle,
 					content: this.input,
 					cid: ``,
 					id: ``,
-					timestamp: date,
-					tags: this.tags,
+					timestamp: new Date(),
+					tags: this.$store.state.draft.tags,
 					comments: [],
 					bookmarks: [],
 					authorID: this.$store.state.session.id,
@@ -297,11 +290,10 @@ export default Vue.extend({
 					this.$sendProfile(profile).then((pcid) => {
 						this.changeCID(pcid)
 						// Reset draft & redirect
-						this.toggleDraftMode()
 						this.title = ``
 						this.subtitle = ``
 						this.input = ``
-						this.tags = []
+						this.$store.commit(`draft/reset`)
 						this.$router.push(`/post/` + cid)
 					})
 				})
@@ -309,12 +301,9 @@ export default Vue.extend({
 		},
 		updateStore (): void {
 			this.input = this.editor.getContent()
-			this.$store.commit(`draft/updateDraft`, {
-				title: this.title,
-				subtitle: this.subtitle,
-				content: this.input,
-				tags: this.tags,
-			})
+			this.$store.commit(`draft/updateTitle`, this.title)
+			this.$store.commit(`draft/updateSubtitle`, this.subtitle)
+			this.$store.commit(`draft/updateContent`, this.input)
 			this.$router.go(-1)
 		},
 	},
@@ -323,10 +312,10 @@ export default Vue.extend({
 
 <style>
 .medium-toolbar-arrow-under:after {
-  border-color: #242424 transparent transparent transparent
+  border-color: #ffffff transparent transparent transparent
 }
 .medium-toolbar-arrow-over:before {
-  border-color: transparent transparent #242424 transparent
+  border-color: transparent transparent #ffffff transparent
 }
 .medium-editor-anchor-preview a  {
   color: red;

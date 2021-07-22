@@ -122,7 +122,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapActions } from 'vuex'
 
 import HomeIcon from '@/components/icons/Home.vue'
 import DiscoverIcon from '@/components/icons/Discover.vue'
@@ -132,7 +131,6 @@ import SettingsIcon from '@/components/icons/Settings.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 import BookmarksIcon from '@/components/icons/Bookmarks.vue'
 import InboxIcon from '@/components/icons/Inbox.vue'
-import { actionType, namespace as settingStoreNamespace } from '~/store/settings'
 
 export default Vue.extend({
 	components: {
@@ -151,15 +149,11 @@ export default Vue.extend({
 		}
 	},
 	methods: {
-		...mapActions(settingStoreNamespace, {
-			toggleDraftMode: actionType.TOGGLE_DRAFT_MODE,
-		}),
 		toggleProfileActions () {
 			this.isProfileActions = !this.isProfileActions
 		},
 		redirect () {
 			this.$router.push(`/post`)
-			console.log(`redirect`)
 		},
 		getStyles (tab: string): string {
 			let res = ``

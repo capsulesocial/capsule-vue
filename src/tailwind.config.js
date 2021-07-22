@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-const defaultTheme = require('tailwindcss/defaultTheme')
+const { fontFamily } = require('tailwindcss/defaultTheme')
 
 module.exports = {
   future: {
@@ -8,8 +8,10 @@ module.exports = {
   },
   theme: {
     fontFamily: {
-      sans: ['NotoSans-Medium'],
-      bold: ['NotoSans-Bold']
+      ...fontFamily,
+      sans: ['Noto', 'sans-serif'],
+      serif: ['Noto', 'serif'],
+
     },
     extend: {
       colors: {
@@ -68,7 +70,7 @@ module.exports = {
         darkActive: '#367589',
         darkError: '#B00020',
         darkOnErrorText: '#FFFFFF',
-      }
+      },
     }
   },
   plugins: [
