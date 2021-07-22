@@ -5,10 +5,10 @@ type dateFormat = (input: object | Date) => string
 
 // eslint-disable-next-line quotes
 declare module 'vue/types/vue' {
-  interface Vue {
-    $getFormat: dateString,
-    $formatDate: dateFormat
-  }
+	interface Vue {
+		$getFormat: dateString,
+		$formatDate: dateFormat
+	}
 }
 
 const MONTH_NAMES = [

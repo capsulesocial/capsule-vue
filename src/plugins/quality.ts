@@ -10,13 +10,13 @@ type Text = (input: string) => boolean
 
 // eslint-disable-next-line quotes
 declare module 'vue/types/vue' {
-  interface Vue {
-    $qualityPassword: Password,
-    $qualityID: Id,
-    $qualityEmail: Email,
-    $qualityURL: URL,
-    $qualityText: Text
-  }
+	interface Vue {
+		$qualityPassword: Password,
+		$qualityID: Id,
+		$qualityEmail: Email,
+		$qualityURL: URL,
+		$qualityText: Text
+	}
 }
 
 const qualityPassword: Password = (input) => {
