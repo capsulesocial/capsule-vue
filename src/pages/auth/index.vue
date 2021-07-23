@@ -206,16 +206,20 @@ export default Vue.extend({
 					// Export private key: encrypt it using AES-GCM (for Ed25519 keys)
 					const peerIDPrivateKey = await node.key.export(`self`, `password`)
 					const _res = await this.$register(account, peerIDPrivateKey)
-					console.log(_res)
-					account.password = ``
-					this.$sendProfile(account).then((cid) => {
-						account.cid = cid
-						this.changeCID(cid)
-						this.changeID(this.id)
-						this.changeName(this.name)
-						this.changeEmail(this.email)
-						this.$router.push(`/settings`)
-					})
+					if (_res === true) {
+						// Registration successful
+						account.password = ``
+						this.$sendProfile(account).then((cid) => {
+							account.cid = cid
+							this.changeCID(cid)
+							this.changeID(this.id)
+							this.changeName(this.name)
+							this.changeEmail(this.email)
+							this.$router.push(`/settings`)
+						})
+					} else {
+						alert(`Registration Unsuccessful!`)
+					}
 				} else {
 					alert(`Password mismatch!`)
 				}
