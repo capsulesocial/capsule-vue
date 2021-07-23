@@ -14,6 +14,13 @@ module.exports = {
 
     },
     extend: {
+      typography: {
+        DEFAULT: {
+          css: {
+            color: '#000'
+          },
+        },
+      },
       colors: {
         primary: '#1E566C', // Dark Teal
         secondary: '#367589', // Moss Teal

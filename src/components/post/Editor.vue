@@ -87,7 +87,7 @@
     <article class="px-5">
       <div
         :v-model="this.input"
-        class="editable prose focus:outline-none border-t border-b py-5"
+        class="editable prose max-w-none focus:outline-none border-t border-b py-5"
         v-html="this.$store.state.draft.content"
       >
       </div>
@@ -98,33 +98,27 @@
       <footer
         class="w-full p-5 flex flex-row justify-between"
       >
-        <TagCard v-for="t in this.$store.state.draft.tags" :key="t.name" :tag="t.name" />
-        <div
-          :class="this.$store.state.settings.darkMode ? 'border-lightBorder bg-lightBG' : 'border-darkBorder bg-darkBG'"
-          class="flex flex-nowrap overflow-x-auto items-center border rounded-full"
-        >
-          <span
-            :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-            class="flex flex-no-wrap items-center rounded-full pl-4"
-          >
-            <label for="tag" class="hidden" value="Enter hashtags"></label>
-            #<input
-              v-model="tag"
-              type="text"
-              placeholder="tag"
-              :class="this.$store.state.settings.darkMode ? 'bg-lightBG text-lightPrimaryText placeholder-lightSecondaryText' : 'bg-darkBG  text-darkPrimaryText placeholder-darkSecondaryText'"
-              class="focus:outline-none w-32 pr-1 py-2 pl-1"
-            />
-          </span>
+        <div>
+          <label for="tag" class="hidden" value="Enter hashtags"></label>
+          #<input
+            v-model="tag"
+            type="text"
+            placeholder="tag"
+            :class="this.$store.state.settings.darkMode ? 'bg-lightBG text-lightPrimaryText placeholder-lightSecondaryText' : 'bg-darkBG  text-darkPrimaryText placeholder-darkSecondaryText'"
+            class="focus:outline-none w-32 pr-1 py-2 pl-1"
+          />
           <button
             class="rounded-full bg-primary border border-white p-2 focus:outline-none"
             @click="addTag"
           >
             <span class="text-white"><PlusIcon /></span>
           </button>
+        </div>
+        <div class="flex flex-row">
           <span v-for="t in this.$store.state.draft.tags" :key="t.name" class="flex flex-no-wrap items-center mx-2">
-            <h6 class="inline">#{{ t['name'] }}</h6>
-            <button class="ml-1" @click="removeTag(t)">❌</button></span>
+            <button class="ml-1" @click="removeTag(t)">❌</button>
+            <TagCard :tag="t.name" />
+          </span>
         </div>
       </footer>
       <BrandedButton
@@ -256,8 +250,8 @@ export default Vue.extend({
 		},
 		post (): void {
 			// eslint-disable-next-line
-      // this.input = this.turndownService.turndown(this.editor.getContent())
-			this.input = this.editor.getContent()
+      this.input = this.turndownService.turndown(this.editor.getContent())
+			// this.input = this.editor.getContent()
 			if (this.title === `` || !this.$qualityText(this.title)) {
 				alert(`Invalid title!`)
 			} else if (this.subtitle === `` || !this.$qualityText(this.subtitle)) {
