@@ -48,6 +48,25 @@ async function encryptData(key: Uint8Array, data: Uint8Array, nonce: Uint8Array)
 	return encryptedDataBytes
 }
 
+async function decryptData(key: Uint8Array, data: Uint8Array, nonce: Uint8Array) {
+	const derivedKey = await window.crypto.subtle.importKey(`raw`, key, { name: `AES-GCM` }, false, [
+		`encrypt`,
+		`decrypt`,
+	])
+	const decryptedData = await window.crypto.subtle.decrypt(
+		{
+			name: `AES-GCM`,
+			iv: nonce,
+			tagLength: 128,
+		},
+		derivedKey,
+		data,
+	)
+
+	const decryptedDataBytes = new Uint8Array(decryptedData)
+	return decryptedDataBytes
+}
+
 async function scrypt(passphrase: Uint8Array, salt: Uint8Array) {
 	const wasm = await import(`scrypt-wasm`)
 
@@ -77,4 +96,4 @@ async function getEncryptedPeerIDPrivateKey(payload: Profile, peerIDPrivateKey: 
 	return privKey
 }
 
-export { getEncryptedPeerIDPrivateKey }
+export { getEncryptedPeerIDPrivateKey, hkdf, scrypt, decryptData }

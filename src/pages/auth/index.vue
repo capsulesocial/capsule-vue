@@ -172,6 +172,8 @@ export default Vue.extend({
 			}
 			// Login
 			if (this.isLogin) {
+				const _res = await this.$login(this.id, this.password)
+				console.log(_res)
 				alert(`Authentication not supported yet!`)
 			} else {
 				// Registration
