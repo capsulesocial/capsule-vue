@@ -1,4 +1,3 @@
-/* eslint-disable no-shadow */
 export const state = () => ([
 	{
 		id: `tombrady`,

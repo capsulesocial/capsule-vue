@@ -1,4 +1,3 @@
-/* eslint-disable no-shadow */
 import type { GetterTree, MutationTree } from 'vuex'
 import type { RootState } from './index'
 import { Post } from '~/interfaces/Post'

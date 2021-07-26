@@ -1,4 +1,3 @@
-/* eslint-disable no-shadow */
 // import type { Context } from '@nuxt/types'
 import type { GetterTree, MutationTree } from 'vuex'
 import type { RootState } from './index'
