@@ -1,4 +1,4 @@
-export const state = () => ([
+export const state = () => [
 	{
 		id: `tombrady`,
 		username: `Tom Brady`,
@@ -13,10 +13,10 @@ export const state = () => ([
 		following: [`tombrady`],
 		avatar: `QmTV5DzEzb3zucoWxcuD9Jvp1yEmnbnaLRtVUypXoC7wgv`,
 	},
-])
+]
 
 export const mutations = {
-	handleFollow (state, data) {
+	handleFollow(state, data) {
 		// Adds to target user followers list
 		this.$api.authors.handleFollow(data.me, data.targetUser)
 		for (let i = 0; i < state.length; i++) {
@@ -24,7 +24,7 @@ export const mutations = {
 				if (!state[i].followers.includes(data.me)) {
 					state[i].followers.push(data.me)
 				} else {
-					state[i].followers = state[i].followers.filter(e => e !== data.me)
+					state[i].followers = state[i].followers.filter((e) => e !== data.me)
 				}
 			}
 		}

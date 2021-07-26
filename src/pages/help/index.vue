@@ -1,5 +1,3 @@
 <template>
-  <main>
-    Help
-  </main>
+	<main>Help</main>
 </template>

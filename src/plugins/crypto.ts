@@ -7,25 +7,20 @@ declare module 'vue/types/vue' {
 	}
 }
 
-async function hkdf (password: Uint8Array, salt: Uint8Array) {
+async function hkdf(password: Uint8Array, salt: Uint8Array) {
 	const ec = new TextEncoder()
-	const key = await window.crypto.subtle.importKey(
-		`raw`,
-		password,
-		`HKDF`,
-		false,
-		[
-			`deriveBits`,
-			`deriveKey`,
-		],
-	)
+	const key = await window.crypto.subtle.importKey(`raw`, password, `HKDF`, false, [`deriveBits`, `deriveKey`])
 
-	const derivedKey = await window.crypto.subtle.deriveBits({
-		name: `HKDF`,
-		hash: `SHA-256`,
-		info: ec.encode(`CapsuleBlogchainAuth`),
-		salt,
-	}, key, 512)
+	const derivedKey = await window.crypto.subtle.deriveBits(
+		{
+			name: `HKDF`,
+			hash: `SHA-256`,
+			info: ec.encode(`CapsuleBlogchainAuth`),
+			salt,
+		},
+		key,
+		512,
+	)
 
 	const derivedKeyBytes = new Uint8Array(derivedKey)
 	return {
@@ -34,28 +29,26 @@ async function hkdf (password: Uint8Array, salt: Uint8Array) {
 	}
 }
 
-async function encryptData (key: Uint8Array, data: Uint8Array, nonce: Uint8Array) {
-	const derivedKey = await window.crypto.subtle.importKey(
-		`raw`,
-		key,
-		{ name: `AES-GCM` },
-		false,
-		[
-			`encrypt`,
-			`decrypt`,
-		],
+async function encryptData(key: Uint8Array, data: Uint8Array, nonce: Uint8Array) {
+	const derivedKey = await window.crypto.subtle.importKey(`raw`, key, { name: `AES-GCM` }, false, [
+		`encrypt`,
+		`decrypt`,
+	])
+	const encryptedData = await window.crypto.subtle.encrypt(
+		{
+			name: `AES-GCM`,
+			iv: nonce,
+			tagLength: 128,
+		},
+		derivedKey,
+		data,
 	)
-	const encryptedData = await window.crypto.subtle.encrypt({
-		name: `AES-GCM`,
-		iv: nonce,
-		tagLength: 128,
-	}, derivedKey, data)
 
 	const encryptedDataBytes = new Uint8Array(encryptedData)
 	return encryptedDataBytes
 }
 
-async function scrypt (passphrase: Uint8Array, salt: Uint8Array) {
+async function scrypt(passphrase: Uint8Array, salt: Uint8Array) {
 	const wasm = await import(`scrypt-wasm`)
 
 	const hexSalt = Buffer.from(salt).toString(`hex`)
@@ -67,7 +60,7 @@ async function scrypt (passphrase: Uint8Array, salt: Uint8Array) {
 	return derivedKey
 }
 
-async function getEncryptedPeerIDPrivateKey (payload: Profile, peerIDPrivateKey: Uint8Array) {
+async function getEncryptedPeerIDPrivateKey(payload: Profile, peerIDPrivateKey: Uint8Array) {
 	const ec = new TextEncoder()
 
 	// HKDF(key: userPassword, info: "CapsuleBlogchainAuth", salt: username)

@@ -1,18 +1,12 @@
 <template>
-  <button
-    class="rounded-full focus:outline-none"
-    @click="toggleFriend"
-  >
-    <div
-      v-if="iFollow()"
-      class="bg-red-200 rounded-lg shadow-lg px-2 py-1"
-    >
-      <span class="text-black text-bold text-sm">Unfollow</span>
-    </div>
-    <div v-else class="bg-primary rounded-lg shadow-lg px-2 py-1">
-      <span class="text-white text-bold text-sm">Follow</span>
-    </div>
-  </button>
+	<button class="rounded-full focus:outline-none" @click="toggleFriend">
+		<div v-if="iFollow()" class="bg-red-200 rounded-lg shadow-lg px-2 py-1">
+			<span class="text-black text-bold text-sm">Unfollow</span>
+		</div>
+		<div v-else class="bg-primary rounded-lg shadow-lg px-2 py-1">
+			<span class="text-white text-bold text-sm">Follow</span>
+		</div>
+	</button>
 </template>
 
 <script>
@@ -24,7 +18,7 @@ export default {
 		},
 	},
 	methods: {
-		iFollow () {
+		iFollow() {
 			// Check if I am following currentUser
 			const followingList = this.$store.state.session.following
 			for (let i = 0; i < followingList.length; i++) {
@@ -34,7 +28,7 @@ export default {
 			}
 			return false
 		},
-		toggleFriend () {
+		toggleFriend() {
 			// this.$store.commit('me/handleFollow', this.authorID)
 			// this.$store.commit('authors/handleFollow',
 			//   {

@@ -1,13 +1,23 @@
 <template>
-  <button
-    :class="this.getStyles()"
-    class="transition duration-500 ease-in-out transform hover:scale-110 font-bold rounded-xl shadow-lg focus:outline-none"
-    @click="this.$props.action"
-  >
-    <span class="font-sans">
-      {{ this.$props.text }}
-    </span>
-  </button>
+	<button
+		:class="this.getStyles()"
+		class="
+			transition
+			duration-500
+			ease-in-out
+			transform
+			hover:scale-110
+			font-bold
+			rounded-xl
+			shadow-lg
+			focus:outline-none
+		"
+		@click="this.$props.action"
+	>
+		<span class="font-sans">
+			{{ this.$props.text }}
+		</span>
+	</button>
 </template>
 
 <script lang="ts">
@@ -25,13 +35,13 @@ export default Vue.extend({
 		},
 		action: {
 			type: Function,
-			default () {
+			default() {
 				return null
 			},
 		},
 	},
 	methods: {
-		getStyles (): string {
+		getStyles(): string {
 			let res = ``
 			if (this.$store.state.settings.darkMode) {
 				res += `bg-lightButtonBG text-lightButtonText`

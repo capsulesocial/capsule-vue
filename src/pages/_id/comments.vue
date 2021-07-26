@@ -1,7 +1,5 @@
 <template>
-  <section>
-    <article>
-      Comments
-    </article>
-  </section>
+	<section>
+		<article>Comments</article>
+	</section>
 </template>

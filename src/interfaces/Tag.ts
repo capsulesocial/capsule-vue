@@ -1,4 +1,4 @@
 export interface Tag {
-  name: string,
-  posts: string[] | string,
+	name: string
+	posts: string[] | string
 }

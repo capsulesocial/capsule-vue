@@ -1,7 +1,7 @@
 <template>
-  <main class="w-full h-auto">
-    <PostEditor />
-  </main>
+	<main class="w-full h-auto">
+		<PostEditor />
+	</main>
 </template>
 
 <script lang="ts">

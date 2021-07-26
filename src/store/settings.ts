@@ -5,7 +5,7 @@ import type { RootState } from './index'
 export const namespace = `settings`
 
 export interface SettingState {
-  darkMode: boolean
+	darkMode: boolean
 }
 
 export const state = (): SettingState => ({
@@ -29,11 +29,11 @@ export const actionType = {
 }
 
 export const actions: ActionTree<SettingState, RootState> = {
-	nuxtServerInit ({ commit }, _context: Context) {
+	nuxtServerInit({ commit }, _context: Context) {
 		commit(MutationType.CHANGE_DARK_MODE, true)
 	},
 
-	[actionType.TOGGLE_DARK_MODE] ({ commit, state }) {
+	[actionType.TOGGLE_DARK_MODE]({ commit, state }) {
 		commit(MutationType.CHANGE_DARK_MODE, !state.darkMode)
 	},
 }

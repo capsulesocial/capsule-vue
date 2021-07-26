@@ -1,9 +1,9 @@
 <template>
-  <section class="px-4">
-    <div v-for="p in this.posts" :key="p.id">
-      <PostCard :post="p" :authorID="p.authorID" :authorUsername="p.authorID" />
-    </div>
-  </section>
+	<section class="px-4">
+		<div v-for="p in this.posts" :key="p.id">
+			<PostCard :post="p" :authorID="p.authorID" :authorUsername="p.authorID" />
+		</div>
+	</section>
 </template>
 
 <script lang="ts">
@@ -14,13 +14,13 @@ export default Vue.extend({
 	components: {
 		PostCard,
 	},
-	data () {
+	data() {
 		return {
 			currentUser: {},
 			posts: [],
 		}
 	},
-	created () {
+	created() {
 		// The user in which I am currently viewing
 		// Check if this is my profile
 		if (this.$route.params.id === this.$store.state.session.cid) {
@@ -31,7 +31,7 @@ export default Vue.extend({
 		this.getRepostList()
 	},
 	methods: {
-		async getRepostList () {
+		async getRepostList() {
 			// Get list of reposts posts by visited profile
 			let targetProfile = {}
 			if (this.$route.params.id === this.$store.state.session.cid) {

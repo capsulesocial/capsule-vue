@@ -6,8 +6,8 @@ import { Post } from '@/interfaces/Post'
 export const namespace = `posts`
 
 export interface Posts {
-  tags: Tag[],
-  recent: Post[]
+	tags: Tag[]
+	recent: Post[]
 }
 
 export const state = (): Posts => ({

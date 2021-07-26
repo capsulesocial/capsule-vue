@@ -2,7 +2,7 @@ import type { Context } from '@nuxt/types'
 import type { GetterTree, ActionTree, MutationTree } from 'vuex'
 
 export interface RootState {
-  description: string
+	description: string
 }
 
 export const state = (): RootState => ({
@@ -24,7 +24,7 @@ export const mutations: MutationTree<RootState> = {
 }
 
 export const actions: ActionTree<RootState, RootState> = {
-	nuxtServerInit ({ commit }, _context: Context) {
+	nuxtServerInit({ commit }, _context: Context) {
 		commit(MutationType.CHANGE_DESCRIPTION, `I'm defined by server side`)
 	},
 }
