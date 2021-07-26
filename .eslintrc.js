@@ -7,10 +7,11 @@ module.exports = {
 	},
 	"extends": [
 		"@nuxtjs/eslint-config-typescript",
-		'prettier', // Uses eslint-config-prettier to disable ESLint rules from @typescript-eslint/eslint-plugin that would conflict with prettier
-        'plugin:prettier/recommended' // Enables eslint-plugin-prettier and eslint-config-prettier. This will display prettier errors as ESLint errors. Make sure this is always the last configuration in the extends array.
+		// 'prettier', // Uses eslint-config-prettier to disable ESLint rules from @typescript-eslint/eslint-plugin that would conflict with prettier
+		// 'plugin:prettier/recommended' // Enables eslint-plugin-prettier and eslint-config-prettier. This will display prettier errors as ESLint errors. Make sure this is always the last configuration in the extends array.
 	],
 	"rules": {
+		"no-shadow": ["error", { "allow": ["state"] }],
 		"vue/attribute-hyphenation": 0,
 		"vue/no-v-html": 0,
 		"vue/html-self-closing": 0,
@@ -46,7 +47,6 @@ module.exports = {
 		"require-await": "error",
 		"strict": ["error", "global"],
 		"init-declarations": "error",
-		"no-shadow": "error",
 		"array-bracket-newline": "error",
 		"array-bracket-spacing": "error",
 		"block-spacing": "error",
