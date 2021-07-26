@@ -116,6 +116,7 @@
 				<button class="flex justify-between p-4 text-xl items-center border-b">
 					<h3>Image</h3>
 					<ChevronDown />
+					<ChevronUp />
 				</button>
 				<div>
 					<!-- Upload Featured Image -->
@@ -220,7 +221,7 @@ export default Vue.extend({
 				cleanPastedHTML: true,
 			},
 			toolbar: {
-				buttons: ['bold', 'italic', 'underline', 'anchor', 'h1', 'h2', 'h3', 'quote'],
+				buttons: [`bold`, `italic`, `underline`, `anchor`, `h1`, `h2`, `h3`, `quote`],
 			},
 		})
 		this.turndownService = new Turndown()
@@ -237,7 +238,7 @@ export default Vue.extend({
 		toggleComposeState(state): void {
 			this.mobileState = state
 		},
-		update: _.debounce(function(this: any, e): void {
+		update: _.debounce(function (this: any, e): void {
 			const clean: string = DOMPurify.sanitize(e.target.value, {
 				USE_PROFILES: { html: true, svg: true },
 			})
