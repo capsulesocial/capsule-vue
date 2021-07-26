@@ -1,133 +1,134 @@
 <template>
-  <section
-    class="w-full h-auto border-l border-r"
-    :class="this.$store.state.settings.darkMode ? 'bg-lightBG text-lightPrimaryText' : 'bg-darkBG text-darkPrimaryText'"
-  >
-    <!-- Header and close button -->
-    <article
-      :class="this.$store.state.settings.darkMode ? 'text-lightOnSurfaceVariantText bg-lightSurfaceVariant bg-opacity-25' : 'text-darkOnSurfaceVariantText bg-darkSurfaceVariant bg-opacity-75'"
-      class="flex items-center justify-between p-5 border-b"
-    >
-      <div class="flex items-center">
-        <h3 class="font-bold text-2xl pr-4">
-          New Post
-        </h3>
-        <h6
-          :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryVariant' : 'text-darkPrimaryVariant'"
-        >
-          Category
-        </h6>
-      </div>
-      <button class="flex items-center" @click="updateStore">
-        Save and Close
-        <CloseIcon class="ml-2" />
-      </button>
-    </article>
+	<section
+		class="w-full h-auto border-l border-r"
+		:class="this.$store.state.settings.darkMode ? 'bg-lightBG text-lightPrimaryText' : 'bg-darkBG text-darkPrimaryText'"
+	>
+		<!-- Header and close button -->
+		<article
+			:class="
+				this.$store.state.settings.darkMode
+					? 'text-lightOnSurfaceVariantText bg-lightSurfaceVariant bg-opacity-25'
+					: 'text-darkOnSurfaceVariantText bg-darkSurfaceVariant bg-opacity-75'
+			"
+			class="flex items-center justify-between p-5 border-b"
+		>
+			<div class="flex items-center">
+				<h3 class="font-bold text-2xl pr-4">New Post</h3>
+				<h6 :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryVariant' : 'text-darkPrimaryVariant'">
+					Category
+				</h6>
+			</div>
+			<button class="flex items-center" @click="updateStore">
+				Save and Close
+				<CloseIcon class="ml-2" />
+			</button>
+		</article>
 
-    <!-- Title, subtitle, author -->
-    <article class="p-5 flex justify-between">
-      <div>
-        <label for="title" class="hidden">Title</label>
-        <input
-          v-model="title"
-          type="text"
-          placeholder="Enter Title"
-          :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText bg-lightBG placeholder-lightSecondaryText' : 'text-darkPrimaryText bg-darkBG placeholder-darkSecondaryText'"
-          class="text-4xl focus:outline-none text-xl w-full pb-2"
-        />
-        <label for="subtitle" class="hidden">Subtitle:</label>
-        <input
-          v-model="subtitle"
-          type="text"
-          placeholder="Enter Subtitle"
-          :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText bg-lightBG placeholder-lightSecondaryText' : 'text-darkPrimaryText bg-darkBG placeholder-darkSecondaryText'"
-          class="text-2xl focus:outline-none text-xl w-full pb-2"
-        />
-        <h6
-          :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-          class="text-sm pb-4"
-        >
-          By: {{ this.$store.state.session.name }}
-        </h6>
-      </div>
-      <div>
-        <!-- Upload Featured Image -->
-        <button
-          class="rounded-lg px-4 py-2"
-          :class="this.$store.state.settings.darkMode ? 'bg-lightSecondary text-lightOnSecondaryText' : 'bg-darkSecondary text-darkOnSecondaryText'"
-          @click="$refs.featuredPhoto.click()"
-        >
-          <input
-            id="featured-photo"
-            ref="featuredPhoto"
-            class="hidden"
-            name="photo"
-            type="file"
-            accept="image/*"
-            @change="handleImage"
-          >
-          <div
-            class="flex justify-center items-center focus:outline-none"
-          >
-            <CameraIcon class="mr-2" />
-            <span class="w-32">Featured Photo</span>
-          </div>
-        </button>
-      </div>
-    </article>
+		<!-- Title, subtitle, author -->
+		<article class="p-5 flex justify-between">
+			<div>
+				<label for="title" class="hidden">Title</label>
+				<input
+					v-model="title"
+					type="text"
+					placeholder="Enter Title"
+					:class="
+						this.$store.state.settings.darkMode
+							? 'text-lightPrimaryText bg-lightBG placeholder-lightSecondaryText'
+							: 'text-darkPrimaryText bg-darkBG placeholder-darkSecondaryText'
+					"
+					class="text-4xl focus:outline-none text-xl w-full pb-2"
+				/>
+				<label for="subtitle" class="hidden">Subtitle:</label>
+				<input
+					v-model="subtitle"
+					type="text"
+					placeholder="Enter Subtitle"
+					:class="
+						this.$store.state.settings.darkMode
+							? 'text-lightPrimaryText bg-lightBG placeholder-lightSecondaryText'
+							: 'text-darkPrimaryText bg-darkBG placeholder-darkSecondaryText'
+					"
+					class="text-2xl focus:outline-none text-xl w-full pb-2"
+				/>
+				<h6
+					:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+					class="text-sm pb-4"
+				>
+					By: {{ this.$store.state.session.name }}
+				</h6>
+			</div>
+			<div>
+				<!-- Upload Featured Image -->
+				<button
+					class="rounded-lg px-4 py-2"
+					:class="
+						this.$store.state.settings.darkMode
+							? 'bg-lightSecondary text-lightOnSecondaryText'
+							: 'bg-darkSecondary text-darkOnSecondaryText'
+					"
+					@click="$refs.featuredPhoto.click()"
+				>
+					<input
+						id="featured-photo"
+						ref="featuredPhoto"
+						class="hidden"
+						name="photo"
+						type="file"
+						accept="image/*"
+						@change="handleImage"
+					/>
+					<div class="flex justify-center items-center focus:outline-none">
+						<CameraIcon class="mr-2" />
+						<span class="w-32">Featured Photo</span>
+					</div>
+				</button>
+			</div>
+		</article>
 
-    <article class="px-5">
-      <img
-        v-if="this.featuredPhoto !== null"
-        :src="this.featuredPhoto"
-      />
-    </article>
+		<article class="px-5">
+			<img v-if="this.featuredPhoto !== null" :src="this.featuredPhoto" />
+		</article>
 
-    <!-- WYSIWYG -->
-    <article class="px-5">
-      <div
-        :v-model="this.input"
-        class="editable prose max-w-none focus:outline-none border-t border-b py-5"
-        v-html="this.$store.state.draft.content"
-      >
-      </div>
-    </article>
+		<!-- WYSIWYG -->
+		<article class="px-5">
+			<div
+				:v-model="this.input"
+				class="editable prose max-w-none focus:outline-none border-t border-b py-5"
+				v-html="this.$store.state.draft.content"
+			></div>
+		</article>
 
-    <article class="flex">
-      <!-- Bottom footer: Tags and Publish button -->
-      <footer
-        class="w-full p-5 flex flex-row justify-between"
-      >
-        <div>
-          <label for="tag" class="hidden" value="Enter hashtags"></label>
-          #<input
-            v-model="tag"
-            type="text"
-            placeholder="tag"
-            :class="this.$store.state.settings.darkMode ? 'bg-lightBG text-lightPrimaryText placeholder-lightSecondaryText' : 'bg-darkBG  text-darkPrimaryText placeholder-darkSecondaryText'"
-            class="focus:outline-none w-32 pr-1 py-2 pl-1"
-          />
-          <button
-            class="rounded-full bg-primary border border-white p-2 focus:outline-none"
-            @click="addTag"
-          >
-            <span class="text-white"><PlusIcon /></span>
-          </button>
-        </div>
-        <div class="flex flex-row">
-          <span v-for="t in this.$store.state.draft.tags" :key="t.name" class="flex flex-no-wrap items-center mx-2">
-            <button class="ml-1" @click="removeTag(t)">❌</button>
-            <TagCard :tag="t.name" />
-          </span>
-        </div>
-      </footer>
-      <BrandedButton
-        text="Publish"
-        :action="post"
-        class="preview justify-self-end w-32 h-12 self-center mr-5"
-      />
-    </article>
-  </section>
+		<article class="flex">
+			<!-- Bottom footer: Tags and Publish button -->
+			<footer class="w-full p-5 flex flex-row justify-between">
+				<div>
+					<label for="tag" class="hidden" value="Enter hashtags"></label>
+					#<input
+						v-model="tag"
+						type="text"
+						placeholder="tag"
+						:class="
+							this.$store.state.settings.darkMode
+								? 'bg-lightBG text-lightPrimaryText placeholder-lightSecondaryText'
+								: 'bg-darkBG  text-darkPrimaryText placeholder-darkSecondaryText'
+						"
+						class="focus:outline-none w-32 pr-1 py-2 pl-1"
+					/>
+					<button class="rounded-full bg-primary border border-white p-2 focus:outline-none" @click="addTag">
+						<span class="text-white"><PlusIcon /></span>
+					</button>
+				</div>
+				<div class="flex flex-row">
+					<span v-for="t in this.$store.state.draft.tags" :key="t.name" class="flex flex-no-wrap items-center mx-2">
+						<button class="ml-1" @click="removeTag(t)">❌</button>
+						<TagCard :tag="t.name" />
+					</span>
+				</div>
+			</footer>
+			<BrandedButton text="Publish" :action="post" class="preview justify-self-end w-32 h-12 self-center mr-5" />
+		</article>
+	</section>
 </template>
 
 <script lang="ts">
@@ -160,7 +161,7 @@ export default Vue.extend({
 		TagCard,
 		CloseIcon,
 	},
-	data () {
+	data() {
 		let input: string = ``
 		if (this.$store.state.draft.content !== ``) {
 			input = this.$store.state.draft.content
@@ -180,7 +181,7 @@ export default Vue.extend({
 			turndownService: Turndown,
 		}
 	},
-	mounted () {
+	mounted() {
 		this.editor = new MediumEditor(`.editable`, {
 			spellcheck: false,
 			placeholder: {
@@ -201,7 +202,7 @@ export default Vue.extend({
 			addPost: MutationType.ADD_POST,
 			changeCID: MutationType.CHANGE_CID,
 		}),
-		toggleComposeState (state): void {
+		toggleComposeState(state): void {
 			this.mobileState = state
 		},
 		update: _.debounce(function (this: any, e): void {
@@ -211,7 +212,7 @@ export default Vue.extend({
 			// eslint-disable-next-line no-invalid-this
 			this.input = clean
 		}, 300),
-		addTag (): void {
+		addTag(): void {
 			if (this.tag === `` || !this.$qualityText(this.tag)) {
 				alert(`Invalid tag!`)
 			} else {
@@ -223,11 +224,11 @@ export default Vue.extend({
 				this.tag = ``
 			}
 		},
-		removeTag (t): void {
+		removeTag(t): void {
 			// Remove
 			this.$store.commit(`draft/removeTag`, t)
 		},
-		handleImage (e): void {
+		handleImage(e): void {
 			const image = e.target.files[0]
 			const reader = new FileReader()
 			reader.readAsDataURL(image)
@@ -237,18 +238,18 @@ export default Vue.extend({
 				}
 			}
 		},
-		uploadImage (image): void {
+		uploadImage(image): void {
 			this.$sendPhoto(image).then((cid) => {
 				this.featuredPhotoCID = cid
 				this.downloadImage(cid)
 			})
 		},
-		downloadImage (cid): void {
+		downloadImage(cid): void {
 			this.$getPhoto(cid).then((image) => {
 				this.featuredPhoto = image
 			})
 		},
-		post (): void {
+		post(): void {
 			// eslint-disable-next-line
       this.input = this.turndownService.turndown(this.editor.getContent())
 			// this.input = this.editor.getContent()
@@ -293,7 +294,7 @@ export default Vue.extend({
 				})
 			}
 		},
-		updateStore (): void {
+		updateStore(): void {
 			this.input = this.editor.getContent()
 			this.$store.commit(`draft/updateTitle`, this.title)
 			this.$store.commit(`draft/updateSubtitle`, this.subtitle)
@@ -306,12 +307,12 @@ export default Vue.extend({
 
 <style>
 .medium-toolbar-arrow-under:after {
-  border-color: #ffffff transparent transparent transparent
+	border-color: #ffffff transparent transparent transparent;
 }
 .medium-toolbar-arrow-over:before {
-  border-color: transparent transparent #ffffff transparent
+	border-color: transparent transparent #ffffff transparent;
 }
-.medium-editor-anchor-preview a  {
-  color: red;
+.medium-editor-anchor-preview a {
+	color: red;
 }
 </style>

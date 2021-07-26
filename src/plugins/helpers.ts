@@ -6,7 +6,7 @@ type dateFormat = (input: object | Date) => string
 // eslint-disable-next-line quotes
 declare module 'vue/types/vue' {
 	interface Vue {
-		$getFormat: dateString,
+		$getFormat: dateString
 		$formatDate: dateFormat
 	}
 }
@@ -31,7 +31,7 @@ const getFormat: dateString = (date, preformattedDate = false, hideYear = false)
 	const month = MONTH_NAMES[date.getMonth()]
 	const year = date.getFullYear()
 	const hours = date.getHours()
-	let minutes:any = date.getMinutes()
+	let minutes: any = date.getMinutes()
 
 	if (minutes < 10) {
 		// Adding leading zero to minutes

@@ -1,9 +1,9 @@
 <template>
-  <section class="px-4">
-    <div v-for="p in this.posts" :key="p.id">
-      <PostCard :post="p" :authorID="p.authorID" :authorUsername="p.authorID" />
-    </div>
-  </section>
+	<section class="px-4">
+		<div v-for="p in this.posts" :key="p.id">
+			<PostCard :post="p" :authorID="p.authorID" :authorUsername="p.authorID" />
+		</div>
+	</section>
 </template>
 
 <script>
@@ -13,13 +13,13 @@ export default {
 	components: {
 		PostCard,
 	},
-	data () {
+	data() {
 		return {
 			currentUser: {},
 			posts: [],
 		}
 	},
-	async created () {
+	async created() {
 		// The user in which I am currently viewing
 		// Check if this is my profile
 		if (this.$route.params.id === this.$store.state.session.cid) {
@@ -30,7 +30,7 @@ export default {
 		this.getBookmarkList()
 	},
 	methods: {
-		async getBookmarkList () {
+		async getBookmarkList() {
 			// Get list of bookmarked posts by visited profile
 			// let targetProfile = this.$getProfile(this.$route.params.id)
 			let targetProfile = {}

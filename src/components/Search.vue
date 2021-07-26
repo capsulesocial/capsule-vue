@@ -1,15 +1,15 @@
 <template>
-  <div class="rounded-full bg-gray-100 m-4 flex flex-start">
-    <button type="submit" class="px-4">
-      <SearchIcon />
-    </button>
-    <input
-      v-model="keyword"
-      type="search"
-      placeholder="Type your keywords..."
-      class="rounded-full bg-gray-100 text-black focus:outline-none flex-grow mr-10"
-    />
-  </div>
+	<div class="rounded-full bg-gray-100 m-4 flex flex-start">
+		<button type="submit" class="px-4">
+			<SearchIcon />
+		</button>
+		<input
+			v-model="keyword"
+			type="search"
+			placeholder="Type your keywords..."
+			class="rounded-full bg-gray-100 text-black focus:outline-none flex-grow mr-10"
+		/>
+	</div>
 </template>
 
 <script>
@@ -19,7 +19,7 @@ export default {
 	components: {
 		SearchIcon,
 	},
-	data () {
+	data() {
 		return {
 			keyword: ``,
 		}

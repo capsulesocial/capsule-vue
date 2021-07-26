@@ -1,20 +1,8 @@
 <template>
-  <div class="text-3xl">
-    <button
-      v-if="this.$store.state.settings.darkMode"
-      class="focus:outline-none"
-      @click="toggleDarkMode"
-    >
-      🌝
-    </button>
-    <button
-      v-else
-      class="focus:outline-none"
-      @click="toggleDarkMode"
-    >
-      🌞
-    </button>
-  </div>
+	<div class="text-3xl">
+		<button v-if="this.$store.state.settings.darkMode" class="focus:outline-none" @click="toggleDarkMode">🌝</button>
+		<button v-else class="focus:outline-none" @click="toggleDarkMode">🌞</button>
+	</div>
 </template>
 
 <script lang="ts">

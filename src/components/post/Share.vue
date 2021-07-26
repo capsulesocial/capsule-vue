@@ -1,60 +1,65 @@
 <template>
-  <div class="flex relative">
-    <button
-      class="flex focus:outline-none hover:text-primary toggle"
-      :class="showSocialShares ? 'text-primary' : ''"
-      @click.stop="toggleDropdown"
-    >
-      <SendIcon class="mr-2" />
-    </button>
-    <div
-      v-if="this.showSocialShares"
-      :class="this.$store.state.settings.darkMode ? 'bg-lightBG text-lightPrimaryText border-lightBorder' : 'bg-darkBG text-darkPrimaryText border-darkBorder'"
-      class="absolute flex flex-col mt-8 border-l border-r border-b rounded-lg p-1 rounded-t-none w-40 pl-2"
-    >
-      <!-- Repost -->
-      <button
-        :class="this.$store.state.settings.darkMode ? 'hover:text-lightActive' : 'hover:text-darkActive'"
-        class="flex focus:outline-none"
-        @click="handleRepost()"
-      >
-        <RepostIcon :isActive="this.isReposted" :shrink="true" />
-        <span
-          v-if="this.isReposted"
-          :class="this.$store.state.settings.darkMode ? 'text-lightActive' : 'text-darkActive'"
-          class="text-sm self-center"
-        >Undo Repost</span>
-        <span v-else class="text-sm self-center">Repost to Feed</span>
-      </button>
-      <!-- Twitter -->
-      <button
-        :class="this.$store.state.settings.darkMode ? 'hover:text-lightActive' : 'hover:text-darkActive'"
-        class="flex focus:outline-none"
-        @click="handleShare('TWITTER')"
-      >
-        <TwitterIcon class="p-1" />
-        <span class="text-sm">Share on Twitter</span>
-      </button>
-      <!-- Copy URL Link -->
-      <button
-        :class="this.$store.state.settings.darkMode ? 'hover:text-lightActive' : 'hover:text-darkActive'"
-        class="flex focus:outline-none"
-        @click="handleShare('URL')"
-      >
-        <LinkIcon class="p-1" />
-        <span class="text-sm self-center">Copy Link</span>
-      </button>
-    </div>
-    <input :id="this.$props.post.id" type="hidden" value="" class="hidden" />
-  </div>
+	<div class="flex relative">
+		<button
+			class="flex focus:outline-none hover:text-primary toggle"
+			:class="showSocialShares ? 'text-primary' : ''"
+			@click.stop="toggleDropdown"
+		>
+			<SendIcon class="mr-2" />
+		</button>
+		<div
+			v-if="this.showSocialShares"
+			:class="
+				this.$store.state.settings.darkMode
+					? 'bg-lightBG text-lightPrimaryText border-lightBorder'
+					: 'bg-darkBG text-darkPrimaryText border-darkBorder'
+			"
+			class="absolute flex flex-col mt-8 border-l border-r border-b rounded-lg p-1 rounded-t-none w-40 pl-2"
+		>
+			<!-- Repost -->
+			<button
+				:class="this.$store.state.settings.darkMode ? 'hover:text-lightActive' : 'hover:text-darkActive'"
+				class="flex focus:outline-none"
+				@click="handleRepost()"
+			>
+				<RepostIcon :isActive="this.isReposted" :shrink="true" />
+				<span
+					v-if="this.isReposted"
+					:class="this.$store.state.settings.darkMode ? 'text-lightActive' : 'text-darkActive'"
+					class="text-sm self-center"
+					>Undo Repost</span
+				>
+				<span v-else class="text-sm self-center">Repost to Feed</span>
+			</button>
+			<!-- Twitter -->
+			<button
+				:class="this.$store.state.settings.darkMode ? 'hover:text-lightActive' : 'hover:text-darkActive'"
+				class="flex focus:outline-none"
+				@click="handleShare('TWITTER')"
+			>
+				<TwitterIcon class="p-1" />
+				<span class="text-sm">Share on Twitter</span>
+			</button>
+			<!-- Copy URL Link -->
+			<button
+				:class="this.$store.state.settings.darkMode ? 'hover:text-lightActive' : 'hover:text-darkActive'"
+				class="flex focus:outline-none"
+				@click="handleShare('URL')"
+			>
+				<LinkIcon class="p-1" />
+				<span class="text-sm self-center">Copy Link</span>
+			</button>
+		</div>
+		<input :id="this.$props.post.id" type="hidden" value="" class="hidden" />
+	</div>
 </template>
 
 <script lang="ts">
-import Vue from "vue"
-import SendIcon from "@/components/icons/Share.vue"
-import TwitterIcon from "@/components/icons/brands/Twitter.vue"
-import LinkIcon from "@/components/icons/Link.vue"
-import RepostIcon from "@/components/icons/Repost.vue"
+import Vue from 'vue'
+import SendIcon from '@/components/icons/Share.vue'
+import TwitterIcon from '@/components/icons/brands/Twitter.vue'
+import LinkIcon from '@/components/icons/Link.vue'
+import RepostIcon from '@/components/icons/Repost.vue'
 
 export default Vue.extend({
 	components: {
@@ -69,13 +74,13 @@ export default Vue.extend({
 			default: null,
 		},
 	},
-	data () {
+	data() {
 		return {
 			showSocialShares: false,
 			isReposted: false,
 		}
 	},
-	created () {
+	created() {
 		const reposts = this.$store.state.session.reposts
 		if (!reposts) {
 			return
@@ -84,7 +89,7 @@ export default Vue.extend({
 			this.isReposted = true
 		}
 	},
-	mounted () {
+	mounted() {
 		window.addEventListener(
 			`click`,
 			(e: any): void => {
@@ -103,7 +108,7 @@ export default Vue.extend({
 		)
 	},
 	methods: {
-		handleRepost () {
+		handleRepost() {
 			this.$store.commit(`me/handleRepost`, this.$props.post.id)
 			this.isReposted = !this.isReposted
 			if (this.isReposted) {
@@ -112,24 +117,22 @@ export default Vue.extend({
 				alert(`Repost Removed!`)
 			}
 		},
-		handleShare (type) {
-			// this.$store.commit('posts/addShare', this.post.id)
+		handleShare(type) {
 			const shareElement = document.createElement(`textarea`)
 			shareElement.value = `${document.location.origin}/${this.post.authorID}/${this.post.id}`
 			shareElement.style.opacity = `0`
 			document.body.appendChild(shareElement)
 			switch (type) {
-			case `URL`:
-				shareElement.focus()
-				shareElement.select()
-				const copied = document.execCommand(`copy`)
-				alert(copied ? `Copied` : `Not copied`)
-				document.body.removeChild(shareElement)
-				break
-			case `TWITTER`:
-				// TODO: The below line constitutes a security risk and should be rewritten to use templating/stronger sanitization on the post title and authorID fields. The URI field should be double-checked as well.
-				window.open(
-					`https://twitter.com/share?url=` +
+				case `URL`:
+					shareElement.focus()
+					shareElement.select()
+					const copied = document.execCommand(`copy`)
+					alert(copied ? `Copied` : `Not copied`)
+					document.body.removeChild(shareElement)
+					break
+				case `TWITTER`:
+					window.open(
+						`https://twitter.com/share?url=` +
 							encodeURIComponent(shareElement.value) +
 							`&text=` +
 							`📰 ` +
@@ -137,15 +140,14 @@ export default Vue.extend({
 							`\n 🔏 ` +
 							this.post.authorID +
 							` on @CapsuleSoc 🔗`,
-				)
-				break
-			default:
-				break
+					)
+					break
+				default:
+					break
 			}
-			// Close Dropdown
 			this.showSocialShares = false
 		},
-		toggleDropdown () {
+		toggleDropdown() {
 			this.showSocialShares = !this.showSocialShares
 		},
 	},

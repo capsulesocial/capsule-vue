@@ -1,114 +1,96 @@
 <template>
-  <section>
-    <!-- Post a Comment -->
-    <article class="py-5">
-      <div class="flex items-start">
-        <!-- Profile Photo / Avatar -->
-        <span
-          v-if="this.myAvatar === '' || this.myAvatar === null"
-          class="p-1 border-2 rounded-full mt-1"
-        >
-          <ProfileIcon class="w-6 h-6" />
-        </span>
-        <img
-          v-else
-          :src="this.myAvatar"
-          class="w-10 h-10 rounded-lg object-cover mt-1"
-        />
-        <!-- Comment box Container -->
-        <div
-          class="flex bg-white shadow-xl rounded-xl p-3 ml-5 w-full relative overflow-hidden"
-        >
-          <!-- Background image -->
-          <div class="absolute flex flex-row -mt-3 -ml-3 w-full">
-            <img
-              v-if="this.emotion !== ''"
-              :src="
-                require('@/assets/images/backgrounds/' +
-                  this.emotion.toLowerCase() +
-                  '.png')
-              "
-              class="w-full"
-            />
-            <span v-else class="flex flex-row">
-              <img :src="require('@/assets/images/backgrounds/paper.png')" />
-              <img :src="require('@/assets/images/backgrounds/paper.png')" />
-              <img :src="require('@/assets/images/backgrounds/paper.png')" />
-            </span>
-          </div>
-          <div
-            class="flip-container relative border-2 shadow-inner rounded-xl overflow-hidden w-full h-24"
-            :class="this.showEmotions ? 'flip' : ''"
-          >
-            <div class="flipper flex flex-row absolute">
-              <!-- Type comment -->
-              <div class="front w-full">
-                <textarea
-                  v-model="comment"
-                  class="leading-normal resize-none overflow-y-auto w-full h-24 pl-2 pt-1 pr-16 focus:outline-none"
-                  name="body"
-                  placeholder="Write a Comment..."
-                  :class="this.$store.state.settings.darkMode ? 'bg-lightBG text-lightPrimaryText' : 'bg-darkBG text-darkPrimaryText'"
-                />
-                <div class="relative">
-                  <span class="absolute bottom-0 right-0 flex flex-col">
-                    <button class="mb-4" @click="showEmotions = !showEmotions">
-                      Flip
-                    </button>
-                    <BrandedButton
-                      text="Post"
-                      :action="sendComment"
-                      :thin="true"
-                      class="text-sm mb-4 mr-2"
-                      :class="this.comment !== '' ? '' : 'opacity-50'"
-                    />
-                  </span>
-                </div>
-              </div>
-              <div
-                :class="this.$store.state.settings.darkMode ? 'bg-lightBG text-lightPrimaryText' : 'bg-darkBG text-darkPrimaryText'"
-                class="back w-full px-1 h-24"
-              >
-                <!-- Select Reaction -->
-                <p
-                  :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-                  class="text-sm italic"
-                >
-                  What's your response?
-                </p>
-                <button @click="showEmotions = !showEmotions">
-                  Flip
-                </button>
-                <button
-                  v-for="r in this.$store.state.config.reactions"
-                  :key="r.label"
-                  @click="setEmotion(r)"
-                >
-                  {{ r.label }}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </article>
-    <article>
-      <CommentCard
-        v-for="c in this.filterComments()"
-        :key="c.id"
-        class="py-2"
-        :comment="c"
-      />
-    </article>
-  </section>
+	<section>
+		<!-- Post a Comment -->
+		<article class="py-5">
+			<div class="flex items-start">
+				<!-- Profile Photo / Avatar -->
+				<span v-if="this.myAvatar === '' || this.myAvatar === null" class="p-1 border-2 rounded-full mt-1">
+					<ProfileIcon class="w-6 h-6" />
+				</span>
+				<img v-else :src="this.myAvatar" class="w-10 h-10 rounded-lg object-cover mt-1" />
+				<!-- Comment box Container -->
+				<div class="flex bg-white shadow-xl rounded-xl p-3 ml-5 w-full relative overflow-hidden">
+					<!-- Background image -->
+					<div class="absolute flex flex-row -mt-3 -ml-3 w-full">
+						<img
+							v-if="this.emotion !== ''"
+							:src="require('@/assets/images/backgrounds/' + this.emotion.toLowerCase() + '.png')"
+							class="w-full"
+						/>
+						<span v-else class="flex flex-row">
+							<img :src="require('@/assets/images/backgrounds/paper.png')" />
+							<img :src="require('@/assets/images/backgrounds/paper.png')" />
+							<img :src="require('@/assets/images/backgrounds/paper.png')" />
+						</span>
+					</div>
+					<div
+						class="flip-container relative border-2 shadow-inner rounded-xl overflow-hidden w-full h-24"
+						:class="this.showEmotions ? 'flip' : ''"
+					>
+						<div class="flipper flex flex-row absolute">
+							<!-- Type comment -->
+							<div class="front w-full">
+								<textarea
+									v-model="comment"
+									class="leading-normal resize-none overflow-y-auto w-full h-24 pl-2 pt-1 pr-16 focus:outline-none"
+									name="body"
+									placeholder="Write a Comment..."
+									:class="
+										this.$store.state.settings.darkMode
+											? 'bg-lightBG text-lightPrimaryText'
+											: 'bg-darkBG text-darkPrimaryText'
+									"
+								/>
+								<div class="relative">
+									<span class="absolute bottom-0 right-0 flex flex-col">
+										<button class="mb-4" @click="showEmotions = !showEmotions">Flip</button>
+										<BrandedButton
+											text="Post"
+											:action="sendComment"
+											:thin="true"
+											class="text-sm mb-4 mr-2"
+											:class="this.comment !== '' ? '' : 'opacity-50'"
+										/>
+									</span>
+								</div>
+							</div>
+							<div
+								:class="
+									this.$store.state.settings.darkMode
+										? 'bg-lightBG text-lightPrimaryText'
+										: 'bg-darkBG text-darkPrimaryText'
+								"
+								class="back w-full px-1 h-24"
+							>
+								<!-- Select Reaction -->
+								<p
+									:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+									class="text-sm italic"
+								>
+									What's your response?
+								</p>
+								<button @click="showEmotions = !showEmotions">Flip</button>
+								<button v-for="r in this.$store.state.config.reactions" :key="r.label" @click="setEmotion(r)">
+									{{ r.label }}
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</article>
+		<article>
+			<CommentCard v-for="c in this.filterComments()" :key="c.id" class="py-2" :comment="c" />
+		</article>
+	</section>
 </template>
 
 <script lang="ts">
-import Vue from "vue"
-import { Comment } from "@/interfaces/Comment"
-import BrandedButton from "@/components/BrandedButton.vue"
-import ProfileIcon from "@/components/icons/Person.vue"
-import CommentCard from "@/components/post/Comment.vue"
+import Vue from 'vue'
+import { Comment } from '@/interfaces/Comment'
+import BrandedButton from '@/components/BrandedButton.vue'
+import ProfileIcon from '@/components/icons/Person.vue'
+import CommentCard from '@/components/post/Comment.vue'
 
 export default Vue.extend({
 	components: {
@@ -126,7 +108,7 @@ export default Vue.extend({
 			default: null,
 		},
 	},
-	data () {
+	data() {
 		const comments: Comment[] = []
 		return {
 			comment: ``,
@@ -137,7 +119,7 @@ export default Vue.extend({
 			commentBackground: `@/assets/images/brand/paper4.svg`,
 		}
 	},
-	created () {
+	created() {
 		if (this.$store.state.session.avatar !== ``) {
 			this.$getPhoto(this.$store.state.session.avatar).then((image) => {
 				this.myAvatar = image
@@ -145,11 +127,11 @@ export default Vue.extend({
 		}
 	},
 	methods: {
-		setEmotion (r) {
+		setEmotion(r) {
 			this.emotion = r.label
 			this.showEmotions = false
 		},
-		sendComment () {
+		sendComment() {
 			// Check comment quality
 			if (this.comment === `` || !this.$qualityText(this.comment)) {
 				alert(`invalid comment!`)
@@ -170,10 +152,10 @@ export default Vue.extend({
 				this.emotion = ``
 			}
 		},
-		handleReaction (reaction) {
+		handleReaction(reaction) {
 			this.emotion = reaction
 		},
-		filterComments () {
+		filterComments() {
 			let cList: Comment[] = []
 			if (this.$props.filter === null) {
 				cList = this.$props.post.comments

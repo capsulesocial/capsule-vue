@@ -1,63 +1,59 @@
 <template>
-  <section
-    class="w-full"
-    :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText bg-lightBG' : 'text-darkPrimaryText bg-darkBG'"
-  >
-    <nav class="flex flex-row border bg-secondary bg-opacity-25 py-2 px-4 pl-5">
-      <div class="flex items-center mr-6">
-        <button
-          v-if="this.algorithm !== 'NEW'"
-          class="font-sans py-2 px-4 focus:outline-none uppercase rounded-lg bg-gray-100 text-gray-800"
-          @click="sortFeed('NEW')"
-        >
-          New
-        </button>
-        <span
-          v-else
-          class="font-sans py-2 px-4 focus:outline-none uppercase rounded-lg bg-primary text-white shadow-lg"
-        >
-          New
-        </span>
-      </div>
-      <div class="flex items-center mr-6">
-        <button
-          v-if="this.algorithm !== 'TOP'"
-          class="font-sans py-2 px-4 focus:outline-none uppercase rounded-lg bg-gray-100 text-gray-800"
-          @click="sortFeed('TOP')"
-        >
-          Top
-        </button>
-        <span
-          v-else
-          class="font-sans py-2 px-4 focus:outline-none uppercase rounded-lg bg-primary text-white shadow-lg"
-        >
-          Top
-        </span>
-      </div>
-      <div class="flex items-center mr-6">
-        <button
-          v-if="this.algorithm !== 'FOLLOWING'"
-          class="font-sans py-2 px-4 focus:outline-none uppercase rounded-lg bg-gray-100 text-gray-800"
-          @click="sortFeed('FOLLOWING')"
-        >
-          following
-        </button>
-        <span
-          v-else
-          class="font-sans py-2 px-4 focus:outline-none uppercase rounded-lg bg-primary text-white shadow-lg"
-        >
-          following
-        </span>
-      </div>
-    </nav>
-    <div
-      v-for="post in this.posts"
-      :key="post.contentAddress"
-      class="mx-4"
-    >
-      <PostCard :post="post" />
-    </div>
-  </section>
+	<section
+		class="w-full"
+		:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText bg-lightBG' : 'text-darkPrimaryText bg-darkBG'"
+	>
+		<nav class="flex flex-row border bg-secondary bg-opacity-25 py-2 px-4 pl-5">
+			<div class="flex items-center mr-6">
+				<button
+					v-if="this.algorithm !== 'NEW'"
+					class="font-sans py-2 px-4 focus:outline-none uppercase rounded-lg bg-gray-100 text-gray-800"
+					@click="sortFeed('NEW')"
+				>
+					New
+				</button>
+				<span
+					v-else
+					class="font-sans py-2 px-4 focus:outline-none uppercase rounded-lg bg-primary text-white shadow-lg"
+				>
+					New
+				</span>
+			</div>
+			<div class="flex items-center mr-6">
+				<button
+					v-if="this.algorithm !== 'TOP'"
+					class="font-sans py-2 px-4 focus:outline-none uppercase rounded-lg bg-gray-100 text-gray-800"
+					@click="sortFeed('TOP')"
+				>
+					Top
+				</button>
+				<span
+					v-else
+					class="font-sans py-2 px-4 focus:outline-none uppercase rounded-lg bg-primary text-white shadow-lg"
+				>
+					Top
+				</span>
+			</div>
+			<div class="flex items-center mr-6">
+				<button
+					v-if="this.algorithm !== 'FOLLOWING'"
+					class="font-sans py-2 px-4 focus:outline-none uppercase rounded-lg bg-gray-100 text-gray-800"
+					@click="sortFeed('FOLLOWING')"
+				>
+					following
+				</button>
+				<span
+					v-else
+					class="font-sans py-2 px-4 focus:outline-none uppercase rounded-lg bg-primary text-white shadow-lg"
+				>
+					following
+				</span>
+			</div>
+		</nav>
+		<div v-for="post in this.posts" :key="post.contentAddress" class="mx-4">
+			<PostCard :post="post" />
+		</div>
+	</section>
 </template>
 
 <script lang="ts">
@@ -69,18 +65,18 @@ export default Vue.extend({
 	components: {
 		PostCard,
 	},
-	data () {
+	data() {
 		const posts: Post[] = []
 		return {
 			algorithm: `NEW`,
 			posts,
 		}
 	},
-	created () {
+	created() {
 		this.sortFeed(this.algorithm)
 	},
 	methods: {
-		sortFeed (a) {
+		sortFeed(a) {
 			this.posts = []
 			// Get list of posts
 			for (const p in this.$store.state.posts.recent) {

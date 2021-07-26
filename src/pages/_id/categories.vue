@@ -1,14 +1,14 @@
 <template>
-  <section>
-    <article>
-      <CategoryCard
-        text="test"
-        :bgImage="require('@/assets/images/category/education/education.jpg')"
-        layout="list"
-        class="p-5"
-      />
-    </article>
-  </section>
+	<section>
+		<article>
+			<CategoryCard
+				text="test"
+				:bgImage="require('@/assets/images/category/education/education.jpg')"
+				layout="list"
+				class="p-5"
+			/>
+		</article>
+	</section>
 </template>
 
 <script lang="ts">

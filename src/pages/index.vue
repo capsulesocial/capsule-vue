@@ -1,38 +1,32 @@
 <template>
-  <main
-    class="h-full"
-    :class="this.$store.state.settings.darkMode ? 'bg-lightBG text-lightPrimaryText' : 'bg-darkBG text-darkPrimaryText'"
-  >
-    <nav class="flex flex-row flex-wrap justify-between p-5">
-      <div class="flex items-center">
-        <span class="mr-5"><CapsuleIcon /></span>
-        <h1 class="text-3xl italic font-bold">
-          Capsule Social
-        </h1>
-      </div>
-      <section>
-        <p class="text-center">
-          Join the Community
-        </p>
-        <div
-          class="flex items-center justify-center"
-        >
-          <a href="https://twitter.com/capsule_social" target="_blank">
-            <TwitterIcon />
-          </a>
+	<main
+		class="h-full"
+		:class="this.$store.state.settings.darkMode ? 'bg-lightBG text-lightPrimaryText' : 'bg-darkBG text-darkPrimaryText'"
+	>
+		<nav class="flex flex-row flex-wrap justify-between p-5">
+			<div class="flex items-center">
+				<span class="mr-5"><CapsuleIcon /></span>
+				<h1 class="text-3xl italic font-bold">Capsule Social</h1>
+			</div>
+			<section>
+				<p class="text-center">Join the Community</p>
+				<div class="flex items-center justify-center">
+					<a href="https://twitter.com/capsule_social" target="_blank">
+						<TwitterIcon />
+					</a>
 
-          <a href="https://discord.gg/sZWjf3E6bY" target="_blank" class="ml-5 bg-white rounded-lg">
-            <DiscordIcon class="w-24" />
-          </a>
-        </div>
-      </section>
-    </nav>
-    <section>
-      <article class="flex justify-center">
-        <BrandedButton text="Get started" :action="handleCTA" />
-      </article>
-    </section>
-  </main>
+					<a href="https://discord.gg/sZWjf3E6bY" target="_blank" class="ml-5 bg-white rounded-lg">
+						<DiscordIcon class="w-24" />
+					</a>
+				</div>
+			</section>
+		</nav>
+		<section>
+			<article class="flex justify-center">
+				<BrandedButton text="Get started" :action="handleCTA" />
+			</article>
+		</section>
+	</main>
 </template>
 
 <script lang="ts">
@@ -51,7 +45,7 @@ export default Vue.extend({
 	},
 	layout: `landing`,
 	methods: {
-		handleCTA () {
+		handleCTA() {
 			if (this.$store.state.session.cid === ``) {
 				this.$router.push(`/auth`)
 			} else {

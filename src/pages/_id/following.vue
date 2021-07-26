@@ -1,24 +1,23 @@
 <template>
-  <section v-if="this.targetUser !== null" class="px-4">
-    <article>
-      <div v-for="i in this.targetUser['following']" :key="i">
-        <nuxt-link class="text-primary underline" :to="'/' + i">
-          {{ i }}
-        </nuxt-link>
-      </div>
-    </article>
-  </section>
+	<section v-if="this.targetUser !== null" class="px-4">
+		<article>
+			<div v-for="i in this.targetUser['following']" :key="i">
+				<nuxt-link class="text-primary underline" :to="'/' + i">
+					{{ i }}
+				</nuxt-link>
+			</div>
+		</article>
+	</section>
 </template>
 
 <script>
-
 export default {
-	data () {
+	data() {
 		return {
 			targetUser: null,
 		}
 	},
-	async created () {
+	async created() {
 		if (this.$route.params.id === this.$store.state.session.cid) {
 			this.targetUser = this.$store.state.session
 		} else {

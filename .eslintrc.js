@@ -17,7 +17,7 @@ module.exports = {
 		"vue/html-self-closing": 0,
 		"vue/this-in-template": 0,
 		"no-tabs": 0,
-		"indent": ["error", "tab"],
+		"indent": ["error", "tab", { "SwitchCase": 1 }],
 		"linebreak-style": ["error", "unix"],
 		"quotes": ["error", "backtick"],
 		"no-var": "error",
@@ -59,7 +59,6 @@ module.exports = {
 				"allowArrowFunctions": true
 			}
 		],
-		"arrow-parens": "error",
 		"arrow-spacing": [
 			"error", {
 				"before": true,

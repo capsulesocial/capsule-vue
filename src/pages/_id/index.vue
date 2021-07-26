@@ -1,9 +1,9 @@
 <template>
-  <section class="px-4">
-    <article v-for="post in this.posts" :key="post.id">
-      <PostCard :post="post" />
-    </article>
-  </section>
+	<section class="px-4">
+		<article v-for="post in this.posts" :key="post.id">
+			<PostCard :post="post" />
+		</article>
+	</section>
 </template>
 
 <script lang="ts">
@@ -15,14 +15,14 @@ export default Vue.extend({
 	components: {
 		PostCard,
 	},
-	data () {
+	data() {
 		const posts: Post[] = []
 		return {
 			currentUser: {},
 			posts,
 		}
 	},
-	async created () {
+	async created() {
 		// The user in which I am currently viewing
 		// Check if this is my profile
 		if (this.$route.params.id === this.$store.state.session.cid) {

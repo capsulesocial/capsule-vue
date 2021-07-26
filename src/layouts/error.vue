@@ -1,15 +1,13 @@
 <template>
-  <main>
-    <h1 class="text-4xl font-bold text-red-500 text-center">
-      {{ this.$props.error["statusCode"] }}: {{ this.$props.error["message"] }}
-    </h1>
-    <h6 class="text-xl text-center p-10">
-      😰 We're so sorry... An error has occurred 😓
-    </h6>
-    <div class="flex justify-center">
-      <BrandedButton text="Return" :action="goBack" class="w-64" />
-    </div>
-  </main>
+	<main>
+		<h1 class="text-4xl font-bold text-red-500 text-center">
+			{{ this.$props.error['statusCode'] }}: {{ this.$props.error['message'] }}
+		</h1>
+		<h6 class="text-xl text-center p-10">😰 We're so sorry... An error has occurred 😓</h6>
+		<div class="flex justify-center">
+			<BrandedButton text="Return" :action="goBack" class="w-64" />
+		</div>
+	</main>
 </template>
 
 <script>
@@ -26,13 +24,13 @@ export default {
 			default: null,
 		},
 	},
-	created () {
+	created() {
 		if (this.$store.state.session.cid === ``) {
 			this.$router.push(`/auth`)
 		}
 	},
 	methods: {
-		goBack () {
+		goBack() {
 			this.$router.push(`/`)
 		},
 	},

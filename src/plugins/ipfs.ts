@@ -6,13 +6,13 @@ const IPFS = require(`ipfs`)
 // eslint-disable-next-line quotes
 declare module 'vue/types/vue' {
 	interface Vue {
-		$getNode: () => any,
-		$sendProfile: (content: Profile) => Promise<string>,
-		$getProfile: (cid: string) => Promise<Profile>,
-		$sendPost: (content: Post) => Promise<string>,
-		$getPost: (cid: string) => Promise<Post>,
-		$getPhoto: (cid: string) => Promise<any>,
-		$sendPhoto: (content: any) => Promise<string>,
+		$getNode: () => any
+		$sendProfile: (content: Profile) => Promise<string>
+		$getProfile: (cid: string) => Promise<Profile>
+		$sendPost: (content: Post) => Promise<string>
+		$getPost: (cid: string) => Promise<Post>
+		$getPhoto: (cid: string) => Promise<any>
+		$sendPhoto: (content: any) => Promise<string>
 	}
 }
 
@@ -31,7 +31,7 @@ const ipfsPlugin: Plugin = async (_context, inject) => {
 	}
 
 	// Send a user profile object to IPFS
-	const sendProfile: ((content: Profile) => Promise<string>) = async (content) => {
+	const sendProfile: (content: Profile) => Promise<string> = async (content) => {
 		const profileAdded = await node.add({
 			path: content.id,
 			content: JSON.stringify(content),
@@ -41,7 +41,7 @@ const ipfsPlugin: Plugin = async (_context, inject) => {
 	}
 
 	// Returns post object associated with content id
-	const getProfile: ((cid: string) => Promise<Profile>) = async (cid) => {
+	const getProfile: (cid: string) => Promise<Profile> = async (cid) => {
 		let content: string = ``
 		for await (const chunk of node.cat(cid)) {
 			content += chunk.toString()
@@ -50,7 +50,7 @@ const ipfsPlugin: Plugin = async (_context, inject) => {
 	}
 
 	// Send post to IPFS
-	const sendPost: ((content: Post) => Promise<string>) = async (content: Post) => {
+	const sendPost: (content: Post) => Promise<string> = async (content: Post) => {
 		const postAdded = await node.add({
 			path: content.title,
 			content: JSON.stringify(content),
@@ -60,7 +60,7 @@ const ipfsPlugin: Plugin = async (_context, inject) => {
 	}
 
 	// Returns post object associated with content id
-	const getPost: ((cid: string) => Promise<Post>) = async (cid) => {
+	const getPost: (cid: string) => Promise<Post> = async (cid) => {
 		let content: string = ``
 		for await (const chunk of node.cat(cid)) {
 			content += chunk.toString()
@@ -69,14 +69,14 @@ const ipfsPlugin: Plugin = async (_context, inject) => {
 	}
 
 	// Add photo to IPFS
-	const sendPhoto: ((content: any) => Promise<string>) = async (content) => {
+	const sendPhoto: (content: any) => Promise<string> = async (content) => {
 		const photoAdded = await node.add(content)
 		const cid = photoAdded.cid.string
 		return cid
 	}
 
 	// Get photo
-	const getPhoto: ((cid: string) => Promise<any>) = async (cid) => {
+	const getPhoto: (cid: string) => Promise<any> = async (cid) => {
 		if (cid === null || cid === ``) {
 			return
 		}
