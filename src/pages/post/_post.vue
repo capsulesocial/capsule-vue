@@ -48,7 +48,7 @@
 			<!-- Content -->
 			<div
 				:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-				class="prose max-w-none content"
+				class="editable prose max-w-none content"
 				v-html="this.content"
 			></div>
 
@@ -125,7 +125,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import markdown from '@/mixins/markdown.js'
+// import markdown from '@/mixins/markdown.js'
 import marked from 'marked'
 import PostActions from '@/components/post/Actions.vue'
 import AuthorCard from '@/components/AuthorCard.vue'
@@ -147,7 +147,7 @@ export default Vue.extend({
 		ChevronUp,
 		ChevronDown,
 	},
-	mixins: [markdown],
+	// mixins: [markdown],
 	data() {
 		return {
 			post: {},

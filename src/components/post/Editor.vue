@@ -1,134 +1,157 @@
 <template>
-	<section
-		class="w-full h-auto border-l border-r"
-		:class="this.$store.state.settings.darkMode ? 'bg-lightBG text-lightPrimaryText' : 'bg-darkBG text-darkPrimaryText'"
-	>
-		<!-- Header and close button -->
-		<article
-			:class="
-				this.$store.state.settings.darkMode
-					? 'text-lightOnSurfaceVariantText bg-lightSurfaceVariant bg-opacity-25'
-					: 'text-darkOnSurfaceVariantText bg-darkSurfaceVariant bg-opacity-75'
-			"
-			class="flex items-center justify-between p-5 border-b"
-		>
-			<div class="flex items-center">
-				<h3 class="font-bold text-2xl pr-4">New Post</h3>
-				<h6 :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryVariant' : 'text-darkPrimaryVariant'">
-					Category
-				</h6>
-			</div>
-			<button class="flex items-center" @click="updateStore">
-				Save and Close
-				<CloseIcon class="ml-2" />
-			</button>
-		</article>
-
-		<!-- Title, subtitle, author -->
-		<article class="p-5 flex justify-between">
-			<div>
-				<label for="title" class="hidden">Title</label>
-				<input
-					v-model="title"
-					type="text"
-					placeholder="Enter Title"
-					:class="
-						this.$store.state.settings.darkMode
-							? 'text-lightPrimaryText bg-lightBG placeholder-lightSecondaryText'
-							: 'text-darkPrimaryText bg-darkBG placeholder-darkSecondaryText'
-					"
-					class="text-4xl focus:outline-none text-xl w-full pb-2"
-				/>
-				<label for="subtitle" class="hidden">Subtitle:</label>
-				<input
-					v-model="subtitle"
-					type="text"
-					placeholder="Enter Subtitle"
-					:class="
-						this.$store.state.settings.darkMode
-							? 'text-lightPrimaryText bg-lightBG placeholder-lightSecondaryText'
-							: 'text-darkPrimaryText bg-darkBG placeholder-darkSecondaryText'
-					"
-					class="text-2xl focus:outline-none text-xl w-full pb-2"
-				/>
-				<h6
-					:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-					class="text-sm pb-4"
-				>
-					By: {{ this.$store.state.session.name }}
-				</h6>
-			</div>
-			<div>
-				<!-- Upload Featured Image -->
-				<button
-					class="rounded-lg px-4 py-2"
-					:class="
-						this.$store.state.settings.darkMode
-							? 'bg-lightSecondary text-lightOnSecondaryText'
-							: 'bg-darkSecondary text-darkOnSecondaryText'
-					"
-					@click="$refs.featuredPhoto.click()"
-				>
-					<input
-						id="featured-photo"
-						ref="featuredPhoto"
-						class="hidden"
-						name="photo"
-						type="file"
-						accept="image/*"
-						@change="handleImage"
-					/>
-					<div class="flex justify-center items-center focus:outline-none">
-						<CameraIcon class="mr-2" />
-						<span class="w-32">Featured Photo</span>
-					</div>
+	<div>
+		<header>
+			<!-- Header and close button -->
+			<article class="flex items-center justify-between p-5 border-b border-l border-r">
+				<div class="flex items-center">
+					<CapsuleIcon />
+					<h3
+						:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryVariant' : 'text-darkPrimaryVariant'"
+						class="text-xl border-l-2 border-primary ml-4 pl-4"
+					>
+						New Post
+					</h3>
+				</div>
+				<button class="flex items-center" @click="updateStore">
+					Save and Close
+					<CloseIcon class="ml-2" />
 				</button>
-			</div>
-		</article>
+			</article>
+		</header>
 
-		<article class="px-5">
-			<img v-if="this.featuredPhoto !== null" :src="this.featuredPhoto" />
-		</article>
+		<div class="flex h-screen pt-24 -mt-24">
+			<section
+				class="w-full border-l"
+				:class="
+					this.$store.state.settings.darkMode ? 'bg-lightBG text-lightPrimaryText' : 'bg-darkBG text-darkPrimaryText'
+				"
+			>
+				<!-- Title, subtitle, author -->
+				<article class="p-5 flex justify-between">
+					<div>
+						<label for="title" class="hidden">Title</label>
+						<input
+							v-model="title"
+							type="text"
+							placeholder="Enter Title"
+							:class="
+								this.$store.state.settings.darkMode
+									? 'text-lightPrimaryText bg-lightBG placeholder-lightSecondaryText'
+									: 'text-darkPrimaryText bg-darkBG placeholder-darkSecondaryText'
+							"
+							class="text-4xl focus:outline-none text-xl w-full pb-2"
+						/>
+						<label for="subtitle" class="hidden">Subtitle:</label>
+						<input
+							v-model="subtitle"
+							type="text"
+							placeholder="Enter Subtitle"
+							:class="
+								this.$store.state.settings.darkMode
+									? 'text-lightPrimaryText bg-lightBG placeholder-lightSecondaryText'
+									: 'text-darkPrimaryText bg-darkBG placeholder-darkSecondaryText'
+							"
+							class="text-2xl focus:outline-none text-xl w-full pb-2"
+						/>
+						<h6
+							:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+							class="text-sm pb-4"
+						>
+							By: {{ this.$store.state.session.name }}
+						</h6>
+					</div>
+				</article>
 
-		<!-- WYSIWYG -->
-		<article class="px-5">
-			<div
-				:v-model="this.input"
-				class="editable prose max-w-none focus:outline-none border-t border-b py-5"
-				v-html="this.$store.state.draft.content"
-			></div>
-		</article>
+				<article class="px-5">
+					<img v-if="this.featuredPhoto !== null" :src="this.featuredPhoto" />
+				</article>
 
-		<article class="flex">
-			<!-- Bottom footer: Tags and Publish button -->
-			<footer class="w-full p-5 flex flex-row justify-between">
+				<!-- WYSIWYG -->
+				<div
+					:v-model="this.input"
+					class="editable prose max-w-none px-5 focus:outline-none border-t border-b py-5"
+					v-html="this.$store.state.draft.content"
+				></div>
+
+				<article class="flex"></article>
+			</section>
+
+			<!-- Right column -->
+			<section class="w-64 border-l border-r flex flex-col relative">
+				<button class="flex justify-between p-4 text-xl items-center border-b">
+					<h3>Tags</h3>
+					<ChevronDown />
+				</button>
+				<!-- Bottom footer: Tags and Publish button -->
+				<footer class="w-full p-5 flex flex-row justify-between">
+					<div>
+						<label for="tag" class="hidden" value="Enter hashtags"></label>
+						#<input
+							v-model="tag"
+							type="text"
+							placeholder="tag"
+							:class="
+								this.$store.state.settings.darkMode
+									? 'bg-lightBG text-lightPrimaryText placeholder-lightSecondaryText'
+									: 'bg-darkBG  text-darkPrimaryText placeholder-darkSecondaryText'
+							"
+							class="focus:outline-none w-32 pr-1 py-2 pl-1"
+						/>
+						<button class="rounded-full bg-primary border border-white p-2 focus:outline-none" @click="addTag">
+							<span class="text-white"><PlusIcon /></span>
+						</button>
+					</div>
+					<div class="flex flex-row">
+						<span v-for="t in this.$store.state.draft.tags" :key="t.name" class="flex flex-no-wrap items-center mx-2">
+							<button class="ml-1" @click="removeTag(t)">❌</button>
+							<TagCard :tag="t.name" />
+						</span>
+					</div>
+				</footer>
+
+				<button class="flex justify-between p-4 text-xl items-center border-b">
+					<h3>Category</h3>
+					<ChevronDown />
+				</button>
+				<button class="flex justify-between p-4 text-xl items-center border-b">
+					<h3>Image</h3>
+					<ChevronDown />
+				</button>
 				<div>
-					<label for="tag" class="hidden" value="Enter hashtags"></label>
-					#<input
-						v-model="tag"
-						type="text"
-						placeholder="tag"
+					<!-- Upload Featured Image -->
+					<button
+						class="rounded-lg px-4 py-2"
 						:class="
 							this.$store.state.settings.darkMode
-								? 'bg-lightBG text-lightPrimaryText placeholder-lightSecondaryText'
-								: 'bg-darkBG  text-darkPrimaryText placeholder-darkSecondaryText'
+								? 'bg-lightSecondary text-lightOnSecondaryText'
+								: 'bg-darkSecondary text-darkOnSecondaryText'
 						"
-						class="focus:outline-none w-32 pr-1 py-2 pl-1"
-					/>
-					<button class="rounded-full bg-primary border border-white p-2 focus:outline-none" @click="addTag">
-						<span class="text-white"><PlusIcon /></span>
+						@click="$refs.featuredPhoto.click()"
+					>
+						<input
+							id="featured-photo"
+							ref="featuredPhoto"
+							class="hidden"
+							name="photo"
+							type="file"
+							accept="image/*"
+							@change="handleImage"
+						/>
+						<div class="flex justify-center items-center focus:outline-none">
+							<CameraIcon class="mr-2" />
+							<span class="">Photo</span>
+						</div>
 					</button>
 				</div>
-				<div class="flex flex-row">
-					<span v-for="t in this.$store.state.draft.tags" :key="t.name" class="flex flex-no-wrap items-center mx-2">
-						<button class="ml-1" @click="removeTag(t)">❌</button>
-						<TagCard :tag="t.name" />
-					</span>
-				</div>
-			</footer>
-			<BrandedButton text="Publish" :action="post" class="preview justify-self-end w-32 h-12 self-center mr-5" />
-		</article>
-	</section>
+
+				<BrandedButton
+					text="Publish"
+					:action="post"
+					class="absolute justify-self-end w-32 h-12 self-center mr-5 bottom-0"
+				/>
+			</section>
+		</div>
+	</div>
 </template>
 
 <script lang="ts">
@@ -146,6 +169,9 @@ import BrandedButton from '@/components/BrandedButton.vue'
 import PlusIcon from '@/components/icons/Plus.vue'
 import TagCard from '@/components/Tag.vue'
 import CloseIcon from '@/components/icons/Close.vue'
+import CapsuleIcon from '@/components/icons/Capsule.vue'
+import ChevronUp from '@/components/icons/ChevronUp.vue'
+import ChevronDown from '@/components/icons/ChevronDown.vue'
 
 import { Post } from '@/interfaces/Post'
 import { Tag } from '@/interfaces/Tag'
@@ -160,6 +186,9 @@ export default Vue.extend({
 		PlusIcon,
 		TagCard,
 		CloseIcon,
+		CapsuleIcon,
+		ChevronUp,
+		ChevronDown,
 	},
 	data() {
 		let input: string = ``
@@ -190,6 +219,9 @@ export default Vue.extend({
 			paste: {
 				cleanPastedHTML: true,
 			},
+			toolbar: {
+				buttons: ['bold', 'italic', 'underline', 'anchor', 'h1', 'h2', 'h3', 'quote'],
+			},
 		})
 		this.turndownService = new Turndown()
 	},
@@ -205,7 +237,7 @@ export default Vue.extend({
 		toggleComposeState(state): void {
 			this.mobileState = state
 		},
-		update: _.debounce(function (this: any, e): void {
+		update: _.debounce(function(this: any, e): void {
 			const clean: string = DOMPurify.sanitize(e.target.value, {
 				USE_PROFILES: { html: true, svg: true },
 			})
@@ -251,7 +283,7 @@ export default Vue.extend({
 		},
 		post(): void {
 			// eslint-disable-next-line
-      this.input = this.turndownService.turndown(this.editor.getContent())
+			this.input = this.turndownService.turndown(this.editor.getContent())
 			// this.input = this.editor.getContent()
 			if (this.title === `` || !this.$qualityText(this.title)) {
 				alert(`Invalid title!`)
