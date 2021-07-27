@@ -13,8 +13,7 @@
 					</h3>
 				</div>
 				<button class="flex items-center" @click="updateStore">
-					Save and Close
-					<CloseIcon class="ml-2" />
+					<CloseIcon />
 				</button>
 			</article>
 		</header>
@@ -69,7 +68,7 @@
 				<!-- WYSIWYG -->
 				<div
 					:v-model="this.input"
-					class="editable prose max-w-none px-5 focus:outline-none border-t border-b py-5"
+					class="editable prose max-w-none px-5 focus:outline-none py-5"
 					v-html="this.$store.state.draft.content"
 				></div>
 
@@ -77,73 +76,64 @@
 			</section>
 
 			<!-- Right column -->
-			<section class="w-64 border-l border-r flex flex-col relative">
-				<button class="flex justify-between p-4 text-xl items-center border-b">
-					<h3>Tags</h3>
-					<ChevronDown />
-				</button>
-				<!-- Bottom footer: Tags and Publish button -->
-				<footer class="w-full p-5 flex flex-row justify-between">
-					<div>
+			<section class="w-64 border-l border-r flex flex-col relative bg-lightSecondary bg-opacity-25">
+				<!-- Tags tab -->
+				<article class="border-b">
+					<button class="flex w-full justify-between p-4 text-xl items-center" @click="changeTab('tags')">
+						<h3>Tags</h3>
+						<ChevronUp v-if="this.tabs.tags" />
+						<ChevronDown v-else />
+					</button>
+					<!-- Dropdown -->
+					<div v-if="this.tabs.tags">
 						<label for="tag" class="hidden" value="Enter hashtags"></label>
-						#<input
-							v-model="tag"
-							type="text"
-							placeholder="tag"
-							:class="
-								this.$store.state.settings.darkMode
-									? 'bg-lightBG text-lightPrimaryText placeholder-lightSecondaryText'
-									: 'bg-darkBG  text-darkPrimaryText placeholder-darkSecondaryText'
-							"
-							class="focus:outline-none w-32 pr-1 py-2 pl-1"
-						/>
+						#<input v-model="tag" type="text" placeholder="tag" class="focus:outline-none w-32 pr-1 py-2 pl-1" />
 						<button class="rounded-full bg-primary border border-white p-2 focus:outline-none" @click="addTag">
 							<span class="text-white"><PlusIcon /></span>
 						</button>
+						<button v-for="t in this.$store.state.draft.tags" :key="t.name" class="ml-1" @click="removeTag(t)">
+							<TagCard :tag="t.name" /> ❌
+						</button>
 					</div>
-					<div class="flex flex-row">
-						<span v-for="t in this.$store.state.draft.tags" :key="t.name" class="flex flex-no-wrap items-center mx-2">
-							<button class="ml-1" @click="removeTag(t)">❌</button>
-							<TagCard :tag="t.name" />
-						</span>
-					</div>
-				</footer>
-
-				<button class="flex justify-between p-4 text-xl items-center border-b">
-					<h3>Category</h3>
-					<ChevronDown />
-				</button>
-				<button class="flex justify-between p-4 text-xl items-center border-b">
-					<h3>Image</h3>
-					<ChevronDown />
-					<ChevronUp />
-				</button>
-				<div>
-					<!-- Upload Featured Image -->
-					<button
-						class="rounded-lg px-4 py-2"
-						:class="
-							this.$store.state.settings.darkMode
-								? 'bg-lightSecondary text-lightOnSecondaryText'
-								: 'bg-darkSecondary text-darkOnSecondaryText'
-						"
-						@click="$refs.featuredPhoto.click()"
-					>
-						<input
-							id="featured-photo"
-							ref="featuredPhoto"
-							class="hidden"
-							name="photo"
-							type="file"
-							accept="image/*"
-							@change="handleImage"
-						/>
-						<div class="flex justify-center items-center focus:outline-none">
-							<CameraIcon class="mr-2" />
-							<span class="">Photo</span>
-						</div>
+				</article>
+				<!-- Category tab -->
+				<article class="border-b">
+					<button class="flex w-full justify-between p-4 text-xl items-center" @click="changeTab('category')">
+						<h3>Category</h3>
+						<ChevronUp v-if="this.tabs.category" />
+						<ChevronDown v-else />
 					</button>
-				</div>
+					<!-- Dropdown -->
+					<div v-if="this.tabs.category">Display category list</div>
+				</article>
+				<!-- Image tab -->
+				<article class="border-b">
+					<button class="flex w-full justify-between p-4 text-xl items-center" @click="changeTab('image')">
+						<h3>Image</h3>
+						<ChevronUp v-if="this.tabs.image" />
+						<ChevronDown v-else />
+					</button>
+					<!-- Dropdown -->
+					<div v-if="this.tabs.category">
+						<!-- Upload Featured Image -->
+						<button class="rounded-lg px-4 py-2" @click="$refs.featuredPhoto.click()">
+							<input
+								id="featured-photo"
+								ref="featuredPhoto"
+								class="hidden"
+								name="photo"
+								type="file"
+								accept="image/*"
+								@change="handleImage"
+							/>
+							<div class="flex justify-center items-center focus:outline-none">
+								<CameraIcon class="mr-2" />
+								<span class="">Photo</span>
+							</div>
+						</button>
+					</div>
+				</article>
+				<div></div>
 
 				<BrandedButton
 					text="Publish"
@@ -158,8 +148,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapMutations } from 'vuex'
-// import { postsMutationType, namespace as postsStoreNamespace, Posts} from '~/store/posts'
-
 import _ from 'lodash'
 import DOMPurify from 'dompurify'
 import MediumEditor from 'medium-editor'
@@ -178,8 +166,6 @@ import { Post } from '@/interfaces/Post'
 import { Tag } from '@/interfaces/Tag'
 import { Profile } from '@/interfaces/Profile'
 import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
-// import { actionType, namespace as settingStoreNamespace } from '~/store/settings'
-
 export default Vue.extend({
 	components: {
 		BrandedButton,
@@ -202,13 +188,16 @@ export default Vue.extend({
 			title: this.$store.state.draft.title,
 			subtitle: this.$store.state.draft.subtitle,
 			input,
-			showPreview: false,
-			mobileState: `edit`,
 			tag: ``,
 			featuredPhoto: null,
 			featuredPhotoCID: ``,
 			editor: MediumEditor,
 			turndownService: Turndown,
+			tabs: {
+				tags: false,
+				category: false,
+				image: false,
+			},
 		}
 	},
 	mounted() {
@@ -235,9 +224,6 @@ export default Vue.extend({
 			addPost: MutationType.ADD_POST,
 			changeCID: MutationType.CHANGE_CID,
 		}),
-		toggleComposeState(state): void {
-			this.mobileState = state
-		},
 		update: _.debounce(function (this: any, e): void {
 			const clean: string = DOMPurify.sanitize(e.target.value, {
 				USE_PROFILES: { html: true, svg: true },
@@ -245,6 +231,15 @@ export default Vue.extend({
 			// eslint-disable-next-line no-invalid-this
 			this.input = clean
 		}, 300),
+		changeTab(t: string) {
+			if (t === `tags`) {
+				this.tabs.tags = !this.tabs.tags
+			} else if (t === `category`) {
+				this.tabs.category = !this.tabs.category
+			} else if (t === `image`) {
+				this.tabs.image = !this.tabs.image
+			}
+		},
 		addTag(): void {
 			if (this.tag === `` || !this.$qualityText(this.tag)) {
 				alert(`Invalid tag!`)
@@ -258,7 +253,6 @@ export default Vue.extend({
 			}
 		},
 		removeTag(t): void {
-			// Remove
 			this.$store.commit(`draft/removeTag`, t)
 		},
 		handleImage(e): void {
@@ -283,9 +277,7 @@ export default Vue.extend({
 			})
 		},
 		post(): void {
-			// eslint-disable-next-line
 			this.input = this.turndownService.turndown(this.editor.getContent())
-			// this.input = this.editor.getContent()
 			if (this.title === `` || !this.$qualityText(this.title)) {
 				alert(`Invalid title!`)
 			} else if (this.subtitle === `` || !this.$qualityText(this.subtitle)) {
@@ -305,19 +297,13 @@ export default Vue.extend({
 					authorCID: this.$store.state.session.cid,
 					featuredPhotoCID: this.featuredPhotoCID,
 				}
-				// sending post to IPFS. Returns Content Address
 				this.$sendPost(p).then((cid) => {
-					// eslint-disable-next-line no-console
 					p.cid = cid
-					// Adding post to local profile object
 					this.$store.commit(`posts/addPost`, p)
 					this.addPost(p)
 					const profile: Profile = this.$store.state.session
-					// Sending updated profile to IPFS.
-					// Returns upd ated content address
 					this.$sendProfile(profile).then((pcid) => {
 						this.changeCID(pcid)
-						// Reset draft & redirect
 						this.title = ``
 						this.subtitle = ``
 						this.input = ``
