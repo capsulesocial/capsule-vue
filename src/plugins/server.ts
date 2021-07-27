@@ -18,7 +18,7 @@ async function sendAuthentication(data: Authentication): Promise<boolean> {
 	const encPrivateKey = Buffer.from(data.privateKey.encryptedPeerIDPrivateKey).toString(`hex`)
 	const hp1 = Buffer.from(data.privateKey.hp1).toString(`hex`)
 
-	const requestURL = new URL(`/write/${data.id}/${encPrivateKey}/${nonce}/${hp1}`, serverURL)
+	const requestURL = new URL(`/write/${data.id}/${encPrivateKey}/${nonce}/${hp1}/${data.profileCID}`, serverURL)
 	try {
 		const response = await axios.get(requestURL.toString())
 		if (response.data.status === `OK`) {
@@ -46,7 +46,7 @@ async function getAuthentication(
 		hp1: new Uint8Array(),
 		nonce: new Uint8Array(),
 	}
-	const defaultAuth: Authentication = { privateKey: defaultprivKey, id: username }
+	const defaultAuth: Authentication = { privateKey: defaultprivKey, id: username, profileCID: `` }
 
 	const requestURL = new URL(`/read/${username}/${hp1Hex}`, serverURL)
 	try {
@@ -56,7 +56,7 @@ async function getAuthentication(
 			const hp1 = new Uint8Array(Buffer.from(response.data.hp1, `hex`))
 			const nonce = new Uint8Array(Buffer.from(response.data.encryptedPrivateKeyNonce, `hex`))
 			const privKey: PrivateKey = { encryptedPeerIDPrivateKey, hp1, nonce }
-			const auth: Authentication = { privateKey: privKey, id: username }
+			const auth: Authentication = { privateKey: privKey, id: username, profileCID: response.data.cid }
 			return { success: true, auth }
 		}
 	} catch {

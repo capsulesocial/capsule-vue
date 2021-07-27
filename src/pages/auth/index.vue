@@ -191,7 +191,7 @@ export default Vue.extend({
 						id: this.id,
 						name: this.name,
 						email: this.email,
-						password: this.password,
+						password: ``,
 						bio: `Default bio.`,
 						location: ``,
 						posts: [],
@@ -206,19 +206,21 @@ export default Vue.extend({
 					}
 					const node = this.$getNode()
 					// Export private key: encrypt it using AES-GCM (for Ed25519 keys)
-					const peerIDPrivateKey = await node.key.export(`self`, `password`)
-					const _res = await this.$register(account, peerIDPrivateKey)
+					// Send user profile to IPFS
+					const [peerIDPrivateKey, cid] = await Promise.all([
+						node.key.export(`self`, `password`),
+						this.$sendProfile(account),
+					])
+					account.cid = cid
+					account.password = this.password
+					const _res = await this.$register(account, peerIDPrivateKey, cid)
 					if (_res === true) {
 						// Registration successful
-						account.password = ``
-						this.$sendProfile(account).then((cid) => {
-							account.cid = cid
-							this.changeCID(cid)
-							this.changeID(this.id)
-							this.changeName(this.name)
-							this.changeEmail(this.email)
-							this.$router.push(`/settings`)
-						})
+						this.changeCID(cid)
+						this.changeID(this.id)
+						this.changeName(this.name)
+						this.changeEmail(this.email)
+						this.$router.push(`/settings`)
 					} else {
 						alert(`Registration Unsuccessful!`)
 					}

@@ -9,25 +9,31 @@ const multibase = require(`multibase`)
 // eslint-disable-next-line quotes
 declare module 'vue/types/vue' {
 	interface Vue {
-		$register: (payload: Profile, peerIDPrivateKey: string) => Promise<boolean>
-		$login: (username: string, password: string) => Promise<boolean>
+		$register: (payload: Profile, peerIDPrivateKey: string, profileCID: string) => Promise<boolean>
+		$login: (
+			username: string,
+			password: string,
+		) => Promise<{ success: boolean; peerIDPrivateKey: string; profileCID: string }>
 	}
 }
 
 // POST newly created account to IPFS
-async function register(payload: Profile, peerIDPrivateKey: string): Promise<boolean> {
+async function register(payload: Profile, peerIDPrivateKey: string, profileCID: string): Promise<boolean> {
 	const base64 = multibase.names.base64
 	// peerIDPrivateKey is base64 encoded using js-multibase
 	const peerIDPrivateKeyBytes = base64.decode(peerIDPrivateKey)
 
 	const encPrivateKey = await getEncryptedPeerIDPrivateKey(payload, peerIDPrivateKeyBytes)
 
-	const AuthObj: Authentication = { privateKey: encPrivateKey, id: payload.id }
+	const AuthObj: Authentication = { privateKey: encPrivateKey, id: payload.id, profileCID }
 	const authstatus = await sendAuthentication(AuthObj)
 	return authstatus
 }
 
-async function login(username: string, password: string): Promise<boolean> {
+async function login(
+	username: string,
+	password: string,
+): Promise<{ success: boolean; peerIDPrivateKey: string; profileCID: string }> {
 	const ec = new TextEncoder()
 
 	// HKDF(key: userPassword, info: "CapsuleBlogchainAuth", salt: username)
@@ -48,10 +54,9 @@ async function login(username: string, password: string): Promise<boolean> {
 		)
 		const base64 = multibase.names.base64
 		const peerIDPrivateKey = base64.encode(peerIDPrivateKeyBytes)
-		console.log(peerIDPrivateKey)
-		return success
+		return { success, peerIDPrivateKey, profileCID: auth.profileCID }
 	}
-	return false
+	return { success: false, peerIDPrivateKey: ``, profileCID: `` }
 }
 
 const authPlugin: Plugin = (_context, inject) => {
