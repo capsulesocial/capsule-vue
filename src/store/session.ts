@@ -2,7 +2,6 @@
 import type { GetterTree, MutationTree } from 'vuex'
 import type { RootState } from './index'
 import { Profile } from '~/interfaces/Profile'
-import { Post } from '~/interfaces/Post'
 
 export const namespace = `session`
 
@@ -61,7 +60,7 @@ export const mutations: MutationTree<Profile> = {
 	[MutationType.CHANGE_LOCATION]: (state, newLocation: string) => {
 		state.location = newLocation
 	},
-	[MutationType.ADD_POST]: (state, newPost: Post) => {
+	[MutationType.ADD_POST]: (state, newPost: string) => {
 		state.posts.push(newPost)
 	},
 	[MutationType.LOGOUT]: (state) => {

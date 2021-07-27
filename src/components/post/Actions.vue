@@ -12,11 +12,7 @@
 				<div class="flex bg-white shadow-xl rounded-xl p-3 ml-5 w-full relative overflow-hidden">
 					<!-- Background image -->
 					<div class="absolute flex flex-row -mt-3 -ml-3 w-full">
-						<img
-							v-if="this.emotion !== ''"
-							:src="require('@/assets/images/backgrounds/' + this.emotion.toLowerCase() + '.png')"
-							class="w-full"
-						/>
+						<img v-if="this.emotion !== ''" :src="this.emotion.background" class="w-full" />
 						<span v-else class="flex flex-row">
 							<img :src="require('@/assets/images/backgrounds/paper.png')" />
 							<img :src="require('@/assets/images/backgrounds/paper.png')" />
@@ -43,12 +39,15 @@
 								/>
 								<div class="relative">
 									<span class="absolute bottom-0 right-0 flex flex-col">
-										<button class="mb-4" @click="showEmotions = !showEmotions">Flip</button>
+										<button @click="showEmotions = !showEmotions">
+											<img v-if="this.emotion !== ''" :src="this.emotion.image" class="h-16 w-16 object-center" />
+											<span v-else>Flip</span>
+										</button>
 										<BrandedButton
 											text="Post"
 											:action="sendComment"
 											:thin="true"
-											class="text-sm mb-4 mr-2"
+											class="text-sm mb-3 mr-1"
 											:class="this.comment !== '' ? '' : 'opacity-50'"
 										/>
 									</span>
@@ -69,10 +68,11 @@
 								>
 									What's your response?
 								</p>
-								<button @click="showEmotions = !showEmotions">Flip</button>
-								<button v-for="r in this.$store.state.config.reactions" :key="r.label" @click="setEmotion(r)">
-									{{ r.label }}
-								</button>
+								<div class="flex flex-nowrap overflow-x-auto">
+									<button v-for="r in this.$store.state.config.reactions" :key="r.label" @click="setEmotion(r)">
+										<img :src="r.image" :alt="r.label" class="flex-shrink-0 h-12 w-12" />
+									</button>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -93,6 +93,7 @@ import ProfileIcon from '@/components/icons/Person.vue'
 import CommentCard from '@/components/post/Comment.vue'
 
 export default Vue.extend({
+	name: `ComponentPostActions`,
 	components: {
 		BrandedButton,
 		ProfileIcon,
@@ -128,7 +129,7 @@ export default Vue.extend({
 	},
 	methods: {
 		setEmotion(r) {
-			this.emotion = r.label
+			this.emotion = r
 			this.showEmotions = false
 		},
 		sendComment() {

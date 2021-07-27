@@ -1,6 +1,3 @@
-import { Post } from '@/interfaces/Post'
-import { Comment } from '@/interfaces/Comment'
-
 export interface Profile {
 	cid: string
 	id: string
@@ -10,10 +7,10 @@ export interface Profile {
 	bio: string
 	location: string
 	avatar: string
-	posts: Post[]
-	reposts: Post[]
+	posts: string[]
+	reposts: string[]
 	socials: []
-	comments: Comment[]
+	comments: string[]
 	bookmarks: string[]
 	categories: string[]
 	following: string[]

@@ -114,7 +114,7 @@
 						<ChevronDown v-else />
 					</button>
 					<!-- Dropdown -->
-					<div v-if="this.tabs.category">
+					<div v-if="this.tabs.image">
 						<!-- Upload Featured Image -->
 						<button class="rounded-lg px-4 py-2" @click="$refs.featuredPhoto.click()">
 							<input
@@ -297,10 +297,10 @@ export default Vue.extend({
 					authorCID: this.$store.state.session.cid,
 					featuredPhotoCID: this.featuredPhotoCID,
 				}
-				this.$sendPost(p).then((cid) => {
+				this.$sendPost(p).then((cid: string) => {
 					p.cid = cid
-					this.$store.commit(`posts/addPost`, p)
-					this.addPost(p)
+					this.$store.commit(`posts/addPost`, cid)
+					this.addPost(cid)
 					const profile: Profile = this.$store.state.session
 					this.$sendProfile(profile).then((pcid) => {
 						this.changeCID(pcid)
