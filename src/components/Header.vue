@@ -41,15 +41,15 @@
 						class="bg-gray1 rounded-full w-10 h-10 focus:outline-none flex justify-center shadow-lg dropdown"
 						@click.stop="toggleDropdown"
 					>
-						<DownIcon v-if="!showMore" class="self-center dropdown" />
-						<UpIcon v-else class="self-center dropdown" />
+						<DownIcon v-show="!showMore" class="self-center dropdown" />
+						<UpIcon v-show="showMore" class="self-center dropdown" />
 					</button>
 				</span>
 			</div>
 			<!-- Dropdown menu -->
 			<div
-				v-if="showMore"
-				class="absolute mt-64 z-10 bg-white shadow-lg rounded-lg w-64 -ml-4"
+				v-show="showMore"
+				class="absolute mt-56 z-10 bg-white shadow-lg rounded-lg w-64 -ml-4"
 				@click.stop="toggleDropdown"
 			>
 				<nuxt-link to="/settings" class="w-full p-2 grid grid-cols-4 items-center">

@@ -77,23 +77,26 @@
 		<!-- Mobile -->
 		<div class="fixed md:hidden bottom-0 h-16 w-full flex flex-row justify-around pb-4 pt-2 items-end bg-white z-50">
 			<nuxt-link to="/home">
-				<HomeIcon v-if="this.$route.path === '/home'" class="stroke-current text-primary" />
-				<HomeIcon v-else class="stroke-current text-gray-400" />
+				<HomeIcon v-show="this.$route.path === '/home'" class="stroke-current text-primary" />
+				<HomeIcon v-show="this.$route.path !== '/home'" class="stroke-current text-gray-400" />
 			</nuxt-link>
 			<nuxt-link to="/discover">
-				<DiscoverIcon v-if="this.$route.path === '/discover'" class="stroke-current text-primary" />
-				<DiscoverIcon v-else class="stroke-current text-gray-400" />
+				<DiscoverIcon v-show="this.$route.path === '/discover'" class="stroke-current text-primary" />
+				<DiscoverIcon v-show="this.$route.path !== '/discover'" class="stroke-current text-gray-400" />
 			</nuxt-link>
 			<nuxt-link to="/post" class="focus:outline-none bg-primary p-4 rounded-full shadow-lg">
 				<PencilIcon class="fill-current text-white" />
 			</nuxt-link>
-			<ProfileIcon v-if="this.$route.params.id === this.$store.state.session.cid" class="stroke-current text-primary" />
-			<nuxt-link v-else :to="$store.state.session.cid">
+			<ProfileIcon
+				v-show="this.$route.params.id === this.$store.state.session.cid"
+				class="stroke-current text-primary"
+			/>
+			<nuxt-link v-show="this.$route.params.id !== this.$store.state.session.cid" :to="$store.state.session.cid">
 				<ProfileIcon class="stroke-current text-gray-400" />
 			</nuxt-link>
 			<nuxt-link to="/settings">
-				<SettingsIcon v-if="this.$route.path === '/settings'" class="text-primary" />
-				<SettingsIcon v-else class="fill-gray-400 text-gray-400" />
+				<SettingsIcon v-show="this.$route.path === '/settings'" class="text-primary" />
+				<SettingsIcon v-show="this.$route.path !== '/settings'" class="fill-gray-400 text-gray-400" />
 			</nuxt-link>
 		</div>
 	</nav>

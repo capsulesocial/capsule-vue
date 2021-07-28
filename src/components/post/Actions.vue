@@ -62,20 +62,72 @@
 										? 'bg-lightBG text-lightPrimaryText'
 										: 'bg-darkBG text-darkPrimaryText'
 								"
-								class="back w-full px-1 h-24"
+								class="back flex justify-between items-center w-full px-1 h-24"
 							>
-								<!-- Select Reaction -->
-								<p
-									:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-									class="text-sm italic"
-								>
-									What's your response?
-								</p>
-								<div class="flex flex-nowrap overflow-x-auto">
-									<button v-for="r in this.$store.state.config.reactions" :key="r.label" @click="setEmotion(r)">
-										<img :src="r.image" :alt="r.label" class="flex-shrink-0 h-12 w-12" />
-									</button>
+								<!-- Left Button -->
+								<button @click="decSlide()">
+									<ChevronLeft />
+								</button>
+								<!-- Slides -->
+								<div class="flex flex-col h-full">
+									<!-- <p
+										:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+										class="text-sm italic"
+									>
+										What's your response?
+									</p> -->
+									<div v-show="this.slideCounter === 0" class="flex flex-grow items-center w-full h-full">
+										<!-- <button v-for="r in this.$store.state.config.reactions" :key="r.label" @click="setEmotion(r)">
+											<img :src="r.image" :alt="r.label" class="flex-shrink-0 h-14 w-14" />
+										</button> -->
+										<button @click="setEmotion(this.$store.state.config.reactions.awe)">
+											<img
+												:src="this.$store.state.config.reactions.awe.image"
+												:alt="this.$store.state.config.reactions.awe.label"
+												class="flex-shrink-0 h-20 w-20"
+											/>
+										</button>
+										<button @click="setEmotion(this.$store.state.config.reactions.happy)">
+											<img
+												:src="this.$store.state.config.reactions.happy.image"
+												:alt="this.$store.state.config.reactions.happy.label"
+												class="flex-shrink-0 h-20 w-20"
+											/>
+										</button>
+										<button @click="setEmotion(this.$store.state.config.reactions.excited)">
+											<img
+												:src="this.$store.state.config.reactions.excited.image"
+												:alt="this.$store.state.config.reactions.excited.label"
+												class="flex-shrink-0 h-20 w-20"
+											/>
+										</button>
+										<button @click="setEmotion(this.$store.state.config.reactions.goofy)">
+											<img
+												:src="this.$store.state.config.reactions.goofy.image"
+												:alt="this.$store.state.config.reactions.goofy.label"
+												class="flex-shrink-0 h-20 w-20"
+											/>
+										</button>
+										<button @click="setEmotion(this.$store.state.config.reactions.satisfied)">
+											<img
+												:src="this.$store.state.config.reactions.satisfied.image"
+												:alt="this.$store.state.config.reactions.satisfied.label"
+												class="flex-shrink-0 h-20 w-20"
+											/>
+										</button>
+										<button @click="setEmotion(this.$store.state.config.reactions.touched)">
+											<img
+												:src="this.$store.state.config.reactions.touched.image"
+												:alt="this.$store.state.config.reactions.touched.label"
+												class="flex-shrink-0 h-20 w-20"
+											/>
+										</button>
+									</div>
 								</div>
+								<button @click="incSlide()">
+									<ChevronRight />
+								</button>
+								<!-- Select Reaction -->
 							</div>
 						</div>
 					</div>
@@ -94,6 +146,8 @@ import { Comment } from '@/interfaces/Comment'
 import BrandedButton from '@/components/BrandedButton.vue'
 import ProfileIcon from '@/components/icons/Person.vue'
 import CommentCard from '@/components/post/Comment.vue'
+import ChevronLeft from '../icons/ChevronLeft.vue'
+import ChevronRight from '../icons/ChevronRight.vue'
 
 export default Vue.extend({
 	name: `ComponentPostActions`,
@@ -101,6 +155,8 @@ export default Vue.extend({
 		BrandedButton,
 		ProfileIcon,
 		CommentCard,
+		ChevronLeft,
+		ChevronRight,
 	},
 	props: {
 		post: {
@@ -121,6 +177,7 @@ export default Vue.extend({
 			myAvatar: ``,
 			showEmotions: false,
 			commentBackground: `@/assets/images/brand/paper4.svg`,
+			slideCounter: 0,
 		}
 	},
 	created() {
@@ -175,6 +232,12 @@ export default Vue.extend({
 				return p1.timestamp.getTime() - p0.timestamp.getTime()
 			})
 			return cList
+		},
+		incSlide() {
+			this.slideCounter += 1
+		},
+		decSlide() {
+			this.slideCounter -= 1
 		},
 	},
 })

@@ -68,15 +68,10 @@
 						<ChevronDown v-else />
 					</button>
 					<!-- Dropdown -->
-					<div v-if="this.tabs.tags" class="pb-2">
+					<div v-show="this.tabs.tags" class="pb-2">
 						<div class="flex flex-row flex-nowrap py-2">
 							<label for="tag" class="hidden" value="Enter hashtags"></label>
-							#<input
-								v-model="tag"
-								type="text"
-								placeholder="tag"
-								class="w-32 pl-1 bg-transparent border-b focus:outline-none"
-							/>
+							#<input v-model="tag" type="text" placeholder="tag" class="w-32 pl-1 bg-transparent focus:outline-none" />
 							<button class="focus:outline-none" @click="addTag">
 								<span class="text-primary"><PlusIcon /></span>
 							</button>
@@ -96,7 +91,7 @@
 						<ChevronDown v-else />
 					</button>
 					<!-- Dropdown -->
-					<div v-if="this.tabs.category" class="flex flex-col">
+					<div v-show="this.tabs.category" class="flex flex-col">
 						<button
 							v-for="c in this.$store.state.config.categories"
 							:key="c"
@@ -115,7 +110,7 @@
 						<ChevronDown v-else />
 					</button>
 					<!-- Dropdown -->
-					<div v-if="this.tabs.image">
+					<div v-show="this.tabs.image">
 						<!-- Upload Featured Image -->
 						<button class="w-full" @click="$refs.featuredPhoto.click()">
 							<input

@@ -95,7 +95,7 @@
 					class="self-center"
 				/>
 			</div>
-			<div v-if="this.showComments" class="flex">
+			<div v-show="this.showComments" class="flex">
 				<h6>Filter Comments</h6>
 				<div class="relative">
 					<button
@@ -108,7 +108,7 @@
 						<ChevronDown v-else />
 					</button>
 					<ul
-						v-if="this.showFilter"
+						v-show="this.showFilter"
 						:class="
 							this.$store.state.settings.darkMode
 								? 'bg-lightBG text-lightSecondaryText'
@@ -133,7 +133,7 @@
 				</div>
 			</div>
 		</div>
-		<PostActions v-if="this.showComments" :post="this.post" :filter="this.filter" />
+		<PostActions v-show="this.showComments" :post="this.post" :filter="this.filter" />
 	</article>
 </template>
 
