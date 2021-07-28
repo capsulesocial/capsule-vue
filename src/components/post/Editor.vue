@@ -1,32 +1,25 @@
 <template>
-	<div>
-		<header>
-			<!-- Header and close button -->
-			<article class="flex items-center justify-between p-5 border-b border-l border-r">
-				<div class="flex items-center">
-					<CapsuleIcon />
-					<h3
-						:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryVariant' : 'text-darkPrimaryVariant'"
-						class="text-xl border-l-2 border-primary ml-4 pl-4"
-					>
-						New Post
-					</h3>
-				</div>
-				<button class="flex items-center" @click="updateStore">
-					<CloseIcon />
-				</button>
-			</article>
-		</header>
+	<div class="relative">
+		<button class="absolute flex items-center mt-6 right-0" @click="updateStore">
+			<CloseIcon />
+		</button>
 
 		<div class="flex h-screen pt-24 -mt-24">
 			<section
-				class="w-full border-l"
+				class="w-full shadow-lg border-l border-r px-10"
 				:class="
 					this.$store.state.settings.darkMode ? 'bg-lightBG text-lightPrimaryText' : 'bg-darkBG text-darkPrimaryText'
 				"
 			>
+				<!-- Save to Drafts & Category -->
+				<article class="p-5">
+					<div class="w-full border-b pb-5 mb-5">
+						<h6 class="text-sm">Saved to <span class="font-bold underline">Drafts</span></h6>
+					</div>
+					<h6 class="text-primary uppercase text-sm">{{ this.category === `` ? 'Category' : this.category }}</h6>
+				</article>
 				<!-- Title, subtitle, author -->
-				<article class="p-5 flex justify-between">
+				<article class="flex justify-between px-5">
 					<div>
 						<label for="title" class="hidden">Title</label>
 						<input
@@ -38,7 +31,7 @@
 									? 'text-lightPrimaryText bg-lightBG placeholder-lightSecondaryText'
 									: 'text-darkPrimaryText bg-darkBG placeholder-darkSecondaryText'
 							"
-							class="text-4xl focus:outline-none text-xl w-full pb-2"
+							class="font-serif font-bold text-4xl focus:outline-none text-xl w-full pb-2"
 						/>
 						<label for="subtitle" class="hidden">Subtitle:</label>
 						<input
@@ -52,17 +45,7 @@
 							"
 							class="text-2xl focus:outline-none text-xl w-full pb-2"
 						/>
-						<h6
-							:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-							class="text-sm pb-4"
-						>
-							By: {{ this.$store.state.session.name }}
-						</h6>
 					</div>
-				</article>
-
-				<article class="px-5">
-					<img v-if="this.featuredPhoto !== null" :src="this.featuredPhoto" />
 				</article>
 
 				<!-- WYSIWYG -->
@@ -76,39 +59,57 @@
 			</section>
 
 			<!-- Right column -->
-			<section class="w-64 border-l border-r flex flex-col relative bg-lightSecondary bg-opacity-25">
+			<section class="w-64 flex flex-col relative bg-lightSecondary bg-opacity-25 border-r">
 				<!-- Tags tab -->
-				<article class="border-b">
-					<button class="flex w-full justify-between p-4 text-xl items-center" @click="changeTab('tags')">
+				<article class="border-b mx-4">
+					<button class="flex w-full justify-between py-4 px-2 text-xl items-center" @click="changeTab('tags')">
 						<h3>Tags</h3>
 						<ChevronUp v-if="this.tabs.tags" />
 						<ChevronDown v-else />
 					</button>
 					<!-- Dropdown -->
-					<div v-if="this.tabs.tags">
-						<label for="tag" class="hidden" value="Enter hashtags"></label>
-						#<input v-model="tag" type="text" placeholder="tag" class="focus:outline-none w-32 pr-1 py-2 pl-1" />
-						<button class="rounded-full bg-primary border border-white p-2 focus:outline-none" @click="addTag">
-							<span class="text-white"><PlusIcon /></span>
-						</button>
-						<button v-for="t in this.$store.state.draft.tags" :key="t.name" class="ml-1" @click="removeTag(t)">
-							<TagCard :tag="t.name" /> ❌
-						</button>
+					<div v-if="this.tabs.tags" class="pb-2">
+						<div class="flex flex-row flex-nowrap py-2">
+							<label for="tag" class="hidden" value="Enter hashtags"></label>
+							#<input
+								v-model="tag"
+								type="text"
+								placeholder="tag"
+								class="w-32 pl-1 bg-transparent border-b focus:outline-none"
+							/>
+							<button class="focus:outline-none" @click="addTag">
+								<span class="text-primary"><PlusIcon /></span>
+							</button>
+						</div>
+						<div class="flex flex-col">
+							<button v-for="t in this.$store.state.draft.tags" :key="t.name" @click="removeTag(t)">
+								<TagCard :tag="t.name" /> ❌
+							</button>
+						</div>
 					</div>
 				</article>
 				<!-- Category tab -->
-				<article class="border-b">
-					<button class="flex w-full justify-between p-4 text-xl items-center" @click="changeTab('category')">
+				<article class="border-b mx-4">
+					<button class="flex w-full justify-between py-4 px-2 text-xl items-center" @click="changeTab('category')">
 						<h3>Category</h3>
 						<ChevronUp v-if="this.tabs.category" />
 						<ChevronDown v-else />
 					</button>
 					<!-- Dropdown -->
-					<div v-if="this.tabs.category">Display category list</div>
+					<div v-if="this.tabs.category" class="flex flex-col">
+						<button
+							v-for="c in this.$store.state.config.categories"
+							:key="c"
+							class="w-full p-2 uppercase"
+							@click="changeCategory(c)"
+						>
+							{{ c }}
+						</button>
+					</div>
 				</article>
 				<!-- Image tab -->
-				<article class="border-b">
-					<button class="flex w-full justify-between p-4 text-xl items-center" @click="changeTab('image')">
+				<article class="border-b mx-4">
+					<button class="flex w-full justify-between py-4 px-2 text-xl items-center" @click="changeTab('image')">
 						<h3>Image</h3>
 						<ChevronUp v-if="this.tabs.image" />
 						<ChevronDown v-else />
@@ -116,7 +117,7 @@
 					<!-- Dropdown -->
 					<div v-if="this.tabs.image">
 						<!-- Upload Featured Image -->
-						<button class="rounded-lg px-4 py-2" @click="$refs.featuredPhoto.click()">
+						<button class="w-full" @click="$refs.featuredPhoto.click()">
 							<input
 								id="featured-photo"
 								ref="featuredPhoto"
@@ -126,9 +127,10 @@
 								accept="image/*"
 								@change="handleImage"
 							/>
-							<div class="flex justify-center items-center focus:outline-none">
+							<img v-if="this.featuredPhoto !== null" :src="this.featuredPhoto" />
+							<div v-else class="flex justify-center items-center focus:outline-none">
 								<CameraIcon class="mr-2" />
-								<span class="">Photo</span>
+								<span class="">Cover Photo</span>
 							</div>
 						</button>
 					</div>
@@ -138,7 +140,7 @@
 				<BrandedButton
 					text="Publish"
 					:action="post"
-					class="absolute justify-self-end w-32 h-12 self-center mr-5 bottom-0"
+					class="absolute justify-self-end w-32 h-12 self-center mb-24 bottom-0"
 				/>
 			</section>
 		</div>
@@ -158,7 +160,6 @@ import BrandedButton from '@/components/BrandedButton.vue'
 import PlusIcon from '@/components/icons/Plus.vue'
 import TagCard from '@/components/Tag.vue'
 import CloseIcon from '@/components/icons/Close.vue'
-import CapsuleIcon from '@/components/icons/Capsule.vue'
 import ChevronUp from '@/components/icons/ChevronUp.vue'
 import ChevronDown from '@/components/icons/ChevronDown.vue'
 
@@ -173,7 +174,6 @@ export default Vue.extend({
 		PlusIcon,
 		TagCard,
 		CloseIcon,
-		CapsuleIcon,
 		ChevronUp,
 		ChevronDown,
 	},
@@ -198,6 +198,7 @@ export default Vue.extend({
 				category: false,
 				image: false,
 			},
+			category: ``,
 		}
 	},
 	mounted() {
@@ -239,6 +240,9 @@ export default Vue.extend({
 			} else if (t === `image`) {
 				this.tabs.image = !this.tabs.image
 			}
+		},
+		changeCategory(c: string) {
+			this.category = c
 		},
 		addTag(): void {
 			if (this.tag === `` || !this.$qualityText(this.tag)) {

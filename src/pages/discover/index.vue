@@ -47,7 +47,7 @@
 			</article>
 			<article class="grid grid-cols-2 gap-4 md:grid-cols-4">
 				<CategoryCard
-					v-for="c in this.categories"
+					v-for="c in this.$store.state.config.categories"
 					:key="c"
 					:text="c"
 					:bgImage="require('@/assets/images/category/' + c + '/' + c + '.jpg')"
@@ -81,18 +81,6 @@ export default {
 				`clock`,
 				`sunset`,
 				`beef`,
-			],
-			categories: [
-				`technology`,
-				`crypto`,
-				`politics`,
-				`US-world`,
-				`science`,
-				`environment`,
-				`food & drink`,
-				`culture`,
-				`education`,
-				`philosophy`,
 			],
 		}
 	},

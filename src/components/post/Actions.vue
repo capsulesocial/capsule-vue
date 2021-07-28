@@ -20,12 +20,19 @@
 						</span>
 					</div>
 					<div
-						class="flip-container relative border-2 shadow-inner rounded-xl overflow-hidden w-full h-24"
+						class="flip-container relative border shadow-inner rounded-xl overflow-hidden w-full h-24"
 						:class="this.showEmotions ? 'flip' : ''"
 					>
 						<div class="flipper flex flex-row absolute">
 							<!-- Type comment -->
-							<div class="front w-full">
+							<div class="front w-full flex bg-white">
+								<div class="self-center">
+									<button @click="showEmotions = !showEmotions">
+										<img v-if="this.emotion !== ''" :src="this.emotion.image" class="h-16 w-16 object-center" />
+										<span v-else>Flip</span>
+									</button>
+								</div>
+
 								<textarea
 									v-model="comment"
 									class="leading-normal resize-none overflow-y-auto w-full h-24 pl-2 pt-1 pr-16 focus:outline-none"
@@ -39,10 +46,6 @@
 								/>
 								<div class="relative">
 									<span class="absolute bottom-0 right-0 flex flex-col">
-										<button @click="showEmotions = !showEmotions">
-											<img v-if="this.emotion !== ''" :src="this.emotion.image" class="h-16 w-16 object-center" />
-											<span v-else>Flip</span>
-										</button>
 										<BrandedButton
 											text="Post"
 											:action="sendComment"
@@ -133,7 +136,6 @@ export default Vue.extend({
 			this.showEmotions = false
 		},
 		sendComment() {
-			// Check comment quality
 			if (this.comment === `` || !this.$qualityText(this.comment)) {
 				alert(`invalid comment!`)
 			} else {
@@ -146,7 +148,6 @@ export default Vue.extend({
 					timestamp: new Date(),
 					replies: [],
 				}
-				// this.$store.commit('posts/postComment', c)
 				this.$props.post.comments.push(c)
 				this.filterComments()
 				this.comment = ``

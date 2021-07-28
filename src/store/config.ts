@@ -71,4 +71,16 @@ export const state = () => ({
 			background: require(`@/assets/images/brand/capsules.svg`),
 		},
 	},
+	categories: [
+		`technology`,
+		`crypto`,
+		`politics`,
+		`US-world`,
+		`science`,
+		`environment`,
+		`food & drink`,
+		`culture`,
+		`education`,
+		`philosophy`,
+	],
 })

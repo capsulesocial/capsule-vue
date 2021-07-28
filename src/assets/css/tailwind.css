@@ -4,13 +4,13 @@
 
 @layer base {
   .editable h1 {
-    @apply text-2xl
+    @apply text-3xl font-serif
   }
   .editable h2 {
-    @apply text-xl
+    @apply text-2xl font-serif
   }
   .editable h3 {
-    @apply text-lg
+    @apply text-xl font-serif
   }
   .editable a {
     @apply text-primary
