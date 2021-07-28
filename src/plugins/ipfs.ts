@@ -3,6 +3,9 @@ import { Post } from '~/interfaces/Post'
 import { Profile } from '~/interfaces/Profile'
 const IPFS = require(`ipfs`)
 
+// Declare type of function
+type importKey = (name: string, privateKey: string, password: string) => Promise<boolean>
+
 // eslint-disable-next-line quotes
 declare module 'vue/types/vue' {
 	interface Vue {
@@ -13,6 +16,7 @@ declare module 'vue/types/vue' {
 		$getPost: (cid: string) => Promise<Post>
 		$getPhoto: (cid: string) => Promise<any>
 		$sendPhoto: (content: any) => Promise<string>
+		$importPrivateKey: importKey
 	}
 }
 
@@ -81,6 +85,26 @@ const ipfsPlugin: Plugin = async (_context, inject) => {
 		// eslint-disable-next-line consistent-return
 		return content
 	}
+
+	// Import Private Key to local IPFS repo
+	const importPrivateKey: importKey = async (name, privateKey, password) => {
+		try {
+			await node.key.import(name, privateKey, password)
+			return true
+		} catch (error) {
+			if (error.code === `ERR_KEY_ALREADY_EXISTS`) {
+				await node.key.rm(name)
+				try {
+					await node.key.import(name, privateKey, password)
+					return true
+				} catch {
+					return false
+				}
+			}
+		}
+		return false
+	}
+
 	inject(`getNode`, getNode)
 	inject(`sendProfile`, sendProfile)
 	inject(`sendPost`, sendPost)
@@ -88,5 +112,6 @@ const ipfsPlugin: Plugin = async (_context, inject) => {
 	inject(`sendPhoto`, sendPhoto)
 	inject(`getPhoto`, getPhoto)
 	inject(`getProfile`, getProfile)
+	inject(`importPrivateKey`, importPrivateKey)
 }
 export default ipfsPlugin

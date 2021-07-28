@@ -173,16 +173,21 @@ export default Vue.extend({
 			// Login
 			if (this.isLogin) {
 				const { success, peerIDPrivateKey, profileCID } = await this.$login(this.id, this.password)
-				// eslint-disable-next-line no-console
-				console.log(peerIDPrivateKey)
 				if (success === true) {
-					const account: Profile = await this.$getProfile(profileCID)
-					account.cid = profileCID
-					this.changeCID(profileCID)
-					this.changeID(account.id)
-					this.changeName(account.name)
-					this.changeEmail(account.email)
-					this.$router.push(`/settings`)
+					const [account, imported] = await Promise.all([
+						this.$getProfile(profileCID),
+						this.$importPrivateKey(`blogchain-auth-${this.id}`, peerIDPrivateKey, `password`),
+					])
+					if (imported === true) {
+						account.cid = profileCID
+						this.changeCID(profileCID)
+						this.changeID(account.id)
+						this.changeName(account.name)
+						this.changeEmail(account.email)
+						this.$router.push(`/settings`)
+					} else {
+						alert(`Authentication failed!`)
+					}
 				} else {
 					alert(`Authentication failed!`)
 				}
