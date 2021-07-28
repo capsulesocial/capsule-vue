@@ -172,9 +172,20 @@ export default Vue.extend({
 			}
 			// Login
 			if (this.isLogin) {
-				const _res = await this.$login(this.id, this.password)
-				console.log(_res)
-				alert(`Authentication not supported yet!`)
+				const { success, peerIDPrivateKey, profileCID } = await this.$login(this.id, this.password)
+				// eslint-disable-next-line no-console
+				console.log(peerIDPrivateKey)
+				if (success === true) {
+					const account: Profile = await this.$getProfile(profileCID)
+					account.cid = profileCID
+					this.changeCID(profileCID)
+					this.changeID(account.id)
+					this.changeName(account.name)
+					this.changeEmail(account.email)
+					this.$router.push(`/settings`)
+				} else {
+					alert(`Authentication failed!`)
+				}
 			} else {
 				// Registration
 				if (!this.consent) {
