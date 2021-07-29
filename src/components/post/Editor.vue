@@ -1,7 +1,7 @@
 <template>
 	<div class="relative">
-		<button class="absolute flex items-center mt-6 right-0" @click="updateStore">
-			<CloseIcon />
+		<button class="absolute flex items-center mt-6 right-0 bg-lightSecondary rounded-full p-2" @click="updateStore">
+			<XIcon />
 		</button>
 
 		<div class="flex h-screen pt-24 -mt-24">
@@ -62,23 +62,32 @@
 			<section class="w-64 flex flex-col relative bg-lightSecondary bg-opacity-25 border-r">
 				<!-- Tags tab -->
 				<article class="border-b mx-4">
-					<button class="flex w-full justify-between py-4 px-2 text-xl items-center" @click="changeTab('tags')">
+					<button
+						class="flex w-full justify-between py-4 px-2 text-xl items-center focus:outline-none"
+						@click="changeTab('tags')"
+					>
 						<h3>Tags</h3>
 						<ChevronUp v-if="this.tabs.tags" />
 						<ChevronDown v-else />
 					</button>
 					<!-- Dropdown -->
 					<div v-show="this.tabs.tags" class="pb-2">
-						<div class="flex flex-row flex-nowrap py-2">
+						<div class="flex flex-row flex-nowrap bg-white py-2 border">
 							<label for="tag" class="hidden" value="Enter hashtags"></label>
-							#<input v-model="tag" type="text" placeholder="tag" class="w-32 pl-1 bg-transparent focus:outline-none" />
-							<button class="focus:outline-none" @click="addTag">
-								<span class="text-primary"><PlusIcon /></span>
-							</button>
+							<input
+								v-model="tag"
+								type="text"
+								placeholder="Add a tag..."
+								class="w-32 pl-2 px-1 focus:outline-none"
+								@keyup.enter="addTag"
+							/>
 						</div>
-						<div class="flex flex-col">
-							<button v-for="t in this.$store.state.draft.tags" :key="t.name" @click="removeTag(t)">
-								<TagCard :tag="t.name" /> ❌
+						<div v-for="t in this.$store.state.draft.tags" :key="t.name">
+							<button
+								class="flex items-center rounded-xl shadow-lg text-primary bg-white text-sm pl-3 pr-1 mt-2"
+								@click="removeTag(t)"
+							>
+								{{ t.name }} <XIcon class="p-1 text-lightPrimary" />
 							</button>
 						</div>
 					</div>
@@ -152,11 +161,9 @@ import Turndown from 'turndown'
 
 import CameraIcon from '@/components/icons/Camera.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
-import PlusIcon from '@/components/icons/Plus.vue'
-import TagCard from '@/components/Tag.vue'
-import CloseIcon from '@/components/icons/Close.vue'
 import ChevronUp from '@/components/icons/ChevronUp.vue'
 import ChevronDown from '@/components/icons/ChevronDown.vue'
+import XIcon from '@/components/icons/X.vue'
 
 import { Post } from '@/interfaces/Post'
 import { Tag } from '@/interfaces/Tag'
@@ -166,11 +173,9 @@ export default Vue.extend({
 	components: {
 		BrandedButton,
 		CameraIcon,
-		PlusIcon,
-		TagCard,
-		CloseIcon,
 		ChevronUp,
 		ChevronDown,
+		XIcon,
 	},
 	data() {
 		let input: string = ``
@@ -193,7 +198,7 @@ export default Vue.extend({
 				category: false,
 				image: false,
 			},
-			category: ``,
+			category: this.$store.state.draft.category,
 		}
 	},
 	mounted() {
@@ -317,6 +322,7 @@ export default Vue.extend({
 			this.$store.commit(`draft/updateTitle`, this.title)
 			this.$store.commit(`draft/updateSubtitle`, this.subtitle)
 			this.$store.commit(`draft/updateContent`, this.input)
+			this.$store.commit(`draft/updateCategory`, this.category)
 			this.$router.go(-1)
 		},
 	},

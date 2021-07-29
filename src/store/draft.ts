@@ -11,6 +11,7 @@ export const state = () => ({
 	content: ``,
 	featuredPhotoCID: ``,
 	tags: [],
+	category: ``,
 })
 
 export const getters: GetterTree<Post, RootState> = {}
@@ -22,6 +23,7 @@ export const MutationType = {
 	UPDATE_FEATURED_PHOTO_CID: `updateFeaturedPhotoCID`,
 	ADD_TAG: `addTag`,
 	REMOVE_TAG: `removeTag`,
+	UPDATE_CATEGORY: `updateCategory`,
 	RESET: `reset`,
 }
 
@@ -46,6 +48,9 @@ export const mutations: MutationTree<any> = {
 		if (index > -1) {
 			state.tags.splice(index, 1)
 		}
+	},
+	[MutationType.UPDATE_CATEGORY]: (state, newCategory: string) => {
+		state.category = newCategory
 	},
 	[MutationType.RESET]: (state) => {
 		// eslint-disable-next-line
