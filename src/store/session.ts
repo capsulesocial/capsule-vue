@@ -64,25 +64,14 @@ export const mutations: MutationTree<Profile> = {
 		state.posts.push(newPost)
 	},
 	[MutationType.LOGOUT]: (state) => {
-		// eslint-disable-next-line
-		state = {
-			cid: ``,
-			id: ``,
-			name: ``,
-			email: ``,
-			password: ``,
-			bio: `Default bio.`,
-			location: ``,
-			posts: [],
-			reposts: [],
-			socials: [],
-			bookmarks: [],
-			categories: [],
-			followers: [],
-			following: [],
-			avatar: ``,
-			comments: [],
-		}
+		state.cid = ``
+		state.id = ``
+		state.name = ``
+		state.email = ``
+		state.avatar = ``
+		state.bio = `Default bio.`
+		state.location = ``
+		state.posts = []
 	},
 }
 
