@@ -17,6 +17,7 @@ declare module 'vue/types/vue' {
 		$getPhoto: (cid: string) => Promise<any>
 		$sendPhoto: (content: any) => Promise<string>
 		$importPrivateKey: importKey
+		$generatePrivateKey: (name: string) => Promise<boolean>
 	}
 }
 
@@ -105,6 +106,21 @@ const ipfsPlugin: Plugin = async (_context, inject) => {
 		return false
 	}
 
+	// Generate a new ed25519 key
+	const generatePrivateKey: (name: string) => Promise<boolean> = async (name) => {
+		try {
+			await node.key.gen(name, { type: `ed25519` })
+			return true
+		} catch (error) {
+			if (error.code === `ERR_KEY_ALREADY_EXISTS`) {
+				await node.key.rm(name)
+				await node.key.gen(name, { type: `ed25519` })
+				return true
+			}
+		}
+		return false
+	}
+
 	inject(`getNode`, getNode)
 	inject(`sendProfile`, sendProfile)
 	inject(`sendPost`, sendPost)
@@ -113,5 +129,6 @@ const ipfsPlugin: Plugin = async (_context, inject) => {
 	inject(`getPhoto`, getPhoto)
 	inject(`getProfile`, getProfile)
 	inject(`importPrivateKey`, importPrivateKey)
+	inject(`generatePrivateKey`, generatePrivateKey)
 }
 export default ipfsPlugin

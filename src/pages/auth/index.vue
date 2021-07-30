@@ -221,10 +221,11 @@ export default Vue.extend({
 						avatar: ``,
 					}
 					const node = this.$getNode()
+					await this.$generatePrivateKey(`blogchain-auth-${this.id}`)
 					// Export private key: encrypt it using AES-GCM (for Ed25519 keys)
 					// Send user profile to IPFS
 					const [peerIDPrivateKey, cid] = await Promise.all([
-						node.key.export(`self`, `password`),
+						node.key.export(`blogchain-auth-${this.id}`, `password`),
 						this.$sendProfile(account),
 					])
 					account.cid = cid
