@@ -4,7 +4,7 @@
 		<div class="flex">
 			<!-- Avatar -->
 			<div class="flex-shrink-0">
-				<span v-if="this.avatar === '' || this.avatar === null" class="p-1 border-2 rounded-full block">
+				<span v-if="this.avatar === `` || this.avatar === null" class="p-1 border-2 rounded-full block">
 					<ProfileIcon class="w-6 h-6" />
 				</span>
 				<img v-else :src="this.avatar" class="w-10 h-10 rounded-lg object-cover" />
@@ -115,9 +115,11 @@ export default {
 			this.name = p.name
 			this.id = p.id
 		})
-		this.$getPhoto(this.$props.comment.authorAvatarCID).then((avatar) => {
-			this.avatar = avatar
-		})
+		if (this.$props.comment.authorAvatarCID !== ``) {
+			this.$getPhoto(this.$props.comment.authorAvatarCID).then((avatar) => {
+				this.avatar = avatar
+			})
+		}
 	},
 	methods: {
 		sendReply() {

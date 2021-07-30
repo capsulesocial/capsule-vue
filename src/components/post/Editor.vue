@@ -1,6 +1,9 @@
 <template>
 	<div class="relative">
-		<button class="absolute flex items-center mt-6 right-0 bg-lightSecondary rounded-full p-2" @click="updateStore">
+		<button
+			class="absolute flex items-center mt-6 right-0 bg-lightSecondary rounded-full p-2 focus:outline-none"
+			@click="updateStore"
+		>
 			<XIcon />
 		</button>
 
@@ -63,7 +66,7 @@
 				<!-- Tags tab -->
 				<article class="border-b mx-4">
 					<button
-						class="flex w-full justify-between py-4 px-2 text-xl items-center focus:outline-none"
+						class="flex w-full justify-between py-4 text-xl items-center focus:outline-none"
 						@click="changeTab('tags')"
 					>
 						<h3>Tags</h3>
@@ -71,8 +74,8 @@
 						<ChevronDown v-else />
 					</button>
 					<!-- Dropdown -->
-					<div v-show="this.tabs.tags" class="pb-2">
-						<div class="flex flex-row flex-nowrap bg-white py-2 border">
+					<div v-show="this.tabs.tags" class="pb-4">
+						<div class="flex flex-row flex-nowrap bg-white py-2 mb-2 border">
 							<label for="tag" class="hidden" value="Enter hashtags"></label>
 							<input
 								v-model="tag"
@@ -82,9 +85,21 @@
 								@keyup.enter="addTag"
 							/>
 						</div>
-						<div v-for="t in this.$store.state.draft.tags" :key="t.name">
+						<div v-for="t in this.$store.state.draft.tags" :key="t.name" class="pt-2">
 							<button
-								class="flex items-center rounded-xl shadow-lg text-primary bg-white text-sm pl-3 pr-1 mt-2"
+								class="
+									flex
+									items-center
+									rounded-xl
+									shadow-lg
+									text-primary
+									bg-white
+									text-sm
+									pl-3
+									pr-1
+									mt-2
+									focus:outline-none
+								"
 								@click="removeTag(t)"
 							>
 								{{ t.name }} <XIcon class="p-1 text-lightPrimary" />
@@ -94,49 +109,73 @@
 				</article>
 				<!-- Category tab -->
 				<article class="border-b mx-4">
-					<button class="flex w-full justify-between py-4 px-2 text-xl items-center" @click="changeTab('category')">
+					<button
+						class="flex w-full justify-between py-4 text-xl items-center focus:outline-none"
+						@click="changeTab('category')"
+					>
 						<h3>Category</h3>
 						<ChevronUp v-if="this.tabs.category" />
 						<ChevronDown v-else />
 					</button>
 					<!-- Dropdown -->
-					<div v-show="this.tabs.category" class="flex flex-col">
-						<button
-							v-for="c in this.$store.state.config.categories"
-							:key="c"
-							class="w-full p-2 uppercase"
-							@click="changeCategory(c)"
-						>
-							{{ c }}
-						</button>
+					<div v-show="this.tabs.category" class="pb-4">
+						<div class="dropdown_inset flex flex-col bg-white -mx-4 py-2">
+							<button
+								v-for="c in this.$store.state.config.categories"
+								:key="c"
+								class="w-full p-2 uppercase focus:outline-none"
+								@click="changeCategory(c)"
+							>
+								{{ c }}
+							</button>
+						</div>
 					</div>
 				</article>
 				<!-- Image tab -->
 				<article class="border-b mx-4">
-					<button class="flex w-full justify-between py-4 px-2 text-xl items-center" @click="changeTab('image')">
+					<button
+						class="flex w-full justify-between py-4 text-xl items-center focus:outline-none"
+						@click="changeTab('image')"
+					>
 						<h3>Image</h3>
 						<ChevronUp v-if="this.tabs.image" />
 						<ChevronDown v-else />
 					</button>
 					<!-- Dropdown -->
-					<div v-show="this.tabs.image">
-						<!-- Upload Featured Image -->
-						<button class="w-full" @click="$refs.featuredPhoto.click()">
-							<input
-								id="featured-photo"
-								ref="featuredPhoto"
-								class="hidden"
-								name="photo"
-								type="file"
-								accept="image/*"
-								@change="handleImage"
-							/>
-							<img v-if="this.featuredPhoto !== null" :src="this.featuredPhoto" />
-							<div v-else class="flex justify-center items-center focus:outline-none">
-								<CameraIcon class="mr-2" />
-								<span class="">Cover Photo</span>
+					<div v-show="this.tabs.image" class="pb-4">
+						<div class="dropdown_inset flex flex-col bg-white -mx-4 py-2">
+							<!-- Upload Featured Image -->
+							<p class="px-4 py-2 text-sm">Selecting a featured image is recommended for an optimal user experience.</p>
+							<button class="w-full focus:outline-none" @click="$refs.featuredPhoto.click()">
+								<input
+									id="featured-photo"
+									ref="featuredPhoto"
+									class="hidden"
+									name="photo"
+									type="file"
+									accept="image/*"
+									@change="handleImage"
+								/>
+								<!-- No Photo Uploaded -->
+								<div v-show="this.featuredPhoto === null" class="flex justify-between border mx-4 my-2 p-1">
+									<span class="flex items-center text-sm"> <ImageIcon class="mr-1 p-1" />IMAGE </span>
+									<span class="flex items-center text-sm text-primary"> <UploadIcon class="mr-1 p-1" />Add </span>
+								</div>
+							</button>
+							<!-- Photo Uploaded -->
+							<div v-if="this.featuredPhoto !== null" class="mx-4">
+								<img :src="this.featuredPhoto" class="w-full" />
+								<button
+									class="border border-primary text-primary focus:outline-none text-sm mt-4 p-1"
+									@click="$refs.featuredPhoto.click()"
+								>
+									Replace Image
+								</button>
+								<button class="my-2 text-sm underline text-lightError focus:outline-none" @click="removeImage()">
+									Remove Image
+								</button>
 							</div>
-						</button>
+						</div>
 					</div>
 				</article>
 				<div></div>
@@ -159,7 +198,8 @@ import DOMPurify from 'dompurify'
 import MediumEditor from 'medium-editor'
 import Turndown from 'turndown'
 
-import CameraIcon from '@/components/icons/Camera.vue'
+import ImageIcon from '@/components/icons/Image.vue'
+import UploadIcon from '@/components/icons/Upload.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 import ChevronUp from '@/components/icons/ChevronUp.vue'
 import ChevronDown from '@/components/icons/ChevronDown.vue'
@@ -172,7 +212,8 @@ import { MutationType, namespace as sessionStoreNamespace } from '~/store/sessio
 export default Vue.extend({
 	components: {
 		BrandedButton,
-		CameraIcon,
+		ImageIcon,
+		UploadIcon,
 		ChevronUp,
 		ChevronDown,
 		XIcon,
@@ -259,6 +300,10 @@ export default Vue.extend({
 		removeTag(t): void {
 			this.$store.commit(`draft/removeTag`, t)
 		},
+		removeImage(): void {
+			this.featuredPhoto = null
+			this.featuredPhotoCID = ``
+		},
 		handleImage(e): void {
 			const image = e.target.files[0]
 			const reader = new FileReader()
@@ -323,6 +368,7 @@ export default Vue.extend({
 			this.$store.commit(`draft/updateSubtitle`, this.subtitle)
 			this.$store.commit(`draft/updateContent`, this.input)
 			this.$store.commit(`draft/updateCategory`, this.category)
+			this.$store.commit(`draft/updateCategory`, this.category)
 			this.$router.go(-1)
 		},
 	},
@@ -338,5 +384,8 @@ export default Vue.extend({
 }
 .medium-editor-anchor-preview a {
 	color: red;
+}
+.dropdown_inset {
+	box-shadow: inset 0px 0px 3px #0020ff;
 }
 </style>

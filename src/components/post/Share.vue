@@ -8,13 +8,13 @@
 			<SendIcon class="mr-2" />
 		</button>
 		<div
-			v-if="this.showSocialShares"
+			v-show="this.showSocialShares"
 			:class="
 				this.$store.state.settings.darkMode
 					? 'bg-lightBG text-lightPrimaryText border-lightBorder'
 					: 'bg-darkBG text-darkPrimaryText border-darkBorder'
 			"
-			class="absolute flex flex-col mt-8 border-l border-r border-b rounded-lg p-1 rounded-t-none w-40 pl-2"
+			class="absolute flex flex-col mt-8 border-l border-r border-b rounded-lg p-1 rounded-t-none w-40 -ml-32 pl-2"
 		>
 			<!-- Repost -->
 			<button
