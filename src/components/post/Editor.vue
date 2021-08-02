@@ -62,7 +62,7 @@
 			</section>
 
 			<!-- Right column -->
-			<section class="w-64 flex flex-col relative bg-lightSecondary bg-opacity-25 border-r">
+			<section id="editor-menu" class="flex flex-col relative bg-lightSecondary bg-opacity-25 border-r">
 				<!-- Tags tab -->
 				<article class="border-b mx-4">
 					<button
@@ -123,9 +123,10 @@
 							<button
 								v-for="c in this.$store.state.config.categories"
 								:key="c"
-								class="w-full p-2 uppercase focus:outline-none"
+								class="w-full flex items-center p-2 uppercase focus:outline-none"
 								@click="changeCategory(c)"
 							>
+								<img :src="require(`@/assets/images/category/` + c + `/icon.png`)" class="w-10 h-10 mr-1" />
 								{{ c }}
 							</button>
 						</div>
@@ -376,6 +377,9 @@ export default Vue.extend({
 </script>
 
 <style>
+#editor-menu {
+	width: 18rem;
+}
 .medium-toolbar-arrow-under:after {
 	border-color: #ffffff transparent transparent transparent;
 }
