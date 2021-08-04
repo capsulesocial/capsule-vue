@@ -9,16 +9,10 @@
 				</span>
 				<img v-else :src="this.myAvatar" class="w-10 h-10 rounded-lg object-cover mt-1" />
 				<!-- Comment box Container -->
-				<div class="flex bg-white shadow-xl rounded-xl p-3 ml-5 w-full relative overflow-hidden">
-					<!-- Background image -->
-					<div class="absolute flex flex-row -mt-3 -ml-3 w-full">
-						<img v-if="this.emotion !== ''" :src="this.emotion.background" class="w-full" />
-						<span v-else class="flex flex-row">
-							<img :src="require('@/assets/images/backgrounds/paper.png')" />
-							<img :src="require('@/assets/images/backgrounds/paper.png')" />
-							<img :src="require('@/assets/images/backgrounds/paper.png')" />
-						</span>
-					</div>
+				<div
+					class="comment-container flex bg-white shadow-xl rounded-xl p-3 ml-5 w-full overflow-hidden"
+					:style="{ backgroundImage: `url(${this.$store.state.config.backgrounds[this.emotionCategory]})` }"
+				>
 					<div
 						class="flip-container relative border shadow-inner rounded-xl overflow-hidden w-full h-40"
 						:class="this.showEmotions ? 'flip' : ''"
@@ -37,11 +31,6 @@
 									class="leading-normal resize-none overflow-y-auto w-full h-40 pl-2 pt-1 pr-16 focus:outline-none"
 									name="body"
 									placeholder="Write a Comment..."
-									:class="
-										this.$store.state.settings.darkMode
-											? 'bg-lightBG text-lightPrimaryText'
-											: 'bg-darkBG text-darkPrimaryText'
-									"
 								/>
 								<div class="relative">
 									<span class="absolute bottom-0 right-0 flex flex-col">
@@ -56,25 +45,28 @@
 								</div>
 							</div>
 							<!-- Back side: Choose reaction -->
-							<div class="back flex w-full px-1 h-40">
+							<div class="back flex w-full h-40">
 								<!-- Left side: Category of emotion -->
-								<div class="w-32 flex flex-col bg-white -ml-1">
+								<div class="w-40 flex flex-col bg-white">
 									<button
-										class="px-2 py-1 m-2 rounded-lg w-24 focus:outline-none"
+										class="focus:outline-none text-left pl-4 py-1 rounded-lg mt-2 ml-2"
+										:class="this.emotionCategory === `positive` ? `bg-transparent -mr-2` : `mr-2`"
 										:style="{ backgroundImage: `url(${$store.state.config.backgrounds.positive})` }"
 										@click="setEmotionCategory(`positive`)"
 									>
 										Positive
 									</button>
 									<button
-										class="px-2 py-1 m-2 rounded-lg w-24 focus:outline-none"
+										class="focus:outline-none text-left pl-4 py-1 rounded-lg mt-2 ml-2"
+										:class="this.emotionCategory === `negative` ? `bg-transparent -mr-2` : `mr-2`"
 										:style="{ backgroundImage: `url(${$store.state.config.backgrounds.negative})` }"
 										@click="setEmotionCategory(`negative`)"
 									>
 										Negative
 									</button>
 									<button
-										class="px-2 py-1 m-2 rounded-lg w-24 focus:outline-none"
+										class="focus:outline-none text-left pl-4 py-1 rounded-lg mt-2 ml-2"
+										:class="this.emotionCategory === `neutral` ? `bg-transparent -mr-2` : `mr-2`"
 										:style="{ backgroundImage: `url(${$store.state.config.backgrounds.neutral})` }"
 										@click="setEmotionCategory(`neutral`)"
 									>
@@ -82,10 +74,7 @@
 									</button>
 								</div>
 								<!-- Right side: -->
-								<div
-									class="overflow-auto grid grid-cols-3 w-full -mr-1 border-l"
-									:style="{ backgroundImage: `url(${this.$store.state.config.backgrounds[this.emotionCategory]})` }"
-								>
+								<div class="overflow-auto grid grid-cols-3 w-full -mr-1">
 									<button
 										v-for="e in this.categories[this.emotionCategory]"
 										:key="e"
@@ -143,7 +132,7 @@ export default Vue.extend({
 			emotion: ``,
 			emotionCategory: `positive`,
 			myAvatar: ``,
-			showEmotions: false,
+			showEmotions: true,
 			commentBackground: `@/assets/images/brand/paper4.svg`,
 			categories: {
 				positive: [`awe`, `excited`, `happy`, `lol`, `proud`, `touched`],
@@ -247,5 +236,12 @@ export default Vue.extend({
 /* back, initially hidden pane */
 .back {
 	transform: rotateY(180deg);
+}
+.comment-container {
+	background: no-repeat;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
 }
 </style>
