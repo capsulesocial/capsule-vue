@@ -20,11 +20,11 @@
 						</span>
 					</div>
 					<div
-						class="flip-container relative border shadow-inner rounded-xl overflow-hidden w-full h-24"
+						class="flip-container relative border shadow-inner rounded-xl overflow-hidden w-full h-40"
 						:class="this.showEmotions ? 'flip' : ''"
 					>
 						<div class="flipper flex flex-row absolute">
-							<!-- Type comment -->
+							<!-- Front side: Type comment -->
 							<div class="front w-full flex bg-white">
 								<div class="self-center">
 									<button @click="showEmotions = !showEmotions">
@@ -32,10 +32,9 @@
 										<span v-else>Flip</span>
 									</button>
 								</div>
-
 								<textarea
 									v-model="comment"
-									class="leading-normal resize-none overflow-y-auto w-full h-24 pl-2 pt-1 pr-16 focus:outline-none"
+									class="leading-normal resize-none overflow-y-auto w-full h-40 pl-2 pt-1 pr-16 focus:outline-none"
 									name="body"
 									placeholder="Write a Comment..."
 									:class="
@@ -56,78 +55,50 @@
 									</span>
 								</div>
 							</div>
-							<div
-								:class="
-									this.$store.state.settings.darkMode
-										? 'bg-lightBG text-lightPrimaryText'
-										: 'bg-darkBG text-darkPrimaryText'
-								"
-								class="back flex justify-between items-center w-full px-1 h-24"
-							>
-								<!-- Left Button -->
-								<button @click="decSlide()">
-									<ChevronLeft />
-								</button>
-								<!-- Slides -->
-								<div class="flex flex-col h-full">
-									<!-- <p
-										:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-										class="text-sm italic"
+							<!-- Back side: Choose reaction -->
+							<div class="back flex w-full px-1 h-40">
+								<!-- Left side: Category of emotion -->
+								<div class="w-32 flex flex-col bg-white -ml-1">
+									<button
+										class="px-2 py-1 m-2 rounded-lg w-24 focus:outline-none"
+										:style="{ backgroundImage: `url(${$store.state.config.backgrounds.positive})` }"
+										@click="setEmotionCategory(`positive`)"
 									>
-										What's your response?
-									</p> -->
-									<div v-show="this.slideCounter === 0" class="flex flex-grow items-center w-full h-full">
-										<!-- <button v-for="r in this.$store.state.config.reactions" :key="r.label" @click="setEmotion(r)">
-											<img :src="r.image" :alt="r.label" class="flex-shrink-0 h-14 w-14" />
-										</button> -->
-										<button @click="setEmotion(this.$store.state.config.reactions.awe)">
-											<img
-												:src="this.$store.state.config.reactions.awe.image"
-												:alt="this.$store.state.config.reactions.awe.label"
-												class="flex-shrink-0 h-20 w-20"
-											/>
-										</button>
-										<button @click="setEmotion(this.$store.state.config.reactions.happy)">
-											<img
-												:src="this.$store.state.config.reactions.happy.image"
-												:alt="this.$store.state.config.reactions.happy.label"
-												class="flex-shrink-0 h-20 w-20"
-											/>
-										</button>
-										<button @click="setEmotion(this.$store.state.config.reactions.excited)">
-											<img
-												:src="this.$store.state.config.reactions.excited.image"
-												:alt="this.$store.state.config.reactions.excited.label"
-												class="flex-shrink-0 h-20 w-20"
-											/>
-										</button>
-										<button @click="setEmotion(this.$store.state.config.reactions.goofy)">
-											<img
-												:src="this.$store.state.config.reactions.goofy.image"
-												:alt="this.$store.state.config.reactions.goofy.label"
-												class="flex-shrink-0 h-20 w-20"
-											/>
-										</button>
-										<button @click="setEmotion(this.$store.state.config.reactions.satisfied)">
-											<img
-												:src="this.$store.state.config.reactions.satisfied.image"
-												:alt="this.$store.state.config.reactions.satisfied.label"
-												class="flex-shrink-0 h-20 w-20"
-											/>
-										</button>
-										<button @click="setEmotion(this.$store.state.config.reactions.touched)">
-											<img
-												:src="this.$store.state.config.reactions.touched.image"
-												:alt="this.$store.state.config.reactions.touched.label"
-												class="flex-shrink-0 h-20 w-20"
-											/>
-										</button>
-									</div>
+										Positive
+									</button>
+									<button
+										class="px-2 py-1 m-2 rounded-lg w-24 focus:outline-none"
+										:style="{ backgroundImage: `url(${$store.state.config.backgrounds.negative})` }"
+										@click="setEmotionCategory(`negative`)"
+									>
+										Negative
+									</button>
+									<button
+										class="px-2 py-1 m-2 rounded-lg w-24 focus:outline-none"
+										:style="{ backgroundImage: `url(${$store.state.config.backgrounds.neutral})` }"
+										@click="setEmotionCategory(`neutral`)"
+									>
+										Neutral
+									</button>
 								</div>
-								<button @click="incSlide()">
-									<ChevronRight />
-								</button>
-								<!-- Select Reaction -->
+								<!-- Right side: -->
+								<div
+									class="overflow-auto grid grid-cols-3 w-full -mr-1 border-l"
+									:style="{ backgroundImage: `url(${this.$store.state.config.backgrounds[this.emotionCategory]})` }"
+								>
+									<button
+										v-for="e in this.categories[this.emotionCategory]"
+										:key="e"
+										class="w-full items-center focus:outline-none"
+										@click="setEmotion($store.state.config.reactions[e])"
+									>
+										<img
+											:src="$store.state.config.reactions[e].image"
+											:alt="$store.state.config.reactions[e].label"
+											class="flex-shrink-0 h-20 w-20"
+										/>
+									</button>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -146,8 +117,6 @@ import { Comment } from '@/interfaces/Comment'
 import BrandedButton from '@/components/BrandedButton.vue'
 import ProfileIcon from '@/components/icons/Person.vue'
 import CommentCard from '@/components/post/Comment.vue'
-import ChevronLeft from '../icons/ChevronLeft.vue'
-import ChevronRight from '../icons/ChevronRight.vue'
 
 export default Vue.extend({
 	name: `ComponentPostActions`,
@@ -155,8 +124,6 @@ export default Vue.extend({
 		BrandedButton,
 		ProfileIcon,
 		CommentCard,
-		ChevronLeft,
-		ChevronRight,
 	},
 	props: {
 		post: {
@@ -174,10 +141,15 @@ export default Vue.extend({
 			comment: ``,
 			comments,
 			emotion: ``,
+			emotionCategory: `positive`,
 			myAvatar: ``,
 			showEmotions: false,
 			commentBackground: `@/assets/images/brand/paper4.svg`,
-			slideCounter: 0,
+			categories: {
+				positive: [`awe`, `excited`, `happy`, `lol`, `proud`, `touched`],
+				negative: [`sad`, `sick`, `terrified`, `skeptical`, `drama`],
+				neutral: [`goofy`],
+			},
 		}
 	},
 	created() {
@@ -191,6 +163,9 @@ export default Vue.extend({
 		setEmotion(r) {
 			this.emotion = r
 			this.showEmotions = false
+		},
+		setEmotionCategory(c) {
+			this.emotionCategory = c
 		},
 		sendComment() {
 			if (this.comment === `` || !this.$qualityText(this.comment)) {
@@ -232,12 +207,6 @@ export default Vue.extend({
 				return p1.timestamp.getTime() - p0.timestamp.getTime()
 			})
 			return cList
-		},
-		incSlide() {
-			this.slideCounter += 1
-		},
-		decSlide() {
-			this.slideCounter -= 1
 		},
 	},
 })
