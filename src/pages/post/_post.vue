@@ -147,6 +147,7 @@ export default Vue.extend({
 		ChevronUp,
 		ChevronDown,
 	},
+	layout: `Reader`,
 	// mixins: [markdown],
 	data() {
 		return {

@@ -1,8 +1,5 @@
 <template>
-	<div
-		:class="this.$store.state.settings.darkMode ? 'bg-lightAuthorCard' : 'bg-darkAuthorCard'"
-		class="border rounded-lg p-5 shadow-xl my-5 flex flex-row justify-between"
-	>
+	<div class="border-t border-b p-5 my-5 flex flex-row justify-between">
 		<div class="flex-shrink-0 flex">
 			<img
 				v-if="this.$props.authorAvatar !== ``"
@@ -12,16 +9,9 @@
 			<ProfileIcon v-else class="w-10 h-10 border-2 rounded-full" />
 
 			<div class="mx-4">
-				<h6 class="text-sm italic">About the Author:</h6>
-				<h4 class="text-lg inline">
+				<h6 class="text-sm uppercase text-lightSecondaryText">written by:</h6>
+				<nuxt-link :to="'/' + this.$props.authorCID" class="text-2xl">
 					{{ this.$props.authorName }}
-				</h4>
-				<nuxt-link
-					:to="'/' + this.$props.authorCID"
-					:class="this.$store.state.settings.darkMode ? 'text-lightActive' : 'text-darkActive'"
-					class="text-sm underline inline"
-				>
-					@{{ this.$props.authorId }}
 				</nuxt-link>
 				<p
 					:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
@@ -31,8 +21,9 @@
 				</p>
 			</div>
 		</div>
-
-		<FriendButton class="justify-self-end" :authorID="this.$props.authorCID" />
+		<div>
+			<FriendButton class="justify-self-end" :authorID="this.$props.authorCID" />
+		</div>
 	</div>
 </template>
 

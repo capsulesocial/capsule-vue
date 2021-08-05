@@ -10,7 +10,7 @@
 				<img v-else :src="this.myAvatar" class="w-10 h-10 rounded-lg object-cover mt-1" />
 				<!-- Comment box Container -->
 				<div
-					class="comment-container flex bg-white shadow-xl rounded-xl p-3 ml-5 w-full overflow-hidden"
+					class="comment-container flex bg-white shadow-xl rounded-xl p-2 ml-5 w-full overflow-hidden"
 					:style="{ backgroundImage: `url(${this.$store.state.config.backgrounds[this.emotionCategory]})` }"
 				>
 					<div
@@ -47,26 +47,23 @@
 							<!-- Back side: Choose reaction -->
 							<div class="back flex w-full h-40">
 								<!-- Left side: Category of emotion -->
-								<div class="w-40 flex flex-col bg-white">
+								<div class="w-40 flex flex-col bg-white items-center">
 									<button
-										class="focus:outline-none text-left pl-4 py-1 rounded-lg mt-2 ml-2"
-										:class="this.emotionCategory === `positive` ? `bg-transparent -mr-2` : `mr-2`"
+										class="focus:outline-none rounded-lg w-24 py-1 mt-4"
 										:style="{ backgroundImage: `url(${$store.state.config.backgrounds.positive})` }"
 										@click="setEmotionCategory(`positive`)"
 									>
 										Positive
 									</button>
 									<button
-										class="focus:outline-none text-left pl-4 py-1 rounded-lg mt-2 ml-2"
-										:class="this.emotionCategory === `negative` ? `bg-transparent -mr-2` : `mr-2`"
+										class="focus:outline-none rounded-lg w-24 py-1 mt-4"
 										:style="{ backgroundImage: `url(${$store.state.config.backgrounds.negative})` }"
 										@click="setEmotionCategory(`negative`)"
 									>
 										Negative
 									</button>
 									<button
-										class="focus:outline-none text-left pl-4 py-1 rounded-lg mt-2 ml-2"
-										:class="this.emotionCategory === `neutral` ? `bg-transparent -mr-2` : `mr-2`"
+										class="focus:outline-none rounded-lg w-24 py-1 mt-4"
 										:style="{ backgroundImage: `url(${$store.state.config.backgrounds.neutral})` }"
 										@click="setEmotionCategory(`neutral`)"
 									>
@@ -74,7 +71,7 @@
 									</button>
 								</div>
 								<!-- Right side: -->
-								<div class="overflow-auto grid grid-cols-3 w-full -mr-1">
+								<div class="overflow-auto grid grid-cols-3 w-full -mr-1 bg-white">
 									<button
 										v-for="e in this.categories[this.emotionCategory]"
 										:key="e"
@@ -169,7 +166,7 @@ export default Vue.extend({
 					timestamp: new Date(),
 					replies: [],
 				}
-				this.$props.post.comments.push(c)
+				this.comments.push(c)
 				this.filterComments()
 				this.comment = ``
 				this.emotion = ``
@@ -181,16 +178,13 @@ export default Vue.extend({
 		filterComments() {
 			let cList: Comment[] = []
 			if (this.$props.filter === null) {
-				cList = this.$props.post.comments
+				cList = this.comments
 			} else {
-				for (const c in this.$props.post.comments) {
-					if (this.$props.post.comments[c].emotion === this.$props.filter) {
-						cList.push(this.$props.post.comments[c])
+				for (const c in this.comments) {
+					if (this.comments[c].emotion === this.$props.filter) {
+						cList.push(this.comments[c])
 					}
 				}
-			}
-			if (!cList) {
-				return this.$props.post.comments
 			}
 			cList = cList.slice().sort((p0, p1) => {
 				return p1.timestamp.getTime() - p0.timestamp.getTime()

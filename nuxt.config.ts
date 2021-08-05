@@ -45,7 +45,7 @@ const config: NuxtConfig = {
   buildModules: [
     // https://go.nuxtjs.dev/tailwindcss
     '@nuxtjs/tailwindcss',
-    '@nuxt/typescript-build'
+    '@nuxt/typescript-build',
   ],
 
   tailwindcss: {
@@ -56,6 +56,10 @@ const config: NuxtConfig = {
   modules: [
     "@nuxtjs/axios"
   ],
+
+  axios: {
+    baseURL: 'http://localhost:3001',
+  },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {

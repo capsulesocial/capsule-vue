@@ -19,7 +19,7 @@
 					<div class="w-full border-b pb-5 mb-5">
 						<h6 class="text-sm">Saved to <span class="font-bold underline">Drafts</span></h6>
 					</div>
-					<h6 class="text-primary uppercase text-sm">{{ this.category === `` ? 'Category' : this.category }}</h6>
+					<h6 class="text-primary capitalize text-sm">{{ this.category === `` ? 'Category' : this.category }}</h6>
 				</article>
 				<!-- Title, subtitle, author -->
 				<article class="flex justify-between px-5">
@@ -123,7 +123,7 @@
 							<button
 								v-for="c in this.$store.state.config.categories"
 								:key="c"
-								class="w-full flex items-center p-2 uppercase focus:outline-none"
+								class="w-full flex items-center p-2 capitalize focus:outline-none"
 								@click="changeCategory(c)"
 							>
 								<img :src="require(`@/assets/images/category/` + c + `/icon.png`)" class="w-10 h-10 mr-1" />
@@ -339,10 +339,9 @@ export default Vue.extend({
 					content: this.input,
 					cid: ``,
 					id: ``,
-					timestamp: new Date(),
+					category: this.category,
+					timestamp: Date.now(),
 					tags: this.$store.state.draft.tags,
-					comments: [],
-					bookmarks: [],
 					authorID: this.$store.state.session.id,
 					authorCID: this.$store.state.session.cid,
 					featuredPhotoCID: this.featuredPhotoCID,
@@ -351,7 +350,10 @@ export default Vue.extend({
 					p.cid = cid
 					this.$store.commit(`posts/addPost`, cid)
 					this.addPost(cid)
+					p.cid = ``
 					const profile: Profile = this.$store.state.session
+					// Send post to orbit DB
+					this.$axios.post(`/content`, { cid, data: p })
 					this.$sendProfile(profile).then((pcid) => {
 						this.changeCID(pcid)
 						this.title = ``

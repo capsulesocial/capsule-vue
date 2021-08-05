@@ -73,6 +73,9 @@ export default Vue.extend({
 		}
 	},
 	created() {
+		this.$axios.$get(`/content`).then((p) => {
+			console.log(p)
+		})
 		this.sortFeed(this.algorithm)
 	},
 	methods: {
@@ -90,9 +93,10 @@ export default Vue.extend({
 			this.algorithm = a
 			// Sort by time
 			if (a === `NEW`) {
-				this.posts.sort((p0, p1) => {
-					return p1.timestamp.getTime() - p0.timestamp.getTime()
-				})
+				return this.posts.reverse()
+				// this.posts.sort((p0, p1) => {
+				// 	return p1.timestamp - p0.timestamp
+				// })
 				// } else if (a === 'TOP') {
 				//   this.posts.sort((p0, p1) => {
 				//     return p1.views - p0.views
@@ -109,6 +113,7 @@ export default Vue.extend({
 				}
 				this.posts = res
 			}
+			return this.posts
 		},
 	},
 })
