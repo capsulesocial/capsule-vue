@@ -348,7 +348,7 @@ export default Vue.extend({
 				}
 				this.$sendPost(p).then((cid: string) => {
 					p.cid = cid
-					this.$store.commit(`posts/addPost`, cid)
+					// this.$store.commit(`posts/addPost`, cid)
 					this.addPost(cid)
 					p.cid = ``
 					const profile: Profile = this.$store.state.session

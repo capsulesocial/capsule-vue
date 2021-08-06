@@ -74,9 +74,10 @@ export default Vue.extend({
 	},
 	created() {
 		this.$axios.$get(`/content`).then((p) => {
-			console.log(p)
+			console.log(p.data)
+			this.posts = p.data
 		})
-		this.sortFeed(this.algorithm)
+		// this.sortFeed(this.algorithm)
 	},
 	methods: {
 		sortFeed(a) {
@@ -94,13 +95,6 @@ export default Vue.extend({
 			// Sort by time
 			if (a === `NEW`) {
 				return this.posts.reverse()
-				// this.posts.sort((p0, p1) => {
-				// 	return p1.timestamp - p0.timestamp
-				// })
-				// } else if (a === 'TOP') {
-				//   this.posts.sort((p0, p1) => {
-				//     return p1.views - p0.views
-				//   })
 			} else if (a === `FOLLOWING`) {
 				// Get list of accounts being followed
 				const fList: string[] = []

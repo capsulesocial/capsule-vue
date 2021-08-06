@@ -49,7 +49,7 @@
 
 		<!-- Preview Content -->
 		<div class="my-2">
-			<nuxt-link :to="'/post/' + this.post.cid" class="flex justify-between">
+			<nuxt-link :to="'/post/' + this.post._id" class="flex justify-between">
 				<div>
 					<h3
 						:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"

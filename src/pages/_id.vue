@@ -123,7 +123,7 @@
 			</nuxt-link>
 		</section>
 		<section>
-			<nuxt-child />
+			<nuxt-child :profile="this.currentUser" />
 		</section>
 	</main>
 </template>
@@ -148,7 +148,6 @@ export default Vue.extend({
 		return {
 			avatar: ``,
 			currentUser: {},
-			posts: [],
 		}
 	},
 	created() {
@@ -170,7 +169,6 @@ export default Vue.extend({
 					this.avatar = image
 				})
 			}
-			this.userPosts()
 		})
 	},
 	methods: {
@@ -189,18 +187,6 @@ export default Vue.extend({
 		openWindow(url) {
 			if (process.client) {
 				window.open(url, `_blank`)
-			}
-		},
-		async userPosts() {
-			// @ts-ignore
-			const p = this.currentUser.posts
-			if (p.length > 0) {
-				for (let i = 0; i < p.length; i++) {
-					const post = await this.$getPost(p[i])
-					post.id = p[i]
-					// @ts-ignore
-					this.posts.push(post)
-				}
 			}
 		},
 	},
