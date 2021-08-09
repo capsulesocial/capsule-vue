@@ -74,7 +74,6 @@ export default Vue.extend({
 	},
 	created() {
 		this.$axios.$get(`/content`).then((p) => {
-			console.log(p.data)
 			this.posts = p.data
 		})
 		// this.sortFeed(this.algorithm)

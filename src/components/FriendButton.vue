@@ -28,14 +28,7 @@ export default {
 			}
 			return false
 		},
-		toggleFriend() {
-			// this.$store.commit('me/handleFollow', this.authorID)
-			// this.$store.commit('authors/handleFollow',
-			//   {
-			//     me: this.$store.state.session.cid,
-			//     targetUser: this.authorID,
-			//   })
-		},
+		toggleFriend() {},
 	},
 }
 </script>
