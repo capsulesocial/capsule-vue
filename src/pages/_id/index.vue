@@ -1,5 +1,6 @@
 <template>
 	<section class="px-4">
+		<article v-show="this.isLoading" class="loader m-10"></article>
 		<article v-for="post in this.posts" :key="post.id">
 			<PostCard :post="post" />
 		</article>
@@ -26,13 +27,14 @@ export default Vue.extend({
 		const posts: Post[] = []
 		return {
 			posts,
+			isLoading: true,
 		}
 	},
 	created() {
 		// Fetch posts from Orbit DB by ID
 		this.$axios.$get(`/content?authorID=` + this.$route.params.id).then((res) => {
-			console.log(res)
 			this.posts = res.data
+			this.isLoading = false
 		})
 
 		// const postList = this.$props.profile.posts

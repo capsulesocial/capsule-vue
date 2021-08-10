@@ -4,7 +4,7 @@
 		<h2 class="text-2xl uppercase">
 			{{ this.$route.params.category }}
 		</h2>
-		<article v-for="post in this.posts" :key="post.id">
+		<article v-for="post in this.posts" :key="post.title">
 			<PostCard :post="post" />
 		</article>
 	</section>
