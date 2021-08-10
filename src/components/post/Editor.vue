@@ -9,7 +9,7 @@
 
 		<div class="flex h-screen pt-24 -mt-24">
 			<section
-				class="w-full shadow-lg border-l border-r px-10"
+				class="w-full shadow-lg border-l border-r px-10 overflow-y-auto"
 				:class="
 					this.$store.state.settings.darkMode ? 'bg-lightBG text-lightPrimaryText' : 'bg-darkBG text-darkPrimaryText'
 				"
