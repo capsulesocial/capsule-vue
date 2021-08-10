@@ -1,11 +1,11 @@
 <template>
 	<div class="relative">
-		<button
-			class="absolute flex items-center mt-6 right-0 bg-lightSecondary rounded-full p-2 focus:outline-none"
-			@click="updateStore"
-		>
-			<XIcon />
-		</button>
+		<div class="absolute flex right-0 items-center h-24">
+			<BrandedButton text="Publish" :action="post" class="w-32 h-12 mr-4" />
+			<button class="flex items-center bg-lightSecondary rounded-full p-2 focus:outline-none" @click="updateStore">
+				<XIcon />
+			</button>
+		</div>
 
 		<div class="flex h-screen pt-24 -mt-24">
 			<section
@@ -179,13 +179,6 @@
 						</div>
 					</div>
 				</article>
-				<div></div>
-
-				<BrandedButton
-					text="Publish"
-					:action="post"
-					class="absolute justify-self-end w-32 h-12 self-center mb-24 bottom-0"
-				/>
 			</section>
 		</div>
 	</div>
