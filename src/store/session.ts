@@ -2,6 +2,7 @@
 import type { GetterTree, MutationTree } from 'vuex'
 import type { RootState } from './index'
 import { Profile } from '~/interfaces/Profile'
+import { walletLogout } from '~/plugins/near'
 
 export const namespace = `session`
 
@@ -72,5 +73,6 @@ export const mutations: MutationTree<Profile> = {
 		state.bio = `Default bio.`
 		state.location = ``
 		state.posts = []
+		walletLogout()
 	},
 }

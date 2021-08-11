@@ -45,9 +45,10 @@ export default Vue.extend({
 	},
 	layout: `landing`,
 	methods: {
-		handleCTA() {
-			if (this.$store.state.session.id === ``) {
+		async handleCTA() {
+			if (this.$store.state.session.cid === ``) {
 				this.$router.push(`/auth`)
+				await this.$walletLogin()
 			} else {
 				this.$router.push(`/home`)
 			}

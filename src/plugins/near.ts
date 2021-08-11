@@ -82,4 +82,4 @@ const nearPlugin: Plugin = async (_context, inject) => {
 }
 
 export default nearPlugin
-export { getWalletConnection, getContract }
+export { getWalletConnection, getContract, walletLogout }
