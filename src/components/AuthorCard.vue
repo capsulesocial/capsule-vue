@@ -22,7 +22,7 @@
 			</div>
 		</div>
 		<div>
-			<FriendButton class="justify-self-end" :authorID="this.$props.authorCID" />
+			<FriendButton class="justify-self-end" :authorID="this.$props.authorCID" :showIcons="true" />
 		</div>
 	</div>
 </template>

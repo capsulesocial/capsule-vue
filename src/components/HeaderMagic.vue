@@ -1,5 +1,5 @@
 <template>
-	<header class="page-header flex items-center bg-white z-20">
+	<header class="page-header flex items-center bg-white z-30">
 		<nav>
 			<div
 				class="
@@ -16,7 +16,7 @@
 					border-b
 				"
 			>
-				<div class="md:min-w-max md:max-w-3xl w-full px-10 flex justify-between">
+				<div class="md:min-w-max md:max-w-3xl w-full pl-10 pr-5 flex justify-between">
 					<div class="items-center flex">
 						<img :src="this.$props.avatar" class="w-10 h-10 rounded-xl mr-4" />
 						<h4 class="pr-4">{{ this.$props.authorID }}</h4>

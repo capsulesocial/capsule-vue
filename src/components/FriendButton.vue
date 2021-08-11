@@ -1,20 +1,38 @@
 <template>
 	<button class="rounded-full focus:outline-none" @click="toggleFriend">
-		<div v-if="iFollow()" class="bg-red-200 rounded-lg shadow-lg px-2 py-1">
-			<span class="text-black text-bold text-sm">Unfollow</span>
+		<div v-if="iFollow()" class="text-black">
+			<span v-if="this.$props.showIcons" class="rounded-full bg-red-200">
+				<UnfollowIcon />
+			</span>
+			<span v-else class="text-bold rounded-lg text-sm bg-red-200 shadow-lg px-2 py-1">Unfollow</span>
 		</div>
-		<div v-else class="bg-primary rounded-lg shadow-lg px-2 py-1">
-			<span class="text-white text-bold text-sm">Follow</span>
+		<div v-else>
+			<div v-if="this.$props.showIcons" class="shadow-lg rounded-full bg-primary p-3 items-center">
+				<FollowIcon class="text-white" />
+			</div>
+			<span v-else class="text-white text-bold rounded-lg text-sm bg-primary shadow-lg px-4 py-2">Follow</span>
 		</div>
 	</button>
 </template>
 
 <script>
-export default {
+import Vue from 'vue'
+import FollowIcon from '@/components/icons/Follow.vue'
+import UnfollowIcon from '@/components/icons/Unfollow.vue'
+
+export default Vue.extend({
+	components: {
+		FollowIcon,
+		UnfollowIcon,
+	},
 	props: {
 		authorCID: {
 			type: String,
 			default: null,
+		},
+		showIcons: {
+			type: Boolean,
+			default: false,
 		},
 	},
 	methods: {
@@ -30,5 +48,5 @@ export default {
 		},
 		toggleFriend() {},
 	},
-}
+})
 </script>
