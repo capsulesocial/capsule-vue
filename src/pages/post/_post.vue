@@ -1,6 +1,7 @@
 <template>
 	<div v-if="this.post" class="w-full">
-		<section v-if="this.post !== {}" class="pb-16 md:pb-5 md:pl-5 m-5">
+		<HeaderMagic :authorID="this.post.authorID" :avatar="this.authorAvatar" />
+		<section v-if="this.post !== {}" class="pb-16 md:pb-5 md:pl-5 m-5 pt-4">
 			<article>
 				<h1
 					:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
@@ -134,6 +135,8 @@ import BookmarkButton from '@/components/post/BookmarkButton.vue'
 import ShareButton from '@/components/post/Share.vue'
 import ChevronUp from '@/components/icons/ChevronUp.vue'
 import ChevronDown from '@/components/icons/ChevronDown.vue'
+import HeaderMagic from '@/components/HeaderMagic.vue'
+
 import { Post } from '~/interfaces/Post'
 import { Profile } from '~/interfaces/Profile'
 
@@ -146,6 +149,7 @@ export default Vue.extend({
 		ShareButton,
 		ChevronUp,
 		ChevronDown,
+		HeaderMagic,
 	},
 	layout: `Reader`,
 	// mixins: [markdown],
