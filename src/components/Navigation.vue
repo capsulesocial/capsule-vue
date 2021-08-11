@@ -29,8 +29,8 @@
 			</nuxt-link>
 			<!-- profile -->
 			<nuxt-link
-				:to="'/' + $store.state.session.cid"
-				:class="this.getStyles(this.$store.state.session.cid)"
+				:to="'/' + $store.state.session.id"
+				:class="this.getStyles(this.$store.state.session.id)"
 				class="group flex items-center p-2 text-base leading-6 m-2 text-xl rounded-xl"
 			>
 				<span class="p-2">
@@ -49,7 +49,7 @@
 				<strong class="hidden xl:block ml-2"> Messages </strong>
 			</nuxt-link>
 			<nuxt-link
-				:to="'/' + $store.state.session.cid + '/bookmarks'"
+				:to="'/' + $store.state.session.id + '/bookmarks'"
 				:class="this.getStyles('id-bookmarks')"
 				class="group flex items-center p-2 text-base leading-6 m-2 text-xl rounded-xl"
 			>
@@ -88,10 +88,10 @@
 				<PencilIcon class="fill-current text-white" />
 			</nuxt-link>
 			<ProfileIcon
-				v-show="this.$route.params.id === this.$store.state.session.cid"
+				v-show="this.$route.params.id === this.$store.state.session.id"
 				class="stroke-current text-primary"
 			/>
-			<nuxt-link v-show="this.$route.params.id !== this.$store.state.session.cid" :to="$store.state.session.cid">
+			<nuxt-link v-show="this.$route.params.id !== this.$store.state.session.id" :to="$store.state.session.id">
 				<ProfileIcon class="stroke-current text-gray-400" />
 			</nuxt-link>
 			<nuxt-link to="/settings">
@@ -140,7 +140,7 @@ export default Vue.extend({
 		getStyles(tab: string): string {
 			let res = ``
 			// Check if current tab
-			if (this.$route.name === tab || (this.$route.name === `id` && tab === this.$store.state.session.cid)) {
+			if (this.$route.name === tab || (this.$route.name === `id` && tab === this.$store.state.session.id)) {
 				// Check dark mode
 				if (this.$store.state.settings.darkMode) {
 					res += `text-lightPrimary bg-lightPrimary shadow-lg bg-opacity-25`

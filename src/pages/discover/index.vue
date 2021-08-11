@@ -1,5 +1,5 @@
 <template>
-	<main class="px-4">
+	<div class="w-full px-4">
 		<section>
 			<article class="flex flex-col md:flex-row justify-between mb-1 items-center mt-3">
 				<h2
@@ -54,7 +54,7 @@
 				/>
 			</article>
 		</section>
-	</main>
+	</div>
 </template>
 
 <script>

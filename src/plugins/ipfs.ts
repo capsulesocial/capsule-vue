@@ -32,10 +32,7 @@ const ipfsPlugin: Plugin = async (_context, inject) => {
 
 	// Send a user profile object to IPFS
 	const sendProfile: (content: Profile) => Promise<string> = async (content) => {
-		const profileAdded = await node.add({
-			path: content.id,
-			content: JSON.stringify(content),
-		})
+		const profileAdded = await node.add(JSON.stringify(content, null, 0))
 		const cid = profileAdded.cid.string
 		return cid
 	}
@@ -51,10 +48,7 @@ const ipfsPlugin: Plugin = async (_context, inject) => {
 
 	// Send post to IPFS
 	const sendPost: (content: Post) => Promise<string> = async (content: Post) => {
-		const postAdded = await node.add({
-			path: content.title,
-			content: JSON.stringify(content),
-		})
+		const postAdded = await node.add(JSON.stringify(content, null, 0))
 		const cid = postAdded.cid.string
 		return cid
 	}

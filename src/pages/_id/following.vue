@@ -1,7 +1,7 @@
 <template>
-	<section v-if="this.targetUser !== null" class="px-4">
+	<section v-if="this.$props.profile !== null" class="px-4">
 		<article>
-			<div v-for="i in this.targetUser['following']" :key="i">
+			<div v-for="i in this.$props.profile['following']" :key="i">
 				<nuxt-link class="text-primary underline" :to="'/' + i">
 					{{ i }}
 				</nuxt-link>
@@ -12,18 +12,11 @@
 
 <script>
 export default {
-	data() {
-		return {
-			targetUser: null,
-		}
-	},
-	async created() {
-		if (this.$route.params.id === this.$store.state.session.cid) {
-			this.targetUser = this.$store.state.session
-		} else {
-			// Get user profile
-			this.targetUser = await this.$getProfile(this.$route.params.id)
-		}
+	props: {
+		profile: {
+			type: Object,
+			default: null,
+		},
 	},
 }
 </script>

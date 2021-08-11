@@ -407,7 +407,7 @@ export default Vue.extend({
 				this.changeCID(cid)
 			})
 			alert(`Settings updated!`)
-			this.$router.push(`/` + this.$store.state.session.cid)
+			this.$router.push(`/` + this.$store.state.session.id)
 		},
 	},
 })

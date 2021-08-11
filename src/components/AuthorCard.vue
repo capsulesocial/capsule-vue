@@ -1,6 +1,6 @@
 <template>
 	<div class="border-t border-b p-5 my-5 flex flex-row justify-between">
-		<div class="flex-shrink-0 flex">
+		<div class="flex">
 			<img
 				v-if="this.$props.authorAvatar !== ``"
 				:src="this.$props.authorAvatar"
@@ -15,14 +15,14 @@
 				</nuxt-link>
 				<p
 					:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-					class="italic text-sm"
+					class="italic text-sm w-full"
 				>
 					{{ this.$props.authorBio }}
 				</p>
 			</div>
 		</div>
 		<div>
-			<FriendButton class="justify-self-end" :authorID="this.$props.authorCID" />
+			<FriendButton class="justify-self-end" :authorID="this.$props.authorCID" :showIcons="true" />
 		</div>
 	</div>
 </template>

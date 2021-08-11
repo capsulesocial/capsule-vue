@@ -145,7 +145,7 @@ export default Vue.extend({
 		}
 	},
 	mounted() {
-		if (this.$store.state.session.cid !== ``) {
+		if (this.$store.state.session.id !== ``) {
 			this.$router.push(`/home`)
 		}
 	},

@@ -6,53 +6,39 @@
 		<nav class="flex flex-row border bg-secondary bg-opacity-25 py-2 px-4 pl-5">
 			<div class="flex items-center mr-6">
 				<button
-					v-if="this.algorithm !== 'NEW'"
-					class="font-sans py-2 px-4 focus:outline-none uppercase rounded-lg bg-gray-100 text-gray-800"
+					:class="this.algorithm === `NEW` ? `bg-primary text-white shadow-lg` : `bg-gray-100 text-gray-800`"
+					class="font-sans py-2 px-4 focus:outline-none uppercase rounded-lg"
 					@click="sortFeed('NEW')"
 				>
 					New
 				</button>
-				<span
-					v-else
-					class="font-sans py-2 px-4 focus:outline-none uppercase rounded-lg bg-primary text-white shadow-lg"
-				>
-					New
-				</span>
 			</div>
 			<div class="flex items-center mr-6">
 				<button
-					v-if="this.algorithm !== 'TOP'"
-					class="font-sans py-2 px-4 focus:outline-none uppercase rounded-lg bg-gray-100 text-gray-800"
+					:class="this.algorithm === `TOP` ? `bg-primary text-white shadow-lg` : `bg-gray-100 text-gray-800`"
+					class="font-sans py-2 px-4 focus:outline-none uppercase rounded-lg"
 					@click="sortFeed('TOP')"
 				>
 					Top
 				</button>
-				<span
-					v-else
-					class="font-sans py-2 px-4 focus:outline-none uppercase rounded-lg bg-primary text-white shadow-lg"
-				>
-					Top
-				</span>
 			</div>
 			<div class="flex items-center mr-6">
 				<button
-					v-if="this.algorithm !== 'FOLLOWING'"
-					class="font-sans py-2 px-4 focus:outline-none uppercase rounded-lg bg-gray-100 text-gray-800"
+					:class="this.algorithm === `FOLLOWING` ? `bg-primary text-white shadow-lg` : `bg-gray-100 text-gray-800`"
+					class="font-sans py-2 px-4 focus:outline-none uppercase rounded-lg"
 					@click="sortFeed('FOLLOWING')"
 				>
 					following
 				</button>
-				<span
-					v-else
-					class="font-sans py-2 px-4 focus:outline-none uppercase rounded-lg bg-primary text-white shadow-lg"
-				>
-					following
-				</span>
 			</div>
 		</nav>
-		<div v-for="post in this.posts" :key="post.contentAddress" class="mx-4">
+
+		<!-- Not loaded yet -->
+		<div v-show="this.isLoading" class="loader m-10"></div>
+
+		<article v-for="post in this.posts" :key="post.contentAddress" class="px-4">
 			<PostCard :post="post" />
-		</div>
+		</article>
 	</section>
 </template>
 
@@ -70,51 +56,62 @@ export default Vue.extend({
 		return {
 			algorithm: `NEW`,
 			posts,
+			isLoading: true,
 		}
 	},
 	created() {
 		this.$axios.$get(`/content`).then((p) => {
-			console.log(p)
+			this.posts = p.data
+			this.isLoading = false
 		})
-		this.sortFeed(this.algorithm)
 	},
 	methods: {
 		sortFeed(a) {
 			this.posts = []
-			// Get list of posts
-			for (const p in this.$store.state.posts.recent) {
-				if (p) {
-					this.$getPost(this.$store.state.posts.recent[p]).then((post: Post) => {
-						post.cid = this.$store.state.posts.recent[p]
-						this.posts.push(post)
-					})
-				}
-			}
+			this.isLoading = true
 			this.algorithm = a
 			// Sort by time
 			if (a === `NEW`) {
+				// Get new posts from all following & category feeds
+				this.$axios.$get(`/content`).then((p) => {
+					this.posts = p.data.reverse()
+					this.isLoading = false
+				})
 				return this.posts.reverse()
-				// this.posts.sort((p0, p1) => {
-				// 	return p1.timestamp - p0.timestamp
-				// })
-				// } else if (a === 'TOP') {
-				//   this.posts.sort((p0, p1) => {
-				//     return p1.views - p0.views
-				//   })
 			} else if (a === `FOLLOWING`) {
 				// Get list of accounts being followed
-				const fList: string[] = []
-				const res: Post[] = []
-				fList.push(...this.$store.state.session.following)
-				for (const p in this.posts) {
-					if (fList.includes(this.posts[p].authorID)) {
-						res.push(this.posts[p])
-					}
-				}
-				this.posts = res
+				this.$axios.$get(`/content`).then((p) => {
+					this.posts = p.data
+					this.isLoading = false
+				})
+			} else if (a === `TOP`) {
+				this.$axios.$get(`/content`).then((p) => {
+					this.posts = p.data
+					this.isLoading = false
+				})
 			}
 			return this.posts
 		},
 	},
 })
 </script>
+
+<style>
+.loader {
+	border: 16px solid #eeeeee; /* Light grey */
+	border-top: 16px solid #1e566c; /* Blue */
+	border-radius: 50%;
+	width: 120px;
+	height: 120px;
+	animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+</style>

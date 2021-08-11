@@ -60,7 +60,7 @@
 			</article>
 			<div class="flex items-center"></div>
 			<nuxt-link
-				v-if="this.$store.state.session.cid === this.$route.params.id"
+				v-if="this.$store.state.session.id === this.$route.params.id"
 				to="/settings"
 				:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 			>
@@ -123,7 +123,7 @@
 			</nuxt-link>
 		</section>
 		<section>
-			<nuxt-child />
+			<nuxt-child :profile="this.currentUser" />
 		</section>
 	</main>
 </template>
@@ -137,6 +137,7 @@ import ExternalURLIcon from '@/components/icons/ExternalURL.vue'
 import SettingsIcon from '@/components/icons/Settings.vue'
 
 export default Vue.extend({
+	name: `RootIDPage`,
 	components: {
 		TwitterIcon,
 		GitHubIcon,
@@ -154,24 +155,24 @@ export default Vue.extend({
 	created() {
 		// The user in which I am currently viewing
 		// Check if this is my profile
-		if (this.$route.params.id === this.$store.state.session.cid) {
+		if (this.$route.params.id === this.$store.state.session.id) {
 			this.currentUser = this.$store.state.session
 		}
 		// Get user profile
-		this.$getProfile(this.$route.params.id).then((profile) => {
-			this.currentUser = profile
-			if (!this.currentUser) {
-				return
-			}
-			// @ts-ignore
-			if (this.currentUser.avatar !== ``) {
-				// @ts-ignore
-				this.$getPhoto(this.currentUser.avatar).then((image) => {
-					this.avatar = image
-				})
-			}
-			this.userPosts()
-		})
+		// this.$getProfile(this.$route.params.id).then((profile) => {
+		// 	this.currentUser = profile
+		// 	if (!this.currentUser) {
+		// 		return
+		// 	}
+		// 	// @ts-ignore
+		// 	if (this.currentUser.avatar !== ``) {
+		// 		// @ts-ignore
+		// 		this.$getPhoto(this.currentUser.avatar).then((image) => {
+		// 			this.avatar = image
+		// 		})
+		// 	}
+		// })
+		// Fetch posts from Orbit DB by ID
 	},
 	methods: {
 		getStyles(tab): string {
@@ -189,18 +190,6 @@ export default Vue.extend({
 		openWindow(url) {
 			if (process.client) {
 				window.open(url, `_blank`)
-			}
-		},
-		async userPosts() {
-			// @ts-ignore
-			const p = this.currentUser.posts
-			if (p.length > 0) {
-				for (let i = 0; i < p.length; i++) {
-					const post = await this.$getPost(p[i])
-					post.id = p[i]
-					// @ts-ignore
-					this.posts.push(post)
-				}
 			}
 		},
 	},

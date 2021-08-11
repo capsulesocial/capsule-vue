@@ -1,25 +1,41 @@
 <template>
 	<div v-if="this.post" class="w-full">
-		<section v-if="this.post !== {}" class="pb-16 md:pb-5 md:pl-5 m-5">
+		<HeaderMagic :authorID="this.post.authorID" :avatar="this.authorAvatar" />
+		<section v-if="this.post !== {}" class="pb-16 md:pb-5 md:pl-5 m-5 pt-4">
+			<!-- Category and elipses -->
+			<article class="w-full flex justify-between my-2">
+				<div class="text-lg">
+					Category | <span class="text-primary uppercase">{{ this.post.category }}</span>
+				</div>
+				<MoreIcon />
+			</article>
 			<article>
 				<h1
 					:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-					class="text-5xl capitalize"
+					class="text-4xl capitalize font-serif font-bold"
 				>
 					{{ this.post.title }}
 				</h1>
 				<h2
 					:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-					class="text-3xl text-subtitle"
+					class="text-2xl text-subtitle"
 				>
 					{{ this.post.subtitle }}
 				</h2>
-				<div class="flex justify-between pt-5">
+			</article>
+
+			<article class="my-5">
+				<img v-if="this.featuredPhoto !== null" :src="this.featuredPhoto" />
+			</article>
+
+			<!-- Author Intro -->
+			<article class="flex justify-between mt-5 py-2">
+				<div class="flex">
+					<img :src="this.authorAvatar" :alt="this.author.id" class="w-10 h-10 rounded-lg mr-4" />
 					<p
 						:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 						class="font-sans uppercase"
 					>
-						Written by
 						<nuxt-link
 							:to="'/' + this.author.cid"
 							:class="this.$store.state.settings.darkMode ? 'text-lightActive' : 'text-darkActive'"
@@ -34,23 +50,47 @@
 							{{ this.$formatDate(this.post.timestamp) }}
 						</span>
 					</p>
-					<div class="flex items-center">
-						<BookmarkButton :postID="this.$route.params.post" />
-						<ShareButton :post="this.post" />
-					</div>
+				</div>
+				<div>
+					<span v-for="s in this.author.socials" :key="s.platform" class="p-2">
+						<!-- Twitter -->
+						<button
+							v-if="s.platform === 'twitter'"
+							class="focus:outline-none text-primary"
+							@click="openWindow('https://twitter.com/' + s.username)"
+						>
+							<TwitterIcon />
+						</button>
+						<!-- GitHub -->
+						<button
+							v-if="s.platform === 'github'"
+							class="focus:outline-none text-primary"
+							@click="openWindow('https://github.com/' + s.username)"
+						>
+							<GitHubIcon />
+						</button>
+						<button
+							v-if="s.platform === 'website'"
+							class="focus:outline-none text-primary"
+							@click="openWindow(s.username)"
+						>
+							<ExternalURLIcon />
+						</button>
+					</span>
 				</div>
 			</article>
 
-			<hr v-if="this.$store.state.settings.darkMode" class="style-two my-5" />
-			<hr v-else class="style-one my-5" />
+			<!-- <hr v-if="this.$store.state.settings.darkMode" class="style-two my-5" />
+			<hr v-else class="style-one my-5" /> -->
 
-			<img v-if="this.featuredPhoto !== null" :src="this.featuredPhoto" />
 			<!-- Content -->
-			<div
-				:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-				class="editable prose max-w-none content"
-				v-html="this.content"
-			></div>
+			<article class="mt-5">
+				<div
+					:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+					class="editable prose max-w-none content"
+					v-html="this.content"
+				></div>
+			</article>
 
 			<!-- Tags -->
 			<article class="mt-5">
@@ -134,6 +174,9 @@ import BookmarkButton from '@/components/post/BookmarkButton.vue'
 import ShareButton from '@/components/post/Share.vue'
 import ChevronUp from '@/components/icons/ChevronUp.vue'
 import ChevronDown from '@/components/icons/ChevronDown.vue'
+import HeaderMagic from '@/components/HeaderMagic.vue'
+import MoreIcon from '@/components/icons/More.vue'
+
 import { Post } from '~/interfaces/Post'
 import { Profile } from '~/interfaces/Profile'
 
@@ -146,6 +189,8 @@ export default Vue.extend({
 		ShareButton,
 		ChevronUp,
 		ChevronDown,
+		HeaderMagic,
+		MoreIcon,
 	},
 	layout: `Reader`,
 	// mixins: [markdown],

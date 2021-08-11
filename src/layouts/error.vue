@@ -25,7 +25,7 @@ export default {
 		},
 	},
 	created() {
-		if (this.$store.state.session.cid === ``) {
+		if (this.$store.state.session.id === ``) {
 			this.$router.push(`/auth`)
 		}
 	},

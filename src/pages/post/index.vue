@@ -1,6 +1,6 @@
 <template>
-	<main class="w-full h-auto">
-		<PostEditor />
+	<main>
+		<PostEditor class="w-full h-screen" />
 	</main>
 </template>
 
