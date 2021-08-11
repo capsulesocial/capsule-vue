@@ -4,8 +4,8 @@ import { connect, Contract, keyStores, WalletConnection } from 'near-api-js'
 // eslint-disable-next-line quotes
 declare module 'vue/types/vue' {
 	interface Vue {
-		$walletLogin: () => null
-		$walletLogout: () => null
+		$walletLogin: () => Promise<void>
+		$walletLogout: () => void
 	}
 }
 
@@ -58,13 +58,17 @@ function getWalletConnection() {
 
 async function walletLogin() {
 	const _walletConnection = getWalletConnection()
-	// Redirects to wallet login page
-	await _walletConnection.requestSignIn(nearConfig.contractName)
+	if (!_walletConnection.isSignedIn()) {
+		// Redirects to wallet login page
+		await _walletConnection.requestSignIn(nearConfig.contractName)
+	}
 }
 
 function walletLogout() {
 	const _walletConnection = getWalletConnection()
-	_walletConnection.signOut()
+	if (_walletConnection.isSignedIn()) {
+		_walletConnection.signOut()
+	}
 }
 
 const nearPlugin: Plugin = async (_context, inject) => {
