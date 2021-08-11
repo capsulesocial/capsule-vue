@@ -15,7 +15,7 @@
 				</nuxt-link>
 				<p
 					:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-					class="italic text-sm w-full text-wrap"
+					class="italic text-sm w-full"
 				>
 					{{ this.$props.authorBio }}
 				</p>
