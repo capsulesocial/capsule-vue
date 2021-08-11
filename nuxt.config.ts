@@ -36,6 +36,8 @@ const config: NuxtConfig = {
     { src: "@/plugins/helpers.ts" },
     { src: "@/plugins/ipfs.ts" },
     { src: "@/plugins/auth.ts" },
+    { src: "@/plugins/near.ts" },
+    { src: "@/plugins/profile.ts" },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -54,7 +56,8 @@ const config: NuxtConfig = {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
-    "@nuxtjs/axios"
+    "@nuxtjs/axios",
+    "@nuxtjs/dotenv"
   ],
 
   axios: {
