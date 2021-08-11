@@ -60,7 +60,7 @@ async function walletLogin() {
 	const _walletConnection = getWalletConnection()
 	if (!_walletConnection.isSignedIn()) {
 		// Redirects to wallet login page
-		await _walletConnection.requestSignIn(nearConfig.contractName)
+		await _walletConnection.requestSignIn(nearConfig.contractName, undefined, `http://localhost:3000/auth`)
 	}
 }
 
