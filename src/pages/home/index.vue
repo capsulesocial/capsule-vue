@@ -32,12 +32,13 @@
 				</button>
 			</div>
 		</nav>
+
 		<!-- Not loaded yet -->
 		<div v-show="this.isLoading" class="loader m-10"></div>
 
-		<div v-for="post in this.posts" :key="post.contentAddress">
+		<article v-for="post in this.posts" :key="post.contentAddress" class="px-4">
 			<PostCard :post="post" />
-		</div>
+		</article>
 	</section>
 </template>
 
