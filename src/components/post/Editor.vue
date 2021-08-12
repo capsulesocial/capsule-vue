@@ -62,7 +62,10 @@
 			</section>
 
 			<!-- Right column -->
-			<section id="editor-menu" class="flex flex-col relative bg-lightSecondary bg-opacity-25 border-r">
+			<section
+				id="editor-menu"
+				class="flex flex-col relative bg-lightSecondary bg-opacity-25 border-r h-auto overflow-y-auto"
+			>
 				<!-- Tags tab -->
 				<article class="border-b mx-4">
 					<button
