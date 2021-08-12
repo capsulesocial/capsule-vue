@@ -10,7 +10,7 @@
 
 			<div class="mx-4">
 				<h6 class="text-sm uppercase text-lightSecondaryText">written by:</h6>
-				<nuxt-link :to="'/' + this.$props.authorCID" class="text-2xl">
+				<nuxt-link :to="'/' + this.$props.authorID" class="text-2xl">
 					{{ this.$props.authorName }}
 				</nuxt-link>
 				<p
@@ -22,7 +22,7 @@
 			</div>
 		</div>
 		<div>
-			<FriendButton class="justify-self-end" :authorID="this.$props.authorCID" :showIcons="true" />
+			<FriendButton class="justify-self-end" :authorID="this.$props.authorID" :showIcons="true" />
 		</div>
 	</div>
 </template>
