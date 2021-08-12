@@ -7,7 +7,7 @@
 	>
 		<!-- Post Preview Header: Avatar, name -->
 		<div class="flex justify-between">
-			<nuxt-link :to="'/' + this.post.authorCID" class="flex items-center">
+			<nuxt-link :to="'/' + this.post.authorID" class="flex items-center">
 				<img v-if="this.avatar !== ``" :src="this.avatar" class="w-12 h-12 rounded-lg object-cover" />
 				<ProfileIcon v-else class="w-12 h-12 border-2 rounded-full" />
 				<div class="ml-4">
