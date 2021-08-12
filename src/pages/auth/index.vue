@@ -172,7 +172,25 @@ export default Vue.extend({
 			}
 			// Login
 			if (this.isLogin) {
-				alert(`Authentication not supported yet!`)
+				const { success, peerIDPrivateKey, profileCID } = await this.$login(this.id, this.password)
+				if (success === true) {
+					const [account, imported] = await Promise.all([
+						this.$getProfile(profileCID),
+						this.$importPrivateKey(`blogchain-auth-${this.id}`, peerIDPrivateKey, `password`),
+					])
+					if (imported === true) {
+						account.cid = profileCID
+						this.changeCID(profileCID)
+						this.changeID(account.id)
+						this.changeName(account.name)
+						this.changeEmail(account.email)
+						this.$router.push(`/settings`)
+					} else {
+						alert(`Authentication failed!`)
+					}
+				} else {
+					alert(`Authentication failed!`)
+				}
 			} else {
 				// Registration
 				if (!this.consent) {
@@ -189,7 +207,7 @@ export default Vue.extend({
 						id: this.id,
 						name: this.name,
 						email: this.email,
-						password: this.password,
+						password: ``,
 						bio: `Default bio.`,
 						location: ``,
 						posts: [],
@@ -203,19 +221,26 @@ export default Vue.extend({
 						avatar: ``,
 					}
 					const node = this.$getNode()
+					await this.$generatePrivateKey(`blogchain-auth-${this.id}`)
 					// Export private key: encrypt it using AES-GCM (for Ed25519 keys)
-					const peerIDPrivateKey = await node.key.export(`self`, `password`)
-					const _res = await this.$register(account, peerIDPrivateKey)
-					console.log(_res)
-					account.password = ``
-					this.$sendProfile(account).then((cid) => {
-						account.cid = cid
+					// Send user profile to IPFS
+					const [peerIDPrivateKey, cid] = await Promise.all([
+						node.key.export(`blogchain-auth-${this.id}`, `password`),
+						this.$sendProfile(account),
+					])
+					account.cid = cid
+					account.password = this.password
+					const _res = await this.$register(account, peerIDPrivateKey, cid)
+					if (_res === true) {
+						// Registration successful
 						this.changeCID(cid)
 						this.changeID(this.id)
 						this.changeName(this.name)
 						this.changeEmail(this.email)
 						this.$router.push(`/settings`)
-					})
+					} else {
+						alert(`Registration Unsuccessful!`)
+					}
 				} else {
 					alert(`Password mismatch!`)
 				}
