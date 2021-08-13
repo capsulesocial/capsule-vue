@@ -70,7 +70,7 @@
 										Neutral
 									</button>
 								</div>
-								<!-- Right side: -->
+								<!-- Right side: images -->
 								<div class="overflow-auto grid grid-cols-3 w-full -mr-1 bg-white">
 									<button
 										v-for="e in this.categories[this.emotionCategory]"
@@ -127,9 +127,9 @@ export default Vue.extend({
 			comment: ``,
 			comments,
 			emotion: ``,
-			emotionCategory: `positive`,
+			emotionCategory: `default`,
 			myAvatar: ``,
-			showEmotions: true,
+			showEmotions: false,
 			commentBackground: `@/assets/images/brand/paper4.svg`,
 			categories: {
 				positive: [`awe`, `excited`, `happy`, `lol`, `proud`, `touched`],

@@ -75,6 +75,7 @@ export const state = () => ({
 		positive: require(`@/assets/images/backgrounds/agree.png`),
 		negative: require(`@/assets/images/backgrounds/disagree.png`),
 		neutral: require(`@/assets/images/backgrounds/neutral.png`),
+		default: require(`@/assets/images/backgrounds/paper.png`),
 	},
 	categories: [
 		`technology`,
