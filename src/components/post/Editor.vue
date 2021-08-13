@@ -260,7 +260,6 @@ export default Vue.extend({
 			updateDraft: `draft/updateDraft`,
 		}),
 		...mapMutations(sessionStoreNamespace, {
-			addPost: MutationType.ADD_POST,
 			changeCID: MutationType.CHANGE_CID,
 		}),
 		update: _.debounce(function (this: any, e): void {
@@ -333,8 +332,6 @@ export default Vue.extend({
 					title: this.title,
 					subtitle: this.subtitle,
 					content: this.input,
-					cid: ``,
-					id: ``,
 					category: this.category,
 					timestamp: Date.now(),
 					tags: this.$store.state.draft.tags,
@@ -343,10 +340,6 @@ export default Vue.extend({
 					featuredPhotoCID: this.featuredPhotoCID,
 				}
 				this.$sendPost(p).then((cid: string) => {
-					p.cid = cid
-					// this.$store.commit(`posts/addPost`, cid)
-					this.addPost(cid)
-					p.cid = ``
 					const profile: Profile = this.$store.state.session
 					// Send post to orbit DB
 					this.$axios.post(`/content`, { cid, data: p })

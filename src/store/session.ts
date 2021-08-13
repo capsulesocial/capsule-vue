@@ -34,7 +34,6 @@ export const MutationType = {
 	CHANGE_AVATAR: `updateAvatar`,
 	CHANGE_BIO: `updateBio`,
 	CHANGE_LOCATION: `updateLocation`,
-	ADD_POST: `addPost`,
 	LOGOUT: `logout`,
 }
 
@@ -60,9 +59,6 @@ export const mutations: MutationTree<Profile> = {
 	[MutationType.CHANGE_LOCATION]: (state, newLocation: string) => {
 		state.location = newLocation
 	},
-	[MutationType.ADD_POST]: (state, newPost: string) => {
-		state.posts.push(newPost)
-	},
 	[MutationType.LOGOUT]: (state) => {
 		state.cid = ``
 		state.id = ``
@@ -74,16 +70,3 @@ export const mutations: MutationTree<Profile> = {
 		state.posts = []
 	},
 }
-
-// export const actionType = {
-//   UPDATE_CID: 'updateCID',
-// }
-
-// export const actions: ActionTree<SessionState, RootState> = {
-//   nuxtServerInit({ commit }, _context: Context) {
-//     commit(MutationType.CHANGE_CID, true)
-//   },
-//   [actionType.UPDATE_CID] ({ commit, state }) {
-//     commit(MutationType.CHANGE_CID)
-//   }
-// }
