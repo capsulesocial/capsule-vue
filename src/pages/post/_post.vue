@@ -152,7 +152,7 @@
 				</div>
 				<PostActions
 					:post="this.post"
-					:authorID="this.post.authorCID"
+					:authorID="this.post.authorID"
 					:isCommenting="true"
 					:tags="this.post.tags"
 					:filter="this.filter"
