@@ -208,8 +208,8 @@ export default Vue.extend({
 	created() {
 		// Fetch post from IPFS,
 		this.$getPost(this.$route.params.post).then((p: Post) => {
-			p.id = this.$route.params.post
 			this.post = p
+			// Convert markdown to HTML
 			this.content = marked(p.content)
 			// Get featured photo
 			if (p.featuredPhotoCID !== ``) {

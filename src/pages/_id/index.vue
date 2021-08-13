@@ -1,6 +1,8 @@
 <template>
 	<section class="px-4">
-		<article v-show="this.isLoading" class="loader m-10"></article>
+		<article v-show="this.isLoading" class="flex justify-center">
+			<div class="loader m-10"></div>
+		</article>
 		<article v-for="post in this.posts" :key="post.id">
 			<PostCard :post="post" />
 		</article>
