@@ -75,4 +75,19 @@ async function getAuthentication(
 	return { success: false, auth: defaultAuth }
 }
 
-export { sendAuthentication, getAuthentication }
+async function resolveUsername(username: string): Promise<{ success: boolean; accountId: string }> {
+	// Get NEAR AccountId corresponding to a capsule username
+	const requestURL = new URL(`/resolve/${username}`, serverURL)
+	try {
+		const response = await axios.get(requestURL.toString())
+		if (response.data.status === `OK`) {
+			const _accountId = response.data.accountId
+			return { success: true, accountId: _accountId }
+		}
+	} catch {
+		// Unable to send a request!
+	}
+	return { success: false, accountId: `` }
+}
+
+export { sendAuthentication, getAuthentication, resolveUsername }
