@@ -3,6 +3,8 @@ import { Profile } from '../interfaces/Profile'
 import { Authentication } from '../interfaces/Authentication'
 import { getEncryptedPeerIDPrivateKey, hkdf, scrypt, decryptData } from './crypto'
 import { sendAuthentication, getAuthentication } from './server'
+import { setProfileNEAR, getProfileNEAR } from './profile'
+import { getWalletConnection } from './near'
 
 const multibase = require(`multibase`)
 
@@ -23,11 +25,22 @@ async function register(payload: Profile, peerIDPrivateKey: string, profileCID: 
 	// peerIDPrivateKey is base64 encoded using js-multibase
 	const peerIDPrivateKeyBytes = base64.decode(peerIDPrivateKey)
 
-	const encPrivateKey = await getEncryptedPeerIDPrivateKey(payload, peerIDPrivateKeyBytes)
+	const [encPrivateKey, profileSet] = await Promise.all([
+		getEncryptedPeerIDPrivateKey(payload, peerIDPrivateKeyBytes),
+		setProfileNEAR(profileCID),
+	])
 
-	const AuthObj: Authentication = { privateKey: encPrivateKey, id: payload.id, profileCID }
-	const authstatus = await sendAuthentication(AuthObj)
-	return authstatus
+	if (profileSet === true) {
+		const _walletConnection = getWalletConnection()
+		const _accountId: string = _walletConnection.getAccountId()
+
+		const AuthObj: Authentication = { privateKey: encPrivateKey, id: payload.id, nearAccountId: _accountId }
+		const authstatus = await sendAuthentication(AuthObj)
+
+		return authstatus
+	}
+
+	return false
 }
 
 async function login(
@@ -47,14 +60,15 @@ async function login(
 
 	// Check if authentication was successful
 	if (success === true) {
-		const peerIDPrivateKeyBytes = await decryptData(
-			peerIDEncryptionKey,
-			auth.privateKey.encryptedPeerIDPrivateKey,
-			auth.privateKey.nonce,
-		)
+		const [peerIDPrivateKeyBytes, profile] = await Promise.all([
+			decryptData(peerIDEncryptionKey, auth.privateKey.encryptedPeerIDPrivateKey, auth.privateKey.nonce),
+			getProfileNEAR(username),
+		])
 		const base64 = multibase.names.base64
 		const peerIDPrivateKey = base64.encode(peerIDPrivateKeyBytes)
-		return { success, peerIDPrivateKey, profileCID: auth.profileCID }
+		if (profile.success === true) {
+			return { success, peerIDPrivateKey, profileCID: profile.profileCID }
+		}
 	}
 	return { success: false, peerIDPrivateKey: ``, profileCID: `` }
 }

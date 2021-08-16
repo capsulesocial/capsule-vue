@@ -11,6 +11,7 @@ declare module 'vue/types/vue' {
 
 const axios = require(`axios`).default
 const serverURL = `http://test-node.capsule.social:4000`
+// const serverURL = `http://localhost:8080`
 
 async function sendAuthentication(data: Authentication): Promise<boolean> {
 	// Encoding all values to hex
@@ -26,7 +27,7 @@ async function sendAuthentication(data: Authentication): Promise<boolean> {
 			username: data.id,
 			encryptedPrivateKey: encPrivateKey,
 			encryptedPrivateKeyNonce: nonce,
-			cid: data.profileCID,
+			accountId: data.nearAccountId,
 		}
 		const response = await axios.post(requestURL.toString(), reqData)
 		if (response.data.status === `OK`) {
@@ -54,7 +55,7 @@ async function getAuthentication(
 		hp1: new Uint8Array(),
 		nonce: new Uint8Array(),
 	}
-	const defaultAuth: Authentication = { privateKey: defaultprivKey, id: username, profileCID: `` }
+	const defaultAuth: Authentication = { privateKey: defaultprivKey, id: username, nearAccountId: `` }
 
 	const requestURL = new URL(`/read`, serverURL)
 	// Request body data
@@ -66,7 +67,7 @@ async function getAuthentication(
 			const hp1 = new Uint8Array(Buffer.from(response.data.hp1, `hex`))
 			const nonce = new Uint8Array(Buffer.from(response.data.encryptedPrivateKeyNonce, `hex`))
 			const privKey: PrivateKey = { encryptedPeerIDPrivateKey, hp1, nonce }
-			const auth: Authentication = { privateKey: privKey, id: username, profileCID: response.data.cid }
+			const auth: Authentication = { privateKey: privKey, id: username, nearAccountId: response.data.accountId }
 			return { success: true, auth }
 		}
 	} catch {

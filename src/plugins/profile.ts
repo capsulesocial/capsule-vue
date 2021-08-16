@@ -36,3 +36,4 @@ const nearProfile: Plugin = (_context, inject) => {
 }
 
 export default nearProfile
+export { getProfileNEAR, setProfileNEAR }
