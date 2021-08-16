@@ -57,7 +57,7 @@ const config: NuxtConfig = {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     "@nuxtjs/axios",
-    "@nuxtjs/dotenv"
+    ["@nuxtjs/dotenv", { path: './'}]
   ],
 
   axios: {
