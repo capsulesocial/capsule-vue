@@ -24,7 +24,7 @@ async function setProfileNEAR(cid: string) {
 	const _contract: any = getContract()
 	const _walletConnection = getWalletConnection()
 	if (_walletConnection.isSignedIn()) {
-		await _contract.setProfile(cid)
+		await _contract.setProfile({ cid })
 		return true
 	}
 	return false
