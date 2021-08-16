@@ -1,11 +1,11 @@
 import type { Plugin } from '@nuxt/types'
-import { getContract } from './near'
+import { getContract, getWalletConnection } from './near'
 
 // eslint-disable-next-line quotes
 declare module 'vue/types/vue' {
 	interface Vue {
 		$getProfileNEAR: (accountId: string) => Promise<string>
-		$setProfileNEAR: (cid: string) => Promise<void>
+		$setProfileNEAR: (cid: string) => Promise<boolean>
 	}
 }
 
@@ -17,7 +17,12 @@ async function getProfileNEAR(accountId: string) {
 
 async function setProfileNEAR(cid: string) {
 	const _contract: any = getContract()
-	await _contract.setProfile(cid)
+	const _walletConnection = getWalletConnection()
+	if (_walletConnection.isSignedIn()) {
+		await _contract.setProfile(cid)
+		return true
+	}
+	return false
 }
 
 const nearProfile: Plugin = (_context, inject) => {
