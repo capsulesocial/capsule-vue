@@ -28,9 +28,7 @@ async function initContract() {
 		return
 	}
 	// Initialize connection to the NEAR network
-	const near = await connect(
-		Object.assign({ deps: { keyStore: new keyStores.BrowserLocalStorageKeyStore() } }, nearConfig),
-	)
+	const near = await connect({ deps: { keyStore: new keyStores.BrowserLocalStorageKeyStore() }, ...nearConfig })
 
 	// Initializing Wallet based Account
 	walletConnection = new WalletConnection(near, null)
@@ -60,7 +58,9 @@ async function walletLogin() {
 	const _walletConnection = getWalletConnection()
 	if (!_walletConnection.isSignedIn()) {
 		// Redirects to wallet login page
-		await _walletConnection.requestSignIn(nearConfig.contractName, undefined, `http://localhost:3000/auth`)
+		const domain = process.env.DOMAIN || `http://localhost:3000`
+		const redirectURL = new URL(`/auth`, domain)
+		await _walletConnection.requestSignIn(nearConfig.contractName, undefined, redirectURL.toString())
 	}
 }
 

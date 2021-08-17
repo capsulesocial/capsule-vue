@@ -74,9 +74,12 @@ async function resolveUsername(username: string): Promise<{ success: boolean; ac
 		if (response.data.status === `OK`) {
 			const _accountId = response.data.accountId
 			return { success: true, accountId: _accountId }
+		} else {
+			throw new Error(`Failed to find accountId`)
 		}
-	} catch {
-		// Unable to send a request!
+	} catch (error) {
+		// eslint-disable-next-line no-console
+		console.log(error)
 	}
 	return { success: false, accountId: `` }
 }
