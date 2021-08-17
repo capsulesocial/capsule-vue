@@ -88,5 +88,7 @@ export const state = () => ({
 		`culture`,
 		`education`,
 		`philosophy`,
+		`news`,
+		`sports`,
 	],
 })
