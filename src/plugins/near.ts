@@ -1,5 +1,6 @@
 import type { Plugin } from '@nuxt/types'
 import { connect, Contract, keyStores, WalletConnection } from 'near-api-js'
+import constants from '../../constants'
 
 // eslint-disable-next-line quotes
 declare module 'vue/types/vue' {
@@ -11,12 +12,12 @@ declare module 'vue/types/vue' {
 
 // Run capsule-vue with NEAR testnet for now
 const nearConfig = {
-	networkId: `testnet`,
-	nodeUrl: `https://rpc.testnet.near.org`,
-	contractName: process.env.CONTRACT_NAME || `capsule-vue`,
-	walletUrl: `https://wallet.testnet.near.org`,
-	helperUrl: `https://helper.testnet.near.org`,
-	explorerUrl: `https://explorer.testnet.near.org`,
+	networkId: constants.networkId,
+	nodeUrl: constants.nodeUrl,
+	contractName: constants.contractName,
+	walletUrl: constants.walletUrl,
+	helperUrl: constants.helperUrl,
+	explorerUrl: constants.explorerUrl,
 }
 
 let walletConnection: WalletConnection | null = null
@@ -58,7 +59,7 @@ async function walletLogin() {
 	const _walletConnection = getWalletConnection()
 	if (!_walletConnection.isSignedIn()) {
 		// Redirects to wallet login page
-		const domain = process.env.DOMAIN || `http://localhost:3000`
+		const domain = constants.DOMAIN
 		const redirectURL = new URL(`/auth`, domain)
 		await _walletConnection.requestSignIn(nearConfig.contractName, undefined, redirectURL.toString())
 	}
