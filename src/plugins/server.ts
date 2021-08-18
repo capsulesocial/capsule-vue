@@ -18,10 +18,12 @@ async function sendAuthentication(data: Authentication): Promise<boolean> {
 	const encPrivateKey = Buffer.from(data.privateKey.encryptedPeerIDPrivateKey).toString(`hex`)
 	const hp1 = Buffer.from(data.privateKey.hp1).toString(`hex`)
 
-	const requestURL = new URL(`/write/${data.id}/${hp1}`, serverURL)
+	const requestURL = new URL(`/write`, serverURL)
 	try {
 		// Request body data
 		const reqData = {
+			hp1,
+			username: data.id,
 			encryptedPrivateKey: encPrivateKey,
 			encryptedPrivateKeyNonce: nonce,
 			cid: data.profileCID,
