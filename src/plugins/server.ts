@@ -56,9 +56,11 @@ async function getAuthentication(
 	}
 	const defaultAuth: Authentication = { privateKey: defaultprivKey, id: username, profileCID: `` }
 
-	const requestURL = new URL(`/read/${username}/${hp1Hex}`, serverURL)
+	const requestURL = new URL(`/read`, serverURL)
+	// Request body data
+	const reqData = { hp1: hp1Hex, username }
 	try {
-		const response = await axios.get(requestURL.toString())
+		const response = await axios.post(requestURL.toString(), reqData)
 		if (response.data.status === `OK`) {
 			const encryptedPeerIDPrivateKey = new Uint8Array(Buffer.from(response.data.encryptedPrivateKey, `hex`))
 			const hp1 = new Uint8Array(Buffer.from(response.data.hp1, `hex`))
