@@ -18,9 +18,15 @@ async function sendAuthentication(data: Authentication): Promise<boolean> {
 	const encPrivateKey = Buffer.from(data.privateKey.encryptedPeerIDPrivateKey).toString(`hex`)
 	const hp1 = Buffer.from(data.privateKey.hp1).toString(`hex`)
 
-	const requestURL = new URL(`/write/${data.id}/${encPrivateKey}/${nonce}/${hp1}/${data.profileCID}`, serverURL)
+	const requestURL = new URL(`/write/${data.id}/${hp1}`, serverURL)
 	try {
-		const response = await axios.get(requestURL.toString())
+		// Request body data
+		const reqData = {
+			encryptedPrivateKey: encPrivateKey,
+			encryptedPrivateKeyNonce: nonce,
+			cid: data.profileCID,
+		}
+		const response = await axios.post(requestURL.toString(), reqData)
 		if (response.data.status === `OK`) {
 			// Registration successful!
 			return true
