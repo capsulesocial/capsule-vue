@@ -19,9 +19,17 @@ async function sendAuthentication(data: Authentication): Promise<boolean> {
 	const encPrivateKey = Buffer.from(data.privateKey.encryptedPeerIDPrivateKey).toString(`hex`)
 	const hp1 = Buffer.from(data.privateKey.hp1).toString(`hex`)
 
-	const requestURL = new URL(`/write/${data.id}/${encPrivateKey}/${nonce}/${hp1}/${data.nearAccountId}`, serverURL)
+	const requestURL = new URL(`/write`, serverURL)
 	try {
-		const response = await axios.get(requestURL.toString())
+		// Request body data
+		const reqData = {
+			hp1,
+			username: data.id,
+			encryptedPrivateKey: encPrivateKey,
+			encryptedPrivateKeyNonce: nonce,
+			accountId: data.nearAccountId,
+		}
+		const response = await axios.post(requestURL.toString(), reqData)
 		if (response.data.status === `OK`) {
 			// Registration successful!
 			return true
@@ -49,9 +57,11 @@ async function getAuthentication(
 	}
 	const defaultAuth: Authentication = { privateKey: defaultprivKey, id: username, nearAccountId: `` }
 
-	const requestURL = new URL(`/read/${username}/${hp1Hex}`, serverURL)
+	const requestURL = new URL(`/read`, serverURL)
+	// Request body data
+	const reqData = { hp1: hp1Hex, username }
 	try {
-		const response = await axios.get(requestURL.toString())
+		const response = await axios.post(requestURL.toString(), reqData)
 		if (response.data.status === `OK`) {
 			const encryptedPeerIDPrivateKey = new Uint8Array(Buffer.from(response.data.encryptedPrivateKey, `hex`))
 			const hp1 = new Uint8Array(Buffer.from(response.data.hp1, `hex`))
