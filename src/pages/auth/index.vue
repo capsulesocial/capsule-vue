@@ -126,6 +126,7 @@ import CapsuleIcon from '@/components/icons/Capsule.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
 import { Profile } from '~/interfaces/Profile'
+import { signedInToWallet } from '~/plugins/near'
 
 export default Vue.extend({
 	components: {
@@ -158,6 +159,15 @@ export default Vue.extend({
 		}),
 		toggleFormType() {
 			this.isLogin = !this.isLogin
+			// Request wallet sign-in for new capsule users
+			// provided wallet credentials aren't already present
+			// in LocalStorage
+			if (this.isLogin === false) {
+				if (!signedInToWallet()) {
+					// Request wallet sign-in
+					this.$walletLogin()
+				}
+			}
 		},
 		async verify() {
 			const pwCheck = this.$qualityPassword(this.password)
@@ -172,22 +182,15 @@ export default Vue.extend({
 			}
 			// Login
 			if (this.isLogin) {
-				const { success, peerIDPrivateKey, profileCID } = await this.$login(this.id, this.password)
-				if (success === true) {
-					const [account, imported] = await Promise.all([
-						this.$getProfile(profileCID),
-						this.$importPrivateKey(`blogchain-auth-${this.id}`, peerIDPrivateKey, `password`),
-					])
-					if (imported === true) {
-						account.cid = profileCID
-						this.changeCID(profileCID)
-						this.changeID(account.id)
-						this.changeName(account.name)
-						this.changeEmail(account.email)
-						this.$router.push(`/settings`)
-					} else {
-						alert(`Authentication failed!`)
-					}
+				const { success, profileCID } = await this.$login(this.id, this.password)
+				if (success === true && signedInToWallet()) {
+					const account = await this.$getProfile(profileCID)
+					account.cid = profileCID
+					this.changeCID(profileCID)
+					this.changeID(account.id)
+					this.changeName(account.name)
+					this.changeEmail(account.email)
+					this.$router.push(`/settings`)
 				} else {
 					alert(`Authentication failed!`)
 				}
@@ -220,17 +223,11 @@ export default Vue.extend({
 						following: [],
 						avatar: ``,
 					}
-					const node = this.$getNode()
-					await this.$generatePrivateKey(`blogchain-auth-${this.id}`)
-					// Export private key: encrypt it using AES-GCM (for Ed25519 keys)
 					// Send user profile to IPFS
-					const [peerIDPrivateKey, cid] = await Promise.all([
-						node.key.export(`blogchain-auth-${this.id}`, `password`),
-						this.$sendProfile(account),
-					])
+					const cid = await this.$sendProfile(account)
 					account.cid = cid
 					account.password = this.password
-					const _res = await this.$register(account, peerIDPrivateKey, cid)
+					const _res = await this.$register(account, cid)
 					if (_res === true) {
 						// Registration successful
 						this.changeCID(cid)
