@@ -34,7 +34,7 @@
 									? 'text-lightPrimaryText bg-lightBG placeholder-lightSecondaryText'
 									: 'text-darkPrimaryText bg-darkBG placeholder-darkSecondaryText'
 							"
-							class="font-serif font-bold text-4xl focus:outline-none text-xl w-full pb-2"
+							class="font-serif font-bold text-3xl leading-loose focus:outline-none w-full pb-2"
 						/>
 						<label for="subtitle" class="hidden">Subtitle:</label>
 						<input
@@ -46,7 +46,7 @@
 									? 'text-lightPrimaryText bg-lightBG placeholder-lightSecondaryText'
 									: 'text-darkPrimaryText bg-darkBG placeholder-darkSecondaryText'
 							"
-							class="text-2xl focus:outline-none text-xl w-full pb-2"
+							class="text-xl font-medium focus:outline-none w-full pb-2"
 						/>
 					</div>
 				</article>

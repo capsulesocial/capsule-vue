@@ -12,13 +12,13 @@
 			<article>
 				<h1
 					:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-					class="text-4xl capitalize font-serif font-bold"
+					class="font-serif font-bold text-3xl capitalize leading-loose"
 				>
 					{{ this.post.title }}
 				</h1>
 				<h2
 					:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-					class="text-2xl text-subtitle"
+					class="text-xl font-medium"
 				>
 					{{ this.post.subtitle }}
 				</h2>
