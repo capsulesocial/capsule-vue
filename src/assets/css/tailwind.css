@@ -3,23 +3,26 @@
 @import "tailwindcss/utilities";
 
 @layer base {
+  .medium-editor-toolbar {
+    @apply bg-white border rounded-xl shadow-xl
+  }
   .editable h1 {
-    @apply text-3xl font-serif
+    @apply text-3xl font-serif font-bold
   }
   .editable h2 {
-    @apply text-2xl font-serif
+    @apply text-2xl font-serif font-bold
   }
   .editable h3 {
-    @apply text-xl font-serif
+    @apply text-xl font-serif font-bold
   }
   .editable a {
     @apply text-primary
   }
-  .medium-editor-toolbar {
-    @apply bg-white border rounded-xl shadow-xl
+  .editable p {
+    @apply text-base font-normal leading-relaxed
   }
   blockquote {
-    @apply pl-2 border-l-2 border-primary
+    @apply pl-2 border-l-2 border-primary text-xl leading-8 font-serif py-2
   }
   .medium-toolbar-arrow-under:after {
     @apply bg-transparent
