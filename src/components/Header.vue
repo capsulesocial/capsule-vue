@@ -133,10 +133,7 @@ export default Vue.extend({
 		...mapMutations(sessionStoreNamespace, {
 			endSession: MutationType.LOGOUT,
 		}),
-		async logout() {
-			const node = this.$getNode()
-			// Remove a user's key from keychain when they logout
-			await node.key.rm(`blogchain-auth-${this.$store.state.session.id}`)
+		logout() {
 			this.endSession()
 			this.$router.push(`/`)
 		},
