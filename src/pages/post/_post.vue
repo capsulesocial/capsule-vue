@@ -112,43 +112,7 @@
 						<BookmarkButton :postID="this.$route.params.post" />
 						<ShareButton :post="this.post" class="z-20" />
 					</div>
-					<div class="flex">
-						<h6>Filter Comments</h6>
-						<div class="relative">
-							<button
-								class="toggle focus:outline-none flex justify-center shadow-lg rounded-lg px-4 ml-4 text-sm w-32"
-								@click.stop="showFilter = !showFilter"
-							>
-								<span v-if="this.filter === null" class="toggle">All</span>
-								<span v-else class="toggle capitalize">{{ this.filter }}</span>
-								<ChevronUp v-if="this.showFilter" />
-								<ChevronDown v-else />
-							</button>
-							<ul
-								v-if="this.showFilter"
-								:class="
-									this.$store.state.settings.darkMode
-										? 'bg-lightBG text-lightSecondaryText'
-										: 'bg-darkBG text-darkSecondaryText border-darkBorder'
-								"
-								class="absolute z-10 shadow-lg rounded-lg py-1 ml-4 w-32"
-							>
-								<button class="w-full" @click="setCommentFilter(null)">
-									<li class="text-left pl-2">All</li>
-								</button>
-								<button
-									v-for="r in this.$store.state.config.reactions"
-									:key="r.label"
-									class="w-full"
-									@click="setCommentFilter(r.label)"
-								>
-									<li class="text-left pl-2">
-										{{ r.label }}
-									</li>
-								</button>
-							</ul>
-						</div>
-					</div>
+					<CommentFilter :filter="this.filter" @clicked="setFilter" />
 				</div>
 				<PostActions
 					:post="this.post"
@@ -172,10 +136,9 @@ import AuthorCard from '@/components/AuthorCard.vue'
 import TagCard from '@/components/Tag.vue'
 import BookmarkButton from '@/components/post/BookmarkButton.vue'
 import ShareButton from '@/components/post/Share.vue'
-import ChevronUp from '@/components/icons/ChevronUp.vue'
-import ChevronDown from '@/components/icons/ChevronDown.vue'
 import HeaderMagic from '@/components/HeaderMagic.vue'
 import MoreIcon from '@/components/icons/More.vue'
+import CommentFilter from '@/components/post/CommentFilter.vue'
 
 import { Post } from '~/interfaces/Post'
 import { Profile } from '~/interfaces/Profile'
@@ -187,10 +150,9 @@ export default Vue.extend({
 		TagCard,
 		BookmarkButton,
 		ShareButton,
-		ChevronUp,
-		ChevronDown,
 		HeaderMagic,
 		MoreIcon,
+		CommentFilter,
 	},
 	layout: `Reader`,
 	// mixins: [markdown],
@@ -202,7 +164,7 @@ export default Vue.extend({
 			content: ``,
 			featuredPhoto: null,
 			showFilter: false,
-			filter: null,
+			filter: ``,
 		}
 	},
 	created() {
@@ -246,9 +208,8 @@ export default Vue.extend({
 		)
 	},
 	methods: {
-		setCommentFilter(reaction) {
+		setFilter(reaction: string): void {
 			this.filter = reaction
-			this.showFilter = false
 		},
 	},
 })

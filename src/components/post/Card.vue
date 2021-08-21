@@ -95,60 +95,7 @@
 					class="self-center"
 				/>
 			</div>
-
-			<div v-show="this.showComments" class="flex relative">
-				<!-- Comment filter -->
-				<button class="text-primary font-bold">Statistics</button>
-				<span class="px-2">|</span>
-				<h6>Sort by:</h6>
-				<button
-					class="toggle focus:outline-none flex justify-between items-center border rounded-lg px-4 ml-4 text-sm w-32"
-					@click.stop="showFilter = !showFilter"
-				>
-					<span v-if="this.filter === null" class="toggle font-bold">All</span>
-					<span v-else class="toggle capitalize font-bold">{{ this.filter }}</span>
-					<ChevronUp v-if="this.showFilter" />
-					<ChevronDown v-else />
-				</button>
-				<!-- comment filter dropdown -->
-				<div v-show="this.showFilter" class="absolute hotzone mt-8 z-10 bg-white rounded-lg shadow-lg p-4 w-full">
-					<!-- Select charge of reaction button -->
-					<div class="hotzone flex justify-between mb-2">
-						<button
-							class="focus:outline-none border-b-4"
-							:class="this.feeling === `positive` ? `border-green-500` : `border-transparent`"
-							@click="setCommentFilterFeeling(`positive`)"
-						>
-							Positive
-						</button>
-						<button
-							class="focus:outline-none border-b-4"
-							:class="this.feeling === `neutral` ? `border-yellow-500` : `border-transparent`"
-							@click="setCommentFilterFeeling(`neutral`)"
-						>
-							Neutral
-						</button>
-						<button
-							class="focus:outline-none border-b-4"
-							:class="this.feeling === `negative` ? ` border-red-500` : `border-transparent`"
-							@click="setCommentFilterFeeling(`negative`)"
-						>
-							Negative
-						</button>
-					</div>
-					<!-- Show faces -->
-					<div class="grid grid-cols-3 h-64 gap-1 overflow-y-auto">
-						<button v-for="r in this.$store.state.config.feelings[this.feeling]" :key="r.label">
-							<img
-								:src="$store.state.config.reactions[r].image"
-								:alt="$store.state.config.reactions[r].label"
-								class="flex-shrink-0 h-20 w-20"
-								@click="setCommentFilter($store.state.config.reactions[r].label)"
-							/>
-						</button>
-					</div>
-				</div>
-			</div>
+			<CommentFilter v-show="this.showComments" :filter="this.filter" @clicked="setFilter" />
 		</div>
 		<PostActions v-show="this.showComments" :post="this.post" :filter="this.filter" />
 	</article>
@@ -162,8 +109,7 @@ import ProfileIcon from '@/components/icons/Person.vue'
 import BookmarkButton from '@/components/post/BookmarkButton.vue'
 import Share from '@/components/post/Share.vue'
 import CommentIcon from '@/components/icons/Comment.vue'
-import ChevronUp from '@/components/icons/ChevronUp.vue'
-import ChevronDown from '@/components/icons/ChevronDown.vue'
+import CommentFilter from '@/components/post/CommentFilter.vue'
 
 export default Vue.extend({
 	name: `PostCard`,
@@ -174,8 +120,7 @@ export default Vue.extend({
 		BookmarkButton,
 		Share,
 		CommentIcon,
-		ChevronUp,
-		ChevronDown,
+		CommentFilter,
 	},
 	props: {
 		post: {
@@ -186,14 +131,12 @@ export default Vue.extend({
 	data() {
 		return {
 			showComments: false,
-			showFilter: false,
-			filter: null,
+			filter: ``,
 			authorName: ``,
 			authorID: ``,
 			authorCID: ``,
 			avatar: ``,
 			featuredPhoto: ``,
-			feeling: `positive`,
 		}
 	},
 	created() {
@@ -220,24 +163,10 @@ export default Vue.extend({
 				})
 			}
 		})
-		// Set filter dropdown event handler
-		window.addEventListener(`click`, this.handleDropdown, false)
-	},
-	destroyed() {
-		window.removeEventListener(`click`, this.handleDropdown)
 	},
 	methods: {
-		handleDropdown(e: any): void {
-			if (!e.target || e.target.parentNode.classList.contains(`hotzone`)) {
-				return
-			}
-			if (
-				e.target.parentNode === null ||
-				e.target.parentNode.classList === undefined ||
-				!e.target.parentNode.classList.contains(`toggle`)
-			) {
-				this.showFilter = false
-			}
+		setFilter(reaction: string): void {
+			this.filter = reaction
 		},
 		getStyles(): string {
 			let res = ``
@@ -251,14 +180,6 @@ export default Vue.extend({
 				res += `hover:text-darkActive`
 			}
 			return res
-		},
-		setCommentFilterFeeling(feeling) {
-			this.feeling = feeling
-			this.showFilter = true
-		},
-		setCommentFilter(reaction) {
-			this.filter = reaction
-			this.showFilter = false
 		},
 	},
 })
