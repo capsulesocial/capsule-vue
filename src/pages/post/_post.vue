@@ -112,51 +112,8 @@
 						<BookmarkButton :postID="this.$route.params.post" />
 						<ShareButton :post="this.post" class="z-20" />
 					</div>
-					<div class="flex">
-						<h6>Filter Comments</h6>
-						<div class="relative">
-							<button
-								class="toggle focus:outline-none flex justify-center shadow-lg rounded-lg px-4 ml-4 text-sm w-32"
-								@click.stop="showFilter = !showFilter"
-							>
-								<span v-if="this.filter === null" class="toggle">All</span>
-								<span v-else class="toggle capitalize">{{ this.filter }}</span>
-								<ChevronUp v-if="this.showFilter" />
-								<ChevronDown v-else />
-							</button>
-							<ul
-								v-if="this.showFilter"
-								:class="
-									this.$store.state.settings.darkMode
-										? 'bg-lightBG text-lightSecondaryText'
-										: 'bg-darkBG text-darkSecondaryText border-darkBorder'
-								"
-								class="absolute z-10 shadow-lg rounded-lg py-1 ml-4 w-32"
-							>
-								<button class="w-full" @click="setCommentFilter(null)">
-									<li class="text-left pl-2">All</li>
-								</button>
-								<button
-									v-for="r in this.$store.state.config.reactions"
-									:key="r.label"
-									class="w-full"
-									@click="setCommentFilter(r.label)"
-								>
-									<li class="text-left pl-2">
-										{{ r.label }}
-									</li>
-								</button>
-							</ul>
-						</div>
-					</div>
 				</div>
-				<PostActions
-					:post="this.post"
-					:authorID="this.post.authorID"
-					:isCommenting="true"
-					:tags="this.post.tags"
-					:filter="this.filter"
-				/>
+				<PostActions :post="this.post" :authorID="this.post.authorID" :isCommenting="true" :tags="this.post.tags" />
 			</article>
 		</section>
 		<section v-else>Post not found 😵‍💫</section>
@@ -172,8 +129,6 @@ import AuthorCard from '@/components/AuthorCard.vue'
 import TagCard from '@/components/Tag.vue'
 import BookmarkButton from '@/components/post/BookmarkButton.vue'
 import ShareButton from '@/components/post/Share.vue'
-import ChevronUp from '@/components/icons/ChevronUp.vue'
-import ChevronDown from '@/components/icons/ChevronDown.vue'
 import HeaderMagic from '@/components/HeaderMagic.vue'
 import MoreIcon from '@/components/icons/More.vue'
 
@@ -187,8 +142,6 @@ export default Vue.extend({
 		TagCard,
 		BookmarkButton,
 		ShareButton,
-		ChevronUp,
-		ChevronDown,
 		HeaderMagic,
 		MoreIcon,
 	},
@@ -202,7 +155,6 @@ export default Vue.extend({
 			content: ``,
 			featuredPhoto: null,
 			showFilter: false,
-			filter: null,
 		}
 	},
 	created() {
@@ -244,12 +196,6 @@ export default Vue.extend({
 			},
 			false,
 		)
-	},
-	methods: {
-		setCommentFilter(reaction) {
-			this.filter = reaction
-			this.showFilter = false
-		},
 	},
 })
 </script>

@@ -73,7 +73,7 @@
 								<!-- Right side: images -->
 								<div class="overflow-auto grid grid-cols-3 w-full -mr-1 bg-white">
 									<button
-										v-for="e in this.categories[this.emotionCategory]"
+										v-for="e in this.$store.state.config.feelings[this.emotionCategory]"
 										:key="e"
 										class="w-full items-center focus:outline-none"
 										@click="setEmotion($store.state.config.reactions[e])"
@@ -91,6 +91,10 @@
 				</div>
 			</div>
 		</article>
+		<article class="w-full flex justify-between">
+			<div>0 comments</div>
+			<CommentFilter :filter="this.filter" @clicked="setFilter" />
+		</article>
 		<article>
 			<CommentCard v-for="c in this.filterComments()" :key="c.id" class="py-2" :comment="c" />
 		</article>
@@ -103,6 +107,7 @@ import { Comment } from '@/interfaces/Comment'
 import BrandedButton from '@/components/BrandedButton.vue'
 import ProfileIcon from '@/components/icons/Person.vue'
 import CommentCard from '@/components/post/Comment.vue'
+import CommentFilter from '@/components/post/CommentFilter.vue'
 
 export default Vue.extend({
 	name: `ComponentPostActions`,
@@ -110,14 +115,11 @@ export default Vue.extend({
 		BrandedButton,
 		ProfileIcon,
 		CommentCard,
+		CommentFilter,
 	},
 	props: {
 		post: {
 			type: Object,
-			default: null,
-		},
-		filter: {
-			type: String,
 			default: null,
 		},
 	},
@@ -131,11 +133,7 @@ export default Vue.extend({
 			myAvatar: ``,
 			showEmotions: false,
 			commentBackground: `@/assets/images/brand/paper4.svg`,
-			categories: {
-				positive: [`awe`, `excited`, `happy`, `lol`, `proud`, `touched`],
-				negative: [`sad`, `sick`, `terrified`, `skeptical`, `drama`],
-				neutral: [`goofy`],
-			},
+			filter: ``,
 		}
 	},
 	created() {
@@ -146,6 +144,9 @@ export default Vue.extend({
 		}
 	},
 	methods: {
+		setFilter(reaction: string): void {
+			this.filter = reaction
+		},
 		setEmotion(r) {
 			this.emotion = r
 			this.showEmotions = false

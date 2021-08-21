@@ -1,0 +1,115 @@
+<template>
+	<div class="flex relative items-center">
+		<!-- Comment filter -->
+		<button class="text-primary font-bold">Statistics</button>
+		<span class="px-2 text-xl">|</span>
+		<h6>Sort by:</h6>
+		<button
+			class="toggle focus:outline-none flex justify-between items-center border rounded-lg px-4 ml-4 text-sm w-32"
+			@click.stop="showFilter = !showFilter"
+		>
+			<span v-if="this.$props.filter === ``" class="toggle font-bold">All</span>
+			<span v-else class="toggle capitalize font-bold">{{ this.$props.filter }}</span>
+			<ChevronUp v-if="this.showFilter" />
+			<ChevronDown v-else />
+		</button>
+		<!-- comment filter dropdown -->
+		<div v-show="this.showFilter" class="absolute hotzone top-0 mt-8 z-10 bg-white rounded-lg shadow-lg p-4 w-full">
+			<!-- Select charge of reaction button -->
+			<div class="hotzone flex justify-between mb-2">
+				<button
+					class="focus:outline-none border-b-4"
+					:class="this.feeling === `positive` ? `border-green-500` : `border-transparent`"
+					@click="setCommentFilterFeeling(`positive`)"
+				>
+					Positive
+				</button>
+				<button
+					class="focus:outline-none border-b-4"
+					:class="this.feeling === `neutral` ? `border-yellow-500` : `border-transparent`"
+					@click="setCommentFilterFeeling(`neutral`)"
+				>
+					Neutral
+				</button>
+				<button
+					class="focus:outline-none border-b-4"
+					:class="this.feeling === `negative` ? ` border-red-500` : `border-transparent`"
+					@click="setCommentFilterFeeling(`negative`)"
+				>
+					Negative
+				</button>
+			</div>
+			<!-- Show faces -->
+			<div class="grid grid-cols-3 h-64 gap-1 overflow-y-auto">
+				<button v-for="r in this.$store.state.config.feelings[this.feeling]" :key="r.label">
+					<img
+						:src="$store.state.config.reactions[r].image"
+						:alt="$store.state.config.reactions[r].label"
+						class="flex-shrink-0 h-20 w-20"
+						@click="updateFilter($store.state.config.reactions[r].label)"
+					/>
+				</button>
+			</div>
+		</div>
+	</div>
+</template>
+
+<script lang="ts">
+import Vue from 'vue'
+import ChevronUp from '@/components/icons/ChevronUp.vue'
+import ChevronDown from '@/components/icons/ChevronDown.vue'
+
+export default Vue.extend({
+	name: `PostCommentFilter`,
+	components: {
+		ChevronUp,
+		ChevronDown,
+	},
+	props: {
+		filter: {
+			type: String,
+			default: ``,
+		},
+	},
+	data() {
+		return {
+			feeling: `positive`,
+			showFilter: false,
+		}
+	},
+	created() {
+		// Set filter dropdown event handler
+		window.addEventListener(`click`, this.handleDropdown, false)
+	},
+	destroyed() {
+		window.removeEventListener(`click`, this.handleDropdown)
+	},
+	methods: {
+		handleDropdown(e: any): void {
+			if (!e.target) {
+				return
+			}
+			if (
+				e.target.parentNode === null ||
+				e.target.parentNode.classList === undefined ||
+				!e.target.parentNode.classList.contains(`toggle`)
+			) {
+				this.showFilter = false
+				return
+			}
+			if (e.target.parentNode.classList.contains(`hotzone`)) {
+				this.showFilter = true
+			}
+		},
+		setCommentFilterFeeling(feeling) {
+			this.feeling = feeling
+			this.showFilter = true
+		},
+		updateFilter(reaction) {
+			// When a user selects a filter
+			this.$emit(`clicked`, reaction)
+			this.showFilter = false
+		},
+	},
+})
+</script>

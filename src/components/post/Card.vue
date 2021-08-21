@@ -95,45 +95,8 @@
 					class="self-center"
 				/>
 			</div>
-			<div v-show="this.showComments" class="flex">
-				<h6>Filter Comments</h6>
-				<div class="relative">
-					<button
-						class="toggle focus:outline-none flex justify-center shadow-lg rounded-lg px-4 ml-4 text-sm w-32"
-						@click.stop="showFilter = !showFilter"
-					>
-						<span v-if="this.filter === null" class="toggle">All</span>
-						<span v-else class="toggle capitalize">{{ this.filter }}</span>
-						<ChevronUp v-if="this.showFilter" />
-						<ChevronDown v-else />
-					</button>
-					<ul
-						v-show="this.showFilter"
-						:class="
-							this.$store.state.settings.darkMode
-								? 'bg-lightBG text-lightSecondaryText'
-								: 'bg-darkBG text-darkSecondaryText border-darkBorder'
-						"
-						class="absolute z-10 shadow-lg rounded-lg py-1 ml-4 w-32"
-					>
-						<button class="w-full" @click="setCommentFilter(null)">
-							<li class="text-left pl-2">All</li>
-						</button>
-						<button
-							v-for="r in this.$store.state.config.reactions"
-							:key="r.label"
-							class="w-full"
-							@click="setCommentFilter(r.label)"
-						>
-							<li class="text-left pl-2">
-								{{ r.label }}
-							</li>
-						</button>
-					</ul>
-				</div>
-			</div>
 		</div>
-		<PostActions v-show="this.showComments" :post="this.post" :filter="this.filter" />
+		<PostActions v-show="this.showComments" :post="this.post" />
 	</article>
 </template>
 
@@ -145,10 +108,9 @@ import ProfileIcon from '@/components/icons/Person.vue'
 import BookmarkButton from '@/components/post/BookmarkButton.vue'
 import Share from '@/components/post/Share.vue'
 import CommentIcon from '@/components/icons/Comment.vue'
-import ChevronUp from '@/components/icons/ChevronUp.vue'
-import ChevronDown from '@/components/icons/ChevronDown.vue'
 
 export default Vue.extend({
+	name: `PostCard`,
 	components: {
 		PostActions,
 		XIcon,
@@ -156,8 +118,6 @@ export default Vue.extend({
 		BookmarkButton,
 		Share,
 		CommentIcon,
-		ChevronUp,
-		ChevronDown,
 	},
 	props: {
 		post: {
@@ -168,8 +128,6 @@ export default Vue.extend({
 	data() {
 		return {
 			showComments: false,
-			showFilter: false,
-			filter: null,
 			authorName: ``,
 			authorID: ``,
 			authorCID: ``,
@@ -201,23 +159,6 @@ export default Vue.extend({
 				})
 			}
 		})
-		// Set filter dropdown event handler
-		window.addEventListener(
-			`click`,
-			(e: any): void => {
-				if (!e.target) {
-					return
-				}
-				if (
-					e.target.parentNode === null ||
-					e.target.parentNode.classList === undefined ||
-					!e.target.parentNode.classList.contains(`toggle`)
-				) {
-					this.showFilter = false
-				}
-			},
-			false,
-		)
 	},
 	methods: {
 		getStyles(): string {
@@ -232,10 +173,6 @@ export default Vue.extend({
 				res += `hover:text-darkActive`
 			}
 			return res
-		},
-		setCommentFilter(reaction) {
-			this.filter = reaction
-			this.showFilter = false
 		},
 	},
 })
