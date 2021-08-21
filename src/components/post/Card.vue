@@ -95,41 +95,58 @@
 					class="self-center"
 				/>
 			</div>
-			<div v-show="this.showComments" class="flex">
-				<h6>Filter Comments</h6>
-				<div class="relative">
-					<button
-						class="toggle focus:outline-none flex justify-center shadow-lg rounded-lg px-4 ml-4 text-sm w-32"
-						@click.stop="showFilter = !showFilter"
-					>
-						<span v-if="this.filter === null" class="toggle">All</span>
-						<span v-else class="toggle capitalize">{{ this.filter }}</span>
-						<ChevronUp v-if="this.showFilter" />
-						<ChevronDown v-else />
-					</button>
-					<ul
-						v-show="this.showFilter"
-						:class="
-							this.$store.state.settings.darkMode
-								? 'bg-lightBG text-lightSecondaryText'
-								: 'bg-darkBG text-darkSecondaryText border-darkBorder'
-						"
-						class="absolute z-10 shadow-lg rounded-lg py-1 ml-4 w-32"
-					>
-						<button class="w-full" @click="setCommentFilter(null)">
-							<li class="text-left pl-2">All</li>
+
+			<div v-show="this.showComments" class="flex relative">
+				<!-- Comment filter -->
+				<button class="text-primary font-bold">Statistics</button>
+				<span class="px-2">|</span>
+				<h6>Sort by:</h6>
+				<button
+					class="toggle focus:outline-none flex justify-between items-center border rounded-lg px-4 ml-4 text-sm w-32"
+					@click.stop="showFilter = !showFilter"
+				>
+					<span v-if="this.filter === null" class="toggle font-bold">All</span>
+					<span v-else class="toggle capitalize font-bold">{{ this.filter }}</span>
+					<ChevronUp v-if="this.showFilter" />
+					<ChevronDown v-else />
+				</button>
+				<!-- comment filter dropdown -->
+				<div v-show="this.showFilter" class="absolute hotzone mt-8 z-10 bg-white rounded-lg shadow-lg p-4 w-full">
+					<!-- Select charge of reaction button -->
+					<div class="hotzone flex justify-between mb-2">
+						<button
+							class="focus:outline-none border-b-4"
+							:class="this.feeling === `positive` ? `border-green-500` : `border-transparent`"
+							@click="setCommentFilterFeeling(`positive`)"
+						>
+							Positive
 						</button>
 						<button
-							v-for="r in this.$store.state.config.reactions"
-							:key="r.label"
-							class="w-full"
-							@click="setCommentFilter(r.label)"
+							class="focus:outline-none border-b-4"
+							:class="this.feeling === `neutral` ? `border-yellow-500` : `border-transparent`"
+							@click="setCommentFilterFeeling(`neutral`)"
 						>
-							<li class="text-left pl-2">
-								{{ r.label }}
-							</li>
+							Neutral
 						</button>
-					</ul>
+						<button
+							class="focus:outline-none border-b-4"
+							:class="this.feeling === `negative` ? ` border-red-500` : `border-transparent`"
+							@click="setCommentFilterFeeling(`negative`)"
+						>
+							Negative
+						</button>
+					</div>
+					<!-- Show faces -->
+					<div class="grid grid-cols-3 h-64 gap-1 overflow-y-auto">
+						<button v-for="r in this.$store.state.config.feelings[this.feeling]" :key="r.label">
+							<img
+								:src="$store.state.config.reactions[r].image"
+								:alt="$store.state.config.reactions[r].label"
+								class="flex-shrink-0 h-20 w-20"
+								@click="setCommentFilter($store.state.config.reactions[r].label)"
+							/>
+						</button>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -149,6 +166,7 @@ import ChevronUp from '@/components/icons/ChevronUp.vue'
 import ChevronDown from '@/components/icons/ChevronDown.vue'
 
 export default Vue.extend({
+	name: `PostCard`,
 	components: {
 		PostActions,
 		XIcon,
@@ -175,6 +193,7 @@ export default Vue.extend({
 			authorCID: ``,
 			avatar: ``,
 			featuredPhoto: ``,
+			feeling: `positive`,
 		}
 	},
 	created() {
@@ -202,24 +221,24 @@ export default Vue.extend({
 			}
 		})
 		// Set filter dropdown event handler
-		window.addEventListener(
-			`click`,
-			(e: any): void => {
-				if (!e.target) {
-					return
-				}
-				if (
-					e.target.parentNode === null ||
-					e.target.parentNode.classList === undefined ||
-					!e.target.parentNode.classList.contains(`toggle`)
-				) {
-					this.showFilter = false
-				}
-			},
-			false,
-		)
+		window.addEventListener(`click`, this.handleDropdown, false)
+	},
+	destroyed() {
+		window.removeEventListener(`click`, this.handleDropdown)
 	},
 	methods: {
+		handleDropdown(e: any): void {
+			if (!e.target || e.target.parentNode.classList.contains(`hotzone`)) {
+				return
+			}
+			if (
+				e.target.parentNode === null ||
+				e.target.parentNode.classList === undefined ||
+				!e.target.parentNode.classList.contains(`toggle`)
+			) {
+				this.showFilter = false
+			}
+		},
 		getStyles(): string {
 			let res = ``
 			if (this.showComments && this.$store.state.settings.darkMode) {
@@ -232,6 +251,10 @@ export default Vue.extend({
 				res += `hover:text-darkActive`
 			}
 			return res
+		},
+		setCommentFilterFeeling(feeling) {
+			this.feeling = feeling
+			this.showFilter = true
 		},
 		setCommentFilter(reaction) {
 			this.filter = reaction

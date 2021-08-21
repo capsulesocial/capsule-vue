@@ -1,4 +1,9 @@
 export const state = () => ({
+	feelings: {
+		positive: [`awe`, `excited`, `happy`, `lol`, `proud`, `touched`],
+		negative: [`sad`, `sick`, `terrified`, `skeptical`, `drama`],
+		neutral: [`goofy`],
+	},
 	reactions: {
 		awe: {
 			label: `Awe`,

@@ -73,7 +73,7 @@
 								<!-- Right side: images -->
 								<div class="overflow-auto grid grid-cols-3 w-full -mr-1 bg-white">
 									<button
-										v-for="e in this.categories[this.emotionCategory]"
+										v-for="e in this.$store.state.config.feelings[this.emotionCategory]"
 										:key="e"
 										class="w-full items-center focus:outline-none"
 										@click="setEmotion($store.state.config.reactions[e])"
@@ -131,11 +131,6 @@ export default Vue.extend({
 			myAvatar: ``,
 			showEmotions: false,
 			commentBackground: `@/assets/images/brand/paper4.svg`,
-			categories: {
-				positive: [`awe`, `excited`, `happy`, `lol`, `proud`, `touched`],
-				negative: [`sad`, `sick`, `terrified`, `skeptical`, `drama`],
-				neutral: [`goofy`],
-			},
 		}
 	},
 	created() {
