@@ -23,7 +23,7 @@
 								<div class="self-center">
 									<button @click="showEmotions = !showEmotions">
 										<img v-if="this.emotion !== ''" :src="this.emotion.image" class="h-16 w-16 object-center" />
-										<span v-else>Flip</span>
+										<span v-else><FlipIcon class="w-12 h-12" /></span>
 									</button>
 								</div>
 								<textarea
@@ -108,6 +108,7 @@ import BrandedButton from '@/components/BrandedButton.vue'
 import ProfileIcon from '@/components/icons/Person.vue'
 import CommentCard from '@/components/post/Comment.vue'
 import CommentFilter from '@/components/post/CommentFilter.vue'
+import FlipIcon from '@/components/icons/Flip.vue'
 
 export default Vue.extend({
 	name: `ComponentPostActions`,
@@ -116,6 +117,7 @@ export default Vue.extend({
 		ProfileIcon,
 		CommentCard,
 		CommentFilter,
+		FlipIcon,
 	},
 	props: {
 		post: {

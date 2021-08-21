@@ -18,21 +18,21 @@
 			<!-- Select charge of reaction button -->
 			<div class="hotzone flex justify-between mb-2">
 				<button
-					class="focus:outline-none border-b-4"
+					class="hotzone focus:outline-none border-b-4"
 					:class="this.feeling === `positive` ? `border-green-500` : `border-transparent`"
 					@click="setCommentFilterFeeling(`positive`)"
 				>
 					Positive
 				</button>
 				<button
-					class="focus:outline-none border-b-4"
+					class="hotzone focus:outline-none border-b-4"
 					:class="this.feeling === `neutral` ? `border-yellow-500` : `border-transparent`"
 					@click="setCommentFilterFeeling(`neutral`)"
 				>
 					Neutral
 				</button>
 				<button
-					class="focus:outline-none border-b-4"
+					class="hotzone focus:outline-none border-b-4"
 					:class="this.feeling === `negative` ? ` border-red-500` : `border-transparent`"
 					@click="setCommentFilterFeeling(`negative`)"
 				>
@@ -95,7 +95,6 @@ export default Vue.extend({
 				!e.target.parentNode.classList.contains(`toggle`)
 			) {
 				this.showFilter = false
-				return
 			}
 			if (e.target.parentNode.classList.contains(`hotzone`)) {
 				this.showFilter = true
