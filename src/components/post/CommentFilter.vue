@@ -1,8 +1,8 @@
 <template>
-	<div class="flex relative">
+	<div class="flex relative items-center">
 		<!-- Comment filter -->
 		<button class="text-primary font-bold">Statistics</button>
-		<span class="px-2">|</span>
+		<span class="px-2 text-xl">|</span>
 		<h6>Sort by:</h6>
 		<button
 			class="toggle focus:outline-none flex justify-between items-center border rounded-lg px-4 ml-4 text-sm w-32"
@@ -14,7 +14,7 @@
 			<ChevronDown v-else />
 		</button>
 		<!-- comment filter dropdown -->
-		<div v-show="this.showFilter" class="absolute hotzone mt-8 z-10 bg-white rounded-lg shadow-lg p-4 w-full">
+		<div v-show="this.showFilter" class="absolute hotzone top-0 mt-8 z-10 bg-white rounded-lg shadow-lg p-4 w-full">
 			<!-- Select charge of reaction button -->
 			<div class="hotzone flex justify-between mb-2">
 				<button
@@ -86,7 +86,7 @@ export default Vue.extend({
 	},
 	methods: {
 		handleDropdown(e: any): void {
-			if (!e.target || e.target.parentNode.classList.contains(`hotzone`)) {
+			if (!e.target) {
 				return
 			}
 			if (
@@ -95,6 +95,10 @@ export default Vue.extend({
 				!e.target.parentNode.classList.contains(`toggle`)
 			) {
 				this.showFilter = false
+				return
+			}
+			if (e.target.parentNode.classList.contains(`hotzone`)) {
+				this.showFilter = true
 			}
 		},
 		setCommentFilterFeeling(feeling) {

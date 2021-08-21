@@ -95,9 +95,8 @@
 					class="self-center"
 				/>
 			</div>
-			<CommentFilter v-show="this.showComments" :filter="this.filter" @clicked="setFilter" />
 		</div>
-		<PostActions v-show="this.showComments" :post="this.post" :filter="this.filter" />
+		<PostActions v-show="this.showComments" :post="this.post" />
 	</article>
 </template>
 
@@ -109,7 +108,6 @@ import ProfileIcon from '@/components/icons/Person.vue'
 import BookmarkButton from '@/components/post/BookmarkButton.vue'
 import Share from '@/components/post/Share.vue'
 import CommentIcon from '@/components/icons/Comment.vue'
-import CommentFilter from '@/components/post/CommentFilter.vue'
 
 export default Vue.extend({
 	name: `PostCard`,
@@ -120,7 +118,6 @@ export default Vue.extend({
 		BookmarkButton,
 		Share,
 		CommentIcon,
-		CommentFilter,
 	},
 	props: {
 		post: {
@@ -131,7 +128,6 @@ export default Vue.extend({
 	data() {
 		return {
 			showComments: false,
-			filter: ``,
 			authorName: ``,
 			authorID: ``,
 			authorCID: ``,
@@ -165,9 +161,6 @@ export default Vue.extend({
 		})
 	},
 	methods: {
-		setFilter(reaction: string): void {
-			this.filter = reaction
-		},
 		getStyles(): string {
 			let res = ``
 			if (this.showComments && this.$store.state.settings.darkMode) {

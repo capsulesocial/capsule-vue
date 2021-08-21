@@ -112,15 +112,8 @@
 						<BookmarkButton :postID="this.$route.params.post" />
 						<ShareButton :post="this.post" class="z-20" />
 					</div>
-					<CommentFilter :filter="this.filter" @clicked="setFilter" />
 				</div>
-				<PostActions
-					:post="this.post"
-					:authorID="this.post.authorID"
-					:isCommenting="true"
-					:tags="this.post.tags"
-					:filter="this.filter"
-				/>
+				<PostActions :post="this.post" :authorID="this.post.authorID" :isCommenting="true" :tags="this.post.tags" />
 			</article>
 		</section>
 		<section v-else>Post not found 😵‍💫</section>
@@ -138,7 +131,6 @@ import BookmarkButton from '@/components/post/BookmarkButton.vue'
 import ShareButton from '@/components/post/Share.vue'
 import HeaderMagic from '@/components/HeaderMagic.vue'
 import MoreIcon from '@/components/icons/More.vue'
-import CommentFilter from '@/components/post/CommentFilter.vue'
 
 import { Post } from '~/interfaces/Post'
 import { Profile } from '~/interfaces/Profile'
@@ -152,7 +144,6 @@ export default Vue.extend({
 		ShareButton,
 		HeaderMagic,
 		MoreIcon,
-		CommentFilter,
 	},
 	layout: `Reader`,
 	// mixins: [markdown],
@@ -164,7 +155,6 @@ export default Vue.extend({
 			content: ``,
 			featuredPhoto: null,
 			showFilter: false,
-			filter: ``,
 		}
 	},
 	created() {
@@ -206,11 +196,6 @@ export default Vue.extend({
 			},
 			false,
 		)
-	},
-	methods: {
-		setFilter(reaction: string): void {
-			this.filter = reaction
-		},
 	},
 })
 </script>
