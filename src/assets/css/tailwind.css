@@ -7,13 +7,13 @@
     @apply bg-white border rounded-xl shadow-xl
   }
   .editable h1 {
-    @apply text-3xl font-serif font-bold
+    @apply text-3xl font-serif font-bold mt-3
   }
   .editable h2 {
-    @apply text-2xl font-serif font-bold
+    @apply text-2xl font-serif font-bold mt-2
   }
   .editable h3 {
-    @apply text-xl font-serif font-bold
+    @apply text-xl font-serif font-bold mt-1
   }
   .editable a {
     @apply text-primary
@@ -22,7 +22,7 @@
     @apply text-base font-normal leading-relaxed
   }
   blockquote {
-    @apply pl-2 border-l-2 border-primary text-xl leading-8 font-serif py-2
+    @apply pl-2 border-l-2 border-primary text-xl leading-8 font-serif py-2 mt-1
   }
   .medium-toolbar-arrow-under:after {
     @apply bg-transparent
