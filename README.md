@@ -45,6 +45,7 @@ $ yarn build:win
 ### Dependencies:
 
 - [Nuxt.js docs](https://nuxtjs.org) - Vue Framework
+- [Vuex persisted state](https://www.npmjs.com/package/vuex-persistedstate) - Rehydrates Vuex state between page reloads.
 - [TailwindCSS](https://tailwindcss.com) - CSS Framework
 - [Marked.js](https://marked.js.org/) - markdown parsing
 - [Medium Editor](https://github.com/yabwe/medium-editor) - WYSIWYG editor
