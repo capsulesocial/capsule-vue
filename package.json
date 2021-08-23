@@ -94,6 +94,7 @@
     "scrypt-wasm": "^0.1.1",
     "ts-loader": "^8.2.0",
     "turndown": "^7.1.1",
+    "vuex-persistedstate": "^4.0.0",
     "zxcvbn": "^4.4.2"
   },
   "devDependencies": {

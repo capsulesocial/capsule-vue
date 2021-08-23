@@ -36,6 +36,7 @@ const config: NuxtConfig = {
     { src: "@/plugins/helpers.ts" },
     { src: "@/plugins/ipfs.ts" },
     { src: "@/plugins/auth.ts" },
+    { src: "@/plugins/persistedstate.ts"}
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
