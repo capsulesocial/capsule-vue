@@ -2,7 +2,7 @@
 import type { GetterTree, MutationTree } from 'vuex'
 import type { RootState } from './index'
 import { Profile } from '~/interfaces/Profile'
-import { walletLogout } from '~/plugins/near'
+import { walletLogout, removeNearPrivateKey } from '~/plugins/near'
 
 export const namespace = `session`
 
@@ -73,6 +73,11 @@ export const mutations: MutationTree<Profile> = {
 		state.bio = `Default bio.`
 		state.location = ``
 		state.posts = []
+		// Remove NEAR private key when logging out.
+		// walletLogout() removes only
+		// one key-value pair (null_wallet_auth_key)
+		// out of two key-value pairs from LocalStorage
+		removeNearPrivateKey()
 		walletLogout()
 	},
 }
