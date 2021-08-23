@@ -100,7 +100,7 @@
 				:authorCID="this.post.authorCID"
 				:authorAvatar="this.authorAvatar"
 				:authorName="this.author.name"
-				:authorId="this.author.id"
+				:authorID="this.author.id"
 				:authorBio="this.author.bio"
 			/>
 

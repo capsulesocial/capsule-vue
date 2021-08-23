@@ -20,7 +20,7 @@
 					<div class="items-center flex">
 						<img :src="this.$props.avatar" class="w-10 h-10 rounded-xl mr-4" />
 						<nuxt-link :to="`/` + this.$props.authorID" class="pr-4 text-lg">@{{ this.$props.authorID }}</nuxt-link>
-						<FriendButton />
+						<FriendButton :authorID="this.$props.authorID" />
 					</div>
 					<button
 						class="flex items-center bg-lightSecondary rounded-full p-2 focus:outline-none"
