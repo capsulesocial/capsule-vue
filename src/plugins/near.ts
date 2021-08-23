@@ -102,6 +102,15 @@ async function setNearPrivateKey(privateKey: Uint8Array, accountId: string) {
 	return false
 }
 
+async function removeNearPrivateKey() {
+	const _walletConnection = getWalletConnection()
+	const accountId = _walletConnection.getAccountId()
+	console.log(`AccountId whose key is to be removed, ${accountId}`)
+
+	const keystore = new keyStores.BrowserLocalStorageKeyStore()
+	await keystore.removeKey(nearConfig.networkId, accountId)
+}
+
 const nearPlugin: Plugin = async (_context, inject) => {
 	// Initialise contract API
 	await initContract()
@@ -124,4 +133,5 @@ export {
 	getNearPrivateKey,
 	setNearPrivateKey,
 	initContract,
+	removeNearPrivateKey,
 }
