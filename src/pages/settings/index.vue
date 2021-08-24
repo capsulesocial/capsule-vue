@@ -378,13 +378,11 @@ export default Vue.extend({
 			this.downloadImage(avatarCID)
 			const currentCid = this.$store.state.session.cid
 			const cid = await this.$sendProfile(this.$store.state.session)
-			const currentProfile = Object(this.$store.state.session)
-			const newServerProfile: any = {}
-			Object.assign(newServerProfile, { ...currentProfile, cid: currentCid })
-			const serverProfile: any = await this.updateServerProfile(cid, newServerProfile)
+			const serverProfile: any = await this.updateServerProfile(cid, { ...this.$store.state.session, cid: currentCid })
 			if (serverProfile.success === false) {
 				// eslint-disable-next-line no-console
-				console.log(`Server Profile could not be updated`)
+				alert(`Server Profile could not be updated`)
+				return
 			}
 			this.changeCID(cid)
 			const profileSet = await this.$setProfileNEAR(cid)
@@ -423,13 +421,11 @@ export default Vue.extend({
 			}
 			const currentCid = this.$store.state.session.cid
 			const cid = await this.$sendProfile(this.$store.state.session)
-			const currentProfile = Object(this.$store.state.session)
-			const newServerProfile: any = {}
-			Object.assign(newServerProfile, { ...currentProfile, cid: currentCid })
-			const serverProfile: any = await this.updateServerProfile(cid, newServerProfile)
+			const serverProfile: any = await this.updateServerProfile(cid, { ...this.$store.state.session, cid: currentCid })
 			if (serverProfile.success === false) {
 				// eslint-disable-next-line no-console
-				console.log(`Server Profile could not be updated`)
+				alert(`Server Profile could not be updated`)
+				return
 			}
 			this.changeCID(cid)
 			const profileSet = await this.$setProfileNEAR(cid)

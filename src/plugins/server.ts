@@ -104,8 +104,6 @@ async function sendProfileServer(cid: string, data: Profile): Promise<{ success:
 		if (response.data.success === true) {
 			const _cid = response.data.cid
 			return { success: true, cid: _cid }
-		} else {
-			throw new Error(`Failed to validate profile`)
 		}
 	} catch (error) {
 		// eslint-disable-next-line no-console
