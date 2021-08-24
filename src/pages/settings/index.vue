@@ -367,7 +367,7 @@ export default Vue.extend({
 		async updateProfile() {
 			const currentCid = this.$store.state.session.cid
 			const cid = await this.$sendProfile(this.$store.state.session)
-			const serverProfile = await await sendProfileServer(cid, { ...this.$store.state.session, cid: currentCid })
+			const serverProfile = await sendProfileServer(cid, { ...this.$store.state.session, cid: currentCid })
 			if (serverProfile.success === false) {
 				// eslint-disable-next-line no-console
 				alert(`Server Profile could not be updated`)
