@@ -364,10 +364,12 @@ export default Vue.extend({
 				}
 			}
 		},
-		async updateServerProfile(cid: string, data: Profile) {
+		async setProfile(cid: string) {
 			try {
-				const { success: serverSuccess, cid: serverCid } = await sendProfileServer(cid, data)
-				return { serverSuccess, serverCid }
+				this.changeCID(cid)
+				const profileSet = await this.$setProfileNEAR(cid)
+				// eslint-disable-next-line no-console
+				console.log(`Profile set`, profileSet)
 			} catch (error) {
 				throw new Error(error.message)
 			}
@@ -378,16 +380,13 @@ export default Vue.extend({
 			this.downloadImage(avatarCID)
 			const currentCid = this.$store.state.session.cid
 			const cid = await this.$sendProfile(this.$store.state.session)
-			const serverProfile: any = await this.updateServerProfile(cid, { ...this.$store.state.session, cid: currentCid })
+			const serverProfile = await sendProfileServer(cid, { ...this.$store.state.session, cid: currentCid })
 			if (serverProfile.success === false) {
 				// eslint-disable-next-line no-console
 				alert(`Server Profile could not be updated`)
 				return
 			}
-			this.changeCID(cid)
-			const profileSet = await this.$setProfileNEAR(cid)
-			// eslint-disable-next-line no-console
-			console.log(`Profile set`, profileSet)
+			await this.setProfile(cid)
 		},
 		downloadImage(cid) {
 			this.$getPhoto(cid).then((image) => {
@@ -421,16 +420,13 @@ export default Vue.extend({
 			}
 			const currentCid = this.$store.state.session.cid
 			const cid = await this.$sendProfile(this.$store.state.session)
-			const serverProfile: any = await this.updateServerProfile(cid, { ...this.$store.state.session, cid: currentCid })
+			const serverProfile = await sendProfileServer(cid, { ...this.$store.state.session, cid: currentCid })
 			if (serverProfile.success === false) {
 				// eslint-disable-next-line no-console
 				alert(`Server Profile could not be updated`)
 				return
 			}
-			this.changeCID(cid)
-			const profileSet = await this.$setProfileNEAR(cid)
-			// eslint-disable-next-line no-console
-			console.log(`Profile set`, profileSet)
+			await this.setProfile(cid)
 			alert(`Settings updated!`)
 			this.$router.push(`/` + this.$store.state.session.id)
 		},
