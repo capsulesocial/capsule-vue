@@ -364,29 +364,26 @@ export default Vue.extend({
 				}
 			}
 		},
-		async setProfile(cid: string) {
-			try {
-				this.changeCID(cid)
-				const profileSet = await this.$setProfileNEAR(cid)
+		async updateProfile() {
+			const currentCid = this.$store.state.session.cid
+			const cid = await this.$sendProfile(this.$store.state.session)
+			const serverProfile = await await sendProfileServer(cid, { ...this.$store.state.session, cid: currentCid })
+			if (serverProfile.success === false) {
 				// eslint-disable-next-line no-console
-				console.log(`Profile set`, profileSet)
-			} catch (error) {
-				throw new Error(error.message)
+				alert(`Server Profile could not be updated`)
+				return false
 			}
+			this.changeCID(cid)
+			const profileSet = await this.$setProfileNEAR(cid)
+			// eslint-disable-next-line no-console
+			console.log(`Profile set`, profileSet)
+			return true
 		},
 		async uploadImage(image) {
 			const avatarCID = await this.$sendPhoto(image)
 			this.changeAvatar(avatarCID)
 			this.downloadImage(avatarCID)
-			const currentCid = this.$store.state.session.cid
-			const cid = await this.$sendProfile(this.$store.state.session)
-			const serverProfile = await sendProfileServer(cid, { ...this.$store.state.session, cid: currentCid })
-			if (serverProfile.success === false) {
-				// eslint-disable-next-line no-console
-				alert(`Server Profile could not be updated`)
-				return
-			}
-			await this.setProfile(cid)
+			await this.updateProfile()
 		},
 		downloadImage(cid) {
 			this.$getPhoto(cid).then((image) => {
@@ -418,17 +415,11 @@ export default Vue.extend({
 			if (this.location !== this.$store.state.session.location && this.$qualityText(this.location)) {
 				this.changeLocation(this.location)
 			}
-			const currentCid = this.$store.state.session.cid
-			const cid = await this.$sendProfile(this.$store.state.session)
-			const serverProfile = await sendProfileServer(cid, { ...this.$store.state.session, cid: currentCid })
-			if (serverProfile.success === false) {
-				// eslint-disable-next-line no-console
-				alert(`Server Profile could not be updated`)
-				return
+			const profileUpdated = await this.updateProfile()
+			if (profileUpdated === true) {
+				alert(`Settings updated!`)
+				this.$router.push(`/` + this.$store.state.session.id)
 			}
-			await this.setProfile(cid)
-			alert(`Settings updated!`)
-			this.$router.push(`/` + this.$store.state.session.id)
 		},
 	},
 })

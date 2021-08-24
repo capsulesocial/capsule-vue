@@ -1,5 +1,4 @@
 import type { Plugin } from '@nuxt/types'
-import { sendProfileServer } from './server'
 import { Post } from '~/interfaces/Post'
 import { Profile } from '~/interfaces/Profile'
 const IPFS = require(`ipfs`)
@@ -42,12 +41,6 @@ const ipfsPlugin: Plugin = async (_context, inject) => {
 		const profileAdded = await node.add(JSON.stringify(content, null, 0))
 		const cid = profileAdded.cid.string
 		return cid
-	}
-
-	// Send a user profile object to server IPFS
-	const sendProfileServerIpfs = async (cid: string, data: Profile): Promise<{ success: boolean; cid: string }> => {
-		const profileAdded = await sendProfileServer(cid, data)
-		return { success: profileAdded.success, cid: profileAdded.cid }
 	}
 
 	// Returns post object associated with content id
@@ -131,7 +124,6 @@ const ipfsPlugin: Plugin = async (_context, inject) => {
 
 	inject(`getNode`, getNode)
 	inject(`sendProfile`, sendProfile)
-	inject(`sendProfileServer`, sendProfileServerIpfs)
 	inject(`sendPost`, sendPost)
 	inject(`getPost`, getPost)
 	inject(`sendPhoto`, sendPhoto)

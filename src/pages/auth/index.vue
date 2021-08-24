@@ -225,8 +225,8 @@ export default Vue.extend({
 					}
 					// Send user profile to IPFS
 					const cid = await this.$sendProfile(account)
-					const { success: serverSuccess } = await sendProfileServer(cid, account)
-					if (serverSuccess === false) {
+					const serverProfile = await sendProfileServer(cid, account)
+					if (serverProfile.success === false) {
 						alert(`Invalid entry`)
 						return
 					}

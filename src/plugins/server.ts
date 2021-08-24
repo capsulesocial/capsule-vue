@@ -102,8 +102,7 @@ async function sendProfileServer(cid: string, data: Profile): Promise<{ success:
 	try {
 		const response = await axios.post(requestURL.toString(), { cid, data })
 		if (response.data.success === true) {
-			const _cid = response.data.cid
-			return { success: true, cid: _cid }
+			return { success: true, cid: response.data.cid }
 		}
 	} catch (error) {
 		// eslint-disable-next-line no-console
