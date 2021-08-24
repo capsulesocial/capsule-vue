@@ -279,6 +279,8 @@ import ChevronRight from '@/components/icons/ChevronRight.vue'
 import UploadAvatar from '@/components/icons/UploadAvatar.vue'
 import ColorMode from '@/components/ColorMode.vue'
 import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
+import { sendProfileServer } from '../../plugins/server'
+import { Profile } from '../../interfaces/Profile'
 
 export default Vue.extend({
 	components: {
@@ -364,12 +366,37 @@ export default Vue.extend({
 				}
 			}
 		},
+		async updateServerProfile(cid: string, data: Profile) {
+			try {
+				const { success: serverSuccess, cid: serverCid } = await sendProfileServer(cid, data)
+				return { serverSuccess, serverCid }
+			} catch (error) {
+				throw new Error(error.message)
+			}
+		},
 		uploadImage(image) {
 			this.$sendPhoto(image).then((avatarCID) => {
 				this.changeAvatar(avatarCID)
 				this.downloadImage(avatarCID)
+				const currentCid = this.$store.state.session.cid
 				this.$sendProfile(this.$store.state.session).then((cid) => {
-					this.changeCID(cid)
+					const currentProfile = Object(this.$store.state.session)
+					const newServerProfile: any = {}
+					Object.assign(newServerProfile, { ...currentProfile, cid: currentCid })
+					this.updateServerProfile(cid, newServerProfile)
+						.then((serverProfile: any) => {
+							if (serverProfile.success === false) {
+								// eslint-disable-next-line no-console
+								console.log(`Server Profile could not be updated`)
+							}
+							this.changeCID(cid)
+						})
+						.then(() => {
+							this.$setProfileNEAR(cid).then((profileSet) => {
+								// eslint-disable-next-line no-console
+								console.log(`Profile set`, profileSet)
+							})
+						})
 				})
 			})
 		},
@@ -403,8 +430,25 @@ export default Vue.extend({
 			if (this.location !== this.$store.state.session.location && this.$qualityText(this.location)) {
 				this.changeLocation(this.location)
 			}
+			const currentCid = this.$store.state.session.cid
 			this.$sendProfile(this.$store.state.session).then((cid) => {
-				this.changeCID(cid)
+				const currentProfile = Object(this.$store.state.session)
+				const newServerProfile: any = {}
+				Object.assign(newServerProfile, { ...currentProfile, cid: currentCid })
+				this.updateServerProfile(cid, newServerProfile)
+					.then((serverProfile: any) => {
+						if (serverProfile.success === false) {
+							// eslint-disable-next-line no-console
+							console.log(`Server Profile could not be updated`)
+						}
+						this.changeCID(cid)
+					})
+					.then(() => {
+						this.$setProfileNEAR(cid).then((profileSet) => {
+							// eslint-disable-next-line no-console
+							console.log(`Profile set`, profileSet)
+						})
+					})
 			})
 			alert(`Settings updated!`)
 			this.$router.push(`/` + this.$store.state.session.id)
