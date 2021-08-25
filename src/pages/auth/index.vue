@@ -156,6 +156,10 @@ export default Vue.extend({
 			changeID: MutationType.CHANGE_ID,
 			changeName: MutationType.CHANGE_NAME,
 			changeEmail: MutationType.CHANGE_EMAIL,
+			changeAvatar: MutationType.CHANGE_AVATAR,
+			changeBio: MutationType.CHANGE_BIO,
+			changeLocation: MutationType.CHANGE_LOCATION,
+			appendPostCID: MutationType.APPEND_POSTCID,
 		}),
 		toggleFormType() {
 			this.isLogin = !this.isLogin
@@ -190,6 +194,12 @@ export default Vue.extend({
 					this.changeID(account.id)
 					this.changeName(account.name)
 					this.changeEmail(account.email)
+					this.changeAvatar(account.avatar)
+					this.changeBio(account.bio)
+					this.changeLocation(account.location)
+					for (const postcid of account.posts) {
+						this.appendPostCID(postcid)
+					}
 					this.$router.push(`/settings`)
 				} else {
 					alert(`Authentication failed!`)
