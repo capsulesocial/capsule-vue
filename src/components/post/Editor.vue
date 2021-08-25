@@ -261,6 +261,7 @@ export default Vue.extend({
 		}),
 		...mapMutations(sessionStoreNamespace, {
 			changeCID: MutationType.CHANGE_CID,
+			appendPostCID: MutationType.APPEND_POSTCID,
 		}),
 		update: _.debounce(function (this: any, e): void {
 			const clean: string = DOMPurify.sanitize(e.target.value, {
@@ -340,6 +341,7 @@ export default Vue.extend({
 					featuredPhotoCID: this.featuredPhotoCID,
 				}
 				this.$sendPost(p).then((cid: string) => {
+					this.appendPostCID(cid)
 					const profile: Profile = this.$store.state.session
 					// Send post to orbit DB
 					this.$axios.post(`/content`, { cid, data: p })
