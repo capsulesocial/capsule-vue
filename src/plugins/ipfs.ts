@@ -11,7 +11,6 @@ declare module 'vue/types/vue' {
 	interface Vue {
 		$getNode: () => any
 		$sendProfile: (content: Profile) => Promise<string>
-		$sendServerProfile: (cid: string, data: Profile) => Promise<{ success: boolean; cid: string }>
 		$getProfile: (cid: string) => Promise<Profile>
 		$sendPost: (content: Post) => Promise<string>
 		$getPost: (cid: string) => Promise<Post>

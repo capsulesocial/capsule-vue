@@ -96,7 +96,7 @@ async function resolveUsername(username: string): Promise<{ success: boolean; ac
 }
 
 async function sendProfileServer(cid: string, data: Profile): Promise<{ success: boolean; cid: string }> {
-	const baseUrl = `http://localhost:3001`
+	const baseUrl = `http://test-node.capsule.social:3000/`
 	const requestURL = new URL(`/profile`, baseUrl)
 	try {
 		const response = await axios.post(requestURL.toString(), { cid, data })
