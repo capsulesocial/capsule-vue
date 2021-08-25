@@ -4,10 +4,12 @@
 		<div class="flex">
 			<!-- Avatar -->
 			<div class="flex-shrink-0">
-				<span v-if="this.avatar === `` || this.avatar === null" class="p-1 border-2 rounded-full block">
-					<ProfileIcon class="w-6 h-6" />
-				</span>
-				<img v-else :src="this.avatar" class="w-10 h-10 rounded-lg object-cover" />
+				<div class="rounded-lg p-1" :style="{ backgroundImage: `url(${this.comment.emotion.background})` }">
+					<span v-if="this.avatar === `` || this.avatar === null" class="p-1 border-2 rounded-lg block bg-white">
+						<ProfileIcon class="w-6 h-6" />
+					</span>
+					<img v-else :src="this.avatar" class="w-10 h-10 rounded-lg object-cover" />
+				</div>
 			</div>
 			<!-- Content -->
 			<div class="flex-1 leading-relaxed ml-2">
@@ -82,12 +84,13 @@
 	</div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import ProfileIcon from '@/components/icons/Person.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 import Reply from '@/components/post/Reply.vue'
 
-export default {
+export default Vue.extend({
 	components: {
 		ProfileIcon,
 		BrandedButton,
@@ -141,12 +144,12 @@ export default {
 				this.reply = ``
 			}
 		},
-		filterReplies() {
+		filterReplies(): [] {
 			const rList = this.replies.slice().sort((p0, p1) => {
 				return p1.timestamp - p0.timestamp
 			})
 			return rList
 		},
 	},
-}
+})
 </script>
