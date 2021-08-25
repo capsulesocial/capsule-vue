@@ -29,6 +29,7 @@ export const getters: GetterTree<Profile, RootState> = {}
 export const MutationType = {
 	CHANGE_CID: `updateCID`,
 	CHANGE_ID: `updateID`,
+	APPEND_POSTCID: `appendPostCID`,
 	CHANGE_NAME: `updateName`,
 	CHANGE_EMAIL: `updateEmail`,
 	CHANGE_AVATAR: `updateAvatar`,
@@ -43,6 +44,9 @@ export const mutations: MutationTree<Profile> = {
 	},
 	[MutationType.CHANGE_ID]: (state, newID: string) => {
 		state.id = newID
+	},
+	[MutationType.APPEND_POSTCID]: (state, postCID: string) => {
+		state.posts.push(postCID)
 	},
 	[MutationType.CHANGE_NAME]: (state, newName: string) => {
 		state.name = newName
