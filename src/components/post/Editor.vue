@@ -349,6 +349,9 @@ export default Vue.extend({
 					alert(`Server Profile could not be updated`)
 				} else {
 					this.changeCID(pcid)
+					const profileSet = await this.$setProfileNEAR(pcid)
+					// eslint-disable-next-line no-console
+					console.log(`Profile set`, profileSet)
 					this.title = ``
 					this.subtitle = ``
 					this.input = ``
