@@ -127,7 +127,7 @@ import BrandedButton from '@/components/BrandedButton.vue'
 import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
 import { Profile } from '~/interfaces/Profile'
 import { signedInToWallet } from '~/plugins/near'
-
+import { sendProfileServer } from '~/plugins/server'
 export default Vue.extend({
 	components: {
 		CapsuleIcon,
@@ -225,6 +225,11 @@ export default Vue.extend({
 					}
 					// Send user profile to IPFS
 					const cid = await this.$sendProfile(account)
+					const serverProfile = await sendProfileServer(cid, account)
+					if (serverProfile.success === false) {
+						alert(`Invalid entry`)
+						return
+					}
 					account.cid = cid
 					account.password = this.password
 					const _res = await this.$register(account, cid)

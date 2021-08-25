@@ -206,6 +206,7 @@ import { Post } from '@/interfaces/Post'
 import { Tag } from '@/interfaces/Tag'
 import { Profile } from '@/interfaces/Profile'
 import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
+import { sendProfileServer } from '~/plugins/server'
 export default Vue.extend({
 	components: {
 		BrandedButton,
@@ -322,7 +323,7 @@ export default Vue.extend({
 				this.featuredPhoto = image
 			})
 		},
-		post(): void {
+		async post(): Promise<void> {
 			this.input = this.turndownService.turndown(this.editor.getContent())
 			if (this.title === `` || !this.$qualityText(this.title)) {
 				alert(`Invalid title!`)
@@ -340,20 +341,25 @@ export default Vue.extend({
 					authorCID: this.$store.state.session.cid,
 					featuredPhotoCID: this.featuredPhotoCID,
 				}
-				this.$sendPost(p).then((cid: string) => {
-					this.appendPostCID(cid)
-					const profile: Profile = this.$store.state.session
-					// Send post to orbit DB
-					this.$axios.post(`/content`, { cid, data: p })
-					this.$sendProfile(profile).then((pcid) => {
-						this.changeCID(pcid)
-						this.title = ``
-						this.subtitle = ``
-						this.input = ``
-						this.$store.commit(`draft/reset`)
-						this.$router.push(`/post/` + cid)
-					})
-				})
+				const cid: string = await this.$sendPost(p)
+				this.appendPostCID(cid)
+				const profile: Profile = this.$store.state.session
+				this.$axios.post(`/content`, { cid, data: p })
+				const pcid = await this.$sendProfile(profile)
+				const serverProfile = await sendProfileServer(pcid, profile)
+				if (serverProfile.success === false) {
+					alert(`Server Profile could not be updated`)
+				} else {
+					this.changeCID(pcid)
+					const profileSet = await this.$setProfileNEAR(pcid)
+					// eslint-disable-next-line no-console
+					console.log(`Profile set`, profileSet)
+					this.title = ``
+					this.subtitle = ``
+					this.input = ``
+					this.$store.commit(`draft/reset`)
+					this.$router.push(`/post/` + cid)
+				}
 			}
 		},
 		updateStore(): void {

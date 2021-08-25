@@ -1,5 +1,6 @@
 import { Authentication } from '~/interfaces/Authentication'
 import { PrivateKey } from '~/interfaces/PrivateKey'
+import { Profile } from '~/interfaces/Profile'
 
 // eslint-disable-next-line quotes
 declare module 'vue/types/vue' {
@@ -94,4 +95,19 @@ async function resolveUsername(username: string): Promise<{ success: boolean; ac
 	return { success: false, accountId: `` }
 }
 
-export { sendAuthentication, getAuthentication, resolveUsername }
+async function sendProfileServer(cid: string, data: Profile): Promise<{ success: boolean; cid: string }> {
+	const baseUrl = `http://test-node.capsule.social:3000/`
+	const requestURL = new URL(`/profile`, baseUrl)
+	try {
+		const response = await axios.post(requestURL.toString(), { cid, data })
+		if (response.data.success === true) {
+			return { success: true, cid: response.data.cid }
+		}
+	} catch (error) {
+		// eslint-disable-next-line no-console
+		console.log(error)
+	}
+	return { success: false, cid: `` }
+}
+
+export { sendAuthentication, getAuthentication, resolveUsername, sendProfileServer }
