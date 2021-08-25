@@ -13,6 +13,9 @@
 			<ChevronUp v-if="this.showFilter" />
 			<ChevronDown v-else />
 		</button>
+		<button v-show="this.$props.filter !== ``" @click="$emit(`clicked`, ``)">
+			<span class="text-sm italic ml-2">Clear</span>
+		</button>
 		<!-- comment filter dropdown -->
 		<div v-show="this.showFilter" class="absolute hotzone top-0 mt-8 z-10 bg-white rounded-lg shadow-lg p-4 w-full">
 			<!-- Select charge of reaction button -->
@@ -86,14 +89,10 @@ export default Vue.extend({
 	},
 	methods: {
 		handleDropdown(e: any): void {
-			if (!e.target) {
+			if (!e.target || e.target.parentNode === null || e.target.parentNode.classList === undefined) {
 				return
 			}
-			if (
-				e.target.parentNode === null ||
-				e.target.parentNode.classList === undefined ||
-				!e.target.parentNode.classList.contains(`toggle`)
-			) {
+			if (!e.target.parentNode.classList.contains(`toggle`)) {
 				this.showFilter = false
 			}
 			if (e.target.parentNode.classList.contains(`hotzone`)) {

@@ -1,6 +1,6 @@
 /* eslint-disable prefer-const */
 <template>
-	<section class="pt-4 px-4">
+	<section class="pt-4 px-4 w-full">
 		<h2 class="text-2xl">Hashtags /</h2>
 		<h2 class="text-2xl uppercase">#{{ this.$route.params.tag }}</h2>
 		<div v-for="p in this.posts" :key="p.contentAddress">
@@ -10,8 +10,11 @@
 </template>
 
 <script>
+import Vue from 'vue'
+
 import PostCard from '@/components/post/Card.vue'
-export default {
+export default Vue.extend({
+	name: `TagPage`,
 	components: {
 		PostCard,
 	},
@@ -23,21 +26,9 @@ export default {
 	},
 	created() {
 		// Fetch posts with tag
-		for (const p of this.$store.state.tags) {
-			if (p.tag === this.tag) {
-				for (const c of p.posts) {
-					// Fetch specific post
-					this.findPost(c)
-				}
-			}
-		}
+		this.$axios.$get(`/content?tag=` + this.$route.params.tag).then((res) => {
+			this.posts = res.data
+		})
 	},
-	methods: {
-		async findPost(pID) {
-			const p = await this.$getPost(pID)
-			p.id = pID
-			this.posts.push(p)
-		},
-	},
-}
+})
 </script>

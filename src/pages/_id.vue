@@ -66,7 +66,7 @@
 			>
 				<SettingsIcon />
 			</nuxt-link>
-			<FriendButton v-else :authorCID="currentUser.cid" />
+			<FriendButton v-else :authorID="this.$route.params.id" />
 		</section>
 
 		<section :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'">

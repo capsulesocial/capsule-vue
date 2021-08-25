@@ -11,7 +11,10 @@
 </template>
 
 <script>
-export default {
+import Vue from 'vue'
+
+export default Vue.extend({
+	name: `Tag`,
 	props: {
 		tag: {
 			type: String,
@@ -34,5 +37,5 @@ export default {
 			return i
 		},
 	},
-}
+})
 </script>

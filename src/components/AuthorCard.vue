@@ -50,7 +50,7 @@ export default Vue.extend({
 			type: String,
 			default: ``,
 		},
-		authorId: {
+		authorID: {
 			type: String,
 			default: ``,
 		},

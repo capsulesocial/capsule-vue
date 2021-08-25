@@ -26,7 +26,7 @@ export default Vue.extend({
 		UnfollowIcon,
 	},
 	props: {
-		authorCID: {
+		authorID: {
 			type: String,
 			default: null,
 		},

@@ -1,5 +1,5 @@
 <template>
-	<section class="pt-4 w-full">
+	<section class="pt-4 px-4 w-full">
 		<h4 class="text-xl">Category /</h4>
 		<h2 class="text-2xl uppercase">
 			{{ this.$route.params.category }}
@@ -26,7 +26,6 @@ export default Vue.extend({
 	created() {
 		// Fetch posts from Orbit DB by ID
 		this.$axios.$get(`/content?category=` + this.$route.params.category).then((res) => {
-			console.log(res)
 			this.posts = res.data
 		})
 	},

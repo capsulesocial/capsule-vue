@@ -92,7 +92,7 @@
 			</div>
 		</article>
 		<article class="w-full flex justify-between">
-			<div>0 comments</div>
+			<div>{{ this.comments.length }} comments</div>
 			<CommentFilter :filter="this.filter" @clicked="setFilter" />
 		</article>
 		<article>
@@ -169,10 +169,14 @@ export default Vue.extend({
 					timestamp: new Date(),
 					replies: [],
 				}
+				// Send comment (c)
 				this.comments.push(c)
+				// Apply filter to comments, in case new comment was added in filtered category
 				this.filterComments()
 				this.comment = ``
 				this.emotion = ``
+				this.filter = ``
+				this.emotionCategory = `default`
 			}
 		},
 		handleReaction(reaction) {
@@ -180,11 +184,11 @@ export default Vue.extend({
 		},
 		filterComments() {
 			let cList: Comment[] = []
-			if (this.$props.filter === null) {
+			if (this.filter === ``) {
 				cList = this.comments
 			} else {
 				for (const c in this.comments) {
-					if (this.comments[c].emotion === this.$props.filter) {
+					if (this.comments[c].emotion === this.filter) {
 						cList.push(this.comments[c])
 					}
 				}

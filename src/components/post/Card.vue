@@ -35,6 +35,9 @@
 					</h6>
 				</div>
 			</nuxt-link>
+			<div class="flex-grow">
+				<FriendButton :authorID="this.post.authorID" />
+			</div>
 			<button
 				:class="
 					this.$store.state.settings.darkMode
@@ -95,6 +98,10 @@
 					class="self-center"
 				/>
 			</div>
+			<!-- Display tags -->
+			<div class="flex flex-row-reverse">
+				<TagPill v-for="t in this.post.tags" :key="t.name" :tag="t.name" />
+			</div>
 		</div>
 		<PostActions v-show="this.showComments" :post="this.post" />
 	</article>
@@ -108,6 +115,8 @@ import ProfileIcon from '@/components/icons/Person.vue'
 import BookmarkButton from '@/components/post/BookmarkButton.vue'
 import Share from '@/components/post/Share.vue'
 import CommentIcon from '@/components/icons/Comment.vue'
+import FriendButton from '@/components/FriendButton.vue'
+import TagPill from '@/components/Tag.vue'
 
 export default Vue.extend({
 	name: `PostCard`,
@@ -118,6 +127,8 @@ export default Vue.extend({
 		BookmarkButton,
 		Share,
 		CommentIcon,
+		FriendButton,
+		TagPill,
 	},
 	props: {
 		post: {
