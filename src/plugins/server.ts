@@ -29,7 +29,6 @@ async function sendAuthentication(data: Authentication): Promise<boolean> {
 			encryptedPrivateKey: encPrivateKey,
 			encryptedPrivateKeyNonce: nonce,
 			accountId: data.nearAccountId,
-			cid: data.nearAccountId,
 		}
 		const response = await axios.post(requestURL.toString(), reqData)
 		if (response.data.status === `OK`) {

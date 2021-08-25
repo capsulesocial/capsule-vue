@@ -279,7 +279,6 @@ import UploadAvatar from '@/components/icons/UploadAvatar.vue'
 import ColorMode from '@/components/ColorMode.vue'
 import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
 import { sendProfileServer } from '~/plugins/server'
-import { Profile } from '~/interfaces/Profile'
 export default Vue.extend({
 	components: {
 		VerifySocial: () => import(`@/components/VerifySocial.vue`),
@@ -365,11 +364,9 @@ export default Vue.extend({
 			}
 		},
 		async updateProfile() {
-			const currentCid = this.$store.state.session.cid
 			const cid = await this.$sendProfile(this.$store.state.session)
-			const serverProfile = await sendProfileServer(cid, { ...this.$store.state.session, cid: currentCid })
+			const serverProfile = await sendProfileServer(cid, this.$store.state.session)
 			if (serverProfile.success === false) {
-				// eslint-disable-next-line no-console
 				alert(`Server Profile could not be updated`)
 				return false
 			}
