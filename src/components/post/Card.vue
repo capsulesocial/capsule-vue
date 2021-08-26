@@ -90,7 +90,7 @@
 				<Share
 					:post="this.post"
 					:class="this.$store.state.settings.darkMode ? 'fill-lightActive' : 'fill-darkActive'"
-					class="fill-primary self-center z-20"
+					class="fill-primary self-center z-10"
 				/>
 				<BookmarkButton
 					:postID="this.post.cid"

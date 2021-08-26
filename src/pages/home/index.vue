@@ -79,7 +79,6 @@ export default Vue.extend({
 					this.posts = p.data.reverse()
 					this.isLoading = false
 				})
-				return this.posts.reverse()
 			} else if (a === `FOLLOWING`) {
 				// Get list of accounts being followed
 				this.$axios.$get(`/content`).then((p) => {
