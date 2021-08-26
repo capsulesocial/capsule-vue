@@ -204,9 +204,9 @@ import XIcon from '@/components/icons/X.vue'
 
 import { Post } from '@/interfaces/Post'
 import { Tag } from '@/interfaces/Tag'
-import { Profile } from '@/interfaces/Profile'
-import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
+import { MutationType, namespace as sessionStoreNamespace, getProfileFromSession, Session } from '~/store/session'
 import { sendProfileServer } from '~/plugins/server'
+
 export default Vue.extend({
 	components: {
 		BrandedButton,
@@ -343,10 +343,10 @@ export default Vue.extend({
 				}
 				const cid = await this.$sendPost(p)
 				this.appendPostCID(cid)
-				const profile = this.$store.state.session as Profile
+				const profile = this.$store.state.session as Session
 				this.$axios.post(`/content`, { cid, data: p })
-				const pcid = await this.$sendProfile(profile)
-				const serverProfile = await sendProfileServer(pcid, profile)
+				const pcid = await this.$sendProfile(getProfileFromSession(profile))
+				const serverProfile = await sendProfileServer(pcid, getProfileFromSession(profile))
 				if (!serverProfile.success) {
 					alert(`Server Profile could not be updated`)
 				} else {

@@ -133,7 +133,7 @@ import HeaderMagic from '@/components/HeaderMagic.vue'
 import MoreIcon from '@/components/icons/More.vue'
 
 import { Post } from '~/interfaces/Post'
-import { BackendProfile } from '~/interfaces/Profile'
+import { Profile } from '~/interfaces/Profile'
 
 export default Vue.extend({
 	components: {
@@ -170,7 +170,7 @@ export default Vue.extend({
 				})
 			}
 			// Get author profile
-			this.$getProfile(p.authorCID).then((profile: BackendProfile) => {
+			this.$getProfile(p.authorCID).then((profile: Profile) => {
 				this.author = profile
 				if (profile.avatar.length > 1) {
 					this.$getPhoto(profile.avatar).then((avatar) => {

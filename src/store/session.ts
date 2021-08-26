@@ -1,14 +1,32 @@
 // import type { Context } from '@nuxt/types'
 import type { GetterTree, MutationTree } from 'vuex'
 import type { RootState } from './index'
-import { BackendProfile, Profile } from '~/interfaces/Profile'
+import { Profile } from '~/interfaces/Profile'
 import { walletLogout, removeNearPrivateKey } from '~/plugins/near'
+export interface Session {
+	id: Profile[`id`]
+	name: Profile[`name`]
+	email: Profile[`email`]
+	bio: Profile[`bio`]
+	location: Profile[`location`]
+	avatar: Profile[`avatar`]
+	socials: Profile[`socials`]
+	publicKey: Profile[`publicKey`]
+	cid: string
+	posts: string[]
+	reposts: string[]
+	comments: string[]
+	bookmarks: string[]
+	categories: string[]
+	following: string[]
+	followers: string[]
+}
 
 export const namespace = `session`
 
-export const state = (): Profile => createDefaultProfile(``, ``, ``, ``)
+export const state = (): Session => createDefaultSession(``, ``, ``, ``)
 
-export const getters: GetterTree<Profile, RootState> = {}
+export const getters: GetterTree<Session, RootState> = {}
 
 export const MutationType = {
 	CHANGE_CID: `updateCID`,
@@ -22,7 +40,7 @@ export const MutationType = {
 	LOGOUT: `logout`,
 }
 
-export const mutations: MutationTree<Profile> = {
+export const mutations: MutationTree<Session> = {
 	[MutationType.CHANGE_CID]: (state, newCID: string) => {
 		state.cid = newCID
 	},
@@ -67,7 +85,7 @@ export const mutations: MutationTree<Profile> = {
 
 /* Helpers */
 
-export function createDefaultProfile(id: string, name: string, email: string, publicKey: string): Profile {
+export function createDefaultSession(id: string, name: string, email: string, publicKey: string): Session {
 	return {
 		cid: ``,
 		id,
@@ -88,20 +106,20 @@ export function createDefaultProfile(id: string, name: string, email: string, pu
 	}
 }
 
-export function getBackendProfile(profile: Profile): BackendProfile {
+export function getProfileFromSession(s: Session): Profile {
 	return {
-		id: profile.id,
-		name: profile.name,
-		email: profile.email,
-		bio: profile.bio,
-		location: profile.location,
-		avatar: profile.avatar,
-		socials: profile.socials,
-		publicKey: profile.publicKey,
+		id: s.id,
+		name: s.name,
+		email: s.email,
+		bio: s.bio,
+		location: s.location,
+		avatar: s.avatar,
+		socials: s.socials,
+		publicKey: s.publicKey,
 	}
 }
 
-export function createProfileFromBackendProfile(cid: string, p: BackendProfile): Profile {
+export function createSessionFromProfile(cid: string, p: Profile): Session {
 	return {
 		cid,
 		id: p.id,

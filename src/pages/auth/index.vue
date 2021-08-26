@@ -138,9 +138,9 @@ import CapsuleIcon from '@/components/icons/Capsule.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 import {
 	MutationType,
-	createDefaultProfile,
-	createProfileFromBackendProfile,
-	getBackendProfile,
+	createDefaultSession,
+	getProfileFromSession,
+	createSessionFromProfile,
 	namespace as sessionStoreNamespace,
 } from '~/store/session'
 import { signedInToWallet } from '~/plugins/near'
@@ -202,7 +202,7 @@ export default Vue.extend({
 				const { success, profileCID } = await this.$login(this.id, this.password)
 				if (success && signedInToWallet()) {
 					const backendProfile = await this.$getProfile(profileCID)
-					const account = createProfileFromBackendProfile(profileCID, backendProfile)
+					const account = createSessionFromProfile(profileCID, backendProfile)
 					account.cid = profileCID
 					this.changeCID(profileCID)
 					this.changeID(account.id)
@@ -229,10 +229,10 @@ export default Vue.extend({
 					return
 				}
 				if (this.password === this.confirmPassword) {
-					const account = createDefaultProfile(this.id, this.name, this.email, ``) // TODO: We need to add the public key to the profile
+					const account = createDefaultSession(this.id, this.name, this.email, ``) // TODO: We need to add the public key to the profile
 					// Send user profile to IPFS
-					const cid = await this.$sendProfile(getBackendProfile(account))
-					const serverProfile = await sendProfileServer(cid, getBackendProfile(account))
+					const cid = await this.$sendProfile(getProfileFromSession(account))
+					const serverProfile = await sendProfileServer(cid, getProfileFromSession(account))
 					if (!serverProfile.success) {
 						alert(`Invalid entry`)
 						return
