@@ -3,37 +3,43 @@ import { Profile } from '../interfaces/Profile'
 import { Authentication } from '../interfaces/Authentication'
 import { getEncryptedPeerIDPrivateKey, hkdf, scrypt, decryptData } from './crypto'
 import { sendAuthentication, getAuthentication } from './server'
-
-const multibase = require(`multibase`)
+import { setProfileNEAR, getProfileNEAR } from './profile'
+import { getWalletConnection, getNearPrivateKey, setNearPrivateKey, initContract } from './near'
 
 // eslint-disable-next-line quotes
 declare module 'vue/types/vue' {
 	interface Vue {
-		$register: (payload: Profile, peerIDPrivateKey: string, profileCID: string) => Promise<boolean>
-		$login: (
-			username: string,
-			password: string,
-		) => Promise<{ success: boolean; peerIDPrivateKey: string; profileCID: string }>
+		$register: (payload: Profile, profileCID: string) => Promise<boolean>
+		$login: (username: string, password: string) => Promise<{ success: boolean; profileCID: string }>
 	}
 }
 
 // POST newly created account to IPFS
-async function register(payload: Profile, peerIDPrivateKey: string, profileCID: string): Promise<boolean> {
-	const base64 = multibase.names.base64
-	// peerIDPrivateKey is base64 encoded using js-multibase
-	const peerIDPrivateKeyBytes = base64.decode(peerIDPrivateKey)
+async function register(payload: Profile, profileCID: string): Promise<boolean> {
+	const privateKeyBytes = await getNearPrivateKey()
 
-	const encPrivateKey = await getEncryptedPeerIDPrivateKey(payload, peerIDPrivateKeyBytes)
+	const [encPrivateKey, profileSet] = await Promise.all([
+		getEncryptedPeerIDPrivateKey(payload, privateKeyBytes),
+		setProfileNEAR(profileCID),
+	])
 
-	const AuthObj: Authentication = { privateKey: encPrivateKey, id: payload.id, profileCID }
-	const authstatus = await sendAuthentication(AuthObj)
-	return authstatus
+	if (profileSet) {
+		const walletConnection = getWalletConnection()
+
+		const authObj: Authentication = {
+			privateKey: encPrivateKey,
+			id: payload.id,
+			nearAccountId: walletConnection.getAccountId() as string,
+		}
+		const authstatus = await sendAuthentication(authObj)
+
+		return authstatus
+	}
+
+	return false
 }
 
-async function login(
-	username: string,
-	password: string,
-): Promise<{ success: boolean; peerIDPrivateKey: string; profileCID: string }> {
+async function login(username: string, password: string): Promise<{ success: boolean; profileCID: string }> {
 	const ec = new TextEncoder()
 
 	// HKDF(key: userPassword, info: "CapsuleBlogchainAuth", salt: username)
@@ -47,16 +53,25 @@ async function login(
 
 	// Check if authentication was successful
 	if (success === true) {
-		const peerIDPrivateKeyBytes = await decryptData(
-			peerIDEncryptionKey,
-			auth.privateKey.encryptedPeerIDPrivateKey,
-			auth.privateKey.nonce,
-		)
-		const base64 = multibase.names.base64
-		const peerIDPrivateKey = base64.encode(peerIDPrivateKeyBytes)
-		return { success, peerIDPrivateKey, profileCID: auth.profileCID }
+		const [privateKeyBytes, profile] = await Promise.all([
+			decryptData(peerIDEncryptionKey, auth.privateKey.encryptedPeerIDPrivateKey, auth.privateKey.nonce),
+			getProfileNEAR(username),
+		])
+		if (profile.success) {
+			const isKeySet = await setNearPrivateKey(privateKeyBytes, auth.nearAccountId)
+			if (isKeySet) {
+				const value = {
+					accountId: auth.nearAccountId,
+					allKeys: [],
+				}
+				window.localStorage.setItem(`null_wallet_auth_key`, JSON.stringify(value))
+				// Reinitialise Smart Contract API
+				await initContract()
+				return { success, profileCID: profile.profileCID }
+			}
+		}
 	}
-	return { success: false, peerIDPrivateKey: ``, profileCID: `` }
+	return { success: false, profileCID: `` }
 }
 
 const authPlugin: Plugin = (_context, inject) => {

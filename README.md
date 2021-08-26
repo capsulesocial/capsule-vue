@@ -6,6 +6,8 @@ Capsule Vue.js front-end, to be integrated into main client codebase.
 
 #### To deploy a Web app
 
+Create a copy of `example.env` named `.env`. Change value of environment variables if required.
+
 ```bash
 # install dependencies
 $ yarn install

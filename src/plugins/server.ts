@@ -1,5 +1,6 @@
 import { Authentication } from '~/interfaces/Authentication'
 import { PrivateKey } from '~/interfaces/PrivateKey'
+import { Profile } from '~/interfaces/Profile'
 
 // eslint-disable-next-line quotes
 declare module 'vue/types/vue' {
@@ -10,7 +11,9 @@ declare module 'vue/types/vue' {
 }
 
 const axios = require(`axios`).default
-const serverURL = `http://test-node.capsule.social:4000`
+const serverURL = process.env.SERVER_URL || `http://test-node.capsule.social:4000`
+// const serverURL = `http://localhost:8080`
+const baseUrl = `http://test-node.capsule.social:3000/`
 
 async function sendAuthentication(data: Authentication): Promise<boolean> {
 	// Encoding all values to hex
@@ -26,7 +29,7 @@ async function sendAuthentication(data: Authentication): Promise<boolean> {
 			username: data.id,
 			encryptedPrivateKey: encPrivateKey,
 			encryptedPrivateKeyNonce: nonce,
-			cid: data.profileCID,
+			accountId: data.nearAccountId,
 		}
 		const response = await axios.post(requestURL.toString(), reqData)
 		if (response.data.status === `OK`) {
@@ -54,7 +57,7 @@ async function getAuthentication(
 		hp1: new Uint8Array(),
 		nonce: new Uint8Array(),
 	}
-	const defaultAuth: Authentication = { privateKey: defaultprivKey, id: username, profileCID: `` }
+	const defaultAuth: Authentication = { privateKey: defaultprivKey, id: username, nearAccountId: `` }
 
 	const requestURL = new URL(`/read`, serverURL)
 	// Request body data
@@ -66,7 +69,7 @@ async function getAuthentication(
 			const hp1 = new Uint8Array(Buffer.from(response.data.hp1, `hex`))
 			const nonce = new Uint8Array(Buffer.from(response.data.encryptedPrivateKeyNonce, `hex`))
 			const privKey: PrivateKey = { encryptedPeerIDPrivateKey, hp1, nonce }
-			const auth: Authentication = { privateKey: privKey, id: username, profileCID: response.data.cid }
+			const auth: Authentication = { privateKey: privKey, id: username, nearAccountId: response.data.accountId }
 			return { success: true, auth }
 		}
 	} catch {
@@ -75,4 +78,36 @@ async function getAuthentication(
 	return { success: false, auth: defaultAuth }
 }
 
-export { sendAuthentication, getAuthentication }
+async function resolveUsername(username: string): Promise<{ success: boolean; accountId: string }> {
+	// Get NEAR AccountId corresponding to a capsule username
+	const requestURL = new URL(`/resolve/${username}`, serverURL)
+	try {
+		const response = await axios.get(requestURL.toString())
+		if (response.data.status === `OK`) {
+			const _accountId = response.data.accountId
+			return { success: true, accountId: _accountId }
+		}
+		throw new Error(`Failed to find accountId`)
+	} catch (error) {
+		// eslint-disable-next-line no-console
+		console.log(error)
+	}
+	return { success: false, accountId: `` }
+}
+
+async function sendProfileServer(cid: string, data: Profile): Promise<{ success: boolean; cid: string }> {
+	const requestURL = new URL(`/profile`, baseUrl)
+	try {
+		const response = await axios.post(requestURL.toString(), { cid, data })
+		if (response.data.success) {
+			return { success: true, cid: response.data.cid }
+		}
+		throw new Error(`Failed to send Profile`)
+	} catch (error) {
+		// eslint-disable-next-line no-console
+		console.log(error)
+	}
+	return { success: false, cid: `` }
+}
+
+export { sendAuthentication, getAuthentication, resolveUsername, sendProfileServer }

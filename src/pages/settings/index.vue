@@ -273,13 +273,12 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapMutations } from 'vuex'
-
 import BrandedButton from '@/components/BrandedButton.vue'
 import ChevronRight from '@/components/icons/ChevronRight.vue'
 import UploadAvatar from '@/components/icons/UploadAvatar.vue'
 import ColorMode from '@/components/ColorMode.vue'
 import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
-
+import { sendProfileServer } from '~/plugins/server'
 export default Vue.extend({
 	components: {
 		VerifySocial: () => import(`@/components/VerifySocial.vue`),
@@ -364,14 +363,24 @@ export default Vue.extend({
 				}
 			}
 		},
-		uploadImage(image) {
-			this.$sendPhoto(image).then((avatarCID) => {
-				this.changeAvatar(avatarCID)
-				this.downloadImage(avatarCID)
-				this.$sendProfile(this.$store.state.session).then((cid) => {
-					this.changeCID(cid)
-				})
-			})
+		async updateProfile() {
+			const cid = await this.$sendProfile(this.$store.state.session)
+			const serverProfile = await sendProfileServer(cid, this.$store.state.session)
+			if (!serverProfile.success) {
+				alert(`Server Profile could not be updated`)
+				return false
+			}
+			this.changeCID(cid)
+			const profileSet = await this.$setProfileNEAR(cid)
+			// eslint-disable-next-line no-console
+			console.log(`Profile set`, profileSet)
+			return true
+		},
+		async uploadImage(image) {
+			const avatarCID = await this.$sendPhoto(image)
+			this.changeAvatar(avatarCID)
+			this.downloadImage(avatarCID)
+			await this.updateProfile()
 		},
 		downloadImage(cid) {
 			this.$getPhoto(cid).then((image) => {
@@ -382,7 +391,7 @@ export default Vue.extend({
 			const charCount = this.bio.length
 			return this.maxCharBio - charCount
 		},
-		updateSettings() {
+		async updateSettings() {
 			if (this.hasChanged() === false) {
 				alert(`Nothing to update!`)
 				return
@@ -403,11 +412,11 @@ export default Vue.extend({
 			if (this.location !== this.$store.state.session.location && this.$qualityText(this.location)) {
 				this.changeLocation(this.location)
 			}
-			this.$sendProfile(this.$store.state.session).then((cid) => {
-				this.changeCID(cid)
-			})
-			alert(`Settings updated!`)
-			this.$router.push(`/` + this.$store.state.session.id)
+			const profileUpdated = await this.updateProfile()
+			if (profileUpdated) {
+				alert(`Settings updated!`)
+				this.$router.push(`/` + this.$store.state.session.id)
+			}
 		},
 	},
 })
