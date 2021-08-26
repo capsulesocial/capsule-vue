@@ -1,5 +1,4 @@
 import type { Plugin } from '@nuxt/types'
-import { Profile } from '../interfaces/Profile'
 import { Authentication } from '../interfaces/Authentication'
 import { getEncryptedPeerIDPrivateKey, hkdf, scrypt, decryptData } from './crypto'
 import { sendAuthentication, getAuthentication } from './server'
@@ -9,17 +8,17 @@ import { getWalletConnection, getNearPrivateKey, setNearPrivateKey, initContract
 // eslint-disable-next-line quotes
 declare module 'vue/types/vue' {
 	interface Vue {
-		$register: (payload: Profile, profileCID: string) => Promise<boolean>
+		$register: (id: string, password: string, profileCID: string) => Promise<boolean>
 		$login: (username: string, password: string) => Promise<{ success: boolean; profileCID: string }>
 	}
 }
 
 // POST newly created account to IPFS
-async function register(payload: Profile, profileCID: string): Promise<boolean> {
+async function register(id: string, password: string, profileCID: string): Promise<boolean> {
 	const privateKeyBytes = await getNearPrivateKey()
 
 	const [encPrivateKey, profileSet] = await Promise.all([
-		getEncryptedPeerIDPrivateKey(payload, privateKeyBytes),
+		getEncryptedPeerIDPrivateKey(id, password, privateKeyBytes),
 		setProfileNEAR(profileCID),
 	])
 
@@ -28,7 +27,7 @@ async function register(payload: Profile, profileCID: string): Promise<boolean> 
 
 		const authObj: Authentication = {
 			privateKey: encPrivateKey,
-			id: payload.id,
+			id,
 			nearAccountId: walletConnection.getAccountId() as string,
 		}
 		const authstatus = await sendAuthentication(authObj)

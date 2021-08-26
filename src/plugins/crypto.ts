@@ -1,4 +1,3 @@
-import { Profile } from '../interfaces/Profile'
 import { PrivateKey } from '../interfaces/PrivateKey'
 // eslint-disable-next-line quotes
 declare module 'vue/types/vue' {
@@ -79,14 +78,14 @@ async function scrypt(passphrase: Uint8Array, salt: Uint8Array) {
 	return derivedKey
 }
 
-async function getEncryptedPeerIDPrivateKey(payload: Profile, peerIDPrivateKey: Uint8Array) {
+async function getEncryptedPeerIDPrivateKey(id: string, password: string, peerIDPrivateKey: Uint8Array) {
 	const ec = new TextEncoder()
 
 	// HKDF(key: userPassword, info: "CapsuleBlogchainAuth", salt: username)
-	const { hp0, hp1 } = await hkdf(ec.encode(payload.password), ec.encode(payload.id))
+	const { hp0, hp1 } = await hkdf(ec.encode(password), ec.encode(id))
 
 	// peerIDEncryptionKey = SCRYPT (pw: hp0, salt: "CapsuleBlogchainAuth-${username}", N=2^15, r=8, p=1)
-	const peerIDEncryptionKey = await scrypt(hp0, ec.encode(`CapsuleBlogchainAuth-${payload.id}`))
+	const peerIDEncryptionKey = await scrypt(hp0, ec.encode(`CapsuleBlogchainAuth-${id}`))
 
 	// encryptedPeerIDPrivateKey = AES-GCM(key: peerIDEncryptionKey, plaintext: peerIDPrivateKey, nonce: nonce)
 	const nonce = window.crypto.getRandomValues(new Uint8Array(12))

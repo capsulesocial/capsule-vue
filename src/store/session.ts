@@ -1,29 +1,12 @@
 // import type { Context } from '@nuxt/types'
 import type { GetterTree, MutationTree } from 'vuex'
 import type { RootState } from './index'
-import { Profile } from '~/interfaces/Profile'
+import { BackendProfile, Profile } from '~/interfaces/Profile'
 import { walletLogout, removeNearPrivateKey } from '~/plugins/near'
 
 export const namespace = `session`
 
-export const state = (): Profile => ({
-	cid: ``,
-	id: ``,
-	name: ``,
-	email: ``,
-	password: ``,
-	bio: `Default bio.`,
-	location: ``,
-	posts: [],
-	reposts: [],
-	socials: [],
-	bookmarks: [],
-	categories: [],
-	followers: [],
-	following: [],
-	avatar: ``,
-	comments: [],
-})
+export const state = (): Profile => createDefaultProfile(``, ``, ``, ``)
 
 export const getters: GetterTree<Profile, RootState> = {}
 
@@ -80,4 +63,61 @@ export const mutations: MutationTree<Profile> = {
 		removeNearPrivateKey()
 		walletLogout()
 	},
+}
+
+/* Helpers */
+
+export function createDefaultProfile(id: string, name: string, email: string, publicKey: string): Profile {
+	return {
+		cid: ``,
+		id,
+		name,
+		email,
+		publicKey,
+		bio: `Default bio.`,
+		location: ``,
+		posts: [],
+		reposts: [],
+		socials: [],
+		bookmarks: [],
+		categories: [],
+		comments: [],
+		followers: [],
+		following: [],
+		avatar: ``,
+	}
+}
+
+export function getBackendProfile(profile: Profile): BackendProfile {
+	return {
+		id: profile.id,
+		name: profile.name,
+		email: profile.email,
+		bio: profile.bio,
+		location: profile.location,
+		avatar: profile.avatar,
+		socials: profile.socials,
+		publicKey: profile.publicKey,
+	}
+}
+
+export function createProfileFromBackendProfile(cid: string, p: BackendProfile): Profile {
+	return {
+		cid,
+		id: p.id,
+		name: p.name,
+		email: p.email,
+		publicKey: p.publicKey,
+		bio: p.bio,
+		location: p.location,
+		avatar: p.avatar,
+		posts: [],
+		reposts: [],
+		socials: [],
+		bookmarks: [],
+		categories: [],
+		comments: [],
+		followers: [],
+		following: [],
+	}
 }

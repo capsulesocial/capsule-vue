@@ -157,7 +157,7 @@ export default Vue.extend({
 			// Populate Avatar
 			this.authorName = profile.name
 			this.authorID = profile.id
-			this.authorCID = profile.cid
+			this.authorCID = this.$props.post.authorCID
 			if (profile.avatar !== ``) {
 				this.$getPhoto(profile.avatar).then((image) => {
 					this.avatar = image

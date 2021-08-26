@@ -347,7 +347,7 @@ export default Vue.extend({
 				this.$axios.post(`/content`, { cid, data: p })
 				const pcid = await this.$sendProfile(profile)
 				const serverProfile = await sendProfileServer(pcid, profile)
-				if (serverProfile.success === false) {
+				if (!serverProfile.success) {
 					alert(`Server Profile could not be updated`)
 				} else {
 					this.changeCID(pcid)

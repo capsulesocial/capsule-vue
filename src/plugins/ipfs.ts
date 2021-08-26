@@ -1,6 +1,6 @@
 import type { Plugin } from '@nuxt/types'
 import { Post } from '~/interfaces/Post'
-import { Profile } from '~/interfaces/Profile'
+import { BackendProfile, Profile } from '~/interfaces/Profile'
 const IPFS = require(`ipfs`)
 
 // Declare type of function
@@ -10,8 +10,8 @@ type importKey = (name: string, privateKey: string, password: string) => Promise
 declare module 'vue/types/vue' {
 	interface Vue {
 		$getNode: () => any
-		$sendProfile: (content: Profile) => Promise<string>
-		$getProfile: (cid: string) => Promise<Profile>
+		$sendProfile: (content: BackendProfile) => Promise<string>
+		$getProfile: (cid: string) => Promise<BackendProfile>
 		$sendPost: (content: Post) => Promise<string>
 		$getPost: (cid: string) => Promise<Post>
 		$getPhoto: (cid: string) => Promise<any>
