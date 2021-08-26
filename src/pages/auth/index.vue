@@ -3,8 +3,19 @@
 		<div class="self-center mb-5">
 			<CapsuleIcon />
 		</div>
+
+		<BrandedButton
+			v-show="!this.walletConnected"
+			class="w-64 self-center"
+			:action="$walletLogin"
+			text="Connect Wallet"
+		/>
+
 		<!-- Login -->
-		<section class="bg-white mx-auto lg:w-full lg:max-w-md rounded shadow-lg divide-y divide-gray-200">
+		<section
+			v-show="this.walletConnected"
+			class="bg-white mx-auto lg:w-full lg:max-w-md rounded shadow-lg divide-y divide-gray-200"
+		>
 			<article class="flex justify-around">
 				<span v-if="isLogin" class="text-primary p-5 inline-block border-b-2 border-primary font-bold"> Sign In </span>
 				<button v-if="!isLogin" class="focus:outline-none" @click="toggleFormType">Sign In</button>
@@ -13,10 +24,11 @@
 			</article>
 
 			<article class="px-10 py-6 font-sans">
+				<h6 class="text-center italics text-gray-600">Wallet connected</h6>
 				<!-- Register: Name -->
-				<label v-if="!isLogin" for="name" class="font-semibold text-sm text-gray-600 pb-1 block">Name</label>
+				<label v-show="!isLogin" for="name" class="font-semibold text-sm text-gray-600 pb-1 block">Name</label>
 				<input
-					v-if="!isLogin"
+					v-show="!isLogin"
 					id="name"
 					v-model="name"
 					type="text"
@@ -136,14 +148,18 @@ export default Vue.extend({
 	layout: `unauth`,
 	data() {
 		return {
-			isLogin: true,
+			isLogin: false,
 			name: ``,
 			id: ``,
 			email: ``,
 			password: ``,
 			confirmPassword: null,
 			consent: true,
+			walletConnected: false,
 		}
+	},
+	created() {
+		this.walletConnected = signedInToWallet()
 	},
 	mounted() {
 		if (this.$store.state.session.id !== ``) {
@@ -163,15 +179,7 @@ export default Vue.extend({
 		}),
 		toggleFormType() {
 			this.isLogin = !this.isLogin
-			// Request wallet sign-in for new capsule users
-			// provided wallet credentials aren't already present
-			// in LocalStorage
-			if (!this.isLogin) {
-				if (!signedInToWallet()) {
-					// Request wallet sign-in
-					this.$walletLogin()
-				}
-			}
+			this.walletConnected = signedInToWallet()
 		},
 		async verify() {
 			const pwCheck = this.$qualityPassword(this.password)
