@@ -4,7 +4,7 @@
 		<section class="flex flex-row justify-between">
 			<article class="flex items-center">
 				<img
-					v-if="this.currentUser.avatar !== '' && this.currentUser.avatar !== null"
+					v-if="this.currentUser.avatar !== `` && this.currentUser.avatar !== null"
 					:src="this.avatar"
 					class="w-16 h-16 rounded-lg mr-4 object-cover"
 				/>
@@ -136,6 +136,8 @@ import FriendButton from '@/components/FriendButton.vue'
 import ExternalURLIcon from '@/components/icons/ExternalURL.vue'
 import SettingsIcon from '@/components/icons/Settings.vue'
 
+import { Profile } from '~/interfaces/Profile'
+
 export default Vue.extend({
 	name: `RootIDPage`,
 	components: {
@@ -153,26 +155,19 @@ export default Vue.extend({
 		}
 	},
 	created() {
-		// The user in which I am currently viewing
-		// Check if this is my profile
-		if (this.$route.params.id === this.$store.state.session.id) {
-			this.currentUser = this.$store.state.session
-		}
 		// Get user profile
-		// this.$getProfile(this.$route.params.id).then((profile) => {
-		// 	this.currentUser = profile
-		// 	if (!this.currentUser) {
-		// 		return
-		// 	}
-		// 	// @ts-ignore
-		// 	if (this.currentUser.avatar !== ``) {
-		// 		// @ts-ignore
-		// 		this.$getPhoto(this.currentUser.avatar).then((image) => {
-		// 			this.avatar = image
-		// 		})
-		// 	}
-		// })
-		// Fetch posts from Orbit DB by ID
+		this.$getProfileNEAR(this.$route.params.id).then((res) => {
+			if (res.success) {
+				this.$getProfile(res.profileCID).then((profile: Profile) => {
+					this.currentUser = profile
+					if (profile.avatar !== ``) {
+						this.$getPhoto(profile.avatar).then((image) => {
+							this.avatar = image
+						})
+					}
+				})
+			}
+		})
 	},
 	methods: {
 		getStyles(tab): string {
