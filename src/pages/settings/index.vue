@@ -366,7 +366,7 @@ export default Vue.extend({
 		async updateProfile() {
 			const cid = await this.$sendProfile(this.$store.state.session)
 			const serverProfile = await sendProfileServer(cid, this.$store.state.session)
-			if (serverProfile.success === false) {
+			if (!serverProfile.success) {
 				alert(`Server Profile could not be updated`)
 				return false
 			}
@@ -413,7 +413,7 @@ export default Vue.extend({
 				this.changeLocation(this.location)
 			}
 			const profileUpdated = await this.updateProfile()
-			if (profileUpdated === true) {
+			if (profileUpdated) {
 				alert(`Settings updated!`)
 				this.$router.push(`/` + this.$store.state.session.id)
 			}

@@ -341,9 +341,9 @@ export default Vue.extend({
 					authorCID: this.$store.state.session.cid,
 					featuredPhotoCID: this.featuredPhotoCID,
 				}
-				const cid: string = await this.$sendPost(p)
+				const cid = await this.$sendPost(p)
 				this.appendPostCID(cid)
-				const profile: Profile = this.$store.state.session
+				const profile = this.$store.state.session as Profile
 				this.$axios.post(`/content`, { cid, data: p })
 				const pcid = await this.$sendProfile(profile)
 				const serverProfile = await sendProfileServer(pcid, profile)

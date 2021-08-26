@@ -166,7 +166,7 @@ export default Vue.extend({
 			// Request wallet sign-in for new capsule users
 			// provided wallet credentials aren't already present
 			// in LocalStorage
-			if (this.isLogin === false) {
+			if (!this.isLogin) {
 				if (!signedInToWallet()) {
 					// Request wallet sign-in
 					this.$walletLogin()
@@ -187,7 +187,7 @@ export default Vue.extend({
 			// Login
 			if (this.isLogin) {
 				const { success, profileCID } = await this.$login(this.id, this.password)
-				if (success === true && signedInToWallet()) {
+				if (success && signedInToWallet()) {
 					const account = await this.$getProfile(profileCID)
 					account.cid = profileCID
 					this.changeCID(profileCID)
@@ -236,7 +236,7 @@ export default Vue.extend({
 					// Send user profile to IPFS
 					const cid = await this.$sendProfile(account)
 					const serverProfile = await sendProfileServer(cid, account)
-					if (serverProfile.success === false) {
+					if (!serverProfile.success) {
 						alert(`Invalid entry`)
 						return
 					}

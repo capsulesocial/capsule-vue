@@ -13,6 +13,7 @@ declare module 'vue/types/vue' {
 const axios = require(`axios`).default
 const serverURL = process.env.SERVER_URL || `http://test-node.capsule.social:4000`
 // const serverURL = `http://localhost:8080`
+const baseUrl = `http://test-node.capsule.social:3000/`
 
 async function sendAuthentication(data: Authentication): Promise<boolean> {
 	// Encoding all values to hex
@@ -85,9 +86,8 @@ async function resolveUsername(username: string): Promise<{ success: boolean; ac
 		if (response.data.status === `OK`) {
 			const _accountId = response.data.accountId
 			return { success: true, accountId: _accountId }
-		} else {
-			throw new Error(`Failed to find accountId`)
 		}
+		throw new Error(`Failed to find accountId`)
 	} catch (error) {
 		// eslint-disable-next-line no-console
 		console.log(error)
@@ -96,13 +96,13 @@ async function resolveUsername(username: string): Promise<{ success: boolean; ac
 }
 
 async function sendProfileServer(cid: string, data: Profile): Promise<{ success: boolean; cid: string }> {
-	const baseUrl = `http://test-node.capsule.social:3000/`
 	const requestURL = new URL(`/profile`, baseUrl)
 	try {
 		const response = await axios.post(requestURL.toString(), { cid, data })
-		if (response.data.success === true) {
+		if (response.data.success) {
 			return { success: true, cid: response.data.cid }
 		}
+		throw new Error(`Failed to send Profile`)
 	} catch (error) {
 		// eslint-disable-next-line no-console
 		console.log(error)

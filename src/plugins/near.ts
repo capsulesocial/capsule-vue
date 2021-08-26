@@ -22,62 +22,62 @@ const nearConfig = {
 	explorerUrl: `https://explorer.testnet.near.org`,
 }
 
-let walletConnection: WalletConnection | null = null
-let contract: Contract | null = null
+const domain = process.env.DOMAIN || `http://localhost:3000`
+let _walletConnection: WalletConnection | null = null
+let _contract: Contract | null = null
 
 async function initContract() {
 	// Initialize connection to the NEAR network
 	const near = await connect({ deps: { keyStore: new keyStores.BrowserLocalStorageKeyStore() }, ...nearConfig })
 
 	// Initializing Wallet based Account
-	walletConnection = new WalletConnection(near, null)
+	_walletConnection = new WalletConnection(near, null)
 
 	// Initializing contract API
-	contract = new Contract(walletConnection.account(), nearConfig.contractName, {
+	_contract = new Contract(_walletConnection.account(), nearConfig.contractName, {
 		viewMethods: [`getProfile`],
 		changeMethods: [`setProfile`],
 	})
 }
 
 function getContract() {
-	if (!contract) {
+	if (!_contract) {
 		throw new Error(`Contract not yet initialised!`)
 	}
-	return contract
+	return _contract
 }
 
 function getWalletConnection() {
-	if (!walletConnection) {
+	if (!_walletConnection) {
 		throw new Error(`Wallet Connection not yet initialised!`)
 	}
-	return walletConnection
+	return _walletConnection
 }
 
 async function walletLogin() {
-	const _walletConnection = getWalletConnection()
-	if (!_walletConnection.isSignedIn()) {
+	const walletConnection = getWalletConnection()
+	if (!walletConnection.isSignedIn()) {
 		// Redirects to wallet login page
-		const domain = process.env.DOMAIN || `http://localhost:3000`
 		const redirectURL = new URL(`/auth`, domain)
-		await _walletConnection.requestSignIn(nearConfig.contractName, undefined, redirectURL.toString())
+		await walletConnection.requestSignIn(nearConfig.contractName, undefined, redirectURL.toString())
 	}
 }
 
 function walletLogout() {
-	const _walletConnection = getWalletConnection()
-	if (_walletConnection.isSignedIn()) {
-		_walletConnection.signOut()
+	const walletConnection = getWalletConnection()
+	if (walletConnection.isSignedIn()) {
+		walletConnection.signOut()
 	}
 }
 
 function signedInToWallet() {
-	const _walletConnection = getWalletConnection()
-	return _walletConnection.isSignedIn()
+	const walletConnection = getWalletConnection()
+	return walletConnection.isSignedIn()
 }
 
 async function getNearPrivateKey() {
-	const _walletConnection = getWalletConnection()
-	const accountId = _walletConnection.getAccountId()
+	const walletConnection = getWalletConnection()
+	const accountId = walletConnection.getAccountId()
 
 	const keystore = new keyStores.BrowserLocalStorageKeyStore()
 	const keypair = (await keystore.getKey(nearConfig.networkId, accountId)) as KeyPairEd25519
@@ -96,16 +96,17 @@ async function setNearPrivateKey(privateKey: Uint8Array, accountId: string) {
 		const keystore = new keyStores.BrowserLocalStorageKeyStore()
 		await keystore.setKey(nearConfig.networkId, accountId, keypair)
 		return true
-	} catch {
+	} catch (error) {
 		// Couldn't set private key in LocalStorage
+		// eslint-disable-next-line no-console
+		console.log(error)
 	}
 	return false
 }
 
 async function removeNearPrivateKey() {
-	const _walletConnection = getWalletConnection()
-	const accountId = _walletConnection.getAccountId()
-	console.log(`AccountId whose key is to be removed, ${accountId}`)
+	const walletConnection = getWalletConnection()
+	const accountId = walletConnection.getAccountId()
 
 	const keystore = new keyStores.BrowserLocalStorageKeyStore()
 	await keystore.removeKey(nearConfig.networkId, accountId)
@@ -117,8 +118,8 @@ const nearPlugin: Plugin = async (_context, inject) => {
 	// eslint-disable-next-line no-console
 	console.log(`Smart Contract API initialised!`)
 
-	const _walletConnection = getWalletConnection()
-	console.log(`Is Signed in? ${_walletConnection.isSignedIn()}`)
+	const walletConnection = getWalletConnection()
+	console.log(`Is Signed in? ${walletConnection.isSignedIn()}`)
 
 	inject(`walletLogin`, walletLogin)
 	inject(`walletLogout`, walletLogout)

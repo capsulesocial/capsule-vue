@@ -23,12 +23,15 @@ async function register(payload: Profile, profileCID: string): Promise<boolean> 
 		setProfileNEAR(profileCID),
 	])
 
-	if (profileSet === true) {
-		const _walletConnection = getWalletConnection()
-		const _accountId: string = _walletConnection.getAccountId()
+	if (profileSet) {
+		const walletConnection = getWalletConnection()
 
-		const AuthObj: Authentication = { privateKey: encPrivateKey, id: payload.id, nearAccountId: _accountId }
-		const authstatus = await sendAuthentication(AuthObj)
+		const authObj: Authentication = {
+			privateKey: encPrivateKey,
+			id: payload.id,
+			nearAccountId: walletConnection.getAccountId() as string,
+		}
+		const authstatus = await sendAuthentication(authObj)
 
 		return authstatus
 	}
@@ -54,9 +57,9 @@ async function login(username: string, password: string): Promise<{ success: boo
 			decryptData(peerIDEncryptionKey, auth.privateKey.encryptedPeerIDPrivateKey, auth.privateKey.nonce),
 			getProfileNEAR(username),
 		])
-		if (profile.success === true) {
+		if (profile.success) {
 			const isKeySet = await setNearPrivateKey(privateKeyBytes, auth.nearAccountId)
-			if (isKeySet === true) {
+			if (isKeySet) {
 				const value = {
 					accountId: auth.nearAccountId,
 					allKeys: [],

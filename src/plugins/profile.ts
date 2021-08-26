@@ -11,20 +11,20 @@ declare module 'vue/types/vue' {
 }
 
 async function getProfileNEAR(username: string) {
-	const _contract: any = getContract()
+	const contract: any = getContract()
 	const { success, accountId } = await resolveUsername(username)
-	if (success === true) {
-		const profileCID: string = await _contract.getProfile({ accountId })
+	if (success) {
+		const profileCID: string = await contract.getProfile({ accountId })
 		return { success, profileCID }
 	}
 	return { success: false, profileCID: `` }
 }
 
 async function setProfileNEAR(cid: string) {
-	const _contract: any = getContract()
-	const _walletConnection = getWalletConnection()
-	if (_walletConnection.isSignedIn()) {
-		await _contract.setProfile({ cid })
+	const contract: any = getContract()
+	const walletConnection = getWalletConnection()
+	if (walletConnection.isSignedIn()) {
+		await contract.setProfile({ cid })
 		return true
 	}
 	return false
