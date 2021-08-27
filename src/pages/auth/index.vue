@@ -4,31 +4,37 @@
 			<CapsuleIcon />
 		</div>
 
-		<BrandedButton
-			v-show="!this.walletConnected"
-			class="w-64 self-center"
-			:action="$walletLogin"
-			text="Connect Wallet"
-		/>
-
 		<!-- Login -->
-		<section
-			v-show="this.walletConnected"
-			class="bg-white mx-auto lg:w-full lg:max-w-md rounded shadow-lg divide-y divide-gray-200"
-		>
+		<section class="bg-white mx-auto lg:w-full lg:max-w-md rounded shadow-lg divide-y divide-gray-200">
 			<article class="flex justify-around">
-				<span v-if="isLogin" class="text-primary p-5 inline-block border-b-2 border-primary font-bold"> Sign In </span>
-				<button v-if="!isLogin" class="focus:outline-none" @click="toggleFormType">Sign In</button>
-				<span v-if="!isLogin" class="text-primary p-5 inline-block border-b-2 border-primary font-bold"> Sign Up </span>
-				<button v-else class="focus:outline-none" @click="toggleFormType">Sign Up</button>
+				<span v-show="isLogin" class="text-primary p-5 inline-block border-b-2 border-primary font-bold">
+					Sign In
+				</span>
+				<button v-show="!isLogin" class="focus:outline-none" @click="toggleFormType">Sign In</button>
+				<span v-show="!isLogin" class="text-primary p-5 inline-block border-b-2 border-primary font-bold">
+					Sign Up
+				</span>
+				<button v-show="isLogin" class="focus:outline-none" @click="toggleFormType">Sign Up</button>
 			</article>
 
 			<article class="px-10 py-6 font-sans">
-				<h6 class="text-center italics text-gray-600">Wallet connected</h6>
+				<!-- Connect Wallet -->
+				<div class="flex justify-center">
+					<BrandedButton
+						v-show="!walletConnected && !isLogin"
+						class="w-64"
+						:action="$walletLogin"
+						text="Connect Wallet"
+					/>
+					<h6 v-show="walletConnected && !isLogin" class="text-center italics text-gray-600">Wallet connected</h6>
+				</div>
+
 				<!-- Register: Name -->
-				<label v-show="!isLogin" for="name" class="font-semibold text-sm text-gray-600 pb-1 block">Name</label>
+				<label v-show="!isLogin && walletConnected" for="name" class="font-semibold text-sm text-gray-600 pb-1 block"
+					>Name</label
+				>
 				<input
-					v-show="!isLogin"
+					v-show="!isLogin && walletConnected"
 					id="name"
 					v-model="name"
 					type="text"
@@ -48,8 +54,14 @@
 					"
 				/>
 				<!-- Sign in + Register: ID -->
-				<label for="id" class="font-semibold text-sm text-gray-600 pb-1 block">ID</label>
+				<label
+					v-show="isLogin || (!isLogin && walletConnected)"
+					for="id"
+					class="font-semibold text-sm text-gray-600 pb-1 block"
+					>ID</label
+				>
 				<input
+					v-show="isLogin || (!isLogin && walletConnected)"
 					id="id"
 					v-model="id"
 					type="text"
@@ -69,9 +81,11 @@
 					"
 				/>
 				<!-- Register: Contact -->
-				<label v-if="!isLogin" for="contact" class="font-semibold text-sm text-gray-600 pb-1 block">Contact</label>
+				<label v-show="walletConnected && !isLogin" for="contact" class="font-semibold text-sm text-gray-600 pb-1 block"
+					>Contact</label
+				>
 				<input
-					v-if="!isLogin"
+					v-show="walletConnected && !isLogin"
 					id="contact"
 					v-model="email"
 					type="email"
@@ -90,35 +104,49 @@
 						font-sans
 					"
 				/>
-				<label for="password" class="font-semibold text-sm text-gray-600 pb-1 block">Password</label>
+				<label
+					v-show="isLogin || (walletConnected && !isLogin)"
+					for="password"
+					class="font-semibold text-sm text-gray-600 pb-1 block"
+					>Password</label
+				>
 				<input
+					v-show="isLogin || (walletConnected && !isLogin)"
 					id="loginPassword"
 					v-model="password"
 					type="password"
 					placeholder="************"
 					class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full focus:outline-none focus:border-primary"
 				/>
-				<label v-if="!isLogin" for="confirmPassword" class="font-semibold text-sm text-gray-600 pb-1 block"
+				<label
+					v-show="walletConnected && !isLogin"
+					for="confirmPassword"
+					class="font-semibold text-sm text-gray-600 pb-1 block"
 					>Confirm Password</label
 				>
 				<input
-					v-if="!isLogin"
+					v-show="walletConnected && !isLogin"
 					id="confirmPassword"
 					v-model="confirmPassword"
 					type="password"
 					placeholder="************"
 					class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full focus:outline-none focus:border-primary"
 				/>
-				<BrandedButton :text="isLogin ? 'Sign In' : 'Sign Up'" :action="verify" class="w-full" />
+				<BrandedButton
+					v-show="isLogin || (walletConnected && !isLogin)"
+					:text="isLogin ? 'Sign In' : 'Sign Up'"
+					:action="verify"
+					class="w-full"
+				/>
 			</article>
 			<article
-				v-if="isLogin"
+				v-show="isLogin"
 				class="text-center whitespace-nowrap flex justify-between text-sm p-5 text-gray-600 font-sans"
 			>
 				<button class="px-4 py-2 focus:outline-none">Forgot Password</button>
 				<button class="px-4 py-2 focus:outline-none">Help</button>
 			</article>
-			<article v-else class="flex justify-center">
+			<article v-show="walletConnected && !isLogin" class="flex justify-center">
 				<label class="items-center p-5 text-gray-600 inline-flex">
 					<input v-model="consent" type="checkbox" class="form-checkbox h-4 w-4 text-primary" checked /><span
 						class="ml-2 text-gray-700 font-sans"
@@ -127,7 +155,6 @@
 				</label>
 			</article>
 		</section>
-		<BrandedButton class="fixed bottom-0 m-5" text="Admin Bypass (for development)" :action="adminBypass" />
 	</main>
 </template>
 
@@ -253,13 +280,6 @@ export default Vue.extend({
 					alert(`Password mismatch!`)
 				}
 			}
-		},
-		adminBypass() {
-			this.changeCID(`Qmdors4fRHTT6ut6BAjNHEARxfbnBwHSbyz7BaD4oJPwzZ`)
-			this.changeID(`admin`)
-			this.changeName(`Capsule Admin`)
-			this.changeEmail(`admin@admin.com`)
-			this.$router.push(`/settings`)
 		},
 	},
 })

@@ -37,7 +37,7 @@
 						class="font-sans uppercase"
 					>
 						<nuxt-link
-							:to="'/' + this.author.cid"
+							:to="'/' + this.author.id"
 							:class="this.$store.state.settings.darkMode ? 'text-lightActive' : 'text-darkActive'"
 							class="underline"
 						>

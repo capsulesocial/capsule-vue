@@ -63,7 +63,7 @@ export default Vue.extend({
 	},
 	created() {
 		this.$axios.$get(`/content`).then((p) => {
-			this.posts = p.data
+			this.posts = p.data.reverse()
 			this.isLoading = false
 		})
 	},
