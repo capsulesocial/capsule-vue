@@ -153,23 +153,25 @@ export default Vue.extend({
 			this.authorID = this.$store.state.session.id
 			this.authorCID = this.$store.state.session.cid
 		}
-		this.$getProfile(this.$props.post.authorCID).then((profile) => {
-			// Populate Avatar
-			this.authorName = profile.name
-			this.authorID = profile.id
-			this.authorCID = this.$props.post.authorCID
-			if (profile.avatar !== ``) {
-				this.$getPhoto(profile.avatar).then((image) => {
-					this.avatar = image
-				})
-			}
-			// Populate Featured Photo
-			if (this.post.featuredPhotoCID !== ``) {
-				this.$getPhoto(this.post.featuredPhotoCID).then((image) => {
-					this.featuredPhoto = image
-				})
-			}
-		})
+		this.$getProfileNEAR(this.$props.post.authorID).then((res) =>
+			this.$getProfile(res.profileCID).then((profile) => {
+				// Populate Avatar
+				this.authorName = profile.name
+				this.authorID = profile.id
+				this.authorCID = res.profileCID
+				if (profile.avatar !== ``) {
+					this.$getPhoto(profile.avatar).then((image) => {
+						this.avatar = image
+					})
+				}
+				// Populate Featured Photo
+				if (this.post.featuredPhotoCID !== ``) {
+					this.$getPhoto(this.post.featuredPhotoCID).then((image) => {
+						this.featuredPhoto = image
+					})
+				}
+			}),
+		)
 	},
 	methods: {
 		getStyles(): string {
