@@ -62,8 +62,7 @@ const config: NuxtConfig = {
   ],
 
   axios: {
-    // baseURL: 'http://test-node.capsule.social:3000/',
-    baseURL: 'http://localhost:3001/',
+    baseURL: 'http://test-node.capsule.social:3000/',
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
