@@ -146,32 +146,36 @@ export default Vue.extend({
 			featuredPhoto: ``,
 		}
 	},
-	created() {
-		if (this.$store.state.session.cid === this.$props.post.authorCID) {
+	async created() {
+		if (this.$store.state.session.id === this.$props.post.authorID) {
 			// Viewing own post
 			this.authorName = this.$store.state.session.name
-			this.authorID = this.$store.state.session.id
 			this.authorCID = this.$store.state.session.cid
+		} else {
+			// Viewing someone else's post
+			const nearProfile = await this.$getProfileNEAR(this.$props.post.authorID)
+			if (!nearProfile.success) {
+				throw new Error(`Could not get profile from near ${this.$props.post.authorID}`)
+			}
+			this.authorCID = nearProfile.profileCID
 		}
-		this.$getProfileNEAR(this.$props.post.authorID).then((res) =>
-			this.$getProfile(res.profileCID).then((profile) => {
-				// Populate Avatar
-				this.authorName = profile.name
-				this.authorID = profile.id
-				this.authorCID = res.profileCID
-				if (profile.avatar !== ``) {
-					this.$getPhoto(profile.avatar).then((image) => {
-						this.avatar = image
-					})
-				}
-				// Populate Featured Photo
-				if (this.post.featuredPhotoCID !== ``) {
-					this.$getPhoto(this.post.featuredPhotoCID).then((image) => {
-						this.featuredPhoto = image
-					})
-				}
-			}),
-		)
+		// This wasn't refactored to async/await to easily see the relevant changes (A complete async/await refactor is due)
+		this.$getProfile(this.authorCID).then((profile) => {
+			// Populate Avatar
+			this.authorName = profile.name
+			this.authorID = profile.id
+			if (profile.avatar !== ``) {
+				this.$getPhoto(profile.avatar).then((image) => {
+					this.avatar = image
+				})
+			}
+			// Populate Featured Photo
+			if (this.post.featuredPhotoCID !== ``) {
+				this.$getPhoto(this.post.featuredPhotoCID).then((image) => {
+					this.featuredPhoto = image
+				})
+			}
+		})
 	},
 	methods: {
 		getStyles(): string {
