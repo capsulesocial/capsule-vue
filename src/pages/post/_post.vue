@@ -97,7 +97,6 @@
 				<TagCard v-for="t in this.post.tags" :key="t.name" class="mr-2" :tag="t.name" />
 			</article>
 			<AuthorCard
-				:authorCID="this.post.authorCID"
 				:authorAvatar="this.authorAvatar"
 				:authorName="this.author.name"
 				:authorID="this.author.id"
@@ -170,14 +169,16 @@ export default Vue.extend({
 				})
 			}
 			// Get author profile
-			this.$getProfile(p.authorCID).then((profile: Profile) => {
-				this.author = profile
-				if (profile.avatar.length > 1) {
-					this.$getPhoto(profile.avatar).then((avatar) => {
-						this.authorAvatar = avatar
-					})
-				}
-			})
+			this.$getProfileNEAR(p.authorID).then((res) =>
+				this.$getProfile(res.profileCID).then((profile: Profile) => {
+					this.author = profile
+					if (profile.avatar.length > 1) {
+						this.$getPhoto(profile.avatar).then((avatar) => {
+							this.authorAvatar = avatar
+						})
+					}
+				}),
+			)
 		})
 		// Set filter dropdown event handler
 		window.addEventListener(

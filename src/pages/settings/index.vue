@@ -277,7 +277,7 @@ import BrandedButton from '@/components/BrandedButton.vue'
 import ChevronRight from '@/components/icons/ChevronRight.vue'
 import UploadAvatar from '@/components/icons/UploadAvatar.vue'
 import ColorMode from '@/components/ColorMode.vue'
-import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
+import { MutationType, getProfileFromSession, namespace as sessionStoreNamespace } from '~/store/session'
 import { sendProfileServer } from '~/plugins/server'
 export default Vue.extend({
 	components: {
@@ -364,8 +364,9 @@ export default Vue.extend({
 			}
 		},
 		async updateProfile() {
-			const cid = await this.$sendProfile(this.$store.state.session)
-			const serverProfile = await sendProfileServer(cid, this.$store.state.session)
+			const backendProfile = getProfileFromSession(this.$store.state.session)
+			const cid = await this.$sendProfile(backendProfile)
+			const serverProfile = await sendProfileServer(cid, backendProfile)
 			if (!serverProfile.success) {
 				alert(`Server Profile could not be updated`)
 				return false

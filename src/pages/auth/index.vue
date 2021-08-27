@@ -136,8 +136,13 @@ import Vue from 'vue'
 import { mapMutations } from 'vuex'
 import CapsuleIcon from '@/components/icons/Capsule.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
-import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
-import { Profile } from '~/interfaces/Profile'
+import {
+	MutationType,
+	createDefaultSession,
+	getProfileFromSession,
+	createSessionFromProfile,
+	namespace as sessionStoreNamespace,
+} from '~/store/session'
 import { signedInToWallet } from '~/plugins/near'
 import { sendProfileServer } from '~/plugins/server'
 export default Vue.extend({
@@ -196,7 +201,8 @@ export default Vue.extend({
 			if (this.isLogin) {
 				const { success, profileCID } = await this.$login(this.id, this.password)
 				if (success && signedInToWallet()) {
-					const account = await this.$getProfile(profileCID)
+					const backendProfile = await this.$getProfile(profileCID)
+					const account = createSessionFromProfile(profileCID, backendProfile)
 					account.cid = profileCID
 					this.changeCID(profileCID)
 					this.changeID(account.id)
@@ -223,34 +229,16 @@ export default Vue.extend({
 					return
 				}
 				if (this.password === this.confirmPassword) {
-					const account: Profile = {
-						cid: ``,
-						id: this.id,
-						name: this.name,
-						email: this.email,
-						password: ``,
-						bio: `Default bio.`,
-						location: ``,
-						posts: [],
-						reposts: [],
-						socials: [],
-						bookmarks: [],
-						categories: [],
-						comments: [],
-						followers: [],
-						following: [],
-						avatar: ``,
-					}
+					const account = createDefaultSession(this.id, this.name, this.email, ``) // TODO: We need to add the public key to the profile
 					// Send user profile to IPFS
-					const cid = await this.$sendProfile(account)
-					const serverProfile = await sendProfileServer(cid, account)
+					const cid = await this.$sendProfile(getProfileFromSession(account))
+					const serverProfile = await sendProfileServer(cid, getProfileFromSession(account))
 					if (!serverProfile.success) {
 						alert(`Invalid entry`)
 						return
 					}
 					account.cid = cid
-					account.password = this.password
-					const _res = await this.$register(account, cid)
+					const _res = await this.$register(this.id, this.password, cid)
 					if (_res === true) {
 						// Registration successful
 						this.changeCID(cid)

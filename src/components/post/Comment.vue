@@ -114,7 +114,6 @@ export default Vue.extend({
 	},
 	created() {
 		this.$getProfile(this.$props.comment.authorCID).then((p) => {
-			p.cid = this.$props.comment.authorCID
 			this.name = p.name
 			this.id = p.id
 		})

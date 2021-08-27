@@ -3,29 +3,30 @@ import type { GetterTree, MutationTree } from 'vuex'
 import type { RootState } from './index'
 import { Profile } from '~/interfaces/Profile'
 import { walletLogout, removeNearPrivateKey } from '~/plugins/near'
+export interface Session {
+	id: Profile[`id`]
+	name: Profile[`name`]
+	email: Profile[`email`]
+	bio: Profile[`bio`]
+	location: Profile[`location`]
+	avatar: Profile[`avatar`]
+	socials: Profile[`socials`]
+	publicKey: Profile[`publicKey`]
+	cid: string
+	posts: string[]
+	reposts: string[]
+	comments: string[]
+	bookmarks: string[]
+	categories: string[]
+	following: string[]
+	followers: string[]
+}
 
 export const namespace = `session`
 
-export const state = (): Profile => ({
-	cid: ``,
-	id: ``,
-	name: ``,
-	email: ``,
-	password: ``,
-	bio: `Default bio.`,
-	location: ``,
-	posts: [],
-	reposts: [],
-	socials: [],
-	bookmarks: [],
-	categories: [],
-	followers: [],
-	following: [],
-	avatar: ``,
-	comments: [],
-})
+export const state = (): Session => createDefaultSession(``, ``, ``, ``)
 
-export const getters: GetterTree<Profile, RootState> = {}
+export const getters: GetterTree<Session, RootState> = {}
 
 export const MutationType = {
 	CHANGE_CID: `updateCID`,
@@ -39,7 +40,7 @@ export const MutationType = {
 	LOGOUT: `logout`,
 }
 
-export const mutations: MutationTree<Profile> = {
+export const mutations: MutationTree<Session> = {
 	[MutationType.CHANGE_CID]: (state, newCID: string) => {
 		state.cid = newCID
 	},
@@ -65,14 +66,7 @@ export const mutations: MutationTree<Profile> = {
 		state.location = newLocation
 	},
 	[MutationType.LOGOUT]: (state) => {
-		state.cid = ``
-		state.id = ``
-		state.name = ``
-		state.email = ``
-		state.avatar = ``
-		state.bio = `Default bio.`
-		state.location = ``
-		state.posts = []
+		Object.assign(state, createDefaultSession(``, ``, ``, ``))
 		// Remove NEAR private key when logging out.
 		// walletLogout() removes only
 		// one key-value pair (null_wallet_auth_key)
@@ -80,4 +74,61 @@ export const mutations: MutationTree<Profile> = {
 		removeNearPrivateKey()
 		walletLogout()
 	},
+}
+
+/* Helpers */
+
+export function createDefaultSession(id: string, name: string, email: string, publicKey: string): Session {
+	return {
+		cid: ``,
+		id,
+		name,
+		email,
+		publicKey,
+		bio: `Default bio.`,
+		location: ``,
+		posts: [],
+		reposts: [],
+		socials: [],
+		bookmarks: [],
+		categories: [],
+		comments: [],
+		followers: [],
+		following: [],
+		avatar: ``,
+	}
+}
+
+export function getProfileFromSession(s: Session): Profile {
+	return {
+		id: s.id,
+		name: s.name,
+		email: s.email,
+		bio: s.bio,
+		location: s.location,
+		avatar: s.avatar,
+		socials: s.socials,
+		publicKey: s.publicKey,
+	}
+}
+
+export function createSessionFromProfile(cid: string, p: Profile): Session {
+	return {
+		cid,
+		id: p.id,
+		name: p.name,
+		email: p.email,
+		publicKey: p.publicKey,
+		bio: p.bio,
+		location: p.location,
+		avatar: p.avatar,
+		posts: [],
+		reposts: [],
+		socials: [],
+		bookmarks: [],
+		categories: [],
+		comments: [],
+		followers: [],
+		following: [],
+	}
 }
