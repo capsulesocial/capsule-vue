@@ -38,10 +38,6 @@ export default Vue.extend({
 		ProfileIcon,
 	},
 	props: {
-		authorCID: {
-			type: String,
-			default: null,
-		},
 		authorAvatar: {
 			type: String,
 			default: ``,

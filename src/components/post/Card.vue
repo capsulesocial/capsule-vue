@@ -141,26 +141,26 @@ export default Vue.extend({
 			showComments: false,
 			authorName: ``,
 			authorID: ``,
-			authorCID: ``,
 			avatar: ``,
 			featuredPhoto: ``,
 		}
 	},
 	async created() {
+		let authorCID = ``
 		if (this.$store.state.session.id === this.$props.post.authorID) {
 			// Viewing own post
 			this.authorName = this.$store.state.session.name
-			this.authorCID = this.$store.state.session.cid
+			authorCID = this.$store.state.session.cid
 		} else {
 			// Viewing someone else's post
 			const nearProfile = await this.$getProfileNEAR(this.$props.post.authorID)
 			if (!nearProfile.success) {
 				throw new Error(`Could not get profile from near ${this.$props.post.authorID}`)
 			}
-			this.authorCID = nearProfile.profileCID
+			authorCID = nearProfile.profileCID
 		}
 		// This wasn't refactored to async/await to easily see the relevant changes (A complete async/await refactor is due)
-		this.$getProfile(this.authorCID).then((profile) => {
+		this.$getProfile(authorCID).then((profile) => {
 			// Populate Avatar
 			this.authorName = profile.name
 			this.authorID = profile.id

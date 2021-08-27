@@ -97,7 +97,6 @@
 				<TagCard v-for="t in this.post.tags" :key="t.name" class="mr-2" :tag="t.name" />
 			</article>
 			<AuthorCard
-				:authorCID="this.post.authorCID"
 				:authorAvatar="this.authorAvatar"
 				:authorName="this.author.name"
 				:authorID="this.author.id"
