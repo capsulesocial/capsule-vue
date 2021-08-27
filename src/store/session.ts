@@ -66,14 +66,7 @@ export const mutations: MutationTree<Session> = {
 		state.location = newLocation
 	},
 	[MutationType.LOGOUT]: (state) => {
-		state.cid = ``
-		state.id = ``
-		state.name = ``
-		state.email = ``
-		state.avatar = ``
-		state.bio = `Default bio.`
-		state.location = ``
-		state.posts = []
+		Object.assign(state, createDefaultSession(``, ``, ``, ``))
 		// Remove NEAR private key when logging out.
 		// walletLogout() removes only
 		// one key-value pair (null_wallet_auth_key)
