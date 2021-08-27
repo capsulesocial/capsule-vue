@@ -338,7 +338,6 @@ export default Vue.extend({
 					timestamp: Date.now(),
 					tags: this.$store.state.draft.tags,
 					authorID: this.$store.state.session.id,
-					authorCID: this.$store.state.session.cid,
 					featuredPhotoCID: this.featuredPhotoCID,
 				}
 				const cid = await this.$sendPost(p)

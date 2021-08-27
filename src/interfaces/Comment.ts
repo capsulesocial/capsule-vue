@@ -1,6 +1,6 @@
 export interface Comment {
 	postID: string
-	authorCID: string
+	authorID: string
 	authorAvatarCID: string
 	content: string
 	emotion: string

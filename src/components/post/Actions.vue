@@ -162,7 +162,7 @@ export default Vue.extend({
 			} else {
 				const c: Comment = {
 					postID: this.post.id,
-					authorCID: this.$store.state.session.cid,
+					authorID: this.$store.state.session.id,
 					authorAvatarCID: this.$store.state.session.avatar,
 					content: this.comment,
 					emotion: this.emotion,
