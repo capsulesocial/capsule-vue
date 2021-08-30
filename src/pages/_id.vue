@@ -1,5 +1,5 @@
 <template>
-	<main class="p-4 w-full">
+	<main v-if="this.currentUser !== null" class="p-4 w-full">
 		<!-- Name, socials, follow, bio -->
 		<section class="flex flex-row justify-between">
 			<article class="flex items-center">
