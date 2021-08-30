@@ -159,23 +159,17 @@ export default Vue.extend({
 			}
 			authorCID = nearProfile.profileCID
 		}
-		// This wasn't refactored to async/await to easily see the relevant changes (A complete async/await refactor is due)
-		this.$getProfile(authorCID).then((profile) => {
-			// Populate Avatar
-			this.authorName = profile.name
-			this.authorID = profile.id
-			if (profile.avatar !== ``) {
-				this.$getPhoto(profile.avatar).then((image) => {
-					this.avatar = image
-				})
-			}
-			// Populate Featured Photo
-			if (this.post.featuredPhotoCID !== ``) {
-				this.$getPhoto(this.post.featuredPhotoCID).then((image) => {
-					this.featuredPhoto = image
-				})
-			}
-		})
+		const profile = await this.$getProfile(authorCID)
+		// Populate Avatar
+		this.authorName = profile.name
+		this.authorID = profile.id
+		if (profile.avatar !== ``) {
+			this.avatar = await this.$getPhoto(profile.avatar)
+		}
+		// Populate Featured Photo
+		if (this.post.featuredPhotoCID !== ``) {
+			this.featuredPhoto = await this.$getPhoto(this.post.featuredPhotoCID)
+		}
 	},
 	methods: {
 		getStyles(): string {

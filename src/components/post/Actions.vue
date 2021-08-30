@@ -138,11 +138,9 @@ export default Vue.extend({
 			filter: ``,
 		}
 	},
-	created() {
+	async created() {
 		if (this.$store.state.session.avatar !== ``) {
-			this.$getPhoto(this.$store.state.session.avatar).then((image) => {
-				this.myAvatar = image
-			})
+			this.myAvatar = await this.$getPhoto(this.$store.state.session.avatar)
 		}
 	},
 	methods: {

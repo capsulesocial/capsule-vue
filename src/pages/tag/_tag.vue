@@ -24,11 +24,10 @@ export default Vue.extend({
 			tag: this.$route.params.tag,
 		}
 	},
-	created() {
+	async created() {
 		// Fetch posts with tag
-		this.$axios.$get(`/content?tag=` + this.$route.params.tag).then((res) => {
-			this.posts = res.data
-		})
+		const res = await this.$axios.$get(`/content?tag=` + this.$route.params.tag)
+		this.posts = res.data
 	},
 })
 </script>

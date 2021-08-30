@@ -136,8 +136,6 @@ import FriendButton from '@/components/FriendButton.vue'
 import ExternalURLIcon from '@/components/icons/ExternalURL.vue'
 import SettingsIcon from '@/components/icons/Settings.vue'
 
-import { Profile } from '~/interfaces/Profile'
-
 export default Vue.extend({
 	name: `RootIDPage`,
 	components: {
@@ -154,20 +152,16 @@ export default Vue.extend({
 			posts: [],
 		}
 	},
-	created() {
+	async created() {
 		// Get user profile
-		this.$getProfileNEAR(this.$route.params.id).then((res) => {
-			if (res.success) {
-				this.$getProfile(res.profileCID).then((profile: Profile) => {
-					this.currentUser = profile
-					if (profile.avatar !== ``) {
-						this.$getPhoto(profile.avatar).then((image) => {
-							this.avatar = image
-						})
-					}
-				})
+		const res = await this.$getProfileNEAR(this.$route.params.id)
+		if (res.success) {
+			const profile = await this.$getProfile(res.profileCID)
+			this.currentUser = profile
+			if (profile.avatar !== ``) {
+				this.avatar = await this.$getPhoto(profile.avatar)
 			}
-		})
+		}
 	},
 	methods: {
 		getStyles(tab): string {

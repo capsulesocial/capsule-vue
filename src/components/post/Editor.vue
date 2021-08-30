@@ -312,16 +312,13 @@ export default Vue.extend({
 				}
 			}
 		},
-		uploadImage(image): void {
-			this.$sendPhoto(image).then((cid) => {
-				this.featuredPhotoCID = cid
-				this.downloadImage(cid)
-			})
+		async uploadImage(image: any): Promise<void> {
+			const cid = await this.$sendPhoto(image)
+			this.featuredPhotoCID = cid
+			this.downloadImage(cid)
 		},
-		downloadImage(cid): void {
-			this.$getPhoto(cid).then((image) => {
-				this.featuredPhoto = image
-			})
+		async downloadImage(cid: any): Promise<void> {
+			this.featuredPhoto = await this.$getPhoto(cid)
 		},
 		async post(): Promise<void> {
 			this.input = this.turndownService.turndown(this.editor.getContent())

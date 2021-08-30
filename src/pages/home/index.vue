@@ -61,35 +61,30 @@ export default Vue.extend({
 			isLoading: true,
 		}
 	},
-	created() {
-		this.$axios.$get(`/content`).then((p) => {
-			this.posts = p.data.reverse()
-			this.isLoading = false
-		})
+	async created() {
+		const p = await this.$axios.$get(`/content`)
+		this.posts = p.data.reverse()
+		this.isLoading = false
 	},
 	methods: {
-		sortFeed(a) {
+		async sortFeed(a: `NEW` | `FOLLOWING` | `TOP`) {
 			this.posts = []
 			this.isLoading = true
 			this.algorithm = a
+			const p = await this.$axios.$get(`/content`)
+			// This should be refactored to a switch statement (TODO)
 			// Sort by time
 			if (a === `NEW`) {
 				// Get new posts from all following & category feeds
-				this.$axios.$get(`/content`).then((p) => {
-					this.posts = p.data.reverse()
-					this.isLoading = false
-				})
+				this.posts = p.data.reverse()
+				this.isLoading = false
 			} else if (a === `FOLLOWING`) {
 				// Get list of accounts being followed
-				this.$axios.$get(`/content`).then((p) => {
-					this.posts = p.data
-					this.isLoading = false
-				})
+				this.posts = p.data
+				this.isLoading = false
 			} else if (a === `TOP`) {
-				this.$axios.$get(`/content`).then((p) => {
-					this.posts = p.data
-					this.isLoading = false
-				})
+				this.posts = p.data
+				this.isLoading = false
 			}
 			return this.posts
 		},

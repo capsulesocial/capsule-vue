@@ -112,15 +112,12 @@ export default Vue.extend({
 			id: ``,
 		}
 	},
-	created() {
-		this.$getProfile(this.$props.comment.authorCID).then((p) => {
-			this.name = p.name
-			this.id = p.id
-		})
+	async created() {
+		const p = await this.$getProfile(this.$props.comment.authorCID)
+		this.name = p.name
+		this.id = p.id
 		if (this.$props.comment.authorAvatarCID !== ``) {
-			this.$getPhoto(this.$props.comment.authorAvatarCID).then((avatar) => {
-				this.avatar = avatar
-			})
+			this.avatar = await this.$getPhoto(this.$props.comment.authorAvatarCID)
 		}
 	},
 	methods: {

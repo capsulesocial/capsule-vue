@@ -32,12 +32,11 @@ export default Vue.extend({
 			isLoading: true,
 		}
 	},
-	created() {
+	async created() {
 		// Fetch posts from Orbit DB by ID
-		this.$axios.$get(`/content?authorID=` + this.$route.params.id).then((res) => {
-			this.posts = res.data
-			this.isLoading = false
-		})
+		const res = await this.$axios.$get(`/content?authorID=` + this.$route.params.id)
+		this.posts = res.data
+		this.isLoading = false
 
 		// const postList = this.$props.profile.posts
 		// Fetching posts from IPFS
