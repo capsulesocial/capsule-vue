@@ -191,19 +191,11 @@ export default Vue.extend({
 			this.emotion = reaction
 		},
 		filterComments() {
-			let cList: Comment[] = []
-			if (this.filter === ``) {
-				cList = this.comments
-			} else {
-				for (const c in this.comments) {
-					if (this.comments[c].emotion === this.filter) {
-						cList.push(this.comments[c])
-					}
-				}
+			let cList: Comment[] = this.comments
+			if (this.filter !== ``) {
+				cList = cList.filter((c) => c.emotion === this.filter)
 			}
-			cList = cList.slice().sort((p0, p1) => {
-				return p1.timestamp.getTime() - p0.timestamp.getTime()
-			})
+			cList = cList.slice().sort((p0, p1) => p1.timestamp.getTime() - p0.timestamp.getTime())
 			return cList
 		},
 	},
