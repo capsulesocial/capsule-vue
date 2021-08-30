@@ -6,15 +6,14 @@ declare module 'vue/types/vue' {
 	}
 }
 
-async function hkdf(password: Uint8Array, salt: Uint8Array) {
-	const ec = new TextEncoder()
+async function hkdf(password: Uint8Array, salt: Uint8Array, info: Uint8Array) {
 	const key = await window.crypto.subtle.importKey(`raw`, password, `HKDF`, false, [`deriveBits`, `deriveKey`])
 
 	const derivedKey = await window.crypto.subtle.deriveBits(
 		{
 			name: `HKDF`,
 			hash: `SHA-256`,
-			info: ec.encode(`CapsuleBlogchainAuth`),
+			info,
 			salt,
 		},
 		key,
@@ -78,14 +77,20 @@ async function scrypt(passphrase: Uint8Array, salt: Uint8Array) {
 	return derivedKey
 }
 
-async function getEncryptedPeerIDPrivateKey(id: string, password: string, peerIDPrivateKey: Uint8Array) {
+async function getEncryptedPeerIDPrivateKey(
+	id: string,
+	password: string,
+	saltScrypt: string,
+	info: string,
+	peerIDPrivateKey: Uint8Array,
+) {
 	const ec = new TextEncoder()
 
-	// HKDF(key: userPassword, info: "CapsuleBlogchainAuth", salt: username)
-	const { hp0, hp1 } = await hkdf(ec.encode(password), ec.encode(id))
+	// HKDF(key: userPassword, salt: username, info: info)
+	const { hp0, hp1 } = await hkdf(ec.encode(password), ec.encode(id), ec.encode(info))
 
 	// peerIDEncryptionKey = SCRYPT (pw: hp0, salt: "CapsuleBlogchainAuth-${username}", N=2^15, r=8, p=1)
-	const peerIDEncryptionKey = await scrypt(hp0, ec.encode(`CapsuleBlogchainAuth-${id}`))
+	const peerIDEncryptionKey = await scrypt(hp0, ec.encode(saltScrypt))
 
 	// encryptedPeerIDPrivateKey = AES-GCM(key: peerIDEncryptionKey, plaintext: peerIDPrivateKey, nonce: nonce)
 	const nonce = window.crypto.getRandomValues(new Uint8Array(12))

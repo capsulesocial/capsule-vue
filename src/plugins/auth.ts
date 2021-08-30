@@ -18,7 +18,7 @@ async function register(id: string, password: string, profileCID: string): Promi
 	const privateKeyBytes = await getNearPrivateKey()
 
 	const [encPrivateKey, profileSet] = await Promise.all([
-		getEncryptedPeerIDPrivateKey(id, password, privateKeyBytes),
+		getEncryptedPeerIDPrivateKey(id, password, `CapsuleBlogchainAuth-${id}`, `CapsuleBlogchainAuth`, privateKeyBytes),
 		setProfileNEAR(profileCID),
 	])
 
@@ -41,8 +41,8 @@ async function register(id: string, password: string, profileCID: string): Promi
 async function login(username: string, password: string): Promise<{ success: boolean; profileCID: string }> {
 	const ec = new TextEncoder()
 
-	// HKDF(key: userPassword, info: "CapsuleBlogchainAuth", salt: username)
-	const { hp0, hp1 } = await hkdf(ec.encode(password), ec.encode(username))
+	// HKDF(key: userPassword, salt: username, info: "CapsuleBlogchainAuth")
+	const { hp0, hp1 } = await hkdf(ec.encode(password), ec.encode(username), ec.encode(`CapsuleBlogchainAuth`))
 
 	// peerIDEncryptionKey = SCRYPT (pw: hp0, salt: "CapsuleBlogchainAuth-${username}", N=2^15, r=8, p=1)
 	const peerIDEncryptionKey = await scrypt(hp0, ec.encode(`CapsuleBlogchainAuth-${username}`))
