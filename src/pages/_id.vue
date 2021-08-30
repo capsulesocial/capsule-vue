@@ -135,6 +135,14 @@ import GitHubIcon from '@/components/icons/brands/GitHub.vue'
 import FriendButton from '@/components/FriendButton.vue'
 import ExternalURLIcon from '@/components/icons/ExternalURL.vue'
 import SettingsIcon from '@/components/icons/Settings.vue'
+import { Profile } from '@/interfaces/Profile'
+import { Post } from '@/interfaces/Post'
+
+interface IData {
+	avatar: string
+	currentUser: Profile | null
+	posts: Post[]
+}
 
 export default Vue.extend({
 	name: `RootIDPage`,
@@ -145,10 +153,10 @@ export default Vue.extend({
 		ExternalURLIcon,
 		SettingsIcon,
 	},
-	data() {
+	data(): IData {
 		return {
 			avatar: ``,
-			currentUser: {},
+			currentUser: null,
 			posts: [],
 		}
 	},

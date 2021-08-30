@@ -117,6 +117,7 @@ import Share from '@/components/post/Share.vue'
 import CommentIcon from '@/components/icons/Comment.vue'
 import FriendButton from '@/components/FriendButton.vue'
 import TagPill from '@/components/Tag.vue'
+import { Post } from '@/interfaces/Post'
 
 export default Vue.extend({
 	name: `PostCard`,
@@ -132,7 +133,7 @@ export default Vue.extend({
 	},
 	props: {
 		post: {
-			type: Object,
+			type: Object as () => Post,
 			default: null,
 		},
 	},

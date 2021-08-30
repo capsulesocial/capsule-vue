@@ -207,6 +207,23 @@ import { Tag } from '@/interfaces/Tag'
 import { MutationType, namespace as sessionStoreNamespace, getProfileFromSession, Session } from '~/store/session'
 import { sendProfileServer } from '~/plugins/server'
 
+interface IData {
+	title: string
+	subtitle: string
+	input: string
+	tag: string
+	featuredPhoto: null | any
+	featuredPhotoCID: string
+	editor: MediumEditor
+	turndownService: Turndown
+	tabs: {
+		tags: boolean
+		category: boolean
+		image: boolean
+	}
+	category: string
+}
+
 export default Vue.extend({
 	components: {
 		BrandedButton,
@@ -216,7 +233,7 @@ export default Vue.extend({
 		ChevronDown,
 		XIcon,
 	},
-	data() {
+	data(): IData {
 		let input: string = ``
 		if (this.$store.state.draft.content !== ``) {
 			input = this.$store.state.draft.content

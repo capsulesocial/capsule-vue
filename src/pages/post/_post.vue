@@ -130,6 +130,17 @@ import BookmarkButton from '@/components/post/BookmarkButton.vue'
 import ShareButton from '@/components/post/Share.vue'
 import HeaderMagic from '@/components/HeaderMagic.vue'
 import MoreIcon from '@/components/icons/More.vue'
+import { Post } from '@/interfaces/Post'
+import { Profile } from '@/interfaces/Profile'
+
+interface IData {
+	post: Post | null
+	author: Profile | null
+	authorAvatar: string
+	content: string
+	featuredPhoto: null | string
+	showFilter: boolean
+}
 
 export default Vue.extend({
 	components: {
@@ -143,10 +154,10 @@ export default Vue.extend({
 	},
 	layout: `Reader`,
 	// mixins: [markdown],
-	data() {
+	data(): IData {
 		return {
-			post: {},
-			author: {},
+			post: null,
+			author: null,
 			authorAvatar: ``,
 			content: ``,
 			featuredPhoto: null,
@@ -155,16 +166,15 @@ export default Vue.extend({
 	},
 	async created() {
 		// Fetch post from IPFS,
-		const p = await this.$getPost(this.$route.params.post)
-		this.post = p
+		this.post = await this.$getPost(this.$route.params.post)
 		// Convert markdown to HTML
-		this.content = marked(p.content)
+		this.content = marked(this.post.content)
 		// Get featured photo
-		if (p.featuredPhotoCID !== ``) {
-			this.featuredPhoto = await this.$getPhoto(p.featuredPhotoCID)
+		if (this.post.featuredPhotoCID !== ``) {
+			this.featuredPhoto = await this.$getPhoto(this.post.featuredPhotoCID)
 		}
 		// Get author profile
-		const res = await this.$getProfileNEAR(p.authorID)
+		const res = await this.$getProfileNEAR(this.post.authorID)
 		const profile = await this.$getProfile(res.profileCID)
 		this.author = profile
 		if (profile.avatar.length > 1) {

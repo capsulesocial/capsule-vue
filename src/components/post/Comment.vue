@@ -89,6 +89,16 @@ import Vue from 'vue'
 import ProfileIcon from '@/components/icons/Person.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 import Reply from '@/components/post/Reply.vue'
+import { Comment } from '@/interfaces/Comment'
+
+interface IData {
+	isReplying: boolean
+	reply: string
+	replies: any[]
+	avatar: string
+	name: string
+	id: string
+}
 
 export default Vue.extend({
 	components: {
@@ -98,11 +108,11 @@ export default Vue.extend({
 	},
 	props: {
 		comment: {
-			type: Object,
+			type: Object as () => Comment,
 			default: null,
 		},
 	},
-	data() {
+	data(): IData {
 		return {
 			isReplying: false,
 			reply: ``,
@@ -122,7 +132,7 @@ export default Vue.extend({
 	},
 	methods: {
 		sendReply() {
-			if (this.comment === `` || !this.$qualityText(this.reply)) {
+			if (!this.$qualityText(this.reply)) {
 				alert(`Invalid reply!`)
 			} else {
 				const r = {
@@ -140,7 +150,7 @@ export default Vue.extend({
 				this.reply = ``
 			}
 		},
-		filterReplies(): [] {
+		filterReplies(): any[] {
 			const rList = this.replies.slice().sort((p0, p1) => {
 				return p1.timestamp - p0.timestamp
 			})

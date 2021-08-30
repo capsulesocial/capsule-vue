@@ -109,6 +109,18 @@ import ProfileIcon from '@/components/icons/Person.vue'
 import CommentCard from '@/components/post/Comment.vue'
 import CommentFilter from '@/components/post/CommentFilter.vue'
 import FlipIcon from '@/components/icons/Flip.vue'
+import { Post } from '@/interfaces/Post'
+
+interface IData {
+	comments: Comment[]
+	comment: string
+	emotion: string
+	emotionCategory: string
+	myAvatar: string
+	showEmotions: boolean
+	commentBackground: string
+	filter: string
+}
 
 export default Vue.extend({
 	name: `ComponentPostActions`,
@@ -121,15 +133,14 @@ export default Vue.extend({
 	},
 	props: {
 		post: {
-			type: Object,
+			type: Object as () => Post,
 			default: null,
 		},
 	},
-	data() {
-		const comments: Comment[] = []
+	data(): IData {
 		return {
 			comment: ``,
-			comments,
+			comments: [],
 			emotion: ``,
 			emotionCategory: `default`,
 			myAvatar: ``,
@@ -147,11 +158,11 @@ export default Vue.extend({
 		setFilter(reaction: string): void {
 			this.filter = reaction
 		},
-		setEmotion(r) {
+		setEmotion(r: string) {
 			this.emotion = r
 			this.showEmotions = false
 		},
-		setEmotionCategory(c) {
+		setEmotionCategory(c: string) {
 			this.emotionCategory = c
 		},
 		sendComment() {
@@ -159,7 +170,6 @@ export default Vue.extend({
 				alert(`invalid comment!`)
 			} else {
 				const c: Comment = {
-					postID: this.post.id,
 					authorID: this.$store.state.session.id,
 					authorAvatarCID: this.$store.state.session.avatar,
 					content: this.comment,
@@ -177,7 +187,7 @@ export default Vue.extend({
 				this.emotionCategory = `default`
 			}
 		},
-		handleReaction(reaction) {
+		handleReaction(reaction: string) {
 			this.emotion = reaction
 		},
 		filterComments() {
