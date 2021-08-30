@@ -172,13 +172,25 @@ import {
 } from '~/store/session'
 import { signedInToWallet } from '~/plugins/near'
 import { sendProfileServer } from '~/plugins/server'
+
+interface IData {
+	isLogin: boolean
+	name: string
+	id: string
+	email: string
+	password: string
+	confirmPassword: string | null
+	consent: boolean
+	walletConnected: boolean
+}
+
 export default Vue.extend({
 	components: {
 		CapsuleIcon,
 		BrandedButton,
 	},
 	layout: `unauth`,
-	data() {
+	data(): IData {
 		return {
 			isLogin: false,
 			name: ``,

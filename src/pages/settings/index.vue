@@ -279,6 +279,18 @@ import UploadAvatar from '@/components/icons/UploadAvatar.vue'
 import ColorMode from '@/components/ColorMode.vue'
 import { MutationType, getProfileFromSession, namespace as sessionStoreNamespace } from '~/store/session'
 import { sendProfileServer } from '~/plugins/server'
+
+interface IData {
+	newName: string
+	profilePic: null | string
+	newID: string
+	newEmail: string
+	location: string
+	bio: string
+	maxCharBio: number
+	tab: string
+}
+
 export default Vue.extend({
 	components: {
 		VerifySocial: () => import(`@/components/VerifySocial.vue`),
@@ -287,7 +299,7 @@ export default Vue.extend({
 		UploadAvatar,
 		ColorMode,
 	},
-	data() {
+	data(): IData {
 		return {
 			newName: ``,
 			profilePic: null,

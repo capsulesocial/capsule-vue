@@ -49,15 +49,22 @@ import Vue from 'vue'
 import PostCard from '@/components/post/Card.vue'
 import { Post } from '~/interfaces/Post'
 
+type Algorithm = `NEW` | `FOLLOWING` | `TOP`
+
+interface IData {
+	posts: Post[]
+	isLoading: boolean
+	algorithm: Algorithm
+}
+
 export default Vue.extend({
 	components: {
 		PostCard,
 	},
-	data() {
-		const posts: Post[] = []
+	data(): IData {
 		return {
 			algorithm: `NEW`,
-			posts,
+			posts: [],
 			isLoading: true,
 		}
 	},
@@ -67,7 +74,7 @@ export default Vue.extend({
 		this.isLoading = false
 	},
 	methods: {
-		async sortFeed(a: `NEW` | `FOLLOWING` | `TOP`) {
+		async sortFeed(a: Algorithm) {
 			this.posts = []
 			this.isLoading = true
 			this.algorithm = a

@@ -13,12 +13,17 @@
 <script lang="ts">
 import Vue from 'vue'
 import PostCard from '@/components/post/Card.vue'
+import { Post } from '@/interfaces/Post'
+
+interface IData {
+	posts: Post[]
+}
 
 export default Vue.extend({
 	components: {
 		PostCard,
 	},
-	data() {
+	data(): IData {
 		return {
 			posts: [],
 		}

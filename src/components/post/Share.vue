@@ -60,6 +60,7 @@ import SendIcon from '@/components/icons/Share.vue'
 import TwitterIcon from '@/components/icons/brands/Twitter.vue'
 import LinkIcon from '@/components/icons/Link.vue'
 import RepostIcon from '@/components/icons/Repost.vue'
+import { Post } from '@/interfaces/Post'
 
 export default Vue.extend({
 	components: {
@@ -70,7 +71,7 @@ export default Vue.extend({
 	},
 	props: {
 		post: {
-			type: Object,
+			type: Object as () => Post & { id: string }, // TODO fix the post type,
 			default: null,
 		},
 	},

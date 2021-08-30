@@ -9,7 +9,12 @@
 <script lang="ts">
 import Vue from 'vue'
 import PostCard from '@/components/post/Card.vue'
-import { Post } from '~/interfaces/Post'
+import { Post } from '@/interfaces/Post'
+import { Profile } from '@/interfaces/Profile'
+
+interface IData {
+	posts: Post[]
+}
 
 export default Vue.extend({
 	components: {
@@ -17,14 +22,13 @@ export default Vue.extend({
 	},
 	props: {
 		profile: {
-			type: Object,
+			type: Object as () => Profile,
 			default: null,
 		},
 	},
-	data() {
-		const posts: Post[] = []
+	data(): IData {
 		return {
-			posts,
+			posts: [],
 		}
 	},
 	async created() {
