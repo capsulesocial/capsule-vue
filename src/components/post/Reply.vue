@@ -56,11 +56,9 @@ export default Vue.extend({
 			avatar: ``,
 		}
 	},
-	created() {
+	async created() {
 		if (this.$props.reply.authorAvatarCID !== null) {
-			this.$getPhoto(this.$props.reply.authorAvatarCID).then((image) => {
-				this.avatar = image
-			})
+			this.avatar = await this.$getPhoto(this.$props.reply.authorAvatarCID)
 		}
 	},
 	methods: {

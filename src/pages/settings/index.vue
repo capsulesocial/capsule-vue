@@ -299,11 +299,9 @@ export default Vue.extend({
 			tab: ``,
 		}
 	},
-	created() {
+	async created() {
 		if (this.$store.state.session.avatar !== ``) {
-			this.$getPhoto(this.$store.state.session.avatar).then((image) => {
-				this.profilePic = image
-			})
+			this.profilePic = await this.$getPhoto(this.$store.state.session.avatar)
 		}
 		// Check for dark mode
 		const prefersDarkMode = window.matchMedia(`(prefers-color-scheme: dark)`).matches
@@ -383,10 +381,8 @@ export default Vue.extend({
 			this.downloadImage(avatarCID)
 			await this.updateProfile()
 		},
-		downloadImage(cid) {
-			this.$getPhoto(cid).then((image) => {
-				this.profilePic = image
-			})
+		async downloadImage(cid: any) {
+			this.profilePic = await this.$getPhoto(cid)
 		},
 		checkBio() {
 			const charCount = this.bio.length

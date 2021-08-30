@@ -131,9 +131,6 @@ import ShareButton from '@/components/post/Share.vue'
 import HeaderMagic from '@/components/HeaderMagic.vue'
 import MoreIcon from '@/components/icons/More.vue'
 
-import { Post } from '~/interfaces/Post'
-import { Profile } from '~/interfaces/Profile'
-
 export default Vue.extend({
 	components: {
 		PostActions,
@@ -156,30 +153,23 @@ export default Vue.extend({
 			showFilter: false,
 		}
 	},
-	created() {
+	async created() {
 		// Fetch post from IPFS,
-		this.$getPost(this.$route.params.post).then((p: Post) => {
-			this.post = p
-			// Convert markdown to HTML
-			this.content = marked(p.content)
-			// Get featured photo
-			if (p.featuredPhotoCID !== ``) {
-				this.$getPhoto(p.featuredPhotoCID).then((image) => {
-					this.featuredPhoto = image
-				})
-			}
-			// Get author profile
-			this.$getProfileNEAR(p.authorID).then((res) =>
-				this.$getProfile(res.profileCID).then((profile: Profile) => {
-					this.author = profile
-					if (profile.avatar.length > 1) {
-						this.$getPhoto(profile.avatar).then((avatar) => {
-							this.authorAvatar = avatar
-						})
-					}
-				}),
-			)
-		})
+		const p = await this.$getPost(this.$route.params.post)
+		this.post = p
+		// Convert markdown to HTML
+		this.content = marked(p.content)
+		// Get featured photo
+		if (p.featuredPhotoCID !== ``) {
+			this.featuredPhoto = await this.$getPhoto(p.featuredPhotoCID)
+		}
+		// Get author profile
+		const res = await this.$getProfileNEAR(p.authorID)
+		const profile = await this.$getProfile(res.profileCID)
+		this.author = profile
+		if (profile.avatar.length > 1) {
+			this.authorAvatar = await this.$getPhoto(profile.avatar)
+		}
 		// Set filter dropdown event handler
 		window.addEventListener(
 			`click`,

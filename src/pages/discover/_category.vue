@@ -23,11 +23,10 @@ export default Vue.extend({
 			posts: [],
 		}
 	},
-	created() {
+	async created() {
 		// Fetch posts from Orbit DB by ID
-		this.$axios.$get(`/content?category=` + this.$route.params.category).then((res) => {
-			this.posts = res.data
-		})
+		const res = await this.$axios.$get(`/content?category=` + this.$route.params.category)
+		this.posts = res.data
 	},
 })
 </script>
