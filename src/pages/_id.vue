@@ -172,7 +172,7 @@ export default Vue.extend({
 		}
 	},
 	methods: {
-		getStyles(tab): string {
+		getStyles(tab: string): string {
 			let res = ``
 			if (this.$store.state.settings.darkMode) {
 				res += `text-lightSecondaryText border-lightActive`
@@ -184,7 +184,7 @@ export default Vue.extend({
 			}
 			return res
 		},
-		openWindow(url) {
+		openWindow(url: string) {
 			if (process.client) {
 				window.open(url, `_blank`)
 			}

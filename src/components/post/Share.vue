@@ -118,7 +118,7 @@ export default Vue.extend({
 				alert(`Repost Removed!`)
 			}
 		},
-		handleShare(type) {
+		handleShare(type: string) {
 			const shareElement = document.createElement(`textarea`)
 			shareElement.value = `${document.location.origin}/${this.post.authorID}/${this.post.id}`
 			shareElement.style.opacity = `0`

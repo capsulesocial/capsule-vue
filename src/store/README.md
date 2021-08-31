@@ -2,7 +2,7 @@
 
 Check out [the documentation](https://nuxtjs.org/guide/vuex-store) for usage on Vuex Store
 
-#### authors.js
+#### authors.ts
 **Mutations:**
 - handleFollow
 **States:**

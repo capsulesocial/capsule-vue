@@ -121,7 +121,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-// import markdown from '@/mixins/markdown.js'
+// import markdown from '@/mixins/markdown.ts'
 import marked from 'marked'
 import PostActions from '@/components/post/Actions.vue'
 import AuthorCard from '@/components/AuthorCard.vue'
