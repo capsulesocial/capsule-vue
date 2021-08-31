@@ -1,4 +1,6 @@
-export const state = () => [
+import { AuthorsState } from '../interfaces/AuthorsState'
+
+export const state = (): AuthorsState[] => [
 	{
 		id: `tombrady`,
 		username: `Tom Brady`,
@@ -16,7 +18,7 @@ export const state = () => [
 ]
 
 export const mutations = {
-	handleFollow(state, data) {
+	handleFollow(state: AuthorsState[], data) {
 		// Adds to target user followers list
 		this.$api.authors.handleFollow(data.me, data.targetUser)
 		for (let i = 0; i < state.length; i++) {
