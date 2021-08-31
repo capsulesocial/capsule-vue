@@ -62,17 +62,8 @@ export default Vue.extend({
 		}
 	},
 	methods: {
-		getFullName(id) {
-			if (this.$store.state.session.id === id) {
-				return this.$store.state.session.name
-			}
-			const list = this.$store.state.authors
-			const name = list.find((x) => x.id === id)
-			if (name) {
-				return name.username
-			} else {
-				return id
-			}
+		getFullName(id: string) {
+			return id
 		},
 	},
 })

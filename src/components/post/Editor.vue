@@ -214,6 +214,7 @@ interface IData {
 	tag: string
 	featuredPhoto: null | any
 	featuredPhotoCID: string
+	// @ts-ignore
 	editor: MediumEditor
 	turndownService: Turndown
 	tabs: {
@@ -248,6 +249,7 @@ export default Vue.extend({
 			featuredPhoto: null,
 			featuredPhotoCID: ``,
 			editor: MediumEditor,
+			// @ts-ignore
 			turndownService: Turndown,
 			tabs: {
 				tags: false,
@@ -281,12 +283,15 @@ export default Vue.extend({
 			changeCID: MutationType.CHANGE_CID,
 			appendPostCID: MutationType.APPEND_POSTCID,
 		}),
-		update: _.debounce(function (this: any, e): void {
-			const clean: string = DOMPurify.sanitize(e.target.value, {
-				USE_PROFILES: { html: true, svg: true },
-			})
-			// eslint-disable-next-line no-invalid-this
-			this.input = clean
+		update: _.debounce(function (this: any, e: { target: { value: any } }): void {
+			if (e.target) {
+				// eslint-disable-next-line
+				const clean: string = DOMPurify.sanitize(e.target.value, {
+					USE_PROFILES: { html: true, svg: true },
+				})
+				// eslint-disable-next-line no-invalid-this
+				this.input = clean
+			}
 		}, 300),
 		changeTab(t: string) {
 			if (t === `tags`) {
@@ -312,14 +317,15 @@ export default Vue.extend({
 				this.tag = ``
 			}
 		},
-		removeTag(t): void {
+		removeTag(t: Tag): void {
 			this.$store.commit(`draft/removeTag`, t)
 		},
 		removeImage(): void {
 			this.featuredPhoto = null
 			this.featuredPhotoCID = ``
 		},
-		handleImage(e): void {
+		handleImage(e: Event): void {
+			// @ts-ignore
 			const image = e.target.files[0]
 			const reader = new FileReader()
 			reader.readAsDataURL(image)

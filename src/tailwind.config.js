@@ -1,5 +1,5 @@
 /* eslint-disable */
-
+// @ts-ignore
 const { fontFamily } = require('tailwindcss/defaultTheme')
 
 module.exports = {
@@ -81,6 +81,7 @@ module.exports = {
     }
   },
   plugins: [
-    require('@tailwindcss/typography')
+			// @ts-ignore
+      require('@tailwindcss/typography')
   ]
 }

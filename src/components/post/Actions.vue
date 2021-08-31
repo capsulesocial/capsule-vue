@@ -4,7 +4,7 @@
 		<article class="py-5">
 			<div class="flex items-start">
 				<!-- Profile Photo / Avatar -->
-				<span v-if="this.myAvatar === '' || this.myAvatar === null" class="p-1 border-2 rounded-full mt-1">
+				<span v-if="this.myAvatar" class="p-1 border-2 rounded-full mt-1">
 					<ProfileIcon class="w-6 h-6" />
 				</span>
 				<img v-else :src="this.myAvatar" class="w-10 h-10 rounded-lg object-cover mt-1" />
@@ -95,8 +95,8 @@
 			<div>{{ this.comments.length }} comments</div>
 			<CommentFilter :filter="this.filter" @clicked="setFilter" />
 		</article>
-		<article>
-			<CommentCard v-for="c in this.filterComments()" :key="c.id" class="py-2" :comment="c" />
+		<article v-for="c in this.comments" :key="comments[c]" class="py-2">
+			<CommentCard :comment="c" />
 		</article>
 	</section>
 </template>
@@ -116,7 +116,7 @@ interface IData {
 	comment: string
 	emotion: string
 	emotionCategory: string
-	myAvatar: string
+	myAvatar: string | null
 	showEmotions: boolean
 	commentBackground: string
 	filter: string
@@ -143,7 +143,7 @@ export default Vue.extend({
 			comments: [],
 			emotion: ``,
 			emotionCategory: `default`,
-			myAvatar: ``,
+			myAvatar: null,
 			showEmotions: false,
 			commentBackground: `@/assets/images/brand/paper4.svg`,
 			filter: ``,
@@ -153,10 +153,13 @@ export default Vue.extend({
 		if (this.$store.state.session.avatar !== ``) {
 			this.myAvatar = await this.$getPhoto(this.$store.state.session.avatar)
 		}
+		// get list of most recent comments with ALL reaction types
+		// this.comments =
 	},
 	methods: {
 		setFilter(reaction: string): void {
 			this.filter = reaction
+			this.filterComments()
 		},
 		setEmotion(r: string) {
 			this.emotion = r
@@ -166,7 +169,7 @@ export default Vue.extend({
 			this.emotionCategory = c
 		},
 		sendComment() {
-			if (this.comment === `` || !this.$qualityText(this.comment)) {
+			if (!this.$qualityText(this.comment)) {
 				alert(`invalid comment!`)
 			} else {
 				const c: Comment = {
@@ -187,16 +190,17 @@ export default Vue.extend({
 				this.emotionCategory = `default`
 			}
 		},
-		handleReaction(reaction: string) {
-			this.emotion = reaction
-		},
 		filterComments() {
+			// Fetch comments
 			let cList: Comment[] = this.comments
+			// Filter by emotion
 			if (this.filter !== ``) {
 				cList = cList.filter((c) => c.emotion === this.filter)
 			}
+			// Show most recent first
 			cList = cList.slice().sort((p0, p1) => p1.timestamp.getTime() - p0.timestamp.getTime())
-			return cList
+			// Set obect to filtered comments
+			this.comments = cList
 		},
 	},
 })

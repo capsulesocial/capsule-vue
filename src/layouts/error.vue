@@ -11,9 +11,10 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 
-export default {
+export default Vue.extend({
 	components: {
 		BrandedButton,
 	},
@@ -34,5 +35,5 @@ export default {
 			this.$router.push(`/`)
 		},
 	},
-}
+})
 </script>

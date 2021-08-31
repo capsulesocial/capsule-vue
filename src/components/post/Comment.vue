@@ -101,6 +101,7 @@ interface IData {
 }
 
 export default Vue.extend({
+	name: `Comment`,
 	components: {
 		ProfileIcon,
 		BrandedButton,
@@ -122,8 +123,9 @@ export default Vue.extend({
 			id: ``,
 		}
 	},
-	async created() {
-		const p = await this.$getProfile(this.$props.comment.authorCID)
+	async mounted() {
+		const pCID = await this.$getProfileNEAR(this.$props.comment.authorID)
+		const p = await this.$getProfile(pCID.profileCID)
 		this.name = p.name
 		this.id = p.id
 		if (this.$props.comment.authorAvatarCID !== ``) {
@@ -136,15 +138,12 @@ export default Vue.extend({
 				alert(`Invalid reply!`)
 			} else {
 				const r = {
-					postID: this.$props.comment.postID,
-					commentID: this.$props.comment.id,
 					authorID: this.$store.state.session.id,
 					authorCID: this.$store.state.session.cid,
 					authorAvatarCID: this.$store.state.session.avatar,
 					content: this.reply,
 					timestamp: new Date(),
 				}
-				// this.$store.commit('posts/commentReply', r)
 				this.replies.push(r)
 				this.filterReplies()
 				this.reply = ``
