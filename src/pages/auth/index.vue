@@ -172,6 +172,7 @@ import {
 } from '~/store/session'
 import { signedInToWallet } from '~/plugins/near'
 import { sendProfileServer } from '~/plugins/server'
+import { genAndSetSigningKey, removeSigningKey } from '~/plugins/keys'
 
 interface IData {
 	isLogin: boolean
@@ -270,11 +271,18 @@ export default Vue.extend({
 					return
 				}
 				if (this.password === this.confirmPassword) {
-					const account = createDefaultSession(this.id, this.name, this.email, ``) // TODO: We need to add the public key to the profile
+					// Generate a new keypair for content-signing when a user registers
+					// and store it in localStorage
+					const pubkey = genAndSetSigningKey(this.id)
+					// Store hex-encoded content-signing public key in Session
+					const account = createDefaultSession(this.id, this.name, this.email, Buffer.from(pubkey).toString(`hex`))
 					// Send user profile to IPFS
 					const cid = await this.$sendProfile(getProfileFromSession(account))
 					const serverProfile = await sendProfileServer(cid, getProfileFromSession(account))
 					if (!serverProfile.success) {
+						// Remove content-signing key from localStorage
+						// in case registration is unsuccessful
+						removeSigningKey(this.id)
 						alert(`Invalid entry`)
 						return
 					}
@@ -289,6 +297,9 @@ export default Vue.extend({
 						this.changePublicKey(account.publicKey)
 						this.$router.push(`/settings`)
 					} else {
+						// Remove content-signing key from localStorage
+						// in case registration is unsuccessful
+						removeSigningKey(this.id)
 						alert(`Registration Unsuccessful!`)
 					}
 				} else {
