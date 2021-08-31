@@ -35,9 +35,6 @@
 					</h6>
 				</div>
 			</nuxt-link>
-			<div class="flex-grow">
-				<FriendButton :authorID="this.post.authorID" />
-			</div>
 			<button
 				:class="
 					this.$store.state.settings.darkMode
@@ -115,7 +112,6 @@ import ProfileIcon from '@/components/icons/Person.vue'
 import BookmarkButton from '@/components/post/BookmarkButton.vue'
 import Share from '@/components/post/Share.vue'
 import CommentIcon from '@/components/icons/Comment.vue'
-import FriendButton from '@/components/FriendButton.vue'
 import TagPill from '@/components/Tag.vue'
 import { Post } from '@/interfaces/Post'
 
@@ -128,7 +124,6 @@ export default Vue.extend({
 		BookmarkButton,
 		Share,
 		CommentIcon,
-		FriendButton,
 		TagPill,
 	},
 	props: {
