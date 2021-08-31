@@ -99,11 +99,11 @@ export default Vue.extend({
 				this.showFilter = true
 			}
 		},
-		setCommentFilterFeeling(feeling) {
+		setCommentFilterFeeling(feeling: string) {
 			this.feeling = feeling
 			this.showFilter = true
 		},
-		updateFilter(reaction) {
+		updateFilter(reaction: string) {
 			// When a user selects a filter
 			this.$emit(`clicked`, reaction)
 			this.showFilter = false
