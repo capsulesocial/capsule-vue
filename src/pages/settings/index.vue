@@ -272,6 +272,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { HTMLInputEvent } from '@/interfaces/HTMLInputEvent'
 import { mapMutations } from 'vuex'
 import BrandedButton from '@/components/BrandedButton.vue'
 import ChevronRight from '@/components/icons/ChevronRight.vue'
@@ -341,7 +342,7 @@ export default Vue.extend({
 			}
 			return styles
 		},
-		isActiveTab(t) {
+		isActiveTab(t: string) {
 			if (t === this.tab) {
 				return true
 			} else {
@@ -360,16 +361,16 @@ export default Vue.extend({
 			}
 			return false
 		},
-		changeTab(tab) {
+		changeTab(tab: string) {
 			this.tab = tab
 		},
-		handleImage(e) {
-			const image = e.target.files[0]
+		handleImage(e: HTMLInputEvent) {
+			const image = e.target.files![0]
 			const reader = new FileReader()
 			reader.readAsDataURL(image)
-			reader.onload = (i) => {
+			reader.onload = (i: Event) => {
 				if (i.target !== null) {
-					this.uploadImage(i.target.result)
+					this.uploadImage(reader.result as ArrayBuffer)
 				}
 			}
 		},
@@ -387,7 +388,7 @@ export default Vue.extend({
 			console.log(`Profile set`, profileSet)
 			return true
 		},
-		async uploadImage(image) {
+		async uploadImage(image: ArrayBuffer) {
 			const avatarCID = await this.$sendPhoto(image)
 			this.changeAvatar(avatarCID)
 			this.downloadImage(avatarCID)
