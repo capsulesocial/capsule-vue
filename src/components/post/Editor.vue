@@ -311,7 +311,6 @@ export default Vue.extend({
 			} else {
 				const t: Tag = {
 					name: this.tag,
-					posts: ``,
 				}
 				this.$store.commit(`draft/addTag`, t)
 				this.tag = ``
