@@ -1,5 +1,5 @@
 <template>
-	<div v-if="this.post" class="w-full">
+	<div v-if="this.post && this.author" class="w-full">
 		<HeaderMagic :authorID="this.post.authorID" :avatar="this.authorAvatar" />
 		<section v-if="this.post !== {}" class="pb-16 md:pb-5 md:pl-5 m-5 pt-4">
 			<!-- Category and elipses -->
@@ -31,7 +31,12 @@
 			<!-- Author Intro -->
 			<article class="flex justify-between mt-5 py-2">
 				<div class="flex">
-					<img :src="this.authorAvatar" :alt="this.author.id" class="w-10 h-10 rounded-lg mr-4" />
+					<img
+						v-if="this.authorAvatar"
+						:src="this.authorAvatar"
+						:alt="this.author.id"
+						class="w-10 h-10 rounded-lg mr-4"
+					/>
 					<p
 						:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 						class="font-sans uppercase"
@@ -136,7 +141,7 @@ import { Profile } from '@/interfaces/Profile'
 interface IData {
 	post: Post | null
 	author: Profile | null
-	authorAvatar: string
+	authorAvatar: string | null
 	content: string
 	featuredPhoto: null | string
 	showFilter: boolean
@@ -158,7 +163,7 @@ export default Vue.extend({
 		return {
 			post: null,
 			author: null,
-			authorAvatar: ``,
+			authorAvatar: null,
 			content: ``,
 			featuredPhoto: null,
 			showFilter: false,
