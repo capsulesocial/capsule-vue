@@ -47,7 +47,7 @@
 			</article>
 			<article class="grid grid-cols-2 gap-4 md:grid-cols-4">
 				<CategoryCard
-					v-for="c in this.$store.state.config.categories"
+					v-for="c in this.categoryList"
 					:key="c"
 					:text="c"
 					:bgImage="require('@/assets/images/category/' + c + '/' + c + '.jpg')"
@@ -61,6 +61,8 @@
 import CategoryCard from '@/components/CategoryCard.vue'
 import TagCard from '@/components/Tag.vue'
 
+import { categories } from '@/config'
+
 export default {
 	components: {
 		CategoryCard,
@@ -69,6 +71,7 @@ export default {
 	data() {
 		return {
 			tagCategory: `trending`,
+			categoryList: categories,
 			tags: [
 				`jack`,
 				`pancakes`,

@@ -44,12 +44,12 @@
 			</div>
 			<!-- Show faces -->
 			<div class="grid grid-cols-3 h-64 gap-1 overflow-y-auto">
-				<button v-for="r in this.$store.state.config.feelings[this.feeling]" :key="r.label">
+				<button v-for="r in this.feelingList[this.feeling]" :key="r.label">
 					<img
-						:src="$store.state.config.reactions[r].image"
-						:alt="$store.state.config.reactions[r].label"
+						:src="reactionList[r].image"
+						:alt="reactionList[r].label"
 						class="flex-shrink-0 h-20 w-20"
-						@click="updateFilter($store.state.config.reactions[r].label)"
+						@click="updateFilter(reactionList[r].label)"
 					/>
 				</button>
 			</div>
@@ -61,6 +61,14 @@
 import Vue from 'vue'
 import ChevronUp from '@/components/icons/ChevronUp.vue'
 import ChevronDown from '@/components/icons/ChevronDown.vue'
+import { reactions, feelings } from '@/config'
+
+interface IData {
+	reactionList: {}
+	feelingList: {}
+	feeling: string
+	showFilter: boolean
+}
 
 export default Vue.extend({
 	name: `PostCommentFilter`,
@@ -74,8 +82,10 @@ export default Vue.extend({
 			default: ``,
 		},
 	},
-	data() {
+	data(): IData {
 		return {
+			reactionList: reactions,
+			feelingList: feelings,
 			feeling: `positive`,
 			showFilter: false,
 		}

@@ -124,7 +124,7 @@
 					<div v-show="this.tabs.category" class="pb-4">
 						<div class="dropdown_inset flex flex-col bg-white -mx-4 py-2">
 							<button
-								v-for="c in this.$store.state.config.categories"
+								v-for="c in this.categoryList"
 								:key="c"
 								class="w-full flex items-center p-2 capitalize focus:outline-none"
 								@click="changeCategory(c)"
@@ -204,9 +204,11 @@ import XIcon from '@/components/icons/X.vue'
 
 import { Post } from '@/interfaces/Post'
 import { Tag } from '@/interfaces/Tag'
+import { categories } from '@/config'
 import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
 
 interface IData {
+	categoryList: string[]
 	title: string
 	subtitle: string
 	input: string
@@ -241,6 +243,7 @@ export default Vue.extend({
 			input = ``
 		}
 		return {
+			categoryList: categories,
 			title: this.$store.state.draft.title,
 			subtitle: this.$store.state.draft.subtitle,
 			input,
