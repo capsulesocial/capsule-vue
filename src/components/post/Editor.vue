@@ -204,8 +204,7 @@ import XIcon from '@/components/icons/X.vue'
 
 import { Post } from '@/interfaces/Post'
 import { Tag } from '@/interfaces/Tag'
-import { MutationType, namespace as sessionStoreNamespace, getProfileFromSession, Session } from '~/store/session'
-import { sendProfileServer } from '~/plugins/server'
+import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
 
 interface IData {
 	title: string
@@ -361,23 +360,12 @@ export default Vue.extend({
 				}
 				const cid = await this.$sendPost(p)
 				this.appendPostCID(cid)
-				const profile = this.$store.state.session as Session
 				this.$axios.post(`/content`, { cid, data: p })
-				const pcid = await this.$sendProfile(getProfileFromSession(profile))
-				const serverProfile = await sendProfileServer(pcid, getProfileFromSession(profile))
-				if (!serverProfile.success) {
-					alert(`Server Profile could not be updated`)
-				} else {
-					this.changeCID(pcid)
-					const profileSet = await this.$setProfileNEAR(pcid)
-					// eslint-disable-next-line no-console
-					console.log(`Profile set`, profileSet)
-					this.title = ``
-					this.subtitle = ``
-					this.input = ``
-					this.$store.commit(`draft/reset`)
-					this.$router.push(`/post/` + cid)
-				}
+				this.title = ``
+				this.subtitle = ``
+				this.input = ``
+				this.$store.commit(`draft/reset`)
+				this.$router.push(`/post/` + cid)
 			}
 		},
 		updateStore(): void {
