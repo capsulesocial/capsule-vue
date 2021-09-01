@@ -176,7 +176,7 @@ export default Vue.extend({
 		// Convert markdown to HTML
 		this.content = marked(this.post.content)
 		// Get featured photo
-		if (this.post.featuredPhotoCID !== ``) {
+		if (this.post.featuredPhotoCID) {
 			this.featuredPhoto = await this.$getPhoto(this.post.featuredPhotoCID)
 		}
 		// Get author profile

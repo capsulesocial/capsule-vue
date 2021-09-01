@@ -212,7 +212,7 @@ interface IData {
 	input: string
 	tag: string
 	featuredPhoto: null | any
-	featuredPhotoCID: string
+	featuredPhotoCID: string | null
 	// @ts-ignore
 	editor: MediumEditor
 	turndownService: Turndown
@@ -246,7 +246,7 @@ export default Vue.extend({
 			input,
 			tag: ``,
 			featuredPhoto: null,
-			featuredPhotoCID: ``,
+			featuredPhotoCID: null,
 			editor: MediumEditor,
 			// @ts-ignore
 			turndownService: Turndown,
@@ -320,7 +320,7 @@ export default Vue.extend({
 		},
 		removeImage(): void {
 			this.featuredPhoto = null
-			this.featuredPhotoCID = ``
+			this.featuredPhotoCID = null
 		},
 		handleImage(e: Event): void {
 			// @ts-ignore

@@ -9,7 +9,7 @@ export const state = () => ({
 	title: ``,
 	subtitle: ``,
 	content: ``,
-	featuredPhotoCID: ``,
+	featuredPhotoCID: null,
 	tags: [],
 	category: ``,
 })
@@ -58,7 +58,7 @@ export const mutations: MutationTree<any> = {
 			title: ``,
 			subtitle: ``,
 			content: ``,
-			featuredPhotoCID: ``,
+			featuredPhotoCID: null,
 			tags: [],
 		}
 	},
