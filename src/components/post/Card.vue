@@ -163,7 +163,7 @@ export default Vue.extend({
 			this.avatar = await this.$getPhoto(profile.avatar)
 		}
 		// Populate Featured Photo
-		if (this.post.featuredPhotoCID !== ``) {
+		if (this.post.featuredPhotoCID) {
 			this.featuredPhoto = await this.$getPhoto(this.post.featuredPhotoCID)
 		}
 	},
