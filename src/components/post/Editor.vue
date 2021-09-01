@@ -310,13 +310,22 @@ export default Vue.extend({
 		addTag(): void {
 			if (this.tag === `` || !this.$qualityText(this.tag)) {
 				alert(`Invalid tag!`)
-			} else {
-				const t: Tag = {
-					name: this.tag,
-				}
-				this.$store.commit(`draft/addTag`, t)
-				this.tag = ``
+				return
 			}
+			const tagList = this.$store.state.draft.tags
+			if (tagList.some((t: Tag) => t.name === this.tag)) {
+				alert(`Duplicate tag!`)
+				return
+			}
+			if (tagList.length > 2) {
+				alert(`Max: 3 tags`)
+				return
+			}
+			const t: Tag = {
+				name: this.tag,
+			}
+			this.$store.commit(`draft/addTag`, t)
+			this.tag = ``
 		},
 		removeTag(t: Tag): void {
 			this.$store.commit(`draft/removeTag`, t)
