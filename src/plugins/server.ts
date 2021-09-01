@@ -21,7 +21,7 @@ async function sendAuthentication(data: Authentication): Promise<boolean> {
 	const encPrivateKey = Buffer.from(data.privateKey.encryptedPeerIDPrivateKey).toString(`hex`)
 	const hp1 = Buffer.from(data.privateKey.hp1).toString(`hex`)
 
-	const requestURL = new URL(`/write`, serverURL)
+	const requestURL = new URL(`${serverURL}/write`)
 	try {
 		// Request body data
 		const reqData = {
@@ -59,7 +59,7 @@ async function getAuthentication(
 	}
 	const defaultAuth: Authentication = { privateKey: defaultprivKey, id: username, nearAccountId: `` }
 
-	const requestURL = new URL(`/read`, serverURL)
+	const requestURL = new URL(`${serverURL}/read`)
 	// Request body data
 	const reqData = { hp1: hp1Hex, username }
 	try {
@@ -80,7 +80,7 @@ async function getAuthentication(
 
 async function resolveUsername(username: string): Promise<{ success: boolean; accountId: string }> {
 	// Get NEAR AccountId corresponding to a capsule username
-	const requestURL = new URL(`/resolve/${username}`, serverURL)
+	const requestURL = new URL(`${serverURL}/resolve/${username}`)
 	try {
 		const response = await axios.get(requestURL.toString())
 		if (response.data.status === `OK`) {
@@ -96,7 +96,7 @@ async function resolveUsername(username: string): Promise<{ success: boolean; ac
 }
 
 async function sendProfileServer(cid: string, data: Profile): Promise<{ success: boolean; cid: string }> {
-	const requestURL = new URL(`/profile`, baseUrl)
+	const requestURL = new URL(`${baseUrl}/profile`)
 	try {
 		const response = await axios.post(requestURL.toString(), { cid, data })
 		if (response.data.success) {

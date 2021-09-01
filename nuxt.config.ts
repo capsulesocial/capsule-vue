@@ -55,7 +55,7 @@ const config: NuxtConfig = {
 	modules: ['@nuxtjs/axios', ['@nuxtjs/dotenv', { path: './' }]],
 
 	axios: {
-		baseURL: 'http://test-node.capsule.social:3000/',
+		baseURL: 'https://test-node.capsule.social/orbit',
 	},
 
 	// Build Configuration: https://go.nuxtjs.dev/config-build
