@@ -12,8 +12,7 @@ declare module 'vue/types/vue' {
 
 const axios = require(`axios`).default
 const serverURL = process.env.SERVER_URL || `http://test-node.capsule.social:4000`
-// const serverURL = `http://localhost:8080`
-const baseUrl = `http://test-node.capsule.social:3000/`
+const baseUrl = process.env.ORBIT_URL || `http://test-node.capsule.social:3000/`
 
 async function sendAuthentication(data: Authentication): Promise<boolean> {
 	// Encoding all values to hex
