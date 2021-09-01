@@ -7,6 +7,6 @@ export interface Post {
 	content: string
 	category: string
 	featuredPhotoCID?: string | null
-	timestamp: Number
+	timestamp: number
 	tags: Tag[]
 }
