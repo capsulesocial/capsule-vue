@@ -34,6 +34,7 @@ export const MutationType = {
 	APPEND_POSTCID: `appendPostCID`,
 	CHANGE_NAME: `updateName`,
 	CHANGE_EMAIL: `updateEmail`,
+	CHANGE_PUBLICKEY: `changePublicKey`,
 	CHANGE_AVATAR: `updateAvatar`,
 	CHANGE_BIO: `updateBio`,
 	CHANGE_LOCATION: `updateLocation`,
@@ -55,6 +56,9 @@ export const mutations: MutationTree<Session> = {
 	},
 	[MutationType.CHANGE_EMAIL]: (state, newEmail: string) => {
 		state.email = newEmail
+	},
+	[MutationType.CHANGE_PUBLICKEY]: (state, publickey: string) => {
+		state.publicKey = publickey
 	},
 	[MutationType.CHANGE_AVATAR]: (state, newAvatar: string) => {
 		state.avatar = newAvatar

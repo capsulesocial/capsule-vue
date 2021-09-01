@@ -220,6 +220,7 @@ export default Vue.extend({
 			changeBio: MutationType.CHANGE_BIO,
 			changeLocation: MutationType.CHANGE_LOCATION,
 			appendPostCID: MutationType.APPEND_POSTCID,
+			changePublicKey: MutationType.CHANGE_PUBLICKEY,
 		}),
 		toggleFormType() {
 			this.isLogin = !this.isLogin
@@ -253,6 +254,7 @@ export default Vue.extend({
 					for (const postcid of account.posts) {
 						this.appendPostCID(postcid)
 					}
+					this.changePublicKey(account.publicKey)
 					this.$router.push(`/settings`)
 				} else {
 					alert(`Authentication failed!`)
@@ -284,6 +286,7 @@ export default Vue.extend({
 						this.changeID(this.id)
 						this.changeName(this.name)
 						this.changeEmail(this.email)
+						this.changePublicKey(account.publicKey)
 						this.$router.push(`/settings`)
 					} else {
 						alert(`Registration Unsuccessful!`)
