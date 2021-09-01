@@ -1,3 +1,3 @@
 <template>
-	<main>Help</main>
+	<main class="w-full">Help</main>
 </template>

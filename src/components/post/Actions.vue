@@ -11,7 +11,7 @@
 				<!-- Comment box Container -->
 				<div
 					class="comment-container flex bg-white shadow-xl rounded-xl p-2 ml-5 w-full overflow-hidden"
-					:style="{ backgroundImage: `url(${this.$store.state.config.backgrounds[this.emotionCategory]})` }"
+					:style="{ backgroundImage: `url(${this.backgroundList[this.emotionCategory]})` }"
 				>
 					<div
 						class="flip-container relative border shadow-inner rounded-xl overflow-hidden w-full h-40"
@@ -50,21 +50,21 @@
 								<div class="w-40 flex flex-col bg-white items-center">
 									<button
 										class="focus:outline-none rounded-lg w-24 py-1 mt-4"
-										:style="{ backgroundImage: `url(${$store.state.config.backgrounds.positive})` }"
+										:style="{ backgroundImage: `url(${backgroundList.positive})` }"
 										@click="setEmotionCategory(`positive`)"
 									>
 										Positive
 									</button>
 									<button
 										class="focus:outline-none rounded-lg w-24 py-1 mt-4"
-										:style="{ backgroundImage: `url(${$store.state.config.backgrounds.negative})` }"
+										:style="{ backgroundImage: `url(${backgroundList.negative})` }"
 										@click="setEmotionCategory(`negative`)"
 									>
 										Negative
 									</button>
 									<button
 										class="focus:outline-none rounded-lg w-24 py-1 mt-4"
-										:style="{ backgroundImage: `url(${$store.state.config.backgrounds.neutral})` }"
+										:style="{ backgroundImage: `url(${backgroundList.neutral})` }"
 										@click="setEmotionCategory(`neutral`)"
 									>
 										Neutral
@@ -73,16 +73,12 @@
 								<!-- Right side: images -->
 								<div class="overflow-auto grid grid-cols-3 w-full -mr-1 bg-white">
 									<button
-										v-for="e in this.$store.state.config.feelings[this.emotionCategory]"
+										v-for="e in this.feelingList[this.emotionCategory]"
 										:key="e"
 										class="w-full items-center focus:outline-none"
-										@click="setEmotion($store.state.config.reactions[e])"
+										@click="setEmotion(reactionList[e])"
 									>
-										<img
-											:src="$store.state.config.reactions[e].image"
-											:alt="$store.state.config.reactions[e].label"
-											class="flex-shrink-0 h-20 w-20"
-										/>
+										<img :src="reactionList[e].image" :alt="reactionList[e].label" class="flex-shrink-0 h-20 w-20" />
 									</button>
 								</div>
 							</div>
@@ -110,8 +106,12 @@ import CommentCard from '@/components/post/Comment.vue'
 import CommentFilter from '@/components/post/CommentFilter.vue'
 import FlipIcon from '@/components/icons/Flip.vue'
 import { Post } from '@/interfaces/Post'
+import { backgrounds, reactions, feelings } from '@/config'
 
 interface IData {
+	backgroundList: {}
+	reactionList: {}
+	feelingList: {}
 	comments: Comment[]
 	comment: string
 	emotion: string
@@ -139,6 +139,9 @@ export default Vue.extend({
 	},
 	data(): IData {
 		return {
+			backgroundList: backgrounds,
+			reactionList: reactions,
+			feelingList: feelings,
 			comment: ``,
 			comments: [],
 			emotion: ``,

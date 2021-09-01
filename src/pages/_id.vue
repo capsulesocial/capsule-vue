@@ -142,7 +142,9 @@
 				<nuxt-child :profile="this.currentUser" />
 			</article>
 		</div>
-		<div v-else>No profile found</div>
+		<div v-else class="flex justify-center mt-32">
+			<div class="loader m-10"></div>
+		</div>
 	</section>
 </template>
 

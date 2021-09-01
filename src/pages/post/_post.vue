@@ -5,7 +5,10 @@
 			<!-- Category and elipses -->
 			<article class="w-full flex justify-between my-2">
 				<div class="text-lg">
-					Category | <span class="text-primary uppercase">{{ this.post.category }}</span>
+					Category |
+					<nuxt-link :to="`/discover/` + this.post.category" class="text-primary uppercase">{{
+						this.post.category
+					}}</nuxt-link>
 				</div>
 				<MoreIcon />
 			</article>
@@ -158,7 +161,7 @@ export default Vue.extend({
 		HeaderMagic,
 		MoreIcon,
 	},
-	layout: `Reader`,
+	layout: `reader`,
 	// mixins: [markdown],
 	data(): IData {
 		return {

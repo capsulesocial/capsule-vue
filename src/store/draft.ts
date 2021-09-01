@@ -60,6 +60,7 @@ export const mutations: MutationTree<any> = {
 			content: ``,
 			featuredPhotoCID: null,
 			tags: [],
+			category: ``,
 		}
 	},
 }
