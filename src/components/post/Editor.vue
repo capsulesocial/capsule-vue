@@ -72,7 +72,7 @@
 						class="toggle flex w-full justify-between py-4 text-xl items-center focus:outline-none"
 						@click="changeTab('tags')"
 					>
-						<h3 class="toggle">Tags</h3>
+						<h4 class="toggle">Tags</h4>
 						<ChevronUp v-if="this.tabs.tags" class="toggle" />
 						<ChevronDown v-else />
 					</button>
@@ -117,7 +117,7 @@
 						class="toggle flex w-full justify-between py-4 text-xl items-center focus:outline-none"
 						@click="changeTab('category')"
 					>
-						<h3 class="toggle">Category</h3>
+						<h4 class="toggle">Category</h4>
 						<ChevronUp v-if="this.tabs.category" class="toggle" />
 						<ChevronDown v-else class="toggle" />
 					</button>
@@ -128,11 +128,17 @@
 								v-for="c in this.categoryList"
 								:key="c"
 								class="hotzone w-full flex items-center p-2 capitalize focus:outline-none"
-								:class="category === c ? 'bg-selectedBlue bg-opacity-25' : ''"
 								@click="changeCategory(c)"
 							>
 								<img :src="require(`@/assets/images/category/` + c + `/icon.png`)" class="hotzone w-10 h-10 mr-1" />
-								{{ c }}
+								<span
+									class="border-b text-lg ml-2"
+									:class="
+										category === c ? 'border-primary text-primary' : ' border-transparent text-lightPrimaryVariant'
+									"
+								>
+									{{ c }}</span
+								>
 							</button>
 						</div>
 					</div>
@@ -143,7 +149,7 @@
 						class="toggle flex w-full justify-between py-4 text-xl items-center focus:outline-none"
 						@click="changeTab('image')"
 					>
-						<h3 class="toggle">Image</h3>
+						<h4 class="toggle">Image</h4>
 						<ChevronUp v-if="this.tabs.image" class="toggle" />
 						<ChevronDown v-else class="toggle" />
 					</button>
