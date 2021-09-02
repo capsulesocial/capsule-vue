@@ -15,7 +15,7 @@
 
 		<div class="flex justify-center">
 			<!-- Main Content -->
-			<Nuxt class="md:min-w-max md:max-w-4xl" />
+			<Nuxt class="md:min-w-max md:max-w-4xl w-full" />
 		</div>
 	</main>
 </template>
