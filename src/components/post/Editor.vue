@@ -397,6 +397,13 @@ export default Vue.extend({
 #editor-menu {
 	width: 18rem;
 }
+.medium-editor-toolbar {
+	background-color: #ffffff;
+	border-color: black;
+	border-radius: 0.75rem;
+	--tw-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+	box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
 .medium-toolbar-arrow-under:after {
 	border-color: #ffffff transparent transparent transparent;
 }
