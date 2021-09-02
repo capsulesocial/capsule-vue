@@ -9,7 +9,7 @@ Used in:
 
 #### _Props_
 
-- post: takes in the post object. Required for displaying title, subtitle, views, timestamp. Modifies the likes and comments arrays
+- post: takes in the post object. Required for displaying title, views, timestamp. Modifies the likes and comments arrays
 - authorID: Used for creating the link to route to the author's profile.
 
 #### _Methods_

@@ -21,7 +21,7 @@
 					</div>
 					<h6 class="text-primary capitalize text-sm">{{ this.category === `` ? 'Category' : this.category }}</h6>
 				</article>
-				<!-- Title, subtitle, author -->
+				<!-- Title, author -->
 				<article class="flex justify-between px-5">
 					<div>
 						<label for="title" class="hidden">Title</label>
@@ -35,18 +35,6 @@
 									: 'text-darkPrimaryText bg-darkBG placeholder-darkSecondaryText'
 							"
 							class="font-serif font-bold text-3xl leading-loose focus:outline-none w-full pb-2"
-						/>
-						<label for="subtitle" class="hidden">Subtitle:</label>
-						<input
-							v-model="subtitle"
-							type="text"
-							placeholder="Enter Subtitle"
-							:class="
-								this.$store.state.settings.darkMode
-									? 'text-lightPrimaryText bg-lightBG placeholder-lightSecondaryText'
-									: 'text-darkPrimaryText bg-darkBG placeholder-darkSecondaryText'
-							"
-							class="text-xl font-medium focus:outline-none w-full pb-2"
 						/>
 					</div>
 				</article>
@@ -225,7 +213,6 @@ import { MutationType, namespace as sessionStoreNamespace } from '~/store/sessio
 interface IData {
 	categoryList: string[]
 	title: string
-	subtitle: string
 	input: string
 	tag: string
 	featuredPhoto: null | any
@@ -260,7 +247,6 @@ export default Vue.extend({
 		return {
 			categoryList: categories,
 			title: this.$store.state.draft.title,
-			subtitle: this.$store.state.draft.subtitle,
 			input,
 			tag: ``,
 			featuredPhoto: null,
@@ -374,12 +360,9 @@ export default Vue.extend({
 			this.input = this.turndownService.turndown(this.editor.getContent())
 			if (this.title === `` || !this.$qualityText(this.title)) {
 				alert(`Invalid title!`)
-			} else if (this.subtitle === `` || !this.$qualityText(this.subtitle)) {
-				alert(`Invalid subtitle!`)
 			} else {
 				const p: Post = {
 					title: this.title,
-					subtitle: this.subtitle,
 					content: this.input,
 					category: this.category,
 					timestamp: Date.now(),
@@ -391,7 +374,6 @@ export default Vue.extend({
 				this.appendPostCID(cid)
 				this.$axios.post(`/content`, { cid, data: p })
 				this.title = ``
-				this.subtitle = ``
 				this.input = ``
 				this.$store.commit(`draft/reset`)
 				this.$router.push(`/post/` + cid)
@@ -400,7 +382,6 @@ export default Vue.extend({
 		updateStore(): void {
 			this.input = this.editor.getContent()
 			this.$store.commit(`draft/updateTitle`, this.title)
-			this.$store.commit(`draft/updateSubtitle`, this.subtitle)
 			this.$store.commit(`draft/updateContent`, this.input)
 			this.$store.commit(`draft/updateCategory`, this.category)
 			this.$store.commit(`draft/updateCategory`, this.category)

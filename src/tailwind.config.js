@@ -34,7 +34,6 @@ module.exports = {
         gray4: '#888888',
         gray5: '#777777',
         gray6: '#454545',
-        subtitle: '#868686',
         lightAuthorCard: '#E5E7EB',
         darkAuthorCard: '#777777',
         selectedBlue: '#0020ff',
