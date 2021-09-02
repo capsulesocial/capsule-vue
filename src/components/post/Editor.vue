@@ -67,18 +67,18 @@
 				class="flex flex-col relative bg-lightSecondary bg-opacity-25 border-r h-auto overflow-y-auto"
 			>
 				<!-- Tags tab -->
-				<article class="border-b mx-4">
+				<article class="toggle border-b mx-4">
 					<button
-						class="flex w-full justify-between py-4 text-xl items-center focus:outline-none"
+						class="toggle flex w-full justify-between py-4 text-xl items-center focus:outline-none"
 						@click="changeTab('tags')"
 					>
-						<h3>Tags</h3>
-						<ChevronUp v-if="this.tabs.tags" />
+						<h3 class="toggle">Tags</h3>
+						<ChevronUp v-if="this.tabs.tags" class="toggle" />
 						<ChevronDown v-else />
 					</button>
 					<!-- Dropdown -->
-					<div v-show="this.tabs.tags" class="pb-4">
-						<div class="flex flex-row flex-nowrap bg-white py-2 mb-2 border">
+					<div v-show="this.tabs.tags" class="hotzone pb-4">
+						<div class="hotzone flex flex-row flex-nowrap bg-white py-2 mb-2 border">
 							<label for="tag" class="hidden" value="Enter hashtags"></label>
 							<input
 								v-model="tag"
@@ -88,9 +88,10 @@
 								@keyup.enter="addTag"
 							/>
 						</div>
-						<div v-for="t in this.$store.state.draft.tags" :key="t.name" class="pt-2">
+						<div v-for="t in this.$store.state.draft.tags" :key="t.name" class="hotzone pt-2">
 							<button
 								class="
+									hotzone
 									flex
 									items-center
 									rounded-xl
@@ -105,53 +106,55 @@
 								"
 								@click="removeTag(t)"
 							>
-								{{ t.name }} <XIcon class="p-1 text-lightPrimary" />
+								{{ t.name }} <XIcon class="hotzone p-1 text-lightPrimary" />
 							</button>
 						</div>
 					</div>
 				</article>
 				<!-- Category tab -->
-				<article class="border-b mx-4">
+				<article class="toggle border-b mx-4">
 					<button
-						class="flex w-full justify-between py-4 text-xl items-center focus:outline-none"
+						class="toggle flex w-full justify-between py-4 text-xl items-center focus:outline-none"
 						@click="changeTab('category')"
 					>
-						<h3>Category</h3>
-						<ChevronUp v-if="this.tabs.category" />
-						<ChevronDown v-else />
+						<h3 class="toggle">Category</h3>
+						<ChevronUp v-if="this.tabs.category" class="toggle" />
+						<ChevronDown v-else class="toggle" />
 					</button>
 					<!-- Dropdown -->
-					<div v-show="this.tabs.category" class="pb-4">
-						<div class="dropdown_inset flex flex-col bg-white -mx-4">
+					<div v-show="this.tabs.category" class="hotzone pb-4">
+						<div class="dropdown_inset hotzone flex flex-col bg-white -mx-4">
 							<button
 								v-for="c in this.categoryList"
 								:key="c"
-								class="w-full flex items-center p-2 capitalize focus:outline-none"
+								class="hotzone w-full flex items-center p-2 capitalize focus:outline-none"
 								:class="category === c ? 'bg-selectedBlue bg-opacity-25' : ''"
 								@click="changeCategory(c)"
 							>
-								<img :src="require(`@/assets/images/category/` + c + `/icon.png`)" class="w-10 h-10 mr-1" />
+								<img :src="require(`@/assets/images/category/` + c + `/icon.png`)" class="hotzone w-10 h-10 mr-1" />
 								{{ c }}
 							</button>
 						</div>
 					</div>
 				</article>
 				<!-- Image tab -->
-				<article class="border-b mx-4">
+				<article class="toggle border-b mx-4">
 					<button
-						class="flex w-full justify-between py-4 text-xl items-center focus:outline-none"
+						class="toggle flex w-full justify-between py-4 text-xl items-center focus:outline-none"
 						@click="changeTab('image')"
 					>
-						<h3>Image</h3>
-						<ChevronUp v-if="this.tabs.image" />
-						<ChevronDown v-else />
+						<h3 class="toggle">Image</h3>
+						<ChevronUp v-if="this.tabs.image" class="toggle" />
+						<ChevronDown v-else class="toggle" />
 					</button>
 					<!-- Dropdown -->
-					<div v-show="this.tabs.image" class="pb-4">
-						<div class="dropdown_inset flex flex-col bg-white -mx-4 py-2">
+					<div v-show="this.tabs.image" class="hotzone pb-4">
+						<div class="hotzone dropdown_inset hotzone flex flex-col bg-white -mx-4 py-2">
 							<!-- Upload Featured Image -->
-							<p class="px-4 py-2 text-sm">Selecting a featured image is recommended for an optimal user experience.</p>
-							<button class="w-full focus:outline-none" @click="$refs.featuredPhoto.click()">
+							<p class="hotzone px-4 py-2 text-sm">
+								Selecting a featured image is recommended for an optimal user experience.
+							</p>
+							<button class="hotzone w-full focus:outline-none" @click="$refs.featuredPhoto.click()">
 								<input
 									id="featured-photo"
 									ref="featuredPhoto"
@@ -162,21 +165,26 @@
 									@change="handleImage"
 								/>
 								<!-- No Photo Uploaded -->
-								<div v-show="this.featuredPhoto === null" class="flex justify-between border mx-4 my-2 p-1">
-									<span class="flex items-center text-sm"> <ImageIcon class="mr-1 p-1" />IMAGE </span>
-									<span class="flex items-center text-sm text-primary"> <UploadIcon class="mr-1 p-1" />Add </span>
+								<div v-show="this.featuredPhoto === null" class="hotzone flex justify-between border mx-4 my-2 p-1">
+									<span class="hotzone flex items-center text-sm"> <ImageIcon class="hotzone mr-1 p-1" />IMAGE</span>
+									<span class="hotzone flex items-center text-sm text-primary">
+										<UploadIcon class="hotzone mr-1 p-1" />Add
+									</span>
 								</div>
 							</button>
 							<!-- Photo Uploaded -->
-							<div v-if="this.featuredPhoto !== null" class="mx-4">
-								<img :src="this.featuredPhoto" class="w-full" />
+							<div v-if="this.featuredPhoto !== null" class="hotzone mx-4">
+								<img :src="this.featuredPhoto" class="hotzone w-full" />
 								<button
-									class="border border-primary text-primary focus:outline-none text-sm mt-4 p-1"
+									class="hotzone border border-primary text-primary focus:outline-none text-sm mt-4 p-1"
 									@click="$refs.featuredPhoto.click()"
 								>
 									Replace Image
 								</button>
-								<button class="my-2 text-sm underline text-lightError focus:outline-none" @click="removeImage()">
+								<button
+									class="hotzone my-2 text-sm underline text-lightError focus:outline-none"
+									@click="removeImage()"
+								>
 									Remove Image
 								</button>
 							</div>
@@ -276,6 +284,13 @@ export default Vue.extend({
 			},
 		})
 		this.turndownService = new Turndown()
+	},
+	created() {
+		// Set filter dropdown event handler
+		window.addEventListener(`click`, this.handleDropdown, false)
+	},
+	destroyed() {
+		window.removeEventListener(`click`, this.handleDropdown)
 	},
 	methods: {
 		...mapMutations(sessionStoreNamespace, {
@@ -384,6 +399,27 @@ export default Vue.extend({
 			this.$store.commit(`draft/updateCategory`, this.category)
 			this.$store.commit(`draft/updateCategory`, this.category)
 			this.$router.go(-1)
+		},
+		handleDropdown(e: any): void {
+			// Check if any tabs are open
+			if (this.tabs.tags || this.tabs.category || this.tabs.image) {
+				// Check if event is outside HTML to prevent errors
+				if (!e.target || e.target.parentNode === null || e.target.parentNode.classList === undefined) {
+					return
+				}
+				// Check if clicking a button to open a tab
+				if (e.target.parentNode.classList.contains(`toggle`)) {
+					return
+				}
+				// Check if clicking inside a dropdown
+				if (e.target.parentNode.classList.contains(`hotzone`)) {
+					return
+				}
+				// Close tabs
+				this.tabs.tags = false
+				this.tabs.category = false
+				this.tabs.image = false
+			}
 		},
 	},
 })
