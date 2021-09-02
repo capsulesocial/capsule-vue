@@ -3,9 +3,9 @@
 @import "tailwindcss/utilities";
 
 @layer base {
-  .medium-editor-toolbar {
+  /* .medium-editor-toolbar {
     @apply bg-white border rounded-xl shadow-xl
-  }
+  } */
   .editable h1 {
     @apply text-3xl font-serif font-bold mt-3
   }

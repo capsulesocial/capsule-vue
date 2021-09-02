@@ -37,6 +37,7 @@ module.exports = {
         subtitle: '#868686',
         lightAuthorCard: '#E5E7EB',
         darkAuthorCard: '#777777',
+        selectedBlue: '#0020ff',
 
         lightBG: '#FFFFFF',
         lightPrimary: '#407C83',
