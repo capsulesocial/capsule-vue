@@ -150,10 +150,7 @@ export default Vue.extend({
 			}
 		},
 		filterReplies(): any[] {
-			const rList = this.replies.slice().sort((p0, p1) => {
-				return p1.timestamp - p0.timestamp
-			})
-			return rList
+			return this.replies.slice().sort((p0, p1) => p1.timestamp - p0.timestamp)
 		},
 	},
 })

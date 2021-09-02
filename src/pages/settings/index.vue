@@ -394,7 +394,7 @@ export default Vue.extend({
 			this.downloadImage(avatarCID)
 			await this.updateProfile()
 		},
-		async downloadImage(cid: any) {
+		async downloadImage(cid: string) {
 			this.profilePic = await this.$getPhoto(cid)
 		},
 		checkBio() {

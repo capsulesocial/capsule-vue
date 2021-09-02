@@ -350,7 +350,7 @@ export default Vue.extend({
 			this.featuredPhotoCID = cid
 			this.downloadImage(cid)
 		},
-		async downloadImage(cid: any): Promise<void> {
+		async downloadImage(cid: string): Promise<void> {
 			this.featuredPhoto = await this.$getPhoto(cid)
 		},
 		async post(): Promise<void> {

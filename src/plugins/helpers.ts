@@ -1,6 +1,6 @@
 import type { Plugin } from '@nuxt/types'
 
-type dateString = (date: Date, preformattedDate: any, hideYear: boolean | null) => string
+type dateString = (date: Date, hideYear?: boolean, preformattedDate?: string | null) => string
 type dateFormat = (input: object | Date) => string
 
 // eslint-disable-next-line quotes
@@ -26,7 +26,7 @@ const MONTH_NAMES = [
 	`December`,
 ]
 
-const getFormat: dateString = (date, preformattedDate = false, hideYear = false) => {
+const getFormat: dateString = (date, hideYear = false, preformattedDate = null) => {
 	const day = date.getDate()
 	const month = MONTH_NAMES[date.getMonth()]
 	const year = date.getFullYear()
@@ -73,17 +73,18 @@ const formatDate = (input: string | Date | number) => {
 	const isToday = today.toDateString() === date.toDateString()
 	const isYesterday = yesterday.toDateString() === date.toDateString()
 	if (isToday) {
-		return getFormat(date, `Today`, false)
+		return getFormat(date, true, `Today`)
 	}
 	if (isYesterday) {
-		return getFormat(date, `Yesterday`, false)
+		return getFormat(date, true, `Yesterday`)
 	}
 
 	const isThisYear = today.getFullYear() === date.getFullYear()
 	if (isThisYear) {
-		return getFormat(date, false, true)
+		return getFormat(date, true)
 	}
-	return getFormat(date, false, false)
+
+	return getFormat(date)
 }
 
 const helperPlugin: Plugin = (_context, inject) => {
