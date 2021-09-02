@@ -122,11 +122,12 @@
 					</button>
 					<!-- Dropdown -->
 					<div v-show="this.tabs.category" class="pb-4">
-						<div class="dropdown_inset flex flex-col bg-white -mx-4 py-2">
+						<div class="dropdown_inset flex flex-col bg-white -mx-4">
 							<button
 								v-for="c in this.categoryList"
 								:key="c"
 								class="w-full flex items-center p-2 capitalize focus:outline-none"
+								:class="category === c ? 'bg-selectedBlue bg-opacity-25' : ''"
 								@click="changeCategory(c)"
 							>
 								<img :src="require(`@/assets/images/category/` + c + `/icon.png`)" class="w-10 h-10 mr-1" />
@@ -277,12 +278,7 @@ export default Vue.extend({
 		this.turndownService = new Turndown()
 	},
 	methods: {
-		...mapMutations({
-			toggle: `draft/toggleCompose`,
-			updateDraft: `draft/updateDraft`,
-		}),
 		...mapMutations(sessionStoreNamespace, {
-			changeCID: MutationType.CHANGE_CID,
 			appendPostCID: MutationType.APPEND_POSTCID,
 		}),
 		update: _.debounce(function (this: any, e: { target: { value: any } }): void {
