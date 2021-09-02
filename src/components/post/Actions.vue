@@ -4,7 +4,7 @@
 		<article class="py-5">
 			<div class="flex items-start">
 				<!-- Profile Photo / Avatar -->
-				<span v-if="this.myAvatar" class="p-1 border-2 rounded-full mt-1">
+				<span v-if="!this.myAvatar" class="p-1 border-2 rounded-full mt-1">
 					<ProfileIcon class="w-6 h-6" />
 				</span>
 				<img v-else :src="this.myAvatar" class="w-10 h-10 rounded-lg object-cover mt-1" />

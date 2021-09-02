@@ -16,37 +16,37 @@
 			>
 				<!-- Save to Drafts & Category -->
 				<article class="p-5">
-					<div class="w-full border-b pb-5 mb-5">
-						<h6 class="text-sm">Saved to <span class="font-bold underline">Drafts</span></h6>
+					<div class="flex justify-between w-full border-b pb-5 mb-5">
+						<h6 class="text-sm italic">Auto-save on Close</h6>
+						<h6 class="text-sm">
+							<span class="font-bold text-primary">{{ wordCount }}</span> words
+						</h6>
 					</div>
 					<h6 class="text-primary capitalize text-sm">{{ this.category === `` ? 'Category' : this.category }}</h6>
 				</article>
 				<!-- Title, author -->
 				<article class="flex justify-between px-5">
-					<div>
-						<label for="title" class="hidden">Title</label>
-						<input
-							v-model="title"
-							type="text"
-							placeholder="Enter Title"
-							:class="
-								this.$store.state.settings.darkMode
-									? 'text-lightPrimaryText bg-lightBG placeholder-lightSecondaryText'
-									: 'text-darkPrimaryText bg-darkBG placeholder-darkSecondaryText'
-							"
-							class="font-serif font-bold text-3xl leading-loose focus:outline-none w-full pb-2"
-						/>
-					</div>
+					<label for="title" class="hidden">Title</label>
+					<input
+						v-model="title"
+						type="text"
+						placeholder="Enter Title"
+						:class="
+							this.$store.state.settings.darkMode
+								? 'text-lightPrimaryText bg-lightBG placeholder-lightSecondaryText'
+								: 'text-darkPrimaryText bg-darkBG placeholder-darkSecondaryText'
+						"
+						class="font-serif font-bold text-3xl leading-loose focus:outline-none w-full pb-2"
+					/>
 				</article>
 
 				<!-- WYSIWYG -->
 				<div
 					:v-model="this.input"
 					class="editable prose max-w-none px-5 focus:outline-none py-5"
+					@keyup="update"
 					v-html="this.$store.state.draft.content"
 				></div>
-
-				<article class="flex"></article>
 			</section>
 
 			<!-- Right column -->
@@ -226,6 +226,7 @@ interface IData {
 		image: boolean
 	}
 	category: string
+	wordCount: number
 }
 
 export default Vue.extend({
@@ -260,6 +261,7 @@ export default Vue.extend({
 				image: false,
 			},
 			category: this.$store.state.draft.category,
+			wordCount: 0,
 		}
 	},
 	mounted() {
@@ -291,11 +293,16 @@ export default Vue.extend({
 		update: _.debounce(function (this: any, e: { target: { value: any } }): void {
 			if (e.target) {
 				// eslint-disable-next-line
-				const clean: string = DOMPurify.sanitize(e.target.value, {
+				const clean: string = DOMPurify.sanitize(this.editor.getContent(), {
 					USE_PROFILES: { html: true, svg: true },
 				})
 				// eslint-disable-next-line no-invalid-this
 				this.input = clean
+				let count = clean.replace(/<[^>]*>/g, ` `)
+				count = count.replace(/\s+/g, ` `)
+				count.trim()
+				// eslint-disable-next-line no-invalid-this
+				this.wordCount = count.split(` `).length - 2
 			}
 		}, 300),
 		changeTab(t: string) {
@@ -357,10 +364,15 @@ export default Vue.extend({
 			this.featuredPhoto = await this.$getPhoto(cid)
 		},
 		async post(): Promise<void> {
-			this.input = this.turndownService.turndown(this.editor.getContent())
 			if (this.title === `` || !this.$qualityText(this.title)) {
 				alert(`Invalid title!`)
 			} else {
+				// Sanitize HTML
+				const clean: string = DOMPurify.sanitize(this.editor.getContent(), {
+					USE_PROFILES: { html: true, svg: true },
+				})
+				// Convert to Markdown
+				this.input = this.turndownService.turndown(clean)
 				const p: Post = {
 					title: this.title,
 					content: this.input,
