@@ -262,7 +262,12 @@
 			</div>
 		</section>
 		<div v-if="this.tab !== ''" class="text-center pt-4 pl-1">
-			<BrandedButton text="Save Changes" :action="this.updateSettings" :class="this.hasChanged() ? '' : 'opacity-50'" class="ml-16" />
+			<BrandedButton
+				text="Save Changes"
+				:action="this.updateSettings"
+				:class="this.hasChanged() ? '' : 'opacity-50'"
+				class="ml-16"
+			/>
 		</div>
 	</main>
 </template>
