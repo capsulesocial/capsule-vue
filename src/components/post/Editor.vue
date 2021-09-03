@@ -347,11 +347,13 @@ export default Vue.extend({
 		handleImage(e: Event): void {
 			// @ts-ignore
 			const image = e.target.files[0]
-			const reader = new FileReader()
-			reader.readAsDataURL(image)
-			reader.onload = (i) => {
-				if (i.target !== null) {
-					this.uploadImage(i.target.result)
+			if (image) {
+				const reader = new FileReader()
+				reader.readAsDataURL(image)
+				reader.onload = (i) => {
+					if (i.target !== null) {
+						this.uploadImage(i.target.result)
+					}
 				}
 			}
 		},
@@ -395,7 +397,6 @@ export default Vue.extend({
 			this.input = this.editor.getContent()
 			this.$store.commit(`draft/updateTitle`, this.title)
 			this.$store.commit(`draft/updateContent`, this.input)
-			this.$store.commit(`draft/updateCategory`, this.category)
 			this.$store.commit(`draft/updateCategory`, this.category)
 			this.$router.go(-1)
 		},

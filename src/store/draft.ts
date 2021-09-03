@@ -50,13 +50,10 @@ export const mutations: MutationTree<DraftPost> = {
 		state.category = newCategory
 	},
 	[MutationType.RESET]: (state: DraftPost) => {
-		// eslint-disable-next-line
-		state = {
-			title: ``,
-			content: ``,
-			featuredPhotoCID: null,
-			tags: [],
-			category: ``,
-		}
+		state.title = ``
+		state.content = ``
+		state.featuredPhotoCID = null
+		state.tags = []
+		state.category = ``
 	},
 }
