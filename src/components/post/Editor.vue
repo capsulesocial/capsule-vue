@@ -110,17 +110,17 @@
 						<ChevronDown v-else class="toggle" />
 					</button>
 					<!-- Dropdown -->
-					<div v-show="this.tabs.category" class="hotzone pb-4">
+					<div v-show="this.tabs.category" class="hotzone pb-4 py-2">
 						<div class="dropdown_inset hotzone flex flex-col bg-white -mx-4">
 							<button
 								v-for="c in this.categoryList"
 								:key="c"
-								class="hotzone w-full flex items-center p-2 capitalize focus:outline-none"
+								class="hotzone w-full flex items-center px-2 capitalize focus:outline-none h-12"
 								@click="changeCategory(c)"
 							>
 								<img :src="require(`@/assets/images/category/` + c + `/icon.png`)" class="hotzone w-10 h-10 mr-1" />
 								<span
-									class="border-b text-lg ml-2"
+									class="border-b ml-2"
 									:class="
 										category === c ? 'border-primary text-primary' : ' border-transparent text-lightPrimaryVariant'
 									"

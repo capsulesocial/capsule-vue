@@ -10,7 +10,7 @@
 				<TwitterIcon v-if="this.$props.platform === 'twitter'" class="mr-4" />
 				<GitHubIcon v-if="this.$props.platform === 'github'" class="mr-4" />
 				<ExternalURLIcon v-if="this.$props.platform === 'website'" class="mr-4" />
-				<span class="capitalize">{{ this.$props.platform.toUpperCase() }}</span>
+				<span class="capitalize">{{ this.$props.platform }}</span>
 			</div>
 			<button
 				:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
