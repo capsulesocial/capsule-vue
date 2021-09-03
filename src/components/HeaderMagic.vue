@@ -22,10 +22,7 @@
 						<nuxt-link :to="`/` + this.$props.authorID" class="pr-4 text-lg">@{{ this.$props.authorID }}</nuxt-link>
 						<FriendButton :authorID="this.$props.authorID" />
 					</div>
-					<button
-						class="flex items-center bg-lightSecondary rounded-full p-2 focus:outline-none"
-						@click="$router.go(-1)"
-					>
+					<button class="flex items-center bg-lightSecondary rounded-full p-2 focus:outline-none" @click="handleClose">
 						<XIcon />
 					</button>
 				</div>
@@ -87,6 +84,19 @@ export default Vue.extend({
 				body.classList.add(scrollUp)
 			}
 			this.lastScroll = currentScroll
+		},
+		handleClose() {
+			// @ts-ignore
+			if (this.$router.history._startLocation === this.$route.path) {
+				// IF they started on this page:
+				this.$router.push(`/home`)
+			} else if (this.$store.state.settings.recentlyPosted) {
+				// IF coming from after recently posting:
+				this.$router.push(`/` + this.$store.state.session.id)
+				this.$store.commit(`settings/setRecentlyPosted`, false)
+			} else {
+				this.$router.go(-1)
+			}
 		},
 	},
 })

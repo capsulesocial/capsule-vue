@@ -6,21 +6,27 @@ export const namespace = `settings`
 
 export interface SettingState {
 	darkMode: boolean
+	recentlyPosted: boolean
 }
 
 export const state = (): SettingState => ({
 	darkMode: true,
+	recentlyPosted: false,
 })
 
 export const getters: GetterTree<SettingState, RootState> = {}
 
 export const MutationType = {
 	CHANGE_DARK_MODE: `changeDarkMode`,
+	SET_RECENTLY_POSTED: `setRecentlyPosted`,
 }
 
 export const mutations: MutationTree<SettingState> = {
 	[MutationType.CHANGE_DARK_MODE]: (state, newMode: boolean) => {
 		state.darkMode = newMode
+	},
+	[MutationType.SET_RECENTLY_POSTED]: (state, recentlyPosted: boolean) => {
+		state.recentlyPosted = recentlyPosted
 	},
 }
 

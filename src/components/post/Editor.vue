@@ -390,6 +390,7 @@ export default Vue.extend({
 				this.title = ``
 				this.input = ``
 				this.$store.commit(`draft/reset`)
+				this.$store.commit(`settings/setRecentlyPosted`, true)
 				this.$router.push(`/post/` + cid)
 			}
 		},
