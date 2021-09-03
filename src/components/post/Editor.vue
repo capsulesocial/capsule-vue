@@ -193,7 +193,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapMutations } from 'vuex'
-import _ from 'lodash'
+import debounce from 'lodash/debounce'
 import DOMPurify from 'dompurify'
 import MediumEditor from 'medium-editor'
 import Turndown from 'turndown'
@@ -290,7 +290,7 @@ export default Vue.extend({
 		...mapMutations(sessionStoreNamespace, {
 			appendPostCID: MutationType.APPEND_POSTCID,
 		}),
-		update: _.debounce(function (this: any, e: { target: { value: any } }): void {
+		update: debounce(function (this: any, e: { target: { value: any } }): void {
 			if (e.target) {
 				// eslint-disable-next-line
 				const clean: string = DOMPurify.sanitize(this.editor.getContent(), {
