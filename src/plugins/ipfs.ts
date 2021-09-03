@@ -44,7 +44,7 @@ const ipfsPlugin: Plugin = async (_context, inject) => {
 
 	// Returns post object associated with content id
 	const getProfile: (cid: string) => Promise<Profile> = async (cid) => {
-		let content: string = ``
+		let content = ``
 		for await (const chunk of node.cat(cid)) {
 			content += chunk.toString()
 		}
@@ -60,7 +60,7 @@ const ipfsPlugin: Plugin = async (_context, inject) => {
 
 	// Returns post object associated with content id
 	const getPost: (cid: string) => Promise<Post> = async (cid) => {
-		let content: string = ``
+		let content = ``
 		for await (const chunk of node.cat(cid)) {
 			content += chunk.toString()
 		}
@@ -76,10 +76,7 @@ const ipfsPlugin: Plugin = async (_context, inject) => {
 
 	// Get photo
 	const getPhoto: (cid: string) => Promise<any> = async (cid) => {
-		if (cid === null || cid === ``) {
-			return
-		}
-		let content: string = ``
+		let content = ``
 		for await (const chunk of node.cat(cid)) {
 			content += chunk.toString()
 		}
