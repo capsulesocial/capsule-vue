@@ -155,7 +155,7 @@ export default Vue.extend({
 		HeaderMagic,
 		MoreIcon,
 	},
-	layout: `reader`,
+	layout: `Reader`,
 	// mixins: [markdown],
 	data(): IData {
 		return {
