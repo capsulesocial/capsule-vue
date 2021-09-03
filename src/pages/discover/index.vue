@@ -67,7 +67,7 @@ import { categories } from '@/config'
 interface IData {
 	tagCategory: string
 	categoryList: string[]
-	tags: string[] | null
+	tags: string[]
 }
 
 export default Vue.extend({
@@ -79,12 +79,12 @@ export default Vue.extend({
 		return {
 			tagCategory: `trending`,
 			categoryList: categories,
-			tags: null,
+			tags: [],
 		}
 	},
 	async created() {
 		const content = await this.$axios.$get(`/content/tags`)
-		this.tags = content.data
+		this.tags = content.data.slice(0, 14)
 	},
 })
 </script>
