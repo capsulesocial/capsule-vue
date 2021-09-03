@@ -1,7 +1,7 @@
 <template>
 	<section class="p-4 w-full">
 		<!-- IF a profile exists -->
-		<div v-if="this.currentUser">
+		<div v-if="this.currentUser" style="width: 500px">
 			<!-- Name, socials, follow, bio -->
 			<section class="flex flex-row justify-between">
 				<article class="flex items-center">

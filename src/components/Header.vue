@@ -1,13 +1,11 @@
 <template>
 	<header
 		:class="this.$store.state.settings.darkMode ? 'bg-lightBG' : 'bg-darkBG'"
-		class="w-full flex justify-center z-20 border-b py-4"
+		class="w-full flex justify-center z-20 border-b py-4 xl:pr-16"
 	>
 		<!-- Top Left: Logo -->
-		<div class="md:ml-8 xl:mr-24 xl:ml-0">
-			<CapsuleIcon class="mr-2" />
-		</div>
-		<article class="flex justify-between md:min-w-max md:max-w-2xl w-full xl:pl-24">
+		<div class="flex xl:justify-between" style="width: 240px">
+			<CapsuleIcon class="ml-8 xl:ml-0 mr-2" />
 			<div
 				class="flex md:pl-8 xl:pl-0"
 				:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
@@ -19,12 +17,13 @@
 					<ForwardButton />
 				</button>
 			</div>
-			<h2 class="text-2xl pt-4"></h2>
-			<span></span>
+		</div>
+		<article style="width: 500px">
+			<!-- Placeholder -->
 		</article>
 
 		<!-- Top Right -->
-		<article class="relative hidden md:flex items-center">
+		<article class="relative hidden md:flex items-center xl:pr-8">
 			<div class="flex">
 				<span>
 					<button class="bg-gray1 rounded-full w-10 h-10 focus:outline-none flex justify-center shadow-lg">
