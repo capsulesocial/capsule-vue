@@ -57,35 +57,34 @@
 	</div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import CategoryCard from '@/components/CategoryCard.vue'
 import TagCard from '@/components/Tag.vue'
 
 import { categories } from '@/config'
 
-export default {
+interface IData {
+	tagCategory: string
+	categoryList: string[]
+	tags: string[] | null
+}
+
+export default Vue.extend({
 	components: {
 		CategoryCard,
 		TagCard,
 	},
-	data() {
+	data(): IData {
 		return {
 			tagCategory: `trending`,
 			categoryList: categories,
-			tags: [
-				`jack`,
-				`pancakes`,
-				`biking`,
-				`reddit`,
-				`crypto`,
-				`lizardpeople`,
-				`LEGOs`,
-				`aspen`,
-				`clock`,
-				`sunset`,
-				`beef`,
-			],
+			tags: null,
 		}
 	},
-}
+	async created() {
+		const content = await this.$axios.$get(`/content/tags`)
+		this.tags = content.data
+	},
+})
 </script>
