@@ -408,19 +408,19 @@ export default Vue.extend({
 			}
 			// Run quality rules before saving
 			if (this.newName !== ``) {
-				this.changeName(this.newName)
+				this.changeName(this.newName.trim())
 			}
 			if (this.newID !== `` && this.$qualityID(this.newID)) {
-				this.changeID(this.newID)
+				this.changeID(this.newID.trim())
 			}
 			if (this.bio !== this.$store.state.session.bio && this.checkBio() > 0) {
-				this.changeBio(this.bio)
+				this.changeBio(this.bio.trim())
 			}
 			if (this.newEmail !== `` && this.$qualityEmail(this.newEmail)) {
-				this.changeEmail(this.newEmail)
+				this.changeEmail(this.newEmail.trim())
 			}
 			if (this.location !== this.$store.state.session.location && this.$qualityText(this.location)) {
-				this.changeLocation(this.location)
+				this.changeLocation(this.location.trim())
 			}
 			const profileUpdated = await this.updateProfile()
 			if (profileUpdated) {

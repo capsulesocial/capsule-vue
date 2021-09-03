@@ -364,7 +364,7 @@ export default Vue.extend({
 			this.featuredPhoto = await this.$getPhoto(cid)
 		},
 		async post(): Promise<void> {
-			if (this.title === `` || !this.$qualityText(this.title)) {
+			if (!this.$qualityText(this.title)) {
 				alert(`Invalid title!`)
 			} else {
 				// Sanitize HTML
@@ -374,7 +374,7 @@ export default Vue.extend({
 				// Convert to Markdown
 				this.input = this.turndownService.turndown(clean)
 				const p: Post = {
-					title: this.title,
+					title: this.title.trim(),
 					content: this.input,
 					category: this.category,
 					timestamp: Date.now(),
