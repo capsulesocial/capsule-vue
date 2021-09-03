@@ -89,7 +89,7 @@ const ipfsPlugin: Plugin = async (_context, inject) => {
 		try {
 			await node.key.import(name, privateKey, password)
 			return true
-		} catch (error) {
+		} catch (error: any) {
 			if (error.code === `ERR_KEY_ALREADY_EXISTS`) {
 				await node.key.rm(name)
 				try {
@@ -108,7 +108,7 @@ const ipfsPlugin: Plugin = async (_context, inject) => {
 		try {
 			await node.key.gen(name, { type: `ed25519` })
 			return true
-		} catch (error) {
+		} catch (error: any) {
 			if (error.code === `ERR_KEY_ALREADY_EXISTS`) {
 				await node.key.rm(name)
 				await node.key.gen(name, { type: `ed25519` })

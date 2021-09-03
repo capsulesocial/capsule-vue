@@ -1,128 +1,128 @@
 {
-  "name": "capsule-vue",
-  "productName": "Capsule Client",
-  "version": "1.0.0",
-  "description": "Electron application using Nuxt.js to serve the Capsule Social Application",
-  "author": {
-    "name": "Capsule Social",
-    "email": "jack@capsule.social",
-    "url": "https://capsule.social"
-  },
-  "private": true,
-  "main": "main.js",
-  "license": "GNU GENERAL PUBLIC LICENSE",
-  "build": {
-    "files": [
-      "**/*",
-      "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}",
-      "!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}",
-      "!**/node_modules/*.d.ts",
-      "!**/node_modules/.bin",
-      "!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}",
-      "!.editorconfig",
-      "!**/._*",
-      "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}",
-      "!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}",
-      "!**/{appveyor.yml,.travis.yml,circle.yml}",
-      "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}",
-      "!**/.nuxt/**",
-      "!**/build/**",
-      "!**/mainprocess/**",
-      "!**/src/**",
-      "!main.mainprocess.js",
-      "!main.dev.js",
-      "!main.dev.js.map",
-      "!webpack.config.js",
-      "!.gitignore",
-      "!nuxt.config.js",
-      "!package-lock.json",
-      "!README.md"
-    ],
-    "win": {
-      "target": [
-        "nsis"
-      ]
-    },
-    "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
-      "deleteAppDataOnUninstall": true,
-      "perMachine": true,
-      "include": "build/installer.nsh"
-    },
-    "afterSign": "build/afterSignHook.js",
-    "mac": {
-      "target": [
-        "dmg"
-      ],
-      "provisioningProfile": "build/embedded.provisionprofile",
-      "hardenedRuntime": true,
-      "gatekeeperAssess": false,
-      "entitlements": "build/entitlements.mac.plist"
-    },
-    "mas": {
-      "hardenedRuntime": false,
-      "provisioningProfile": "build/embedded.provisionprofile",
-      "entitlements": "build/entitlements.mas.plist",
-      "entitlementsInherit": "build/entitlements.mas.inherit.plist",
-      "gatekeeperAssess": false,
-      "asarUnpack": []
-    }
-  },
-  "scripts": {
-    "web": "nuxt",
-    "start": "nuxt start",
-    "dev": "webpack --mode=development && electron ./main.dev.js",
-    "build:web": "nuxt build",
-    "build:win": "nuxt build && webpack && electron-builder --win --x64",
-    "build:mac": "nuxt build && webpack && export CSC_IDENTITY_AUTO_DISCOVERY=false && electron-builder --mac --x64",
-    "build:mac:dmg": "nuxt build && webpack && CSC_NAME=\"CERTIFICATE NAME (***********)\" appleId='apple@developer.id' appleIdPassword='application password' electron-builder",
-    "build:mac:store": "nuxt build && webpack && CSC_NAME=\"CERTIFICATE NAME (***********)\" electron-builder && bash build/resignAndPackage.sh",
-    "lint": "yarn eslint -c .eslintrc.js --ext .ts,.js,.vue .",
-    "lint-fix": "yarn eslint -c .eslintrc.js --fix --ext .ts,.js,.vue ."
-  },
-  "dependencies": {
-    "@nuxtjs/axios": "^5.13.1",
-    "@nuxtjs/dotenv": "^1.4.1",
-    "@tailwindcss/typography": "^0.4.0",
-    "@types/dompurify": "^2.2.3",
-    "@types/lodash": "^4.14.172",
-    "@types/marked": "^3.0.0",
-    "@types/medium-editor": "^5.0.4",
-    "@types/turndown": "^5.0.1",
-    "core-js": "^3.8.3",
-    "dompurify": "^2.2.7",
-    "electron-serve": "^0.4.1",
-    "ipfs": "^0.54.5",
-    "marked": "^2.0.1",
-    "medium-editor": "^5.23.3",
-    "near-api-js": "^0.42.0",
-    "nuxt": "^2.14.12",
-    "scrypt-wasm": "^0.1.1",
-    "ts-loader": "^8.2.0",
-    "turndown": "^7.1.1",
-    "vuex-persistedstate": "^4.0.0",
-    "zxcvbn": "^4.4.2"
-  },
-  "devDependencies": {
-    "@babel/eslint-parser": "^7.14.7",
-    "@babel/runtime-corejs2": "^7.8.0",
-    "@nuxt/types": "^2.15.7",
-    "@nuxt/typescript-build": "^2.1.0",
-    "@nuxtjs/eslint-config-typescript": "^6.0.1",
-    "@nuxtjs/tailwindcss": "^3.4.2",
-    "core-js": "^3.8.3",
-    "cross-env": "^6.0.3",
-    "electron": "^12.0.5",
-    "electron-builder": "^21.2.0",
-    "electron-devtools-installer": "^3.1.1",
-    "electron-notarize": "^0.2.1",
-    "eslint": "^7.21.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-prettier": "^3.4.0",
-    "prettier": "^2.3.2",
-    "typescript": "^4.3.5",
-    "webpack": "^4.41.5",
-    "webpack-cli": "^3.3.10"
-  }
+	"name": "capsule-vue",
+	"productName": "Capsule Client",
+	"version": "1.0.0",
+	"description": "Electron application using Nuxt.js to serve the Capsule Social Application",
+	"author": {
+		"name": "Capsule Social",
+		"email": "jack@capsule.social",
+		"url": "https://capsule.social"
+	},
+	"private": true,
+	"main": "main.js",
+	"license": "GNU GENERAL PUBLIC LICENSE",
+	"build": {
+		"files": [
+			"**/*",
+			"!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}",
+			"!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}",
+			"!**/node_modules/*.d.ts",
+			"!**/node_modules/.bin",
+			"!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}",
+			"!.editorconfig",
+			"!**/._*",
+			"!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}",
+			"!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}",
+			"!**/{appveyor.yml,.travis.yml,circle.yml}",
+			"!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}",
+			"!**/.nuxt/**",
+			"!**/build/**",
+			"!**/mainprocess/**",
+			"!**/src/**",
+			"!main.mainprocess.js",
+			"!main.dev.js",
+			"!main.dev.js.map",
+			"!webpack.config.js",
+			"!.gitignore",
+			"!nuxt.config.js",
+			"!package-lock.json",
+			"!README.md"
+		],
+		"win": {
+			"target": [
+				"nsis"
+			]
+		},
+		"nsis": {
+			"oneClick": false,
+			"allowToChangeInstallationDirectory": true,
+			"deleteAppDataOnUninstall": true,
+			"perMachine": true,
+			"include": "build/installer.nsh"
+		},
+		"afterSign": "build/afterSignHook.js",
+		"mac": {
+			"target": [
+				"dmg"
+			],
+			"provisioningProfile": "build/embedded.provisionprofile",
+			"hardenedRuntime": true,
+			"gatekeeperAssess": false,
+			"entitlements": "build/entitlements.mac.plist"
+		},
+		"mas": {
+			"hardenedRuntime": false,
+			"provisioningProfile": "build/embedded.provisionprofile",
+			"entitlements": "build/entitlements.mas.plist",
+			"entitlementsInherit": "build/entitlements.mas.inherit.plist",
+			"gatekeeperAssess": false,
+			"asarUnpack": []
+		}
+	},
+	"scripts": {
+		"web": "nuxt",
+		"start": "nuxt start",
+		"dev": "webpack --mode=development && electron ./main.dev.js",
+		"build:web": "nuxt build",
+		"build:win": "nuxt build && webpack && electron-builder --win --x64",
+		"build:mac": "nuxt build && webpack && export CSC_IDENTITY_AUTO_DISCOVERY=false && electron-builder --mac --x64",
+		"build:mac:dmg": "nuxt build && webpack && CSC_NAME=\"CERTIFICATE NAME (***********)\" appleId='apple@developer.id' appleIdPassword='application password' electron-builder",
+		"build:mac:store": "nuxt build && webpack && CSC_NAME=\"CERTIFICATE NAME (***********)\" electron-builder && bash build/resignAndPackage.sh",
+		"lint": "yarn eslint -c .eslintrc.js --ext .ts,.js,.vue .",
+		"lint-fix": "yarn eslint -c .eslintrc.js --fix --ext .ts,.js,.vue ."
+	},
+	"dependencies": {
+		"@nuxtjs/axios": "^5.13.1",
+		"@nuxtjs/dotenv": "^1.4.1",
+		"@tailwindcss/typography": "^0.4.0",
+		"core-js": "^3.8.3",
+		"dompurify": "^2.2.7",
+		"electron-serve": "^0.4.1",
+		"ipfs": "^0.54.5",
+		"marked": "^2.0.1",
+		"medium-editor": "^5.23.3",
+		"near-api-js": "^0.42.0",
+		"nuxt": "^2.14.12",
+		"scrypt-wasm": "^0.1.1",
+		"ts-loader": "^8.2.0",
+		"turndown": "^7.1.1",
+		"vuex-persistedstate": "^4.0.0",
+		"zxcvbn": "^4.4.2"
+	},
+	"devDependencies": {
+		"@babel/eslint-parser": "^7.14.4",
+		"@babel/runtime-corejs2": "^7.8.0",
+		"@nuxt/types": "^2.15.8",
+		"@nuxt/typescript-build": "^2.1.0",
+		"@nuxtjs/eslint-config-typescript": "^6.0.1",
+		"@nuxtjs/tailwindcss": "^3.4.2",
+		"core-js": "^3.8.3",
+		"cross-env": "^6.0.3",
+		"electron": "^12.0.5",
+		"electron-builder": "^21.2.0",
+		"electron-devtools-installer": "^3.1.1",
+		"electron-notarize": "^0.2.1",
+		"eslint": "^7.32.0",
+		"eslint-config-prettier": "^8.3.0",
+		"eslint-plugin-prettier": "^4.0.0",
+		"prettier": "^2.3.2",
+		"typescript": "^4.4.2",
+		"webpack": "^4.41.5",
+		"webpack-cli": "^3.3.10",
+		"@types/dompurify": "^2.2.3",
+		"@types/lodash": "^4.14.172",
+		"@types/marked": "^3.0.0",
+		"@types/medium-editor": "^5.0.4",
+		"@types/turndown": "^5.0.1"
+	}
 }
