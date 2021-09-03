@@ -63,11 +63,7 @@ const qualityURL: URL = (url) => {
 }
 
 const qualityText: Text = (input) => {
-	if (input) {
-		return true
-	} else {
-		return false
-	}
+	return input.trim().length > 0
 }
 
 const qualityPlugin: Plugin = (_context, inject) => {
