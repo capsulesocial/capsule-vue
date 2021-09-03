@@ -6,6 +6,7 @@
 			<article class="w-full flex justify-between my-2">
 				<div class="text-lg">
 					Category |
+					<span v-if="!this.post.category" class="text-lightSecondaryText"> None</span>
 					<nuxt-link :to="`/discover/` + this.post.category" class="text-primary uppercase">{{
 						this.post.category
 					}}</nuxt-link>
