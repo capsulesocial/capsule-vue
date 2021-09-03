@@ -396,7 +396,6 @@ export default Vue.extend({
 			this.$store.commit(`draft/updateTitle`, this.title)
 			this.$store.commit(`draft/updateContent`, this.input)
 			this.$store.commit(`draft/updateCategory`, this.category)
-			this.$store.commit(`draft/updateCategory`, this.category)
 			this.$router.go(-1)
 		},
 		handleDropdown(e: any): void {
