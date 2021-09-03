@@ -5,7 +5,9 @@ import { Tag } from '~/interfaces/Tag'
 
 export const namespace = `draft`
 
-export const state = () => ({
+type DraftPost = Omit<Post, `authorID` | `timestamp`>
+
+export const state = (): DraftPost => ({
 	title: ``,
 	content: ``,
 	featuredPhotoCID: null,
@@ -25,7 +27,7 @@ export const MutationType = {
 	RESET: `reset`,
 }
 
-export const mutations: MutationTree<any> = {
+export const mutations: MutationTree<DraftPost> = {
 	[MutationType.UPDATE_TITLE]: (state, newTitle: string) => {
 		state.title = newTitle
 	},
@@ -47,7 +49,7 @@ export const mutations: MutationTree<any> = {
 	[MutationType.UPDATE_CATEGORY]: (state, newCategory: string) => {
 		state.category = newCategory
 	},
-	[MutationType.RESET]: (state) => {
+	[MutationType.RESET]: (state: DraftPost) => {
 		// eslint-disable-next-line
 		state = {
 			title: ``,
