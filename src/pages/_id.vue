@@ -12,16 +12,16 @@
 					/>
 					<div class="flex flex-col">
 						<!-- Name Username, Follow button -->
-						<div class="flex flex-row items-center">
+						<div class="flex flex-col">
 							<h3
-								class="text-2xl pr-4"
+								class="text-lg pr-4"
 								:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 							>
 								{{ this.currentUser.name }}
 							</h3>
 							<h5
 								:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-								class="text-xl text-gray-700"
+								class="text-lightSecondary"
 							>
 								@{{ this.currentUser.id }}
 							</h5>
