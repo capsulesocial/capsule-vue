@@ -1,6 +1,6 @@
 <template>
 	<div class="w-full px-4">
-		<section>
+		<section style="width: 640px">
 			<article class="flex flex-col md:flex-row justify-between mb-1 items-center mt-3">
 				<h2
 					:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
