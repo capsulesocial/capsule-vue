@@ -1,7 +1,7 @@
 import type { Plugin } from '@nuxt/types'
+import IPFS from 'ipfs'
 import { Post } from '~/interfaces/Post'
 import { Profile } from '~/interfaces/Profile'
-const IPFS = require(`ipfs`)
 
 // Declare type of function
 type importKey = (name: string, privateKey: string, password: string) => Promise<boolean>
@@ -23,7 +23,7 @@ declare module 'vue/types/vue' {
 
 const ipfsPlugin: Plugin = async (_context, inject) => {
 	const node = await IPFS.create({
-		init: { algorithm: `ed25519` },
+		init: { algorithm: `Ed25519` },
 	})
 	const version = await node.version()
 
@@ -38,50 +38,53 @@ const ipfsPlugin: Plugin = async (_context, inject) => {
 	// Send a user profile object to IPFS
 	const sendProfile: (content: Profile) => Promise<string> = async (content) => {
 		const profileAdded = await node.add(JSON.stringify(content, null, 0))
-		const cid = profileAdded.cid.string
+		const cid = profileAdded.cid.toString()
 		return cid
 	}
 
 	// Returns post object associated with content id
 	const getProfile: (cid: string) => Promise<Profile> = async (cid) => {
-		let content = ``
+		const content: Buffer[] = []
 		for await (const chunk of node.cat(cid)) {
-			content += chunk.toString()
+			content.push(Buffer.from(chunk))
 		}
-		return JSON.parse(content)
+		const contentData = Buffer.concat(content)
+		return JSON.parse(contentData.toString())
 	}
 
 	// Send post to IPFS
 	const sendPost: (content: Post) => Promise<string> = async (content: Post) => {
 		const postAdded = await node.add(JSON.stringify(content, null, 0))
-		const cid = postAdded.cid.string
+		const cid = postAdded.cid.toString()
 		return cid
 	}
 
 	// Returns post object associated with content id
 	const getPost: (cid: string) => Promise<Post> = async (cid) => {
-		let content = ``
+		const content: Buffer[] = []
 		for await (const chunk of node.cat(cid)) {
-			content += chunk.toString()
+			content.push(Buffer.from(chunk))
 		}
-		return JSON.parse(content)
+		const contentData = Buffer.concat(content)
+		return JSON.parse(contentData.toString())
 	}
 
 	// Add photo to IPFS
 	const sendPhoto: (content: any) => Promise<string> = async (content) => {
 		const photoAdded = await node.add(content)
-		const cid = photoAdded.cid.string
+		const cid = photoAdded.cid.toString()
 		return cid
 	}
 
 	// Get photo
 	const getPhoto: (cid: string) => Promise<any> = async (cid) => {
-		let content = ``
+		const content: Buffer[] = []
 		for await (const chunk of node.cat(cid)) {
-			content += chunk.toString()
+			content.push(Buffer.from(chunk))
 		}
+		const contentData = Buffer.concat(content)
 		// eslint-disable-next-line consistent-return
-		return content
+		return contentData.toString()
 	}
 
 	// Import Private Key to local IPFS repo
@@ -89,7 +92,7 @@ const ipfsPlugin: Plugin = async (_context, inject) => {
 		try {
 			await node.key.import(name, privateKey, password)
 			return true
-		} catch (error) {
+		} catch (error: any) {
 			if (error.code === `ERR_KEY_ALREADY_EXISTS`) {
 				await node.key.rm(name)
 				try {
@@ -108,7 +111,7 @@ const ipfsPlugin: Plugin = async (_context, inject) => {
 		try {
 			await node.key.gen(name, { type: `ed25519` })
 			return true
-		} catch (error) {
+		} catch (error: any) {
 			if (error.code === `ERR_KEY_ALREADY_EXISTS`) {
 				await node.key.rm(name)
 				await node.key.gen(name, { type: `ed25519` })

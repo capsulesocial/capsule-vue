@@ -272,8 +272,8 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { HTMLInputEvent } from '@/interfaces/HTMLInputEvent'
 import { mapMutations } from 'vuex'
+import { HTMLInputEvent } from '@/interfaces/HTMLInputEvent'
 import BrandedButton from '@/components/BrandedButton.vue'
 import ChevronRight from '@/components/icons/ChevronRight.vue'
 import UploadAvatar from '@/components/icons/UploadAvatar.vue'
