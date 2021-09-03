@@ -3,7 +3,7 @@
 		class="w-full"
 		:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText bg-lightBG' : 'text-darkPrimaryText bg-darkBG'"
 	>
-		<nav class="flex flex-row border bg-secondary bg-opacity-25 py-2 px-4 pl-5">
+		<nav class="flex flex-row border bg-secondary bg-opacity-25 py-2 px-4 pl-5" style="width: 500px">
 			<div class="flex items-center mr-6">
 				<button
 					:class="this.algorithm === `NEW` ? `bg-primary text-white shadow-lg` : `bg-gray-100 text-gray-800`"
@@ -79,19 +79,23 @@ export default Vue.extend({
 			this.isLoading = true
 			this.algorithm = a
 			const p = await this.$axios.$get(`/content`)
-			// This should be refactored to a switch statement (TODO)
-			// Sort by time
-			if (a === `NEW`) {
-				// Get new posts from all following & category feeds
-				this.posts = p.data.reverse()
-				this.isLoading = false
-			} else if (a === `FOLLOWING`) {
-				// Get list of accounts being followed
-				this.posts = p.data
-				this.isLoading = false
-			} else if (a === `TOP`) {
-				this.posts = p.data
-				this.isLoading = false
+			switch (a) {
+				case `NEW`:
+					// Get new posts from all following & category feeds and sort by time
+					this.posts = p.data.reverse()
+					this.isLoading = false
+					break
+				case `FOLLOWING`:
+					// Get list of accounts being followed
+					this.posts = p.data
+					this.isLoading = false
+					break
+				case `TOP`:
+					this.posts = p.data
+					this.isLoading = false
+					break
+				default:
+					this.posts = p.data
 			}
 			return this.posts
 		},

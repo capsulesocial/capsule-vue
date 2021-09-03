@@ -45,7 +45,7 @@
 								class="relative flex flex-row items-center py-4 pl-2 my-2 rounded-lg"
 							>
 								<div class="absolute text-xs right-0 top-0 mr-4 mt-4">5 min</div>
-								<img class="w-10 h-10 rounded-lg flex-shrink-0 m-2" />
+								<img :src="this.friendAvatar" class="w-10 h-10 rounded-lg flex-shrink-0 m-2" />
 								<div class="flex flex-col flex-grow ml-2">
 									<div class="text-sm font-bold">Jack Dishman</div>
 									<div class="text-xs truncate w-40">
@@ -63,7 +63,7 @@
 								class="relative flex flex-row items-center py-4 pl-2 my-2 rounded-lg shadow-lg"
 							>
 								<div class="absolute text-xs right-0 top-0 mr-4 mt-4">1 day ago</div>
-								<img class="w-10 h-10 rounded-lg flex-shrink-0 m-2" />
+								<img :src="this.friendAvatar" class="w-10 h-10 rounded-lg flex-shrink-0 m-2" />
 								<div class="flex flex-col flex-grow ml-2">
 									<div class="text-sm font-bold">Jack Dishman</div>
 									<div class="text-xs truncate w-40">
@@ -79,7 +79,7 @@
 			<article class="flex flex-col h-full w-full px-4 py-6">
 				<!-- Header for selected chat -->
 				<div class="p-4 flex">
-					<img class="w-10 h-10 rounded-lg" />
+					<img :src="this.friendAvatar" class="w-10 h-10 rounded-lg" />
 					<span class="pl-2">
 						<h4 class="text-lg font-bold">Jack Dishman</h4>
 						<h6 class="text-xs">Last seen today</h6>
@@ -87,9 +87,9 @@
 				</div>
 				<div class="h-full overflow-hidden py-4">
 					<div class="h-full overflow-y-auto">
-						<!-- Message #1 -->
+						<!-- Response message -->
 						<div class="flex items-end p-4">
-							<img class="w-10 h-10 rounded-lg flex-shrink-0 m-2" />
+							<img :src="this.friendAvatar" class="w-10 h-10 rounded-lg flex-shrink-0 m-2" />
 							<div
 								:class="
 									this.$store.state.settings.darkMode
@@ -98,17 +98,14 @@
 								"
 								class="my-2 ml-2 mr-12 pt-4 px-2 rounded-lg"
 							>
-								<p>
-									Hey! How are you? It's been a while since we last spoke. I saw your Capsule post and want to hear more
-									about your thoughts on Pangea.
-								</p>
+								<p>Hey! Welcome to your messages inbox. Full functionality coming soon</p>
 								<h6 class="text-xs text-right p-4">10:00 AM</h6>
 							</div>
 						</div>
 
-						<!-- Message #2 -->
+						<!-- Sent message -->
 						<div class="flex flex-row-reverse items-end">
-							<img class="w-10 h-10 rounded-lg flex-shrink-0 m-2" />
+							<img :src="this.avatar" class="w-10 h-10 rounded-lg flex-shrink-0 m-2" />
 							<div
 								:class="
 									this.$store.state.settings.darkMode
@@ -117,7 +114,7 @@
 								"
 								class="my-2 mr-2 ml-12 pt-4 px-2 rounded-lg"
 							>
-								<p>Pangea is a mindset.</p>
+								<p>Looking forward to it!</p>
 								<h6 class="text-xs text-right p-4">10:03 AM</h6>
 							</div>
 						</div>
@@ -166,6 +163,11 @@ import MailIcon from '@/components/icons/Mail.vue'
 import AttachmentIcon from '@/components/icons/Attachment.vue'
 import SendIcon from '@/components/icons/Send.vue'
 
+interface IData {
+	friendAvatar: string | null
+	avatar: string | null
+}
+
 export default Vue.extend({
 	components: {
 		MailIcon,
@@ -173,5 +175,17 @@ export default Vue.extend({
 		SendIcon,
 	},
 	layout: `Messages`,
+	data(): IData {
+		return {
+			friendAvatar: null,
+			avatar: null,
+		}
+	},
+	async created() {
+		this.friendAvatar = await this.$getPhoto(`QmNyc3T7RH6c7RtGFhdYjvRssqrN1SbNatsXmee3HZuZJ4`)
+		if (this.$store.state.session.avatar) {
+			this.avatar = await this.$getPhoto(this.$store.state.session.avatar)
+		}
+	},
 })
 </script>

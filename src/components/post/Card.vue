@@ -1,6 +1,7 @@
 <template>
 	<article
-		class="shadow rounded-lg my-2 p-5 w-full"
+		class="shadow rounded-lg my-2 p-5 object-contain"
+		style="width: 480px"
 		:class="
 			this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText border border-darkBorder'
 		"
@@ -50,7 +51,7 @@
 		<!-- Preview Content -->
 		<div class="my-2">
 			<nuxt-link :to="'/post/' + this.post._id" class="flex justify-between">
-				<div>
+				<div class="h-24">
 					<h3
 						:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 						class="text-base font-bold capitalize"
