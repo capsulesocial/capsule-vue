@@ -79,6 +79,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapMutations } from 'vuex'
 import CapsuleIcon from '@/components/icons/Capsule.vue'
 import NotificationsIcon from '@/components/icons/Notifications.vue'
 import SettingsIcon from '@/components/icons/Settings.vue'
@@ -89,7 +90,6 @@ import UpIcon from '@/components/icons/ChevronUp.vue'
 import SearchIcon from '@/components/icons/Search.vue'
 import HelpIcon from '@/components/icons/Help.vue'
 import LogoutIcon from '@/components/icons/Logout.vue'
-import { mapMutations } from 'vuex'
 import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
 
 export default Vue.extend({

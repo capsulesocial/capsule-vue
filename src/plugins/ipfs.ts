@@ -1,7 +1,7 @@
 import type { Plugin } from '@nuxt/types'
+import IPFS from 'ipfs'
 import { Post } from '~/interfaces/Post'
 import { Profile } from '~/interfaces/Profile'
-import IPFS from 'ipfs'
 
 // Declare type of function
 type importKey = (name: string, privateKey: string, password: string) => Promise<boolean>
