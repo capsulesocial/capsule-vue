@@ -50,22 +50,22 @@ async function login(username: string, password: string): Promise<{ success: boo
 	const ec = new TextEncoder()
 
 	// HKDF(key: userPassword, salt: username, info: "CapsuleBlogchainAuth")
-	const [{ hp0, hp1 }, { hp0: hp0Content, hp1: hp1Content }] = await Promise.all([
+	const [nearKey, contentKey] = await Promise.all([
 		hkdf(ec.encode(password), ec.encode(username), ec.encode(`CapsuleBlogchainAuth`)),
 		hkdf(ec.encode(password), ec.encode(username), ec.encode(`CapsuleBlogchainSign`)),
 	])
 
 	// peerIDEncryptionKey = SCRYPT (pw: hp0, salt: "CapsuleBlogchainAuth-${username}", N=2^15, r=8, p=1)
 	const [peerIDEncryptionKey, encryptionKey] = await Promise.all([
-		scrypt(hp0, ec.encode(`CapsuleBlogchainAuth-${username}`)),
-		scrypt(hp0Content, ec.encode(`CapsuleBlogchainSign-${username}`)),
+		scrypt(nearKey.hp0, ec.encode(`CapsuleBlogchainAuth-${username}`)),
+		scrypt(contentKey.hp0, ec.encode(`CapsuleBlogchainSign-${username}`)),
 	])
 
 	// Authenticate with server to get encrypted PeerIDPrivateKey
-	const { success, auth } = await getAuthentication(username, hp1)
+	const { success, auth } = await getAuthentication(username, nearKey.hp1)
 
 	// Check if authentication was successful
-	if (success && Buffer.from(auth.signingKey.hp1).toString(`hex`) === Buffer.from(hp1Content).toString(`hex`)) {
+	if (success && Buffer.from(auth.signingKey.hp1).toString(`hex`) === Buffer.from(contentKey.hp1).toString(`hex`)) {
 		const [privateKeyBytes, profile, signingKeyBytes] = await Promise.all([
 			decryptData(peerIDEncryptionKey, auth.privateKey.encryptedPeerIDPrivateKey, auth.privateKey.nonce),
 			getProfileNEAR(username),
