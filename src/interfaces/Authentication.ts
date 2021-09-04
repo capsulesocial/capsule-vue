@@ -4,5 +4,5 @@ export interface Authentication {
 	privateKey: PrivateKey
 	signingKey: PrivateKey
 	id: string
-	nearAccountId: string
+	nearAccountId: string | null
 }

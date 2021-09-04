@@ -65,7 +65,11 @@ async function login(username: string, password: string): Promise<{ success: boo
 	const { success, auth } = await getAuthentication(username, nearKey.hp1)
 
 	// Check if authentication was successful
-	if (success && Buffer.from(auth.signingKey.hp1).toString(`hex`) === Buffer.from(contentKey.hp1).toString(`hex`)) {
+	if (
+		success &&
+		Buffer.from(auth.signingKey.hp1).toString(`hex`) === Buffer.from(contentKey.hp1).toString(`hex`) &&
+		auth.nearAccountId
+	) {
 		const [privateKeyBytes, profile, signingKeyBytes] = await Promise.all([
 			decryptData(peerIDEncryptionKey, auth.privateKey.encryptedPeerIDPrivateKey, auth.privateKey.nonce),
 			getProfileNEAR(username),

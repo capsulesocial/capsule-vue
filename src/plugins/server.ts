@@ -66,7 +66,7 @@ async function getAuthentication(
 		privateKey: defaultprivKey,
 		signingKey: defaultprivKey,
 		id: username,
-		nearAccountId: ``,
+		nearAccountId: null,
 	}
 
 	const requestURL = new URL(`${serverURL}/read`)
