@@ -1,4 +1,5 @@
-const marked = require(`marked`)
+import marked from 'marked'
+
 export default {
 	methods: {
 		compileMarkdown(input: string) {
