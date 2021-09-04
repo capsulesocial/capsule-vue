@@ -1,5 +1,5 @@
 import type { Plugin } from '@nuxt/types'
-import IPFS from 'ipfs'
+import IPFS from 'ipfs-core'
 import { Post } from '~/interfaces/Post'
 import { Profile } from '~/interfaces/Profile'
 
