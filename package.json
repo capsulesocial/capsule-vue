@@ -95,7 +95,7 @@
 		"nuxt": "^2.15.8",
 		"scrypt-wasm": "^0.1.1",
 		"turndown": "^7.1.1",
-		"vuex-persistedstate": "^4.0.0",
+		"vuex-persistedstate": "^3.2.0",
 		"zxcvbn": "^4.4.2"
 	},
 	"devDependencies": {
@@ -110,6 +110,7 @@
 		"@types/marked": "^3.0.0",
 		"@types/medium-editor": "^5.0.4",
 		"@types/turndown": "^5.0.1",
+		"@types/zxcvbn": "^4.4.1",
 		"core-js": "^3.8.3",
 		"cross-env": "^6.0.3",
 		"electron": "^12.0.5",
