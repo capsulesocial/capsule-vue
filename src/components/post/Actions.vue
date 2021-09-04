@@ -3,14 +3,10 @@
 		<!-- Post a Comment -->
 		<article class="py-5">
 			<div class="flex items-start">
-				<!-- Profile Photo / Avatar -->
-				<span v-if="!this.myAvatar" class="p-1 border-2 rounded-full mt-1">
-					<ProfileIcon class="w-6 h-6" />
-				</span>
-				<img v-else :src="this.myAvatar" class="w-10 h-10 rounded-lg object-cover mt-1" />
 				<!-- Comment box Container -->
 				<div
-					class="comment-container flex bg-white shadow-xl rounded-xl p-2 ml-5 w-full overflow-hidden"
+					class="comment-container flex bg-white shadow-xl rounded-xl w-full overflow-hidden"
+					style="padding: 16px 20px 16px 20px"
 					:style="{ backgroundImage: `url(${this.backgroundList[this.emotionCategory]})` }"
 				>
 					<div
@@ -21,24 +17,24 @@
 							<!-- Front side: Type comment -->
 							<div class="front w-full flex bg-white">
 								<div class="self-center">
-									<button @click="showEmotions = !showEmotions">
-										<img v-if="this.emotion !== ''" :src="this.emotion.image" class="h-16 w-16 object-center" />
+									<button style="margin-left: 40px" @click="showEmotions = !showEmotions">
+										<img v-if="this.emotion !== ''" :src="this.emotion.image" class="max-w-full h-auto object-center" />
 										<span v-else><FlipIcon class="w-12 h-12" /></span>
 									</button>
 								</div>
 								<textarea
 									v-model="comment"
-									class="leading-normal resize-none overflow-y-auto w-full h-40 pl-2 pt-1 pr-16 focus:outline-none"
+									class="leading-normal resize-none overflow-y-auto w-full h-40 pl-2 py-8 pr-16 mr-4 focus:outline-none"
 									name="body"
-									placeholder="Write a Comment..."
+									placeholder="What's your response?"
 								/>
 								<div class="relative">
 									<span class="absolute bottom-0 right-0 flex flex-col">
 										<BrandedButton
+											style="margin-right: 15.2px; margin-bottom: 15px"
 											text="Post"
 											:action="sendComment"
 											:thin="true"
-											class="text-sm mb-3 mr-1"
 											:class="this.comment !== '' ? '' : 'opacity-50'"
 										/>
 									</span>
@@ -101,7 +97,6 @@
 import Vue from 'vue'
 import { Comment } from '@/interfaces/Comment'
 import BrandedButton from '@/components/BrandedButton.vue'
-import ProfileIcon from '@/components/icons/Person.vue'
 import CommentCard from '@/components/post/Comment.vue'
 import CommentFilter from '@/components/post/CommentFilter.vue'
 import FlipIcon from '@/components/icons/Flip.vue'
@@ -116,7 +111,6 @@ interface IData {
 	comment: string
 	emotion: string
 	emotionCategory: string
-	myAvatar: string | null
 	showEmotions: boolean
 	commentBackground: string
 	filter: string
@@ -126,7 +120,6 @@ export default Vue.extend({
 	name: `ComponentPostActions`,
 	components: {
 		BrandedButton,
-		ProfileIcon,
 		CommentCard,
 		CommentFilter,
 		FlipIcon,
@@ -146,16 +139,12 @@ export default Vue.extend({
 			comments: [],
 			emotion: ``,
 			emotionCategory: `default`,
-			myAvatar: null,
 			showEmotions: false,
 			commentBackground: `@/assets/images/brand/paper4.svg`,
 			filter: ``,
 		}
 	},
 	async created() {
-		if (this.$store.state.session.avatar !== ``) {
-			this.myAvatar = await this.$getPhoto(this.$store.state.session.avatar)
-		}
 		// get list of most recent comments with ALL reaction types
 		// this.comments =
 	},
