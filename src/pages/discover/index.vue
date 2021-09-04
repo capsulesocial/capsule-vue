@@ -23,7 +23,6 @@
 			</article>
 			<p
 				:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-				class="mb-5"
 				style="font-size: 1.563rem"
 			>
 				Find and join conversations on any topic
@@ -47,7 +46,7 @@
 					Read more of what you love by browsing top categories
 				</p>
 			</article>
-			<article class="grid grid-cols-2 gap-4 md:grid-cols-4">
+			<article class="grid grid-cols-2 gap-4 md:grid-cols-2">
 				<CategoryCard
 					v-for="c in this.categoryList"
 					:key="c"
