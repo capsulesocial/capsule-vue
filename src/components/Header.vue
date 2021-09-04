@@ -18,26 +18,30 @@
 				</button>
 			</div>
 		</div>
-		<article style="width: 500px">
-			<!-- Placeholder -->
-		</article>
 
 		<!-- Top Right -->
-		<article class="relative hidden md:flex items-center xl:pr-8">
-			<div class="flex">
+		<article class="relative hidden md:flex md:justify-center xl:justify-end items-center xl:ml-0" style="width: 640px">
+			<div class="flex items-center">
 				<span>
-					<button class="bg-gray1 rounded-full w-10 h-10 focus:outline-none flex justify-center shadow-lg">
+					<button
+						class="bg-gray1 rounded-full focus:outline-none flex justify-center shadow-lg"
+						style="width: 38px; height: 38px"
+					>
 						<SearchIcon class="self-center" />
 					</button>
 				</span>
-				<span class="px-2">
-					<button class="bg-gray1 rounded-full w-10 h-10 focus:outline-none flex justify-center shadow-lg">
+				<span class="px-3">
+					<button
+						class="bg-gray1 rounded-full focus:outline-none flex justify-center shadow-lg"
+						style="width: 38px; height: 38px"
+					>
 						<NotificationsIcon class="self-center" />
 					</button>
 				</span>
 				<span class="dropdown">
 					<button
-						class="bg-gray1 rounded-full w-10 h-10 focus:outline-none flex justify-center shadow-lg dropdown"
+						class="bg-gray1 rounded-full focus:outline-none flex justify-center shadow-lg"
+						style="width: 38px; height: 38px"
 						@click.stop="toggleDropdown"
 					>
 						<DownIcon v-show="!showMore" class="self-center dropdown" />
@@ -48,7 +52,8 @@
 			<!-- Dropdown menu -->
 			<div
 				v-show="showMore"
-				class="absolute mt-56 z-10 bg-white shadow-lg rounded-lg w-64 -ml-4"
+				class="absolute mt-56 z-10 bg-white shadow-lg rounded-lg w-64"
+				style="margin-right: -7rem"
 				@click.stop="toggleDropdown"
 			>
 				<nuxt-link to="/settings" class="w-full p-2 grid grid-cols-4 items-center">

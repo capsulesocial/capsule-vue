@@ -1,27 +1,27 @@
 <template>
-	<section class="p-4 w-full">
+	<section class="w-full">
 		<!-- IF a profile exists -->
-		<div v-if="this.currentUser" style="width: 500px">
+		<div v-if="this.currentUser" style="width: 512px" class="border-r">
 			<!-- Name, socials, follow, bio -->
-			<section class="flex flex-row justify-between">
+			<section class="flex flex-row justify-between p-4">
 				<article class="flex items-center">
 					<img
 						v-if="this.currentUser.avatar !== `` && this.currentUser.avatar !== null"
 						:src="this.avatar"
-						class="w-16 h-16 rounded-lg mr-4 object-cover"
+						class="w-24 h-24 rounded-lg mr-4 object-cover"
 					/>
 					<div class="flex flex-col">
 						<!-- Name Username, Follow button -->
 						<div class="flex flex-col">
 							<h3
-								class="text-lg pr-4"
+								class="text-xl pr-4"
 								:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 							>
 								{{ this.currentUser.name }}
 							</h3>
 							<h5
 								:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-								class="text-lightSecondary"
+								class="text-lightSecondary text-lg"
 							>
 								@{{ this.currentUser.id }}
 							</h5>
@@ -77,8 +77,11 @@
 				<FriendButton v-else :authorID="this.$route.params.id" />
 			</section>
 
-			<section :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'">
-				<p class="text-sm italic py-2">
+			<section
+				class="px-4 pb-4"
+				:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+			>
+				<p class="italic">
 					{{ this.currentUser.bio }}
 				</p>
 				<span v-for="s in this.currentUser.socials" :key="s.platform" class="p-2">
@@ -108,7 +111,7 @@
 				</span>
 			</section>
 
-			<article class="flex flex-col md:flex-row w-full justify-between border-b">
+			<article class="flex flex-col md:flex-row w-full justify-between border-b px-4">
 				<nuxt-link
 					:to="'/' + this.$route.params.id"
 					class="text-gray5 font-bold px-2 pb-1"
@@ -139,11 +142,11 @@
 				</nuxt-link>
 			</article>
 			<article>
-				<nuxt-child :profile="this.currentUser" />
+				<nuxt-child :profile="this.currentUser" style="padding-left: 16px" />
 			</article>
 		</div>
-		<div v-else class="flex justify-center mt-32">
-			<div class="loader m-10"></div>
+		<div v-else style="width: 512px" class="flex justify-center border-r">
+			<div class="loader m-5"></div>
 		</div>
 	</section>
 </template>

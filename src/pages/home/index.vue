@@ -1,47 +1,52 @@
 <template>
-	<section
-		class="w-full"
-		:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText bg-lightBG' : 'text-darkPrimaryText bg-darkBG'"
-	>
-		<nav class="flex flex-row border bg-secondary bg-opacity-25 py-2 px-4 pl-5" style="width: 500px">
-			<div class="flex items-center mr-6">
-				<button
-					:class="this.algorithm === `NEW` ? `bg-primary text-white shadow-lg` : `bg-gray-100 text-gray-800`"
-					class="font-sans py-2 px-4 focus:outline-none uppercase rounded-lg"
-					@click="sortFeed('NEW')"
-				>
-					New
-				</button>
-			</div>
-			<div class="flex items-center mr-6">
-				<button
-					:class="this.algorithm === `TOP` ? `bg-primary text-white shadow-lg` : `bg-gray-100 text-gray-800`"
-					class="font-sans py-2 px-4 focus:outline-none uppercase rounded-lg"
-					@click="sortFeed('TOP')"
-				>
-					Top
-				</button>
-			</div>
-			<div class="flex items-center mr-6">
-				<button
-					:class="this.algorithm === `FOLLOWING` ? `bg-primary text-white shadow-lg` : `bg-gray-100 text-gray-800`"
-					class="font-sans py-2 px-4 focus:outline-none uppercase rounded-lg"
-					@click="sortFeed('FOLLOWING')"
-				>
-					following
-				</button>
-			</div>
-		</nav>
+	<div class="w-full">
+		<section
+			style="width: 512px"
+			class="border-r"
+			:class="
+				this.$store.state.settings.darkMode ? 'text-lightPrimaryText bg-lightBG' : 'text-darkPrimaryText bg-darkBG'
+			"
+		>
+			<nav class="flex flex-row border bg-secondary bg-opacity-25 py-2 px-4 pl-5">
+				<div class="flex items-center mr-6">
+					<button
+						:class="this.algorithm === `NEW` ? `bg-primary text-white shadow-lg` : `bg-gray-100 text-gray-800`"
+						class="font-sans py-2 px-4 focus:outline-none uppercase rounded-lg"
+						@click="sortFeed('NEW')"
+					>
+						New
+					</button>
+				</div>
+				<div class="flex items-center mr-6">
+					<button
+						:class="this.algorithm === `TOP` ? `bg-primary text-white shadow-lg` : `bg-gray-100 text-gray-800`"
+						class="font-sans py-2 px-4 focus:outline-none uppercase rounded-lg"
+						@click="sortFeed('TOP')"
+					>
+						Top
+					</button>
+				</div>
+				<div class="flex items-center mr-6">
+					<button
+						:class="this.algorithm === `FOLLOWING` ? `bg-primary text-white shadow-lg` : `bg-gray-100 text-gray-800`"
+						class="font-sans py-2 px-4 focus:outline-none uppercase rounded-lg"
+						@click="sortFeed('FOLLOWING')"
+					>
+						following
+					</button>
+				</div>
+			</nav>
 
-		<!-- Not loaded yet -->
-		<article v-show="this.isLoading" class="flex justify-center">
-			<div class="loader m-10"></div>
-		</article>
+			<!-- Not loaded yet -->
+			<article v-show="this.isLoading" class="flex justify-center" style="width: 512px">
+				<div class="loader m-5"></div>
+			</article>
 
-		<article v-for="post in this.posts" :key="post.contentAddress" class="px-4">
-			<PostCard :post="post" />
-		</article>
-	</section>
+			<article v-for="post in this.posts" :key="post.contentAddress" style="padding-left: 16px">
+				<PostCard :post="post" />
+			</article>
+		</section>
+	</div>
 </template>
 
 <script lang="ts">
