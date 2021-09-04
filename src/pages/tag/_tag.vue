@@ -1,10 +1,13 @@
-/* eslint-disable prefer-const */
 <template>
-	<section class="pt-4 px-4 w-full">
-		<h2 class="text-2xl">Hashtags /</h2>
-		<h2 class="text-2xl uppercase">#{{ this.$route.params.tag }}</h2>
-		<div v-for="p in this.posts" :key="p.contentAddress">
-			<PostCard :post="p" :authorID="p.authorID" :authorUsername="p.authorID" />
+	<section class="w-full">
+		<div style="width: 500px" class="border-r">
+			<article class="p-4">
+				<h2 class="text-xl">Hashtags /</h2>
+				<h2 class="text-2xl uppercase">#{{ this.$route.params.tag }}</h2>
+			</article>
+			<article v-for="p in this.posts" :key="p.contentAddress" style="padding-left: 10px">
+				<PostCard :post="p" :authorID="p.authorID" :authorUsername="p.authorID" />
+			</article>
 		</div>
 	</section>
 </template>

@@ -1,12 +1,16 @@
 <template>
-	<section class="pt-4 px-4 w-full">
-		<h4 class="text-xl">Category /</h4>
-		<h2 class="text-2xl uppercase">
-			{{ this.$route.params.category }}
-		</h2>
-		<article v-for="post in this.posts" :key="post.title">
-			<PostCard :post="post" />
-		</article>
+	<section class="w-full">
+		<div style="width: 500px" class="border-r">
+			<article class="p-4">
+				<h4 class="text-xl">Category /</h4>
+				<h2 class="text-2xl uppercase">
+					{{ this.$route.params.category }}
+				</h2>
+			</article>
+			<article v-for="post in this.posts" :key="post.title" style="padding-left: 10px">
+				<PostCard :post="post" />
+			</article>
+		</div>
 	</section>
 </template>
 
