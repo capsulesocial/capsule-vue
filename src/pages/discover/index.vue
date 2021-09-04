@@ -24,14 +24,17 @@
 			<p
 				:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 				style="font-size: 1.563rem"
+				class="mb-2"
 			>
 				Find and join conversations on any topic
 			</p>
-			<TagCard v-for="t in this.tags" :key="t" :tag="t" />
+			<div class="my-4">
+				<TagCard v-for="t in this.tags" :key="t" :tag="t" />
+			</div>
 		</section>
 
 		<section style="width: 640px">
-			<article class="mt-3">
+			<article class="mt-4">
 				<h2
 					:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 					class="text-4xl font-bold"
