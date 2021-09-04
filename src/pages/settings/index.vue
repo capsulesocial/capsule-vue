@@ -43,7 +43,7 @@
 
 			<!-- Right column: Show details -->
 			<div class="col-span-2" style="width: 250px">
-				<article v-if="this.tab === 'account'" class="col-span-2 border-r-2 h-full">
+				<article v-if="this.tab === 'account'" class="col-span-2 border-r h-full">
 					<!-- General Settings (Username, ID, Email) -->
 					<h2
 						:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
@@ -162,7 +162,7 @@
 					</div>
 				</article>
 
-				<article v-if="this.tab === 'password'" class="col-span-2">
+				<article v-if="this.tab === 'password'" class="col-span-2 border-r h-full">
 					<h2
 						:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 						class="border-b-2 text-xl bold font-bold"
@@ -208,7 +208,7 @@
 					</div>
 				</article>
 				<!-- Social Links -->
-				<article v-if="this.tab === 'social'" class="col-span-2">
+				<article v-if="this.tab === 'social'" class="col-span-2 border-r h-full">
 					<h2
 						:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 						class="border-b-2 text-xl bold font-bold"
@@ -233,7 +233,7 @@
 					<VerifySocial platform="website" class="mx-4 mb-4" />
 				</article>
 				<!-- Display Themes -->
-				<article v-if="this.tab === 'display'" class="col-span-2">
+				<article v-if="this.tab === 'display'" class="col-span-2 border-r h-full">
 					<h2
 						:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 						class="border-b-2 text-xl bold font-bold"
