@@ -12,17 +12,17 @@
 				transform
 				hover:scale-110
 				overflow-hidden
-				h-40
 				rounded-lg
 				shadow-lg
 				bg-primary
 			"
+			style="width: 200px; height: 141px"
 		>
 			<img
 				v-if="this.$props.bgImage !== ``"
 				:src="this.$props.bgImage"
 				:alt="this.$props.text"
-				class="opacity-75 absolute left-0 top-0 object-cover h-40 w-full"
+				class="opacity-75 absolute left-0 top-0 object-contain w-full"
 			/>
 			<div class="flex flex-col font-sans p-4">
 				<h4 class="text-lg text-white font-extrabold capitalize z-20">

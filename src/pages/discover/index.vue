@@ -49,7 +49,7 @@
 					Read more of what you love by browsing top categories
 				</p>
 			</article>
-			<article class="grid grid-cols-2 gap-4 md:grid-cols-2">
+			<article class="grid grid-cols-2 gap-4 md:grid-cols-3">
 				<CategoryCard
 					v-for="c in this.categoryList"
 					:key="c"

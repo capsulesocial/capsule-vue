@@ -111,14 +111,14 @@
 					</button>
 					<!-- Dropdown -->
 					<div v-show="this.tabs.category" class="hotzone pb-4 py-2">
-						<div class="dropdown_inset hotzone flex flex-col bg-white -mx-4">
+						<div class="dropdown_inset hotzone flex flex-col bg-white -mx-4 py-1">
 							<button
 								v-for="c in this.categoryList"
 								:key="c"
-								class="hotzone w-full flex items-center px-2 capitalize focus:outline-none h-12"
+								class="hotzone w-full flex items-center px-2 capitalize focus:outline-none h-10"
 								@click="changeCategory(c)"
 							>
-								<img :src="require(`@/assets/images/category/` + c + `/icon.png`)" class="hotzone w-10 h-10 mr-1" />
+								<img :src="require(`@/assets/images/category/` + c + `/icon.png`)" class="hotzone w-6 h-6 mr-1 ml-2" />
 								<span
 									class="border-b ml-2"
 									:class="
