@@ -10,7 +10,7 @@ const config: NuxtConfig = {
 	ssr: false,
 	telemetry: false,
 	head: {
-		title: 'capsule-frontend',
+		title: 'Capsule Social',
 		htmlAttrs: {
 			lang: 'en',
 		},
