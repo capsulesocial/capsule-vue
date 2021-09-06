@@ -29,7 +29,7 @@
 				Find and join conversations on any topic
 			</p>
 			<div class="my-4">
-				<TagCard v-for="t in this.tags" :key="t" :tag="t" />
+				<TagCard v-for="t in this.tags" :key="t" :tag="t" class="text-lg" />
 			</div>
 		</section>
 

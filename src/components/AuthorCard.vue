@@ -2,11 +2,11 @@
 	<div class="border-t border-b p-5 my-5 flex flex-row justify-between">
 		<div class="flex">
 			<img
-				v-if="this.$props.authorAvatar !== ``"
+				v-if="this.$props.authorAvatar !== `` && this.$props.authorAvatar !== null"
 				:src="this.$props.authorAvatar"
 				class="w-12 h-12 rounded-lg object-cover"
 			/>
-			<ProfileIcon v-else class="w-10 h-10 border-2 rounded-full" />
+			<ProfileIcon v-else class="w-10 h-10 border rounded-full" />
 
 			<div class="mx-4">
 				<h6 class="text-sm uppercase text-lightSecondaryText">written by:</h6>

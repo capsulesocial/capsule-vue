@@ -8,7 +8,7 @@
 			>
 				<h2 class="border-b-2 text-xl bold font-bold" style="padding: 12px 0px 10px 16px">Settings</h2>
 				<button
-					class="flex flex-row justify-between px-4 py-2 focus:outline-none bg-opacity-25 border-r-4 border-transparent"
+					class="flex flex-row justify-between px-4 py-2 focus:outline-none border-r-4 border-transparent"
 					:class="this.getStyles('account')"
 					@click="changeTab('account')"
 				>
@@ -16,7 +16,7 @@
 					<ChevronRight class="text-gray4" />
 				</button>
 				<button
-					class="flex flex-row justify-between px-4 py-2 focus:outline-none bg-opacity-25 border-r-4 border-transparent"
+					class="flex flex-row justify-between px-4 py-2 focus:outline-none border-r-4 border-transparent"
 					:class="this.getStyles('password')"
 					@click="changeTab('password')"
 				>
@@ -24,7 +24,7 @@
 					<ChevronRight class="text-gray4" />
 				</button>
 				<button
-					class="flex flex-row justify-between px-4 py-2 focus:outline-none bg-opacity-25 border-r-4 border-transparent"
+					class="flex flex-row justify-between px-4 py-2 focus:outline-none border-r-4 border-transparent"
 					:class="this.getStyles('social')"
 					@click="changeTab('social')"
 				>
@@ -32,7 +32,7 @@
 					<ChevronRight class="text-gray4" />
 				</button>
 				<button
-					class="flex flex-row justify-between px-4 py-2 focus:outline-none bg-opacity-25 border-r-4 border-transparent"
+					class="flex flex-row justify-between px-4 py-2 focus:outline-none border-r-4 border-transparent"
 					:class="this.getStyles('display')"
 					@click="changeTab('display')"
 				>
@@ -261,13 +261,15 @@
 				</article>
 			</div>
 		</section>
-		<div v-if="this.tab !== ''" class="text-center pt-4 pl-1">
-			<BrandedButton
-				text="Save Changes"
-				:action="this.updateSettings"
+		<div v-if="this.tab !== ''">
+			<button
 				:class="this.hasChanged() ? '' : 'opacity-50'"
-				class="ml-16"
-			/>
+				class="bg-primary text-white rounded-lg focus:outline-none"
+				style="width: 128px; height: 40px; margin-left: 360px"
+				@click="this.updateSettings"
+			>
+				Save Changes
+			</button>
 		</div>
 	</main>
 </template>
@@ -276,7 +278,6 @@
 import Vue from 'vue'
 import { mapMutations } from 'vuex'
 import { HTMLInputEvent } from '@/interfaces/HTMLInputEvent'
-import BrandedButton from '@/components/BrandedButton.vue'
 import ChevronRight from '@/components/icons/ChevronRight.vue'
 import UploadAvatar from '@/components/icons/UploadAvatar.vue'
 import ColorMode from '@/components/ColorMode.vue'
@@ -297,7 +298,6 @@ interface IData {
 export default Vue.extend({
 	components: {
 		VerifySocial: () => import(`@/components/VerifySocial.vue`),
-		BrandedButton,
 		ChevronRight,
 		UploadAvatar,
 		ColorMode,
@@ -338,7 +338,7 @@ export default Vue.extend({
 			let styles: string = ``
 			// Dark mode AND selected tab
 			if (t === this.tab && this.$store.state.settings.darkMode) {
-				styles += `bg-darkButtonBG border-primary`
+				styles += `bg-neutralLightest border-primary`
 			} else if (t === this.tab && !this.$store.state.settings.darkMode) {
 				styles += `bg-lightButtonBG`
 			}

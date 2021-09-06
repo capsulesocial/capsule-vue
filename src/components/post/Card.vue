@@ -91,7 +91,7 @@
 				/>
 			</div>
 			<!-- Display tags -->
-			<div class="flex flex-row-reverse">
+			<div class="flex flex-row-reverse overflow-x-auto">
 				<TagPill v-for="t in this.post.tags" :key="t.name" :tag="t.name" />
 			</div>
 		</div>

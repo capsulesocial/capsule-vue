@@ -4,7 +4,7 @@
 		:class="this.$props.theme === 'colors' ? 'bg-white shadow rounded-full' : 'bg-gray1 text-gray5 rounded-lg'"
 		@click="$router.push('/tag/' + tag)"
 	>
-		<span class="font-bold text-lg" :class="this.$props.theme === 'colors' ? colors[getRandomColor()] : 'text-gray5'">
+		<span class="font-bold" :class="this.$props.theme === 'colors' ? colors[getRandomColor()] : 'text-gray5'">
 			#{{ tag }}
 		</span>
 	</button>
