@@ -19,6 +19,9 @@ async function sendAuthentication(data: Authentication): Promise<boolean> {
 	const nonce = Buffer.from(data.privateKey.nonce).toString(`hex`)
 	const encPrivateKey = Buffer.from(data.privateKey.encryptedPeerIDPrivateKey).toString(`hex`)
 	const hp1 = Buffer.from(data.privateKey.hp1).toString(`hex`)
+	const hp1Content = Buffer.from(data.signingKey.hp1).toString(`hex`)
+	const encSigningKey = Buffer.from(data.signingKey.encryptedPeerIDPrivateKey).toString(`hex`)
+	const encSigningKeyNonce = Buffer.from(data.signingKey.nonce).toString(`hex`)
 
 	const requestURL = new URL(`${serverURL}/write`)
 	try {
@@ -28,6 +31,9 @@ async function sendAuthentication(data: Authentication): Promise<boolean> {
 			username: data.id,
 			encryptedPrivateKey: encPrivateKey,
 			encryptedPrivateKeyNonce: nonce,
+			hp1Content,
+			encryptedSigningKey: encSigningKey,
+			encryptedSigningKeyNonce: encSigningKeyNonce,
 			accountId: data.nearAccountId,
 		}
 		const response = await axios.post(requestURL.toString(), reqData)
@@ -56,7 +62,12 @@ async function getAuthentication(
 		hp1: new Uint8Array(),
 		nonce: new Uint8Array(),
 	}
-	const defaultAuth: Authentication = { privateKey: defaultprivKey, id: username, nearAccountId: `` }
+	const defaultAuth: Authentication = {
+		privateKey: defaultprivKey,
+		signingKey: defaultprivKey,
+		id: username,
+		nearAccountId: null,
+	}
 
 	const requestURL = new URL(`${serverURL}/read`)
 	// Request body data
@@ -67,8 +78,24 @@ async function getAuthentication(
 			const encryptedPeerIDPrivateKey = new Uint8Array(Buffer.from(response.data.encryptedPrivateKey, `hex`))
 			const hp1 = new Uint8Array(Buffer.from(response.data.hp1, `hex`))
 			const nonce = new Uint8Array(Buffer.from(response.data.encryptedPrivateKeyNonce, `hex`))
+
+			const encryptedSigningKey = new Uint8Array(Buffer.from(response.data.encryptedSigningKey, `hex`))
+			const hp1Content = new Uint8Array(Buffer.from(response.data.hp1Content, `hex`))
+			const encryptedSigningKeyNonce = new Uint8Array(Buffer.from(response.data.encryptedSigningKeyNonce, `hex`))
+
+			const signKey: PrivateKey = {
+				encryptedPeerIDPrivateKey: encryptedSigningKey,
+				hp1: hp1Content,
+				nonce: encryptedSigningKeyNonce,
+			}
 			const privKey: PrivateKey = { encryptedPeerIDPrivateKey, hp1, nonce }
-			const auth: Authentication = { privateKey: privKey, id: username, nearAccountId: response.data.accountId }
+
+			const auth: Authentication = {
+				privateKey: privKey,
+				signingKey: signKey,
+				id: username,
+				nearAccountId: response.data.accountId,
+			}
 			return { success: true, auth }
 		}
 	} catch {

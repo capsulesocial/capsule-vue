@@ -3,6 +3,7 @@ import type { GetterTree, MutationTree } from 'vuex'
 import type { RootState } from './index'
 import { Profile } from '~/interfaces/Profile'
 import { walletLogout, removeNearPrivateKey } from '~/plugins/near'
+import { removeSigningKey } from '~/plugins/keys'
 export interface Session {
 	id: Profile[`id`]
 	name: Profile[`name`]
@@ -70,6 +71,9 @@ export const mutations: MutationTree<Session> = {
 		state.location = newLocation
 	},
 	[MutationType.LOGOUT]: (state) => {
+		// Remove content-signing key from localStorage
+		// when logging out
+		removeSigningKey(state.id)
 		Object.assign(state, createDefaultSession(``, ``, ``, ``))
 		// Remove NEAR private key when logging out.
 		// walletLogout() removes only

@@ -95,6 +95,7 @@
 		"nuxt": "^2.15.8",
 		"scrypt-wasm": "^0.1.1",
 		"turndown": "^7.1.1",
+		"tweetnacl": "^1.0.3",
 		"vuex-persistedstate": "^3.2.0",
 		"zxcvbn": "^4.4.2"
 	},

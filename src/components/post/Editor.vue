@@ -209,6 +209,7 @@ import { Post } from '@/interfaces/Post'
 import { Tag } from '@/interfaces/Tag'
 import { categories } from '@/config'
 import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
+import { signContent } from '~/plugins/keys'
 
 interface IData {
 	categoryList: string[]
@@ -385,13 +386,18 @@ export default Vue.extend({
 					featuredPhotoCID: this.featuredPhotoCID,
 				}
 				const cid = await this.$sendPost(p)
-				this.appendPostCID(cid)
-				this.$axios.post(`/content`, { cid, data: p })
-				this.title = ``
-				this.input = ``
-				this.$store.commit(`draft/reset`)
-				this.$store.commit(`settings/setRecentlyPosted`, true)
-				this.$router.push(`/post/` + cid)
+				const signature = signContent(p, p.authorID)
+				if (signature) {
+					this.appendPostCID(cid)
+					this.$axios.post(`/content`, { cid, data: p, sig: Buffer.from(signature).toString(`hex`), type: `post` })
+					this.title = ``
+					this.input = ``
+					this.$store.commit(`draft/reset`)
+					this.$store.commit(`settings/setRecentlyPosted`, true)
+					this.$router.push(`/post/` + cid)
+				} else {
+					alert(`Signature could not be generated!`)
+				}
 			}
 		},
 		updateStore(): void {
