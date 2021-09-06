@@ -8,7 +8,7 @@
 			>
 				<h2 class="border-b-2 text-xl bold font-bold" style="padding: 12px 0px 10px 16px">Settings</h2>
 				<button
-					class="flex flex-row justify-between px-4 py-2 focus:outline-none bg-opacity-25 border-r-4 border-transparent"
+					class="flex flex-row justify-between px-4 py-2 focus:outline-none border-r-4 border-transparent"
 					:class="this.getStyles('account')"
 					@click="changeTab('account')"
 				>
@@ -16,7 +16,7 @@
 					<ChevronRight class="text-gray4" />
 				</button>
 				<button
-					class="flex flex-row justify-between px-4 py-2 focus:outline-none bg-opacity-25 border-r-4 border-transparent"
+					class="flex flex-row justify-between px-4 py-2 focus:outline-none border-r-4 border-transparent"
 					:class="this.getStyles('password')"
 					@click="changeTab('password')"
 				>
@@ -24,7 +24,7 @@
 					<ChevronRight class="text-gray4" />
 				</button>
 				<button
-					class="flex flex-row justify-between px-4 py-2 focus:outline-none bg-opacity-25 border-r-4 border-transparent"
+					class="flex flex-row justify-between px-4 py-2 focus:outline-none border-r-4 border-transparent"
 					:class="this.getStyles('social')"
 					@click="changeTab('social')"
 				>
@@ -32,7 +32,7 @@
 					<ChevronRight class="text-gray4" />
 				</button>
 				<button
-					class="flex flex-row justify-between px-4 py-2 focus:outline-none bg-opacity-25 border-r-4 border-transparent"
+					class="flex flex-row justify-between px-4 py-2 focus:outline-none border-r-4 border-transparent"
 					:class="this.getStyles('display')"
 					@click="changeTab('display')"
 				>
@@ -338,7 +338,7 @@ export default Vue.extend({
 			let styles: string = ``
 			// Dark mode AND selected tab
 			if (t === this.tab && this.$store.state.settings.darkMode) {
-				styles += `bg-darkButtonBG border-primary`
+				styles += `bg-neutralLightest border-primary`
 			} else if (t === this.tab && !this.$store.state.settings.darkMode) {
 				styles += `bg-lightButtonBG`
 			}
