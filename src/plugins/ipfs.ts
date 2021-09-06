@@ -109,12 +109,12 @@ const ipfsPlugin: Plugin = async (_context, inject) => {
 	// Generate a new ed25519 key
 	const generatePrivateKey: (name: string) => Promise<boolean> = async (name) => {
 		try {
-			await node.key.gen(name, { type: `ed25519` })
+			await node.key.gen(name, { type: `Ed25519` })
 			return true
 		} catch (error: any) {
 			if (error.code === `ERR_KEY_ALREADY_EXISTS`) {
 				await node.key.rm(name)
-				await node.key.gen(name, { type: `ed25519` })
+				await node.key.gen(name, { type: `Ed25519` })
 				return true
 			}
 		}
