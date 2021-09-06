@@ -261,13 +261,15 @@
 				</article>
 			</div>
 		</section>
-		<div v-if="this.tab !== ''" class="text-center pt-4 pl-1">
-			<BrandedButton
-				text="Save Changes"
-				:action="this.updateSettings"
+		<div v-if="this.tab !== ''">
+			<button
 				:class="this.hasChanged() ? '' : 'opacity-50'"
-				class="ml-16"
-			/>
+				class="bg-primary text-white rounded-lg focus:outline-none"
+				style="width: 128px; height: 40px; margin-left: 360px"
+				@click="this.updateSettings"
+			>
+				Save Changes
+			</button>
 		</div>
 	</main>
 </template>
@@ -276,7 +278,6 @@
 import Vue from 'vue'
 import { mapMutations } from 'vuex'
 import { HTMLInputEvent } from '@/interfaces/HTMLInputEvent'
-import BrandedButton from '@/components/BrandedButton.vue'
 import ChevronRight from '@/components/icons/ChevronRight.vue'
 import UploadAvatar from '@/components/icons/UploadAvatar.vue'
 import ColorMode from '@/components/ColorMode.vue'
@@ -297,7 +298,6 @@ interface IData {
 export default Vue.extend({
 	components: {
 		VerifySocial: () => import(`@/components/VerifySocial.vue`),
-		BrandedButton,
 		ChevronRight,
 		UploadAvatar,
 		ColorMode,
