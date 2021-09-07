@@ -44,56 +44,56 @@ const ipfsConfig: Options = {
 async function createIPFSInterface(): Promise<IPFSInterface> {
 	const node = await IPFS.create(ipfsConfig)
 
-	// Send a user profile object to IPFS
-	const sendProfile = async (content: Profile) => {
-		const profileAdded = await node.add(JSON.stringify(content, null, 0))
-		const cid = profileAdded.cid.toString()
-		return cid
-	}
-
-	// Returns post object associated with content id
-	const getProfile = async (cid: string) => {
+	const getData = async (cid: string) => {
 		const content: Buffer[] = []
 		for await (const chunk of node.cat(cid)) {
 			content.push(Buffer.from(chunk))
 		}
-		const contentData = Buffer.concat(content)
-		return JSON.parse(contentData.toString()) as Profile
+		return Buffer.concat(content).toString()
+	}
+
+	const getJSONData = async <T>(cid: string) => {
+		const contentData = await getData(cid)
+		return JSON.parse(contentData.toString()) as T
+	}
+
+	const sendData = async (content: string | ArrayBuffer) => {
+		const { cid } = await node.add(content)
+		return cid.toString()
+	}
+
+	const sendJSONData = <T>(content: T) => {
+		return sendData(JSON.stringify(content, null, 0))
+	}
+
+	// Send a user profile object to IPFS
+	const sendProfile = (content: Profile) => {
+		return sendJSONData(content)
 	}
 
 	// Send post to IPFS
-	const sendPost = async (content: Post) => {
-		const postAdded = await node.add(JSON.stringify(content, null, 0))
-		const cid = postAdded.cid.toString()
-		return cid
-	}
-
-	// Returns post object associated with content id
-	const getPost = async (cid: string) => {
-		const content: Buffer[] = []
-		for await (const chunk of node.cat(cid)) {
-			content.push(Buffer.from(chunk))
-		}
-		const contentData = Buffer.concat(content)
-		return JSON.parse(contentData.toString()) as Post
+	const sendPost = (content: Post) => {
+		return sendJSONData(content)
 	}
 
 	// Add photo to IPFS
-	const sendPhoto = async (content: any) => {
-		const photoAdded = await node.add(content)
-		const cid = photoAdded.cid.toString()
-		return cid
+	const sendPhoto = (content: string | ArrayBuffer) => {
+		return sendData(content)
+	}
+
+	// Returns post object associated with content id
+	const getProfile = (cid: string) => {
+		return getJSONData<Profile>(cid)
+	}
+
+	// Returns post object associated with content id
+	const getPost = (cid: string) => {
+		return getJSONData<Post>(cid)
 	}
 
 	// Get photo
-	const getPhoto = async (cid: string) => {
-		const content: Buffer[] = []
-		for await (const chunk of node.cat(cid)) {
-			content.push(Buffer.from(chunk))
-		}
-		const contentData = Buffer.concat(content)
-		// eslint-disable-next-line consistent-return
-		return contentData.toString()
+	const getPhoto = (cid: string) => {
+		return getData(cid)
 	}
 
 	// Import Private Key to local IPFS repo
