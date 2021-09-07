@@ -193,7 +193,9 @@ export default Vue.extend({
 			const profile = await this.$getProfile(res.profileCID)
 			this.currentUser = profile
 			if (profile.avatar !== ``) {
-				this.avatar = await this.$getPhoto(profile.avatar)
+				this.$getPhoto(profile.avatar).then((p) => {
+					this.avatar = p
+				})
 			}
 		}
 	},
