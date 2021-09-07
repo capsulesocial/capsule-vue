@@ -16,14 +16,14 @@
 			<article>
 				<h1
 					:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-					class="font-serif font-bold text-3xl capitalize leading-loose"
+					class="font-serif font-semibold text-3xl capitalize leading-loose"
 				>
 					{{ this.post.title }}
 				</h1>
 			</article>
 
-			<article class="my-5">
-				<img v-if="this.featuredPhoto !== null" :src="this.featuredPhoto" />
+			<article class="my-5 flex justify-center">
+				<img v-if="this.featuredPhoto !== null" :src="this.featuredPhoto" class="shadow-xl" />
 			</article>
 
 			<!-- Author Intro -->

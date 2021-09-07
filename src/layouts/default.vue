@@ -7,7 +7,9 @@
 			<!-- Main Content -->
 			<Nuxt class="mb-20 md:mb-5 md:min-w-max" style="width: 600px" />
 			<!-- Featured Tags -->
-			<div style="width: 240px"></div>
+			<div style="width: 240px">
+				<Trending v-if="this.$route.name === `home`" />
+			</div>
 		</div>
 	</main>
 </template>

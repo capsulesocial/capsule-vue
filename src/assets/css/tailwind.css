@@ -7,13 +7,13 @@
     @apply bg-white border rounded-xl shadow-xl
   } */
   .editable h1 {
-    @apply text-3xl font-serif font-bold mt-3
+    @apply text-3xl font-serif font-semibold mt-3
   }
   .editable h2 {
-    @apply text-2xl font-serif font-bold mt-2
+    @apply text-2xl font-serif font-semibold mt-2
   }
   .editable h3 {
-    @apply text-xl font-serif font-bold mt-1
+    @apply text-xl font-serif font-semibold mt-1
   }
   .editable a {
     @apply text-primary

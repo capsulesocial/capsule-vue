@@ -5,7 +5,9 @@
 	>
 		<!-- Top Left: Logo -->
 		<div class="flex justify-center lg:justify-between" style="width: 240px">
-			<CapsuleIcon class="lg:pl-5 lg:ml-1" />
+			<nuxt-link to="/home">
+				<CapsuleIcon class="lg:pl-5 lg:ml-1" />
+			</nuxt-link>
 			<div
 				class="hidden lg:flex md:pl-8 xl:pl-0"
 				:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
