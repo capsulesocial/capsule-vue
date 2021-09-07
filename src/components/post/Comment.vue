@@ -27,11 +27,11 @@
 					@{{ this.$props.authorID }}
 				</nuxt-link>
 				<span
-					v-if="this.timestamp"
+					v-if="this.$props.timestamp"
 					:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 					class="text-xs font-sans"
 				>
-					{{ $formatDate(this.timestamp) }}
+					{{ $formatDate(this.$props.timestamp) }}
 				</span>
 				<p class="text-base py-1 font-sans">
 					{{ this.content }}
@@ -110,9 +110,9 @@ export default Vue.extend({
 		Reply,
 	},
 	props: {
-		authorID: { type: String, default: null },
-		cid: { type: String, default: null },
-		timestamp: { type: Number, default: null },
+		authorID: { type: String, required: true },
+		cid: { type: String, required: true },
+		timestamp: { type: Number, required: true },
 	},
 	data(): IData {
 		return {
@@ -126,8 +126,9 @@ export default Vue.extend({
 		}
 	},
 	async created() {
-		const comment = await ipfs().getComment(this.cid)
+		const comment = await ipfs().getComment(this.$props.cid)
 		this.content = comment.content
+		this.emotion = comment.emotion
 	},
 	async mounted() {
 		const p = await getProfile(this.$props.comment.authorID)

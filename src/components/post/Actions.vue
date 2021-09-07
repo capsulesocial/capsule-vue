@@ -87,7 +87,7 @@
 			<div>{{ this.comments.length }} comments</div>
 			<CommentFilter :filter="this.filter" @clicked="setFilter" />
 		</article>
-		<article v-for="c in this.comments" :key="comments[c]" class="py-2">
+		<article v-for="c in this.comments" :key="c.cid" class="py-2">
 			<CommentCard :authorID="c.authorID" :cid="c.cid" :timestamp="c.timestamp" />
 		</article>
 	</section>
@@ -158,8 +158,8 @@ export default Vue.extend({
 		}
 	},
 	async created() {
-		// get list of most recent comments with ALL reaction types
-		// this.comments =
+		const res = await this.$axios.$get(`/content/${this.postCID}/comments`)
+		this.comments = res.data.comments
 	},
 	methods: {
 		setFilter(reaction: string): void {
@@ -186,6 +186,7 @@ export default Vue.extend({
 				}
 
 				const cid = await this.$sendComment(c)
+				await this.$axios.$post(`/content/${this.postCID}/comments`, { cid, data: c, sig: `whatever`, type: `comment` })
 
 				// Send comment (c)
 				this.comments.push({ cid, timestamp: c.timestamp, authorID: c.authorID, emotion: c.emotion })

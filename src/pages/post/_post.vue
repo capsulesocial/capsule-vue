@@ -117,7 +117,7 @@
 				</div>
 				<PostActions
 					:postCID="this.$route.params.post"
-					:authorID="this.post.authorID"
+					:authorID="this.author.id"
 					:isCommenting="true"
 					:tags="this.post.tags"
 				/>

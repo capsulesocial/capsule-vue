@@ -95,7 +95,7 @@
 				<TagPill v-for="t in this.post.tags" :key="t.name" :tag="t.name" class="ml-4 my-1" />
 			</div>
 		</div>
-		<PostActions v-show="this.showComments" :post="this.post" />
+		<PostActions v-show="this.showComments" :post="this.post.cid" />
 	</article>
 </template>
 
