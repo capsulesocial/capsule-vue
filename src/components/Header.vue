@@ -5,7 +5,7 @@
 	>
 		<!-- Top Left: Logo -->
 		<div class="flex justify-center lg:justify-between" style="width: 240px">
-			<CapsuleIcon class="lg:pl-4" />
+			<CapsuleIcon class="lg:pl-5 lg:ml-1" />
 			<div
 				class="hidden lg:flex md:pl-8 xl:pl-0"
 				:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
@@ -65,25 +65,24 @@
 			<div
 				v-show="showMore"
 				class="absolute mt-56 z-10 bg-white shadow-lg rounded-lg w-64"
-				style="margin-right: -7rem"
 				@click.stop="toggleDropdown"
 			>
 				<nuxt-link to="/settings" class="w-full p-2 grid grid-cols-4 items-center">
-					<span class="bg-gray1 rounded-full w-10 h-10 flex justify-center">
+					<span class="bg-gray1 rounded-full w-10 h-10 flex justify-center ml-1">
 						<SettingsIcon class="self-center" />
 					</span>
 					<h5 class="text-base font-sans justify-self-start col-span-2">Settings</h5>
 					<ForwardButton class="justify-self-end" />
 				</nuxt-link>
 				<nuxt-link to="/help" class="w-full p-2 grid grid-cols-4 items-center">
-					<span class="bg-gray1 rounded-full w-10 h-10 flex justify-center">
+					<span class="bg-gray1 rounded-full w-10 h-10 flex justify-center ml-1">
 						<HelpIcon class="self-center" />
 					</span>
 					<h5 class="text-base font-sans justify-self-start col-span-2">Help & Support</h5>
 					<ForwardButton class="justify-self-end" />
 				</nuxt-link>
 				<button class="w-full p-2 grid grid-cols-4 items-center" @click="logout">
-					<span class="bg-gray1 rounded-full w-10 h-10 flex justify-center">
+					<span class="bg-gray1 rounded-full w-10 h-10 flex justify-center ml-1">
 						<LogoutIcon class="self-center" />
 					</span>
 					<h5 class="text-base font-sans justify-self-start col-span-2">Log Out</h5>

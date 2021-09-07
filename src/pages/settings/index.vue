@@ -1,49 +1,49 @@
 <template>
-	<main class="w-full">
+	<main class="w-full border-l">
 		<section class="flex">
 			<!-- Left column: Select tab -->
 			<article
-				style="width: 200px"
+				style="width: 250px"
 				:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 				class="flex flex-col w-full h-full"
 			>
 				<h2 class="border-b-2 text-xl bold font-bold" style="padding: 12px 0px 10px 16px">Settings</h2>
 				<button
-					class="flex flex-row justify-between px-4 py-2 focus:outline-none border-r-4 border-transparent"
+					class="flex flex-row justify-between p-4 focus:outline-none border-r-4 border-transparent"
 					:class="this.getStyles('account')"
 					@click="changeTab('account')"
 				>
-					Account Info
+					<span class="text-lg">Account Info</span>
 					<ChevronRight class="text-gray4" />
 				</button>
 				<button
-					class="flex flex-row justify-between px-4 py-2 focus:outline-none border-r-4 border-transparent"
+					class="flex flex-row justify-between p-4 focus:outline-none border-r-4 border-transparent"
 					:class="this.getStyles('password')"
 					@click="changeTab('password')"
 				>
-					Password Update
+					<span class="text-lg">Password Update</span>
 					<ChevronRight class="text-gray4" />
 				</button>
 				<button
-					class="flex flex-row justify-between px-4 py-2 focus:outline-none border-r-4 border-transparent"
+					class="flex flex-row justify-between p-4 focus:outline-none border-r-4 border-transparent"
 					:class="this.getStyles('social')"
 					@click="changeTab('social')"
 				>
-					Social Accounts
+					<span class="text-lg">Social Accounts</span>
 					<ChevronRight class="text-gray4" />
 				</button>
 				<button
-					class="flex flex-row justify-between px-4 py-2 focus:outline-none border-r-4 border-transparent"
+					class="flex flex-row justify-between p-4 focus:outline-none border-r-4 border-transparent"
 					:class="this.getStyles('display')"
 					@click="changeTab('display')"
 				>
-					Display Themes
+					<span class="text-lg">Display Themes</span>
 					<ChevronRight class="text-gray4" />
 				</button>
 			</article>
 
 			<!-- Right column: Show details -->
-			<div style="width: 400px">
+			<div style="width: 350px">
 				<article v-if="this.tab === 'account'" class="col-span-2 border-r border-l h-full">
 					<!-- General Settings (Username, ID, Email) -->
 					<h2
@@ -54,6 +54,7 @@
 						Account Information
 					</h2>
 					<div class="p-5 flex flex-col">
+						<p style="color: #424242" class="mb-5">Edit your profile:</p>
 						<button class="self-center mb-2 text-xs text-gray4" @click="$refs.uploadedPic.click()">
 							<img
 								v-if="this.$store.state.session.avatar !== ''"
@@ -74,10 +75,10 @@
 							accept="image/*"
 							@change="handleImage"
 						/>
-						<div class="flex flex-col items-center">
+						<div class="flex flex-col">
 							<!-- Enter name: -->
-							<div class="grid grid-cols-3 items-center my-5">
-								<label for="newName" class="text-lightSecondaryText text-right pr-2">Name: </label>
+							<div class="my-5">
+								<label for="newID" class="hidden">Change Name</label>
 								<input
 									id="newName"
 									v-model="newName"
@@ -88,12 +89,12 @@
 											? 'bg-lightBG text-lightSecondaryText focus:border-lightActive'
 											: 'bg-darkBG text-darkSecondaryText focus:border-darkActive'
 									"
-									class="focus:outline-none border-b-2 col-span-2"
+									class="focus:outline-none border-b-2 w-full"
 								/>
 							</div>
 							<!-- Enter ID -->
-							<div class="grid grid-cols-3 items-center mb-5">
-								<label for="newID" class="text-lightSecondaryText text-right pr-2">ID:</label>
+							<div class="mb-5">
+								<label for="newID" class="hidden">Change ID</label>
 								<input
 									id="newID"
 									v-model.trim="newID"
@@ -104,12 +105,12 @@
 											? 'bg-lightBG text-lightSecondaryText focus:border-lightActive'
 											: 'bg-darkBG text-darkSecondaryText focus:border-darkActive'
 									"
-									class="focus:outline-none border-b-2 col-span-2"
+									class="focus:outline-none border-b-2 w-full"
 								/>
 							</div>
 							<!-- Enter email -->
-							<div class="grid grid-cols-3 items-center mb-5">
-								<label for="newEmail" class="text-lightSecondaryText text-right pr-2">Email:</label>
+							<div class="mb-5">
+								<label for="newEmail" class="hidden">Change Email</label>
 								<input
 									id="newEmail"
 									v-model="newEmail"
@@ -120,12 +121,12 @@
 											? 'bg-lightBG text-lightSecondaryText focus:border-lightActive'
 											: 'bg-darkBG text-darkSecondaryText focus:border-darkActive'
 									"
-									class="focus:outline-none border-b-2 col-span-2"
+									class="focus:outline-none border-b-2 w-full"
 								/>
 							</div>
 							<!-- Enter Location -->
-							<div class="grid grid-cols-3 items-center mb-5">
-								<label for="location" class="text-lightSecondaryText text-right pr-2">Location:</label>
+							<div class="mb-5">
+								<label for="location" class="hidden">Location:</label>
 								<input
 									id="location"
 									v-model="location"
@@ -138,18 +139,18 @@
 											? 'bg-lightBG text-lightSecondaryText focus:border-lightActive'
 											: 'bg-darkBG text-darkSecondaryText focus:border-darkActive'
 									"
-									class="focus:outline-none border-b-2 col-span-2"
+									class="focus:outline-none border-b-2 w-full"
 								/>
 							</div>
 						</div>
 						<!-- Enter bio -->
-						<div class="px-5 flex flex-col">
+						<div class="flex flex-col">
 							<label
 								for="bio"
-								class="text-lightSecondaryText pl-1"
+								class=""
 								:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 							>
-								How would you describe yourself?
+								Bio:
 							</label>
 							<textarea
 								id="bio"
@@ -161,7 +162,7 @@
 										? 'bg-lightBG text-lightSecondaryText focus:text-lightPrimaryText focus:border-lightActive'
 										: 'bg-darkBG text-darkSecondaryText focus:text-darkPrimaryText focus:border-darkActive'
 								"
-								class="border-b-2 focus:outline-none p-1 resize-none"
+								class="border-b-2 focus:outline-none resize-none"
 								@input="bio = $event.target.value"
 								@keyup="checkBio()"
 							></textarea>
@@ -278,7 +279,7 @@
 			<button
 				:class="this.hasChanged() ? '' : 'opacity-50'"
 				class="bg-primary text-white rounded-lg focus:outline-none"
-				style="width: 128px; height: 40px; margin-left: 450px"
+				style="width: 128px; height: 40px; margin-left: 350px"
 				@click="this.updateSettings"
 			>
 				Save Changes

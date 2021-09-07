@@ -1,5 +1,5 @@
 <template>
-	<div class="w-full px-4">
+	<div class="w-full">
 		<section style="width: 640px">
 			<article style="width: 600px" class="flex flex-col md:flex-row justify-between mb-1 items-center mt-3">
 				<h2
@@ -9,12 +9,8 @@
 					Featured Hashtags
 				</h2>
 				<select
-					:class="
-						this.$store.state.settings.darkMode
-							? 'bg-lightBG border-lightBorder text-lightSecondaryText'
-							: 'bg-darkBG border-darkBorder text-darkSecondaryText'
-					"
-					class="border rounded-lg px-2 py-2 focus:outline-none self-center"
+					class="border rounded-lg focus:outline-none self-center"
+					style="padding: 15px 15px 15px 15px; color: #686868"
 				>
 					<option>Trending</option>
 					<option>Top This Week</option>
@@ -28,26 +24,26 @@
 				Find and join conversations on any topic:
 			</p>
 			<div class="my-4">
-				<TagCard v-for="t in this.tags" :key="t" :tag="t" class="text-lg" />
+				<TagCard v-for="t in this.tags" :key="t" :tag="t" class="text-lg mr-4 my-1" />
 			</div>
 		</section>
 
 		<section style="width: 640px">
-			<article class="mt-4 pt-4">
+			<article class="mb-1 mt-3">
 				<h2
 					:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 					class="text-3xl font-semibold"
 				>
 					Featured Categories
 				</h2>
-				<p
-					:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-					class="mb-2 font-normal text-xl"
-				>
-					Read more of what you love by browsing top categories:
-				</p>
 			</article>
-			<article class="grid grid-cols-2 gap-4">
+			<p
+				:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+				class="font-normal text-xl"
+			>
+				Read more of what you love by browsing top categories:
+			</p>
+			<article class="grid grid-cols-2 gap-4 my-4">
 				<CategoryCard
 					v-for="c in this.categoryList"
 					:key="c"

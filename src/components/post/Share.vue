@@ -14,7 +14,8 @@
 					? 'bg-lightBG text-lightPrimaryText border-lightBorder'
 					: 'bg-darkBG text-darkPrimaryText border-darkBorder'
 			"
-			class="absolute flex flex-col mt-8 border-l border-r border-b rounded-lg p-1 rounded-t-none w-40 -ml-8 pl-2"
+			class="absolute flex flex-col mt-8 rounded-lg rounded-t-none w-40 shadow-lg"
+			style="padding: 16px"
 		>
 			<!-- Repost -->
 			<button
@@ -22,7 +23,7 @@
 				class="flex focus:outline-none"
 				@click="handleRepost()"
 			>
-				<RepostIcon :isActive="this.isReposted" :shrink="true" />
+				<RepostIcon :isActive="this.isReposted" :shrink="true" style="width: 13.7px" class="mr-2" />
 				<span
 					v-if="this.isReposted"
 					:class="this.$store.state.settings.darkMode ? 'text-lightActive' : 'text-darkActive'"
@@ -37,8 +38,8 @@
 				class="flex focus:outline-none"
 				@click="handleShare('TWITTER')"
 			>
-				<TwitterIcon class="p-1" />
-				<span class="text-sm">Share on Twitter</span>
+				<TwitterIcon style="width: 13.7px" class="mr-2" />
+				<span class="text-sm self-center">Share on Twitter</span>
 			</button>
 			<!-- Copy URL Link -->
 			<button
@@ -46,7 +47,7 @@
 				class="flex focus:outline-none"
 				@click="handleShare('URL')"
 			>
-				<LinkIcon class="p-1" />
+				<LinkIcon style="width: 13.7px" class="mr-2" />
 				<span class="text-sm self-center">Copy Link</span>
 			</button>
 		</div>

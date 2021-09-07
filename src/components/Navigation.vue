@@ -20,7 +20,7 @@
 			<nuxt-link
 				to="/discover"
 				:class="this.getStyles('discover')"
-				class="group flex items-center p-2 text-base leading-6 m-2 text-xl rounded-xl"
+				class="group flex items-center p-2 text-base leading-6 m-1 text-xl rounded-xl"
 			>
 				<span class="p-2">
 					<DiscoverIcon />
@@ -31,7 +31,7 @@
 			<nuxt-link
 				:to="'/' + $store.state.session.id"
 				:class="this.getStyles(this.$store.state.session.id)"
-				class="group flex items-center p-2 text-base leading-6 m-2 text-xl rounded-xl"
+				class="group flex items-center p-2 text-base leading-6 m-1 text-xl rounded-xl"
 			>
 				<span class="p-2">
 					<ProfileIcon />
@@ -41,7 +41,7 @@
 			<nuxt-link
 				to="/messages"
 				:class="this.getStyles('messages')"
-				class="group flex items-center p-2 text-base leading-6 m-2 text-xl rounded-xl"
+				class="group flex items-center p-2 text-base leading-6 m-1 text-xl rounded-xl"
 			>
 				<span class="p-2">
 					<InboxIcon />
@@ -51,7 +51,7 @@
 			<nuxt-link
 				:to="'/' + $store.state.session.id + '/bookmarks'"
 				:class="this.getStyles('id-bookmarks')"
-				class="group flex items-center p-2 text-base leading-6 m-2 text-xl rounded-xl"
+				class="group flex items-center p-2 text-base leading-6 m-1 text-xl rounded-xl"
 			>
 				<span class="p-2">
 					<BookmarksIcon />
@@ -65,7 +65,7 @@
 						? 'text-lightOnPrimaryText bg-lightPrimary'
 						: 'text-darkOnPrimary bg-darkPrimary'
 				"
-				class="lg:hidden group flex items-center p-2 text-base leading-6 m-2 mt-16 text-xl rounded-xl"
+				class="lg:hidden group flex items-center p-2 text-base leading-6 m-1 mt-16 text-xl rounded-xl"
 			>
 				<span class="p-2">
 					<PencilIcon class="fill-current" />

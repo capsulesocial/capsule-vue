@@ -1,7 +1,7 @@
 <template>
 	<article
-		class="shadow rounded-lg my-2 p-5 object-contain"
-		style="width: 512px; margin-bottom: 22px; margin-top: 22px"
+		class="shadow rounded-lg my-2 object-contain"
+		style="width: 578px; margin-bottom: 22px; margin-top: 22px; padding: 16px"
 		:class="
 			this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText border border-darkBorder'
 		"
@@ -70,7 +70,7 @@
 		</div>
 
 		<!-- Actions -->
-		<div class="pt-2 flex justify-between">
+		<div class="flex justify-between">
 			<div class="flex">
 				<button
 					class="flex focus:outline-none self-center mr-2"
@@ -92,7 +92,7 @@
 			</div>
 			<!-- Display tags -->
 			<div class="flex flex-row-reverse overflow-x-auto">
-				<TagPill v-for="t in this.post.tags" :key="t.name" :tag="t.name" />
+				<TagPill v-for="t in this.post.tags" :key="t.name" :tag="t.name" class="ml-4 my-1" />
 			</div>
 		</div>
 		<PostActions v-show="this.showComments" :post="this.post" />

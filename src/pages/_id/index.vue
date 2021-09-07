@@ -1,5 +1,5 @@
 <template>
-	<section class="px-4">
+	<section class="w-full">
 		<article v-show="this.isLoading" class="flex justify-center">
 			<div class="loader m-10"></div>
 		</article>

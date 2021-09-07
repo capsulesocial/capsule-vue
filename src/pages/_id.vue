@@ -1,5 +1,5 @@
 <template>
-	<section class="w-full">
+	<section class="w-full border-l border-r">
 		<!-- IF a profile exists -->
 		<div v-if="this.currentUser" style="width: 600px">
 			<!-- Name, socials, follow, bio -->
@@ -33,7 +33,7 @@
 								:to="'/' + this.$route.params.id + '/categories'"
 								:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 							>
-								<!-- {{ this.currentUser.categories.length }} -->0
+								<span class="font-bold"><!-- {{ this.currentUser.categories.length }} -->0</span>
 								<span
 									:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 								>
@@ -45,7 +45,7 @@
 								:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 								class="pl-4"
 							>
-								<!-- {{ this.currentUser.followers.length }} -->0
+								<span class="font-bold"><!-- {{ this.currentUser.followers.length }} -->0</span>
 								<span
 									:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 								>
@@ -57,7 +57,7 @@
 								:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 								class="pl-4"
 							>
-								<!-- {{ this.currentUser.following.length }} -->0
+								<span class="font-bold"><!-- {{ this.currentUser.following.length }} -->0</span>
 								<span
 									:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 								>
@@ -112,38 +112,32 @@
 				</span>
 			</section>
 
-			<article class="flex flex-col md:flex-row w-full justify-between border-b px-4">
-				<nuxt-link
-					:to="'/' + this.$route.params.id"
-					class="text-gray5 font-bold px-2 pb-1"
-					:class="this.getStyles('id')"
-				>
-					Posts
-				</nuxt-link>
+			<article class="flex flex-col md:flex-row w-full justify-between border-b px-4 text-gray7">
+				<nuxt-link :to="'/' + this.$route.params.id" class="px-2 pb-1" :class="this.getStyles('id')"> Posts </nuxt-link>
 				<nuxt-link
 					:to="'/' + this.$route.params.id + '/comments'"
-					class="text-gray5 font-bold px-2 pb-1"
+					class="px-2 pb-1"
 					:class="this.getStyles('id-comments')"
 				>
 					Comments
 				</nuxt-link>
 				<nuxt-link
 					:to="'/' + this.$route.params.id + '/bookmarks'"
-					class="text-gray5 font-bold px-2 pb-1"
+					class="px-2 pb-1"
 					:class="this.getStyles('id-bookmarks')"
 				>
 					Bookmarks
 				</nuxt-link>
 				<nuxt-link
 					:to="'/' + this.$route.params.id + '/reposts'"
-					class="font-bold px-2 pb-1"
+					class="px-2 pb-1"
 					:class="this.getStyles('id-reposts')"
 				>
 					Reposts
 				</nuxt-link>
 			</article>
 			<article>
-				<nuxt-child :profile="this.currentUser" style="padding-left: 44px" />
+				<nuxt-child :profile="this.currentUser" style="padding-left: 11px" />
 			</article>
 		</div>
 		<div v-else style="width: 600px" class="flex justify-center">
@@ -203,12 +197,14 @@ export default Vue.extend({
 		getStyles(tab: string): string {
 			let res = ``
 			if (this.$store.state.settings.darkMode) {
-				res += `text-lightSecondaryText border-lightActive`
+				res += `border-lightActive`
 			} else {
-				res += `text-darkSecondaryText border-darkActive`
+				res += `border-darkActive`
 			}
 			if (this.$route.name === tab) {
-				res += ` border-b-2`
+				res += ` text-primary font-bold border-b-2`
+			} else {
+				res += ` text-gray7`
 			}
 			return res
 		},

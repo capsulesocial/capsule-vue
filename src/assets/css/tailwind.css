@@ -19,7 +19,7 @@
     @apply text-primary
   }
   .editable p {
-    @apply text-base font-normal leading-relaxed
+    @apply text-base font-normal leading-relaxed text-lg mt-1
   }
   blockquote {
     @apply pl-2 border-l-2 border-primary text-xl leading-8 font-serif py-2 mt-1

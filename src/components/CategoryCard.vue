@@ -10,7 +10,7 @@
 				duration-500
 				ease-in-out
 				transform
-				hover:scale-110
+				hover:scale-105
 				overflow-hidden
 				rounded-lg
 				shadow-lg

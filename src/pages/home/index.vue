@@ -1,5 +1,5 @@
 <template>
-	<div class="w-full">
+	<div class="w-full border-l border-r">
 		<section
 			:class="
 				this.$store.state.settings.darkMode ? 'text-lightPrimaryText bg-lightBG' : 'text-darkPrimaryText bg-darkBG'
@@ -40,7 +40,7 @@
 				<div class="loader m-5"></div>
 			</article>
 
-			<article v-for="post in this.posts" :key="post.contentAddress" style="padding-left: 44px">
+			<article v-for="post in this.posts" :key="post.contentAddress" style="padding-left: 11px">
 				<PostCard :post="post" />
 			</article>
 		</section>
