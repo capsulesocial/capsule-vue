@@ -115,7 +115,12 @@
 						<ShareButton :post="this.post" class="z-20" />
 					</div>
 				</div>
-				<PostActions :post="this.post" :authorID="this.post.authorID" :isCommenting="true" :tags="this.post.tags" />
+				<PostActions
+					:postCID="this.$route.params.post"
+					:authorID="this.post.authorID"
+					:isCommenting="true"
+					:tags="this.post.tags"
+				/>
 			</article>
 		</section>
 		<section v-else>Post not found 😵‍💫</section>

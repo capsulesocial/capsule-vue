@@ -88,26 +88,39 @@
 			<CommentFilter :filter="this.filter" @clicked="setFilter" />
 		</article>
 		<article v-for="c in this.comments" :key="comments[c]" class="py-2">
-			<CommentCard :comment="c" />
+			<CommentCard :authorID="c.authorID" :cid="c.cid" :timestamp="c.timestamp" />
 		</article>
 	</section>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import { Comment } from '@/interfaces/Comment'
 import BrandedButton from '@/components/BrandedButton.vue'
 import CommentCard from '@/components/post/Comment.vue'
 import CommentFilter from '@/components/post/CommentFilter.vue'
 import FlipIcon from '@/components/icons/Flip.vue'
-import { Post } from '@/interfaces/Post'
 import { backgrounds, reactions, feelings } from '@/config'
+
+interface INewCommentData {
+	content: string
+	emotion: string
+	timestamp: number
+	postCID: string
+	authorID: string
+}
+
+interface ICommentData {
+	authorID: string
+	cid: string
+	timestamp: number
+	emotion: string
+}
 
 interface IData {
 	backgroundList: {}
 	reactionList: {}
 	feelingList: {}
-	comments: Comment[]
+	comments: ICommentData[]
 	comment: string
 	emotion: string
 	emotionCategory: string
@@ -125,8 +138,8 @@ export default Vue.extend({
 		FlipIcon,
 	},
 	props: {
-		post: {
-			type: Object as () => Post,
+		postCID: {
+			type: String as () => string,
 			default: null,
 		},
 	},
@@ -160,20 +173,22 @@ export default Vue.extend({
 		setEmotionCategory(c: string) {
 			this.emotionCategory = c
 		},
-		sendComment() {
+		async sendComment() {
 			if (!this.$qualityText(this.comment)) {
 				alert(`invalid comment!`)
 			} else {
-				const c: Comment = {
+				const c: INewCommentData = {
 					authorID: this.$store.state.session.id,
-					authorAvatarCID: this.$store.state.session.avatar,
 					content: this.comment,
 					emotion: this.emotion,
-					timestamp: new Date(),
-					replies: [],
+					timestamp: new Date().getTime(),
+					postCID: this.postCID,
 				}
+
+				const cid = await this.$sendComment(c)
+
 				// Send comment (c)
-				this.comments.push(c)
+				this.comments.push({ cid, timestamp: c.timestamp, authorID: c.authorID, emotion: c.emotion })
 				// Apply filter to comments, in case new comment was added in filtered category
 				this.filterComments()
 				this.comment = ``
@@ -184,13 +199,13 @@ export default Vue.extend({
 		},
 		filterComments() {
 			// Fetch comments
-			let cList: Comment[] = this.comments
+			let cList: ICommentData[] = this.comments
 			// Filter by emotion
 			if (this.filter !== ``) {
 				cList = cList.filter((c) => c.emotion === this.filter)
 			}
 			// Show most recent first
-			cList = cList.slice().sort((p0, p1) => p1.timestamp.getTime() - p0.timestamp.getTime())
+			cList = cList.slice().sort((p0, p1) => p1.timestamp - p0.timestamp)
 			// Set obect to filtered comments
 			this.comments = cList
 		},
