@@ -1,15 +1,55 @@
 <template>
-	<svg
-		enable-background="new 0 0 24 24"
-		width="24"
-		height="24"
-		viewBox="0 0 24 24"
-		fill="none"
-		stroke="currentColor"
-		xmlns="http://www.w3.org/2000/svg"
-	>
-		<path
-			d="m.501 21.999c-.041 0-.083-.005-.124-.016-.221-.057-.375-.255-.376-.483l-.001-.429s0 0 0-.001c0-7.735 6.274-14.031 14-14.07v-4.5c0-.2.119-.38.302-.459.186-.081.396-.042.542.096l9 8.5c.099.094.156.225.156.363s-.057.269-.156.363l-9 8.5c-.146.138-.355.177-.542.096-.183-.079-.302-.259-.302-.459v-4.5h-1.627c-4.752 0-9.134 2.583-11.435 6.741-.089.161-.258.258-.437.258zm13.569-13.999c-6.74 0-12.305 5.129-12.998 11.688 2.632-3.547 6.813-5.688 11.301-5.688h2.127c.276 0 .5.224.5.5v3.84l7.771-7.34-7.771-7.34v3.84c0 .276-.224.5-.5.5z"
-		/>
-	</svg>
+	<span>
+		<svg
+			v-if="!isActive"
+			xmlns="http://www.w3.org/2000/svg"
+			width="24"
+			height="24"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="2"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+			class="feather feather-share-2"
+		>
+			<circle cx="18" cy="5" r="3"></circle>
+			<circle cx="6" cy="12" r="3"></circle>
+			<circle cx="18" cy="19" r="3"></circle>
+			<line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+			<line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+		</svg>
+		<svg
+			v-else
+			xmlns="http://www.w3.org/2000/svg"
+			width="24"
+			height="24"
+			viewBox="0 0 24 24"
+			fill="#1E566C"
+			stroke="#1E566C"
+			stroke-width="2"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+			class="feather feather-share-2"
+		>
+			<circle cx="18" cy="5" r="3"></circle>
+			<circle cx="6" cy="12" r="3"></circle>
+			<circle cx="18" cy="19" r="3"></circle>
+			<line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+			<line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+		</svg>
+	</span>
 </template>
+
+<script lang="ts">
+import Vue from 'vue'
+
+export default Vue.extend({
+	props: {
+		isActive: {
+			type: Boolean,
+			default: false,
+		},
+	},
+})
+</script>

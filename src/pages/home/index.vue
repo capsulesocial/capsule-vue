@@ -5,32 +5,32 @@
 				this.$store.state.settings.darkMode ? 'text-lightPrimaryText bg-lightBG' : 'text-darkPrimaryText bg-darkBG'
 			"
 		>
-			<nav class="flex flex-row border bg-secondary bg-opacity-25 py-2 px-4 pl-5">
-				<div class="flex items-center mr-6">
+			<nav class="flex flex-row bg-secondary bg-opacity-25 h-12">
+				<div class="flex items-center">
 					<button
-						:class="this.algorithm === `NEW` ? `bg-primary text-white shadow-lg` : `bg-gray-100 text-gray-800`"
-						class="font-sans py-2 px-4 focus:outline-none uppercase rounded-lg"
+						:class="this.algorithm === `NEW` ? `bg-primary text-white` : ``"
+						class="h-full focus:outline-none px-5"
 						@click="sortFeed('NEW')"
 					>
 						New
 					</button>
 				</div>
-				<div class="flex items-center mr-6">
+				<div class="flex items-center">
 					<button
-						:class="this.algorithm === `TOP` ? `bg-primary text-white shadow-lg` : `bg-gray-100 text-gray-800`"
-						class="font-sans py-2 px-4 focus:outline-none uppercase rounded-lg"
+						:class="this.algorithm === `TOP` ? `bg-primary text-white` : ``"
+						class="h-full focus:outline-none px-5"
 						@click="sortFeed('TOP')"
 					>
 						Top
 					</button>
 				</div>
-				<div class="flex items-center mr-6">
+				<div class="flex items-center">
 					<button
-						:class="this.algorithm === `FOLLOWING` ? `bg-primary text-white shadow-lg` : `bg-gray-100 text-gray-800`"
-						class="font-sans py-2 px-4 focus:outline-none uppercase rounded-lg"
+						:class="this.algorithm === `FOLLOWING` ? `bg-primary text-white shadow-lg` : ``"
+						class="h-full focus:outline-none px-5"
 						@click="sortFeed('FOLLOWING')"
 					>
-						following
+						Following
 					</button>
 				</div>
 			</nav>

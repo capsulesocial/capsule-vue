@@ -5,7 +5,7 @@
 			:class="showSocialShares ? 'text-primary' : ''"
 			@click.stop="toggleDropdown"
 		>
-			<SendIcon class="mr-2" />
+			<ShareIcon :isActive="this.showSocialShares" class="mr-2" />
 		</button>
 		<div
 			v-show="this.showSocialShares"
@@ -57,7 +57,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import SendIcon from '@/components/icons/Share.vue'
+import ShareIcon from '@/components/icons/Share.vue'
 import TwitterIcon from '@/components/icons/brands/Twitter.vue'
 import LinkIcon from '@/components/icons/Link.vue'
 import RepostIcon from '@/components/icons/Repost.vue'
@@ -65,7 +65,7 @@ import { Post } from '@/interfaces/Post'
 
 export default Vue.extend({
 	components: {
-		SendIcon,
+		ShareIcon,
 		TwitterIcon,
 		LinkIcon,
 		RepostIcon,

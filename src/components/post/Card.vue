@@ -77,7 +77,7 @@
 					:class="this.getStyles()"
 					@click="showComments = !showComments"
 				>
-					<CommentIcon class="fill-primary" />
+					<CommentIcon :isActive="this.showComments" />
 				</button>
 				<Share
 					:post="this.post"
