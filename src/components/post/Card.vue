@@ -157,7 +157,7 @@ export default Vue.extend({
 		// Populate Avatar
 		this.authorName = profile.name
 		this.authorID = profile.id
-		if (profile.avatar !== ``) {
+		if (profile.avatar && profile.avatar !== ``) {
 			ipfs()
 				.getPhoto(profile.avatar)
 				.then((p) => {

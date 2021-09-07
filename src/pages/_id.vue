@@ -157,7 +157,7 @@ import SettingsIcon from '@/components/icons/Settings.vue'
 import { Profile } from '@/interfaces/Profile'
 import { Post } from '@/interfaces/Post'
 import ipfs from '@/backend/ipfs'
-import { getProfileNEAR } from '@/backend/profile'
+import { getProfile } from '@/backend/profile'
 
 interface IData {
 	avatar: string
@@ -184,17 +184,13 @@ export default Vue.extend({
 	},
 	async created() {
 		// Get user profile
-		const res = await getProfileNEAR(this.$route.params.id)
-		if (res.success) {
-			const profile = await ipfs().getProfile(res.profileCID)
-			this.currentUser = profile
-			if (profile.avatar !== ``) {
-				ipfs()
-					.getPhoto(profile.avatar)
-					.then((p) => {
-						this.avatar = p
-					})
-			}
+		this.currentUser = await getProfile(this.$route.params.id)
+		if (this.currentUser.avatar !== ``) {
+			ipfs()
+				.getPhoto(this.currentUser.avatar)
+				.then((p) => {
+					this.avatar = p
+				})
 		}
 	},
 	methods: {

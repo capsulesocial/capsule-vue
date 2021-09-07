@@ -137,7 +137,8 @@ import MoreIcon from '@/components/icons/More.vue'
 import { Post } from '@/interfaces/Post'
 import { Profile } from '@/interfaces/Profile'
 import ipfs from '@/backend/ipfs'
-import { getProfileNEAR } from '@/backend/profile'
+import { getProfile } from '@/backend/profile'
+import { getPost } from '@/backend/post'
 
 interface IData {
 	post: Post | null
@@ -172,7 +173,7 @@ export default Vue.extend({
 	},
 	async created() {
 		// Fetch post from IPFS,
-		this.post = await ipfs().getPost(this.$route.params.post)
+		this.post = await getPost(this.$route.params.post)
 		// Convert markdown to HTML
 		this.content = marked(this.post.content)
 		// Get featured photo
@@ -184,12 +185,10 @@ export default Vue.extend({
 				})
 		}
 		// Get author profile
-		const res = await getProfileNEAR(this.post.authorID)
-		const profile = await ipfs().getProfile(res.profileCID)
-		this.author = profile
-		if (profile.avatar.length > 1) {
+		this.author = await getProfile(this.post.authorID)
+		if (this.author.avatar.length > 1) {
 			ipfs()
-				.getPhoto(profile.avatar)
+				.getPhoto(this.author.avatar)
 				.then((p) => {
 					this.authorAvatar = p
 				})

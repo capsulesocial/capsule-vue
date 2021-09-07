@@ -41,3 +41,7 @@ export async function sendPost(data: Post): Promise<string> {
 
 	return cid
 }
+
+export function getPost(cid: string): Promise<Post> {
+	return ipfs().getPost(cid)
+}

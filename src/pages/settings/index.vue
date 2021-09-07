@@ -296,9 +296,8 @@ import ChevronRight from '@/components/icons/ChevronRight.vue'
 import UploadAvatar from '@/components/icons/UploadAvatar.vue'
 import ColorMode from '@/components/ColorMode.vue'
 import { MutationType, getProfileFromSession, namespace as sessionStoreNamespace } from '~/store/session'
-import { sendProfileServer } from '~/plugins/server'
 import ipfs from '@/backend/ipfs'
-import { setProfileNEAR } from '@/backend/profile'
+import { setProfile } from '@/backend/profile'
 
 interface IData {
 	newName: string
@@ -394,16 +393,8 @@ export default Vue.extend({
 		},
 		async updateProfile() {
 			const backendProfile = getProfileFromSession(this.$store.state.session)
-			const cid = await ipfs().sendProfile(backendProfile)
-			const serverProfile = await sendProfileServer(cid, backendProfile)
-			if (!serverProfile.success) {
-				alert(`Server Profile could not be updated`)
-				return false
-			}
+			const cid = await setProfile(backendProfile)
 			this.changeCID(cid)
-			const profileSet = await setProfileNEAR(cid)
-			// eslint-disable-next-line no-console
-			console.log(`Profile set`, profileSet)
 			return true
 		},
 		async uploadImage(image: ArrayBuffer) {
