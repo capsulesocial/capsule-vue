@@ -175,14 +175,18 @@ export default Vue.extend({
 		this.content = marked(this.post.content)
 		// Get featured photo
 		if (this.post.featuredPhotoCID) {
-			this.featuredPhoto = await this.$getPhoto(this.post.featuredPhotoCID)
+			this.$getPhoto(this.post.featuredPhotoCID).then((p) => {
+				this.featuredPhoto = p
+			})
 		}
 		// Get author profile
 		const res = await this.$getProfileNEAR(this.post.authorID)
 		const profile = await this.$getProfile(res.profileCID)
 		this.author = profile
 		if (profile.avatar.length > 1) {
-			this.authorAvatar = await this.$getPhoto(profile.avatar)
+			this.$getPhoto(profile.avatar).then((p) => {
+				this.authorAvatar = p
+			})
 		}
 		// Set filter dropdown event handler
 		window.addEventListener(

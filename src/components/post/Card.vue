@@ -155,11 +155,15 @@ export default Vue.extend({
 		this.authorName = profile.name
 		this.authorID = profile.id
 		if (profile.avatar !== ``) {
-			this.avatar = await this.$getPhoto(profile.avatar)
+			this.$getPhoto(profile.avatar).then((p) => {
+				this.avatar = p
+			})
 		}
 		// Populate Featured Photo
 		if (this.post.featuredPhotoCID) {
-			this.featuredPhoto = await this.$getPhoto(this.post.featuredPhotoCID)
+			this.$getPhoto(this.post.featuredPhotoCID).then((p) => {
+				this.featuredPhoto = p
+			})
 		}
 	},
 	methods: {
