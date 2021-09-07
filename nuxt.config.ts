@@ -30,11 +30,9 @@ const config: NuxtConfig = {
 	plugins: [
 		{ src: '@/plugins/quality.ts' },
 		{ src: '@/plugins/helpers.ts' },
-		{ src: '@/plugins/ipfs.ts' },
+		{ src: '@/plugins/backend.ts' },
 		{ src: '@/plugins/auth.ts' },
 		{ src: '@/plugins/persistedstate.ts' },
-		{ src: '@/plugins/near.ts' },
-		{ src: '@/plugins/profile.ts' },
 	],
 
 	// Auto import components: https://go.nuxtjs.dev/config-components

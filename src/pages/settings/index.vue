@@ -297,6 +297,8 @@ import UploadAvatar from '@/components/icons/UploadAvatar.vue'
 import ColorMode from '@/components/ColorMode.vue'
 import { MutationType, getProfileFromSession, namespace as sessionStoreNamespace } from '~/store/session'
 import { sendProfileServer } from '~/plugins/server'
+import ipfs from '@/backend/ipfs'
+import { setProfileNEAR } from '@/backend/profile'
 
 interface IData {
 	newName: string
@@ -330,7 +332,7 @@ export default Vue.extend({
 	},
 	async created() {
 		if (this.$store.state.session.avatar !== ``) {
-			this.profilePic = await this.$getPhoto(this.$store.state.session.avatar)
+			this.profilePic = await ipfs().getPhoto(this.$store.state.session.avatar)
 		}
 		// Check for dark mode
 		const prefersDarkMode = window.matchMedia(`(prefers-color-scheme: dark)`).matches
@@ -392,26 +394,26 @@ export default Vue.extend({
 		},
 		async updateProfile() {
 			const backendProfile = getProfileFromSession(this.$store.state.session)
-			const cid = await this.$sendProfile(backendProfile)
+			const cid = await ipfs().sendProfile(backendProfile)
 			const serverProfile = await sendProfileServer(cid, backendProfile)
 			if (!serverProfile.success) {
 				alert(`Server Profile could not be updated`)
 				return false
 			}
 			this.changeCID(cid)
-			const profileSet = await this.$setProfileNEAR(cid)
+			const profileSet = await setProfileNEAR(cid)
 			// eslint-disable-next-line no-console
 			console.log(`Profile set`, profileSet)
 			return true
 		},
 		async uploadImage(image: ArrayBuffer) {
-			const avatarCID = await this.$sendPhoto(image)
+			const avatarCID = await ipfs().sendPhoto(image)
 			this.changeAvatar(avatarCID)
 			this.downloadImage(avatarCID)
 			await this.updateProfile()
 		},
 		async downloadImage(cid: string) {
-			this.profilePic = await this.$getPhoto(cid)
+			this.profilePic = await ipfs().getPhoto(cid)
 		},
 		checkBio() {
 			const charCount = this.bio.length

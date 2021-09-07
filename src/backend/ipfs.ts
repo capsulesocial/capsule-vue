@@ -1,27 +1,22 @@
-import type { Plugin } from '@nuxt/types'
 import IPFS from 'ipfs-core'
 import { Post } from '~/interfaces/Post'
 import { Profile } from '~/interfaces/Profile'
 
 // Declare type of function
-type importKey = (name: string, privateKey: string, password: string) => Promise<boolean>
+export type importKey = (name: string, privateKey: string, password: string) => Promise<boolean>
 
-// eslint-disable-next-line quotes
-declare module 'vue/types/vue' {
-	interface Vue {
-		$getNode: () => any
-		$sendProfile: (content: Profile) => Promise<string>
-		$getProfile: (cid: string) => Promise<Profile>
-		$sendPost: (content: Post) => Promise<string>
-		$getPost: (cid: string) => Promise<Post>
-		$getPhoto: (cid: string) => Promise<any>
-		$sendPhoto: (content: any) => Promise<string>
-		$importPrivateKey: importKey
-		$generatePrivateKey: (name: string) => Promise<boolean>
-	}
+export interface IPFSInterface {
+	sendProfile: (content: Profile) => Promise<string>
+	getProfile: (hash: string) => Promise<Profile>
+	sendPost: (content: Post) => Promise<string>
+	getPost: (cid: string) => Promise<Post>
+	sendPhoto: (content: any) => Promise<string>
+	getPhoto: (cid: string) => Promise<any>
+	importPrivateKey: importKey
+	generatePrivateKey: (name: string) => Promise<boolean>
 }
 
-const ipfsPlugin: Plugin = async (_context, inject) => {
+async function createIPFSInterface(): Promise<IPFSInterface> {
 	const node = await IPFS.create({
 		init: { algorithm: `Ed25519` },
 		preload: {
@@ -54,11 +49,6 @@ const ipfsPlugin: Plugin = async (_context, inject) => {
 
 	// eslint-disable-next-line no-console
 	console.log(`IPFS version: `, version.version)
-
-	// Exports IPFS node instance
-	const getNode = () => {
-		return node
-	}
 
 	// Send a user profile object to IPFS
 	const sendProfile: (content: Profile) => Promise<string> = async (content) => {
@@ -146,14 +136,34 @@ const ipfsPlugin: Plugin = async (_context, inject) => {
 		return false
 	}
 
-	inject(`getNode`, getNode)
-	inject(`sendProfile`, sendProfile)
-	inject(`sendPost`, sendPost)
-	inject(`getPost`, getPost)
-	inject(`sendPhoto`, sendPhoto)
-	inject(`getPhoto`, getPhoto)
-	inject(`getProfile`, getProfile)
-	inject(`importPrivateKey`, importPrivateKey)
-	inject(`generatePrivateKey`, generatePrivateKey)
+	return {
+		sendProfile,
+		getProfile,
+		sendPost,
+		getPost,
+		sendPhoto,
+		getPhoto,
+		importPrivateKey,
+		generatePrivateKey,
+	}
 }
-export default ipfsPlugin
+
+let _ipfs: IPFSInterface | null = null
+
+export async function initIPFS() {
+	if (_ipfs) {
+		return _ipfs
+	}
+
+	_ipfs = await createIPFSInterface()
+	return _ipfs
+}
+
+function ipfs() {
+	if (!_ipfs) {
+		throw new Error(`IPFS isn't initiated!`)
+	}
+	return _ipfs
+}
+
+export default ipfs

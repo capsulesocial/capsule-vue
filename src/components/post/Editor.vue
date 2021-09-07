@@ -205,11 +205,12 @@ import ChevronUp from '@/components/icons/ChevronUp.vue'
 import ChevronDown from '@/components/icons/ChevronDown.vue'
 import XIcon from '@/components/icons/X.vue'
 
-import { Post } from '@/interfaces/Post'
 import { Tag } from '@/interfaces/Tag'
 import { categories } from '@/config'
 import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
-import { signContent } from '~/plugins/keys'
+
+import { createPost, sendPost } from '@/backend/post'
+import ipfs from '@/backend/ipfs'
 
 interface IData {
 	categoryList: string[]
@@ -359,12 +360,12 @@ export default Vue.extend({
 			}
 		},
 		async uploadImage(image: any): Promise<void> {
-			const cid = await this.$sendPhoto(image)
+			const cid = await ipfs().sendPhoto(image)
 			this.featuredPhotoCID = cid
 			this.downloadImage(cid)
 		},
 		async downloadImage(cid: string): Promise<void> {
-			this.featuredPhoto = await this.$getPhoto(cid)
+			this.featuredPhoto = await ipfs().getPhoto(cid)
 		},
 		async post(): Promise<void> {
 			if (!this.$qualityText(this.title)) {
@@ -376,28 +377,21 @@ export default Vue.extend({
 				})
 				// Convert to Markdown
 				this.input = this.turndownService.turndown(clean)
-				const p: Post = {
-					title: this.title.trim(),
-					content: this.input,
-					category: this.category,
-					timestamp: Date.now(),
-					tags: this.$store.state.draft.tags,
-					authorID: this.$store.state.session.id,
-					featuredPhotoCID: this.featuredPhotoCID,
-				}
-				const cid = await this.$sendPost(p)
-				const signature = signContent(p, p.authorID)
-				if (signature) {
-					this.appendPostCID(cid)
-					this.$axios.post(`/content`, { cid, data: p, sig: Buffer.from(signature).toString(`hex`), type: `post` })
-					this.title = ``
-					this.input = ``
-					this.$store.commit(`draft/reset`)
-					this.$store.commit(`settings/setRecentlyPosted`, true)
-					this.$router.push(`/post/` + cid)
-				} else {
-					alert(`Signature could not be generated!`)
-				}
+				const p = createPost(
+					this.title,
+					this.input,
+					this.category,
+					this.$store.state.draft.tags,
+					this.$store.state.session.id,
+					this.featuredPhotoCID,
+				)
+				const cid = await sendPost(p)
+				this.appendPostCID(cid)
+				this.title = ``
+				this.input = ``
+				this.$store.commit(`draft/reset`)
+				this.$store.commit(`settings/setRecentlyPosted`, true)
+				this.$router.push(`/post/` + cid)
 			}
 		},
 		updateStore(): void {

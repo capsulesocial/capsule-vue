@@ -170,9 +170,10 @@ import {
 	createSessionFromProfile,
 	namespace as sessionStoreNamespace,
 } from '~/store/session'
-import { signedInToWallet } from '~/plugins/near'
+import { signedInToWallet } from '@/backend/near'
 import { sendProfileServer } from '~/plugins/server'
-import { genAndSetSigningKey, removeSigningKey } from '~/plugins/keys'
+import { genAndSetSigningKey, removeSigningKey } from '@/backend/keys'
+import ipfs from '@/backend/ipfs'
 
 interface IData {
 	isLogin: boolean
@@ -242,7 +243,7 @@ export default Vue.extend({
 			if (this.isLogin) {
 				const { success, profileCID } = await this.$login(this.id, this.password)
 				if (success && signedInToWallet()) {
-					const backendProfile = await this.$getProfile(profileCID)
+					const backendProfile = await ipfs().getProfile(profileCID)
 					const account = createSessionFromProfile(profileCID, backendProfile)
 					account.cid = profileCID
 					this.changeCID(profileCID)
@@ -277,7 +278,7 @@ export default Vue.extend({
 					// Store hex-encoded content-signing public key in Session
 					const account = createDefaultSession(this.id, this.name, this.email, Buffer.from(pubkey).toString(`hex`))
 					// Send user profile to IPFS
-					const cid = await this.$sendProfile(getProfileFromSession(account))
+					const cid = await ipfs().sendProfile(getProfileFromSession(account))
 					const serverProfile = await sendProfileServer(cid, getProfileFromSession(account))
 					if (!serverProfile.success) {
 						// Remove content-signing key from localStorage

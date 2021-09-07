@@ -40,6 +40,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import ProfileIcon from '@/components/icons/Person.vue'
+import ipfs from '@/backend/ipfs'
 
 export default Vue.extend({
 	components: {
@@ -58,7 +59,7 @@ export default Vue.extend({
 	},
 	async created() {
 		if (this.$props.reply.authorAvatarCID !== null) {
-			this.avatar = await this.$getPhoto(this.$props.reply.authorAvatarCID)
+			this.avatar = await ipfs().getPhoto(this.$props.reply.authorAvatarCID)
 		}
 	},
 	methods: {

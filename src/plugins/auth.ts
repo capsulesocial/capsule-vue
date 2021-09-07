@@ -1,10 +1,11 @@
 import type { Plugin } from '@nuxt/types'
 import { Authentication } from '../interfaces/Authentication'
-import { getEncryptedPeerIDPrivateKey, hkdf, scrypt, decryptData } from './crypto'
 import { sendAuthentication, getAuthentication } from './server'
-import { setProfileNEAR, getProfileNEAR } from './profile'
-import { getWalletConnection, getNearPrivateKey, setNearPrivateKey, initContract } from './near'
-import { getSigningKey, setSigningKey } from '~/plugins/keys'
+
+import { getWalletConnection, getNearPrivateKey, setNearPrivateKey, initContract } from '@/backend/near'
+import { getEncryptedPeerIDPrivateKey, hkdf, scrypt, decryptData } from '@/backend/crypto'
+import { getSigningKey, setSigningKey } from '@/backend/keys'
+import { setProfileNEAR, getProfileNEAR } from '@/backend/profile'
 
 // eslint-disable-next-line quotes
 declare module 'vue/types/vue' {
