@@ -10,6 +10,7 @@
 						:src="this.avatar"
 						class="w-24 h-24 rounded-lg mr-4 object-cover"
 					/>
+					<ProfileIcon v-else class="w-24 h-24 rounded-full mr-4 border" />
 					<div class="flex flex-col">
 						<!-- Name Username, Follow button -->
 						<div class="flex flex-col">
@@ -153,6 +154,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import ProfileIcon from '@/components/icons/Person.vue'
 import TwitterIcon from '@/components/icons/brands/Twitter.vue'
 import GitHubIcon from '@/components/icons/brands/GitHub.vue'
 import FriendButton from '@/components/FriendButton.vue'
@@ -170,6 +172,7 @@ interface IData {
 export default Vue.extend({
 	name: `RootIDPage`,
 	components: {
+		ProfileIcon,
 		TwitterIcon,
 		GitHubIcon,
 		FriendButton,

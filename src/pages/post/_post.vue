@@ -7,7 +7,7 @@
 				<div class="text-lg">
 					Category |
 					<span v-if="!this.post.category" class="text-lightSecondaryText"> None</span>
-					<nuxt-link :to="`/discover/` + this.post.category" class="text-primary uppercase">{{
+					<nuxt-link :to="`/discover/` + this.post.category" class="text-primary capitalize">{{
 						this.post.category
 					}}</nuxt-link>
 				</div>
@@ -37,7 +37,7 @@
 					/>
 					<p
 						:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-						class="font-sans uppercase"
+						class="font-sans capitalize"
 					>
 						<nuxt-link
 							:to="'/' + this.author.id"
