@@ -2,9 +2,6 @@ import IPFS, { Options } from 'ipfs-core'
 import { Post } from '~/interfaces/Post'
 import { Profile } from '~/interfaces/Profile'
 
-// Declare type of function
-export type importKey = (name: string, privateKey: string, password: string) => Promise<boolean>
-
 export interface IPFSInterface {
 	sendProfile: (content: Profile) => Promise<string>
 	getProfile: (hash: string) => Promise<Profile>
@@ -12,7 +9,7 @@ export interface IPFSInterface {
 	getPost: (cid: string) => Promise<Post>
 	sendPhoto: (content: any) => Promise<string>
 	getPhoto: (cid: string) => Promise<any>
-	importPrivateKey: importKey
+	importPrivateKey: (name: string, privateKey: string, password: string) => Promise<boolean>
 	generatePrivateKey: (name: string) => Promise<boolean>
 }
 
@@ -48,48 +45,48 @@ async function createIPFSInterface(): Promise<IPFSInterface> {
 	const node = await IPFS.create(ipfsConfig)
 
 	// Send a user profile object to IPFS
-	const sendProfile: (content: Profile) => Promise<string> = async (content) => {
+	const sendProfile = async (content: Profile) => {
 		const profileAdded = await node.add(JSON.stringify(content, null, 0))
 		const cid = profileAdded.cid.toString()
 		return cid
 	}
 
 	// Returns post object associated with content id
-	const getProfile: (cid: string) => Promise<Profile> = async (cid) => {
+	const getProfile = async (cid: string) => {
 		const content: Buffer[] = []
 		for await (const chunk of node.cat(cid)) {
 			content.push(Buffer.from(chunk))
 		}
 		const contentData = Buffer.concat(content)
-		return JSON.parse(contentData.toString())
+		return JSON.parse(contentData.toString()) as Profile
 	}
 
 	// Send post to IPFS
-	const sendPost: (content: Post) => Promise<string> = async (content: Post) => {
+	const sendPost = async (content: Post) => {
 		const postAdded = await node.add(JSON.stringify(content, null, 0))
 		const cid = postAdded.cid.toString()
 		return cid
 	}
 
 	// Returns post object associated with content id
-	const getPost: (cid: string) => Promise<Post> = async (cid) => {
+	const getPost = async (cid: string) => {
 		const content: Buffer[] = []
 		for await (const chunk of node.cat(cid)) {
 			content.push(Buffer.from(chunk))
 		}
 		const contentData = Buffer.concat(content)
-		return JSON.parse(contentData.toString())
+		return JSON.parse(contentData.toString()) as Post
 	}
 
 	// Add photo to IPFS
-	const sendPhoto: (content: any) => Promise<string> = async (content) => {
+	const sendPhoto = async (content: any) => {
 		const photoAdded = await node.add(content)
 		const cid = photoAdded.cid.toString()
 		return cid
 	}
 
 	// Get photo
-	const getPhoto: (cid: string) => Promise<any> = async (cid) => {
+	const getPhoto = async (cid: string) => {
 		const content: Buffer[] = []
 		for await (const chunk of node.cat(cid)) {
 			content.push(Buffer.from(chunk))
@@ -100,7 +97,7 @@ async function createIPFSInterface(): Promise<IPFSInterface> {
 	}
 
 	// Import Private Key to local IPFS repo
-	const importPrivateKey: importKey = async (name, privateKey, password) => {
+	const importPrivateKey = async (name: string, privateKey: string, password: string) => {
 		try {
 			await node.key.import(name, privateKey, password)
 			return true
@@ -119,7 +116,7 @@ async function createIPFSInterface(): Promise<IPFSInterface> {
 	}
 
 	// Generate a new ed25519 key
-	const generatePrivateKey: (name: string) => Promise<boolean> = async (name) => {
+	const generatePrivateKey = async (name: string) => {
 		try {
 			await node.key.gen(name, { type: `Ed25519` })
 			return true

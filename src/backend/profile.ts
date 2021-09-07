@@ -21,6 +21,7 @@ async function setProfileNEAR(cid: string) {
 		await contract.setProfile({ cid })
 		return true
 	}
+
 	return false
 }
 

@@ -1,48 +1,35 @@
+import axios from 'axios'
+
 import { Authentication } from '~/interfaces/Authentication'
 import { PrivateKey } from '~/interfaces/PrivateKey'
 import { Profile } from '~/interfaces/Profile'
 
-// eslint-disable-next-line quotes
-declare module 'vue/types/vue' {
-	interface Vue {
-		$sendAuthentication: (data: Authentication) => Promise<boolean>
-		$getAuthentication: (username: string, hp1: Uint8Array) => Promise<{ success: boolean; auth: Authentication }>
-	}
-}
-
-const axios = require(`axios`).default
 const serverURL = process.env.SERVER_URL || `http://test-node.capsule.social:4000`
 const baseUrl = process.env.ORBIT_URL || `http://test-node.capsule.social:3000/`
 
 async function sendAuthentication(data: Authentication): Promise<boolean> {
 	// Encoding all values to hex
-	const nonce = Buffer.from(data.privateKey.nonce).toString(`hex`)
-	const encPrivateKey = Buffer.from(data.privateKey.encryptedPeerIDPrivateKey).toString(`hex`)
-	const hp1 = Buffer.from(data.privateKey.hp1).toString(`hex`)
-	const hp1Content = Buffer.from(data.signingKey.hp1).toString(`hex`)
-	const encSigningKey = Buffer.from(data.signingKey.encryptedPeerIDPrivateKey).toString(`hex`)
-	const encSigningKeyNonce = Buffer.from(data.signingKey.nonce).toString(`hex`)
+	const encryptedPrivateKeyNonce = uint8ArrayToHexString(data.privateKey.nonce)
+	const encryptedPrivateKey = uint8ArrayToHexString(data.privateKey.encryptedPeerIDPrivateKey)
+	const hp1 = uint8ArrayToHexString(data.privateKey.hp1)
+	const hp1Content = uint8ArrayToHexString(data.signingKey.hp1)
+	const encryptedSigningKey = uint8ArrayToHexString(data.signingKey.encryptedPeerIDPrivateKey)
+	const encryptedSigningKeyNonce = uint8ArrayToHexString(data.signingKey.nonce)
 
-	const requestURL = new URL(`${serverURL}/write`)
 	try {
 		// Request body data
 		const reqData = {
 			hp1,
 			username: data.id,
-			encryptedPrivateKey: encPrivateKey,
-			encryptedPrivateKeyNonce: nonce,
+			encryptedPrivateKey,
+			encryptedPrivateKeyNonce,
 			hp1Content,
-			encryptedSigningKey: encSigningKey,
-			encryptedSigningKeyNonce: encSigningKeyNonce,
+			encryptedSigningKey,
+			encryptedSigningKeyNonce,
 			accountId: data.nearAccountId,
 		}
-		const response = await axios.post(requestURL.toString(), reqData)
-		if (response.data.status === `OK`) {
-			// Registration successful!
-			return true
-		} else {
-			// Registration failed!
-		}
+		const response = await axios.post(`${serverURL}/write`, reqData)
+		return response.data.status === `OK`
 	} catch {
 		// Unable to send a request!
 	}
@@ -54,7 +41,7 @@ async function getAuthentication(
 	hp1Send: Uint8Array,
 ): Promise<{ success: boolean; auth: Authentication }> {
 	// Encoding hp1 to hex
-	const hp1Hex = Buffer.from(hp1Send).toString(`hex`)
+	const hp1Hex = uint8ArrayToHexString(hp1Send)
 
 	// Initialise empty Authentication object to be used as a default return value
 	const defaultprivKey: PrivateKey = {
@@ -69,19 +56,18 @@ async function getAuthentication(
 		nearAccountId: null,
 	}
 
-	const requestURL = new URL(`${serverURL}/read`)
 	// Request body data
 	const reqData = { hp1: hp1Hex, username }
 	try {
-		const response = await axios.post(requestURL.toString(), reqData)
+		const response = await axios.post(`${serverURL}/read`, reqData)
 		if (response.data.status === `OK`) {
-			const encryptedPeerIDPrivateKey = new Uint8Array(Buffer.from(response.data.encryptedPrivateKey, `hex`))
-			const hp1 = new Uint8Array(Buffer.from(response.data.hp1, `hex`))
-			const nonce = new Uint8Array(Buffer.from(response.data.encryptedPrivateKeyNonce, `hex`))
+			const encryptedPeerIDPrivateKey = hexStringToUint8Array(response.data.encryptedPrivateKey)
+			const hp1 = hexStringToUint8Array(response.data.hp1)
+			const nonce = hexStringToUint8Array(response.data.encryptedPrivateKeyNonce)
 
-			const encryptedSigningKey = new Uint8Array(Buffer.from(response.data.encryptedSigningKey, `hex`))
-			const hp1Content = new Uint8Array(Buffer.from(response.data.hp1Content, `hex`))
-			const encryptedSigningKeyNonce = new Uint8Array(Buffer.from(response.data.encryptedSigningKeyNonce, `hex`))
+			const encryptedSigningKey = hexStringToUint8Array(response.data.encryptedSigningKey)
+			const hp1Content = hexStringToUint8Array(response.data.hp1Content)
+			const encryptedSigningKeyNonce = hexStringToUint8Array(response.data.encryptedSigningKeyNonce)
 
 			const signKey: PrivateKey = {
 				encryptedPeerIDPrivateKey: encryptedSigningKey,
@@ -122,9 +108,8 @@ async function resolveUsername(username: string): Promise<{ success: boolean; ac
 }
 
 async function sendProfileServer(cid: string, data: Profile): Promise<{ success: boolean; cid: string }> {
-	const requestURL = new URL(`${baseUrl}/profile`)
 	try {
-		const response = await axios.post(requestURL.toString(), { cid, data })
+		const response = await axios.post(`${baseUrl}/profile`, { cid, data })
 		if (response.data.success) {
 			return { success: true, cid: response.data.cid }
 		}
@@ -137,3 +122,13 @@ async function sendProfileServer(cid: string, data: Profile): Promise<{ success:
 }
 
 export { sendAuthentication, getAuthentication, resolveUsername, sendProfileServer }
+
+// Helpers
+
+function uint8ArrayToHexString(uint8Array: Uint8Array): string {
+	return Buffer.from(uint8Array).toString(`hex`)
+}
+
+function hexStringToUint8Array(hexString: string): Uint8Array {
+	return new Uint8Array(Buffer.from(hexString, `hex`))
+}

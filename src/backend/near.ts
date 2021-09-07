@@ -80,19 +80,12 @@ async function getNearPrivateKey() {
 }
 
 async function setNearPrivateKey(privateKey: Uint8Array, accountId: string) {
-	try {
-		const encodedPrivateKey = base_encode(privateKey)
-		const keypair = new KeyPairEd25519(encodedPrivateKey)
+	const encodedPrivateKey = base_encode(privateKey)
+	const keypair = new KeyPairEd25519(encodedPrivateKey)
 
-		const keystore = new keyStores.BrowserLocalStorageKeyStore()
-		await keystore.setKey(nearConfig.networkId, accountId, keypair)
-		return true
-	} catch (error) {
-		// Couldn't set private key in LocalStorage
-		// eslint-disable-next-line no-console
-		console.log(error)
-	}
-	return false
+	const keystore = new keyStores.BrowserLocalStorageKeyStore()
+	await keystore.setKey(nearConfig.networkId, accountId, keypair)
+	return true
 }
 
 async function removeNearPrivateKey() {
