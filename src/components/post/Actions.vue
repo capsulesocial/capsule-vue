@@ -181,7 +181,7 @@ export default Vue.extend({
 					authorID: this.$store.state.session.id,
 					content: this.comment,
 					emotion: this.emotion,
-					timestamp: new Date().getTime(),
+					timestamp: Date.now(),
 					postCID: this.postCID,
 				}
 
