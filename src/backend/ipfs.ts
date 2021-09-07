@@ -1,4 +1,5 @@
 import IPFS, { Options } from 'ipfs-core'
+
 import { Post } from '~/interfaces/Post'
 import { Profile } from '~/interfaces/Profile'
 

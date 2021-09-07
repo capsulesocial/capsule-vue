@@ -1,5 +1,4 @@
-import { Authentication } from '../interfaces/Authentication'
-import { sendAuthentication, getAuthentication } from './server'
+import { sendAuthentication, getAuthentication, Authentication } from './server'
 
 import { getWalletConnection, getNearPrivateKey, setNearPrivateKey, initContract } from './near'
 import { getEncryptedPeerIDPrivateKey, hkdf, scrypt, decryptData } from './crypto'

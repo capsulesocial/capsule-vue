@@ -1,8 +1,13 @@
 import axios from 'axios'
+import { PrivateKey } from './interfaces'
 
-import { Authentication } from '~/interfaces/Authentication'
-import { PrivateKey } from '~/interfaces/PrivateKey'
 import { Profile } from '~/interfaces/Profile'
+export interface Authentication {
+	privateKey: PrivateKey
+	signingKey: PrivateKey
+	id: string
+	nearAccountId: string | null
+}
 
 const serverURL = process.env.SERVER_URL || `http://test-node.capsule.social:4000`
 const baseUrl = process.env.ORBIT_URL || `http://test-node.capsule.social:3000/`

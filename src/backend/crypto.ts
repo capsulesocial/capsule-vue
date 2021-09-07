@@ -1,4 +1,4 @@
-import { PrivateKey } from '../interfaces/PrivateKey'
+import { PrivateKey } from './interfaces'
 
 async function hkdf(password: Uint8Array, salt: Uint8Array, info: Uint8Array) {
 	const key = await window.crypto.subtle.importKey(`raw`, password, `HKDF`, false, [`deriveBits`, `deriveKey`])
