@@ -1,10 +1,11 @@
 <template>
 	<main class="w-full">
-		<section class="md:grid md:grid-cols-3">
+		<section class="flex">
 			<!-- Left column: Select tab -->
 			<article
+				style="width: 200px"
 				:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-				class="flex flex-col w-full border-r h-full"
+				class="flex flex-col w-full h-full"
 			>
 				<h2 class="border-b-2 text-xl bold font-bold" style="padding: 12px 0px 10px 16px">Settings</h2>
 				<button
@@ -12,7 +13,7 @@
 					:class="this.getStyles('account')"
 					@click="changeTab('account')"
 				>
-					Account Information
+					Account Info
 					<ChevronRight class="text-gray4" />
 				</button>
 				<button
@@ -42,8 +43,8 @@
 			</article>
 
 			<!-- Right column: Show details -->
-			<div class="col-span-2" style="width: 250px">
-				<article v-if="this.tab === 'account'" class="col-span-2 border-r h-full">
+			<div style="width: 400px">
+				<article v-if="this.tab === 'account'" class="col-span-2 border-r border-l h-full">
 					<!-- General Settings (Username, ID, Email) -->
 					<h2
 						:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
@@ -52,7 +53,7 @@
 					>
 						Account Information
 					</h2>
-					<div class="p-4 flex flex-col">
+					<div class="p-5 flex flex-col">
 						<button class="self-center mb-2 text-xs text-gray4" @click="$refs.uploadedPic.click()">
 							<img
 								v-if="this.$store.state.session.avatar !== ''"
@@ -73,96 +74,109 @@
 							accept="image/*"
 							@change="handleImage"
 						/>
-						<div class="flex flex-col">
-							<label for="newName" class="hidden">Enter Name</label>
-							<input
-								id="newName"
-								v-model="newName"
-								type="text"
-								:placeholder="this.$store.state.session.name"
-								:class="
-									this.$store.state.settings.darkMode
-										? 'bg-lightBG text-lightSecondaryText focus:border-lightActive'
-										: 'bg-darkBG text-darkSecondaryText focus:border-darkActive'
-								"
-								class="focus:outline-none border-b-2 w-full mb-4"
-							/>
-
-							<label for="newID" class="hidden">Enter ID</label>
-							<input
-								id="newID"
-								v-model.trim="newID"
-								type="text"
-								:placeholder="this.$store.state.session.id"
-								:class="
-									this.$store.state.settings.darkMode
-										? 'bg-lightBG text-lightSecondaryText focus:border-lightActive'
-										: 'bg-darkBG text-darkSecondaryText focus:border-darkActive'
-								"
-								class="focus:outline-none border-b-2 w-full mb-4"
-							/>
-
-							<label for="newEmail" class="hidden">Enter email</label>
-							<input
-								id="newEmail"
-								v-model="newEmail"
-								type="email"
-								:placeholder="this.$store.state.session.email"
-								:class="
-									this.$store.state.settings.darkMode
-										? 'bg-lightBG text-lightSecondaryText focus:border-lightActive'
-										: 'bg-darkBG text-darkSecondaryText focus:border-darkActive'
-								"
-								class="focus:outline-none border-b-2 w-full mb-4"
-							/>
-
-							<label for="location" class="hidden">Enter location</label>
-							<input
-								id="location"
-								v-model="location"
-								type="text"
-								:placeholder="
-									this.$store.state.session.location === '' ? 'Enter Location' : this.$store.state.session.location
-								"
-								:class="
-									this.$store.state.settings.darkMode
-										? 'bg-lightBG text-lightSecondaryText focus:border-lightActive'
-										: 'bg-darkBG text-darkSecondaryText focus:border-darkActive'
-								"
-								class="focus:outline-none border-b-2 w-full mb-4"
-							/>
+						<div class="flex flex-col items-center">
+							<!-- Enter name: -->
+							<div class="grid grid-cols-3 items-center my-5">
+								<label for="newName" class="text-lightSecondaryText text-right pr-2">Name: </label>
+								<input
+									id="newName"
+									v-model="newName"
+									type="text"
+									:placeholder="this.$store.state.session.name"
+									:class="
+										this.$store.state.settings.darkMode
+											? 'bg-lightBG text-lightSecondaryText focus:border-lightActive'
+											: 'bg-darkBG text-darkSecondaryText focus:border-darkActive'
+									"
+									class="focus:outline-none border-b-2 col-span-2"
+								/>
+							</div>
+							<!-- Enter ID -->
+							<div class="grid grid-cols-3 items-center mb-5">
+								<label for="newID" class="text-lightSecondaryText text-right pr-2">ID:</label>
+								<input
+									id="newID"
+									v-model.trim="newID"
+									type="text"
+									:placeholder="this.$store.state.session.id"
+									:class="
+										this.$store.state.settings.darkMode
+											? 'bg-lightBG text-lightSecondaryText focus:border-lightActive'
+											: 'bg-darkBG text-darkSecondaryText focus:border-darkActive'
+									"
+									class="focus:outline-none border-b-2 col-span-2"
+								/>
+							</div>
+							<!-- Enter email -->
+							<div class="grid grid-cols-3 items-center mb-5">
+								<label for="newEmail" class="text-lightSecondaryText text-right pr-2">Email:</label>
+								<input
+									id="newEmail"
+									v-model="newEmail"
+									type="email"
+									:placeholder="this.$store.state.session.email"
+									:class="
+										this.$store.state.settings.darkMode
+											? 'bg-lightBG text-lightSecondaryText focus:border-lightActive'
+											: 'bg-darkBG text-darkSecondaryText focus:border-darkActive'
+									"
+									class="focus:outline-none border-b-2 col-span-2"
+								/>
+							</div>
+							<!-- Enter Location -->
+							<div class="grid grid-cols-3 items-center mb-5">
+								<label for="location" class="text-lightSecondaryText text-right pr-2">Location:</label>
+								<input
+									id="location"
+									v-model="location"
+									type="text"
+									:placeholder="
+										this.$store.state.session.location === '' ? 'Enter Location' : this.$store.state.session.location
+									"
+									:class="
+										this.$store.state.settings.darkMode
+											? 'bg-lightBG text-lightSecondaryText focus:border-lightActive'
+											: 'bg-darkBG text-darkSecondaryText focus:border-darkActive'
+									"
+									class="focus:outline-none border-b-2 col-span-2"
+								/>
+							</div>
 						</div>
-						<label
-							for="bio"
-							class="bold"
-							:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-						>
-							Bio:
-						</label>
-						<textarea
-							id="bio"
-							:maxlength="maxCharBio"
-							:value="bio"
-							rows="4"
-							:class="
-								this.$store.state.settings.darkMode
-									? 'bg-lightBG text-lightSecondaryText focus:text-lightPrimaryText focus:border-lightActive'
-									: 'bg-darkBG text-darkSecondaryText focus:text-darkPrimaryText focus:border-darkActive'
-							"
-							class="w-full border-b-2 focus:outline-none p-1 resize-none"
-							@input="bio = $event.target.value"
-							@keyup="checkBio()"
-						></textarea>
-						<p
-							class="text-xs text-right"
-							:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-						>
-							{{ this.checkBio() }} Characters Remaining
-						</p>
+						<!-- Enter bio -->
+						<div class="px-5 flex flex-col">
+							<label
+								for="bio"
+								class="text-lightSecondaryText pl-1"
+								:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+							>
+								How would you describe yourself?
+							</label>
+							<textarea
+								id="bio"
+								:maxlength="maxCharBio"
+								:value="bio"
+								rows="5"
+								:class="
+									this.$store.state.settings.darkMode
+										? 'bg-lightBG text-lightSecondaryText focus:text-lightPrimaryText focus:border-lightActive'
+										: 'bg-darkBG text-darkSecondaryText focus:text-darkPrimaryText focus:border-darkActive'
+								"
+								class="border-b-2 focus:outline-none p-1 resize-none"
+								@input="bio = $event.target.value"
+								@keyup="checkBio()"
+							></textarea>
+
+							<p
+								class="text-xs text-right"
+								:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+							>
+								{{ this.checkBio() }} Characters Remaining
+							</p>
+						</div>
 					</div>
 				</article>
 
-				<article v-if="this.tab === 'password'" class="col-span-2 border-r h-full">
+				<article v-if="this.tab === 'password'" class="col-span-2 border-r border-l h-full">
 					<h2
 						:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 						class="border-b-2 text-xl bold font-bold"
@@ -170,9 +184,9 @@
 					>
 						Change Password
 					</h2>
-					<div class="flex flex-col p-4">
+					<div class="flex flex-col p-5">
 						<p
-							class="mb-4"
+							class="mb-5"
 							:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 						>
 							Choose a strong password to protect your account:
@@ -182,7 +196,7 @@
 						<input
 							id="password"
 							type="password"
-							class="w-full border rounded-lg focus:outline-none px-4 py-2 focus:border-primary"
+							class="w-full border rounded-lg focus:outline-none px-5 py-2 focus:border-primary"
 							placeholder="Current Password"
 						/>
 
@@ -194,7 +208,7 @@
 						<input
 							id="newPassword"
 							type="password"
-							class="w-full border rounded-lg focus:outline-none px-4 py-2 focus:border-primary mb-2"
+							class="w-full border rounded-lg focus:outline-none px-5 py-2 focus:border-primary mb-2"
 							placeholder="New Password"
 						/>
 
@@ -202,13 +216,13 @@
 						<input
 							id="confirmPassword"
 							type="password"
-							class="w-full border rounded-lg focus:outline-none px-4 py-2 focus:border-primary"
+							class="w-full border rounded-lg focus:outline-none px-5 py-2 focus:border-primary"
 							placeholder="Confirm Password"
 						/>
 					</div>
 				</article>
 				<!-- Social Links -->
-				<article v-if="this.tab === 'social'" class="col-span-2 border-r h-full">
+				<article v-if="this.tab === 'social'" class="col-span-2 border-r border-l h-full">
 					<h2
 						:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 						class="border-b-2 text-xl bold font-bold"
@@ -216,24 +230,23 @@
 					>
 						Social Links
 					</h2>
-					<p
-						class="m-4"
-						:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-					>
-						Link your social media accounts:
-					</p>
-					<VerifySocial platform="twitter" class="mx-4 my-2" />
-					<VerifySocial platform="github" class="mx-4 my-2 pb-2" />
-					<p
-						:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-						class="p-4 border-t"
-					>
-						Link your professional account:
-					</p>
-					<VerifySocial platform="website" class="mx-4 mb-4" />
+					<div class="p-5">
+						<p :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'">
+							Link your social media accounts:
+						</p>
+						<VerifySocial platform="twitter" class="my-5" />
+						<VerifySocial platform="github" class="my-5" />
+						<p
+							:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+							class="py-5 border-t"
+						>
+							Link your professional account:
+						</p>
+						<VerifySocial platform="website" class="mb-5 mb-5" />
+					</div>
 				</article>
 				<!-- Display Themes -->
-				<article v-if="this.tab === 'display'" class="col-span-2 border-r h-full">
+				<article v-if="this.tab === 'display'" class="col-span-2 border-r border-l h-full">
 					<h2
 						:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 						class="border-b-2 text-xl bold font-bold"
@@ -265,7 +278,7 @@
 			<button
 				:class="this.hasChanged() ? '' : 'opacity-50'"
 				class="bg-primary text-white rounded-lg focus:outline-none"
-				style="width: 128px; height: 40px; margin-left: 360px"
+				style="width: 128px; height: 40px; margin-left: 450px"
 				@click="this.updateSettings"
 			>
 				Save Changes
@@ -311,7 +324,7 @@ export default Vue.extend({
 			location: ``,
 			bio: this.$store.state.session.bio,
 			maxCharBio: 256,
-			tab: ``,
+			tab: `account`,
 		}
 	},
 	async created() {
