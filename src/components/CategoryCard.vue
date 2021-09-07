@@ -16,7 +16,7 @@
 				shadow-lg
 				bg-primary
 			"
-			style="width: 200px; height: 141px"
+			style="width: 300px; height: 211.5px"
 		>
 			<img
 				v-if="this.$props.bgImage !== ``"

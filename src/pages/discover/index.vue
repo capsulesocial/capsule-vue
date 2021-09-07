@@ -4,7 +4,7 @@
 			<article style="width: 600px" class="flex flex-col md:flex-row justify-between mb-1 items-center mt-3">
 				<h2
 					:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-					class="text-4xl font-bold"
+					class="text-3xl font-semibold"
 				>
 					Featured Hashtags
 				</h2>
@@ -16,17 +16,16 @@
 					"
 					class="border rounded-lg px-2 py-2 focus:outline-none self-center"
 				>
-					<option style="font-size: 1.563rem">Trending</option>
-					<option style="font-size: 1.563rem">Top This Week</option>
-					<option style="font-size: 1.563rem">All Time</option>
+					<option>Trending</option>
+					<option>Top This Week</option>
+					<option>All Time</option>
 				</select>
 			</article>
 			<p
 				:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-				style="font-size: 1.563rem"
-				class="mb-2"
+				class="font-normal text-xl"
 			>
-				Find and join conversations on any topic
+				Find and join conversations on any topic:
 			</p>
 			<div class="my-4">
 				<TagCard v-for="t in this.tags" :key="t" :tag="t" class="text-lg" />
@@ -34,22 +33,21 @@
 		</section>
 
 		<section style="width: 640px">
-			<article class="mt-4">
+			<article class="mt-4 pt-4">
 				<h2
 					:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-					class="text-4xl font-bold"
+					class="text-3xl font-semibold"
 				>
 					Featured Categories
 				</h2>
 				<p
 					:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-					class="mb-5"
-					style="font-size: 1.563rem"
+					class="mb-2 font-normal text-xl"
 				>
-					Read more of what you love by browsing top categories
+					Read more of what you love by browsing top categories:
 				</p>
 			</article>
-			<article class="grid grid-cols-2 gap-4 md:grid-cols-3">
+			<article class="grid grid-cols-2 gap-4">
 				<CategoryCard
 					v-for="c in this.categoryList"
 					:key="c"

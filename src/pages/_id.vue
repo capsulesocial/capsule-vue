@@ -1,7 +1,7 @@
 <template>
 	<section class="w-full">
 		<!-- IF a profile exists -->
-		<div v-if="this.currentUser" style="width: 512px" class="border-r">
+		<div v-if="this.currentUser" style="width: 600px">
 			<!-- Name, socials, follow, bio -->
 			<section class="flex flex-row justify-between p-4">
 				<article class="flex items-center">
@@ -142,10 +142,10 @@
 				</nuxt-link>
 			</article>
 			<article>
-				<nuxt-child :profile="this.currentUser" style="padding-left: 16px" />
+				<nuxt-child :profile="this.currentUser" style="padding-left: 44px" />
 			</article>
 		</div>
-		<div v-else style="width: 512px" class="flex justify-center border-r">
+		<div v-else style="width: 600px" class="flex justify-center border-r">
 			<div class="loader m-5"></div>
 		</div>
 	</section>

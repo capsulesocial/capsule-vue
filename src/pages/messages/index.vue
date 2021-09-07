@@ -1,9 +1,10 @@
 <template>
 	<div
+		class="w-full"
 		:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText bg-lightBG' : 'text-darkPrimaryText bg-darkBG'"
 	>
 		<section class="flex flex-row h-screen pt-12">
-			<article class="flex flex-row w-96 flex-shrink-0 p-4">
+			<article class="flex flex-row flex-shrink-0 p-4" style="width: 240px">
 				<div class="flex flex-col w-full h-full pl-4 pr-4 py-4 -mr-4">
 					<!-- Left Column: Messages list -->
 					<div class="flex flex-row items-center">
@@ -76,7 +77,7 @@
 				</div>
 			</article>
 			<!-- Right column -->
-			<article class="flex flex-col h-full w-full px-4 py-6">
+			<article class="flex flex-col h-full w-full px-4 py-6" style="width: 600px">
 				<!-- Header for selected chat -->
 				<div class="p-4 flex">
 					<img :src="this.friendAvatar" class="w-10 h-10 rounded-lg" />

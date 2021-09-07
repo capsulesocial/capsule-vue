@@ -1,8 +1,6 @@
 <template>
 	<div class="w-full">
 		<section
-			style="width: 512px"
-			class="border-r"
 			:class="
 				this.$store.state.settings.darkMode ? 'text-lightPrimaryText bg-lightBG' : 'text-darkPrimaryText bg-darkBG'
 			"
@@ -38,11 +36,11 @@
 			</nav>
 
 			<!-- Not loaded yet -->
-			<article v-show="this.isLoading" class="flex justify-center" style="width: 512px">
+			<article v-show="this.isLoading" class="flex justify-center" style="width: 600px">
 				<div class="loader m-5"></div>
 			</article>
 
-			<article v-for="post in this.posts" :key="post.contentAddress" style="padding-left: 16px">
+			<article v-for="post in this.posts" :key="post.contentAddress" style="padding-left: 44px">
 				<PostCard :post="post" />
 			</article>
 		</section>

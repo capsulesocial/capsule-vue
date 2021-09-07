@@ -2,11 +2,11 @@
 	<main :class="this.$store.state.settings.darkMode ? 'bg-lightBG' : 'bg-darkBG'" class="h-screen">
 		<Header class="fixed top-0" />
 
-		<div class="flex justify-center">
+		<div class="flex justify-center min-h-full">
 			<!-- Left Nav Menu -->
-			<Navigation class="flex lg:pr-0 xl:pr-8" />
+			<Navigation class="flex" style="width: 240px" />
 			<!-- Main Content -->
-			<Nuxt class="border-l md:ml-24 xl:ml-64 md:min-w-max md:max-w-3xl" />
+			<Nuxt style="width: 840px" />
 		</div>
 	</main>
 </template>

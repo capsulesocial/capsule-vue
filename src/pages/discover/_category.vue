@@ -1,6 +1,6 @@
 <template>
 	<section class="w-full">
-		<div style="width: 512px" class="border-r">
+		<div style="width: 600px" class="border-r">
 			<article class="p-4">
 				<h4 class="text-xl">Category /</h4>
 				<h2 class="text-2xl uppercase">
@@ -8,7 +8,7 @@
 				</h2>
 			</article>
 			<!-- Not loaded yet -->
-			<article v-show="this.isLoading" class="flex justify-center" style="width: 512px">
+			<article v-show="this.isLoading" class="flex justify-center" style="width: 600px">
 				<div class="loader m-5"></div>
 			</article>
 			<!-- Posts loaded -->

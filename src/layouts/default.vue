@@ -3,9 +3,11 @@
 		<Header class="sticky top-0" />
 		<div class="flex justify-center min-h-full">
 			<!-- Left Nav Menu -->
-			<Navigation class="flex lg:pr-0 xl:pr-8" />
+			<Navigation class="flex" style="width: 240px" />
 			<!-- Main Content -->
-			<Nuxt class="mb-20 md:mb-5 border-l md:ml-24 xl:ml-64 md:min-w-max md:max-w-3xl" />
+			<Nuxt class="mb-20 md:mb-5 md:min-w-max" style="width: 600px" />
+			<!-- Featured Tags -->
+			<div style="width: 240px"></div>
 		</div>
 	</main>
 </template>

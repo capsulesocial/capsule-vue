@@ -1,11 +1,11 @@
 <template>
-	<nav>
+	<nav class="flex justify-center lg:justify-start lg:pl-2 xl:pl-0">
 		<!-- Desktop -->
 		<div
 			:class="
 				this.$store.state.settings.darkMode ? 'text-lightPrimaryText bg-lightBG' : 'text-darkSecondaryText bg-darkBG'
 			"
-			class="hidden md:flex flex-col px-2 h-screen sticky top-0 xl:pl-6 md:fixed md:pt-24 xl:mt-12"
+			class="hidden md:flex flex-col h-screen sticky top-0 md:fixed md:pt-24 lg:mt-12"
 		>
 			<nuxt-link
 				to="/home"
@@ -15,7 +15,7 @@
 				<span class="p-2">
 					<HomeIcon />
 				</span>
-				<strong class="hidden xl:block ml-2"> Home </strong>
+				<strong class="hidden lg:block ml-2"> Home </strong>
 			</nuxt-link>
 			<nuxt-link
 				to="/discover"
@@ -25,7 +25,7 @@
 				<span class="p-2">
 					<DiscoverIcon />
 				</span>
-				<strong class="hidden xl:block ml-2"> Discover </strong>
+				<strong class="hidden lg:block ml-2"> Discover </strong>
 			</nuxt-link>
 			<!-- profile -->
 			<nuxt-link
@@ -36,7 +36,7 @@
 				<span class="p-2">
 					<ProfileIcon />
 				</span>
-				<strong class="hidden xl:block ml-2"> Profile </strong>
+				<strong class="hidden lg:block ml-2"> Profile </strong>
 			</nuxt-link>
 			<nuxt-link
 				to="/messages"
@@ -46,7 +46,7 @@
 				<span class="p-2">
 					<InboxIcon />
 				</span>
-				<strong class="hidden xl:block ml-2"> Messages </strong>
+				<strong class="hidden lg:block ml-2"> Messages </strong>
 			</nuxt-link>
 			<nuxt-link
 				:to="'/' + $store.state.session.id + '/bookmarks'"
@@ -56,7 +56,7 @@
 				<span class="p-2">
 					<BookmarksIcon />
 				</span>
-				<strong class="hidden xl:block ml-2"> Bookmarks </strong>
+				<strong class="hidden lg:block ml-2"> Bookmarks </strong>
 			</nuxt-link>
 			<nuxt-link
 				to="/post"
@@ -65,13 +65,13 @@
 						? 'text-lightOnPrimaryText bg-lightPrimary'
 						: 'text-darkOnPrimary bg-darkPrimary'
 				"
-				class="xl:hidden group flex items-center p-2 text-base leading-6 m-2 mt-16 text-xl rounded-xl"
+				class="lg:hidden group flex items-center p-2 text-base leading-6 m-2 mt-16 text-xl rounded-xl"
 			>
 				<span class="p-2">
 					<PencilIcon class="fill-current" />
 				</span>
 			</nuxt-link>
-			<BrandedButton text="Write Post" :action="redirect" class="hidden xl:block mt-5 w-48 px-12 py-4 mt-16" />
+			<BrandedButton text="Write Post" :action="redirect" class="hidden lg:block mt-5 w-48 px-12 py-4 mt-16" />
 		</div>
 
 		<!-- Mobile -->

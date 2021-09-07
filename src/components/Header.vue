@@ -1,13 +1,13 @@
 <template>
 	<header
 		:class="this.$store.state.settings.darkMode ? 'bg-lightBG' : 'bg-darkBG'"
-		class="w-full flex justify-center z-20 border-b py-4 xl:pr-16"
+		class="w-full flex justify-center z-20 border-b py-4 lg:pl-2 xl:pl-0"
 	>
 		<!-- Top Left: Logo -->
-		<div class="flex xl:justify-between" style="width: 240px">
-			<CapsuleIcon class="ml-8 xl:ml-0 mr-2" />
+		<div class="flex justify-center lg:justify-between" style="width: 240px">
+			<CapsuleIcon class="lg:pl-4" />
 			<div
-				class="flex md:pl-8 xl:pl-0"
+				class="hidden lg:flex md:pl-8 xl:pl-0"
 				:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 			>
 				<button class="focus:outline-none" @click="$router.go(-1)">
@@ -20,7 +20,19 @@
 		</div>
 
 		<!-- Top Right -->
-		<article class="relative hidden md:flex md:justify-center xl:justify-end items-center xl:ml-0" style="width: 640px">
+		<article class="relative hidden md:flex justify-between lg:justify-end items-center" style="width: 600px">
+			<div
+				class="flex lg:hidden md:pl-8 xl:pl-0"
+				:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+			>
+				<button class="focus:outline-none" @click="$router.go(-1)">
+					<BackButton />
+				</button>
+				<button class="focus:outline-none" @click="$router.go(1)">
+					<ForwardButton />
+				</button>
+			</div>
+
 			<div class="flex items-center">
 				<span>
 					<button
@@ -79,6 +91,8 @@
 				</button>
 			</div>
 		</article>
+
+		<div style="width: 240px"></div>
 	</header>
 </template>
 
