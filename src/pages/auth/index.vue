@@ -171,9 +171,10 @@ import {
 	namespace as sessionStoreNamespace,
 } from '~/store/session'
 import { signedInToWallet } from '@/backend/near'
-import { sendProfileServer } from '~/plugins/server'
+import { sendProfileServer } from '@/backend/server'
 import { genAndSetSigningKey, removeSigningKey } from '@/backend/keys'
 import ipfs from '@/backend/ipfs'
+import { login, register } from '@/backend/auth'
 
 interface IData {
 	isLogin: boolean
@@ -241,7 +242,7 @@ export default Vue.extend({
 			}
 			// Login
 			if (this.isLogin) {
-				const { success, profileCID } = await this.$login(this.id, this.password)
+				const { success, profileCID } = await login(this.id, this.password)
 				if (success && signedInToWallet()) {
 					const backendProfile = await ipfs().getProfile(profileCID)
 					const account = createSessionFromProfile(profileCID, backendProfile)
@@ -288,7 +289,7 @@ export default Vue.extend({
 						return
 					}
 					account.cid = cid
-					const _res = await this.$register(this.id, this.password, cid)
+					const _res = await register(this.id, this.password, cid)
 					if (_res === true) {
 						// Registration successful
 						this.changeCID(cid)

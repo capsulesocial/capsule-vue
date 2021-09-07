@@ -1,19 +1,10 @@
-import type { Plugin } from '@nuxt/types'
 import { Authentication } from '../interfaces/Authentication'
 import { sendAuthentication, getAuthentication } from './server'
 
-import { getWalletConnection, getNearPrivateKey, setNearPrivateKey, initContract } from '@/backend/near'
-import { getEncryptedPeerIDPrivateKey, hkdf, scrypt, decryptData } from '@/backend/crypto'
-import { getSigningKey, setSigningKey } from '@/backend/keys'
-import { setProfileNEAR, getProfileNEAR } from '@/backend/profile'
-
-// eslint-disable-next-line quotes
-declare module 'vue/types/vue' {
-	interface Vue {
-		$register: (id: string, password: string, profileCID: string) => Promise<boolean>
-		$login: (username: string, password: string) => Promise<{ success: boolean; profileCID: string }>
-	}
-}
+import { getWalletConnection, getNearPrivateKey, setNearPrivateKey, initContract } from './near'
+import { getEncryptedPeerIDPrivateKey, hkdf, scrypt, decryptData } from './crypto'
+import { getSigningKey, setSigningKey } from './keys'
+import { setProfileNEAR, getProfileNEAR } from './profile'
 
 // POST newly created account to IPFS
 async function register(id: string, password: string, profileCID: string): Promise<boolean> {
@@ -95,9 +86,4 @@ async function login(username: string, password: string): Promise<{ success: boo
 	return { success: false, profileCID: `` }
 }
 
-const authPlugin: Plugin = (_context, inject) => {
-	inject(`register`, register)
-	inject(`login`, login)
-}
-
-export default authPlugin
+export { register, login }

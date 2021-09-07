@@ -386,8 +386,8 @@ export default Vue.extend({
 			const reader = new FileReader()
 			reader.readAsDataURL(image)
 			reader.onload = (i: Event) => {
-				if (i.target !== null) {
-					this.uploadImage(reader.result as ArrayBuffer)
+				if (i.target !== null && reader.result !== null) {
+					this.uploadImage(reader.result)
 				}
 			}
 		},
@@ -397,7 +397,7 @@ export default Vue.extend({
 			this.changeCID(cid)
 			return true
 		},
-		async uploadImage(image: ArrayBuffer) {
+		async uploadImage(image: string | ArrayBuffer) {
 			const avatarCID = await ipfs().sendPhoto(image)
 			this.changeAvatar(avatarCID)
 			this.downloadImage(avatarCID)

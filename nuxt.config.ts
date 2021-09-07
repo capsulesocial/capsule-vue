@@ -31,7 +31,6 @@ const config: NuxtConfig = {
 		{ src: '@/plugins/quality.ts' },
 		{ src: '@/plugins/helpers.ts' },
 		{ src: '@/plugins/backend.ts' },
-		{ src: '@/plugins/auth.ts' },
 		{ src: '@/plugins/persistedstate.ts' },
 	],
 

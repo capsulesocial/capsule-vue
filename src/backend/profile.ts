@@ -1,4 +1,4 @@
-import { resolveUsername, sendProfileServer } from '../plugins/server'
+import { resolveUsername, sendProfileServer } from './server'
 import ipfs from './ipfs'
 
 import { getContract, getWalletConnection } from '@/backend/near'
