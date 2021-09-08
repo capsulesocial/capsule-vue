@@ -209,7 +209,7 @@ import { categories } from '@/config'
 import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
 
 import { createPost, sendPost, Tag } from '@/backend/post'
-import ipfs from '@/backend/utilities/ipfs'
+import { addPhotoToIPFS, getPhotoFromIPFS } from '@/backend/photos'
 
 interface IData {
 	categoryList: string[]
@@ -359,12 +359,12 @@ export default Vue.extend({
 			}
 		},
 		async uploadImage(image: any): Promise<void> {
-			const cid = await ipfs().sendPhoto(image)
+			const cid = await addPhotoToIPFS(image)
 			this.featuredPhotoCID = cid
 			this.downloadImage(cid)
 		},
 		async downloadImage(cid: string): Promise<void> {
-			this.featuredPhoto = await ipfs().getPhoto(cid)
+			this.featuredPhoto = await getPhotoFromIPFS(cid)
 		},
 		async post(): Promise<void> {
 			if (!this.$qualityText(this.title)) {
