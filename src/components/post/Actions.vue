@@ -156,7 +156,6 @@ export default Vue.extend({
 			this.filterComments()
 		},
 		setEmotion(r: string) {
-			console.log(r)
 			this.emotion = r
 			this.showEmotions = false
 		},
@@ -167,11 +166,8 @@ export default Vue.extend({
 			if (!this.$qualityText(this.comment)) {
 				alert(`invalid comment!`)
 			} else {
-				console.log(this.emotion)
 				const c = createComment(this.$store.state.session.id, this.comment, this.emotion, this.postCID)
-
 				const cid = await sendComment(c)
-
 				// Send comment (c)
 				this.comments.push({ cid, ...c })
 				// Apply filter to comments, in case new comment was added in filtered category

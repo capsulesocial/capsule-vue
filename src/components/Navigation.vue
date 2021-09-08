@@ -10,7 +10,7 @@
 			<nuxt-link
 				to="/home"
 				:class="this.getStyles('home')"
-				class="group flex items-center p-2 text-base leading-6 m-2 text-xl rounded-xl"
+				class="group flex items-center p-2 text-base leading-6 m-1 text-xl rounded-xl"
 			>
 				<span class="p-2">
 					<HomeIcon />
