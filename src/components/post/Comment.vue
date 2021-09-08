@@ -4,7 +4,7 @@
 		<div class="flex">
 			<!-- Avatar -->
 			<div class="flex-shrink-0">
-				<div class="rounded-lg p-1" :style="{ backgroundImage: `url(${this.comment.emotion.background})` }">
+				<div class="rounded-lg p-1" :style="{ backgroundImage: `url(${this.emotion.background})` }">
 					<span v-if="this.avatar === `` || this.avatar === null" class="p-1 border-2 rounded-lg block bg-white">
 						<ProfileIcon class="w-6 h-6" />
 					</span>
@@ -20,28 +20,28 @@
 					{{ this.name }}
 				</strong>
 				<nuxt-link
-					:to="'/' + this.$props.comment.authorCID"
+					:to="'/' + this.$props.authorID"
 					:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 					class="text-gray-700 text-sm mr-2"
 				>
-					@{{ this.id }}
+					@{{ this.$props.authorID }}
 				</nuxt-link>
 				<span
-					v-if="comment.timestamp"
+					v-if="this.$props.timestamp"
 					:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 					class="text-xs font-sans"
 				>
-					{{ $formatDate(comment.timestamp) }}
+					{{ $formatDate(this.$props.timestamp) }}
 				</span>
 				<p class="text-base py-1 font-sans">
-					{{ comment.content }}
+					{{ this.content }}
 				</p>
 			</div>
 		</div>
 		<!-- Reply button -->
 		<div class="ml-10 pl-1">
 			<button class="font-sans text-xs focus:outline-none" @click="isReplying = !isReplying">
-				{{ this.comment.replies.length }} Replies
+				{{ this.replies.length }} Replies
 			</button>
 
 			<!-- Active reply state -->
@@ -89,9 +89,9 @@ import Vue from 'vue'
 import ProfileIcon from '@/components/icons/Person.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 import Reply from '@/components/post/Reply.vue'
-import { Comment } from '@/interfaces/Comment'
 import ipfs from '@/backend/ipfs'
 import { getProfile } from '@/backend/profile'
+import { reactions } from '@/config'
 
 interface IData {
 	isReplying: boolean
@@ -99,7 +99,8 @@ interface IData {
 	replies: any[]
 	avatar: string
 	name: string
-	id: string
+	emotion: { label: string; background: any; image: any } | null
+	content: string
 }
 
 export default Vue.extend({
@@ -110,23 +111,33 @@ export default Vue.extend({
 		Reply,
 	},
 	props: {
-		comment: {
-			type: Object as () => Comment,
-			default: null,
-		},
+		authorID: { type: String, required: true },
+		cid: { type: String, required: true },
+		timestamp: { type: Number, required: true },
 	},
 	data(): IData {
 		return {
 			isReplying: false,
 			reply: ``,
-			replies: this.comment.replies,
+			replies: [],
 			avatar: ``,
 			name: ``,
-			id: this.$props.comment.authorID,
+			emotion: reactions.satisfied,
+			content: ``,
+		}
+	},
+	async created() {
+		const comment = await ipfs().getComment(this.$props.cid)
+		this.content = comment.content
+		const emotion = comment.emotion as keyof typeof reactions
+		if (emotion in reactions) {
+			this.emotion = reactions[emotion]
+		} else {
+			this.emotion = reactions.satisfied
 		}
 	},
 	async mounted() {
-		const p = await getProfile(this.$props.comment.authorID)
+		const p = await getProfile(this.$props.authorID)
 		this.name = p.name
 		if (p.avatar) {
 			ipfs()

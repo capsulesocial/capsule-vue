@@ -1,7 +1,7 @@
 <template>
 	<section class="px-4">
-		<div v-for="p in this.posts" :key="p.id">
-			<PostCard :post="p" :authorID="p.authorID" :authorUsername="p.authorID" />
+		<div v-for="p in this.posts" :key="p._id">
+			<PostCard :post="p" :authorID="p.authorID" :authorUsername="p.authorID" :cid="p._id" />
 		</div>
 	</section>
 </template>

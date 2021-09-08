@@ -12,6 +12,8 @@ export interface IPFSInterface {
 	getPhoto: (cid: string) => Promise<any>
 	importPrivateKey: (name: string, privateKey: string, password: string) => Promise<boolean>
 	generatePrivateKey: (name: string) => Promise<boolean>
+	sendComment: (comment: Record<string, any>) => Promise<string>
+	getComment: (cid: string) => Promise<Record<string, any>>
 }
 
 const ipfsConfig: Options = {
@@ -97,6 +99,14 @@ async function createIPFSInterface(): Promise<IPFSInterface> {
 		return getData(cid)
 	}
 
+	const sendComment = (comment: Record<string, any>) => {
+		return sendJSONData(comment)
+	}
+
+	const getComment = (cid: string) => {
+		return getJSONData<Record<string, any>>(cid)
+	}
+
 	// Import Private Key to local IPFS repo
 	const importPrivateKey = async (name: string, privateKey: string, password: string) => {
 		try {
@@ -140,6 +150,8 @@ async function createIPFSInterface(): Promise<IPFSInterface> {
 		getPhoto,
 		importPrivateKey,
 		generatePrivateKey,
+		sendComment,
+		getComment,
 	}
 }
 

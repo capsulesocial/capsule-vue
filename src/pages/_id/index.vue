@@ -3,8 +3,8 @@
 		<article v-show="this.isLoading" class="flex justify-center">
 			<div class="loader m-10"></div>
 		</article>
-		<article v-for="post in this.posts" :key="post.id">
-			<PostCard :post="post" />
+		<article v-for="post in this.posts" :key="post._id">
+			<PostCard :post="post" :cid="post._id" />
 		</article>
 	</section>
 </template>
