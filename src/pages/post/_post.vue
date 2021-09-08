@@ -178,14 +178,14 @@ export default Vue.extend({
 	async created() {
 		// Fetch post from IPFS,
 		this.post = await getPost(this.$route.params.post)
-		// Convert markdown to HTML
-		this.content = marked(this.post.content)
 		// Get featured photo
 		if (this.post.featuredPhotoCID) {
 			getPhotoFromIPFS(this.post.featuredPhotoCID).then((p) => {
 				this.featuredPhoto = p
 			})
 		}
+		// Convert markdown to HTML
+		this.content = marked(this.post.content)
 		// Get author profile
 		this.author = await getProfile(this.post.authorID)
 		if (this.author && this.author.avatar.length > 1) {

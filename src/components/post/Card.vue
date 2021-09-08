@@ -81,11 +81,12 @@
 				</button>
 				<Share
 					:post="this.post"
+					:cid="this.$props.cid"
 					:class="this.$store.state.settings.darkMode ? 'fill-lightActive' : 'fill-darkActive'"
 					class="fill-primary self-center z-10"
 				/>
 				<BookmarkButton
-					:postID="this.post.cid"
+					:postID="this.$props.cid"
 					:class="this.$store.state.settings.darkMode ? 'fill-lightActive' : 'fill-darkActive'"
 					class="self-center"
 				/>
