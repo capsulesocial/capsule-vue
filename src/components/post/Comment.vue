@@ -4,7 +4,11 @@
 		<div class="flex">
 			<!-- Avatar -->
 			<div class="flex-shrink-0">
-				<div class="rounded-lg p-1" :style="{ backgroundImage: `url(${this.emotion.background})` }">
+				<div
+					class="rounded-lg p-1"
+					:style="{ backgroundImage: `url(${this.emotion.background})` }"
+					style="background-size: cover"
+				>
 					<span v-if="this.avatar === `` || this.avatar === null" class="p-1 border-2 rounded-lg block bg-white">
 						<ProfileIcon class="w-6 h-6" />
 					</span>
@@ -123,7 +127,7 @@ export default Vue.extend({
 			replies: [],
 			avatar: ``,
 			name: ``,
-			emotion: reactions.satisfied,
+			emotion: reactions.default,
 			content: ``,
 		}
 	},
@@ -134,7 +138,7 @@ export default Vue.extend({
 		if (emotion in reactions) {
 			this.emotion = reactions[emotion]
 		} else {
-			this.emotion = reactions.satisfied
+			this.emotion = reactions.default
 		}
 	},
 	async mounted() {

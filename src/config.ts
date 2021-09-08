@@ -20,7 +20,6 @@ export const feelings = {
 		`sad`,
 		`sick`,
 		`terrified`,
-		`drama`,
 		`aloof`,
 		`barelyInterested`,
 		`fearful`,
@@ -50,6 +49,7 @@ export const feelings = {
 		`whine`,
 		`yazz`,
 		`zzz`,
+		`drama`,
 	],
 }
 
@@ -82,7 +82,12 @@ export const reactions = {
 	cringe: {
 		label: `Cringe`,
 		image: require(`@/assets/images/reactions/cringed.png`),
-		background: require(`@/assets/images/backgrounds/disagree.png`),
+		background: require(`@/assets/images/backgrounds/neutral.png`),
+	},
+	default: {
+		label: `Default`,
+		image: require(`@/assets/images/reactions/default.png`),
+		background: require(`@/assets/images/backgrounds/capsule.png`),
 	},
 	determined: {
 		label: `Determined`,

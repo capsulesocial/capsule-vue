@@ -18,7 +18,11 @@
 							<div class="front w-full flex bg-white">
 								<div class="self-center">
 									<button style="margin-left: 40px" @click="showEmotions = !showEmotions">
-										<img v-if="this.emotion !== ''" :src="this.emotion.image" class="max-w-full h-auto object-center" />
+										<img
+											v-if="this.emotion !== ''"
+											:src="this.reactionList[this.emotion].image"
+											class="max-w-full h-auto object-center"
+										/>
 										<span v-else><FlipIcon class="w-12 h-12" /></span>
 									</button>
 								</div>
@@ -72,7 +76,7 @@
 										v-for="e in this.feelingList[this.emotionCategory]"
 										:key="e"
 										class="w-full items-center focus:outline-none"
-										@click="setEmotion(reactionList[e])"
+										@click="setEmotion(e)"
 									>
 										<img :src="reactionList[e].image" :alt="reactionList[e].label" class="flex-shrink-0 h-20 w-20" />
 									</button>
@@ -152,6 +156,7 @@ export default Vue.extend({
 			this.filterComments()
 		},
 		setEmotion(r: string) {
+			console.log(r)
 			this.emotion = r
 			this.showEmotions = false
 		},
@@ -162,6 +167,7 @@ export default Vue.extend({
 			if (!this.$qualityText(this.comment)) {
 				alert(`invalid comment!`)
 			} else {
+				console.log(this.emotion)
 				const c = createComment(this.$store.state.session.id, this.comment, this.emotion, this.postCID)
 
 				const cid = await sendComment(c)
