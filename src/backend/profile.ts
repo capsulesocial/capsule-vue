@@ -1,7 +1,7 @@
 import { resolveUsername, sendProfileServer } from './server'
 import ipfs from './utilities/ipfs'
 
-import { getContract, getWalletConnection } from '@/backend/near'
+import { getContract, getWalletConnection } from './near'
 
 export interface Profile {
 	id: string

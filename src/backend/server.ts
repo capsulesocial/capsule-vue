@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { PrivateKey } from './interfaces'
-import { hexStringToUint8Array, uint8ArrayToHexString } from './helpers'
+import { hexStringToUint8Array, uint8ArrayToHexString } from './utilities/helpers'
 
 import { Profile } from './profile'
 export interface Authentication {

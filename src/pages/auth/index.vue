@@ -255,9 +255,6 @@ export default Vue.extend({
 					this.changeAvatar(account.avatar)
 					this.changeBio(account.bio)
 					this.changeLocation(account.location)
-					for (const postcid of account.posts) {
-						this.appendPostCID(postcid)
-					}
 					this.changePublicKey(account.publicKey)
 					this.$router.push(`/settings`)
 				} else {
