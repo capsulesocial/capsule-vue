@@ -4,6 +4,7 @@ import { getWalletConnection, getNearPrivateKey, setNearPrivateKey, initContract
 import { getEncryptedPeerIDPrivateKey, hkdf, scrypt, decryptData } from './crypto'
 import { getSigningKey, setSigningKey } from './keys'
 import { setProfileNEAR, getProfileNEAR } from './profile'
+import { uint8ArrayToHexString } from './helpers'
 
 // POST newly created account to IPFS
 async function register(id: string, password: string, profileCID: string): Promise<boolean> {
@@ -58,7 +59,7 @@ async function login(username: string, password: string): Promise<{ success: boo
 	// Check if authentication was successful
 	if (
 		success &&
-		Buffer.from(auth.signingKey.hp1).toString(`hex`) === Buffer.from(contentKey.hp1).toString(`hex`) &&
+		uint8ArrayToHexString(auth.signingKey.hp1) === uint8ArrayToHexString(contentKey.hp1) &&
 		auth.nearAccountId
 	) {
 		const [privateKeyBytes, profile, signingKeyBytes] = await Promise.all([

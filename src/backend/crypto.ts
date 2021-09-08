@@ -1,3 +1,4 @@
+import { hexStringToUint8Array, uint8ArrayToHexString } from './helpers'
 import { PrivateKey } from './interfaces'
 
 async function hkdf(password: Uint8Array, salt: Uint8Array, info: Uint8Array) {
@@ -62,12 +63,12 @@ async function decryptData(key: Uint8Array, data: Uint8Array, nonce: Uint8Array)
 async function scrypt(passphrase: Uint8Array, salt: Uint8Array) {
 	const wasm = await import(`scrypt-wasm`)
 
-	const hexSalt = Buffer.from(salt).toString(`hex`)
-	const hexPassphrase = Buffer.from(passphrase).toString(`hex`)
+	const hexSalt = uint8ArrayToHexString(salt)
+	const hexPassphrase = uint8ArrayToHexString(passphrase)
 
 	const derivedKeyHex = wasm.scrypt(hexPassphrase, hexSalt, 32768, 8, 1, 16)
 
-	const derivedKey = new Uint8Array(Buffer.from(derivedKeyHex, `hex`))
+	const derivedKey = hexStringToUint8Array(derivedKeyHex)
 	return derivedKey
 }
 

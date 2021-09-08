@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { PrivateKey } from './interfaces'
+import { hexStringToUint8Array, uint8ArrayToHexString } from './helpers'
 
 import { Profile } from '~/interfaces/Profile'
 export interface Authentication {
@@ -127,13 +128,3 @@ async function sendProfileServer(cid: string, data: Profile): Promise<{ success:
 }
 
 export { sendAuthentication, getAuthentication, resolveUsername, sendProfileServer }
-
-// Helpers
-
-function uint8ArrayToHexString(uint8Array: Uint8Array): string {
-	return Buffer.from(uint8Array).toString(`hex`)
-}
-
-function hexStringToUint8Array(hexString: string): Uint8Array {
-	return new Uint8Array(Buffer.from(hexString, `hex`))
-}

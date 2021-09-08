@@ -2,9 +2,12 @@ import axios from 'axios'
 
 import { signContent } from './keys'
 import ipfs from './ipfs'
+import { uint8ArrayToHexString } from './helpers'
 
 import { Post } from '@/interfaces/Post'
 import { Tag } from '@/interfaces/Tag'
+
+const baseUrl = process.env.ORBIT_URL || `https://test-node.capsule.social/orbit`
 
 export function createPost(
 	title: string,
@@ -32,10 +35,10 @@ export async function sendPost(data: Post): Promise<string> {
 	}
 
 	const cid = await ipfs().sendPost(data)
-	axios.post(`https://test-node.capsule.social/orbit/content`, {
+	await axios.post(`${baseUrl}/content`, {
 		cid,
 		data,
-		sig: Buffer.from(signature).toString(`hex`),
+		sig: uint8ArrayToHexString(signature),
 		type: `post`,
 	})
 
