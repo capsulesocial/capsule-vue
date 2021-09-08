@@ -12,11 +12,13 @@
 				"
 				alt=""
 				class="object-cover shadow-lg"
-				style="width: 598px; height: 192px"
+				style="width: 598px"
 			/>
-			<div style="padding-left: 11px; margin-top: 22px">
-				<h2 class="text-2xl font-medium">Category /</h2>
-				<h2 class="text-2xl capitalize font-medium">
+			<div style="padding-left: 11px" class="-mt-12 ml-2">
+				<h2
+					class="text-2xl capitalize text-white font-extrabold capitalize z-10"
+					style="text-shadow: 2px 2px 4px #000000"
+				>
 					{{ this.$route.params.category }}
 				</h2>
 			</div>
