@@ -61,6 +61,7 @@ import CategoryCard from '@/components/CategoryCard.vue'
 import TagCard from '@/components/Tag.vue'
 
 import { categories } from '@/config'
+import { getTags } from '@/backend/post'
 
 interface IData {
 	tagCategory: string
@@ -81,8 +82,8 @@ export default Vue.extend({
 		}
 	},
 	async created() {
-		const content = await this.$axios.$get(`/content/tags`)
-		this.tags = content.data.slice(0, 14)
+		const content = await getTags()
+		this.tags = content.slice(0, 14)
 	},
 })
 </script>

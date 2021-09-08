@@ -20,9 +20,11 @@
 <script lang="ts">
 import Vue from 'vue'
 import PostCard from '@/components/post/Card.vue'
+import { getPosts } from '@/backend/post'
+import { Post } from '@/interfaces/Post'
 
 interface IData {
-	posts: []
+	posts: Post[]
 	tag: string
 	isLoading: boolean
 }
@@ -41,8 +43,7 @@ export default Vue.extend({
 	},
 	async created() {
 		// Fetch posts with tag
-		const res = await this.$axios.$get(`/content?tag=` + this.$route.params.tag)
-		this.posts = res.data
+		this.posts = await getPosts({ tag: this.$route.params.tag })
 		this.isLoading = false
 	},
 })

@@ -82,7 +82,7 @@
 		"lint-fix": "yarn eslint -c .eslintrc.js --fix --ext .ts,.js,.vue ./src"
 	},
 	"dependencies": {
-		"@nuxtjs/axios": "^5.13.1",
+		"axios": "^0.21.4",
 		"@nuxtjs/dotenv": "^1.4.1",
 		"@tailwindcss/typography": "^0.4.0",
 		"core-js": "^3.8.3",

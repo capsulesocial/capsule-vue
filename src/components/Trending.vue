@@ -12,6 +12,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import Tag from '@/components/Tag.vue'
+import { getTags } from '@/backend/post'
 
 interface IData {
 	tags: string[]
@@ -27,8 +28,8 @@ export default Vue.extend({
 		}
 	},
 	async created() {
-		const content = await this.$axios.$get(`/content/tags`)
-		this.tags = content.data.slice(0, 14)
+		const content = await getTags()
+		this.tags = content.slice(0, 14)
 	},
 })
 </script>

@@ -14,6 +14,7 @@ import Vue from 'vue'
 import PostCard from '@/components/post/Card.vue'
 import { Post } from '@/interfaces/Post'
 import { Profile } from '@/interfaces/Profile'
+import { getPosts } from '@/backend/post'
 
 interface IData {
 	posts: Post[]
@@ -39,8 +40,7 @@ export default Vue.extend({
 	},
 	async created() {
 		// Fetch posts from Orbit DB by ID
-		const res = await this.$axios.$get(`/content?authorID=` + this.$route.params.id)
-		this.posts = res.data
+		this.posts = await getPosts({ authorID: this.$route.params.id })
 		this.isLoading = false
 
 		// const postList = this.$props.profile.posts
