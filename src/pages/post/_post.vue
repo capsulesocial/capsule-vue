@@ -139,6 +139,7 @@ import BookmarkButton from '@/components/post/BookmarkButton.vue'
 import ShareButton from '@/components/post/Share.vue'
 import HeaderMagic from '@/components/HeaderMagic.vue'
 import MoreIcon from '@/components/icons/More.vue'
+
 import { getProfile, Profile } from '@/backend/profile'
 import { getPost, Post } from '@/backend/post'
 import { getPhotoFromIPFS } from '@/backend/photos'
@@ -146,7 +147,7 @@ import { getPhotoFromIPFS } from '@/backend/photos'
 interface IData {
 	post: Post | null
 	author: Profile | null
-	authorAvatar: string | null
+	authorAvatar: string | ArrayBuffer | null
 	content: string
 	featuredPhoto: null | string
 	showFilter: boolean
