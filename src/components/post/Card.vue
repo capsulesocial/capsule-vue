@@ -111,8 +111,9 @@ import CommentIcon from '@/components/icons/Comment.vue'
 import TagPill from '@/components/Tag.vue'
 
 import { Post } from '@/backend/post'
-import { getProfileNEAR, loadProfileFromIPFS, Profile } from '@/backend/profile'
+import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
+import { getProfileFromSession } from '@/store/session'
 
 export default Vue.extend({
 	name: `PostCard`,
@@ -146,22 +147,16 @@ export default Vue.extend({
 		}
 	},
 	async created() {
-		let authorCID = ``
 		let profile = this.$props.profile
 		if (!profile) {
 			if (this.$store.state.session.id === this.$props.post.authorID) {
 				// Viewing own post
 				this.authorName = this.$store.state.session.name
-				authorCID = this.$store.state.session.cid
+				profile = getProfileFromSession(this.$store.state.session)
 			} else {
 				// Viewing someone else's post
-				const nearProfile = await getProfileNEAR(this.$props.post.authorID)
-				if (!nearProfile.success) {
-					throw new Error(`Could not get profile from near ${this.$props.post.authorID}`)
-				}
-				authorCID = nearProfile.profileCID
+				profile = await getProfile(this.$props.post.authorID)
 			}
-			profile = await loadProfileFromIPFS(authorCID)
 		}
 
 		// Populate Avatar
