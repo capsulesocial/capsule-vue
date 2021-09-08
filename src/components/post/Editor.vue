@@ -205,11 +205,10 @@ import ChevronUp from '@/components/icons/ChevronUp.vue'
 import ChevronDown from '@/components/icons/ChevronDown.vue'
 import XIcon from '@/components/icons/X.vue'
 
-import { Tag } from '@/interfaces/Tag'
 import { categories } from '@/config'
 import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
 
-import { createPost, sendPost } from '@/backend/post'
+import { createPost, sendPost, Tag } from '@/backend/post'
 import ipfs from '@/backend/ipfs'
 
 interface IData {

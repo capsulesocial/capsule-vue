@@ -2,7 +2,17 @@ import { resolveUsername, sendProfileServer } from './server'
 import ipfs from './ipfs'
 
 import { getContract, getWalletConnection } from '@/backend/near'
-import { Profile } from '@/interfaces/Profile'
+
+export interface Profile {
+	id: string
+	name: string
+	email: string
+	bio: string
+	location: string
+	avatar: string
+	socials: string[]
+	publicKey: string
+}
 
 async function getProfileNEAR(username: string) {
 	const contract = getContract() as any

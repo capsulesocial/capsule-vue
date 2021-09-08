@@ -1,7 +1,7 @@
 import nacl from 'tweetnacl'
 import { hexStringToUint8Array, uint8ArrayToHexString } from './helpers'
 
-import { Post } from '~/interfaces/Post'
+import { Post } from './post'
 
 function getSignKeyPair(username: string) {
 	const secretKeyHex = window.localStorage.getItem(`content_signing_key_${username}`)

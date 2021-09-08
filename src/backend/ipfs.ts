@@ -1,7 +1,7 @@
 import IPFS, { Options } from 'ipfs-core'
 
-import { Post } from '~/interfaces/Post'
-import { Profile } from '~/interfaces/Profile'
+import { Post } from './post'
+import { Profile } from './profile'
 
 export interface IPFSInterface {
 	sendProfile: (content: Profile) => Promise<string>

@@ -61,7 +61,7 @@ import ShareIcon from '@/components/icons/Share.vue'
 import TwitterIcon from '@/components/icons/brands/Twitter.vue'
 import LinkIcon from '@/components/icons/Link.vue'
 import RepostIcon from '@/components/icons/Repost.vue'
-import { Post } from '@/interfaces/Post'
+import { Post } from '@/backend/post'
 
 export default Vue.extend({
 	components: {

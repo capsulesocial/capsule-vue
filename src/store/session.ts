@@ -1,7 +1,7 @@
 // import type { Context } from '@nuxt/types'
 import type { GetterTree, MutationTree } from 'vuex'
 import type { RootState } from './index'
-import { Profile } from '~/interfaces/Profile'
+import { Profile } from '@/backend/profile'
 import { walletLogout, removeNearPrivateKey } from '@/backend/near'
 import { removeSigningKey } from '@/backend/keys'
 export interface Session {

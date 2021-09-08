@@ -2,7 +2,7 @@ import axios from 'axios'
 import { PrivateKey } from './interfaces'
 import { hexStringToUint8Array, uint8ArrayToHexString } from './helpers'
 
-import { Profile } from '~/interfaces/Profile'
+import { Profile } from './profile'
 export interface Authentication {
 	privateKey: PrivateKey
 	signingKey: PrivateKey

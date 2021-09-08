@@ -1,7 +1,6 @@
 import type { GetterTree, MutationTree } from 'vuex'
 import type { RootState } from './index'
-import { Post } from '~/interfaces/Post'
-import { Tag } from '~/interfaces/Tag'
+import { Tag, Post } from '@/backend/post'
 
 export const namespace = `draft`
 

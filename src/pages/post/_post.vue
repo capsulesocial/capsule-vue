@@ -139,11 +139,9 @@ import BookmarkButton from '@/components/post/BookmarkButton.vue'
 import ShareButton from '@/components/post/Share.vue'
 import HeaderMagic from '@/components/HeaderMagic.vue'
 import MoreIcon from '@/components/icons/More.vue'
-import { Post } from '@/interfaces/Post'
-import { Profile } from '@/interfaces/Profile'
 import ipfs from '@/backend/ipfs'
-import { getProfile } from '@/backend/profile'
-import { getPost } from '@/backend/post'
+import { getProfile, Profile } from '@/backend/profile'
+import { getPost, Post } from '@/backend/post'
 
 interface IData {
 	post: Post | null
@@ -191,7 +189,7 @@ export default Vue.extend({
 		}
 		// Get author profile
 		this.author = await getProfile(this.post.authorID)
-		if (this.author.avatar.length > 1) {
+		if (this.author && this.author.avatar.length > 1) {
 			ipfs()
 				.getPhoto(this.author.avatar)
 				.then((p) => {

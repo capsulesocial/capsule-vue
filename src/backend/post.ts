@@ -4,8 +4,19 @@ import { signContent } from './keys'
 import ipfs from './ipfs'
 import { uint8ArrayToHexString } from './helpers'
 
-import { Post } from '@/interfaces/Post'
-import { Tag } from '@/interfaces/Tag'
+export interface Tag {
+	name: string
+}
+
+export interface Post {
+	authorID: string
+	title: string
+	content: string
+	category: string
+	featuredPhotoCID?: string | null
+	timestamp: number
+	tags: Tag[]
+}
 
 const baseUrl = process.env.ORBIT_URL || `https://test-node.capsule.social/orbit`
 

@@ -108,8 +108,8 @@ import BookmarkButton from '@/components/post/BookmarkButton.vue'
 import Share from '@/components/post/Share.vue'
 import CommentIcon from '@/components/icons/Comment.vue'
 import TagPill from '@/components/Tag.vue'
-import { Post } from '@/interfaces/Post'
 
+import { Post } from '@/backend/post'
 import ipfs from '@/backend/ipfs'
 import { getProfileNEAR } from '@/backend/profile'
 

@@ -20,8 +20,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import PostCard from '@/components/post/Card.vue'
-import { getPosts } from '@/backend/post'
-import { Post } from '@/interfaces/Post'
+import { getPosts, Post } from '@/backend/post'
 
 interface IData {
 	posts: Post[]
