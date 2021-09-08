@@ -156,8 +156,8 @@ import ExternalURLIcon from '@/components/icons/ExternalURL.vue'
 import SettingsIcon from '@/components/icons/Settings.vue'
 
 import { Post } from '@/backend/post'
-import ipfs from '@/backend/ipfs'
 import { getProfile, Profile } from '@/backend/profile'
+import { getPhotoFromIPFS } from '@/backend/photos'
 
 interface IData {
 	avatar: string
@@ -186,11 +186,9 @@ export default Vue.extend({
 		// Get user profile
 		this.currentUser = await getProfile(this.$route.params.id)
 		if (this.currentUser && this.currentUser.avatar !== ``) {
-			ipfs()
-				.getPhoto(this.currentUser.avatar)
-				.then((p) => {
-					this.avatar = p
-				})
+			getPhotoFromIPFS(this.currentUser.avatar).then((p) => {
+				this.avatar = p
+			})
 		}
 	},
 	methods: {

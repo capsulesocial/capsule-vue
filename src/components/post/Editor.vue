@@ -209,7 +209,7 @@ import { categories } from '@/config'
 import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
 
 import { createPost, sendPost, Tag } from '@/backend/post'
-import ipfs from '@/backend/ipfs'
+import ipfs from '@/backend/utilities/ipfs'
 
 interface IData {
 	categoryList: string[]

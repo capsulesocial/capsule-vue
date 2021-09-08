@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 import { signContent } from './keys'
-import ipfs from './ipfs'
+import ipfs from './utilities/ipfs'
 import { uint8ArrayToHexString } from './helpers'
 
 export interface Tag {
@@ -45,7 +45,7 @@ export async function sendPost(data: Post): Promise<string> {
 		throw new Error(`Post signing failed`)
 	}
 
-	const cid = await ipfs().sendPost(data)
+	const cid = await ipfs().sendJSONData(data)
 	await axios.post(`${baseUrl}/content`, {
 		cid,
 		data,
@@ -57,7 +57,11 @@ export async function sendPost(data: Post): Promise<string> {
 }
 
 export function getPost(cid: string): Promise<Post> {
-	return ipfs().getPost(cid)
+	return ipfs().getJSONData(cid)
+}
+
+export function getComment(cid: string): Promise<Record<string, any>> {
+	return ipfs().getJSONData(cid)
 }
 
 export async function getPosts(filter: { category?: string; authorID?: string; tag?: string }): Promise<Post[]> {

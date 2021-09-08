@@ -1,19 +1,12 @@
 import IPFS, { Options } from 'ipfs-core'
 
-import { Post } from './post'
-import { Profile } from './profile'
-
 export interface IPFSInterface {
-	sendProfile: (content: Profile) => Promise<string>
-	getProfile: (hash: string) => Promise<Profile>
-	sendPost: (content: Post) => Promise<string>
-	getPost: (cid: string) => Promise<Post>
-	sendPhoto: (content: any) => Promise<string>
-	getPhoto: (cid: string) => Promise<any>
+	sendData: (content: string | ArrayBuffer) => Promise<string>
+	getData: (cid: string) => Promise<string>
+	getJSONData: <T>(hash: string) => Promise<T>
+	sendJSONData: <T>(content: T) => Promise<string>
 	importPrivateKey: (name: string, privateKey: string, password: string) => Promise<boolean>
 	generatePrivateKey: (name: string) => Promise<boolean>
-	sendComment: (comment: Record<string, any>) => Promise<string>
-	getComment: (cid: string) => Promise<Record<string, any>>
 }
 
 const ipfsConfig: Options = {
@@ -69,44 +62,6 @@ async function createIPFSInterface(): Promise<IPFSInterface> {
 		return sendData(JSON.stringify(content, null, 0))
 	}
 
-	// Send a user profile object to IPFS
-	const sendProfile = (content: Profile) => {
-		return sendJSONData(content)
-	}
-
-	// Send post to IPFS
-	const sendPost = (content: Post) => {
-		return sendJSONData(content)
-	}
-
-	// Add photo to IPFS
-	const sendPhoto = (content: string | ArrayBuffer) => {
-		return sendData(content)
-	}
-
-	// Returns post object associated with content id
-	const getProfile = (cid: string) => {
-		return getJSONData<Profile>(cid)
-	}
-
-	// Returns post object associated with content id
-	const getPost = (cid: string) => {
-		return getJSONData<Post>(cid)
-	}
-
-	// Get photo
-	const getPhoto = (cid: string) => {
-		return getData(cid)
-	}
-
-	const sendComment = (comment: Record<string, any>) => {
-		return sendJSONData(comment)
-	}
-
-	const getComment = (cid: string) => {
-		return getJSONData<Record<string, any>>(cid)
-	}
-
 	// Import Private Key to local IPFS repo
 	const importPrivateKey = async (name: string, privateKey: string, password: string) => {
 		try {
@@ -142,16 +97,12 @@ async function createIPFSInterface(): Promise<IPFSInterface> {
 	}
 
 	return {
-		sendProfile,
-		getProfile,
-		sendPost,
-		getPost,
-		sendPhoto,
-		getPhoto,
+		getJSONData,
+		sendJSONData,
+		sendData,
+		getData,
 		importPrivateKey,
 		generatePrivateKey,
-		sendComment,
-		getComment,
 	}
 }
 

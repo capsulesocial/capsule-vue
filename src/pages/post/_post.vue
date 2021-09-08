@@ -139,9 +139,9 @@ import BookmarkButton from '@/components/post/BookmarkButton.vue'
 import ShareButton from '@/components/post/Share.vue'
 import HeaderMagic from '@/components/HeaderMagic.vue'
 import MoreIcon from '@/components/icons/More.vue'
-import ipfs from '@/backend/ipfs'
 import { getProfile, Profile } from '@/backend/profile'
 import { getPost, Post } from '@/backend/post'
+import { getPhotoFromIPFS } from '@/backend/photos'
 
 interface IData {
 	post: Post | null
@@ -181,20 +181,16 @@ export default Vue.extend({
 		this.content = marked(this.post.content)
 		// Get featured photo
 		if (this.post.featuredPhotoCID) {
-			ipfs()
-				.getPhoto(this.post.featuredPhotoCID)
-				.then((p) => {
-					this.featuredPhoto = p
-				})
+			getPhotoFromIPFS(this.post.featuredPhotoCID).then((p) => {
+				this.featuredPhoto = p
+			})
 		}
 		// Get author profile
 		this.author = await getProfile(this.post.authorID)
 		if (this.author && this.author.avatar.length > 1) {
-			ipfs()
-				.getPhoto(this.author.avatar)
-				.then((p) => {
-					this.authorAvatar = p
-				})
+			getPhotoFromIPFS(this.author.avatar).then((p) => {
+				this.authorAvatar = p
+			})
 		}
 		// Set filter dropdown event handler
 		window.addEventListener(

@@ -1,5 +1,5 @@
 import { resolveUsername, sendProfileServer } from './server'
-import ipfs from './ipfs'
+import ipfs from './utilities/ipfs'
 
 import { getContract, getWalletConnection } from '@/backend/near'
 
@@ -35,17 +35,25 @@ async function setProfileNEAR(cid: string) {
 	return false
 }
 
+function loadProfileFromIPFS(cid: string) {
+	return ipfs().getJSONData<Profile>(cid)
+}
+
+function addProfileToIPFS(content: Profile) {
+	return ipfs().sendJSONData(content)
+}
+
 async function getProfile(authorID: string) {
 	const res = await getProfileNEAR(authorID)
 	if (res.success) {
-		return ipfs().getProfile(res.profileCID)
+		return loadProfileFromIPFS(res.profileCID)
 	}
 
 	throw new Error(`Error finding profile!`)
 }
 
 async function setProfile(p: Profile) {
-	const cid = await ipfs().sendProfile(p)
+	const cid = await addProfileToIPFS(p)
 	const res = await sendProfileServer(cid, p)
 	if (!res.success) {
 		throw new Error(`Profile didn't update on the server!`)
@@ -55,4 +63,4 @@ async function setProfile(p: Profile) {
 	return cid
 }
 
-export { getProfileNEAR, setProfileNEAR, getProfile, setProfile }
+export { getProfileNEAR, setProfileNEAR, getProfile, setProfile, loadProfileFromIPFS, addProfileToIPFS }

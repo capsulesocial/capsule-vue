@@ -110,8 +110,8 @@ import CommentIcon from '@/components/icons/Comment.vue'
 import TagPill from '@/components/Tag.vue'
 
 import { Post } from '@/backend/post'
-import ipfs from '@/backend/ipfs'
-import { getProfileNEAR } from '@/backend/profile'
+import { getProfileNEAR, loadProfileFromIPFS } from '@/backend/profile'
+import { getPhotoFromIPFS } from '@/backend/photos'
 
 export default Vue.extend({
 	name: `PostCard`,
@@ -154,24 +154,20 @@ export default Vue.extend({
 			}
 			authorCID = nearProfile.profileCID
 		}
-		const profile = await ipfs().getProfile(authorCID)
+		const profile = await loadProfileFromIPFS(authorCID)
 		// Populate Avatar
 		this.authorName = profile.name
 		this.authorID = profile.id
 		if (profile.avatar && profile.avatar !== ``) {
-			ipfs()
-				.getPhoto(profile.avatar)
-				.then((p) => {
-					this.avatar = p
-				})
+			getPhotoFromIPFS(profile.avatar).then((p) => {
+				this.avatar = p
+			})
 		}
 		// Populate Featured Photo
 		if (this.post.featuredPhotoCID) {
-			ipfs()
-				.getPhoto(this.post.featuredPhotoCID)
-				.then((p) => {
-					this.featuredPhoto = p
-				})
+			getPhotoFromIPFS(this.post.featuredPhotoCID).then((p) => {
+				this.featuredPhoto = p
+			})
 		}
 	},
 	methods: {

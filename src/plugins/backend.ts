@@ -1,5 +1,5 @@
 import { Plugin } from '@nuxt/types'
-import { initIPFS } from '@/backend/ipfs'
+import { initIPFS } from '@/backend/utilities/ipfs'
 import { getWalletConnection, initContract, walletLogin } from '@/backend/near'
 
 const backend: Plugin = async (_context, inject) => {

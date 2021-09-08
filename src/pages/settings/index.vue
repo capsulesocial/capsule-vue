@@ -296,8 +296,8 @@ import ChevronRight from '@/components/icons/ChevronRight.vue'
 import UploadAvatar from '@/components/icons/UploadAvatar.vue'
 import ColorMode from '@/components/ColorMode.vue'
 import { MutationType, getProfileFromSession, namespace as sessionStoreNamespace } from '~/store/session'
-import ipfs from '@/backend/ipfs'
 import { setProfile } from '@/backend/profile'
+import { addPhotoToIPFS, getPhotoFromIPFS } from '@/backend/photos'
 
 interface IData {
 	newName: string
@@ -329,9 +329,11 @@ export default Vue.extend({
 			tab: `account`,
 		}
 	},
-	async created() {
+	created() {
 		if (this.$store.state.session.avatar !== ``) {
-			this.profilePic = await ipfs().getPhoto(this.$store.state.session.avatar)
+			getPhotoFromIPFS(this.$store.state.session.avatar).then((p) => {
+				this.profilePic = p
+			})
 		}
 		// Check for dark mode
 		const prefersDarkMode = window.matchMedia(`(prefers-color-scheme: dark)`).matches
@@ -398,13 +400,13 @@ export default Vue.extend({
 			return true
 		},
 		async uploadImage(image: string | ArrayBuffer) {
-			const avatarCID = await ipfs().sendPhoto(image)
+			const avatarCID = await addPhotoToIPFS(image)
 			this.changeAvatar(avatarCID)
 			this.downloadImage(avatarCID)
 			await this.updateProfile()
 		},
 		async downloadImage(cid: string) {
-			this.profilePic = await ipfs().getPhoto(cid)
+			this.profilePic = await addPhotoToIPFS(cid)
 		},
 		checkBio() {
 			const charCount = this.bio.length

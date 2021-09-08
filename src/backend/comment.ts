@@ -1,5 +1,5 @@
 import axios from 'axios'
-import ipfs from './ipfs'
+import ipfs from './utilities/ipfs'
 
 const baseUrl = process.env.ORBIT_URL || `https://test-node.capsule.social/orbit`
 
@@ -28,8 +28,12 @@ export function createComment(authorID: string, content: string, emotion: string
 	}
 }
 
+export function getComment(cid: string): Promise<INewCommentData> {
+	return ipfs().getJSONData(cid)
+}
+
 export async function sendComment(c: INewCommentData) {
-	const cid = await ipfs().sendComment(c)
+	const cid = await ipfs().sendJSONData(c)
 	await axios.post(`${baseUrl}/content/${c.postCID}/comments`, { cid, data: c, sig: `whatever`, type: `comment` })
 	return cid
 }

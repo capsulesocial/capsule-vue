@@ -89,9 +89,10 @@ import Vue from 'vue'
 import ProfileIcon from '@/components/icons/Person.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 import Reply from '@/components/post/Reply.vue'
-import ipfs from '@/backend/ipfs'
 import { getProfile } from '@/backend/profile'
 import { reactions } from '@/config'
+import { getComment } from '@/backend/comment'
+import { getPhotoFromIPFS } from '@/backend/photos'
 
 interface IData {
 	isReplying: boolean
@@ -127,7 +128,7 @@ export default Vue.extend({
 		}
 	},
 	async created() {
-		const comment = await ipfs().getComment(this.$props.cid)
+		const comment = await getComment(this.$props.cid)
 		this.content = comment.content
 		const emotion = comment.emotion as keyof typeof reactions
 		if (emotion in reactions) {
@@ -140,11 +141,9 @@ export default Vue.extend({
 		const p = await getProfile(this.$props.authorID)
 		this.name = p.name
 		if (p.avatar) {
-			ipfs()
-				.getPhoto(p.avatar)
-				.then((a) => {
-					this.avatar = a
-				})
+			getPhotoFromIPFS(p.avatar).then((a) => {
+				this.avatar = a
+			})
 		}
 	},
 	methods: {

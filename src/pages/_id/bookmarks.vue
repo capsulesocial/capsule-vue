@@ -9,9 +9,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import PostCard from '@/components/post/Card.vue'
-import { Post } from '@/backend/post'
+import { getPost, Post } from '@/backend/post'
 import { Profile } from '@/backend/profile'
-import ipfs from '@/backend/ipfs'
 
 interface IData {
 	posts: Post[]
@@ -36,7 +35,7 @@ export default Vue.extend({
 		const postList = this.$props.profile.bookmarks
 		for (const p in postList) {
 			if (p) {
-				const post = await ipfs().getPost(postList[p])
+				const post = await getPost(postList[p])
 				this.posts.push(post)
 			}
 		}

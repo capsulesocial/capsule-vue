@@ -163,7 +163,7 @@ import Vue from 'vue'
 import MailIcon from '@/components/icons/Mail.vue'
 import AttachmentIcon from '@/components/icons/Attachment.vue'
 import SendIcon from '@/components/icons/Send.vue'
-import ipfs from '@/backend/ipfs'
+import { getPhotoFromIPFS } from '@/backend/photos'
 
 interface IData {
 	friendAvatar: string | null
@@ -184,9 +184,9 @@ export default Vue.extend({
 		}
 	},
 	async created() {
-		this.friendAvatar = await ipfs().getPhoto(`QmNyc3T7RH6c7RtGFhdYjvRssqrN1SbNatsXmee3HZuZJ4`)
+		this.friendAvatar = await getPhotoFromIPFS(`QmNyc3T7RH6c7RtGFhdYjvRssqrN1SbNatsXmee3HZuZJ4`)
 		if (this.$store.state.session.avatar) {
-			this.avatar = await ipfs().getPhoto(this.$store.state.session.avatar)
+			this.avatar = await getPhotoFromIPFS(this.$store.state.session.avatar)
 		}
 	},
 })
