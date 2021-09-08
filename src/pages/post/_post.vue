@@ -112,7 +112,7 @@
 				<div class="flex flex-row justify-between">
 					<div class="flex items-center">
 						<BookmarkButton :postID="this.$route.params.post" />
-						<ShareButton :post="this.post" class="z-20" />
+						<ShareButton :post="this.post" :cid="this.$route.params.post" :class="'z-20'" />
 					</div>
 				</div>
 				<PostActions
