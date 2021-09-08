@@ -48,3 +48,13 @@ export async function sendPost(data: Post): Promise<string> {
 export function getPost(cid: string): Promise<Post> {
 	return ipfs().getPost(cid)
 }
+
+export async function getPosts(filter: { category?: string; authorID?: string; tag?: string }): Promise<Post[]> {
+	const res = await axios.get(`${baseUrl}/content`, { params: filter })
+	return res.data.data
+}
+
+export async function getTags(): Promise<string[]> {
+	const res = await axios.get(`${baseUrl}/content/tags`)
+	return res.data.data
+}

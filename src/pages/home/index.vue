@@ -51,6 +51,7 @@
 import Vue from 'vue'
 import PostCard from '@/components/post/Card.vue'
 import { Post } from '~/interfaces/Post'
+import { getPosts } from '@/backend/post'
 
 type Algorithm = `NEW` | `FOLLOWING` | `TOP`
 
@@ -72,8 +73,8 @@ export default Vue.extend({
 		}
 	},
 	async created() {
-		const p = await this.$axios.$get(`/content`)
-		this.posts = p.data.reverse()
+		const p = await getPosts({})
+		this.posts = p.reverse()
 		this.isLoading = false
 	},
 	methods: {
@@ -81,24 +82,24 @@ export default Vue.extend({
 			this.posts = []
 			this.isLoading = true
 			this.algorithm = a
-			const p = await this.$axios.$get(`/content`)
+			const p = await getPosts({})
 			switch (a) {
 				case `NEW`:
 					// Get new posts from all following & category feeds and sort by time
-					this.posts = p.data.reverse()
+					this.posts = p.reverse()
 					this.isLoading = false
 					break
 				case `FOLLOWING`:
 					// Get list of accounts being followed
-					this.posts = p.data
+					this.posts = p
 					this.isLoading = false
 					break
 				case `TOP`:
-					this.posts = p.data
+					this.posts = p
 					this.isLoading = false
 					break
 				default:
-					this.posts = p.data
+					this.posts = p
 			}
 			return this.posts
 		},
