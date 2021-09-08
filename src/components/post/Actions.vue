@@ -16,19 +16,34 @@
 						<div class="flipper flex flex-row absolute">
 							<!-- Front side: Type comment -->
 							<div class="front w-full flex bg-white">
-								<div class="self-center">
-									<button style="margin-left: 40px" @click="showEmotions = !showEmotions">
+								<button
+									class="h-auto flex-shrink-0 focus:outline-none"
+									style="margin-left: 15.2px; margin-bottom: 15px; margin-top: 15px; width: 126px; height: 126px"
+									@click="showEmotions = !showEmotions"
+								>
+									<span v-if="this.emotion !== ''">
 										<img
-											v-if="this.emotion !== ''"
 											:src="this.reactionList[this.emotion].image"
-											class="max-w-full h-auto object-center"
+											class="object-contain"
+											style="width: 126px; height: 126px"
 										/>
-										<span v-else><FlipIcon class="w-12 h-12" /></span>
-									</button>
-								</div>
+									</span>
+									<span v-else><FlipIcon style="width: 126px; height: 126px" /></span>
+								</button>
 								<textarea
 									v-model="comment"
-									class="leading-normal resize-none overflow-y-auto w-full h-40 pl-2 py-8 pr-16 mr-4 focus:outline-none"
+									class="
+										leading-normal
+										resize-none
+										overflow-y-auto
+										w-full
+										h-40
+										pl-2
+										py-16
+										pr-16
+										mr-4
+										focus:outline-none
+									"
 									name="body"
 									placeholder="What's your response?"
 								/>
@@ -71,7 +86,7 @@
 									</button>
 								</div>
 								<!-- Right side: images -->
-								<div class="overflow-auto grid grid-cols-3 w-full -mr-1 bg-white">
+								<div class="overflow-y-scroll grid grid-cols-3 w-full -mr-1 bg-white">
 									<button
 										v-for="e in this.feelingList[this.emotionCategory]"
 										:key="e"
