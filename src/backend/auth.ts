@@ -1,18 +1,10 @@
-import type { Plugin } from '@nuxt/types'
-import { Authentication } from '../interfaces/Authentication'
-import { getEncryptedPeerIDPrivateKey, hkdf, scrypt, decryptData } from './crypto'
-import { sendAuthentication, getAuthentication } from './server'
-import { setProfileNEAR, getProfileNEAR } from './profile'
-import { getWalletConnection, getNearPrivateKey, setNearPrivateKey, initContract } from './near'
-import { getSigningKey, setSigningKey } from '~/plugins/keys'
+import { sendAuthentication, getAuthentication, Authentication } from './server'
 
-// eslint-disable-next-line quotes
-declare module 'vue/types/vue' {
-	interface Vue {
-		$register: (id: string, password: string, profileCID: string) => Promise<boolean>
-		$login: (username: string, password: string) => Promise<{ success: boolean; profileCID: string }>
-	}
-}
+import { getWalletConnection, getNearPrivateKey, setNearPrivateKey, initContract } from './near'
+import { getEncryptedPeerIDPrivateKey, hkdf, scrypt, decryptData } from './crypto'
+import { getSigningKey, setSigningKey } from './keys'
+import { setProfileNEAR, getProfileNEAR } from './profile'
+import { uint8ArrayToHexString } from './helpers'
 
 // POST newly created account to IPFS
 async function register(id: string, password: string, profileCID: string): Promise<boolean> {
@@ -67,7 +59,7 @@ async function login(username: string, password: string): Promise<{ success: boo
 	// Check if authentication was successful
 	if (
 		success &&
-		Buffer.from(auth.signingKey.hp1).toString(`hex`) === Buffer.from(contentKey.hp1).toString(`hex`) &&
+		uint8ArrayToHexString(auth.signingKey.hp1) === uint8ArrayToHexString(contentKey.hp1) &&
 		auth.nearAccountId
 	) {
 		const [privateKeyBytes, profile, signingKeyBytes] = await Promise.all([
@@ -94,9 +86,4 @@ async function login(username: string, password: string): Promise<{ success: boo
 	return { success: false, profileCID: `` }
 }
 
-const authPlugin: Plugin = (_context, inject) => {
-	inject(`register`, register)
-	inject(`login`, login)
-}
-
-export default authPlugin
+export { register, login }

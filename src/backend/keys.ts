@@ -1,10 +1,12 @@
 import nacl from 'tweetnacl'
+import { hexStringToUint8Array, uint8ArrayToHexString } from './helpers'
+
 import { Post } from '~/interfaces/Post'
 
 function getSignKeyPair(username: string) {
 	const secretKeyHex = window.localStorage.getItem(`content_signing_key_${username}`)
 	if (secretKeyHex) {
-		const secretKey = new Uint8Array(Buffer.from(secretKeyHex, `hex`))
+		const secretKey = hexStringToUint8Array(secretKeyHex)
 		const keypair = nacl.sign.keyPair.fromSecretKey(secretKey)
 		return keypair
 	}
@@ -58,7 +60,7 @@ function genAndSetSigningKey(username: string) {
 
 function setSigningKey(username: string, privateKey: Uint8Array) {
 	// Store hex-encoded private key in localStorage
-	const encodedPrivateKey = Buffer.from(privateKey).toString(`hex`)
+	const encodedPrivateKey = uint8ArrayToHexString(privateKey)
 	window.localStorage.setItem(`content_signing_key_${username}`, encodedPrivateKey)
 }
 

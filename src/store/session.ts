@@ -2,8 +2,8 @@
 import type { GetterTree, MutationTree } from 'vuex'
 import type { RootState } from './index'
 import { Profile } from '~/interfaces/Profile'
-import { walletLogout, removeNearPrivateKey } from '~/plugins/near'
-import { removeSigningKey } from '~/plugins/keys'
+import { walletLogout, removeNearPrivateKey } from '@/backend/near'
+import { removeSigningKey } from '@/backend/keys'
 export interface Session {
 	id: Profile[`id`]
 	name: Profile[`name`]

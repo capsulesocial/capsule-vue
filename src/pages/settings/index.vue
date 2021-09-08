@@ -296,7 +296,8 @@ import ChevronRight from '@/components/icons/ChevronRight.vue'
 import UploadAvatar from '@/components/icons/UploadAvatar.vue'
 import ColorMode from '@/components/ColorMode.vue'
 import { MutationType, getProfileFromSession, namespace as sessionStoreNamespace } from '~/store/session'
-import { sendProfileServer } from '~/plugins/server'
+import ipfs from '@/backend/ipfs'
+import { setProfile } from '@/backend/profile'
 
 interface IData {
 	newName: string
@@ -330,7 +331,7 @@ export default Vue.extend({
 	},
 	async created() {
 		if (this.$store.state.session.avatar !== ``) {
-			this.profilePic = await this.$getPhoto(this.$store.state.session.avatar)
+			this.profilePic = await ipfs().getPhoto(this.$store.state.session.avatar)
 		}
 		// Check for dark mode
 		const prefersDarkMode = window.matchMedia(`(prefers-color-scheme: dark)`).matches
@@ -385,33 +386,25 @@ export default Vue.extend({
 			const reader = new FileReader()
 			reader.readAsDataURL(image)
 			reader.onload = (i: Event) => {
-				if (i.target !== null) {
-					this.uploadImage(reader.result as ArrayBuffer)
+				if (i.target !== null && reader.result !== null) {
+					this.uploadImage(reader.result)
 				}
 			}
 		},
 		async updateProfile() {
 			const backendProfile = getProfileFromSession(this.$store.state.session)
-			const cid = await this.$sendProfile(backendProfile)
-			const serverProfile = await sendProfileServer(cid, backendProfile)
-			if (!serverProfile.success) {
-				alert(`Server Profile could not be updated`)
-				return false
-			}
+			const cid = await setProfile(backendProfile)
 			this.changeCID(cid)
-			const profileSet = await this.$setProfileNEAR(cid)
-			// eslint-disable-next-line no-console
-			console.log(`Profile set`, profileSet)
 			return true
 		},
-		async uploadImage(image: ArrayBuffer) {
-			const avatarCID = await this.$sendPhoto(image)
+		async uploadImage(image: string | ArrayBuffer) {
+			const avatarCID = await ipfs().sendPhoto(image)
 			this.changeAvatar(avatarCID)
 			this.downloadImage(avatarCID)
 			await this.updateProfile()
 		},
 		async downloadImage(cid: string) {
-			this.profilePic = await this.$getPhoto(cid)
+			this.profilePic = await ipfs().getPhoto(cid)
 		},
 		checkBio() {
 			const charCount = this.bio.length

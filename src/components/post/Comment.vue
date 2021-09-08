@@ -90,6 +90,8 @@ import ProfileIcon from '@/components/icons/Person.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 import Reply from '@/components/post/Reply.vue'
 import { Comment } from '@/interfaces/Comment'
+import ipfs from '@/backend/ipfs'
+import { getProfile } from '@/backend/profile'
 
 interface IData {
 	isReplying: boolean
@@ -120,16 +122,18 @@ export default Vue.extend({
 			replies: this.comment.replies,
 			avatar: ``,
 			name: ``,
-			id: ``,
+			id: this.$props.comment.authorID,
 		}
 	},
 	async mounted() {
-		const pCID = await this.$getProfileNEAR(this.$props.comment.authorID)
-		const p = await this.$getProfile(pCID.profileCID)
+		const p = await getProfile(this.$props.comment.authorID)
 		this.name = p.name
-		this.id = p.id
-		if (this.$props.comment.authorAvatarCID !== ``) {
-			this.avatar = await this.$getPhoto(this.$props.comment.authorAvatarCID)
+		if (p.avatar) {
+			ipfs()
+				.getPhoto(p.avatar)
+				.then((a) => {
+					this.avatar = a
+				})
 		}
 	},
 	methods: {

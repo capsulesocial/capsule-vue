@@ -110,6 +110,9 @@ import CommentIcon from '@/components/icons/Comment.vue'
 import TagPill from '@/components/Tag.vue'
 import { Post } from '@/interfaces/Post'
 
+import ipfs from '@/backend/ipfs'
+import { getProfileNEAR } from '@/backend/profile'
+
 export default Vue.extend({
 	name: `PostCard`,
 	components: {
@@ -144,26 +147,30 @@ export default Vue.extend({
 			authorCID = this.$store.state.session.cid
 		} else {
 			// Viewing someone else's post
-			const nearProfile = await this.$getProfileNEAR(this.$props.post.authorID)
+			const nearProfile = await getProfileNEAR(this.$props.post.authorID)
 			if (!nearProfile.success) {
 				throw new Error(`Could not get profile from near ${this.$props.post.authorID}`)
 			}
 			authorCID = nearProfile.profileCID
 		}
-		const profile = await this.$getProfile(authorCID)
+		const profile = await ipfs().getProfile(authorCID)
 		// Populate Avatar
 		this.authorName = profile.name
 		this.authorID = profile.id
-		if (profile.avatar !== ``) {
-			this.$getPhoto(profile.avatar).then((p) => {
-				this.avatar = p
-			})
+		if (profile.avatar && profile.avatar !== ``) {
+			ipfs()
+				.getPhoto(profile.avatar)
+				.then((p) => {
+					this.avatar = p
+				})
 		}
 		// Populate Featured Photo
 		if (this.post.featuredPhotoCID) {
-			this.$getPhoto(this.post.featuredPhotoCID).then((p) => {
-				this.featuredPhoto = p
-			})
+			ipfs()
+				.getPhoto(this.post.featuredPhotoCID)
+				.then((p) => {
+					this.featuredPhoto = p
+				})
 		}
 	},
 	methods: {

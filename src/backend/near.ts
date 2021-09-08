@@ -1,16 +1,7 @@
-import type { Plugin } from '@nuxt/types'
 import { connect, Contract, keyStores, WalletConnection } from 'near-api-js'
 import { KeyPairEd25519 } from 'near-api-js/lib/utils'
 // eslint-disable-next-line camelcase
 import { base_decode, base_encode } from 'near-api-js/lib/utils/serialize'
-
-// eslint-disable-next-line quotes
-declare module 'vue/types/vue' {
-	interface Vue {
-		$walletLogin: () => Promise<void>
-		$walletLogout: () => void
-	}
-}
 
 // Run capsule-vue with NEAR testnet for now
 const nearConfig = {
@@ -89,19 +80,12 @@ async function getNearPrivateKey() {
 }
 
 async function setNearPrivateKey(privateKey: Uint8Array, accountId: string) {
-	try {
-		const encodedPrivateKey = base_encode(privateKey)
-		const keypair = new KeyPairEd25519(encodedPrivateKey)
+	const encodedPrivateKey = base_encode(privateKey)
+	const keypair = new KeyPairEd25519(encodedPrivateKey)
 
-		const keystore = new keyStores.BrowserLocalStorageKeyStore()
-		await keystore.setKey(nearConfig.networkId, accountId, keypair)
-		return true
-	} catch (error) {
-		// Couldn't set private key in LocalStorage
-		// eslint-disable-next-line no-console
-		console.log(error)
-	}
-	return false
+	const keystore = new keyStores.BrowserLocalStorageKeyStore()
+	await keystore.setKey(nearConfig.networkId, accountId, keypair)
+	return true
 }
 
 async function removeNearPrivateKey() {
@@ -112,20 +96,6 @@ async function removeNearPrivateKey() {
 	await keystore.removeKey(nearConfig.networkId, accountId)
 }
 
-const nearPlugin: Plugin = async (_context, inject) => {
-	// Initialise contract API
-	await initContract()
-	// eslint-disable-next-line no-console
-	console.log(`Smart Contract API initialised!`)
-
-	const walletConnection = getWalletConnection()
-	console.log(`Is Signed in? ${walletConnection.isSignedIn()}`)
-
-	inject(`walletLogin`, walletLogin)
-	inject(`walletLogout`, walletLogout)
-}
-
-export default nearPlugin
 export {
 	getWalletConnection,
 	getContract,
@@ -135,4 +105,5 @@ export {
 	setNearPrivateKey,
 	initContract,
 	removeNearPrivateKey,
+	walletLogin,
 }
