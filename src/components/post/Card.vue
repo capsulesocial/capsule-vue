@@ -151,7 +151,6 @@ export default Vue.extend({
 		if (!profile) {
 			if (this.$store.state.session.id === this.$props.post.authorID) {
 				// Viewing own post
-				this.authorName = this.$store.state.session.name
 				profile = getProfileFromSession(this.$store.state.session)
 			} else {
 				// Viewing someone else's post
