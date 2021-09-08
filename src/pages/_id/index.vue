@@ -1,10 +1,10 @@
 <template>
 	<section class="w-full">
-		<article v-show="this.isLoading" class="flex justify-center">
+		<article v-show="isLoading" class="flex justify-center">
 			<div class="loader m-10"></div>
 		</article>
-		<article v-for="post in this.posts" :key="post._id">
-			<PostCard :post="post" :cid="post._id" />
+		<article v-for="post in posts" :key="post._id">
+			<PostCard :post="post" :profile="$props.profile" :cid="post._id" />
 		</article>
 	</section>
 </template>

@@ -111,7 +111,7 @@ import CommentIcon from '@/components/icons/Comment.vue'
 import TagPill from '@/components/Tag.vue'
 
 import { Post } from '@/backend/post'
-import { getProfileNEAR, loadProfileFromIPFS } from '@/backend/profile'
+import { getProfileNEAR, loadProfileFromIPFS, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
 
 export default Vue.extend({
@@ -130,6 +130,10 @@ export default Vue.extend({
 			type: Object as () => Post,
 			default: null,
 		},
+		profile: {
+			type: Object as () => Profile,
+			default: null,
+		},
 		cid: { type: String, required: true },
 	},
 	data() {
@@ -143,19 +147,23 @@ export default Vue.extend({
 	},
 	async created() {
 		let authorCID = ``
-		if (this.$store.state.session.id === this.$props.post.authorID) {
-			// Viewing own post
-			this.authorName = this.$store.state.session.name
-			authorCID = this.$store.state.session.cid
-		} else {
-			// Viewing someone else's post
-			const nearProfile = await getProfileNEAR(this.$props.post.authorID)
-			if (!nearProfile.success) {
-				throw new Error(`Could not get profile from near ${this.$props.post.authorID}`)
+		let profile = this.$props.profile
+		if (!profile) {
+			if (this.$store.state.session.id === this.$props.post.authorID) {
+				// Viewing own post
+				this.authorName = this.$store.state.session.name
+				authorCID = this.$store.state.session.cid
+			} else {
+				// Viewing someone else's post
+				const nearProfile = await getProfileNEAR(this.$props.post.authorID)
+				if (!nearProfile.success) {
+					throw new Error(`Could not get profile from near ${this.$props.post.authorID}`)
+				}
+				authorCID = nearProfile.profileCID
 			}
-			authorCID = nearProfile.profileCID
+			profile = await loadProfileFromIPFS(authorCID)
 		}
-		const profile = await loadProfileFromIPFS(authorCID)
+
 		// Populate Avatar
 		this.authorName = profile.name
 		this.authorID = profile.id
