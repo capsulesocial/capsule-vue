@@ -301,7 +301,7 @@ import { addPhotoToIPFS, getPhotoFromIPFS } from '@/backend/photos'
 
 interface IData {
 	newName: string
-	profilePic: null | string
+	profilePic: null | string | ArrayBuffer
 	newID: string
 	newEmail: string
 	location: string
@@ -362,23 +362,16 @@ export default Vue.extend({
 			return styles
 		},
 		isActiveTab(t: string) {
-			if (t === this.tab) {
-				return true
-			} else {
-				return false
-			}
+			return t === this.tab
 		},
 		hasChanged() {
-			if (
+			return (
 				this.newName !== `` ||
 				this.newID !== `` ||
 				this.newEmail !== `` ||
 				this.location !== `` ||
 				this.bio !== this.$store.state.session.bio
-			) {
-				return true
-			}
-			return false
+			)
 		},
 		changeTab(tab: string) {
 			this.tab = tab
@@ -402,7 +395,7 @@ export default Vue.extend({
 		async uploadImage(image: string | ArrayBuffer) {
 			const avatarCID = await addPhotoToIPFS(image)
 			this.changeAvatar(avatarCID)
-			this.downloadImage(avatarCID)
+			this.profilePic = image
 			await this.updateProfile()
 		},
 		async downloadImage(cid: string) {

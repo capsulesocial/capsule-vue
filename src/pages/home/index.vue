@@ -81,24 +81,22 @@ export default Vue.extend({
 			this.posts = []
 			this.isLoading = true
 			this.algorithm = a
-			const p = await getPosts({})
+			this.posts = await getPosts({})
 			switch (a) {
 				case `NEW`:
 					// Get new posts from all following & category feeds and sort by time
-					this.posts = p.reverse()
+					this.posts = this.posts.reverse()
 					this.isLoading = false
 					break
 				case `FOLLOWING`:
 					// Get list of accounts being followed
-					this.posts = p
 					this.isLoading = false
 					break
 				case `TOP`:
-					this.posts = p
 					this.isLoading = false
 					break
 				default:
-					this.posts = p
+					throw new Error(`Unexpected algorithm ${a}!`)
 			}
 			return this.posts
 		},

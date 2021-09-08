@@ -28,7 +28,7 @@ export default Vue.extend({
 	props: {
 		profile: {
 			type: Object as () => Profile,
-			default: null,
+			required: true,
 		},
 	},
 	data(): IData {
