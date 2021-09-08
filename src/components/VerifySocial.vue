@@ -6,19 +6,16 @@
 			:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 			class="flex justify-between"
 		>
-			<div class="flex flex-row items-center text-xl">
+			<div
+				class="flex flex-row items-center text-xl"
+				:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+			>
 				<TwitterIcon v-if="this.$props.platform === 'twitter'" class="mr-4" />
 				<GitHubIcon v-if="this.$props.platform === 'github'" class="mr-4" />
 				<ExternalURLIcon v-if="this.$props.platform === 'website'" class="mr-4" />
 				<span class="capitalize">{{ this.$props.platform }}</span>
 			</div>
-			<button
-				:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-				class="focus:outline-none font-bold"
-				@click="toggleVerify()"
-			>
-				Connect
-			</button>
+			<button class="focus:outline-none font-bold text-primary" @click="toggleVerify()">Connect</button>
 		</div>
 
 		<div v-else class="h-12 w-full flex justify-between items-center">

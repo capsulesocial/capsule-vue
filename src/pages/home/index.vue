@@ -5,29 +5,37 @@
 				this.$store.state.settings.darkMode ? 'text-lightPrimaryText bg-lightBG' : 'text-darkPrimaryText bg-darkBG'
 			"
 		>
-			<nav class="flex flex-row bg-secondary bg-opacity-25 h-12">
-				<div class="flex items-center">
+			<nav class="flex flex-row justify-around bg-secondary bg-opacity-25 h-12 border-b">
+				<div class="flex items-center w-full">
 					<button
-						:class="this.algorithm === `NEW` ? `bg-primary text-white` : ``"
-						class="h-full focus:outline-none px-5"
+						:class="
+							this.algorithm === `NEW` ? `bg-white text-primary border-t-2 border-primary font-semibold` : `text-gray7`
+						"
+						class="h-full focus:outline-none text-lg w-full"
 						@click="sortFeed('NEW')"
 					>
 						New
 					</button>
 				</div>
-				<div class="flex items-center">
+				<div class="flex items-center w-full">
 					<button
-						:class="this.algorithm === `TOP` ? `bg-primary text-white` : ``"
-						class="h-full focus:outline-none px-5"
+						:class="
+							this.algorithm === `TOP` ? `bg-white text-primary border-t-2 border-primary font-semibold` : `text-gray7`
+						"
+						class="h-full focus:outline-none text-lg w-full"
 						@click="sortFeed('TOP')"
 					>
 						Top
 					</button>
 				</div>
-				<div class="flex items-center">
+				<div class="flex items-center w-full">
 					<button
-						:class="this.algorithm === `FOLLOWING` ? `bg-primary text-white shadow-lg` : ``"
-						class="h-full focus:outline-none px-5"
+						:class="
+							this.algorithm === `FOLLOWING`
+								? `bg-white text-primary border-t-2 border-primary font-semibold`
+								: `text-gray7`
+						"
+						class="h-full focus:outline-none text-lg w-full"
 						@click="sortFeed('FOLLOWING')"
 					>
 						Following

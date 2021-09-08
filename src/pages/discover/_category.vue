@@ -11,14 +11,15 @@
 						`.jpg`)
 				"
 				alt=""
-				class="h-64 object-cover w-full"
+				class="object-cover shadow-lg"
+				style="width: 598px; height: 192px"
 			/>
-			<h2
-				class="text-2xl font-bold text-white capitalize z-20 top-0 -mt-12 ml-12"
-				style="text-shadow: 2px 2px 4px #000000"
-			>
-				{{ this.$route.params.category }}
-			</h2>
+			<div style="padding-left: 11px; margin-top: 22px">
+				<h2 class="text-2xl font-medium">Category /</h2>
+				<h2 class="text-2xl capitalize font-medium">
+					{{ this.$route.params.category }}
+				</h2>
+			</div>
 
 			<!-- Not loaded yet -->
 			<article v-show="this.isLoading" class="flex justify-center" style="width: 600px">

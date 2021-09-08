@@ -3,7 +3,7 @@
 		<!-- IF a profile exists -->
 		<div v-if="this.currentUser" style="width: 600px">
 			<!-- Name, socials, follow, bio -->
-			<section class="flex flex-row justify-between p-4">
+			<section class="flex flex-row justify-between p-4 mx-2">
 				<article class="flex items-center">
 					<img
 						v-if="this.currentUser.avatar !== `` && this.currentUser.avatar !== null"
@@ -79,7 +79,7 @@
 			</section>
 
 			<section
-				class="px-4 pb-4"
+				class="px-4 pb-4 mx-2"
 				:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 			>
 				<p class="italic">
