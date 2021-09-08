@@ -3,13 +3,7 @@
 		<div style="width: 600px">
 			<!-- Header -->
 			<img
-				:src="
-					require(`@/assets/images/category/` +
-						this.$route.params.category +
-						`/` +
-						this.$route.params.category +
-						`.jpg`)
-				"
+				:src="require(`@/assets/images/category/` + this.$route.params.category + `/` + `header.png`)"
 				alt=""
 				class="object-cover shadow-lg"
 				style="width: 598px; height: 192px"

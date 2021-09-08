@@ -23,7 +23,7 @@ export default Vue.extend({
 	},
 	created() {
 		if (this.$store.state.session.id === ``) {
-			this.$router.push(`/auth`)
+			this.$router.push(`/`)
 		}
 	},
 })
