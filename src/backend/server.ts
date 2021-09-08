@@ -9,8 +9,8 @@ export interface Authentication {
 	nearAccountId: string | null
 }
 
-const serverURL = process.env.SERVER_URL || `http://test-node.capsule.social:4000`
-const baseUrl = process.env.ORBIT_URL || `http://test-node.capsule.social:3000/`
+const serverURL = process.env.SERVER_URL || `https://test-node.capsule.social/server`
+const baseUrl = process.env.ORBIT_URL || `https://test-node.capsule.social/orbit`
 
 async function sendAuthentication(data: Authentication): Promise<boolean> {
 	// Encoding all values to hex
