@@ -1,4 +1,4 @@
-import { hexStringToUint8Array, uint8ArrayToHexString } from './helpers'
+import { hexStringToUint8Array, uint8ArrayToHexString } from './utilities/helpers'
 import { PrivateKey } from './interfaces'
 
 async function hkdf(password: Uint8Array, salt: Uint8Array, info: Uint8Array) {

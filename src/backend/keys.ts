@@ -1,5 +1,5 @@
 import nacl from 'tweetnacl'
-import { hexStringToUint8Array, uint8ArrayToHexString } from './helpers'
+import { hexStringToUint8Array, uint8ArrayToHexString } from './utilities/helpers'
 
 import { Post } from './post'
 

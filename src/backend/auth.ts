@@ -4,7 +4,7 @@ import { getWalletConnection, getNearPrivateKey, setNearPrivateKey, initContract
 import { getEncryptedPeerIDPrivateKey, hkdf, scrypt, decryptData } from './crypto'
 import { getSigningKey, setSigningKey } from './keys'
 import { setProfileNEAR, getProfileNEAR } from './profile'
-import { uint8ArrayToHexString } from './helpers'
+import { uint8ArrayToHexString } from './utilities/helpers'
 
 // POST newly created account to IPFS
 async function register(id: string, password: string, profileCID: string): Promise<boolean> {

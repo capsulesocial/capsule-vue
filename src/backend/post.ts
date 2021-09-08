@@ -2,7 +2,7 @@ import axios from 'axios'
 
 import { signContent } from './keys'
 import ipfs from './utilities/ipfs'
-import { uint8ArrayToHexString } from './helpers'
+import { uint8ArrayToHexString } from './utilities/helpers'
 
 export interface Tag {
 	name: string
@@ -57,10 +57,6 @@ export async function sendPost(data: Post): Promise<string> {
 }
 
 export function getPost(cid: string): Promise<Post> {
-	return ipfs().getJSONData(cid)
-}
-
-export function getComment(cid: string): Promise<Record<string, any>> {
 	return ipfs().getJSONData(cid)
 }
 
