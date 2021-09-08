@@ -38,8 +38,8 @@ export async function sendComment(c: INewCommentData) {
 	return cid
 }
 
-export async function getCommentsOfPost(postCID: string): Promise<ICommentData[]> {
-	const res = await axios.get(`${baseUrl}/content/${postCID}/comments`)
+export async function getCommentsOfPost(postCID: string, emotion?: string): Promise<ICommentData[]> {
+	const res = await axios.get(`${baseUrl}/content/${postCID}/comments`, { params: { ...(emotion ? { emotion } : {}) } })
 	if (res.data && res.data.data && res.data.data.comments) {
 		return res.data.data.comments
 	}
