@@ -51,7 +51,7 @@
 				<span class="text-sm self-center">Copy Link</span>
 			</button>
 		</div>
-		<input :id="this.$props.post.id" type="hidden" value="" class="hidden" />
+		<input :id="this.cid" type="hidden" value="" class="hidden" />
 	</div>
 </template>
 
@@ -72,8 +72,12 @@ export default Vue.extend({
 	},
 	props: {
 		post: {
-			type: Object as () => Post & { id: string }, // TODO fix the post type,
-			default: null,
+			type: Object as () => Post, // TODO fix the post type,
+			required: true,
+		},
+		cid: {
+			type: String,
+			required: true,
 		},
 	},
 	data() {
@@ -121,7 +125,7 @@ export default Vue.extend({
 		},
 		handleShare(type: string) {
 			const shareElement = document.createElement(`textarea`)
-			shareElement.value = `${document.location.origin}/${this.post.authorID}/${this.post.id}`
+			shareElement.value = `${document.location.origin}/post/${this.$props.cid}`
 			shareElement.style.opacity = `0`
 			document.body.appendChild(shareElement)
 			switch (type) {
@@ -138,9 +142,9 @@ export default Vue.extend({
 							encodeURIComponent(shareElement.value) +
 							`&text=` +
 							`📰 ` +
-							this.post.title +
+							this.$props.post.title +
 							`\n 🔏 ` +
-							this.post.authorID +
+							this.$props.post.authorID +
 							` on @CapsuleSoc 🔗`,
 					)
 					break
