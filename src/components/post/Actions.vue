@@ -100,21 +100,7 @@ import CommentCard from '@/components/post/Comment.vue'
 import CommentFilter from '@/components/post/CommentFilter.vue'
 import FlipIcon from '@/components/icons/Flip.vue'
 import { backgrounds, reactions, feelings } from '@/config'
-
-interface INewCommentData {
-	content: string
-	emotion: string
-	timestamp: number
-	postCID: string
-	authorID: string
-}
-
-interface ICommentData {
-	authorID: string
-	cid: string
-	timestamp: number
-	emotion: string
-}
+import { createComment, sendComment, ICommentData, getCommentsOfPost } from '@/backend/comment'
 
 interface IData {
 	backgroundList: {}
@@ -158,8 +144,7 @@ export default Vue.extend({
 		}
 	},
 	async created() {
-		const res = await this.$axios.$get(`/content/${this.postCID}/comments`)
-		this.comments = res.data.comments
+		this.comments = await getCommentsOfPost(this.postCID)
 	},
 	methods: {
 		setFilter(reaction: string): void {
@@ -177,19 +162,12 @@ export default Vue.extend({
 			if (!this.$qualityText(this.comment)) {
 				alert(`invalid comment!`)
 			} else {
-				const c: INewCommentData = {
-					authorID: this.$store.state.session.id,
-					content: this.comment,
-					emotion: this.emotion,
-					timestamp: Date.now(),
-					postCID: this.postCID,
-				}
+				const c = createComment(this.$store.state.session.id, this.comment, this.emotion, this.postCID)
 
-				const cid = await this.$sendComment(c)
-				await this.$axios.$post(`/content/${this.postCID}/comments`, { cid, data: c, sig: `whatever`, type: `comment` })
+				const cid = await sendComment(c)
 
 				// Send comment (c)
-				this.comments.push({ cid, timestamp: c.timestamp, authorID: c.authorID, emotion: c.emotion })
+				this.comments.push({ cid, ...c })
 				// Apply filter to comments, in case new comment was added in filtered category
 				this.filterComments()
 				this.comment = ``
