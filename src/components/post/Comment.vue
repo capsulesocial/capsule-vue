@@ -91,6 +91,7 @@ import BrandedButton from '@/components/BrandedButton.vue'
 import Reply from '@/components/post/Reply.vue'
 import ipfs from '@/backend/ipfs'
 import { getProfile } from '@/backend/profile'
+import { reactions } from '@/config'
 
 interface IData {
 	isReplying: boolean
@@ -98,7 +99,7 @@ interface IData {
 	replies: any[]
 	avatar: string
 	name: string
-	emotion: string
+	emotion: { label: string; background: any; image: any } | null
 	content: string
 }
 
@@ -121,17 +122,22 @@ export default Vue.extend({
 			replies: [],
 			avatar: ``,
 			name: ``,
-			emotion: ``,
+			emotion: reactions.satisfied,
 			content: ``,
 		}
 	},
 	async created() {
 		const comment = await ipfs().getComment(this.$props.cid)
 		this.content = comment.content
-		this.emotion = comment.emotion
+		const emotion = comment.emotion as keyof typeof reactions
+		if (emotion in reactions) {
+			this.emotion = reactions[emotion]
+		} else {
+			this.emotion = reactions.satisfied
+		}
 	},
 	async mounted() {
-		const p = await getProfile(this.$props.comment.authorID)
+		const p = await getProfile(this.$props.authorID)
 		this.name = p.name
 		if (p.avatar) {
 			ipfs()

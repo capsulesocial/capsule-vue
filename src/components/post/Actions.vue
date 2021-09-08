@@ -126,7 +126,7 @@ export default Vue.extend({
 	props: {
 		postCID: {
 			type: String as () => string,
-			default: null,
+			required: true,
 		},
 	},
 	data(): IData {

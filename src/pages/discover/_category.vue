@@ -26,7 +26,7 @@
 			</article>
 			<!-- Posts loaded -->
 			<article v-for="post in this.posts" :key="post.title" style="padding-left: 11px">
-				<PostCard :post="post" />
+				<PostCard :post="post" :cid="post._id" />
 			</article>
 		</div>
 	</section>

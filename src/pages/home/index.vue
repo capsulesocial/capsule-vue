@@ -40,8 +40,8 @@
 				<div class="loader m-5"></div>
 			</article>
 
-			<article v-for="post in this.posts" :key="post.contentAddress" style="padding-left: 11px">
-				<PostCard :post="post" />
+			<article v-for="post in this.posts" :key="post._id" style="padding-left: 11px">
+				<PostCard :post="post" :cid="post._id" />
 			</article>
 		</section>
 	</div>

@@ -36,8 +36,8 @@ export async function sendComment(c: INewCommentData) {
 
 export async function getCommentsOfPost(postCID: string): Promise<ICommentData[]> {
 	const res = await axios.get(`${baseUrl}/content/${postCID}/comments`)
-	if (res.data && res.data.comments) {
-		return res.data.comments
+	if (res.data && res.data.data && res.data.data.comments) {
+		return res.data.data.comments
 	}
 
 	return []

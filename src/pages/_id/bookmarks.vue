@@ -1,7 +1,7 @@
 <template>
 	<section class="px-4">
-		<article v-for="post in this.posts" :key="post.id">
-			<PostCard :post="post" />
+		<article v-for="post in this.posts" :key="post._id">
+			<PostCard :post="post" :cid="post._id" />
 		</article>
 	</section>
 </template>

@@ -10,8 +10,8 @@
 				<div class="loader m-5"></div>
 			</article>
 			<!-- Posts loaded -->
-			<article v-for="p in this.posts" :key="p.contentAddress" style="padding-left: 16px">
-				<PostCard :post="p" :authorID="p.authorID" :authorUsername="p.authorID" />
+			<article v-for="p in this.posts" :key="p._id" style="padding-left: 16px">
+				<PostCard :post="p" :authorID="p.authorID" :authorUsername="p.authorID" :cid="p._id" />
 			</article>
 		</div>
 	</section>
