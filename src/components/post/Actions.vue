@@ -16,19 +16,34 @@
 						<div class="flipper flex flex-row absolute">
 							<!-- Front side: Type comment -->
 							<div class="front w-full flex bg-white">
-								<div class="self-center">
-									<button style="margin-left: 40px" @click="showEmotions = !showEmotions">
+								<button
+									class="h-auto flex-shrink-0 focus:outline-none"
+									style="margin-left: 15.2px; margin-bottom: 15px; margin-top: 15px; width: 126px; height: 126px"
+									@click="showEmotions = !showEmotions"
+								>
+									<span v-if="this.emotion !== ''">
 										<img
-											v-if="this.emotion !== ''"
 											:src="this.reactionList[this.emotion].image"
-											class="max-w-full h-auto object-center"
+											class="object-contain"
+											style="width: 126px; height: 126px"
 										/>
-										<span v-else><FlipIcon class="w-12 h-12" /></span>
-									</button>
-								</div>
+									</span>
+									<span v-else><FlipIcon style="width: 126px; height: 126px" /></span>
+								</button>
 								<textarea
 									v-model="comment"
-									class="leading-normal resize-none overflow-y-auto w-full h-40 pl-2 py-8 pr-16 mr-4 focus:outline-none"
+									class="
+										leading-normal
+										resize-none
+										overflow-y-auto
+										w-full
+										h-40
+										pl-2
+										py-16
+										pr-16
+										mr-4
+										focus:outline-none
+									"
 									name="body"
 									placeholder="What's your response?"
 								/>
@@ -71,7 +86,7 @@
 									</button>
 								</div>
 								<!-- Right side: images -->
-								<div class="overflow-auto grid grid-cols-3 w-full -mr-1 bg-white">
+								<div class="faces overflow-y-scroll grid grid-cols-3 w-full -mr-1 bg-white">
 									<button
 										v-for="e in this.feelingList[this.emotionCategory]"
 										:key="e"
@@ -178,17 +193,18 @@ export default Vue.extend({
 				this.emotionCategory = `default`
 			}
 		},
-		filterComments() {
+		async filterComments() {
 			// Fetch comments
-			let cList: ICommentData[] = this.comments
-			// Filter by emotion
-			if (this.filter !== ``) {
-				cList = cList.filter((c) => c.emotion === this.filter)
+			if (this.filter === ``) {
+				const cList: ICommentData[] = await getCommentsOfPost(this.$props.postCID)
+				this.comments = cList.reverse()
+			} else {
+				const cList: ICommentData[] = await getCommentsOfPost(
+					this.$props.postCID,
+					this.filter.charAt(0).toLowerCase() + this.filter.replace(/\s/g, ``).substring(1),
+				)
+				this.comments = cList.reverse()
 			}
-			// Show most recent first
-			cList = cList.slice().sort((p0, p1) => p1.timestamp - p0.timestamp)
-			// Set obect to filtered comments
-			this.comments = cList
 		},
 	},
 })
@@ -236,5 +252,25 @@ export default Vue.extend({
 	-moz-background-size: cover;
 	-o-background-size: cover;
 	background-size: cover;
+}
+
+/* Custom scrollbar */
+.faces::-webkit-scrollbar {
+	width: 15px;
+}
+/* Track */
+.faces::-webkit-scrollbar-track {
+	box-shadow: inset 0 0 5px #888888;
+	border-radius: 15px;
+}
+/* Handle */
+.faces::-webkit-scrollbar-thumb {
+	background: #1e566c;
+	border-radius: 15px;
+}
+
+/* Handle on hover */
+.faces::-webkit-scrollbar-thumb:hover {
+	background: #1e566c;
 }
 </style>
