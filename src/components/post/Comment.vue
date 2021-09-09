@@ -93,10 +93,11 @@ import Vue from 'vue'
 import ProfileIcon from '@/components/icons/Person.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 import Reply from '@/components/post/Reply.vue'
-import { getProfile } from '@/backend/profile'
+import { getProfile, Profile } from '@/backend/profile'
 import { reactions } from '@/config'
 import { getComment } from '@/backend/comment'
 import { getPhotoFromIPFS } from '@/backend/photos'
+import { getProfileFromSession } from '@/store/session'
 
 interface IData {
 	isReplying: boolean
@@ -119,6 +120,7 @@ export default Vue.extend({
 		authorID: { type: String, required: true },
 		cid: { type: String, required: true },
 		timestamp: { type: Number, required: true },
+		profile: { type: Object as () => Profile, default: null },
 	},
 	data(): IData {
 		return {
@@ -142,7 +144,16 @@ export default Vue.extend({
 		}
 	},
 	async mounted() {
-		const p = await getProfile(this.$props.authorID)
+		let p = this.$props.profile
+		if (!p) {
+			if (this.$store.state.session.id === this.$props.authorID) {
+				// Viewing own post
+				p = getProfileFromSession(this.$store.state.session)
+			} else {
+				// Viewing someone else's post
+				p = await getProfile(this.$props.authorID)
+			}
+		}
 		this.name = p.name
 		if (p.avatar) {
 			getPhotoFromIPFS(p.avatar).then((a) => {

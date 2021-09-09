@@ -2,6 +2,7 @@ import { resolveUsername, sendProfileServer } from './server'
 import ipfs from './utilities/ipfs'
 
 import { getContract, getWalletConnection } from './near'
+import cache from './utilities/caching'
 
 export interface Profile {
 	id: string
@@ -43,7 +44,7 @@ function addProfileToIPFS(content: Profile) {
 	return ipfs().sendJSONData(content)
 }
 
-async function getProfile(authorID: string) {
+async function _getProfile(authorID: string) {
 	const res = await getProfileNEAR(authorID)
 	if (res.success) {
 		return loadProfileFromIPFS(res.profileCID)
@@ -51,6 +52,8 @@ async function getProfile(authorID: string) {
 
 	throw new Error(`Error finding profile!`)
 }
+
+const getProfile = cache(_getProfile)
 
 async function setProfile(p: Profile) {
 	const cid = await addProfileToIPFS(p)
