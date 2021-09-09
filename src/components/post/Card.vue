@@ -49,7 +49,7 @@
 				<img
 					v-if="this.featuredPhoto !== ``"
 					:src="this.featuredPhoto"
-					class="h-full rounded object-cover object-top"
+					class="h-full w-48 object-scale-down object-top"
 				/>
 			</nuxt-link>
 		</div>

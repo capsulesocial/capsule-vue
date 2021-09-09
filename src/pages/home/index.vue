@@ -20,7 +20,9 @@
 				<div class="flex items-center w-full">
 					<button
 						:class="
-							this.algorithm === `TOP` ? `bg-white text-primary border-t-2 border-primary font-semibold` : `text-gray7`
+							this.algorithm === `TOP`
+								? `bg-white text-primary border-t-2 border-primary font-semibold`
+								: `border-l border-r text-gray7`
 						"
 						class="h-full focus:outline-none text-lg w-full"
 						@click="sortFeed('TOP')"

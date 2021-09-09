@@ -1,5 +1,5 @@
 <template>
-	<header class="page-header flex items-center bg-white z-30">
+	<header class="page-header flex items-center bg-white">
 		<nav>
 			<div
 				class="
@@ -112,6 +112,7 @@ export default Vue.extend({
 <style>
 .trigger-menu-wrapper {
 	transition: transform 0.4s;
+	z-index: 50;
 }
 
 .page-header {
