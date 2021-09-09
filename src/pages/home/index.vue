@@ -80,8 +80,7 @@ export default Vue.extend({
 		}
 	},
 	async created() {
-		const p = await getPosts({})
-		this.posts = p.reverse()
+		this.posts = await getPosts({})
 		this.isLoading = false
 	},
 	methods: {
