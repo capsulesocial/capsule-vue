@@ -93,7 +93,6 @@ export default Vue.extend({
 			switch (a) {
 				case `NEW`:
 					// Get new posts from all following & category feeds and sort by time
-					this.posts = this.posts.reverse()
 					this.isLoading = false
 					break
 				case `FOLLOWING`:
