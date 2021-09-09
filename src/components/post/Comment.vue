@@ -82,7 +82,15 @@
 					</span>
 				</div>
 				<!-- List replies -->
-				<Reply v-for="r in this.filterReplies()" :key="r.id" :reply="r" class="pt-1"> </Reply>
+				<Reply
+					v-for="r in this.filterReplies()"
+					:key="r.cid"
+					:authorID="r.authorID"
+					:cid="r.cid"
+					:timestamp="r.timestamp"
+					class="pt-1"
+				>
+				</Reply>
 			</div>
 		</div>
 	</div>
@@ -95,7 +103,7 @@ import BrandedButton from '@/components/BrandedButton.vue'
 import Reply from '@/components/post/Reply.vue'
 import { getProfile, Profile } from '@/backend/profile'
 import { reactions } from '@/config'
-import { getComment } from '@/backend/comment'
+import { createComment, getComment, getCommentsOfPost, sendComment } from '@/backend/comment'
 import { getPhotoFromIPFS } from '@/backend/photos'
 import { getProfileFromSession } from '@/store/session'
 
@@ -160,20 +168,16 @@ export default Vue.extend({
 				this.avatar = a
 			})
 		}
+		this.replies = await getCommentsOfPost(this.$props.cid)
 	},
 	methods: {
-		sendReply() {
+		async sendReply() {
 			if (!this.$qualityText(this.reply)) {
 				alert(`Invalid reply!`)
 			} else {
-				const r = {
-					authorID: this.$store.state.session.id,
-					authorCID: this.$store.state.session.cid,
-					authorAvatarCID: this.$store.state.session.avatar,
-					content: this.reply,
-					timestamp: new Date(),
-				}
-				this.replies.push(r)
+				const c = createComment(this.$store.state.session.id, this.reply, `no-emotion`, this.$props.cid)
+				const cid = await sendComment(c, `reply`)
+				this.replies.push({ cid, ...c })
 				this.filterReplies()
 				this.reply = ``
 			}

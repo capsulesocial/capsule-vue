@@ -7,7 +7,7 @@ export interface INewCommentData {
 	content: string
 	emotion: string
 	timestamp: number
-	postCID: string
+	parentCID: string
 	authorID: string
 }
 
@@ -18,13 +18,13 @@ export interface ICommentData {
 	emotion: string
 }
 
-export function createComment(authorID: string, content: string, emotion: string, postCID: string): INewCommentData {
+export function createComment(authorID: string, content: string, emotion: string, parentCID: string): INewCommentData {
 	return {
 		authorID,
 		content,
 		emotion,
 		timestamp: Date.now(),
-		postCID,
+		parentCID,
 	}
 }
 
@@ -32,14 +32,16 @@ export function getComment(cid: string): Promise<INewCommentData> {
 	return ipfs().getJSONData(cid)
 }
 
-export async function sendComment(c: INewCommentData) {
+export async function sendComment(c: INewCommentData, type: `comment` | `reply`) {
 	const cid = await ipfs().sendJSONData(c)
-	await axios.post(`${baseUrl}/content/${c.postCID}/comments`, { cid, data: c, sig: `whatever`, type: `comment` })
+	await axios.post(`${baseUrl}/content/${c.parentCID}/comments`, { cid, data: c, sig: `whatever`, type })
 	return cid
 }
 
-export async function getCommentsOfPost(postCID: string, emotion?: string): Promise<ICommentData[]> {
-	const res = await axios.get(`${baseUrl}/content/${postCID}/comments`, { params: { ...(emotion ? { emotion } : {}) } })
+export async function getCommentsOfPost(parentCID: string, emotion?: string): Promise<ICommentData[]> {
+	const res = await axios.get(`${baseUrl}/content/${parentCID}/comments`, {
+		params: { ...(emotion ? { emotion } : {}) },
+	})
 	if (res.data && res.data.data && res.data.data.comments) {
 		return res.data.data.comments
 	}

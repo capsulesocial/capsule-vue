@@ -1,7 +1,7 @@
 <template>
 	<div class="flex">
 		<div class="flex-shrink-0">
-			<img v-if="reply.authorAvatarCID !== null" :src="this.avatar" class="w-10 h-10 rounded-lg object-cover" />
+			<img v-if="avatar !== null" :src="avatar" class="w-10 h-10 rounded-lg object-cover" />
 			<span v-else class="p-1 border-2 rounded-full block">
 				<ProfileIcon class="w-6 h-6" />
 			</span>
@@ -11,27 +11,27 @@
 				:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 				class="font-bold bold mr-1"
 			>
-				{{ getFullName(reply.authorID) }}
+				{{ name }}
 			</strong>
 			<nuxt-link
-				:to="this.$props.reply.authorCID"
+				:to="this.$props.authorID"
 				:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 				class="text-sm mr-2"
 			>
-				@{{ reply.authorID }}
+				@{{ $props.authorID }}
 			</nuxt-link>
 			<span
-				v-if="reply.timestamp"
+				v-if="timestamp"
 				class="text-xs"
 				:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 			>
-				{{ $formatDate(reply.timestamp) }}
+				{{ $formatDate(timestamp) }}
 			</span>
 			<p
 				:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 				class="text-sm py-1"
 			>
-				{{ reply.content }}
+				{{ content }}
 			</p>
 		</div>
 	</div>
@@ -41,25 +41,53 @@
 import Vue from 'vue'
 import ProfileIcon from '@/components/icons/Person.vue'
 import { getPhotoFromIPFS } from '@/backend/photos'
+import { getComment } from '@/backend/comment'
+import { getProfile, Profile } from '@/backend/profile'
+import { getProfileFromSession } from '@/store/session'
+
+interface IData {
+	avatar: string | null
+	content: string
+	name: string
+}
 
 export default Vue.extend({
 	components: {
 		ProfileIcon,
 	},
 	props: {
-		reply: {
-			type: Object,
-			default: null,
-		},
+		authorID: { type: String, required: true },
+		cid: { type: String, required: true },
+		timestamp: { type: Number, required: true },
+		profile: { type: Object as () => Profile, default: null },
 	},
-	data() {
+	data(): IData {
 		return {
-			avatar: ``,
+			avatar: null,
+			content: ``,
+			name: ``,
 		}
 	},
 	async created() {
-		if (this.$props.reply.authorAvatarCID !== null) {
-			this.avatar = await getPhotoFromIPFS(this.$props.reply.authorAvatarCID)
+		const comment = await getComment(this.$props.cid)
+		this.content = comment.content
+	},
+	async mounted() {
+		let p = this.$props.profile
+		if (!p) {
+			if (this.$store.state.session.id === this.$props.authorID) {
+				// Viewing own post
+				p = getProfileFromSession(this.$store.state.session)
+			} else {
+				// Viewing someone else's post
+				p = await getProfile(this.$props.authorID)
+			}
+		}
+		this.name = p.name
+		if (p.avatar) {
+			getPhotoFromIPFS(p.avatar).then((a) => {
+				this.avatar = a
+			})
 		}
 	},
 	methods: {

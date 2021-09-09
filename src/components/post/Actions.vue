@@ -182,7 +182,7 @@ export default Vue.extend({
 				alert(`invalid comment!`)
 			} else {
 				const c = createComment(this.$store.state.session.id, this.comment, this.emotion, this.postCID)
-				const cid = await sendComment(c)
+				const cid = await sendComment(c, `comment`)
 				// Send comment (c)
 				this.comments.push({ cid, ...c })
 				// Apply filter to comments, in case new comment was added in filtered category
