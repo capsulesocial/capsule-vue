@@ -22,7 +22,10 @@
 		</div>
 
 		<!-- Top Right -->
-		<article class="relative hidden md:flex justify-between lg:justify-end items-center" style="width: 600px">
+		<article
+			class="relative hidden md:flex justify-between lg:justify-end items-center"
+			:style="this.$props.extended ? `width: 840px` : `width: 600px`"
+		>
 			<div
 				class="flex lg:hidden md:pl-8 xl:pl-0"
 				:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
@@ -93,7 +96,7 @@
 			</div>
 		</article>
 
-		<div style="width: 240px"></div>
+		<div :class="this.$props.extended ? `hidden` : ``" style="width: 240px"></div>
 	</header>
 </template>
 
@@ -124,6 +127,12 @@ export default Vue.extend({
 		UpIcon,
 		HelpIcon,
 		LogoutIcon,
+	},
+	props: {
+		extended: {
+			type: Boolean,
+			default: false,
+		},
 	},
 	data() {
 		return {

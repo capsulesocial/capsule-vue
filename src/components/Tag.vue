@@ -1,6 +1,6 @@
 <template>
 	<button
-		class="focus:outline-none px-3 py-1 transition duration-500 ease-in-out transform hover:scale-110"
+		class="z-10 focus:outline-none px-3 py-1 transition duration-500 ease-in-out transform hover:scale-105"
 		:class="this.$props.theme === 'colors' ? 'bg-white shadow rounded-full' : 'bg-gray1 text-gray5 rounded-lg'"
 		@click="$router.push('/tag/' + tag)"
 	>

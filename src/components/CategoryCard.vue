@@ -16,7 +16,7 @@
 				shadow-lg
 				bg-primary
 			"
-			style="width: 300px; height: 211.5px"
+			style="width: 400px; height: 282px"
 		>
 			<img
 				v-if="this.$props.bgImage !== ``"
@@ -25,7 +25,7 @@
 				class="opacity-75 absolute left-0 top-0 object-contain w-full"
 			/>
 			<div class="flex flex-col font-sans p-4">
-				<h4 class="text-lg text-white font-extrabold capitalize z-20" style="text-shadow: 2px 2px 4px #000000">
+				<h4 class="text-2xl text-white font-extrabold capitalize z-20" style="text-shadow: 2px 2px 4px #000000">
 					{{ this.$props.text }}
 				</h4>
 			</div>

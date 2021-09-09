@@ -1,7 +1,7 @@
 <template>
 	<div class="w-full">
-		<section style="width: 600px">
-			<article style="width: 600px" class="flex flex-col md:flex-row justify-between mb-1 items-center mt-3">
+		<section style="width: 840px">
+			<article style="width: 840px" class="flex flex-col md:flex-row justify-between mb-1 items-center mt-3">
 				<!-- Tag title and filter dropdown -->
 				<div class="flex flex-row justify-between w-full">
 					<h2
@@ -61,7 +61,7 @@
 			</div>
 		</section>
 
-		<section style="width: 620px">
+		<section style="width: 840px">
 			<article class="mb-1 mt-3">
 				<h2
 					:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
@@ -72,7 +72,7 @@
 			</article>
 			<p
 				:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-				class="font-normal text-xl"
+				class="font-normal text-xl pb-1"
 			>
 				Read more of what you love by browsing top categories:
 			</p>
@@ -112,6 +112,7 @@ export default Vue.extend({
 		ChevronUp,
 		ChevronDown,
 	},
+	layout: `Extended`,
 	data(): IData {
 		return {
 			categoryList: categories,

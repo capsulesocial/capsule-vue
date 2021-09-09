@@ -1,7 +1,7 @@
 <template>
-	<div class="flex relative">
+	<div class="flex items-end relative">
 		<button
-			class="flex focus:outline-none hover:text-primary toggle"
+			class="flex items-end focus:outline-none hover:text-primary toggle"
 			:class="showSocialShares ? 'text-primary' : ''"
 			@click.stop="toggleDropdown"
 		>
@@ -14,8 +14,8 @@
 					? 'bg-lightBG text-lightPrimaryText border-lightBorder'
 					: 'bg-darkBG text-darkPrimaryText border-darkBorder'
 			"
-			class="absolute flex flex-col mt-8 rounded-lg rounded-t-none w-40 shadow-lg"
-			style="padding: 16px"
+			class="absolute flex flex-col rounded-lg rounded-t-none w-40 shadow-lg z-20"
+			style="padding: 16px; top: 40px"
 		>
 			<!-- Repost -->
 			<button

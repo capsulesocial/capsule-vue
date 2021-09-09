@@ -3,7 +3,7 @@
 		<section class="flex">
 			<!-- Left column: Select tab -->
 			<article
-				style="width: 250px"
+				style="width: 240px"
 				:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 				class="flex flex-col w-full h-full"
 			>
@@ -43,7 +43,7 @@
 			</article>
 
 			<!-- Right column: Show details -->
-			<div style="width: 350px">
+			<div style="width: 600px">
 				<article v-if="this.tab === 'account'" class="col-span-2 border-r border-l h-full">
 					<!-- General Settings (Username, ID, Email) -->
 					<h2
@@ -279,7 +279,7 @@
 			<button
 				:class="this.hasChanged() ? '' : 'opacity-50'"
 				class="bg-primary text-white rounded-lg focus:outline-none"
-				style="width: 128px; height: 40px; margin-left: 350px"
+				style="width: 128px; height: 40px; margin-left: 450px"
 				@click="this.updateSettings"
 			>
 				Save Changes
@@ -317,6 +317,7 @@ export default Vue.extend({
 		UploadAvatar,
 		ColorMode,
 	},
+	layout: `Extended`,
 	data(): IData {
 		return {
 			newName: ``,

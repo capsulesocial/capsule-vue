@@ -3,7 +3,7 @@
 		<!-- IF a profile exists -->
 		<div v-if="this.currentUser" style="width: 600px">
 			<!-- Name, socials, follow, bio -->
-			<section class="flex flex-row justify-between p-4 mx-2">
+			<section class="flex flex-row justify-between p-4" style="margin-left: 22px; margin-right: 22px">
 				<article class="flex items-center">
 					<img
 						v-if="this.currentUser.avatar !== `` && this.currentUser.avatar !== null"
@@ -77,9 +77,10 @@
 				</nuxt-link>
 				<FriendButton v-else :authorID="this.$route.params.id" />
 			</section>
-
+			<!-- Bio -->
 			<section
-				class="px-4 pb-4 mx-2"
+				style="margin-left: 22px; margin-right: 22px"
+				class="px-4 pb-4"
 				:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 			>
 				<p class="italic">
@@ -112,32 +113,29 @@
 				</span>
 			</section>
 
-			<article class="flex flex-col md:flex-row w-full justify-between border-b px-4 text-gray7">
-				<nuxt-link :to="'/' + this.$route.params.id" class="px-2 pb-1" :class="this.getStyles('id')"> Posts </nuxt-link>
-				<nuxt-link
-					:to="'/' + this.$route.params.id + '/comments'"
-					class="px-2 pb-1"
-					:class="this.getStyles('id-comments')"
-				>
-					Comments
+			<article
+				class="flex flex-col md:flex-row w-full justify-between border-b text-gray7"
+				style="padding-left: 22px; padding-right: 22px"
+			>
+				<nuxt-link :to="'/' + this.$route.params.id" class="pb-1" :class="this.getStyles('id')">
+					<span class="px-4">Posts</span>
+				</nuxt-link>
+				<nuxt-link :to="'/' + this.$route.params.id + '/comments'" class="pb-1" :class="this.getStyles('id-comments')">
+					<span class="px-4">Comments</span>
 				</nuxt-link>
 				<nuxt-link
 					:to="'/' + this.$route.params.id + '/bookmarks'"
-					class="px-2 pb-1"
+					class="pb-1"
 					:class="this.getStyles('id-bookmarks')"
 				>
-					Bookmarks
+					<span class="px-4">Bookmarks </span>
 				</nuxt-link>
-				<nuxt-link
-					:to="'/' + this.$route.params.id + '/reposts'"
-					class="px-2 pb-1"
-					:class="this.getStyles('id-reposts')"
-				>
-					Reposts
+				<nuxt-link :to="'/' + this.$route.params.id + '/reposts'" class="pb-1" :class="this.getStyles('id-reposts')">
+					<span class="px-4">Reposts</span>
 				</nuxt-link>
 			</article>
 			<article>
-				<nuxt-child :profile="this.currentUser" style="padding-left: 11px" />
+				<nuxt-child :profile="this.currentUser" style="padding-left: 22px" />
 			</article>
 		</div>
 		<div v-else style="width: 600px" class="flex justify-center">

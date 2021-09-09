@@ -1,79 +1,63 @@
 <template>
 	<article
 		class="shadow rounded-lg my-2 object-contain"
-		style="width: 578px; margin-bottom: 22px; margin-top: 22px; padding: 16px"
+		style="width: 556px; margin-bottom: 22px; margin-top: 22px; padding: 16px"
 		:class="
 			this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText border border-darkBorder'
 		"
 	>
-		<!-- Post Preview Header: Avatar, name -->
-		<div class="flex justify-between">
-			<nuxt-link :to="'/' + this.post.authorID" class="flex items-center">
-				<img v-if="this.avatar !== ``" :src="this.avatar" class="w-12 h-12 rounded-lg object-cover" />
-				<ProfileIcon v-else class="w-12 h-12 border-2 rounded-full" />
-				<div class="ml-4">
-					<!-- Name, ID -->
-					<div class="flex items-center">
+		<!-- Post Preview Card -->
+		<div class="flex flex-row h-32">
+			<!-- Left side -->
+			<div class="flex flex-col flex-grow">
+				<!-- Top: Name, ID, avatar, timestamp -->
+				<nuxt-link :to="'/' + this.post.authorID" class="w-full flex flex-row">
+					<img v-if="this.avatar !== ``" :src="this.avatar" class="w-16 h-16 rounded-lg object-cover" />
+					<ProfileIcon v-else class="w-16 h-16 border-2 rounded-full" />
+					<div class="ml-4">
+						<!-- Name, ID -->
 						<h4
 							:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-							class="text-bold mr-2 text-lg"
+							class="font-medium text-lg truncate"
 						>
 							{{ this.authorName }}
 						</h4>
-						<h5
-							:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-							class="mr-2"
-						>
+						<h5 :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'">
 							@{{ this.post.authorID }}
 						</h5>
+						<!-- Timestamp -->
+						<h6
+							:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+							class="text-xs"
+						>
+							{{ this.$formatDate(this.post.timestamp) }}
+						</h6>
 					</div>
-					<!-- Timestamp -->
-					<h6
-						:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-						class="text-xs mb-2"
-					>
-						{{ this.$formatDate(this.post.timestamp) }}
-					</h6>
-				</div>
-			</nuxt-link>
-			<button
-				:class="
-					this.$store.state.settings.darkMode
-						? 'text-lightPrimaryText hover:text-lightActive '
-						: 'text-darkPrimaryText hover:text-darkActive'
-				"
-				class="focus:outline-none self-start"
-			>
-				<XIcon />
-			</button>
-		</div>
-
-		<!-- Preview Content -->
-		<div class="my-2">
-			<nuxt-link :to="'/post/' + this.post._id" class="flex justify-between">
-				<div class="h-24">
+				</nuxt-link>
+				<!-- Bottom: Post Preview title -->
+				<nuxt-link :to="'/post/' + this.post._id" class="flex justify-between mt-4">
 					<h3
 						:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-						class="text-base font-bold capitalize"
+						class="text-base font-semibold capitalize"
 					>
 						{{ this.post.title }}
 					</h3>
-				</div>
-				<div class="ml-2">
-					<img
-						v-if="this.featuredPhoto !== ``"
-						:src="this.featuredPhoto"
-						class="w-32 h-24 rounded object-cover object-top"
-					/>
-				</div>
+				</nuxt-link>
+			</div>
+			<!-- Right side: Featured Photo -->
+			<nuxt-link :to="'/post/' + this.post._id" class="flex justify-between">
+				<img
+					v-if="this.featuredPhoto !== ``"
+					:src="this.featuredPhoto"
+					class="h-full rounded object-cover object-top"
+				/>
 			</nuxt-link>
 		</div>
-
 		<!-- Actions -->
-		<div class="flex justify-between">
-			<div class="flex">
+		<div class="flex justify-between mt-2">
+			<div class="flex items-end">
 				<button
-					class="flex focus:outline-none self-center mr-2"
+					class="flex items-end focus:outline-none mr-2"
 					:class="this.getStyles()"
 					@click="showComments = !showComments"
 				>
@@ -83,16 +67,15 @@
 					:post="this.post"
 					:cid="this.$props.cid"
 					:class="this.$store.state.settings.darkMode ? 'fill-lightActive' : 'fill-darkActive'"
-					class="fill-primary self-center z-10"
+					class="fill-primary"
 				/>
 				<BookmarkButton
 					:postID="this.$props.cid"
 					:class="this.$store.state.settings.darkMode ? 'fill-lightActive' : 'fill-darkActive'"
-					class="self-center"
 				/>
 			</div>
 			<!-- Display tags -->
-			<div class="flex flex-row-reverse overflow-x-auto">
+			<div class="flex flex-row-reverse overflow-x-auto items-end">
 				<TagPill v-for="t in this.post.tags" :key="t.name" :tag="t.name" class="ml-4 my-1" />
 			</div>
 		</div>
@@ -103,7 +86,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import PostActions from '@/components/post/Actions.vue'
-import XIcon from '@/components/icons/X.vue'
 import ProfileIcon from '@/components/icons/Person.vue'
 import BookmarkButton from '@/components/post/BookmarkButton.vue'
 import Share from '@/components/post/Share.vue'
@@ -119,7 +101,6 @@ export default Vue.extend({
 	name: `PostCard`,
 	components: {
 		PostActions,
-		XIcon,
 		ProfileIcon,
 		BookmarkButton,
 		Share,

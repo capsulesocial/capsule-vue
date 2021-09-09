@@ -48,7 +48,7 @@
 				<div class="loader m-5"></div>
 			</article>
 
-			<article v-for="post in this.posts" :key="post._id" style="padding-left: 11px">
+			<article v-for="post in this.posts" :key="post._id" style="padding-left: 22px">
 				<PostCard :post="post" :cid="post._id" />
 			</article>
 		</section>

@@ -8,7 +8,7 @@
 				class="object-cover shadow-lg"
 				style="width: 598px; height: 192px"
 			/>
-			<div style="padding-left: 11px; margin-top: 22px">
+			<div style="padding-left: 22px; margin-top: 22px">
 				<h2 class="text-2xl font-medium">Category /</h2>
 				<h2 class="text-2xl capitalize font-medium">
 					{{ this.$route.params.category }}
@@ -20,7 +20,7 @@
 				<div class="loader m-5"></div>
 			</article>
 			<!-- Posts loaded -->
-			<article v-for="post in this.posts" :key="post.title" style="padding-left: 11px">
+			<article v-for="post in this.posts" :key="post.title" style="padding-left: 22px">
 				<PostCard :post="post" :cid="post._id" />
 			</article>
 		</div>
