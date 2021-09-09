@@ -211,7 +211,7 @@ export const reactions = {
 	},
 	onIt: {
 		label: `On it`,
-		image: require(`@/assets/images/reactions/onIt.png`),
+		image: require(`@/assets/images/reactions/on-it.png`),
 		background: require(`@/assets/images/backgrounds/agree.png`),
 	},
 	pompous: {

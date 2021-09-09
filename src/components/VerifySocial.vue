@@ -3,27 +3,24 @@
 		<!-- Unverified -->
 		<div
 			v-if="!this.isActive"
-			:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+			:class="this.$store.state.settings.darkMode ? 'text-gray7' : 'text-darkPrimaryText'"
 			class="flex justify-between"
 		>
 			<div
 				class="flex flex-row items-center text-xl"
 				:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 			>
-				<TwitterIcon v-if="this.$props.platform === 'twitter'" class="mr-4" />
-				<GitHubIcon v-if="this.$props.platform === 'github'" class="mr-4" />
-				<ExternalURLIcon v-if="this.$props.platform === 'website'" class="mr-4" />
-				<span class="capitalize">{{ this.$props.platform }}</span>
+				<TwitterIcon v-if="this.$props.platform === 'twitter'" class="mr-4 text-gray7" />
+				<GitHubIcon v-if="this.$props.platform === 'github'" class="mr-4 text-gray7" />
+				<ExternalURLIcon v-if="this.$props.platform === 'website'" class="mr-4 text-gray7" />
+				<span class="capitalize text-gray7">{{ this.$props.platform }}</span>
 			</div>
 			<button class="focus:outline-none font-bold text-primary" @click="toggleVerify()">Connect</button>
 		</div>
 
 		<div v-else class="h-12 w-full flex justify-between items-center">
 			<div v-if="!this.isVerified">
-				<label
-					for="handle"
-					:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-				>
+				<label for="handle" :class="this.$store.state.settings.darkMode ? 'text-gray7' : 'text-darkSecondaryText'">
 					<span v-if="this.$props.platform !== 'website'">handle: @</span><span v-else>URL:</span>
 				</label>
 				<input
@@ -40,7 +37,7 @@
 				/>
 			</div>
 			<div v-else>
-				<span> ({{ this.handle }}) {{ this.$props.platform }} account has been verified </span>
+				<span class="text-gray7"> ({{ this.handle }}) {{ this.$props.platform }} account has been verified </span>
 			</div>
 			<button
 				v-if="!this.isVerified"
