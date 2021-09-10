@@ -1,7 +1,6 @@
 import axios from 'axios'
+import { capsuleOrbit } from './config'
 import ipfs from './utilities/ipfs'
-
-const baseUrl = process.env.ORBIT_URL || `https://test-node.capsule.social/orbit`
 
 export interface INewCommentData {
 	content: string
@@ -34,12 +33,12 @@ export function getComment(cid: string): Promise<INewCommentData> {
 
 export async function sendComment(c: INewCommentData, type: `comment` | `reply`) {
 	const cid = await ipfs().sendJSONData(c)
-	await axios.post(`${baseUrl}/content/${c.parentCID}/comments`, { cid, data: c, sig: `whatever`, type })
+	await axios.post(`${capsuleOrbit}/content/${c.parentCID}/comments`, { cid, data: c, sig: `whatever`, type })
 	return cid
 }
 
 export async function getCommentsOfPost(parentCID: string, emotion?: string): Promise<ICommentData[]> {
-	const res = await axios.get(`${baseUrl}/content/${parentCID}/comments`, {
+	const res = await axios.get(`${capsuleOrbit}/content/${parentCID}/comments`, {
 		params: { ...(emotion ? { emotion } : {}) },
 	})
 	if (res.data && res.data.data && res.data.data.comments) {

@@ -3,6 +3,7 @@ import axios from 'axios'
 import { signContent } from './keys'
 import ipfs from './utilities/ipfs'
 import { uint8ArrayToHexString } from './utilities/helpers'
+import { capsuleOrbit } from './config'
 export interface Tag {
 	name: string
 }
@@ -26,8 +27,6 @@ export interface IPostResponse {
 }
 
 export type Algorithm = `NEW` | `FOLLOWING` | `TOP`
-
-const baseUrl = process.env.ORBIT_URL || `https://test-node.capsule.social/orbit`
 
 export function createPost(
 	title: string,
@@ -55,7 +54,7 @@ export async function sendPost(data: Post): Promise<string> {
 	}
 
 	const cid = await ipfs().sendJSONData(data)
-	await axios.post(`${baseUrl}/content`, {
+	await axios.post(`${capsuleOrbit}/content`, {
 		cid,
 		data,
 		sig: uint8ArrayToHexString(signature),
@@ -73,11 +72,11 @@ export async function getPosts(
 	filter: { category?: string; authorID?: string; tag?: string },
 	sort?: Algorithm,
 ): Promise<IPostResponse[]> {
-	const res = await axios.get(`${baseUrl}/content`, { params: { ...filter, sort } })
+	const res = await axios.get(`${capsuleOrbit}/content`, { params: { ...filter, sort } })
 	return res.data.data
 }
 
 export async function getTags(): Promise<string[]> {
-	const res = await axios.get(`${baseUrl}/content/tags`)
+	const res = await axios.get(`${capsuleOrbit}/content/tags`)
 	return res.data.data
 }
