@@ -147,6 +147,10 @@ export default Vue.extend({
 			type: String as () => string,
 			required: true,
 		},
+		initComments: {
+			type: Array as () => ICommentData[] | null,
+			default: null,
+		},
 	},
 	data(): IData {
 		return {
@@ -163,7 +167,11 @@ export default Vue.extend({
 		}
 	},
 	async created() {
-		this.comments = await getCommentsOfPost(this.postCID)
+		if (!this.$props.initComments) {
+			this.comments = await getCommentsOfPost(this.postCID)
+		} else {
+			this.comments = this.$props.initComments
+		}
 	},
 	methods: {
 		setFilter(reaction: string): void {

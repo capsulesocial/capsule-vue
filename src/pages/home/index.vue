@@ -50,8 +50,8 @@
 				<div class="loader m-5"></div>
 			</article>
 
-			<article v-for="post in this.posts" :key="post._id" style="padding-left: 22px">
-				<PostCard :post="post" :cid="post._id" />
+			<article v-for="post in this.posts" :key="post.post._id" style="padding-left: 22px">
+				<PostCard :post="post.post" :cid="post.post._id" :comments="post.comments" />
 			</article>
 		</section>
 	</div>
@@ -60,10 +60,10 @@
 <script lang="ts">
 import Vue from 'vue'
 import PostCard from '@/components/post/Card.vue'
-import { getPosts, Post, Algorithm } from '@/backend/post'
+import { getPosts, Algorithm, IPostResponse } from '@/backend/post'
 
 interface IData {
-	posts: Post[]
+	posts: IPostResponse[]
 	isLoading: boolean
 	algorithm: Algorithm
 }

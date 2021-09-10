@@ -9,7 +9,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import PostCard from '@/components/post/Card.vue'
-import { getPost, Post } from '@/backend/post'
+import { getPost, Post, RetrievedPost } from '@/backend/post'
 import { Profile } from '@/backend/profile'
 
 interface IData {
@@ -32,12 +32,10 @@ export default Vue.extend({
 		}
 	},
 	async created() {
-		const postList = this.$props.profile.bookmarks
-		for (const p in postList) {
-			if (p) {
-				const post = await getPost(postList[p])
-				this.posts.push(post)
-			}
+		const postList: RetrievedPost[] = [] // TODO: Here we need to implement that
+		for (const p of postList) {
+			const post = await getPost(p._id)
+			this.posts.push(post)
 		}
 	},
 })
