@@ -204,7 +204,6 @@ export default Vue.extend({
 		async filterComments() {
 			// Fetch comments
 			if (this.filter === ``) {
-				console.log(this.filter)
 				const cList: ICommentData[] = await getCommentsOfPost(this.$props.postCID)
 				this.comments = cList.reverse()
 			} else {

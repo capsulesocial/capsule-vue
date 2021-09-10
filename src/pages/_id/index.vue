@@ -40,7 +40,6 @@ export default Vue.extend({
 	async created() {
 		// Fetch posts from Orbit DB by ID
 		this.posts = await getPosts({ authorID: this.$route.params.id }, `NEW`)
-		console.log(this.posts)
 		this.isLoading = false
 
 		// const postList = this.$props.profile.posts
