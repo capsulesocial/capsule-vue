@@ -10,8 +10,8 @@
 				<div class="loader m-5"></div>
 			</article>
 			<!-- Posts loaded -->
-			<article v-for="p in this.posts" :key="p._id" style="padding-left: 22px">
-				<PostCard :post="p" :authorID="p.authorID" :authorUsername="p.authorID" :cid="p._id" />
+			<article v-for="p in this.posts" :key="p.post._id" style="padding-left: 22px">
+				<PostCard :post="p.post" :comments="p.comments" />
 			</article>
 		</div>
 	</section>
@@ -20,10 +20,10 @@
 <script lang="ts">
 import Vue from 'vue'
 import PostCard from '@/components/post/Card.vue'
-import { getPosts, Post } from '@/backend/post'
+import { getPosts, IPostResponse } from '@/backend/post'
 
 interface IData {
-	posts: Post[]
+	posts: IPostResponse[]
 	tag: string
 	isLoading: boolean
 }

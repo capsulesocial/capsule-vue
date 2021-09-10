@@ -64,22 +64,22 @@
 					<CommentIcon :isActive="this.showComments" />
 				</button>
 				<Share
-					:post="this.post"
-					:cid="this.$props.cid"
+					:post="post"
+					:cid="$props.post._id"
 					:class="this.$store.state.settings.darkMode ? 'fill-lightActive' : 'fill-darkActive'"
 					class="fill-primary"
 				/>
 				<BookmarkButton
-					:postID="this.$props.cid"
+					:postID="$props.post._id"
 					:class="this.$store.state.settings.darkMode ? 'fill-lightActive' : 'fill-darkActive'"
 				/>
 			</div>
 			<!-- Display tags -->
 			<div class="flex flex-row-reverse overflow-x-auto items-end">
-				<TagPill v-for="t in this.post.tags" :key="t.name" :tag="t.name" class="ml-4 my-1" />
+				<TagPill v-for="t in post.tags" :key="t.name" :tag="t.name" class="ml-4 my-1" />
 			</div>
 		</div>
-		<PostActions v-show="this.showComments" :postCID="this.$props.cid" />
+		<PostActions v-show="showComments" :postCID="$props.post._id" :initComments="$props.comments" />
 	</article>
 </template>
 
@@ -92,7 +92,7 @@ import Share from '@/components/post/Share.vue'
 import CommentIcon from '@/components/icons/Comment.vue'
 import TagPill from '@/components/Tag.vue'
 
-import { Post } from '@/backend/post'
+import { RetrievedPost } from '@/backend/post'
 import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
 import { getProfileFromSession } from '@/store/session'
@@ -109,14 +109,17 @@ export default Vue.extend({
 	},
 	props: {
 		post: {
-			type: Object as () => Post,
+			type: Object as () => RetrievedPost,
+			default: null,
+		},
+		comments: {
+			type: Array as () => Comment[] | null,
 			default: null,
 		},
 		profile: {
 			type: Object as () => Profile,
 			default: null,
 		},
-		cid: { type: String, required: true },
 	},
 	data() {
 		return {
