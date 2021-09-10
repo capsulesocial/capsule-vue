@@ -3,15 +3,13 @@ import { PrivateKey } from './interfaces'
 import { hexStringToUint8Array, uint8ArrayToHexString } from './utilities/helpers'
 
 import { Profile } from './profile'
+import { capsuleServer, capsuleOrbit } from './config'
 export interface Authentication {
 	privateKey: PrivateKey
 	signingKey: PrivateKey
 	id: string
 	nearAccountId: string | null
 }
-
-const serverURL = process.env.SERVER_URL || `https://test-node.capsule.social/server`
-const baseUrl = process.env.ORBIT_URL || `https://test-node.capsule.social/orbit`
 
 async function sendAuthentication(data: Authentication): Promise<boolean> {
 	// Encoding all values to hex
@@ -34,7 +32,7 @@ async function sendAuthentication(data: Authentication): Promise<boolean> {
 			encryptedSigningKeyNonce,
 			accountId: data.nearAccountId,
 		}
-		const response = await axios.post(`${serverURL}/write`, reqData)
+		const response = await axios.post(`${capsuleServer}/write`, reqData)
 		return response.data.status === `OK`
 	} catch {
 		// Unable to send a request!
@@ -65,7 +63,7 @@ async function getAuthentication(
 	// Request body data
 	const reqData = { hp1: hp1Hex, username }
 	try {
-		const response = await axios.post(`${serverURL}/read`, reqData)
+		const response = await axios.post(`${capsuleServer}/read`, reqData)
 		if (response.data.status === `OK`) {
 			const encryptedPeerIDPrivateKey = hexStringToUint8Array(response.data.encryptedPrivateKey)
 			const hp1 = hexStringToUint8Array(response.data.hp1)
@@ -98,7 +96,7 @@ async function getAuthentication(
 
 async function resolveUsername(username: string): Promise<{ success: boolean; accountId: string }> {
 	// Get NEAR AccountId corresponding to a capsule username
-	const requestURL = new URL(`${serverURL}/resolve/${username}`)
+	const requestURL = new URL(`${capsuleServer}/resolve/${username}`)
 	try {
 		const response = await axios.get(requestURL.toString())
 		if (response.data.status === `OK`) {
@@ -115,7 +113,7 @@ async function resolveUsername(username: string): Promise<{ success: boolean; ac
 
 async function sendProfileServer(cid: string, data: Profile): Promise<{ success: boolean; cid: string }> {
 	try {
-		const response = await axios.post(`${baseUrl}/profile`, { cid, data })
+		const response = await axios.post(`${capsuleOrbit}/profile`, { cid, data })
 		if (response.data.success) {
 			return { success: true, cid: response.data.cid }
 		}

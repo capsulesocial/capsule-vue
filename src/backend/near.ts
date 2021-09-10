@@ -2,6 +2,7 @@ import { connect, Contract, keyStores, WalletConnection } from 'near-api-js'
 import { KeyPairEd25519 } from 'near-api-js/lib/utils'
 // eslint-disable-next-line camelcase
 import { base_decode, base_encode } from 'near-api-js/lib/utils/serialize'
+import { domain } from './config'
 
 // Run capsule-vue with NEAR testnet for now
 const nearConfig = {
@@ -13,7 +14,6 @@ const nearConfig = {
 	explorerUrl: `https://explorer.testnet.near.org`,
 }
 
-const domain = process.env.DOMAIN || `http://localhost:3000`
 let _walletConnection: WalletConnection | null = null
 let _contract: Contract | null = null
 
