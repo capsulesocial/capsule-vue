@@ -60,9 +60,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import PostCard from '@/components/post/Card.vue'
-import { getPosts, Post } from '@/backend/post'
-
-type Algorithm = `NEW` | `FOLLOWING` | `TOP`
+import { getPosts, Post, Algorithm } from '@/backend/post'
 
 interface IData {
 	posts: Post[]
@@ -82,7 +80,7 @@ export default Vue.extend({
 		}
 	},
 	async created() {
-		this.posts = await getPosts({})
+		this.posts = await getPosts({}, `NEW`)
 		this.isLoading = false
 	},
 	methods: {
@@ -90,22 +88,8 @@ export default Vue.extend({
 			this.posts = []
 			this.isLoading = true
 			this.algorithm = a
-			this.posts = await getPosts({})
-			switch (a) {
-				case `NEW`:
-					// Get new posts from all following & category feeds and sort by time
-					this.isLoading = false
-					break
-				case `FOLLOWING`:
-					// Get list of accounts being followed
-					this.isLoading = false
-					break
-				case `TOP`:
-					this.isLoading = false
-					break
-				default:
-					throw new Error(`Unexpected algorithm ${a}!`)
-			}
+			this.posts = await getPosts({}, a)
+			this.isLoading = false
 			return this.posts
 		},
 	},
