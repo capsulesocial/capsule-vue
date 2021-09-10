@@ -49,7 +49,7 @@ export default Vue.extend({
 	},
 	async created() {
 		// Fetch posts from Orbit DB by ID
-		this.posts = await getPosts({ category: this.$route.params.category })
+		this.posts = await getPosts({ category: this.$route.params.category }, `NEW`)
 		this.isLoading = false
 	},
 })

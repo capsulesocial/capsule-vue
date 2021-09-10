@@ -18,6 +18,8 @@ export interface Post {
 	tags: Tag[]
 }
 
+export type Algorithm = `NEW` | `FOLLOWING` | `TOP`
+
 const baseUrl = process.env.ORBIT_URL || `https://test-node.capsule.social/orbit`
 
 export function createPost(
@@ -60,8 +62,11 @@ export function getPost(cid: string): Promise<Post> {
 	return ipfs().getJSONData(cid)
 }
 
-export async function getPosts(filter: { category?: string; authorID?: string; tag?: string }): Promise<Post[]> {
-	const res = await axios.get(`${baseUrl}/content`, { params: filter })
+export async function getPosts(
+	filter: { category?: string; authorID?: string; tag?: string },
+	sort?: Algorithm,
+): Promise<Post[]> {
+	const res = await axios.get(`${baseUrl}/content`, { params: { ...filter, sort } })
 	return res.data.data
 }
 

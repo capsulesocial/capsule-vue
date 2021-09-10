@@ -42,7 +42,7 @@ export default Vue.extend({
 	},
 	async created() {
 		// Fetch posts with tag
-		this.posts = await getPosts({ tag: this.$route.params.tag })
+		this.posts = await getPosts({ tag: this.$route.params.tag }, `NEW`)
 		this.isLoading = false
 	},
 })
