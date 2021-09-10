@@ -1,7 +1,7 @@
 import { hexStringToUint8Array, uint8ArrayToHexString } from './utilities/helpers'
-import { PrivateKey } from './interfaces'
+import { PrivateKey } from './utilities/interfaces'
 
-async function hkdf(password: Uint8Array, salt: Uint8Array, info: Uint8Array) {
+export async function hkdf(password: Uint8Array, salt: Uint8Array, info: Uint8Array) {
 	const key = await window.crypto.subtle.importKey(`raw`, password, `HKDF`, false, [`deriveBits`, `deriveKey`])
 
 	const derivedKey = await window.crypto.subtle.deriveBits(
@@ -41,7 +41,7 @@ async function encryptData(key: Uint8Array, data: Uint8Array, nonce: Uint8Array)
 	return encryptedDataBytes
 }
 
-async function decryptData(key: Uint8Array, data: Uint8Array, nonce: Uint8Array) {
+export async function decryptData(key: Uint8Array, data: Uint8Array, nonce: Uint8Array) {
 	const derivedKey = await window.crypto.subtle.importKey(`raw`, key, { name: `AES-GCM` }, false, [
 		`encrypt`,
 		`decrypt`,
@@ -60,7 +60,7 @@ async function decryptData(key: Uint8Array, data: Uint8Array, nonce: Uint8Array)
 	return decryptedDataBytes
 }
 
-async function scrypt(passphrase: Uint8Array, salt: Uint8Array) {
+export async function scrypt(passphrase: Uint8Array, salt: Uint8Array) {
 	const wasm = await import(`scrypt-wasm`)
 
 	const hexSalt = uint8ArrayToHexString(salt)
@@ -72,7 +72,7 @@ async function scrypt(passphrase: Uint8Array, salt: Uint8Array) {
 	return derivedKey
 }
 
-async function getEncryptedPeerIDPrivateKey(
+export async function getEncryptedPeerIDPrivateKey(
 	id: string,
 	password: string,
 	saltScrypt: string,
@@ -94,5 +94,3 @@ async function getEncryptedPeerIDPrivateKey(
 	const privKey: PrivateKey = { encryptedPeerIDPrivateKey, hp1, nonce }
 	return privKey
 }
-
-export { getEncryptedPeerIDPrivateKey, hkdf, scrypt, decryptData }

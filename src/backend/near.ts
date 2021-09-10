@@ -2,7 +2,7 @@ import { connect, Contract, keyStores, WalletConnection } from 'near-api-js'
 import { KeyPairEd25519 } from 'near-api-js/lib/utils'
 // eslint-disable-next-line camelcase
 import { base_decode, base_encode } from 'near-api-js/lib/utils/serialize'
-import { domain } from './config'
+import { domain } from './utilities/config'
 
 // Run capsule-vue with NEAR testnet for now
 const nearConfig = {
@@ -17,7 +17,7 @@ const nearConfig = {
 let _walletConnection: WalletConnection | null = null
 let _contract: Contract | null = null
 
-async function initContract() {
+export async function initContract() {
 	// Initialize connection to the NEAR network
 	const near = await connect({ deps: { keyStore: new keyStores.BrowserLocalStorageKeyStore() }, ...nearConfig })
 
@@ -31,21 +31,21 @@ async function initContract() {
 	})
 }
 
-function getContract() {
+export function getContract() {
 	if (!_contract) {
 		throw new Error(`Contract not yet initialised!`)
 	}
 	return _contract
 }
 
-function getWalletConnection() {
+export function getWalletConnection() {
 	if (!_walletConnection) {
 		throw new Error(`Wallet Connection not yet initialised!`)
 	}
 	return _walletConnection
 }
 
-async function walletLogin() {
+export async function walletLogin() {
 	const walletConnection = getWalletConnection()
 	if (!walletConnection.isSignedIn()) {
 		// Redirects to wallet login page
@@ -54,19 +54,19 @@ async function walletLogin() {
 	}
 }
 
-function walletLogout() {
+export function walletLogout() {
 	const walletConnection = getWalletConnection()
 	if (walletConnection.isSignedIn()) {
 		walletConnection.signOut()
 	}
 }
 
-function signedInToWallet() {
+export function signedInToWallet() {
 	const walletConnection = getWalletConnection()
 	return walletConnection.isSignedIn()
 }
 
-async function getNearPrivateKey() {
+export async function getNearPrivateKey() {
 	const walletConnection = getWalletConnection()
 	const accountId = walletConnection.getAccountId()
 
@@ -79,7 +79,7 @@ async function getNearPrivateKey() {
 	return privateKeyBytes
 }
 
-async function setNearPrivateKey(privateKey: Uint8Array, accountId: string) {
+export async function setNearPrivateKey(privateKey: Uint8Array, accountId: string) {
 	const encodedPrivateKey = base_encode(privateKey)
 	const keypair = new KeyPairEd25519(encodedPrivateKey)
 
@@ -88,22 +88,10 @@ async function setNearPrivateKey(privateKey: Uint8Array, accountId: string) {
 	return true
 }
 
-async function removeNearPrivateKey() {
+export async function removeNearPrivateKey() {
 	const walletConnection = getWalletConnection()
 	const accountId = walletConnection.getAccountId()
 
 	const keystore = new keyStores.BrowserLocalStorageKeyStore()
 	await keystore.removeKey(nearConfig.networkId, accountId)
-}
-
-export {
-	getWalletConnection,
-	getContract,
-	walletLogout,
-	signedInToWallet,
-	getNearPrivateKey,
-	setNearPrivateKey,
-	initContract,
-	removeNearPrivateKey,
-	walletLogin,
 }
