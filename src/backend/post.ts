@@ -3,7 +3,6 @@ import axios from 'axios'
 import { signContent } from './keys'
 import ipfs from './utilities/ipfs'
 import { uint8ArrayToHexString } from './utilities/helpers'
-
 export interface Tag {
 	name: string
 }
@@ -16,6 +15,14 @@ export interface Post {
 	featuredPhotoCID?: string | null
 	timestamp: number
 	tags: Tag[]
+}
+
+export type RetrievedPost = Omit<Post, `content`> & { _id: string }
+
+export interface IPostResponse {
+	post: RetrievedPost
+	comments: Comment[]
+	usersParticipating: string[]
 }
 
 export type Algorithm = `NEW` | `FOLLOWING` | `TOP`
@@ -65,7 +72,7 @@ export function getPost(cid: string): Promise<Post> {
 export async function getPosts(
 	filter: { category?: string; authorID?: string; tag?: string },
 	sort?: Algorithm,
-): Promise<Post[]> {
+): Promise<IPostResponse[]> {
 	const res = await axios.get(`${baseUrl}/content`, { params: { ...filter, sort } })
 	return res.data.data
 }
