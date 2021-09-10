@@ -9,6 +9,4 @@ function _getPhotoFromIPFS(cid: string) {
 	return ipfs().getData(cid)
 }
 
-const getPhotoFromIPFS = cache(_getPhotoFromIPFS)
-
-export { getPhotoFromIPFS }
+export const getPhotoFromIPFS = cache(_getPhotoFromIPFS)

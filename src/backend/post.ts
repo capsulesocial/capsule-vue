@@ -3,7 +3,7 @@ import axios from 'axios'
 import { signContent } from './keys'
 import ipfs from './utilities/ipfs'
 import { uint8ArrayToHexString } from './utilities/helpers'
-import { capsuleOrbit } from './config'
+import { capsuleOrbit } from './utilities/config'
 export interface Tag {
 	name: string
 }

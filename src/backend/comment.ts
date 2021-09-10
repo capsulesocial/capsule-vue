@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { capsuleOrbit } from './config'
+import { capsuleOrbit } from './utilities/config'
 import ipfs from './utilities/ipfs'
 
 export interface INewCommentData {
