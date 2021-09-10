@@ -10,7 +10,7 @@
 			<div v-if="this.$props.showIcons" class="shadow-lg rounded-full bg-primary p-3 items-center">
 				<FollowIcon class="text-white" />
 			</div>
-			<span v-else class="text-white text-bold rounded-lg text-sm bg-primary shadow-lg px-4 py-2">Follow</span>
+			<span v-else class="text-white text-bold rounded-full text-sm bg-primary shadow-lg px-4 py-1">Follow</span>
 		</div>
 	</button>
 </template>

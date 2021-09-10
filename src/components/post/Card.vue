@@ -11,20 +11,29 @@
 			<!-- Left side -->
 			<div class="flex flex-col flex-grow">
 				<!-- Top: Name, ID, avatar, timestamp -->
-				<nuxt-link :to="'/' + this.post.authorID" class="w-full flex flex-row">
-					<img v-if="this.avatar !== ``" :src="this.avatar" class="w-16 h-16 rounded-lg object-cover" />
-					<ProfileIcon v-else class="w-16 h-16 border-2 rounded-full" />
+				<div class="w-full flex flex-row">
+					<nuxt-link :to="'/' + this.post.authorID">
+						<img v-if="this.avatar !== ``" :src="this.avatar" class="w-16 h-16 rounded-lg object-cover" />
+						<ProfileIcon v-else class="w-16 h-16 border-2 rounded-full" />
+					</nuxt-link>
 					<div class="ml-4">
 						<!-- Name, ID -->
-						<h4
-							:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-							class="font-medium text-lg truncate"
-						>
-							{{ this.authorName }}
-						</h4>
-						<h5 :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'">
-							@{{ this.post.authorID }}
-						</h5>
+						<div class="flex flex-row flex-no-wrap">
+							<nuxt-link :to="'/' + this.post.authorID">
+								<h4
+									:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+									class="font-medium text-lg mr-4"
+								>
+									{{ this.authorName }}
+								</h4>
+							</nuxt-link>
+							<FriendButton v-if="this.post.authorID !== this.$store.state.session.id" :small="true" />
+						</div>
+						<nuxt-link :to="'/' + this.post.authorID">
+							<h5 :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'">
+								@{{ this.post.authorID }}
+							</h5>
+						</nuxt-link>
 						<!-- Timestamp -->
 						<h6
 							:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
@@ -33,29 +42,37 @@
 							{{ this.$formatDate(this.post.timestamp) }}
 						</h6>
 					</div>
-				</nuxt-link>
+				</div>
 				<!-- Bottom: Post Preview title -->
-				<nuxt-link :to="'/post/' + this.post._id" class="flex justify-between mt-4">
+				<nuxt-link :to="'/post/' + this.post._id" class="flex flex-col mt-4" style="width: 350px">
 					<h3
 						:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-						class="text-base font-semibold capitalize"
+						class="text-lg font-semibold capitalize truncate"
 					>
 						{{ this.post.title }}
 					</h3>
+					<h6 class="text-base text-lightSecondaryText truncate">
+						This is placeholder text for the subtitle even if it is very long
+					</h6>
 				</nuxt-link>
 			</div>
 			<!-- Right side: Featured Photo -->
-			<nuxt-link :to="'/post/' + this.post._id" class="flex justify-between">
-				<img
-					v-if="this.featuredPhoto !== ``"
-					:src="this.featuredPhoto"
-					class="h-full w-48 object-scale-down object-top"
-				/>
-			</nuxt-link>
+			<div class="flex flex-col w-32 h-32">
+				<div v-if="this.post.authorID !== this.$store.state.session.id" class="h-10 flex flex-row-reverse">
+					<XIcon />
+				</div>
+				<nuxt-link :to="'/post/' + this.post._id" class="flex">
+					<img
+						v-if="this.featuredPhoto !== ``"
+						:src="this.featuredPhoto"
+						class="w-full h-24 object-contain rounded-lg"
+					/>
+				</nuxt-link>
+			</div>
 		</div>
 		<!-- Actions -->
 		<div class="flex justify-between mt-2">
-			<div class="flex items-end">
+			<div class="flex items-end pt-4 mt-1">
 				<button
 					class="flex items-end focus:outline-none mr-2"
 					:class="this.getStyles()"
@@ -91,6 +108,8 @@ import BookmarkButton from '@/components/post/BookmarkButton.vue'
 import Share from '@/components/post/Share.vue'
 import CommentIcon from '@/components/icons/Comment.vue'
 import TagPill from '@/components/Tag.vue'
+import XIcon from '@/components/icons/X.vue'
+import FriendButton from '@/components/FriendButton.vue'
 
 import { RetrievedPost } from '@/backend/post'
 import { getProfile, Profile } from '@/backend/profile'
@@ -106,6 +125,8 @@ export default Vue.extend({
 		Share,
 		CommentIcon,
 		TagPill,
+		XIcon,
+		FriendButton,
 	},
 	props: {
 		post: {

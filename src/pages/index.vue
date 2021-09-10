@@ -12,7 +12,7 @@
 						<TwitterIcon />
 					</a>
 
-					<a href="https://discord.gg/sZWjf3E6bY" target="_blank" class="ml-5 bg-white rounded-lg">
+					<a href="https://discord.gg/sZWjf3E6bY" target="_blank" class="ml-6 bg-white rounded-lg">
 						<DiscordIcon class="w-24" />
 					</a>
 				</div>
