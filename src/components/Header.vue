@@ -9,7 +9,7 @@
 				<CapsuleIcon class="lg:pl-5 lg:ml-1" />
 			</nuxt-link>
 			<div
-				class="hidden lg:flex md:pl-8 xl:pl-0"
+				class="hidden lg:flex lg:pl-8 xl:pl-0"
 				:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 			>
 				<button class="focus:outline-none" @click="$router.go(-1)">
@@ -22,12 +22,11 @@
 		</div>
 
 		<!-- Top Right -->
-		<article
-			class="relative hidden md:flex justify-between lg:justify-end items-center"
-			:style="this.$props.extended ? `width: 840px` : `width: 600px`"
-		>
+		<article class="" style="width: 600px"></article>
+
+		<div style="width: 240px" class="relative hidden lg:flex items-center">
 			<div
-				class="flex lg:hidden md:pl-8 xl:pl-0"
+				class="flex lg:hidden lg:pl-8 xl:pl-0"
 				:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 			>
 				<button class="focus:outline-none" @click="$router.go(-1)">
@@ -38,7 +37,7 @@
 				</button>
 			</div>
 
-			<div class="flex items-center">
+			<div class="hidden lg:flex items-center justify-between" style="width: 150px">
 				<span>
 					<button
 						class="bg-gray1 rounded-full focus:outline-none flex justify-center shadow-lg"
@@ -94,9 +93,7 @@
 					<span></span>
 				</button>
 			</div>
-		</article>
-
-		<div :class="this.$props.extended ? `hidden` : ``" style="width: 240px"></div>
+		</div>
 	</header>
 </template>
 
@@ -127,12 +124,6 @@ export default Vue.extend({
 		UpIcon,
 		HelpIcon,
 		LogoutIcon,
-	},
-	props: {
-		extended: {
-			type: Boolean,
-			default: false,
-		},
 	},
 	data() {
 		return {

@@ -1,7 +1,7 @@
 <template>
 	<div class="w-full">
-		<section style="width: 840px">
-			<article style="width: 840px" class="flex flex-col md:flex-row justify-between mb-1 items-center mt-3">
+		<section style="width: 750px">
+			<article style="width: 750px" class="flex flex-col md:flex-row justify-between mb-1 items-center mt-3">
 				<!-- Tag title and filter dropdown -->
 				<div class="flex flex-row justify-between w-full">
 					<h2
@@ -61,7 +61,7 @@
 			</div>
 		</section>
 
-		<section style="width: 840px">
+		<section style="width: 750px">
 			<article class="mb-1 mt-3">
 				<h2
 					:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
@@ -112,7 +112,6 @@ export default Vue.extend({
 		ChevronUp,
 		ChevronDown,
 	},
-	layout: `Extended`,
 	data(): IData {
 		return {
 			categoryList: categories,
