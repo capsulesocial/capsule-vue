@@ -6,73 +6,61 @@
 			this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText border border-darkBorder'
 		"
 	>
-		<!-- Post Preview Card -->
-		<div class="flex flex-row h-32">
-			<!-- Left side -->
-			<div class="flex flex-col flex-grow">
-				<!-- Top: Name, ID, avatar, timestamp -->
-				<div class="w-full flex flex-row">
-					<nuxt-link :to="'/' + this.post.authorID">
-						<img v-if="this.avatar !== ``" :src="this.avatar" class="w-16 h-16 rounded-lg object-cover" />
-						<ProfileIcon v-else class="w-16 h-16 border-2 rounded-full" />
-					</nuxt-link>
-					<div class="ml-4">
-						<!-- Name, ID -->
-						<div class="flex flex-row flex-no-wrap">
-							<nuxt-link :to="'/' + this.post.authorID">
-								<h4
-									:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-									class="font-medium text-lg mr-4"
-								>
-									{{ this.authorName }}
-								</h4>
-							</nuxt-link>
-							<FriendButton v-if="this.post.authorID !== this.$store.state.session.id" :small="true" />
-						</div>
-						<nuxt-link :to="'/' + this.post.authorID">
-							<h5 :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'">
-								@{{ this.post.authorID }}
-							</h5>
-						</nuxt-link>
-						<!-- Timestamp -->
-						<h6
-							:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-							class="text-xs"
+		<!-- Top: avatar, name, id, close -->
+		<div class="flex w-full">
+			<nuxt-link :to="'/' + this.post.authorID" class="flex">
+				<img v-if="this.avatar !== ``" :src="this.avatar" class="w-12 h-12 rounded-lg object-cover" />
+				<ProfileIcon v-else class="w-12 h-12 border-2 rounded-full" />
+			</nuxt-link>
+			<div class="flex flex-col flex-grow ml-4">
+				<div class="flex">
+					<nuxt-link :to="'/' + this.post.authorID" class="flex mr-4">
+						<span
+							:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+							class="font-medium text-base"
 						>
-							{{ this.$formatDate(this.post.timestamp) }}
-						</h6>
-					</div>
+							{{ this.authorName }}
+						</span>
+						<span
+							:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+							class="ml-2"
+						>
+							@{{ this.post.authorID }}
+						</span>
+					</nuxt-link>
+					<FriendButton v-if="this.post.authorID !== this.$store.state.session.id" :small="true" />
 				</div>
-				<!-- Bottom: Post Preview title -->
-				<nuxt-link :to="'/post/' + this.post._id" class="flex flex-col mt-4" style="width: 350px">
-					<h3
-						:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-						class="text-lg font-semibold capitalize truncate"
-					>
+				<!-- Timestamp -->
+				<div class="text-xs ml-14">
+					{{ this.$formatDate(this.post.timestamp) }}
+				</div>
+			</div>
+			<span v-if="this.post.authorID !== this.$store.state.session.id" class="h-10 flex flex-row-reverse">
+				<XIcon />
+			</span>
+		</div>
+		<!-- Content -->
+		<div class="my-4">
+			<!-- Content -->
+			<nuxt-link :to="'/post/' + this.post._id" class="flex justify-between">
+				<div class="flex flex-col pr-4">
+					<h3 class="text-lg font-semibold capitalize pb-2">
 						{{ this.post.title }}
 					</h3>
-					<h6 class="text-base text-lightSecondaryText truncate">
-						This is placeholder text for the subtitle even if it is very long
+					<h6 :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'">
+						Here is my awesome subtitle that gives a preview of this post to potential readers. Click here to read!
 					</h6>
-				</nuxt-link>
-			</div>
-			<!-- Right side: Featured Photo -->
-			<div class="flex flex-col w-32 h-32">
-				<div v-if="this.post.authorID !== this.$store.state.session.id" class="h-10 flex flex-row-reverse">
-					<XIcon />
 				</div>
-				<nuxt-link :to="'/post/' + this.post._id" class="flex">
-					<img
-						v-if="this.featuredPhoto !== ``"
-						:src="this.featuredPhoto"
-						class="w-full h-24 object-contain rounded-lg"
-					/>
-				</nuxt-link>
-			</div>
+				<img
+					v-if="this.featuredPhoto !== ``"
+					:src="this.featuredPhoto"
+					class="flex-shrink-0 h-24 object-contain rounded-lg"
+				/>
+			</nuxt-link>
 		</div>
 		<!-- Actions -->
-		<div class="flex justify-between mt-2">
-			<div class="flex items-end pt-4 mt-1">
+		<div class="flex justify-between">
+			<div class="flex items-end mt-1">
 				<button
 					class="flex items-end focus:outline-none mr-2"
 					:class="this.getStyles()"
