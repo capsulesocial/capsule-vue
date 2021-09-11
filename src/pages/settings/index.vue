@@ -1,6 +1,6 @@
 <template>
 	<main class="w-full border-l">
-		<section class="flex">
+		<section class="flex" style="width: 750px">
 			<!-- Left column: Select tab -->
 			<article
 				style="width: 240px"
@@ -43,7 +43,7 @@
 			</article>
 
 			<!-- Right column: Show details -->
-			<div style="width: 600px">
+			<div style="width: 510px">
 				<article v-if="this.tab === 'account'" class="col-span-2 border-r border-l h-full">
 					<!-- General Settings (Username, ID, Email) -->
 					<h2
@@ -317,7 +317,6 @@ export default Vue.extend({
 		UploadAvatar,
 		ColorMode,
 	},
-	layout: `Extended`,
 	data(): IData {
 		return {
 			newName: ``,

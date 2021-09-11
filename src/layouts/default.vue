@@ -7,7 +7,7 @@
 			<!-- Main Content -->
 			<Nuxt class="mb-20 md:mb-5 md:min-w-max" style="width: 600px" />
 			<!-- Featured Tags -->
-			<div style="width: 240px">
+			<div class="hidden lg:block" style="width: 240px">
 				<Trending
 					v-if="this.$route.name === `home` || this.$route.name === `tag` || this.$route.name === `discover-category`"
 				/>
