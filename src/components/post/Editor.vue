@@ -396,6 +396,7 @@ export default Vue.extend({
 				this.input = this.turndownService.turndown(clean)
 				const p = createPost(
 					this.title,
+					this.subtitle,
 					this.input,
 					this.category,
 					this.$store.state.draft.tags,
@@ -405,6 +406,7 @@ export default Vue.extend({
 				const cid = await sendPost(p)
 				this.appendPostCID(cid)
 				this.title = ``
+				this.subtitle = ``
 				this.input = ``
 				this.$store.commit(`draft/reset`)
 				this.$store.commit(`settings/setRecentlyPosted`, true)
@@ -414,6 +416,7 @@ export default Vue.extend({
 		updateStore(): void {
 			this.input = this.editor.getContent()
 			this.$store.commit(`draft/updateTitle`, this.title)
+			this.$store.commit(`draft/updateSubtitle`, this.subtitle)
 			this.$store.commit(`draft/updateContent`, this.input)
 			this.$store.commit(`draft/updateCategory`, this.category)
 			this.$router.go(-1)

@@ -20,6 +20,12 @@
 				>
 					{{ this.post.title }}
 				</h1>
+				<h2
+					:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+					class="font-serif text-2xl capitalize leading-loose"
+				>
+					{{ this.post.subtitle }}
+				</h2>
 			</article>
 
 			<!-- Author Intro -->
