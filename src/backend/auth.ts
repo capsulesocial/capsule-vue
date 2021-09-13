@@ -76,37 +76,38 @@ async function login(
 
 	// Authenticate with server to get encrypted PeerIDPrivateKey
 	const { success, auth } = await getAuthentication(username, nearKey.hp1)
-
-	// Check if authentication was successful
 	if (
-		success &&
-		uint8ArrayToHexString(auth.signingKey.hp1) === uint8ArrayToHexString(contentKey.hp1) &&
-		auth.nearAccountId
+		!success ||
+		!(uint8ArrayToHexString(auth.signingKey.hp1) === uint8ArrayToHexString(contentKey.hp1)) ||
+		!auth.nearAccountId
 	) {
-		const [privateKeyBytes, nearProfile, signingKeyBytes] = await Promise.all([
-			decryptData(peerIDEncryptionKey, auth.privateKey.encryptedPeerIDPrivateKey, auth.privateKey.nonce),
-			getProfileNEAR(username),
-			decryptData(encryptionKey, auth.signingKey.encryptedPeerIDPrivateKey, auth.signingKey.nonce),
-		])
-		if (nearProfile.success) {
-			// Set Signing Key in localStorage
-			setSigningKey(username, signingKeyBytes)
-			const isKeySet = await setNearPrivateKey(privateKeyBytes, auth.nearAccountId)
-			if (isKeySet) {
-				const value = {
-					accountId: auth.nearAccountId,
-					allKeys: [],
-				}
-				window.localStorage.setItem(`null_wallet_auth_key`, JSON.stringify(value))
-				// Reinitialise Smart Contract API
-				await initContract()
-				const profile = await loadProfileFromIPFS(nearProfile.profileCID)
-				return { success, profile, profileCID: nearProfile.profileCID }
-			}
-		}
+		throw new Error(`Authentication failed!`)
 	}
 
-	throw new Error(`Authentication failed!`)
+	// Check if authentication was successful
+	const [privateKeyBytes, nearProfile, signingKeyBytes] = await Promise.all([
+		decryptData(peerIDEncryptionKey, auth.privateKey.encryptedPeerIDPrivateKey, auth.privateKey.nonce),
+		getProfileNEAR(username),
+		decryptData(encryptionKey, auth.signingKey.encryptedPeerIDPrivateKey, auth.signingKey.nonce),
+	])
+	if (!nearProfile.success) {
+		throw new Error(`Error on getProfileNEAR`)
+	}
+	// Set Signing Key in localStorage
+	setSigningKey(username, signingKeyBytes)
+	const isKeySet = await setNearPrivateKey(privateKeyBytes, auth.nearAccountId)
+	if (!isKeySet) {
+		throw new Error(`Error on setNearPrivateKey`)
+	}
+	const value = {
+		accountId: auth.nearAccountId,
+		allKeys: [],
+	}
+	window.localStorage.setItem(`null_wallet_auth_key`, JSON.stringify(value))
+	// Reinitialise Smart Contract API
+	await initContract()
+	const profile = await loadProfileFromIPFS(nearProfile.profileCID)
+	return { success, profile, profileCID: nearProfile.profileCID }
 }
 
 export { register, login }
