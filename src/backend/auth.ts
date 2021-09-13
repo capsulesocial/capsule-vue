@@ -7,7 +7,7 @@ import { getProfileNEAR, loadProfileFromIPFS, Profile, setProfile } from './prof
 import { uint8ArrayToHexString } from './utilities/helpers'
 
 // POST newly created account to IPFS
-async function register(
+export async function register(
 	id: string,
 	password: string,
 	name: string,
@@ -56,7 +56,7 @@ async function register(
 	return { cid, profile }
 }
 
-async function login(
+export async function login(
 	username: string,
 	password: string,
 ): Promise<{ success: boolean; profile: Profile; profileCID: string }> {
@@ -109,5 +109,3 @@ async function login(
 	const profile = await loadProfileFromIPFS(nearProfile.profileCID)
 	return { success, profile, profileCID: nearProfile.profileCID }
 }
-
-export { register, login }
