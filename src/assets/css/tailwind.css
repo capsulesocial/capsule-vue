@@ -101,10 +101,10 @@
 		@apply text-primary;
 	}
 	.editable p {
-		@apply text-base font-normal leading-relaxed text-lg mt-1;
+		@apply text-base font-normal leading-relaxed mt-2;
 	}
 	blockquote {
-		@apply pl-2 border-l-2 border-primary text-xl leading-8 py-2 mt-1;
+		@apply pl-2 border-l-2 border-primary text-xl leading-8 py-1 mt-1;
 	}
 	.medium-toolbar-arrow-under:after {
 		@apply bg-transparent;
