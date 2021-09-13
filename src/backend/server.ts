@@ -1,9 +1,8 @@
 import axios from 'axios'
-import { PrivateKey } from './interfaces'
+import { PrivateKey } from './utilities/interfaces'
 import { hexStringToUint8Array, uint8ArrayToHexString } from './utilities/helpers'
 
-import { Profile } from './profile'
-import { capsuleServer, capsuleOrbit } from './config'
+import { capsuleServer } from './utilities/config'
 export interface Authentication {
 	privateKey: PrivateKey
 	signingKey: PrivateKey
@@ -11,7 +10,7 @@ export interface Authentication {
 	nearAccountId: string | null
 }
 
-async function sendAuthentication(data: Authentication): Promise<boolean> {
+export async function sendAuthentication(data: Authentication): Promise<boolean> {
 	// Encoding all values to hex
 	const encryptedPrivateKeyNonce = uint8ArrayToHexString(data.privateKey.nonce)
 	const encryptedPrivateKey = uint8ArrayToHexString(data.privateKey.encryptedPeerIDPrivateKey)
@@ -40,7 +39,7 @@ async function sendAuthentication(data: Authentication): Promise<boolean> {
 	return false
 }
 
-async function getAuthentication(
+export async function getAuthentication(
 	username: string,
 	hp1Send: Uint8Array,
 ): Promise<{ success: boolean; auth: Authentication }> {
@@ -94,7 +93,7 @@ async function getAuthentication(
 	return { success: false, auth: defaultAuth }
 }
 
-async function resolveUsername(username: string): Promise<{ success: boolean; accountId: string }> {
+export async function resolveUsername(username: string): Promise<{ success: boolean; accountId: string }> {
 	// Get NEAR AccountId corresponding to a capsule username
 	const requestURL = new URL(`${capsuleServer}/resolve/${username}`)
 	try {
@@ -110,19 +109,3 @@ async function resolveUsername(username: string): Promise<{ success: boolean; ac
 	}
 	return { success: false, accountId: `` }
 }
-
-async function sendProfileServer(cid: string, data: Profile): Promise<{ success: boolean; cid: string }> {
-	try {
-		const response = await axios.post(`${capsuleOrbit}/profile`, { cid, data })
-		if (response.data.success) {
-			return { success: true, cid: response.data.cid }
-		}
-		throw new Error(`Failed to send Profile`)
-	} catch (error) {
-		// eslint-disable-next-line no-console
-		console.log(error)
-	}
-	return { success: false, cid: `` }
-}
-
-export { sendAuthentication, getAuthentication, resolveUsername, sendProfileServer }

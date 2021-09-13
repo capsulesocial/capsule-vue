@@ -13,12 +13,12 @@ function getSignKeyPair(username: string) {
 	return null
 }
 
-function removeSigningKey(username: string) {
+export function removeSigningKey(username: string) {
 	// Remove signing key from localStorage
 	window.localStorage.removeItem(`content_signing_key_${username}`)
 }
 
-function signContent(content: Post, username: string) {
+export function signContent(content: Post, username: string) {
 	const ec = new TextEncoder()
 	const keypair = getSignKeyPair(username)
 	if (keypair) {
@@ -28,13 +28,13 @@ function signContent(content: Post, username: string) {
 	return null
 }
 
-function verifyContent(content: Post, signature: Uint8Array, publicKey: Uint8Array) {
+export function verifyContent(content: Post, signature: Uint8Array, publicKey: Uint8Array) {
 	const ec = new TextEncoder()
 	const message = ec.encode(JSON.stringify(content))
 	return nacl.sign.detached.verify(message, signature, publicKey)
 }
 
-function getSigningKey(username: string) {
+export function getSigningKey(username: string) {
 	const keypair = getSignKeyPair(username)
 	if (keypair) {
 		return keypair.secretKey
@@ -42,15 +42,15 @@ function getSigningKey(username: string) {
 	return null
 }
 
-function getPublicKey(username: string) {
-	const keypair = getSignKeyPair(username)
-	if (keypair) {
-		return keypair.publicKey
-	}
-	return null
-}
+// function getPublicKey(username: string) {
+// 	const keypair = getSignKeyPair(username)
+// 	if (keypair) {
+// 		return keypair.publicKey
+// 	}
+// 	return null
+// }
 
-function genAndSetSigningKey(username: string) {
+export function genAndSetSigningKey(username: string) {
 	// Generate an Ed25519 keypair and
 	// store it in localStorage
 	const keypair = nacl.sign.keyPair()
@@ -58,10 +58,8 @@ function genAndSetSigningKey(username: string) {
 	return keypair.publicKey
 }
 
-function setSigningKey(username: string, privateKey: Uint8Array) {
+export function setSigningKey(username: string, privateKey: Uint8Array) {
 	// Store hex-encoded private key in localStorage
 	const encodedPrivateKey = uint8ArrayToHexString(privateKey)
 	window.localStorage.setItem(`content_signing_key_${username}`, encodedPrivateKey)
 }
-
-export { genAndSetSigningKey, setSigningKey, getPublicKey, getSigningKey, signContent, verifyContent, removeSigningKey }

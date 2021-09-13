@@ -185,19 +185,11 @@ import CapsuleIcon from '@/components/icons/Capsule.vue'
 import TwitterIcon from '@/components/icons/brands/Twitter.vue'
 import DiscordIcon from '@/components/icons/brands/Discord.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
-import {
-	MutationType,
-	createDefaultSession,
-	getProfileFromSession,
-	createSessionFromProfile,
-	namespace as sessionStoreNamespace,
-} from '~/store/session'
+import { MutationType, createSessionFromProfile, namespace as sessionStoreNamespace } from '~/store/session'
 
 import { signedInToWallet } from '@/backend/near'
-import { sendProfileServer } from '@/backend/server'
-import { genAndSetSigningKey, removeSigningKey } from '@/backend/keys'
+import { removeSigningKey } from '@/backend/keys'
 import { login, register } from '@/backend/auth'
-import { addProfileToIPFS, loadProfileFromIPFS } from '@/backend/profile'
 
 interface IData {
 	isLogin: boolean
@@ -267,11 +259,12 @@ export default Vue.extend({
 			}
 			// Login
 			if (this.isLogin) {
-				const { success, profileCID } = await login(this.id, this.password)
-				if (success && signedInToWallet()) {
-					const backendProfile = await loadProfileFromIPFS(profileCID)
+				try {
+					const { profile: backendProfile, profileCID } = await login(this.id, this.password)
+					if (!signedInToWallet()) {
+						throw new Error(`Authentication failed!`)
+					}
 					const account = createSessionFromProfile(profileCID, backendProfile)
-					account.cid = profileCID
 					this.changeCID(profileCID)
 					this.changeID(account.id)
 					this.changeName(account.name)
@@ -281,8 +274,8 @@ export default Vue.extend({
 					this.changeLocation(account.location)
 					this.changePublicKey(account.publicKey)
 					this.$router.push(`/settings`)
-				} else {
-					alert(`Authentication failed!`)
+				} catch (err) {
+					alert(err.message)
 				}
 			} else {
 				// Registration
@@ -295,36 +288,23 @@ export default Vue.extend({
 					return
 				}
 				if (this.password === this.confirmPassword) {
-					// Generate a new keypair for content-signing when a user registers
-					// and store it in localStorage
-					const pubkey = genAndSetSigningKey(this.id)
-					// Store hex-encoded content-signing public key in Session
-					const account = createDefaultSession(this.id, this.name, this.email, Buffer.from(pubkey).toString(`hex`))
-					// Send user profile to IPFS
-					const cid = await addProfileToIPFS(getProfileFromSession(account))
-					const serverProfile = await sendProfileServer(cid, getProfileFromSession(account))
-					if (!serverProfile.success) {
-						// Remove content-signing key from localStorage
-						// in case registration is unsuccessful
-						removeSigningKey(this.id)
-						alert(`Invalid entry`)
-						return
-					}
-					account.cid = cid
-					const _res = await register(this.id, this.password, cid)
-					if (_res === true) {
+					try {
+						const { cid, profile } = await register(this.id, this.password, this.name, this.email)
 						// Registration successful
+						const account = createSessionFromProfile(cid, profile)
 						this.changeCID(cid)
-						this.changeID(this.id)
-						this.changeName(this.name)
-						this.changeEmail(this.email)
+						this.changeID(account.id)
+						this.changeName(account.name)
+						this.changeEmail(account.email)
+						this.changeAvatar(account.avatar)
+						this.changeBio(account.bio)
+						this.changeLocation(account.location)
 						this.changePublicKey(account.publicKey)
 						this.$router.push(`/settings`)
-					} else {
-						// Remove content-signing key from localStorage
-						// in case registration is unsuccessful
+					} catch (err) {
 						removeSigningKey(this.id)
 						alert(`Registration Unsuccessful!`)
+						throw err
 					}
 				} else {
 					alert(`Password mismatch!`)
