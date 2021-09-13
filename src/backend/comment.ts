@@ -1,6 +1,8 @@
 import axios from 'axios'
 import { capsuleOrbit } from './utilities/config'
 import ipfs from './utilities/ipfs'
+import { signContent } from './keys'
+import { uint8ArrayToHexString } from './utilities/helpers'
 
 export interface INewCommentData {
 	content: string
@@ -32,8 +34,19 @@ export function getComment(cid: string): Promise<INewCommentData> {
 }
 
 export async function sendComment(c: INewCommentData, type: `comment` | `reply`) {
+	const signature = signContent(c, c.authorID)
+
+	if (!signature) {
+		throw new Error(`Comment signing failed`)
+	}
+
 	const cid = await ipfs().sendJSONData(c)
-	await axios.post(`${capsuleOrbit}/content/${c.parentCID}/comments`, { cid, data: c, sig: `whatever`, type })
+	await axios.post(`${capsuleOrbit}/content/${c.parentCID}/comments`, {
+		cid,
+		data: c,
+		sig: uint8ArrayToHexString(signature),
+		type,
+	})
 	return cid
 }
 
