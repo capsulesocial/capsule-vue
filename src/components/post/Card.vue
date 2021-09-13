@@ -48,7 +48,7 @@
 						{{ this.post.title }}
 					</h3>
 					<h6 :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'">
-						Subtitle goes here.
+						{{ this.post.subtitle }}
 					</h6>
 				</div>
 				<img

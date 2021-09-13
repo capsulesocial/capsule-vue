@@ -24,20 +24,34 @@
 					</div>
 					<h6 class="text-primary capitalize text-sm">{{ this.category === `` ? 'Category' : this.category }}</h6>
 				</article>
-				<!-- Title, author -->
+				<!-- Title, subtitle -->
 				<article class="flex justify-between px-5">
 					<label for="title" class="hidden">Title</label>
 					<input
 						v-model="title"
 						type="text"
 						placeholder="Enter Title"
-						:class="
-							this.$store.state.settings.darkMode
-								? 'text-lightPrimaryText bg-lightBG placeholder-lightSecondaryText'
-								: 'text-darkPrimaryText bg-darkBG placeholder-darkSecondaryText'
-						"
-						class="font-serif text-3xl leading-loose focus:outline-none w-full pb-2"
+						maxlength="90"
+						:class="getStyle(this.title.length)"
+						class="font-serif leading-loose focus:outline-none w-full pb-2"
 					/>
+					<span v-if="this.title.length < 12" class="w-24 self-center text-xs text-right text-lightError font-sans"
+						>Too short!</span
+					>
+				</article>
+				<article class="flex justify-between px-5">
+					<label for="subtitle" class="hidden">Subtitle</label>
+					<input
+						v-model="subtitle"
+						type="text"
+						placeholder="Enter Subtitle"
+						maxlength="90"
+						:class="getStyle(this.subtitle.length)"
+						class="font-serif leading-loose text-lightSecondaryText focus:outline-none w-full pb-2"
+					/>
+					<span v-if="this.subtitle.length < 12" class="w-24 self-center text-xs text-right text-lightError font-sans"
+						>Too short!</span
+					>
 				</article>
 
 				<!-- WYSIWYG -->
@@ -214,6 +228,7 @@ import { addPhotoToIPFS, getPhotoFromIPFS } from '@/backend/photos'
 interface IData {
 	categoryList: string[]
 	title: string
+	subtitle: string
 	input: string
 	tag: string
 	featuredPhoto: null | any
@@ -249,6 +264,7 @@ export default Vue.extend({
 		return {
 			categoryList: categories,
 			title: this.$store.state.draft.title,
+			subtitle: this.$store.state.draft.subtitle,
 			input,
 			tag: ``,
 			featuredPhoto: null,
@@ -367,8 +383,10 @@ export default Vue.extend({
 			this.featuredPhoto = await getPhotoFromIPFS(cid)
 		},
 		async post(): Promise<void> {
-			if (!this.$qualityText(this.title)) {
+			if (!this.$qualityText(this.title) || this.title.length < 12) {
 				alert(`Invalid title!`)
+			} else if (!this.$qualityText(this.subtitle) || this.subtitle.length < 12) {
+				alert(`Invalid subtitle!`)
 			} else {
 				// Sanitize HTML
 				const clean: string = DOMPurify.sanitize(this.editor.getContent(), {
@@ -378,6 +396,7 @@ export default Vue.extend({
 				this.input = this.turndownService.turndown(clean)
 				const p = createPost(
 					this.title,
+					this.subtitle,
 					this.input,
 					this.category,
 					this.$store.state.draft.tags,
@@ -387,6 +406,7 @@ export default Vue.extend({
 				const cid = await sendPost(p)
 				this.appendPostCID(cid)
 				this.title = ``
+				this.subtitle = ``
 				this.input = ``
 				this.$store.commit(`draft/reset`)
 				this.$store.commit(`settings/setRecentlyPosted`, true)
@@ -396,6 +416,7 @@ export default Vue.extend({
 		updateStore(): void {
 			this.input = this.editor.getContent()
 			this.$store.commit(`draft/updateTitle`, this.title)
+			this.$store.commit(`draft/updateSubtitle`, this.subtitle)
 			this.$store.commit(`draft/updateContent`, this.input)
 			this.$store.commit(`draft/updateCategory`, this.category)
 			this.$router.go(-1)
@@ -419,6 +440,25 @@ export default Vue.extend({
 				this.tabs.tags = false
 				this.tabs.category = false
 				this.tabs.image = false
+			}
+		},
+		getStyle(len: number) {
+			if (len < 39) {
+				return `text-3xl`
+			} else if (len >= 39 && len < 50) {
+				return `text-2xl`
+			} else if (len >= 50 && len < 57) {
+				return `text-xl`
+			} else if (len >= 57 && len < 65) {
+				return `text-lg`
+			} else if (len >= 65 && len < 76) {
+				return `text-base`
+			} else if (len >= 76 && len < 88) {
+				return `text-sm`
+			} else if (len >= 88 && len < 91) {
+				return `text-xs`
+			} else {
+				return ``
 			}
 		},
 	},

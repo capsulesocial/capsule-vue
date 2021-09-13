@@ -8,6 +8,7 @@ type DraftPost = Omit<Post, `authorID` | `timestamp`>
 
 export const state = (): DraftPost => ({
 	title: ``,
+	subtitle: ``,
 	content: ``,
 	featuredPhotoCID: null,
 	tags: [],
@@ -18,6 +19,7 @@ export const getters: GetterTree<Post, RootState> = {}
 
 export const MutationType = {
 	UPDATE_TITLE: `updateTitle`,
+	UPDATE_SUBTITLE: `updateSubtitle`,
 	UPDATE_CONTENT: `updateContent`,
 	UPDATE_FEATURED_PHOTO_CID: `updateFeaturedPhotoCID`,
 	ADD_TAG: `addTag`,
@@ -29,6 +31,9 @@ export const MutationType = {
 export const mutations: MutationTree<DraftPost> = {
 	[MutationType.UPDATE_TITLE]: (state, newTitle: string) => {
 		state.title = newTitle
+	},
+	[MutationType.UPDATE_SUBTITLE]: (state, newSubtitle: string) => {
+		state.subtitle = newSubtitle
 	},
 	[MutationType.UPDATE_CONTENT]: (state, newContent: string) => {
 		state.content = newContent
@@ -50,6 +55,7 @@ export const mutations: MutationTree<DraftPost> = {
 	},
 	[MutationType.RESET]: (state: DraftPost) => {
 		state.title = ``
+		state.subtitle = ``
 		state.content = ``
 		state.featuredPhotoCID = null
 		state.tags = []
