@@ -48,7 +48,7 @@
 						{{ this.post.title }}
 					</h3>
 					<h6 :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'">
-						Here is my awesome subtitle that gives a preview of this post to potential readers. Click here to read!
+						Subtitle goes here.
 					</h6>
 				</div>
 				<img
