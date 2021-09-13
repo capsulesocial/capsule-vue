@@ -274,7 +274,7 @@ export default Vue.extend({
 					this.changeLocation(account.location)
 					this.changePublicKey(account.publicKey)
 					this.$router.push(`/settings`)
-				} catch (err) {
+				} catch (err: any) {
 					alert(err.message)
 				}
 			} else {
