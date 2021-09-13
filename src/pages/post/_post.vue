@@ -22,12 +22,8 @@
 				</h1>
 			</article>
 
-			<article class="my-5 flex justify-center">
-				<img v-if="this.featuredPhoto !== null" :src="this.featuredPhoto" class="shadow-xl h-56" />
-			</article>
-
 			<!-- Author Intro -->
-			<article class="flex justify-between mt-5 py-2">
+			<article class="flex justify-between mt-5">
 				<div class="flex">
 					<img
 						v-if="this.authorAvatar"
@@ -81,6 +77,15 @@
 						</button>
 					</span>
 				</div>
+			</article>
+
+			<!-- Featured Photo -->
+			<article class="my-5 flex justify-center">
+				<img
+					v-if="this.featuredPhoto !== null"
+					:src="this.featuredPhoto"
+					class="border-neutralLightest border-2 rounded h-64 shadow"
+				/>
 			</article>
 
 			<!-- <hr v-if="this.$store.state.settings.darkMode" class="style-two my-5" />
