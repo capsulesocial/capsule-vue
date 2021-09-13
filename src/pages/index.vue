@@ -288,11 +288,6 @@ export default Vue.extend({
 					return
 				}
 				if (this.password === this.confirmPassword) {
-					// Generate a new keypair for content-signing when a user registers
-					// and store it in localStorage
-
-					// Send user profile to IPFS
-
 					try {
 						const { cid, profile } = await register(this.id, this.password, this.name, this.email)
 						// Registration successful
