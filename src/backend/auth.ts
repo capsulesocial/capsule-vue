@@ -27,9 +27,6 @@ async function register(
 		publicKey: uint8ArrayToHexString(pubkey),
 	}
 
-	// Send user profile to IPFS and set it on near
-	const cid = await setProfile(profile)
-
 	const privateKeyBytes = await getNearPrivateKey()
 	const signingKeyBytes = getSigningKey(id)
 
@@ -37,9 +34,10 @@ async function register(
 		throw new Error(`Error on getSigningKey`)
 	}
 
-	const [encPrivateKey, encSigningKey] = await Promise.all([
+	const [encPrivateKey, encSigningKey, cid] = await Promise.all([
 		getEncryptedPeerIDPrivateKey(id, password, `CapsuleBlogchainAuth-${id}`, `CapsuleBlogchainAuth`, privateKeyBytes),
 		getEncryptedPeerIDPrivateKey(id, password, `CapsuleBlogchainSign-${id}`, `CapsuleBlogchainSign`, signingKeyBytes),
+		setProfile(profile),
 	])
 
 	const walletConnection = getWalletConnection()
