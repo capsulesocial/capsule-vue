@@ -1,6 +1,6 @@
 <template>
 	<div class="fixed h-screen px-5">
-		<h2 class="text-xl text-primary underline py-2 font-semibold">
+		<h2 class="text-xl text-primary py-2 font-semibold">
 			<nuxt-link to="/discover">Trending Tags</nuxt-link>
 		</h2>
 		<div class="flex flex-row flex-wrap" style="width: 240px">

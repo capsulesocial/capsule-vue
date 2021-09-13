@@ -8,10 +8,8 @@ module.exports = {
   },
   theme: {
     fontFamily: {
-      ...fontFamily,
       sans: ['Noto', 'sans-serif'],
-      serif: ['Noto', 'serif'],
-
+      serif: ['NotoSerif', 'serif'],
     },
     extend: {
       typography: {

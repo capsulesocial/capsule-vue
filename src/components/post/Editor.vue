@@ -36,7 +36,7 @@
 								? 'text-lightPrimaryText bg-lightBG placeholder-lightSecondaryText'
 								: 'text-darkPrimaryText bg-darkBG placeholder-darkSecondaryText'
 						"
-						class="font-serif font-semibold text-3xl leading-loose focus:outline-none w-full pb-2"
+						class="font-serif text-3xl leading-loose focus:outline-none w-full pb-2"
 					/>
 				</article>
 
