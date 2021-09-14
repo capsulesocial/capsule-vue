@@ -16,14 +16,14 @@
 			<article>
 				<h1
 					:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-					class="font-serif text-3xl capitalize leading-loose"
+					class="font-serif text-3xl capitalize mb-2"
 				>
 					{{ this.post.title }}
 				</h1>
 				<h2
 					v-if="this.post.subtitle"
 					:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-					class="font-serif text-xl capitalize leading-loose"
+					class="font-serif text-xl capitalize"
 				>
 					{{ this.post.subtitle }}
 				</h2>
@@ -87,7 +87,7 @@
 			</article>
 
 			<!-- Featured Photo -->
-			<article class="my-5 flex justify-center">
+			<article v-if="this.featuredPhoto !== null" class="my-5 flex justify-center">
 				<img
 					v-if="this.featuredPhoto !== null"
 					:src="this.featuredPhoto"
