@@ -27,31 +27,26 @@
 				<!-- Title, subtitle -->
 				<article class="flex justify-between px-5">
 					<label for="title" class="hidden">Title</label>
-					<input
-						v-model="title"
-						type="text"
+					<h1
+						id="title"
+						ref="title"
 						placeholder="Enter Title"
-						maxlength="90"
-						:class="getStyle(this.title.length)"
-						class="font-serif leading-loose focus:outline-none w-full pb-2"
-					/>
-					<span v-if="this.title.length < 12" class="w-24 self-center text-xs text-right text-lightError font-sans"
-						>Too short!</span
-					>
+						contenteditable="true"
+						class="font-serif text-3xl leading-loose focus:outline-none w-full pb-2"
+						@keydown="handleTitle"
+					></h1>
+					<span class="self-center text-right text-xs text-lightError w-16">{{ this.titleError }}</span>
 				</article>
+
 				<article class="flex justify-between px-5">
 					<label for="subtitle" class="hidden">Subtitle</label>
-					<input
-						v-model="subtitle"
-						type="text"
+					<h2
+						id="subtitle"
+						ref="subtitle"
 						placeholder="Enter Subtitle"
-						maxlength="90"
-						:class="getStyle(this.subtitle.length)"
-						class="font-serif leading-loose text-lightSecondaryText focus:outline-none w-full pb-2"
-					/>
-					<span v-if="this.subtitle.length < 12" class="w-24 self-center text-xs text-right text-lightError font-sans"
-						>Too short!</span
-					>
+						contenteditable="true"
+						class="font-serif text-2xl leading-loose text-lightSecondaryText focus:outline-none w-full pb-2"
+					></h2>
 				</article>
 
 				<!-- WYSIWYG -->
@@ -228,7 +223,7 @@ import { addPhotoToIPFS, getPhotoFromIPFS } from '@/backend/photos'
 interface IData {
 	categoryList: string[]
 	title: string
-	subtitle: string
+	subtitle: string | null
 	input: string
 	tag: string
 	featuredPhoto: null | any
@@ -243,6 +238,7 @@ interface IData {
 	}
 	category: string
 	wordCount: number
+	titleError: string
 }
 
 export default Vue.extend({
@@ -279,6 +275,7 @@ export default Vue.extend({
 			},
 			category: this.$store.state.draft.category,
 			wordCount: 0,
+			titleError: `Good!`,
 		}
 	},
 	mounted() {
@@ -295,6 +292,12 @@ export default Vue.extend({
 			},
 		})
 		this.turndownService = new Turndown()
+		// Set title from draft
+		// @ts-ignore
+		this.$refs.title.innerHTML = this.$store.state.draft.title
+		this.handleTitle(null)
+		// @ts-ignore
+		this.$refs.subtitle.innerHTML = this.$store.state.draft.subtitle
 	},
 	created() {
 		// Set filter dropdown event handler
@@ -383,11 +386,23 @@ export default Vue.extend({
 			this.featuredPhoto = await getPhotoFromIPFS(cid)
 		},
 		async post(): Promise<void> {
-			if (!this.$qualityText(this.title) || this.title.length < 12) {
+			// @ts-ignore
+			this.title = this.$refs.title.innerHTML
+			// @ts-ignore
+			this.subtitle = this.$refs.subtitle.innerHTML
+			// Check for quality title
+			if (!this.$qualityText(this.title) || this.title.length < 12 || this.title.length > 90) {
 				alert(`Invalid title!`)
-			} else if (!this.$qualityText(this.subtitle) || this.subtitle.length < 12) {
+				// Check if using a subtitle
+			} else if (this.subtitle !== `` && this.subtitle && !this.$qualityText(this.subtitle)) {
 				alert(`Invalid subtitle!`)
+			} else if (this.subtitle && this.subtitle.length > 90) {
+				alert(`Subtitle too long!`)
 			} else {
+				if (this.subtitle === ``) {
+					// Set profile to null for backend
+					this.subtitle = null
+				}
 				// Sanitize HTML
 				const clean: string = DOMPurify.sanitize(this.editor.getContent(), {
 					USE_PROFILES: { html: true, svg: true },
@@ -415,8 +430,10 @@ export default Vue.extend({
 		},
 		updateStore(): void {
 			this.input = this.editor.getContent()
-			this.$store.commit(`draft/updateTitle`, this.title)
-			this.$store.commit(`draft/updateSubtitle`, this.subtitle)
+			// @ts-ignore
+			this.$store.commit(`draft/updateTitle`, this.$refs.title.innerHTML)
+			// @ts-ignore
+			this.$store.commit(`draft/updateSubtitle`, this.$refs.subtitle.innerHTML)
 			this.$store.commit(`draft/updateContent`, this.input)
 			this.$store.commit(`draft/updateCategory`, this.category)
 			this.$router.go(-1)
@@ -442,23 +459,25 @@ export default Vue.extend({
 				this.tabs.image = false
 			}
 		},
-		getStyle(len: number) {
-			if (len < 39) {
-				return `text-3xl`
-			} else if (len >= 39 && len < 50) {
-				return `text-2xl`
-			} else if (len >= 50 && len < 57) {
-				return `text-xl`
-			} else if (len >= 57 && len < 65) {
-				return `text-lg`
-			} else if (len >= 65 && len < 76) {
-				return `text-base`
-			} else if (len >= 76 && len < 88) {
-				return `text-sm`
-			} else if (len >= 88 && len < 91) {
-				return `text-xs`
+		handleTitle(e: any) {
+			if (e) {
+				// check for enter or tab key press
+				if (e.keyCode === 13 || e.keyCode === 9) {
+					// prevent new line
+					e.preventDefault()
+					// @ts-ignore
+					this.$refs.subtitle.focus()
+					// then toggle to subtitle
+				}
+			}
+			// @ts-ignore
+			if (this.$refs.title.innerHTML.length < 12) {
+				this.titleError = `Too short!`
+				// @ts-ignore
+			} else if (this.$refs.title.innerHTML.length > 90) {
+				this.titleError = `Too long!`
 			} else {
-				return ``
+				this.titleError = ``
 			}
 		},
 	},
@@ -466,6 +485,12 @@ export default Vue.extend({
 </script>
 
 <style>
+[contenteditable='true']:empty:before {
+	content: attr(placeholder);
+	pointer-events: none;
+	display: block; /* For Firefox */
+}
+
 #editor-menu {
 	width: 18rem;
 }

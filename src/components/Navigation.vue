@@ -15,7 +15,7 @@
 				<span class="p-2">
 					<HomeIcon />
 				</span>
-				<strong class="hidden lg:block ml-2"> Home </strong>
+				<span class="hidden font-semibold lg:block ml-2"> Home </span>
 			</nuxt-link>
 			<nuxt-link
 				to="/discover"
@@ -25,7 +25,7 @@
 				<span class="p-2">
 					<DiscoverIcon />
 				</span>
-				<strong class="hidden lg:block ml-2"> Discover </strong>
+				<span class="hidden font-semibold lg:block ml-2"> Discover </span>
 			</nuxt-link>
 			<!-- profile -->
 			<nuxt-link
@@ -36,7 +36,7 @@
 				<span class="p-2">
 					<ProfileIcon />
 				</span>
-				<strong class="hidden lg:block ml-2"> Profile </strong>
+				<span class="hidden font-semibold lg:block ml-2"> Profile </span>
 			</nuxt-link>
 			<nuxt-link
 				to="/messages"
@@ -46,7 +46,7 @@
 				<span class="p-2">
 					<InboxIcon />
 				</span>
-				<strong class="hidden lg:block ml-2"> Messages </strong>
+				<span class="hidden font-semibold lg:block ml-2"> Messages </span>
 			</nuxt-link>
 			<nuxt-link
 				:to="'/' + $store.state.session.id + '/bookmarks'"
@@ -56,7 +56,7 @@
 				<span class="p-2">
 					<BookmarksIcon />
 				</span>
-				<strong class="hidden lg:block ml-2"> Bookmarks </strong>
+				<span class="hidden font-semibold lg:block ml-2"> Bookmarks </span>
 			</nuxt-link>
 			<nuxt-link
 				to="/post"

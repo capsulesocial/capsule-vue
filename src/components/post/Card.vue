@@ -47,7 +47,10 @@
 					<h3 class="text-lg font-semibold capitalize pb-2">
 						{{ this.post.title }}
 					</h3>
-					<h6 :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'">
+					<h6
+						v-if="this.post.subtitle"
+						:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+					>
 						{{ this.post.subtitle }}
 					</h6>
 				</div>

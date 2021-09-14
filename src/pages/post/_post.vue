@@ -21,6 +21,7 @@
 					{{ this.post.title }}
 				</h1>
 				<h2
+					v-if="this.post.subtitle"
 					:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 					class="font-serif text-2xl capitalize leading-loose"
 				>

@@ -11,7 +11,7 @@ export interface Tag {
 export interface Post {
 	authorID: string
 	title: string
-	subtitle: string
+	subtitle: string | null
 	content: string
 	category: string
 	featuredPhotoCID?: string | null
@@ -31,16 +31,19 @@ export type Algorithm = `NEW` | `FOLLOWING` | `TOP`
 
 export function createPost(
 	title: string,
-	subtitle: string,
+	subtitle: string | null,
 	content: string,
 	category: string,
 	tags: Tag[],
 	authorID: string,
 	featuredPhotoCID?: string | null,
 ): Post {
+	if (subtitle !== null) {
+		subtitle = subtitle.trim()
+	}
 	return {
 		title: title.trim(),
-		subtitle: subtitle.trim(),
+		subtitle,
 		content,
 		category,
 		timestamp: Date.now(),
