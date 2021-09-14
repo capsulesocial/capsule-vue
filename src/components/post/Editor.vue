@@ -32,8 +32,8 @@
 						ref="title"
 						placeholder="Enter Title"
 						class="font-serif text-3xl leading-loose focus:outline-none w-full pb-2"
-						@input="handleTitle"
 						wrap="soft"
+						@input="handleTitle"
 					/>
 					<span class="self-center text-right text-xs text-lightError w-16">{{ this.titleError }}</span>
 				</article>
@@ -45,19 +45,19 @@
 						ref="subtitle"
 						placeholder="Enter Subtitle"
 						class="font-serif text-xl leading-loose text-lightSecondaryText focus:outline-none w-full pb-2"
-						@input="handleSubtitle"
 						wrap="soft"
+						@input="handleSubtitle"
 					/>
 					<span class="self-center text-right text-xs text-lightError w-16">{{ this.subtitleError }}</span>
 				</article>
 
 				<!-- WYSIWYG -->
 				<div
+					ref="editor"
 					:v-model="this.input"
 					class="editable prose max-w-none px-5 focus:outline-none py-5"
 					@keyup="update"
 					v-html="this.$store.state.draft.content"
-					ref="editor"
 				></div>
 			</section>
 
@@ -465,16 +465,16 @@ export default Vue.extend({
 			}
 		},
 		handleTitle(e: any) {
-			let titleInput = this.$refs.title as HTMLTextAreaElement
-			let subtitleInput = this.$refs.subtitle as HTMLTextAreaElement
+			const titleInput = this.$refs.title as HTMLTextAreaElement
+			const subtitleInput = this.$refs.subtitle as HTMLTextAreaElement
 			if (e) {
 				if (e.keyCode === 13 || e.keyCode === 9) {
 					e.preventDefault()
 					subtitleInput.focus()
 				}
 			}
-			titleInput.style.height = `${(titleInput.scrollHeight)}px`
-			if (titleInput.value.length == 0) {
+			titleInput.style.height = `${titleInput.scrollHeight}px`
+			if (titleInput.value.length === 0) {
 				this.titleError = `Please enter a title.`
 			} else if (titleInput.value.length < 12) {
 				this.titleError = `Title is too short.`
@@ -484,15 +484,12 @@ export default Vue.extend({
 				this.titleError = ``
 			}
 		},
-		handleSubtitle(e: any) {
-			let subtitleInput = this.$refs.subtitle as HTMLTextAreaElement
-			subtitleInput.style.height = `${(subtitleInput.scrollHeight)}px`
-			if (subtitleInput.value.length == 0) {
+		handleSubtitle() {
+			const subtitleInput = this.$refs.subtitle as HTMLTextAreaElement
+			subtitleInput.style.height = `${subtitleInput.scrollHeight}px`
+			if (subtitleInput.value.length === 0) {
 				this.subtitleError = ``
-			} else if (
-				(subtitleInput.value.length > 0) &&
-				(subtitleInput.value.length < 12)
-			) {
+			} else if (subtitleInput.value.length > 0 && subtitleInput.value.length < 12) {
 				this.subtitleError = `Subtitle is too short.`
 			} else if (subtitleInput.value.length > 180) {
 				this.subtitleError = `Title is too long.`
