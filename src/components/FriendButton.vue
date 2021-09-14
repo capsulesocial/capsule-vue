@@ -1,6 +1,6 @@
 <template>
 	<button class="rounded-full focus:outline-none" @click="toggleFriend">
-		<div v-if="iFollow()" class="text-black">
+		<div v-if="this.following" class="text-black">
 			<span v-if="this.$props.showIcons" class="rounded-full bg-red-200">
 				<UnfollowIcon />
 			</span>
@@ -15,10 +15,15 @@
 	</button>
 </template>
 
-<script>
+<script lang="ts">
 import Vue from 'vue'
 import FollowIcon from '@/components/icons/Follow.vue'
 import UnfollowIcon from '@/components/icons/Unfollow.vue'
+import { followChange, getFollowerData, updateFollowerData } from '@/backend/following'
+
+interface IData {
+	following: boolean
+}
 
 export default Vue.extend({
 	components: {
@@ -28,25 +33,28 @@ export default Vue.extend({
 	props: {
 		authorID: {
 			type: String,
-			default: null,
+			required: true,
 		},
 		showIcons: {
 			type: Boolean,
 			default: false,
 		},
 	},
+	data: (): IData => {
+		return {
+			following: false,
+		}
+	},
+	async mounted() {
+		const data = await getFollowerData(this.$store.state.session.id)
+		this.following = data.following.has(this.authorID)
+	},
 	methods: {
-		iFollow() {
-			// Check if I am following currentUser
-			const followingList = this.$store.state.session.following
-			for (let i = 0; i < followingList.length; i++) {
-				if (followingList[i] === this.$route.params.id) {
-					return true
-				}
-			}
-			return false
+		async toggleFriend() {
+			await followChange(this.following ? `UNFOLLOW` : `FOLLOW`, this.$store.state.session.id, this.authorID)
+			const data = await updateFollowerData(this.$store.state.session.id)
+			this.following = data.following.has(this.authorID)
 		},
-		toggleFriend() {},
 	},
 })
 </script>

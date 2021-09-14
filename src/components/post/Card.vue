@@ -28,7 +28,11 @@
 							@{{ this.post.authorID }}
 						</span>
 					</nuxt-link>
-					<FriendButton v-if="this.post.authorID !== this.$store.state.session.id" :small="true" />
+					<FriendButton
+						v-if="this.post.authorID !== this.$store.state.session.id"
+						:small="true"
+						:authorID="this.post.authorID"
+					/>
 				</div>
 				<!-- Timestamp -->
 				<div class="text-xs ml-14">
