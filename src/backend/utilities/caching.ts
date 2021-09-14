@@ -7,7 +7,10 @@ function promiseCache<T>() {
 			return cached
 		}
 
-		const promise = func(key)
+		const promise = func(key).then((res) => {
+			_promiseCache.delete(key)
+			return res
+		})
 		_promiseCache.set(key, promise)
 		return promise
 	}
