@@ -27,26 +27,28 @@
 				<!-- Title, subtitle -->
 				<article class="flex justify-between px-5">
 					<label for="title" class="hidden">Title</label>
-					<h1
+					<textarea
 						id="title"
 						ref="title"
 						placeholder="Enter Title"
-						contenteditable="true"
 						class="font-serif text-3xl leading-loose focus:outline-none w-full pb-2"
-						@keydown="handleTitle"
-					></h1>
+						@input="handleTitle"
+						wrap="soft"
+					/>
 					<span class="self-center text-right text-xs text-lightError w-16">{{ this.titleError }}</span>
 				</article>
 
 				<article class="flex justify-between px-5">
 					<label for="subtitle" class="hidden">Subtitle</label>
-					<h2
+					<textarea
 						id="subtitle"
 						ref="subtitle"
 						placeholder="Enter Subtitle"
-						contenteditable="true"
 						class="font-serif text-xl leading-loose text-lightSecondaryText focus:outline-none w-full pb-2"
-					></h2>
+						@input="handleSubtitle"
+						wrap="soft"
+					/>
+					<span class="self-center text-right text-xs text-lightError w-16">{{ this.subtitleError }}</span>
 				</article>
 
 				<!-- WYSIWYG -->
@@ -55,6 +57,7 @@
 					class="editable prose max-w-none px-5 focus:outline-none py-5"
 					@keyup="update"
 					v-html="this.$store.state.draft.content"
+					ref="editor"
 				></div>
 			</section>
 
@@ -239,6 +242,7 @@ interface IData {
 	category: string
 	wordCount: number
 	titleError: string
+	subtitleError: string
 }
 
 export default Vue.extend({
@@ -275,7 +279,8 @@ export default Vue.extend({
 			},
 			category: this.$store.state.draft.category,
 			wordCount: 0,
-			titleError: `Good!`,
+			titleError: ``,
+			subtitleError: ``,
 		}
 	},
 	mounted() {
@@ -294,10 +299,10 @@ export default Vue.extend({
 		this.turndownService = new Turndown()
 		// Set title from draft
 		// @ts-ignore
-		this.$refs.title.innerHTML = this.$store.state.draft.title
+		this.$refs.title.value = this.$store.state.draft.title
 		this.handleTitle(null)
 		// @ts-ignore
-		this.$refs.subtitle.innerHTML = this.$store.state.draft.subtitle
+		this.$refs.subtitle.value = this.$store.state.draft.subtitle
 	},
 	created() {
 		// Set filter dropdown event handler
@@ -387,16 +392,16 @@ export default Vue.extend({
 		},
 		async post(): Promise<void> {
 			// @ts-ignore
-			this.title = this.$refs.title.innerHTML
+			this.title = this.$refs.title.value
 			// @ts-ignore
-			this.subtitle = this.$refs.subtitle.innerHTML
+			this.subtitle = this.$refs.subtitle.value
 			// Check for quality title
 			if (!this.$qualityText(this.title) || this.title.length < 12 || this.title.length > 90) {
 				alert(`Invalid title!`)
 				// Check if using a subtitle
 			} else if (this.subtitle !== `` && this.subtitle && !this.$qualityText(this.subtitle)) {
 				alert(`Invalid subtitle!`)
-			} else if (this.subtitle && this.subtitle.length > 90) {
+			} else if (this.subtitle && this.subtitle.length > 180) {
 				alert(`Subtitle too long!`)
 			} else {
 				if (this.subtitle === ``) {
@@ -431,9 +436,9 @@ export default Vue.extend({
 		updateStore(): void {
 			this.input = this.editor.getContent()
 			// @ts-ignore
-			this.$store.commit(`draft/updateTitle`, this.$refs.title.innerHTML)
+			this.$store.commit(`draft/updateTitle`, this.$refs.title.value)
 			// @ts-ignore
-			this.$store.commit(`draft/updateSubtitle`, this.$refs.subtitle.innerHTML)
+			this.$store.commit(`draft/updateSubtitle`, this.$refs.subtitle.value)
 			this.$store.commit(`draft/updateContent`, this.input)
 			this.$store.commit(`draft/updateCategory`, this.category)
 			this.$router.go(-1)
@@ -460,24 +465,39 @@ export default Vue.extend({
 			}
 		},
 		handleTitle(e: any) {
+			let titleInput = this.$refs.title as HTMLTextAreaElement
+			let subtitleInput = this.$refs.subtitle as HTMLTextAreaElement
 			if (e) {
-				// check for enter or tab key press
 				if (e.keyCode === 13 || e.keyCode === 9) {
-					// prevent new line
 					e.preventDefault()
-					// @ts-ignore
-					this.$refs.subtitle.focus()
-					// then toggle to subtitle
+					subtitleInput.focus()
 				}
 			}
-			// @ts-ignore
-			if (this.$refs.title.innerHTML.length < 12) {
-				this.titleError = `Too short!`
-				// @ts-ignore
-			} else if (this.$refs.title.innerHTML.length > 90) {
-				this.titleError = `Too long!`
+			titleInput.style.height = `${(titleInput.scrollHeight)}px`
+			if (titleInput.value.length == 0) {
+				this.titleError = `Please enter a title.`
+			} else if (titleInput.value.length < 12) {
+				this.titleError = `Title is too short.`
+			} else if (titleInput.value.length > 90) {
+				this.titleError = `Title is too long.`
 			} else {
 				this.titleError = ``
+			}
+		},
+		handleSubtitle(e: any) {
+			let subtitleInput = this.$refs.subtitle as HTMLTextAreaElement
+			subtitleInput.style.height = `${(subtitleInput.scrollHeight)}px`
+			if (subtitleInput.value.length == 0) {
+				this.subtitleError = ``
+			} else if (
+				(subtitleInput.value.length > 0) &&
+				(subtitleInput.value.length < 12)
+			) {
+				this.subtitleError = `Subtitle is too short.`
+			} else if (subtitleInput.value.length > 180) {
+				this.subtitleError = `Title is too long.`
+			} else {
+				this.subtitleError = ``
 			}
 		},
 	},
@@ -485,10 +505,17 @@ export default Vue.extend({
 </script>
 
 <style>
-[contenteditable='true']:empty:before {
-	content: attr(placeholder);
-	pointer-events: none;
-	display: block; /* For Firefox */
+textarea#title {
+	border: none;
+	resize: none;
+	overflow-y: hidden;
+	height: 3rem;
+}
+textarea#subtitle {
+	border: none;
+	resize: none;
+	overflow-y: hidden;
+	height: 2rem;
 }
 
 #editor-menu {
