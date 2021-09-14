@@ -45,7 +45,7 @@ export default Vue.extend({
 			following: false,
 		}
 	},
-	async mounted() {
+	async created() {
 		const data = await getFollowersAndFollowing(this.$store.state.session.id)
 		this.following = data.following.has(this.authorID)
 	},
