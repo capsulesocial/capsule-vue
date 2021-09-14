@@ -55,7 +55,7 @@
 				<div
 					ref="editor"
 					:v-model="this.input"
-					class="editable prose max-w-none px-5 focus:outline-none py-5"
+					class="editable prose max-w-none px-5 focus:outline-none py-5 content"
 					@keyup="update"
 					v-html="this.$store.state.draft.content"
 				></div>
@@ -536,5 +536,9 @@ textarea#subtitle {
 }
 .dropdown_inset {
 	box-shadow: inset 0px 0px 3px #0020ff;
+}
+.content {
+	text-align: justify;
+	text-justify: inter-word;
 }
 </style>
