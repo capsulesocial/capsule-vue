@@ -10,7 +10,7 @@
 				<h2 class="border-b-2 text-xl bold font-bold" style="padding: 12px 0px 10px 16px">Settings</h2>
 				<button
 					class="flex flex-row justify-between p-4 focus:outline-none border-r-4 border-transparent"
-					:class="this.getStyles('account')"
+					:class="getStyles('account')"
 					@click="changeTab('account')"
 				>
 					<span class="text-lg">Account Info</span>
@@ -18,7 +18,7 @@
 				</button>
 				<button
 					class="flex flex-row justify-between p-4 focus:outline-none border-r-4 border-transparent"
-					:class="this.getStyles('password')"
+					:class="getStyles('password')"
 					@click="changeTab('password')"
 				>
 					<span class="text-lg">Password Update</span>
@@ -26,7 +26,7 @@
 				</button>
 				<button
 					class="flex flex-row justify-between p-4 focus:outline-none border-r-4 border-transparent"
-					:class="this.getStyles('social')"
+					:class="getStyles('social')"
 					@click="changeTab('social')"
 				>
 					<span class="text-lg">Social Accounts</span>
@@ -34,7 +34,7 @@
 				</button>
 				<button
 					class="flex flex-row justify-between p-4 focus:outline-none border-r-4 border-transparent"
-					:class="this.getStyles('display')"
+					:class="getStyles('display')"
 					@click="changeTab('display')"
 				>
 					<span class="text-lg">Display Themes</span>
@@ -44,7 +44,7 @@
 
 			<!-- Right column: Show details -->
 			<div style="width: 510px">
-				<article v-if="this.tab === 'account'" class="col-span-2 border-r border-l h-full">
+				<article v-if="tab === 'account'" class="col-span-2 border-r border-l h-full">
 					<!-- General Settings (Username, ID, Email) -->
 					<h2
 						:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
@@ -58,7 +58,7 @@
 						<button class="self-center mb-2 text-xs text-gray4" @click="$refs.uploadedPic.click()">
 							<img
 								v-if="this.$store.state.session.avatar !== ''"
-								:src="this.profilePic"
+								:src="profilePic"
 								class="w-32 h-32 rounded-lg object-cover"
 							/>
 							<UploadAvatar v-else class="w-32 h-32 rounded-lg" />
@@ -171,13 +171,13 @@
 								class="text-xs text-right"
 								:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 							>
-								{{ this.checkBio() }} Characters Remaining
+								{{ checkBio() }} Characters Remaining
 							</p>
 						</div>
 					</div>
 				</article>
 
-				<article v-if="this.tab === 'password'" class="col-span-2 border-r border-l h-full">
+				<article v-if="tab === 'password'" class="col-span-2 border-r border-l h-full">
 					<h2
 						:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 						class="border-b-2 text-xl bold font-bold"
@@ -223,7 +223,7 @@
 					</div>
 				</article>
 				<!-- Social Links -->
-				<article v-if="this.tab === 'social'" class="col-span-2 border-r border-l h-full">
+				<article v-if="tab === 'social'" class="col-span-2 border-r border-l h-full">
 					<h2
 						:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 						class="border-b-2 text-xl bold font-bold"
@@ -247,7 +247,7 @@
 					</div>
 				</article>
 				<!-- Display Themes -->
-				<article v-if="this.tab === 'display'" class="col-span-2 border-r border-l h-full">
+				<article v-if="tab === 'display'" class="col-span-2 border-r border-l h-full">
 					<h2
 						:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 						class="border-b-2 text-xl bold font-bold"
@@ -275,12 +275,12 @@
 				</article>
 			</div>
 		</section>
-		<div v-if="this.tab !== ''">
+		<div v-if="tab !== ''">
 			<button
-				:class="this.hasChanged() ? '' : 'opacity-50'"
+				:class="hasChanged() ? '' : 'opacity-50'"
 				class="bg-primary text-white rounded-lg focus:outline-none"
 				style="width: 128px; height: 40px; margin-left: 450px"
-				@click="this.updateSettings"
+				@click="updateSettings"
 			>
 				Save Changes
 			</button>

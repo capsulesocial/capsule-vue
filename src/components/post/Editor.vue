@@ -22,7 +22,7 @@
 							<span class="font-bold text-primary">{{ wordCount }}</span> words
 						</h6>
 					</div>
-					<h6 class="text-primary capitalize text-sm">{{ this.category === `` ? 'Category' : this.category }}</h6>
+					<h6 class="text-primary capitalize text-sm">{{ category === `` ? 'Category' : category }}</h6>
 				</article>
 				<!-- Title, subtitle -->
 				<article class="flex justify-between px-5">
@@ -35,7 +35,7 @@
 						wrap="soft"
 						@input="handleTitle"
 					/>
-					<span class="self-center text-right text-xs text-lightError w-16">{{ this.titleError }}</span>
+					<span class="self-center text-right text-xs text-lightError w-16">{{ titleError }}</span>
 				</article>
 
 				<article class="flex justify-between px-5">
@@ -48,13 +48,13 @@
 						wrap="soft"
 						@input="handleSubtitle"
 					/>
-					<span class="self-center text-right text-xs text-lightError w-16">{{ this.subtitleError }}</span>
+					<span class="self-center text-right text-xs text-lightError w-16">{{ subtitleError }}</span>
 				</article>
 
 				<!-- WYSIWYG -->
 				<div
 					ref="editor"
-					:v-model="this.input"
+					:v-model="input"
 					class="editable prose max-w-none px-5 focus:outline-none py-5 content"
 					@keyup="update"
 					v-html="this.$store.state.draft.content"
@@ -73,11 +73,11 @@
 						@click="changeTab('tags')"
 					>
 						<h4 class="toggle">Tags</h4>
-						<ChevronUp v-if="this.tabs.tags" class="toggle" />
+						<ChevronUp v-if="tabs.tags" class="toggle" />
 						<ChevronDown v-else />
 					</button>
 					<!-- Dropdown -->
-					<div v-show="this.tabs.tags" class="hotzone pb-4">
+					<div v-show="tabs.tags" class="hotzone pb-4">
 						<div class="hotzone flex flex-row flex-nowrap bg-white py-2 mb-2 border">
 							<label for="tag" class="hidden" value="Enter hashtags"></label>
 							<input
@@ -118,14 +118,14 @@
 						@click="changeTab('category')"
 					>
 						<h4 class="toggle">Category</h4>
-						<ChevronUp v-if="this.tabs.category" class="toggle" />
+						<ChevronUp v-if="tabs.category" class="toggle" />
 						<ChevronDown v-else class="toggle" />
 					</button>
 					<!-- Dropdown -->
-					<div v-show="this.tabs.category" class="hotzone pb-4 py-2">
+					<div v-show="tabs.category" class="hotzone pb-4 py-2">
 						<div class="dropdown_inset hotzone flex flex-col bg-white -mx-4 py-1">
 							<button
-								v-for="c in this.categoryList"
+								v-for="c in categoryList"
 								:key="c"
 								class="hotzone w-full flex items-center px-2 capitalize focus:outline-none h-10"
 								@click="changeCategory(c)"
@@ -150,11 +150,11 @@
 						@click="changeTab('image')"
 					>
 						<h4 class="toggle">Image</h4>
-						<ChevronUp v-if="this.tabs.image" class="toggle" />
+						<ChevronUp v-if="tabs.image" class="toggle" />
 						<ChevronDown v-else class="toggle" />
 					</button>
 					<!-- Dropdown -->
-					<div v-show="this.tabs.image" class="hotzone pb-4">
+					<div v-show="tabs.image" class="hotzone pb-4">
 						<div class="hotzone dropdown_inset hotzone flex flex-col bg-white -mx-4 py-2">
 							<!-- Upload Featured Image -->
 							<p class="hotzone px-4 py-2 text-sm">
@@ -171,7 +171,7 @@
 									@change="handleImage"
 								/>
 								<!-- No Photo Uploaded -->
-								<div v-show="this.featuredPhoto === null" class="hotzone flex justify-between border mx-4 my-2 p-1">
+								<div v-show="featuredPhoto === null" class="hotzone flex justify-between border mx-4 my-2 p-1">
 									<span class="hotzone flex items-center text-sm"> <ImageIcon class="hotzone mr-1 p-1" />IMAGE</span>
 									<span class="hotzone flex items-center text-sm text-primary">
 										<UploadIcon class="hotzone mr-1 p-1" />Add
@@ -179,8 +179,8 @@
 								</div>
 							</button>
 							<!-- Photo Uploaded -->
-							<div v-if="this.featuredPhoto !== null" class="hotzone mx-4">
-								<img :src="this.featuredPhoto" class="hotzone w-full" />
+							<div v-if="featuredPhoto !== null" class="hotzone mx-4">
+								<img :src="featuredPhoto" class="hotzone w-full" />
 								<button
 									class="hotzone border border-primary text-primary focus:outline-none text-sm mt-4 p-1"
 									@click="$refs.featuredPhoto.click()"

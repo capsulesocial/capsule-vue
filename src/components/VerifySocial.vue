@@ -2,7 +2,7 @@
 	<article>
 		<!-- Unverified -->
 		<div
-			v-if="!this.isActive"
+			v-if="!isActive"
 			:class="this.$store.state.settings.darkMode ? 'text-gray7' : 'text-darkPrimaryText'"
 			class="flex justify-between"
 		>
@@ -10,18 +10,18 @@
 				class="flex flex-row items-center text-xl"
 				:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 			>
-				<TwitterIcon v-if="this.$props.platform === 'twitter'" class="mr-4 text-gray7" />
-				<GitHubIcon v-if="this.$props.platform === 'github'" class="mr-4 text-gray7" />
-				<ExternalURLIcon v-if="this.$props.platform === 'website'" class="mr-4 text-gray7" />
-				<span class="capitalize text-gray7">{{ this.$props.platform }}</span>
+				<TwitterIcon v-if="platform === 'twitter'" class="mr-4 text-gray7" />
+				<GitHubIcon v-if="platform === 'github'" class="mr-4 text-gray7" />
+				<ExternalURLIcon v-if="platform === 'website'" class="mr-4 text-gray7" />
+				<span class="capitalize text-gray7">{{ platform }}</span>
 			</div>
 			<button class="focus:outline-none font-bold text-primary" @click="toggleVerify()">Connect</button>
 		</div>
 
 		<div v-else class="h-12 w-full flex justify-between items-center">
-			<div v-if="!this.isVerified">
+			<div v-if="!isVerified">
 				<label for="handle" :class="this.$store.state.settings.darkMode ? 'text-gray7' : 'text-darkSecondaryText'">
-					<span v-if="this.$props.platform !== 'website'">handle: @</span><span v-else>URL:</span>
+					<span v-if="platform !== 'website'">handle: @</span><span v-else>URL:</span>
 				</label>
 				<input
 					id="handle"
@@ -37,10 +37,10 @@
 				/>
 			</div>
 			<div v-else>
-				<span class="text-gray7"> ({{ this.handle }}) {{ this.$props.platform }} account has been verified </span>
+				<span class="text-gray7"> ({{ handle }}) {{ platform }} account has been verified </span>
 			</div>
 			<button
-				v-if="!this.isVerified"
+				v-if="!isVerified"
 				:class="
 					this.$store.state.settings.darkMode
 						? 'bg-lightButtonBG text-lightButtonText hover:bg-lightActive'
@@ -50,9 +50,9 @@
 				@click="verifySocial()"
 			>
 				<span class="mr-2">Verify</span>
-				<TwitterIcon v-if="this.$props.platform === 'twitter'" />
-				<GitHubIcon v-if="this.$props.platform === 'github'" />
-				<ExternalURLIcon v-if="this.$props.platform === 'website'" />
+				<TwitterIcon v-if="platform === 'twitter'" />
+				<GitHubIcon v-if="platform === 'github'" />
+				<ExternalURLIcon v-if="platform === 'website'" />
 			</button>
 			<button
 				v-else
@@ -70,9 +70,9 @@
 				"
 				@click="removeSocial()"
 			>
-				<TwitterIcon v-if="this.$props.platform === 'twitter'" />
-				<GitHubIcon v-if="this.$props.platform === 'github'" />
-				<ExternalURLIcon v-if="this.$props.platform === 'website'" />
+				<TwitterIcon v-if="platform === 'twitter'" />
+				<GitHubIcon v-if="platform === 'github'" />
+				<ExternalURLIcon v-if="platform === 'website'" />
 				<span class="mx-2">Remove</span>
 				<XIcon />
 			</button>
@@ -110,7 +110,7 @@ export default Vue.extend({
 	mounted() {
 		const socials = this.$store.state.session.socials
 		for (const s in socials) {
-			if (socials[s].platform === this.$props.platform) {
+			if (socials[s].platform === this.platform) {
 				this.isActive = true
 				this.isVerified = true
 				this.handle = socials[s].username
@@ -122,12 +122,12 @@ export default Vue.extend({
 			this.isActive = !this.isActive
 		},
 		verifySocial() {
-			if (this.$props.platform === `website` && !this.$qualityURL(this.handle)) {
+			if (this.platform === `website` && !this.$qualityURL(this.handle)) {
 				alert(`Check URL!`)
 				return
 			}
 			this.$store.commit(`me/addSocial`, {
-				platform: this.$props.platform,
+				platform: this.platform,
 				username: this.handle,
 			})
 			this.isVerified = true

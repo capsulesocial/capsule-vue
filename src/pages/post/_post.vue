@@ -1,15 +1,13 @@
 <template>
-	<div v-if="this.post && this.author" class="w-full">
-		<HeaderMagic :authorID="this.post.authorID" :avatar="this.authorAvatar" />
-		<section v-if="this.post !== {}" class="pb-16 md:pb-5 md:pl-5 m-5 pt-4">
+	<div v-if="post && author" class="w-full">
+		<HeaderMagic :authorID="post.authorID" :avatar="authorAvatar" />
+		<section v-if="post !== null" class="pb-16 md:pb-5 md:pl-5 m-5 pt-4">
 			<!-- Category and elipses -->
 			<article class="w-full flex justify-between my-2">
 				<div class="text-lg">
 					Category |
-					<span v-if="!this.post.category" class="text-lightSecondaryText"> None</span>
-					<nuxt-link :to="`/discover/` + this.post.category" class="text-primary capitalize">{{
-						this.post.category
-					}}</nuxt-link>
+					<span v-if="!post.category" class="text-lightSecondaryText"> None</span>
+					<nuxt-link :to="`/discover/` + post.category" class="text-primary capitalize">{{ post.category }}</nuxt-link>
 				</div>
 				<MoreIcon />
 			</article>
@@ -18,47 +16,42 @@
 					:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 					class="font-serif text-3xl capitalize mb-2"
 				>
-					{{ this.post.title }}
+					{{ post.title }}
 				</h1>
 				<h2
-					v-if="this.post.subtitle"
+					v-if="post.subtitle"
 					:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 					class="font-serif text-xl capitalize"
 				>
-					{{ this.post.subtitle }}
+					{{ post.subtitle }}
 				</h2>
 			</article>
 
 			<!-- Author Intro -->
 			<article class="flex justify-between mt-5">
 				<div class="flex">
-					<img
-						v-if="this.authorAvatar"
-						:src="this.authorAvatar"
-						:alt="this.author.id"
-						class="w-10 h-10 rounded-lg mr-4"
-					/>
+					<img v-if="authorAvatar" :src="authorAvatar" :alt="author.id" class="w-10 h-10 rounded-lg mr-4" />
 					<p
 						:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 						class="font-sans capitalize"
 					>
 						<nuxt-link
-							:to="'/' + this.author.id"
+							:to="'/' + author.id"
 							:class="this.$store.state.settings.darkMode ? 'text-lightActive' : 'text-darkActive'"
 							class="underline"
 						>
-							{{ this.author.name }}
+							{{ author.name }}
 						</nuxt-link>
 						<span
 							:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 							class="font-sans text-sm block"
 						>
-							{{ this.$formatDate(this.post.timestamp) }}
+							{{ $formatDate(post.timestamp) }}
 						</span>
 					</p>
 				</div>
 				<div>
-					<span v-for="s in this.author.socials" :key="s.platform" class="p-2">
+					<span v-for="s in author.socials" :key="s.platform" class="p-2">
 						<!-- Twitter -->
 						<button
 							v-if="s.platform === 'twitter'"
@@ -87,10 +80,10 @@
 			</article>
 
 			<!-- Featured Photo -->
-			<article v-if="this.featuredPhoto !== null" class="my-5 flex justify-center">
+			<article v-if="featuredPhoto !== null" class="my-5 flex justify-center">
 				<img
-					v-if="this.featuredPhoto !== null"
-					:src="this.featuredPhoto"
+					v-if="featuredPhoto !== null"
+					:src="featuredPhoto"
 					class="border-neutralLightest border-2 rounded h-64 shadow"
 				/>
 			</article>
@@ -103,19 +96,19 @@
 				<div
 					:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 					class="editable prose max-w-none content"
-					v-html="this.content"
+					v-html="content"
 				></div>
 			</article>
 
 			<!-- Tags -->
 			<article class="mt-5">
-				<TagCard v-for="t in this.post.tags" :key="t.name" class="mr-2" :tag="t.name" />
+				<TagCard v-for="t in post.tags" :key="t.name" class="mr-2" :tag="t.name" />
 			</article>
 			<AuthorCard
-				:authorAvatar="this.authorAvatar"
-				:authorName="this.author.name"
-				:authorID="this.author.id"
-				:authorBio="this.author.bio"
+				:authorAvatar="authorAvatar"
+				:authorName="author.name"
+				:authorID="author.id"
+				:authorBio="author.bio"
 			/>
 
 			<!-- Comments -->
@@ -124,15 +117,10 @@
 				<div class="flex flex-row justify-between">
 					<div class="flex items-center">
 						<BookmarkButton :postID="this.$route.params.post" />
-						<ShareButton :post="this.post" :cid="this.$route.params.post" :class="'z-20'" />
+						<ShareButton :post="post" :cid="this.$route.params.post" :class="'z-20'" />
 					</div>
 				</div>
-				<PostActions
-					:postCID="this.$route.params.post"
-					:authorID="this.author.id"
-					:isCommenting="true"
-					:tags="this.post.tags"
-				/>
+				<PostActions :postCID="this.$route.params.post" :authorID="author.id" :isCommenting="true" :tags="post.tags" />
 			</article>
 		</section>
 		<section v-else>Post not found 😵‍💫</section>

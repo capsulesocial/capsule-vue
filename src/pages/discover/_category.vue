@@ -16,7 +16,7 @@
 			</div>
 
 			<!-- Not loaded yet -->
-			<article v-show="this.isLoading" class="flex justify-center" style="width: 600px">
+			<article v-show="isLoading" class="flex justify-center" style="width: 600px">
 				<div class="loader m-5"></div>
 			</article>
 			<!-- Posts loaded -->

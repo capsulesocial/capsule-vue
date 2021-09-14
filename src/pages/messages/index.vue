@@ -46,7 +46,7 @@
 								class="relative flex flex-row items-center py-4 pl-2 my-2 rounded-lg"
 							>
 								<div class="absolute text-xs right-0 top-0 mr-4 mt-4">5 min</div>
-								<img :src="this.friendAvatar" class="w-10 h-10 rounded-lg flex-shrink-0 m-2" />
+								<img :src="friendAvatar" class="w-10 h-10 rounded-lg flex-shrink-0 m-2" />
 								<div class="flex flex-col flex-grow ml-2">
 									<div class="text-sm font-bold">Jack Dishman</div>
 									<div class="text-xs truncate w-40">
@@ -64,7 +64,7 @@
 								class="relative flex flex-row items-center py-4 pl-2 my-2 rounded-lg shadow-lg"
 							>
 								<div class="absolute text-xs right-0 top-0 mr-4 mt-4">1 day ago</div>
-								<img :src="this.friendAvatar" class="w-10 h-10 rounded-lg flex-shrink-0 m-2" />
+								<img :src="friendAvatar" class="w-10 h-10 rounded-lg flex-shrink-0 m-2" />
 								<div class="flex flex-col flex-grow ml-2">
 									<div class="text-sm font-bold">Jack Dishman</div>
 									<div class="text-xs truncate w-40">
@@ -80,7 +80,7 @@
 			<article class="flex flex-col h-full w-full px-4 py-6" style="width: 600px">
 				<!-- Header for selected chat -->
 				<div class="p-4 flex">
-					<img :src="this.friendAvatar" class="w-10 h-10 rounded-lg" />
+					<img :src="friendAvatar" class="w-10 h-10 rounded-lg" />
 					<span class="pl-2">
 						<h4 class="text-lg font-bold">Jack Dishman</h4>
 						<h6 class="text-xs">Last seen today</h6>
@@ -90,7 +90,7 @@
 					<div class="h-full overflow-y-auto">
 						<!-- Response message -->
 						<div class="flex items-end p-4">
-							<img :src="this.friendAvatar" class="w-10 h-10 rounded-lg flex-shrink-0 m-2" />
+							<img :src="friendAvatar" class="w-10 h-10 rounded-lg flex-shrink-0 m-2" />
 							<div
 								:class="
 									this.$store.state.settings.darkMode
@@ -106,7 +106,7 @@
 
 						<!-- Sent message -->
 						<div class="flex flex-row-reverse items-end">
-							<img :src="this.avatar" class="w-10 h-10 rounded-lg flex-shrink-0 m-2" />
+							<img :src="avatar" class="w-10 h-10 rounded-lg flex-shrink-0 m-2" />
 							<div
 								:class="
 									this.$store.state.settings.darkMode

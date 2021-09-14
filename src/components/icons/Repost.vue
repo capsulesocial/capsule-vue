@@ -2,7 +2,7 @@
 	<span>
 		<svg
 			v-if="!isActive"
-			:style="this.$props.shrink ? `width: 13.7px` : ``"
+			:style="shrink ? `width: 13.7px` : ``"
 			xmlns="http://www.w3.org/2000/svg"
 			width="24"
 			height="24"
@@ -20,7 +20,7 @@
 		</svg>
 		<svg
 			v-else
-			:class="this.$props.shrink ? 'p-1' : ''"
+			:class="shrink ? 'p-1' : ''"
 			xmlns="http://www.w3.org/2000/svg"
 			width="24"
 			height="24"

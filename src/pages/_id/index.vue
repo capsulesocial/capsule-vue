@@ -11,6 +11,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import type { PropType } from 'vue'
 import PostCard from '@/components/post/Card.vue'
 import { Profile } from '@/backend/profile'
 import { getPosts, IPostResponse } from '@/backend/post'
@@ -27,7 +28,7 @@ export default Vue.extend({
 	},
 	props: {
 		profile: {
-			type: Object as () => Profile,
+			type: Object as PropType<Profile>,
 			required: true,
 		},
 	},

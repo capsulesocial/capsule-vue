@@ -1,6 +1,6 @@
 <template>
 	<button class="flex items-end focus:outline-none hover:text-primary" @click="handleBookmark()">
-		<BookmarkIcon :isActive="this.isBookmarked" class="mr-2 fill-none" />
+		<BookmarkIcon :isActive="isBookmarked" class="mr-2 fill-none" />
 	</button>
 </template>
 

@@ -32,11 +32,11 @@
 							@click.stop="showFilter = !showFilter"
 						>
 							{{ tagFilter }}
-							<ChevronUp v-if="this.showFilter" />
+							<ChevronUp v-if="showFilter" />
 							<ChevronDown v-else />
 						</button>
 						<!-- Dropdown -->
-						<div v-show="this.showFilter" class="absolute z-10 top-0 bg-white rounded-lg shadow-lg p-2 mt-10 w-full">
+						<div v-show="showFilter" class="absolute z-10 top-0 bg-white rounded-lg shadow-lg p-2 mt-10 w-full">
 							<button class="w-full text-left text-gray7 focus:outline-none p-2" @click="setTagFilter(`Trending`)">
 								Trending
 							</button>
@@ -57,7 +57,7 @@
 				Find and join conversations on any topic:
 			</p>
 			<div class="my-4">
-				<TagCard v-for="t in this.tags" :key="t" :tag="t" class="text-lg mr-4 my-1" />
+				<TagCard v-for="t in tags" :key="t" :tag="t" class="text-lg mr-4 my-1" />
 			</div>
 		</section>
 
@@ -78,7 +78,7 @@
 			</p>
 			<article class="grid grid-cols-2 gap-4 my-4">
 				<CategoryCard
-					v-for="c in this.categoryList"
+					v-for="c in categoryList"
 					:key="c"
 					:text="c"
 					:bgImage="require('@/assets/images/category/' + c + '/' + c + '.jpg')"

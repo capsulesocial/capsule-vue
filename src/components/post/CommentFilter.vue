@@ -21,17 +21,17 @@
 			"
 			@click.stop="showFilter = !showFilter"
 		>
-			<span v-if="this.$props.filter === ``" class="toggle font-bold">All</span>
-			<span v-else class="toggle capitalize font-bold">{{ this.$props.filter }}</span>
-			<ChevronUp v-if="this.showFilter" />
+			<span v-if="filter === ``" class="toggle font-bold">All</span>
+			<span v-else class="toggle capitalize font-bold">{{ filter }}</span>
+			<ChevronUp v-if="showFilter" />
 			<ChevronDown v-else />
 		</button>
-		<button v-show="this.$props.filter !== ``" @click="$emit(`clicked`, ``)">
+		<button v-show="filter !== ``" @click="$emit(`clicked`, ``)">
 			<span class="text-sm italic ml-2">Clear</span>
 		</button>
 		<!-- comment filter dropdown -->
 		<div
-			v-show="this.showFilter"
+			v-show="showFilter"
 			class="absolute hotzone top-0 z-10 bg-white rounded-lg shadow-lg p-2 w-full"
 			style="margin-top: 28px"
 		>
@@ -39,21 +39,21 @@
 			<div class="hotzone flex justify-between mb-2">
 				<button
 					class="hotzone focus:outline-none border-b-4"
-					:class="this.feeling === `positive` ? `border-green-500` : `border-transparent`"
+					:class="feeling === `positive` ? `border-green-500` : `border-transparent`"
 					@click="setCommentFilterFeeling(`positive`)"
 				>
 					Positive
 				</button>
 				<button
 					class="hotzone focus:outline-none border-b-4"
-					:class="this.feeling === `neutral` ? `border-yellow-500` : `border-transparent`"
+					:class="feeling === `neutral` ? `border-yellow-500` : `border-transparent`"
 					@click="setCommentFilterFeeling(`neutral`)"
 				>
 					Neutral
 				</button>
 				<button
 					class="hotzone focus:outline-none border-b-4"
-					:class="this.feeling === `negative` ? ` border-red-500` : `border-transparent`"
+					:class="feeling === `negative` ? ` border-red-500` : `border-transparent`"
 					@click="setCommentFilterFeeling(`negative`)"
 				>
 					Negative
@@ -62,7 +62,7 @@
 			<!-- Show faces -->
 			<div class="grid grid-cols-5 gap-1 overflow-y-auto faces" style="height: 155px; padding-right: 5px">
 				<button
-					v-for="r in this.feelingList[this.feeling]"
+					v-for="r in feelingList[feeling]"
 					:key="r.label"
 					class="h-12 w-12 rounded-xl shadow-lg transition duration-500 ease-in-out transform hover:scale-105"
 				>
@@ -85,8 +85,8 @@ import ChevronDown from '@/components/icons/ChevronDown.vue'
 import { reactions, feelings } from '@/config'
 
 interface IData {
-	reactionList: {}
-	feelingList: {}
+	reactionList: Record<string, any>
+	feelingList: Record<string, any>
 	feeling: string
 	showFilter: boolean
 }

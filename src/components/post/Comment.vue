@@ -6,19 +6,19 @@
 			<div class="flex-shrink-0 relative">
 				<div
 					class="rounded-lg p-1"
-					:style="{ backgroundImage: `url(${this.emotion.background})` }"
+					:style="emotion ? { backgroundImage: `url(${emotion.background})` } : {}"
 					style="background-size: cover"
 				>
-					<span v-if="this.avatar === `` || this.avatar === null" class="p-1 border-2 rounded-lg block bg-white">
+					<span v-if="avatar === `` || avatar === null" class="p-1 border-2 rounded-lg block bg-white">
 						<ProfileIcon class="w-12 h-12" />
 					</span>
-					<img v-else :src="this.avatar" class="w-12 h-12 rounded-lg object-cover" />
+					<img v-else :src="avatar" class="w-12 h-12 rounded-lg object-cover" />
 					<span
-						v-if="this.emotion"
+						v-if="emotion"
 						class="absolute rounded-full p-1 -mt-4 -ml-4"
-						:style="{ backgroundImage: `url(${this.emotion.background})` }"
+						:style="{ backgroundImage: `url(${emotion.background})` }"
 					>
-						<img :src="this.emotion.image" class="bg-white rounded-full w-8 h-8" />
+						<img :src="emotion.image" class="bg-white rounded-full w-8 h-8" />
 					</span>
 				</div>
 			</div>
@@ -28,31 +28,31 @@
 					:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 					class="font-bold bold mr-1"
 				>
-					{{ this.name }}
+					{{ name }}
 				</strong>
 				<nuxt-link
-					:to="'/' + this.$props.authorID"
+					:to="'/' + authorID"
 					:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 					class="text-gray-700 text-sm mr-2"
 				>
-					@{{ this.$props.authorID }}
+					@{{ authorID }}
 				</nuxt-link>
 				<span
-					v-if="this.$props.timestamp"
+					v-if="timestamp"
 					:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 					class="text-xs font-sans"
 				>
-					{{ $formatDate(this.$props.timestamp) }}
+					{{ $formatDate(timestamp) }}
 				</span>
 				<p class="text-base py-1 font-sans">
-					{{ this.content }}
+					{{ content }}
 				</p>
 			</div>
 		</div>
 		<!-- Reply button -->
 		<div class="ml-10 pl-1">
 			<button class="font-sans text-xs focus:outline-none" @click="isReplying = !isReplying">
-				{{ this.replies.length }} Replies
+				{{ replies.length }} Replies
 			</button>
 
 			<!-- Active reply state -->
@@ -80,7 +80,7 @@
 					</textarea>
 					<span class="relative">
 						<BrandedButton
-							v-if="this.reply !== ''"
+							v-if="reply !== ''"
 							text="Post"
 							:action="sendReply"
 							:thin="true"
@@ -90,7 +90,7 @@
 				</div>
 				<!-- List replies -->
 				<Reply
-					v-for="r in this.filterReplies()"
+					v-for="r in filterReplies()"
 					:key="r.cid"
 					:authorID="r.authorID"
 					:cid="r.cid"
@@ -105,6 +105,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import type { PropType } from 'vue'
 import ProfileIcon from '@/components/icons/Person.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 import Reply from '@/components/post/Reply.vue'
@@ -135,7 +136,7 @@ export default Vue.extend({
 		authorID: { type: String, required: true },
 		cid: { type: String, required: true },
 		timestamp: { type: Number, required: true },
-		profile: { type: Object as () => Profile, default: null },
+		profile: { type: Object as PropType<Profile>, default: null },
 	},
 	data(): IData {
 		return {
@@ -149,7 +150,7 @@ export default Vue.extend({
 		}
 	},
 	async created() {
-		const comment = await getComment(this.$props.cid)
+		const comment = await getComment(this.cid)
 		this.content = comment.content
 		const emotion = comment.emotion as keyof typeof reactions
 		if (emotion in reactions) {
@@ -159,14 +160,14 @@ export default Vue.extend({
 		}
 	},
 	async mounted() {
-		let p = this.$props.profile
+		let p = this.profile
 		if (!p) {
-			if (this.$store.state.session.id === this.$props.authorID) {
+			if (this.$store.state.session.id === this.authorID) {
 				// Viewing own post
 				p = getProfileFromSession(this.$store.state.session)
 			} else {
 				// Viewing someone else's post
-				p = await getProfile(this.$props.authorID)
+				p = await getProfile(this.authorID)
 			}
 		}
 		this.name = p.name
@@ -175,14 +176,14 @@ export default Vue.extend({
 				this.avatar = a
 			})
 		}
-		this.replies = await getCommentsOfPost(this.$props.cid)
+		this.replies = await getCommentsOfPost(this.cid)
 	},
 	methods: {
 		async sendReply() {
 			if (!this.$qualityText(this.reply)) {
 				alert(`Invalid reply!`)
 			} else {
-				const c = createComment(this.$store.state.session.id, this.reply, `no-emotion`, this.$props.cid)
+				const c = createComment(this.$store.state.session.id, this.reply, `no-emotion`, this.cid)
 				const cid = await sendComment(c, `reply`)
 				this.replies.push({ cid, ...c })
 				this.filterReplies()

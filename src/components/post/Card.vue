@@ -8,61 +8,53 @@
 	>
 		<!-- Top: avatar, name, id, close -->
 		<div class="flex w-full">
-			<nuxt-link :to="'/' + this.post.authorID" class="flex">
-				<img v-if="this.avatar !== ``" :src="this.avatar" class="w-12 h-12 rounded-lg object-cover" />
+			<nuxt-link :to="'/' + post.authorID" class="flex">
+				<img v-if="avatar !== ``" :src="avatar" class="w-12 h-12 rounded-lg object-cover" />
 				<ProfileIcon v-else class="w-12 h-12 border-2 rounded-full" />
 			</nuxt-link>
 			<div class="flex flex-col flex-grow ml-4">
 				<div class="flex">
-					<nuxt-link :to="'/' + this.post.authorID" class="flex mr-4">
+					<nuxt-link :to="'/' + post.authorID" class="flex mr-4">
 						<span
 							:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 							class="font-medium text-base"
 						>
-							{{ this.authorName }}
+							{{ authorName }}
 						</span>
 						<span
 							:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 							class="ml-2"
 						>
-							@{{ this.post.authorID }}
+							@{{ post.authorID }}
 						</span>
 					</nuxt-link>
-					<FriendButton
-						v-if="this.post.authorID !== this.$store.state.session.id"
-						:small="true"
-						:authorID="this.post.authorID"
-					/>
+					<FriendButton v-if="post.authorID !== this.$store.state.session.id" :small="true" :authorID="post.authorID" />
 				</div>
 				<!-- Timestamp -->
 				<div class="text-xs ml-14">
-					{{ this.$formatDate(this.post.timestamp) }}
+					{{ $formatDate(post.timestamp) }}
 				</div>
 			</div>
-			<span v-if="this.post.authorID !== this.$store.state.session.id" class="h-10 flex flex-row-reverse">
+			<span v-if="post.authorID !== $store.state.session.id" class="h-10 flex flex-row-reverse">
 				<XIcon />
 			</span>
 		</div>
 		<!-- Content -->
 		<div class="my-4">
 			<!-- Content -->
-			<nuxt-link :to="'/post/' + this.post._id" class="flex justify-between">
+			<nuxt-link :to="'/post/' + post._id" class="flex justify-between">
 				<div class="flex flex-col pr-4">
 					<h3 class="text-lg font-semibold capitalize pb-2">
-						{{ this.post.title }}
+						{{ post.title }}
 					</h3>
 					<h6
-						v-if="this.post.subtitle"
-						:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+						v-if="post.subtitle"
+						:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 					>
-						{{ this.post.subtitle }}
+						{{ post.subtitle }}
 					</h6>
 				</div>
-				<img
-					v-if="this.featuredPhoto !== ``"
-					:src="this.featuredPhoto"
-					class="flex-shrink-0 h-24 object-contain rounded-lg"
-				/>
+				<img v-if="featuredPhoto !== ``" :src="featuredPhoto" class="flex-shrink-0 h-24 object-contain rounded-lg" />
 			</nuxt-link>
 		</div>
 		<!-- Actions -->
@@ -70,19 +62,19 @@
 			<div class="flex items-end mt-1">
 				<button
 					class="flex items-end focus:outline-none mr-2"
-					:class="this.getStyles()"
+					:class="getStyles()"
 					@click="showComments = !showComments"
 				>
-					<CommentIcon :isActive="this.showComments" />
+					<CommentIcon :isActive="showComments" />
 				</button>
 				<Share
 					:post="post"
-					:cid="$props.post._id"
+					:cid="post._id"
 					:class="this.$store.state.settings.darkMode ? 'fill-lightActive' : 'fill-darkActive'"
 					class="fill-primary"
 				/>
 				<BookmarkButton
-					:postID="$props.post._id"
+					:postID="post._id"
 					:class="this.$store.state.settings.darkMode ? 'fill-lightActive' : 'fill-darkActive'"
 				/>
 			</div>
@@ -91,12 +83,13 @@
 				<TagPill v-for="t in post.tags" :key="t.name" :tag="t.name" class="ml-4 my-1" />
 			</div>
 		</div>
-		<PostActions v-if="showComments" :postCID="$props.post._id" :initComments="$props.comments" />
+		<PostActions v-if="showComments" :postCID="post._id" :initComments="comments" />
 	</article>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+import type { PropType } from 'vue'
 import PostActions from '@/components/post/Actions.vue'
 import ProfileIcon from '@/components/icons/Person.vue'
 import BookmarkButton from '@/components/post/BookmarkButton.vue'
@@ -125,15 +118,15 @@ export default Vue.extend({
 	},
 	props: {
 		post: {
-			type: Object as () => RetrievedPost,
+			type: Object as PropType<RetrievedPost>,
 			default: null,
 		},
 		comments: {
-			type: Array as () => Comment[] | null,
+			type: Array as PropType<Comment[] | null>,
 			default: null,
 		},
 		profile: {
-			type: Object as () => Profile,
+			type: Object as PropType<Profile>,
 			default: null,
 		},
 	},
@@ -147,14 +140,14 @@ export default Vue.extend({
 		}
 	},
 	async created() {
-		let profile = this.$props.profile
+		let profile = this.profile
 		if (!profile) {
-			if (this.$store.state.session.id === this.$props.post.authorID) {
+			if (this.$store.state.session.id === this.post.authorID) {
 				// Viewing own post
 				profile = getProfileFromSession(this.$store.state.session)
 			} else {
 				// Viewing someone else's post
-				profile = await getProfile(this.$props.post.authorID)
+				profile = await getProfile(this.post.authorID)
 			}
 		}
 

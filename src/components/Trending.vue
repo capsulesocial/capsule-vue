@@ -4,7 +4,7 @@
 			<nuxt-link to="/discover">Trending Tags</nuxt-link>
 		</h2>
 		<div class="flex flex-row flex-wrap" style="width: 240px">
-			<Tag v-for="t in this.tags" :key="t" :tag="t" class="my-1 mr-1 overflow-x-auto" />
+			<Tag v-for="t in tags" :key="t" :tag="t" class="my-1 mr-1 overflow-x-auto" />
 		</div>
 	</div>
 </template>

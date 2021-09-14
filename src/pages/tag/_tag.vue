@@ -6,11 +6,11 @@
 				<h2 class="text-2xl uppercase">#{{ this.$route.params.tag }}</h2>
 			</article>
 			<!-- Not loaded yet -->
-			<article v-show="this.isLoading" class="flex justify-center" style="width: 600px">
+			<article v-show="isLoading" class="flex justify-center" style="width: 600px">
 				<div class="loader m-5"></div>
 			</article>
 			<!-- Posts loaded -->
-			<article v-for="p in this.posts" :key="p.post._id" style="padding-left: 22px">
+			<article v-for="p in posts" :key="p.post._id" style="padding-left: 22px">
 				<PostCard :post="p.post" :comments="p.comments" />
 			</article>
 		</div>

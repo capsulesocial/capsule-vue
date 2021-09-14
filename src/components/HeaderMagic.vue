@@ -18,14 +18,10 @@
 			>
 				<div class="md:min-w-max md:max-w-3xl w-full pl-10 pr-5 flex justify-between">
 					<div class="items-center flex">
-						<img
-							v-if="this.$props.avatar !== null && this.$props.avatar !== ``"
-							:src="this.$props.avatar"
-							class="w-10 h-10 rounded-xl mr-4"
-						/>
+						<img v-if="avatar !== null && avatar !== ``" :src="avatar" class="w-10 h-10 rounded-xl mr-4" />
 						<ProfileIcon v-else class="w-10 h-10 rounded-full mr-4 border" />
-						<nuxt-link :to="`/` + this.$props.authorID" class="pr-4 text-lg">@{{ this.$props.authorID }}</nuxt-link>
-						<FriendButton :authorID="this.$props.authorID" />
+						<nuxt-link :to="`/` + authorID" class="pr-4 text-lg">@{{ authorID }}</nuxt-link>
+						<FriendButton :authorID="authorID" />
 					</div>
 					<button class="flex items-center bg-lightSecondary rounded-full p-2 focus:outline-none" @click="handleClose">
 						<XIcon />
@@ -38,6 +34,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import type { PropType } from 'vue'
 import XIcon from '@/components/icons/X.vue'
 import FriendButton from '@/components/FriendButton.vue'
 import ProfileIcon from '@/components/icons/Person.vue'
@@ -54,7 +51,7 @@ export default Vue.extend({
 			default: `username`,
 		},
 		avatar: {
-			type: String,
+			type: Object as PropType<string | ArrayBuffer | null>,
 			default: null,
 		},
 	},
