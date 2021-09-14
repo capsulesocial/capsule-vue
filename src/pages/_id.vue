@@ -33,7 +33,7 @@
 								:to="'/' + this.$route.params.id + '/categories'"
 								:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 							>
-								<span class="font-bold"><!-- {{ this.currentUser.categories.length }} -->0</span>
+								<span class="font-bold">0</span>
 								<span
 									:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 								>
@@ -45,7 +45,7 @@
 								:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 								class="pl-4"
 							>
-								<span class="font-bold"><!-- {{ this.currentUser.followers.length }} -->0</span>
+								<span class="font-bold">{{ this.followers }}</span>
 								<span
 									:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 								>
@@ -57,7 +57,7 @@
 								:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 								class="pl-4"
 							>
-								<span class="font-bold"><!-- {{ this.currentUser.following.length }} -->0</span>
+								<span class="font-bold">{{ this.following }}</span>
 								<span
 									:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 								>
@@ -156,11 +156,14 @@ import SettingsIcon from '@/components/icons/Settings.vue'
 import { Post } from '@/backend/post'
 import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
+import { getFollowersAndFollowing } from '@/backend/following'
 
 interface IData {
 	avatar: string
 	currentUser: Profile | null
 	posts: Post[]
+	followers: number
+	following: number
 }
 
 export default Vue.extend({
@@ -177,6 +180,8 @@ export default Vue.extend({
 		return {
 			avatar: ``,
 			currentUser: null,
+			followers: 0,
+			following: 0,
 			posts: [],
 		}
 	},
@@ -188,6 +193,9 @@ export default Vue.extend({
 				this.avatar = p
 			})
 		}
+		const { followers, following } = await getFollowersAndFollowing(this.$route.params.id)
+		this.followers = followers.size
+		this.following = following.size
 	},
 	methods: {
 		getStyles(tab: string): string {
