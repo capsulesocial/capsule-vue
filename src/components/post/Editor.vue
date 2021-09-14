@@ -45,7 +45,7 @@
 						ref="subtitle"
 						placeholder="Enter Subtitle"
 						contenteditable="true"
-						class="font-serif text-2xl leading-loose text-lightSecondaryText focus:outline-none w-full pb-2"
+						class="font-serif text-xl leading-loose text-lightSecondaryText focus:outline-none w-full pb-2"
 					></h2>
 				</article>
 
