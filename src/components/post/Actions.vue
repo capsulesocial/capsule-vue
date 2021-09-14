@@ -6,7 +6,7 @@
 				<!-- Comment box Container -->
 				<div
 					class="comment-container flex bg-white shadow-xl rounded-xl w-full overflow-hidden"
-					style="padding: 16px 20px 16px 20px"
+					style="padding: 8px 10px 8px 10px"
 					:style="{ backgroundImage: `url(${this.backgroundList[this.emotionCategory]})` }"
 				>
 					<div
@@ -86,14 +86,27 @@
 									</button>
 								</div>
 								<!-- Right side: images -->
-								<div class="faces overflow-y-scroll grid grid-cols-3 w-full -mr-1 bg-white">
+								<div class="faces overflow-y-scroll flex flex-row justify-around flex-wrap w-full bg-white">
 									<button
 										v-for="e in this.feelingList[this.emotionCategory]"
 										:key="e"
-										class="w-full items-center focus:outline-none"
+										class="
+											items-center
+											rounded-lg
+											shadow-lg
+											transition
+											duration-500
+											ease-in-out
+											transform
+											hover:scale-105
+											focus:outline-none
+											w-24
+											h-24
+											m-1
+										"
 										@click="setEmotion(e)"
 									>
-										<img :src="reactionList[e].image" :alt="reactionList[e].label" class="flex-shrink-0 h-20 w-20" />
+										<img :src="reactionList[e].image" :alt="reactionList[e].label" class="flex-shrink-0 h-24 w-24" />
 									</button>
 								</div>
 							</div>
@@ -264,17 +277,17 @@ export default Vue.extend({
 
 /* Custom scrollbar */
 .faces::-webkit-scrollbar {
-	width: 15px;
+	width: 10px;
 }
 /* Track */
 .faces::-webkit-scrollbar-track {
 	box-shadow: inset 0 0 5px #888888;
-	border-radius: 15px;
+	border-radius: 0.75rem;
 }
 /* Handle */
 .faces::-webkit-scrollbar-thumb {
 	background: #1e566c;
-	border-radius: 15px;
+	border-radius: 0.75rem;
 }
 
 /* Handle on hover */

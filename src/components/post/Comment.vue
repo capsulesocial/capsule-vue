@@ -3,20 +3,27 @@
 		<!-- Component that displays a posted comment -->
 		<div class="flex">
 			<!-- Avatar -->
-			<div class="flex-shrink-0">
+			<div class="flex-shrink-0 relative">
 				<div
 					class="rounded-lg p-1"
 					:style="{ backgroundImage: `url(${this.emotion.background})` }"
 					style="background-size: cover"
 				>
 					<span v-if="this.avatar === `` || this.avatar === null" class="p-1 border-2 rounded-lg block bg-white">
-						<ProfileIcon class="w-6 h-6" />
+						<ProfileIcon class="w-12 h-12" />
 					</span>
-					<img v-else :src="this.avatar" class="w-10 h-10 rounded-lg object-cover" />
+					<img v-else :src="this.avatar" class="w-12 h-12 rounded-lg object-cover" />
+					<span
+						v-if="this.emotion"
+						class="absolute rounded-full p-1 -mt-4 -ml-4"
+						:style="{ backgroundImage: `url(${this.emotion.background})` }"
+					>
+						<img :src="this.emotion.image" class="bg-white rounded-full w-8 h-8" />
+					</span>
 				</div>
 			</div>
 			<!-- Content -->
-			<div class="flex-1 leading-relaxed ml-2">
+			<div class="flex-1 leading-relaxed ml-4">
 				<strong
 					:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 					class="font-bold bold mr-1"
