@@ -88,7 +88,7 @@ export default Vue.extend({
 			this.posts = []
 			this.isLoading = true
 			this.algorithm = a
-			this.posts = await getPosts({}, a)
+			this.posts = await getPosts({}, a, this.$store.state.session.id)
 			this.isLoading = false
 			return this.posts
 		},
