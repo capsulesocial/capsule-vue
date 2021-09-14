@@ -2,6 +2,7 @@ import axios from 'axios'
 import { capsuleOrbit } from './utilities/config'
 import { signContent } from './keys'
 import { uint8ArrayToHexString } from './utilities/helpers'
+import cache from './utilities/caching'
 
 export interface IFollowData {
 	action: `FOLLOW` | `UNFOLLOW`
@@ -30,11 +31,7 @@ export async function followChange(action: `FOLLOW` | `UNFOLLOW`, self: string, 
 	})
 }
 
-let _followerData: { followers: Set<string>; following: Set<string> } | null = null
-
-export async function getFollowersAndFollowing(
-	user: string,
-): Promise<{ followers: Set<string>; following: Set<string> }> {
+async function _getFollowersAndFollowing(user: string): Promise<{ followers: Set<string>; following: Set<string> }> {
 	const response = await axios.get(`${capsuleOrbit}/follow/${user}`)
 
 	const { followers, following } = response.data.data
@@ -42,16 +39,4 @@ export async function getFollowersAndFollowing(
 	return { followers: new Set(followers), following: new Set(following) }
 }
 
-export async function updateFollowerData(user: string) {
-	_followerData = await getFollowersAndFollowing(user)
-
-	return _followerData
-}
-
-export async function getFollowerData(user: string) {
-	if (!_followerData) {
-		_followerData = await getFollowersAndFollowing(user)
-	}
-
-	return _followerData
-}
+export const getFollowersAndFollowing = cache(_getFollowersAndFollowing)

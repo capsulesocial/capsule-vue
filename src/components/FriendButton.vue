@@ -19,7 +19,7 @@
 import Vue from 'vue'
 import FollowIcon from '@/components/icons/Follow.vue'
 import UnfollowIcon from '@/components/icons/Unfollow.vue'
-import { followChange, getFollowerData, updateFollowerData } from '@/backend/following'
+import { followChange, getFollowersAndFollowing } from '@/backend/following'
 
 interface IData {
 	following: boolean
@@ -46,13 +46,13 @@ export default Vue.extend({
 		}
 	},
 	async mounted() {
-		const data = await getFollowerData(this.$store.state.session.id)
+		const data = await getFollowersAndFollowing(this.$store.state.session.id)
 		this.following = data.following.has(this.authorID)
 	},
 	methods: {
 		async toggleFriend() {
 			await followChange(this.following ? `UNFOLLOW` : `FOLLOW`, this.$store.state.session.id, this.authorID)
-			const data = await updateFollowerData(this.$store.state.session.id)
+			const data = await getFollowersAndFollowing(this.$store.state.session.id, true)
 			this.following = data.following.has(this.authorID)
 		},
 	},
