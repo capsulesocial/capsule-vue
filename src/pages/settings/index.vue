@@ -1,11 +1,11 @@
 <template>
 	<main class="w-full border-l z-10">
-		<section class="flex" style="width: 750px">
+		<section class="flex" style="width: 750px; height: calc(100vh - 95px)">
 			<!-- Left column: Select tab -->
 			<article
 				style="width: 240px"
 				:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-				class="flex flex-col w-full h-full"
+				class="flex flex-col w-full"
 			>
 				<h2 class="border-b-2 text-xl bold font-bold" style="padding: 12px 0px 10px 16px">Settings</h2>
 				<button
@@ -32,14 +32,14 @@
 					<span class="text-lg">Social Accounts</span>
 					<ChevronRight class="text-gray4" />
 				</button>
-				<button
+				<!-- <button
 					class="flex flex-row justify-between p-4 focus:outline-none border-r-4 border-transparent"
 					:class="getStyles('display')"
 					@click="changeTab('display')"
 				>
 					<span class="text-lg">Display Themes</span>
 					<ChevronRight class="text-gray4" />
-				</button>
+				</button> -->
 			</article>
 
 			<!-- Right column: Show details -->
@@ -166,7 +166,6 @@
 								@input="bio = $event.target.value"
 								@keyup="checkBio()"
 							></textarea>
-
 							<p
 								class="text-xs text-right"
 								:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
@@ -174,6 +173,15 @@
 								{{ checkBio() }} Characters Remaining
 							</p>
 						</div>
+						<!-- Submit button -->
+						<button
+							:class="hasChanged() ? '' : 'opacity-50'"
+							class="bg-primary text-white rounded-lg focus:outline-none"
+							style="width: 128px; height: 40px; margin-left: 340px; margin-top: 25px"
+							@click="updateSettings"
+						>
+							Save Changes
+						</button>
 					</div>
 				</article>
 
@@ -220,6 +228,15 @@
 							class="w-full border rounded-lg focus:outline-none px-5 py-2 focus:border-primary"
 							placeholder="Confirm Password"
 						/>
+						<!-- Submit button -->
+						<button
+							:class="hasChanged() ? '' : 'opacity-50'"
+							class="bg-primary text-white rounded-lg focus:outline-none"
+							style="width: 128px; height: 40px; margin-left: 340px; margin-top: 25px"
+							@click="updateSettings"
+						>
+							Save Changes
+						</button>
 					</div>
 				</article>
 				<!-- Social Links -->
@@ -244,10 +261,19 @@
 							Link your professional account:
 						</p>
 						<VerifySocial platform="website" class="mb-5 mb-5" />
+						<!-- Submit button -->
+						<button
+							:class="hasChanged() ? '' : 'opacity-50'"
+							class="bg-primary text-white rounded-lg focus:outline-none"
+							style="width: 128px; height: 40px; margin-left: 350px; margin-top: 25px"
+							@click="updateSettings"
+						>
+							Save Changes
+						</button>
 					</div>
 				</article>
 				<!-- Display Themes -->
-				<article v-if="tab === 'display'" class="col-span-2 border-r border-l h-full">
+				<!-- <article v-if="tab === 'display'" class="col-span-2 border-r border-l h-full">
 					<h2
 						:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 						class="border-b-2 text-xl bold font-bold"
@@ -272,19 +298,9 @@
 							Auto-detect dark mode:
 						</p>
 					</div>
-				</article>
+				</article> -->
 			</div>
 		</section>
-		<div v-if="tab !== ''">
-			<button
-				:class="hasChanged() ? '' : 'opacity-50'"
-				class="bg-primary text-white rounded-lg focus:outline-none"
-				style="width: 128px; height: 40px; margin-left: 450px"
-				@click="updateSettings"
-			>
-				Save Changes
-			</button>
-		</div>
 	</main>
 </template>
 
@@ -294,7 +310,7 @@ import { mapMutations } from 'vuex'
 import { HTMLInputEvent } from '@/interfaces/HTMLInputEvent'
 import ChevronRight from '@/components/icons/ChevronRight.vue'
 import UploadAvatar from '@/components/icons/UploadAvatar.vue'
-import ColorMode from '@/components/ColorMode.vue'
+// import ColorMode from '@/components/ColorMode.vue'
 import { MutationType, getProfileFromSession, namespace as sessionStoreNamespace } from '~/store/session'
 import { setProfile } from '@/backend/profile'
 import { addPhotoToIPFS, getPhotoFromIPFS } from '@/backend/photos'
@@ -315,7 +331,7 @@ export default Vue.extend({
 		VerifySocial: () => import(`@/components/VerifySocial.vue`),
 		ChevronRight,
 		UploadAvatar,
-		ColorMode,
+		// ColorMode,
 	},
 	data(): IData {
 		return {

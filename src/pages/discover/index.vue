@@ -56,8 +56,8 @@
 			>
 				Find and join conversations on any topic:
 			</p>
-			<div class="my-4">
-				<TagCard v-for="t in tags" :key="t" :tag="t" class="text-lg mr-4 my-1" />
+			<div class="mb-4 mt-2">
+				<TagCard v-for="t in tags" :key="t" :tag="t" class="text-lg mr-4 my-2" />
 			</div>
 		</section>
 
