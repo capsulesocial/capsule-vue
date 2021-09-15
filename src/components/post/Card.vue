@@ -29,7 +29,7 @@
 						</span>
 					</nuxt-link>
 					<FriendButton
-						v-if="post.authorID !== this.$store.state.session.id"
+						v-if="post.authorID !== this.$store.state.session.id && this.$route.name !== `id`"
 						:small="true"
 						:following="usersFollowing.has(post.authorID)"
 						:toggleFriend="() => toggleFriend(post.authorID)"
