@@ -28,7 +28,7 @@
 											style="width: 126px; height: 126px"
 										/>
 									</span>
-									<span v-else><FlipIcon style="width: 126px; height: 126px" /></span>
+									<span v-else><FlipIcon style="width: 80px; height: 80px; margin-left: 20px" /></span>
 								</button>
 								<textarea
 									v-model="comment"
