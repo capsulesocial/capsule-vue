@@ -14,13 +14,6 @@ export interface Session {
 	socials: Profile[`socials`]
 	publicKey: Profile[`publicKey`]
 	cid: string
-	posts: string[]
-	reposts: string[]
-	comments: string[]
-	bookmarks: string[]
-	categories: string[]
-	following: string[]
-	followers: string[]
 }
 
 export const namespace = `session`
@@ -48,9 +41,6 @@ export const mutations: MutationTree<Session> = {
 	},
 	[MutationType.CHANGE_ID]: (state, newID: string) => {
 		state.id = newID
-	},
-	[MutationType.APPEND_POSTCID]: (state, postCID: string) => {
-		state.posts.push(postCID)
 	},
 	[MutationType.CHANGE_NAME]: (state, newName: string) => {
 		state.name = newName
@@ -93,16 +83,9 @@ export function createDefaultSession(id: string, name: string, email: string, pu
 		name,
 		email,
 		publicKey,
-		bio: `Default bio.`,
+		bio: ``,
 		location: ``,
-		posts: [],
-		reposts: [],
 		socials: [],
-		bookmarks: [],
-		categories: [],
-		comments: [],
-		followers: [],
-		following: [],
 		avatar: ``,
 	}
 }
@@ -130,13 +113,6 @@ export function createSessionFromProfile(cid: string, p: Profile): Session {
 		bio: p.bio,
 		location: p.location,
 		avatar: p.avatar,
-		posts: [],
-		reposts: [],
 		socials: [],
-		bookmarks: [],
-		categories: [],
-		comments: [],
-		followers: [],
-		following: [],
 	}
 }

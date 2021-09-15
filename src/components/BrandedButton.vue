@@ -1,6 +1,6 @@
 <template>
 	<button
-		:class="this.getStyles()"
+		:class="getStyles()"
 		class="
 			transition
 			duration-500
@@ -12,10 +12,10 @@
 			shadow-lg
 			focus:outline-none
 		"
-		@click="this.$props.action"
+		@click="action"
 	>
 		<span class="font-sans">
-			{{ this.$props.text }}
+			{{ text }}
 		</span>
 	</button>
 </template>
@@ -48,7 +48,7 @@ export default Vue.extend({
 			} else {
 				res += `bg-darkButtonBG text-darkButtonText`
 			}
-			if (!this.$props.thin) {
+			if (!this.thin) {
 				res += ` py-2 px-4`
 			} else {
 				res += ` py-1 px-4`

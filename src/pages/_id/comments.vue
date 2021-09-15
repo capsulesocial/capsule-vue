@@ -1,7 +1,7 @@
 <template>
 	<section>
 		<article>Comments</article>
-		{{ this.$props.profile }}
+		{{ profile }}
 	</section>
 </template>
 

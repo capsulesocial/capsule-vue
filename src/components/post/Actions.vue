@@ -7,11 +7,11 @@
 				<div
 					class="comment-container flex bg-white shadow-xl rounded-xl w-full overflow-hidden"
 					style="padding: 8px 10px 8px 10px"
-					:style="{ backgroundImage: `url(${this.backgroundList[this.emotionCategory]})` }"
+					:style="{ backgroundImage: `url(${backgroundList[emotionCategory]})` }"
 				>
 					<div
 						class="flip-container relative border shadow-inner rounded-xl overflow-hidden w-full h-40"
-						:class="this.showEmotions ? 'flip' : ''"
+						:class="showEmotions ? 'flip' : ''"
 					>
 						<div class="flipper flex flex-row absolute">
 							<!-- Front side: Type comment -->
@@ -21,9 +21,9 @@
 									style="margin-left: 15.2px; margin-bottom: 15px; margin-top: 15px; width: 126px; height: 126px"
 									@click="showEmotions = !showEmotions"
 								>
-									<span v-if="this.emotion !== ''">
+									<span v-if="emotion !== ''">
 										<img
-											:src="this.reactionList[this.emotion].image"
+											:src="reactionList[emotion].image"
 											class="object-contain"
 											style="width: 126px; height: 126px"
 										/>
@@ -54,7 +54,7 @@
 											text="Post"
 											:action="sendComment"
 											:thin="true"
-											:class="this.comment !== '' ? '' : 'opacity-50'"
+											:class="comment !== '' ? '' : 'opacity-50'"
 										/>
 									</span>
 								</div>
@@ -88,7 +88,7 @@
 								<!-- Right side: images -->
 								<div class="faces overflow-y-scroll flex flex-row justify-around flex-wrap w-full bg-white">
 									<button
-										v-for="e in this.feelingList[this.emotionCategory]"
+										v-for="e in feelingList[emotionCategory]"
 										:key="e"
 										class="
 											items-center
@@ -116,10 +116,10 @@
 			</div>
 		</article>
 		<article class="w-full flex justify-between">
-			<div>{{ this.comments.length }} comments</div>
-			<CommentFilter :filter="this.filter" @clicked="setFilter" />
+			<div>{{ comments.length }} comments</div>
+			<CommentFilter :filter="filter" @clicked="setFilter" />
 		</article>
-		<article v-for="c in this.comments" :key="c.cid" class="py-2">
+		<article v-for="c in comments" :key="c.cid" class="py-2">
 			<CommentCard :authorID="c.authorID" :cid="c.cid" :timestamp="c.timestamp" />
 		</article>
 	</section>
@@ -127,6 +127,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import type { PropType } from 'vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 import CommentCard from '@/components/post/Comment.vue'
 import CommentFilter from '@/components/post/CommentFilter.vue'
@@ -135,9 +136,9 @@ import { backgrounds, reactions, feelings } from '@/config'
 import { createComment, sendComment, ICommentData, getCommentsOfPost } from '@/backend/comment'
 
 interface IData {
-	backgroundList: {}
-	reactionList: {}
-	feelingList: {}
+	backgroundList: Record<string, string>
+	reactionList: Record<string, any>
+	feelingList: Record<string, any>
 	comments: ICommentData[]
 	comment: string
 	emotion: string
@@ -157,11 +158,11 @@ export default Vue.extend({
 	},
 	props: {
 		postCID: {
-			type: String as () => string,
+			type: String as PropType<string>,
 			required: true,
 		},
 		initComments: {
-			type: Array as () => ICommentData[] | null,
+			type: Array as PropType<ICommentData[] | null>,
 			default: null,
 		},
 	},
@@ -180,10 +181,10 @@ export default Vue.extend({
 		}
 	},
 	async created() {
-		if (!this.$props.initComments) {
+		if (!this.initComments) {
 			this.comments = await getCommentsOfPost(this.postCID)
 		} else {
-			this.comments = this.$props.initComments
+			this.comments = this.initComments
 		}
 	},
 	methods: {
@@ -217,11 +218,11 @@ export default Vue.extend({
 		async filterComments() {
 			// Fetch comments
 			if (this.filter === ``) {
-				const cList: ICommentData[] = await getCommentsOfPost(this.$props.postCID)
+				const cList: ICommentData[] = await getCommentsOfPost(this.postCID)
 				this.comments = cList.reverse()
 			} else {
 				const cList: ICommentData[] = await getCommentsOfPost(
-					this.$props.postCID,
+					this.postCID,
 					this.filter.charAt(0).toLowerCase() + this.filter.replace(/\s/g, ``).substring(1),
 				)
 				this.comments = cList.reverse()

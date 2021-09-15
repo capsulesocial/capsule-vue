@@ -5,10 +5,10 @@
 			:class="showSocialShares ? 'text-primary' : ''"
 			@click.stop="toggleDropdown"
 		>
-			<ShareIcon :isActive="this.showSocialShares" class="mr-2" />
+			<ShareIcon :isActive="showSocialShares" class="mr-2" />
 		</button>
 		<div
-			v-show="this.showSocialShares"
+			v-show="showSocialShares"
 			:class="
 				this.$store.state.settings.darkMode
 					? 'bg-lightBG text-lightPrimaryText border-lightBorder'
@@ -23,14 +23,14 @@
 				class="flex focus:outline-none"
 				@click="handleRepost()"
 			>
-				<RepostIcon :isActive="this.isReposted" :shrink="true" style="width: 13.7px" class="mr-2" />
+				<RepostIcon :isActive="isReposted" :shrink="true" style="width: 13.7px" class="mr-2" />
 				<span
-					v-if="this.isReposted"
+					v-if="isReposted"
 					:class="this.$store.state.settings.darkMode ? 'text-lightActive' : 'text-darkActive'"
-					class="text-sm self-center"
+					class="text-xs self-center"
 					>Undo Repost</span
 				>
-				<span v-else class="text-sm self-center">Repost to Feed</span>
+				<span v-else class="text-xs self-center">Repost to Feed</span>
 			</button>
 			<!-- Twitter -->
 			<button
@@ -39,7 +39,7 @@
 				@click="handleShare('TWITTER')"
 			>
 				<TwitterIcon style="width: 13.7px" class="mr-2" />
-				<span class="text-sm self-center">Share on Twitter</span>
+				<span class="text-xs self-center text-left">Share on Twitter</span>
 			</button>
 			<!-- Copy URL Link -->
 			<button
@@ -48,15 +48,16 @@
 				@click="handleShare('URL')"
 			>
 				<LinkIcon style="width: 13.7px" class="mr-2" />
-				<span class="text-sm self-center">Copy Link</span>
+				<span class="text-xs self-center">Copy Link</span>
 			</button>
 		</div>
-		<input :id="this.cid" type="hidden" value="" class="hidden" />
+		<input :id="cid" type="hidden" value="" class="hidden" />
 	</div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+import type { PropType } from 'vue'
 import ShareIcon from '@/components/icons/Share.vue'
 import TwitterIcon from '@/components/icons/brands/Twitter.vue'
 import LinkIcon from '@/components/icons/Link.vue'
@@ -72,7 +73,7 @@ export default Vue.extend({
 	},
 	props: {
 		post: {
-			type: Object as () => Post, // TODO fix the post type,
+			type: Object as PropType<Post>, // TODO fix the post type,
 			required: true,
 		},
 		cid: {
@@ -91,7 +92,7 @@ export default Vue.extend({
 		if (!reposts) {
 			return
 		}
-		if (reposts.includes(this.$props.post.id)) {
+		if (reposts.includes(this.cid)) {
 			this.isReposted = true
 		}
 	},
@@ -115,7 +116,6 @@ export default Vue.extend({
 	},
 	methods: {
 		handleRepost() {
-			this.$store.commit(`me/handleRepost`, this.$props.post.id)
 			this.isReposted = !this.isReposted
 			if (this.isReposted) {
 				alert(`Reposted!`)
@@ -125,7 +125,7 @@ export default Vue.extend({
 		},
 		handleShare(type: string) {
 			const shareElement = document.createElement(`textarea`)
-			shareElement.value = `${document.location.origin}/post/${this.$props.cid}`
+			shareElement.value = `${document.location.origin}/post/${this.cid}`
 			shareElement.style.opacity = `0`
 			document.body.appendChild(shareElement)
 			switch (type) {
@@ -142,9 +142,9 @@ export default Vue.extend({
 							encodeURIComponent(shareElement.value) +
 							`&text=` +
 							`📰 ` +
-							this.$props.post.title +
+							this.post.title +
 							`\n 🔏 ` +
-							this.$props.post.authorID +
+							this.post.authorID +
 							` on @CapsuleSoc 🔗`,
 					)
 					break

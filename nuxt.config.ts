@@ -53,6 +53,13 @@ const config: NuxtConfig = {
 
 	// Build Configuration: https://go.nuxtjs.dev/config-build
 	build: {},
+	typescript: {
+		typeCheck: {
+			eslint: {
+				files: './src/**/*.{ts,vue,js}',
+			},
+		},
+	},
 }
 
 export default config

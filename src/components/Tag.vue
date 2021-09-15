@@ -1,12 +1,10 @@
 <template>
 	<button
 		class="z-10 focus:outline-none px-3 py-1 transition duration-500 ease-in-out transform hover:scale-105"
-		:class="this.$props.theme === 'colors' ? 'bg-white shadow rounded-full' : 'bg-gray1 text-gray5 rounded-lg'"
+		:class="theme === 'colors' ? 'bg-white shadow rounded-full' : 'bg-gray1 text-gray5 rounded-lg'"
 		@click="$router.push('/tag/' + tag)"
 	>
-		<span class="font-bold" :class="this.$props.theme === 'colors' ? colors[getRandomColor()] : 'text-gray5'">
-			#{{ tag }}
-		</span>
+		<span class="font-bold" :class="theme === 'colors' ? colors[getRandomColor()] : 'text-gray5'"> #{{ tag }} </span>
 	</button>
 </template>
 

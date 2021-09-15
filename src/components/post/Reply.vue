@@ -14,11 +14,11 @@
 				{{ name }}
 			</strong>
 			<nuxt-link
-				:to="this.$props.authorID"
+				:to="authorID"
 				:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 				class="text-sm mr-2"
 			>
-				@{{ $props.authorID }}
+				@{{ authorID }}
 			</nuxt-link>
 			<span
 				v-if="timestamp"
@@ -39,6 +39,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import type { PropType } from 'vue'
 import ProfileIcon from '@/components/icons/Person.vue'
 import { getPhotoFromIPFS } from '@/backend/photos'
 import { getComment } from '@/backend/comment'
@@ -59,7 +60,7 @@ export default Vue.extend({
 		authorID: { type: String, required: true },
 		cid: { type: String, required: true },
 		timestamp: { type: Number, required: true },
-		profile: { type: Object as () => Profile, default: null },
+		profile: { type: Object as PropType<Profile>, default: null },
 	},
 	data(): IData {
 		return {
@@ -69,18 +70,18 @@ export default Vue.extend({
 		}
 	},
 	async created() {
-		const comment = await getComment(this.$props.cid)
+		const comment = await getComment(this.cid)
 		this.content = comment.content
 	},
 	async mounted() {
-		let p = this.$props.profile
+		let p = this.profile
 		if (!p) {
-			if (this.$store.state.session.id === this.$props.authorID) {
+			if (this.$store.state.session.id === this.authorID) {
 				// Viewing own post
 				p = getProfileFromSession(this.$store.state.session)
 			} else {
 				// Viewing someone else's post
-				p = await getProfile(this.$props.authorID)
+				p = await getProfile(this.authorID)
 			}
 		}
 		this.name = p.name
