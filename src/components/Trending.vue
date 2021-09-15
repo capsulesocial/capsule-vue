@@ -27,9 +27,10 @@ export default Vue.extend({
 			tags: [],
 		}
 	},
-	async created() {
-		const content = await getTags()
-		this.tags = content.slice(0, 14)
+	created() {
+		getTags().then((content) => {
+			this.tags = content.slice(0, 14)
+		})
 	},
 })
 </script>
