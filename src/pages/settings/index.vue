@@ -225,7 +225,7 @@
 						<input
 							id="confirmPassword"
 							type="password"
-							class="w-full border rounded-lg focus:outline-none px-5 py-2 focus:border-primary"
+							class="w-full border rounded-lg focus:outline-none px-5 py-2 my-2 focus:border-primary"
 							placeholder="Confirm Password"
 						/>
 						<!-- Submit button -->
