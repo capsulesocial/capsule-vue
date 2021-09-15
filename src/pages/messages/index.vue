@@ -1,7 +1,7 @@
 <template>
 	<div
 		class="w-full"
-		:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText bg-lightBG' : 'text-darkPrimaryText bg-darkBG'"
+		:class="$store.state.settings.darkMode ? 'text-lightPrimaryText bg-lightBG' : 'text-darkPrimaryText bg-darkBG'"
 	>
 		<section class="flex flex-row h-screen pt-12">
 			<article class="flex flex-row flex-shrink-0 p-4" style="width: 240px">
@@ -12,7 +12,7 @@
 							<h3 class="text-xl font-semibold">Messages</h3>
 							<h6
 								:class="
-									this.$store.state.settings.darkMode
+									$store.state.settings.darkMode
 										? 'text-lightOnSecondaryText bg-lightSecondary'
 										: 'text-darkOnSecondaryText bg-darkSecondary'
 								"
@@ -24,7 +24,7 @@
 						<div class="ml-auto">
 							<button
 								:class="
-									this.$store.state.settings.darkMode
+									$store.state.settings.darkMode
 										? 'text-lightOnPrimaryText bg-lightPrimary'
 										: 'text-darkOnPrimaryText bg-darkPrimary'
 								"
@@ -39,7 +39,7 @@
 							<!-- Name & Contact card / button (active) -->
 							<div
 								:class="
-									this.$store.state.settings.darkMode
+									$store.state.settings.darkMode
 										? 'text-lightPrimaryText bg-lightPrimary bg-opacity-25'
 										: 'text-darkPrimaryText bg-darkPrimary bg-opacity-75'
 								"
@@ -57,7 +57,7 @@
 							<!-- Contact Button (Inactive) -->
 							<div
 								:class="
-									this.$store.state.settings.darkMode
+									$store.state.settings.darkMode
 										? 'text-lightOnSurfaceText bg-lightSurface'
 										: 'text-darkOnSurfaceVariantText bg-darkSurface'
 								"
@@ -93,7 +93,7 @@
 							<img :src="friendAvatar" class="w-10 h-10 rounded-lg flex-shrink-0 m-2" />
 							<div
 								:class="
-									this.$store.state.settings.darkMode
+									$store.state.settings.darkMode
 										? 'bg-lightSecondary shadow-lg bg-opacity-25'
 										: 'bg-darkSecondary bg-opacity-75'
 								"
@@ -109,7 +109,7 @@
 							<img :src="avatar" class="w-10 h-10 rounded-lg flex-shrink-0 m-2" />
 							<div
 								:class="
-									this.$store.state.settings.darkMode
+									$store.state.settings.darkMode
 										? 'bg-lightSurfaceVariant bg-opacity-25'
 										: 'text-darkOnSurfaceVariantText bg-darkSurface'
 								"
@@ -125,7 +125,7 @@
 				<div class="flex flex-row items-center">
 					<div
 						:class="
-							this.$store.state.settings.darkMode
+							$store.state.settings.darkMode
 								? 'text-lightPrimaryText bg-lightBG border-lightBorder'
 								: 'text-darkPrimaryText bg-darkBG border-darkBorder'
 						"
@@ -138,7 +138,7 @@
 							<input
 								type="text"
 								:class="
-									this.$store.state.settings.darkMode
+									$store.state.settings.darkMode
 										? 'text-lightPrimaryText placeholder-lightSecondaryText bg-lightBG border-lightBorder'
 										: 'text-darkPrimaryText placeholder-darkSecondaryText bg-darkBG border-darkBorder'
 								"

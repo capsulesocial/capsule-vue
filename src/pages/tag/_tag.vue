@@ -3,7 +3,7 @@
 		<div style="width: 600px" class="border-l border-r">
 			<article class="p-4">
 				<h2 class="text-xl">Hashtags /</h2>
-				<h2 class="text-2xl uppercase">#{{ this.$route.params.tag }}</h2>
+				<h2 class="text-2xl uppercase">#{{ $route.params.tag }}</h2>
 			</article>
 			<!-- Not loaded yet -->
 			<article v-show="isLoading" class="flex justify-center" style="width: 600px">

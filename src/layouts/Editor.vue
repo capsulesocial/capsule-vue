@@ -5,7 +5,7 @@
 			<div class="flex items-center md:min-w-max md:max-w-4xl w-full pl-4">
 				<CapsuleIcon />
 				<h3
-					:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryVariant' : 'text-darkPrimaryVariant'"
+					:class="$store.state.settings.darkMode ? 'text-lightPrimaryVariant' : 'text-darkPrimaryVariant'"
 					class="text-xl border-l-2 border-primary ml-4 pl-4"
 				>
 					New Post

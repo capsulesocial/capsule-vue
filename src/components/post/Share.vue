@@ -10,7 +10,7 @@
 		<div
 			v-show="showSocialShares"
 			:class="
-				this.$store.state.settings.darkMode
+				$store.state.settings.darkMode
 					? 'bg-lightBG text-lightPrimaryText border-lightBorder'
 					: 'bg-darkBG text-darkPrimaryText border-darkBorder'
 			"
@@ -19,14 +19,14 @@
 		>
 			<!-- Repost -->
 			<button
-				:class="this.$store.state.settings.darkMode ? 'hover:text-lightActive' : 'hover:text-darkActive'"
+				:class="$store.state.settings.darkMode ? 'hover:text-lightActive' : 'hover:text-darkActive'"
 				class="flex focus:outline-none"
 				@click="handleRepost()"
 			>
 				<RepostIcon :isActive="isReposted" :shrink="true" style="width: 13.7px" class="mr-2" />
 				<span
 					v-if="isReposted"
-					:class="this.$store.state.settings.darkMode ? 'text-lightActive' : 'text-darkActive'"
+					:class="$store.state.settings.darkMode ? 'text-lightActive' : 'text-darkActive'"
 					class="text-xs self-center"
 					>Undo Repost</span
 				>
@@ -34,7 +34,7 @@
 			</button>
 			<!-- Twitter -->
 			<button
-				:class="this.$store.state.settings.darkMode ? 'hover:text-lightActive' : 'hover:text-darkActive'"
+				:class="$store.state.settings.darkMode ? 'hover:text-lightActive' : 'hover:text-darkActive'"
 				class="flex focus:outline-none"
 				@click="handleShare('TWITTER')"
 			>
@@ -43,7 +43,7 @@
 			</button>
 			<!-- Copy URL Link -->
 			<button
-				:class="this.$store.state.settings.darkMode ? 'hover:text-lightActive' : 'hover:text-darkActive'"
+				:class="$store.state.settings.darkMode ? 'hover:text-lightActive' : 'hover:text-darkActive'"
 				class="flex focus:outline-none"
 				@click="handleShare('URL')"
 			>

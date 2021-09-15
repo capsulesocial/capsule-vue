@@ -20,7 +20,6 @@ export default Vue.extend({
 	},
 	data() {
 		return {
-			// isBookmarked: this.post.bookmarks.includes(this.$store.state.me.id),
 			isBookmarked: false,
 		}
 	},
@@ -35,18 +34,7 @@ export default Vue.extend({
 	},
 	methods: {
 		handleBookmark() {
-			// this.$store.commit('me/handleBookmark', this.postID)
 			this.isBookmarked = !this.isBookmarked
-			// this.$store.commit('posts/handleBookmark', {
-			//   postID: this.postID,
-			//   userID: this.$store.state.me.id,
-			// })
-			// const p = await this.$api.post.handleBookmark(this.$store.state.me.id, this.post.id)
-			// if (p.bookmarks.includes(this.$store.state.me.id)) {
-			//   this.isBookmarked = true
-			// } else {
-			//   this.isBookmarked = false
-			// }
 		},
 	},
 })

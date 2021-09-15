@@ -4,7 +4,7 @@
 			<!-- Left column: Select tab -->
 			<article
 				style="width: 240px"
-				:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+				:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 				class="flex flex-col w-full"
 			>
 				<h2 class="border-b-2 text-xl bold font-bold" style="padding: 12px 0px 10px 16px">Settings</h2>
@@ -47,7 +47,7 @@
 				<article v-if="tab === 'account'" class="col-span-2 border-r border-l h-full">
 					<!-- General Settings (Username, ID, Email) -->
 					<h2
-						:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+						:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 						class="border-b-2 text-xl bold font-bold"
 						style="padding: 12px 0px 10px 16px"
 					>
@@ -57,12 +57,12 @@
 						<p style="color: #424242" class="mb-5">Edit your profile:</p>
 						<button class="self-center mb-2 text-xs text-gray4" @click="$refs.uploadedPic.click()">
 							<img
-								v-if="this.$store.state.session.avatar !== ''"
+								v-if="$store.state.session.avatar !== ''"
 								:src="profilePic"
 								class="w-32 h-32 rounded-lg object-cover"
 							/>
 							<UploadAvatar v-else class="w-32 h-32 rounded-lg" />
-							<span :class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'">
+							<span :class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'">
 								Change Avatar
 							</span>
 						</button>
@@ -83,9 +83,9 @@
 									id="newName"
 									v-model="newName"
 									type="text"
-									:placeholder="this.$store.state.session.name"
+									:placeholder="$store.state.session.name"
 									:class="
-										this.$store.state.settings.darkMode
+										$store.state.settings.darkMode
 											? 'bg-lightBG text-lightSecondaryText focus:border-lightActive'
 											: 'bg-darkBG text-darkSecondaryText focus:border-darkActive'
 									"
@@ -99,9 +99,9 @@
 									id="newID"
 									v-model.trim="newID"
 									type="text"
-									:placeholder="this.$store.state.session.id"
+									:placeholder="$store.state.session.id"
 									:class="
-										this.$store.state.settings.darkMode
+										$store.state.settings.darkMode
 											? 'bg-lightBG text-lightSecondaryText focus:border-lightActive'
 											: 'bg-darkBG text-darkSecondaryText focus:border-darkActive'
 									"
@@ -115,9 +115,9 @@
 									id="newEmail"
 									v-model="newEmail"
 									type="email"
-									:placeholder="this.$store.state.session.email"
+									:placeholder="$store.state.session.email"
 									:class="
-										this.$store.state.settings.darkMode
+										$store.state.settings.darkMode
 											? 'bg-lightBG text-lightSecondaryText focus:border-lightActive'
 											: 'bg-darkBG text-darkSecondaryText focus:border-darkActive'
 									"
@@ -131,11 +131,9 @@
 									id="location"
 									v-model="location"
 									type="text"
-									:placeholder="
-										this.$store.state.session.location === '' ? 'Enter Location' : this.$store.state.session.location
-									"
+									:placeholder="$store.state.session.location === '' ? 'Enter Location' : $store.state.session.location"
 									:class="
-										this.$store.state.settings.darkMode
+										$store.state.settings.darkMode
 											? 'bg-lightBG text-lightSecondaryText focus:border-lightActive'
 											: 'bg-darkBG text-darkSecondaryText focus:border-darkActive'
 									"
@@ -148,7 +146,7 @@
 							<label
 								for="bio"
 								class=""
-								:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+								:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 							>
 								Bio:
 							</label>
@@ -158,7 +156,7 @@
 								:value="bio"
 								rows="5"
 								:class="
-									this.$store.state.settings.darkMode
+									$store.state.settings.darkMode
 										? 'bg-lightBG text-lightSecondaryText focus:text-lightPrimaryText focus:border-lightActive'
 										: 'bg-darkBG text-darkSecondaryText focus:text-darkPrimaryText focus:border-darkActive'
 								"
@@ -168,7 +166,7 @@
 							></textarea>
 							<p
 								class="text-xs text-right"
-								:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+								:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 							>
 								{{ checkBio() }} Characters Remaining
 							</p>
@@ -187,7 +185,7 @@
 
 				<article v-if="tab === 'password'" class="col-span-2 border-r border-l h-full">
 					<h2
-						:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+						:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 						class="border-b-2 text-xl bold font-bold"
 						style="padding: 12px 0px 10px 16px"
 					>
@@ -196,7 +194,7 @@
 					<div class="flex flex-col p-5">
 						<p
 							class="mb-5"
-							:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+							:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 						>
 							Choose a strong password to protect your account:
 						</p>
@@ -242,20 +240,20 @@
 				<!-- Social Links -->
 				<article v-if="tab === 'social'" class="col-span-2 border-r border-l h-full">
 					<h2
-						:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+						:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 						class="border-b-2 text-xl bold font-bold"
 						style="padding: 12px 0px 10px 16px"
 					>
 						Social Links
 					</h2>
 					<div class="p-5">
-						<p :class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'">
+						<p :class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'">
 							Link your social media accounts:
 						</p>
 						<VerifySocial platform="twitter" class="my-5" />
 						<VerifySocial platform="github" class="my-5" />
 						<p
-							:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+							:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 							class="py-5 border-t"
 						>
 							Link your professional account:
@@ -275,7 +273,7 @@
 				<!-- Display Themes -->
 				<!-- <article v-if="tab === 'display'" class="col-span-2 border-r border-l h-full">
 					<h2
-						:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+						:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 						class="border-b-2 text-xl bold font-bold"
 						style="padding: 12px 0px 10px 16px"
 					>
@@ -284,16 +282,16 @@
 					<div class="flex items-center">
 						<p
 							class="m-4"
-							:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+							:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 						>
-							Toggle {{ this.$store.state.settings.darkMode ? 'night' : 'day' }} mode:
+							Toggle {{ $store.state.settings.darkMode ? 'night' : 'day' }} mode:
 						</p>
 						<ColorMode class="text-5xl" />
 					</div>
 					<div class="flex items-center">
 						<p
 							class="m-4"
-							:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+							:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 						>
 							Auto-detect dark mode:
 						</p>

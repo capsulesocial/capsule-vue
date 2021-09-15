@@ -1,5 +1,5 @@
 <template>
-	<main class="emoji-cursor w-full h-screen" :class="this.$store.state.settings.darkMode ? 'bg-lightBG' : 'bg-darkBG'">
+	<main class="emoji-cursor w-full h-screen" :class="$store.state.settings.darkMode ? 'bg-lightBG' : 'bg-darkBG'">
 		<Nuxt />
 	</main>
 </template>

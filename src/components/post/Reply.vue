@@ -8,14 +8,14 @@
 		</div>
 		<div class="flex-1 leading-relaxed ml-2">
 			<strong
-				:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+				:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 				class="font-bold bold mr-1"
 			>
 				{{ name }}
 			</strong>
 			<nuxt-link
 				:to="authorID"
-				:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+				:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 				class="text-sm mr-2"
 			>
 				@{{ authorID }}
@@ -23,12 +23,12 @@
 			<span
 				v-if="timestamp"
 				class="text-xs"
-				:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+				:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 			>
 				{{ $formatDate(timestamp) }}
 			</span>
 			<p
-				:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+				:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 				class="text-sm py-1"
 			>
 				{{ content }}

@@ -3,12 +3,12 @@
 		<!-- Unverified -->
 		<div
 			v-if="!isActive"
-			:class="this.$store.state.settings.darkMode ? 'text-gray7' : 'text-darkPrimaryText'"
+			:class="$store.state.settings.darkMode ? 'text-gray7' : 'text-darkPrimaryText'"
 			class="flex justify-between"
 		>
 			<div
 				class="flex flex-row items-center text-xl"
-				:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+				:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 			>
 				<TwitterIcon v-if="platform === 'twitter'" class="mr-4 text-gray7" />
 				<GitHubIcon v-if="platform === 'github'" class="mr-4 text-gray7" />
@@ -20,7 +20,7 @@
 
 		<div v-else class="h-12 w-full flex justify-between items-center">
 			<div v-if="!isVerified">
-				<label for="handle" :class="this.$store.state.settings.darkMode ? 'text-gray7' : 'text-darkSecondaryText'">
+				<label for="handle" :class="$store.state.settings.darkMode ? 'text-gray7' : 'text-darkSecondaryText'">
 					<span v-if="platform !== 'website'">handle: @</span><span v-else>URL:</span>
 				</label>
 				<input
@@ -29,7 +29,7 @@
 					type="text"
 					placeholder="handle"
 					:class="
-						this.$store.state.settings.darkMode
+						$store.state.settings.darkMode
 							? 'bg-lightBG text-lightPrimaryText border-lightBorder'
 							: 'bg-darkBG text-darkPrimaryText border-darkBorder'
 					"
@@ -42,7 +42,7 @@
 			<button
 				v-if="!isVerified"
 				:class="
-					this.$store.state.settings.darkMode
+					$store.state.settings.darkMode
 						? 'bg-lightButtonBG text-lightButtonText hover:bg-lightActive'
 						: 'bg-darkButtonBG text-darkButtonText hover:bg-darkActive'
 				"

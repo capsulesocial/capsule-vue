@@ -10,9 +10,7 @@
 		<div class="flex h-screen pt-24 -mt-24">
 			<section
 				class="w-full shadow-lg border-l border-r px-10 overflow-y-auto"
-				:class="
-					this.$store.state.settings.darkMode ? 'bg-lightBG text-lightPrimaryText' : 'bg-darkBG text-darkPrimaryText'
-				"
+				:class="$store.state.settings.darkMode ? 'bg-lightBG text-lightPrimaryText' : 'bg-darkBG text-darkPrimaryText'"
 			>
 				<!-- Save to Drafts & Category -->
 				<article class="p-5">
@@ -57,7 +55,7 @@
 					:v-model="input"
 					class="editable prose max-w-none px-5 focus:outline-none py-5 content"
 					@keyup="update"
-					v-html="this.$store.state.draft.content"
+					v-html="$store.state.draft.content"
 				></div>
 			</section>
 
@@ -88,7 +86,7 @@
 								@keyup.enter="addTag"
 							/>
 						</div>
-						<div v-for="t in this.$store.state.draft.tags" :key="t.name" class="hotzone pt-2">
+						<div v-for="t in $store.state.draft.tags" :key="t.name" class="hotzone pt-2">
 							<button
 								class="
 									hotzone

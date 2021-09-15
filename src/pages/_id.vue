@@ -16,12 +16,12 @@
 						<div class="flex flex-col">
 							<h3
 								class="text-xl pr-4"
-								:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+								:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 							>
 								{{ currentUser.name }}
 							</h3>
 							<h5
-								:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+								:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 								class="text-lightSecondary text-lg"
 							>
 								@{{ currentUser.id }}
@@ -30,37 +30,31 @@
 						<div class="flex flex-row">
 							<!-- Categories, following, followers -->
 							<nuxt-link
-								:to="'/' + this.$route.params.id + '/categories'"
-								:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+								:to="'/' + $route.params.id + '/categories'"
+								:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 							>
 								<span class="font-bold">0</span>
-								<span
-									:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-								>
+								<span :class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'">
 									categories
 								</span>
 							</nuxt-link>
 							<nuxt-link
-								:to="'/' + this.$route.params.id + '/followers'"
-								:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+								:to="'/' + $route.params.id + '/followers'"
+								:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 								class="pl-4"
 							>
 								<span class="font-bold">{{ followers }}</span>
-								<span
-									:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-								>
+								<span :class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'">
 									Followers
 								</span>
 							</nuxt-link>
 							<nuxt-link
-								:to="'/' + this.$route.params.id + '/following'"
-								:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+								:to="'/' + $route.params.id + '/following'"
+								:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 								class="pl-4"
 							>
 								<span class="font-bold">{{ following }}</span>
-								<span
-									:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-								>
+								<span :class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'">
 									Following
 								</span>
 							</nuxt-link>
@@ -69,19 +63,19 @@
 				</article>
 				<div class="flex items-center"></div>
 				<nuxt-link
-					v-if="this.$store.state.session.id === this.$route.params.id"
+					v-if="$store.state.session.id === $route.params.id"
 					to="/settings"
-					:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+					:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 				>
 					<SettingsIcon />
 				</nuxt-link>
-				<FriendButton v-else :toggleFriend="toggleFriend" :following="this.userIsFollowed" />
+				<FriendButton v-else :toggleFriend="toggleFriend" :following="userIsFollowed" />
 			</section>
 			<!-- Bio -->
 			<section
 				style="margin-left: 22px; margin-right: 22px"
 				class="px-4 pb-4"
-				:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+				:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 			>
 				<p class="italic">
 					{{ currentUser.bio }}
@@ -117,16 +111,16 @@
 				class="flex flex-col md:flex-row w-full justify-between border-b text-gray7"
 				style="padding-left: 22px; padding-right: 22px"
 			>
-				<nuxt-link :to="'/' + this.$route.params.id" class="pb-1" :class="getStyles('id')">
+				<nuxt-link :to="'/' + $route.params.id" class="pb-1" :class="getStyles('id')">
 					<span class="px-4">Posts</span>
 				</nuxt-link>
-				<nuxt-link :to="'/' + this.$route.params.id + '/comments'" class="pb-1" :class="getStyles('id-comments')">
+				<nuxt-link :to="'/' + $route.params.id + '/comments'" class="pb-1" :class="getStyles('id-comments')">
 					<span class="px-4">Comments</span>
 				</nuxt-link>
-				<nuxt-link :to="'/' + this.$route.params.id + '/bookmarks'" class="pb-1" :class="getStyles('id-bookmarks')">
+				<nuxt-link :to="'/' + $route.params.id + '/bookmarks'" class="pb-1" :class="getStyles('id-bookmarks')">
 					<span class="px-4">Bookmarks </span>
 				</nuxt-link>
-				<nuxt-link :to="'/' + this.$route.params.id + '/reposts'" class="pb-1" :class="getStyles('id-reposts')">
+				<nuxt-link :to="'/' + $route.params.id + '/reposts'" class="pb-1" :class="getStyles('id-reposts')">
 					<span class="px-4">Reposts</span>
 				</nuxt-link>
 			</article>

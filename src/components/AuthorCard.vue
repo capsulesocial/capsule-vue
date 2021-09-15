@@ -14,7 +14,7 @@
 					{{ authorName }}
 				</nuxt-link>
 				<p
-					:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+					:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 					class="italic text-sm w-full"
 				>
 					{{ authorBio }}

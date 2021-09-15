@@ -3,7 +3,7 @@
 		<div style="width: 600px">
 			<!-- Header -->
 			<img
-				:src="require(`@/assets/images/category/` + this.$route.params.category + `/` + `header.jpg`)"
+				:src="require(`@/assets/images/category/` + $route.params.category + `/` + `header.jpg`)"
 				alt=""
 				class="object-cover shadow-lg"
 				style="width: 598px; height: 192px"
@@ -11,7 +11,7 @@
 			<div style="padding-left: 22px; margin-top: 22px">
 				<h2 class="text-2xl font-medium">Category /</h2>
 				<h2 class="text-2xl capitalize font-medium">
-					{{ this.$route.params.category }}
+					{{ $route.params.category }}
 				</h2>
 			</div>
 
