@@ -17,13 +17,9 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import type { PropType } from 'vue'
 import FollowIcon from '@/components/icons/Follow.vue'
 import UnfollowIcon from '@/components/icons/Unfollow.vue'
-import { followChange, getFollowersAndFollowing } from '@/backend/following'
-
-interface IData {
-	following: boolean
-}
 
 export default Vue.extend({
 	components: {
@@ -31,29 +27,17 @@ export default Vue.extend({
 		UnfollowIcon,
 	},
 	props: {
-		authorID: {
-			type: String,
+		following: {
+			type: Boolean,
 			required: true,
 		},
 		showIcons: {
 			type: Boolean,
 			default: false,
 		},
-	},
-	data: (): IData => {
-		return {
-			following: false,
-		}
-	},
-	async created() {
-		const data = await getFollowersAndFollowing(this.$store.state.session.id)
-		this.following = data.following.has(this.authorID)
-	},
-	methods: {
-		async toggleFriend() {
-			await followChange(this.following ? `UNFOLLOW` : `FOLLOW`, this.$store.state.session.id, this.authorID)
-			const data = await getFollowersAndFollowing(this.$store.state.session.id, true)
-			this.following = data.following.has(this.authorID)
+		toggleFriend: {
+			type: Function as PropType<() => void>,
+			required: true,
 		},
 	},
 })

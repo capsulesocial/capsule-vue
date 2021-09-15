@@ -75,7 +75,7 @@
 				>
 					<SettingsIcon />
 				</nuxt-link>
-				<FriendButton v-else :authorID="this.$route.params.id" />
+				<FriendButton v-else :toggleFriend="toggleFriend" :following="this.userIsFollowed" />
 			</section>
 			<!-- Bio -->
 			<section
@@ -152,7 +152,7 @@ import SettingsIcon from '@/components/icons/Settings.vue'
 import { Post } from '@/backend/post'
 import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
-import { getFollowersAndFollowing } from '@/backend/following'
+import { followChange, getFollowersAndFollowing } from '@/backend/following'
 
 interface IData {
 	avatar: string
@@ -160,6 +160,7 @@ interface IData {
 	posts: Post[]
 	followers: number
 	following: number
+	userIsFollowed: boolean
 }
 
 export default Vue.extend({
@@ -179,6 +180,7 @@ export default Vue.extend({
 			followers: 0,
 			following: 0,
 			posts: [],
+			userIsFollowed: false,
 		}
 	},
 	async created() {
@@ -189,9 +191,11 @@ export default Vue.extend({
 				this.avatar = p
 			})
 		}
-		const { followers, following } = await getFollowersAndFollowing(this.$route.params.id)
-		this.followers = followers.size
-		this.following = following.size
+		getFollowersAndFollowing(this.$route.params.id).then(({ followers, following }) => {
+			this.followers = followers.size
+			this.following = following.size
+			this.userIsFollowed = followers.has(this.$store.state.session.id)
+		})
 	},
 	methods: {
 		getStyles(tab: string): string {
@@ -212,6 +216,17 @@ export default Vue.extend({
 			if (process.client) {
 				window.open(url, `_blank`)
 			}
+		},
+		async toggleFriend() {
+			await followChange(
+				this.userIsFollowed ? `UNFOLLOW` : `FOLLOW`,
+				this.$store.state.session.id,
+				this.$route.params.id,
+			)
+			const { followers, following } = await getFollowersAndFollowing(this.$route.params.id, true)
+			this.followers = followers.size
+			this.following = following.size
+			this.userIsFollowed = followers.has(this.$store.state.session.id)
 		},
 	},
 })

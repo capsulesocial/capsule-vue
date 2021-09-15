@@ -28,7 +28,12 @@
 							@{{ post.authorID }}
 						</span>
 					</nuxt-link>
-					<FriendButton v-if="post.authorID !== this.$store.state.session.id" :small="true" :authorID="post.authorID" />
+					<FriendButton
+						v-if="post.authorID !== this.$store.state.session.id"
+						:small="true"
+						:following="following"
+						:toggleFriend="toggleFriend"
+					/>
 				</div>
 				<!-- Timestamp -->
 				<div class="text-xs ml-14">
@@ -103,6 +108,15 @@ import { RetrievedPost } from '@/backend/post'
 import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
 import { getProfileFromSession } from '@/store/session'
+import { followChange, getFollowersAndFollowing } from '@/backend/following'
+
+interface IData {
+	showComments: boolean
+	authorName: string
+	avatar: string
+	featuredPhoto: string
+	following: boolean
+}
 
 export default Vue.extend({
 	name: `PostCard`,
@@ -130,16 +144,19 @@ export default Vue.extend({
 			default: null,
 		},
 	},
-	data() {
+	data(): IData {
 		return {
 			showComments: false,
 			authorName: ``,
-			authorID: ``,
 			avatar: ``,
 			featuredPhoto: ``,
+			following: false,
 		}
 	},
-	async created() {
+	async mounted() {
+		getFollowersAndFollowing(this.$store.state.session.id).then((data) => {
+			this.following = data.following.has(this.post.authorID)
+		})
 		let profile = this.profile
 		if (!profile) {
 			if (this.$store.state.session.id === this.post.authorID) {
@@ -153,7 +170,6 @@ export default Vue.extend({
 
 		// Populate Avatar
 		this.authorName = profile.name
-		this.authorID = profile.id
 		if (profile.avatar && profile.avatar !== ``) {
 			getPhotoFromIPFS(profile.avatar).then((p) => {
 				this.avatar = p
@@ -179,6 +195,11 @@ export default Vue.extend({
 				res += `hover:text-darkActive`
 			}
 			return res
+		},
+		async toggleFriend() {
+			await followChange(this.following ? `UNFOLLOW` : `FOLLOW`, this.$store.state.session.id, this.post.authorID)
+			const data = await getFollowersAndFollowing(this.$store.state.session.id, true)
+			this.following = data.following.has(this.post.authorID)
 		},
 	},
 })
