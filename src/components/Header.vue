@@ -69,6 +69,7 @@
 			<div
 				v-show="showMore"
 				class="absolute mt-56 z-10 bg-white shadow-lg rounded-lg w-64"
+				style="margin-left: -13px"
 				@click.stop="toggleDropdown"
 			>
 				<nuxt-link to="/settings" class="w-full p-2 grid grid-cols-4 items-center">

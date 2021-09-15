@@ -28,7 +28,7 @@
 											style="width: 126px; height: 126px"
 										/>
 									</span>
-									<span v-else><FlipIcon style="width: 126px; height: 126px" /></span>
+									<span v-else><FlipIcon style="width: 80px; height: 80px; margin-left: 20px" /></span>
 								</button>
 								<textarea
 									v-model="comment"
@@ -86,7 +86,7 @@
 									</button>
 								</div>
 								<!-- Right side: images -->
-								<div class="faces overflow-y-scroll flex flex-row justify-around flex-wrap w-full bg-white">
+								<div class="faces overflow-y-scroll flex flex-row justify-around flex-wrap w-full bg-white py-2">
 									<button
 										v-for="e in feelingList[emotionCategory]"
 										:key="e"
@@ -102,7 +102,7 @@
 											focus:outline-none
 											w-24
 											h-24
-											m-1
+											my-5
 										"
 										@click="setEmotion(e)"
 									>

@@ -1,16 +1,39 @@
 <template>
-	<button class="rounded-full focus:outline-none" @click="toggleFriend">
-		<div v-if="following" class="text-black">
-			<span v-if="showIcons" class="rounded-full bg-red-200">
+	<button class="rounded-lg focus:outline-none" @click="toggleFriend">
+		<div v-if="following">
+			<div v-if="showIcons" class="rounded-full p-3 items-center">
 				<UnfollowIcon />
-			</span>
-			<span v-else class="text-bold rounded-lg text-sm bg-red-200 shadow-lg px-2 py-1">Unfollow</span>
+			</div>
+			<div
+				v-else
+				class="
+					friendbtn
+					inline
+					text-primary
+					bg-white
+					hover:bg-black hover:text-white
+					text-sm
+					shadow-lg
+					px-4
+					py-1
+					font-semibold
+					rounded-lg
+				"
+			>
+				<span class="following">Following</span>
+				<span class="unfollow">Unfollow</span>
+			</div>
 		</div>
 		<div v-else>
 			<div v-if="showIcons" class="shadow-lg rounded-full bg-primary p-3 items-center">
 				<FollowIcon class="text-white" />
 			</div>
-			<span v-else class="text-white text-bold rounded-full text-sm bg-primary shadow-lg px-4 py-1">Follow</span>
+			<span
+				v-else
+				class="text-white font-semibold rounded-lg text-sm shadow-lg px-4 py-1"
+				style="background-color: #a97ea7"
+				>Follow</span
+			>
 		</div>
 	</button>
 </template>
@@ -42,3 +65,18 @@ export default Vue.extend({
 	},
 })
 </script>
+
+<style scoped>
+div.friendbtn span.following {
+	display: inline;
+}
+div.friendbtn:hover span.following {
+	display: none;
+}
+div.friendbtn span.unfollow {
+	display: none;
+}
+div.friendbtn:hover span.unfollow {
+	display: inline;
+}
+</style>
