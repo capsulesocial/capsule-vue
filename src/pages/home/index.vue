@@ -51,7 +51,13 @@
 			</article>
 
 			<article v-for="post in this.posts" :key="post.post._id" style="padding-left: 22px">
-				<PostCard :post="post.post" :cid="post.post._id" :comments="post.comments" />
+				<PostCard
+					:post="post.post"
+					:cid="post.post._id"
+					:comments="post.comments"
+					:toggleFriend="toggleFriend"
+					:usersFollowing="following"
+				/>
 			</article>
 		</section>
 	</div>
@@ -61,11 +67,13 @@
 import Vue from 'vue'
 import PostCard from '@/components/post/Card.vue'
 import { getPosts, Algorithm, IPostResponse } from '@/backend/post'
+import { followChange, getFollowersAndFollowing } from '@/backend/following'
 
 interface IData {
 	posts: IPostResponse[]
 	isLoading: boolean
 	algorithm: Algorithm
+	following: Set<string>
 }
 
 export default Vue.extend({
@@ -77,10 +85,14 @@ export default Vue.extend({
 			algorithm: `NEW`,
 			posts: [],
 			isLoading: true,
+			following: new Set(),
 		}
 	},
 	async created() {
 		this.posts = await getPosts({}, `NEW`)
+		getFollowersAndFollowing(this.$store.state.session.id).then(({ following }) => {
+			this.following = following
+		})
 		this.isLoading = false
 	},
 	methods: {
@@ -91,6 +103,13 @@ export default Vue.extend({
 			this.posts = await getPosts({}, a, this.$store.state.session.id)
 			this.isLoading = false
 			return this.posts
+		},
+		async toggleFriend(authorID: string) {
+			if (authorID !== this.$store.state.session.id) {
+				await followChange(this.following.has(authorID) ? `UNFOLLOW` : `FOLLOW`, this.$store.state.session.id, authorID)
+				const data = await getFollowersAndFollowing(this.$store.state.session.id, true)
+				this.following = data.following
+			}
 		},
 	},
 })
