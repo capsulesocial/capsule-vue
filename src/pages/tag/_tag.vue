@@ -11,7 +11,7 @@
 			</article>
 			<!-- Posts loaded -->
 			<article v-for="p in posts" :key="p.post._id" style="padding-left: 22px">
-				<PostCard :post="p.post" :comments="p.comments" />
+				<PostCard :post="p.post" :comments="p.comments" :usersFollowing="following" :toggleFriend="toggleFriend" />
 			</article>
 		</div>
 	</section>
@@ -21,11 +21,13 @@
 import Vue from 'vue'
 import PostCard from '@/components/post/Card.vue'
 import { getPosts, IPostResponse } from '@/backend/post'
+import { followChange, getFollowersAndFollowing } from '@/backend/following'
 
 interface IData {
 	posts: IPostResponse[]
 	tag: string
 	isLoading: boolean
+	following: Set<string>
 }
 
 export default Vue.extend({
@@ -38,12 +40,25 @@ export default Vue.extend({
 			posts: [],
 			tag: this.$route.params.tag,
 			isLoading: true,
+			following: new Set(),
 		}
 	},
 	async created() {
 		// Fetch posts with tag
 		this.posts = await getPosts({ tag: this.$route.params.tag }, `NEW`)
 		this.isLoading = false
+		getFollowersAndFollowing(this.$store.state.session.id).then(({ following }) => {
+			this.following = following
+		})
+	},
+	methods: {
+		async toggleFriend(authorID: string) {
+			if (authorID !== this.$store.state.session.id) {
+				await followChange(this.following.has(authorID) ? `UNFOLLOW` : `FOLLOW`, this.$store.state.session.id, authorID)
+				const data = await getFollowersAndFollowing(this.$store.state.session.id, true)
+				this.following = data.following
+			}
+		},
 	},
 })
 </script>

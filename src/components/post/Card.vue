@@ -31,8 +31,8 @@
 					<FriendButton
 						v-if="post.authorID !== this.$store.state.session.id"
 						:small="true"
-						:following="following"
-						:toggleFriend="toggleFriend"
+						:following="usersFollowing.has(post.authorID)"
+						:toggleFriend="() => toggleFriend(post.authorID)"
 					/>
 				</div>
 				<!-- Timestamp -->
@@ -108,14 +108,12 @@ import { RetrievedPost } from '@/backend/post'
 import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
 import { getProfileFromSession } from '@/store/session'
-import { followChange, getFollowersAndFollowing } from '@/backend/following'
 
 interface IData {
 	showComments: boolean
 	authorName: string
 	avatar: string
 	featuredPhoto: string
-	following: boolean
 }
 
 export default Vue.extend({
@@ -133,7 +131,7 @@ export default Vue.extend({
 	props: {
 		post: {
 			type: Object as PropType<RetrievedPost>,
-			default: null,
+			required: true,
 		},
 		comments: {
 			type: Array as PropType<Comment[] | null>,
@@ -143,6 +141,14 @@ export default Vue.extend({
 			type: Object as PropType<Profile>,
 			default: null,
 		},
+		usersFollowing: {
+			type: Set as PropType<Set<string>>,
+			default: () => new Set(),
+		},
+		toggleFriend: {
+			type: Function as PropType<(id: string) => void>,
+			default: () => null,
+		},
 	},
 	data(): IData {
 		return {
@@ -150,13 +156,9 @@ export default Vue.extend({
 			authorName: ``,
 			avatar: ``,
 			featuredPhoto: ``,
-			following: false,
 		}
 	},
-	async mounted() {
-		getFollowersAndFollowing(this.$store.state.session.id).then((data) => {
-			this.following = data.following.has(this.post.authorID)
-		})
+	async created() {
 		let profile = this.profile
 		if (!profile) {
 			if (this.$store.state.session.id === this.post.authorID) {
@@ -195,11 +197,6 @@ export default Vue.extend({
 				res += `hover:text-darkActive`
 			}
 			return res
-		},
-		async toggleFriend() {
-			await followChange(this.following ? `UNFOLLOW` : `FOLLOW`, this.$store.state.session.id, this.post.authorID)
-			const data = await getFollowersAndFollowing(this.$store.state.session.id, true)
-			this.following = data.following.has(this.post.authorID)
 		},
 	},
 })

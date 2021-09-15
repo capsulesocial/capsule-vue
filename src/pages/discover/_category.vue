@@ -21,7 +21,7 @@
 			</article>
 			<!-- Posts loaded -->
 			<article v-for="p in posts" :key="p.post._id" style="padding-left: 22px">
-				<PostCard :post="p.post" :comments="p.comments" />
+				<PostCard :post="p.post" :comments="p.comments" :usersFollowing="following" :toggleFriend="toggleFriend" />
 			</article>
 		</div>
 	</section>
@@ -31,10 +31,12 @@
 import Vue from 'vue'
 import PostCard from '@/components/post/Card.vue'
 import { getPosts, IPostResponse } from '@/backend/post'
+import { followChange, getFollowersAndFollowing } from '@/backend/following'
 
 interface IData {
 	posts: IPostResponse[]
 	isLoading: boolean
+	following: Set<string>
 }
 
 export default Vue.extend({
@@ -45,12 +47,25 @@ export default Vue.extend({
 		return {
 			posts: [],
 			isLoading: true,
+			following: new Set(),
 		}
 	},
 	async created() {
 		// Fetch posts from Orbit DB by ID
 		this.posts = await getPosts({ category: this.$route.params.category }, `NEW`)
 		this.isLoading = false
+		getFollowersAndFollowing(this.$store.state.session.id).then(({ following }) => {
+			this.following = following
+		})
+	},
+	methods: {
+		async toggleFriend(authorID: string) {
+			if (authorID !== this.$store.state.session.id) {
+				await followChange(this.following.has(authorID) ? `UNFOLLOW` : `FOLLOW`, this.$store.state.session.id, authorID)
+				const data = await getFollowersAndFollowing(this.$store.state.session.id, true)
+				this.following = data.following
+			}
+		},
 	},
 })
 </script>
