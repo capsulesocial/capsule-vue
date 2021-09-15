@@ -22,7 +22,7 @@
 			</div>
 		</div>
 		<div>
-			<FriendButton class="justify-self-end" :authorID="authorID" :showIcons="true" />
+			<FriendButton class="justify-self-end" :following="isFollowed" :toggleFriend="toggleFriend" :showIcons="true" />
 		</div>
 	</div>
 </template>
@@ -53,6 +53,14 @@ export default Vue.extend({
 		},
 		authorBio: {
 			type: String,
+			required: true,
+		},
+		isFollowed: {
+			type: Boolean,
+			required: true,
+		},
+		toggleFriend: {
+			type: Function as PropType<() => void>,
 			required: true,
 		},
 	},

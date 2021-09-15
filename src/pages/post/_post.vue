@@ -1,6 +1,11 @@
 <template>
 	<div v-if="post && author" class="w-full">
-		<HeaderMagic :authorID="post.authorID" :avatar="authorAvatar" />
+		<HeaderMagic
+			:authorID="post.authorID"
+			:avatar="authorAvatar"
+			:toggleFriend="toggleFriend"
+			:userIsFollowed="userIsFollowed"
+		/>
 		<section v-if="post !== null" class="pb-16 md:pb-5 md:pl-5 m-5 pt-4">
 			<!-- Category and elipses -->
 			<article class="w-full flex justify-between my-2">
@@ -109,6 +114,8 @@
 				:authorName="author.name"
 				:authorID="author.id"
 				:authorBio="author.bio"
+				:isFollowed="userIsFollowed"
+				:toggleFriend="toggleFriend"
 			/>
 
 			<!-- Comments -->
@@ -143,6 +150,7 @@ import MoreIcon from '@/components/icons/More.vue'
 import { getProfile, Profile } from '@/backend/profile'
 import { getPost, Post } from '@/backend/post'
 import { getPhotoFromIPFS } from '@/backend/photos'
+import { followChange, getFollowersAndFollowing } from '@/backend/following'
 
 interface IData {
 	post: Post | null
@@ -151,6 +159,7 @@ interface IData {
 	content: string
 	featuredPhoto: null | string
 	showFilter: boolean
+	userIsFollowed: boolean
 }
 
 export default Vue.extend({
@@ -173,11 +182,20 @@ export default Vue.extend({
 			content: ``,
 			featuredPhoto: null,
 			showFilter: false,
+			userIsFollowed: false,
 		}
 	},
 	async created() {
 		// Fetch post from IPFS,
 		this.post = await getPost(this.$route.params.post)
+		if (this.post === null) {
+			throw new Error(`Post is null!`)
+		}
+		getFollowersAndFollowing(this.$store.state.session.id).then((data) => {
+			if (this.post !== null) {
+				this.userIsFollowed = data.following.has(this.post.authorID)
+			}
+		})
 		// Get featured photo
 		if (this.post.featuredPhotoCID) {
 			getPhotoFromIPFS(this.post.featuredPhotoCID).then((p) => {
@@ -210,6 +228,24 @@ export default Vue.extend({
 			},
 			false,
 		)
+	},
+	methods: {
+		async toggleFriend() {
+			if (this.post) {
+				await followChange(
+					this.userIsFollowed ? `UNFOLLOW` : `FOLLOW`,
+					this.$store.state.session.id,
+					this.post.authorID,
+				)
+				const { following } = await getFollowersAndFollowing(this.$store.state.session.id, true)
+				this.userIsFollowed = following.has(this.post.authorID)
+			}
+		},
+		openWindow(url: string) {
+			if (process.client) {
+				window.open(url, `_blank`)
+			}
+		},
 	},
 })
 </script>

@@ -21,7 +21,7 @@
 						<img v-if="avatar !== null && avatar !== ``" :src="avatar" class="w-10 h-10 rounded-xl mr-4" />
 						<ProfileIcon v-else class="w-10 h-10 rounded-full mr-4 border" />
 						<nuxt-link :to="`/` + authorID" class="pr-4 text-lg">@{{ authorID }}</nuxt-link>
-						<FriendButton :authorID="authorID" />
+						<FriendButton :following="userIsFollowed" :toggleFriend="toggleFriend" />
 					</div>
 					<button class="flex items-center bg-lightSecondary rounded-full p-2 focus:outline-none" @click="handleClose">
 						<XIcon />
@@ -53,6 +53,14 @@ export default Vue.extend({
 		avatar: {
 			type: String as PropType<string | ArrayBuffer | null>,
 			default: null,
+		},
+		userIsFollowed: {
+			type: Boolean,
+			default: false,
+		},
+		toggleFriend: {
+			type: Function as PropType<() => void>,
+			required: true,
 		},
 	},
 	data() {
