@@ -51,7 +51,7 @@ export default Vue.extend({
 			default: `username`,
 		},
 		avatar: {
-			type: Object as PropType<string | ArrayBuffer | null>,
+			type: String as PropType<string | ArrayBuffer | null>,
 			default: null,
 		},
 	},

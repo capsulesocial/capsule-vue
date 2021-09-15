@@ -27,10 +27,10 @@
 				<span
 					v-if="isReposted"
 					:class="this.$store.state.settings.darkMode ? 'text-lightActive' : 'text-darkActive'"
-					class="text-sm self-center"
+					class="text-xs self-center"
 					>Undo Repost</span
 				>
-				<span v-else class="text-sm self-center">Repost to Feed</span>
+				<span v-else class="text-xs self-center">Repost to Feed</span>
 			</button>
 			<!-- Twitter -->
 			<button
@@ -39,7 +39,7 @@
 				@click="handleShare('TWITTER')"
 			>
 				<TwitterIcon style="width: 13.7px" class="mr-2" />
-				<span class="text-sm self-center">Share on Twitter</span>
+				<span class="text-xs self-center text-left">Share on Twitter</span>
 			</button>
 			<!-- Copy URL Link -->
 			<button
@@ -48,7 +48,7 @@
 				@click="handleShare('URL')"
 			>
 				<LinkIcon style="width: 13.7px" class="mr-2" />
-				<span class="text-sm self-center">Copy Link</span>
+				<span class="text-xs self-center">Copy Link</span>
 			</button>
 		</div>
 		<input :id="cid" type="hidden" value="" class="hidden" />
@@ -116,7 +116,6 @@ export default Vue.extend({
 	},
 	methods: {
 		handleRepost() {
-			this.$store.commit(`me/handleRepost`, this.cid)
 			this.isReposted = !this.isReposted
 			if (this.isReposted) {
 				alert(`Reposted!`)

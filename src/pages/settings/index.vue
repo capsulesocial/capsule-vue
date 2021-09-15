@@ -1,5 +1,5 @@
 <template>
-	<main class="w-full border-l">
+	<main class="w-full border-l z-10">
 		<section class="flex" style="width: 750px">
 			<!-- Left column: Select tab -->
 			<article

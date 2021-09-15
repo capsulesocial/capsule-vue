@@ -15,7 +15,7 @@
 				<ExternalURLIcon v-if="platform === 'website'" class="mr-4 text-gray7" />
 				<span class="capitalize text-gray7">{{ platform }}</span>
 			</div>
-			<button class="focus:outline-none font-bold text-primary" @click="toggleVerify()">Connect</button>
+			<button class="focus:outline-none font-bold text-primary" @click="toggleVerify">Connect</button>
 		</div>
 
 		<div v-else class="h-12 w-full flex justify-between items-center">

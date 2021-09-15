@@ -40,7 +40,7 @@ export default Vue.extend({
 	},
 	props: {
 		authorAvatar: {
-			type: Object as PropType<ArrayBuffer | string | null>,
+			type: String as PropType<ArrayBuffer | string | null>,
 			default: null,
 		},
 		authorName: {

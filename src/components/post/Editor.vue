@@ -31,7 +31,7 @@
 						id="title"
 						ref="title"
 						placeholder="Enter Title"
-						class="font-serif text-3xl leading-loose focus:outline-none w-full pb-2"
+						class="font-serif text-3xl focus:outline-none w-full pb-2"
 						wrap="soft"
 						@input="handleTitle"
 					/>
@@ -44,7 +44,7 @@
 						id="subtitle"
 						ref="subtitle"
 						placeholder="Enter Subtitle"
-						class="font-serif text-xl leading-loose text-lightSecondaryText focus:outline-none w-full pb-2"
+						class="font-serif text-xl text-lightSecondaryText focus:outline-none w-full pb-2"
 						wrap="soft"
 						@input="handleSubtitle"
 					/>
