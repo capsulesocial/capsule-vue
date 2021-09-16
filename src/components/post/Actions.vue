@@ -213,6 +213,7 @@ export default Vue.extend({
 				this.emotion = ``
 				this.filter = ``
 				this.emotionCategory = `default`
+				this.filterComments()
 			}
 		},
 		async filterComments() {
@@ -221,6 +222,11 @@ export default Vue.extend({
 				const cList: ICommentData[] = await getCommentsOfPost(this.postCID)
 				this.comments = cList.reverse()
 			} else {
+				if (this.filter === `positive` || this.filter === `neutral` || this.filter === `negative`) {
+					const cList: ICommentData[] = await getCommentsOfPost(this.postCID, undefined, this.filter)
+					this.comments = cList.reverse()
+					return
+				}
 				const cList: ICommentData[] = await getCommentsOfPost(
 					this.postCID,
 					this.filter.charAt(0).toLowerCase() + this.filter.replace(/\s/g, ``).substring(1),

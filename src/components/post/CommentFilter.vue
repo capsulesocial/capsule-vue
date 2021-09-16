@@ -132,6 +132,7 @@ export default Vue.extend({
 		},
 		setCommentFilterFeeling(feeling: string) {
 			this.feeling = feeling
+			this.$emit(`clicked`, feeling)
 			this.showFilter = true
 		},
 		updateFilter(reaction: string) {
