@@ -6,10 +6,7 @@
 	>
 		<!-- Top: avatar, name, id, close -->
 		<div class="flex w-full">
-			<nuxt-link :to="'/' + post.authorID" class="flex">
-				<img v-if="avatar !== ``" :src="avatar" class="w-12 h-12 rounded-lg object-cover" />
-				<ProfileIcon v-else class="w-12 h-12 border-2 rounded-full" />
-			</nuxt-link>
+			<Avatar :avatar="avatar" :authorID="post.authorID" size="w-12 h-12" />
 			<div class="flex flex-col flex-grow ml-4">
 				<div class="flex">
 					<nuxt-link :to="'/' + post.authorID" class="flex mr-4">
@@ -94,7 +91,7 @@
 import Vue from 'vue'
 import type { PropType } from 'vue'
 import PostActions from '@/components/post/Actions.vue'
-import ProfileIcon from '@/components/icons/Person.vue'
+import Avatar from '@/components/Avatar.vue'
 import BookmarkButton from '@/components/post/BookmarkButton.vue'
 import Share from '@/components/post/Share.vue'
 import CommentIcon from '@/components/icons/Comment.vue'
@@ -118,7 +115,7 @@ export default Vue.extend({
 	name: `PostCard`,
 	components: {
 		PostActions,
-		ProfileIcon,
+		Avatar,
 		BookmarkButton,
 		Share,
 		CommentIcon,

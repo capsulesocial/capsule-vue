@@ -9,10 +9,11 @@
 					:style="emotion ? { backgroundImage: `url(${emotion.background})` } : {}"
 					style="background-size: cover"
 				>
-					<span v-if="avatar === `` || avatar === null" class="p-1 border-2 rounded-lg block bg-white">
+					<Avatar :avatar="avatar" :authorID="authorID" size="w-12 h-12" />
+					<!-- <span v-if="avatar === `` || avatar === null" class="p-1 border-2 rounded-lg block bg-white">
 						<ProfileIcon class="w-12 h-12" />
 					</span>
-					<img v-else :src="avatar" class="w-12 h-12 rounded-lg object-cover" />
+					<img v-else :src="avatar" class="w-12 h-12 rounded-lg object-cover" /> -->
 					<span
 						v-if="emotion"
 						class="absolute rounded-full p-1 -mt-4 -ml-4"
@@ -87,15 +88,16 @@
 					</span>
 				</div>
 				<!-- List replies -->
-				<Reply
-					v-for="r in filterReplies()"
-					:key="r.cid"
-					:authorID="r.authorID"
-					:cid="r.cid"
-					:timestamp="r.timestamp"
-					class="pt-1"
-				>
-				</Reply>
+				<div class="pl-5 pt-1">
+					<Reply
+						v-for="r in filterReplies()"
+						:key="r.cid"
+						:authorID="r.authorID"
+						:cid="r.cid"
+						:timestamp="r.timestamp"
+						class="pt-1"
+					/>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -104,7 +106,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import type { PropType } from 'vue'
-import ProfileIcon from '@/components/icons/Person.vue'
+import Avatar from '@/components/Avatar.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 import Reply from '@/components/post/Reply.vue'
 import { getProfile, Profile } from '@/backend/profile'
@@ -126,9 +128,9 @@ interface IData {
 export default Vue.extend({
 	name: `Comment`,
 	components: {
-		ProfileIcon,
 		BrandedButton,
 		Reply,
+		Avatar,
 	},
 	props: {
 		authorID: { type: String, required: true },

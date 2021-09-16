@@ -1,10 +1,7 @@
 <template>
 	<div class="flex">
 		<div class="flex-shrink-0">
-			<img v-if="avatar !== null" :src="avatar" class="w-10 h-10 rounded-lg object-cover" />
-			<span v-else class="p-1 border-2 rounded-full block">
-				<ProfileIcon class="w-6 h-6" />
-			</span>
+			<Avatar :avatar="avatar" :authorID="authorID" size="w-10 h-10" />
 		</div>
 		<div class="flex-1 leading-relaxed ml-2">
 			<strong
@@ -40,7 +37,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import type { PropType } from 'vue'
-import ProfileIcon from '@/components/icons/Person.vue'
+import Avatar from '@/components/Avatar.vue'
 import { getPhotoFromIPFS } from '@/backend/photos'
 import { getComment } from '@/backend/comment'
 import { getProfile, Profile } from '@/backend/profile'
@@ -54,7 +51,7 @@ interface IData {
 
 export default Vue.extend({
 	components: {
-		ProfileIcon,
+		Avatar,
 	},
 	props: {
 		authorID: { type: String, required: true },

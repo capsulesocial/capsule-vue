@@ -1,13 +1,7 @@
 <template>
 	<div class="border-t border-b p-5 my-5 flex flex-row justify-between">
 		<div class="flex">
-			<img
-				v-if="authorAvatar !== `` && authorAvatar !== null"
-				:src="authorAvatar"
-				class="w-12 h-12 rounded-lg object-cover"
-			/>
-			<ProfileIcon v-else class="w-10 h-10 border rounded-full" />
-
+			<Avatar :avatar="authorAvatar" :authorID="authorID" size="w-16 h-16" />
 			<div class="mx-4">
 				<h6 class="text-sm uppercase text-lightSecondaryText">written by:</h6>
 				<nuxt-link :to="'/' + authorID" class="text-2xl">
@@ -31,12 +25,12 @@
 import Vue from 'vue'
 import type { PropType } from 'vue'
 import FriendButton from '@/components/FriendButton.vue'
-import ProfileIcon from '@/components/icons/Person.vue'
+import Avatar from '@/components/Avatar.vue'
 
 export default Vue.extend({
 	components: {
 		FriendButton,
-		ProfileIcon,
+		Avatar,
 	},
 	props: {
 		authorAvatar: {

@@ -5,12 +5,7 @@
 			<!-- Name, socials, follow, bio -->
 			<section class="flex flex-row justify-between p-4" style="margin-left: 22px; margin-right: 22px">
 				<article class="flex items-center">
-					<img
-						v-if="currentUser.avatar !== `` && currentUser.avatar !== null"
-						:src="avatar"
-						class="w-24 h-24 rounded-lg mr-4 object-cover"
-					/>
-					<ProfileIcon v-else class="w-24 h-24 rounded-full mr-4 border" />
+					<Avatar :avatar="avatar" :authorID="$route.params.id" size="w-24 h-24" class="mr-4" />
 					<div class="flex flex-col">
 						<!-- Name Username, Follow button -->
 						<div class="flex flex-col">
@@ -136,7 +131,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import ProfileIcon from '@/components/icons/Person.vue'
+import Avatar from '@/components/Avatar.vue'
 import TwitterIcon from '@/components/icons/brands/Twitter.vue'
 import GitHubIcon from '@/components/icons/brands/GitHub.vue'
 import FriendButton from '@/components/FriendButton.vue'
@@ -160,7 +155,7 @@ interface IData {
 export default Vue.extend({
 	name: `RootIDPage`,
 	components: {
-		ProfileIcon,
+		Avatar,
 		TwitterIcon,
 		GitHubIcon,
 		FriendButton,

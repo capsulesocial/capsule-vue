@@ -18,8 +18,7 @@
 			>
 				<div class="md:min-w-max md:max-w-3xl w-full pl-10 pr-5 flex justify-between">
 					<div class="items-center flex">
-						<img v-if="avatar !== null && avatar !== ``" :src="avatar" class="w-10 h-10 rounded-xl mr-4" />
-						<ProfileIcon v-else class="w-10 h-10 rounded-full mr-4 border" />
+						<Avatar :avatar="avatar" :authorID="authorID" size="w-10 h-10" class="mr-4" />
 						<nuxt-link :to="`/` + authorID" class="pr-4 text-lg">@{{ authorID }}</nuxt-link>
 						<FriendButton :following="userIsFollowed" :toggleFriend="toggleFriend" />
 					</div>
@@ -37,13 +36,13 @@ import Vue from 'vue'
 import type { PropType } from 'vue'
 import XIcon from '@/components/icons/X.vue'
 import FriendButton from '@/components/FriendButton.vue'
-import ProfileIcon from '@/components/icons/Person.vue'
+import Avatar from '@/components/Avatar.vue'
 
 export default Vue.extend({
 	components: {
 		XIcon,
 		FriendButton,
-		ProfileIcon,
+		Avatar,
 	},
 	props: {
 		authorID: {
