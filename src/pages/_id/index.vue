@@ -1,10 +1,10 @@
 <template>
 	<section class="w-full">
-		<article v-show="isLoading" class="flex justify-center">
-			<div class="loader m-10"></div>
-		</article>
 		<article v-for="post in posts" :key="post.post._id">
 			<PostCard :post="post.post" :profile="profile" :comments="post.comments" />
+		</article>
+		<article v-show="isLoading" class="flex justify-center">
+			<div class="loader m-10"></div>
 		</article>
 	</section>
 </template>
@@ -14,11 +14,14 @@ import Vue from 'vue'
 import type { PropType } from 'vue'
 import PostCard from '@/components/post/Card.vue'
 import { Profile } from '@/backend/profile'
-import { getPosts, IPostResponse } from '@/backend/post'
+import { getPosts, Algorithm, IPostResponse } from '@/backend/post'
 
 interface IData {
 	posts: IPostResponse[]
 	isLoading: boolean
+	currentPage: number
+	limit: number
+	algorithm: Algorithm
 }
 
 export default Vue.extend({
@@ -36,21 +39,43 @@ export default Vue.extend({
 		return {
 			posts: [],
 			isLoading: true,
+			currentPage: 0,
+			limit: 10,
+			algorithm: `NEW`,
 		}
 	},
 	async created() {
+		window.addEventListener(`scroll`, this.handleScroll)
 		// Fetch posts from Orbit DB by ID
 		this.posts = await getPosts({ authorID: this.$route.params.id }, `NEW`)
 		this.isLoading = false
-
-		// const postList = this.$props.profile.posts
-		// Fetching posts from IPFS
-		// for (const p in postList) {
-		// 	if (p) {
-		// 		const post = await this.$getPost(postList[p])
-		// 		this.posts.push(post)
-		// 	}
-		// }
+	},
+	destroyed() {
+		window.removeEventListener(`scroll`, this.handleScroll)
+	},
+	methods: {
+		loadPosts(a: Algorithm, page: number, limit: number) {
+			this.isLoading = true
+			setTimeout(async () => {
+				try {
+					const res = await getPosts({ authorID: this.$route.params.id }, this.algorithm)
+					// eslint-disable-next-line
+					console.log(a, page, limit)
+					this.posts = this.posts.concat(res)
+				} catch (err) {
+					alert(err)
+				} finally {
+					this.isLoading = false
+				}
+			}, 500)
+		},
+		handleScroll() {
+			const { scrollTop, scrollHeight, clientHeight } = document.documentElement
+			if (scrollTop + clientHeight >= scrollHeight - 5) {
+				this.currentPage++
+				this.loadPosts(this.algorithm, this.currentPage, this.limit)
+			}
+		},
 	},
 })
 </script>

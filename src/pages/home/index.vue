@@ -46,7 +46,7 @@
 				<div class="loader m-5"></div>
 			</article>
 
-			<article v-for="post in posts" :key="post.post._id" style="padding-left: 22px">
+			<article v-for="post in this.posts" :key="post.post._id" style="padding-left: 22px">
 				<PostCard
 					:post="post.post"
 					:cid="post.post._id"
@@ -54,6 +54,11 @@
 					:toggleFriend="toggleFriend"
 					:usersFollowing="following"
 				/>
+			</article>
+
+			<!-- Not loaded yet -->
+			<article v-show="this.isLoading" class="flex justify-center" style="width: 600px">
+				<div class="loader m-5"></div>
 			</article>
 		</section>
 	</div>
@@ -70,6 +75,8 @@ interface IData {
 	isLoading: boolean
 	algorithm: Algorithm
 	following: Set<string>
+	currentPage: number
+	limit: number
 }
 
 export default Vue.extend({
@@ -82,14 +89,20 @@ export default Vue.extend({
 			posts: [],
 			isLoading: true,
 			following: new Set(),
+			currentPage: 0,
+			limit: 10,
 		}
 	},
 	async created() {
+		window.addEventListener(`scroll`, this.handleScroll)
 		this.posts = await getPosts({}, `NEW`)
 		getFollowersAndFollowing(this.$store.state.session.id).then(({ following }) => {
 			this.following = following
 		})
 		this.isLoading = false
+	},
+	destroyed() {
+		window.removeEventListener(`scroll`, this.handleScroll)
 	},
 	methods: {
 		async sortFeed(a: Algorithm) {
@@ -105,6 +118,28 @@ export default Vue.extend({
 				await followChange(this.following.has(authorID) ? `UNFOLLOW` : `FOLLOW`, this.$store.state.session.id, authorID)
 				const data = await getFollowersAndFollowing(this.$store.state.session.id, true)
 				this.following = data.following
+			}
+		},
+		loadPosts(a: Algorithm, page: number, limit: number) {
+			this.isLoading = true
+			setTimeout(async () => {
+				try {
+					const res = await getPosts({}, this.algorithm, this.$store.state.session.id)
+					// eslint-disable-next-line
+					console.log(a, page, limit)
+					this.posts = this.posts.concat(res)
+				} catch (err) {
+					alert(err)
+				} finally {
+					this.isLoading = false
+				}
+			}, 500)
+		},
+		handleScroll() {
+			const { scrollTop, scrollHeight, clientHeight } = document.documentElement
+			if (scrollTop + clientHeight >= scrollHeight - 5) {
+				this.currentPage++
+				this.loadPosts(this.algorithm, this.currentPage, this.limit)
 			}
 		},
 	},
