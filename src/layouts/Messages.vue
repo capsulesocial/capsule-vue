@@ -1,5 +1,5 @@
 <template>
-	<main :class="this.$store.state.settings.darkMode ? 'bg-lightBG' : 'bg-darkBG'" class="h-screen">
+	<main :class="$store.state.settings.darkMode ? 'bg-lightBG' : 'bg-darkBG'" class="h-screen">
 		<Header class="fixed top-0" />
 
 		<div class="flex justify-center min-h-full">

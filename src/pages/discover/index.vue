@@ -5,7 +5,7 @@
 				<!-- Tag title and filter dropdown -->
 				<div class="flex flex-row justify-between w-full">
 					<h2
-						:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+						:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 						class="text-3xl font-semibold"
 					>
 						Featured Hashtags
@@ -51,7 +51,7 @@
 				</div>
 			</article>
 			<p
-				:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+				:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 				class="font-normal text-xl"
 			>
 				Find and join conversations on any topic:
@@ -64,14 +64,14 @@
 		<section style="width: 750px">
 			<article class="mb-1 mt-3">
 				<h2
-					:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+					:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 					class="text-3xl font-semibold"
 				>
 					Featured Categories
 				</h2>
 			</article>
 			<p
-				:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+				:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 				class="font-normal text-xl pb-1"
 			>
 				Read more of what you love by browsing top categories:

@@ -2,14 +2,12 @@
 	<nav class="flex justify-center lg:justify-start lg:pl-2 xl:pl-0">
 		<!-- Desktop -->
 		<div
-			:class="
-				this.$store.state.settings.darkMode ? 'text-lightPrimaryText bg-lightBG' : 'text-darkSecondaryText bg-darkBG'
-			"
+			:class="$store.state.settings.darkMode ? 'text-lightPrimaryText bg-lightBG' : 'text-darkSecondaryText bg-darkBG'"
 			class="hidden md:flex flex-col h-screen sticky top-0 md:fixed md:pt-24 lg:mt-12"
 		>
 			<nuxt-link
 				to="/home"
-				:class="this.getStyles('home')"
+				:class="getStyles('home')"
 				class="group flex items-center p-2 text-base leading-6 m-1 text-xl rounded-xl"
 			>
 				<span class="p-2">
@@ -19,7 +17,7 @@
 			</nuxt-link>
 			<nuxt-link
 				to="/discover"
-				:class="this.getStyles('discover')"
+				:class="getStyles('discover')"
 				class="group flex items-center p-2 text-base leading-6 m-1 text-xl rounded-xl"
 			>
 				<span class="p-2">
@@ -30,7 +28,7 @@
 			<!-- profile -->
 			<nuxt-link
 				:to="'/' + $store.state.session.id"
-				:class="this.getStyles(this.$store.state.session.id)"
+				:class="getStyles($store.state.session.id)"
 				class="group flex items-center p-2 text-base leading-6 m-1 text-xl rounded-xl"
 			>
 				<span class="p-2">
@@ -40,7 +38,7 @@
 			</nuxt-link>
 			<nuxt-link
 				to="/messages"
-				:class="this.getStyles('messages')"
+				:class="getStyles('messages')"
 				class="group flex items-center p-2 text-base leading-6 m-1 text-xl rounded-xl"
 			>
 				<span class="p-2">
@@ -50,7 +48,7 @@
 			</nuxt-link>
 			<nuxt-link
 				:to="'/' + $store.state.session.id + '/bookmarks'"
-				:class="this.getStyles('id-bookmarks')"
+				:class="getStyles('id-bookmarks')"
 				class="group flex items-center p-2 text-base leading-6 m-1 text-xl rounded-xl"
 			>
 				<span class="p-2">
@@ -61,7 +59,7 @@
 			<nuxt-link
 				to="/post"
 				:class="
-					this.$store.state.settings.darkMode
+					$store.state.settings.darkMode
 						? 'text-lightOnPrimaryText bg-lightPrimary'
 						: 'text-darkOnPrimary bg-darkPrimary'
 				"
@@ -77,26 +75,23 @@
 		<!-- Mobile -->
 		<div class="fixed md:hidden bottom-0 h-16 w-full flex flex-row justify-around pb-4 pt-2 items-end bg-white z-50">
 			<nuxt-link to="/home">
-				<HomeIcon v-show="this.$route.path === '/home'" class="stroke-current text-primary" />
-				<HomeIcon v-show="this.$route.path !== '/home'" class="stroke-current text-gray-400" />
+				<HomeIcon v-show="$route.path === '/home'" class="stroke-current text-primary" />
+				<HomeIcon v-show="$route.path !== '/home'" class="stroke-current text-gray-400" />
 			</nuxt-link>
 			<nuxt-link to="/discover">
-				<DiscoverIcon v-show="this.$route.path === '/discover'" class="stroke-current text-primary" />
-				<DiscoverIcon v-show="this.$route.path !== '/discover'" class="stroke-current text-gray-400" />
+				<DiscoverIcon v-show="$route.path === '/discover'" class="stroke-current text-primary" />
+				<DiscoverIcon v-show="$route.path !== '/discover'" class="stroke-current text-gray-400" />
 			</nuxt-link>
 			<nuxt-link to="/post" class="focus:outline-none bg-primary p-4 rounded-full shadow-lg">
 				<PencilIcon class="fill-current text-white" />
 			</nuxt-link>
-			<ProfileIcon
-				v-show="this.$route.params.id === this.$store.state.session.id"
-				class="stroke-current text-primary"
-			/>
-			<nuxt-link v-show="this.$route.params.id !== this.$store.state.session.id" :to="$store.state.session.id">
+			<ProfileIcon v-show="$route.params.id === $store.state.session.id" class="stroke-current text-primary" />
+			<nuxt-link v-show="$route.params.id !== $store.state.session.id" :to="$store.state.session.id">
 				<ProfileIcon class="stroke-current text-gray-400" />
 			</nuxt-link>
 			<nuxt-link to="/settings">
-				<SettingsIcon v-show="this.$route.path === '/settings'" class="text-primary" />
-				<SettingsIcon v-show="this.$route.path !== '/settings'" class="fill-gray-400 text-gray-400" />
+				<SettingsIcon v-show="$route.path === '/settings'" class="text-primary" />
+				<SettingsIcon v-show="$route.path !== '/settings'" class="fill-gray-400 text-gray-400" />
 			</nuxt-link>
 		</div>
 	</nav>

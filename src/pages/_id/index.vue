@@ -4,7 +4,7 @@
 			<div class="loader m-10"></div>
 		</article>
 		<article v-for="post in posts" :key="post.post._id">
-			<PostCard :post="post.post" :profile="$props.profile" :comments="post.comments" />
+			<PostCard :post="post.post" :profile="profile" :comments="post.comments" />
 		</article>
 	</section>
 </template>

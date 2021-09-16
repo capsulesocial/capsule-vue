@@ -2,9 +2,7 @@
 	<article
 		class="shadow rounded-lg my-2 object-contain"
 		style="width: 556px; margin-bottom: 22px; margin-top: 22px; padding: 16px"
-		:class="
-			this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText border border-darkBorder'
-		"
+		:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText border border-darkBorder'"
 	>
 		<!-- Top: avatar, name, id, close -->
 		<div class="flex w-full">
@@ -16,20 +14,20 @@
 				<div class="flex">
 					<nuxt-link :to="'/' + post.authorID" class="flex mr-4">
 						<span
-							:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+							:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 							class="font-medium text-base"
 						>
 							{{ authorName }}
 						</span>
 						<span
-							:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+							:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 							class="ml-2"
 						>
 							@{{ post.authorID }}
 						</span>
 					</nuxt-link>
 					<FriendButton
-						v-if="post.authorID !== this.$store.state.session.id && this.$route.name !== `id`"
+						v-if="post.authorID !== $store.state.session.id && $route.name !== `id`"
 						:small="true"
 						:following="usersFollowing.has(post.authorID)"
 						:toggleFriend="() => toggleFriend(post.authorID)"
@@ -75,12 +73,12 @@
 				<Share
 					:post="post"
 					:cid="post._id"
-					:class="this.$store.state.settings.darkMode ? 'fill-lightActive' : 'fill-darkActive'"
+					:class="$store.state.settings.darkMode ? 'fill-lightActive' : 'fill-darkActive'"
 					class="fill-primary"
 				/>
 				<BookmarkButton
 					:postID="post._id"
-					:class="this.$store.state.settings.darkMode ? 'fill-lightActive' : 'fill-darkActive'"
+					:class="$store.state.settings.darkMode ? 'fill-lightActive' : 'fill-darkActive'"
 				/>
 			</div>
 			<!-- Display tags -->

@@ -1,15 +1,13 @@
 <template>
 	<div class="w-full border-l border-r">
 		<section
-			:class="
-				this.$store.state.settings.darkMode ? 'text-lightPrimaryText bg-lightBG' : 'text-darkPrimaryText bg-darkBG'
-			"
+			:class="$store.state.settings.darkMode ? 'text-lightPrimaryText bg-lightBG' : 'text-darkPrimaryText bg-darkBG'"
 		>
 			<nav class="flex flex-row justify-around bg-secondary bg-opacity-25 h-12 border-b">
 				<div class="flex items-center w-full">
 					<button
 						:class="
-							this.algorithm === `NEW` ? `bg-white text-primary border-t-2 border-primary font-semibold` : `text-gray7`
+							algorithm === `NEW` ? `bg-white text-primary border-t-2 border-primary font-semibold` : `text-gray7`
 						"
 						class="h-full focus:outline-none text-lg w-full"
 						@click="sortFeed('NEW')"
@@ -20,7 +18,7 @@
 				<div class="flex items-center w-full">
 					<button
 						:class="
-							this.algorithm === `TOP`
+							algorithm === `TOP`
 								? `bg-white text-primary border-t-2 border-primary font-semibold`
 								: `border-l border-r text-gray7`
 						"
@@ -33,9 +31,7 @@
 				<div class="flex items-center w-full">
 					<button
 						:class="
-							this.algorithm === `FOLLOWING`
-								? `bg-white text-primary border-t-2 border-primary font-semibold`
-								: `text-gray7`
+							algorithm === `FOLLOWING` ? `bg-white text-primary border-t-2 border-primary font-semibold` : `text-gray7`
 						"
 						class="h-full focus:outline-none text-lg w-full"
 						@click="sortFeed('FOLLOWING')"
@@ -46,11 +42,11 @@
 			</nav>
 
 			<!-- Not loaded yet -->
-			<article v-show="this.isLoading" class="flex justify-center" style="width: 600px">
+			<article v-show="isLoading" class="flex justify-center" style="width: 600px">
 				<div class="loader m-5"></div>
 			</article>
 
-			<article v-for="post in this.posts" :key="post.post._id" style="padding-left: 22px">
+			<article v-for="post in posts" :key="post.post._id" style="padding-left: 22px">
 				<PostCard
 					:post="post.post"
 					:cid="post.post._id"

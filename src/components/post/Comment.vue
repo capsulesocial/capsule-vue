@@ -25,21 +25,21 @@
 			<!-- Content -->
 			<div class="flex-1 leading-relaxed ml-4">
 				<strong
-					:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+					:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 					class="font-bold bold mr-1"
 				>
 					{{ name }}
 				</strong>
 				<nuxt-link
 					:to="'/' + authorID"
-					:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+					:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 					class="text-gray-700 text-sm mr-2"
 				>
 					@{{ authorID }}
 				</nuxt-link>
 				<span
 					v-if="timestamp"
-					:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+					:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 					class="text-xs font-sans"
 				>
 					{{ $formatDate(timestamp) }}
@@ -60,7 +60,7 @@
 				<!-- Reply Input box -->
 				<div
 					:class="
-						this.$store.state.settings.darkMode
+						$store.state.settings.darkMode
 							? 'bg-lightBG text-lightPrimaryText border-lightBorder'
 							: 'bg-darkBG text-darkPrimaryText border-darkBorder'
 					"
@@ -71,9 +71,7 @@
 						type="text"
 						placeholder="Reply.."
 						:class="
-							this.$store.state.settings.darkMode
-								? 'bg-lightBG text-lightPrimaryText'
-								: 'bg-darkBG text-darkPrimaryText'
+							$store.state.settings.darkMode ? 'bg-lightBG text-lightPrimaryText' : 'bg-darkBG text-darkPrimaryText'
 						"
 						class="leading-normal resize-vertical overflow-y-auto w-full focus:outline-none py-1 px-2 text-sm"
 					>

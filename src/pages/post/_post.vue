@@ -18,14 +18,14 @@
 			</article>
 			<article>
 				<h1
-					:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+					:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 					class="font-serif text-3xl capitalize mb-2"
 				>
 					{{ post.title }}
 				</h1>
 				<h2
 					v-if="post.subtitle"
-					:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+					:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 					class="font-serif text-xl capitalize"
 				>
 					{{ post.subtitle }}
@@ -37,18 +37,18 @@
 				<div class="flex">
 					<img v-if="authorAvatar" :src="authorAvatar" :alt="author.id" class="w-10 h-10 rounded-lg mr-4" />
 					<p
-						:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+						:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 						class="font-sans capitalize"
 					>
 						<nuxt-link
 							:to="'/' + author.id"
-							:class="this.$store.state.settings.darkMode ? 'text-lightActive' : 'text-darkActive'"
+							:class="$store.state.settings.darkMode ? 'text-lightActive' : 'text-darkActive'"
 							class="underline"
 						>
 							{{ author.name }}
 						</nuxt-link>
 						<span
-							:class="this.$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+							:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 							class="font-sans text-sm block"
 						>
 							{{ $formatDate(post.timestamp) }}
@@ -99,7 +99,7 @@
 			<!-- Content -->
 			<article class="mt-5">
 				<div
-					:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+					:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 					class="editable prose max-w-none content"
 					v-html="content"
 				></div>
@@ -123,11 +123,11 @@
 				<!-- Choose reaction -->
 				<div class="flex flex-row justify-between">
 					<div class="flex items-center">
-						<BookmarkButton :postID="this.$route.params.post" />
-						<ShareButton :post="post" :cid="this.$route.params.post" :class="'z-20'" />
+						<BookmarkButton :postID="$route.params.post" />
+						<ShareButton :post="post" :cid="$route.params.post" :class="'z-20'" />
 					</div>
 				</div>
-				<PostActions :postCID="this.$route.params.post" :authorID="author.id" :isCommenting="true" :tags="post.tags" />
+				<PostActions :postCID="$route.params.post" :authorID="author.id" :isCommenting="true" :tags="post.tags" />
 			</article>
 		</section>
 		<section v-else>Post not found 😵‍💫</section>

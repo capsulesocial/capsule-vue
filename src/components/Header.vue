@@ -1,6 +1,6 @@
 <template>
 	<header
-		:class="this.$store.state.settings.darkMode ? 'bg-lightBG' : 'bg-darkBG'"
+		:class="$store.state.settings.darkMode ? 'bg-lightBG' : 'bg-darkBG'"
 		class="w-full flex justify-center z-20 border-b py-4 lg:pl-2 xl:pl-0"
 	>
 		<!-- Top Left: Logo -->
@@ -10,7 +10,7 @@
 			</nuxt-link>
 			<div
 				class="hidden lg:flex lg:pl-8 xl:pl-0"
-				:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+				:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 			>
 				<button class="focus:outline-none" @click="$router.go(-1)">
 					<BackButton />
@@ -27,7 +27,7 @@
 		<div style="width: 240px" class="relative hidden lg:flex items-center">
 			<div
 				class="flex lg:hidden lg:pl-8 xl:pl-0"
-				:class="this.$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+				:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 			>
 				<button class="focus:outline-none" @click="$router.go(-1)">
 					<BackButton />
