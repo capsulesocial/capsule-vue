@@ -50,9 +50,13 @@ export async function sendComment(c: INewCommentData, type: `comment` | `reply`)
 	return cid
 }
 
-export async function getCommentsOfPost(parentCID: string, emotion?: string): Promise<ICommentData[]> {
+export async function getCommentsOfPost(
+	parentCID: string,
+	emotion?: string,
+	emotionCategory?: `negative` | `neutral` | `positive`,
+): Promise<ICommentData[]> {
 	const res = await axios.get(`${capsuleOrbit}/content/${parentCID}/comments`, {
-		params: { ...(emotion ? { emotion } : {}) },
+		params: { ...(emotion ? { emotion } : {}), ...(emotionCategory ? { emotionCategory } : {}) },
 	})
 	if (res.data && res.data.data && res.data.data.comments) {
 		return res.data.data.comments
