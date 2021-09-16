@@ -239,7 +239,6 @@ export default Vue.extend({
 			changeAvatar: MutationType.CHANGE_AVATAR,
 			changeBio: MutationType.CHANGE_BIO,
 			changeLocation: MutationType.CHANGE_LOCATION,
-			appendPostCID: MutationType.APPEND_POSTCID,
 			changePublicKey: MutationType.CHANGE_PUBLICKEY,
 		}),
 		toggleFormType() {

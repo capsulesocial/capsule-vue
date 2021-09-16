@@ -53,6 +53,16 @@ export const feelings = {
 	],
 }
 
+export const avatars = [
+	require(`@/assets/images/avatars/beats.jpeg`),
+	require(`@/assets/images/avatars/cassete.jpeg`),
+	require(`@/assets/images/avatars/footballhead.jpeg`),
+	require(`@/assets/images/avatars/hiphopblood.jpeg`),
+	require(`@/assets/images/avatars/hiphopcribs.jpeg`),
+	require(`@/assets/images/avatars/hiphopking.jpeg`),
+	require(`@/assets/images/avatars/meathead.jpeg`),
+]
+
 export const reactions = {
 	awe: {
 		label: `Awe`,

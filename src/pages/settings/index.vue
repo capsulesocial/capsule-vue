@@ -312,6 +312,7 @@ import UploadAvatar from '@/components/icons/UploadAvatar.vue'
 import { MutationType, getProfileFromSession, namespace as sessionStoreNamespace } from '~/store/session'
 import { setProfile } from '@/backend/profile'
 import { addPhotoToIPFS, getPhotoFromIPFS } from '@/backend/photos'
+import { avatars } from '@/config'
 
 interface IData {
 	newName: string
@@ -348,6 +349,11 @@ export default Vue.extend({
 			getPhotoFromIPFS(this.$store.state.session.avatar).then((p) => {
 				this.profilePic = p
 			})
+		} else {
+			// assign random profile photo from capsule avatars
+			const i: number = Math.floor(Math.random() * 8)
+			const randomAvatar = avatars[i]
+			this.uploadImage(randomAvatar)
 		}
 		// Check for dark mode
 		const prefersDarkMode = window.matchMedia(`(prefers-color-scheme: dark)`).matches

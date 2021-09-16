@@ -25,7 +25,6 @@ export const getters: GetterTree<Session, RootState> = {}
 export const MutationType = {
 	CHANGE_CID: `updateCID`,
 	CHANGE_ID: `updateID`,
-	APPEND_POSTCID: `appendPostCID`,
 	CHANGE_NAME: `updateName`,
 	CHANGE_EMAIL: `updateEmail`,
 	CHANGE_PUBLICKEY: `changePublicKey`,

@@ -202,22 +202,17 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapMutations } from 'vuex'
 import debounce from 'lodash/debounce'
 import DOMPurify from 'dompurify'
 import MediumEditor from 'medium-editor'
 import Turndown from 'turndown'
-
 import ImageIcon from '@/components/icons/Image.vue'
 import UploadIcon from '@/components/icons/Upload.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 import ChevronUp from '@/components/icons/ChevronUp.vue'
 import ChevronDown from '@/components/icons/ChevronDown.vue'
 import XIcon from '@/components/icons/X.vue'
-
 import { categories } from '@/config'
-import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
-
 import { createPost, sendPost, Tag } from '@/backend/post'
 import { addPhotoToIPFS, getPhotoFromIPFS } from '@/backend/photos'
 
@@ -310,9 +305,6 @@ export default Vue.extend({
 		window.removeEventListener(`click`, this.handleDropdown)
 	},
 	methods: {
-		...mapMutations(sessionStoreNamespace, {
-			appendPostCID: MutationType.APPEND_POSTCID,
-		}),
 		update: debounce(function (this: any, e: { target: { value: any } }): void {
 			if (e.target) {
 				// eslint-disable-next-line
@@ -422,7 +414,6 @@ export default Vue.extend({
 					this.featuredPhotoCID,
 				)
 				const cid = await sendPost(p)
-				this.appendPostCID(cid)
 				this.title = ``
 				this.subtitle = ``
 				this.input = ``
