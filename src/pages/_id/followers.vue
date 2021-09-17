@@ -2,9 +2,7 @@
 	<section v-if="profile !== null" class="px-4">
 		<article>
 			<div v-for="p in profiles" :key="p.id">
-				<nuxt-link class="text-primary underline" :to="'/' + p.id">
-					{{ p }}
-				</nuxt-link>
+				<ProfilePreview :profile="p" />
 			</div>
 		</article>
 	</section>
@@ -12,6 +10,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import ProfilePreview from '@/components/ProfilePreview.vue'
 import { getFollowersAndFollowing } from '@/backend/following'
 import { getProfile } from '@/backend/profile'
 interface IData {
@@ -20,6 +19,9 @@ interface IData {
 }
 
 export default Vue.extend({
+	components: {
+		ProfilePreview,
+	},
 	props: {
 		profile: {
 			type: Object,
