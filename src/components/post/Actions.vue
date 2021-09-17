@@ -107,6 +107,7 @@
 										@click="setEmotion(e)"
 									>
 										<img :src="reactionList[e].image" :alt="reactionList[e].label" class="flex-shrink-0 h-24 w-24" />
+										<span class="text-xs text-center text-black w-24 -mt-1">{{ reactionList[e].label }}</span>
 									</button>
 								</div>
 							</div>
