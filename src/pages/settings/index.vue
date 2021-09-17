@@ -311,7 +311,7 @@ import UploadAvatar from '@/components/icons/UploadAvatar.vue'
 // import ColorMode from '@/components/ColorMode.vue'
 import { MutationType, getProfileFromSession, namespace as sessionStoreNamespace } from '~/store/session'
 import { setProfile } from '@/backend/profile'
-import { addPhotoToIPFS, getPhotoFromIPFS } from '@/backend/photos'
+import { addPhotoToIPFS, getPhotoFromIPFS, preUploadPhoto } from '@/backend/photos'
 
 interface IData {
 	newName: string
@@ -391,12 +391,17 @@ export default Vue.extend({
 			this.tab = tab
 		},
 		handleImage(e: HTMLInputEvent) {
-			const image = e.target.files![0]
-			const reader = new FileReader()
-			reader.readAsDataURL(image)
-			reader.onload = (i: Event) => {
-				if (i.target !== null && reader.result !== null) {
-					this.uploadImage(reader.result)
+			if (!e.target.files) {
+				return
+			}
+			const image = e.target.files[0]
+			if (image) {
+				const reader = new FileReader()
+				reader.readAsDataURL(image)
+				reader.onload = (i: Event) => {
+					if (i.target !== null && reader.result !== null) {
+						this.uploadImage(reader.result, image)
+					}
 				}
 			}
 		},
@@ -406,8 +411,9 @@ export default Vue.extend({
 			this.changeCID(cid)
 			return true
 		},
-		async uploadImage(image: string | ArrayBuffer) {
+		async uploadImage(image: string | ArrayBuffer, blobImage: Blob) {
 			const avatarCID = await addPhotoToIPFS(image)
+			await preUploadPhoto(avatarCID, blobImage)
 			this.changeAvatar(avatarCID)
 			this.profilePic = image
 			await this.updateProfile()
