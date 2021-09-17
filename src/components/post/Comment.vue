@@ -10,16 +10,15 @@
 					style="background-size: cover"
 				>
 					<Avatar :avatar="avatar" :authorID="authorID" size="w-12 h-12" />
-					<!-- <span v-if="avatar === `` || avatar === null" class="p-1 border-2 rounded-lg block bg-white">
-						<ProfileIcon class="w-12 h-12" />
-					</span>
-					<img v-else :src="avatar" class="w-12 h-12 rounded-lg object-cover" /> -->
 					<span
 						v-if="emotion"
-						class="absolute rounded-full p-1 -mt-4 -ml-4"
+						class="tooltip absolute rounded-full p-1 -mt-4 -ml-4"
 						:style="{ backgroundImage: `url(${emotion.background})` }"
 					>
 						<img :src="emotion.image" class="bg-white rounded-full w-8 h-8" />
+						<span class="tooltiptext bg-white bg-opacity-75 rounded-lg text-xs text-center text-black w-16 -ml-8">{{
+							emotion.label
+						}}</span>
 					</span>
 				</div>
 			</div>
@@ -196,3 +195,18 @@ export default Vue.extend({
 	},
 })
 </script>
+
+<style scoped>
+.tooltip .tooltiptext {
+	visibility: hidden;
+	/* Position the tooltip */
+	position: absolute;
+	z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+	visibility: visible;
+	top: 100%;
+	left: 50%;
+}
+</style>

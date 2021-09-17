@@ -60,11 +60,27 @@
 				</button>
 			</div>
 			<!-- Show faces -->
-			<div class="grid grid-cols-5 gap-1 overflow-y-auto faces" style="height: 155px; padding-right: 5px">
+			<div
+				class="grid grid-cols-5 gap-x-1 gap-y-4 overflow-y-auto overflow-x-hidden faces"
+				style="height: 155px; padding-right: 5px"
+			>
 				<button
 					v-for="r in feelingList[feeling]"
 					:key="r.label"
-					class="h-12 w-12 rounded-xl shadow-lg transition duration-500 ease-in-out transform hover:scale-105"
+					class="
+						tooltip
+						relative
+						inline-block
+						h-12
+						w-12
+						rounded-xl
+						shadow-lg
+						transition
+						duration-500
+						ease-in-out
+						transform
+						hover:scale-105
+					"
 				>
 					<img
 						:src="reactionList[r].image"
@@ -72,6 +88,9 @@
 						class="flex-shrink-0 h-12 w-12"
 						@click="updateFilter(reactionList[r].label)"
 					/>
+					<span class="tooltiptext bg-white bg-opacity-75 text-xs text-center text-black w-16 -ml-8 -mt-1">{{
+						reactionList[r].label
+					}}</span>
 				</button>
 			</div>
 		</div>
@@ -143,3 +162,18 @@ export default Vue.extend({
 	},
 })
 </script>
+
+<style scoped>
+.tooltip .tooltiptext {
+	visibility: hidden;
+	/* Position the tooltip */
+	position: absolute;
+	z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+	visibility: visible;
+	top: 100%;
+	left: 50%;
+}
+</style>
