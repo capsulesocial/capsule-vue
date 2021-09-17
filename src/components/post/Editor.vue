@@ -214,7 +214,7 @@ import ChevronDown from '@/components/icons/ChevronDown.vue'
 import XIcon from '@/components/icons/X.vue'
 import { categories } from '@/config'
 import { createPost, sendPost, Tag } from '@/backend/post'
-import { addPhotoToIPFS, getPhotoFromIPFS } from '@/backend/photos'
+import { addPhotoToIPFS, getPhotoFromIPFS, preUploadPhoto } from '@/backend/photos'
 
 interface IData {
 	categoryList: string[]
@@ -364,16 +364,18 @@ export default Vue.extend({
 			const image = e.target.files[0]
 			if (image) {
 				const reader = new FileReader()
+
 				reader.readAsDataURL(image)
 				reader.onload = (i) => {
 					if (i.target !== null) {
-						this.uploadImage(i.target.result)
+						this.uploadImage(i.target.result, image)
 					}
 				}
 			}
 		},
-		async uploadImage(image: any): Promise<void> {
+		async uploadImage(image: any, blobImage: Blob): Promise<void> {
 			const cid = await addPhotoToIPFS(image)
+			await preUploadPhoto(cid, blobImage)
 			this.featuredPhotoCID = cid
 			this.downloadImage(cid)
 		},
