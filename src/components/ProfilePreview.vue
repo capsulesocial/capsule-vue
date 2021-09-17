@@ -1,19 +1,20 @@
 <template>
 	<div class="flex">
 		<Avatar :authorID="$props.profile.id" :avatar="$props.profile.avatar" size="w-12 h-12" :getPhotoFromIPFS="true" />
-		<div class="h-12">
+		<div class="h-12 flex-grow px-4">
 			<nuxt-link :to="`/` + $props.profile.id" class="flex flex-col">
-				<h3>
+				<h3 class="font-medium text-base">
 					{{ $props.profile.name }}
-					<span class="text-lightSecondaryText">{{ $props.profile.id }}</span>
+					<span class="text-lightSecondaryText ml-2">@{{ $props.profile.id }}</span>
 				</h3>
-				<p>{{ $props.profile.bio }}</p>
+				<p class="">{{ $props.profile.bio }}</p>
 			</nuxt-link>
 		</div>
 		<FriendButton
 			v-if="$props.profile.id !== $store.state.session.id"
 			:following="isFollowing"
 			:toggleFriend="toggleFriend"
+			class="justify-self-end"
 		/>
 		<!-- {{ $props.profile }} -->
 	</div>

@@ -1,8 +1,8 @@
 <template>
-	<section v-if="profile !== null" class="px-4">
+	<section v-if="profile !== null" class="p-4">
 		<article>
 			<div v-for="p in profiles" :key="p.id">
-				<ProfilePreview :profile="p" />
+				<ProfilePreview :profile="p" class="pb-4" />
 			</div>
 		</article>
 	</section>
