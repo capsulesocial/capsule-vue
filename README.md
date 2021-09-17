@@ -53,3 +53,4 @@ $ yarn build:win
 - [Medium Editor](https://github.com/yabwe/medium-editor) - WYSIWYG editor
 - [DOMPurify](https://github.com/cure53/DOMPurify) - sanitize HTML output
 - [electron-nuxt](https://github.com/webspaceteam/electron-nuxt) - Electron scripts
+- [browser-image-compression](https://www.npmjs.com/package/browser-image-compression) - image compression

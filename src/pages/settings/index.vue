@@ -305,6 +305,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapMutations } from 'vuex'
+import imageCompression from 'browser-image-compression'
 import { HTMLInputEvent } from '@/interfaces/HTMLInputEvent'
 import ChevronRight from '@/components/icons/ChevronRight.vue'
 import UploadAvatar from '@/components/icons/UploadAvatar.vue'
@@ -390,18 +391,29 @@ export default Vue.extend({
 		changeTab(tab: string) {
 			this.tab = tab
 		},
-		handleImage(e: HTMLInputEvent) {
+		async handleImage(e: HTMLInputEvent) {
 			if (!e.target.files) {
 				return
 			}
 			const image = e.target.files[0]
 			if (image) {
-				const reader = new FileReader()
-				reader.readAsDataURL(image)
-				reader.onload = (i: Event) => {
-					if (i.target !== null && reader.result !== null) {
-						this.uploadImage(reader.result, image)
+				const options = {
+					maxSizeMB: 5,
+					maxWidthOrHeight: 1024,
+					useWebWorker: true,
+					initialQuality: 0.9,
+				}
+				try {
+					const compressedImage = await imageCompression(image, options)
+					const reader = new FileReader()
+					reader.readAsDataURL(compressedImage)
+					reader.onload = (i: Event) => {
+						if (i.target !== null && reader.result !== null) {
+							this.uploadImage(reader.result, compressedImage)
+						}
 					}
+				} catch (err) {
+					alert(err)
 				}
 			}
 		},

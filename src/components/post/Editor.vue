@@ -206,6 +206,7 @@ import debounce from 'lodash/debounce'
 import DOMPurify from 'dompurify'
 import MediumEditor from 'medium-editor'
 import Turndown from 'turndown'
+import imageCompression from 'browser-image-compression'
 import ImageIcon from '@/components/icons/Image.vue'
 import UploadIcon from '@/components/icons/Upload.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
@@ -359,17 +360,27 @@ export default Vue.extend({
 			this.featuredPhoto = null
 			this.featuredPhotoCID = null
 		},
-		handleImage(e: Event): void {
+		async handleImage(e: Event): Promise<void> {
 			// @ts-ignore
 			const image = e.target.files[0]
 			if (image) {
-				const reader = new FileReader()
-
-				reader.readAsDataURL(image)
-				reader.onload = (i) => {
-					if (i.target !== null) {
-						this.uploadImage(i.target.result, image)
+				const options = {
+					maxSizeMB: 5,
+					maxWidthOrHeight: 1920,
+					useWebWorker: true,
+					initialQuality: 0.9,
+				}
+				try {
+					const compressedImage = await imageCompression(image, options)
+					const reader = new FileReader()
+					reader.readAsDataURL(compressedImage)
+					reader.onload = (i) => {
+						if (i.target !== null) {
+							this.uploadImage(i.target.result, compressedImage)
+						}
 					}
+				} catch (err) {
+					alert(err)
 				}
 			}
 		},
