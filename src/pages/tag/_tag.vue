@@ -53,10 +53,11 @@ export default Vue.extend({
 		window.addEventListener(`scroll`, this.handleScroll)
 		// Fetch posts with tag
 		this.posts = await getPosts({ tag: this.$route.params.tag }, this.algorithm)
-		this.isLoading = false
+		this.currentOffset += this.limit
 		getFollowersAndFollowing(this.$store.state.session.id).then(({ following }) => {
 			this.following = following
 		})
+		this.isLoading = false
 	},
 	destroyed() {
 		window.removeEventListener(`scroll`, this.handleScroll)
@@ -69,12 +70,16 @@ export default Vue.extend({
 				this.following = data.following
 			}
 		},
-		async loadPosts(offset: number, limit: number) {
+		async loadPosts() {
 			this.isLoading = true
 			try {
-				const res = await getPosts({}, this.algorithm, this.currentOffset, this.limit, this.$store.state.session.id)
-				// eslint-disable-next-line
-				console.log(this.algorithm, offset, limit)
+				const res = await getPosts(
+					{ tag: this.$route.params.tag },
+					this.algorithm,
+					this.currentOffset,
+					this.limit,
+					this.$store.state.session.id,
+				)
 				if (res.length === 0) {
 					this.isLoading = false
 					window.removeEventListener(`scroll`, this.handleScroll)
@@ -89,10 +94,8 @@ export default Vue.extend({
 		async handleScroll() {
 			const { scrollTop, scrollHeight, clientHeight } = document.documentElement
 			if (scrollTop + clientHeight >= scrollHeight - 5) {
-				window.removeEventListener(`scroll`, this.handleScroll)
-				await this.loadPosts(this.currentOffset, this.limit)
+				await this.loadPosts()
 				this.currentOffset += this.limit
-				window.addEventListener(`scroll`, this.handleScroll)
 			}
 		},
 	},
