@@ -41,11 +41,6 @@
 				</div>
 			</nav>
 
-			<!-- Not loaded yet -->
-			<article v-show="isLoading" class="flex justify-center" style="width: 600px">
-				<div class="loader m-5"></div>
-			</article>
-
 			<article v-for="post in this.posts" :key="post.post._id" style="padding-left: 22px">
 				<PostCard
 					:post="post.post"
@@ -95,7 +90,8 @@ export default Vue.extend({
 	},
 	async created() {
 		window.addEventListener(`scroll`, this.handleScroll)
-		this.posts = await getPosts({}, `NEW`, 0, this.limit)
+		this.posts = await getPosts({}, this.algorithm, 0, this.limit)
+		this.currentOffset += this.limit
 		getFollowersAndFollowing(this.$store.state.session.id).then(({ following }) => {
 			this.following = following
 		})
@@ -106,13 +102,14 @@ export default Vue.extend({
 	},
 	methods: {
 		async sortFeed(a: Algorithm) {
+			window.addEventListener(`scroll`, this.handleScroll)
 			this.posts = []
 			this.currentOffset = 0
 			this.isLoading = true
 			this.algorithm = a
-			this.posts = await getPosts({}, a, 0, this.limit, this.$store.state.session.id)
+			this.posts = await getPosts({}, a, this.currentOffset, this.limit, this.$store.state.session.id)
+			this.currentOffset += this.limit
 			this.isLoading = false
-			window.addEventListener(`scroll`, this.handleScroll)
 			return this.posts
 		},
 		async toggleFriend(authorID: string) {
@@ -122,12 +119,10 @@ export default Vue.extend({
 				this.following = data.following
 			}
 		},
-		async loadPosts(offset: number, limit: number) {
+		async loadPosts() {
 			this.isLoading = true
 			try {
 				const res = await getPosts({}, this.algorithm, this.currentOffset, this.limit, this.$store.state.session.id)
-				// eslint-disable-next-line
-				console.log(this.algorithm, offset, limit)
 				if (res.length === 0) {
 					this.isLoading = false
 					window.removeEventListener(`scroll`, this.handleScroll)
@@ -142,10 +137,8 @@ export default Vue.extend({
 		async handleScroll() {
 			const { scrollTop, scrollHeight, clientHeight } = document.documentElement
 			if (scrollTop + clientHeight >= scrollHeight - 5) {
-				window.removeEventListener(`scroll`, this.handleScroll)
-				await this.loadPosts(this.currentOffset, this.limit)
+				await this.loadPosts()
 				this.currentOffset += this.limit
-				window.addEventListener(`scroll`, this.handleScroll)
 			}
 		},
 	},
