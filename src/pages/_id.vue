@@ -24,34 +24,17 @@
 						</div>
 						<div class="flex flex-row">
 							<!-- Categories, following, followers -->
-							<nuxt-link
-								:to="'/' + $route.params.id + '/categories'"
-								:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-							>
+							<nuxt-link :to="'/' + $route.params.id + '/categories'" :class="getStyles(`id-categories`)">
 								<span class="font-bold">0</span>
-								<span :class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'">
-									categories
-								</span>
+								categories
 							</nuxt-link>
-							<nuxt-link
-								:to="'/' + $route.params.id + '/followers'"
-								:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-								class="pl-4"
-							>
+							<nuxt-link :to="'/' + $route.params.id + '/followers'" :class="getStyles(`id-followers`)" class="pl-4">
 								<span class="font-bold">{{ followers }}</span>
-								<span :class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'">
-									Followers
-								</span>
+								Followers
 							</nuxt-link>
-							<nuxt-link
-								:to="'/' + $route.params.id + '/following'"
-								:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-								class="pl-4"
-							>
+							<nuxt-link :to="'/' + $route.params.id + '/following'" :class="getStyles(`id-following`)" class="pl-4">
 								<span class="font-bold">{{ following }}</span>
-								<span :class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'">
-									Following
-								</span>
+								Following
 							</nuxt-link>
 						</div>
 					</div>
@@ -120,7 +103,7 @@
 				</nuxt-link>
 			</article>
 			<article>
-				<nuxt-child :profile="currentUser" style="padding-left: 22px" />
+				<nuxt-child :profile="currentUser" :updateFollowers="updateFollowers" style="padding-left: 22px" />
 			</article>
 		</div>
 		<div v-else style="width: 600px" class="flex justify-center">
@@ -195,9 +178,23 @@ export default Vue.extend({
 				res += `border-darkActive`
 			}
 			if (this.$route.name === tab) {
-				res += ` text-primary font-bold border-b-2`
+				res += ` text-primary font-bold`
+				if (
+					this.$route.name !== `id-followers` &&
+					this.$route.name !== `id-following` &&
+					this.$route.name !== `id-categories`
+				) {
+					res += ` border-b-2`
+				}
 			} else {
-				res += ` text-gray7`
+				if (
+					this.$route.name !== `id-followers` &&
+					this.$route.name !== `id-following` &&
+					this.$route.name !== `id-categories`
+				) {
+					res += ` text-gray7`
+				}
+				res += ` text-lightPrimaryText`
 			}
 			return res
 		},
@@ -212,6 +209,9 @@ export default Vue.extend({
 				this.$store.state.session.id,
 				this.$route.params.id,
 			)
+			this.updateFollowers()
+		},
+		async updateFollowers() {
 			const { followers, following } = await getFollowersAndFollowing(this.$route.params.id, true)
 			this.followers = followers.size
 			this.following = following.size

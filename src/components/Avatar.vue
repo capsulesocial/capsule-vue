@@ -17,6 +17,7 @@ import { avatars } from '@/config'
 interface IData {
 	avatarList: Array<any>
 	hasAvatar: boolean
+	fetchedAvatar: string
 }
 
 export default Vue.extend({
@@ -38,6 +39,7 @@ export default Vue.extend({
 		return {
 			avatarList: avatars,
 			hasAvatar: false,
+			fetchedAvatar: ``,
 		}
 	},
 	methods: {
