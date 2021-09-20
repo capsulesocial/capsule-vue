@@ -20,7 +20,11 @@
 					<div class="items-center flex">
 						<Avatar :avatar="avatar" :authorID="authorID" size="w-10 h-10" class="mr-4" />
 						<nuxt-link :to="`/` + authorID" class="pr-4 text-lg">@{{ authorID }}</nuxt-link>
-						<FriendButton :following="userIsFollowed" :toggleFriend="toggleFriend" />
+						<FriendButton
+							v-if="authorID !== $store.state.session.id"
+							:following="userIsFollowed"
+							:toggleFriend="toggleFriend"
+						/>
 					</div>
 					<button class="flex items-center bg-lightSecondary rounded-full p-2 focus:outline-none" @click="handleClose">
 						<XIcon />

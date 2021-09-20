@@ -16,7 +16,13 @@
 			</div>
 		</div>
 		<div>
-			<FriendButton class="justify-self-end" :following="isFollowed" :toggleFriend="toggleFriend" :showIcons="true" />
+			<FriendButton
+				v-if="authorID !== $store.state.session.id"
+				class="justify-self-end"
+				:following="isFollowed"
+				:toggleFriend="toggleFriend"
+				:showIcons="true"
+			/>
 		</div>
 	</div>
 </template>
