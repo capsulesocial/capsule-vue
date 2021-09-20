@@ -1,6 +1,6 @@
 <template>
 	<div class="flex">
-		<Avatar :authorID="$props.profile.id" :avatar="$props.profile.avatar" size="w-12 h-12" :getPhotoFromIPFS="true" />
+		<Avatar :authorID="$props.profile.id" :avatar="avatar" size="w-12 h-12" />
 		<div class="h-12 flex-grow px-4">
 			<nuxt-link :to="`/` + $props.profile.id" class="flex flex-col">
 				<h3 class="font-medium text-base">
@@ -29,6 +29,7 @@ import { followChange, getFollowersAndFollowing } from '@/backend/following'
 
 interface IData {
 	isFollowing: boolean
+	avatar: string | null
 }
 
 export default Vue.extend({
@@ -45,9 +46,12 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			isFollowing: false,
+			avatar: null,
 		}
 	},
-	created() {
+	async created() {
+		// fetch avatar
+		this.avatar = await getPhotoFromIPFS(this.$props.profile.avatar)
 		// Check if I am following the listed person
 		getFollowersAndFollowing(this.$store.state.session.id).then(({ following }) => {
 			this.isFollowing = following.has(this.$props.profile.id)
