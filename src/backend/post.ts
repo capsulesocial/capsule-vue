@@ -77,13 +77,15 @@ export function getPost(cid: string): Promise<Post> {
 export async function getPosts(
 	filter: { category?: string; authorID?: string; tag?: string },
 	sort?: Algorithm,
+	offset = 0,
+	limit = 10,
 	following?: string,
 ): Promise<IPostResponse[]> {
 	if (sort === `FOLLOWING` && !following) {
 		throw new Error(`No following provided`)
 	}
 	const res = await axios.get(`${capsuleOrbit}/content`, {
-		params: { ...filter, sort, ...(following && sort === `FOLLOWING` ? { following } : {}) },
+		params: { ...filter, sort, ...(following && sort === `FOLLOWING` ? { following } : {}), offset, limit },
 	})
 	return res.data.data
 }

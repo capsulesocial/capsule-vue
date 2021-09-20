@@ -37,7 +37,7 @@ interface IData {
 	posts: IPostResponse[]
 	isLoading: boolean
 	following: Set<string>
-	currentPage: number
+	currentOffset: number
 	limit: number
 	algorithm: Algorithm
 }
@@ -51,7 +51,7 @@ export default Vue.extend({
 			posts: [],
 			isLoading: true,
 			following: new Set(),
-			currentPage: 0,
+			currentOffset: 0,
 			limit: 10,
 			algorithm: `NEW`,
 		}
@@ -76,26 +76,30 @@ export default Vue.extend({
 				this.following = data.following
 			}
 		},
-		loadPosts(a: Algorithm, page: number, limit: number) {
+		async loadPosts(offset: number, limit: number) {
 			this.isLoading = true
-			setTimeout(async () => {
-				try {
-					const res = await getPosts({}, this.algorithm)
-					// eslint-disable-next-line
-					console.log(a, page, limit)
-					this.posts = this.posts.concat(res)
-				} catch (err) {
-					alert(err)
-				} finally {
+			try {
+				const res = await getPosts({}, this.algorithm, this.currentOffset, this.limit, this.$store.state.session.id)
+				// eslint-disable-next-line
+				console.log(this.algorithm, offset, limit)
+				if (res.length === 0) {
 					this.isLoading = false
+					window.removeEventListener(`scroll`, this.handleScroll)
 				}
-			}, 500)
+				this.posts = this.posts.concat(res)
+			} catch (err) {
+				alert(err)
+			} finally {
+				this.isLoading = false
+			}
 		},
-		handleScroll() {
+		async handleScroll() {
 			const { scrollTop, scrollHeight, clientHeight } = document.documentElement
 			if (scrollTop + clientHeight >= scrollHeight - 5) {
-				this.currentPage++
-				this.loadPosts(this.algorithm, this.currentPage, this.limit)
+				window.removeEventListener(`scroll`, this.handleScroll)
+				await this.loadPosts(this.currentOffset, this.limit)
+				this.currentOffset += this.limit
+				window.addEventListener(`scroll`, this.handleScroll)
 			}
 		},
 	},

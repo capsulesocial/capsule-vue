@@ -75,7 +75,7 @@ interface IData {
 	isLoading: boolean
 	algorithm: Algorithm
 	following: Set<string>
-	currentPage: number
+	currentOffset: number
 	limit: number
 }
 
@@ -89,13 +89,13 @@ export default Vue.extend({
 			posts: [],
 			isLoading: true,
 			following: new Set(),
-			currentPage: 0,
+			currentOffset: 0,
 			limit: 10,
 		}
 	},
 	async created() {
 		window.addEventListener(`scroll`, this.handleScroll)
-		this.posts = await getPosts({}, `NEW`)
+		this.posts = await getPosts({}, `NEW`, 0, this.limit)
 		getFollowersAndFollowing(this.$store.state.session.id).then(({ following }) => {
 			this.following = following
 		})
@@ -107,10 +107,12 @@ export default Vue.extend({
 	methods: {
 		async sortFeed(a: Algorithm) {
 			this.posts = []
+			this.currentOffset = 0
 			this.isLoading = true
 			this.algorithm = a
-			this.posts = await getPosts({}, a, this.$store.state.session.id)
+			this.posts = await getPosts({}, a, 0, this.limit, this.$store.state.session.id)
 			this.isLoading = false
+			window.addEventListener(`scroll`, this.handleScroll)
 			return this.posts
 		},
 		async toggleFriend(authorID: string) {
@@ -120,26 +122,30 @@ export default Vue.extend({
 				this.following = data.following
 			}
 		},
-		loadPosts(a: Algorithm, page: number, limit: number) {
+		async loadPosts(offset: number, limit: number) {
 			this.isLoading = true
-			setTimeout(async () => {
-				try {
-					const res = await getPosts({}, this.algorithm, this.$store.state.session.id)
-					// eslint-disable-next-line
-					console.log(a, page, limit)
-					this.posts = this.posts.concat(res)
-				} catch (err) {
-					alert(err)
-				} finally {
+			try {
+				const res = await getPosts({}, this.algorithm, this.currentOffset, this.limit, this.$store.state.session.id)
+				// eslint-disable-next-line
+				console.log(this.algorithm, offset, limit)
+				if (res.length === 0) {
 					this.isLoading = false
+					window.removeEventListener(`scroll`, this.handleScroll)
 				}
-			}, 500)
+				this.posts = this.posts.concat(res)
+			} catch (err) {
+				alert(err)
+			} finally {
+				this.isLoading = false
+			}
 		},
-		handleScroll() {
+		async handleScroll() {
 			const { scrollTop, scrollHeight, clientHeight } = document.documentElement
 			if (scrollTop + clientHeight >= scrollHeight - 5) {
-				this.currentPage++
-				this.loadPosts(this.algorithm, this.currentPage, this.limit)
+				window.removeEventListener(`scroll`, this.handleScroll)
+				await this.loadPosts(this.currentOffset, this.limit)
+				this.currentOffset += this.limit
+				window.addEventListener(`scroll`, this.handleScroll)
 			}
 		},
 	},
