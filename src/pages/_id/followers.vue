@@ -2,7 +2,7 @@
 	<section v-if="profile !== null" class="p-4">
 		<article>
 			<div v-for="p in profiles" :key="p.id">
-				<ProfilePreview :profile="p" class="pb-4" />
+				<ProfilePreview :profile="p" :updateFollowers="updateFollowers" class="pb-4" />
 			</div>
 		</article>
 	</section>
@@ -10,6 +10,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import type { PropType } from 'vue'
 import ProfilePreview from '@/components/ProfilePreview.vue'
 import { getFollowersAndFollowing } from '@/backend/following'
 import { getProfile } from '@/backend/profile'
@@ -26,6 +27,10 @@ export default Vue.extend({
 		profile: {
 			type: Object,
 			default: null,
+		},
+		updateFollowers: {
+			type: Function as PropType<() => void>,
+			required: true,
 		},
 	},
 	data(): IData {

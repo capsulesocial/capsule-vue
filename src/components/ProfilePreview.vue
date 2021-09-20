@@ -22,6 +22,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import type { PropType } from 'vue'
 import Avatar from '@/components/Avatar.vue'
 import FriendButton from '@/components/FriendButton.vue'
 import { getPhotoFromIPFS } from '@/backend/photos'
@@ -33,6 +34,7 @@ interface IData {
 }
 
 export default Vue.extend({
+	name: `ProfilePreview`,
 	components: {
 		Avatar,
 		FriendButton,
@@ -41,6 +43,10 @@ export default Vue.extend({
 		profile: {
 			type: Object,
 			default: null,
+		},
+		updateFollowers: {
+			type: Function as PropType<() => void>,
+			required: true,
 		},
 	},
 	data(): IData {
@@ -51,10 +57,12 @@ export default Vue.extend({
 	},
 	async created() {
 		// fetch avatar
-		this.avatar = await getPhotoFromIPFS(this.$props.profile.avatar)
+		if (this.$props.profile.avatar !== null && this.$props.profile.avatar !== ``) {
+			this.avatar = await getPhotoFromIPFS(this.$props.profile.avatar)
+		}
 		// Check if I am following the listed person
-		getFollowersAndFollowing(this.$store.state.session.id).then(({ following }) => {
-			this.isFollowing = following.has(this.$props.profile.id)
+		getFollowersAndFollowing(this.$props.profile.id, true).then(({ followers }) => {
+			this.isFollowing = followers.has(this.$store.state.session.id)
 		})
 	},
 	methods: {
@@ -66,10 +74,11 @@ export default Vue.extend({
 					this.$store.state.session.id,
 					this.$props.profile.id,
 				)
+				this.isFollowing = !this.isFollowing
+				if (this.$props.updateFollowers) {
+					this.updateFollowers()
+				}
 			}
-			getFollowersAndFollowing(this.$store.state.session.id).then(({ following }) => {
-				this.isFollowing = following.has(this.$props.profile.id)
-			})
 		},
 	},
 })

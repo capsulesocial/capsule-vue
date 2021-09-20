@@ -60,7 +60,7 @@ export default Vue.extend({
 		},
 		toggleFriend: {
 			type: Function as PropType<() => void>,
-			required: true,
+			default: () => {},
 		},
 	},
 })

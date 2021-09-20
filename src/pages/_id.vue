@@ -103,7 +103,7 @@
 				</nuxt-link>
 			</article>
 			<article>
-				<nuxt-child :profile="currentUser" style="padding-left: 22px" />
+				<nuxt-child :profile="currentUser" :updateFollowers="updateFollowers" style="padding-left: 22px" />
 			</article>
 		</div>
 		<div v-else style="width: 600px" class="flex justify-center">
@@ -209,6 +209,9 @@ export default Vue.extend({
 				this.$store.state.session.id,
 				this.$route.params.id,
 			)
+			this.updateFollowers()
+		},
+		async updateFollowers() {
 			const { followers, following } = await getFollowersAndFollowing(this.$route.params.id, true)
 			this.followers = followers.size
 			this.following = following.size
