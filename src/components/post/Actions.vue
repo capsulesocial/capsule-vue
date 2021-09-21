@@ -203,6 +203,14 @@ export default Vue.extend({
 			this.emotionCategory = c
 		},
 		async sendComment() {
+			if (this.emotion === ``) {
+				alert(`Please select a reaction`)
+				return
+			}
+			if (this.comment.length < 70 || this.comment.length > 500) {
+				alert(`Comment length too short or too long`)
+				return
+			}
 			if (!this.$qualityText(this.comment)) {
 				alert(`invalid comment!`)
 			} else {

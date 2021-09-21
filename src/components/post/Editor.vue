@@ -334,7 +334,7 @@ export default Vue.extend({
 			this.category = c
 		},
 		addTag(): void {
-			if (this.tag === `` || !this.$qualityText(this.tag)) {
+			if (!this.$qualityText(this.tag) || this.tag.length < 1 || this.tag.length > 99) {
 				alert(`Invalid tag!`)
 				return
 			}
@@ -415,6 +415,24 @@ export default Vue.extend({
 				const clean: string = DOMPurify.sanitize(this.editor.getContent(), {
 					USE_PROFILES: { html: true, svg: true },
 				})
+				// Check content quality
+				if (clean.length < 280) {
+					alert(`Post body too short. Write more before posting`)
+					return
+				}
+				if (clean.length > 100000) {
+					alert(`Post body too long for IPFS deliverability`)
+					return
+				}
+				// Check for at least one tag and category
+				if (this.$store.state.draft.tags.length < 1) {
+					alert(`At least 1 tag required`)
+					return
+				}
+				if (this.category === ``) {
+					alert(`Missing category`)
+					return
+				}
 				// Convert to Markdown
 				this.input = this.turndownService.turndown(clean)
 				const p = createPost(
