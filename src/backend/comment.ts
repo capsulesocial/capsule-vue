@@ -34,16 +34,24 @@ export function getComment(cid: string): Promise<INewCommentData> {
 }
 
 export async function sendComment(c: INewCommentData, type: `comment` | `reply`) {
-	const signature = signContent(c, c.authorID)
+	const comment: INewCommentData = {
+		content: c.content,
+		emotion: c.emotion,
+		timestamp: c.timestamp,
+		parentCID: c.parentCID,
+		authorID: c.authorID,
+	}
+
+	const signature = signContent(comment, comment.authorID)
 
 	if (!signature) {
 		throw new Error(`Comment signing failed`)
 	}
 
-	const cid = await ipfs().sendJSONData(c)
-	await axios.post(`${capsuleOrbit}/content/${c.parentCID}/comments`, {
+	const cid = await ipfs().sendJSONData(comment)
+	await axios.post(`${capsuleOrbit}/content/${comment.parentCID}/comments`, {
 		cid,
-		data: c,
+		data: comment,
 		sig: uint8ArrayToHexString(signature),
 		type,
 	})
