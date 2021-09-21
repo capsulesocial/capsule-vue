@@ -444,10 +444,20 @@ export default Vue.extend({
 			}
 			// Run quality rules before saving
 			if (this.newName !== ``) {
-				this.changeName(this.newName.trim())
+				if (this.newName.length < 2 || this.newName.length > 32) {
+					alert(`Invalid name length`)
+					return
+				} else {
+					this.changeName(this.newName.trim())
+				}
 			}
 			if (this.newID !== `` && this.$qualityID(this.newID)) {
-				this.changeID(this.newID.trim())
+				if (this.newID.length < 2 || this.newID.length > 18) {
+					alert(`Invalid ID length`)
+					return
+				} else {
+					this.changeID(this.newID.trim())
+				}
 			}
 			if (this.bio !== this.$store.state.session.bio && this.checkBio() > 0) {
 				this.changeBio(this.bio.trim())
