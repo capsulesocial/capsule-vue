@@ -184,8 +184,10 @@ export default Vue.extend({
 	async created() {
 		if (!this.initComments) {
 			this.comments = await getCommentsOfPost(this.postCID)
+			this.comments = this.comments.reverse()
 		} else {
 			this.comments = this.initComments
+			this.comments = this.comments.reverse()
 		}
 	},
 	methods: {

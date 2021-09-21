@@ -72,7 +72,7 @@
 					>
 						<h4 class="toggle">Tags</h4>
 						<ChevronUp v-if="tabs.tags" class="toggle" />
-						<ChevronDown v-else />
+						<ChevronDown v-else class="toggle" />
 					</button>
 					<!-- Dropdown -->
 					<div v-show="tabs.tags" class="hotzone pb-4">
@@ -453,7 +453,7 @@ export default Vue.extend({
 					return
 				}
 				// Check if clicking a button to open a tab
-				if (e.target.parentNode.classList.contains(`toggle`)) {
+				if (e.target.parentNode.classList.contains(`toggle`) || e.path[2].classList.value === `toggle`) {
 					return
 				}
 				// Check if clicking inside a dropdown
