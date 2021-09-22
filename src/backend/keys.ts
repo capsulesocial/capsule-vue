@@ -2,8 +2,6 @@ import nacl from 'tweetnacl'
 import { hexStringToUint8Array, uint8ArrayToHexString } from './utilities/helpers'
 
 import { Post } from './post'
-import { INewCommentData } from './comment'
-import { IFollowData } from './following'
 
 function getSignKeyPair(username: string) {
 	const secretKeyHex = window.localStorage.getItem(`content_signing_key_${username}`)
@@ -20,7 +18,7 @@ export function removeSigningKey(username: string) {
 	window.localStorage.removeItem(`content_signing_key_${username}`)
 }
 
-export function signContent(content: Post | INewCommentData | IFollowData, username: string) {
+export function signContent<T>(content: T, username: string) {
 	const ec = new TextEncoder()
 	const keypair = getSignKeyPair(username)
 	if (keypair) {
