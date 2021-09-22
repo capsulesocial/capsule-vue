@@ -63,7 +63,7 @@ import TwitterIcon from '@/components/icons/brands/Twitter.vue'
 import LinkIcon from '@/components/icons/Link.vue'
 import RepostIcon from '@/components/icons/Repost.vue'
 import { Post } from '@/backend/post'
-import { sendRepost, getReposts } from '@/backend/reposts'
+import { sendRepost } from '@/backend/reposts'
 
 export default Vue.extend({
 	components: {
@@ -88,15 +88,6 @@ export default Vue.extend({
 			isReposted: false,
 		}
 	},
-	async created() {
-		const res = await getReposts(this.$store.state.session.id, `NEW`, this.$props.post._id)
-		for (const r in res) {
-			// @ts-ignore
-			if (this.$props.cid === res[r].repost.postCID) {
-				this.isReposted = true
-			}
-		}
-	},
 	mounted() {
 		window.addEventListener(
 			`click`,
@@ -117,14 +108,8 @@ export default Vue.extend({
 	},
 	methods: {
 		sendRepost,
-		getReposts,
 		async handleRepost() {
-			if (!this.isReposted) {
-				await sendRepost(this.$store.state.session.id, this.$props.post._id, ``)
-				this.isReposted = true
-			} else {
-				alert(`Cannot undo repost at this time`)
-			}
+			await sendRepost(this.$store.state.session.id, this.$props.post._id, ``)
 		},
 		handleShare(type: string) {
 			const shareElement = document.createElement(`textarea`)
