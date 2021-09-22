@@ -47,16 +47,6 @@
 				<span class="hidden font-semibold lg:block ml-2"> Messages </span>
 			</nuxt-link>
 			<nuxt-link
-				:to="'/' + $store.state.session.id + '/bookmarks'"
-				:class="getStyles('id-bookmarks')"
-				class="group flex items-center p-2 text-base leading-6 m-1 text-xl rounded-xl"
-			>
-				<span class="p-2">
-					<BookmarksIcon />
-				</span>
-				<span class="hidden font-semibold lg:block ml-2"> Bookmarks </span>
-			</nuxt-link>
-			<nuxt-link
 				to="/post"
 				:class="
 					$store.state.settings.darkMode
@@ -106,7 +96,6 @@ import PencilIcon from '@/components/icons/Pencil.vue'
 import ProfileIcon from '@/components/icons/Person.vue'
 import SettingsIcon from '@/components/icons/Settings.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
-import BookmarksIcon from '@/components/icons/Bookmarks.vue'
 import InboxIcon from '@/components/icons/Inbox.vue'
 
 export default Vue.extend({
@@ -117,7 +106,6 @@ export default Vue.extend({
 		ProfileIcon,
 		SettingsIcon,
 		BrandedButton,
-		BookmarksIcon,
 		InboxIcon,
 	},
 	data() {
@@ -135,7 +123,7 @@ export default Vue.extend({
 		getStyles(tab: string): string {
 			let res = ``
 			// Check if current tab
-			if (this.$route.name === tab || (this.$route.name === `id` && tab === this.$store.state.session.id)) {
+			if (this.$route.name === tab || this.$route.params.id === tab) {
 				// Check dark mode
 				if (this.$store.state.settings.darkMode) {
 					res += `text-lightPrimary bg-lightPrimary shadow-lg bg-opacity-25`

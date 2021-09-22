@@ -121,7 +121,7 @@
 			<CommentFilter :filter="filter" @clicked="setFilter" />
 		</article>
 		<article v-for="c in comments" :key="c.cid" class="py-2">
-			<CommentCard :authorID="c.authorID" :cid="c.cid" :timestamp="c.timestamp" />
+			<Comment :authorID="c.authorID" :cid="c.cid" :timestamp="c.timestamp" />
 		</article>
 	</section>
 </template>
@@ -130,7 +130,7 @@
 import Vue from 'vue'
 import type { PropType } from 'vue'
 import BrandedButton from '@/components/BrandedButton.vue'
-import CommentCard from '@/components/post/Comment.vue'
+import Comment from '@/components/post/Comment.vue'
 import CommentFilter from '@/components/post/CommentFilter.vue'
 import FlipIcon from '@/components/icons/Flip.vue'
 import { backgrounds, reactions, feelings } from '@/config'
@@ -153,7 +153,7 @@ export default Vue.extend({
 	name: `ComponentPostActions`,
 	components: {
 		BrandedButton,
-		CommentCard,
+		Comment,
 		CommentFilter,
 		FlipIcon,
 	},
@@ -207,7 +207,7 @@ export default Vue.extend({
 				alert(`Please select a reaction`)
 				return
 			}
-			if (this.comment.length < 70 || this.comment.length > 500) {
+			if (this.comment.length < 1 || this.comment.length > 5000) {
 				alert(`Comment length too short or too long`)
 				return
 			}
