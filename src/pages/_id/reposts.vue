@@ -1,7 +1,13 @@
 <template>
 	<section class="px-4">
-		<div v-for="p in posts" :key="p._id">
-			<PostCard :post="p" :authorID="p.authorID" :authorUsername="p.authorID" :cid="p._id" />
+		<div v-for="p in this.reposts" :key="p._id">
+			<PostCard
+				:post="p"
+				:authorID="p.authorID"
+				:authorUsername="p.authorID"
+				:cid="p._id"
+				:repostedBy="$route.params.id"
+			/>
 		</div>
 	</section>
 </template>
@@ -10,11 +16,14 @@
 import Vue from 'vue'
 import type { PropType } from 'vue'
 import PostCard from '@/components/post/Card.vue'
-import { getPost, RetrievedPost } from '@/backend/post'
+import { getReposts } from '@/backend/reposts'
 import { Profile } from '@/backend/profile'
 
 interface IData {
-	posts: RetrievedPost[]
+	reposts: []
+	isLoading: boolean
+	currentOffset: number
+	limit: number
 }
 
 export default Vue.extend({
@@ -29,17 +38,23 @@ export default Vue.extend({
 	},
 	data(): IData {
 		return {
-			posts: [],
+			reposts: [],
+			isLoading: true,
+			currentOffset: 0,
+			limit: 10,
 		}
 	},
 	async created() {
-		const postList: string[] = []
-		for (const p in postList) {
-			if (p) {
-				const post = await getPost(postList[p])
-				this.posts.push({ ...post, _id: postList[p], excerpt: `` })
+		const res = await getReposts(this.$route.params.id)
+		for (const i in res) {
+			if (res[i]) {
+				// @ts-ignore
+				this.reposts.push(res[i].post)
 			}
 		}
+	},
+	methods: {
+		getReposts,
 	},
 })
 </script>
