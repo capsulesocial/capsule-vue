@@ -424,11 +424,6 @@ export default Vue.extend({
 					alert(`Post body too long for IPFS deliverability`)
 					return
 				}
-				// Check for at least one tag and category
-				if (this.$store.state.draft.tags.length < 1) {
-					alert(`At least 1 tag required`)
-					return
-				}
 				if (this.category === ``) {
 					alert(`Missing category`)
 					return
