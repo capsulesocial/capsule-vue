@@ -47,6 +47,5 @@ export async function getReposts(
 			postCID,
 		},
 	})
-
-	return data.map((cid: string) => cid)
+	return data.data.map((cid: string) => cid)
 }
