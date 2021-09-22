@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<!-- Component that displays a posted comment -->
-		<div class="flex">
+		<div class="flex w-full">
 			<!-- Avatar -->
 			<div class="flex-shrink-0 relative">
 				<div
@@ -23,7 +23,7 @@
 				</div>
 			</div>
 			<!-- Content -->
-			<div class="flex-1 leading-relaxed ml-4">
+			<div class="flex-1 leading-relaxed ml-4 w-full overflow-hidden">
 				<strong
 					:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 					class="font-bold bold mr-1"
@@ -44,7 +44,7 @@
 				>
 					{{ $formatDate(timestamp) }}
 				</span>
-				<p class="text-base py-1 font-sans">
+				<p class="text-base py-1 font-sans break-words">
 					{{ content }}
 				</p>
 			</div>

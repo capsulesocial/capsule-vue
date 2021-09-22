@@ -100,7 +100,7 @@
 			<article class="mt-5">
 				<div
 					:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-					class="editable prose max-w-none content"
+					class="editable prose max-w-none content break-words"
 					v-html="content"
 				></div>
 			</article>
