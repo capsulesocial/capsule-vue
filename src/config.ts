@@ -61,6 +61,10 @@ export const avatars = [
 	require(`@/assets/images/avatars/hiphopcribs.jpeg`),
 	require(`@/assets/images/avatars/hiphopking.jpeg`),
 	require(`@/assets/images/avatars/meathead.jpeg`),
+	require(`@/assets/images/avatars/blues.jpeg`),
+	require(`@/assets/images/avatars/fastfood.jpeg`),
+	require(`@/assets/images/avatars/streetart.jpeg`),
+	require(`@/assets/images/avatars/strongwomen.jpeg`),
 ]
 
 export const reactions = {

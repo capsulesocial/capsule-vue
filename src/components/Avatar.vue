@@ -41,7 +41,7 @@ export default Vue.extend({
 		}
 	},
 	methods: {
-		usernameToPicture(username: string, buckets: number = 7): number {
+		usernameToPicture(username: string, buckets: number = 11): number {
 			let x = 0
 			for (let i = 0; i < username.length; i++) {
 				x += username.charCodeAt(i)
