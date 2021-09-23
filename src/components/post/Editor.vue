@@ -310,15 +310,18 @@ export default Vue.extend({
 			if (e.target) {
 				// Check for lists
 				for (let i = 0; i < e.target.children.length; i++) {
-					if (e.target.children[i].outerHTML.substring(0, 5) === `<p>- `) {
+					if (
+						e.target.children[i].outerHTML.substring(0, 4) === `<p>-` ||
+						e.target.children[i].outerHTML.substring(0, 4) === `<p>*`
+					) {
 						e.target.children[i].outerHTML =
 							`<ul><li>` +
-							e.target.children[i].outerHTML.substring(5, e.target.children[i].outerHTML.length - 4) +
+							e.target.children[i].outerHTML.substring(4, e.target.children[i].outerHTML.length - 4) +
 							`</li></ul>`
-					} else if (e.target.children[i].outerHTML.substring(0, 6) === `<p>1. `) {
+					} else if (e.target.children[i].outerHTML.substring(0, 5) === `<p>1.`) {
 						e.target.children[i].outerHTML =
 							`<ol><li>` +
-							e.target.children[i].outerHTML.substring(6, e.target.children[i].outerHTML.length - 4) +
+							e.target.children[i].outerHTML.substring(5, e.target.children[i].outerHTML.length - 4) +
 							`</li></ol>`
 					}
 				}
@@ -334,7 +337,7 @@ export default Vue.extend({
 				// eslint-disable-next-line no-invalid-this
 				this.wordCount = count.split(` `).length - 2
 			}
-		}, 300),
+		}, 100),
 		changeTab(t: string) {
 			if (t === `tags`) {
 				this.tabs.tags = !this.tabs.tags
