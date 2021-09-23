@@ -311,7 +311,7 @@ import ChevronRight from '@/components/icons/ChevronRight.vue'
 import UploadAvatar from '@/components/icons/UploadAvatar.vue'
 // import ColorMode from '@/components/ColorMode.vue'
 import { MutationType, getProfileFromSession, namespace as sessionStoreNamespace } from '~/store/session'
-import { setProfile } from '@/backend/profile'
+import { getProfile, setProfile } from '@/backend/profile'
 import { addPhotoToIPFS, getPhotoFromIPFS, preUploadPhoto } from '@/backend/photos'
 
 interface IData {
@@ -433,6 +433,7 @@ export default Vue.extend({
 			this.profilePic = image
 			this.changeAvatar(avatarCID)
 			await this.updateProfile()
+			getProfile(this.$store.state.session.id, true) // Update cached profile
 		},
 		async downloadImage(cid: string) {
 			this.profilePic = await addPhotoToIPFS(cid)
