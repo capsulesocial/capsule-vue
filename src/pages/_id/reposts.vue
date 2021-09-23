@@ -37,7 +37,7 @@ export default Vue.extend({
 		for (const p in postList) {
 			if (p) {
 				const post = await getPost(postList[p])
-				this.posts.push({ ...post, _id: postList[p] })
+				this.posts.push({ ...post, _id: postList[p], excerpt: `` })
 			}
 		}
 	},

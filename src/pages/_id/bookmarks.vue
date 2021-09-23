@@ -36,7 +36,7 @@ export default Vue.extend({
 		const postList: RetrievedPost[] = [] // TODO: Here we need to implement that
 		for (const p of postList) {
 			const post = await getPost(p._id)
-			this.posts.push({ ...post, _id: p._id })
+			this.posts.push({ ...post, _id: p._id, excerpt: `` })
 		}
 	},
 })

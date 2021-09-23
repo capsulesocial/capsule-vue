@@ -19,7 +19,7 @@ export interface Post {
 	tags: Tag[]
 }
 
-export type RetrievedPost = Omit<Post, `content`> & { _id: string }
+export type RetrievedPost = Omit<Post, `content`> & { _id: string; excerpt: string }
 
 export interface IPostResponse {
 	post: RetrievedPost
