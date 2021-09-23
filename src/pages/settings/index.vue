@@ -421,7 +421,6 @@ export default Vue.extend({
 			const backendProfile = getProfileFromSession(this.$store.state.session)
 			const cid = await setProfile(backendProfile)
 			this.changeCID(cid)
-			this.changeAvatar(backendProfile.avatar)
 			this.changeBio(backendProfile.bio)
 			this.changeLocation(backendProfile.location)
 			this.changeName(backendProfile.name)
@@ -432,6 +431,7 @@ export default Vue.extend({
 			const avatarCID = await addPhotoToIPFS(image)
 			await preUploadPhoto(avatarCID, blobImage)
 			this.profilePic = image
+			this.changeAvatar(avatarCID)
 			await this.updateProfile()
 		},
 		async downloadImage(cid: string) {
