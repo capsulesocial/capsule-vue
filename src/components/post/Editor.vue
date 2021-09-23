@@ -306,8 +306,22 @@ export default Vue.extend({
 		window.removeEventListener(`click`, this.handleDropdown)
 	},
 	methods: {
-		update: debounce(function (this: any, e: { target: { value: any } }): void {
+		update: debounce(function (this: any, e: { target: { value: any; children: any } }): void {
 			if (e.target) {
+				// Check for lists
+				for (let i = 0; i < e.target.children.length; i++) {
+					if (e.target.children[i].outerHTML.substring(0, 5) === `<p>- `) {
+						e.target.children[i].outerHTML =
+							`<ul><li>` +
+							e.target.children[i].outerHTML.substring(5, e.target.children[i].outerHTML.length - 4) +
+							`</li></ul>`
+					} else if (e.target.children[i].outerHTML.substring(0, 6) === `<p>1. `) {
+						e.target.children[i].outerHTML =
+							`<ol><li>` +
+							e.target.children[i].outerHTML.substring(6, e.target.children[i].outerHTML.length - 4) +
+							`</li></ol>`
+					}
+				}
 				// eslint-disable-next-line
 				const clean: string = DOMPurify.sanitize(this.editor.getContent(), {
 					USE_PROFILES: { html: true, svg: true },
