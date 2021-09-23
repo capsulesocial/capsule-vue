@@ -2,17 +2,9 @@ import { connect, Contract, keyStores, WalletConnection } from 'near-api-js'
 import { KeyPairEd25519 } from 'near-api-js/lib/utils'
 // eslint-disable-next-line camelcase
 import { base_decode, base_encode } from 'near-api-js/lib/utils/serialize'
-import { contractName, domain } from './utilities/config'
+import { getNearConfig, domain } from './utilities/config'
 
-// Run capsule-vue with NEAR testnet for now
-const nearConfig = {
-	networkId: `testnet`,
-	nodeUrl: `https://rpc.testnet.near.org`,
-	contractName,
-	walletUrl: `https://wallet.testnet.near.org`,
-	helperUrl: `https://helper.testnet.near.org`,
-	explorerUrl: `https://explorer.testnet.near.org`,
-}
+const nearConfig = getNearConfig()
 
 let _walletConnection: WalletConnection | null = null
 let _contract: Contract | null = null
