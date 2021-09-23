@@ -103,6 +103,12 @@
 	.editable p {
 		@apply text-base font-normal leading-relaxed mt-2;
 	}
+	.editable ul {
+		@apply text-base font-normal leading-relaxed mt-2 pl-2 list-disc list-inside
+	}
+	.editable ol {
+		@apply text-base font-normal leading-relaxed mt-2 pl-2 list-decimal list-inside
+	}
 	blockquote {
 		@apply pl-2 border-l-2 border-primary text-xl leading-8 py-1 mt-1;
 	}
