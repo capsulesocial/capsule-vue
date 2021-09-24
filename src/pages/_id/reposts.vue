@@ -52,6 +52,7 @@ export default Vue.extend({
 				this.reposts.push(res[i].post)
 			}
 		}
+		this.reposts.reverse()
 	},
 	methods: {
 		getReposts,
