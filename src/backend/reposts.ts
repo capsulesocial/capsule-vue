@@ -23,7 +23,7 @@ export async function sendRepost(authorID: string, postCID: string, content: str
 		cid,
 		data,
 		sig: uint8ArrayToHexString(signature),
-		type: `repost`,
+		type: `simple`,
 	})
 
 	return cid
