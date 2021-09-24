@@ -57,11 +57,5 @@ export default Vue.extend({
 	methods: {
 		getReposts,
 	},
-	methods: {
-		getReposts,
-	},
-	methods: {
-		getReposts,
-	},
 })
 </script>
