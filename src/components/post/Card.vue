@@ -51,7 +51,7 @@
 						v-if="post.subtitle || post.excerpt"
 						:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 					>
-						{{ post.subtitle ? post.subtitle : post.excerpt }}
+						{{ post.subtitle ? post.subtitle : postExcerpt() }}
 					</h6>
 				</div>
 				<img v-if="featuredPhoto !== ``" :src="featuredPhoto" class="flex-shrink-0 h-24 object-contain rounded-lg" />
@@ -192,6 +192,20 @@ export default Vue.extend({
 				res += `hover:text-darkActive`
 			}
 			return res
+		},
+		postExcerpt(): string {
+			const excerpt = this.post.excerpt.slice(0, 177).trim()
+			if (excerpt.endsWith(`...`)) {
+				return excerpt
+			}
+			if (excerpt.endsWith(`..`)) {
+				return excerpt + `.`
+			}
+			if (excerpt.endsWith(`.`)) {
+				return excerpt + `..`
+			}
+
+			return excerpt + `...`
 		},
 	},
 })
