@@ -80,12 +80,13 @@ export async function getPosts(
 	offset = 0,
 	limit = 10,
 	following?: string,
+	reposts?: string,
 ): Promise<IPostResponse[]> {
 	if (sort === `FOLLOWING` && !following) {
 		throw new Error(`No following provided`)
 	}
 	const res = await axios.get(`${capsuleOrbit}/content`, {
-		params: { ...filter, sort, ...(following && sort === `FOLLOWING` ? { following } : {}), offset, limit },
+		params: { ...filter, sort, ...(following && sort === `FOLLOWING` ? { following } : {}), offset, limit, reposts },
 	})
 	return res.data.data
 }
