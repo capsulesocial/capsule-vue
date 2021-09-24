@@ -1,53 +1,56 @@
 <template>
 	<article
-		class="shadow rounded-lg my-2 object-contain"
-		style="width: 556px; margin-bottom: 22px; margin-top: 22px; padding: 16px"
-		:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText border border-darkBorder'"
+		class="object-contain"
+		style="width: 556px; margin-top: 22px; margin-bottom: 22px"
+		:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 	>
 		<!-- Top: avatar, name, id, timestamp then close icon,  -->
-		<div class="flex w-full">
-			<Avatar :avatar="avatar" :authorID="comment.authorID" size="w-12 h-12" />
-			<div class="flex flex-col flex-grow ml-4">
-				<div class="flex">
-					<nuxt-link :to="'/' + comment.authorID" class="flex mr-4">
-						<span
-							:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-							class="font-medium text-base"
-						>
-							{{ profile.name }}
-						</span>
-						<span
-							:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-							class="ml-2"
-						>
-							@{{ comment.authorID }}
-						</span>
+		<div v-if="commentData" class="flex w-full">
+			<div class="flex justify-between items-start mr-4">
+				<span class="rounded-lg p-1" :class="`bg-` + getCategory(comment.emotion)">
+					<Avatar :avatar="avatar" :authorID="comment.authorID" size="w-12 h-12" />
+				</span>
+			</div>
+			<!-- Dashed bubble -->
+			<div
+				class="border rounded-lg h-32 w-full flex justify-between border-dashed"
+				:class="`border-` + getCategory(comment.emotion)"
+			>
+				<!-- Text -->
+				<div class="flex flex-col flex-grow w-full px-4 py-2">
+					<!-- Top row: name, id, timestamp -->
+					<div class="flex">
+						<nuxt-link :to="'/' + comment.authorID" class="flex mr-4 flex-row items-center">
+							<span
+								:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+								class="font-medium text-base"
+							>
+								{{ profile.name }}
+							</span>
+							<span
+								:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+								class="ml-2"
+							>
+								@{{ comment.authorID }}
+							</span>
+						</nuxt-link>
+						<div class="text-xs self-center">
+							{{ $formatDate(comment.timestamp) }}
+						</div>
+					</div>
+					<!-- Content -->
+					<div class="flex flex-col flex-grow w-full p-2">
+						<nuxt-link :to="`/post/` + commentData.parentCID" class="text-lg">
+							{{ commentData.content }}
+						</nuxt-link>
+					</div>
+				</div>
+				<!-- Image -->
+				<div class="flex-shrink-0 flex justify-center items-center pr-4">
+					<nuxt-link :to="`/post/` + commentData.parentCID" class="text-lg">
+						<img :src="emotion.image" :alt="emotion.label" class="bg-white rounded-full w-24 h-24" />
 					</nuxt-link>
 				</div>
-				<!-- Timestamp -->
-				<div class="text-xs ml-14">
-					{{ $formatDate(comment.timestamp) }}
-				</div>
-			</div>
-			<span v-if="comment.authorID !== $store.state.session.id" class="h-10 flex flex-row-reverse">
-				<XIcon />
-			</span>
-		</div>
-		<!-- Content -->
-		<div v-if="commentData" class="flex my-4">
-			<div class="flex flex-col flex-grow w-full pr-4">
-				<nuxt-link :to="`/` + postData.authorID">
-					<h4 class="text-xl text-primary">@{{ postData.authorID }}</h4>
-				</nuxt-link>
-				<nuxt-link :to="`/post/` + commentData.parentCID">
-					<h6 class="text-lg">
-						{{ commentData.content }}
-					</h6>
-				</nuxt-link>
-			</div>
-			<div class="flex-shrink-0 -mt-12 w-32 h-32">
-				<img :src="emotion.image" :alt="emotion.label" class="bg-white rounded-full w-32 h-32" />
-				<h5 class="text-center">{{ emotion.label }}</h5>
 			</div>
 		</div>
 	</article>
@@ -57,8 +60,7 @@
 import Vue from 'vue'
 import type { PropType } from 'vue'
 import Avatar from '@/components/Avatar.vue'
-import XIcon from '@/components/icons/X.vue'
-import { reactions } from '@/config'
+import { reactions, feelings } from '@/config'
 import { getComment, INewCommentData } from '@/backend/comment'
 import { Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
@@ -74,7 +76,6 @@ interface IData {
 export default Vue.extend({
 	components: {
 		Avatar,
-		XIcon,
 	},
 	props: {
 		comment: {
@@ -114,6 +115,15 @@ export default Vue.extend({
 	},
 	methods: {
 		getComment,
+		getCategory(emotion: string) {
+			if (feelings.positive.includes(emotion)) {
+				return `positive`
+			} else if (feelings.negative.includes(emotion)) {
+				return `negative`
+			} else {
+				return `neutral`
+			}
+		},
 	},
 })
 </script>
