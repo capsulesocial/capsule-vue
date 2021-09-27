@@ -90,7 +90,7 @@ export default Vue.extend({
 	},
 	async created() {
 		window.addEventListener(`scroll`, this.handleScroll)
-		this.posts = await getPosts({}, this.algorithm, 0, this.limit)
+		this.posts = await getPosts({}, this.algorithm, this.currentOffset, this.limit)
 		this.currentOffset += this.limit
 		getFollowersAndFollowing(this.$store.state.session.id).then(({ following }) => {
 			this.following = following
@@ -122,7 +122,14 @@ export default Vue.extend({
 		async loadPosts() {
 			this.isLoading = true
 			try {
-				const res = await getPosts({}, this.algorithm, this.currentOffset, this.limit, this.$store.state.session.id)
+				const res = await getPosts(
+					{},
+					this.algorithm,
+					this.currentOffset,
+					this.limit,
+					this.algorithm === `FOLLOWING` ? this.$store.state.session.id : ``,
+					`true`,
+				)
 				if (res.length === 0) {
 					this.isLoading = false
 					window.removeEventListener(`scroll`, this.handleScroll)

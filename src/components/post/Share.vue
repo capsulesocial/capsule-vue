@@ -63,6 +63,7 @@ import TwitterIcon from '@/components/icons/brands/Twitter.vue'
 import LinkIcon from '@/components/icons/Link.vue'
 import RepostIcon from '@/components/icons/Repost.vue'
 import { Post } from '@/backend/post'
+import { sendRepost, getReposts } from '@/backend/reposts'
 
 export default Vue.extend({
 	components: {
@@ -87,13 +88,13 @@ export default Vue.extend({
 			isReposted: false,
 		}
 	},
-	created() {
-		const reposts = this.$store.state.session.reposts
-		if (!reposts) {
-			return
-		}
-		if (reposts.includes(this.cid)) {
-			this.isReposted = true
+	async created() {
+		const res = await getReposts(this.$store.state.session.id, `NEW`, this.$props.post._id)
+		for (const r in res) {
+			// @ts-ignore
+			if (this.$props.cid === res[r].repost.postCID) {
+				this.isReposted = true
+			}
 		}
 	},
 	mounted() {
@@ -115,12 +116,14 @@ export default Vue.extend({
 		)
 	},
 	methods: {
-		handleRepost() {
-			this.isReposted = !this.isReposted
-			if (this.isReposted) {
-				alert(`Reposted!`)
+		sendRepost,
+		getReposts,
+		async handleRepost() {
+			if (!this.isReposted) {
+				await sendRepost(this.$store.state.session.id, this.$props.post._id, ``)
+				this.isReposted = true
 			} else {
-				alert(`Repost Removed!`)
+				alert(`Cannot undo repost at this time`)
 			}
 		},
 		handleShare(type: string) {

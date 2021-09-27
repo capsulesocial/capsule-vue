@@ -4,6 +4,14 @@
 		style="width: 556px; margin-bottom: 22px; margin-top: 22px; padding: 16px"
 		:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText border border-darkBorder'"
 	>
+		<!-- IF reposted -->
+		<div v-if="repostedBy !== ``" class="flex w-full -mt-2">
+			<RepostIcon :shrink="true" />
+			<p class="pl-2 italic text-sm">
+				<nuxt-link :to="`/` + repostedBy">{{ repostedBy }} </nuxt-link>
+				reposted
+			</p>
+		</div>
 		<!-- Top: avatar, name, id, close -->
 		<div class="flex w-full">
 			<Avatar :avatar="avatar" :authorID="post.authorID" size="w-12 h-12" />
@@ -35,7 +43,11 @@
 					{{ $formatDate(post.timestamp) }}
 				</div>
 			</div>
-			<span v-if="post.authorID !== $store.state.session.id" class="h-10 flex flex-row-reverse">
+			<span
+				v-if="post.authorID !== $store.state.session.id"
+				class="h-10 flex flex-row-reverse"
+				:class="repostedBy !== `` ? `-mt-4` : ``"
+			>
 				<XIcon />
 			</span>
 		</div>
@@ -98,6 +110,7 @@ import CommentIcon from '@/components/icons/Comment.vue'
 import TagPill from '@/components/Tag.vue'
 import XIcon from '@/components/icons/X.vue'
 import FriendButton from '@/components/FriendButton.vue'
+import RepostIcon from '@/components/icons/Repost.vue'
 
 import { RetrievedPost } from '@/backend/post'
 import { getProfile, Profile } from '@/backend/profile'
@@ -122,11 +135,16 @@ export default Vue.extend({
 		TagPill,
 		XIcon,
 		FriendButton,
+		RepostIcon,
 	},
 	props: {
 		post: {
 			type: Object as PropType<RetrievedPost>,
 			required: true,
+		},
+		repostedBy: {
+			type: String,
+			default: ``,
 		},
 		comments: {
 			type: Array as PropType<Comment[] | null>,
@@ -204,7 +222,6 @@ export default Vue.extend({
 			if (excerpt.endsWith(`.`)) {
 				return excerpt + `..`
 			}
-
 			return excerpt + `...`
 		},
 	},
