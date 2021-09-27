@@ -48,6 +48,7 @@
 					:comments="post.comments"
 					:toggleFriend="toggleFriend"
 					:usersFollowing="following"
+					:repostedBy="myReposts.includes(post.post._id) ? $store.state.session.id : ``"
 				/>
 			</article>
 
@@ -64,6 +65,7 @@ import Vue from 'vue'
 import PostCard from '@/components/post/Card.vue'
 import { getPosts, Algorithm, IPostResponse } from '@/backend/post'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
+import { getReposts } from '@/backend/reposts'
 
 interface IData {
 	posts: IPostResponse[]
@@ -72,6 +74,7 @@ interface IData {
 	following: Set<string>
 	currentOffset: number
 	limit: number
+	myReposts: string[]
 }
 
 export default Vue.extend({
@@ -86,6 +89,7 @@ export default Vue.extend({
 			following: new Set(),
 			currentOffset: 0,
 			limit: 10,
+			myReposts: [],
 		}
 	},
 	async created() {
@@ -95,12 +99,19 @@ export default Vue.extend({
 		getFollowersAndFollowing(this.$store.state.session.id).then(({ following }) => {
 			this.following = following
 		})
+		// Fetch my reposts
+		const repostData = await getReposts(this.$store.state.session.id)
+		repostData.forEach((p) => {
+			// @ts-ignore
+			this.myReposts.push(p.repost.postCID)
+		})
 		this.isLoading = false
 	},
 	destroyed() {
 		window.removeEventListener(`scroll`, this.handleScroll)
 	},
 	methods: {
+		getReposts,
 		async sortFeed(a: Algorithm) {
 			window.addEventListener(`scroll`, this.handleScroll)
 			this.posts = []

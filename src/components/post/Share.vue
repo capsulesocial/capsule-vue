@@ -19,13 +19,14 @@
 		>
 			<!-- Repost -->
 			<button
+				v-if="$store.state.session.id !== $props.post.authorID"
 				:class="$store.state.settings.darkMode ? 'hover:text-lightActive' : 'hover:text-darkActive'"
 				class="flex focus:outline-none"
 				@click="handleRepost()"
 			>
-				<RepostIcon :isActive="isReposted" :shrink="true" style="width: 13.7px" class="mr-2" />
+				<RepostIcon :isActive="isReposted()" :shrink="true" style="width: 13.7px" class="mr-2" />
 				<span
-					v-if="isReposted"
+					v-if="isReposted()"
 					:class="$store.state.settings.darkMode ? 'text-lightActive' : 'text-darkActive'"
 					class="text-xs self-center"
 					>Undo Repost</span
@@ -63,7 +64,12 @@ import TwitterIcon from '@/components/icons/brands/Twitter.vue'
 import LinkIcon from '@/components/icons/Link.vue'
 import RepostIcon from '@/components/icons/Repost.vue'
 import { Post } from '@/backend/post'
-import { sendRepost, getReposts } from '@/backend/reposts'
+import { sendRepost } from '@/backend/reposts'
+
+interface IData {
+	isReposted: Function
+	showSocialShares: boolean
+}
 
 export default Vue.extend({
 	components: {
@@ -81,23 +87,21 @@ export default Vue.extend({
 			type: String,
 			required: true,
 		},
+		hasRepost: {
+			type: Function,
+			default: () => {},
+		},
 	},
-	data() {
+	data(): IData {
 		return {
 			showSocialShares: false,
-			isReposted: false,
+			isReposted: () => {
+				return false
+			},
 		}
 	},
-	async created() {
-		const res = await getReposts(this.$store.state.session.id, `NEW`, this.$props.post._id)
-		for (const r in res) {
-			// @ts-ignore
-			if (this.$props.cid === res[r].repost.postCID) {
-				this.isReposted = true
-			}
-		}
-	},
-	mounted() {
+	created() {
+		this.isReposted = this.$props.hasRepost
 		window.addEventListener(
 			`click`,
 			(e: any): void => {
@@ -117,11 +121,12 @@ export default Vue.extend({
 	},
 	methods: {
 		sendRepost,
-		getReposts,
 		async handleRepost() {
-			if (!this.isReposted) {
+			if (!this.isReposted()) {
 				await sendRepost(this.$store.state.session.id, this.$props.post._id, ``)
-				this.isReposted = true
+				this.isReposted = () => {
+					return true
+				}
 			} else {
 				alert(`Cannot undo repost at this time`)
 			}

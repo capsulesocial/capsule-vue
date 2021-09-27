@@ -18,6 +18,8 @@ import { getPosts, Algorithm, IPostResponse } from '@/backend/post'
 
 interface IData {
 	posts: IPostResponse[]
+	repostList: string[]
+	myRepostList: string[]
 	isLoading: boolean
 	currentOffset: number
 	limit: number
@@ -38,6 +40,8 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			posts: [],
+			repostList: [],
+			myRepostList: [],
 			isLoading: true,
 			currentOffset: 0,
 			limit: 10,

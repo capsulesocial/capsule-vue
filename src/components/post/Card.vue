@@ -84,6 +84,7 @@
 					:cid="post._id"
 					:class="$store.state.settings.darkMode ? 'fill-lightActive' : 'fill-darkActive'"
 					class="fill-primary"
+					:hasRepost="hasReposted"
 				/>
 				<BookmarkButton
 					:postID="post._id"
@@ -198,6 +199,13 @@ export default Vue.extend({
 		}
 	},
 	methods: {
+		hasReposted(): boolean {
+			if (this.$store.state.session.id === this.$props.repostedBy) {
+				return true
+			} else {
+				return false
+			}
+		},
 		getStyles(): string {
 			let res = ``
 			if (this.showComments && this.$store.state.settings.darkMode) {
