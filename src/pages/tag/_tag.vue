@@ -1,6 +1,6 @@
 <template>
 	<section class="w-full">
-		<div style="width: 600px" class="border-l border-r">
+		<div style="width: 660px" class="border-l border-r">
 			<article class="p-4">
 				<h2 class="text-xl">Hashtags /</h2>
 				<h2 class="text-2xl uppercase">#{{ $route.params.tag }}</h2>
@@ -10,7 +10,7 @@
 				<PostCard :post="p.post" :comments="p.comments" :usersFollowing="following" :toggleFriend="toggleFriend" />
 			</article>
 			<!-- Not loaded yet -->
-			<article v-show="isLoading" class="flex justify-center" style="width: 600px">
+			<article v-show="isLoading" class="flex justify-center" style="width: 660px">
 				<div class="loader m-5"></div>
 			</article>
 		</div>

@@ -5,7 +5,7 @@
 			<!-- Left Nav Menu -->
 			<Navigation class="flex" style="width: 240px" />
 			<!-- Main Content -->
-			<Nuxt class="mb-20 md:mb-5 md:min-w-max" style="width: 600px" />
+			<Nuxt class="mb-20 md:mb-5 md:min-w-max" style="width: 660px" />
 			<!-- Featured Tags -->
 			<div class="hidden lg:block" style="width: 240px">
 				<Trending v-if="$route.name === `home` || $route.name === `tag` || $route.name === `discover-category`" />

@@ -1,6 +1,6 @@
 <template>
 	<section class="w-full border-l border-r">
-		<div style="width: 600px">
+		<div style="width: 660px">
 			<!-- Header -->
 			<img
 				:src="require(`@/assets/images/category/` + $route.params.category + `/` + `header.jpg`)"
@@ -20,7 +20,7 @@
 				<PostCard :post="p.post" :comments="p.comments" :usersFollowing="following" :toggleFriend="toggleFriend" />
 			</article>
 			<!-- Not loaded yet -->
-			<article v-show="isLoading" class="flex justify-center" style="width: 600px">
+			<article v-show="isLoading" class="flex justify-center" style="width: 660px">
 				<div class="loader m-5"></div>
 			</article>
 		</div>

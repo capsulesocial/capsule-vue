@@ -77,7 +77,7 @@
 				</div>
 			</article>
 			<!-- Right column -->
-			<article class="flex flex-col h-full w-full px-4 py-6" style="width: 600px">
+			<article class="flex flex-col h-full w-full px-4 py-6" style="width: 660px">
 				<!-- Header for selected chat -->
 				<div class="p-4 flex">
 					<img :src="friendAvatar" class="w-10 h-10 rounded-lg" />

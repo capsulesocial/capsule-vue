@@ -1,13 +1,13 @@
 <template>
 	<article
 		class="object-contain"
-		style="width: 556px; margin-top: 22px; margin-bottom: 22px"
+		style="width: 616px; margin-top: 22px; margin-bottom: 22px"
 		:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 	>
 		<!-- Top: avatar, name, id, timestamp then close icon,  -->
 		<div v-if="commentData" class="flex w-full">
 			<div class="flex justify-between items-start mr-4">
-				<span class="rounded-lg p-1" :class="`bg-` + getCategory(comment.emotion)">
+				<span class="rounded-lg p-1 flex-shrink-0" :class="`bg-` + getCategory(comment.emotion)">
 					<Avatar :avatar="avatar" :authorID="comment.authorID" size="w-12 h-12" />
 				</span>
 			</div>

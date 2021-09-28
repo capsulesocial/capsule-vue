@@ -22,7 +22,7 @@
 		</div>
 
 		<!-- Top Right -->
-		<article class="" style="width: 600px"></article>
+		<article class="" style="width: 660px"></article>
 
 		<div style="width: 240px" class="relative hidden lg:flex items-center">
 			<div
