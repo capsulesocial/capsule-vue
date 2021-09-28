@@ -43,6 +43,16 @@
 
 			<article v-for="post in this.posts" :key="post.post._id" style="padding-left: 22px">
 				<PostCard
+					v-if="post.repost"
+					:post="post.post"
+					:cid="post.post._id"
+					:comments="post.comments"
+					:toggleFriend="toggleFriend"
+					:usersFollowing="following"
+					:repostedBy="post.repost.authorID"
+				/>
+				<PostCard
+					v-else
 					:post="post.post"
 					:cid="post.post._id"
 					:comments="post.comments"

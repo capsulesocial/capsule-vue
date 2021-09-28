@@ -19,7 +19,6 @@
 		>
 			<!-- Repost -->
 			<button
-				v-if="$store.state.session.id !== $props.post.authorID"
 				:class="$store.state.settings.darkMode ? 'hover:text-lightActive' : 'hover:text-darkActive'"
 				class="flex focus:outline-none"
 				@click="handleRepost()"
