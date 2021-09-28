@@ -1,60 +1,58 @@
 <template>
-	<div>
+	<div class="object-contain">
 		<!-- Component that displays a posted comment -->
 		<div class="flex w-full">
-			<!-- Avatar -->
-			<div class="flex-shrink-0 relative">
-				<div
-					class="rounded-lg p-1"
-					:style="emotion ? { backgroundImage: `url(${emotion.background})` } : {}"
-					style="background-size: cover"
-				>
+			<div class="flex justify-between items-start mr-4">
+				<span class="rounded-lg p-1" :class="getCategory(`bg-`)">
 					<Avatar :avatar="avatar" :authorID="authorID" size="w-12 h-12" />
-					<span
-						v-if="emotion"
-						class="tooltip absolute rounded-full p-1 -mt-4 -ml-4"
-						:style="{ backgroundImage: `url(${emotion.background})` }"
-					>
-						<img :src="emotion.image" class="bg-white rounded-full w-8 h-8" />
-						<span class="tooltiptext bg-white bg-opacity-75 rounded-lg text-xs text-center text-black w-16 -ml-8">{{
-							emotion.label
-						}}</span>
-					</span>
-				</div>
-			</div>
-			<!-- Content -->
-			<div class="flex-1 leading-relaxed ml-4 w-full overflow-hidden">
-				<strong
-					:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-					class="font-bold bold mr-1"
-				>
-					{{ name }}
-				</strong>
-				<nuxt-link
-					:to="'/' + authorID"
-					:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-					class="text-gray-700 text-sm mr-2"
-				>
-					@{{ authorID }}
-				</nuxt-link>
-				<span
-					v-if="timestamp"
-					:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-					class="text-xs font-sans"
-				>
-					{{ $formatDate(timestamp) }}
 				</span>
-				<p class="text-base py-1 font-sans break-words">
-					{{ content }}
-				</p>
+			</div>
+			<!-- Dashed bubble -->
+			<div class="border rounded-lg w-full flex justify-between border-dashed" :class="getCategory(`border-`)">
+				<!-- Text -->
+				<div class="flex flex-col flex-grow w-full px-4 py-2">
+					<!-- Top row: name, id, timestamp -->
+					<div class="flex">
+						<nuxt-link :to="`/` + authorID" class="flex mr-4 flex-row items-center">
+							<span
+								:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+								class="font-medium"
+							>
+								{{ name }}
+							</span>
+							<span
+								:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+								class="ml-2"
+							>
+								@{{ authorID }}
+							</span>
+						</nuxt-link>
+						<span v-if="timestamp" class="text-xs self-center">
+							{{ $formatDate(timestamp) }}
+						</span>
+					</div>
+					<!-- Content -->
+					<div class="flex flex-col flex-grow w-full overflow-hidden">
+						<p class="text-lg py-1 font-sans break-words leading-relaxed">
+							{{ content }}
+						</p>
+						<div class="h-full flex flex-col-reverse">
+							<button
+								class="font-sans text-sm text-lightSecondaryText focus:outline-none w-10"
+								@click="isReplying = !isReplying"
+							>
+								Reply
+							</button>
+						</div>
+					</div>
+				</div>
+				<div class="flex-shrink-0 flex justify-center items-center">
+					<img :src="emotion.image" class="bg-white rounded-full w-32 h-32" />
+				</div>
 			</div>
 		</div>
 		<!-- Reply button -->
 		<div class="ml-10 pl-1">
-			<button class="font-sans text-xs focus:outline-none" @click="isReplying = !isReplying">
-				{{ replies.length }} Replies
-			</button>
-
 			<!-- Active reply state -->
 			<div v-if="isReplying" class="border-l pl-2 mr-5">
 				<!-- Reply Input box -->
@@ -109,7 +107,7 @@ import Avatar from '@/components/Avatar.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 import Reply from '@/components/post/Reply.vue'
 import { getProfile, Profile } from '@/backend/profile'
-import { reactions } from '@/config'
+import { reactions, feelings } from '@/config'
 import { createComment, getComment, getCommentsOfPost, sendComment } from '@/backend/comment'
 import { getPhotoFromIPFS } from '@/backend/photos'
 import { getProfileFromSession } from '@/store/session'
@@ -121,6 +119,7 @@ interface IData {
 	avatar: string
 	name: string
 	emotion: { label: string; background: any; image: any } | null
+	emotionType: string
 	content: string
 }
 
@@ -145,12 +144,14 @@ export default Vue.extend({
 			avatar: ``,
 			name: ``,
 			emotion: reactions.default,
+			emotionType: ``,
 			content: ``,
 		}
 	},
 	async created() {
 		const comment = await getComment(this.cid)
 		this.content = comment.content
+		this.emotionType = comment.emotion
 		const emotion = comment.emotion as keyof typeof reactions
 		if (emotion in reactions) {
 			this.emotion = reactions[emotion]
@@ -178,6 +179,15 @@ export default Vue.extend({
 		this.replies = await getCommentsOfPost(this.cid)
 	},
 	methods: {
+		getCategory(prefix: string) {
+			if (feelings.positive.includes(this.emotionType)) {
+				return prefix + `positive`
+			} else if (feelings.negative.includes(this.emotionType)) {
+				return prefix + `negative`
+			} else {
+				return `neutral`
+			}
+		},
 		async sendReply() {
 			if (!this.$qualityText(this.reply)) {
 				alert(`Invalid reply!`)
