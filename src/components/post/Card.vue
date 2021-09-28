@@ -43,13 +43,14 @@
 		<div class="my-4">
 			<!-- Content -->
 			<nuxt-link :to="'/post/' + post._id" class="flex justify-between">
-				<div class="flex flex-col pr-4">
-					<h3 class="text-lg font-semibold capitalize pb-2">
+				<div class="flex flex-col pr-4 max-w-full overflow-hidden">
+					<h3 class="text-lg font-semibold capitalize pb-2 break-words">
 						{{ post.title }}
 					</h3>
 					<h6
 						v-if="post.subtitle || post.excerpt"
 						:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+						class="break-words"
 					>
 						{{ post.subtitle ? post.subtitle : postExcerpt() }}
 					</h6>

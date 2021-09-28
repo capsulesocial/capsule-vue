@@ -19,7 +19,7 @@
 			<article>
 				<h1
 					:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-					class="font-serif text-3xl capitalize mb-2"
+					class="font-serif text-3xl capitalize mb-2 break-words"
 				>
 					{{ post.title }}
 				</h1>
