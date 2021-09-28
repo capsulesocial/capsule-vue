@@ -90,6 +90,7 @@
 		"dompurify": "^2.2.7",
 		"electron-serve": "^0.4.1",
 		"ipfs-core": "0.10.5",
+		"lodash": "^4.17.21",
 		"marked": "^2.0.1",
 		"medium-editor": "^5.23.3",
 		"near-api-js": "^0.42.0",
