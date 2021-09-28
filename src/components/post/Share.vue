@@ -123,7 +123,7 @@ export default Vue.extend({
 		sendRepost,
 		async handleRepost() {
 			if (!this.isReposted()) {
-				await sendRepost(this.$store.state.session.id, this.$props.post._id, ``)
+				await sendRepost(this.$store.state.session.id, this.$props.cid, ``)
 				this.isReposted = () => {
 					return true
 				}
