@@ -23,9 +23,9 @@
 				class="flex focus:outline-none"
 				@click="handleRepost()"
 			>
-				<RepostIcon :isActive="isReposted" :shrink="true" style="width: 13.7px" class="mr-2" />
+				<RepostIcon :isActive="isReposted()" :shrink="true" style="width: 13.7px" class="mr-2" />
 				<span
-					v-if="isReposted"
+					v-if="isReposted()"
 					:class="$store.state.settings.darkMode ? 'text-lightActive' : 'text-darkActive'"
 					class="text-xs self-center"
 					>Undo Repost</span
@@ -63,6 +63,12 @@ import TwitterIcon from '@/components/icons/brands/Twitter.vue'
 import LinkIcon from '@/components/icons/Link.vue'
 import RepostIcon from '@/components/icons/Repost.vue'
 import { Post } from '@/backend/post'
+import { sendRepost } from '@/backend/reposts'
+
+interface IData {
+	isReposted: Function
+	showSocialShares: boolean
+}
 
 export default Vue.extend({
 	components: {
@@ -80,23 +86,21 @@ export default Vue.extend({
 			type: String,
 			required: true,
 		},
+		hasRepost: {
+			type: Function,
+			default: () => {},
+		},
 	},
-	data() {
+	data(): IData {
 		return {
 			showSocialShares: false,
-			isReposted: false,
+			isReposted: () => {
+				return false
+			},
 		}
 	},
 	created() {
-		const reposts = this.$store.state.session.reposts
-		if (!reposts) {
-			return
-		}
-		if (reposts.includes(this.cid)) {
-			this.isReposted = true
-		}
-	},
-	mounted() {
+		this.isReposted = this.$props.hasRepost
 		window.addEventListener(
 			`click`,
 			(e: any): void => {
@@ -115,12 +119,15 @@ export default Vue.extend({
 		)
 	},
 	methods: {
-		handleRepost() {
-			this.isReposted = !this.isReposted
-			if (this.isReposted) {
-				alert(`Reposted!`)
+		sendRepost,
+		async handleRepost() {
+			if (!this.isReposted()) {
+				await sendRepost(this.$store.state.session.id, this.$props.cid, ``)
+				this.isReposted = () => {
+					return true
+				}
 			} else {
-				alert(`Repost Removed!`)
+				alert(`Cannot undo repost at this time`)
 			}
 		},
 		handleShare(type: string) {

@@ -43,11 +43,22 @@
 
 			<article v-for="post in this.posts" :key="post.post._id" style="padding-left: 22px">
 				<PostCard
+					v-if="post.repost"
 					:post="post.post"
 					:cid="post.post._id"
 					:comments="post.comments"
 					:toggleFriend="toggleFriend"
 					:usersFollowing="following"
+					:repostedBy="post.repost.authorID"
+				/>
+				<PostCard
+					v-else
+					:post="post.post"
+					:cid="post.post._id"
+					:comments="post.comments"
+					:toggleFriend="toggleFriend"
+					:usersFollowing="following"
+					:repostedBy="myReposts.includes(post.post._id) ? $store.state.session.id : ``"
 				/>
 			</article>
 
@@ -64,6 +75,7 @@ import Vue from 'vue'
 import PostCard from '@/components/post/Card.vue'
 import { getPosts, Algorithm, IPostResponse } from '@/backend/post'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
+import { getReposts } from '@/backend/reposts'
 
 interface IData {
 	posts: IPostResponse[]
@@ -72,6 +84,7 @@ interface IData {
 	following: Set<string>
 	currentOffset: number
 	limit: number
+	myReposts: string[]
 }
 
 export default Vue.extend({
@@ -86,14 +99,21 @@ export default Vue.extend({
 			following: new Set(),
 			currentOffset: 0,
 			limit: 10,
+			myReposts: [],
 		}
 	},
 	async created() {
 		window.addEventListener(`scroll`, this.handleScroll)
-		this.posts = await getPosts({}, this.algorithm, 0, this.limit)
+		this.posts = await getPosts({}, this.algorithm, this.currentOffset, this.limit)
 		this.currentOffset += this.limit
 		getFollowersAndFollowing(this.$store.state.session.id).then(({ following }) => {
 			this.following = following
+		})
+		// Fetch my reposts
+		const repostData = await getReposts(this.$store.state.session.id)
+		repostData.forEach((p) => {
+			// @ts-ignore
+			this.myReposts.push(p.repost.postCID)
 		})
 		this.isLoading = false
 	},
@@ -101,6 +121,7 @@ export default Vue.extend({
 		window.removeEventListener(`scroll`, this.handleScroll)
 	},
 	methods: {
+		getReposts,
 		async sortFeed(a: Algorithm) {
 			window.addEventListener(`scroll`, this.handleScroll)
 			this.posts = []
@@ -122,7 +143,14 @@ export default Vue.extend({
 		async loadPosts() {
 			this.isLoading = true
 			try {
-				const res = await getPosts({}, this.algorithm, this.currentOffset, this.limit, this.$store.state.session.id)
+				const res = await getPosts(
+					{},
+					this.algorithm,
+					this.currentOffset,
+					this.limit,
+					this.algorithm === `FOLLOWING` ? this.$store.state.session.id : ``,
+					`true`,
+				)
 				if (res.length === 0) {
 					this.isLoading = false
 					window.removeEventListener(`scroll`, this.handleScroll)

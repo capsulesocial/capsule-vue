@@ -18,6 +18,8 @@ import { getPosts, Algorithm, IPostResponse } from '@/backend/post'
 
 interface IData {
 	posts: IPostResponse[]
+	repostList: string[]
+	myRepostList: string[]
 	isLoading: boolean
 	currentOffset: number
 	limit: number
@@ -38,6 +40,8 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			posts: [],
+			repostList: [],
+			myRepostList: [],
 			isLoading: true,
 			currentOffset: 0,
 			limit: 10,
@@ -47,7 +51,13 @@ export default Vue.extend({
 	async created() {
 		window.addEventListener(`scroll`, this.handleScroll)
 		// Fetch posts from Orbit DB by ID
-		this.posts = await getPosts({ authorID: this.$route.params.id }, `NEW`)
+		this.posts = await getPosts(
+			{ authorID: this.$route.params.id },
+			this.algorithm,
+			this.currentOffset,
+			this.limit,
+			`false`,
+		)
 		this.currentOffset += this.limit
 		this.isLoading = false
 	},
@@ -63,7 +73,7 @@ export default Vue.extend({
 					this.algorithm,
 					this.currentOffset,
 					this.limit,
-					this.$store.state.session.id,
+					`false`,
 				)
 				if (res.length === 0) {
 					this.isLoading = false
