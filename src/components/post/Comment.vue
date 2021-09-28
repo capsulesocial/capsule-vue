@@ -3,7 +3,7 @@
 		<!-- Component that displays a posted comment -->
 		<div class="flex w-full">
 			<div class="flex justify-between items-start mr-4">
-				<span class="rounded-lg p-1" :class="getCategory(`bg-`)">
+				<span class="rounded-lg p-1 flex-shrink-0" :class="getCategory(`bg-`)">
 					<Avatar :avatar="avatar" :authorID="authorID" size="w-12 h-12" />
 				</span>
 			</div>

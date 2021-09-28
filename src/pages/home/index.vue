@@ -63,7 +63,7 @@
 			</article>
 
 			<!-- Not loaded yet -->
-			<article v-show="this.isLoading" class="flex justify-center" style="width: 600px">
+			<article v-show="this.isLoading" class="flex justify-center" style="width: 660px">
 				<div class="loader m-5"></div>
 			</article>
 		</section>

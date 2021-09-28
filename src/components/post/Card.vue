@@ -1,7 +1,7 @@
 <template>
 	<article
 		class="shadow rounded-lg my-2 object-contain"
-		style="width: 556px; margin-bottom: 22px; margin-top: 22px; padding: 16px"
+		style="width: 616px; margin-bottom: 22px; margin-top: 22px; padding: 16px"
 		:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText border border-darkBorder'"
 	>
 		<!-- IF reposted -->
