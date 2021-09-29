@@ -32,6 +32,14 @@
 					<span class="text-lg">Social Accounts</span>
 					<ChevronRight class="text-gray4" />
 				</button>
+				<button
+					class="flex flex-row justify-between p-4 focus:outline-none border-r-4 border-transparent"
+					:class="getStyles('advanced')"
+					@click="changeTab('advanced')"
+				>
+					<span class="text-lg">Advanced</span>
+					<ChevronRight class="text-gray4" />
+				</button>
 				<!-- <button
 					class="flex flex-row justify-between p-4 focus:outline-none border-r-4 border-transparent"
 					:class="getStyles('display')"
@@ -44,6 +52,7 @@
 
 			<!-- Right column: Show details -->
 			<div style="width: 510px">
+				<!-- Account -->
 				<article v-if="tab === 'account'" class="col-span-2 border-r border-l h-full">
 					<!-- General Settings (Username, ID, Email) -->
 					<h2
@@ -182,7 +191,7 @@
 						</button>
 					</div>
 				</article>
-
+				<!-- Password -->
 				<article v-if="tab === 'password'" class="col-span-2 border-r border-l h-full">
 					<h2
 						:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
@@ -270,6 +279,44 @@
 						</button>
 					</div>
 				</article>
+				<!-- Advanced -->
+				<article v-if="tab === 'advanced'" class="col-span-2 border-r border-l h-full">
+					<h2
+						:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+						class="border-b-2 text-xl bold font-bold"
+						style="padding: 12px 0px 10px 16px"
+					>
+						Advanced Config
+					</h2>
+					<div class="p-5">
+						<p :class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'">
+							Preferred OrbitDB Node URL:
+						</p>
+						<label for="nodeURL" class="hidden">Preferred OrbitDB Node URL</label>
+						<input
+							id="nodeURL"
+							v-model="nodeURL"
+							type="text"
+							:placeholder="$store.state.nodeURL"
+							:class="
+								$store.state.settings.darkMode
+									? 'bg-lightBG text-lightSecondaryText focus:border-lightActive'
+									: 'bg-darkBG text-darkSecondaryText focus:border-darkActive'
+							"
+							class="focus:outline-none border-2 w-full my-2 focus:border-primary py-2 px-4 rounded-xl"
+						/>
+
+						<!-- Submit button -->
+						<button
+							:class="hasChanged() ? '' : 'opacity-50'"
+							class="bg-primary text-white rounded-lg focus:outline-none"
+							style="width: 128px; height: 40px; margin-left: 350px; margin-top: 25px"
+							@click="updateSettings"
+						>
+							Save Changes
+						</button>
+					</div>
+				</article>
 				<!-- Display Themes -->
 				<!-- <article v-if="tab === 'display'" class="col-span-2 border-r border-l h-full">
 					<h2
@@ -316,6 +363,7 @@ import { addPhotoToIPFS, getPhotoFromIPFS, preUploadPhoto } from '@/backend/phot
 
 interface IData {
 	newName: string
+	nodeURL: string
 	profilePic: null | string | ArrayBuffer
 	newID: string
 	newEmail: string
@@ -335,6 +383,7 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			newName: ``,
+			nodeURL: ``,
 			profilePic: null,
 			newID: ``,
 			newEmail: ``,
@@ -385,7 +434,8 @@ export default Vue.extend({
 				this.newID !== `` ||
 				this.newEmail !== `` ||
 				this.location !== `` ||
-				this.bio !== this.$store.state.session.bio
+				this.bio !== this.$store.state.session.bio ||
+				this.nodeURL !== ``
 			)
 		},
 		changeTab(tab: string) {
@@ -468,6 +518,14 @@ export default Vue.extend({
 			}
 			if (this.location !== this.$store.state.session.location && this.$qualityText(this.location)) {
 				this.changeLocation(this.location.trim())
+			}
+			if (this.nodeURL !== this.$store.state.session.nodeURL) {
+				if (!/((http|https?):\/\/)?(www\.)?[a-z0-9\-.]{3,}\.[a-z]{3}$/.test(this.nodeURL)) {
+					alert(`Invalid URL.`)
+					return
+				} else {
+					this.$store.commit(`changeNodeURL`, this.nodeURL)
+				}
 			}
 			const profileUpdated = await this.updateProfile()
 			if (profileUpdated) {
