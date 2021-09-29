@@ -52,6 +52,7 @@ export const feelings = {
 		`face41`,
 		`face42`,
 		`face51`,
+		`face52`,
 	],
 }
 
@@ -324,6 +325,11 @@ export const reactions = {
 		label: `Zzz`,
 		imageLeft: require(`@/assets/images/reactions/left/face51.png`),
 		imageRight: require(`@/assets/images/reactions/right/face51.png`),
+	},
+	face52: {
+		label: `Yeah, so?`,
+		imageLeft: require(`@/assets/images/reactions/left/face52.png`),
+		imageRight: require(`@/assets/images/reactions/right/face52.png`),
 	},
 	default: {
 		label: `Default`,
