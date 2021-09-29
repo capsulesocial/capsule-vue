@@ -73,7 +73,7 @@ export async function getCommentsOfPost(
 	return []
 }
 
-export async function getCommentsOfUser(authorID: string, offset = 0, limit = 10): Promise<ICommentData[]> {
+export async function getCommentsOfUser(authorID: string, offset: number, limit: number): Promise<ICommentData[]> {
 	const res = await axios.get(`${capsuleOrbit}/profile/${authorID}/comments`, { params: { offset, limit } })
 
 	if (res.data && res.data.data && res.data.data) {

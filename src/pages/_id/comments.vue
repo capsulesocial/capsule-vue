@@ -42,7 +42,7 @@ export default Vue.extend({
 	async created() {
 		window.addEventListener(`scroll`, this.handleScroll)
 		// Fetch comments from Orbit DB by ID
-		this.comments = await getCommentsOfUser(this.$props.profile.id)
+		this.comments = await getCommentsOfUser(this.$props.profile.id, this.currentOffset, this.limit)
 		this.currentOffset += this.limit
 		this.isLoading = false
 	},
@@ -53,7 +53,7 @@ export default Vue.extend({
 		async loadComments() {
 			this.isLoading = true
 			try {
-				const res = await getCommentsOfUser(this.$props.profile.id)
+				const res = await getCommentsOfUser(this.$props.profile.id, this.currentOffset, this.limit)
 				if (res.length === 0) {
 					this.isLoading = false
 					window.removeEventListener(`scroll`, this.handleScroll)
