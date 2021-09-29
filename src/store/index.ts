@@ -1,30 +1,19 @@
-import type { Context } from '@nuxt/types'
-import type { GetterTree, ActionTree, MutationTree } from 'vuex'
+import type { MutationTree } from 'vuex'
 
 export interface RootState {
-	description: string
+	nodeURL: string
 }
 
 export const state = (): RootState => ({
-	description: `Capsule Social`,
+	nodeURL: ``,
 })
 
-export const getters: GetterTree<RootState, RootState> = {
-	reversedName: (state): string => state.description.split(``).reverse().join(``),
-}
-
 export const MutationType = {
-	CHANGE_DESCRIPTION: `changeDescription`,
+	CHANGE_NODE: `changeNodeURL`,
 }
 
 export const mutations: MutationTree<RootState> = {
-	[MutationType.CHANGE_DESCRIPTION]: (state, newDescription: string) => {
-		state.description = newDescription
-	},
-}
-
-export const actions: ActionTree<RootState, RootState> = {
-	nuxtServerInit({ commit }, _context: Context) {
-		commit(MutationType.CHANGE_DESCRIPTION, `I'm defined by server side`)
+	[MutationType.CHANGE_NODE]: (state, newNodeURL: string) => {
+		state.nodeURL = newNodeURL
 	},
 }
