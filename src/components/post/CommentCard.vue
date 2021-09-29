@@ -48,7 +48,7 @@
 				<!-- Image -->
 				<div class="flex-shrink-0 flex justify-center items-center pr-4">
 					<nuxt-link :to="`/post/` + commentData.parentCID" class="text-lg">
-						<img :src="emotion.image" :alt="emotion.label" class="bg-white rounded-full w-24 h-24" />
+						<img :src="emotion.imageLeft" :alt="emotion.label" class="bg-white rounded-full w-24 h-24" />
 					</nuxt-link>
 				</div>
 			</div>
@@ -69,7 +69,7 @@ import { getPost, Post } from '@/backend/post'
 interface IData {
 	avatar: string
 	commentData: INewCommentData | null
-	emotion: { label: string; background: any; image: any } | null
+	emotion: { label: string; imageLeft: any; imageRight: any } | null
 	postData: Post | {}
 }
 

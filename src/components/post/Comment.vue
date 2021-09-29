@@ -47,7 +47,7 @@
 					</div>
 				</div>
 				<div class="flex-shrink-0 flex justify-center items-center">
-					<img :src="emotion.image" class="bg-white rounded-full w-32 h-32" />
+					<img :src="emotion.imageRight" class="bg-white rounded-full w-32 h-32" />
 				</div>
 			</div>
 		</div>
@@ -118,7 +118,7 @@ interface IData {
 	replies: any[]
 	avatar: string
 	name: string
-	emotion: { label: string; background: any; image: any } | null
+	emotion: { label: string; imageLeft: any; imageRight: any } | null
 	emotionType: string
 	content: string
 }

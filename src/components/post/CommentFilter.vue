@@ -83,7 +83,7 @@
 					"
 				>
 					<img
-						:src="reactionList[r].image"
+						:src="reactionList[r].imageLeft"
 						:alt="reactionList[r].label"
 						class="flex-shrink-0 h-12 w-12"
 						@click="updateFilter(reactionList[r].label)"

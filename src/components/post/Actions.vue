@@ -23,7 +23,7 @@
 								>
 									<span v-if="emotion !== ''">
 										<img
-											:src="reactionList[emotion].image"
+											:src="reactionList[emotion].imageRight"
 											class="object-contain"
 											style="width: 126px; height: 126px"
 										/>
@@ -106,7 +106,11 @@
 										"
 										@click="setEmotion(e)"
 									>
-										<img :src="reactionList[e].image" :alt="reactionList[e].label" class="flex-shrink-0 h-24 w-24" />
+										<img
+											:src="reactionList[e].imageLeft"
+											:alt="reactionList[e].label"
+											class="flex-shrink-0 h-24 w-24"
+										/>
 										<span class="text-xs text-center text-black w-24 -mt-1">{{ reactionList[e].label }}</span>
 									</button>
 								</div>
