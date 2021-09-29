@@ -22,7 +22,7 @@ export function signContent<T>(content: T, username: string) {
 	const ec = new TextEncoder()
 	const keypair = getSignKeyPair(username)
 	if (keypair) {
-		const message = ec.encode(JSON.stringify(content))
+		const message = ec.encode(JSON.stringify(stableOrderObj(content)))
 		return nacl.sign.detached(message, keypair.secretKey)
 	}
 	return null
@@ -62,4 +62,16 @@ export function setSigningKey(username: string, privateKey: Uint8Array) {
 	// Store hex-encoded private key in localStorage
 	const encodedPrivateKey = uint8ArrayToHexString(privateKey)
 	window.localStorage.setItem(`content_signing_key_${username}`, encodedPrivateKey)
+}
+
+function stableOrderObj<T extends Record<string, any>>(obj: T): T {
+	const keys = Object.keys(obj)
+	keys.sort()
+
+	const newObj: any = {}
+	for (const key of keys) {
+		newObj[key] = obj[key]
+	}
+
+	return newObj as T
 }

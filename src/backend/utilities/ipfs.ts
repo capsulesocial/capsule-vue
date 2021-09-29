@@ -1,4 +1,4 @@
-import IPFS, { Options } from 'ipfs-core'
+import IPFS, { Options, CID } from 'ipfs-core'
 
 export interface IPFSInterface {
 	sendData: (content: string | ArrayBuffer) => Promise<string>
@@ -49,8 +49,11 @@ async function createIPFSInterface(): Promise<IPFSInterface> {
 	}
 
 	const getJSONData = async <T>(cid: string) => {
-		const contentData = await getData(cid)
-		return JSON.parse(contentData.toString()) as T
+		const res = await node.dag.get(CID.parse(cid))
+		if (!res.value) {
+			throw new Error(`No data found!`)
+		}
+		return res.value as T
 	}
 
 	const sendData = async (content: string | ArrayBuffer) => {
@@ -58,8 +61,9 @@ async function createIPFSInterface(): Promise<IPFSInterface> {
 		return cid.toString()
 	}
 
-	const sendJSONData = <T>(content: T) => {
-		return sendData(JSON.stringify(content, null, 0))
+	const sendJSONData = async <T>(content: T) => {
+		const cid = await node.dag.put(content, { format: `dag-cbor`, hashAlg: `sha2-256` })
+		return cid.toString()
 	}
 
 	// Import Private Key to local IPFS repo
