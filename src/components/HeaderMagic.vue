@@ -16,7 +16,7 @@
 					border-b
 				"
 			>
-				<div class="md:min-w-max md:max-w-3xl w-full pl-10 pr-5 flex justify-between">
+				<div class="md:min-w-max md:max-w-3xl w-full pl-5 flex justify-between">
 					<div class="items-center flex">
 						<Avatar :avatar="avatar" :authorID="authorID" size="w-10 h-10" class="mr-4" />
 						<nuxt-link :to="`/` + authorID" class="pr-4 text-lg">@{{ authorID }}</nuxt-link>

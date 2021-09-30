@@ -89,28 +89,29 @@
 		@apply font-serif;
 	}
 	.editable h1 {
-		@apply text-3xl font-serif font-semibold mt-3;
+		@apply text-h1 font-serif font-semibold mt-10 mb-3;
 	}
 	.editable h2 {
-		@apply text-2xl font-serif font-semibold mt-2;
+		@apply text-h2 font-serif font-semibold mt-8 pt-1 mb-3;
 	}
 	.editable h3 {
-		@apply text-xl font-serif font-semibold mt-1;
+		@apply text-h3 font-serif font-semibold mt-6 mb-3;
 	}
 	.editable a {
-		@apply text-primary;
+		@apply text-primary underline;
+		text-underline-offset: 3.52px;
 	}
 	.editable p {
-		@apply text-base font-normal leading-relaxed mt-2;
+		@apply text-p font-normal leading-relaxed my-3;
 	}
 	.editable ul {
-		@apply text-base font-normal leading-relaxed mt-2 pl-2 list-disc list-inside
+		@apply text-p font-normal leading-relaxed my-3 pl-5 list-disc list-outside
 	}
 	.editable ol {
-		@apply text-base font-normal leading-relaxed mt-2 pl-2 list-decimal list-inside
+		@apply text-p font-normal leading-relaxed my-3 pl-5 list-decimal list-outside
 	}
 	blockquote {
-		@apply pl-2 border-l-2 border-primary text-xl leading-8 py-1 mt-1;
+		@apply px-6 border-l-2 border-primary text-p my-3;
 	}
 	.medium-toolbar-arrow-under:after {
 		@apply bg-transparent;
@@ -124,10 +125,10 @@
 	.medium-editor-anchor-preview a {
 		@apply border;
 	}
-	#articleContent p {
+	/* #articleContent p {
 		margin: 2em 0;
 	}
 	#articleContent ul li, #articleContent ol li {
 		margin: 1.6em 0;
-	}
+	} */
 }
