@@ -19,7 +19,13 @@ module.exports = {
           },
         },
       },
-      colors: {
+      fontSize: {
+        p: [`17.6px`, `28.6px`],
+        h3: [`21.6px`, `30.24px`],
+        h2: [`29.6px`, `38.48px`],
+        h1: [`48px`, `52.8px`],
+      },
+        colors: {
         primary: '#1E566C', // Dark Teal
         secondary: '#367589', // Moss Teal
         teal: '#216B6A', //Teal

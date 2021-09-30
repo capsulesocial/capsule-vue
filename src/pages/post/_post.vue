@@ -6,7 +6,7 @@
 			:toggleFriend="toggleFriend"
 			:userIsFollowed="userIsFollowed"
 		/>
-		<section v-if="post !== null" class="pb-16 md:pb-5 md:pl-5 m-5 pt-4">
+		<section v-if="post !== null" class="pb-16 md:pb-5 md:pl-5 my-5 pt-4">
 			<!-- Category and elipses -->
 			<article class="w-full flex justify-between my-2">
 				<div class="text-lg">
@@ -19,14 +19,14 @@
 			<article>
 				<h1
 					:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-					class="font-serif text-3xl capitalize mb-2 break-words"
+					class="text-h1 font-serif font-semibold mt-5 mb-3 capitalize break-words"
 				>
 					{{ post.title }}
 				</h1>
 				<h2
 					v-if="post.subtitle"
 					:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-					class="font-serif text-xl capitalize"
+					class="font-serif text-h2 mt-5 mb-3 capitalize break-words"
 				>
 					{{ post.subtitle }}
 				</h2>

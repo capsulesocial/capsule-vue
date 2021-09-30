@@ -9,7 +9,7 @@
 
 		<div class="flex h-screen pt-24 -mt-24">
 			<section
-				class="w-full shadow-lg border-l border-r px-10 overflow-y-auto"
+				class="w-full shadow-lg border-l border-r px-5 overflow-y-auto"
 				:class="$store.state.settings.darkMode ? 'bg-lightBG text-lightPrimaryText' : 'bg-darkBG text-darkPrimaryText'"
 			>
 				<!-- Save to Drafts & Category -->
@@ -23,30 +23,30 @@
 					<h6 class="text-primary capitalize text-sm">{{ category === `` ? 'Category' : category }}</h6>
 				</article>
 				<!-- Title, subtitle -->
-				<article class="flex justify-between px-5">
+				<article class="flex flex-col px-5">
+					<p class="text-xs text-lightError">{{ titleError }}</p>
 					<label for="title" class="hidden">Title</label>
 					<textarea
 						id="title"
 						ref="title"
 						placeholder="Enter Title"
-						class="font-serif text-3xl focus:outline-none w-full pb-2"
+						class="text-h1 font-serif font-semibold mt-2 mb-3 capitalize break-words w-full focus:outline-none"
 						wrap="soft"
 						@input="handleTitle"
 					/>
-					<span class="self-center text-right text-xs text-lightError w-16">{{ titleError }}</span>
 				</article>
 
-				<article class="flex justify-between px-5">
+				<article class="flex flex-col px-5 mb-3">
+					<p class="text-xs text-lightError">{{ subtitleError }}</p>
 					<label for="subtitle" class="hidden">Subtitle</label>
 					<textarea
 						id="subtitle"
 						ref="subtitle"
 						placeholder="Enter Subtitle"
-						class="font-serif text-xl text-lightSecondaryText focus:outline-none w-full pb-2"
+						class="font-serif text-h2 mt-2 text-lightSecondaryText capitalize break-words focus:outline-none w-full"
 						wrap="soft"
 						@input="handleSubtitle"
 					/>
-					<span class="self-center text-right text-xs text-lightError w-16">{{ subtitleError }}</span>
 				</article>
 
 				<!-- WYSIWYG -->
@@ -287,7 +287,7 @@ export default Vue.extend({
 				cleanPastedHTML: true,
 			},
 			toolbar: {
-				buttons: [`bold`, `italic`, `underline`, `anchor`, `h1`, `h2`, `h3`, `quote`],
+				buttons: [`bold`, `italic`, `underline`, `anchor`, `h2`, `h3`, `quote`],
 			},
 		})
 		this.turndownService = new Turndown()
