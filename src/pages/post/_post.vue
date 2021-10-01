@@ -35,7 +35,7 @@
 			<!-- Author Intro -->
 			<article class="flex justify-between mt-5">
 				<div class="flex">
-					<img v-if="authorAvatar" :src="authorAvatar" :alt="author.id" class="w-10 h-10 rounded-lg mr-4" />
+					<Avatar :avatar="authorAvatar" :authorID="author.id" :size="`w-10 h-10`" class="mr-4" />
 					<p
 						:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 						class="font-sans capitalize"
@@ -147,6 +147,7 @@ import BookmarkButton from '@/components/post/BookmarkButton.vue'
 import ShareButton from '@/components/post/Share.vue'
 import HeaderMagic from '@/components/HeaderMagic.vue'
 import MoreIcon from '@/components/icons/More.vue'
+import Avatar from '@/components/Avatar.vue'
 
 import { getProfile, Profile } from '@/backend/profile'
 import { getPost, Post } from '@/backend/post'
@@ -174,6 +175,7 @@ export default Vue.extend({
 		ShareButton,
 		HeaderMagic,
 		MoreIcon,
+		Avatar,
 	},
 	layout: `Reader`,
 	// mixins: [markdown],
