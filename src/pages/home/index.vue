@@ -1,5 +1,5 @@
 <template>
-	<div class="w-full border-l border-r">
+	<div class="w-full border-l border-r" style="min-height: calc(100vh - 95px)">
 		<section
 			:class="$store.state.settings.darkMode ? 'text-lightPrimaryText bg-lightBG' : 'text-darkPrimaryText bg-darkBG'"
 		>
@@ -50,6 +50,7 @@
 					:toggleFriend="toggleFriend"
 					:usersFollowing="following"
 					:repostedBy="post.repost.authorID"
+					:hideRepostIcon="algorithm === `NEW` || algorithm === `TOP` ? true : false"
 				/>
 				<PostCard
 					v-else
@@ -59,11 +60,12 @@
 					:toggleFriend="toggleFriend"
 					:usersFollowing="following"
 					:repostedBy="myReposts.includes(post.post._id) ? $store.state.session.id : ``"
+					:hideRepostIcon="algorithm === `NEW` || algorithm === `TOP` ? true : false"
 				/>
 			</article>
 
 			<!-- Not loaded yet -->
-			<article v-show="this.isLoading" class="flex justify-center" style="width: 660px">
+			<article v-show="this.isLoading" class="flex justify-center h-screen" style="width: 660px">
 				<div class="loader m-5"></div>
 			</article>
 		</section>
@@ -149,7 +151,6 @@ export default Vue.extend({
 					this.currentOffset,
 					this.limit,
 					this.algorithm === `FOLLOWING` ? this.$store.state.session.id : ``,
-					`true`,
 				)
 				if (res.length === 0) {
 					this.isLoading = false
