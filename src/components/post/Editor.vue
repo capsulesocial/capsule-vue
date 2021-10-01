@@ -297,6 +297,10 @@ export default Vue.extend({
 		this.handleTitle(null)
 		// @ts-ignore
 		this.$refs.subtitle.value = this.$store.state.draft.subtitle
+		if (this.$store.state.draft.featuredPhotoCID !== null) {
+			this.featuredPhotoCID = this.$store.state.draft.featuredPhotoCID
+			this.featuredPhoto = this.downloadImage(this.$store.state.draft.featuredPhotoCID)
+		}
 	},
 	created() {
 		// Set filter dropdown event handler
@@ -372,6 +376,7 @@ export default Vue.extend({
 		removeImage(): void {
 			this.featuredPhoto = null
 			this.featuredPhotoCID = null
+			this.$store.commit(`draft/updateFeaturedPhotoCID`, null)
 		},
 		async handleImage(e: Event): Promise<void> {
 			// @ts-ignore
@@ -401,6 +406,7 @@ export default Vue.extend({
 			const cid = await addPhotoToIPFS(image)
 			await preUploadPhoto(cid, blobImage)
 			this.featuredPhotoCID = cid
+			this.$store.commit(`draft/updateFeaturedPhotoCID`, this.featuredPhotoCID)
 			this.downloadImage(cid)
 		},
 		async downloadImage(cid: string): Promise<void> {
