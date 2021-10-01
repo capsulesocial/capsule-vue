@@ -403,6 +403,7 @@ export default Vue.extend({
 		},
 		async uploadImage(image: any, blobImage: Blob): Promise<void> {
 			const cid = await addPhotoToIPFS(image)
+			console.log(cid)
 			await preUploadPhoto(cid, blobImage)
 			this.featuredPhotoCID = cid
 			this.downloadImage(cid)

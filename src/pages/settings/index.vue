@@ -519,7 +519,7 @@ export default Vue.extend({
 			if (this.location !== this.$store.state.session.location && this.$qualityText(this.location)) {
 				this.changeLocation(this.location.trim())
 			}
-			if (this.nodeURL !== this.$store.state.session.nodeURL) {
+			if (this.nodeURL && this.nodeURL !== this.$store.state.session.nodeURL) {
 				if (!/((http|https?):\/\/)?(www\.)?[a-z0-9\-.]{3,}\.[a-z]{3}$/.test(this.nodeURL)) {
 					alert(`Invalid URL.`)
 					return
