@@ -5,7 +5,7 @@
 		:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText border border-darkBorder'"
 	>
 		<!-- IF reposted -->
-		<div v-if="repostedBy !== ``" class="flex w-full -mt-2">
+		<div v-if="repostedBy !== `` && !hideRepostIcon" class="flex w-full -mt-2">
 			<RepostIcon :shrink="true" />
 			<p class="pl-2 italic text-sm">
 				<nuxt-link :to="`/` + repostedBy">{{ repostedBy }} </nuxt-link>
@@ -163,6 +163,10 @@ export default Vue.extend({
 		toggleFriend: {
 			type: Function as PropType<(id: string) => void>,
 			default: () => null,
+		},
+		hideRepostIcon: {
+			type: Boolean,
+			default: false,
 		},
 	},
 	data(): IData {
