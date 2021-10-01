@@ -315,14 +315,10 @@ export default Vue.extend({
 						e.target.children[i].outerHTML.substring(0, 4) === `<p>*`
 					) {
 						e.target.children[i].outerHTML =
-							`<ul><li>` +
-							e.target.children[i].outerHTML.substring(4, e.target.children[i].outerHTML.length - 4) +
-							`</li></ul>`
+							`<ul><li>` + e.target.children[i].innerText.substring(1).trim() + `</li></ul>`
 					} else if (e.target.children[i].outerHTML.substring(0, 5) === `<p>1.`) {
 						e.target.children[i].outerHTML =
-							`<ol><li>` +
-							e.target.children[i].outerHTML.substring(5, e.target.children[i].outerHTML.length - 4) +
-							`</li></ol>`
+							`<ol><li>` + e.target.children[i].innerText.substring(2).trim() + `</li></ol>`
 					}
 				}
 				// eslint-disable-next-line
