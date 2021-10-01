@@ -82,6 +82,7 @@ export default Vue.extend({
 					window.removeEventListener(`scroll`, this.handleScroll)
 				}
 				this.posts = this.posts.concat(res)
+				this.currentOffset += this.limit
 			} catch (err) {
 				alert(err)
 			} finally {
@@ -92,7 +93,6 @@ export default Vue.extend({
 			const { scrollTop, scrollHeight, clientHeight } = document.documentElement
 			if (scrollTop + clientHeight >= scrollHeight - 5) {
 				await this.loadPosts()
-				this.currentOffset += this.limit
 			}
 		},
 	},
