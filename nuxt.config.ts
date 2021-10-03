@@ -22,6 +22,9 @@ const config: NuxtConfig = {
 		link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
 		script: [],
 	},
+	extractCSS: {
+		ignoreOrder: false,
+	},
 
 	// Global CSS: https://go.nuxtjs.dev/config-css
 	css: ['medium-editor/dist/css/medium-editor.min.css'],
