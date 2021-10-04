@@ -7,14 +7,14 @@
 		<!-- Top: avatar, name, id, timestamp then close icon,  -->
 		<div v-if="commentData" class="flex w-full">
 			<div class="flex justify-between items-start mr-4">
-				<span class="rounded-lg p-1 flex-shrink-0" :class="`bg-` + getCategory(comment.emotion)">
+				<span class="rounded-lg p-1 flex-shrink-0" :style="getStyle(`bg-`, comment.emotion)">
 					<Avatar :avatar="avatar" :authorID="comment.authorID" size="w-12 h-12" />
 				</span>
 			</div>
 			<!-- Dashed bubble -->
 			<div
 				class="border rounded-lg h-32 w-full flex justify-between border-dashed"
-				:class="`border-` + getCategory(comment.emotion)"
+				:style="getStyle(`border-`, comment.emotion)"
 			>
 				<!-- Text -->
 				<div class="flex flex-col flex-grow w-full px-4 py-2">
@@ -115,14 +115,21 @@ export default Vue.extend({
 	},
 	methods: {
 		getComment,
-		getCategory(emotion: string) {
-			if (feelings.positive.includes(emotion)) {
-				return `positive`
-			} else if (feelings.negative.includes(emotion)) {
-				return `negative`
-			} else {
-				return `neutral`
+		getStyle(key: string, emotion: string) {
+			let res: string = ``
+			if (key === `border-`) {
+				res = `border-color: `
+			} else if (key === `bg-`) {
+				res = `background-color: `
 			}
+			if (feelings.positive.includes(emotion)) {
+				res += `#1F7DAD`
+			} else if (feelings.negative.includes(emotion)) {
+				res += `#EE1F63`
+			} else {
+				res += `#F0B785`
+			}
+			return res
 		},
 	},
 })

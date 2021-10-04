@@ -3,12 +3,12 @@
 		<!-- Component that displays a posted comment -->
 		<div class="flex w-full">
 			<div class="flex justify-between items-start mr-4">
-				<span class="rounded-lg p-1 flex-shrink-0" :class="getCategory(`bg-`)">
+				<span class="rounded-lg p-1 flex-shrink-0" :style="getStyle(`bg-`)">
 					<Avatar :avatar="avatar" :authorID="authorID" size="w-12 h-12" />
 				</span>
 			</div>
 			<!-- Dashed bubble -->
-			<div class="border rounded-lg w-full flex justify-between border-dashed" :class="getCategory(`border-`)">
+			<div class="border rounded-lg w-full flex justify-between border-dashed" :style="getStyle(`border-`)">
 				<!-- Text -->
 				<div class="flex flex-col flex-grow w-full px-4 py-2">
 					<!-- Top row: name, id, timestamp -->
@@ -179,14 +179,21 @@ export default Vue.extend({
 		this.replies = await getCommentsOfPost(this.cid)
 	},
 	methods: {
-		getCategory(prefix: string) {
-			if (feelings.positive.includes(this.emotionType)) {
-				return prefix + `positive`
-			} else if (feelings.negative.includes(this.emotionType)) {
-				return prefix + `negative`
-			} else {
-				return `neutral`
+		getStyle(prefix: string) {
+			let res: string = ``
+			if (prefix === `border-`) {
+				res = `border-color: `
+			} else if (prefix === `bg-`) {
+				res = `background-color: `
 			}
+			if (feelings.positive.includes(this.emotionType)) {
+				res += `#1F7DAD`
+			} else if (feelings.negative.includes(this.emotionType)) {
+				res += `#EE1F63`
+			} else {
+				res += `#F0B785`
+			}
+			return res
 		},
 		async sendReply() {
 			if (!this.$qualityText(this.reply)) {
