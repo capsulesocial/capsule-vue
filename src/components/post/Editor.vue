@@ -310,19 +310,23 @@ export default Vue.extend({
 		window.removeEventListener(`click`, this.handleDropdown)
 	},
 	methods: {
-		update: debounce(function (this: any, e: { target: { value: any; children: any } }): void {
+		update: debounce(function (
+			this: any,
+			e: { target: { value: any; children: Array<{ outerHTML: string; innerText: string }> } },
+		): void {
 			if (e.target) {
 				// Check for lists
-				for (let i = 0; i < e.target.children.length; i++) {
-					if (
-						e.target.children[i].outerHTML.substring(0, 4) === `<p>-` ||
-						e.target.children[i].outerHTML.substring(0, 4) === `<p>*`
-					) {
-						e.target.children[i].outerHTML =
-							`<ul><li>` + e.target.children[i].innerText.substring(1).trim() + `</li></ul>`
-					} else if (e.target.children[i].outerHTML.substring(0, 5) === `<p>1.`) {
-						e.target.children[i].outerHTML =
-							`<ol><li>` + e.target.children[i].innerText.substring(2).trim() + `</li></ol>`
+				for (const c of e.target.children) {
+					if (!c.outerHTML.startsWith(`<p `)) {
+						continue
+					}
+					if (c.innerText.startsWith(`-`) || c.innerText.startsWith(`*`)) {
+						c.outerHTML = `<ul><li>` + c.innerText.substring(1).trim() + `</li></ul>`
+						continue
+					}
+					if (c.innerText.startsWith(`1.`)) {
+						c.outerHTML = `<ol><li>` + c.innerText.substring(2).trim() + `</li></ol>`
+						continue
 					}
 				}
 				// eslint-disable-next-line
@@ -333,11 +337,12 @@ export default Vue.extend({
 				this.input = clean
 				let count = clean.replace(/<[^>]*>/g, ` `)
 				count = count.replace(/\s+/g, ` `)
-				count.trim()
+				count = count.trim()
 				// eslint-disable-next-line no-invalid-this
 				this.wordCount = count.split(` `).length - 2
 			}
-		}, 100),
+		},
+		100),
 		changeTab(t: string) {
 			if (t === `tags`) {
 				this.tabs.tags = !this.tabs.tags
