@@ -158,7 +158,7 @@
 							<p class="hotzone px-4 py-2 text-sm">
 								Selecting a featured image is recommended for an optimal user experience.
 							</p>
-							<button class="hotzone w-full focus:outline-none" @click="$refs.featuredPhoto?.click()">
+							<button class="hotzone w-full focus:outline-none" @click="$refs.featuredPhoto.click()">
 								<input
 									id="featured-photo"
 									ref="featuredPhoto"
