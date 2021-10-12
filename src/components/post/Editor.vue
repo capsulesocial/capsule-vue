@@ -158,7 +158,7 @@
 							<p class="hotzone px-4 py-2 text-sm">
 								Selecting a featured image is recommended for an optimal user experience.
 							</p>
-							<button class="hotzone w-full focus:outline-none" @click="$refs.featuredPhoto.click()">
+							<button class="hotzone w-full focus:outline-none" @click="handleUploadImageClick">
 								<input
 									id="featured-photo"
 									ref="featuredPhoto"
@@ -181,7 +181,7 @@
 								<img :src="featuredPhoto" class="hotzone w-full" />
 								<button
 									class="hotzone border border-primary text-primary focus:outline-none text-sm mt-4 p-1"
-									@click="$refs.featuredPhoto?.click()"
+									@click="handleUploadImageClick"
 								>
 									Replace Image
 								</button>
@@ -309,6 +309,13 @@ export default Vue.extend({
 		window.removeEventListener(`click`, this.handleDropdown)
 	},
 	methods: {
+		handleUploadImageClick(): void {
+			if (this.$refs.featuredPhoto) {
+				// @ts-ignore
+				const element: HTMLInputElement = this.$refs.featuredPhoto
+				element.click()
+			}
+		},
 		handleUpdate(e: { target: { value: any; children: Array<{ outerHTML: string; innerText: string }> } }) {
 			if (e.target) {
 				// Check for lists
@@ -383,8 +390,9 @@ export default Vue.extend({
 			this.featuredPhotoCID = null
 			this.$store.commit(`draft/updateFeaturedPhotoCID`, null)
 		},
-		async handleImage(e: { target?: { files: any[] } }): Promise<void> {
-			const image = e.target?.files[0]
+		async handleImage(e: Event): Promise<void> {
+			const target = e.target as HTMLInputElement
+			const image: File = (target.files as FileList)[0]
 			if (!image) {
 				return
 			}
