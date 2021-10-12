@@ -158,7 +158,7 @@
 							<p class="hotzone px-4 py-2 text-sm">
 								Selecting a featured image is recommended for an optimal user experience.
 							</p>
-							<button class="hotzone w-full focus:outline-none" @click="$refs.featuredPhoto.click()">
+							<button class="hotzone w-full focus:outline-none" @click="$refs.featuredPhoto?.click()">
 								<input
 									id="featured-photo"
 									ref="featuredPhoto"
@@ -181,7 +181,7 @@
 								<img :src="featuredPhoto" class="hotzone w-full" />
 								<button
 									class="hotzone border border-primary text-primary focus:outline-none text-sm mt-4 p-1"
-									@click="$refs.featuredPhoto.click()"
+									@click="$refs.featuredPhoto?.click()"
 								>
 									Replace Image
 								</button>
@@ -220,13 +220,12 @@ import { addPhotoToIPFS, getPhotoFromIPFS, preUploadPhoto } from '@/backend/phot
 interface IData {
 	categoryList: string[]
 	title: string
-	subtitle: string | null
+	subtitle: string
 	input: string
 	tag: string
 	featuredPhoto: null | any
 	featuredPhotoCID: string | null
-	// @ts-ignore
-	editor: MediumEditor
+	editor: MediumEditor.MediumEditor
 	turndownService: Turndown
 	tabs: {
 		tags: boolean
@@ -310,10 +309,7 @@ export default Vue.extend({
 		window.removeEventListener(`click`, this.handleDropdown)
 	},
 	methods: {
-		update: debounce(function (
-			this: any,
-			e: { target: { value: any; children: Array<{ outerHTML: string; innerText: string }> } },
-		): void {
+		handleUpdate(e: { target: { value: any; children: Array<{ outerHTML: string; innerText: string }> } }) {
 			if (e.target) {
 				// Check for lists
 				for (const c of e.target.children) {
@@ -329,12 +325,8 @@ export default Vue.extend({
 						continue
 					}
 				}
-				// eslint-disable-next-line
-				const clean: string = DOMPurify.sanitize(this.editor.getContent(), {
-					USE_PROFILES: { html: true, svg: true },
-				})
-				// eslint-disable-next-line no-invalid-this
-				this.input = clean
+
+				const clean = this.editor.getContent()
 				let count = clean.replace(/<[^>]*>/g, ` `)
 				count = count.replace(/\s+/g, ` `)
 				count = count.trim()
@@ -342,14 +334,22 @@ export default Vue.extend({
 				this.wordCount = count.split(` `).length - 2
 			}
 		},
-		100),
-		changeTab(t: string) {
-			if (t === `tags`) {
-				this.tabs.tags = !this.tabs.tags
-			} else if (t === `category`) {
-				this.tabs.category = !this.tabs.category
-			} else if (t === `image`) {
-				this.tabs.image = !this.tabs.image
+		update() {
+			debounce(this.handleUpdate, 100)
+		},
+		changeTab(t: `tags` | `category` | `image`): void {
+			switch (t) {
+				case `tags`:
+					this.tabs.tags = !this.tabs.tags
+					break
+				case `category`:
+					this.tabs.category = !this.tabs.category
+					break
+				case `image`:
+					this.tabs.image = !this.tabs.image
+					break
+				default:
+					throw new Error(`Unexpected tab ${t}`)
 			}
 		},
 		changeCategory(c: string) {
@@ -383,28 +383,27 @@ export default Vue.extend({
 			this.featuredPhotoCID = null
 			this.$store.commit(`draft/updateFeaturedPhotoCID`, null)
 		},
-		async handleImage(e: Event): Promise<void> {
-			// @ts-ignore
-			const image = e.target.files[0]
-			if (image) {
-				const options = {
+		async handleImage(e: { target?: { files: any[] } }): Promise<void> {
+			const image = e.target?.files[0]
+			if (!image) {
+				return
+			}
+			try {
+				const compressedImage = await imageCompression(image, {
 					maxSizeMB: 5,
 					maxWidthOrHeight: 1920,
 					useWebWorker: true,
 					initialQuality: 0.9,
-				}
-				try {
-					const compressedImage = await imageCompression(image, options)
-					const reader = new FileReader()
-					reader.readAsDataURL(compressedImage)
-					reader.onload = (i) => {
-						if (i.target !== null) {
-							this.uploadImage(i.target.result, compressedImage)
-						}
+				})
+				const reader = new FileReader()
+				reader.readAsDataURL(compressedImage)
+				reader.onload = (i) => {
+					if (i.target !== null) {
+						this.uploadImage(i.target.result, compressedImage)
 					}
-				} catch (err) {
-					alert(err)
 				}
+			} catch (err) {
+				alert(err)
 			}
 		},
 		async uploadImage(image: any, blobImage: Blob): Promise<void> {
@@ -425,116 +424,128 @@ export default Vue.extend({
 			// Check for quality title
 			if (!this.$qualityText(this.title) || this.title.length < 12 || this.title.length > 90) {
 				alert(`Invalid title!`)
+				return
 				// Check if using a subtitle
-			} else if (this.subtitle !== `` && this.subtitle && !this.$qualityText(this.subtitle)) {
-				alert(`Invalid subtitle!`)
-			} else if (this.subtitle && this.subtitle.length > 180) {
-				alert(`Subtitle too long!`)
-			} else {
-				if (this.subtitle === ``) {
-					// Set profile to null for backend
-					this.subtitle = null
-				}
-				// Sanitize HTML
-				const clean: string = DOMPurify.sanitize(this.editor.getContent(), {
-					USE_PROFILES: { html: true, svg: true },
-				})
-				// Check content quality
-				if (clean.length < 280) {
-					alert(`Post body too short. Write more before posting`)
-					return
-				}
-				if (clean.length > 100000) {
-					alert(`Post body too long for IPFS deliverability`)
-					return
-				}
-				if (this.category === ``) {
-					alert(`Missing category`)
-					return
-				}
-				// Convert to Markdown
-				this.input = this.turndownService.turndown(clean)
-				const p = createPost(
-					this.title,
-					this.subtitle,
-					this.input,
-					this.category,
-					this.$store.state.draft.tags,
-					this.$store.state.session.id,
-					this.featuredPhotoCID,
-				)
-				const cid = await sendPost(p)
-				this.title = ``
-				this.subtitle = ``
-				this.input = ``
-				this.$store.commit(`draft/reset`)
-				this.$store.commit(`settings/setRecentlyPosted`, true)
-				this.$router.push(`/post/` + cid)
 			}
+			if (this.subtitle !== `` && this.subtitle && !this.$qualityText(this.subtitle)) {
+				alert(`Invalid subtitle!`)
+				return
+			}
+			if (this.subtitle !== `` && this.subtitle.length > 180) {
+				alert(`Subtitle too long!`)
+				return
+			}
+			if (this.category === ``) {
+				alert(`Missing category`)
+				return
+			}
+
+			// Sanitize HTML
+			const clean: string = DOMPurify.sanitize(this.editor.getContent(), {
+				USE_PROFILES: { html: true, svg: true },
+			})
+			// Check content quality
+			if (clean.length < 280) {
+				alert(`Post body too short. Write more before posting`)
+				return
+			}
+			if (clean.length > 100000) {
+				alert(`Post body too long for IPFS deliverability`)
+				return
+			}
+			// Convert to Markdown
+			const p = createPost(
+				this.title,
+				this.subtitle === `` ? null : this.subtitle,
+				this.turndownService.turndown(clean),
+				this.category,
+				this.$store.state.draft.tags,
+				this.$store.state.session.id,
+				this.featuredPhotoCID,
+			)
+			const cid = await sendPost(p)
+			this.title = ``
+			this.subtitle = ``
+			this.input = ``
+			this.$store.commit(`draft/reset`)
+			this.$store.commit(`settings/setRecentlyPosted`, true)
+			this.$router.push(`/post/` + cid)
 		},
 		updateStore(): void {
-			this.input = this.editor.getContent()
+			const input = this.editor.getContent()
 			// @ts-ignore
 			this.$store.commit(`draft/updateTitle`, this.$refs.title.value)
 			// @ts-ignore
 			this.$store.commit(`draft/updateSubtitle`, this.$refs.subtitle.value)
-			this.$store.commit(`draft/updateContent`, this.input)
+			this.$store.commit(`draft/updateContent`, input)
 			this.$store.commit(`draft/updateCategory`, this.category)
 			this.$router.go(-1)
 		},
 		handleDropdown(e: any): void {
 			// Check if any tabs are open
-			if (this.tabs.tags || this.tabs.category || this.tabs.image) {
-				// Check if event is outside HTML to prevent errors
-				if (!e.target || e.target.parentNode === null || e.target.parentNode.classList === undefined) {
-					return
-				}
-				// Check if clicking a button to open a tab
-				if (e.target.parentNode.classList.contains(`toggle`) || e.path[2].classList.value === `toggle`) {
-					return
-				}
-				// Check if clicking inside a dropdown
-				if (e.target.parentNode.classList.contains(`hotzone`)) {
-					return
-				}
-				// Close tabs
-				this.tabs.tags = false
-				this.tabs.category = false
-				this.tabs.image = false
+			if (!this.tabs.tags && !this.tabs.category && !this.tabs.image) {
+				return
 			}
+			// Check if event is outside HTML to prevent errors
+			if (!e.target || e.target.parentNode === null || e.target.parentNode.classList === undefined) {
+				return
+			}
+			// Check if clicking a button to open a tab
+			if (e.target.parentNode.classList.contains(`toggle`) || e.path[2].classList.value === `toggle`) {
+				return
+			}
+			// Check if clicking inside a dropdown
+			if (e.target.parentNode.classList.contains(`hotzone`)) {
+				return
+			}
+			// Close tabs
+			this.tabs.tags = false
+			this.tabs.category = false
+			this.tabs.image = false
 		},
 		handleTitle(e: any) {
+			if (!e) {
+				return
+			}
+
 			const titleInput = this.$refs.title as HTMLTextAreaElement
 			const subtitleInput = this.$refs.subtitle as HTMLTextAreaElement
-			if (e) {
-				if (e.keyCode === 13 || e.keyCode === 9) {
-					e.preventDefault()
-					subtitleInput.focus()
-				}
+			if (e.keyCode === 13 || e.keyCode === 9) {
+				e.preventDefault()
+				subtitleInput.focus()
 			}
 			titleInput.style.height = `${titleInput.scrollHeight}px`
 			if (titleInput.value.length === 0) {
 				this.titleError = `Please enter a title.`
-			} else if (titleInput.value.length < 12) {
-				this.titleError = `Title is too short.`
-			} else if (titleInput.value.length > 90) {
-				this.titleError = `Title is too long.`
-			} else {
-				this.titleError = ``
+				return
 			}
+			if (titleInput.value.length < 12) {
+				this.titleError = `Title is too short.`
+				return
+			}
+			if (titleInput.value.length > 90) {
+				this.titleError = `Title is too long.`
+				return
+			}
+
+			this.titleError = ``
 		},
 		handleSubtitle() {
 			const subtitleInput = this.$refs.subtitle as HTMLTextAreaElement
 			subtitleInput.style.height = `${subtitleInput.scrollHeight}px`
 			if (subtitleInput.value.length === 0) {
 				this.subtitleError = ``
-			} else if (subtitleInput.value.length > 0 && subtitleInput.value.length < 12) {
-				this.subtitleError = `Subtitle is too short.`
-			} else if (subtitleInput.value.length > 180) {
-				this.subtitleError = `Title is too long.`
-			} else {
-				this.subtitleError = ``
+				return
 			}
+			if (subtitleInput.value.length > 0 && subtitleInput.value.length < 12) {
+				this.subtitleError = `Subtitle is too short.`
+				return
+			}
+			if (subtitleInput.value.length > 180) {
+				this.subtitleError = `Title is too long.`
+				return
+			}
+			this.subtitleError = ``
 		},
 	},
 })
