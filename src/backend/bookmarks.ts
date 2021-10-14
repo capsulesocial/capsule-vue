@@ -18,7 +18,7 @@ export async function getBookmarks(query: { authorID?: string; postCID?: string 
 	const { authorID, postCID } = query
 
 	if (!authorID && !postCID) {
-		throw new Error(`Provide atleast one parameter`)
+		throw new Error(`Provide at least one parameter`)
 	}
 
 	const { data } = await axios.get(`${capsuleOrbit}/bookmark`, {
