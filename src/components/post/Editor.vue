@@ -16,7 +16,7 @@
 				<article class="p-5">
 					<div class="flex justify-between w-full border-b pb-5 mb-5">
 						<h6 class="text-sm italic">Auto-save on Close</h6>
-						<h6 class="text-sm">
+						<h6 v-if="wordCount > 1" class="text-sm">
 							<span class="font-bold text-primary">{{ wordCount }}</span> words
 						</h6>
 					</div>
@@ -51,10 +51,9 @@
 
 				<!-- WYSIWYG -->
 				<div
+					id="editor"
 					ref="editor"
-					:v-model="input"
-					class="editable prose max-w-none px-5 focus:outline-none py-5 content"
-					@keyup="update"
+					class="max-w-none focus:outline-none p-5 content"
 					v-html="$store.state.draft.content"
 				></div>
 			</section>
@@ -202,11 +201,12 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import debounce from 'lodash/debounce'
 import DOMPurify from 'dompurify'
-import MediumEditor from 'medium-editor'
 import Turndown from 'turndown'
 import imageCompression from 'browser-image-compression'
+import Quill from 'quill'
+// @ts-ignore
+import QuillMarkdown from 'quilljs-markdown'
 import ImageIcon from '@/components/icons/Image.vue'
 import UploadIcon from '@/components/icons/Upload.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
@@ -225,7 +225,7 @@ interface IData {
 	tag: string
 	featuredPhoto: null | any
 	featuredPhotoCID: string | null
-	editor: MediumEditor.MediumEditor
+	editor: Quill
 	turndownService: Turndown
 	tabs: {
 		tags: boolean
@@ -262,7 +262,6 @@ export default Vue.extend({
 			tag: ``,
 			featuredPhoto: null,
 			featuredPhotoCID: null,
-			editor: MediumEditor,
 			// @ts-ignore
 			turndownService: Turndown,
 			tabs: {
@@ -277,18 +276,22 @@ export default Vue.extend({
 		}
 	},
 	mounted() {
-		this.editor = new MediumEditor(`.editable`, {
-			spellcheck: false,
-			placeholder: {
-				text: `Click to edit`,
-			},
-			paste: {
-				cleanPastedHTML: true,
-			},
-			toolbar: {
-				buttons: [`bold`, `italic`, `underline`, `anchor`, `h2`, `h3`, `quote`],
+		Quill.register(`modules/counter`, (quill: Quill) => {
+			quill.on(`text-change`, () => {
+				const text = quill.getText()
+				const n = text.split(/\s+/).length
+				this.updateWordCount(n)
+				this.getInputHTML()
+			})
+		})
+		const editor = new Quill(`#editor`, {
+			placeholder: `Compose an epic...`,
+			theme: `bubble`,
+			modules: {
+				counter: true,
 			},
 		})
+		this.editor = new QuillMarkdown(editor, {})
 		this.turndownService = new Turndown()
 		// Set title from draft
 		// @ts-ignore
@@ -309,40 +312,26 @@ export default Vue.extend({
 		window.removeEventListener(`click`, this.handleDropdown)
 	},
 	methods: {
+		updateWordCount(n: number) {
+			this.wordCount = n - 1
+		},
+		getInputHTML(): string {
+			const input = document.getElementsByClassName(`ql-editor`)[0]
+			if (!input) {
+				return ``
+			}
+			// Sanitize HTML
+			const clean: string = DOMPurify.sanitize(input.innerHTML, {
+				USE_PROFILES: { html: true, svg: true },
+			})
+			return clean
+		},
 		handleUploadImageClick(): void {
 			if (this.$refs.featuredPhoto) {
 				// @ts-ignore
 				const element: HTMLInputElement = this.$refs.featuredPhoto
 				element.click()
 			}
-		},
-		handleUpdate(e: { target: { value: any; children: Array<{ outerHTML: string; innerText: string }> } }) {
-			if (e.target) {
-				// Check for lists
-				for (const c of e.target.children) {
-					if (!c.outerHTML.startsWith(`<p `)) {
-						continue
-					}
-					if (c.innerText.startsWith(`-`) || c.innerText.startsWith(`*`)) {
-						c.outerHTML = `<ul><li>` + c.innerText.substring(1).trim() + `</li></ul>`
-						continue
-					}
-					if (c.innerText.startsWith(`1.`)) {
-						c.outerHTML = `<ol><li>` + c.innerText.substring(2).trim() + `</li></ol>`
-						continue
-					}
-				}
-
-				const clean = this.editor.getContent()
-				let count = clean.replace(/<[^>]*>/g, ` `)
-				count = count.replace(/\s+/g, ` `)
-				count = count.trim()
-				// eslint-disable-next-line no-invalid-this
-				this.wordCount = count.split(` `).length - 2
-			}
-		},
-		update() {
-			debounce(this.handleUpdate, 100)
 		},
 		changeTab(t: `tags` | `category` | `image`): void {
 			switch (t) {
@@ -447,11 +436,7 @@ export default Vue.extend({
 				alert(`Missing category`)
 				return
 			}
-
-			// Sanitize HTML
-			const clean: string = DOMPurify.sanitize(this.editor.getContent(), {
-				USE_PROFILES: { html: true, svg: true },
-			})
+			const clean = this.getInputHTML()
 			// Check content quality
 			if (clean.length < 280) {
 				alert(`Post body too short. Write more before posting`)
@@ -480,7 +465,7 @@ export default Vue.extend({
 			this.$router.push(`/post/` + cid)
 		},
 		updateStore(): void {
-			const input = this.editor.getContent()
+			const input = this.getInputHTML()
 			// @ts-ignore
 			this.$store.commit(`draft/updateTitle`, this.$refs.title.value)
 			// @ts-ignore
@@ -515,7 +500,6 @@ export default Vue.extend({
 			if (!e) {
 				return
 			}
-
 			const titleInput = this.$refs.title as HTMLTextAreaElement
 			const subtitleInput = this.$refs.subtitle as HTMLTextAreaElement
 			if (e.keyCode === 13 || e.keyCode === 9) {
@@ -535,7 +519,6 @@ export default Vue.extend({
 				this.titleError = `Title is too long.`
 				return
 			}
-
 			this.titleError = ``
 		},
 		handleSubtitle() {
@@ -572,25 +555,8 @@ textarea#subtitle {
 	overflow-y: hidden;
 	height: 2rem;
 }
-
 #editor-menu {
 	width: 18rem;
-}
-.medium-editor-toolbar {
-	background-color: #ffffff;
-	border-color: black;
-	border-radius: 0.75rem;
-	--tw-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-	box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
-}
-.medium-toolbar-arrow-under:after {
-	border-color: #ffffff transparent transparent transparent;
-}
-.medium-toolbar-arrow-over:before {
-	border-color: transparent transparent #ffffff transparent;
-}
-.medium-editor-anchor-preview a {
-	color: red;
 }
 .dropdown_inset {
 	box-shadow: inset 0px 0px 3px #0020ff;

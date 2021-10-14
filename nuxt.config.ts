@@ -24,7 +24,7 @@ const config: NuxtConfig = {
 	},
 
 	// Global CSS: https://go.nuxtjs.dev/config-css
-	css: ['medium-editor/dist/css/medium-editor.min.css'],
+	css: ['@/assets/css/quill.css'],
 
 	// Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
 	plugins: [
