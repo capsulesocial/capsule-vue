@@ -14,7 +14,9 @@ export async function sendBookmarkEvent(action: `ADD` | `REMOVE`, authorID: stri
 	await axios.post(`${capsuleOrbit}/bookmark`, { event, sig: uint8ArrayToHexString(signature) })
 }
 
-export async function getBookmarks(authorID?: string, postCID?: string) {
+export async function getBookmarks(query: { authorID?: string; postCID?: string }) {
+	const { authorID, postCID } = query
+
 	if (!authorID && !postCID) {
 		throw new Error(`Provide atleast one parameter`)
 	}
