@@ -284,11 +284,18 @@ export default Vue.extend({
 				this.getInputHTML()
 			})
 		})
+		const toolbarOptions = [
+			[`bold`, `italic`, `underline`, `strike`],
+			[`blockquote`, `code-block`],
+			[{ header: 1 }, { header: 2 }],
+			[{ list: `ordered` }, { list: `bullet` }],
+		]
 		const editor = new Quill(`#editor`, {
 			placeholder: `Compose an epic...`,
 			theme: `bubble`,
 			modules: {
 				counter: true,
+				toolbar: toolbarOptions,
 			},
 		})
 		this.editor = new QuillMarkdown(editor, {})

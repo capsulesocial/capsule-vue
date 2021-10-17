@@ -26,7 +26,7 @@
 				<h2
 					v-if="post.subtitle"
 					:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-					class="font-serif text-h2 mt-5 mb-3 capitalize break-words"
+					class="text-h2 font-serif font-medium mt-5 mb-3 capitalize break-words"
 				>
 					{{ post.subtitle }}
 				</h2>
@@ -55,33 +55,6 @@
 						</span>
 					</p>
 				</div>
-				<div>
-					<span v-for="s in author.socials" :key="s.platform" class="p-2">
-						<!-- Twitter -->
-						<button
-							v-if="s.platform === 'twitter'"
-							class="focus:outline-none text-primary"
-							@click="openWindow('https://twitter.com/' + s.username)"
-						>
-							<TwitterIcon />
-						</button>
-						<!-- GitHub -->
-						<button
-							v-if="s.platform === 'github'"
-							class="focus:outline-none text-primary"
-							@click="openWindow('https://github.com/' + s.username)"
-						>
-							<GitHubIcon />
-						</button>
-						<button
-							v-if="s.platform === 'website'"
-							class="focus:outline-none text-primary"
-							@click="openWindow(s.username)"
-						>
-							<ExternalURLIcon />
-						</button>
-					</span>
-				</div>
 			</article>
 
 			<!-- Featured Photo -->
@@ -99,7 +72,6 @@
 			<!-- Content -->
 			<article class="mt-5">
 				<div
-					id="articleContent"
 					:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 					class="editable prose max-w-none content break-words"
 					v-html="content"

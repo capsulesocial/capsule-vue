@@ -53,7 +53,12 @@
 }
 .ql-editor ol,
 .ql-editor ul {
-	padding-left: 1.5em;
+	padding-left: 1.5rem;
+	font-size: 17.6px;
+	line-height: 28.6px;
+	margin-top: 0.75rem;
+	margin-bottom: 0.75rem;
+
 }
 .ql-editor ol > li,
 .ql-editor ul > li {
@@ -582,30 +587,65 @@
 	display: none;
 }
 .ql-bubble .ql-editor h1 {
-	font-size: 2em;
+	font-size: 48px;
+	line-height: 52.8px;
+	font-family: NotoSerif, serif;
+	font-weight: 600;
+	margin-top: 1.5rem;
+	margin-bottom: 0.75rem;
 }
 .ql-bubble .ql-editor h2 {
-	font-size: 1.5em;
+	font-size: 29.6px;
+	line-height: 38.48px;
+	font-family: NotoSerif, serif;
+	font-weight: 600;
+	margin-top: 1.25rem;
+	margin-bottom: 0.75rem;
 }
 .ql-bubble .ql-editor h3 {
-	font-size: 1.17em;
+	font-size: 21.6px;
+	line-height: 30.24px;
+	font-family: NotoSerif, serif;
+	font-weight: 600;
+	margin-top: 1rem;
+	margin-bottom: 0.625rem;
 }
 .ql-bubble .ql-editor h4 {
 	font-size: 1em;
+	line-height: 1.5rem;
+	font-family: NotoSerif, serif;
+	font-weight: 600;
+	margin-top: 0.75rem;
 }
 .ql-bubble .ql-editor h5 {
 	font-size: 0.83em;
+	line-height: 1.25rem;
+	font-family: NotoSerif, serif;
+	font-weight: 600;
+	margin-top: 0.5rem;
 }
 .ql-bubble .ql-editor h6 {
 	font-size: 0.67em;
+	line-height: 1rem;
+	font-family: NotoSerif, serif;
+	font-weight: 600;
+	margin-top: 0.25rem;
+}
+.ql-bubble .ql-editor p {
+	font-size: 17.6px;
+	line-height: 28.6px;
+	margin-top: 0.75rem;
+	margin-bottom: 0.75rem;
 }
 .ql-bubble .ql-editor a {
 	text-decoration: underline;
 }
 .ql-bubble .ql-editor blockquote {
 	border-left: 4px solid #ccc;
-	margin-bottom: 5px;
-	margin-top: 5px;
+	font-size: 17.6px;
+	line-height: 28.6px;
+	margin-top: 0.75rem;
+	margin-bottom: 0.75rem;
 	padding-left: 16px;
 }
 .ql-bubble .ql-editor code,
