@@ -85,17 +85,26 @@
 	/* .medium-editor-toolbar {
     @apply bg-white border rounded-xl shadow-xl
   } */
-    h1, h2, h3, h4, h5 {
+    h1, h2, h3, h4, h5, h6 {
 		@apply font-serif;
 	}
 	.editable h1 {
-		@apply text-h1 font-serif font-semibold mt-10 mb-3;
+		@apply text-h1 font-serif font-semibold mt-6 mb-3;
 	}
 	.editable h2 {
-		@apply text-h2 font-serif font-semibold mt-8 pt-1 mb-3;
+		@apply text-h2 font-serif font-semibold mt-5 mb-2;
 	}
 	.editable h3 {
-		@apply text-h3 font-serif font-semibold mt-6 mb-3;
+		@apply text-h3 font-serif font-semibold mt-4 mb-1;
+	}
+	.editable h4 {
+		@apply text-h4 font-serif font-semibold mt-3;
+	}
+	.editable h5 {
+		@apply text-h5 font-serif font-semibold mt-2;
+	}
+	.editable h6 {
+		@apply text-h6 font-serif font-semibold mt-1;
 	}
 	.editable a {
 		@apply text-primary underline;
@@ -105,30 +114,34 @@
 		@apply text-p font-normal leading-relaxed my-3;
 	}
 	.editable ul {
-		@apply text-p font-normal leading-relaxed my-3 pl-5 list-disc list-outside
+		@apply text-p font-normal leading-relaxed my-3 pl-6 list-disc
 	}
 	.editable ol {
-		@apply text-p font-normal leading-relaxed my-3 pl-5 list-decimal list-outside
+		@apply text-p font-normal leading-relaxed my-3 pl-6 list-decimal
+	}
+	.editable code {
+		font-size: 85%;
+		padding: 2px 4px;
+		background-color: #f0f0f0;
+		border-radius: 3px;
+	}
+	.editable u {
+		text-decoration: underline;
+	}
+	.editable pre code {
+		background-color: #23241f;
+		color: #f8f8f2;
+		overflow: visible;
+		white-space: pre-wrap;
+		margin-bottom: 5px;
+		margin-top: 5px;
+		padding: 5px 10px;
+		border-radius: 3px;
 	}
 	blockquote {
-		@apply px-6 border-l-2 border-primary text-p my-3;
+		border-left: 4px solid #ccc;
+		margin-bottom: 0.75rem;
+		margin-top: 0.75rem;
+		padding-left: 16px;	
 	}
-	.medium-toolbar-arrow-under:after {
-		@apply bg-transparent;
-	}
-	.medium-toolbar-arrow-over:before {
-		@apply bg-transparent;
-	}
-	.medium-editor-anchor-preview {
-		@apply bg-white;
-	}
-	.medium-editor-anchor-preview a {
-		@apply border;
-	}
-	/* #articleContent p {
-		margin: 2em 0;
-	}
-	#articleContent ul li, #articleContent ol li {
-		margin: 1.6em 0;
-	} */
 }

@@ -20,10 +20,13 @@ module.exports = {
         },
       },
       fontSize: {
-        p: [`17.6px`, `28.6px`],
-        h3: [`21.6px`, `30.24px`],
-        h2: [`29.6px`, `38.48px`],
         h1: [`48px`, `52.8px`],
+        h2: [`29.6px`, `38.48px`],
+        h3: [`21.6px`, `30.24px`],
+        h4: [`1em`, `1.5rem`],
+        h5: [`0.83em`, `1.25rem`],
+        h6: [`0.67em`, `1rem`],
+        p: [`17.6px`, `28.6px`],
       },
         colors: {
         primary: '#1E566C', // Dark Teal
