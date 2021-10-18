@@ -286,8 +286,8 @@ export default Vue.extend({
 		})
 		const toolbarOptions = [
 			[`bold`, `italic`, `underline`, `strike`],
-			[`blockquote`, `code-block`],
-			[{ header: 1 }, { header: 2 }],
+			[`blockquote`, `code-block`, `link`],
+			[{ header: 2 }],
 			[{ list: `ordered` }, { list: `bullet` }],
 		]
 		const options = {
@@ -302,6 +302,13 @@ export default Vue.extend({
 		const editor = new Quill(`#editor`, options)
 		this.editor = new QuillMarkdown(editor, {})
 		this.turndownService = new Turndown()
+		this.turndownService.addRule(`codeblock`, {
+			filter: [`pre`],
+			replacement: (content) => {
+				// eslint-disable-next-line quotes
+				return '``` \n' + content + '```'
+			},
+		})
 		// Set title from draft
 		// @ts-ignore
 		this.$refs.title.value = this.$store.state.draft.title
@@ -332,6 +339,7 @@ export default Vue.extend({
 			// Sanitize HTML
 			const clean: string = DOMPurify.sanitize(input.innerHTML, {
 				USE_PROFILES: { html: true, svg: true },
+				ALLOWED_TAGS: [`pre`],
 			})
 			return clean
 		},
