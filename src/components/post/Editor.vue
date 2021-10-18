@@ -290,14 +290,16 @@ export default Vue.extend({
 			[{ header: 1 }, { header: 2 }],
 			[{ list: `ordered` }, { list: `bullet` }],
 		]
-		const editor = new Quill(`#editor`, {
-			placeholder: `Compose an epic...`,
+		const options = {
+			placeholder: `Start typing here...`,
 			theme: `bubble`,
+			bounds: `#editor`,
 			modules: {
 				counter: true,
 				toolbar: toolbarOptions,
 			},
-		})
+		}
+		const editor = new Quill(`#editor`, options)
 		this.editor = new QuillMarkdown(editor, {})
 		this.turndownService = new Turndown()
 		// Set title from draft

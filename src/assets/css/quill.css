@@ -389,6 +389,8 @@
 	/* left: 15px; */
 	pointer-events: none;
 	position: absolute;
+	top: 25px;
+	font-size: 1.5rem;
 	/* right: 15px; */
 }
 .ql-bubble.ql-toolbar:after,
