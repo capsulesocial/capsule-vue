@@ -1,7 +1,7 @@
 <template>
 	<header
 		:class="$store.state.settings.darkMode ? 'bg-lightBG' : 'bg-darkBG'"
-		class="w-full flex justify-center z-20 border-b py-4 lg:pl-2 xl:pl-0"
+		class="w-full flex justify-center z-30 border-b py-4 lg:pl-2 xl:pl-0"
 	>
 		<!-- Top Left: Logo -->
 		<div class="flex justify-center lg:justify-between" style="width: 240px">
