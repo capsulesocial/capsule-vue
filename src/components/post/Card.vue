@@ -119,14 +119,12 @@ import { RetrievedPost } from '@/backend/post'
 import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
 import { getProfileFromSession } from '@/store/session'
-import { getBookmarks } from '@/backend/bookmarks'
 
 interface IData {
 	showComments: boolean
 	authorName: string
 	avatar: string
 	featuredPhoto: string
-	myBookmarks: string[]
 }
 
 export default Vue.extend({
@@ -171,6 +169,10 @@ export default Vue.extend({
 			type: Boolean,
 			default: false,
 		},
+		bookmarked: {
+			type: Boolean,
+			default: false,
+		},
 	},
 	data(): IData {
 		return {
@@ -178,7 +180,6 @@ export default Vue.extend({
 			authorName: ``,
 			avatar: ``,
 			featuredPhoto: ``,
-			myBookmarks: [],
 		}
 	},
 	async created() {
@@ -205,11 +206,6 @@ export default Vue.extend({
 				this.featuredPhoto = p
 			})
 		}
-		// Get bookmarks
-		const bList = await getBookmarks({ authorID: this.$store.state.session.id })
-		bList.forEach((b: { authorID: string; postCID: string; timestamp: Date }) => {
-			this.myBookmarks.push(b.postCID)
-		})
 	},
 	methods: {
 		hasReposted(): boolean {
@@ -220,10 +216,7 @@ export default Vue.extend({
 			}
 		},
 		hasBookmarked(): boolean {
-			if (this.myBookmarks.includes(this.post._id)) {
-				return true
-			}
-			return false
+			return this.bookmarked
 		},
 		getStyles(): string {
 			let res = ``

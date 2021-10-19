@@ -1,7 +1,7 @@
 <template>
 	<section class="px-4">
-		<article v-for="post in posts" :key="post._id">
-			<PostCard :post="post" />
+		<article v-for="p in posts" :key="p.post._id">
+			<PostCard :post="p.post" :bookmarked="p.bookmarked" />
 		</article>
 	</section>
 </template>
@@ -11,17 +11,10 @@ import Vue from 'vue'
 import type { PropType } from 'vue'
 import PostCard from '@/components/post/Card.vue'
 import { Profile } from '@/backend/profile'
-import { getPosts } from '@/backend/post'
+import { getPosts, IPostResponse } from '@/backend/post'
 
 interface IData {
-	posts: {
-		authorID: string
-		category: string
-		excerpt: string
-		tags: any
-		timestamp: number
-		_id: string
-	}[]
+	posts: IPostResponse[]
 }
 
 export default Vue.extend({
@@ -42,7 +35,7 @@ export default Vue.extend({
 	async created() {
 		const bookmarkList = await getPosts({ bookmarkedBy: this.$route.params.id }, this.$store.state.session.id)
 		bookmarkList.forEach((p) => {
-			this.posts.push(p.post)
+			this.posts.push(p)
 		})
 	},
 	methods: {
