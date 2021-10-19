@@ -49,7 +49,6 @@ export default Vue.extend({
 		}
 	},
 	async created() {
-		window.addEventListener(`scroll`, this.handleScroll)
 		// Fetch posts from Orbit DB by ID
 		this.posts = await getPosts(
 			{ authorID: this.$route.params.id },
@@ -61,6 +60,7 @@ export default Vue.extend({
 		)
 		this.currentOffset += this.limit
 		this.isLoading = false
+		window.addEventListener(`scroll`, this.handleScroll)
 	},
 	destroyed() {
 		window.removeEventListener(`scroll`, this.handleScroll)

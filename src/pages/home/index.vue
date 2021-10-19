@@ -105,7 +105,6 @@ export default Vue.extend({
 		}
 	},
 	async created() {
-		window.addEventListener(`scroll`, this.handleScroll)
 		this.posts = await getPosts({}, this.algorithm, this.currentOffset, this.limit)
 		this.currentOffset += this.limit
 		getFollowersAndFollowing(this.$store.state.session.id).then(({ following }) => {
@@ -118,6 +117,7 @@ export default Vue.extend({
 			this.myReposts.push(p.repost.postCID)
 		})
 		this.isLoading = false
+		window.addEventListener(`scroll`, this.handleScroll)
 	},
 	destroyed() {
 		window.removeEventListener(`scroll`, this.handleScroll)

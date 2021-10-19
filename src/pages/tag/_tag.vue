@@ -50,7 +50,6 @@ export default Vue.extend({
 		}
 	},
 	async created() {
-		window.addEventListener(`scroll`, this.handleScroll)
 		// Fetch posts with tag
 		this.posts = await getPosts({ tag: this.$route.params.tag }, this.algorithm, this.currentOffset, this.limit)
 		this.currentOffset += this.limit
@@ -58,6 +57,7 @@ export default Vue.extend({
 			this.following = following
 		})
 		this.isLoading = false
+		window.addEventListener(`scroll`, this.handleScroll)
 	},
 	destroyed() {
 		window.removeEventListener(`scroll`, this.handleScroll)
