@@ -41,20 +41,14 @@ export default Vue.extend({
 		sendBookmarkEvent,
 		async handleBookmark() {
 			if (!this.isBookmarked()) {
-				await sendBookmarkEvent(
-					this.$props.isBookmarked ? `REMOVE` : `ADD`,
-					this.$store.state.session.id,
-					this.$props.postID,
-				)
+				// add bookmark
+				await sendBookmarkEvent(`ADD`, this.$store.state.session.id, this.$props.postID)
 				this.isBookmarked = () => {
 					return true
 				}
 			} else {
-				await sendBookmarkEvent(
-					this.$props.isBookmarked ? `REMOVE` : `ADD`,
-					this.$store.state.session.id,
-					this.$props.postID,
-				)
+				// Remove bookmark
+				await sendBookmarkEvent(`REMOVE`, this.$store.state.session.id, this.$props.postID)
 				this.isBookmarked = () => {
 					return false
 				}

@@ -220,7 +220,7 @@ export default Vue.extend({
 			}
 		},
 		hasBookmarked(): boolean {
-			if (this.myBookmarks.includes(this.$route.params.post)) {
+			if (this.myBookmarks.includes(this.post._id)) {
 				return true
 			}
 			return false
