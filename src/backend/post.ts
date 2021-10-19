@@ -24,6 +24,7 @@ export type RetrievedPost = Omit<Post, `content`> & { _id: string; excerpt: stri
 export interface IPostResponse {
 	post: RetrievedPost
 	comments: Comment[]
+	bookmarked: boolean
 	usersParticipating: string[]
 }
 
