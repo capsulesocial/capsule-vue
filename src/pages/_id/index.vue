@@ -52,6 +52,7 @@ export default Vue.extend({
 		// Fetch posts from Orbit DB by ID
 		this.posts = await getPosts(
 			{ authorID: this.$route.params.id },
+			this.$store.state.session.id,
 			this.algorithm,
 			this.currentOffset,
 			this.limit,
@@ -71,6 +72,7 @@ export default Vue.extend({
 			try {
 				const res = await getPosts(
 					{ authorID: this.$route.params.id },
+					this.$store.state.session.id,
 					this.algorithm,
 					this.currentOffset,
 					this.limit,

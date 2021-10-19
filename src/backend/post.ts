@@ -75,7 +75,8 @@ export function getPost(cid: string): Promise<Post> {
 }
 
 export async function getPosts(
-	filter: { category?: string; authorID?: string; tag?: string },
+	filter: { category?: string; authorID?: string; tag?: string; bookmarkedBy?: string },
+	bookmarker: string,
 	sort?: Algorithm,
 	offset = 0,
 	limit = 10,
@@ -86,7 +87,15 @@ export async function getPosts(
 		throw new Error(`No following provided`)
 	}
 	const res = await axios.get(`${capsuleOrbit}/content`, {
-		params: { ...filter, sort, ...(following && sort === `FOLLOWING` ? { following } : {}), offset, limit, reposts },
+		params: {
+			...filter,
+			sort,
+			...(following && sort === `FOLLOWING` ? { following } : {}),
+			offset,
+			limit,
+			reposts,
+			bookmarker,
+		},
 	})
 	return res.data.data
 }

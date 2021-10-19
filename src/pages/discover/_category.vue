@@ -58,7 +58,13 @@ export default Vue.extend({
 	},
 	async created() {
 		// Fetch posts from Orbit DB by ID
-		this.posts = await getPosts({ category: this.$route.params.category }, this.algorithm, 0, this.limit)
+		this.posts = await getPosts(
+			{ category: this.$route.params.category },
+			this.$store.state.session.id,
+			this.algorithm,
+			0,
+			this.limit,
+		)
 		this.currentOffset += this.limit
 		getFollowersAndFollowing(this.$store.state.session.id).then(({ following }) => {
 			this.following = following
@@ -82,6 +88,7 @@ export default Vue.extend({
 			try {
 				const res = await getPosts(
 					{ category: this.$route.params.category },
+					this.$store.state.session.id,
 					this.algorithm,
 					this.currentOffset,
 					this.limit,

@@ -105,7 +105,7 @@ export default Vue.extend({
 		}
 	},
 	async created() {
-		this.posts = await getPosts({}, this.algorithm, this.currentOffset, this.limit)
+		this.posts = await getPosts({}, this.$store.state.session.id, this.algorithm, this.currentOffset, this.limit)
 		this.currentOffset += this.limit
 		getFollowersAndFollowing(this.$store.state.session.id).then(({ following }) => {
 			this.following = following
@@ -130,7 +130,14 @@ export default Vue.extend({
 			this.currentOffset = 0
 			this.isLoading = true
 			this.algorithm = a
-			this.posts = await getPosts({}, a, this.currentOffset, this.limit, this.$store.state.session.id)
+			this.posts = await getPosts(
+				{},
+				this.$store.state.session.id,
+				a,
+				this.currentOffset,
+				this.limit,
+				this.$store.state.session.id,
+			)
 			this.currentOffset += this.limit
 			this.isLoading = false
 			return this.posts
@@ -147,6 +154,7 @@ export default Vue.extend({
 			try {
 				const res = await getPosts(
 					{},
+					this.$store.state.session.id,
 					this.algorithm,
 					this.currentOffset,
 					this.limit,
