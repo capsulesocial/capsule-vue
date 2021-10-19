@@ -96,7 +96,7 @@
 				<!-- Choose reaction -->
 				<div class="flex flex-row justify-between">
 					<div class="flex items-center">
-						<BookmarkButton :postID="$route.params.post" />
+						<BookmarkButton :hasBookmark="hasBookmarked" :postID="$route.params.post" />
 						<ShareButton :post="post" :cid="$route.params.post" :class="'z-20'" :hasRepost="hasReposted" />
 					</div>
 				</div>
@@ -126,6 +126,7 @@ import { getPost, Post } from '@/backend/post'
 import { getPhotoFromIPFS } from '@/backend/photos'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
 import { getReposts } from '@/backend/reposts'
+import { getBookmarks } from '@/backend/bookmarks'
 
 interface IData {
 	post: Post | null
@@ -136,6 +137,7 @@ interface IData {
 	showFilter: boolean
 	userIsFollowed: boolean
 	myReposts: string[]
+	myBookmarks: string[]
 }
 
 export default Vue.extend({
@@ -161,6 +163,7 @@ export default Vue.extend({
 			showFilter: false,
 			userIsFollowed: false,
 			myReposts: [],
+			myBookmarks: [],
 		}
 	},
 	async created() {
@@ -196,6 +199,11 @@ export default Vue.extend({
 			this.myReposts.push(p.repost.postCID)
 		})
 
+		// Get bookmarks
+		const bList = await getBookmarks({ authorID: this.$store.state.session.id })
+		bList.forEach((b: { authorID: string; postCID: string; timestamp: Date }) => {
+			this.myBookmarks.push(b.postCID)
+		})
 		// Set filter dropdown event handler
 		window.addEventListener(
 			`click`,
@@ -216,12 +224,18 @@ export default Vue.extend({
 	},
 	methods: {
 		getReposts,
+		getBookmarks,
 		hasReposted(): boolean {
 			if (this.myReposts.includes(this.$route.params.post)) {
 				return true
-			} else {
-				return false
 			}
+			return false
+		},
+		hasBookmarked(): boolean {
+			if (this.myBookmarks.includes(this.$route.params.post)) {
+				return true
+			}
+			return false
 		},
 		async toggleFriend() {
 			if (this.post) {

@@ -1,12 +1,17 @@
 <template>
 	<button class="flex items-end focus:outline-none hover:text-primary" @click="handleBookmark()">
-		<BookmarkIcon :isActive="isBookmarked" class="mr-2 fill-none" />
+		<BookmarkIcon :isActive="isBookmarked()" class="mr-2 fill-none" />
 	</button>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import BookmarkIcon from '@/components/icons/Bookmark.vue'
+import { sendBookmarkEvent } from '@/backend/bookmarks'
+
+interface IData {
+	isBookmarked: Function
+}
 
 export default Vue.extend({
 	components: {
@@ -17,24 +22,43 @@ export default Vue.extend({
 			type: String,
 			default: null,
 		},
+		hasBookmark: {
+			type: Function,
+			default: null,
+		},
 	},
-	data() {
+	data(): IData {
 		return {
-			isBookmarked: false,
+			isBookmarked: () => {
+				return false
+			},
 		}
 	},
 	created() {
-		const bookmarks = this.$store.state.session.bookmarks
-		if (!bookmarks) {
-			return
-		}
-		if (bookmarks.includes(this.postID)) {
-			this.isBookmarked = true
-		}
+		this.isBookmarked = this.$props.hasBookmark
 	},
 	methods: {
-		handleBookmark() {
-			this.isBookmarked = !this.isBookmarked
+		sendBookmarkEvent,
+		async handleBookmark() {
+			if (!this.isBookmarked()) {
+				await sendBookmarkEvent(
+					this.$props.isBookmarked ? `REMOVE` : `ADD`,
+					this.$store.state.session.id,
+					this.$props.postID,
+				)
+				this.isBookmarked = () => {
+					return true
+				}
+			} else {
+				await sendBookmarkEvent(
+					this.$props.isBookmarked ? `REMOVE` : `ADD`,
+					this.$store.state.session.id,
+					this.$props.postID,
+				)
+				this.isBookmarked = () => {
+					return false
+				}
+			}
 		},
 	},
 })
