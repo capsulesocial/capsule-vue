@@ -1,7 +1,7 @@
 <template>
 	<section class="w-full">
 		<article v-for="post in posts" :key="post.post._id">
-			<PostCard :post="post.post" :profile="profile" :comments="post.comments" />
+			<PostCard :post="post.post" :profile="profile" :comments="post.comments" :bookmarked="post.bookmarked" />
 		</article>
 		<article v-show="isLoading" class="flex justify-center">
 			<div class="loader m-10"></div>

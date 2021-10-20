@@ -80,17 +80,8 @@
 				>
 					<CommentIcon :isActive="showComments" />
 				</button>
-				<Share
-					:post="post"
-					:cid="post._id"
-					:class="$store.state.settings.darkMode ? 'fill-lightActive' : 'fill-darkActive'"
-					class="fill-primary"
-					:hasRepost="hasReposted"
-				/>
-				<BookmarkButton
-					:postID="post._id"
-					:class="$store.state.settings.darkMode ? 'fill-lightActive' : 'fill-darkActive'"
-				/>
+				<Share :post="post" :cid="post._id" class="fill-primary" :hasRepost="hasReposted" />
+				<BookmarkButton :postID="post._id" :hasBookmark="isBookmarked" @clicked="getBookmarkStatus" />
 			</div>
 			<!-- Display tags -->
 			<div class="flex flex-row-reverse overflow-x-auto items-end">
@@ -118,12 +109,14 @@ import { RetrievedPost } from '@/backend/post'
 import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
 import { getProfileFromSession } from '@/store/session'
+import { isPostBookmarkedByUser } from '@/backend/bookmarks'
 
 interface IData {
 	showComments: boolean
 	authorName: string
 	avatar: string
 	featuredPhoto: string
+	isBookmarked: boolean
 }
 
 export default Vue.extend({
@@ -175,6 +168,7 @@ export default Vue.extend({
 			authorName: ``,
 			avatar: ``,
 			featuredPhoto: ``,
+			isBookmarked: false,
 		}
 	},
 	async created() {
@@ -188,7 +182,6 @@ export default Vue.extend({
 				profile = await getProfile(this.post.authorID)
 			}
 		}
-
 		// Populate Avatar
 		this.authorName = profile.name
 		if (profile.avatar && profile.avatar !== ``) {
@@ -202,8 +195,14 @@ export default Vue.extend({
 				this.featuredPhoto = p
 			})
 		}
+		// Get bookmark status
+		this.getBookmarkStatus()
 	},
 	methods: {
+		isPostBookmarkedByUser,
+		async getBookmarkStatus() {
+			this.isBookmarked = await isPostBookmarkedByUser(this.post._id, this.$store.state.session.id)
+		},
 		hasReposted(): boolean {
 			if (this.$store.state.session.id === this.$props.repostedBy) {
 				return true

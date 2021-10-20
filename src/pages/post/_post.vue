@@ -96,7 +96,7 @@
 				<!-- Choose reaction -->
 				<div class="flex flex-row justify-between">
 					<div class="flex items-center">
-						<BookmarkButton :postID="$route.params.post" />
+						<BookmarkButton :postID="$route.params.post" :hasBookmark="isBookmarked" @clicked="getBookmarkStatus" />
 						<ShareButton :post="post" :cid="$route.params.post" :class="'z-20'" :hasRepost="hasReposted" />
 					</div>
 				</div>
@@ -126,6 +126,7 @@ import { getPost, Post } from '@/backend/post'
 import { getPhotoFromIPFS } from '@/backend/photos'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
 import { getReposts } from '@/backend/reposts'
+import { isPostBookmarkedByUser } from '@/backend/bookmarks'
 
 interface IData {
 	post: Post | null
@@ -136,6 +137,7 @@ interface IData {
 	showFilter: boolean
 	userIsFollowed: boolean
 	myReposts: string[]
+	isBookmarked: boolean
 }
 
 export default Vue.extend({
@@ -161,6 +163,7 @@ export default Vue.extend({
 			showFilter: false,
 			userIsFollowed: false,
 			myReposts: [],
+			isBookmarked: false,
 		}
 	},
 	async created() {
@@ -189,13 +192,14 @@ export default Vue.extend({
 				this.authorAvatar = p
 			})
 		}
+		// Get bookmark status
+		this.getBookmarkStatus()
 		// Get reposts
 		const repostData = await getReposts(this.$store.state.session.id)
 		repostData.forEach((p) => {
 			// @ts-ignore
 			this.myReposts.push(p.repost.postCID)
 		})
-
 		// Set filter dropdown event handler
 		window.addEventListener(
 			`click`,
@@ -216,12 +220,15 @@ export default Vue.extend({
 	},
 	methods: {
 		getReposts,
+		isPostBookmarkedByUser,
+		async getBookmarkStatus() {
+			this.isBookmarked = await isPostBookmarkedByUser(this.$route.params.post, this.$store.state.session.id)
+		},
 		hasReposted(): boolean {
 			if (this.myReposts.includes(this.$route.params.post)) {
 				return true
-			} else {
-				return false
 			}
+			return false
 		},
 		async toggleFriend() {
 			if (this.post) {

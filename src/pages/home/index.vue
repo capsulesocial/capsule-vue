@@ -50,6 +50,7 @@
 					:toggleFriend="toggleFriend"
 					:usersFollowing="following"
 					:repostedBy="post.repost.authorID"
+					:bookmarked="post.bookmarked"
 					:hideRepostIcon="algorithm === `NEW` || algorithm === `TOP` ? true : false"
 				/>
 				<PostCard
@@ -60,6 +61,7 @@
 					:toggleFriend="toggleFriend"
 					:usersFollowing="following"
 					:repostedBy="myReposts.includes(post.post._id) ? $store.state.session.id : ``"
+					:bookmarked="post.bookmarked"
 					:hideRepostIcon="algorithm === `NEW` || algorithm === `TOP` ? true : false"
 				/>
 			</article>

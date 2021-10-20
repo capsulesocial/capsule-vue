@@ -14,16 +14,13 @@ export async function sendBookmarkEvent(action: `ADD` | `REMOVE`, authorID: stri
 	await axios.post(`${capsuleOrbit}/bookmark`, { event, sig: uint8ArrayToHexString(signature) })
 }
 
-export async function getBookmarks(query: { authorID?: string; postCID?: string }) {
-	const { authorID, postCID } = query
-
-	if (!authorID && !postCID) {
-		throw new Error(`Provide at least one parameter`)
-	}
-
-	const { data } = await axios.get(`${capsuleOrbit}/bookmark`, {
-		params: { authorID, postCID },
+export async function isPostBookmarkedByUser(postCID: string, userID: string): Promise<boolean> {
+	const response = await axios.get(`${capsuleOrbit}/bookmark/${userID}/${postCID}`, {
+		params: {
+			postCID,
+			userID,
+		},
 	})
 
-	return data.result
+	return response.data.data.isBookmarked
 }

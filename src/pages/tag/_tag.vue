@@ -7,7 +7,13 @@
 			</article>
 			<!-- Posts loaded -->
 			<article v-for="p in posts" :key="p.post._id" style="padding-left: 22px">
-				<PostCard :post="p.post" :comments="p.comments" :usersFollowing="following" :toggleFriend="toggleFriend" />
+				<PostCard
+					:post="p.post"
+					:comments="p.comments"
+					:usersFollowing="following"
+					:toggleFriend="toggleFriend"
+					:bookmarked="p.bookmarked"
+				/>
 			</article>
 			<!-- Not loaded yet -->
 			<article v-show="isLoading" class="flex justify-center" style="width: 660px">
