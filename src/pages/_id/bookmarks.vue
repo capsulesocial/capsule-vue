@@ -36,10 +36,15 @@ export default Vue.extend({
 		}
 	},
 	async created() {
-		const bookmarkList = await getPosts({ bookmarkedBy: this.$route.params.id }, this.$store.state.session.id)
-		bookmarkList.forEach((p) => {
-			this.posts.push(p)
-		})
+		this.posts = await getPosts(
+			{ bookmarkedBy: this.$route.params.id },
+			this.$store.state.session.id,
+			undefined,
+			undefined,
+			undefined,
+			undefined,
+			`false`,
+		)
 		getFollowersAndFollowing(this.$store.state.session.id).then(({ following }) => {
 			this.following = following
 		})
