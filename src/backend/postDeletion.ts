@@ -2,29 +2,23 @@ import axios from 'axios'
 import { signContent } from './keys'
 import { capsuleOrbit } from './utilities/config'
 import { uint8ArrayToHexString } from './utilities/helpers'
-import ipfs from './utilities/ipfs'
 
-export async function sendPostDeletion(action: `HIDE`, postCID: string, authorID: string): Promise<string> {
-	const data = {
+export async function sendPostDeletion(action: `HIDE`, postCID: string, authorID: string) {
+	const event = {
 		action,
 		postCID,
 		timestamp: Date.now(),
 		authorID,
 	}
 
-	const signature = signContent(data, authorID)
+	const signature = signContent(event, authorID)
 
 	if (!signature) {
 		throw new Error(`Post deletion signing failed`)
 	}
 
-	const cid = await ipfs().sendJSONData(data)
-
 	await axios.post(`${capsuleOrbit}/posts`, {
-		cid,
-		data,
+		event,
 		sig: uint8ArrayToHexString(signature),
 	})
-
-	return cid
 }
