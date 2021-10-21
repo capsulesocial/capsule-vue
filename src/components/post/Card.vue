@@ -1,5 +1,6 @@
 <template>
 	<article
+		v-if="!postDeleted"
 		class="shadow rounded-lg my-2 object-contain"
 		style="width: 616px; margin-bottom: 22px; margin-top: 22px; padding: 16px"
 		:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText border border-darkBorder'"
@@ -43,13 +44,14 @@
 					{{ $formatDate(post.timestamp) }}
 				</div>
 			</div>
-			<span
-				v-if="post.authorID !== $store.state.session.id"
+			<button
+				v-if="post.authorID === $store.state.session.id"
 				class="h-10 flex flex-row-reverse"
 				:class="repostedBy !== `` ? `-mt-4` : ``"
+				@click="deletePost"
 			>
 				<XIcon />
-			</span>
+			</button>
 		</div>
 		<!-- Content -->
 		<div class="my-4">
@@ -110,6 +112,7 @@ import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
 import { getProfileFromSession } from '@/store/session'
 import { isPostBookmarkedByUser } from '@/backend/bookmarks'
+import { sendPostDeletion } from '@/backend/postDeletion'
 
 interface IData {
 	showComments: boolean
@@ -117,6 +120,7 @@ interface IData {
 	avatar: string
 	featuredPhoto: string
 	isBookmarked: boolean
+	postDeleted: boolean
 }
 
 export default Vue.extend({
@@ -173,6 +177,7 @@ export default Vue.extend({
 			avatar: ``,
 			featuredPhoto: ``,
 			isBookmarked: false,
+			postDeleted: false,
 		}
 	},
 	async created() {
@@ -204,6 +209,10 @@ export default Vue.extend({
 	},
 	methods: {
 		isPostBookmarkedByUser,
+		async deletePost() {
+			await sendPostDeletion(`HIDE`, this.post._id, this.$store.state.session.id)
+			this.postDeleted = true
+		},
 		async getBookmarkStatus() {
 			this.isBookmarked = await isPostBookmarkedByUser(this.post._id, this.$store.state.session.id)
 		},
