@@ -1,4 +1,4 @@
-import IPFS, { Options, CID } from 'ipfs-core'
+import { create, Options, CID } from 'ipfs-core'
 
 export interface IPFSInterface {
 	sendData: (content: string | ArrayBuffer) => Promise<string>
@@ -38,7 +38,7 @@ const ipfsConfig: Options = {
 }
 
 async function createIPFSInterface(): Promise<IPFSInterface> {
-	const node = await IPFS.create(ipfsConfig)
+	const node = await create(ipfsConfig)
 
 	const getData = async (cid: string) => {
 		const content: Buffer[] = []
