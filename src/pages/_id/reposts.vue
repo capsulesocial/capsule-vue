@@ -7,6 +7,8 @@
 				:authorUsername="p.authorID"
 				:cid="p._id"
 				:repostedBy="$route.params.id"
+				:toggleFriend="toggleFriend"
+				:usersFollowing="following"
 			/>
 		</div>
 	</section>
@@ -18,12 +20,14 @@ import type { PropType } from 'vue'
 import PostCard from '@/components/post/Card.vue'
 import { getReposts } from '@/backend/reposts'
 import { Profile } from '@/backend/profile'
+import { followChange, getFollowersAndFollowing } from '@/backend/following'
 
 interface IData {
 	reposts: []
 	isLoading: boolean
 	currentOffset: number
 	limit: number
+	following: Set<string>
 }
 
 export default Vue.extend({
@@ -42,6 +46,7 @@ export default Vue.extend({
 			isLoading: true,
 			currentOffset: 0,
 			limit: 10,
+			following: new Set(),
 		}
 	},
 	async created() {
@@ -53,9 +58,19 @@ export default Vue.extend({
 			}
 		}
 		this.reposts.reverse()
+		getFollowersAndFollowing(this.$store.state.session.id).then(({ following }) => {
+			this.following = following
+		})
 	},
 	methods: {
 		getReposts,
+		async toggleFriend(authorID: string) {
+			if (authorID !== this.$store.state.session.id) {
+				await followChange(this.following.has(authorID) ? `UNFOLLOW` : `FOLLOW`, this.$store.state.session.id, authorID)
+				const data = await getFollowersAndFollowing(this.$store.state.session.id, true)
+				this.following = data.following
+			}
+		},
 	},
 })
 </script>
