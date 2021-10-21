@@ -15,12 +15,7 @@ export async function sendBookmarkEvent(action: `ADD` | `REMOVE`, authorID: stri
 }
 
 export async function isPostBookmarkedByUser(postCID: string, userID: string): Promise<boolean> {
-	const response = await axios.get(`${capsuleOrbit}/bookmark/${userID}/${postCID}`, {
-		params: {
-			postCID,
-			userID,
-		},
-	})
+	const response = await axios.get(`${capsuleOrbit}/bookmark/${userID}/${postCID}`)
 
 	return response.data.data.isBookmarked
 }
