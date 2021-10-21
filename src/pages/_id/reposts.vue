@@ -57,7 +57,6 @@ export default Vue.extend({
 				this.reposts.push(res[i].post)
 			}
 		}
-		this.reposts.reverse()
 		getFollowersAndFollowing(this.$store.state.session.id).then(({ following }) => {
 			this.following = following
 		})
