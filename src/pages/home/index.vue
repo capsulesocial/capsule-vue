@@ -107,7 +107,14 @@ export default Vue.extend({
 		}
 	},
 	async created() {
-		this.posts = await getPosts({}, this.$store.state.session.id, this.algorithm, this.currentOffset, this.limit)
+		this.posts = await getPosts(
+			{},
+			this.$store.state.session.id,
+			this.algorithm,
+			this.currentOffset,
+			this.limit,
+			this.$store.state.session.id,
+		)
 		this.currentOffset += this.limit
 		getFollowersAndFollowing(this.$store.state.session.id).then(({ following }) => {
 			this.following = following

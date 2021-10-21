@@ -161,6 +161,10 @@ export default Vue.extend({
 			type: Boolean,
 			default: false,
 		},
+		bookmarked: {
+			type: Boolean,
+			default: false,
+		},
 	},
 	data(): IData {
 		return {
@@ -196,7 +200,7 @@ export default Vue.extend({
 			})
 		}
 		// Get bookmark status
-		this.getBookmarkStatus()
+		this.isBookmarked = this.$props.bookmarked
 	},
 	methods: {
 		isPostBookmarkedByUser,
