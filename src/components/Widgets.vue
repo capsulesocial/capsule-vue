@@ -1,17 +1,34 @@
 <template>
 	<div>
 		<!-- Discover page -->
-		<TagWidget />
+		<TagsWidget class="rounded-lg shadow-lg bg-white" />
+		<DraftsWidget class="rounded-lg shadow-lg bg-white mt-5" />
+		<!-- Configure my Capsule -->
+		<article class="rounded-lg shadow-lg bg-white mt-5">
+			<button class="p-4">
+				<div class="flex flex-row justify-between">
+					<!-- <img :src="require(`@/assets/images/brand/help-page.png`)" /> -->
+					<div class="flex flex-row text-primary items-center">
+						<p class="pr-2">Configure my Capsule</p>
+						<SettingsIcon />
+					</div>
+				</div>
+			</button>
+		</article>
 	</div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import TagWidget from '@/components/widgets/Tags.vue'
+import TagsWidget from '@/components/widgets/Tags.vue'
+import DraftsWidget from '@/components/widgets/Drafts.vue'
+import SettingsIcon from '@/components/icons/Settings.vue'
 
 export default Vue.extend({
 	components: {
-		TagWidget,
+		TagsWidget,
+		DraftsWidget,
+		SettingsIcon,
 	},
 })
 </script>
