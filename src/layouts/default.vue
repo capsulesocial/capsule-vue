@@ -1,6 +1,6 @@
 <template>
 	<main
-		class="h-full p-0 m-0 bg-img"
+		class="h-screen p-0 m-0 bg-img"
 		:style="{ backgroundImage: `url(${require(`@/assets/images/brand/paper4.svg`)})` }"
 	>
 		<!-- Wrapper -->
@@ -34,7 +34,7 @@
 				<!-- Body -->
 				<div>
 					<!-- Title and peered nodes -->
-					<div class="w-full flex justify-between items-center">
+					<div class="fixed w-full flex justify-between items-center" style="width: 1220px">
 						<!-- Title -->
 						<h1 class="text-4xl font-semibold text-primary">
 							{{ getTitle() }}
@@ -46,10 +46,13 @@
 						</div>
 					</div>
 					<!-- Content -->
-					<section class="flex flex-row">
-						<nuxt-child style="width: 750px" class="rounded-lg shadow-lg mr-5 bg-white p-5" />
+					<section class="flex flex-row mt-24">
+						<nuxt-child
+							style="width: 750px; min-height: calc(100vh - 184px); height: calc(100vh - 184px)"
+							class="fixed overflow-y-auto rounded-lg shadow-lg mr-5 bg-white p-5"
+						/>
 						<!-- Widgets -->
-						<aside style="width: 450px">
+						<aside class="fixed" style="margin-left: 780px; width: 450px">
 							<Widgets />
 							<footer class="text-gray5">
 								<div class="flex">
