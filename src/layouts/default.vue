@@ -7,7 +7,7 @@
 		<div class="w-full flex justify-center">
 			<div class="flex flex-col" style="width: 1220px">
 				<!-- Header -->
-				<header class="w-full sticky top-0 py-5 z-30 bg-white">
+				<header class="w-full sticky top-0 py-5 bg-white">
 					<div class="flex flex-row justify-between items-center">
 						<!-- Left side: Links + write post button -->
 						<nav class="flex flex-row items-center">
@@ -49,7 +49,7 @@
 					<section class="flex flex-row mt-24">
 						<nuxt-child
 							style="width: 750px; min-height: calc(100vh - 184px); height: calc(100vh - 184px)"
-							class="fixed overflow-y-auto rounded-lg shadow-lg mr-5 bg-white p-5"
+							class="fixed overflow-y-auto rounded-lg shadow-lg mr-5 bg-white p-5 z-10"
 						/>
 						<!-- Widgets -->
 						<aside class="fixed" style="margin-left: 780px; width: 450px">
