@@ -1,8 +1,6 @@
 <template>
 	<article
-		v-if="!postDeleted"
-		class="shadow rounded-lg my-2 object-contain"
-		style="width: 616px; margin-bottom: 22px; margin-top: 22px; padding: 16px"
+		class="w-full p-4 border-b object-contain"
 		:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText border border-darkBorder'"
 	>
 		<!-- IF reposted -->

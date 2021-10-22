@@ -38,7 +38,7 @@
 					</button>
 				</div>
 			</nav>
-			<div v-if="posts" class="pt-5">
+			<div v-if="posts" class="pt-10">
 				<!-- content -->
 				<article v-for="post in posts" :key="post.post._id">
 					<PostCard
