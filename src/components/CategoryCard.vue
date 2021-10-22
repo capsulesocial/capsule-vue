@@ -1,5 +1,5 @@
 <template>
-	<article>
+	<article class="flex justify-center">
 		<nuxt-link
 			v-if="layout === `block`"
 			:to="'/discover/' + text"
@@ -15,8 +15,9 @@
 				rounded-lg
 				shadow-lg
 				bg-primary
+				w-full
 			"
-			style="width: 350px; height: 246.75px"
+			style="width: 340px; height: 200px"
 		>
 			<img
 				v-if="bgImage !== ``"
@@ -57,10 +58,11 @@
 	</article>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import PlusIcon from '@/components/icons/Plus.vue'
 
-export default {
+export default Vue.extend({
 	components: {
 		PlusIcon,
 	},
@@ -78,5 +80,5 @@ export default {
 			default: `block`,
 		},
 	},
-}
+})
 </script>
