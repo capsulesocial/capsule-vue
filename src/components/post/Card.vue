@@ -1,5 +1,5 @@
 <template>
-	<article v-if="!postDeleted" class="w-full p-4 border-b object-contain">
+	<article v-if="!postDeleted" class="w-full py-5 border-b object-contain z-auto">
 		<!-- popup backdrop -->
 		<div
 			:class="
@@ -10,99 +10,103 @@
 		>
 			<div
 				class="card"
-				:class="showComments ? `shadow rounded-lg p-5 bg-white mt-10 max-h-screen overflow-y-auto` : ``"
+				:class="showComments ? `shadow rounded-lg py-5 bg-white mt-10 max-h-screen overflow-y-auto` : ``"
 				:style="showComments ? `width: 750px` : ``"
 			>
-				<!-- IF reposted -->
-				<div v-if="repostedBy !== `` && !hideRepostIcon" class="flex w-full -mt-2">
-					<RepostIcon :shrink="true" />
-					<p class="pl-2 italic text-sm">
-						<nuxt-link :to="`/` + repostedBy">{{ repostedBy }} </nuxt-link>
-						reposted
-					</p>
-				</div>
-				<!-- Top: avatar, name, id, close -->
-				<div class="flex w-full bg-white">
-					<Avatar :avatar="avatar" :authorID="post.authorID" size="w-12 h-12" />
-					<div class="flex flex-col flex-grow ml-4">
-						<div class="flex">
-							<nuxt-link :to="'/' + post.authorID" class="flex mr-4">
-								<span
-									:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-									class="font-medium text-base"
-								>
-									{{ authorName }}
-								</span>
-								<span
-									:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-									class="ml-2"
-								>
-									@{{ post.authorID }}
-								</span>
-							</nuxt-link>
-							<FriendButton
-								v-if="post.authorID !== $store.state.session.id && $route.name !== `id`"
-								:small="true"
-								:following="usersFollowing.has(post.authorID)"
-								:toggleFriend="() => toggleFriend(post.authorID)"
-							/>
+				<div class="sticky top-0 px-5 bg-white z-10">
+					<!-- IF reposted -->
+					<div v-if="repostedBy !== `` && !hideRepostIcon" class="flex w-full -mt-2">
+						<RepostIcon :shrink="true" />
+						<p class="pl-2 italic text-sm">
+							<nuxt-link :to="`/` + repostedBy">{{ repostedBy }} </nuxt-link>
+							reposted
+						</p>
+					</div>
+					<!-- Top: avatar, name, id, close -->
+					<div class="flex w-full bg-white">
+						<Avatar :avatar="avatar" :authorID="post.authorID" size="w-12 h-12" />
+						<div class="flex flex-col flex-grow ml-4">
+							<div class="flex">
+								<nuxt-link :to="'/' + post.authorID" class="flex mr-4">
+									<span
+										:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+										class="font-medium text-base"
+									>
+										{{ authorName }}
+									</span>
+									<span
+										:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+										class="ml-2"
+									>
+										@{{ post.authorID }}
+									</span>
+								</nuxt-link>
+								<FriendButton
+									v-if="post.authorID !== $store.state.session.id && $route.name !== `id`"
+									:small="true"
+									:following="usersFollowing.has(post.authorID)"
+									:toggleFriend="() => toggleFriend(post.authorID)"
+								/>
+							</div>
+							<!-- Timestamp -->
+							<div class="text-xs ml-14">
+								{{ $formatDate(post.timestamp) }}
+							</div>
 						</div>
-						<!-- Timestamp -->
-						<div class="text-xs ml-14">
-							{{ $formatDate(post.timestamp) }}
+						<div class="flex" :class="repostedBy !== `` ? `-mt-4` : ``">
+							<BookmarkButton :postID="post._id" :hasBookmark="isBookmarked" @clicked="getBookmarkStatus" />
+							<button v-if="post.authorID === $store.state.session.id" @click="deletePost">
+								<XIcon />
+							</button>
 						</div>
 					</div>
-					<button
-						v-if="post.authorID === $store.state.session.id"
-						class="h-10 flex flex-row-reverse"
-						:class="repostedBy !== `` ? `-mt-4` : ``"
-						@click="deletePost"
-					>
-						<XIcon />
-					</button>
-				</div>
-				<!-- Content -->
-				<div class="my-4">
 					<!-- Content -->
-					<nuxt-link :to="'/post/' + post._id" class="flex justify-between">
-						<div class="flex flex-col pr-4 max-w-full overflow-hidden">
-							<h3 class="text-lg font-semibold capitalize pb-2 break-words">
-								{{ post.title }}
-							</h3>
-							<h6
-								v-if="post.subtitle || post.excerpt"
-								:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-								class="break-words"
-							>
-								{{ post.subtitle ? post.subtitle : postExcerpt() }}
-							</h6>
+					<div class="mt-4 flex justify-between">
+						<!-- Left side: Title, subtitle / preview, tags -->
+						<div>
+							<nuxt-link :to="'/post/' + post._id">
+								<div class="flex flex-col pr-4 max-w-full overflow-hidden">
+									<h3 class="text-lg font-semibold capitalize pb-2 break-words">
+										{{ post.title }}
+									</h3>
+									<h6
+										v-if="post.subtitle || post.excerpt"
+										:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+										class="break-words"
+									>
+										{{ post.subtitle ? post.subtitle : postExcerpt() }}
+									</h6>
+								</div>
+							</nuxt-link>
+							<!-- Display tags -->
+							<div class="flex overflow-x-auto mt-2">
+								<TagPill v-for="t in post.tags" :key="t.name" :tag="t.name" class="mr-4" />
+							</div>
+							<!-- Comment and share -->
+							<div class="flex mt-1">
+								<button
+									class="flex items-end focus:outline-none mr-2"
+									:class="getStyles()"
+									@click="showComments = !showComments"
+								>
+									<CommentIcon :isActive="showComments" />
+								</button>
+								<Share :post="post" :cid="post._id" class="fill-primary" :hasRepost="hasReposted" />
+							</div>
 						</div>
-						<img
-							v-if="featuredPhoto !== ``"
-							:src="featuredPhoto"
-							class="flex-shrink-0 h-24 object-contain rounded-lg"
-						/>
-					</nuxt-link>
-				</div>
-				<!-- Actions -->
-				<div class="flex justify-between">
-					<div class="flex items-end mt-1">
-						<button
-							class="flex items-end focus:outline-none mr-2"
-							:class="getStyles()"
-							@click="showComments = !showComments"
-						>
-							<CommentIcon :isActive="showComments" />
-						</button>
-						<Share :post="post" :cid="post._id" class="fill-primary" :hasRepost="hasReposted" />
-						<BookmarkButton :postID="post._id" :hasBookmark="isBookmarked" @clicked="getBookmarkStatus" />
-					</div>
-					<!-- Display tags -->
-					<div class="flex flex-row-reverse overflow-x-auto items-end">
-						<TagPill v-for="t in post.tags" :key="t.name" :tag="t.name" class="ml-4 my-1" />
+						<!-- Right side: Image -->
+						<div class="flex-shrink-0">
+							<nuxt-link :to="'/post/' + post._id">
+								<img
+									v-if="featuredPhoto !== ``"
+									:src="featuredPhoto"
+									class="flex-shrink-0 h-32 object-contain rounded-lg"
+								/>
+							</nuxt-link>
+						</div>
 					</div>
 				</div>
-				<PostActions v-if="showComments" :postCID="post._id" :initComments="comments" />
+				<PostActions v-if="showComments" :postCID="post._id" :initComments="comments" class="px-5" />
 			</div>
 		</div>
 	</article>

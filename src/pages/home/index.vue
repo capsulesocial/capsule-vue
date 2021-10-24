@@ -3,7 +3,7 @@
 		<section
 			:class="$store.state.settings.darkMode ? 'text-lightPrimaryText bg-lightBG' : 'text-darkPrimaryText bg-darkBG'"
 		>
-			<nav class="fixed flex flex-row bg-white h-12 pt-5 -mt-5 z-10" style="width: 700px">
+			<nav class="fixed flex flex-row bg-white h-12 pt-5 -mt-5 z-20" style="width: 700px">
 				<div class="flex items-center">
 					<button
 						:class="
