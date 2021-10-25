@@ -11,7 +11,7 @@ export async function sendPostDeletion(action: `HIDE`, postCID: string, authorID
 		authorID,
 	}
 
-	const signature = signContent(event, authorID)
+	const signature = await signContent(event)
 
 	if (!signature) {
 		throw new Error(`Post deletion signing failed`)

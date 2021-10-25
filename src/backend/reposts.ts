@@ -13,7 +13,7 @@ export async function sendRepost(authorID: string, postCID: string, content: str
 		content,
 	}
 
-	const signature = signContent(data, authorID)
+	const signature = await signContent(data)
 	if (!signature) {
 		throw new Error(`Post signing failed`)
 	}
