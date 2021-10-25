@@ -14,7 +14,6 @@ export interface Profile {
 	location: string
 	avatar: string
 	socials: string[]
-	publicKey: string
 }
 
 export async function getProfileNEAR(username: string) {

@@ -239,7 +239,6 @@ export default Vue.extend({
 			changeAvatar: MutationType.CHANGE_AVATAR,
 			changeBio: MutationType.CHANGE_BIO,
 			changeLocation: MutationType.CHANGE_LOCATION,
-			changePublicKey: MutationType.CHANGE_PUBLICKEY,
 		}),
 		toggleFormType() {
 			this.isLogin = !this.isLogin
@@ -271,7 +270,6 @@ export default Vue.extend({
 					this.changeAvatar(account.avatar)
 					this.changeBio(account.bio)
 					this.changeLocation(account.location)
-					this.changePublicKey(account.publicKey)
 					this.$router.push(`/settings`)
 				} catch (err: any) {
 					alert(err.message)
@@ -298,7 +296,6 @@ export default Vue.extend({
 						this.changeAvatar(account.avatar)
 						this.changeBio(account.bio)
 						this.changeLocation(account.location)
-						this.changePublicKey(account.publicKey)
 						this.$router.push(`/settings`)
 					} catch (err) {
 						removeSigningKey(this.id)
