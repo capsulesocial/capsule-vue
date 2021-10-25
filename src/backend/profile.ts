@@ -1,10 +1,10 @@
 import axios from 'axios'
-import { resolveUsername } from './server'
-import { getContract, getWalletConnection } from './near'
 
 import ipfs from './utilities/ipfs'
 import cache from './utilities/caching'
 import { capsuleOrbit } from './utilities/config'
+import { signContent } from './keys'
+import { uint8ArrayToHexString } from './utilities/helpers'
 
 export interface Profile {
 	id: string
@@ -16,16 +16,6 @@ export interface Profile {
 	socials: string[]
 }
 
-export async function getProfileNEAR(username: string) {
-	const contract = getContract() as any
-	const { success, accountId } = await resolveUsername(username)
-	if (success) {
-		const profileCID: string = await contract.getProfile({ accountId })
-		return { success, profileCID }
-	}
-	return { success: false, profileCID: `` }
-}
-
 export function loadProfileFromIPFS(cid: string) {
 	return ipfs().getJSONData<Profile>(cid)
 }
@@ -33,22 +23,30 @@ export function loadProfileFromIPFS(cid: string) {
 export const getProfile = cache(_getProfile)
 
 export async function setProfile(p: Profile) {
-	const cid = await _addProfileToIPFS(p)
-	const res = await sendProfileServer(cid, p)
+	const [cid, sig] = await Promise.all([addProfileToIPFS(p), signContent(p, p.id)])
+	if (!sig) {
+		throw new Error(`Profile signing failed`)
+	}
+
+	const res = await sendProfileServer(cid, p, sig)
 	if (!res.success) {
 		throw new Error(`Profile didn't update on the server!`)
-	}
-	const profileSet = await _setProfileNEAR(cid)
-	if (!profileSet) {
-		throw new Error(`Profile didn't update on NEAR!`)
 	}
 
 	return cid
 }
 
-export async function sendProfileServer(cid: string, data: Profile): Promise<{ success: boolean; cid: string }> {
+export async function sendProfileServer(
+	cid: string,
+	data: Profile,
+	sig: Uint8Array,
+): Promise<{ success: boolean; cid: string }> {
 	try {
-		const response = await axios.post(`${capsuleOrbit}/profile`, { cid, data })
+		const response = await axios.post(`${capsuleOrbit}/profile`, {
+			cid,
+			data,
+			sig: uint8ArrayToHexString(sig),
+		})
 		if (response.data.success) {
 			return { success: true, cid: response.data.cid }
 		}
@@ -60,26 +58,14 @@ export async function sendProfileServer(cid: string, data: Profile): Promise<{ s
 	return { success: false, cid: `` }
 }
 
-async function _setProfileNEAR(cid: string) {
-	const contract = getContract() as any
-	const walletConnection = getWalletConnection()
-	if (walletConnection.isSignedIn()) {
-		await contract.setProfile({ cid })
-		return true
-	}
-
-	return false
-}
-
-function _addProfileToIPFS(content: Profile) {
+export function addProfileToIPFS(content: Profile) {
 	return ipfs().sendJSONData(content)
 }
 
 async function _getProfile(authorID: string) {
-	const res = await getProfileNEAR(authorID)
-	if (res.success) {
-		return loadProfileFromIPFS(res.profileCID)
+	const response = await axios.get(`${capsuleOrbit}/profile/${authorID}`)
+	if (response.data.data) {
+		return response.data.data as Profile
 	}
-
 	throw new Error(`Error finding profile!`)
 }
