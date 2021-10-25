@@ -1,16 +1,11 @@
 <template>
-	<main>
-		<PostEditor class="w-full h-screen" />
-	</main>
+	<main></main>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import PostEditor from '@/components/post/Editor.vue'
 export default Vue.extend({
-	components: {
-		PostEditor,
-	},
+	components: {},
 	layout: `Editor`,
 })
 </script>

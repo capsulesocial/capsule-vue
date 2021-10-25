@@ -117,7 +117,7 @@ export default Vue.extend({
 	},
 	methods: {
 		togglePostEditor() {
-			alert(`write a post`)
+			this.$router.push(`/post`)
 		},
 		getTitle(): string {
 			switch (this.$route.name) {

@@ -277,7 +277,7 @@ export default Vue.extend({
 			return excerpt + `...`
 		},
 		handleClose(e: any): void {
-			if (!e.target.firstChild || e === undefined || e.target === undefined) {
+			if (e === undefined || e.target === undefined || !e.target.firstChild) {
 				return
 			}
 			if (e.target.firstChild.classList[0] === `card`) {
