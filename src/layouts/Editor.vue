@@ -34,7 +34,7 @@
 				<!-- Body -->
 				<div>
 					<!-- Content -->
-					<section class="flex flex-row mt-24">
+					<section class="flex flex-row mt-12">
 						<PostEditor
 							ref="editor"
 							style="width: 750px; min-height: calc(100vh - 184px); height: calc(100vh - 184px)"

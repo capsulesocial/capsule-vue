@@ -1,25 +1,12 @@
 <template>
 	<div class="relative">
-		<div class="absolute flex right-0 items-center h-24">
-			<BrandedButton text="Publish" :action="post" class="w-32 h-12 mr-4" />
-			<button class="flex items-center bg-lightSecondary rounded-full p-2 focus:outline-none" @click="updateStore">
-				<XIcon />
-			</button>
-		</div>
-
 		<div class="flex">
 			<section class="w-full">
-				<!-- Save to Drafts & Category -->
-				<article class="p-5">
-					<div class="flex justify-between w-full border-b pb-5 mb-5">
-						<h6 class="text-sm italic">Auto-save on Close</h6>
-						<h6 v-if="wordCount > 1" class="text-sm">
-							<span class="font-bold text-primary">{{ wordCount }}</span> words
-						</h6>
-					</div>
-				</article>
 				<!-- Title, subtitle -->
 				<article class="flex flex-col px-5">
+					<button class="absolute right-0 top-0 rounded-full bg-gray1 p-1 m-4" @click="$router.go(-1)">
+						<XIcon />
+					</button>
 					<p class="text-xs text-lightError">{{ titleError }}</p>
 					<label for="title" class="hidden">Title</label>
 					<textarea
@@ -63,7 +50,6 @@ import DOMPurify from 'dompurify'
 import Turndown from 'turndown'
 import Quill from 'quill'
 import QuillMarkdown from 'quilljs-markdown'
-import BrandedButton from '@/components/BrandedButton.vue'
 import XIcon from '@/components/icons/X.vue'
 import { createPost, sendPost } from '@/backend/post'
 
@@ -80,7 +66,6 @@ interface IData {
 }
 export default Vue.extend({
 	components: {
-		BrandedButton,
 		XIcon,
 	},
 	data(): IData {
@@ -119,7 +104,6 @@ export default Vue.extend({
 				const text = quill.getText()
 				const n = text.split(/\s+/).length
 				this.updateWordCount(n)
-				this.getInputHTML()
 			})
 		})
 		const toolbarOptions = [
@@ -152,6 +136,10 @@ export default Vue.extend({
 		this.handleTitle(null)
 		// @ts-ignore
 		this.$refs.subtitle.value = this.$store.state.draft.subtitle
+	},
+	beforeDestroy() {
+		const input = this.getInputHTML()
+		this.$store.commit(`draft/updateContent`, input)
 	},
 	methods: {
 		updateWordCount(n: number) {
@@ -222,11 +210,6 @@ export default Vue.extend({
 			this.$store.commit(`draft/reset`)
 			this.$store.commit(`settings/setRecentlyPosted`, true)
 			this.$router.push(`/post/` + cid)
-		},
-		updateStore(): void {
-			const input = this.getInputHTML()
-			this.$store.commit(`draft/updateContent`, input)
-			this.$router.go(-1)
 		},
 		handleTitle(e: any) {
 			if (!e) {

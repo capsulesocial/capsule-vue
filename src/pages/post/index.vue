@@ -6,6 +6,6 @@
 import Vue from 'vue'
 export default Vue.extend({
 	components: {},
-	layout: `Editor`,
+	layout: `editor`,
 })
 </script>
