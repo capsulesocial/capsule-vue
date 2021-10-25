@@ -65,7 +65,7 @@ export function addProfileToIPFS(content: Profile) {
 async function _getProfile(authorID: string) {
 	const response = await axios.get(`${capsuleOrbit}/profile/${authorID}`)
 	if (response.data.data) {
-		return response.data.data as Profile
+		return response.data.data.profile as Profile
 	}
 	throw new Error(`Error finding profile!`)
 }
