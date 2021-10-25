@@ -84,6 +84,5 @@ export async function login(
 	// Reinitialise Smart Contract API
 	await initContract()
 	const profileCID = await addProfileToIPFS(profile)
-	console.log(success, profile, profileCID)
 	return { success, profile, profileCID }
 }
