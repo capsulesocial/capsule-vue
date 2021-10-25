@@ -1,6 +1,6 @@
 import { sendAuthentication, getAuthentication, Authentication } from './server'
 
-import { getWalletConnection, getNearPrivateKey, setNearPrivateKey, initContract } from './near'
+import { getWalletConnection, getNearPrivateKey, setNearPrivateKey, initContract, setUserInfoNEAR } from './near'
 import { getEncryptedPeerIDPrivateKey, hkdf, scrypt, decryptData } from './crypto'
 import { genAndSetSigningKey, getSigningKey, setSigningKey } from './keys'
 import { addProfileToIPFS, getProfile, Profile, setProfile } from './profile'
@@ -33,11 +33,16 @@ export async function register(
 		throw new Error(`Error on getSigningKey`)
 	}
 
-	const [encPrivateKey, encSigningKey, cid] = await Promise.all([
+	const [encPrivateKey, encSigningKey, cid, userSetStatus] = await Promise.all([
 		getEncryptedPeerIDPrivateKey(id, password, `CapsuleBlogchainAuth-${id}`, `CapsuleBlogchainAuth`, privateKeyBytes),
 		getEncryptedPeerIDPrivateKey(id, password, `CapsuleBlogchainSign-${id}`, `CapsuleBlogchainSign`, signingKeyBytes),
 		setProfile(profile),
+		setUserInfoNEAR(id),
 	])
+
+	if (!userSetStatus.success) {
+		throw new Error(userSetStatus.error)
+	}
 
 	const walletConnection = getWalletConnection()
 

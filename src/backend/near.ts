@@ -18,8 +18,8 @@ export async function initContract() {
 
 	// Initializing contract API
 	_contract = new Contract(_walletConnection.account(), nearConfig.contractName, {
-		viewMethods: [`getProfile`],
-		changeMethods: [`setProfile`],
+		viewMethods: [`getUserInfo`],
+		changeMethods: [`setUserInfo`],
 	})
 }
 
@@ -86,4 +86,37 @@ export async function removeNearPrivateKey() {
 
 	const keystore = new keyStores.BrowserLocalStorageKeyStore()
 	await keystore.removeKey(nearConfig.networkId, accountId)
+}
+
+export async function getUserPublicKey(username: string) {
+	const contract = getContract() as any
+	const userInfo: null | [string, string] = await contract.getUserInfo({ username })
+	if (!userInfo) {
+		throw new Error(`Username not found on NEAR!`)
+	}
+	// Base58 decode the public key
+	// Return it as a Uint8Array
+	return new Uint8Array(base_decode(userInfo[1]))
+}
+
+export async function setUserInfoNEAR(username: string) {
+	const contract = getContract() as any
+	const walletConnection = getWalletConnection()
+	if (walletConnection.isSignedIn()) {
+		// TODO: use separate return values when \
+		// length of username is less than minimum or \
+		// greater than maximum length allowed
+		const status: 1 | 2 | 3 = await contract.setUserInfo({ username })
+		if (status === 1) {
+			return { success: true, error: `` }
+		}
+		if (status === 2) {
+			return { success: false, error: `Username length invalid!` }
+		}
+		if (status === 3) {
+			return { success: false, error: `Username already exists!` }
+		}
+		throw new Error(`Unknown status encountered while updating info on NEAR`)
+	}
+	throw new Error(`Not signed-in to wallet yet!`)
 }
