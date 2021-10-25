@@ -1,26 +1,17 @@
 import nacl from 'tweetnacl'
-import { hexStringToUint8Array, uint8ArrayToHexString } from './utilities/helpers'
 
 import { Post } from './post'
+import { getNearPrivateKey } from './near'
 
-function getSignKeyPair(username: string) {
-	const secretKeyHex = window.localStorage.getItem(`content_signing_key_${username}`)
-	if (secretKeyHex) {
-		const secretKey = hexStringToUint8Array(secretKeyHex)
-		const keypair = nacl.sign.keyPair.fromSecretKey(secretKey)
-		return keypair
-	}
-	return null
+async function getSignKeyPair() {
+	const secretKey = await getNearPrivateKey()
+	const keypair = nacl.sign.keyPair.fromSecretKey(secretKey)
+	return keypair
 }
 
-export function removeSigningKey(username: string) {
-	// Remove signing key from localStorage
-	window.localStorage.removeItem(`content_signing_key_${username}`)
-}
-
-export function signContent<T>(content: T, username: string) {
+export async function signContent<T>(content: T) {
 	const ec = new TextEncoder()
-	const keypair = getSignKeyPair(username)
+	const keypair = await getSignKeyPair()
 	if (keypair) {
 		const message = ec.encode(JSON.stringify(stableOrderObj(content)))
 		return nacl.sign.detached(message, keypair.secretKey)
@@ -34,8 +25,8 @@ export function verifyContent(content: Post, signature: Uint8Array, publicKey: U
 	return nacl.sign.detached.verify(message, signature, publicKey)
 }
 
-export function getSigningKey(username: string) {
-	const keypair = getSignKeyPair(username)
+export async function getSigningKey() {
+	const keypair = await getSignKeyPair()
 	if (keypair) {
 		return keypair.secretKey
 	}
@@ -49,20 +40,6 @@ export function getSigningKey(username: string) {
 // 	}
 // 	return null
 // }
-
-export function genAndSetSigningKey(username: string) {
-	// Generate an Ed25519 keypair and
-	// store it in localStorage
-	const keypair = nacl.sign.keyPair()
-	setSigningKey(username, keypair.secretKey)
-	return keypair.publicKey
-}
-
-export function setSigningKey(username: string, privateKey: Uint8Array) {
-	// Store hex-encoded private key in localStorage
-	const encodedPrivateKey = uint8ArrayToHexString(privateKey)
-	window.localStorage.setItem(`content_signing_key_${username}`, encodedPrivateKey)
-}
 
 function stableOrderObj<T extends Record<string, any>>(obj: T): T {
 	const keys = Object.keys(obj)

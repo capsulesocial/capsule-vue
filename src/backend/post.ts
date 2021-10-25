@@ -55,7 +55,7 @@ export function createPost(
 }
 
 export async function sendPost(data: Post): Promise<string> {
-	const signature = signContent(data, data.authorID)
+	const signature = await signContent(data)
 	if (!signature) {
 		throw new Error(`Post signing failed`)
 	}

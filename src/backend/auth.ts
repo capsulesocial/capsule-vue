@@ -2,9 +2,7 @@ import { sendAuthentication, getAuthentication, Authentication } from './server'
 
 import { getWalletConnection, getNearPrivateKey, setNearPrivateKey, initContract, setUserInfoNEAR } from './near'
 import { getEncryptedPeerIDPrivateKey, hkdf, scrypt, decryptData } from './crypto'
-import { genAndSetSigningKey, getSigningKey, setSigningKey } from './keys'
 import { addProfileToIPFS, getProfile, Profile, setProfile } from './profile'
-import { uint8ArrayToHexString } from './utilities/helpers'
 
 // POST newly created account to IPFS
 export async function register(
@@ -13,9 +11,6 @@ export async function register(
 	name: string,
 	email: string,
 ): Promise<{ cid: string; profile: Profile }> {
-	// Generate a new keypair for content-signing when a user registers
-	// and store it in localStorage
-	genAndSetSigningKey(id)
 	const profile: Profile = {
 		id,
 		name,
@@ -27,15 +22,9 @@ export async function register(
 	}
 
 	const privateKeyBytes = await getNearPrivateKey()
-	const signingKeyBytes = getSigningKey(id)
 
-	if (!signingKeyBytes) {
-		throw new Error(`Error on getSigningKey`)
-	}
-
-	const [encPrivateKey, encSigningKey, cid, userSetStatus] = await Promise.all([
+	const [encPrivateKey, cid, userSetStatus] = await Promise.all([
 		getEncryptedPeerIDPrivateKey(id, password, `CapsuleBlogchainAuth-${id}`, `CapsuleBlogchainAuth`, privateKeyBytes),
-		getEncryptedPeerIDPrivateKey(id, password, `CapsuleBlogchainSign-${id}`, `CapsuleBlogchainSign`, signingKeyBytes),
 		setProfile(profile),
 		setUserInfoNEAR(id),
 	])
@@ -48,7 +37,6 @@ export async function register(
 
 	const authObj: Authentication = {
 		privateKey: encPrivateKey,
-		signingKey: encSigningKey,
 		id,
 		nearAccountId: walletConnection.getAccountId() as string,
 	}
@@ -67,36 +55,23 @@ export async function login(
 	const ec = new TextEncoder()
 
 	// HKDF(key: userPassword, salt: username, info: "CapsuleBlogchainAuth")
-	const [nearKey, contentKey] = await Promise.all([
-		hkdf(ec.encode(password), ec.encode(username), ec.encode(`CapsuleBlogchainAuth`)),
-		hkdf(ec.encode(password), ec.encode(username), ec.encode(`CapsuleBlogchainSign`)),
-	])
+	const nearKey = await hkdf(ec.encode(password), ec.encode(username), ec.encode(`CapsuleBlogchainAuth`))
 
 	// peerIDEncryptionKey = SCRYPT (pw: hp0, salt: "CapsuleBlogchainAuth-${username}", N=2^15, r=8, p=1)
-	const [peerIDEncryptionKey, encryptionKey] = await Promise.all([
-		scrypt(nearKey.hp0, ec.encode(`CapsuleBlogchainAuth-${username}`)),
-		scrypt(contentKey.hp0, ec.encode(`CapsuleBlogchainSign-${username}`)),
-	])
+	const peerIDEncryptionKey = await scrypt(nearKey.hp0, ec.encode(`CapsuleBlogchainAuth-${username}`))
 
 	// Authenticate with server to get encrypted PeerIDPrivateKey
 	const { success, auth } = await getAuthentication(username, nearKey.hp1)
-	if (
-		!success ||
-		!(uint8ArrayToHexString(auth.signingKey.hp1) === uint8ArrayToHexString(contentKey.hp1)) ||
-		!auth.nearAccountId
-	) {
+	if (!success || !auth.nearAccountId) {
 		throw new Error(`Authentication failed!`)
 	}
 
 	// Check if authentication was successful
-	const [privateKeyBytes, profile, signingKeyBytes] = await Promise.all([
+	const [privateKeyBytes, profile] = await Promise.all([
 		decryptData(peerIDEncryptionKey, auth.privateKey.encryptedPeerIDPrivateKey, auth.privateKey.nonce),
 		getProfile(username),
-		decryptData(encryptionKey, auth.signingKey.encryptedPeerIDPrivateKey, auth.signingKey.nonce),
 	])
 
-	// Set Signing Key in localStorage
-	setSigningKey(username, signingKeyBytes)
 	const isKeySet = await setNearPrivateKey(privateKeyBytes, auth.nearAccountId)
 	if (!isKeySet) {
 		throw new Error(`Error on setNearPrivateKey`)
@@ -109,5 +84,6 @@ export async function login(
 	// Reinitialise Smart Contract API
 	await initContract()
 	const profileCID = await addProfileToIPFS(profile)
+	console.log(success, profile, profileCID)
 	return { success, profile, profileCID }
 }

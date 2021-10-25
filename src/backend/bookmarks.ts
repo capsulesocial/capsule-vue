@@ -6,7 +6,7 @@ import { uint8ArrayToHexString } from './utilities/helpers'
 export async function sendBookmarkEvent(action: `ADD` | `REMOVE`, authorID: string, postCID: string) {
 	const event = { action, authorID, postCID, timestamp: Date.now() }
 
-	const signature = signContent(event, authorID)
+	const signature = await signContent(event)
 	if (!signature) {
 		throw new Error(`Bookmark signing failed`)
 	}

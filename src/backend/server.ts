@@ -5,7 +5,6 @@ import { hexStringToUint8Array, uint8ArrayToHexString } from './utilities/helper
 import { capsuleServer } from './utilities/config'
 export interface Authentication {
 	privateKey: PrivateKey
-	signingKey: PrivateKey
 	id: string
 	nearAccountId: string | null
 }
@@ -15,9 +14,6 @@ export async function sendAuthentication(data: Authentication): Promise<boolean>
 	const encryptedPrivateKeyNonce = uint8ArrayToHexString(data.privateKey.nonce)
 	const encryptedPrivateKey = uint8ArrayToHexString(data.privateKey.encryptedPeerIDPrivateKey)
 	const hp1 = uint8ArrayToHexString(data.privateKey.hp1)
-	const hp1Content = uint8ArrayToHexString(data.signingKey.hp1)
-	const encryptedSigningKey = uint8ArrayToHexString(data.signingKey.encryptedPeerIDPrivateKey)
-	const encryptedSigningKeyNonce = uint8ArrayToHexString(data.signingKey.nonce)
 
 	try {
 		// Request body data
@@ -26,9 +22,6 @@ export async function sendAuthentication(data: Authentication): Promise<boolean>
 			username: data.id,
 			encryptedPrivateKey,
 			encryptedPrivateKeyNonce,
-			hp1Content,
-			encryptedSigningKey,
-			encryptedSigningKeyNonce,
 			accountId: data.nearAccountId,
 		}
 		const response = await axios.post(`${capsuleServer}/write`, reqData)
@@ -54,7 +47,6 @@ export async function getAuthentication(
 	}
 	const defaultAuth: Authentication = {
 		privateKey: defaultprivKey,
-		signingKey: defaultprivKey,
 		id: username,
 		nearAccountId: null,
 	}
@@ -68,20 +60,10 @@ export async function getAuthentication(
 			const hp1 = hexStringToUint8Array(response.data.hp1)
 			const nonce = hexStringToUint8Array(response.data.encryptedPrivateKeyNonce)
 
-			const encryptedSigningKey = hexStringToUint8Array(response.data.encryptedSigningKey)
-			const hp1Content = hexStringToUint8Array(response.data.hp1Content)
-			const encryptedSigningKeyNonce = hexStringToUint8Array(response.data.encryptedSigningKeyNonce)
-
-			const signKey: PrivateKey = {
-				encryptedPeerIDPrivateKey: encryptedSigningKey,
-				hp1: hp1Content,
-				nonce: encryptedSigningKeyNonce,
-			}
 			const privKey: PrivateKey = { encryptedPeerIDPrivateKey, hp1, nonce }
 
 			const auth: Authentication = {
 				privateKey: privKey,
-				signingKey: signKey,
 				id: username,
 				nearAccountId: response.data.accountId,
 			}

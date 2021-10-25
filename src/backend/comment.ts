@@ -42,7 +42,7 @@ export async function sendComment(c: INewCommentData, type: `comment` | `reply`)
 		authorID: c.authorID,
 	}
 
-	const signature = signContent(comment, comment.authorID)
+	const signature = await signContent(comment)
 
 	if (!signature) {
 		throw new Error(`Comment signing failed`)

@@ -19,7 +19,7 @@ export async function followChange(action: `FOLLOW` | `UNFOLLOW`, self: string, 
 		timestamp: Date.now(),
 	}
 
-	const signature = signContent(data, self)
+	const signature = await signContent(data)
 
 	if (!signature) {
 		throw new Error(`Comment signing failed`)
