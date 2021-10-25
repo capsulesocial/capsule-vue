@@ -3,7 +3,7 @@ import { sendAuthentication, getAuthentication, Authentication } from './server'
 import { getWalletConnection, getNearPrivateKey, setNearPrivateKey, initContract } from './near'
 import { getEncryptedPeerIDPrivateKey, hkdf, scrypt, decryptData } from './crypto'
 import { genAndSetSigningKey, getSigningKey, setSigningKey } from './keys'
-import { getProfileNEAR, loadProfileFromIPFS, Profile, setProfile } from './profile'
+import { addProfileToIPFS, getProfile, Profile, setProfile } from './profile'
 import { uint8ArrayToHexString } from './utilities/helpers'
 
 // POST newly created account to IPFS
@@ -84,14 +84,12 @@ export async function login(
 	}
 
 	// Check if authentication was successful
-	const [privateKeyBytes, nearProfile, signingKeyBytes] = await Promise.all([
+	const [privateKeyBytes, profile, signingKeyBytes] = await Promise.all([
 		decryptData(peerIDEncryptionKey, auth.privateKey.encryptedPeerIDPrivateKey, auth.privateKey.nonce),
-		getProfileNEAR(username),
+		getProfile(username),
 		decryptData(encryptionKey, auth.signingKey.encryptedPeerIDPrivateKey, auth.signingKey.nonce),
 	])
-	if (!nearProfile.success) {
-		throw new Error(`Error on getProfileNEAR`)
-	}
+
 	// Set Signing Key in localStorage
 	setSigningKey(username, signingKeyBytes)
 	const isKeySet = await setNearPrivateKey(privateKeyBytes, auth.nearAccountId)
@@ -105,6 +103,6 @@ export async function login(
 	window.localStorage.setItem(`null_wallet_auth_key`, JSON.stringify(value))
 	// Reinitialise Smart Contract API
 	await initContract()
-	const profile = await loadProfileFromIPFS(nearProfile.profileCID)
-	return { success, profile, profileCID: nearProfile.profileCID }
+	const profileCID = await addProfileToIPFS(profile)
+	return { success, profile, profileCID }
 }
