@@ -15,7 +15,7 @@ export async function register(
 ): Promise<{ cid: string; profile: Profile }> {
 	// Generate a new keypair for content-signing when a user registers
 	// and store it in localStorage
-	const pubkey = genAndSetSigningKey(id)
+	genAndSetSigningKey(id)
 	const profile: Profile = {
 		id,
 		name,
@@ -24,7 +24,6 @@ export async function register(
 		location: ``,
 		avatar: ``,
 		socials: [],
-		publicKey: uint8ArrayToHexString(pubkey),
 	}
 
 	const privateKeyBytes = await getNearPrivateKey()

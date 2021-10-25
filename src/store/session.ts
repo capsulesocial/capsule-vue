@@ -12,13 +12,12 @@ export interface Session {
 	location: Profile[`location`]
 	avatar: Profile[`avatar`]
 	socials: Profile[`socials`]
-	publicKey: Profile[`publicKey`]
 	cid: string
 }
 
 export const namespace = `session`
 
-export const state = (): Session => createDefaultSession(``, ``, ``, ``)
+export const state = (): Session => createDefaultSession(``, ``, ``)
 
 export const getters: GetterTree<Session, RootState> = {}
 
@@ -27,7 +26,6 @@ export const MutationType = {
 	CHANGE_ID: `updateID`,
 	CHANGE_NAME: `updateName`,
 	CHANGE_EMAIL: `updateEmail`,
-	CHANGE_PUBLICKEY: `changePublicKey`,
 	CHANGE_AVATAR: `updateAvatar`,
 	CHANGE_BIO: `updateBio`,
 	CHANGE_LOCATION: `updateLocation`,
@@ -47,9 +45,6 @@ export const mutations: MutationTree<Session> = {
 	[MutationType.CHANGE_EMAIL]: (state, newEmail: string) => {
 		state.email = newEmail
 	},
-	[MutationType.CHANGE_PUBLICKEY]: (state, publickey: string) => {
-		state.publicKey = publickey
-	},
 	[MutationType.CHANGE_AVATAR]: (state, newAvatar: string) => {
 		state.avatar = newAvatar
 	},
@@ -63,7 +58,7 @@ export const mutations: MutationTree<Session> = {
 		// Remove content-signing key from localStorage
 		// when logging out
 		removeSigningKey(state.id)
-		Object.assign(state, createDefaultSession(``, ``, ``, ``))
+		Object.assign(state, createDefaultSession(``, ``, ``))
 		// Remove NEAR private key when logging out.
 		// walletLogout() removes only
 		// one key-value pair (null_wallet_auth_key)
@@ -75,13 +70,12 @@ export const mutations: MutationTree<Session> = {
 
 /* Helpers */
 
-export function createDefaultSession(id: string, name: string, email: string, publicKey: string): Session {
+export function createDefaultSession(id: string, name: string, email: string): Session {
 	return {
 		cid: ``,
 		id,
 		name,
 		email,
-		publicKey,
 		bio: ``,
 		location: ``,
 		socials: [],
@@ -98,7 +92,6 @@ export function getProfileFromSession(s: Session): Profile {
 		location: s.location,
 		avatar: s.avatar,
 		socials: s.socials,
-		publicKey: s.publicKey,
 	}
 }
 
@@ -108,7 +101,6 @@ export function createSessionFromProfile(cid: string, p: Profile): Session {
 		id: p.id,
 		name: p.name,
 		email: p.email,
-		publicKey: p.publicKey,
 		bio: p.bio,
 		location: p.location,
 		avatar: p.avatar,
