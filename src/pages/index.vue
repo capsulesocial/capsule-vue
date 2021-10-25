@@ -188,7 +188,6 @@ import BrandedButton from '@/components/BrandedButton.vue'
 import { MutationType, createSessionFromProfile, namespace as sessionStoreNamespace } from '~/store/session'
 
 import { signedInToWallet } from '@/backend/near'
-import { removeSigningKey } from '@/backend/keys'
 import { login, register } from '@/backend/auth'
 
 interface IData {
@@ -298,7 +297,6 @@ export default Vue.extend({
 						this.changeLocation(account.location)
 						this.$router.push(`/settings`)
 					} catch (err) {
-						removeSigningKey(this.id)
 						alert(`Registration Unsuccessful!`)
 						throw err
 					}
