@@ -104,19 +104,18 @@ export async function setUserInfoNEAR(username: string) {
 	const walletConnection = getWalletConnection()
 	if (walletConnection.isSignedIn()) {
 		const status: 1 | 2 | 3 | 4 = await contract.setUserInfo({ username })
-		if (status === 1) {
-			return { success: true, error: `` }
+		switch (status) {
+			case 1:
+				return { success: true, error: `` }
+			case 2:
+				return { success: false, error: `Username should contain atleast 3 characters!` }
+			case 3:
+				return { success: false, error: `Username already exists!` }
+			case 4:
+				return { success: false, error: `Username should not contain more than 18 characters!` }
+			default:
+				throw new Error(`Unknown status encountered while updating info on NEAR`)
 		}
-		if (status === 2) {
-			return { success: false, error: `Username should contain atleast 3 characters!` }
-		}
-		if (status === 3) {
-			return { success: false, error: `Username already exists!` }
-		}
-		if (status === 4) {
-			return { success: false, error: `Username should not contain more than 18 characters!` }
-		}
-		throw new Error(`Unknown status encountered while updating info on NEAR`)
 	}
 	throw new Error(`Not signed-in to wallet yet!`)
 }
