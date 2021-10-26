@@ -1,8 +1,6 @@
-import { sendAuthentication, getAuthentication, Authentication } from './server'
-
-import { getWalletConnection, getNearPrivateKey, setNearPrivateKey, initContract, setUserInfoNEAR } from './near'
-import { getEncryptedPeerIDPrivateKey, hkdf, scrypt, decryptData } from './crypto'
+import { initContract, setUserInfoNEAR, getUserInfoNEAR, getNearPublicKey } from './near'
 import { addProfileToIPFS, getProfile, Profile, setProfile } from './profile'
+import { uint8ArrayToHexString } from './utilities/helpers'
 
 // POST newly created account to IPFS
 export async function register(
@@ -21,28 +19,13 @@ export async function register(
 		socials: [],
 	}
 
-	const privateKeyBytes = await getNearPrivateKey()
+	// eslint-disable-next-line no-console
+	console.log(password)
 
-	const [encPrivateKey, cid, userSetStatus] = await Promise.all([
-		getEncryptedPeerIDPrivateKey(id, password, `CapsuleBlogchainAuth-${id}`, `CapsuleBlogchainAuth`, privateKeyBytes),
-		setProfile(profile),
-		setUserInfoNEAR(id),
-	])
+	const [cid, userSetStatus] = await Promise.all([setProfile(profile), setUserInfoNEAR(id)])
 
 	if (!userSetStatus.success) {
 		throw new Error(userSetStatus.error)
-	}
-
-	const walletConnection = getWalletConnection()
-
-	const authObj: Authentication = {
-		privateKey: encPrivateKey,
-		id,
-		nearAccountId: walletConnection.getAccountId() as string,
-	}
-	const authstatus = await sendAuthentication(authObj)
-	if (!authstatus) {
-		throw new Error(`Error on sendAuthentication`)
 	}
 
 	return { cid, profile }
@@ -52,37 +35,30 @@ export async function login(
 	username: string,
 	password: string,
 ): Promise<{ success: boolean; profile: Profile; profileCID: string }> {
-	const ec = new TextEncoder()
+	const profile = await getProfile(username)
 
-	// HKDF(key: userPassword, salt: username, info: "CapsuleBlogchainAuth")
-	const nearKey = await hkdf(ec.encode(password), ec.encode(username), ec.encode(`CapsuleBlogchainAuth`))
+	// eslint-disable-next-line no-console
+	console.log(password)
 
-	// peerIDEncryptionKey = SCRYPT (pw: hp0, salt: "CapsuleBlogchainAuth-${username}", N=2^15, r=8, p=1)
-	const peerIDEncryptionKey = await scrypt(nearKey.hp0, ec.encode(`CapsuleBlogchainAuth-${username}`))
-
-	// Authenticate with server to get encrypted PeerIDPrivateKey
-	const { success, auth } = await getAuthentication(username, nearKey.hp1)
-	if (!success || !auth.nearAccountId) {
-		throw new Error(`Authentication failed!`)
+	const { accountId, publicKey } = await getUserInfoNEAR(username)
+	const pubKey = await getNearPublicKey(accountId)
+	if (!pubKey) {
+		throw new Error(`NEAR Key not found!`)
 	}
 
-	// Check if authentication was successful
-	const [privateKeyBytes, profile] = await Promise.all([
-		decryptData(peerIDEncryptionKey, auth.privateKey.encryptedPeerIDPrivateKey, auth.privateKey.nonce),
-		getProfile(username),
-	])
-
-	const isKeySet = await setNearPrivateKey(privateKeyBytes, auth.nearAccountId)
-	if (!isKeySet) {
-		throw new Error(`Error on setNearPrivateKey`)
+	if (uint8ArrayToHexString(publicKey) !== uint8ArrayToHexString(pubKey)) {
+		throw new Error(`Public key on NEAR and localStorage do not match!`)
 	}
+
 	const value = {
-		accountId: auth.nearAccountId,
+		accountId,
 		allKeys: [],
 	}
 	window.localStorage.setItem(`null_wallet_auth_key`, JSON.stringify(value))
+
 	// Reinitialise Smart Contract API
 	await initContract()
+
 	const profileCID = await addProfileToIPFS(profile)
-	return { success, profile, profileCID }
+	return { success: true, profile, profileCID }
 }
