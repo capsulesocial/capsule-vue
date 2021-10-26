@@ -16,13 +16,7 @@
 							</nuxt-link>
 							<nuxt-link to="/home" class="mx-5" :class="getStyles(`home`)"> Home </nuxt-link>
 							<nuxt-link to="/discover" class="mx-5" :class="getStyles(`discover`)"> Discover </nuxt-link>
-							<nuxt-link
-								:to="'/' + $store.state.session.id + '/bookmarks'"
-								class="mx-5"
-								:class="getStyles(`bookmarks`)"
-							>
-								Bookmarks
-							</nuxt-link>
+							<nuxt-link to="/bookmarks" class="mx-5" :class="getStyles(`bookmarks`)"> Bookmarks </nuxt-link>
 							<BrandedButton :text="`Write a Post`" :action="togglePostEditor" />
 						</nav>
 						<!-- Right side: icons and avatar -->

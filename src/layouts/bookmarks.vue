@@ -27,17 +27,28 @@
 				</header>
 				<!-- Body -->
 				<div>
+					<!-- Title and peered nodes -->
+					<div class="fixed w-full flex justify-between items-center" style="width: 1220px">
+						<!-- Title -->
+						<h1 class="text-4xl font-semibold text-primary">
+							{{ getTitle() }}
+						</h1>
+						<!-- Peered nodes -->
+						<div class="flex items-center bg-gray1 px-2 py-1 rounded-lg">
+							<span class="text-sm">n peered nodes</span>
+							<CapsuleIcon />
+						</div>
+					</div>
 					<!-- Content -->
-					<section class="flex flex-row mt-12">
-						<PostEditor
-							ref="editor"
+					<section class="flex flex-row mt-24">
+						<nuxt-child
 							style="width: 750px; min-height: calc(100vh - 184px); height: calc(100vh - 184px)"
 							class="fixed overflow-y-auto rounded-lg shadow-lg mr-5 bg-white p-5 z-10"
-							@update="updateWordCount"
+							:posts="posts"
 						/>
 						<!-- Widgets -->
 						<aside class="fixed" style="margin-left: 780px; width: 450px">
-							<EditorWidgets :wordCount="wordCount" @post="handlePost" />
+							<BookmarkWidgets @filter="fetchPosts" />
 							<footer class="text-gray5">
 								<div class="flex">
 									<nuxt-link to="/help" class="pr-4">Help</nuxt-link>
@@ -62,16 +73,16 @@ import Vue from 'vue'
 import CapsuleIcon from '@/components/icons/Capsule.vue'
 import Avatar from '@/components/Avatar.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
-import EditorWidgets from '@/components/widgets/Editor.vue'
-import PostEditor from '@/components/post/Editor.vue'
+import BookmarkWidgets from '@/components/widgets/Bookmarks.vue'
 
 import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
+import { IPostResponse, getPosts } from '@/backend/post'
 
 interface IData {
 	profile: Profile | null
 	avatar: string | ArrayBuffer | null
-	wordCount: number
+	posts: IPostResponse[]
 }
 
 export default Vue.extend({
@@ -79,14 +90,13 @@ export default Vue.extend({
 		CapsuleIcon,
 		Avatar,
 		BrandedButton,
-		EditorWidgets,
-		PostEditor,
+		BookmarkWidgets,
 	},
 	data(): IData {
 		return {
 			profile: null,
 			avatar: null,
-			wordCount: 0,
+			posts: [],
 		}
 	},
 	async created() {
@@ -102,14 +112,19 @@ export default Vue.extend({
 				this.avatar = p
 			})
 		}
+		this.fetchPosts()
 	},
 	methods: {
-		async handlePost() {
-			// @ts-ignore
-			await this.$refs.editor.post()
-		},
-		updateWordCount(num: number) {
-			this.wordCount = num
+		async fetchPosts(category: string | undefined = undefined) {
+			this.posts = await getPosts(
+				{ category, bookmarkedBy: this.$store.state.session.id },
+				this.$store.state.session.id,
+				undefined,
+				undefined,
+				undefined,
+				undefined,
+				`false`,
+			)
 		},
 		togglePostEditor() {
 			this.$router.push(`/post`)

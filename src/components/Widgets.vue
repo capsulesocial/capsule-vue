@@ -3,6 +3,7 @@
 		<!-- Discover page -->
 		<TagsWidget class="rounded-lg shadow-lg bg-white mb-5" />
 		<DraftsWidget class="rounded-lg shadow-lg bg-white mb-5" />
+		<BookmarksWidget class="rounded-lg shadow-lg bg-white mb-5" />
 		<!-- Configure my Capsule -->
 		<article class="rounded-lg shadow-lg bg-white mb-5">
 			<button class="p-4">
@@ -22,6 +23,7 @@
 import Vue from 'vue'
 import TagsWidget from '@/components/widgets/Tags.vue'
 import DraftsWidget from '@/components/widgets/Drafts.vue'
+import BookmarksWidget from '@/components/widgets/Bookmarks.vue'
 import SettingsIcon from '@/components/icons/Settings.vue'
 
 export default Vue.extend({
@@ -29,6 +31,7 @@ export default Vue.extend({
 		TagsWidget,
 		DraftsWidget,
 		SettingsIcon,
+		BookmarksWidget,
 	},
 })
 </script>
