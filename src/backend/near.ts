@@ -110,7 +110,11 @@ export async function getUserInfoNEAR(username: string) {
 		throw new Error(`Username not found on NEAR!`)
 	}
 	// Base58 decode the public key, return it as a Uint8Array
-	return { accountId: userInfo[0], publicKey: new Uint8Array(base_decode(userInfo[1])) }
+	const publicKey = new Uint8Array(base_decode(userInfo[1]))
+	if (publicKey[0] !== 0 || publicKey.length !== 33) {
+		throw new Error(`First element is non-null`)
+	}
+	return { accountId: userInfo[0], publicKey: publicKey.slice(1) }
 }
 
 export async function setUserInfoNEAR(username: string) {
