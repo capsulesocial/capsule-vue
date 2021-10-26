@@ -88,15 +88,14 @@ export async function removeNearPrivateKey() {
 	await keystore.removeKey(nearConfig.networkId, accountId)
 }
 
-export async function getUserPublicKey(username: string) {
+export async function getUserInfoNEAR(username: string) {
 	const contract = getContract() as any
 	const userInfo = (await contract.getUserInfo({ username })) as null | [string, string]
 	if (!userInfo) {
 		throw new Error(`Username not found on NEAR!`)
 	}
-	// Base58 decode the public key
-	// Return it as a Uint8Array
-	return new Uint8Array(base_decode(userInfo[1]))
+	// Base58 decode the public key, return it as a Uint8Array
+	return { accountId: userInfo[0], publicKey: new Uint8Array(base_decode(userInfo[1])) }
 }
 
 export async function setUserInfoNEAR(username: string) {
