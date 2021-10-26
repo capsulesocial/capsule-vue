@@ -1,9 +1,9 @@
 <template>
-	<div class="w-full h-full overflow-y-auto">
+	<div class="">
 		<!-- Featured image -->
-		<article class="rounded-lg shadow-lg bg-white">
+		<article class="rounded-lg shadow-lg bg-white p-4 mb-5">
 			<h6 class="text-primary font-semibold">Featuerd Image</h6>
-			<button @click="handleUploadImageClick">
+			<button class="w-full focus:outline-none" @click="handleUploadImageClick">
 				<input
 					id="featured-photo"
 					ref="featuredPhoto"
@@ -14,10 +14,27 @@
 					@change="handleImage"
 				/>
 				<!-- No Photo Uploaded -->
-				<div v-show="featuredPhoto === null">No photo uploaded</div>
+				<div v-show="featuredPhoto === null">
+					<div
+						class="
+							w-full
+							p-4
+							rounded-lg
+							border-4 border-primary border-dashed
+							h-24
+							flex
+							justify-center
+							items-center
+							my-2
+						"
+					>
+						<UploadIcon />
+					</div>
+				</div>
+				<p class="text-primary text-left font-light text-sm">Upload an Image</p>
 			</button>
 			<!-- Photo Uploaded -->
-			<div v-if="featuredPhoto !== null" class="hotzone mx-4">
+			<div v-if="featuredPhoto !== null">
 				<img :src="featuredPhoto" class="hotzone w-full h-24 object-contain" />
 				<button
 					class="hotzone border border-primary text-primary focus:outline-none text-sm mt-4 p-1"
@@ -31,9 +48,23 @@
 			</div>
 		</article>
 		<!-- Category -->
-		<article class="rounded-lg shadow-lg bg-white my-5">
+		<article class="rounded-lg shadow-lg bg-white p-4 mb-5">
 			<h6 class="text-primary font-semibold">Category</h6>
-			<div class="flex flex-col">
+			<button class="w-full p-2 my-1 rounded-lg bg-gray1" @click="showCategoryDropdown = !showCategoryDropdown">
+				<div class="flex justify-between items-center">
+					<div v-if="category" class="flex flex-row items-center">
+						<img
+							:src="require(`@/assets/images/category/` + $store.state.draft.category + `/icon.png`)"
+							class="hotzone w-12 h-12 mr-2"
+						/>
+						<span class="text-lg">{{ $store.state.draft.category }}</span>
+					</div>
+					<div v-else>Select a Category</div>
+					<ChevronUp v-if="showCategoryDropdown" />
+					<ChevronDown v-else />
+				</div>
+			</button>
+			<div v-show="showCategoryDropdown" class="flex flex-col">
 				<button
 					v-for="c in categoryList"
 					:key="c"
@@ -51,14 +82,15 @@
 			</div>
 		</article>
 		<!-- Tags -->
-		<article class="rounded-lg shadow-lg bg-white mb-5">
-			<div class="flex flex-row flex-nowrap bg-white py-2 mb-2 border">
+		<article class="rounded-lg shadow-lg bg-white p-4 mb-5">
+			<h6 class="text-primary font-semibold">Tags</h6>
+			<div class="w-full p-2 my-1 rounded-lg bg-gray1">
 				<label for="tag" class="hidden" value="Enter hashtags"></label>
 				<input
 					v-model="tag"
 					type="text"
 					placeholder="Add a tag..."
-					class="w-32 pl-2 px-1 focus:outline-none"
+					class="focus:outline-none bg-gray1"
 					@keyup.enter="addTag"
 				/>
 			</div>
@@ -67,31 +99,35 @@
 					v-for="t in $store.state.draft.tags"
 					:key="t.name"
 					class="
-						hotzone
-						flex
+						flex flex-row
 						items-center
-						rounded-xl
-						shadow-lg
-						text-primary
-						bg-white
-						text-sm
-						pl-3
-						pr-1
-						mt-2
+						z-10
 						focus:outline-none
+						pl-1
+						mr-4
+						mt-2
+						transition
+						duration-500
+						ease-in-out
+						transform
+						hover:scale-105
+						bg-gray1
+						rounded-lg
 					"
 					@click="removeTag(t)"
 				>
-					{{ t.name }} <XIcon class="p-1 text-lightPrimary" />
+					<span class="font-semibold text-gray5 text-sm">{{ t.name }}</span
+					><XIcon class="p-1 text-lightPrimary" />
 				</button>
 			</div>
 		</article>
-		<article class="rounded-lg shadow-lg bg-white mb-5">
-			<div class="flex flex-row justify-between">
+		<article class="rounded-lg shadow-lg bg-white p-4 mb-5">
+			<div class="flex flex-row justify-between items-center">
 				<div>
-					<h5>
+					<h5 v-show="$props.wordCount > 1">
 						<span class="text-primary">{{ $props.wordCount }}</span> words
 					</h5>
+					<h5>Auto-save on close.</h5>
 				</div>
 				<BrandedButton :action="handlePost" :text="`Publish`" />
 			</div>
@@ -104,6 +140,9 @@ import Vue from 'vue'
 import imageCompression from 'browser-image-compression'
 import XIcon from '@/components/icons/X.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
+import UploadIcon from '@/components/icons/Upload.vue'
+import ChevronUp from '@/components/icons/ChevronUp.vue'
+import ChevronDown from '@/components/icons/ChevronDown.vue'
 
 import { addPhotoToIPFS, getPhotoFromIPFS, preUploadPhoto } from '@/backend/photos'
 import { categories } from '@/config'
@@ -114,12 +153,16 @@ interface IData {
 	categoryList: string[]
 	category: string
 	tag: string
+	showCategoryDropdown: boolean
 }
 
 export default Vue.extend({
 	components: {
 		XIcon,
 		BrandedButton,
+		UploadIcon,
+		ChevronUp,
+		ChevronDown,
 	},
 	props: {
 		wordCount: {
@@ -133,6 +176,7 @@ export default Vue.extend({
 			categoryList: categories,
 			category: this.$store.state.draft.category,
 			tag: ``,
+			showCategoryDropdown: false,
 		}
 	},
 	mounted() {
@@ -170,6 +214,7 @@ export default Vue.extend({
 		changeCategory(c: string) {
 			this.category = c
 			this.$store.commit(`draft/updateCategory`, this.category)
+			this.showCategoryDropdown = false
 		},
 		removeImage(): void {
 			this.featuredPhoto = null
@@ -213,6 +258,14 @@ export default Vue.extend({
 				}
 			} catch (err) {
 				alert(err)
+			}
+		},
+		handleCategoryDropdown(e: any): void {
+			if (!e.target || e.target.parentNode === null || e.target.parentNode.classList === undefined) {
+				return
+			}
+			if (!e.target.parentNode.classList.contains(`toggle`)) {
+				this.showCategoryDropdown = false
 			}
 		},
 	},
