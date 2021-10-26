@@ -90,7 +90,7 @@ export async function removeNearPrivateKey() {
 
 export async function getUserPublicKey(username: string) {
 	const contract = getContract() as any
-	const userInfo: null | [string, string] = await contract.getUserInfo({ username })
+	const userInfo = (await contract.getUserInfo({ username })) as null | [string, string]
 	if (!userInfo) {
 		throw new Error(`Username not found on NEAR!`)
 	}
