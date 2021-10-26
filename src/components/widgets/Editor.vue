@@ -3,7 +3,10 @@
 		<!-- Featured image -->
 		<article class="rounded-lg shadow-lg bg-white p-4 mb-5">
 			<h6 class="text-primary font-semibold">Featuerd Image</h6>
-			<button class="w-full focus:outline-none" @click="handleUploadImageClick">
+			<button
+				class="w-full p-4 rounded-lg border-2 border-primary border-dashed h-24 flex justify-center items-center my-2"
+				@click="handleUploadImageClick"
+			>
 				<input
 					id="featured-photo"
 					ref="featuredPhoto"
@@ -14,37 +17,18 @@
 					@change="handleImage"
 				/>
 				<!-- No Photo Uploaded -->
-				<div v-show="featuredPhoto === null">
-					<div
-						class="
-							w-full
-							p-4
-							rounded-lg
-							border-4 border-primary border-dashed
-							h-24
-							flex
-							justify-center
-							items-center
-							my-2
-						"
-					>
-						<UploadIcon />
-					</div>
+				<div v-if="featuredPhoto === null" class="flex flex-col justify-center">
+					<UploadIcon class="self-center" />
+					<p class="text-primary text-left font-light text-sm">Upload an Image</p>
 				</div>
-				<p class="text-primary text-left font-light text-sm">Upload an Image</p>
+				<div v-else>
+					<img :src="featuredPhoto" class="h-24 w-full object-contain" />
+				</div>
 			</button>
 			<!-- Photo Uploaded -->
-			<div v-if="featuredPhoto !== null">
-				<img :src="featuredPhoto" class="hotzone w-full h-24 object-contain" />
-				<button
-					class="hotzone border border-primary text-primary focus:outline-none text-sm mt-4 p-1"
-					@click="handleUploadImageClick"
-				>
-					Replace Image
-				</button>
-				<button class="hotzone my-2 text-sm underline text-lightError focus:outline-none" @click="removeImage()">
-					Remove Image
-				</button>
+			<div v-if="featuredPhoto !== null" class="w-full">
+				<button class="text-primary focus:outline-none text-sm" @click="handleUploadImageClick">Change Image</button>
+				<button class="text-lightError focus:outline-none text-sm ml-4" @click="removeImage()">Remove Image</button>
 			</div>
 		</article>
 		<!-- Category -->
@@ -129,7 +113,26 @@
 					</h5>
 					<h5>Auto-save on close.</h5>
 				</div>
-				<BrandedButton :action="handlePost" :text="`Publish`" />
+				<button
+					class="
+						transition
+						duration-500
+						ease-in-out
+						transform
+						hover:scale-110
+						font-bold
+						rounded-lg
+						shadow-lg
+						focus:outline-none
+						bg-lightButtonBG
+						text-lightButtonText
+						px-12
+						py-2
+					"
+					@click="handlePost"
+				>
+					Publish
+				</button>
 			</div>
 		</article>
 	</div>
@@ -139,7 +142,6 @@
 import Vue from 'vue'
 import imageCompression from 'browser-image-compression'
 import XIcon from '@/components/icons/X.vue'
-import BrandedButton from '@/components/BrandedButton.vue'
 import UploadIcon from '@/components/icons/Upload.vue'
 import ChevronUp from '@/components/icons/ChevronUp.vue'
 import ChevronDown from '@/components/icons/ChevronDown.vue'
@@ -159,7 +161,6 @@ interface IData {
 export default Vue.extend({
 	components: {
 		XIcon,
-		BrandedButton,
 		UploadIcon,
 		ChevronUp,
 		ChevronDown,
