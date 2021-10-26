@@ -103,18 +103,18 @@ export async function setUserInfoNEAR(username: string) {
 	const contract = getContract() as any
 	const walletConnection = getWalletConnection()
 	if (walletConnection.isSignedIn()) {
-		// TODO: use separate return values when \
-		// length of username is less than minimum or \
-		// greater than maximum length allowed
-		const status: 1 | 2 | 3 = await contract.setUserInfo({ username })
+		const status: 1 | 2 | 3 | 4 = await contract.setUserInfo({ username })
 		if (status === 1) {
 			return { success: true, error: `` }
 		}
 		if (status === 2) {
-			return { success: false, error: `Username length invalid!` }
+			return { success: false, error: `Username should contain atleast 3 characters!` }
 		}
 		if (status === 3) {
 			return { success: false, error: `Username already exists!` }
+		}
+		if (status === 4) {
+			return { success: false, error: `Username should not contain more than 18 characters!` }
 		}
 		throw new Error(`Unknown status encountered while updating info on NEAR`)
 	}
