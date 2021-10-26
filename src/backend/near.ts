@@ -71,6 +71,21 @@ export async function getNearPrivateKey() {
 	return privateKeyBytes
 }
 
+export async function getNearPublicKey(accountId?: string) {
+	if (!accountId) {
+		const walletConnection = getWalletConnection()
+		accountId = walletConnection.getAccountId() as string
+	}
+	const keystore = new keyStores.BrowserLocalStorageKeyStore()
+	const keypair = (await keystore.getKey(nearConfig.networkId, accountId)) as KeyPairEd25519 | null
+
+	if (!keypair) {
+		return null
+	}
+	const publicKey = keypair.publicKey.data
+	return publicKey
+}
+
 export async function setNearPrivateKey(privateKey: Uint8Array, accountId: string) {
 	const encodedPrivateKey = base_encode(privateKey)
 	const keypair = new KeyPairEd25519(encodedPrivateKey)
