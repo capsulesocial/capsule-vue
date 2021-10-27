@@ -6,6 +6,7 @@
 			@click.stop="toggleDropdown"
 		>
 			<ShareIcon :isActive="showSocialShares" class="mr-2" />
+			{{ repostCount }}
 		</button>
 		<div
 			v-show="showSocialShares"
@@ -89,6 +90,10 @@ export default Vue.extend({
 		hasRepost: {
 			type: Function,
 			default: () => {},
+		},
+		repostCount: {
+			type: Number,
+			required: true,
 		},
 	},
 	data(): IData {

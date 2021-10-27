@@ -26,6 +26,8 @@ export interface IPostResponse {
 	comments: Comment[]
 	bookmarked: boolean
 	usersParticipating: string[]
+	bookmarksCount: number
+	repostCount: number
 }
 
 export type Algorithm = `NEW` | `FOLLOWING` | `TOP`

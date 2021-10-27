@@ -55,7 +55,7 @@
 								{{ $formatDate(post.timestamp) }}
 							</div>
 						</div>
-						<div class="flex" :class="repostedBy !== `` ? `-mt-4` : ``">
+						<div class="flex items-center" :class="repostedBy !== `` ? `-mt-4` : ``">
 							<BookmarkButton :postID="post._id" :hasBookmark="isBookmarked" @clicked="getBookmarkStatus" />
 							<button v-if="post.authorID === $store.state.session.id" @click="deletePost">
 								<XIcon />
@@ -92,8 +92,15 @@
 									@click="showComments = !showComments"
 								>
 									<CommentIcon :isActive="showComments" />
+									<span v-if="comments" class="ml-1">{{ comments.length }}</span>
 								</button>
-								<Share :post="post" :cid="post._id" class="fill-primary" :hasRepost="hasReposted" />
+								<Share
+									:post="post"
+									:cid="post._id"
+									class="fill-primary"
+									:hasRepost="hasReposted"
+									:repostCount="repostCount"
+								/>
 							</div>
 						</div>
 						<!-- Right side: Image -->
@@ -168,7 +175,7 @@ export default Vue.extend({
 		},
 		comments: {
 			type: Array as PropType<Comment[] | null>,
-			default: null,
+			required: true,
 		},
 		profile: {
 			type: Object as PropType<Profile>,
@@ -189,6 +196,14 @@ export default Vue.extend({
 		bookmarked: {
 			type: Boolean,
 			default: false,
+		},
+		repostCount: {
+			type: Number,
+			default: 0,
+		},
+		bookmarksCount: {
+			type: Number,
+			default: 0,
 		},
 	},
 	data(): IData {

@@ -50,6 +50,8 @@
 						:repostedBy="myReposts.includes(post.post._id) ? $store.state.session.id : ``"
 						:bookmarked="post.bookmarked"
 						:hideRepostIcon="algorithm === `NEW` || algorithm === `TOP` ? true : false"
+						:bookmarksCount="post.bookmarksCount"
+						:repostCount="post.repostCount"
 					/>
 				</article>
 
