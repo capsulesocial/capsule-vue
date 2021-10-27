@@ -26,7 +26,7 @@
 					<div class="flex w-full bg-white">
 						<Avatar :avatar="avatar" :authorID="post.authorID" size="w-12 h-12" />
 						<div class="flex flex-col flex-grow ml-4">
-							<div class="flex">
+							<div class="flex" @mouseover="showFriendButton = true" @mouseleave="showFriendButton = false">
 								<nuxt-link :to="'/' + post.authorID" class="flex mr-4">
 									<span
 										:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
@@ -41,12 +41,14 @@
 										@{{ post.authorID }}
 									</span>
 								</nuxt-link>
-								<FriendButton
-									v-if="post.authorID !== $store.state.session.id && $route.name !== `id`"
-									:small="true"
-									:following="usersFollowing.has(post.authorID)"
-									:toggleFriend="() => toggleFriend(post.authorID)"
-								/>
+								<span v-show="showFriendButton">
+									<FriendButton
+										v-if="post.authorID !== $store.state.session.id && $route.name !== `id`"
+										:small="true"
+										:following="usersFollowing.has(post.authorID)"
+										:toggleFriend="() => toggleFriend(post.authorID)"
+									/>
+								</span>
 							</div>
 							<!-- Timestamp -->
 							<div class="text-xs ml-14">
@@ -139,6 +141,7 @@ interface IData {
 	featuredPhoto: string
 	isBookmarked: boolean
 	postDeleted: boolean
+	showFriendButton: boolean
 }
 
 export default Vue.extend({
@@ -196,6 +199,7 @@ export default Vue.extend({
 			featuredPhoto: ``,
 			isBookmarked: false,
 			postDeleted: false,
+			showFriendButton: false,
 		}
 	},
 	async created() {
