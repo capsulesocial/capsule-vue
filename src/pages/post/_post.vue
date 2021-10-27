@@ -97,7 +97,13 @@
 				<div class="flex flex-row justify-between">
 					<div class="flex items-center">
 						<BookmarkButton :postID="$route.params.post" :hasBookmark="isBookmarked" @clicked="getBookmarkStatus" />
-						<ShareButton :post="post" :cid="$route.params.post" :class="'z-20'" :hasRepost="hasReposted" />
+						<ShareButton
+							:post="post"
+							:cid="$route.params.post"
+							:class="'z-20'"
+							:hasRepost="hasReposted"
+							:repostCount="-1"
+						/>
 					</div>
 				</div>
 				<PostActions :postCID="$route.params.post" :authorID="author.id" :isCommenting="true" :tags="post.tags" />
