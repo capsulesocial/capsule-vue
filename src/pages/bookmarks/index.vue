@@ -6,6 +6,7 @@
 				:bookmarked="p.bookmarked"
 				:toggleFriend="toggleFriend"
 				:usersFollowing="followingList"
+				:comments="p.comments"
 			/>
 		</article>
 	</div>
