@@ -12,11 +12,10 @@
 		</div>
 		<FriendButton
 			v-if="$props.profile.id !== $store.state.session.id"
-			:following="isFollowing"
+			:userIsFollowed="isFollowing"
 			:toggleFriend="toggleFriend"
 			class="justify-self-end"
 		/>
-		<!-- {{ $props.profile }} -->
 	</div>
 </template>
 

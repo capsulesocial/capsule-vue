@@ -43,6 +43,7 @@
 						<!-- Widgets -->
 						<aside class="fixed" style="margin-left: 780px; width: 450px">
 							<ProfileWidget :location="visitProfile.location" />
+							<FollowersWidget :followersList="followersList" :updateFollowers="updateFollowers" />
 							<footer class="text-gray5">
 								<div class="flex">
 									<nuxt-link to="/help" class="pr-4">Help</nuxt-link>
@@ -71,6 +72,7 @@ import CapsuleIcon from '@/components/icons/Capsule.vue'
 import Avatar from '@/components/Avatar.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 import ProfileWidget from '@/components/widgets/Profile.vue'
+import FollowersWidget from '@/components/widgets/Followers.vue'
 
 import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
@@ -81,7 +83,9 @@ interface IData {
 	myAvatar: string | ArrayBuffer | null
 	visitProfile: Profile | null
 	visitAvatar: string | ArrayBuffer | null
+	followersList: Set<string>
 	followersCount: number
+	followingList: Set<string>
 	followingCount: number
 	userIsFollowed: boolean
 }
@@ -92,6 +96,7 @@ export default Vue.extend({
 		Avatar,
 		BrandedButton,
 		ProfileWidget,
+		FollowersWidget,
 	},
 	data(): IData {
 		return {
@@ -99,7 +104,9 @@ export default Vue.extend({
 			myAvatar: null,
 			visitProfile: null,
 			visitAvatar: null,
+			followersList: new Set(),
 			followersCount: 0,
+			followingList: new Set(),
 			followingCount: 0,
 			userIsFollowed: false,
 		}
@@ -129,7 +136,9 @@ export default Vue.extend({
 			})
 		}
 		getFollowersAndFollowing(this.$route.params.id).then(({ followers, following }) => {
+			this.followersList = followers
 			this.followersCount = followers.size
+			this.followingList = followers
 			this.followingCount = following.size
 			this.userIsFollowed = followers.has(this.$store.state.session.id)
 		})
@@ -156,7 +165,9 @@ export default Vue.extend({
 		},
 		async updateFollowers() {
 			const { followers, following } = await getFollowersAndFollowing(this.$route.params.id, true)
+			this.followersList = followers
 			this.followersCount = followers.size
+			this.followingList = followers
 			this.followingCount = following.size
 			this.userIsFollowed = followers.has(this.$store.state.session.id)
 		},
