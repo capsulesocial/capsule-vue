@@ -34,8 +34,8 @@
 							style="width: 750px; min-height: calc(100vh - 184px); height: calc(100vh - 184px)"
 							:visitProfile="visitProfile"
 							:visitAvatar="visitAvatar"
-							:followersCount="followersCount"
-							:followingCount="followingCount"
+							:followers="followers"
+							:following="following"
 							:toggleFriend="toggleFriend"
 							:updateFollowers="updateFollowers"
 							:userIsFollowed="userIsFollowed"
@@ -43,7 +43,7 @@
 						<!-- Widgets -->
 						<aside class="fixed" style="margin-left: 780px; width: 450px">
 							<ProfileWidget :location="visitProfile.location" />
-							<FollowersWidget :followersList="followersList" :updateFollowers="updateFollowers" />
+							<FollowersWidget :followers="followers" :updateFollowers="updateFollowers" />
 							<footer class="text-gray5">
 								<div class="flex">
 									<nuxt-link to="/help" class="pr-4">Help</nuxt-link>
@@ -83,10 +83,8 @@ interface IData {
 	myAvatar: string | ArrayBuffer | null
 	visitProfile: Profile | null
 	visitAvatar: string | ArrayBuffer | null
-	followersList: Set<string>
-	followersCount: number
-	followingList: Set<string>
-	followingCount: number
+	followers: Set<string>
+	following: Set<string>
 	userIsFollowed: boolean
 }
 
@@ -104,10 +102,8 @@ export default Vue.extend({
 			myAvatar: null,
 			visitProfile: null,
 			visitAvatar: null,
-			followersList: new Set(),
-			followersCount: 0,
-			followingList: new Set(),
-			followingCount: 0,
+			followers: new Set(),
+			following: new Set(),
 			userIsFollowed: false,
 		}
 	},
@@ -135,13 +131,10 @@ export default Vue.extend({
 				this.visitAvatar = p
 			})
 		}
-		getFollowersAndFollowing(this.$route.params.id).then(({ followers, following }) => {
-			this.followersList = followers
-			this.followersCount = followers.size
-			this.followingList = followers
-			this.followingCount = following.size
-			this.userIsFollowed = followers.has(this.$store.state.session.id)
-		})
+		const { followers, following } = await getFollowersAndFollowing(this.$route.params.id)
+		this.followers = followers
+		this.following = following
+		this.userIsFollowed = followers.has(this.$store.state.session.id)
 	},
 	methods: {
 		togglePostEditor() {
@@ -165,10 +158,8 @@ export default Vue.extend({
 		},
 		async updateFollowers() {
 			const { followers, following } = await getFollowersAndFollowing(this.$route.params.id, true)
-			this.followersList = followers
-			this.followersCount = followers.size
-			this.followingList = followers
-			this.followingCount = following.size
+			this.followers = followers
+			this.following = following
 			this.userIsFollowed = followers.has(this.$store.state.session.id)
 		},
 	},

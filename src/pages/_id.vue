@@ -26,7 +26,7 @@
 									:class="getStyles(`id-followers`)"
 									class="pl-4 text-base"
 								>
-									<span class="font-bold text-primary">{{ followersCount }}</span>
+									<span class="font-bold text-primary">{{ followers.size }}</span>
 									Followers
 								</nuxt-link>
 								<nuxt-link
@@ -34,7 +34,7 @@
 									:class="getStyles(`id-following`)"
 									class="pl-4 text-base"
 								>
-									<span class="font-bold text-primary">{{ followingCount }}</span>
+									<span class="font-bold text-primary">{{ following.size }}</span>
 									Following
 								</nuxt-link>
 							</div>
@@ -72,7 +72,7 @@
 				</div>
 			</article>
 			<article :style="padding">
-				<nuxt-child :profile="visitProfile" :updateFollowers="updateFollowers" />
+				<nuxt-child :profile="visitProfile" :updateFollowers="updateFollowers" :followers="followers" />
 			</article>
 		</div>
 	</section>
@@ -110,13 +110,13 @@ export default Vue.extend({
 			type: String as PropType<ArrayBuffer | string | null>,
 			default: null,
 		},
-		followersCount: {
-			type: Number,
-			default: 0,
+		followers: {
+			type: Set,
+			required: true,
 		},
-		followingCount: {
-			type: Number,
-			default: 0,
+		following: {
+			type: Set,
+			required: true,
 		},
 		toggleFriend: {
 			type: Function as PropType<() => void>,

@@ -22,11 +22,9 @@ export default Vue.extend({
 		ProfilePreview,
 	},
 	props: {
-		followersList: {
+		followers: {
 			type: Set,
-			default: () => {
-				return new Set()
-			},
+			required: true,
 		},
 		updateFollowers: {
 			type: Function as PropType<() => void>,
@@ -39,7 +37,7 @@ export default Vue.extend({
 		}
 	},
 	mounted() {
-		this.$props.followersList.forEach(this.getFollowers)
+		this.$props.followers.forEach(this.getFollowers)
 	},
 	methods: {
 		async getFollowers(p: string) {
