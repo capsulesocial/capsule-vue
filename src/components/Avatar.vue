@@ -1,5 +1,5 @@
 <template>
-	<nuxt-link :to="'/' + $props.authorID">
+	<button @click="$router.push('/' + $props.authorID)">
 		<img
 			v-if="$props.avatar !== `` && $props.avatar !== null"
 			:src="$props.avatar"
@@ -7,7 +7,7 @@
 			:class="size"
 		/>
 		<img v-else :src="avatarList[usernameToPicture($props.authorID)]" class="rounded-lg object-cover" :class="size" />
-	</nuxt-link>
+	</button>
 </template>
 
 <script lang="ts">

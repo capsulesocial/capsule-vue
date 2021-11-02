@@ -1,110 +1,78 @@
 <template>
-	<section class="w-full border-l border-r" style="min-height: calc(100vh - 95px)">
+	<section class="w-full">
 		<!-- IF a profile exists -->
-		<div v-if="currentUser" style="width: 660px">
+		<div v-if="currentUser">
 			<!-- Fixed top -->
-			<article class="fixed bg-white z-20 border-r" style="width: 659px">
+			<article class="fixed bg-white pt-5 -mt-5 z-20" style="width: 700px">
 				<!-- Name, socials, follow, bio -->
-				<div class="flex flex-row justify-between p-4" style="margin-left: 22px; margin-right: 22px">
+				<div class="flex flex-row justify-between px-4 pt-4">
 					<div class="flex items-center">
 						<Avatar :avatar="avatar" :authorID="$route.params.id" size="w-24 h-24" class="mr-4" />
-						<div class="flex flex-col">
+						<div class="flex flex-col flex-grow">
 							<!-- Name Username, Follow button -->
 							<div class="flex flex-col">
-								<h3
-									class="text-xl pr-4"
-									:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-								>
+								<h3 class="text-xl pr-4 font-semibold">
 									{{ currentUser.name }}
 								</h3>
-								<h5
-									:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-									class="text-lightSecondary text-lg"
-								>
-									@{{ currentUser.id }}
-								</h5>
+								<h5 class="text-primary text-lg">@{{ currentUser.id }}</h5>
 							</div>
-							<div class="flex flex-row">
-								<!-- Categories, following, followers -->
-								<nuxt-link :to="'/' + $route.params.id + '/categories'" :class="getStyles(`id-categories`)">
-									<span class="font-bold">0</span>
-									categories
+							<div class="flex flex-row pt-1 text-sm text-gray6">
+								<!-- posts, following, followers -->
+								<nuxt-link :to="'/' + $route.params.id" class="text-base" :class="getStyles(`id-categories`)">
+									<span class="font-bold text-primary">X</span>
+									Posts
 								</nuxt-link>
-								<nuxt-link :to="'/' + $route.params.id + '/followers'" :class="getStyles(`id-followers`)" class="pl-4">
-									<span class="font-bold">{{ followers }}</span>
+								<nuxt-link
+									:to="'/' + $route.params.id + '/followers'"
+									:class="getStyles(`id-followers`)"
+									class="pl-4 text-base"
+								>
+									<span class="font-bold text-primary">{{ followers }}</span>
 									Followers
 								</nuxt-link>
-								<nuxt-link :to="'/' + $route.params.id + '/following'" :class="getStyles(`id-following`)" class="pl-4">
-									<span class="font-bold">{{ following }}</span>
+								<nuxt-link
+									:to="'/' + $route.params.id + '/following'"
+									:class="getStyles(`id-following`)"
+									class="pl-4 text-base"
+								>
+									<span class="font-bold text-primary">{{ following }}</span>
 									Following
 								</nuxt-link>
 							</div>
 						</div>
 					</div>
-					<div class="flex items-center"></div>
-					<nuxt-link
-						v-if="$store.state.session.id === $route.params.id"
-						to="/settings"
-						:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-					>
-						<SettingsIcon />
-					</nuxt-link>
-					<FriendButton v-else :toggleFriend="toggleFriend" :following="userIsFollowed" />
+					<div class="flex items-center">
+						<BrandedButton
+							v-if="$store.state.session.id === $route.params.id"
+							:text="`Edit Profile`"
+							:action="
+								() => {
+									$router.push(`/settings`)
+								}
+							"
+						/>
+						<FriendButton v-else :toggleFriend="toggleFriend" :following="userIsFollowed" />
+					</div>
 				</div>
 				<!-- Bio -->
-				<div
-					style="margin-left: 22px; margin-right: 22px"
-					class="px-4 pb-4"
-					:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-				>
+				<div v-if="currentUser.bio" class="pt-4 pl-4">
 					<p class="italic">
 						{{ currentUser.bio }}
 					</p>
-					<span v-for="s in currentUser.socials" :key="s.platform" class="p-2">
-						<!-- Twitter -->
-						<button
-							v-if="s.platform === 'twitter'"
-							class="focus:outline-none text-primary"
-							@click="openWindow('https://twitter.com/' + s.username)"
-						>
-							<TwitterIcon />
-						</button>
-						<!-- GitHub -->
-						<button
-							v-if="s.platform === 'github'"
-							class="focus:outline-none text-primary"
-							@click="openWindow('https://github.com/' + s.username)"
-						>
-							<GitHubIcon />
-						</button>
-						<button
-							v-if="s.platform === 'website'"
-							class="focus:outline-none text-primary"
-							@click="openWindow(s.username)"
-						>
-							<ExternalURLIcon />
-						</button>
-					</span>
 				</div>
-				<div
-					class="flex flex-col md:flex-row w-full justify-between border-b text-gray7"
-					style="padding-left: 22px; padding-right: 22px"
-				>
+				<div class="flex flex-col md:flex-row w-full justify-between border-b text-gray7 pt-4">
 					<nuxt-link :to="'/' + $route.params.id" class="pb-1" :class="getStyles('id')">
 						<span class="px-4">Posts</span>
 					</nuxt-link>
 					<nuxt-link :to="'/' + $route.params.id + '/comments'" class="pb-1" :class="getStyles('id-comments')">
 						<span class="px-4">Comments</span>
 					</nuxt-link>
-					<nuxt-link :to="'/' + $route.params.id + '/bookmarks'" class="pb-1" :class="getStyles('id-bookmarks')">
-						<span class="px-4">Bookmarks </span>
-					</nuxt-link>
 					<nuxt-link :to="'/' + $route.params.id + '/reposts'" class="pb-1" :class="getStyles('id-reposts')">
 						<span class="px-4">Reposts</span>
 					</nuxt-link>
 				</div>
 			</article>
-			<article style="padding-top: 175.069px">
+			<article class="pt-24">
 				<nuxt-child :profile="currentUser" :updateFollowers="updateFollowers" style="padding-left: 22px" />
 			</article>
 		</div>
@@ -117,11 +85,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import Avatar from '@/components/Avatar.vue'
-import TwitterIcon from '@/components/icons/brands/Twitter.vue'
-import GitHubIcon from '@/components/icons/brands/GitHub.vue'
 import FriendButton from '@/components/FriendButton.vue'
-import ExternalURLIcon from '@/components/icons/ExternalURL.vue'
-import SettingsIcon from '@/components/icons/Settings.vue'
+import BrandedButton from '@/components/BrandedButton.vue'
 
 import { Post } from '@/backend/post'
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
@@ -141,11 +106,14 @@ export default Vue.extend({
 	name: `RootIDPage`,
 	components: {
 		Avatar,
-		TwitterIcon,
-		GitHubIcon,
 		FriendButton,
-		ExternalURLIcon,
-		SettingsIcon,
+		BrandedButton,
+	},
+	layout: `profile`,
+	asyncData({ params }) {
+		return {
+			id: params.id,
+		}
 	},
 	data(): IData {
 		return {
@@ -156,6 +124,11 @@ export default Vue.extend({
 			posts: [],
 			userIsFollowed: false,
 		}
+	},
+	watch: {
+		$route() {
+			location.reload()
+		},
 	},
 	async created() {
 		// Get user profile
