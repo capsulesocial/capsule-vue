@@ -45,7 +45,7 @@
 									<FriendButton
 										v-if="post.authorID !== $store.state.session.id && $route.name !== `id`"
 										:small="true"
-										:following="usersFollowing.has(post.authorID)"
+										:userIsFollowed="usersFollowing.has(post.authorID)"
 										:toggleFriend="() => toggleFriend(post.authorID)"
 									/>
 								</span>

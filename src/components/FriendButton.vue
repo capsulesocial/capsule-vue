@@ -1,6 +1,6 @@
 <template>
 	<button class="rounded-lg focus:outline-none" @click="toggleFriend">
-		<div v-if="following">
+		<div v-if="userIsFollowed">
 			<div v-if="showIcons" class="rounded-full p-3 items-center">
 				<UnfollowIcon />
 			</div>
@@ -50,7 +50,7 @@ export default Vue.extend({
 		UnfollowIcon,
 	},
 	props: {
-		following: {
+		userIsFollowed: {
 			type: Boolean,
 			required: true,
 		},
@@ -60,7 +60,7 @@ export default Vue.extend({
 		},
 		toggleFriend: {
 			type: Function as PropType<() => void>,
-			default: () => {},
+			required: true,
 		},
 	},
 })

@@ -21,21 +21,28 @@
 						</nav>
 						<!-- Right side: icons and avatar -->
 						<div class="flex flex-row">
-							<Avatar :avatar="avatar" :authorID="$store.state.session.id" />
+							<Avatar :avatar="myAvatar" :authorID="$store.state.session.id" />
 						</div>
 					</div>
 				</header>
 				<!-- Body -->
 				<div>
 					<!-- Content -->
-					<section class="flex flex-row mt-12">
+					<section v-if="visitProfile" class="flex flex-row mt-12 z-10">
 						<nuxt-child
+							class="fixed overflow-y-auto rounded-lg shadow-lg mr-5 bg-white p-5"
 							style="width: 750px; min-height: calc(100vh - 184px); height: calc(100vh - 184px)"
-							class="fixed overflow-y-auto rounded-lg shadow-lg mr-5 bg-white p-5 z-10"
+							:visitProfile="visitProfile"
+							:visitAvatar="visitAvatar"
+							:followersCount="followersCount"
+							:followingCount="followingCount"
+							:toggleFriend="toggleFriend"
+							:updateFollowers="updateFollowers"
+							:userIsFollowed="userIsFollowed"
 						/>
 						<!-- Widgets -->
 						<aside class="fixed" style="margin-left: 780px; width: 450px">
-							<ProfileWidget />
+							<ProfileWidget :location="visitProfile.location" />
 							<footer class="text-gray5">
 								<div class="flex">
 									<nuxt-link to="/help" class="pr-4">Help</nuxt-link>
@@ -48,6 +55,9 @@
 								© 2021 Capsule.Social, Inc.
 							</footer>
 						</aside>
+					</section>
+					<section v-else class="w-full flex justify-center">
+						<div class="loader m-5 p-10 rounded-lg"></div>
 					</section>
 				</div>
 			</div>
@@ -64,10 +74,16 @@ import ProfileWidget from '@/components/widgets/Profile.vue'
 
 import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
+import { followChange, getFollowersAndFollowing } from '@/backend/following'
 
 interface IData {
-	profile: Profile | null
-	avatar: string | ArrayBuffer | null
+	myProfile: Profile | null
+	myAvatar: string | ArrayBuffer | null
+	visitProfile: Profile | null
+	visitAvatar: string | ArrayBuffer | null
+	followersCount: number
+	followingCount: number
+	userIsFollowed: boolean
 }
 
 export default Vue.extend({
@@ -79,37 +95,48 @@ export default Vue.extend({
 	},
 	data(): IData {
 		return {
-			profile: null,
-			avatar: null,
+			myProfile: null,
+			myAvatar: null,
+			visitProfile: null,
+			visitAvatar: null,
+			followersCount: 0,
+			followingCount: 0,
+			userIsFollowed: false,
 		}
+	},
+	watch: {
+		$route() {
+			location.reload()
+		},
 	},
 	async created() {
 		// Check if logged in user
 		if (this.$store.state.session.id === ``) {
 			this.$router.push(`/`)
 		}
-		// get logged in profile
-		this.profile = await getProfile(this.$store.state.session.id)
-		// Get avatar
-		if (this.profile && this.profile.avatar.length > 1) {
-			getPhotoFromIPFS(this.profile.avatar).then((p) => {
-				this.avatar = p
+		// get my profile and avatar
+		this.myProfile = await getProfile(this.$store.state.session.id)
+		if (this.myProfile && this.myProfile.avatar.length > 1) {
+			getPhotoFromIPFS(this.myProfile.avatar).then((p) => {
+				this.myAvatar = p
 			})
 		}
+		// Get visiting profile and avatar
+		this.visitProfile = await getProfile(this.$route.params.id)
+		if (this.visitProfile && this.visitProfile.avatar !== ``) {
+			getPhotoFromIPFS(this.visitProfile.avatar).then((p) => {
+				this.visitAvatar = p
+			})
+		}
+		getFollowersAndFollowing(this.$route.params.id).then(({ followers, following }) => {
+			this.followersCount = followers.size
+			this.followingCount = following.size
+			this.userIsFollowed = followers.has(this.$store.state.session.id)
+		})
 	},
 	methods: {
 		togglePostEditor() {
 			this.$router.push(`/post`)
-		},
-		getTitle(): string {
-			switch (this.$route.name) {
-				case `home`:
-					return `Welcome, ` + this.profile?.name
-				case `discover`:
-					return `Browse Capsule`
-				default:
-					return ``
-			}
 		},
 		getStyles(tab: string): string {
 			let res: string = ``
@@ -118,6 +145,20 @@ export default Vue.extend({
 				res += `font-semibold text-lightPrimaryTextunderline border-primary border-b`
 			}
 			return res
+		},
+		async toggleFriend() {
+			await followChange(
+				this.userIsFollowed ? `UNFOLLOW` : `FOLLOW`,
+				this.$store.state.session.id,
+				this.$route.params.id,
+			)
+			this.updateFollowers()
+		},
+		async updateFollowers() {
+			const { followers, following } = await getFollowersAndFollowing(this.$route.params.id, true)
+			this.followersCount = followers.size
+			this.followingCount = following.size
+			this.userIsFollowed = followers.has(this.$store.state.session.id)
 		},
 	},
 })
