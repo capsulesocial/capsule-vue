@@ -42,6 +42,7 @@
 							:action="$walletLogin"
 							text="Connect Wallet"
 						/>
+						<BrandedButton v-show="!walletConnected && !isLogin" text="Signup with Google" :action="loginWithGoogle" />
 						<h6 v-show="walletConnected && !isLogin" class="text-center italics text-gray-600">Wallet connected</h6>
 					</div>
 
@@ -181,10 +182,13 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapMutations } from 'vuex'
+import DirectWebSdk from '@toruslabs/torus-direct-web-sdk'
+
 import CapsuleIcon from '@/components/icons/Capsule.vue'
 import TwitterIcon from '@/components/icons/brands/Twitter.vue'
 import DiscordIcon from '@/components/icons/brands/Discord.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
+
 import { MutationType, createSessionFromProfile, namespace as sessionStoreNamespace } from '~/store/session'
 
 import { signedInToWallet } from '@/backend/near'
@@ -199,6 +203,7 @@ interface IData {
 	confirmPassword: string | null
 	consent: boolean
 	walletConnected: boolean
+	torus: DirectWebSdk
 }
 
 export default Vue.extend({
@@ -219,10 +224,15 @@ export default Vue.extend({
 			confirmPassword: null,
 			consent: true,
 			walletConnected: false,
+			torus: new DirectWebSdk({
+				baseUrl: `http://localhost:3000/oauth`,
+				network: `testnet`, // details for test net
+			}),
 		}
 	},
-	created() {
+	async created() {
 		this.walletConnected = signedInToWallet()
+		await this.torus.init()
 	},
 	mounted() {
 		if (this.$store.state.session.id !== ``) {
@@ -242,6 +252,14 @@ export default Vue.extend({
 		toggleFormType() {
 			this.isLogin = !this.isLogin
 			this.walletConnected = signedInToWallet()
+		},
+		async loginWithGoogle() {
+			const userInfo = await this.torus.triggerLogin({
+				typeOfLogin: `google`,
+				verifier: `capsule-social-test-google`,
+				clientId: `653379121360-j8t9ua763vfvd86d1qjguonhrgqvkigo.apps.googleusercontent.com`,
+			})
+			console.log(userInfo)
 		},
 		async verify() {
 			const pwCheck = this.$qualityPassword(this.password)
