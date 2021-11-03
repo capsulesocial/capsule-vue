@@ -71,7 +71,7 @@
 					</nuxt-link>
 				</div>
 			</article>
-			<article :style="padding">
+			<article v-if="loadedContent()" :style="padding">
 				<nuxt-child :profile="visitProfile" :updateFollowers="updateFollowers" :followers="followers" />
 			</article>
 		</div>
@@ -142,6 +142,13 @@ export default Vue.extend({
 		this.padding = `padding-top: ` + this.$refs.topContainer.clientHeight + `px`
 	},
 	methods: {
+		loadedContent(): Boolean {
+			// Check follow page
+			if (this.$route.name === `id-followers` && this.followers.size === 0) {
+				return false
+			}
+			return true
+		},
 		getStyles(tab: string): string {
 			let res = ``
 			if (this.$store.state.settings.darkMode) {

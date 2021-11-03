@@ -12,8 +12,7 @@
 import Vue from 'vue'
 import type { PropType } from 'vue'
 import ProfilePreview from '@/components/ProfilePreview.vue'
-import { getFollowersAndFollowing } from '@/backend/following'
-import { createDefaultProfile, getProfile } from '@/backend/profile'
+import { getProfile } from '@/backend/profile'
 interface IData {
 	isLoading: boolean
 	profiles: any
@@ -24,6 +23,10 @@ export default Vue.extend({
 		ProfilePreview,
 	},
 	props: {
+		followers: {
+			type: Set,
+			required: true,
+		},
 		profile: {
 			type: Object,
 			default: null,
@@ -39,10 +42,8 @@ export default Vue.extend({
 			profiles: [],
 		}
 	},
-	async created() {
-		const res = await getFollowersAndFollowing(this.$route.params.id)
-		const followers = res.followers
-		followers.forEach(this.getFollowers)
+	mounted() {
+		this.$props.followers.forEach(this.getFollowers)
 	},
 	methods: {
 		async getFollowers(p: string) {
