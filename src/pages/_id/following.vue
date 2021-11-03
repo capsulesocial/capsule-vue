@@ -13,7 +13,7 @@ import Vue from 'vue'
 import type { PropType } from 'vue'
 import ProfilePreview from '@/components/ProfilePreview.vue'
 import { getFollowersAndFollowing } from '@/backend/following'
-import { getProfile } from '@/backend/profile'
+import { createDefaultProfile, getProfile } from '@/backend/profile'
 interface IData {
 	isLoading: boolean
 	profiles: any
@@ -46,10 +46,12 @@ export default Vue.extend({
 	},
 	methods: {
 		async getFollowing(p: string) {
-			const profile = await getProfile(p)
-			if (profile) {
-				this.profiles.push(profile)
+			let profile = createDefaultProfile(p)
+			const fetchedProfile = await getProfile(p)
+			if (fetchedProfile) {
+				profile = fetchedProfile
 			}
+			this.profiles.push(profile)
 		},
 	},
 })
