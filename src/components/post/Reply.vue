@@ -41,7 +41,7 @@ import Avatar from '@/components/Avatar.vue'
 import { getPhotoFromIPFS } from '@/backend/photos'
 import { getComment } from '@/backend/comment'
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
-import { createDefaultSession, getProfileFromSession } from '@/store/session'
+import { getProfileFromSession } from '@/store/session'
 
 interface IData {
 	avatar?: string

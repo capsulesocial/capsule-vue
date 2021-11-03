@@ -110,7 +110,7 @@ import RepostIcon from '@/components/icons/Repost.vue'
 import { RetrievedPost } from '@/backend/post'
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
-import { createDefaultSession, getProfileFromSession } from '@/store/session'
+import { getProfileFromSession } from '@/store/session'
 import { isPostBookmarkedByUser } from '@/backend/bookmarks'
 import { sendPostDeletion } from '@/backend/postDeletion'
 

@@ -110,7 +110,7 @@ import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 import { reactions, feelings } from '@/config'
 import { createComment, getComment, getCommentsOfPost, sendComment } from '@/backend/comment'
 import { getPhotoFromIPFS } from '@/backend/photos'
-import { createDefaultSession, getProfileFromSession } from '@/store/session'
+import { getProfileFromSession } from '@/store/session'
 
 interface IData {
 	isReplying: boolean
