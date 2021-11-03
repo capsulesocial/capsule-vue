@@ -108,8 +108,10 @@ export default Vue.extend({
 		}
 	},
 	watch: {
-		$route() {
-			location.reload()
+		$route(n, o) {
+			if (n.params.id !== o.params.id) {
+				location.reload()
+			}
 		},
 	},
 	async created() {

@@ -1,5 +1,5 @@
 <template>
-	<button @click="$router.push('/' + $props.authorID)">
+	<button class="focus:outline-none" @click="$router.push('/' + $props.authorID)">
 		<img
 			v-if="$props.avatar !== `` && $props.avatar !== null"
 			:src="$props.avatar"
