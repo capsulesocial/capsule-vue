@@ -11,6 +11,8 @@
 		"baseUrl": ".",
 		"noImplicitAny": true,
 		"noImplicitThis": true,
+		"noUnusedLocals": false,
+		"noUnusedParameters": false,
 		"allowSyntheticDefaultImports": true,
 		"paths": {
 			"@/*": ["src/*"],

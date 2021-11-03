@@ -16,6 +16,18 @@ export interface Profile {
 	socials: string[]
 }
 
+export function createDefaultProfile(id: string): Profile {
+	return {
+		id,
+		name: ``,
+		email: ``,
+		bio: ``,
+		location: ``,
+		avatar: ``,
+		socials: [],
+	}
+}
+
 export function loadProfileFromIPFS(cid: string) {
 	return ipfs().getJSONData<Profile>(cid)
 }
@@ -65,7 +77,7 @@ export function addProfileToIPFS(content: Profile) {
 async function _getProfile(authorID: string) {
 	const response = await axios.get(`${capsuleOrbit}/profile/${authorID}`)
 	if (response.data.data) {
-		return response.data.data.profile as Profile
+		return response.data.data.profile as Profile | null
 	}
 	throw new Error(`Error finding profile!`)
 }

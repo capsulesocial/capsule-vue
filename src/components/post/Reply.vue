@@ -40,11 +40,11 @@ import type { PropType } from 'vue'
 import Avatar from '@/components/Avatar.vue'
 import { getPhotoFromIPFS } from '@/backend/photos'
 import { getComment } from '@/backend/comment'
-import { getProfile, Profile } from '@/backend/profile'
-import { getProfileFromSession } from '@/store/session'
+import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
+import { createDefaultSession, getProfileFromSession } from '@/store/session'
 
 interface IData {
-	avatar: string | null
+	avatar?: string
 	content: string
 	name: string
 }
@@ -61,7 +61,6 @@ export default Vue.extend({
 	},
 	data(): IData {
 		return {
-			avatar: null,
 			content: ``,
 			name: ``,
 		}
@@ -78,7 +77,11 @@ export default Vue.extend({
 				p = getProfileFromSession(this.$store.state.session)
 			} else {
 				// Viewing someone else's post
-				p = await getProfile(this.authorID)
+				p = createDefaultProfile(this.authorID)
+				const fetchedProfile = await getProfile(this.authorID)
+				if (fetchedProfile) {
+					p = fetchedProfile
+				}
 			}
 		}
 		this.name = p.name
