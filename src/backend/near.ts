@@ -121,7 +121,8 @@ export async function setUserInfoNEAR(username: string) {
 	const contract = getContract() as any
 	const walletConnection = getWalletConnection()
 	if (walletConnection.isSignedIn()) {
-		const status: 1 | 2 | 3 | 4 = await contract.setUserInfo({ username })
+		// TODO: use enums
+		const status: 1 | 2 | 3 | 4 | 5 = await contract.setUserInfo({ username })
 		switch (status) {
 			case 1:
 				return { success: true, error: `` }
@@ -131,6 +132,8 @@ export async function setUserInfoNEAR(username: string) {
 				return { success: false, error: `Username already exists!` }
 			case 4:
 				return { success: false, error: `Username should not contain more than 18 characters!` }
+			case 5:
+				return { success: false, error: `Your NEAR Account is already linked to another username` }
 			default:
 				throw new Error(`Unknown status encountered while updating info on NEAR`)
 		}
