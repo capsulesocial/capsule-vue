@@ -43,7 +43,7 @@
 						<!-- Widgets -->
 						<aside class="fixed" style="margin-left: 780px; width: 450px">
 							<ProfileWidget :location="visitProfile.location" />
-							<FollowersWidget :followers="followers" :updateFollowers="updateFollowers" />
+							<FollowersWidget v-if="followers.size > 0" :followers="followers" :updateFollowers="updateFollowers" />
 							<footer class="text-gray5">
 								<div class="flex">
 									<nuxt-link to="/help" class="pr-4">Help</nuxt-link>
