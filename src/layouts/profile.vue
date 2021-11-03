@@ -28,9 +28,9 @@
 				<!-- Body -->
 				<div>
 					<!-- Content -->
-					<section v-if="visitProfile" class="flex flex-row mt-12 z-10">
+					<section v-if="visitProfile" class="flex flex-row mt-12">
 						<nuxt-child
-							class="fixed overflow-y-auto rounded-lg shadow-lg mr-5 bg-white p-5"
+							class="fixed overflow-y-auto rounded-lg shadow-lg mr-5 bg-white p-5 z-10"
 							style="width: 750px; min-height: calc(100vh - 184px); height: calc(100vh - 184px)"
 							:visitProfile="visitProfile"
 							:visitAvatar="visitAvatar"

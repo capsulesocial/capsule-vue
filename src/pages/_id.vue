@@ -44,11 +44,7 @@
 						<BrandedButton
 							v-if="$store.state.session.id === $route.params.id"
 							:text="`Edit Profile`"
-							:action="
-								() => {
-									$router.push(`/settings`)
-								}
-							"
+							:action="toggleSettings"
 						/>
 						<FriendButton v-else :toggleFriend="toggleFriend" :userIsFollowed="userIsFollowed" />
 					</div>
@@ -75,6 +71,27 @@
 				<nuxt-child :profile="visitProfile" :updateFollowers="updateFollowers" :followers="followers" />
 			</article>
 		</div>
+		<!-- Settings popup -->
+		<div
+			v-if="showSettings"
+			class="
+				fixed
+				w-full
+				h-screen
+				bg-black
+				top-0
+				bottom-0
+				left-0
+				right-0
+				z-30
+				flex
+				justify-center
+				items-center
+				bg-opacity-50
+			"
+		>
+			<SettingsPopup class="bg-white rounded-lg" style="width: 589px" @close="toggleSettings" />
+		</div>
 	</section>
 </template>
 
@@ -84,6 +101,7 @@ import type { PropType } from 'vue'
 import Avatar from '@/components/Avatar.vue'
 import FriendButton from '@/components/FriendButton.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
+import SettingsPopup from '@/components/Settings.vue'
 
 import { Post } from '@/backend/post'
 import { Profile } from '@/backend/profile'
@@ -91,6 +109,7 @@ import { Profile } from '@/backend/profile'
 interface IData {
 	posts: Post[]
 	padding: string
+	showSettings: boolean
 }
 
 export default Vue.extend({
@@ -99,6 +118,7 @@ export default Vue.extend({
 		Avatar,
 		FriendButton,
 		BrandedButton,
+		SettingsPopup,
 	},
 	layout: `profile`,
 	props: {
@@ -135,13 +155,31 @@ export default Vue.extend({
 		return {
 			posts: [],
 			padding: `0px`,
+			showSettings: false,
 		}
+	},
+	created() {
+		window.addEventListener(`click`, this.handleClose, false)
 	},
 	mounted() {
 		// @ts-ignore
 		this.padding = `padding-top: ` + this.$refs.topContainer.clientHeight + `px`
 	},
+	destroyed() {
+		window.removeEventListener(`click`, this.handleClose)
+	},
 	methods: {
+		handleClose(e: any): void {
+			if (!e.target || e.target.firstChild === null || e.target.firstChild.classList === undefined) {
+				return
+			}
+			if (e.target.firstChild.classList[0] === `popup`) {
+				this.showSettings = false
+			}
+		},
+		toggleSettings(): void {
+			this.showSettings = !this.showSettings
+		},
 		loadedContent(): Boolean {
 			// Check follow page
 			if (this.$route.name === `id-followers` && this.followers.size === 0) {
