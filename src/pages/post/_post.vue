@@ -121,7 +121,7 @@ import HeaderMagic from '@/components/HeaderMagic.vue'
 import MoreIcon from '@/components/icons/More.vue'
 import Avatar from '@/components/Avatar.vue'
 
-import { getProfile, Profile } from '@/backend/profile'
+import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 import { getPost, Post } from '@/backend/post'
 import { getPhotoFromIPFS } from '@/backend/photos'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
@@ -172,6 +172,13 @@ export default Vue.extend({
 		if (this.post === null) {
 			throw new Error(`Post is null!`)
 		}
+		// Get author profile
+		this.author = createDefaultProfile(this.post.authorID)
+		getProfile(this.post.authorID).then((p) => {
+			if (p) {
+				this.author = p
+			}
+		})
 		getFollowersAndFollowing(this.$store.state.session.id).then((data) => {
 			if (this.post !== null) {
 				this.userIsFollowed = data.following.has(this.post.authorID)
@@ -185,8 +192,6 @@ export default Vue.extend({
 		}
 		// Convert markdown to HTML
 		this.content = marked(this.post.content)
-		// Get author profile
-		this.author = await getProfile(this.post.authorID)
 		if (this.author && this.author.avatar.length > 1) {
 			getPhotoFromIPFS(this.author.avatar).then((p) => {
 				this.authorAvatar = p
