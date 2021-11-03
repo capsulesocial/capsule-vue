@@ -259,6 +259,7 @@ export default Vue.extend({
 				verifier: `capsule-social-test-google`,
 				clientId: `653379121360-j8t9ua763vfvd86d1qjguonhrgqvkigo.apps.googleusercontent.com`,
 			})
+			// eslint-disable-next-line no-console
 			console.log(userInfo)
 		},
 		async verify() {
