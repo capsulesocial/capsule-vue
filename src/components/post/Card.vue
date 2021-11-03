@@ -108,9 +108,9 @@ import FriendButton from '@/components/FriendButton.vue'
 import RepostIcon from '@/components/icons/Repost.vue'
 
 import { RetrievedPost } from '@/backend/post'
-import { getProfile, Profile } from '@/backend/profile'
+import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
-import { getProfileFromSession } from '@/store/session'
+import { createDefaultSession, getProfileFromSession } from '@/store/session'
 import { isPostBookmarkedByUser } from '@/backend/bookmarks'
 import { sendPostDeletion } from '@/backend/postDeletion'
 
@@ -188,7 +188,11 @@ export default Vue.extend({
 				profile = getProfileFromSession(this.$store.state.session)
 			} else {
 				// Viewing someone else's post
-				profile = await getProfile(this.post.authorID)
+				profile = createDefaultProfile(this.post.authorID)
+				const fetchedProfile = await getProfile(this.post.authorID)
+				if (fetchedProfile) {
+					profile = fetchedProfile
+				}
 			}
 		}
 		// Populate Avatar

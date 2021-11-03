@@ -106,11 +106,11 @@ import type { PropType } from 'vue'
 import Avatar from '@/components/Avatar.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 import Reply from '@/components/post/Reply.vue'
-import { getProfile, Profile } from '@/backend/profile'
+import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 import { reactions, feelings } from '@/config'
 import { createComment, getComment, getCommentsOfPost, sendComment } from '@/backend/comment'
 import { getPhotoFromIPFS } from '@/backend/photos'
-import { getProfileFromSession } from '@/store/session'
+import { createDefaultSession, getProfileFromSession } from '@/store/session'
 
 interface IData {
 	isReplying: boolean
@@ -167,7 +167,11 @@ export default Vue.extend({
 				p = getProfileFromSession(this.$store.state.session)
 			} else {
 				// Viewing someone else's post
-				p = await getProfile(this.authorID)
+				p = createDefaultProfile(this.authorID)
+				const fetchedProfile = await getProfile(this.authorID)
+				if (fetchedProfile) {
+					p = fetchedProfile
+				}
 			}
 		}
 		this.name = p.name
