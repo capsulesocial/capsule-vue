@@ -3,6 +3,13 @@
 		<div>
 			<!-- Fixed top -->
 			<article ref="topContainer" class="fixed bg-white pt-5 -mt-5 z-20" style="width: 700px">
+				<!-- Back button -->
+				<div v-if="$route.params.id !== $store.state.session.id" class="px-4">
+					<nuxt-link to="/home" class="flex flex-row items-center">
+						<span class="bg-gray1 rounded-full p-1"><BackButton :reduceSize="true" /></span>
+						<h6 class="font-semibold ml-2 font-sans">Home</h6>
+					</nuxt-link>
+				</div>
 				<!-- Name, socials, follow, bio -->
 				<div class="flex flex-row justify-between px-4 pt-4">
 					<div class="flex items-center">
@@ -55,7 +62,7 @@
 						{{ visitProfile.bio }}
 					</p>
 				</div>
-				<div class="flex flex-col md:flex-row w-full justify-between border-b text-gray7 pt-4">
+				<div class="flex flex-col md:flex-row w-full justify-between text-gray7 pt-4">
 					<nuxt-link :to="'/' + $route.params.id" class="pb-1" :class="getStyles('id')">
 						<span class="px-4">Posts</span>
 					</nuxt-link>
@@ -102,7 +109,7 @@ import Avatar from '@/components/Avatar.vue'
 import FriendButton from '@/components/FriendButton.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 import SettingsPopup from '@/components/Settings.vue'
-
+import BackButton from '@/components/icons/ChevronLeft.vue'
 import { Post } from '@/backend/post'
 import { Profile } from '@/backend/profile'
 
@@ -119,6 +126,7 @@ export default Vue.extend({
 		FriendButton,
 		BrandedButton,
 		SettingsPopup,
+		BackButton,
 	},
 	layout: `profile`,
 	props: {

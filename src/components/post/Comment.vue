@@ -3,7 +3,7 @@
 		<!-- Component that displays a posted comment -->
 		<div class="flex w-full">
 			<div class="flex justify-between items-start mr-4">
-				<span class="rounded-lg p-1 flex-shrink-0" :style="getStyle(`bg-`)">
+				<span class="rounded-lg px-1 pt-1 flex-shrink-0" :style="getStyle(`bg-`)">
 					<Avatar :avatar="avatar" :authorID="authorID" size="w-12 h-12" />
 				</span>
 			</div>
@@ -14,18 +14,10 @@
 					<!-- Top row: name, id, timestamp -->
 					<div class="flex">
 						<nuxt-link :to="`/` + authorID" class="flex mr-4 flex-row items-center">
-							<span
-								:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-								class="font-medium"
-							>
+							<span class="font-medium">
 								{{ name }}
 							</span>
-							<span
-								:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-								class="ml-2"
-							>
-								@{{ authorID }}
-							</span>
+							<span class="ml-2 text-primary"> @{{ authorID }} </span>
 						</nuxt-link>
 						<span v-if="timestamp" class="text-xs self-center">
 							{{ $formatDate(timestamp) }}
@@ -118,7 +110,7 @@ interface IData {
 	replies: ICommentData[]
 	avatar: string
 	name: string
-	emotion: { label: string; imageLeft: any; imageRight: any } | null
+	emotion: { label: string; imageLeft: any; imageRight: any }
 	emotionType: string
 	content: string
 }

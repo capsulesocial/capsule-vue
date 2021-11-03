@@ -28,18 +28,10 @@
 						<div class="flex flex-col flex-grow ml-4">
 							<div class="flex" @mouseover="showFriendButton = true" @mouseleave="showFriendButton = false">
 								<nuxt-link :to="'/' + post.authorID" class="flex mr-4">
-									<span
-										:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-										class="font-medium text-base"
-									>
+									<span class="font-medium text-base">
 										{{ authorName }}
 									</span>
-									<span
-										:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-										class="ml-2"
-									>
-										@{{ post.authorID }}
-									</span>
+									<span class="ml-2 text-primary"> @{{ post.authorID }} </span>
 								</nuxt-link>
 								<span v-show="showFriendButton">
 									<FriendButton
@@ -81,7 +73,7 @@
 								</div>
 							</nuxt-link>
 							<!-- Display tags -->
-							<div class="flex overflow-x-auto mt-3 mb-3">
+							<div class="flex overflow-x-auto my-2">
 								<TagPill v-for="t in post.tags" :key="t.name" :tag="t.name" class="mr-4" />
 							</div>
 							<!-- Comment and share -->

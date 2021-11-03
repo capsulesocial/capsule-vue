@@ -21,18 +21,10 @@
 					<!-- Top row: name, id, timestamp -->
 					<div class="flex">
 						<nuxt-link :to="'/' + comment.authorID" class="flex mr-4 flex-row items-center">
-							<span
-								:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-								class="font-medium text-base"
-							>
+							<span class="font-medium text-base">
 								{{ profile.name }}
 							</span>
-							<span
-								:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-								class="ml-2"
-							>
-								@{{ comment.authorID }}
-							</span>
+							<span class="ml-2 text-primary"> @{{ comment.authorID }} </span>
 						</nuxt-link>
 						<div class="text-xs self-center">
 							{{ $formatDate(comment.timestamp) }}
