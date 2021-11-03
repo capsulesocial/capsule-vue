@@ -3,11 +3,10 @@
 		<Avatar :authorID="$props.profile.id" :avatar="avatar" size="w-12 h-12" />
 		<div class="h-12 flex-grow px-4">
 			<nuxt-link :to="`/` + $props.profile.id" class="flex flex-col">
-				<h3 class="font-medium text-base">
+				<span class="font-medium text-base">
 					{{ $props.profile.name }}
-					<span class="text-lightSecondaryText ml-2">@{{ $props.profile.id }}</span>
-				</h3>
-				<p class="">{{ $props.profile.bio }}</p>
+				</span>
+				<span class="text-primary text-sm">@{{ $props.profile.id }}</span>
 			</nuxt-link>
 		</div>
 		<FriendButton

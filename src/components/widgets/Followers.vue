@@ -4,6 +4,7 @@
 		<div v-for="p in profiles" :key="p.id">
 			<ProfilePreview :profile="p" :updateFollowers="updateFollowers" class="pb-4" />
 		</div>
+		<nuxt-link :to="$route.params.id + `/followers`" class="text-sm text-primary">Show more</nuxt-link>
 	</article>
 </template>
 
@@ -37,6 +38,12 @@ export default Vue.extend({
 		}
 	},
 	mounted() {
+		// Only display the most recent three followers
+		if (this.$props.followers.length > 3) {
+			const list: Set<string> = this.$props.followers.slice(0, 3)
+			list.forEach(this.getFollowers)
+			return
+		}
 		this.$props.followers.forEach(this.getFollowers)
 	},
 	methods: {
