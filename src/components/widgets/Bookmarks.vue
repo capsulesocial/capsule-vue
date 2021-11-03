@@ -1,6 +1,11 @@
 <template>
 	<article class="w-full rounded-lg shadow-lg bg-white mb-5 p-4">
-		<h6 class="font-semibold text-primary mb-2">Bookmark Categories</h6>
+		<div class="flex flex-row justify-between">
+			<h6 class="font-semibold text-primary mb-2">Filter by Category</h6>
+			<button class="focus:outline-none text-sm italics font-light text-primary" @click="$emit(`filter`)">
+				Show All
+			</button>
+		</div>
 		<button
 			v-for="c in categoryList"
 			:key="c"
