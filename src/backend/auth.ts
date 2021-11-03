@@ -1,11 +1,11 @@
 import { initContract, setUserInfoNEAR, getUserInfoNEAR, getNearPublicKey } from './near'
-import { addProfileToIPFS, getProfile, Profile, setProfile } from './profile'
+import { addProfileToIPFS, createDefaultProfile, getProfile, Profile } from './profile'
 import { uint8ArrayToHexString } from './utilities/helpers'
 
 // POST newly created account to IPFS
 export async function register(
 	id: string,
-	password: string,
+	_password: string,
 	name: string,
 	email: string,
 ): Promise<{ cid: string; profile: Profile }> {
@@ -19,10 +19,7 @@ export async function register(
 		socials: [],
 	}
 
-	// eslint-disable-next-line no-console
-	console.log(password)
-
-	const [cid, userSetStatus] = await Promise.all([setProfile(profile), setUserInfoNEAR(id)])
+	const [cid, userSetStatus] = await Promise.all([addProfileToIPFS(profile), setUserInfoNEAR(id)])
 
 	if (!userSetStatus.success) {
 		throw new Error(userSetStatus.error)
@@ -33,13 +30,8 @@ export async function register(
 
 export async function login(
 	username: string,
-	password: string,
+	_password: string,
 ): Promise<{ success: boolean; profile: Profile; profileCID: string }> {
-	const profile = await getProfile(username)
-
-	// eslint-disable-next-line no-console
-	console.log(password)
-
 	const { accountId, publicKey } = await getUserInfoNEAR(username)
 	const pubKey = await getNearPublicKey(accountId)
 	if (!pubKey) {
@@ -58,6 +50,12 @@ export async function login(
 
 	// Reinitialise Smart Contract API
 	await initContract()
+
+	let profile = createDefaultProfile(username)
+	const fetchedProfile = await getProfile(username)
+	if (fetchedProfile) {
+		profile = fetchedProfile
+	}
 
 	const profileCID = await addProfileToIPFS(profile)
 	return { success: true, profile, profileCID }

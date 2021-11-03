@@ -124,7 +124,7 @@ import ExternalURLIcon from '@/components/icons/ExternalURL.vue'
 import SettingsIcon from '@/components/icons/Settings.vue'
 
 import { Post } from '@/backend/post'
-import { getProfile, Profile } from '@/backend/profile'
+import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
 
@@ -159,7 +159,11 @@ export default Vue.extend({
 	},
 	async created() {
 		// Get user profile
-		this.currentUser = await getProfile(this.$route.params.id)
+		this.currentUser = createDefaultProfile(this.$route.params.id)
+		const fetchedProfile = await getProfile(this.$route.params.id, true)
+		if (fetchedProfile) {
+			this.currentUser = fetchedProfile
+		}
 		if (this.currentUser && this.currentUser.avatar !== ``) {
 			getPhotoFromIPFS(this.currentUser.avatar).then((p) => {
 				this.avatar = p
