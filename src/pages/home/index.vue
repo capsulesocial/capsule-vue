@@ -1,11 +1,11 @@
 <template>
 	<div id="index" class="w-full border border-lightBorder">
 		<section :class="$store.state.settings.darkMode ? 'text-lightPrimaryText ' : 'text-darkPrimaryText bg-darkBG'">
-			<nav class="fixed flex flex-row h-14 pt-4 -mt-6 mt-2 pb-4 z-20 bg-lightBG text-base" style="width: 700px">
+			<nav class="fixed flex flex-row h-14 pt-4 -mt-6 mt-2 z-20 bg-lightBG text-base" style="width: 700px">
 				<div class="flex items-center">
 					<button
 						:class="algorithm === `NEW` ? `text-primary border-b-2 border-primary font-semibold` : `text-gray7`"
-						class="h-full focus:outline-none w-full"
+						class="h-full focus:outline-none w-full pb-2"
 						@click="sortFeed('NEW')"
 					>
 						New Posts
@@ -14,7 +14,7 @@
 				<div class="flex items-center px-12">
 					<button
 						:class="algorithm === `TOP` ? ` text-primary border-b-2 border-primary font-semibold` : `text-gray7`"
-						class="h-full focus:outline-none w-full"
+						class="h-full focus:outline-none w-full pb-2"
 						@click="sortFeed('TOP')"
 					>
 						Top
@@ -23,7 +23,7 @@
 				<div class="flex items-center">
 					<button
 						:class="algorithm === `FOLLOWING` ? ` text-primary border-b-2 border-primary font-semibold` : `text-gray7`"
-						class="h-full focus:outline-none w-full"
+						class="h-full focus:outline-none w-full pb-2"
 						@click="sortFeed('FOLLOWING')"
 					>
 						Following
