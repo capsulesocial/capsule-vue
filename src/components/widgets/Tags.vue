@@ -1,8 +1,8 @@
 <template>
 	<article class="w-full">
-		<div class="flex flex-row justify-between p-4">
-			<h3 v-if="checkRoute()" class="text-primary text-lg font-semibold">Featured tags</h3>
-			<h3 v-else class="self-center text-lg">Top of <button class="font-semibold">Today</button></h3>
+		<div class="flex flex-row justify-between p-6 pt-4 pb-3">
+			<h3 class="text-primary text-base font-semibold">Featured tags</h3>
+			<h3 v-if="checkRoute()" class="self-center text-lg">Top of <button class="font-semibold">Today</button></h3>
 			<!-- Dropdown filter -->
 			<div v-if="$route.name === `discover`" class="relative inline">
 				<button
@@ -42,7 +42,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="px-4 pb-4">
+		<div class="px-6 pb-4">
 			<TagCard v-for="t in tags" :key="t" :tag="t" class="text-lg mr-4 my-2" />
 		</div>
 		<img v-if="checkRoute()" :src="require(`@/assets/images/brand/stats.jpg`)" />

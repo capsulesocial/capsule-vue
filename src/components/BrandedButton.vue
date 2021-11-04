@@ -1,20 +1,20 @@
 <template>
 	<button
+		style="padding: 0.6rem 1.7rem"
 		:class="getStyles()"
 		class="
 			transition
 			duration-500
 			ease-in-out
 			transform
-			hover:scale-110
 			font-bold
-			rounded-xl
-			shadow-lg
+			rounded-lg
+			hover:shadow-lg
 			focus:outline-none
 		"
 		@click="action"
 	>
-		<span class="font-sans">
+		<span class="font-sans" style="font-size: 0.95rem">
 			{{ text }}
 		</span>
 	</button>
@@ -49,7 +49,7 @@ export default Vue.extend({
 				res += `bg-darkButtonBG text-darkButtonText`
 			}
 			if (!this.thin) {
-				res += ` py-2 px-4`
+				res += ` py-3 px-6`
 			} else {
 				res += ` py-1 px-4`
 			}

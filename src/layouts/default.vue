@@ -1,23 +1,23 @@
 <template>
 	<main
 		class="h-screen p-0 m-0 bg-img"
-		:style="{ backgroundImage: `url(${require(`@/assets/images/brand/paper4.svg`)})` }"
+		:style="{ backgroundImage: `url(${require(`@/assets/images/brand/mainBG.png`)})` }"
 	>
 		<!-- Wrapper -->
 		<div class="w-full flex justify-center">
 			<div class="flex flex-col" style="width: 1220px">
 				<!-- Header -->
-				<header class="w-full sticky top-0 py-5 bg-white">
+				<header class="w-full sticky top-0 py-5 bg-gradient-to-r">
 					<div class="flex flex-row justify-between items-center">
 						<!-- Left side: Links + write post button -->
-						<nav class="flex flex-row items-center">
+						<nav class="flex flex-row items-center" style="font-size: 0.95rem">
 							<nuxt-link to="/home" class="mr-5">
 								<CapsuleIcon />
 							</nuxt-link>
-							<nuxt-link to="/home" class="mx-5" :class="getStyles(`home`)"> Home </nuxt-link>
-							<nuxt-link to="/discover" class="mx-5" :class="getStyles(`discover`)"> Discover </nuxt-link>
-							<nuxt-link to="/bookmarks" class="mx-5" :class="getStyles(`bookmarks`)"> Bookmarks </nuxt-link>
-							<BrandedButton :text="`Write a Post`" :action="togglePostEditor" />
+							<nuxt-link to="/home" class="mx-4" :class="getStyles(`home`)"> Home </nuxt-link>
+							<nuxt-link to="/discover" class="mx-4" :class="getStyles(`discover`)"> Discover </nuxt-link>
+							<nuxt-link to="/bookmarks" class="mx-4" :class="getStyles(`bookmarks`)"> Bookmarks </nuxt-link>
+							<BrandedButton :text="`Write a Post`" :action="togglePostEditor" class="mx-4" />
 						</nav>
 						<!-- Right side: icons and avatar -->
 						<div class="flex flex-row">
@@ -30,7 +30,7 @@
 					<!-- Title and peered nodes -->
 					<div class="fixed w-full flex justify-between items-center" style="width: 1220px">
 						<!-- Title -->
-						<h1 class="text-4xl font-semibold text-primary">
+						<h1 class="font-semibold text-primary" style="font-size: 2.6rem">
 							{{ getTitle() }}
 						</h1>
 						<!-- Peered nodes -->
@@ -40,10 +40,10 @@
 						</div>
 					</div>
 					<!-- Content -->
-					<section class="flex flex-row mt-24">
+					<section class="flex flex-row mt-20">
 						<nuxt-child
-							style="width: 750px; min-height: calc(100vh - 184px); height: calc(100vh - 184px)"
-							class="fixed overflow-y-auto rounded-lg shadow-lg mr-5 bg-white p-5 z-10"
+							style="width: 750px; min-height: calc(100vh - 160px); height: calc(100vh - 160px); backdrop-filter: blur(2px);"
+							class="fixed overflow-y-auto rounded-lg shadow-lg mr-5 p-6 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg"
 						/>
 						<!-- Widgets -->
 						<aside class="fixed" style="margin-left: 780px; width: 450px">
@@ -116,7 +116,7 @@ export default Vue.extend({
 		getTitle(): string {
 			switch (this.$route.name) {
 				case `home`:
-					return `Welcome, ` + this.profile?.name
+					return `Hi ` + this.profile?.name + `,`
 				case `discover`:
 					return `Browse Capsule`
 				default:
@@ -127,7 +127,9 @@ export default Vue.extend({
 			let res: string = ``
 			// Check if current tab
 			if (this.$route.name === tab) {
-				res += `font-semibold text-lightPrimaryTextunderline border-primary border-b`
+				res += `font-bold text-primary border-primary border-b`
+			} else {
+				res += `font-regular text-gray5`
 			}
 			return res
 		},

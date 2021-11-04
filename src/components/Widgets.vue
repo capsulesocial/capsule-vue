@@ -1,10 +1,10 @@
-<template>
+ <template>
 	<div>
 		<!-- Discover page -->
-		<TagsWidget class="rounded-lg shadow-lg bg-white mb-5" />
-		<DraftsWidget class="rounded-lg shadow-lg bg-white mb-5" />
+		<TagsWidget class="rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg border border-lightBorder mb-5" />
+		<DraftsWidget class="rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg border border-lightBorder mb-5" />
 		<!-- Configure my Capsule -->
-		<article class="rounded-lg shadow-lg bg-white mb-5">
+		<article class="rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg border border-lightBorder mb-5">
 			<button class="p-4">
 				<div class="flex flex-row justify-between">
 					<!-- <img :src="require(`@/assets/images/brand/help-page.png`)" /> -->

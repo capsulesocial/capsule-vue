@@ -1,15 +1,15 @@
 <template>
-	<div id="index" class="w-full border-l border-r">
+	<div id="index" class="w-full border border-lightBorder">
 		<section
-			:class="$store.state.settings.darkMode ? 'text-lightPrimaryText bg-lightBG' : 'text-darkPrimaryText bg-darkBG'"
+			:class="$store.state.settings.darkMode ? 'text-lightPrimaryText ' : 'text-darkPrimaryText bg-darkBG'"
 		>
-			<nav class="fixed flex flex-row bg-white h-12 pt-5 -mt-5 z-20" style="width: 700px">
+			<nav class="fixed flex flex-row h-14 pt-4 -mt-6 mt-2 pb-4 z-20 bg-lightBG text-base" style="width: 700px">
 				<div class="flex items-center">
 					<button
 						:class="
-							algorithm === `NEW` ? `bg-white text-primary border-b-2 border-primary font-semibold` : `text-gray7`
+							algorithm === `NEW` ? `text-primary border-b-2 border-primary font-semibold` : `text-gray7`
 						"
-						class="h-full focus:outline-none text-lg w-full"
+						class="h-full focus:outline-none w-full"
 						@click="sortFeed('NEW')"
 					>
 						New Posts
@@ -18,9 +18,9 @@
 				<div class="flex items-center px-12">
 					<button
 						:class="
-							algorithm === `TOP` ? `bg-white text-primary border-b-2 border-primary font-semibold` : `text-gray7`
+							algorithm === `TOP` ? ` text-primary border-b-2 border-primary font-semibold` : `text-gray7`
 						"
-						class="h-full focus:outline-none text-lg w-full"
+						class="h-full focus:outline-none w-full"
 						@click="sortFeed('TOP')"
 					>
 						Top
@@ -29,9 +29,9 @@
 				<div class="flex items-center">
 					<button
 						:class="
-							algorithm === `FOLLOWING` ? `bg-white text-primary border-b-2 border-primary font-semibold` : `text-gray7`
+							algorithm === `FOLLOWING` ? ` text-primary border-b-2 border-primary font-semibold` : `text-gray7`
 						"
-						class="h-full focus:outline-none text-lg w-full"
+						class="h-full focus:outline-none w-full"
 						@click="sortFeed('FOLLOWING')"
 					>
 						Following

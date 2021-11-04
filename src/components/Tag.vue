@@ -3,19 +3,18 @@
 		class="
 			z-10
 			focus:outline-none
-			px-2
+			px-3
 			pb-1
 			transition
 			duration-500
 			ease-in-out
 			transform
-			hover:scale-105
 			bg-gray1
 			rounded-lg
 		"
 		@click="$router.push('/tag/' + tag)"
 	>
-		<span class="font-semibold text-gray5 text-sm"> #{{ tag }} </span>
+		<span class="text-gray5 text-sm"> {{ tag }} </span>
 	</button>
 </template>
 

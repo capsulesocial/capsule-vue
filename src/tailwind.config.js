@@ -27,8 +27,8 @@ module.exports = {
         h6: [`0.67em`, `1rem`],
         p: [`17.6px`, `28.6px`],
       },
-      colors: {
-        primary: '#1E566C', // Dark Teal
+        colors: {
+        primary: '#2E556A', // Dark Teal
         secondary: '#367589', // Moss Teal
         teal: '#216B6A', //Teal
         ocean: '#89B8CA', // Ocean Blue
@@ -49,8 +49,10 @@ module.exports = {
         positive: `#1F7DAD`,
         neutral: `#F0B785`,
         negative: `#EE1F63`,
-
         lightBG: '#FFFFFF',
+        lightBGStop: 'rgba(256, 256, 256, 0.97)',
+        lightBGStart: 'rgba(256, 256, 256, 0.94)',
+        lightBorder: 'rgba(46, 85, 106, 0.05)',
         lightPrimary: '#407C83',
         lightPrimaryVariant: '#2F5C61',
         lightSecondary: '#E8E8E8',
@@ -62,11 +64,10 @@ module.exports = {
         lightOnSecondaryText: '#000000',
         lightOnSurfaceText: '#000000',
         lightOnSurfaceVariantText: '#000000',
-        lightBorder: '#777777',
         lightDialog: '#EEEEEE',
-        lightButtonBG: '#1E566C',
+        lightButtonBG: '#2E556A',
         lightButtonText: '#FFFFFF',
-        lightActive: '#1E566C',
+        lightActive: '#2E556A',
         lightError: '#B00020',
         lightOnErrorText: '#FFFFFF',
 
@@ -90,6 +91,9 @@ module.exports = {
         darkError: '#B00020',
         darkOnErrorText: '#FFFFFF',
       },
+      boxShadow: {
+        lg: '1px 2px 20px rgba(0, 0, 0, 0.07)',
+      }
     }
   },
   plugins: [

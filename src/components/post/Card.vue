@@ -13,7 +13,7 @@
 				:class="showComments ? `shadow rounded-lg py-5 bg-white mt-10 max-h-screen overflow-y-auto` : ``"
 				:style="showComments ? `width: 750px` : ``"
 			>
-				<div class="sticky top-0 px-5 bg-white z-10">
+				<div class="sticky top-0 px-5 z-10">
 					<!-- IF reposted -->
 					<div v-if="repostedBy !== `` && !hideRepostIcon" class="flex w-full -mt-2">
 						<RepostIcon :shrink="true" />
@@ -23,7 +23,7 @@
 						</p>
 					</div>
 					<!-- Top: avatar, name, id, close -->
-					<div class="flex w-full bg-white">
+					<div class="flex w-full">
 						<Avatar :avatar="avatar" :authorID="post.authorID" size="w-12 h-12" />
 						<div class="flex flex-col flex-grow ml-4">
 							<div class="flex" @mouseover="showFriendButton = true" @mouseleave="showFriendButton = false">
@@ -81,7 +81,7 @@
 								</div>
 							</nuxt-link>
 							<!-- Display tags -->
-							<div class="flex overflow-x-auto mt-2">
+							<div class="flex overflow-x-auto mt-3 mb-3">
 								<TagPill v-for="t in post.tags" :key="t.name" :tag="t.name" class="mr-4" />
 							</div>
 							<!-- Comment and share -->
