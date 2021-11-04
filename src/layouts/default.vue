@@ -42,12 +42,7 @@
 					<!-- Content -->
 					<section class="flex flex-row mt-20">
 						<nuxt-child
-							style="
-								width: 750px;
-								min-height: calc(100vh - 160px);
-								height: calc(100vh - 160px);
-								backdrop-filter: blur(2px);
-							"
+							style="width: 750px; min-height: calc(100vh - 160px); height: calc(100vh - 160px)"
 							class="
 								fixed
 								overflow-y-auto
