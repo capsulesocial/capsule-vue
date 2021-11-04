@@ -1,14 +1,10 @@
 <template>
 	<div id="index" class="w-full border border-lightBorder">
-		<section
-			:class="$store.state.settings.darkMode ? 'text-lightPrimaryText ' : 'text-darkPrimaryText bg-darkBG'"
-		>
+		<section :class="$store.state.settings.darkMode ? 'text-lightPrimaryText ' : 'text-darkPrimaryText bg-darkBG'">
 			<nav class="fixed flex flex-row h-14 pt-4 -mt-6 mt-2 pb-4 z-20 bg-lightBG text-base" style="width: 700px">
 				<div class="flex items-center">
 					<button
-						:class="
-							algorithm === `NEW` ? `text-primary border-b-2 border-primary font-semibold` : `text-gray7`
-						"
+						:class="algorithm === `NEW` ? `text-primary border-b-2 border-primary font-semibold` : `text-gray7`"
 						class="h-full focus:outline-none w-full"
 						@click="sortFeed('NEW')"
 					>
@@ -17,9 +13,7 @@
 				</div>
 				<div class="flex items-center px-12">
 					<button
-						:class="
-							algorithm === `TOP` ? ` text-primary border-b-2 border-primary font-semibold` : `text-gray7`
-						"
+						:class="algorithm === `TOP` ? ` text-primary border-b-2 border-primary font-semibold` : `text-gray7`"
 						class="h-full focus:outline-none w-full"
 						@click="sortFeed('TOP')"
 					>
@@ -28,9 +22,7 @@
 				</div>
 				<div class="flex items-center">
 					<button
-						:class="
-							algorithm === `FOLLOWING` ? ` text-primary border-b-2 border-primary font-semibold` : `text-gray7`
-						"
+						:class="algorithm === `FOLLOWING` ? ` text-primary border-b-2 border-primary font-semibold` : `text-gray7`"
 						class="h-full focus:outline-none w-full"
 						@click="sortFeed('FOLLOWING')"
 					>

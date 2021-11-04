@@ -1,11 +1,44 @@
  <template>
 	<div>
 		<!-- Discover page -->
-		<TagsWidget class="rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg border border-lightBorder mb-5" />
-		<DraftsWidget class="rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg border border-lightBorder mb-5" />
+		<TagsWidget
+			class="
+				rounded-lg
+				shadow-lg
+				bg-gradient-to-r
+				from-lightBGStart
+				to-lightBGStop
+				backdrop-filter backdrop-blur-lg
+				border border-lightBorder
+				mb-5
+			"
+		/>
+		<DraftsWidget
+			class="
+				rounded-lg
+				shadow-lg
+				bg-gradient-to-r
+				from-lightBGStart
+				to-lightBGStop
+				backdrop-filter backdrop-blur-lg
+				border border-lightBorder
+				mb-5
+			"
+		/>
 		<!-- Configure my Capsule -->
 		<button
-			class="rounded-lg shadow-lg bg-white mb-5 w-full focus:outline-none"
+			class="
+				rounded-lg
+				shadow-lg
+				bg-gradient-to-r
+				from-lightBGStart
+				to-lightBGStop
+				backdrop-filter backdrop-blur-lg
+				border border-lightBorder
+				mb-5
+				w-full
+				focus:outline-none
+			"
 			style="height: 64px; background-position: center; background-size: cover; background-repeat: no-repeat"
 			:style="{ backgroundImage: `url(${require(`@/assets/images/brand/configure-my-capsule.png`)})` }"
 		>

@@ -1,17 +1,6 @@
 <template>
 	<button
-		class="
-			z-10
-			focus:outline-none
-			px-3
-			pb-1
-			transition
-			duration-500
-			ease-in-out
-			transform
-			bg-gray1
-			rounded-lg
-		"
+		class="z-10 focus:outline-none px-3 pb-1 transition duration-500 ease-in-out transform bg-gray1 rounded-lg"
 		@click="$router.push('/tag/' + tag)"
 	>
 		<span class="text-gray5 text-sm"> {{ tag }} </span>
