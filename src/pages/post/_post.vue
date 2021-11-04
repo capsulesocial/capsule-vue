@@ -1,115 +1,122 @@
 <template>
-	<div v-if="post && author" class="w-full">
-		<HeaderMagic
-			:authorID="post.authorID"
-			:avatar="authorAvatar"
-			:toggleFriend="toggleFriend"
-			:userIsFollowed="userIsFollowed"
-		/>
-		<section v-if="post !== null" class="pb-16 md:pb-5 md:pl-5 my-5 pt-4">
-			<!-- Category and elipses -->
-			<article class="w-full flex justify-between my-2">
-				<div class="text-lg">
-					Category |
-					<span v-if="!post.category" class="text-lightSecondaryText"> None</span>
-					<nuxt-link :to="`/discover/` + post.category" class="text-primary capitalize">{{ post.category }}</nuxt-link>
-				</div>
-				<MoreIcon />
-			</article>
-			<article>
-				<h1
-					:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-					class="text-h1 font-serif font-semibold mt-5 mb-3 capitalize break-words"
-				>
-					{{ post.title }}
-				</h1>
-				<h2
-					v-if="post.subtitle"
-					:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-					class="text-h2 font-serif font-medium mt-5 mb-3 capitalize break-words"
-				>
-					{{ post.subtitle }}
-				</h2>
-			</article>
-
-			<!-- Author Intro -->
-			<article class="flex justify-between mt-5">
-				<div class="flex">
-					<Avatar :avatar="authorAvatar" :authorID="author.id" :size="`w-10 h-10`" class="mr-4" />
-					<p
-						:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-						class="font-sans capitalize"
-					>
-						<nuxt-link
-							:to="'/' + author.id"
-							:class="$store.state.settings.darkMode ? 'text-lightActive' : 'text-darkActive'"
-							class="underline"
-						>
-							{{ author.name }}
-						</nuxt-link>
-						<span
-							:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-							class="font-sans text-sm block"
-						>
-							{{ $formatDate(post.timestamp) }}
+	<div v-if="post && author" id="post" class="w-full flex justify-center">
+		<!-- Inner post area -->
+		<div style="width: 760px; max-width: 760px">
+			<!-- Magic header that disappears on scroll down -->
+			<header
+				class="page-header flex items-center fixed top-0 z-10"
+				style="width: 760px; max-width: 760px; margin-top: 135px"
+			>
+				<div class="trigger-menu-wrapper flex justify-center w-full py-2 bg-white">
+					<div class="md:min-w-max md:max-w-3xl w-full pl-5 flex justify-between">
+						<!-- Left side: name, avatar, date -->
+						<div class="items-center flex">
+							<Avatar :avatar="authorAvatar" :authorID="post.authorID" size="w-10 h-10" class="mr-4" />
+							<div class="pr-4">
+								<nuxt-link :to="`/` + post.authorID" class="font-semibold">{{ author.name }}</nuxt-link>
+								<h6 class="font-sans text-sm text-gray6">{{ $formatDate(post.timestamp) }}</h6>
+							</div>
+							<FriendButton
+								v-if="post.authorID !== $store.state.session.id"
+								:toggleFriend="toggleFriend"
+								:userIsFollowed="userIsFollowed"
+							/>
+						</div>
+						<span class="flex items-center">
+							<button class="bg-lightSecondary rounded-full p-1 focus:outline-none" @click="handleClose">
+								<XIcon />
+							</button>
 						</span>
-					</p>
-				</div>
-			</article>
-
-			<!-- Featured Photo -->
-			<article v-if="featuredPhoto !== null" class="my-5 flex justify-center">
-				<img
-					v-if="featuredPhoto !== null"
-					:src="featuredPhoto"
-					class="border-neutralLightest border-2 rounded h-64 shadow"
-				/>
-			</article>
-
-			<!-- <hr v-if="this.$store.state.settings.darkMode" class="style-two my-5" />
-			<hr v-else class="style-one my-5" /> -->
-
-			<!-- Content -->
-			<article class="mt-5">
-				<div
-					:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-					class="editable prose max-w-none content break-words"
-					v-html="content"
-				></div>
-			</article>
-
-			<!-- Tags -->
-			<article class="mt-5">
-				<TagCard v-for="t in post.tags" :key="t.name" class="mr-2" :tag="t.name" />
-			</article>
-			<AuthorCard
-				:authorAvatar="authorAvatar"
-				:authorName="author.name"
-				:authorID="author.id"
-				:authorBio="author.bio"
-				:isFollowed="userIsFollowed"
-				:toggleFriend="toggleFriend"
-			/>
-
-			<!-- Comments -->
-			<article class="pt-5">
-				<!-- Choose reaction -->
-				<div class="flex flex-row justify-between">
-					<div class="flex items-center">
-						<BookmarkButton :postID="$route.params.post" :hasBookmark="isBookmarked" @clicked="getBookmarkStatus" />
-						<ShareButton
-							:post="post"
-							:cid="$route.params.post"
-							:class="'z-20'"
-							:hasRepost="hasReposted"
-							:repostCount="-1"
-						/>
 					</div>
 				</div>
-				<PostActions :postCID="$route.params.post" :authorID="author.id" :isCommenting="true" :tags="post.tags" />
-			</article>
-		</section>
-		<section v-else>Post not found 😵‍💫</section>
+			</header>
+			<section v-if="post !== null" class="pb-16 md:pb-5 md:pl-5 my-5 pt-4">
+				<!-- Category and elipses -->
+				<article class="w-full flex justify-between my-2">
+					<nuxt-link :to="`/discover/` + post.category" class="text-primary capitalize">{{ post.category }}</nuxt-link>
+					<MoreIcon />
+				</article>
+				<article>
+					<h1
+						:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+						class="text-h1 font-serif font-semibold mb-3 capitalize break-words"
+					>
+						{{ post.title }}
+					</h1>
+					<h2
+						v-if="post.subtitle"
+						:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+						class="text-h2 font-serif font-medium mb-3 capitalize break-words"
+					>
+						{{ post.subtitle }}
+					</h2>
+				</article>
+
+				<!-- Featured Photo -->
+				<article v-if="featuredPhoto !== null" class="my-5 flex justify-center">
+					<img
+						v-if="featuredPhoto !== null"
+						:src="featuredPhoto"
+						class="border-neutralLightest border-2 rounded h-64 shadow"
+					/>
+				</article>
+
+				<!-- <hr v-if="this.$store.state.settings.darkMode" class="style-two my-5" />
+				<hr v-else class="style-one my-5" /> -->
+
+				<!-- Content -->
+				<article class="mt-5">
+					<div
+						:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+						class="editable prose max-w-none content break-words"
+						v-html="content"
+					></div>
+				</article>
+
+				<!-- Tags -->
+				<article class="mt-5">
+					<TagCard v-for="t in post.tags" :key="t.name" class="mr-2" :tag="t.name" />
+				</article>
+				<!-- IPFS CID -->
+				<div class="mt-5">
+					<a
+						:href="`https://ipfs.io/api/v0/dag/get?arg=` + $route.params.post"
+						target="_blank"
+						class="flex justify-between bg-gray1 rounded-lg text-gray5 px-3 py-1"
+					>
+						<span>IPFS dag get </span>
+						<span>{{ $route.params.post }}</span>
+					</a>
+				</div>
+				<AuthorCard
+					:authorAvatar="authorAvatar"
+					:authorName="author.name"
+					:authorID="author.id"
+					:authorBio="author.bio"
+					:isFollowed="userIsFollowed"
+					:toggleFriend="toggleFriend"
+				/>
+
+				<!-- Comments -->
+				<article class="pt-5">
+					<!-- Choose reaction -->
+					<div class="flex flex-row justify-between">
+						<div class="flex items-center">
+							<BookmarkButton :postID="$route.params.post" :hasBookmark="isBookmarked" @clicked="getBookmarkStatus" />
+							<ShareButton
+								:post="post"
+								:cid="$route.params.post"
+								:class="'z-20'"
+								:hasRepost="hasReposted"
+								:repostCount="-1"
+							/>
+						</div>
+					</div>
+					<PostActions :postCID="$route.params.post" :authorID="author.id" :isCommenting="true" :tags="post.tags" />
+				</article>
+			</section>
+			<section v-else>Post not found 😵‍💫</section>
+		</div>
 	</div>
 </template>
 
@@ -121,9 +128,10 @@ import AuthorCard from '@/components/AuthorCard.vue'
 import TagCard from '@/components/Tag.vue'
 import BookmarkButton from '@/components/post/BookmarkButton.vue'
 import ShareButton from '@/components/post/Share.vue'
-import HeaderMagic from '@/components/HeaderMagic.vue'
 import MoreIcon from '@/components/icons/More.vue'
 import Avatar from '@/components/Avatar.vue'
+import XIcon from '@/components/icons/X.vue'
+import FriendButton from '@/components/FriendButton.vue'
 
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 import { getPost, Post } from '@/backend/post'
@@ -142,20 +150,25 @@ interface IData {
 	userIsFollowed: boolean
 	myReposts: string[]
 	isBookmarked: boolean
+	lastScroll: number
+	showHeader: boolean
 }
 
 export default Vue.extend({
+	name: `PostReader`,
 	components: {
 		PostActions,
 		AuthorCard,
 		TagCard,
 		BookmarkButton,
 		ShareButton,
-		HeaderMagic,
 		MoreIcon,
 		Avatar,
+		XIcon,
+		FriendButton,
 	},
-	layout: `Reader`,
+	layout: `reader`,
+	// mixins: [markdown],
 	data(): IData {
 		return {
 			post: null,
@@ -167,6 +180,8 @@ export default Vue.extend({
 			userIsFollowed: false,
 			myReposts: [],
 			isBookmarked: false,
+			lastScroll: 0,
+			showHeader: true,
 		}
 	},
 	async created() {
@@ -208,23 +223,10 @@ export default Vue.extend({
 			// @ts-ignore
 			this.myReposts.push(p.repost.postCID)
 		})
-		// Set filter dropdown event handler
-		window.addEventListener(
-			`click`,
-			(e: any): void => {
-				if (!e.target) {
-					return
-				}
-				if (
-					e.target.parentNode === null ||
-					e.target.parentNode.classList === undefined ||
-					!e.target.parentNode.classList.contains(`toggle`)
-				) {
-					this.showFilter = false
-				}
-			},
-			false,
-		)
+		const container = document.getElementById(`post`)
+		if (container) {
+			container.addEventListener(`scroll`, this.handleScroll)
+		}
 	},
 	methods: {
 		getReposts,
@@ -254,6 +256,43 @@ export default Vue.extend({
 				window.open(url, `_blank`)
 			}
 		},
+		// Hide header on scroll down
+		handleScroll() {
+			const body = document.getElementById(`post`)
+			const scrollUp = `scroll-up`
+			const scrollDown = `scroll-down`
+			if (!body) {
+				return
+			}
+			const currentScroll = body.scrollTop
+			if (body.scrollTop <= 0) {
+				body.classList.remove(scrollUp)
+				return
+			}
+			if (currentScroll > this.lastScroll && !body.classList.contains(scrollDown)) {
+				// down
+				body.classList.remove(scrollUp)
+				body.classList.add(scrollDown)
+			} else if (currentScroll < this.lastScroll && body.classList.contains(scrollDown)) {
+				// up
+				body.classList.remove(scrollDown)
+				body.classList.add(scrollUp)
+			}
+			this.lastScroll = currentScroll
+		},
+		handleClose() {
+			// @ts-ignore
+			if (this.$router.history._startLocation === this.$route.path) {
+				// IF they started on this page:
+				this.$router.push(`/home`)
+			} else if (this.$store.state.settings.recentlyPosted) {
+				// IF coming from after recently posting:
+				this.$router.push(`/` + this.$store.state.session.id)
+				this.$store.commit(`settings/setRecentlyPosted`, false)
+			} else {
+				this.$router.go(-1)
+			}
+		},
 	},
 })
 </script>
@@ -272,5 +311,27 @@ hr.style-one {
 .content {
 	text-align: justify;
 	text-justify: inter-word;
+}
+.trigger-menu-wrapper {
+	transition: transform 0.4s;
+	z-index: 50;
+}
+.page-header {
+	transition: transform 0.3s;
+}
+.trigger-menu-wrapper {
+	transition: transform 0.4s;
+}
+.scroll-down .trigger-menu-wrapper {
+	visibility: hidden;
+	opacity: 0;
+	transition: opacity 2s linear;
+	/* transform: translate3d(0, -100%, 0); */
+}
+.scroll-down {
+	background: white;
+}
+.scroll-up {
+	transform: none;
 }
 </style>
