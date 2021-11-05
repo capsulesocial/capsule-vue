@@ -35,12 +35,12 @@
 								shadow-lg
 								mr-5
 								p-6
-								z-10
 								bg-gradient-to-r
 								from-lightBGStart
 								to-lightBGStop
 								backdrop-filter backdrop-blur-lg
 							"
+							:class="showWidgets ? `` : `z-10`"
 						/>
 						<!-- Widgets -->
 						<aside class="fixed" :class="showWidgets ? `z-10` : ``" style="margin-left: 780px; width: 450px">

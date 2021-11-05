@@ -1,9 +1,10 @@
  <template>
-	<div>
-		<!-- Configure my Capsule dropdown -->
+	<div class="popup">
+		<!-- Configure my Capsule overlay -->
 		<div
 			v-if="configureWidgets"
 			class="
+				popup
 				fixed
 				w-full
 				h-screen
