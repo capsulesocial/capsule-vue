@@ -19,12 +19,7 @@
 			"
 			style="width: 340px; height: 200px"
 		>
-			<img
-				v-if="bgImage !== ``"
-				:src="bgImage"
-				:alt="text"
-				class="absolute left-0 top-0 object-contain w-full"
-			/>
+			<img v-if="bgImage !== ``" :src="bgImage" :alt="text" class="absolute left-0 top-0 object-contain w-full" />
 			<div class="flex flex-col font-sans p-4">
 				<h4 class="text-2xl text-white font-extrabold capitalize z-20" style="text-shadow: 2px 2px 4px #000000">
 					{{ text }}

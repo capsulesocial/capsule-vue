@@ -25,8 +25,8 @@
 			</div>
 		</div>
 		<p class="text-primary">
-				<span class="text-sm">Show all</span>
-			</p>
+			<span class="text-sm">Show all</span>
+		</p>
 	</article>
 </template>
 

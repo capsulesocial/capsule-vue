@@ -42,7 +42,7 @@
 				w-full
 				focus:outline-none
 			"
-			style="height: 80px; background-repeat: no-repeat; background-position: -6em center; background-size: cover;"
+			style="height: 80px; background-repeat: no-repeat; background-position: -6em center; background-size: cover"
 			:style="{ backgroundImage: `url(${require(`@/assets/images/brand/configure-my-capsule.png`)})` }"
 		>
 			<p class="text-primary text-right text-sm">
