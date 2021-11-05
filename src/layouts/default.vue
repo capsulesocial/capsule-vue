@@ -43,8 +43,8 @@
 							"
 						/>
 						<!-- Widgets -->
-						<aside class="fixed" style="margin-left: 780px; width: 450px">
-							<Widgets />
+						<aside class="fixed" :class="showWidgets ? `z-10` : ``" style="margin-left: 780px; width: 450px">
+							<Widgets @overlay="toggleZIndex" />
 							<Footer />
 						</aside>
 					</section>
@@ -66,6 +66,7 @@ import { getPhotoFromIPFS } from '@/backend/photos'
 interface IData {
 	profile: Profile | null
 	avatar: string | ArrayBuffer | null
+	showWidgets: boolean
 }
 
 export default Vue.extend({
@@ -79,6 +80,7 @@ export default Vue.extend({
 		return {
 			profile: null,
 			avatar: null,
+			showWidgets: false,
 		}
 	},
 	async created() {
@@ -105,6 +107,9 @@ export default Vue.extend({
 				default:
 					return ``
 			}
+		},
+		toggleZIndex() {
+			this.showWidgets = !this.showWidgets
 		},
 	},
 })

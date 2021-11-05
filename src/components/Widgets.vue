@@ -1,5 +1,26 @@
  <template>
 	<div>
+		<!-- Configure my Capsule dropdown -->
+		<div
+			v-if="configureWidgets"
+			class="
+				fixed
+				w-full
+				h-screen
+				bg-black
+				top-0
+				bottom-0
+				left-0
+				right-0
+				z-30
+				flex
+				justify-center
+				items-center
+				bg-opacity-50
+			"
+		>
+			<ConfigureWidgets @close="toggleConfigure" />
+		</div>
 		<!-- Discover page -->
 		<TagsWidget
 			class="
@@ -44,6 +65,7 @@
 			"
 			style="height: 80px; background-repeat: no-repeat; background-position: -6em center; background-size: cover"
 			:style="{ backgroundImage: `url(${require(`@/assets/images/brand/configure-my-capsule.png`)})` }"
+			@click="toggleConfigure"
 		>
 			<p class="text-primary text-right text-sm">
 				<span class="p-6" style="background: opacity 0.9em">Configure my Capsule</span>
@@ -56,11 +78,28 @@
 import Vue from 'vue'
 import TagsWidget from '@/components/widgets/Tags.vue'
 import DraftsWidget from '@/components/widgets/Drafts.vue'
+import ConfigureWidgets from '@/components/widgets/Configure.vue'
+
+interface IData {
+	configureWidgets: boolean
+}
 
 export default Vue.extend({
 	components: {
 		TagsWidget,
 		DraftsWidget,
+		ConfigureWidgets,
+	},
+	data(): IData {
+		return {
+			configureWidgets: false,
+		}
+	},
+	methods: {
+		toggleConfigure() {
+			this.configureWidgets = !this.configureWidgets
+			this.$emit(`overlay`)
+		},
 	},
 	methods: {
 		checkRoute(): boolean {
