@@ -157,6 +157,10 @@ export default Vue.extend({
 		RepostIcon,
 	},
 	props: {
+		repost: {
+			type: Object,
+			default: null,
+		},
 		post: {
 			type: Object as PropType<RetrievedPost>,
 			required: true,

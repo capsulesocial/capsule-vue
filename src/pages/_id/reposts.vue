@@ -2,6 +2,7 @@
 	<section class="px-4">
 		<div v-for="p in this.reposts" :key="p.repost._id">
 			<PostCard
+				:repost="p.repost"
 				:post="p.post"
 				:authorID="p.post.authorID"
 				:authorUsername="p.post.authorID"
@@ -50,7 +51,13 @@ export default Vue.extend({
 		}
 	},
 	async created() {
-		this.reposts = await getReposts(this.$route.params.id)
+		const res = await getReposts(this.$route.params.id)
+		for (const i in res) {
+			if (res[i]) {
+				// @ts-ignore
+				this.reposts.push(res[i])
+			}
+		}
 		getFollowersAndFollowing(this.$store.state.session.id).then(({ following }) => {
 			this.following = following
 		})

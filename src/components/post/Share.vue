@@ -65,6 +65,7 @@ import LinkIcon from '@/components/icons/Link.vue'
 import RepostIcon from '@/components/icons/Repost.vue'
 import { Post } from '@/backend/post'
 import { sendRepost } from '@/backend/reposts'
+import { sendPostDeletion } from '@/backend/postDeletion'
 
 interface IData {
 	isReposted: Function
@@ -79,6 +80,10 @@ export default Vue.extend({
 		RepostIcon,
 	},
 	props: {
+		repost: {
+			type: Object,
+			default: null,
+		},
 		post: {
 			type: Object as PropType<Post>, // TODO fix the post type,
 			required: true,
@@ -132,7 +137,9 @@ export default Vue.extend({
 					return true
 				}
 			} else {
-				alert(`Cannot undo repost at this time`)
+				// alert(`Cannot undo repost at this time`)
+				await sendPostDeletion(`HIDE`, this.$props.repost._id, this.$props.repost.authorID)
+				alert(`repost deleted`)
 			}
 		},
 		handleShare(type: string) {
