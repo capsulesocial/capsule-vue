@@ -122,7 +122,6 @@ export default Vue.extend({
 		// Fetch my reposts
 		const repostData = await getReposts(this.$store.state.session.id)
 		repostData.forEach((p) => {
-			// @ts-ignore
 			this.myReposts.push(p.repost.postCID)
 		})
 		this.isLoading = false
