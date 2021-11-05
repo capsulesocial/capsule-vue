@@ -1,24 +1,54 @@
-import { connect, Contract, keyStores, WalletConnection } from 'near-api-js'
+import { Account, connect, Contract, keyStores, Near, providers } from 'near-api-js'
 import { KeyPairEd25519 } from 'near-api-js/lib/utils'
 // eslint-disable-next-line camelcase
 import { base_decode, base_encode } from 'near-api-js/lib/utils/serialize'
-import { getNearConfig, domain } from './utilities/config'
+import { getNearConfig } from './utilities/config'
 
 const nearConfig = getNearConfig()
 
-let _walletConnection: WalletConnection | null = null
+let _near: Near | null = null
 let _contract: Contract | null = null
 
-export async function initContract() {
+function getRpcProviderUrl() {
+	switch (nearConfig.networkId) {
+		case `mainnet`:
+		case `testnet`:
+		case `betanet`:
+			return `https://rpc.${nearConfig.networkId}.near.org`
+		case `localnet`:
+			return nearConfig.nodeUrl
+		default:
+			throw new Error(`Invalid NEAR network type`)
+	}
+}
+
+const provider = new providers.JsonRpcProvider(getRpcProviderUrl())
+
+export async function getUsernameNEAR(accountId: string): Promise<string | null> {
+	const rawResult = await provider.query({
+		request_type: `call_function`,
+		account_id: nearConfig.contractName,
+		method_name: `getUsername`,
+		args_base64: Buffer.from(JSON.stringify({ accountId })).toString(`base64`),
+		finality: `optimistic`,
+	})
+
+	if (`result` in rawResult) {
+		// format result
+		// res = [accountId, base58_encode_public_key]
+		const res = JSON.parse(Buffer.from((rawResult as any).result).toString())
+		return res
+	}
+
+	throw new Error(`Error in contract`)
+}
+
+export async function initContract(accountId: string) {
 	// Initialize connection to the NEAR network
-	const near = await connect({ deps: { keyStore: new keyStores.BrowserLocalStorageKeyStore() }, ...nearConfig })
-
-	// Initializing Wallet based Account
-	_walletConnection = new WalletConnection(near, null)
-
+	_near = await connect({ deps: { keyStore: new keyStores.BrowserLocalStorageKeyStore() }, ...nearConfig })
 	// Initializing contract API
-	_contract = new Contract(_walletConnection.account(), nearConfig.contractName, {
-		viewMethods: [`getUserInfo`],
+	_contract = new Contract(new Account(_near.connection, accountId), nearConfig.contractName, {
+		viewMethods: [`getUserInfo`, `getUsername`],
 		changeMethods: [`setUserInfo`],
 	})
 }
@@ -30,37 +60,11 @@ export function getContract() {
 	return _contract
 }
 
-export function getWalletConnection() {
-	if (!_walletConnection) {
-		throw new Error(`Wallet Connection not yet initialised!`)
-	}
-	return _walletConnection
-}
-
-export async function walletLogin() {
-	const walletConnection = getWalletConnection()
-	if (!walletConnection.isSignedIn()) {
-		// Redirects to wallet login page
-		const redirectURL = new URL(`/`, domain)
-		await walletConnection.requestSignIn(nearConfig.contractName, undefined, redirectURL.toString())
-	}
-}
-
-export function walletLogout() {
-	const walletConnection = getWalletConnection()
-	if (walletConnection.isSignedIn()) {
-		walletConnection.signOut()
-	}
-}
-
-export function signedInToWallet() {
-	const walletConnection = getWalletConnection()
-	return walletConnection.isSignedIn()
-}
-
 export async function getNearPrivateKey() {
-	const walletConnection = getWalletConnection()
-	const accountId = walletConnection.getAccountId()
+	if (!_contract) {
+		throw new Error(`Contract not yet initialised!`)
+	}
+	const accountId = _contract.account.accountId
 
 	const keystore = new keyStores.BrowserLocalStorageKeyStore()
 	const keypair = (await keystore.getKey(nearConfig.networkId, accountId)) as KeyPairEd25519
@@ -73,8 +77,10 @@ export async function getNearPrivateKey() {
 
 export async function getNearPublicKey(accountId?: string) {
 	if (!accountId) {
-		const walletConnection = getWalletConnection()
-		accountId = walletConnection.getAccountId() as string
+		if (!_contract) {
+			throw new Error(`Contract not yet initialised!`)
+		}
+		accountId = _contract.account.accountId
 	}
 	const keystore = new keyStores.BrowserLocalStorageKeyStore()
 	const keypair = (await keystore.getKey(nearConfig.networkId, accountId)) as KeyPairEd25519 | null
@@ -96,8 +102,10 @@ export async function setNearPrivateKey(privateKey: Uint8Array, accountId: strin
 }
 
 export async function removeNearPrivateKey() {
-	const walletConnection = getWalletConnection()
-	const accountId = walletConnection.getAccountId()
+	if (!_contract) {
+		throw new Error(`Contract not yet initialised!`)
+	}
+	const accountId = _contract.account.accountId
 
 	const keystore = new keyStores.BrowserLocalStorageKeyStore()
 	await keystore.removeKey(nearConfig.networkId, accountId)
@@ -119,24 +127,20 @@ export async function getUserInfoNEAR(username: string) {
 
 export async function setUserInfoNEAR(username: string) {
 	const contract = getContract() as any
-	const walletConnection = getWalletConnection()
-	if (walletConnection.isSignedIn()) {
-		// TODO: use enums
-		const status: 1 | 2 | 3 | 4 | 5 = await contract.setUserInfo({ username })
-		switch (status) {
-			case 1:
-				return { success: true, error: `` }
-			case 2:
-				return { success: false, error: `Username should contain atleast 3 characters!` }
-			case 3:
-				return { success: false, error: `Username already exists!` }
-			case 4:
-				return { success: false, error: `Username should not contain more than 18 characters!` }
-			case 5:
-				return { success: false, error: `Your NEAR Account is already linked to another username` }
-			default:
-				throw new Error(`Unknown status encountered while updating info on NEAR`)
-		}
+	// TODO: use enums
+	const status: 1 | 2 | 3 | 4 | 5 = await contract.setUserInfo({ username })
+	switch (status) {
+		case 1:
+			return { success: true, error: `` }
+		case 2:
+			return { success: false, error: `Username should contain atleast 3 characters!` }
+		case 3:
+			return { success: false, error: `Username already exists!` }
+		case 4:
+			return { success: false, error: `Username should not contain more than 18 characters!` }
+		case 5:
+			return { success: false, error: `Your NEAR Account is already linked to another username` }
+		default:
+			throw new Error(`Unknown status encountered while updating info on NEAR`)
 	}
-	throw new Error(`Not signed-in to wallet yet!`)
 }

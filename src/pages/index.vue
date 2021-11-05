@@ -22,157 +22,40 @@
 		<div class="flex flex-col mt-10">
 			<!-- Login -->
 			<section class="bg-white mx-auto lg:w-full lg:max-w-md rounded shadow-lg divide-y divide-gray-200">
-				<article class="flex justify-around">
-					<span v-show="isLogin" class="text-primary p-5 inline-block border-b-2 border-primary font-bold">
-						Sign In
-					</span>
-					<button v-show="!isLogin" class="focus:outline-none" @click="toggleFormType">Sign In</button>
-					<span v-show="!isLogin" class="text-primary p-5 inline-block border-b-2 border-primary font-bold">
-						Sign Up
-					</span>
-					<button v-show="isLogin" class="focus:outline-none" @click="toggleFormType">Sign Up</button>
-				</article>
-
 				<article class="px-10 py-6 font-sans">
-					<!-- Connect Wallet -->
-					<div class="flex justify-center">
-						<BrandedButton
-							v-show="!walletConnected && !isLogin"
-							class="w-64"
-							:action="$walletLogin"
-							text="Connect Wallet"
-						/>
-						<BrandedButton v-show="!walletConnected && !isLogin" text="Signup with Google" :action="loginWithGoogle" />
-						<h6 v-show="walletConnected && !isLogin" class="text-center italics text-gray-600">Wallet connected</h6>
-					</div>
-
-					<!-- Register: Name -->
-					<label v-show="!isLogin && walletConnected" for="name" class="font-semibold text-sm text-gray-600 pb-1 block"
-						>Name</label
-					>
-					<input
-						v-show="!isLogin && walletConnected"
-						id="name"
-						v-model="name"
-						type="text"
-						placeholder="Tom Brady"
-						class="
-							border
-							rounded-lg
-							px-3
-							py-2
-							mt-1
-							mb-5
-							text-sm
-							w-full
-							focus:outline-none focus:border-primary
-							text-primary
-							font-sans
-						"
-					/>
 					<!-- Sign in + Register: ID -->
-					<label
-						v-show="isLogin || (!isLogin && walletConnected)"
-						for="id"
-						class="font-semibold text-sm text-gray-600 pb-1 block"
-						>ID</label
-					>
-					<input
-						v-show="isLogin || (!isLogin && walletConnected)"
-						id="id"
-						v-model="id"
-						type="text"
-						placeholder="tombrady"
-						class="
-							border
-							rounded-lg
-							px-3
-							py-2
-							mt-1
-							mb-5
-							text-sm
-							w-full
-							focus:outline-none focus:border-primary
-							text-primary
-							font-sans
-						"
-					/>
-					<!-- Register: Contact -->
-					<label
-						v-show="walletConnected && !isLogin"
-						for="contact"
-						class="font-semibold text-sm text-gray-600 pb-1 block"
-						>Contact</label
-					>
-					<input
-						v-show="walletConnected && !isLogin"
-						id="contact"
-						v-model="email"
-						type="email"
-						placeholder="tb12@nfl.com"
-						class="
-							border
-							rounded-lg
-							px-3
-							py-2
-							mt-1
-							mb-5
-							text-sm
-							w-full
-							focus:outline-none focus:border-primary
-							text-primary
-							font-sans
-						"
-					/>
-					<label
-						v-show="isLogin || (walletConnected && !isLogin)"
-						for="password"
-						class="font-semibold text-sm text-gray-600 pb-1 block"
-						>Password</label
-					>
-					<input
-						v-show="isLogin || (walletConnected && !isLogin)"
-						id="loginPassword"
-						v-model="password"
-						type="password"
-						placeholder="************"
-						class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full focus:outline-none focus:border-primary"
-					/>
-					<label
-						v-show="walletConnected && !isLogin"
-						for="confirmPassword"
-						class="font-semibold text-sm text-gray-600 pb-1 block"
-						>Confirm Password</label
-					>
-					<input
-						v-show="walletConnected && !isLogin"
-						id="confirmPassword"
-						v-model="confirmPassword"
-						type="password"
-						placeholder="************"
-						class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full focus:outline-none focus:border-primary"
-					/>
+					<article v-show="userInfo && !username">
+						<label for="id" class="font-semibold text-sm text-gray-600 pb-1 block">ID</label>
+						<input
+							id="id"
+							v-model="id"
+							type="text"
+							placeholder=""
+							class="
+								border
+								rounded-lg
+								px-3
+								py-2
+								mt-1
+								mb-5
+								text-sm
+								w-full
+								focus:outline-none focus:border-primary
+								text-primary
+								font-sans
+							"
+						/>
+					</article>
+					<BrandedButton v-show="userInfo" :text="`Sign Up`" :action="verify" class="w-full" />
 					<BrandedButton
-						v-show="isLogin || (walletConnected && !isLogin)"
-						:text="isLogin ? 'Sign In' : 'Sign Up'"
-						:action="verify"
+						v-show="!userInfo"
+						:text="`Sign in or Sign up with Google`"
+						:action="torusLogin"
 						class="w-full"
 					/>
 				</article>
-				<article
-					v-show="isLogin"
-					class="text-center whitespace-nowrap flex justify-between text-sm p-5 text-gray-600 font-sans"
-				>
-					<button class="px-4 py-2 focus:outline-none">Forgot Password</button>
+				<article class="text-center whitespace-nowrap flex justify-between text-sm p-5 text-gray-600 font-sans">
 					<button class="px-4 py-2 focus:outline-none">Help</button>
-				</article>
-				<article v-show="walletConnected && !isLogin" class="flex justify-center">
-					<label class="items-center p-5 text-gray-600 inline-flex">
-						<input v-model="consent" type="checkbox" class="form-checkbox h-4 w-4 text-primary" checked /><span
-							class="ml-2 text-gray-700 font-sans"
-							>I agree to the Terms and Conditions
-						</span>
-					</label>
 				</article>
 			</section>
 		</div>
@@ -182,7 +65,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapMutations } from 'vuex'
-import DirectWebSdk from '@toruslabs/torus-direct-web-sdk'
+// eslint-disable-next-line import/named
+import DirectWebSdk, { TorusLoginResponse } from '@toruslabs/torus-direct-web-sdk'
 
 import CapsuleIcon from '@/components/icons/Capsule.vue'
 import TwitterIcon from '@/components/icons/brands/Twitter.vue'
@@ -191,19 +75,15 @@ import BrandedButton from '@/components/BrandedButton.vue'
 
 import { MutationType, createSessionFromProfile, namespace as sessionStoreNamespace } from '~/store/session'
 
-import { signedInToWallet } from '@/backend/near'
-import { login, register } from '@/backend/auth'
+import { getAccountId, login, register } from '@/backend/auth'
+import { Profile } from '@/backend/profile'
+import { getUsernameNEAR } from '@/backend/near'
 
 interface IData {
-	isLogin: boolean
-	name: string
 	id: string
-	email: string
-	password: string
-	confirmPassword: string | null
-	consent: boolean
-	walletConnected: boolean
 	torus: DirectWebSdk
+	userInfo: null | TorusLoginResponse
+	username: null | string
 }
 
 export default Vue.extend({
@@ -216,22 +96,16 @@ export default Vue.extend({
 	layout: `unauth`,
 	data(): IData {
 		return {
-			isLogin: false,
-			name: ``,
 			id: ``,
-			email: ``,
-			password: ``,
-			confirmPassword: null,
-			consent: true,
-			walletConnected: false,
 			torus: new DirectWebSdk({
 				baseUrl: `http://localhost:3000/oauth`,
 				network: `testnet`, // details for test net
 			}),
+			userInfo: null,
+			username: null,
 		}
 	},
 	async created() {
-		this.walletConnected = signedInToWallet()
 		await this.torus.init()
 	},
 	mounted() {
@@ -249,79 +123,56 @@ export default Vue.extend({
 			changeBio: MutationType.CHANGE_BIO,
 			changeLocation: MutationType.CHANGE_LOCATION,
 		}),
-		toggleFormType() {
-			this.isLogin = !this.isLogin
-			this.walletConnected = signedInToWallet()
-		},
-		async loginWithGoogle() {
-			const userInfo = await this.torus.triggerLogin({
+		async torusLogin() {
+			this.userInfo = await this.torus.triggerLogin({
 				typeOfLogin: `google`,
 				verifier: `capsule-social-test-google`,
 				clientId: `653379121360-j8t9ua763vfvd86d1qjguonhrgqvkigo.apps.googleusercontent.com`,
 			})
-			// eslint-disable-next-line no-console
-			console.log(userInfo)
+			const accountId = getAccountId(this.userInfo.privateKey)
+			this.username = await getUsernameNEAR(accountId)
+			if (this.username) {
+				this.verify()
+			}
 		},
 		async verify() {
-			const pwCheck = this.$qualityPassword(this.password)
-			const idCheck = this.$qualityID(this.id)
-			if (pwCheck !== true) {
-				alert(pwCheck)
-				return
+			if (!this.userInfo) {
+				throw new Error(`Unexpected condition!`)
 			}
-			if (idCheck !== true) {
-				alert(idCheck)
-				return
-			}
-			// Login
-			if (this.isLogin) {
-				try {
-					const { profile: backendProfile, profileCID } = await login(this.id, this.password)
-					if (!signedInToWallet()) {
-						throw new Error(`Authentication failed!`)
-					}
-					const account = createSessionFromProfile(profileCID, backendProfile)
-					this.changeCID(profileCID)
-					this.changeID(account.id)
-					this.changeName(account.name)
-					this.changeEmail(account.email)
-					this.changeAvatar(account.avatar)
-					this.changeBio(account.bio)
-					this.changeLocation(account.location)
-					this.$router.push(`/settings`)
-				} catch (err: any) {
-					alert(err.message)
-				}
-			} else {
-				// Registration
-				if (!this.consent) {
-					alert(`Please accept the Terms & Conditions`)
-					return
-				}
-				if (this.$qualityEmail(this.email) !== true) {
-					alert(`Invalid email!`)
-					return
-				}
-				if (this.password === this.confirmPassword) {
-					try {
-						const { cid, profile } = await register(this.id, this.password, this.name, this.email)
-						// Registration successful
-						const account = createSessionFromProfile(cid, profile)
-						this.changeCID(cid)
-						this.changeID(account.id)
-						this.changeName(account.name)
-						this.changeEmail(account.email)
-						this.changeAvatar(account.avatar)
-						this.changeBio(account.bio)
-						this.changeLocation(account.location)
-						this.$router.push(`/settings`)
-					} catch (err) {
-						alert(`Registration Unsuccessful!`)
-						throw err
-					}
+			try {
+				// Login
+				let profile: Profile | null = null
+				let cid: string | null = null
+				if (this.username) {
+					const data = await login(this.username, this.userInfo.privateKey)
+					profile = data.profile
+					cid = data.profileCID
 				} else {
-					alert(`Password mismatch!`)
+					const idCheck = this.$qualityID(this.id)
+					if (!idCheck) {
+						alert(idCheck)
+						return
+					}
+					const data = await register(this.id, this.userInfo.privateKey)
+					profile = data.profile
+					cid = data.cid
 				}
+
+				if (!profile || !cid) {
+					throw new Error(`Unexpected condition!`)
+				}
+
+				const account = createSessionFromProfile(cid, profile)
+				this.changeCID(cid)
+				this.changeID(account.id)
+				this.changeName(account.name)
+				this.changeEmail(account.email)
+				this.changeAvatar(account.avatar)
+				this.changeBio(account.bio)
+				this.changeLocation(account.location)
+				this.$router.push(`/settings`)
+			} catch (err: any) {
+				alert(err.message)
 			}
 		},
 	},

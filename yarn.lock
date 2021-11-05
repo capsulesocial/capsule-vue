@@ -1983,6 +1983,13 @@
   dependencies:
     deepmerge "^4.2.2"
 
+"@toruslabs/openlogin-ed25519@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@toruslabs/openlogin-ed25519/-/openlogin-ed25519-1.0.2.tgz#0f6ed7673f00db0ab29fb0051b11c960e46c147e"
+  integrity sha512-a5TUqoohaz0Lwr9mg5Yo+ELVbk2IvTJMC6tBhpwypKWb5Pep+wvJ9PIuf8M/1VnNIFK6ZqKyepMRnJItqgejWA==
+  dependencies:
+    "@toruslabs/tweetnacl-js" "^1.0.3"
+
 "@toruslabs/torus-direct-web-sdk@^5.0.3":
   version "5.0.3"
   resolved "https://registry.yarnpkg.com/@toruslabs/torus-direct-web-sdk/-/torus-direct-web-sdk-5.0.3.tgz#638d4d8c295e34b12d40be454b61d4689c4c9f77"
@@ -2013,6 +2020,11 @@
     loglevel "^1.7.1"
     memory-cache "^0.2.0"
     web3-utils "^1.6.0"
+
+"@toruslabs/tweetnacl-js@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@toruslabs/tweetnacl-js/-/tweetnacl-js-1.0.3.tgz#52abbcd2a6b77959ef6a98afedce77764d87226d"
+  integrity sha512-WQJYMTR/bkqvpk3DWOqRt5e24RhwJp9PXUoSj4zSthd3+fDhKYCI56YVMPNDKah1fCffOe9F3m8iZ5SgDZ+Csw==
 
 "@types/anymatch@*":
   version "3.0.0"
