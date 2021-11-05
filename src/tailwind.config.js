@@ -1,5 +1,4 @@
 /* eslint-disable */
-// @ts-ignore
 const { fontFamily } = require('tailwindcss/defaultTheme')
 
 module.exports = {
@@ -28,7 +27,7 @@ module.exports = {
         h6: [`0.67em`, `1rem`],
         p: [`17.6px`, `28.6px`],
       },
-        colors: {
+      colors: {
         primary: '#1E566C', // Dark Teal
         secondary: '#367589', // Moss Teal
         teal: '#216B6A', //Teal
@@ -94,7 +93,6 @@ module.exports = {
     }
   },
   plugins: [
-			// @ts-ignore
-      require('@tailwindcss/typography')
+    require('@tailwindcss/typography')
   ]
 }

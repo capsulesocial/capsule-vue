@@ -1,11 +1,11 @@
-import nacl from 'tweetnacl'
+import { sign } from 'tweetnacl'
 
 import { Post } from './post'
 import { getNearPrivateKey } from './near'
 
 async function getSignKeyPair() {
 	const secretKey = await getNearPrivateKey()
-	const keypair = nacl.sign.keyPair.fromSecretKey(secretKey)
+	const keypair = sign.keyPair.fromSecretKey(secretKey)
 	return keypair
 }
 
@@ -14,7 +14,7 @@ export async function signContent<T>(content: T) {
 	const keypair = await getSignKeyPair()
 	if (keypair) {
 		const message = ec.encode(JSON.stringify(stableOrderObj(content)))
-		return nacl.sign.detached(message, keypair.secretKey)
+		return sign.detached(message, keypair.secretKey)
 	}
 	return null
 }
@@ -22,7 +22,7 @@ export async function signContent<T>(content: T) {
 export function verifyContent(content: Post, signature: Uint8Array, publicKey: Uint8Array) {
 	const ec = new TextEncoder()
 	const message = ec.encode(JSON.stringify(content))
-	return nacl.sign.detached.verify(message, signature, publicKey)
+	return sign.detached.verify(message, signature, publicKey)
 }
 
 export async function getSigningKey() {

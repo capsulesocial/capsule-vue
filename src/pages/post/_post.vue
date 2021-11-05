@@ -109,9 +109,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-// import markdown from '@/mixins/markdown.ts'
-// @ts-ignore
-import marked from 'marked'
+import { parse } from 'marked'
 import PostActions from '@/components/post/Actions.vue'
 import AuthorCard from '@/components/AuthorCard.vue'
 import TagCard from '@/components/Tag.vue'
@@ -152,7 +150,6 @@ export default Vue.extend({
 		Avatar,
 	},
 	layout: `Reader`,
-	// mixins: [markdown],
 	data(): IData {
 		return {
 			post: null,
@@ -191,7 +188,7 @@ export default Vue.extend({
 			})
 		}
 		// Convert markdown to HTML
-		this.content = marked(this.post.content)
+		this.content = parse(this.post.content)
 		if (this.author && this.author.avatar.length > 1) {
 			getPhotoFromIPFS(this.author.avatar).then((p) => {
 				this.authorAvatar = p

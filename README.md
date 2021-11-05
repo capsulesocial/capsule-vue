@@ -50,7 +50,6 @@ $ yarn build:win
 - [Vuex persisted state](https://www.npmjs.com/package/vuex-persistedstate) - Rehydrates Vuex state between page reloads.
 - [TailwindCSS](https://tailwindcss.com) - CSS Framework
 - [Marked.js](https://marked.js.org/) - markdown parsing
-- [Medium Editor](https://github.com/yabwe/medium-editor) - WYSIWYG editor
 - [DOMPurify](https://github.com/cure53/DOMPurify) - sanitize HTML output
 - [electron-nuxt](https://github.com/webspaceteam/electron-nuxt) - Electron scripts
 - [browser-image-compression](https://www.npmjs.com/package/browser-image-compression) - image compression

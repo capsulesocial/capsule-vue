@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { signContent } from './keys'
-import { Algorithm } from './post'
+import { Algorithm, Post } from './post'
 import { capsuleOrbit } from './utilities/config'
 import { uint8ArrayToHexString } from './utilities/helpers'
 import ipfs from './utilities/ipfs'
@@ -29,12 +29,17 @@ export async function sendRepost(authorID: string, postCID: string, content: str
 	return cid
 }
 
+export interface IRepostRetrieved {
+	repost: any
+	post: Post
+}
+
 export async function getReposts(
 	authorID: string,
 	sort: Algorithm = `NEW`,
 	postCID?: string,
 	following?: string,
-): Promise<string[]> {
+): Promise<IRepostRetrieved[]> {
 	if (sort === `FOLLOWING` && !following) {
 		throw new Error(`Following not specified`)
 	}
@@ -48,5 +53,5 @@ export async function getReposts(
 		},
 	})
 
-	return data.data.map((cid: string) => cid)
+	return data.data
 }

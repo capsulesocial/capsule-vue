@@ -82,9 +82,7 @@
 		font-weight: 700;
 		font-style: italic;
 	}
-	/* .medium-editor-toolbar {
-    @apply bg-white border rounded-xl shadow-xl
-  } */
+
     h1, h2, h3, h4, h5, h6 {
 		@apply font-serif;
 	}

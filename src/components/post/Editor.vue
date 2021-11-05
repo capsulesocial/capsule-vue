@@ -204,8 +204,8 @@ import Vue from 'vue'
 import DOMPurify from 'dompurify'
 import Turndown from 'turndown'
 import imageCompression from 'browser-image-compression'
+// eslint-disable-next-line import/no-named-as-default
 import Quill from 'quill'
-// @ts-ignore
 import QuillMarkdown from 'quilljs-markdown'
 import ImageIcon from '@/components/icons/Image.vue'
 import UploadIcon from '@/components/icons/Upload.vue'
@@ -225,8 +225,8 @@ interface IData {
 	tag: string
 	featuredPhoto: null | any
 	featuredPhotoCID: string | null
-	editor: Quill
-	turndownService: Turndown
+	editor?: Quill
+	turndownService?: Turndown
 	tabs: {
 		tags: boolean
 		category: boolean
@@ -262,8 +262,6 @@ export default Vue.extend({
 			tag: ``,
 			featuredPhoto: null,
 			featuredPhotoCID: null,
-			// @ts-ignore
-			turndownService: Turndown,
 			tabs: {
 				tags: false,
 				category: false,
@@ -431,6 +429,9 @@ export default Vue.extend({
 			this.featuredPhoto = await getPhotoFromIPFS(cid)
 		},
 		async post(): Promise<void> {
+			if (this.turndownService === undefined) {
+				throw new Error(`Unexpected condition!`)
+			}
 			// @ts-ignore
 			this.title = this.$refs.title.value
 			// @ts-ignore
