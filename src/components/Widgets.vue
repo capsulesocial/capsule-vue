@@ -100,8 +100,6 @@ export default Vue.extend({
 			this.configureWidgets = !this.configureWidgets
 			this.$emit(`overlay`)
 		},
-	},
-	methods: {
 		checkRoute(): boolean {
 			return this.$route.name?.substr(0, 8) === `discover`
 		},
