@@ -41,6 +41,8 @@
 								backdrop-filter backdrop-blur-lg
 							"
 							:class="showWidgets ? `` : `z-10`"
+							:toggleFriend="toggleFriend"
+							:following="following"
 						/>
 						<!-- Widgets -->
 						<aside class="fixed" :class="showWidgets ? `z-10` : ``" style="margin-left: 780px; width: 450px">
@@ -60,13 +62,16 @@ import CapsuleIcon from '@/components/icons/Capsule.vue'
 import Widgets from '@/components/Widgets.vue'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
+
 import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
+import { followChange, getFollowersAndFollowing } from '@/backend/following'
 
 interface IData {
 	profile: Profile | null
 	avatar: string | ArrayBuffer | null
 	showWidgets: boolean
+	following: Set<string>
 }
 
 export default Vue.extend({
@@ -81,6 +86,7 @@ export default Vue.extend({
 			profile: null,
 			avatar: null,
 			showWidgets: false,
+			following: new Set(),
 		}
 	},
 	async created() {
@@ -96,8 +102,19 @@ export default Vue.extend({
 				this.avatar = p
 			})
 		}
+		// Get followers and following
+		getFollowersAndFollowing(this.$store.state.session.id).then(({ following }) => {
+			this.following = following
+		})
 	},
 	methods: {
+		async toggleFriend(authorID: string) {
+			if (authorID !== this.$store.state.session.id) {
+				await followChange(this.following.has(authorID) ? `UNFOLLOW` : `FOLLOW`, this.$store.state.session.id, authorID)
+				const data = await getFollowersAndFollowing(this.$store.state.session.id, true)
+				this.following = data.following
+			}
+		},
 		getTitle(): string {
 			switch (this.$route.name) {
 				case `home`:

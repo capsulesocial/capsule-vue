@@ -58,16 +58,15 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import type { PropType } from 'vue'
 import PostCard from '@/components/post/Card.vue'
 import { getPosts, Algorithm, IPostResponse } from '@/backend/post'
-import { followChange, getFollowersAndFollowing } from '@/backend/following'
 import { getReposts } from '@/backend/reposts'
 
 interface IData {
 	posts: IPostResponse[]
 	isLoading: boolean
 	algorithm: Algorithm
-	following: Set<string>
 	currentOffset: number
 	limit: number
 	myReposts: string[]
@@ -77,12 +76,21 @@ export default Vue.extend({
 	components: {
 		PostCard,
 	},
+	props: {
+		toggleFriend: {
+			type: Function as PropType<(id: string) => void>,
+			required: true,
+		},
+		following: {
+			type: Set as PropType<Set<string>>,
+			default: () => new Set(),
+		},
+	},
 	data(): IData {
 		return {
 			algorithm: `NEW`,
 			posts: [],
 			isLoading: true,
-			following: new Set(),
 			currentOffset: 0,
 			limit: 10,
 			myReposts: [],
@@ -98,9 +106,6 @@ export default Vue.extend({
 			this.$store.state.session.id,
 		)
 		this.currentOffset += this.limit
-		getFollowersAndFollowing(this.$store.state.session.id).then(({ following }) => {
-			this.following = following
-		})
 		// Fetch my reposts
 		const repostData = await getReposts(this.$store.state.session.id)
 		repostData.forEach((p) => {
@@ -131,13 +136,6 @@ export default Vue.extend({
 			this.currentOffset += this.limit
 			this.isLoading = false
 			return this.posts
-		},
-		async toggleFriend(authorID: string) {
-			if (authorID !== this.$store.state.session.id) {
-				await followChange(this.following.has(authorID) ? `UNFOLLOW` : `FOLLOW`, this.$store.state.session.id, authorID)
-				const data = await getFollowersAndFollowing(this.$store.state.session.id, true)
-				this.following = data.following
-			}
 		},
 		async loadPosts() {
 			this.isLoading = true
