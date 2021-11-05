@@ -1,23 +1,35 @@
 <template>
 	<main
 		class="h-screen p-0 m-0 bg-img"
-		:style="{ backgroundImage: `url(${require(`@/assets/images/brand/paper4.svg`)})` }"
+		:style="{ backgroundImage: `url(${require(`@/assets/images/brand/mainBG.png`)})` }"
 	>
 		<!-- Wrapper -->
 		<div class="w-full flex justify-center">
 			<div class="flex flex-col" style="width: 1220px">
 				<!-- Header -->
-				<header class="w-full sticky top-0 py-5 bg-white">
-					<Header :avatar="avatar" :togglePostEditor="togglePostEditor" />
+				<header class="w-full sticky top-0 py-5 bg-gradient-to-r">
+					<Header :avatar="avatar" />
 				</header>
 				<!-- Body -->
 				<div>
 					<!-- Content -->
-					<section class="flex flex-row mt-12">
+					<section class="flex flex-row mt-20">
 						<PostEditor
 							ref="editor"
 							style="width: 750px; min-height: calc(100vh - 184px); height: calc(100vh - 184px)"
-							class="fixed overflow-y-auto rounded-lg shadow-lg mr-5 bg-white p-5 z-10"
+							class="
+								fixed
+								overflow-y-auto
+								rounded-lg
+								shadow-lg
+								mr-5
+								p-6
+								z-10
+								bg-gradient-to-r
+								from-lightBGStart
+								to-lightBGStop
+								backdrop-filter backdrop-blur-lg
+							"
 							@update="updateWordCount"
 						/>
 						<!-- Widgets -->
@@ -82,17 +94,6 @@ export default Vue.extend({
 		},
 		updateWordCount(num: number) {
 			this.wordCount = num
-		},
-		togglePostEditor() {
-			this.$router.push(`/post`)
-		},
-		getStyles(tab: string): string {
-			let res: string = ``
-			// Check if current tab
-			if (this.$route.name === tab) {
-				res += `font-semibold text-lightPrimaryTextunderline border-primary border-b`
-			}
-			return res
 		},
 	},
 })

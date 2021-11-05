@@ -1,44 +1,49 @@
 <template>
 	<article class="w-full">
-		<div class="flex flex-row justify-between p-6 pt-4 pb-3">
+		<div class="flex flex-row justify-between p-6 pt-4 pb-2 items-center">
 			<h3 class="text-primary text-base font-semibold">Featured tags</h3>
-			<h3 v-if="checkRoute()" class="self-center text-lg">Top of <button class="font-semibold">Today</button></h3>
-			<!-- Dropdown filter -->
-			<div v-if="$route.name === `discover`" class="relative inline">
-				<button
-					class="
-						flex
-						justify-between
-						items-center
-						toggle
-						border
-						rounded-lg
-						focus:outline-none
-						self-center
-						capitalize
-						text-gray7
-						font-medium
-						h-10
-						px-2
-					"
-					style="width: 175px"
-					@click.stop="showFilter = !showFilter"
-				>
-					{{ tagFilter }}
-					<ChevronUp v-if="showFilter" />
-					<ChevronDown v-else />
-				</button>
-				<!-- Dropdown -->
-				<div v-show="showFilter" class="absolute z-10 top-0 bg-white rounded-lg shadow-lg p-2 mt-10 w-full">
-					<button class="w-full text-left text-gray7 focus:outline-none p-2" @click="setTagFilter(`Trending`)">
-						Trending
+			<div class="flex flex-row justify-end">
+				<h3 v-if="checkRoute()" class="self-center text-sm">
+					Top of <button class="font-semibold pr-2">Today</button>
+				</h3>
+				<!-- Dropdown filter -->
+				<div v-if="$route.name === `discover`" class="relative inline">
+					<button
+						class="
+							flex
+							justify-between
+							items-center
+							toggle
+							border
+							rounded-lg
+							focus:outline-none
+							self-center
+							capitalize
+							text-gray7
+							font-medium
+							text-sm
+							w-32
+							h-10
+							px-2
+						"
+						@click.stop="showFilter = !showFilter"
+					>
+						{{ tagFilter }}
+						<ChevronUp v-if="showFilter" />
+						<ChevronDown v-else />
 					</button>
-					<button class="w-full text-left text-gray7 focus:outline-none p-2" @click="setTagFilter(`Top This Week`)">
-						Top This Week
-					</button>
-					<button class="w-full text-left text-gray7 focus:outline-none p-2" @click="setTagFilter(`All Time`)">
-						All Time
-					</button>
+					<!-- Dropdown -->
+					<div v-show="showFilter" class="absolute z-10 top-0 bg-white rounded-lg shadow-lg p-2 mt-10 w-full text-sm">
+						<button class="w-full text-left text-gray7 focus:outline-none p-2" @click="setTagFilter(`Trending`)">
+							Trending
+						</button>
+						<button class="w-full text-left text-gray7 focus:outline-none p-2" @click="setTagFilter(`Top This Week`)">
+							Top This Week
+						</button>
+						<button class="w-full text-left text-gray7 focus:outline-none p-2" @click="setTagFilter(`All Time`)">
+							All Time
+						</button>
+					</div>
 				</div>
 			</div>
 		</div>

@@ -8,7 +8,7 @@
 			<div class="flex flex-col" style="width: 1220px">
 				<!-- Header -->
 				<header class="w-full sticky top-0 py-5 bg-gradient-to-r">
-					<Header :avatar="avatar" :togglePostEditor="togglePostEditor" />
+					<Header :avatar="avatar" />
 				</header>
 				<!-- Body -->
 				<div>
@@ -96,9 +96,6 @@ export default Vue.extend({
 		}
 	},
 	methods: {
-		togglePostEditor() {
-			this.$router.push(`/post`)
-		},
 		getTitle(): string {
 			switch (this.$route.name) {
 				case `home`:

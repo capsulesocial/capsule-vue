@@ -1,21 +1,21 @@
 <template>
 	<main
 		class="h-screen p-0 m-0 bg-img"
-		:style="{ backgroundImage: `url(${require(`@/assets/images/brand/paper4.svg`)})` }"
+		:style="{ backgroundImage: `url(${require(`@/assets/images/brand/mainBG.png`)})` }"
 	>
 		<!-- Wrapper -->
 		<div class="w-full flex justify-center">
 			<div class="flex flex-col" style="width: 1220px">
 				<!-- Header -->
-				<header class="w-full sticky top-0 py-5 bg-white">
-					<Header :avatar="avatar" :togglePostEditor="togglePostEditor" />
+				<header class="w-full sticky top-0 py-5 bg-gradient-to-r">
+					<Header :avatar="avatar" />
 				</header>
 				<!-- Body -->
 				<div>
 					<!-- Title and peered nodes -->
 					<div class="fixed w-full flex justify-between items-center" style="width: 1220px">
 						<!-- Title -->
-						<h1 class="text-4xl font-semibold text-primary">
+						<h1 class="font-semibold text-primary" style="font-size: 2.6rem">
 							{{ getTitle() }}
 						</h1>
 						<!-- Peered nodes -->
@@ -25,10 +25,22 @@
 						</div>
 					</div>
 					<!-- Content -->
-					<section class="flex flex-row mt-24">
+					<section class="flex flex-row mt-20">
 						<nuxt-child
-							style="width: 750px; min-height: calc(100vh - 184px); height: calc(100vh - 184px)"
-							class="fixed overflow-y-auto rounded-lg shadow-lg mr-5 bg-white p-5 z-10"
+							style="width: 750px; min-height: calc(100vh - 160px); height: calc(100vh - 160px)"
+							class="
+								fixed
+								overflow-y-auto
+								rounded-lg
+								shadow-lg
+								mr-5
+								p-6
+								z-10
+								bg-gradient-to-r
+								from-lightBGStart
+								to-lightBGStop
+								backdrop-filter backdrop-blur-lg
+							"
 							:posts="posts"
 						/>
 						<!-- Widgets -->
@@ -99,9 +111,6 @@ export default Vue.extend({
 				undefined,
 				`false`,
 			)
-		},
-		togglePostEditor() {
-			this.$router.push(`/post`)
 		},
 		getTitle(): string {
 			switch (this.$route.name) {

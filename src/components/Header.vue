@@ -39,10 +39,6 @@ export default Vue.extend({
 			type: String,
 			default: ``,
 		},
-		togglePostEditor: {
-			type: Function,
-			required: true,
-		},
 	},
 	data() {
 		return {}
@@ -68,6 +64,9 @@ export default Vue.extend({
 			const keystore = new keyStores.BrowserLocalStorageKeyStore()
 			keystore.clear()
 			this.$router.push(`/`)
+		},
+		togglePostEditor() {
+			this.$router.push(`/post`)
 		},
 	},
 })

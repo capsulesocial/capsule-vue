@@ -1,22 +1,34 @@
 <template>
 	<main
 		class="h-screen p-0 m-0 bg-img"
-		:style="{ backgroundImage: `url(${require(`@/assets/images/brand/paper4.svg`)})` }"
+		:style="{ backgroundImage: `url(${require(`@/assets/images/brand/mainBG.png`)})` }"
 	>
 		<!-- Wrapper -->
 		<div class="w-full flex justify-center">
 			<div class="flex flex-col" style="width: 1220px">
 				<!-- Header -->
-				<header class="w-full sticky top-0 py-5 bg-white">
-					<Header :avatar="myAvatar" :togglePostEditor="togglePostEditor" />
+				<header class="w-full sticky top-0 py-5 bg-gradient-to-r">
+					<Header :avatar="myAvatar" />
 				</header>
 				<!-- Body -->
 				<div>
 					<!-- Content -->
-					<section v-if="visitProfile" class="flex flex-row mt-12">
+					<section v-if="visitProfile" class="flex flex-row mt-20">
 						<nuxt-child
-							class="fixed overflow-y-auto rounded-lg shadow-lg mr-5 bg-white p-5 z-10"
-							style="width: 750px; min-height: calc(100vh - 184px); height: calc(100vh - 184px)"
+							style="width: 750px; min-height: calc(100vh - 160px); height: calc(100vh - 160px)"
+							class="
+								fixed
+								overflow-y-auto
+								rounded-lg
+								shadow-lg
+								mr-5
+								p-6
+								z-10
+								bg-gradient-to-r
+								from-lightBGStart
+								to-lightBGStop
+								backdrop-filter backdrop-blur-lg
+							"
 							:visitProfile="visitProfile"
 							:visitAvatar="visitAvatar"
 							:followers="followers"
@@ -112,9 +124,6 @@ export default Vue.extend({
 		this.userIsFollowed = followers.has(this.$store.state.session.id)
 	},
 	methods: {
-		togglePostEditor() {
-			this.$router.push(`/post`)
-		},
 		async toggleFriend() {
 			await followChange(
 				this.userIsFollowed ? `UNFOLLOW` : `FOLLOW`,
