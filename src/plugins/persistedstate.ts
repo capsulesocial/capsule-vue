@@ -1,7 +1,6 @@
 import createPersistedState from 'vuex-persistedstate'
 
-// @ts-ignore
-export default ({ store }) => {
+export default ({ store }: { store: any }) => {
 	createPersistedState({
 		key: `capsule-store`,
 	})(store)

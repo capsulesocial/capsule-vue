@@ -21,9 +21,10 @@ import PostCard from '@/components/post/Card.vue'
 import { getReposts } from '@/backend/reposts'
 import { Profile } from '@/backend/profile'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
+import { Post } from '@/backend/post'
 
 interface IData {
-	reposts: []
+	reposts: Array<Post>
 	isLoading: boolean
 	currentOffset: number
 	limit: number
@@ -53,7 +54,6 @@ export default Vue.extend({
 		const res = await getReposts(this.$route.params.id)
 		for (const i in res) {
 			if (res[i]) {
-				// @ts-ignore
 				this.reposts.push(res[i].post)
 			}
 		}
