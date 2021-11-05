@@ -10,10 +10,12 @@
 				to-lightBGStop
 				backdrop-filter backdrop-blur-lg
 				border border-lightBorder
+				overflow-hidden
 				mb-5
 			"
 		/>
 		<DraftsWidget
+			v-if="!checkRoute()"
 			class="
 				rounded-lg
 				shadow-lg
@@ -27,6 +29,7 @@
 		/>
 		<!-- Configure my Capsule -->
 		<button
+			v-if="!checkRoute()"
 			class="
 				rounded-lg
 				shadow-lg
@@ -39,11 +42,11 @@
 				w-full
 				focus:outline-none
 			"
-			style="height: 64px; background-position: center; background-size: cover; background-repeat: no-repeat"
+			style="height: 80px; background-repeat: no-repeat; background-position: -6em center; background-size: cover;"
 			:style="{ backgroundImage: `url(${require(`@/assets/images/brand/configure-my-capsule.png`)})` }"
 		>
-			<p class="text-primary text-right">
-				<span class="bg-white p-2 rounded-full" style="background: opacity 0.9em">Configure my Capsule</span>
+			<p class="text-primary text-right text-sm">
+				<span class="p-6" style="background: opacity 0.9em">Configure my Capsule</span>
 			</p>
 		</button>
 	</div>
@@ -58,6 +61,11 @@ export default Vue.extend({
 	components: {
 		TagsWidget,
 		DraftsWidget,
+	},
+	methods: {
+		checkRoute(): boolean {
+			return this.$route.name?.substr(0, 8) === `discover`
+		},
 	},
 })
 </script>

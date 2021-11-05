@@ -4,7 +4,7 @@
 			<nav class="fixed flex flex-row h-14 pt-4 -mt-6 mt-2 z-20 bg-lightBG text-base" style="width: 700px">
 				<div class="flex items-center">
 					<button
-						:class="algorithm === `NEW` ? `text-primary border-b-2 border-primary font-semibold` : `text-gray7`"
+						:class="algorithm === `NEW` ? `text-primary border-b-2 border-primary font-semibold` : `text-gray5`"
 						class="h-full focus:outline-none w-full pb-2"
 						@click="sortFeed('NEW')"
 					>
@@ -13,7 +13,7 @@
 				</div>
 				<div class="flex items-center px-12">
 					<button
-						:class="algorithm === `TOP` ? ` text-primary border-b-2 border-primary font-semibold` : `text-gray7`"
+						:class="algorithm === `TOP` ? ` text-primary border-b-2 border-primary font-semibold` : `text-gray5`"
 						class="h-full focus:outline-none w-full pb-2"
 						@click="sortFeed('TOP')"
 					>
@@ -22,7 +22,7 @@
 				</div>
 				<div class="flex items-center">
 					<button
-						:class="algorithm === `FOLLOWING` ? ` text-primary border-b-2 border-primary font-semibold` : `text-gray7`"
+						:class="algorithm === `FOLLOWING` ? ` text-primary border-b-2 border-primary font-semibold` : `text-gray5`"
 						class="h-full focus:outline-none w-full pb-2"
 						@click="sortFeed('FOLLOWING')"
 					>

@@ -1,8 +1,8 @@
 <template>
 	<div class="w-full">
-		<div class="pl-2">
+		<div class="-mt-2">
 			<h2 class="text-xl text-primary font-semibold mb-2">Featured Categories</h2>
-			<p>Read more of what you love by browsing top categories:</p>
+			<p class="text-gray5">Read more of what you love by browsing top categories:</p>
 		</div>
 		<article class="w-full grid grid-cols-2 gap-y-4 my-4">
 			<CategoryCard

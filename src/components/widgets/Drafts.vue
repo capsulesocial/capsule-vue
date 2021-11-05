@@ -1,10 +1,10 @@
 <template>
-	<article class="p-4">
-		<h5 class="text-primary font-semibold">Drafts</h5>
-		<div class="flex flex-row justify-between">
+	<article class="p-6 pt-4 pb-4">
+		<h3 class="text-primary font-semibold">Drafts</h3>
+		<div class="flex flex-row justify-between my-4">
 			<!-- Title -->
 			<div class="flex flex-col flex-grow">
-				<h6 class="text-lg font-semibold">
+				<h6 class="text-base font-semibold">
 					{{ $store.state.draft.title === `` ? `New Post` : $store.state.draft.title }}
 				</h6>
 				<p class="text-sm text-gray5">Last saved __ ago</p>
@@ -24,6 +24,9 @@
 				</nuxt-link>
 			</div>
 		</div>
+		<p class="text-primary">
+				<span class="text-sm">Show all</span>
+			</p>
 	</article>
 </template>
 
