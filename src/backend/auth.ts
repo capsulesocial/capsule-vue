@@ -1,62 +1,61 @@
-import { initContract, setUserInfoNEAR, getUserInfoNEAR, getNearPublicKey } from './near'
+import { getED25519Key } from '@toruslabs/openlogin-ed25519'
+import { base_encode as baseEncode } from 'near-api-js/lib/utils/serialize'
+import { PublicKey } from 'near-api-js/lib/utils'
+
+import { initContract, setUserInfoNEAR, setNearPrivateKey } from './near'
 import { addProfileToIPFS, createDefaultProfile, getProfile, Profile } from './profile'
 import { uint8ArrayToHexString } from './utilities/helpers'
 
-// POST newly created account to IPFS
-export async function register(
-	id: string,
-	_password: string,
-	name: string,
-	email: string,
-): Promise<{ cid: string; profile: Profile }> {
-	const profile: Profile = {
-		id,
-		name,
-		email,
-		bio: ``,
-		location: ``,
-		avatar: ``,
-		socials: [],
-	}
+export interface IAuthResult {
+	profile: Profile
+	cid: string
+}
 
+export function getAccountId(privateKey: string) {
+	const { pk } = getED25519Key(privateKey)
+
+	const pk58 = `ed25519:${baseEncode(pk)}`
+	const accountId = uint8ArrayToHexString(PublicKey.fromString(pk58).data)
+
+	return accountId
+}
+
+// POST newly created account to IPFS
+export async function register(id: string, privateKey: string): Promise<IAuthResult> {
+	const { sk } = getED25519Key(privateKey)
+	const accountId = getAccountId(privateKey)
+
+	setNearPrivateKey(sk, accountId)
+
+	// Reinitialise Smart Contract API
+	await initContract(accountId)
+
+	const profile = createDefaultProfile(id)
 	const [cid, userSetStatus] = await Promise.all([addProfileToIPFS(profile), setUserInfoNEAR(id)])
 
 	if (!userSetStatus.success) {
 		throw new Error(userSetStatus.error)
 	}
 
-	return { cid, profile }
+	window.localStorage.setItem(`accountId`, accountId)
+	return { profile, cid }
 }
 
-export async function login(
-	username: string,
-	_password: string,
-): Promise<{ success: boolean; profile: Profile; profileCID: string }> {
-	const { accountId, publicKey } = await getUserInfoNEAR(username)
-	const pubKey = await getNearPublicKey(accountId)
-	if (!pubKey) {
-		throw new Error(`NEAR Key not found!`)
-	}
+export async function login(id: string, privateKey: string): Promise<IAuthResult> {
+	const accountId = getAccountId(privateKey)
+	const { sk } = getED25519Key(privateKey)
 
-	if (uint8ArrayToHexString(publicKey) !== uint8ArrayToHexString(pubKey)) {
-		throw new Error(`Public key on NEAR and localStorage do not match!`)
-	}
+	setNearPrivateKey(sk, accountId)
+	const contractPromise = initContract(accountId)
 
-	const value = {
-		accountId,
-		allKeys: [],
-	}
-	window.localStorage.setItem(`null_wallet_auth_key`, JSON.stringify(value))
+	let profile = createDefaultProfile(id)
 
-	// Reinitialise Smart Contract API
-	await initContract()
-
-	let profile = createDefaultProfile(username)
-	const fetchedProfile = await getProfile(username)
+	const fetchedProfile = await getProfile(id)
 	if (fetchedProfile) {
 		profile = fetchedProfile
 	}
+	const [cid] = await Promise.all([addProfileToIPFS(profile), contractPromise])
 
-	const profileCID = await addProfileToIPFS(profile)
-	return { success: true, profile, profileCID }
+	window.localStorage.setItem(`accountId`, accountId)
+	return { profile, cid }
 }

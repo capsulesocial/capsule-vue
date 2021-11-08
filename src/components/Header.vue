@@ -155,6 +155,7 @@ export default Vue.extend({
 		}),
 		logout() {
 			this.endSession()
+			window.localStorage.removeItem(`accountId`)
 			this.$router.push(`/`)
 		},
 		toggleDropdown() {
