@@ -1,7 +1,7 @@
 <template>
 	<article class="flex justify-center">
 		<nuxt-link
-			v-if="layout === `block`"
+			v-if="layout === `block` && bgImage!== ``"
 			:to="'/discover/' + text"
 			class="
 				flex
@@ -17,11 +17,11 @@
 				bg-primary
 				w-full
 			"
-			style="width: 340px; height: 200px"
+			:style="{ background: `linear-gradient(180deg, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.8) 100%), url(` + bgImage + `)`, backgroundSize: 'cover', width: '340px', height: '200px' }"
 		>
-			<img v-if="bgImage !== ``" :src="bgImage" :alt="text" class="absolute left-0 top-0 object-contain w-full" />
+			<!-- <img v-if="bgImage !== ``" :src="bgImage" :alt="text" class="absolute left-0 top-0 object-contain w-full" /> -->
 			<div class="flex flex-col font-sans p-4">
-				<h4 class="text-2xl text-white font-extrabold capitalize z-20" style="text-shadow: 2px 2px 4px #000000">
+				<h4 class="text-2xl text-white font-extrabold capitalize z-20">
 					{{ text }}
 				</h4>
 			</div>
@@ -33,7 +33,7 @@
 					v-if="bgImage !== ``"
 					:src="bgImage"
 					:alt="text"
-					class="opacity-75 h-20 w-24 object-cover rounded-lg shadow-lg"
+					class="h-20 w-24 object-cover rounded-lg shadow-lg"
 				/>
 				<div class="px-4 w-full flex items-center">
 					<span>

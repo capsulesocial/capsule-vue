@@ -172,11 +172,11 @@ export default Vue.extend({
 
 <style>
 .loader {
-	border: 16px solid #eeeeee; /* Light grey */
-	border-top: 16px solid #1e566c; /* Blue */
+	border: 3px solid #eeeeee; /* Light grey */
+	border-top: 3px solid #2E556A; /* Dark teal */
 	border-radius: 50%;
-	width: 120px;
-	height: 120px;
+	width: 40px;
+	height: 40px;
 	animation: spin 2s linear infinite;
 }
 

@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<h6 class="text-primary font-semibold">Bookmarks</h6>
+		<h2 class="text-xl text-primary font-semibold mb-2 -mt-2">My bookmarks</h2>
 		<nuxt-child :posts="posts" :followingList="following" :toggleFriend="toggleFriend" />
 	</div>
 </template>

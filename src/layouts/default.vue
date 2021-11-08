@@ -121,6 +121,8 @@ export default Vue.extend({
 					return `Hi ` + this.profile?.name + `,`
 				case `discover`:
 					return `Browse Capsule`
+				case `bookmarks`:
+					return `Bookmarks list`
 				default:
 					return ``
 			}
