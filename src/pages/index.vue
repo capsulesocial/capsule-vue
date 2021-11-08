@@ -84,8 +84,8 @@ import BrandedButton from '@/components/BrandedButton.vue'
 import { MutationType, createSessionFromProfile, namespace as sessionStoreNamespace } from '~/store/session'
 
 import { getAccountId, login, register } from '@/backend/auth'
-import { Profile } from '@/backend/profile'
 import { getUsernameNEAR } from '@/backend/near'
+import { torusVerifiers, TorusVerifiers } from '@/backend/utilities/config'
 
 interface IData {
 	id: string
@@ -133,25 +133,8 @@ export default Vue.extend({
 			changeBio: MutationType.CHANGE_BIO,
 			changeLocation: MutationType.CHANGE_LOCATION,
 		}),
-		async torusLogin(type: string) {
-			switch (type) {
-				case `google`:
-					this.userInfo = await this.torus.triggerLogin({
-						typeOfLogin: `discord`,
-						verifier: `capsule-social-test-discord`,
-						clientId: `906210984396468275`,
-					})
-					break
-				case `discord`:
-					this.userInfo = await this.torus.triggerLogin({
-						typeOfLogin: `discord`,
-						verifier: `capsule-social-test-discord`,
-						clientId: `906210984396468275`,
-					})
-					break
-				default:
-					throw new Error(`Unknown login type`)
-			}
+		async torusLogin(type: TorusVerifiers) {
+			this.userInfo = await this.torus.triggerLogin(torusVerifiers[type])
 
 			this.accountId = getAccountId(this.userInfo.privateKey)
 			this.username = await getUsernameNEAR(this.accountId)
@@ -159,32 +142,28 @@ export default Vue.extend({
 				this.verify()
 			}
 		},
-		async verify() {
+		loginOrRegister() {
 			if (!this.userInfo) {
 				throw new Error(`Unexpected condition!`)
 			}
+			if (this.username) {
+				return login(this.username, this.userInfo.privateKey)
+			}
+			const idCheck = this.$qualityID(this.id)
+			if (!idCheck) {
+				alert(idCheck)
+				return null
+			}
+			return register(this.id, this.userInfo.privateKey)
+		},
+		async verify() {
 			try {
 				// Login
-				let profile: Profile | null = null
-				let cid: string | null = null
-				if (this.username) {
-					const data = await login(this.username, this.userInfo.privateKey)
-					profile = data.profile
-					cid = data.cid
-				} else {
-					const idCheck = this.$qualityID(this.id)
-					if (!idCheck) {
-						alert(idCheck)
-						return
-					}
-					const data = await register(this.id, this.userInfo.privateKey)
-					profile = data.profile
-					cid = data.cid
+				const res = await this.loginOrRegister()
+				if (!res) {
+					return
 				}
-
-				if (!profile || !cid) {
-					throw new Error(`Unexpected condition!`)
-				}
+				const { profile, cid } = res
 
 				const account = createSessionFromProfile(cid, profile)
 				this.changeCID(cid)

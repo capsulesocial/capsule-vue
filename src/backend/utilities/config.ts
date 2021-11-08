@@ -1,3 +1,6 @@
+// eslint-disable-next-line import/named
+import { SubVerifierDetails } from '@toruslabs/torus-direct-web-sdk'
+
 export const capsuleOrbit = process.env.ORBIT_URL || `https://test-node.capsule.social/orbit`
 export const domain = process.env.DOMAIN || `http://localhost:3000`
 export const contractName = process.env.CONTRACT_NAME || `capsule-vue`
@@ -49,4 +52,18 @@ export function getNearConfig() {
 		default:
 			throw new Error(`Invalid NEAR network type`)
 	}
+}
+
+export type TorusVerifiers = `google` | `discord`
+export const torusVerifiers: Record<TorusVerifiers, SubVerifierDetails> = {
+	google: {
+		typeOfLogin: `google`,
+		verifier: `capsule-social-test-google`,
+		clientId: `653379121360-j8t9ua763vfvd86d1qjguonhrgqvkigo.apps.googleusercontent.com`,
+	},
+	discord: {
+		typeOfLogin: `discord`,
+		verifier: `capsule-social-test-discord`,
+		clientId: `906210984396468275`,
+	},
 }
