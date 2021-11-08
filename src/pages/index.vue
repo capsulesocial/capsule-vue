@@ -60,6 +60,9 @@
 							class="w-full"
 						/>
 					</article>
+					<article v-show="this.isLoading" class="flex justify-center h-screen">
+						<div class="loader m-5"></div>
+					</article>
 				</article>
 				<article class="text-center whitespace-nowrap flex justify-between text-sm p-5 text-gray-600 font-sans">
 					<button class="px-4 py-2 focus:outline-none">Help</button>
@@ -92,6 +95,7 @@ interface IData {
 	userInfo: null | TorusLoginResponse
 	username?: null | string
 	accountId: null | string
+	isLoading: boolean
 }
 
 export default Vue.extend({
@@ -111,6 +115,7 @@ export default Vue.extend({
 			}),
 			accountId: null,
 			userInfo: null,
+			isLoading: false,
 		}
 	},
 	async created() {
@@ -134,12 +139,15 @@ export default Vue.extend({
 		}),
 		async torusLogin(type: TorusVerifiers) {
 			this.userInfo = await this.torus.triggerLogin(torusVerifiers[type])
+			this.isLoading = true
 
 			this.accountId = getAccountId(this.userInfo.privateKey)
 			this.username = await getUsernameNEAR(this.accountId)
 			if (this.username) {
 				this.verify()
+				return
 			}
+			this.isLoading = false
 		},
 		loginOrRegister(privateKey: string) {
 			if (this.username) {
