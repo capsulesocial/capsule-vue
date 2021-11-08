@@ -173,7 +173,7 @@ export default Vue.extend({
 <style>
 .loader {
 	border: 3px solid #eeeeee; /* Light grey */
-	border-top: 3px solid #2E556A; /* Dark teal */
+	border-top: 3px solid #2e556a; /* Dark teal */
 	border-radius: 50%;
 	width: 40px;
 	height: 40px;
