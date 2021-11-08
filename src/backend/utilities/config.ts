@@ -1,5 +1,6 @@
 // eslint-disable-next-line import/named
 import { SubVerifierDetails } from '@toruslabs/torus-direct-web-sdk'
+import { ILocalNetNearConfig, INearConfig } from '../near'
 
 export const capsuleOrbit = process.env.ORBIT_URL || `https://test-node.capsule.social/orbit`
 export const domain = process.env.DOMAIN || `http://localhost:3000`
@@ -24,7 +25,7 @@ const torusEnv = {
 	},
 }
 
-export function getNearConfig() {
+export function getNearConfig(): INearConfig | ILocalNetNearConfig {
 	switch (nearNetwork) {
 		case `testnet`:
 			return {
@@ -53,7 +54,7 @@ export function getNearConfig() {
 				helperUrl: `https://helper.betanet.near.org`,
 				explorerUrl: `https://explorer.betanet.near.org`,
 			}
-		case `localnet`:
+		case `local`:
 			return {
 				networkId: `local`,
 				nodeUrl: nearNodeUrl,
