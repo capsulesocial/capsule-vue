@@ -12,6 +12,18 @@ const homeDir = process.env.HOME_DIR || `/home/capsule`
 const nearNodeUrl = process.env.NEAR_NODE_URL || `http://localhost:3030`
 const nearWalletUrl = process.env.NEAR_WALLET_URL || `http://localhost:4000/wallet`
 
+const torusEnv = {
+	google: {
+		verifier: process.env.TORUS_GOOGLE_VERIFIER || `capsule-social-test-google`,
+		clientId:
+			process.env.TORUS_GOOGLE_CLIENTID || `653379121360-j8t9ua763vfvd86d1qjguonhrgqvkigo.apps.googleusercontent.com`,
+	},
+	discord: {
+		verifier: process.env.TORUS_DISCORD_VERIFIER || `capsule-social-test-discord`,
+		clientId: process.env.TORUS_DISCORD_CLIENTID || `906210984396468275`,
+	},
+}
+
 export function getNearConfig() {
 	switch (nearNetwork) {
 		case `testnet`:
@@ -58,12 +70,12 @@ export type TorusVerifiers = `google` | `discord`
 export const torusVerifiers: Record<TorusVerifiers, SubVerifierDetails> = {
 	google: {
 		typeOfLogin: `google`,
-		verifier: `capsule-social-test-google`,
-		clientId: `653379121360-j8t9ua763vfvd86d1qjguonhrgqvkigo.apps.googleusercontent.com`,
+		verifier: torusEnv.google.verifier,
+		clientId: torusEnv.google.clientId,
 	},
 	discord: {
 		typeOfLogin: `discord`,
-		verifier: `capsule-social-test-discord`,
-		clientId: `906210984396468275`,
+		verifier: torusEnv.discord.verifier,
+		clientId: torusEnv.discord.clientId,
 	},
 }
