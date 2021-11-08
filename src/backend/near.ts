@@ -4,6 +4,20 @@ import { KeyPairEd25519 } from 'near-api-js/lib/utils'
 import { base_decode, base_encode } from 'near-api-js/lib/utils/serialize'
 import { getNearConfig } from './utilities/config'
 
+export interface INearConfig {
+	networkId: `testnet` | `mainnet` | `betanet` | `local`
+	nodeUrl: string
+	contractName: string
+	walletUrl: string
+	helperUrl: string
+	explorerUrl: string
+}
+
+export interface ILocalNetNearConfig extends Omit<INearConfig, `explorerUrl` | `helperUrl`> {
+	networkId: `local`
+	keyPath: string
+}
+
 const nearConfig = getNearConfig()
 
 let _near: Near | null = null
@@ -15,7 +29,7 @@ function getRpcProviderUrl() {
 		case `testnet`:
 		case `betanet`:
 			return `https://rpc.${nearConfig.networkId}.near.org`
-		case `localnet`:
+		case `local`:
 			return nearConfig.nodeUrl
 		default:
 			throw new Error(`Invalid NEAR network type`)
