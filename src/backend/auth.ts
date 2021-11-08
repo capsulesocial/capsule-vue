@@ -7,9 +7,9 @@ import { addProfileToIPFS, createDefaultProfile, getProfile, Profile } from './p
 import { uint8ArrayToHexString } from './utilities/helpers'
 
 export function getAccountId(privateKey: string) {
-	const pKey = getED25519Key(privateKey)
+	const { pk } = getED25519Key(privateKey)
 
-	const pk58 = `ed25519:${baseEncode(pKey.pk)}`
+	const pk58 = `ed25519:${baseEncode(pk)}`
 	const accountId = uint8ArrayToHexString(PublicKey.fromString(pk58).data)
 
 	return accountId
@@ -17,22 +17,13 @@ export function getAccountId(privateKey: string) {
 
 // POST newly created account to IPFS
 export async function register(id: string, privateKey: string): Promise<{ cid: string; profile: Profile }> {
-	const pKey = getED25519Key(privateKey)
+	const { sk } = getED25519Key(privateKey)
 
 	const accountId = getAccountId(privateKey)
 	// Reinitialise Smart Contract API
+	setNearPrivateKey(sk, accountId)
 	await initContract(accountId)
-	setNearPrivateKey(pKey.sk, accountId)
-	// eslint-disable-next-line no-console
-	const profile: Profile = {
-		id,
-		name: ``,
-		email: ``,
-		bio: ``,
-		location: ``,
-		avatar: ``,
-		socials: [],
-	}
+	const profile = createDefaultProfile(id)
 
 	const [cid, userSetStatus] = await Promise.all([addProfileToIPFS(profile), setUserInfoNEAR(id)])
 
@@ -47,12 +38,10 @@ export async function login(
 	id: string,
 	privateKey: string,
 ): Promise<{ success: boolean; profile: Profile; profileCID: string }> {
-	const pKey = getED25519Key(privateKey)
-
 	const accountId = getAccountId(privateKey)
-	// Reinitialise Smart Contract API
-	await initContract(accountId)
-	setNearPrivateKey(pKey.sk, accountId)
+
+	const { sk } = getED25519Key(privateKey)
+	setNearPrivateKey(sk, accountId)
 
 	const value = {
 		accountId,
