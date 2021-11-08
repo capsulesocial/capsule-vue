@@ -24,7 +24,7 @@
 			<section class="bg-white mx-auto lg:w-full lg:max-w-md rounded shadow-lg divide-y divide-gray-200">
 				<article class="px-10 py-6 font-sans">
 					<!-- Sign in + Register: ID -->
-					<article v-show="userInfo && !username">
+					<article v-show="userInfo && username === null">
 						<label for="id" class="font-semibold text-sm text-gray-600 pb-1 block">ID</label>
 						<input
 							id="id"
@@ -45,22 +45,21 @@
 								font-sans
 							"
 						/>
-						Ensure that the NEAR account with ID: "{{ accountId }}" has sufficient funds before registering.
+						<p class="text-center">
+							Ensure that the NEAR account with ID: "{{ accountId }}" has sufficient funds before signing up.
+						</p>
 						<BrandedButton :text="`Sign Up`" :action="verify" class="w-full" />
 					</article>
-					<BrandedButton
-						v-show="!userInfo"
-						:text="`Sign in or Sign up with Discord`"
-						:action="() => torusLogin('discord')"
-						class="w-full"
-					/>
-					<BrandedButton
-						v-show="!userInfo"
-						style="margin-top: 10px"
-						:text="`Sign in or Sign up with Google`"
-						:action="() => torusLogin('google')"
-						class="w-full"
-					/>
+					<article v-show="!userInfo">
+						<p style="margin-bottom: 10px" class="text-center">Sign in or sign up using...</p>
+						<BrandedButton :text="`Discord`" :action="() => torusLogin('discord')" class="w-full" />
+						<BrandedButton
+							style="margin-top: 10px"
+							:text="`Google`"
+							:action="() => torusLogin('google')"
+							class="w-full"
+						/>
+					</article>
 				</article>
 				<article class="text-center whitespace-nowrap flex justify-between text-sm p-5 text-gray-600 font-sans">
 					<button class="px-4 py-2 focus:outline-none">Help</button>
@@ -91,7 +90,7 @@ interface IData {
 	id: string
 	torus: DirectWebSdk
 	userInfo: null | TorusLoginResponse
-	username: null | string
+	username?: null | string
 	accountId: null | string
 }
 
@@ -112,7 +111,6 @@ export default Vue.extend({
 			}),
 			accountId: null,
 			userInfo: null,
-			username: null,
 		}
 	},
 	async created() {
