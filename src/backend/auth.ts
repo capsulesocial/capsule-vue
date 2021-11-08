@@ -36,6 +36,7 @@ export async function register(id: string, privateKey: string): Promise<IAuthRes
 		throw new Error(userSetStatus.error)
 	}
 
+	window.localStorage.setItem(`accountId`, accountId)
 	return { profile, cid }
 }
 
@@ -45,12 +46,6 @@ export async function login(id: string, privateKey: string): Promise<IAuthResult
 	const { sk } = getED25519Key(privateKey)
 	setNearPrivateKey(sk, accountId)
 
-	const value = {
-		accountId,
-		allKeys: [],
-	}
-	window.localStorage.setItem(`null_wallet_auth_key`, JSON.stringify(value))
-
 	let profile = createDefaultProfile(id)
 	const fetchedProfile = await getProfile(id)
 	if (fetchedProfile) {
@@ -58,5 +53,6 @@ export async function login(id: string, privateKey: string): Promise<IAuthResult
 	}
 
 	const [cid] = await Promise.all([addProfileToIPFS(profile), await initContract(accountId)])
+	window.localStorage.setItem(`accountId`, accountId)
 	return { profile, cid }
 }

@@ -119,7 +119,8 @@ export default Vue.extend({
 		await this.torus.init()
 	},
 	mounted() {
-		if (this.$store.state.session.id !== ``) {
+		const accountId = window.localStorage.getItem(`accountId`)
+		if (this.$store.state.session.id !== `` && accountId) {
 			this.$router.push(`/home`)
 		}
 	},
@@ -155,7 +156,7 @@ export default Vue.extend({
 		},
 		async verify() {
 			try {
-				if (!this.userInfo) {
+				if (!this.userInfo || !this.accountId) {
 					throw new Error(`Unexpected condition!`)
 				}
 				// Login
