@@ -28,7 +28,6 @@
 					<section class="flex flex-row mt-20">
 						<PostEditor
 							v-if="$store.state.widgets.primary === `editor` && $route.name === `home`"
-							ref="editor"
 							style="width: 750px"
 							class="
 								fixed
@@ -63,7 +62,7 @@
 						/>
 						<!-- Widgets -->
 						<aside class="fixed" :class="showWidgets ? `z-10` : ``" style="margin-left: 780px; width: 450px">
-							<Widgets @overlay="toggleZIndex" @saveDraft="saveDraftState" />
+							<Widgets @overlay="toggleZIndex" />
 							<Footer />
 						</aside>
 					</section>
@@ -140,20 +139,12 @@ export default Vue.extend({
 					return `Hi ` + this.profile?.name + `,`
 				case `discover`:
 					return `Browse Capsule`
-				case `bookmarks`:
-					return `Bookmarks list`
 				default:
 					return ``
 			}
 		},
 		toggleZIndex() {
 			this.showWidgets = !this.showWidgets
-		},
-		saveDraftState(): void {
-			if (this.$refs.editor) {
-				// @ts-ignore
-				this.$refs.editor.saveContent()
-			}
 		},
 	},
 })

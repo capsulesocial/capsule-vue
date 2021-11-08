@@ -47,6 +47,7 @@ export default Vue.extend({
 		PostCard,
 		BackIcon,
 	},
+	layout: `discover`,
 	data(): IData {
 		return {
 			posts: [],

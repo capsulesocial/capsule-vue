@@ -20,7 +20,7 @@
 				bg-opacity-50
 			"
 		>
-			<ConfigureWidgets @close="toggleConfigure" />
+			<ConfigureWidgets @close="toggleConfigure" @save="saveDraft" />
 		</div>
 		<!-- Discover page -->
 		<TagsWidget
@@ -97,6 +97,9 @@ export default Vue.extend({
 		}
 	},
 	methods: {
+		saveDraft(): void {
+			this.$emit(`saveDraft`)
+		},
 		toggleConfigure() {
 			this.configureWidgets = !this.configureWidgets
 			this.$emit(`overlay`)

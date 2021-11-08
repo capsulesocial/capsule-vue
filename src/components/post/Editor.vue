@@ -138,10 +138,15 @@ export default Vue.extend({
 		this.$refs.subtitle.value = this.$store.state.draft.subtitle
 	},
 	beforeDestroy() {
-		const input = this.getInputHTML()
-		this.$store.commit(`draft/updateContent`, input)
+		this.saveContent()
 	},
 	methods: {
+		saveContent(): void {
+			const input = this.getInputHTML()
+			if (input !== ``) {
+				this.$store.commit(`draft/updateContent`, input)
+			}
+		},
 		updateWordCount(n: number) {
 			this.wordCount = n - 1
 			this.$emit(`update`, this.wordCount)

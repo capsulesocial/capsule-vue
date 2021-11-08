@@ -18,8 +18,12 @@
 					backdrop-filter backdrop-blur-lg
 				"
 			>
-				<button @click="handleClose">Close</button>
 				Primary widget
+				<!-- Select a main widget -->
+				<div class="grid grid-cols-3 gap-5">
+					<button class="rounded-lg bg-gray1 h-48" @click="changePrimary(`feed`)">Post feed</button>
+					<button class="rounded-lg bg-gray1 h-48" @click="changePrimary(`editor`)">Post editor</button>
+				</div>
 			</article>
 			<!-- Right side: side widgets -->
 			<div class="fixed" style="margin-left: 780px; width: 450px">
@@ -46,6 +50,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+
 export default Vue.extend({
 	created() {
 		window.addEventListener(`click`, this.handleCloseClick, false)
@@ -54,6 +59,13 @@ export default Vue.extend({
 		window.removeEventListener(`click`, this.handleCloseClick)
 	},
 	methods: {
+		changePrimary(type: string): void {
+			// Update draft on change from editor to new widget
+			if (this.$store.state.widgets.primary === `editor` && type !== `editor`) {
+				this.$emit(`save`)
+			}
+			this.$store.commit(`widgets/changePrimary`, type)
+		},
 		handleCloseClick(e: any): void {
 			if (!e.target || e.target.parentNode === null || e.target.parentNode.classList === undefined) {
 				return

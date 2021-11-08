@@ -33,6 +33,7 @@ export default Vue.extend({
 	components: {
 		CategoryCard,
 	},
+	layout: `discover`,
 	data(): IData {
 		return {
 			categoryList: categories,
