@@ -142,24 +142,24 @@ export default Vue.extend({
 				this.verify()
 			}
 		},
-		loginOrRegister() {
-			if (!this.userInfo) {
-				throw new Error(`Unexpected condition!`)
-			}
+		loginOrRegister(privateKey: string) {
 			if (this.username) {
-				return login(this.username, this.userInfo.privateKey)
+				return login(this.username, privateKey)
 			}
 			const idCheck = this.$qualityID(this.id)
 			if (!idCheck) {
 				alert(idCheck)
 				return null
 			}
-			return register(this.id, this.userInfo.privateKey)
+			return register(this.id, privateKey)
 		},
 		async verify() {
 			try {
+				if (!this.userInfo) {
+					throw new Error(`Unexpected condition!`)
+				}
 				// Login
-				const res = await this.loginOrRegister()
+				const res = await this.loginOrRegister(this.userInfo.privateKey)
 				if (!res) {
 					return
 				}
