@@ -28,10 +28,10 @@ const config: NuxtConfig = {
 
 	// Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
 	plugins: [
+		{ src: '@/plugins/persistedstate.ts' },
 		{ src: '@/plugins/quality.ts' },
 		{ src: '@/plugins/helpers.ts' },
 		{ src: '@/plugins/backend.ts' },
-		{ src: '@/plugins/persistedstate.ts' },
 	],
 
 	// Auto import components: https://go.nuxtjs.dev/config-components

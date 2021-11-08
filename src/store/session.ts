@@ -2,7 +2,6 @@
 import type { GetterTree, MutationTree } from 'vuex'
 import type { RootState } from './index'
 import { Profile } from '@/backend/profile'
-import { walletLogout } from '@/backend/near'
 export interface Session {
 	id: Profile[`id`]
 	name: Profile[`name`]
@@ -16,7 +15,7 @@ export interface Session {
 
 export const namespace = `session`
 
-export const state = (): Session => createDefaultSession(``, ``, ``)
+export const state = (): Session => createDefaultSession(``)
 
 export const getters: GetterTree<Session, RootState> = {}
 
@@ -54,19 +53,18 @@ export const mutations: MutationTree<Session> = {
 		state.location = newLocation
 	},
 	[MutationType.LOGOUT]: (state) => {
-		Object.assign(state, createDefaultSession(``, ``, ``))
-		walletLogout()
+		Object.assign(state, createDefaultSession(``))
 	},
 }
 
 /* Helpers */
 
-export function createDefaultSession(id: string, name: string, email: string): Session {
+export function createDefaultSession(id: string): Session {
 	return {
 		cid: ``,
 		id,
-		name,
-		email,
+		name: ``,
+		email: ``,
 		bio: ``,
 		location: ``,
 		socials: [],
