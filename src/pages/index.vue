@@ -45,12 +45,20 @@
 								font-sans
 							"
 						/>
+						Ensure that the NEAR account with ID: "{{ accountId }}" has sufficient funds before registering.
+						<BrandedButton :text="`Sign Up`" :action="verify" class="w-full" />
 					</article>
-					<BrandedButton v-show="userInfo" :text="`Sign Up`" :action="verify" class="w-full" />
 					<BrandedButton
 						v-show="!userInfo"
+						:text="`Sign in or Sign up with Discord`"
+						:action="() => torusLogin('discord')"
+						class="w-full"
+					/>
+					<BrandedButton
+						v-show="!userInfo"
+						style="margin-top: 10px"
 						:text="`Sign in or Sign up with Google`"
-						:action="torusLogin"
+						:action="() => torusLogin('google')"
 						class="w-full"
 					/>
 				</article>
@@ -84,6 +92,7 @@ interface IData {
 	torus: DirectWebSdk
 	userInfo: null | TorusLoginResponse
 	username: null | string
+	accountId: null | string
 }
 
 export default Vue.extend({
@@ -101,6 +110,7 @@ export default Vue.extend({
 				baseUrl: `http://localhost:3000/oauth`,
 				network: `testnet`, // details for test net
 			}),
+			accountId: null,
 			userInfo: null,
 			username: null,
 		}
@@ -123,14 +133,28 @@ export default Vue.extend({
 			changeBio: MutationType.CHANGE_BIO,
 			changeLocation: MutationType.CHANGE_LOCATION,
 		}),
-		async torusLogin() {
-			this.userInfo = await this.torus.triggerLogin({
-				typeOfLogin: `google`,
-				verifier: `capsule-social-test-google`,
-				clientId: `653379121360-j8t9ua763vfvd86d1qjguonhrgqvkigo.apps.googleusercontent.com`,
-			})
-			const accountId = getAccountId(this.userInfo.privateKey)
-			this.username = await getUsernameNEAR(accountId)
+		async torusLogin(type: string) {
+			switch (type) {
+				case `google`:
+					this.userInfo = await this.torus.triggerLogin({
+						typeOfLogin: `discord`,
+						verifier: `capsule-social-test-discord`,
+						clientId: `906210984396468275`,
+					})
+					break
+				case `discord`:
+					this.userInfo = await this.torus.triggerLogin({
+						typeOfLogin: `discord`,
+						verifier: `capsule-social-test-discord`,
+						clientId: `906210984396468275`,
+					})
+					break
+				default:
+					throw new Error(`Unknown login type`)
+			}
+
+			this.accountId = getAccountId(this.userInfo.privateKey)
+			this.username = await getUsernameNEAR(this.accountId)
 			if (this.username) {
 				this.verify()
 			}
