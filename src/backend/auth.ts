@@ -6,6 +6,11 @@ import { initContract, setUserInfoNEAR, setNearPrivateKey } from './near'
 import { addProfileToIPFS, createDefaultProfile, getProfile, Profile } from './profile'
 import { uint8ArrayToHexString } from './utilities/helpers'
 
+export interface IAuthResult {
+	profile: Profile
+	cid: string
+}
+
 export function getAccountId(privateKey: string) {
 	const { pk } = getED25519Key(privateKey)
 
@@ -16,7 +21,7 @@ export function getAccountId(privateKey: string) {
 }
 
 // POST newly created account to IPFS
-export async function register(id: string, privateKey: string): Promise<{ cid: string; profile: Profile }> {
+export async function register(id: string, privateKey: string): Promise<IAuthResult> {
 	const { sk } = getED25519Key(privateKey)
 
 	const accountId = getAccountId(privateKey)
@@ -31,13 +36,10 @@ export async function register(id: string, privateKey: string): Promise<{ cid: s
 		throw new Error(userSetStatus.error)
 	}
 
-	return { cid, profile }
+	return { profile, cid }
 }
 
-export async function login(
-	id: string,
-	privateKey: string,
-): Promise<{ success: boolean; profile: Profile; profileCID: string }> {
+export async function login(id: string, privateKey: string): Promise<IAuthResult> {
 	const accountId = getAccountId(privateKey)
 
 	const { sk } = getED25519Key(privateKey)
@@ -49,15 +51,12 @@ export async function login(
 	}
 	window.localStorage.setItem(`null_wallet_auth_key`, JSON.stringify(value))
 
-	// Reinitialise Smart Contract API
-	await initContract(accountId)
-
 	let profile = createDefaultProfile(id)
 	const fetchedProfile = await getProfile(id)
 	if (fetchedProfile) {
 		profile = fetchedProfile
 	}
 
-	const profileCID = await addProfileToIPFS(profile)
-	return { success: true, profile, profileCID }
+	const [cid] = await Promise.all([addProfileToIPFS(profile), await initContract(accountId)])
+	return { profile, cid }
 }

@@ -107,7 +107,7 @@ export default Vue.extend({
 		return {
 			id: ``,
 			torus: new DirectWebSdk({
-				baseUrl: `http://localhost:3000/oauth`,
+				baseUrl: `${process.env.DOMAIN}/oauth`,
 				network: `testnet`, // details for test net
 			}),
 			accountId: null,
@@ -170,7 +170,7 @@ export default Vue.extend({
 				if (this.username) {
 					const data = await login(this.username, this.userInfo.privateKey)
 					profile = data.profile
-					cid = data.profileCID
+					cid = data.cid
 				} else {
 					const idCheck = this.$qualityID(this.id)
 					if (!idCheck) {
