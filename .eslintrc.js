@@ -65,7 +65,8 @@ module.exports = {
 				"after": true
 			}
 		],
-		"no-case-declarations": "off"
+		"no-case-declarations": "off",
+		"import/no-named-as-default": "off"
 	},
 	"globals": {
 	},

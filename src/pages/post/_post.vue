@@ -109,7 +109,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { parse } from 'marked'
+import { marked } from 'marked'
 import PostActions from '@/components/post/Actions.vue'
 import AuthorCard from '@/components/AuthorCard.vue'
 import TagCard from '@/components/Tag.vue'
@@ -188,7 +188,7 @@ export default Vue.extend({
 			})
 		}
 		// Convert markdown to HTML
-		this.content = parse(this.post.content)
+		this.content = marked.parse(this.post.content)
 		if (this.author && this.author.avatar.length > 1) {
 			getPhotoFromIPFS(this.author.avatar).then((p) => {
 				this.authorAvatar = p

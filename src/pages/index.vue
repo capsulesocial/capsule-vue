@@ -116,6 +116,7 @@ export default Vue.extend({
 			accountId: null,
 			userInfo: null,
 			isLoading: false,
+			username: undefined,
 		}
 	},
 	async created() {
