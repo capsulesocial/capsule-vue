@@ -101,6 +101,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapMutations } from 'vuex'
+import { keyStores } from 'near-api-js'
+
 import CapsuleIcon from '@/components/icons/Capsule.vue'
 import NotificationsIcon from '@/components/icons/Notifications.vue'
 import SettingsIcon from '@/components/icons/Settings.vue'
@@ -156,6 +158,8 @@ export default Vue.extend({
 		logout() {
 			this.endSession()
 			window.localStorage.removeItem(`accountId`)
+			const keystore = new keyStores.BrowserLocalStorageKeyStore()
+			keystore.clear()
 			this.$router.push(`/`)
 		},
 		toggleDropdown() {
