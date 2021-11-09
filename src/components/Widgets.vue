@@ -8,7 +8,7 @@
 				fixed
 				w-full
 				h-screen
-				bg-black
+				bg-primary
 				top-0
 				bottom-0
 				left-0

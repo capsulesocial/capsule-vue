@@ -1,5 +1,5 @@
 <template>
-	<div class="w-full">
+	<div class="w-full border border-lightBorder">
 		<div class="-mt-2">
 			<h2 class="text-xl text-primary font-semibold mb-2">Featured Categories</h2>
 			<p class="text-gray5">Read more of what you love by browsing top categories:</p>

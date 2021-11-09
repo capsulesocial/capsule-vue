@@ -4,7 +4,7 @@
 		<div
 			:class="
 				showComments
-					? `fixed w-full h-screen bg-black top-0 bottom-0 left-0 right-0 z-30 flex justify-center items-center bg-opacity-50`
+					? `fixed w-full h-screen bg-primary top-0 bottom-0 left-0 right-0 z-30 flex justify-center items-center bg-opacity-50`
 					: ``
 			"
 		>

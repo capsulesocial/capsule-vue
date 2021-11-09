@@ -43,6 +43,7 @@ module.exports = {
         gray7: '#686868',
         lightAuthorCard: '#E5E7EB',
         darkAuthorCard: '#777777',
+        connectGreen: '#72D591',
         selectedBlue: '#0020ff',
         neutralLightest: '#F6F6F6',
 

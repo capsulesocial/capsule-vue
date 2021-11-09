@@ -7,7 +7,7 @@
 				background: `linear-gradient(180deg, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.8) 100%), url(${require(`@/assets/images/category/` +
 					$route.params.category +
 					`/` +
-					`header.jpg`)})`,
+					`header.png`)})`,
 				backgroundSize: 'cover',
 			}"
 		>
@@ -16,7 +16,7 @@
 					<div class="bg-gray1 rounded-full flex-shrink-0">
 						<BackIcon />
 					</div>
-					<p class="pl-4 font-semibold">All categories</p>
+					<p class="pl-3 font-semibold">All categories</p>
 				</button>
 				<h2 class="text-3xl text-lightOnPrimaryText font-semibold">{{ $route.params.category }}</h2>
 			</div>

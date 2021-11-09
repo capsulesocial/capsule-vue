@@ -1,8 +1,8 @@
 <template>
-	<article class="w-full rounded-lg shadow-lg bg-white mb-5 p-4">
-		<div class="flex flex-row justify-between">
-			<h6 class="font-semibold text-primary mb-2">Filter by Category</h6>
-			<button class="focus:outline-none text-sm italics font-light text-primary" @click="$emit(`filter`)">
+	<article class="w-full rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg mb-5 px-6 py-4 border border-lightBorder">
+		<div class="flex flex-row justify-between pb-4 items-center">
+			<h6 class="text-primary text-base font-semibold">Filter by Category</h6>
+			<button class="focus:outline-none text-sm text-primary pr-1" @click="$emit(`filter`)">
 				Show All
 			</button>
 		</div>
@@ -13,7 +13,7 @@
 			:to="`/bookmarks/` + c"
 			@click="setFilter(c)"
 		>
-			<img :src="require(`@/assets/images/category/` + c + `/icon.png`)" class="hotzone w-8 h-8 mr-1 ml-2" />
+			<img :src="require(`@/assets/images/category/` + c + `/icon.png`)" class="hotzone w-8 h-8 mr-1" />
 			<span
 				class="border-b ml-2"
 				:class="active === c ? 'border-primary text-primary' : ' border-transparent text-lightPrimaryVariant'"

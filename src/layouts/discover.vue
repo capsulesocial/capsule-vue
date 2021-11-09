@@ -13,15 +13,16 @@
 				<!-- Body -->
 				<div>
 					<!-- Title and peered nodes -->
-					<div class="fixed w-full flex justify-between items-center" style="width: 1220px">
+					<div class="fixed w-full flex justify-between items-center" style="width: 1220px; height: 62px">
 						<!-- Title -->
 						<h1 class="font-semibold text-primary" style="font-size: 2.6rem">
 							{{ getTitle() }}
 						</h1>
 						<!-- Peered nodes -->
-						<div class="flex items-center bg-gray1 px-2 py-1 rounded-lg">
-							<span class="text-sm">n peered nodes</span>
+						<div class="flex items-center bg-gray1 px-3 rounded-lg">
+							<span class="text-sm mr-1 text-gray5">n peered nodes</span>
 							<CapsuleIcon />
+							<span class="bg-connectGreen rounded-xl w-3 h-3"></span>
 						</div>
 					</div>
 					<!-- Content -->
