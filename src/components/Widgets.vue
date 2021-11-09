@@ -37,7 +37,20 @@
 			"
 		/>
 		<DraftsWidget
-			v-if="!checkRoute()"
+			v-if="!checkRoute() && $store.state.widgets.secondary === `drafts`"
+			class="
+				rounded-lg
+				shadow-lg
+				bg-gradient-to-r
+				from-lightBGStart
+				to-lightBGStop
+				backdrop-filter backdrop-blur-lg
+				border border-lightBorder
+				mb-5
+			"
+		/>
+		<BookmarksWidgets
+			v-if="!checkRoute() && $store.state.widgets.secondary === `bookmarks`"
 			class="
 				rounded-lg
 				shadow-lg
@@ -80,6 +93,7 @@ import Vue from 'vue'
 import TagsWidget from '@/components/widgets/Tags.vue'
 import DraftsWidget from '@/components/widgets/Drafts.vue'
 import ConfigureWidgets from '@/components/widgets/Configure.vue'
+import BookmarksWidgets from '@/components/widgets/Bookmarks.vue'
 
 interface IData {
 	configureWidgets: boolean
@@ -90,6 +104,7 @@ export default Vue.extend({
 		TagsWidget,
 		DraftsWidget,
 		ConfigureWidgets,
+		BookmarksWidgets,
 	},
 	data(): IData {
 		return {

@@ -47,7 +47,34 @@
 						/>
 						<!-- Widgets -->
 						<aside class="fixed" style="margin-left: 780px; width: 450px">
-							<BookmarkWidgets @filter="fetchPosts" />
+							<article class="w-full rounded-lg shadow-lg bg-white mb-5 p-4">
+								<div class="flex flex-row justify-between">
+									<h6 class="font-semibold text-primary mb-2">Filter by Category</h6>
+									<button class="focus:outline-none text-sm italics font-light text-primary" @click="setFilter(``)">
+										Show All
+									</button>
+								</div>
+								<button
+									v-for="c in categoryList"
+									:key="c"
+									class="w-full flex items-center pb-2 capitalize focus:outline-none"
+									:to="`/bookmarks/` + c"
+									@click="setFilter(c)"
+								>
+									<img
+										:src="require(`@/assets/images/category/` + c + `/icon.png`)"
+										class="hotzone w-8 h-8 mr-1 ml-2"
+									/>
+									<span
+										class="border-b ml-2"
+										:class="
+											active === c ? 'border-primary text-primary' : ' border-transparent text-lightPrimaryVariant'
+										"
+									>
+										{{ c }}</span
+									>
+								</button>
+							</article>
 							<Footer />
 						</aside>
 					</section>
@@ -60,23 +87,24 @@
 <script lang="ts">
 import Vue from 'vue'
 import CapsuleIcon from '@/components/icons/Capsule.vue'
-import BookmarkWidgets from '@/components/widgets/Bookmarks.vue'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
 import { IPostResponse, getPosts } from '@/backend/post'
+import { categories } from '@/config'
 
 interface IData {
 	profile: Profile | null
 	avatar: string | ArrayBuffer | null
 	posts: IPostResponse[]
+	categoryList: string[]
+	active: string
 }
 
 export default Vue.extend({
 	components: {
 		CapsuleIcon,
-		BookmarkWidgets,
 		Header,
 		Footer,
 	},
@@ -85,6 +113,8 @@ export default Vue.extend({
 			profile: null,
 			avatar: null,
 			posts: [],
+			categoryList: categories,
+			active: ``,
 		}
 	},
 	async created() {
@@ -103,6 +133,10 @@ export default Vue.extend({
 		this.fetchPosts()
 	},
 	methods: {
+		setFilter(c: string) {
+			this.fetchPosts(c)
+			this.active = c
+		},
 		async fetchPosts(category: string | undefined = undefined) {
 			this.posts = await getPosts(
 				{ category, bookmarkedBy: this.$store.state.session.id },

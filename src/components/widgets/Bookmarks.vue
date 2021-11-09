@@ -1,50 +1,70 @@
 <template>
-	<article class="w-full rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg mb-5 px-6 py-4 border border-lightBorder">
-		<div class="flex flex-row justify-between pb-4 items-center">
-			<h6 class="text-primary text-base font-semibold">Filter by Category</h6>
-			<button class="focus:outline-none text-sm text-primary pr-1" @click="$emit(`filter`)">
-				Show All
-			</button>
-		</div>
-		<button
-			v-for="c in categoryList"
-			:key="c"
-			class="w-full flex items-center pb-2 capitalize focus:outline-none"
-			:to="`/bookmarks/` + c"
-			@click="setFilter(c)"
+	<article class="py-4">
+		<h3 class="text-primary text-base font-semibold px-6 pb-4">Recent Bookmarks</h3>
+		<nuxt-link
+			v-for="p in posts"
+			:key="p.postCID"
+			:to="`/post/` + p.postCID"
+			class="w-full flex flex-row items-center px-6 pb-4"
 		>
-			<img :src="require(`@/assets/images/category/` + c + `/icon.png`)" class="hotzone w-8 h-8 mr-1" />
-			<span
-				class="border-b ml-2"
-				:class="active === c ? 'border-primary text-primary' : ' border-transparent text-lightPrimaryVariant'"
-			>
-				{{ c }}</span
-			>
-		</button>
+			<!-- Left side: title and author name -->
+			<div class="flex flex-col flex-grow">
+				<h5 class="font-semibold">{{ p.title }}</h5>
+				<h6 class="text-gray7">By {{ p.authorID }}</h6>
+			</div>
+			<!-- Right side: featured photo -->
+			<img v-if="p.featuredPhoto" :src="p.featuredPhoto" class="flex-shrink-0 h-12 object-contain rounded-lg" />
+		</nuxt-link>
+		<nuxt-link to="/bookmarks" class="px-6 text-sm italics font-light text-primary">See More</nuxt-link>
 	</article>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import { categories } from '@/config'
+import { IPostResponse, getPosts } from '@/backend/post'
+import { getPhotoFromIPFS } from '@/backend/photos'
+
+interface PostPreview {
+	title: string
+	authorID: string
+	featuredPhoto: string | null
+	postCID: string
+}
 
 interface IData {
-	categoryList: string[]
-	active: string
+	bookmarks: IPostResponse[]
+	posts: PostPreview[]
 }
 
 export default Vue.extend({
 	data(): IData {
 		return {
-			categoryList: categories,
-			active: ``,
+			bookmarks: [],
+			posts: [],
 		}
 	},
-	methods: {
-		setFilter(c: string) {
-			this.$emit(`filter`, c)
-			this.active = c
-		},
+	async created() {
+		this.bookmarks = await getPosts(
+			{ bookmarkedBy: this.$store.state.session.id },
+			this.$store.state.session.id,
+			undefined,
+			undefined,
+			undefined,
+			undefined,
+			`false`,
+		)
+		this.bookmarks = this.bookmarks.slice(0, 2)
+		this.bookmarks.forEach((p: IPostResponse) => {
+			if (p.post.featuredPhotoCID) {
+				getPhotoFromIPFS(p.post.featuredPhotoCID).then((res) => {
+					const post = { title: p.post.title, authorID: p.post.authorID, featuredPhoto: res, postCID: p.post._id }
+					this.posts.push(post)
+				})
+			} else {
+				const post = { title: p.post.title, authorID: p.post.authorID, featuredPhoto: null, postCID: p.post._id }
+				this.posts.push(post)
+			}
+		})
 	},
 })
 </script>

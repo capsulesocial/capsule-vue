@@ -42,6 +42,10 @@
 					"
 				>
 					Side widgets
+					<div class="grid grid-cols-2 gap-5">
+						<button class="rounded-lg bg-gray1 h-32" @click="changeSecondary(`drafts`)">Drafts</button>
+						<button class="rounded-lg bg-gray1 h-32" @click="changeSecondary(`bookmarks`)">Bookmarks</button>
+					</div>
 				</article>
 			</div>
 		</section>
@@ -65,6 +69,9 @@ export default Vue.extend({
 				this.$emit(`save`)
 			}
 			this.$store.commit(`widgets/changePrimary`, type)
+		},
+		changeSecondary(type: string) {
+			this.$store.commit(`widgets/changeSecondary`, type)
 		},
 		handleCloseClick(e: any): void {
 			if (!e.target || e.target.parentNode === null || e.target.parentNode.classList === undefined) {
