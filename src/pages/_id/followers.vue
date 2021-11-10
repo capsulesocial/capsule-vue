@@ -17,7 +17,6 @@ interface IData {
 	isLoading: boolean
 	profiles: any
 }
-
 export default Vue.extend({
 	components: {
 		ProfilePreview,
@@ -47,12 +46,10 @@ export default Vue.extend({
 	},
 	methods: {
 		async getFollowers(p: string) {
-			let profile = createDefaultProfile(p)
-			const fetchedProfile = await getProfile(p)
-			if (fetchedProfile) {
-				profile = fetchedProfile
+			const profile = await getProfile(p)
+			if (profile) {
+				this.profiles.push(profile)
 			}
-			this.profiles.push(profile)
 		},
 	},
 })

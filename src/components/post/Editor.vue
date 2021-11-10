@@ -52,19 +52,18 @@ import Vue from 'vue'
 import DOMPurify from 'dompurify'
 import Turndown from 'turndown'
 import Quill from 'quill'
+// @ts-ignore
 import QuillMarkdown from 'quilljs-markdown'
 import XIcon from '@/components/icons/X.vue'
 import { createPost, sendPost } from '@/backend/post'
-
 interface IData {
 	title: string
 	subtitle: string
 	input: string
-<<<<<<< HEAD
-	tag: string
-	featuredPhoto: null | any
-	featuredPhotoCID: string | null
-	editor?: Quill
+	editor: Quill
+	turndownService: Turndown
+	wordCount: number
+	titleError: string
 	subtitleError: string
 }
 export default Vue.extend({
@@ -82,20 +81,8 @@ export default Vue.extend({
 			title: this.$store.state.draft.title,
 			subtitle: this.$store.state.draft.subtitle,
 			input,
-<<<<<<< HEAD
-			tag: ``,
-			featuredPhoto: null,
-			featuredPhotoCID: null,
-			tabs: {
-				tags: false,
-				category: false,
-				image: false,
-			},
-			category: this.$store.state.draft.category,
-=======
 			// @ts-ignore
 			turndownService: Turndown,
->>>>>>> converted functionality of post editor to new layout
 			wordCount: 0,
 			titleError: ``,
 			subtitleError: ``,
@@ -167,9 +154,6 @@ export default Vue.extend({
 			return clean
 		},
 		async post(): Promise<void> {
-			if (this.turndownService === undefined) {
-				throw new Error(`Unexpected condition!`)
-			}
 			// @ts-ignore
 			this.title = this.$refs.title.value
 			// @ts-ignore
