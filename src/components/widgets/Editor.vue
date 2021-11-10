@@ -1,14 +1,35 @@
 <template>
 	<div class="">
 		<!-- Featured image -->
-		<article class="rounded-lg shadow-lg bg-gradient-to-r
-								from-lightBGStart
-								to-lightBGStop
-								backdrop-filter backdrop-blur-lg
-								border-lightBorder px-6 py-4 mb-5">
+		<article
+			class="
+				rounded-lg
+				shadow-lg
+				bg-gradient-to-r
+				from-lightBGStart
+				to-lightBGStop
+				backdrop-filter backdrop-blur-lg
+				border-lightBorder
+				px-6
+				py-4
+				mb-5
+			"
+		>
 			<h6 class="text-primary font-semibold">Featured Image</h6>
 			<button
-				class="w-full rounded-lg border-2 border-primary border-dashed h-40 flex justify-center items-center  mt-3 mb-2 focus:outline-none overflow-hidden"
+				class="
+					w-full
+					rounded-lg
+					border-2 border-primary border-dashed
+					h-40
+					flex
+					justify-center
+					items-center
+					mt-3
+					mb-2
+					focus:outline-none
+					overflow-hidden
+				"
 				@click="handleUploadImageClick"
 			>
 				<input
@@ -36,11 +57,20 @@
 			</div>
 		</article>
 		<!-- Category -->
-		<article class="rounded-lg shadow-lg bg-gradient-to-r
-								from-lightBGStart
-								to-lightBGStop
-								backdrop-filter backdrop-blur-lg
-								border-lightBorder px-6 py-4 mb-5">
+		<article
+			class="
+				rounded-lg
+				shadow-lg
+				bg-gradient-to-r
+				from-lightBGStart
+				to-lightBGStop
+				backdrop-filter backdrop-blur-lg
+				border-lightBorder
+				px-6
+				py-4
+				mb-5
+			"
+		>
 			<h6 class="text-primary font-semibold">Category</h6>
 			<button class="w-full p-2 my-1 mt-3 rounded-lg bg-gray1" @click="showCategoryDropdown = !showCategoryDropdown">
 				<div class="flex justify-between items-center">
@@ -74,11 +104,21 @@
 			</div>
 		</article>
 		<!-- Tags -->
-		<article class="rounded-lg shadow-lg bg-gradient-to-r
-								from-lightBGStart
-								to-lightBGStop
-								backdrop-filter backdrop-blur-lg
-								border-lightBorder px-6 py-4 pb-6 mb-5">
+		<article
+			class="
+				rounded-lg
+				shadow-lg
+				bg-gradient-to-r
+				from-lightBGStart
+				to-lightBGStop
+				backdrop-filter backdrop-blur-lg
+				border-lightBorder
+				px-6
+				py-4
+				pb-6
+				mb-5
+			"
+		>
 			<h6 class="text-primary font-semibold mb-3">Tags</h6>
 			<div class="w-full p-2 my-1 rounded-lg bg-gray1">
 				<label for="tag" class="hidden" value="Enter hashtags"></label>
@@ -94,17 +134,7 @@
 				<button
 					v-for="t in $store.state.draft.tags"
 					:key="t.name"
-					class="
-						flex flex-row
-						items-center
-						z-10
-						focus:outline-none
-						px-3 py-1
-						mr-4
-						mt-2
-						bg-gray1
-						rounded-lg
-					"
+					class="flex flex-row items-center z-10 focus:outline-none px-3 py-1 mr-4 mt-2 bg-gray1 rounded-lg"
 					@click="removeTag(t)"
 				>
 					<span class="font-semibold text-gray5 text-sm">{{ t.name }}</span
@@ -112,11 +142,19 @@
 				</button>
 			</div>
 		</article>
-		<article class="rounded-lg shadow-lg bg-gradient-to-r
-								from-lightBGStart
-								to-lightBGStop
-								backdrop-filter backdrop-blur-lg
-								border-lightBorder p-6 mb-5">
+		<article
+			class="
+				rounded-lg
+				shadow-lg
+				bg-gradient-to-r
+				from-lightBGStart
+				to-lightBGStop
+				backdrop-filter backdrop-blur-lg
+				border-lightBorder
+				p-6
+				mb-5
+			"
+		>
 			<div class="flex flex-row justify-between items-center">
 				<div>
 					<h5 v-show="$props.wordCount > 1" class="text-sm text-gray5">

@@ -15,7 +15,7 @@
 			<!-- Right side: featured photo -->
 			<img v-if="p.featuredPhoto" :src="p.featuredPhoto" class="flex-shrink-0 h-12 object-contain rounded-lg" />
 		</nuxt-link>
-		<nuxt-link to="/bookmarks" class="px-6 text-sm italics font-light text-primary">See More</nuxt-link>
+		<nuxt-link to="/bookmarks" class="px-6 text-sm italics text-primary">See More</nuxt-link>
 	</article>
 </template>
 

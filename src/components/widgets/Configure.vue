@@ -1,7 +1,7 @@
 <template>
 	<div class="popup w-full flex justify-center">
 		<!-- Container -->
-		<section style="width: 1220px" class="flex flex-row mt-20">
+		<section style="width: 1220px; margin-top: 11rem" class="flex flex-row">
 			<!-- Primary widget -->
 			<article
 				style="width: 750px; min-height: calc(100vh - 160px); height: calc(100vh - 160px)"
@@ -32,7 +32,6 @@
 						overflow-y-auto
 						rounded-lg
 						shadow-lg
-						mr-5
 						p-6
 						z-10
 						bg-gradient-to-r

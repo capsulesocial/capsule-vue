@@ -22,7 +22,6 @@
 					absolute
 					flex flex-col
 					mt-12
-					-ml-20
 					rounded-lg
 					shadow-lg
 					p-3
@@ -31,12 +30,13 @@
 					to-lightBGStop
 					backdrop-filter backdrop-blur-lg
 				"
+				style="margin-left: -5.48rem"
 			>
-				<nuxt-link :to="$store.state.session.id" class="text-left w-full flex flex-row items-center text-gray7"
-					><ProfileIcon class="flex-shrink-0 w-5 h-5 mr-2 mb-2" />Profile</nuxt-link
+				<nuxt-link :to="$store.state.session.id" class="text-left w-full flex flex-row items-center text-gray7 mb-2"
+					><ProfileIcon class="flex-shrink-0 w-5 h-5 mr-2" />Profile</nuxt-link
 				>
-				<nuxt-link to="/settings" class="text-left w-full flex flex-row items-center text-gray7">
-					<SettingsIcon class="flex-shrink-0 w-5 h-5 mr-2 mb-2" />Settings</nuxt-link
+				<nuxt-link to="/settings" class="text-left w-full flex flex-row items-center text-gray7 mb-2">
+					<SettingsIcon class="flex-shrink-0 w-5 h-5 mr-2" />Settings</nuxt-link
 				>
 				<button
 					class="focus:outline-none w-full text-left flex flex-row items-center text-lightError"

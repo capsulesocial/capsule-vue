@@ -4,7 +4,10 @@
 			<section class="w-full">
 				<!-- Title, subtitle -->
 				<article class="flex flex-col px-2">
-					<button class="absolute right-0 top-0 rounded-full bg-gray1 p-1 m-8" @click="$router.go(-1)">
+					<button
+						class="absolute right-0 top-0 rounded-full bg-gray1 p-1 m-8 focus:outline-none"
+						@click="$router.go(-1)"
+					>
 						<XIcon />
 					</button>
 					<p class="text-xs text-lightError">{{ titleError }}</p>

@@ -18,7 +18,7 @@
 					font-semibold
 					rounded-lg
 				"
-				style="padding-top: 0.4rem; padding-bottom: 0.4rem;"
+				style="padding-top: 0.4rem; padding-bottom: 0.4rem"
 			>
 				<span class="following">Following</span>
 				<span class="unfollow">Unfollow</span>
@@ -31,7 +31,7 @@
 			<span
 				v-else
 				class="text-white font-semibold rounded-lg text-sm shadow-lg px-5 bg-secondary"
-				style="padding-top: 0.4rem; padding-bottom: 0.4rem;"
+				style="padding-top: 0.4rem; padding-bottom: 0.4rem"
 				>Follow</span
 			>
 		</div>
