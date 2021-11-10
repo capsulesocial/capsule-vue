@@ -14,7 +14,7 @@ export interface INewCommentData {
 
 export interface ICommentData {
 	authorID: string
-	cid: string
+	_id: string
 	timestamp: number
 	emotion: string
 }
