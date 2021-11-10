@@ -267,6 +267,9 @@ export default Vue.extend({
 				return
 			}
 			const currentScroll = body.scrollTop
+			if (!header) {
+				return
+			}
 			if (body.scrollTop <= 0) {
 				header.classList.remove(scrollUp)
 				return

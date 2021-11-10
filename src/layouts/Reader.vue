@@ -23,7 +23,6 @@
 								shadow-lg
 								mr-5
 								p-6
-								z-10
 								border border-lightBorder
 								bg-gradient-to-r
 								from-lightBGStart
