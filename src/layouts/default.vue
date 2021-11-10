@@ -64,7 +64,12 @@
 						/>
 						<!-- Widgets -->
 						<aside class="fixed" :class="showWidgets ? `z-10` : ``" style="margin-left: 770px; width: 450px">
-							<Widgets @overlay="toggleZIndex" @saveDraft="saveDraftState" />
+							<Widgets
+								:followers="followers"
+								:updateFollowers="updateFollowers"
+								@overlay="toggleZIndex"
+								@saveDraft="saveDraftState"
+							/>
 							<Footer />
 						</aside>
 					</section>
@@ -91,6 +96,7 @@ interface IData {
 	avatar: string | ArrayBuffer | null
 	showWidgets: boolean
 	following: Set<string>
+	followers: Set<string>
 }
 
 export default Vue.extend({
@@ -107,6 +113,7 @@ export default Vue.extend({
 			avatar: null,
 			showWidgets: false,
 			following: new Set(),
+			followers: new Set(),
 		}
 	},
 	async created() {
@@ -123,8 +130,9 @@ export default Vue.extend({
 			})
 		}
 		// Get followers and following
-		getFollowersAndFollowing(this.$store.state.session.id).then(({ following }) => {
+		getFollowersAndFollowing(this.$store.state.session.id).then(({ followers, following }) => {
 			this.following = following
+			this.followers = followers
 		})
 	},
 	methods: {
@@ -134,6 +142,11 @@ export default Vue.extend({
 				const data = await getFollowersAndFollowing(this.$store.state.session.id, true)
 				this.following = data.following
 			}
+		},
+		async updateFollowers() {
+			const { followers, following } = await getFollowersAndFollowing(this.$route.params.id, true)
+			this.followers = followers
+			this.following = following
 		},
 		getTitle(): string {
 			switch (this.$route.name) {

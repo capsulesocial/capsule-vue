@@ -22,8 +22,24 @@
 		>
 			<ConfigureWidgets @close="toggleConfigure" @save="saveDraft" />
 		</div>
-		<!-- Discover page -->
+		<FollowersWidget
+			v-if="$store.state.widgets.secondary2 === `followers` && !checkRoute()"
+			:followers="followers"
+			:updateFollowers="updateFollowers"
+			class="
+				rounded-lg
+				shadow-lg
+				bg-gradient-to-r
+				from-lightBGStart
+				to-lightBGStop
+				backdrop-filter backdrop-blur-lg
+				border border-lightBorder
+				overflow-hidden
+				mb-5
+			"
+		/>
 		<TagsWidget
+			v-if="$store.state.widgets.secondary2 === `tags` || checkRoute()"
 			class="
 				rounded-lg
 				shadow-lg
@@ -90,10 +106,13 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import type { PropType } from 'vue'
+
 import TagsWidget from '@/components/widgets/Tags.vue'
 import DraftsWidget from '@/components/widgets/Drafts.vue'
 import ConfigureWidgets from '@/components/widgets/Configure.vue'
 import BookmarksWidgets from '@/components/widgets/Bookmarks.vue'
+import FollowersWidget from '@/components/widgets/Followers.vue'
 
 interface IData {
 	configureWidgets: boolean
@@ -105,6 +124,17 @@ export default Vue.extend({
 		DraftsWidget,
 		ConfigureWidgets,
 		BookmarksWidgets,
+		FollowersWidget,
+	},
+	props: {
+		followers: {
+			type: Set,
+			default: new Set(),
+		},
+		updateFollowers: {
+			type: Function as PropType<() => void>,
+			required: true,
+		},
 	},
 	data(): IData {
 		return {

@@ -32,6 +32,27 @@
 						overflow-y-auto
 						rounded-lg
 						shadow-lg
+						mr-5
+						mb-5
+						p-6
+						z-10
+						bg-gradient-to-r
+						from-lightBGStart
+						to-lightBGStop
+						backdrop-filter backdrop-blur-lg
+					"
+				>
+					Side widgets
+					<div class="grid grid-cols-2 gap-5">
+						<button class="rounded-lg bg-gray1 h-32" @click="changeSecondary2(`tags`)">Tags</button>
+						<button class="rounded-lg bg-gray1 h-32" @click="changeSecondary2(`followers`)">Followers</button>
+					</div>
+				</article>
+				<article
+					class="
+						overflow-y-auto
+						rounded-lg
+						shadow-lg
 						p-6
 						z-10
 						bg-gradient-to-r
@@ -71,6 +92,9 @@ export default Vue.extend({
 		},
 		changeSecondary(type: string) {
 			this.$store.commit(`widgets/changeSecondary`, type)
+		},
+		changeSecondary2(type: string) {
+			this.$store.commit(`widgets/changeSecondary2`, type)
 		},
 		handleCloseClick(e: any): void {
 			if (!e.target || e.target.parentNode === null || e.target.parentNode.classList === undefined) {
