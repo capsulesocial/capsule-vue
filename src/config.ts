@@ -345,7 +345,7 @@ export const categories = [
 	`US-world`,
 	`science`,
 	`environment`,
-	`food & drink`,
+	`food-drink`,
 	`culture`,
 	`education`,
 	`philosophy`,

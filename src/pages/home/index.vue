@@ -1,91 +1,72 @@
 <template>
-	<div class="w-full border-l border-r" style="min-height: calc(100vh - 95px)">
-		<section
-			:class="$store.state.settings.darkMode ? 'text-lightPrimaryText bg-lightBG' : 'text-darkPrimaryText bg-darkBG'"
-		>
-			<nav class="flex flex-row justify-around bg-secondary bg-opacity-25 h-12 border-b">
-				<div class="flex items-center w-full">
+	<div id="index" class="w-full border border-lightBorder">
+		<section :class="$store.state.settings.darkMode ? 'text-lightPrimaryText ' : 'text-darkPrimaryText bg-darkBG'">
+			<nav class="fixed flex flex-row h-14 pt-4 -mt-6 mt-2 z-20 bg-lightBG text-base" style="width: 700px">
+				<div class="flex items-center">
 					<button
-						:class="
-							algorithm === `NEW` ? `bg-white text-primary border-t-2 border-primary font-semibold` : `text-gray7`
-						"
-						class="h-full focus:outline-none text-lg w-full"
+						:class="algorithm === `NEW` ? `text-primary border-b-2 border-primary font-semibold` : `text-gray5`"
+						class="h-full focus:outline-none w-full pb-2"
 						@click="sortFeed('NEW')"
 					>
-						New
+						New Posts
 					</button>
 				</div>
-				<div class="flex items-center w-full">
+				<div class="flex items-center px-12">
 					<button
-						:class="
-							algorithm === `TOP`
-								? `bg-white text-primary border-t-2 border-primary font-semibold`
-								: `border-l border-r text-gray7`
-						"
-						class="h-full focus:outline-none text-lg w-full"
+						:class="algorithm === `TOP` ? ` text-primary border-b-2 border-primary font-semibold` : `text-gray5`"
+						class="h-full focus:outline-none w-full pb-2"
 						@click="sortFeed('TOP')"
 					>
 						Top
 					</button>
 				</div>
-				<div class="flex items-center w-full">
+				<div class="flex items-center">
 					<button
-						:class="
-							algorithm === `FOLLOWING` ? `bg-white text-primary border-t-2 border-primary font-semibold` : `text-gray7`
-						"
-						class="h-full focus:outline-none text-lg w-full"
+						:class="algorithm === `FOLLOWING` ? ` text-primary border-b-2 border-primary font-semibold` : `text-gray5`"
+						class="h-full focus:outline-none w-full pb-2"
 						@click="sortFeed('FOLLOWING')"
 					>
 						Following
 					</button>
 				</div>
 			</nav>
+			<div v-if="posts" class="pt-10">
+				<!-- content -->
+				<article v-for="post in posts" :key="post.post._id">
+					<PostCard
+						:post="post.post"
+						:cid="post.post._id"
+						:comments="post.comments"
+						:toggleFriend="toggleFriend"
+						:usersFollowing="following"
+						:repostedBy="myReposts.includes(post.post._id) ? $store.state.session.id : ``"
+						:bookmarked="post.bookmarked"
+						:hideRepostIcon="algorithm === `NEW` || algorithm === `TOP` ? true : false"
+						:bookmarksCount="post.bookmarksCount"
+						:repostCount="post.repostCount"
+					/>
+				</article>
 
-			<article v-for="post in this.posts" :key="post.post._id" style="padding-left: 22px">
-				<PostCard
-					v-if="post.repost"
-					:post="post.post"
-					:cid="post.post._id"
-					:comments="post.comments"
-					:toggleFriend="toggleFriend"
-					:usersFollowing="following"
-					:repostedBy="post.repost.authorID"
-					:bookmarked="post.bookmarked"
-					:hideRepostIcon="algorithm === `NEW` || algorithm === `TOP` ? true : false"
-				/>
-				<PostCard
-					v-else
-					:post="post.post"
-					:cid="post.post._id"
-					:comments="post.comments"
-					:toggleFriend="toggleFriend"
-					:usersFollowing="following"
-					:repostedBy="myReposts.includes(post.post._id) ? $store.state.session.id : ``"
-					:bookmarked="post.bookmarked"
-					:hideRepostIcon="algorithm === `NEW` || algorithm === `TOP` ? true : false"
-				/>
-			</article>
-
-			<!-- Not loaded yet -->
-			<article v-show="this.isLoading" class="flex justify-center h-screen" style="width: 660px">
-				<div class="loader m-5"></div>
-			</article>
+				<!-- Not loaded yet -->
+				<article v-show="isLoading" class="flex justify-center h-screen pt-12" style="width: 660px">
+					<div class="loader m-5"></div>
+				</article>
+			</div>
 		</section>
 	</div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+import type { PropType } from 'vue'
 import PostCard from '@/components/post/Card.vue'
 import { getPosts, Algorithm, IPostResponse } from '@/backend/post'
-import { followChange, getFollowersAndFollowing } from '@/backend/following'
 import { getReposts } from '@/backend/reposts'
 
 interface IData {
 	posts: IPostResponse[]
 	isLoading: boolean
 	algorithm: Algorithm
-	following: Set<string>
 	currentOffset: number
 	limit: number
 	myReposts: string[]
@@ -95,12 +76,21 @@ export default Vue.extend({
 	components: {
 		PostCard,
 	},
+	props: {
+		toggleFriend: {
+			type: Function as PropType<(id: string) => void>,
+			required: true,
+		},
+		following: {
+			type: Set as PropType<Set<string>>,
+			default: () => new Set(),
+		},
+	},
 	data(): IData {
 		return {
 			algorithm: `NEW`,
 			posts: [],
 			isLoading: true,
-			following: new Set(),
 			currentOffset: 0,
 			limit: 10,
 			myReposts: [],
@@ -116,16 +106,13 @@ export default Vue.extend({
 			this.$store.state.session.id,
 		)
 		this.currentOffset += this.limit
-		getFollowersAndFollowing(this.$store.state.session.id).then(({ following }) => {
-			this.following = following
-		})
 		// Fetch my reposts
 		const repostData = await getReposts(this.$store.state.session.id)
 		repostData.forEach((p) => {
 			this.myReposts.push(p.repost.postCID)
 		})
 		this.isLoading = false
-		window.addEventListener(`scroll`, this.handleScroll)
+		document.getElementById(`index`)?.addEventListener(`scroll`, this.handleScroll)
 	},
 	destroyed() {
 		window.removeEventListener(`scroll`, this.handleScroll)
@@ -133,7 +120,7 @@ export default Vue.extend({
 	methods: {
 		getReposts,
 		async sortFeed(a: Algorithm) {
-			window.addEventListener(`scroll`, this.handleScroll)
+			document.getElementById(`index`)?.addEventListener(`scroll`, this.handleScroll)
 			this.posts = []
 			this.currentOffset = 0
 			this.isLoading = true
@@ -150,13 +137,6 @@ export default Vue.extend({
 			this.isLoading = false
 			return this.posts
 		},
-		async toggleFriend(authorID: string) {
-			if (authorID !== this.$store.state.session.id) {
-				await followChange(this.following.has(authorID) ? `UNFOLLOW` : `FOLLOW`, this.$store.state.session.id, authorID)
-				const data = await getFollowersAndFollowing(this.$store.state.session.id, true)
-				this.following = data.following
-			}
-		},
 		async loadPosts() {
 			this.isLoading = true
 			try {
@@ -170,7 +150,7 @@ export default Vue.extend({
 				)
 				if (res.length === 0) {
 					this.isLoading = false
-					window.removeEventListener(`scroll`, this.handleScroll)
+					document.getElementById(`index`)?.removeEventListener(`scroll`, this.handleScroll)
 				}
 				this.posts = this.posts.concat(res)
 			} catch (err) {
@@ -180,7 +160,7 @@ export default Vue.extend({
 			}
 		},
 		async handleScroll() {
-			const { scrollTop, scrollHeight, clientHeight } = document.documentElement
+			const { scrollTop, scrollHeight, clientHeight } = document.getElementById(`index`) as Element
 			if (scrollTop + clientHeight >= scrollHeight - 5) {
 				await this.loadPosts()
 				this.currentOffset += this.limit
@@ -192,11 +172,11 @@ export default Vue.extend({
 
 <style>
 .loader {
-	border: 16px solid #eeeeee; /* Light grey */
-	border-top: 16px solid #1e566c; /* Blue */
+	border: 3px solid #eeeeee; /* Light grey */
+	border-top: 3px solid #2e556a; /* Dark teal */
 	border-radius: 50%;
-	width: 120px;
-	height: 120px;
+	width: 40px;
+	height: 40px;
 	animation: spin 2s linear infinite;
 }
 

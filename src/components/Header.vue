@@ -1,101 +1,52 @@
 <template>
-	<header
-		:class="$store.state.settings.darkMode ? 'bg-lightBG' : 'bg-darkBG'"
-		class="w-full flex justify-center z-30 border-b py-4 lg:pl-2 xl:pl-0"
-	>
-		<!-- Top Left: Logo -->
-		<div class="flex justify-center lg:justify-between" style="width: 240px">
-			<nuxt-link to="/home">
-				<CapsuleIcon class="lg:pl-5 lg:ml-1" />
+	<div class="flex flex-row justify-between items-center">
+		<!-- Left side: Links + write post button -->
+		<nav class="flex flex-row items-center" style="font-size: 0.95rem">
+			<nuxt-link to="/home" class="mr-5">
+				<CapsuleIcon />
 			</nuxt-link>
+			<nuxt-link to="/home" class="mx-4" :class="getStyles(`home`)"> Home </nuxt-link>
+			<nuxt-link to="/discover" class="mx-4" :class="getStyles(`discover`)"> Discover </nuxt-link>
+			<nuxt-link to="/bookmarks" class="mx-4" :class="getStyles(`bookmarks`)"> Bookmarks </nuxt-link>
+			<BrandedButton :text="`Write a Post`" :action="togglePostEditor" class="mx-4" />
+		</nav>
+		<!-- Right side: icons and avatar -->
+		<div class="flex flex-row relative">
+			<button class="dropdown focus:outline-none" @click="showDropdown = !showDropdown">
+				<Avatar class="dropdown" :avatar="avatar" :authorID="$store.state.session.id" :noClick="true" />
+			</button>
+			<!-- Dropdown: Profile, settings, disconnect -->
 			<div
-				class="hidden lg:flex lg:pl-8 xl:pl-0"
-				:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+				v-show="showDropdown"
+				class="
+					absolute
+					flex flex-col
+					mt-12
+					rounded-lg
+					shadow-lg
+					p-3
+					bg-gradient-to-r
+					from-lightBGStart
+					to-lightBGStop
+					backdrop-filter backdrop-blur-lg
+				"
+				style="margin-left: -5.48rem"
 			>
-				<button class="focus:outline-none" @click="$router.go(-1)">
-					<BackButton />
-				</button>
-				<button class="focus:outline-none" @click="$router.go(1)">
-					<ForwardButton />
+				<nuxt-link :to="$store.state.session.id" class="text-left w-full flex flex-row items-center text-gray7 mb-2"
+					><ProfileIcon class="flex-shrink-0 w-5 h-5 mr-2" />Profile</nuxt-link
+				>
+				<nuxt-link to="/settings" class="text-left w-full flex flex-row items-center text-gray7 mb-2">
+					<SettingsIcon class="flex-shrink-0 w-5 h-5 mr-2" />Settings</nuxt-link
+				>
+				<button
+					class="focus:outline-none w-full text-left flex flex-row items-center text-lightError"
+					@click="disconnect"
+				>
+					<LogoutIcon class="flex-shrink-0 w-5 h-5 mr-2" />Disconnect
 				</button>
 			</div>
 		</div>
-
-		<!-- Top Right -->
-		<article class="" style="width: 660px"></article>
-
-		<div style="width: 240px" class="relative hidden lg:flex items-center">
-			<div
-				class="flex lg:hidden lg:pl-8 xl:pl-0"
-				:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-			>
-				<button class="focus:outline-none" @click="$router.go(-1)">
-					<BackButton />
-				</button>
-				<button class="focus:outline-none" @click="$router.go(1)">
-					<ForwardButton />
-				</button>
-			</div>
-
-			<div class="hidden lg:flex items-center justify-between" style="width: 150px">
-				<span>
-					<button
-						class="bg-gray1 rounded-full focus:outline-none flex justify-center shadow-lg"
-						style="width: 38px; height: 38px"
-					>
-						<SearchIcon class="self-center" />
-					</button>
-				</span>
-				<span class="px-3">
-					<button
-						class="bg-gray1 rounded-full focus:outline-none flex justify-center shadow-lg"
-						style="width: 38px; height: 38px"
-					>
-						<NotificationsIcon class="self-center" />
-					</button>
-				</span>
-				<span class="dropdown">
-					<button
-						class="bg-gray1 rounded-full focus:outline-none flex justify-center shadow-lg"
-						style="width: 38px; height: 38px"
-						@click.stop="toggleDropdown"
-					>
-						<DownIcon v-show="!showMore" class="self-center dropdown" />
-						<UpIcon v-show="showMore" class="self-center dropdown" />
-					</button>
-				</span>
-			</div>
-			<!-- Dropdown menu -->
-			<div
-				v-show="showMore"
-				class="absolute mt-56 z-10 bg-white shadow-lg rounded-lg w-64"
-				style="margin-left: -13px"
-				@click.stop="toggleDropdown"
-			>
-				<nuxt-link to="/settings" class="w-full p-2 grid grid-cols-4 items-center">
-					<span class="bg-gray1 rounded-full w-10 h-10 flex justify-center ml-1">
-						<SettingsIcon class="self-center" />
-					</span>
-					<h5 class="text-base font-sans justify-self-start col-span-2">Settings</h5>
-					<ForwardButton class="justify-self-end" />
-				</nuxt-link>
-				<nuxt-link to="/help" class="w-full p-2 grid grid-cols-4 items-center">
-					<span class="bg-gray1 rounded-full w-10 h-10 flex justify-center ml-1">
-						<HelpIcon class="self-center" />
-					</span>
-					<h5 class="text-base font-sans justify-self-start col-span-2">Help & Support</h5>
-					<ForwardButton class="justify-self-end" />
-				</nuxt-link>
-				<button class="w-full p-2 grid grid-cols-4 items-center" @click="logout">
-					<span class="bg-gray1 rounded-full w-10 h-10 flex justify-center ml-1">
-						<LogoutIcon class="self-center" />
-					</span>
-					<h5 class="text-base font-sans justify-self-start col-span-2">Log Out</h5>
-					<span></span>
-				</button>
-			</div>
-		</div>
-	</header>
+	</div>
 </template>
 
 <script lang="ts">
@@ -104,57 +55,71 @@ import { mapMutations } from 'vuex'
 import { keyStores } from 'near-api-js'
 
 import CapsuleIcon from '@/components/icons/Capsule.vue'
-import NotificationsIcon from '@/components/icons/Notifications.vue'
+import Avatar from '@/components/Avatar.vue'
+import BrandedButton from '@/components/BrandedButton.vue'
+import ProfileIcon from '@/components/icons/Profile.vue'
 import SettingsIcon from '@/components/icons/Settings.vue'
-import BackButton from '@/components/icons/ChevronLeft.vue'
-import ForwardButton from '@/components/icons/ChevronRight.vue'
-import DownIcon from '@/components/icons/ChevronDown.vue'
-import UpIcon from '@/components/icons/ChevronUp.vue'
-import SearchIcon from '@/components/icons/Search.vue'
-import HelpIcon from '@/components/icons/Help.vue'
 import LogoutIcon from '@/components/icons/Logout.vue'
+
 import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
+
+interface IData {
+	showDropdown: boolean
+}
 
 export default Vue.extend({
 	components: {
 		CapsuleIcon,
+		Avatar,
+		BrandedButton,
+		ProfileIcon,
 		SettingsIcon,
-		NotificationsIcon,
-		BackButton,
-		ForwardButton,
-		SearchIcon,
-		DownIcon,
-		UpIcon,
-		HelpIcon,
 		LogoutIcon,
 	},
-	data() {
+	props: {
+		avatar: {
+			type: String,
+			default: ``,
+		},
+	},
+	data(): IData {
 		return {
-			showMore: false,
+			showDropdown: false,
 		}
 	},
-	mounted() {
-		window.addEventListener(
-			`click`,
-			(e: any): void => {
-				if (!e.target) {
-					return
-				}
-				if (
-					e.target.parentNode === null ||
-					e.target.parentNode.classList === undefined ||
-					!e.target.parentNode.classList.contains(`dropdown`)
-				) {
-					this.showMore = false
-				}
-			},
-			false,
-		)
+	created() {
+		// Set filter dropdown event handler
+		window.addEventListener(`click`, this.handleDropdown, false)
+	},
+	destroyed() {
+		window.removeEventListener(`click`, this.handleDropdown)
 	},
 	methods: {
 		...mapMutations(sessionStoreNamespace, {
 			endSession: MutationType.LOGOUT,
 		}),
+		disconnect(): void {
+			this.endSession()
+			this.$router.push(`/`)
+		},
+		handleDropdown(e: any): void {
+			if (!e.target || e.target.parentNode === null || e.target.parentNode.classList === undefined) {
+				return
+			}
+			if (!e.target.parentNode.classList.contains(`dropdown`)) {
+				this.showDropdown = false
+			}
+		},
+		getStyles(tab: string): string {
+			let res: string = ``
+			// Check if current tab
+			if (this.$route.name === tab) {
+				res += `font-bold text-primary border-primary border-b`
+			} else {
+				res += `font-regular text-gray5`
+			}
+			return res
+		},
 		logout() {
 			this.endSession()
 			window.localStorage.removeItem(`accountId`)
@@ -162,8 +127,8 @@ export default Vue.extend({
 			keystore.clear()
 			this.$router.push(`/`)
 		},
-		toggleDropdown() {
-			this.showMore = !this.showMore
+		togglePostEditor() {
+			this.$router.push(`/post`)
 		},
 	},
 })

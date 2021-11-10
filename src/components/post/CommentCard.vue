@@ -1,13 +1,13 @@
 <template>
 	<article
-		class="object-contain"
-		style="width: 616px; margin-top: 22px; margin-bottom: 22px"
+		class="object-contain w-full"
+		style="margin-top: 22px; margin-bottom: 22px"
 		:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 	>
 		<!-- Top: avatar, name, id, timestamp then close icon,  -->
 		<div v-if="commentData" class="flex w-full">
 			<div class="flex justify-between items-start mr-4">
-				<span class="rounded-lg p-1 flex-shrink-0" :style="getStyle(`bg-`, comment.emotion)">
+				<span class="rounded-lg pt-1 px-1 flex-shrink-0" :style="getStyle(`bg-`, comment.emotion)">
 					<Avatar :avatar="avatar" :authorID="comment.authorID" size="w-12 h-12" />
 				</span>
 			</div>
@@ -21,18 +21,10 @@
 					<!-- Top row: name, id, timestamp -->
 					<div class="flex">
 						<nuxt-link :to="'/' + comment.authorID" class="flex mr-4 flex-row items-center">
-							<span
-								:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-								class="font-medium text-base"
-							>
+							<span class="font-medium text-base">
 								{{ profile.name }}
 							</span>
-							<span
-								:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-								class="ml-2"
-							>
-								@{{ comment.authorID }}
-							</span>
+							<span class="ml-2 text-primary"> @{{ comment.authorID }} </span>
 						</nuxt-link>
 						<div class="text-xs self-center">
 							{{ $formatDate(comment.timestamp) }}
@@ -69,7 +61,7 @@ import { getPost, Post } from '@/backend/post'
 interface IData {
 	avatar: string
 	commentData: INewCommentData | null
-	emotion: { label: string; imageLeft: any; imageRight: any } | null
+	emotion: { label: string; imageLeft: any; imageRight: any }
 	postData: Post | {}
 }
 

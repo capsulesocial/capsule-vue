@@ -1,41 +1,47 @@
 <template>
-	<section class="w-full border-l border-r">
-		<div style="width: 660px">
-			<!-- Header -->
-			<img
-				:src="require(`@/assets/images/category/` + $route.params.category + `/` + `header.jpg`)"
-				alt=""
-				class="object-cover shadow-lg"
-				style="width: 658px; height: 192px"
-			/>
-			<div style="padding-left: 22px; margin-top: 22px">
-				<h2 class="text-2xl font-medium">Category /</h2>
-				<h2 class="text-2xl capitalize font-medium">
-					{{ $route.params.category }}
-				</h2>
+	<section class="w-full border border-lightBorder">
+		<!-- Header -->
+		<div
+			class="sticky bg-primary -mx-6 -mt-6 rounded-lg flex flex-row items-center shadow-lg h-56 border-lightBorder"
+			:style="{
+				background: `linear-gradient(180deg, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.8) 100%), url(${require(`@/assets/images/category/` +
+					$route.params.category +
+					`/` +
+					`header.png`)})`,
+				backgroundSize: 'cover',
+			}"
+		>
+			<div class="px-6 py-5 flex flex-col justify-between h-full">
+				<button class="flex focus:outline-none" @click="$router.go(-1)">
+					<div class="bg-gray1 rounded-full flex-shrink-0">
+						<BackIcon />
+					</div>
+					<p class="pl-3 font-semibold">All categories</p>
+				</button>
+				<h2 class="text-3xl text-lightOnPrimaryText font-semibold">{{ $route.params.category }}</h2>
 			</div>
-
-			<!-- Posts loaded -->
-			<article v-for="p in posts" :key="p.post._id" style="padding-left: 22px">
-				<PostCard
-					:post="p.post"
-					:comments="p.comments"
-					:usersFollowing="following"
-					:toggleFriend="toggleFriend"
-					:bookmarked="p.bookmarked"
-				/>
-			</article>
-			<!-- Not loaded yet -->
-			<article v-show="isLoading" class="flex justify-center" style="width: 660px">
-				<div class="loader m-5"></div>
-			</article>
 		</div>
+		<!-- Posts loaded -->
+		<article v-for="p in posts" :key="p.post._id" class="pt-4">
+			<PostCard
+				:post="p.post"
+				:comments="p.comments"
+				:usersFollowing="following"
+				:toggleFriend="toggleFriend"
+				:bookmarked="p.bookmarked"
+			/>
+		</article>
+		<!-- Not loaded yet -->
+		<article v-show="isLoading" class="flex justify-center" style="width: 660px">
+			<div class="loader m-5"></div>
+		</article>
 	</section>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import PostCard from '@/components/post/Card.vue'
+import BackIcon from '@/components/icons/ChevronLeft.vue'
 import { getPosts, Algorithm, IPostResponse } from '@/backend/post'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
 
@@ -51,7 +57,9 @@ interface IData {
 export default Vue.extend({
 	components: {
 		PostCard,
+		BackIcon,
 	},
+	layout: `discover`,
 	data(): IData {
 		return {
 			posts: [],

@@ -1,5 +1,5 @@
 <template>
-	<nuxt-link :to="'/' + $props.authorID">
+	<button v-if="!noClick" class="focus:outline-none" @click="$router.push('/' + $props.authorID)">
 		<img
 			v-if="$props.avatar !== `` && $props.avatar !== null"
 			:src="$props.avatar"
@@ -7,7 +7,16 @@
 			:class="size"
 		/>
 		<img v-else :src="avatarList[usernameToPicture($props.authorID)]" class="rounded-lg object-cover" :class="size" />
-	</nuxt-link>
+	</button>
+	<span v-else>
+		<img
+			v-if="$props.avatar !== `` && $props.avatar !== null"
+			:src="$props.avatar"
+			class="rounded-lg object-cover"
+			:class="size"
+		/>
+		<img v-else :src="avatarList[usernameToPicture($props.authorID)]" class="rounded-lg object-cover" :class="size" />
+	</span>
 </template>
 
 <script lang="ts">
@@ -32,6 +41,10 @@ export default Vue.extend({
 		size: {
 			type: String,
 			default: `w-12 h-12`,
+		},
+		noClick: {
+			type: Boolean,
+			default: false,
 		},
 	},
 	data(): IData {

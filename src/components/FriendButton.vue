@@ -1,6 +1,6 @@
 <template>
 	<button class="rounded-lg focus:outline-none" @click="toggleFriend">
-		<div v-if="following">
+		<div v-if="userIsFollowed">
 			<div v-if="showIcons" class="rounded-full p-3 items-center">
 				<UnfollowIcon />
 			</div>
@@ -9,16 +9,16 @@
 				class="
 					friendbtn
 					inline
-					text-primary
+					text-grey5
 					bg-white
 					hover:bg-black hover:text-white
 					text-sm
 					shadow-lg
-					px-4
-					py-1
+					px-5
 					font-semibold
 					rounded-lg
 				"
+				style="padding-top: 0.4rem; padding-bottom: 0.4rem"
 			>
 				<span class="following">Following</span>
 				<span class="unfollow">Unfollow</span>
@@ -30,8 +30,8 @@
 			</div>
 			<span
 				v-else
-				class="text-white font-semibold rounded-lg text-sm shadow-lg px-4 py-1"
-				style="background-color: #a97ea7"
+				class="text-white font-semibold rounded-lg text-sm shadow-lg px-5 bg-secondary"
+				style="padding-top: 0.4rem; padding-bottom: 0.4rem"
 				>Follow</span
 			>
 		</div>
@@ -50,7 +50,7 @@ export default Vue.extend({
 		UnfollowIcon,
 	},
 	props: {
-		following: {
+		userIsFollowed: {
 			type: Boolean,
 			required: true,
 		},
@@ -60,7 +60,7 @@ export default Vue.extend({
 		},
 		toggleFriend: {
 			type: Function as PropType<() => void>,
-			default: () => {},
+			required: true,
 		},
 	},
 })

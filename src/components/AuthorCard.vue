@@ -1,28 +1,28 @@
 <template>
-	<div class="border-t border-b p-5 my-5 flex flex-row justify-between">
-		<div class="flex">
-			<Avatar :avatar="authorAvatar" :authorID="authorID" size="w-16 h-16" />
-			<div class="mx-4">
-				<h6 class="text-sm uppercase text-lightSecondaryText">written by:</h6>
-				<nuxt-link :to="'/' + authorID" class="text-2xl">
-					{{ authorName }}
-				</nuxt-link>
-				<p
-					:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-					class="italic text-sm w-full"
-				>
-					{{ authorBio }}
-				</p>
+	<div class="border-t border-b py-5 my-5">
+		<div class="flex flex-row justify-between items-center">
+			<div>
+				<h6 class="text-sm text-gray6 mb-4 font-sans">Written By:</h6>
+				<div class="flex px-5">
+					<Avatar :avatar="authorAvatar" :authorID="authorID" size="w-16 h-16" />
+					<div class="mx-4">
+						<nuxt-link :to="'/' + authorID" class="text-2xl">
+							{{ authorName }}
+						</nuxt-link>
+						<p class="w-full text-gray6">
+							{{ authorBio }}
+						</p>
+					</div>
+				</div>
 			</div>
-		</div>
-		<div>
-			<FriendButton
-				v-if="authorID !== $store.state.session.id"
-				class="justify-self-end"
-				:following="isFollowed"
-				:toggleFriend="toggleFriend"
-				:showIcons="true"
-			/>
+			<div class="mr-5">
+				<FriendButton
+					v-if="authorID !== $store.state.session.id"
+					class="justify-self-end"
+					:userIsFollowed="isFollowed"
+					:toggleFriend="toggleFriend"
+				/>
+			</div>
 		</div>
 	</div>
 </template>
