@@ -124,8 +124,8 @@
 			<div>{{ comments.length }} comments</div>
 			<CommentFilter :filter="filter" @clicked="setFilter" />
 		</article>
-		<article v-for="c in comments" :key="c.cid" class="py-2">
-			<Comment :authorID="c.authorID" :cid="c.cid" :timestamp="c.timestamp" />
+		<article v-for="c in comments" :key="c._id" class="py-2">
+			<Comment :authorID="c.authorID" :cid="c._id" :timestamp="c.timestamp" />
 		</article>
 	</section>
 </template>
@@ -219,9 +219,9 @@ export default Vue.extend({
 				alert(`invalid comment!`)
 			} else {
 				const c = createComment(this.$store.state.session.id, this.comment, this.emotion, this.postCID)
-				const cid = await sendComment(c, `comment`)
+				const _id = await sendComment(c, `comment`)
 				// Send comment (c)
-				this.comments.push({ cid, ...c })
+				this.comments.push({ _id, ...c })
 				// Apply filter to comments, in case new comment was added in filtered category
 				this.filterComments()
 				this.comment = ``

@@ -88,9 +88,9 @@
 				<div class="pl-5 pt-1">
 					<Reply
 						v-for="r in filterReplies()"
-						:key="r.cid"
+						:key="r._id"
 						:authorID="r.authorID"
-						:cid="r.cid"
+						:cid="r._id"
 						:timestamp="r.timestamp"
 						class="pt-1"
 					/>
@@ -108,14 +108,14 @@ import BrandedButton from '@/components/BrandedButton.vue'
 import Reply from '@/components/post/Reply.vue'
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 import { reactions, feelings } from '@/config'
-import { createComment, getComment, getCommentsOfPost, sendComment } from '@/backend/comment'
+import { createComment, getComment, getCommentsOfPost, ICommentData, sendComment } from '@/backend/comment'
 import { getPhotoFromIPFS } from '@/backend/photos'
 import { getProfileFromSession } from '@/store/session'
 
 interface IData {
 	isReplying: boolean
 	reply: string
-	replies: any[]
+	replies: ICommentData[]
 	avatar: string
 	name: string
 	emotion: { label: string; imageLeft: any; imageRight: any } | null
@@ -204,13 +204,13 @@ export default Vue.extend({
 				alert(`Invalid reply!`)
 			} else {
 				const c = createComment(this.$store.state.session.id, this.reply, `no-emotion`, this.cid)
-				const cid = await sendComment(c, `reply`)
-				this.replies.push({ cid, ...c })
+				const _id = await sendComment(c, `reply`)
+				this.replies.push({ _id, ...c })
 				this.filterReplies()
 				this.reply = ``
 			}
 		},
-		filterReplies(): any[] {
+		filterReplies(): ICommentData[] {
 			return this.replies.slice().sort((p0, p1) => p1.timestamp - p0.timestamp)
 		},
 	},
