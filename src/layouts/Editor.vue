@@ -16,24 +16,25 @@
 					<section class="flex flex-row">
 						<PostEditor
 							ref="editor"
-							style="width: 750px; min-height: calc(100vh - 90px); height: calc(100vh - 90px)"
+							style="width: 750px; min-height: calc(100vh - 88px); height: calc(100vh - 88px)"
 							class="
 								fixed
 								overflow-y-auto
-								rounded-lg
+								rounded-t-lg
 								shadow-lg
 								mr-5
-								p-6
+								p-8
 								z-10
 								bg-gradient-to-r
 								from-lightBGStart
 								to-lightBGStop
 								backdrop-filter backdrop-blur-lg
+								border-lightBorder
 							"
 							@update="updateWordCount"
 						/>
 						<!-- Widgets -->
-						<aside class="fixed" style="margin-left: 780px; width: 450px">
+						<aside class="fixed" style="margin-left: 770px; width: 450px">
 							<EditorWidgets :wordCount="wordCount" @post="handlePost" />
 							<Footer />
 						</aside>

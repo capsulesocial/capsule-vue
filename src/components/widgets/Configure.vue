@@ -26,7 +26,7 @@
 				</div>
 			</article>
 			<!-- Right side: side widgets -->
-			<div class="fixed" style="margin-left: 780px; width: 450px">
+			<div class="fixed" style="margin-left: 770px; width: 450px">
 				<article
 					class="
 						overflow-y-auto

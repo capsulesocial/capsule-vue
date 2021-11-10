@@ -46,7 +46,7 @@
 							:posts="posts"
 						/>
 						<!-- Widgets -->
-						<aside class="fixed" style="margin-left: 780px; width: 450px">
+						<aside class="fixed" style="margin-left: 770px; width: 450px">
 							<article
 								class="
 									w-full

@@ -62,7 +62,7 @@
 							:following="following"
 						/>
 						<!-- Widgets -->
-						<aside class="fixed" :class="showWidgets ? `z-10` : ``" style="margin-left: 780px; width: 450px">
+						<aside class="fixed" :class="showWidgets ? `z-10` : ``" style="margin-left: 770px; width: 450px">
 							<Widgets @overlay="toggleZIndex" />
 							<Footer />
 						</aside>

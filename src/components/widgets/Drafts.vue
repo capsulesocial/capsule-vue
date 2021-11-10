@@ -1,7 +1,7 @@
 <template>
 	<article class="p-6 pt-4 pb-4">
 		<h3 class="text-primary font-semibold">Drafts</h3>
-		<div class="flex flex-row justify-between my-4">
+		<div class="flex flex-row justify-between my-4 items-center">
 			<!-- Title -->
 			<div class="flex flex-col flex-grow">
 				<h6 class="text-base font-semibold">

@@ -1,10 +1,14 @@
 <template>
 	<div class="">
 		<!-- Featured image -->
-		<article class="rounded-lg shadow-lg bg-white p-4 mb-5">
-			<h6 class="text-primary font-semibold">Featuerd Image</h6>
+		<article class="rounded-lg shadow-lg bg-gradient-to-r
+								from-lightBGStart
+								to-lightBGStop
+								backdrop-filter backdrop-blur-lg
+								border-lightBorder px-6 py-4 mb-5">
+			<h6 class="text-primary font-semibold">Featured Image</h6>
 			<button
-				class="w-full p-4 rounded-lg border-2 border-primary border-dashed h-24 flex justify-center items-center my-2"
+				class="w-full rounded-lg border-2 border-primary border-dashed h-40 flex justify-center items-center  mt-3 mb-2 focus:outline-none overflow-hidden"
 				@click="handleUploadImageClick"
 			>
 				<input
@@ -19,10 +23,10 @@
 				<!-- No Photo Uploaded -->
 				<div v-if="featuredPhoto === null" class="flex flex-col justify-center">
 					<UploadIcon class="self-center" />
-					<p class="text-primary text-left font-light text-sm">Upload an Image</p>
+					<p class="text-primary text-left font-light text-sm mt-2">Upload an Image</p>
 				</div>
-				<div v-else>
-					<img :src="featuredPhoto" class="h-24 w-full object-contain" />
+				<div v-else class="h-full w-full">
+					<img :src="featuredPhoto" class="h-40 w-full object-cover" />
 				</div>
 			</button>
 			<!-- Photo Uploaded -->
@@ -32,16 +36,20 @@
 			</div>
 		</article>
 		<!-- Category -->
-		<article class="rounded-lg shadow-lg bg-white p-4 mb-5">
+		<article class="rounded-lg shadow-lg bg-gradient-to-r
+								from-lightBGStart
+								to-lightBGStop
+								backdrop-filter backdrop-blur-lg
+								border-lightBorder px-6 py-4 mb-5">
 			<h6 class="text-primary font-semibold">Category</h6>
-			<button class="w-full p-2 my-1 rounded-lg bg-gray1" @click="showCategoryDropdown = !showCategoryDropdown">
+			<button class="w-full p-2 my-1 mt-3 rounded-lg bg-gray1" @click="showCategoryDropdown = !showCategoryDropdown">
 				<div class="flex justify-between items-center">
 					<div v-if="category" class="flex flex-row items-center">
 						<img
 							:src="require(`@/assets/images/category/` + $store.state.draft.category + `/icon.png`)"
-							class="hotzone w-12 h-12 mr-2"
+							class="hotzone w-10 h-10 mr-2"
 						/>
-						<span class="text-lg">{{ $store.state.draft.category }}</span>
+						<span class="text-base text-primary">{{ $store.state.draft.category }}</span>
 					</div>
 					<div v-else>Select a Category</div>
 					<ChevronUp v-if="showCategoryDropdown" />
@@ -66,8 +74,12 @@
 			</div>
 		</article>
 		<!-- Tags -->
-		<article class="rounded-lg shadow-lg bg-white p-4 mb-5">
-			<h6 class="text-primary font-semibold">Tags</h6>
+		<article class="rounded-lg shadow-lg bg-gradient-to-r
+								from-lightBGStart
+								to-lightBGStop
+								backdrop-filter backdrop-blur-lg
+								border-lightBorder px-6 py-4 pb-6 mb-5">
+			<h6 class="text-primary font-semibold mb-3">Tags</h6>
 			<div class="w-full p-2 my-1 rounded-lg bg-gray1">
 				<label for="tag" class="hidden" value="Enter hashtags"></label>
 				<input
@@ -87,31 +99,30 @@
 						items-center
 						z-10
 						focus:outline-none
-						pl-1
+						px-3 py-1
 						mr-4
 						mt-2
-						transition
-						duration-500
-						ease-in-out
-						transform
-						hover:scale-105
 						bg-gray1
 						rounded-lg
 					"
 					@click="removeTag(t)"
 				>
 					<span class="font-semibold text-gray5 text-sm">{{ t.name }}</span
-					><XIcon class="p-1 text-lightPrimary" />
+					><XIcon class="p-1 pr-0 text-gray5" />
 				</button>
 			</div>
 		</article>
-		<article class="rounded-lg shadow-lg bg-white p-4 mb-5">
+		<article class="rounded-lg shadow-lg bg-gradient-to-r
+								from-lightBGStart
+								to-lightBGStop
+								backdrop-filter backdrop-blur-lg
+								border-lightBorder p-6 mb-5">
 			<div class="flex flex-row justify-between items-center">
 				<div>
-					<h5 v-show="$props.wordCount > 1">
+					<h5 v-show="$props.wordCount > 1" class="text-sm text-gray5">
 						<span class="text-primary">{{ $props.wordCount }}</span> words
 					</h5>
-					<h5>Auto-save on close.</h5>
+					<h5 class="text-sm text-gray5">Auto-save on close.</h5>
 				</div>
 				<button
 					class="
@@ -119,7 +130,7 @@
 						duration-500
 						ease-in-out
 						transform
-						hover:scale-110
+						hover:scale-105
 						font-bold
 						rounded-lg
 						shadow-lg

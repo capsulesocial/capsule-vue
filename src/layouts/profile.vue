@@ -38,7 +38,7 @@
 							:userIsFollowed="userIsFollowed"
 						/>
 						<!-- Widgets -->
-						<aside class="fixed" style="margin-left: 780px; width: 450px">
+						<aside class="fixed" style="margin-left: 770px; width: 450px">
 							<ProfileWidget :location="visitProfile.location" />
 							<FollowersWidget v-if="followers.size > 0" :followers="followers" :updateFollowers="updateFollowers" />
 							<Footer />

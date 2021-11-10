@@ -107,7 +107,7 @@
 	::-webkit-scrollbar-thumb:hover {
 		background: #7097AC; 
 	}
-    h1, h5 {
+    h1 {
 		@apply font-serif;
 	}
 	.editable h1 {

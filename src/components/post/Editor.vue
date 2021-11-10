@@ -3,8 +3,8 @@
 		<div class="flex">
 			<section class="w-full">
 				<!-- Title, subtitle -->
-				<article class="flex flex-col px-5">
-					<button class="absolute right-0 top-0 rounded-full bg-gray1 p-1 m-4" @click="$router.go(-1)">
+				<article class="flex flex-col px-2">
+					<button class="absolute right-0 top-0 rounded-full bg-gray1 p-1 m-8" @click="$router.go(-1)">
 						<XIcon />
 					</button>
 					<p class="text-xs text-lightError">{{ titleError }}</p>
@@ -13,20 +13,20 @@
 						id="title"
 						ref="title"
 						placeholder="Enter Title"
-						class="text-h1 font-serif font-semibold mt-2 mb-3 capitalize break-words w-full focus:outline-none"
+						class="text-h1 font-serif font-semibold capitalize break-words w-full focus:outline-none"
 						wrap="soft"
 						@input="handleTitle"
 					/>
 				</article>
 
-				<article class="flex flex-col px-5 mb-3">
+				<article class="flex flex-col px-2 mb-3">
 					<p class="text-xs text-lightError">{{ subtitleError }}</p>
 					<label for="subtitle" class="hidden">Subtitle</label>
 					<textarea
 						id="subtitle"
 						ref="subtitle"
 						placeholder="Enter Subtitle"
-						class="font-serif text-h2 mt-2 text-lightSecondaryText capitalize break-words focus:outline-none w-full"
+						class="font-serif text-h2 mt-2 text-gray5 capitalize break-words focus:outline-none w-full"
 						wrap="soft"
 						@input="handleSubtitle"
 					/>
@@ -36,7 +36,7 @@
 				<div
 					id="editor"
 					ref="editor"
-					class="max-w-none focus:outline-none p-5 content"
+					class="max-w-none focus:outline-none p-2 content"
 					v-html="$store.state.draft.content"
 				></div>
 			</section>
