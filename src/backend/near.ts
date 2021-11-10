@@ -1,7 +1,6 @@
 import { Account, connect, Contract, keyStores, Near, providers } from 'near-api-js'
 import { KeyPairEd25519 } from 'near-api-js/lib/utils'
-// eslint-disable-next-line camelcase
-import { base_decode, base_encode } from 'near-api-js/lib/utils/serialize'
+import { base_decode as baseDecode, base_encode as baseEncode } from 'near-api-js/lib/utils/serialize'
 import { getNearConfig } from './utilities/config'
 
 export interface INearConfig {
@@ -62,31 +61,16 @@ export async function initContract(accountId: string) {
 	_near = await connect({ deps: { keyStore: new keyStores.BrowserLocalStorageKeyStore() }, ...nearConfig })
 	// Initializing contract API
 	_contract = new Contract(new Account(_near.connection, accountId), nearConfig.contractName, {
-		viewMethods: [`getUserInfo`, `getUsername`],
+		viewMethods: [`getUserInfo`],
 		changeMethods: [`setUserInfo`],
 	})
 }
 
-export function getContract() {
+function getContract() {
 	if (!_contract) {
 		throw new Error(`Contract not yet initialised!`)
 	}
 	return _contract
-}
-
-export async function getNearPrivateKey() {
-	if (!_contract) {
-		throw new Error(`Contract not yet initialised!`)
-	}
-	const accountId = _contract.account.accountId
-
-	const keystore = new keyStores.BrowserLocalStorageKeyStore()
-	const keypair = (await keystore.getKey(nearConfig.networkId, accountId)) as KeyPairEd25519
-
-	const privateKey = keypair.secretKey
-	const privateKeyBytes = new Uint8Array(base_decode(privateKey))
-
-	return privateKeyBytes
 }
 
 export async function getNearPublicKey(accountId?: string) {
@@ -107,7 +91,7 @@ export async function getNearPublicKey(accountId?: string) {
 }
 
 export async function setNearPrivateKey(privateKey: Uint8Array, accountId: string) {
-	const encodedPrivateKey = base_encode(privateKey)
+	const encodedPrivateKey = baseEncode(privateKey)
 	const keypair = new KeyPairEd25519(encodedPrivateKey)
 
 	const keystore = new keyStores.BrowserLocalStorageKeyStore()
@@ -132,27 +116,36 @@ export async function getUserInfoNEAR(username: string) {
 		throw new Error(`Username not found on NEAR!`)
 	}
 	// Base58 decode the public key, return it as a Uint8Array
-	const publicKey = new Uint8Array(base_decode(userInfo[1]))
+	const publicKey = new Uint8Array(baseDecode(userInfo[1]))
 	if (publicKey[0] !== 0 || publicKey.length !== 33) {
 		throw new Error(`First element is non-null`)
 	}
 	return { accountId: userInfo[0], publicKey: publicKey.slice(1) }
 }
 
+// (But why does eslint complain here? It doesn't make sense to me - seems like a bug?)
+// eslint-disable-next-line no-shadow
+enum SetUserInfoStatus {
+	Success = 1,
+	UsernameTooSmall,
+	UsernameAlreadyExists,
+	UsernameTooLarge,
+	NearAccountAlreadyLinked,
+}
+
 export async function setUserInfoNEAR(username: string) {
 	const contract = getContract() as any
-	// TODO: use enums
-	const status: 1 | 2 | 3 | 4 | 5 = await contract.setUserInfo({ username })
+	const status = (await contract.setUserInfo({ username })) as SetUserInfoStatus
 	switch (status) {
-		case 1:
-			return { success: true, error: `` }
-		case 2:
-			return { success: false, error: `Username should contain atleast 3 characters!` }
-		case 3:
+		case SetUserInfoStatus.Success:
+			return { success: true }
+		case SetUserInfoStatus.UsernameTooSmall:
+			return { success: false, error: `Username should contain at least 3 characters!` }
+		case SetUserInfoStatus.UsernameAlreadyExists:
 			return { success: false, error: `Username already exists!` }
-		case 4:
+		case SetUserInfoStatus.UsernameTooLarge:
 			return { success: false, error: `Username should not contain more than 18 characters!` }
-		case 5:
+		case SetUserInfoStatus.NearAccountAlreadyLinked:
 			return { success: false, error: `Your NEAR Account is already linked to another username` }
 		default:
 			throw new Error(`Unknown status encountered while updating info on NEAR`)

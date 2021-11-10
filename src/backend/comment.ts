@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { capsuleOrbit } from './utilities/config'
 import ipfs from './utilities/ipfs'
-import { signContent } from './keys'
+import { signContent } from './utilities/keys'
 import { uint8ArrayToHexString } from './utilities/helpers'
 
 export interface INewCommentData {

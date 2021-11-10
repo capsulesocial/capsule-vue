@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { capsuleOrbit } from './utilities/config'
-import { signContent } from './keys'
+import { signContent } from './utilities/keys'
 import { uint8ArrayToHexString } from './utilities/helpers'
 import cache from './utilities/caching'
 
