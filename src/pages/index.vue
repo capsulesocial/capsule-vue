@@ -85,7 +85,7 @@ import BrandedButton from '@/components/BrandedButton.vue'
 
 import { MutationType, createSessionFromProfile, namespace as sessionStoreNamespace } from '~/store/session'
 
-import { getAccountId, login, register } from '@/backend/auth'
+import { getAccountIdFromPrivateKey, login, register } from '@/backend/auth'
 import { getUsernameNEAR } from '@/backend/near'
 import { torusVerifiers, TorusVerifiers } from '@/backend/utilities/config'
 
@@ -142,7 +142,7 @@ export default Vue.extend({
 			this.userInfo = await this.torus.triggerLogin(torusVerifiers[type])
 			this.isLoading = true
 
-			this.accountId = getAccountId(this.userInfo.privateKey)
+			this.accountId = getAccountIdFromPrivateKey(this.userInfo.privateKey)
 			this.username = await getUsernameNEAR(this.accountId)
 			if (this.username) {
 				this.verify()

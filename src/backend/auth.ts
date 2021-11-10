@@ -11,7 +11,7 @@ export interface IAuthResult {
 	cid: string
 }
 
-export function getAccountId(privateKey: string) {
+export function getAccountIdFromPrivateKey(privateKey: string) {
 	const { pk } = getED25519Key(privateKey)
 
 	const pk58 = `ed25519:${baseEncode(pk)}`
@@ -20,15 +20,19 @@ export function getAccountId(privateKey: string) {
 	return accountId
 }
 
-// POST newly created account to IPFS
-export async function register(id: string, privateKey: string): Promise<IAuthResult> {
+async function authUser(privateKey: string) {
+	const accountId = getAccountIdFromPrivateKey(privateKey)
 	const { sk } = getED25519Key(privateKey)
-	const accountId = getAccountId(privateKey)
 
 	setNearPrivateKey(sk, accountId)
-
 	// Reinitialise Smart Contract API
 	await initContract(accountId)
+	window.localStorage.setItem(`accountId`, accountId)
+}
+
+// POST newly created account to IPFS
+export async function register(id: string, privateKey: string): Promise<IAuthResult> {
+	await authUser(privateKey)
 
 	const profile = createDefaultProfile(id)
 	const [cid, userSetStatus] = await Promise.all([addProfileToIPFS(profile), setUserInfoNEAR(id)])
@@ -37,25 +41,18 @@ export async function register(id: string, privateKey: string): Promise<IAuthRes
 		throw new Error(userSetStatus.error)
 	}
 
-	window.localStorage.setItem(`accountId`, accountId)
 	return { profile, cid }
 }
 
 export async function login(id: string, privateKey: string): Promise<IAuthResult> {
-	const accountId = getAccountId(privateKey)
-	const { sk } = getED25519Key(privateKey)
-
-	setNearPrivateKey(sk, accountId)
-	const contractPromise = initContract(accountId)
+	await authUser(privateKey)
 
 	let profile = createDefaultProfile(id)
-
 	const fetchedProfile = await getProfile(id)
 	if (fetchedProfile) {
 		profile = fetchedProfile
 	}
-	const [cid] = await Promise.all([addProfileToIPFS(profile), contractPromise])
+	const cid = await addProfileToIPFS(profile)
 
-	window.localStorage.setItem(`accountId`, accountId)
 	return { profile, cid }
 }

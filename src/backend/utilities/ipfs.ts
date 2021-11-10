@@ -5,8 +5,6 @@ export interface IPFSInterface {
 	getData: (cid: string) => Promise<string>
 	getJSONData: <T>(hash: string) => Promise<T>
 	sendJSONData: <T>(content: T) => Promise<string>
-	importPrivateKey: (name: string, privateKey: string, password: string) => Promise<boolean>
-	generatePrivateKey: (name: string) => Promise<boolean>
 }
 
 const ipfsConfig: Options = {
@@ -66,47 +64,11 @@ async function createIPFSInterface(): Promise<IPFSInterface> {
 		return cid.toString()
 	}
 
-	// Import Private Key to local IPFS repo
-	const importPrivateKey = async (name: string, privateKey: string, password: string) => {
-		try {
-			await node.key.import(name, privateKey, password)
-			return true
-		} catch (error: any) {
-			if (error.code === `ERR_KEY_ALREADY_EXISTS`) {
-				await node.key.rm(name)
-				try {
-					await node.key.import(name, privateKey, password)
-					return true
-				} catch {
-					return false
-				}
-			}
-		}
-		return false
-	}
-
-	// Generate a new ed25519 key
-	const generatePrivateKey = async (name: string) => {
-		try {
-			await node.key.gen(name, { type: `Ed25519` })
-			return true
-		} catch (error: any) {
-			if (error.code === `ERR_KEY_ALREADY_EXISTS`) {
-				await node.key.rm(name)
-				await node.key.gen(name, { type: `Ed25519` })
-				return true
-			}
-		}
-		return false
-	}
-
 	return {
 		getJSONData,
 		sendJSONData,
 		sendData,
 		getData,
-		importPrivateKey,
-		generatePrivateKey,
 	}
 }
 

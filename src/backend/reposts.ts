@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { signContent } from './keys'
+import { signContent } from './utilities/keys'
 import { Algorithm, Post } from './post'
 import { capsuleOrbit } from './utilities/config'
 import { uint8ArrayToHexString } from './utilities/helpers'

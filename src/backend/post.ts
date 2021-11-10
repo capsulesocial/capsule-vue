@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { signContent } from './keys'
+import { signContent } from './utilities/keys'
 import ipfs from './utilities/ipfs'
 import { uint8ArrayToHexString } from './utilities/helpers'
 import { capsuleOrbit } from './utilities/config'
