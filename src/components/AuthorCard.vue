@@ -2,7 +2,7 @@
 	<div class="border-t border-b py-5 my-5">
 		<div class="flex flex-row justify-between items-center">
 			<div>
-				<h6 class="text-sm text-gray6 mb-2 font-sans">Written By:</h6>
+				<h6 class="text-sm text-gray6 mb-4 font-sans">Written By:</h6>
 				<div class="flex px-5">
 					<Avatar :avatar="authorAvatar" :authorID="authorID" size="w-16 h-16" />
 					<div class="mx-4">
@@ -21,7 +21,6 @@
 					class="justify-self-end"
 					:userIsFollowed="isFollowed"
 					:toggleFriend="toggleFriend"
-					:showIcons="true"
 				/>
 			</div>
 		</div>

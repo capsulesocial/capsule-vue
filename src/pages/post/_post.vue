@@ -4,15 +4,16 @@
 		<div style="width: 760px; max-width: 760px">
 			<!-- Magic header that disappears on scroll down -->
 			<header
-				class="page-header flex items-center fixed top-0 z-10"
-				style="width: 760px; max-width: 760px; margin-top: 135px"
+				id="header"
+				class="page-header flex items-center fixed top-0 z-10 bg-white py-2 rounded-b-lg"
+				style="width: 760px; max-width: 760px; margin-top: 89px"
 			>
-				<div class="trigger-menu-wrapper flex justify-center w-full py-2 bg-white">
-					<div class="md:min-w-max md:max-w-3xl w-full pl-5 flex justify-between">
+				<div class="trigger-menu-wrapper flex justify-center w-full py-2 ease-in-out">
+					<div class="md:min-w-max md:max-w-3xl w-full flex justify-between">
 						<!-- Left side: name, avatar, date -->
 						<div class="items-center flex">
 							<Avatar :avatar="authorAvatar" :authorID="post.authorID" size="w-10 h-10" class="mr-4" />
-							<div class="pr-4">
+							<div class="pr-8">
 								<nuxt-link :to="`/` + post.authorID" class="font-semibold">{{ author.name }}</nuxt-link>
 								<h6 class="font-sans text-sm text-gray6">{{ $formatDate(post.timestamp) }}</h6>
 							</div>
@@ -30,7 +31,7 @@
 					</div>
 				</div>
 			</header>
-			<section v-if="post !== null" class="pb-16 md:pb-5 md:pl-5 my-5 pt-4">
+			<section v-if="post !== null" class="pb-16 md:pb-5 my-5 pt-10 px-1">
 				<!-- Category and elipses -->
 				<article class="w-full flex justify-between my-2">
 					<nuxt-link :to="`/discover/` + post.category" class="text-primary capitalize">{{ post.category }}</nuxt-link>
@@ -259,6 +260,7 @@ export default Vue.extend({
 		// Hide header on scroll down
 		handleScroll() {
 			const body = document.getElementById(`post`)
+			const header = document.getElementById(`header`)
 			const scrollUp = `scroll-up`
 			const scrollDown = `scroll-down`
 			if (!body) {
@@ -266,17 +268,17 @@ export default Vue.extend({
 			}
 			const currentScroll = body.scrollTop
 			if (body.scrollTop <= 0) {
-				body.classList.remove(scrollUp)
+				header.classList.remove(scrollUp)
 				return
 			}
-			if (currentScroll > this.lastScroll && !body.classList.contains(scrollDown)) {
+			if (currentScroll > this.lastScroll && !header.classList.contains(scrollDown)) {
 				// down
-				body.classList.remove(scrollUp)
-				body.classList.add(scrollDown)
-			} else if (currentScroll < this.lastScroll && body.classList.contains(scrollDown)) {
+				header.classList.remove(scrollUp)
+				header.classList.add(scrollDown)
+			} else if (currentScroll < this.lastScroll && header.classList.contains(scrollDown)) {
 				// up
-				body.classList.remove(scrollDown)
-				body.classList.add(scrollUp)
+				header.classList.remove(scrollDown)
+				header.classList.add(scrollUp)
 			}
 			this.lastScroll = currentScroll
 		},
@@ -313,25 +315,21 @@ hr.style-one {
 	text-justify: inter-word;
 }
 .trigger-menu-wrapper {
-	transition: transform 0.4s;
+	transition: all 0.4s;
 	z-index: 50;
 }
 .page-header {
-	transition: transform 0.3s;
+	transition: all 0.3s ease-in-out;
 }
 .trigger-menu-wrapper {
-	transition: transform 0.4s;
-}
-.scroll-down .trigger-menu-wrapper {
-	visibility: hidden;
-	opacity: 0;
-	transition: opacity 2s linear;
-	/* transform: translate3d(0, -100%, 0); */
+	transition: all 0.4s;
 }
 .scroll-down {
-	background: white;
+	opacity: 0;
+	transform: translate3d(0,-20%,0);
 }
 .scroll-up {
+	opacity: 1;
 	transform: none;
 }
 </style>

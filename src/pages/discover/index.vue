@@ -1,5 +1,5 @@
 <template>
-	<div class="w-full border border-lightBorder">
+	<div class="w-full border border-lightBorder" style="width: 750px; min-height: calc(100vh - 160px); height: calc(100vh - 160px)">
 		<div class="-mt-2">
 			<h2 class="text-xl text-primary font-semibold mb-2">Featured Categories</h2>
 			<p class="text-gray5">Read more of what you love by browsing top categories:</p>

@@ -269,7 +269,7 @@ textarea#title {
 	border: none;
 	resize: none;
 	overflow-y: hidden;
-	height: 3rem;
+	height: 4rem;
 }
 textarea#subtitle {
 	border: none;

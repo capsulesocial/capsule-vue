@@ -13,9 +13,9 @@
 				<!-- Body -->
 				<div>
 					<!-- Content -->
-					<section class="flex flex-row mt-12">
+					<section class="flex flex-row">
 						<nuxt-child
-							style="width: 1220px; min-height: calc(100vh - 184px); height: calc(100vh - 184px)"
+							style="width: 1220px; min-height: calc(100vh - 80px); height: calc(100vh - 80px)"
 							class="
 								fixed
 								overflow-y-auto
@@ -24,6 +24,7 @@
 								mr-5
 								p-6
 								z-10
+								border border-lightBorder
 								bg-gradient-to-r
 								from-lightBGStart
 								to-lightBGStop

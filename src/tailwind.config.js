@@ -29,7 +29,7 @@ module.exports = {
       },
         colors: {
         primary: '#2E556A', // Dark Teal
-        secondary: '#367589', // Moss Teal
+        secondary: '#7097AC', // Moss Teal
         teal: '#216B6A', //Teal
         ocean: '#89B8CA', // Ocean Blue
         fourth: '#1C478B', // Dark Blue

@@ -13,10 +13,10 @@
 				<!-- Body -->
 				<div>
 					<!-- Content -->
-					<section class="flex flex-row mt-20">
+					<section class="flex flex-row">
 						<PostEditor
 							ref="editor"
-							style="width: 750px; min-height: calc(100vh - 184px); height: calc(100vh - 184px)"
+							style="width: 750px; min-height: calc(100vh - 90px); height: calc(100vh - 90px)"
 							class="
 								fixed
 								overflow-y-auto
