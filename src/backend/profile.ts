@@ -3,7 +3,7 @@ import axios from 'axios'
 import ipfs from './utilities/ipfs'
 import cache from './utilities/caching'
 import { capsuleOrbit } from './utilities/config'
-import { signContent } from './keys'
+import { signContent } from './utilities/keys'
 import { uint8ArrayToHexString } from './utilities/helpers'
 
 export interface Profile {
@@ -66,8 +66,8 @@ export async function sendProfileServer(
 	} catch (error) {
 		// eslint-disable-next-line no-console
 		console.log(error)
+		return { success: false, cid: `` }
 	}
-	return { success: false, cid: `` }
 }
 
 export function addProfileToIPFS(content: Profile) {
