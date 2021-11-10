@@ -63,7 +63,19 @@
 						/>
 						<!-- Widgets -->
 						<aside class="fixed" :class="showWidgets ? `z-10` : ``" style="margin-left: 770px; width: 450px">
-							<Widgets @overlay="toggleZIndex" />
+							<TagsWidget
+								class="
+									rounded-lg
+									shadow-lg
+									bg-gradient-to-r
+									from-lightBGStart
+									to-lightBGStop
+									backdrop-filter backdrop-blur-lg
+									border border-lightBorder
+									overflow-hidden
+									mb-5
+								"
+							/>
 							<Footer />
 						</aside>
 					</section>
@@ -76,10 +88,10 @@
 <script lang="ts">
 import Vue from 'vue'
 import CapsuleIcon from '@/components/icons/Capsule.vue'
-import Widgets from '@/components/Widgets.vue'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 import PostEditor from '@/components/post/Editor.vue'
+import TagsWidget from '@/components/widgets/Tags.vue'
 
 import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
@@ -95,7 +107,7 @@ interface IData {
 export default Vue.extend({
 	components: {
 		CapsuleIcon,
-		Widgets,
+		TagsWidget,
 		Header,
 		Footer,
 		PostEditor,
