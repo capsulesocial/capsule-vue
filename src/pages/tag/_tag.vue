@@ -1,31 +1,46 @@
 <template>
-	<section class="w-full">
-		<div style="width: 660px" class="border-l border-r">
-			<article class="p-4">
-				<h2 class="text-xl">Hashtags /</h2>
-				<h2 class="text-2xl uppercase">#{{ $route.params.tag }}</h2>
-			</article>
-			<!-- Posts loaded -->
-			<article v-for="p in posts" :key="p.post._id" style="padding-left: 22px">
-				<PostCard
-					:post="p.post"
-					:comments="p.comments"
-					:usersFollowing="following"
-					:toggleFriend="toggleFriend"
-					:bookmarked="p.bookmarked"
-				/>
-			</article>
-			<!-- Not loaded yet -->
-			<article v-show="isLoading" class="flex justify-center" style="width: 660px">
-				<div class="loader m-5"></div>
-			</article>
+	<section class="w-full border border-lightBorder">
+		<!--  -->
+		<div
+			class="
+				sticky
+				bg-primary bg-opacity-25
+				-mx-6
+				-mt-6
+				rounded-lg
+				flex flex-row
+				items-center
+				shadow-lg
+				p-2
+				border-lightBorder
+			"
+		>
+			<button class="bg-gray1 rounded-full flex-shrink-0 m-3 focus:outline-none" @click="$router.go(-1)">
+				<BackIcon />
+			</button>
+			<h2 class="text-2xl text-primary font-semibold">{{ $route.params.tag }}</h2>
 		</div>
+		<!-- Posts loaded -->
+		<article v-for="p in posts" :key="p.post._id">
+			<PostCard
+				:post="p.post"
+				:comments="p.comments"
+				:usersFollowing="following"
+				:toggleFriend="toggleFriend"
+				:bookmarked="p.bookmarked"
+			/>
+		</article>
+		<!-- Not loaded yet -->
+		<article v-show="isLoading" class="flex justify-center" style="width: 660px">
+			<div class="loader m-6"></div>
+		</article>
 	</section>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import PostCard from '@/components/post/Card.vue'
+import BackIcon from '@/components/icons/ChevronLeft.vue'
 import { getPosts, Algorithm, IPostResponse } from '@/backend/post'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
 
@@ -43,7 +58,9 @@ export default Vue.extend({
 	name: `TagPage`,
 	components: {
 		PostCard,
+		BackIcon,
 	},
+	layout: `discover`,
 	data(): IData {
 		return {
 			posts: [],

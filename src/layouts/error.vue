@@ -8,7 +8,7 @@
 	</main>
 </template>
 
-<script>
+<script lang="ts">
 import Vue from 'vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 

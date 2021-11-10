@@ -82,8 +82,32 @@
 		font-weight: 700;
 		font-style: italic;
 	}
-
-    h1, h2, h3, h4, h5, h6 {
+	/* .medium-editor-toolbar {
+    @apply bg-white border rounded-xl shadow-xl
+  } */
+  	/* width */
+	::-webkit-scrollbar {
+		padding-top: 5px;
+		margin-top: 5px;
+		width: 3px;
+	}
+	
+	/* Track */
+	::-webkit-scrollbar-track {
+		background: rgba(0, 0, 0, 0);
+	}
+	
+	/* Handle */
+	::-webkit-scrollbar-thumb {
+		background: #2E556A;
+		border-radius: 50px;
+	}
+	
+	/* Handle on hover */
+	::-webkit-scrollbar-thumb:hover {
+		background: #7097AC; 
+	}
+    h1 {
 		@apply font-serif;
 	}
 	.editable h1 {

@@ -6,6 +6,7 @@
 			@click.stop="toggleDropdown"
 		>
 			<ShareIcon :isActive="showSocialShares" class="mr-2" />
+			{{ repostCount }}
 		</button>
 		<div
 			v-show="showSocialShares"
@@ -14,8 +15,8 @@
 					? 'bg-lightBG text-lightPrimaryText border-lightBorder'
 					: 'bg-darkBG text-darkPrimaryText border-darkBorder'
 			"
-			class="absolute flex flex-col rounded-lg rounded-t-none w-40 shadow-lg z-20"
-			style="padding: 16px; top: 40px"
+			class="absolute flex flex-col rounded-lg rounded-t-none w-40 shadow-lg z-10 p-1"
+			style="top: -17px; left: 32px"
 		>
 			<!-- Repost -->
 			<button
@@ -89,6 +90,10 @@ export default Vue.extend({
 		hasRepost: {
 			type: Function,
 			default: () => {},
+		},
+		repostCount: {
+			type: Number,
+			required: true,
 		},
 	},
 	data(): IData {

@@ -1,99 +1,26 @@
 <template>
-	<div class="w-full">
-		<section style="width: 750px">
-			<article style="width: 750px" class="flex flex-col md:flex-row justify-between mb-1 items-center mt-3">
-				<!-- Tag title and filter dropdown -->
-				<div class="flex flex-row justify-between w-full">
-					<h2
-						:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-						class="text-3xl font-semibold"
-					>
-						Featured Hashtags
-					</h2>
-					<!-- Dropdown filter -->
-					<div class="relative inline">
-						<button
-							class="
-								flex
-								justify-between
-								items-center
-								toggle
-								border
-								rounded-lg
-								focus:outline-none
-								self-center
-								capitalize
-								text-gray7
-								font-medium
-								h-10
-								px-2
-							"
-							style="width: 175px"
-							@click.stop="showFilter = !showFilter"
-						>
-							{{ tagFilter }}
-							<ChevronUp v-if="showFilter" />
-							<ChevronDown v-else />
-						</button>
-						<!-- Dropdown -->
-						<div v-show="showFilter" class="absolute z-10 top-0 bg-white rounded-lg shadow-lg p-2 mt-10 w-full">
-							<button class="w-full text-left text-gray7 focus:outline-none p-2" @click="setTagFilter(`Trending`)">
-								Trending
-							</button>
-							<button class="w-full text-left text-gray7 focus:outline-none p-2" @click="setTagFilter(`Top This Week`)">
-								Top This Week
-							</button>
-							<button class="w-full text-left text-gray7 focus:outline-none p-2" @click="setTagFilter(`All Time`)">
-								All Time
-							</button>
-						</div>
-					</div>
-				</div>
-			</article>
-			<p
-				:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-				class="font-normal text-xl"
-			>
-				Find and join conversations on any topic:
-			</p>
-			<div class="mb-4 mt-2">
-				<TagCard v-for="t in tags" :key="t" :tag="t" class="text-lg mr-4 my-2" />
-			</div>
-		</section>
-
-		<section style="width: 750px">
-			<article class="mb-1 mt-3">
-				<h2
-					:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-					class="text-3xl font-semibold"
-				>
-					Featured Categories
-				</h2>
-			</article>
-			<p
-				:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-				class="font-normal text-xl pb-1"
-			>
-				Read more of what you love by browsing top categories:
-			</p>
-			<article class="grid grid-cols-2 gap-4 my-4">
-				<CategoryCard
-					v-for="c in categoryList"
-					:key="c"
-					:text="c"
-					:bgImage="require('@/assets/images/category/' + c + '/' + c + '.jpg')"
-				/>
-			</article>
-		</section>
+	<div
+		class="w-full border border-lightBorder"
+		style="width: 750px; min-height: calc(100vh - 160px); height: calc(100vh - 160px)"
+	>
+		<div class="-mt-2">
+			<h2 class="text-xl text-primary font-semibold mb-2">Featured Categories</h2>
+			<p class="text-gray5">Read more of what you love by browsing top categories:</p>
+		</div>
+		<article class="w-full grid grid-cols-2 gap-y-4 my-4">
+			<CategoryCard
+				v-for="c in categoryList"
+				:key="c"
+				:text="c"
+				:bgImage="require('@/assets/images/category/' + c + '/' + c + '.jpg')"
+			/>
+		</article>
 	</div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import CategoryCard from '@/components/CategoryCard.vue'
-import TagCard from '@/components/Tag.vue'
-import ChevronUp from '@/components/icons/ChevronUp.vue'
-import ChevronDown from '@/components/icons/ChevronDown.vue'
 
 import { categories } from '@/config'
 import { getTags } from '@/backend/post'
@@ -108,10 +35,8 @@ interface IData {
 export default Vue.extend({
 	components: {
 		CategoryCard,
-		TagCard,
-		ChevronUp,
-		ChevronDown,
 	},
+	layout: `discover`,
 	data(): IData {
 		return {
 			categoryList: categories,
