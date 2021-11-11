@@ -1,6 +1,6 @@
 <template>
 	<section>
-		<article v-for="comment in comments" :key="comment.cid">
+		<article v-for="comment in comments" :key="comment._id">
 			<CommentCard :comment="comment" :profile="profile" />
 		</article>
 	</section>

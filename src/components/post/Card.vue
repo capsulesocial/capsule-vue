@@ -166,8 +166,8 @@ export default Vue.extend({
 			default: ``,
 		},
 		comments: {
-			type: Array as PropType<Comment[] | null>,
-			required: true,
+			type: Array as PropType<Comment[] | undefined>,
+			default: undefined,
 		},
 		profile: {
 			type: Object as PropType<Profile>,

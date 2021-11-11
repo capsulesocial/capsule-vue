@@ -53,14 +53,14 @@ import Vue from 'vue'
 import type { PropType } from 'vue'
 import Avatar from '@/components/Avatar.vue'
 import { reactions, feelings } from '@/config'
-import { getComment, INewCommentData } from '@/backend/comment'
+import { getComment, ICommentData, INewCommentData } from '@/backend/comment'
 import { Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
 import { getPost, Post } from '@/backend/post'
 
 interface IData {
 	avatar: string
-	commentData: INewCommentData | null
+	commentData: (INewCommentData & { _id: string }) | null
 	emotion: { label: string; imageLeft: any; imageRight: any }
 	postData: Post | {}
 }
@@ -71,7 +71,7 @@ export default Vue.extend({
 	},
 	props: {
 		comment: {
-			type: Object as PropType<INewCommentData>,
+			type: Object as PropType<ICommentData>,
 			required: true,
 		},
 		profile: {
@@ -94,9 +94,8 @@ export default Vue.extend({
 				this.avatar = p
 			})
 		}
-		// Get comment
-		const c = await getComment(this.$props.comment.cid)
-		this.commentData = c
+		const c = await getComment(this.comment._id)
+		this.commentData = { ...c, _id: this.comment._id }
 		const emotion = c.emotion as keyof typeof reactions
 		if (emotion in reactions) {
 			this.emotion = reactions[emotion]
