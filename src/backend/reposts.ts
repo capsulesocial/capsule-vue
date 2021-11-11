@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { signContent } from './utilities/keys'
-import { Algorithm, Post } from './post'
+import { Algorithm, RetrievedPost } from './post'
 import { capsuleOrbit } from './utilities/config'
 import { uint8ArrayToHexString } from './utilities/helpers'
 import ipfs from './utilities/ipfs'
@@ -29,9 +29,18 @@ export async function sendRepost(authorID: string, postCID: string, content: str
 	return cid
 }
 
+export interface IRepost {
+	authorID: string
+	postCID: string
+	sig: string
+	timestamp: number
+	type: `simple`
+	_id: string
+}
+
 export interface IRepostRetrieved {
 	repost: any
-	post: Post
+	post: RetrievedPost
 }
 
 export async function getReposts(

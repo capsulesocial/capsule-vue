@@ -16,6 +16,7 @@ export interface ICommentData {
 	authorID: string
 	_id: string
 	timestamp: number
+	parentCID: string
 	emotion: string
 }
 

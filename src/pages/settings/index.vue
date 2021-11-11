@@ -101,22 +101,6 @@
 									class="focus:outline-none border-b-2 w-full"
 								/>
 							</div>
-							<!-- Enter ID -->
-							<div class="mb-5">
-								<label for="newID" class="hidden">Change ID</label>
-								<input
-									id="newID"
-									v-model.trim="newID"
-									type="text"
-									:placeholder="$store.state.session.id"
-									:class="
-										$store.state.settings.darkMode
-											? 'bg-lightBG text-lightSecondaryText focus:border-lightActive'
-											: 'bg-darkBG text-darkSecondaryText focus:border-darkActive'
-									"
-									class="focus:outline-none border-b-2 w-full"
-								/>
-							</div>
 							<!-- Enter email -->
 							<div class="mb-5">
 								<label for="newEmail" class="hidden">Change Email</label>
@@ -365,7 +349,6 @@ interface IData {
 	newName: string
 	nodeURL: string
 	profilePic: null | string | ArrayBuffer
-	newID: string
 	newEmail: string
 	location: string
 	bio: string
@@ -385,7 +368,6 @@ export default Vue.extend({
 			newName: ``,
 			nodeURL: ``,
 			profilePic: null,
-			newID: ``,
 			newEmail: ``,
 			location: ``,
 			bio: this.$store.state.session.bio,
@@ -431,7 +413,6 @@ export default Vue.extend({
 		hasChanged() {
 			return (
 				this.newName !== `` ||
-				this.newID !== `` ||
 				this.newEmail !== `` ||
 				this.location !== `` ||
 				this.bio !== this.$store.state.session.bio ||
@@ -495,19 +476,11 @@ export default Vue.extend({
 			}
 			// Run quality rules before saving
 			if (this.newName !== ``) {
-				if (this.newName.length < 2 || this.newName.length > 32) {
+				if (this.newName.length < 3 || this.newName.length > 32) {
 					alert(`Invalid name length`)
 					return
 				} else {
 					this.changeName(this.newName.trim())
-				}
-			}
-			if (this.newID !== `` && this.$qualityID(this.newID)) {
-				if (this.newID.length < 2 || this.newID.length > 18) {
-					alert(`Invalid ID length`)
-					return
-				} else {
-					this.changeID(this.newID.trim())
 				}
 			}
 			if (this.bio !== this.$store.state.session.bio && this.checkBio() > 0) {

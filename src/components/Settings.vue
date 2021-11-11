@@ -31,17 +31,6 @@
 				class="text-black placeholder-black px-2 py-1 bg-gray1 rounded-lg flex-grow"
 			/>
 		</div>
-		<!-- ID -->
-		<div class="flex flex-row mb-2">
-			<label for="newID" class="w-32">Change ID</label>
-			<input
-				id="newID"
-				v-model.trim="newID"
-				type="text"
-				:placeholder="$store.state.session.id"
-				class="text-black placeholder-black px-2 py-1 bg-gray1 rounded-lg flex-grow"
-			/>
-		</div>
 		<!-- Bio -->
 		<div class="flex flex-row mb-2">
 			<label for="bio" class="w-32"> Bio: </label>
