@@ -74,13 +74,11 @@ export default Vue.extend({
 	},
 	async created() {
 		// Fetch posts with tag
-		this.posts = await getPosts(
-			{ tag: this.$route.params.tag },
-			this.$store.state.session.id,
-			this.algorithm,
-			this.currentOffset,
-			this.limit,
-		)
+		this.posts = await getPosts({ tag: this.$route.params.tag }, this.$store.state.session.id, {
+			sort: this.algorithm,
+			limit: this.limit,
+			offset: this.currentOffset,
+		})
 		this.currentOffset += this.limit
 		getFollowersAndFollowing(this.$store.state.session.id).then(({ following }) => {
 			this.following = following
@@ -102,13 +100,11 @@ export default Vue.extend({
 		async loadPosts() {
 			this.isLoading = true
 			try {
-				const res = await getPosts(
-					{ tag: this.$route.params.tag },
-					this.$store.state.session.id,
-					this.algorithm,
-					this.currentOffset,
-					this.limit,
-				)
+				const res = await getPosts({ tag: this.$route.params.tag }, this.$store.state.session.id, {
+					sort: this.algorithm,
+					offset: this.currentOffset,
+					limit: this.limit,
+				})
 				if (res.length === 0) {
 					this.isLoading = false
 					window.removeEventListener(`scroll`, this.handleScroll)

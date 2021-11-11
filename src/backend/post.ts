@@ -4,6 +4,7 @@ import { signContent } from './utilities/keys'
 import ipfs from './utilities/ipfs'
 import { uint8ArrayToHexString } from './utilities/helpers'
 import { capsuleOrbit } from './utilities/config'
+import { IRepostRetrieved } from './reposts'
 export interface Tag {
 	name: string
 }
@@ -77,15 +78,38 @@ export function getPost(cid: string): Promise<Post> {
 	return ipfs().getJSONData(cid)
 }
 
+export interface IGetPostsOptions {
+	sort?: Algorithm
+	offset?: number
+	limit?: number
+	following?: string
+	reposts?: boolean
+}
+
+export interface IGetPostsAndRepostsOptions extends IGetPostsOptions {
+	reposts: true
+}
+
+export interface IGetPostsOnlyOptions extends IGetPostsOptions {
+	reposts?: false
+}
+
 export async function getPosts(
 	filter: { category?: string; authorID?: string; tag?: string; bookmarkedBy?: string },
 	bookmarker: string,
-	sort?: Algorithm,
-	offset = 0,
-	limit = 10,
-	following?: string,
-	reposts?: string,
-): Promise<IPostResponse[]> {
+	options: IGetPostsOnlyOptions,
+): Promise<IPostResponse[]>
+export async function getPosts(
+	filter: { category?: string; authorID?: string; tag?: string; bookmarkedBy?: string },
+	bookmarker: string,
+	options: IGetPostsAndRepostsOptions,
+): Promise<IRepostRetrieved[]>
+export async function getPosts(
+	filter: { category?: string; authorID?: string; tag?: string; bookmarkedBy?: string },
+	bookmarker: string,
+	options: IGetPostsOptions,
+): Promise<IPostResponse[] | IRepostRetrieved[]> {
+	const { sort, offset = 0, limit = 10, following, reposts } = options
 	if (sort === `FOLLOWING` && !following) {
 		throw new Error(`No following provided`)
 	}
