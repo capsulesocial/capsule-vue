@@ -40,14 +40,14 @@
 				<article>
 					<h1
 						:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-						class="text-h1 font-serif font-semibold mb-3 capitalize break-words"
+						class="text-h1 font-serif font-semibold mb-3 break-words"
 					>
 						{{ post.title }}
 					</h1>
 					<h2
 						v-if="post.subtitle"
 						:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-						class="text-h2 font-serif font-medium mb-3 capitalize break-words"
+						class="text-h2 font-serif font-medium mb-3 break-words"
 					>
 						{{ post.subtitle }}
 					</h2>
