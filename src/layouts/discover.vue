@@ -15,9 +15,7 @@
 					<!-- Title and peered nodes -->
 					<div class="fixed w-full flex justify-between items-center" style="width: 1220px; height: 62px">
 						<!-- Title -->
-						<h1 class="font-semibold text-primary" style="font-size: 2.6rem">
-							{{ getTitle() }}
-						</h1>
+						<h1 class="font-semibold text-primary" style="font-size: 2.6rem">Browse Capsule</h1>
 						<!-- Peered nodes -->
 						<div class="flex items-center bg-gray1 px-3 rounded-lg">
 							<span class="text-sm mr-1 text-gray5">n peered nodes</span>
@@ -144,16 +142,6 @@ export default Vue.extend({
 				await followChange(this.following.has(authorID) ? `UNFOLLOW` : `FOLLOW`, this.$store.state.session.id, authorID)
 				const data = await getFollowersAndFollowing(this.$store.state.session.id, true)
 				this.following = data.following
-			}
-		},
-		getTitle(): string {
-			switch (this.$route.name) {
-				case `home`:
-					return `Hi ` + this.profile?.name + `,`
-				case `discover`:
-					return `Browse Capsule`
-				default:
-					return ``
 			}
 		},
 		toggleZIndex() {
