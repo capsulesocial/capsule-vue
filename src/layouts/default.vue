@@ -15,8 +15,8 @@
 					<!-- Title and peered nodes -->
 					<div class="fixed w-full flex justify-between items-center" style="width: 1220px; height: 62px">
 						<!-- Title -->
-						<h1 class="font-semibold text-primary" style="font-size: 2.6rem">
-							{{ getTitle() }}
+						<h1 v-if="profile" class="font-semibold text-primary" style="font-size: 2.6rem">
+							Hello, {{ profile.name }}
 						</h1>
 						<!-- Peered nodes -->
 						<div class="flex items-center bg-gray1 px-3 rounded-lg">
@@ -147,18 +147,6 @@ export default Vue.extend({
 			const { followers, following } = await getFollowersAndFollowing(this.$route.params.id, true)
 			this.followers = followers
 			this.following = following
-		},
-		getTitle(): string {
-			switch (this.$route.name) {
-				case `home`:
-					return `Hi ` + this.profile?.name + `,`
-				case `discover`:
-					return `Browse Capsule`
-				case `bookmarks`:
-					return `Bookmarks list`
-				default:
-					return ``
-			}
 		},
 		toggleZIndex() {
 			this.showWidgets = !this.showWidgets
