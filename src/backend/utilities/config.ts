@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/named
-import { SubVerifierDetails } from '@toruslabs/torus-direct-web-sdk'
+import { SubVerifierDetails } from '@toruslabs/customauth'
 import { ILocalNetNearConfig, INearConfig } from '../near'
 
 export const capsuleOrbit = process.env.ORBIT_URL || `https://test-node.capsule.social/orbit`
