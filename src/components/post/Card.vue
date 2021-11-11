@@ -60,7 +60,7 @@
 						<div>
 							<nuxt-link :to="'/post/' + post._id">
 								<div class="flex flex-col pr-4 max-w-full overflow-hidden">
-									<h3 class="text-lg font-semibold capitalize pb-2 break-words">
+									<h3 class="text-lg font-semibold pb-2 break-words">
 										{{ post.title }}
 									</h3>
 									<h6
