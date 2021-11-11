@@ -36,14 +36,14 @@
 					<PostCard
 						:post="post.post"
 						:cid="post.post._id"
-						:comments="post.comments"
+						:comments="'comments' in post ? post.comments : undefined"
 						:toggleFriend="toggleFriend"
 						:usersFollowing="following"
-						:repostedBy="myReposts.includes(post.post._id) ? $store.state.session.id : ``"
-						:bookmarked="post.bookmarked"
-						:hideRepostIcon="algorithm === `NEW` || algorithm === `TOP` ? true : false"
-						:bookmarksCount="post.bookmarksCount"
-						:repostCount="post.repostCount"
+						:repostedBy="'repost' in post ? post.repost.authorID : undefined"
+						:bookmarked="'bookmarked' in post ? post.bookmarked : false"
+						:hideRepostIcon="algorithm === `NEW` || algorithm === `TOP`"
+						:bookmarksCount="'bookmarksCount' in post ? post.bookmarksCount : -1"
+						:repostCount="'repostCount' in post ? post.bookmarksCount : -1"
 					/>
 				</article>
 
@@ -61,15 +61,14 @@ import Vue from 'vue'
 import type { PropType } from 'vue'
 import PostCard from '@/components/post/Card.vue'
 import { getPosts, Algorithm, IPostResponse } from '@/backend/post'
-import { getReposts } from '@/backend/reposts'
+import { getReposts, IRepostRetrieved } from '@/backend/reposts'
 
 interface IData {
-	posts: IPostResponse[]
+	posts: Array<IPostResponse | IRepostRetrieved>
 	isLoading: boolean
 	algorithm: Algorithm
 	currentOffset: number
 	limit: number
-	myReposts: string[]
 }
 
 export default Vue.extend({
@@ -83,7 +82,7 @@ export default Vue.extend({
 		},
 		following: {
 			type: Set as PropType<Set<string>>,
-			default: () => new Set(),
+			default: () => new Set<string>(),
 		},
 	},
 	data(): IData {
@@ -93,24 +92,17 @@ export default Vue.extend({
 			isLoading: true,
 			currentOffset: 0,
 			limit: 10,
-			myReposts: [],
 		}
 	},
 	async created() {
-		this.posts = await getPosts(
-			{},
-			this.$store.state.session.id,
-			this.algorithm,
-			this.currentOffset,
-			this.limit,
-			this.$store.state.session.id,
-		)
-		this.currentOffset += this.limit
-		// Fetch my reposts
-		const repostData = await getReposts(this.$store.state.session.id)
-		repostData.forEach((p) => {
-			this.myReposts.push(p.repost.postCID)
+		this.posts = await getPosts({}, this.$store.state.session.id, {
+			sort: this.algorithm,
+			limit: this.limit,
+			offset: this.currentOffset,
+			following: this.$store.state.session.id,
+			reposts: true,
 		})
+		this.currentOffset += this.limit
 		this.isLoading = false
 		document.getElementById(`index`)?.addEventListener(`scroll`, this.handleScroll)
 	},
@@ -125,14 +117,12 @@ export default Vue.extend({
 			this.currentOffset = 0
 			this.isLoading = true
 			this.algorithm = a
-			this.posts = await getPosts(
-				{},
-				this.$store.state.session.id,
-				a,
-				this.currentOffset,
-				this.limit,
-				this.$store.state.session.id,
-			)
+			this.posts = await getPosts({}, this.$store.state.session.id, {
+				sort: a,
+				limit: this.limit,
+				offset: this.currentOffset,
+				following: this.$store.state.session.id,
+			})
 			this.currentOffset += this.limit
 			this.isLoading = false
 			return this.posts
@@ -140,14 +130,12 @@ export default Vue.extend({
 		async loadPosts() {
 			this.isLoading = true
 			try {
-				const res = await getPosts(
-					{},
-					this.$store.state.session.id,
-					this.algorithm,
-					this.currentOffset,
-					this.limit,
-					this.algorithm === `FOLLOWING` ? this.$store.state.session.id : ``,
-				)
+				const res = await getPosts({}, this.$store.state.session.id, {
+					sort: this.algorithm,
+					offset: this.currentOffset,
+					limit: this.limit,
+					following: this.algorithm === `FOLLOWING` ? this.$store.state.session.id : undefined,
+				})
 				if (res.length === 0) {
 					this.isLoading = false
 					document.getElementById(`index`)?.removeEventListener(`scroll`, this.handleScroll)

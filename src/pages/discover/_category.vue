@@ -72,13 +72,11 @@ export default Vue.extend({
 	},
 	async created() {
 		// Fetch posts from Orbit DB by ID
-		this.posts = await getPosts(
-			{ category: this.$route.params.category },
-			this.$store.state.session.id,
-			this.algorithm,
-			0,
-			this.limit,
-		)
+		this.posts = await getPosts({ category: this.$route.params.category }, this.$store.state.session.id, {
+			sort: this.algorithm,
+			limit: this.limit,
+			offset: 0,
+		})
 		this.currentOffset += this.limit
 		getFollowersAndFollowing(this.$store.state.session.id).then(({ following }) => {
 			this.following = following
@@ -100,14 +98,12 @@ export default Vue.extend({
 		async loadPosts() {
 			this.isLoading = true
 			try {
-				const res = await getPosts(
-					{ category: this.$route.params.category },
-					this.$store.state.session.id,
-					this.algorithm,
-					this.currentOffset,
-					this.limit,
-					this.$store.state.session.id,
-				)
+				const res = await getPosts({ category: this.$route.params.category }, this.$store.state.session.id, {
+					sort: this.algorithm,
+					limit: this.limit,
+					offset: this.currentOffset,
+					following: this.$store.state.session.id,
+				})
 				if (res.length === 0) {
 					this.isLoading = false
 					window.removeEventListener(`scroll`, this.handleScroll)

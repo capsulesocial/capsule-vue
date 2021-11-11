@@ -44,15 +44,9 @@ export default Vue.extend({
 		}
 	},
 	async created() {
-		this.bookmarks = await getPosts(
-			{ bookmarkedBy: this.$store.state.session.id },
-			this.$store.state.session.id,
-			undefined,
-			undefined,
-			undefined,
-			undefined,
-			`false`,
-		)
+		this.bookmarks = await getPosts({ bookmarkedBy: this.$store.state.session.id }, this.$store.state.session.id, {
+			reposts: false,
+		})
 		this.bookmarks = this.bookmarks.slice(0, 2)
 		this.bookmarks.forEach((p: IPostResponse) => {
 			if (p.post.featuredPhotoCID) {

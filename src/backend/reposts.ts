@@ -39,7 +39,7 @@ export interface IRepost {
 }
 
 export interface IRepostRetrieved {
-	repost: any
+	repost: IRepost
 	post: RetrievedPost
 }
 
