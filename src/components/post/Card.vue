@@ -132,6 +132,7 @@ import { getPhotoFromIPFS } from '@/backend/photos'
 import { getProfileFromSession } from '@/store/session'
 import { isPostBookmarkedByUser } from '@/backend/bookmarks'
 import { sendPostDeletion } from '@/backend/postDeletion'
+import { IRepost } from '@/backend/reposts'
 
 interface IData {
 	showComments: boolean
@@ -157,6 +158,10 @@ export default Vue.extend({
 		RepostIcon,
 	},
 	props: {
+		repost: {
+			type: Object as PropType<IRepost>,
+			default: null,
+		},
 		post: {
 			type: Object as PropType<RetrievedPost>,
 			required: true,
