@@ -18,8 +18,6 @@ import { getPosts, Algorithm, IPostResponse } from '@/backend/post'
 
 interface IData {
 	posts: IPostResponse[]
-	repostList: string[]
-	myRepostList: string[]
 	isLoading: boolean
 	currentOffset: number
 	limit: number
@@ -40,8 +38,6 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			posts: [],
-			repostList: [],
-			myRepostList: [],
 			isLoading: true,
 			currentOffset: 0,
 			limit: 10,
@@ -50,15 +46,13 @@ export default Vue.extend({
 	},
 	async created() {
 		// Fetch posts from Orbit DB by ID
-		this.posts = await getPosts(
-			{ authorID: this.$route.params.id },
-			this.$store.state.session.id,
-			this.algorithm,
-			this.currentOffset,
-			this.limit,
-			undefined,
-			`false`,
-		)
+		this.posts = await getPosts({ authorID: this.$route.params.id }, this.$store.state.session.id, {
+			sort: this.algorithm,
+			limit: this.limit,
+			offset: this.currentOffset,
+			following: this.$store.state.session.id,
+			reposts: false,
+		})
 		this.currentOffset += this.limit
 		this.isLoading = false
 		window.addEventListener(`scroll`, this.handleScroll)
@@ -70,15 +64,12 @@ export default Vue.extend({
 		async loadPosts() {
 			this.isLoading = true
 			try {
-				const res = await getPosts(
-					{ authorID: this.$route.params.id },
-					this.$store.state.session.id,
-					this.algorithm,
-					this.currentOffset,
-					this.limit,
-					undefined,
-					`false`,
-				)
+				const res = await getPosts({ authorID: this.$route.params.id }, this.$store.state.session.id, {
+					sort: this.algorithm,
+					limit: this.limit,
+					offset: this.currentOffset,
+					reposts: false,
+				})
 				if (res.length === 0) {
 					this.isLoading = false
 					window.removeEventListener(`scroll`, this.handleScroll)

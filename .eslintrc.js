@@ -66,7 +66,9 @@ module.exports = {
 			}
 		],
 		"no-case-declarations": "off",
-		"import/no-named-as-default": "off"
+		"import/no-named-as-default": "off",
+		"no-redeclare": "off",
+		"@typescript-eslint/no-redeclare": ["error"]
 	},
 	"globals": {
 	},
