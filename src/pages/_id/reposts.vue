@@ -51,13 +51,7 @@ export default Vue.extend({
 		}
 	},
 	async created() {
-		const res = await getReposts(this.$route.params.id)
-		for (const i in res) {
-			if (res[i]) {
-				// @ts-ignore
-				this.reposts.push(res[i])
-			}
-		}
+		this.reposts = await getReposts(this.$route.params.id)
 		getFollowersAndFollowing(this.$store.state.session.id).then(({ following }) => {
 			this.following = following
 		})

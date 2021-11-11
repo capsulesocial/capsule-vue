@@ -64,7 +64,7 @@ import TwitterIcon from '@/components/icons/brands/Twitter.vue'
 import LinkIcon from '@/components/icons/Link.vue'
 import RepostIcon from '@/components/icons/Repost.vue'
 import { Post } from '@/backend/post'
-import { sendRepost } from '@/backend/reposts'
+import { IRepost, sendRepost } from '@/backend/reposts'
 import { sendPostDeletion } from '@/backend/postDeletion'
 
 interface IData {
@@ -81,7 +81,7 @@ export default Vue.extend({
 	},
 	props: {
 		repost: {
-			type: Object,
+			type: Object as PropType<IRepost>,
 			default: null,
 		},
 		post: {
