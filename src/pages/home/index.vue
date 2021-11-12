@@ -36,14 +36,14 @@
 					<PostCard
 						:post="post.post"
 						:cid="post.post._id"
-						:comments="'comments' in post ? post.comments : undefined"
+						:comments="post.comments"
 						:toggleFriend="toggleFriend"
 						:usersFollowing="following"
 						:repostedBy="'repost' in post ? post.repost.authorID : undefined"
 						:bookmarked="'bookmarked' in post ? post.bookmarked : false"
 						:hideRepostIcon="algorithm === `NEW` || algorithm === `TOP`"
 						:bookmarksCount="'bookmarksCount' in post ? post.bookmarksCount : -1"
-						:repostCount="'repostCount' in post ? post.bookmarksCount : -1"
+						:repostCount="'repostCount' in post ? post.repostCount : -1"
 					/>
 				</article>
 

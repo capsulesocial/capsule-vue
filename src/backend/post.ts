@@ -5,6 +5,7 @@ import ipfs from './utilities/ipfs'
 import { uint8ArrayToHexString } from './utilities/helpers'
 import { capsuleOrbit } from './utilities/config'
 import { IRepostRetrieved } from './reposts'
+import { ICommentData } from './comment'
 export interface Tag {
 	name: string
 }
@@ -24,7 +25,7 @@ export type RetrievedPost = Omit<Post, `content`> & { _id: string; excerpt: stri
 
 export interface IPostResponse {
 	post: RetrievedPost
-	comments: Comment[]
+	comments: ICommentData[]
 	bookmarked: boolean
 	usersParticipating: string[]
 	bookmarksCount: number
