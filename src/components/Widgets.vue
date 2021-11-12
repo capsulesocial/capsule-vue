@@ -23,7 +23,7 @@
 			<ConfigureWidgets @close="toggleConfigure" @save="saveDraft" />
 		</div>
 		<FollowersWidget
-			v-if="$store.state.widgets.secondary2 === `followers` && !checkRoute()"
+			v-if="$store.state.widgets.secondary2 === `followers` && followers.size > 0"
 			:followers="followers"
 			:updateFollowers="updateFollowers"
 			class="
@@ -39,7 +39,7 @@
 			"
 		/>
 		<TagsWidget
-			v-if="$store.state.widgets.secondary2 === `tags` || checkRoute()"
+			v-if="$store.state.widgets.secondary2 === `tags`"
 			class="
 				rounded-lg
 				shadow-lg
@@ -53,7 +53,7 @@
 			"
 		/>
 		<DraftsWidget
-			v-if="!checkRoute() && $store.state.widgets.secondary === `drafts`"
+			v-if="$store.state.widgets.secondary === `drafts`"
 			class="
 				rounded-lg
 				shadow-lg
@@ -66,7 +66,7 @@
 			"
 		/>
 		<BookmarksWidgets
-			v-if="!checkRoute() && $store.state.widgets.secondary === `bookmarks`"
+			v-if="$store.state.widgets.secondary === `bookmarks`"
 			class="
 				rounded-lg
 				shadow-lg
@@ -80,7 +80,6 @@
 		/>
 		<!-- Configure my Capsule -->
 		<button
-			v-if="!checkRoute()"
 			class="
 				rounded-lg
 				shadow-lg
@@ -148,9 +147,6 @@ export default Vue.extend({
 		toggleConfigure() {
 			this.configureWidgets = !this.configureWidgets
 			this.$emit(`overlay`)
-		},
-		checkRoute(): boolean {
-			return this.$route.name?.substr(0, 8) === `discover`
 		},
 	},
 })

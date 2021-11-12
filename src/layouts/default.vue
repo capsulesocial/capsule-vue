@@ -130,10 +130,9 @@ export default Vue.extend({
 			})
 		}
 		// Get followers and following
-		getFollowersAndFollowing(this.$store.state.session.id).then(({ followers, following }) => {
-			this.following = following
-			this.followers = followers
-		})
+		const { followers, following } = await getFollowersAndFollowing(this.$store.state.session.id)
+		this.following = following
+		this.followers = followers
 	},
 	methods: {
 		async toggleFriend(authorID: string) {
