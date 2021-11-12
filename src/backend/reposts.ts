@@ -4,6 +4,7 @@ import { Algorithm, RetrievedPost } from './post'
 import { capsuleOrbit } from './utilities/config'
 import { uint8ArrayToHexString } from './utilities/helpers'
 import ipfs from './utilities/ipfs'
+import { ICommentData } from './comment'
 
 export async function sendRepost(authorID: string, postCID: string, content: string): Promise<string> {
 	const data = {
@@ -41,6 +42,7 @@ export interface IRepost {
 export interface IRepostRetrieved {
 	repost: IRepost
 	post: RetrievedPost
+	comments: ICommentData[]
 }
 
 export async function getReposts(

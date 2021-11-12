@@ -133,6 +133,7 @@ import { getProfileFromSession } from '@/store/session'
 import { isPostBookmarkedByUser } from '@/backend/bookmarks'
 import { sendPostDeletion } from '@/backend/postDeletion'
 import { IRepost } from '@/backend/reposts'
+import { ICommentData } from '@/backend/comment'
 
 interface IData {
 	showComments: boolean
@@ -171,7 +172,7 @@ export default Vue.extend({
 			default: ``,
 		},
 		comments: {
-			type: Array as PropType<Comment[] | undefined>,
+			type: Array as PropType<ICommentData[] | undefined>,
 			default: undefined,
 		},
 		profile: {
