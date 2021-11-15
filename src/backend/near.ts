@@ -74,7 +74,6 @@ export async function checkAccountStatus(accountId: string) {
 
 		const account = await _near.account(accountId)
 		const res = await account.getAccountBalance()
-		console.log(res)
 		return { balance: res.available }
 	} catch (err: any) {
 		if (`type` in err && err.type === `AccountDoesNotExist`) {
