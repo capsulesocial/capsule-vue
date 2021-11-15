@@ -204,7 +204,7 @@ export default Vue.extend({
 			changeLocation: MutationType.CHANGE_LOCATION,
 		}),
 		hasSufficientFunds() {
-			return !(BigInt(this.funds) >= BigInt(`98180000000000000000000`)) // TODO fix
+			return BigInt(this.funds) >= BigInt(`98180000000000000000000`)
 		},
 		async checkFunds() {
 			const accountId = this.accountId
