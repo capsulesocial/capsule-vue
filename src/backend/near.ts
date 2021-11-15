@@ -66,6 +66,24 @@ export async function initContract(accountId: string) {
 	})
 }
 
+export async function checkAccountStatus(accountId: string) {
+	try {
+		if (!_near) {
+			throw new Error(`NEAR not yet initialised!`)
+		}
+
+		const account = await _near.account(accountId)
+		const res = await account.getAccountBalance()
+		console.log(res)
+		return { balance: res.available }
+	} catch (err: any) {
+		if (`type` in err && err.type === `AccountDoesNotExist`) {
+			return { balance: `-1` }
+		}
+		throw err
+	}
+}
+
 function getContract() {
 	if (!_contract) {
 		throw new Error(`Contract not yet initialised!`)

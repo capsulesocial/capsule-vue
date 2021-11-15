@@ -3,6 +3,7 @@ import { SubVerifierDetails } from '@toruslabs/customauth'
 import { ILocalNetNearConfig, INearConfig } from '../near'
 
 export const capsuleOrbit = process.env.ORBIT_URL || `https://test-node.capsule.social/orbit`
+export const capsuleServer = process.env.CAPSULE_SERVER || `https://test-node.capsule.social/server`
 export const domain = process.env.DOMAIN || `http://localhost:3000`
 export const contractName = process.env.CONTRACT_NAME || `capsule-vue`
 
