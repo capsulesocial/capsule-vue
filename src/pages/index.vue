@@ -24,45 +24,103 @@
 			<section class="bg-white mx-auto lg:w-full lg:max-w-md rounded shadow-lg divide-y divide-gray-200">
 				<article class="px-10 py-6 font-sans">
 					<!-- Sign in + Register: ID -->
-					<article v-show="userInfo && username === null">
-						<label for="id" class="font-semibold text-sm text-gray-600 pb-1 block">ID</label>
-						<input
-							id="id"
-							v-model="id"
-							type="text"
-							placeholder=""
-							class="
-								border
-								rounded-lg
-								px-3
-								py-2
-								mt-1
-								mb-5
-								text-sm
-								w-full
-								focus:outline-none focus:border-primary
-								text-primary
-								font-sans
-							"
-						/>
-						<p class="text-center">
-							Ensure that the NEAR account with ID: "{{ accountId }}" has sufficient funds before signing up.
-						</p>
-						<BrandedButton :text="`Sign Up`" :action="verify" class="w-full" />
+					<article v-show="!isLoading">
+						<article v-show="userInfo && username === null">
+							<p class="whitespace-nowrap justify-between text-sm p-5 text-gray-600 font-sans">
+								Available funds: {{ funds }} yN
+							</p>
+							<article v-show="hasSufficientFunds()">
+								<label for="id" class="font-semibold text-sm text-gray-600 pb-1 block">ID</label>
+								<input
+									id="id"
+									v-model="id"
+									type="text"
+									placeholder=""
+									class="
+										border
+										rounded-lg
+										px-3
+										py-2
+										mt-1
+										mb-5
+										text-sm
+										w-full
+										focus:outline-none focus:border-primary
+										text-primary
+										font-sans
+									"
+								/>
+								<BrandedButton :text="`Sign Up`" :action="verify" class="w-full" />
+							</article>
+							<article v-show="!hasSufficientFunds()">
+								<article v-show="!otpSent">
+									<label for="id" class="font-semibold text-sm text-gray-600 pb-1 block">Phone Number</label>
+									<input
+										id="phoneNumber"
+										v-model="phoneNumber"
+										type="text"
+										placeholder=""
+										class="
+											border
+											rounded-lg
+											px-3
+											py-2
+											mt-1
+											mb-5
+											text-sm
+											w-full
+											focus:outline-none focus:border-primary
+											text-primary
+											font-sans
+										"
+									/>
+									<BrandedButton :text="`Send Verification Code`" class="w-full" :action="sendOTP" />
+								</article>
+								<article v-show="phoneNumber.length > 12 && otpSent">
+									<label for="id" class="font-semibold text-sm text-gray-600 pb-1 block">OTP</label>
+									<input
+										id="phoneNumber"
+										v-model="otp"
+										type="text"
+										placeholder=""
+										class="
+											border
+											rounded-lg
+											px-3
+											py-2
+											mt-1
+											mb-5
+											text-sm
+											w-full
+											focus:outline-none focus:border-primary
+											text-primary
+											font-sans
+										"
+									/>
+									<BrandedButton :text="`Verify`" class="w-full" :action="validateOTP" />
+									<article>
+										<p class="whitespace-nowrap justify-between text-sm p-5 text-gray-600 font-sans">
+											Ensure that the NEAR account with ID: "{{ accountId }}" has sufficient funds before signing up.
+										</p>
+										<BrandedButton :text="`Check funds`" class="w-full" :action="checkFunds" />
+									</article>
+								</article>
+							</article>
+						</article>
+						<article v-show="!userInfo">
+							<p style="margin-bottom: 10px" class="text-center">Sign in or sign up using...</p>
+							<BrandedButton :text="`Discord`" :action="() => torusLogin('discord')" class="w-full" />
+							<BrandedButton
+								style="margin-top: 10px"
+								:text="`Google`"
+								:action="() => torusLogin('google')"
+								class="w-full"
+							/>
+						</article>
 					</article>
-					<article v-show="!userInfo">
-						<p style="margin-bottom: 10px" class="text-center">Sign in or sign up using...</p>
-						<BrandedButton :text="`Discord`" :action="() => torusLogin('discord')" class="w-full" />
-						<BrandedButton
-							style="margin-top: 10px"
-							:text="`Google`"
-							:action="() => torusLogin('google')"
-							class="w-full"
-						/>
-					</article>
-					<article v-show="this.isLoading" class="flex justify-center h-screen">
-						<div class="loader m-5"></div>
-					</article>
+					<section v-show="this.isLoading" class="w-full flex justify-center">
+						<div class="loader m-5 p-10 rounded-lg"></div>
+					</section>
 				</article>
 				<article class="text-center whitespace-nowrap flex justify-between text-sm p-5 text-gray-600 font-sans">
 					<button class="px-4 py-2 focus:outline-none">Help</button>
@@ -86,8 +144,9 @@ import BrandedButton from '@/components/BrandedButton.vue'
 import { MutationType, createSessionFromProfile, namespace as sessionStoreNamespace } from '~/store/session'
 
 import { getAccountIdFromPrivateKey, login, register } from '@/backend/auth'
-import { getUsernameNEAR } from '@/backend/near'
-import { torusVerifiers, TorusVerifiers } from '@/backend/utilities/config'
+import { checkAccountStatus, getUsernameNEAR } from '@/backend/near'
+import { sufficientFunds, torusVerifiers, TorusVerifiers } from '@/backend/utilities/config'
+import { requestOTP, requestSponsor } from '@/backend/funder'
 
 interface IData {
 	id: string
@@ -96,6 +155,10 @@ interface IData {
 	username?: null | string
 	accountId: null | string
 	isLoading: boolean
+	phoneNumber: string
+	otp: string
+	otpSent: boolean
+	funds: string
 }
 
 export default Vue.extend({
@@ -109,6 +172,8 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			id: ``,
+			phoneNumber: ``,
+			otp: ``,
 			torus: new DirectWebSdk({
 				baseUrl: `${process.env.DOMAIN}/oauth`,
 				network: `testnet`, // details for test net
@@ -117,6 +182,8 @@ export default Vue.extend({
 			userInfo: null,
 			isLoading: false,
 			username: undefined,
+			otpSent: false,
+			funds: `0`,
 		}
 	},
 	async created() {
@@ -138,16 +205,60 @@ export default Vue.extend({
 			changeBio: MutationType.CHANGE_BIO,
 			changeLocation: MutationType.CHANGE_LOCATION,
 		}),
-		async torusLogin(type: TorusVerifiers) {
-			this.userInfo = await this.torus.triggerLogin(torusVerifiers[type])
-			this.isLoading = true
-
-			this.accountId = getAccountIdFromPrivateKey(this.userInfo.privateKey)
-			this.username = await getUsernameNEAR(this.accountId)
-			if (this.username) {
-				this.verify()
+		hasSufficientFunds() {
+			return BigInt(this.funds) >= BigInt(sufficientFunds)
+		},
+		async checkFunds() {
+			const accountId = this.accountId
+			if (!accountId) {
 				return
 			}
+			const status = await checkAccountStatus(accountId)
+			this.funds = status.balance
+		},
+		async torusLogin(type: TorusVerifiers) {
+			try {
+				this.isLoading = true
+				this.userInfo = await this.torus.triggerLogin(torusVerifiers[type])
+
+				this.accountId = getAccountIdFromPrivateKey(this.userInfo.privateKey)
+				this.username = await getUsernameNEAR(this.accountId)
+				if (this.username) {
+					this.verify()
+					return
+				}
+				await this.checkFunds()
+				this.isLoading = false
+			} catch (e) {
+				this.isLoading = false
+			}
+		},
+		async validateOTP() {
+			if (!this.$qualityPhoneNumber(this.phoneNumber)) {
+				return
+			}
+
+			if (this.otp.length !== 6) {
+				return
+			}
+
+			if (!this.accountId) {
+				return
+			}
+
+			this.isLoading = true
+			await requestSponsor(this.phoneNumber, this.otp, this.accountId)
+			await this.checkFunds()
+			this.isLoading = false
+		},
+		async sendOTP() {
+			// TODO: Think about phone number validation
+			if (this.phoneNumber.length < 12) {
+				return
+			}
+			this.isLoading = true
+			await requestOTP(this.phoneNumber)
+			this.otpSent = true
 			this.isLoading = false
 		},
 		loginOrRegister(privateKey: string) {
@@ -166,6 +277,7 @@ export default Vue.extend({
 				if (!this.userInfo || !this.accountId) {
 					throw new Error(`Unexpected condition!`)
 				}
+				this.isLoading = true
 				// Login
 				const res = await this.loginOrRegister(this.userInfo.privateKey)
 				if (!res) {

@@ -101,8 +101,7 @@
 		"scrypt-wasm": "^0.1.1",
 		"turndown": "^7.1.1",
 		"tweetnacl": "^1.0.3",
-		"vuex-persistedstate": "^3.2.0",
-		"zxcvbn": "^4.4.2"
+		"vuex-persistedstate": "^3.2.0"
 	},
 	"devDependencies": {
 		"@babel/runtime-corejs2": "^7.16.3",
@@ -115,7 +114,6 @@
 		"@types/marked": "^4.0.0",
 		"@types/quill": "^2.0.9",
 		"@types/turndown": "^5.0.1",
-		"@types/zxcvbn": "^4.4.1",
 		"cross-env": "^6.0.3",
 		"electron": "^12.0.5",
 		"electron-builder": "^21.2.0",

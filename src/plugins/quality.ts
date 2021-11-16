@@ -1,17 +1,16 @@
 import type { Plugin } from '@nuxt/types'
-const zxcvbn = require(`zxcvbn`)
 
 // Declare types of functions
-type Password = (input: string) => string | boolean
 type Id = (input: string) => string | boolean
 type Email = (input: string) => string | boolean
 type URL = (url: string) => boolean
 type Text = (input: string) => boolean
+type PhoneNumber = (input: string) => boolean
 
 // eslint-disable-next-line quotes
 declare module 'vue/types/vue' {
 	interface Vue {
-		$qualityPassword: Password
+		$qualityPhoneNumber: PhoneNumber
 		$qualityID: Id
 		$qualityEmail: Email
 		$qualityURL: URL
@@ -19,12 +18,13 @@ declare module 'vue/types/vue' {
 	}
 }
 
-const qualityPassword: Password = (input) => {
-	const result = zxcvbn(input)
-	if (result.score < 3) {
-		return `Password is too weak! \n ${result.feedback.warning} \n ${result.feedback.suggestions[0]}`
+const phoneRegex = /^\+(?:[0-9] ?){6,14}[0-9]$/
+
+const qualityPhoneNumber: PhoneNumber = (input: string): boolean => {
+	if (input.length < 10) {
+		return false
 	}
-	return true
+	return phoneRegex.test(input)
 }
 
 const qualityID: Id = (input) => {
@@ -67,7 +67,7 @@ const qualityText: Text = (input) => {
 }
 
 const qualityPlugin: Plugin = (_context, inject) => {
-	inject(`qualityPassword`, qualityPassword)
+	inject(`qualityPhoneNumber`, qualityPhoneNumber)
 	inject(`qualityID`, qualityID)
 	inject(`qualityEmail`, qualityEmail)
 	inject(`qualityURL`, qualityURL)
