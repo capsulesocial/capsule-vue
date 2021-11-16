@@ -24,18 +24,18 @@
 					mt-12
 					rounded-lg
 					shadow-lg
-					p-3
+					p-4
 					bg-gradient-to-r
 					from-lightBGStart
 					to-lightBGStop
 					backdrop-filter backdrop-blur-lg
 				"
-				style="margin-left: -5.48rem"
+				style="margin-left: -6rem"
 			>
-				<nuxt-link :to="$store.state.session.id" class="text-left w-full flex flex-row items-center text-gray7 mb-2"
+				<nuxt-link :to="$store.state.session.id" class="text-left w-full flex flex-row items-center text-gray7 mb-4"
 					><ProfileIcon class="flex-shrink-0 w-5 h-5 mr-2" />Profile</nuxt-link
 				>
-				<nuxt-link to="/settings" class="text-left w-full flex flex-row items-center text-gray7 mb-2">
+				<nuxt-link to="/settings" class="text-left w-full flex flex-row items-center text-gray7 mb-4">
 					<SettingsIcon class="flex-shrink-0 w-5 h-5 mr-2" />Settings</nuxt-link
 				>
 				<button

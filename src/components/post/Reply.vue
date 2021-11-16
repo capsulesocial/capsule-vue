@@ -61,6 +61,7 @@ export default Vue.extend({
 	},
 	data(): IData {
 		return {
+			avatar: ``,
 			content: ``,
 			name: ``,
 		}

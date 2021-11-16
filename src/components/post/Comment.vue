@@ -30,10 +30,10 @@
 						</p>
 						<div class="h-full flex flex-col-reverse">
 							<button
-								class="font-sans text-sm text-lightSecondaryText focus:outline-none w-10"
+								class="font-sans text-sm text-lightSecondaryText focus:outline-none flex-grow-0 w-24 text-left"
 								@click="isReplying = !isReplying"
 							>
-								Reply
+								{{ replies.length }} Replies
 							</button>
 						</div>
 					</div>
