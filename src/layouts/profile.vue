@@ -60,14 +60,14 @@ import FollowersWidget from '@/components/widgets/Followers.vue'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 
-import { getProfile, Profile } from '@/backend/profile'
+import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
 
 interface IData {
-	myProfile: Profile | null
+	myProfile: Profile
 	myAvatar: string | ArrayBuffer | null
-	visitProfile: Profile | null
+	visitProfile: Profile
 	visitAvatar: string | ArrayBuffer | null
 	followers: Set<string>
 	following: Set<string>
@@ -83,9 +83,9 @@ export default Vue.extend({
 	},
 	data(): IData {
 		return {
-			myProfile: null,
+			myProfile: createDefaultProfile(this.$store.state.session.id),
 			myAvatar: null,
-			visitProfile: null,
+			visitProfile: createDefaultProfile(this.$route.params.id),
 			visitAvatar: null,
 			followers: new Set(),
 			following: new Set(),
@@ -104,16 +104,21 @@ export default Vue.extend({
 		if (this.$store.state.session.id === ``) {
 			this.$router.push(`/`)
 		}
+
+		const [myProfile, visitProfile] = await Promise.all([
+			getProfile(this.$store.state.session.id),
+			getProfile(this.$route.params.id),
+		])
 		// get my profile and avatar
-		this.myProfile = await getProfile(this.$store.state.session.id)
-		if (this.myProfile && this.myProfile.avatar.length > 1) {
+		this.myProfile = myProfile || createDefaultProfile(this.$store.state.session.id)
+		if (this.myProfile.avatar.length > 1) {
 			getPhotoFromIPFS(this.myProfile.avatar).then((p) => {
 				this.myAvatar = p
 			})
 		}
 		// Get visiting profile and avatar
-		this.visitProfile = await getProfile(this.$route.params.id)
-		if (this.visitProfile && this.visitProfile.avatar !== ``) {
+		this.visitProfile = visitProfile || createDefaultProfile(this.$route.params.id)
+		if (this.visitProfile.avatar !== ``) {
 			getPhotoFromIPFS(this.visitProfile.avatar).then((p) => {
 				this.visitAvatar = p
 			})
