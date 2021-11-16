@@ -17,10 +17,13 @@
 					alt="$store.state.draft.title"
 					class="h-16 rounded-lg"
 				/>
+				<span v-else class="h-16 w-24 bg-gray1 text-gray7 rounded-lg flex items-center justify-center">
+					<ImageIcon class="w-6 h-6 fill-current" />
+				</span>
 			</div>
 			<div class="flex items-center">
 				<nuxt-link to="/post" class="p-2 bg-primary text-white rounded-lg">
-					<PencilIcon class="fill-current" />
+					<PencilIcon class="fill-current w-6 h-6 p-" />
 				</nuxt-link>
 			</div>
 		</div>
@@ -33,6 +36,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import PencilIcon from '@/components/icons/Pencil.vue'
+import ImageIcon from '@/components/icons/Image.vue'
 
 import { getPhotoFromIPFS } from '@/backend/photos'
 
@@ -43,6 +47,7 @@ interface IData {
 export default Vue.extend({
 	components: {
 		PencilIcon,
+		ImageIcon,
 	},
 	data(): IData {
 		return {
