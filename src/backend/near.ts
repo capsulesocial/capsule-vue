@@ -77,7 +77,7 @@ export async function checkAccountStatus(accountId: string) {
 		return { balance: res.available }
 	} catch (err: any) {
 		if (`type` in err && err.type === `AccountDoesNotExist`) {
-			return { balance: `-1` }
+			return { balance: `0` }
 		}
 		throw err
 	}
