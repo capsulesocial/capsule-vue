@@ -234,7 +234,7 @@ export default Vue.extend({
 			}
 		},
 		async validateOTP() {
-			if (this.phoneNumber.length < 12) {
+			if (!this.$qualityPhoneNumber(this.phoneNumber)) {
 				return
 			}
 

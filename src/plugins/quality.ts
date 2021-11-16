@@ -5,15 +5,26 @@ type Id = (input: string) => string | boolean
 type Email = (input: string) => string | boolean
 type URL = (url: string) => boolean
 type Text = (input: string) => boolean
+type PhoneNumber = (input: string) => boolean
 
 // eslint-disable-next-line quotes
 declare module 'vue/types/vue' {
 	interface Vue {
+		$qualityPhoneNumber: PhoneNumber
 		$qualityID: Id
 		$qualityEmail: Email
 		$qualityURL: URL
 		$qualityText: Text
 	}
+}
+
+const phoneRegex = /^\+(?:[0-9] ?){6,14}[0-9]$/
+
+const qualityPhoneNumber: PhoneNumber = (input: string): boolean => {
+	if (input.length < 10) {
+		return false
+	}
+	return phoneRegex.test(input)
 }
 
 const qualityID: Id = (input) => {
@@ -56,6 +67,7 @@ const qualityText: Text = (input) => {
 }
 
 const qualityPlugin: Plugin = (_context, inject) => {
+	inject(`qualityPhoneNumber`, qualityPhoneNumber)
 	inject(`qualityID`, qualityID)
 	inject(`qualityEmail`, qualityEmail)
 	inject(`qualityURL`, qualityURL)
