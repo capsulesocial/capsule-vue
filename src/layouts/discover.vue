@@ -17,11 +17,7 @@
 						<!-- Title -->
 						<h1 class="font-semibold text-primary" style="font-size: 2.6rem">Browse Capsule</h1>
 						<!-- Peered nodes -->
-						<div class="flex items-center bg-gray1 px-3 rounded-lg">
-							<span class="text-sm mr-1 text-gray5">n peered nodes</span>
-							<CapsuleIcon />
-							<span class="bg-connectGreen rounded-xl w-3 h-3"></span>
-						</div>
+						<Nodes />
 					</div>
 					<!-- Content -->
 					<section class="flex flex-row mt-20">
@@ -85,11 +81,11 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import CapsuleIcon from '@/components/icons/Capsule.vue'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 import PostEditor from '@/components/post/Editor.vue'
 import TagsWidget from '@/components/widgets/Tags.vue'
+import Nodes from '@/components/Nodes.vue'
 
 import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
@@ -104,11 +100,11 @@ interface IData {
 
 export default Vue.extend({
 	components: {
-		CapsuleIcon,
 		TagsWidget,
 		Header,
 		Footer,
 		PostEditor,
+		Nodes,
 	},
 	data(): IData {
 		return {

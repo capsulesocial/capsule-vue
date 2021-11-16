@@ -1,6 +1,11 @@
 <template>
 	<div>
-		<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" style="transform: scale(0.7)">
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			width="36"
+			height="36"
+			:style="shrink ? `transform: scale(0.7)` : `transform: scale(1)`"
+		>
 			<g>
 				<g>
 					<path
@@ -79,3 +84,16 @@
 		</svg>
 	</div>
 </template>
+
+<script lang="ts">
+import Vue from 'vue'
+
+export default Vue.extend({
+	props: {
+		shrink: {
+			type: Boolean,
+			default: false,
+		},
+	},
+})
+</script>
