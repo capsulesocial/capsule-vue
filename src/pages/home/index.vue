@@ -34,6 +34,7 @@
 				<!-- content -->
 				<article v-for="post in posts" :key="post.post._id">
 					<PostCard
+						:repost="post.repost"
 						:post="post.post"
 						:cid="post.post._id"
 						:comments="post.comments"
