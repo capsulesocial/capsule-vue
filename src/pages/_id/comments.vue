@@ -1,5 +1,5 @@
 <template>
-	<section>
+	<section class="px-10">
 		<article v-for="comment in comments" :key="comment._id">
 			<CommentCard :comment="comment" :profile="profile" />
 		</article>

@@ -47,7 +47,6 @@
 								rounded-lg
 								shadow-lg
 								mr-5
-								p-6
 								bg-gradient-to-r
 								from-lightBGStart
 								to-lightBGStop

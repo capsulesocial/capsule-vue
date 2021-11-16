@@ -21,23 +21,7 @@
 					</div>
 					<!-- Content -->
 					<section class="flex flex-row mt-20">
-						<PostEditor
-							v-if="$store.state.widgets.primary === `editor` && $route.name === `home`"
-							style="width: 750px"
-							class="
-								fixed
-								overflow-y-auto
-								rounded-lg
-								shadow-lg
-								p-6
-								bg-gradient-to-r
-								from-lightBGStart
-								to-lightBGStop
-								backdrop-filter backdrop-blur-lg
-							"
-						/>
 						<nuxt-child
-							v-else
 							style="width: 750px; min-height: calc(100vh - 160px); height: calc(100vh - 160px)"
 							class="
 								fixed
@@ -45,7 +29,6 @@
 								rounded-lg
 								shadow-lg
 								mr-5
-								p-6
 								bg-gradient-to-r
 								from-lightBGStart
 								to-lightBGStop
@@ -83,7 +66,6 @@
 import Vue from 'vue'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
-import PostEditor from '@/components/post/Editor.vue'
 import TagsWidget from '@/components/widgets/Tags.vue'
 import Nodes from '@/components/Nodes.vue'
 
@@ -103,7 +85,6 @@ export default Vue.extend({
 		TagsWidget,
 		Header,
 		Footer,
-		PostEditor,
 		Nodes,
 	},
 	data(): IData {

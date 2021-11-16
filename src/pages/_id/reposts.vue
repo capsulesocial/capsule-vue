@@ -1,6 +1,6 @@
 <template>
-	<section class="px-4">
-		<div v-for="p in this.reposts" :key="p.repost._id">
+	<section v-if="reposts" class="px-6">
+		<div v-for="p in reposts" :key="p.repost._id">
 			<PostCard
 				:repost="p.repost"
 				:post="p.post"

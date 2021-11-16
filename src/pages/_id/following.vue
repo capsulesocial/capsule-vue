@@ -1,5 +1,5 @@
 <template>
-	<section v-if="profile !== null" class="p-4">
+	<section v-if="profile !== null" class="p-6 mx-4">
 		<article>
 			<div v-for="p in profiles" :key="p.id">
 				<ProfilePreview :profile="p" :updateFollowers="updateFollowers" class="pb-4" />
