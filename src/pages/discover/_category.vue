@@ -19,7 +19,7 @@
 					</div>
 					<p class="pl-3 font-semibold">All categories</p>
 				</button>
-				<h2 class="text-3xl text-lightOnPrimaryText font-semibold">{{ $route.params.category }}</h2>
+				<h2 class="text-3xl text-lightOnPrimaryText font-semibold capitalize">{{ $route.params.category }}</h2>
 			</div>
 		</div>
 		<!-- Posts loaded -->
