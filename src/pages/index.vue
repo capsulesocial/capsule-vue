@@ -145,7 +145,7 @@ import { MutationType, createSessionFromProfile, namespace as sessionStoreNamesp
 
 import { getAccountIdFromPrivateKey, login, register } from '@/backend/auth'
 import { checkAccountStatus, getUsernameNEAR } from '@/backend/near'
-import { torusVerifiers, TorusVerifiers } from '@/backend/utilities/config'
+import { sufficientFunds, torusVerifiers, TorusVerifiers } from '@/backend/utilities/config'
 import { requestOTP, requestSponsor } from '@/backend/funder'
 
 interface IData {
@@ -206,7 +206,7 @@ export default Vue.extend({
 			changeLocation: MutationType.CHANGE_LOCATION,
 		}),
 		hasSufficientFunds() {
-			return BigInt(this.funds) >= BigInt(`98180000000000000000000`)
+			return BigInt(this.funds) >= BigInt(sufficientFunds)
 		},
 		async checkFunds() {
 			const accountId = this.accountId
