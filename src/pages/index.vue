@@ -118,9 +118,9 @@
 							/>
 						</article>
 					</article>
-					<article v-show="this.isLoading" class="flex justify-center">
+					<section v-show="this.isLoading" class="w-full flex justify-center">
 						<div class="loader m-5 p-10 rounded-lg"></div>
-					</article>
+					</section>
 				</article>
 				<article class="text-center whitespace-nowrap flex justify-between text-sm p-5 text-gray-600 font-sans">
 					<button class="px-4 py-2 focus:outline-none">Help</button>
