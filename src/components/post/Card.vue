@@ -87,6 +87,7 @@
 									<span v-if="comments" class="ml-1">{{ comments.length }}</span>
 								</button>
 								<Share
+									:repost="repost"
 									:post="post"
 									:cid="post._id"
 									class="fill-primary"
