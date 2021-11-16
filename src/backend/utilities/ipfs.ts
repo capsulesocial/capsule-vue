@@ -5,6 +5,7 @@ export interface IPFSInterface {
 	getData: (cid: string) => Promise<string>
 	getJSONData: <T>(hash: string) => Promise<T>
 	sendJSONData: <T>(content: T) => Promise<string>
+	getNodes: () => Promise<number>
 }
 
 const ipfsConfig: Options = {
@@ -64,11 +65,17 @@ async function createIPFSInterface(): Promise<IPFSInterface> {
 		return cid.toString()
 	}
 
+	const getNodes = async () => {
+		const peers = await node.swarm.peers()
+		return peers.length
+	}
+
 	return {
 		getJSONData,
 		sendJSONData,
 		sendData,
 		getData,
+		getNodes,
 	}
 }
 
