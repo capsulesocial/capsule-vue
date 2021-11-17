@@ -25,7 +25,7 @@
 		<!-- Posts loaded -->
 		<div
 			class="fixed overflow-y-auto"
-			style="width: 748px; min-height: calc(100vh - 392px); height: calc(100vh - 392px)"
+			style="width: 748px; min-height: calc(100vh - 312px); height: calc(100vh - 312px)"
 		>
 			<article v-for="p in posts" :key="p.post._id" class="pt-4">
 				<PostCard

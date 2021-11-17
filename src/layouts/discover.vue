@@ -13,7 +13,11 @@
 				<!-- Body -->
 				<div>
 					<!-- Title and peered nodes -->
-					<div class="fixed w-full flex justify-between items-center" style="width: 1220px; height: 62px">
+					<div
+						v-if="$route.name === `discover`"
+						class="fixed w-full flex justify-between items-center"
+						style="width: 1220px; height: 62px"
+					>
 						<!-- Title -->
 						<h1 class="font-semibold text-primary" style="font-size: 2.6rem">Browse Capsule</h1>
 						<!-- Peered nodes -->
@@ -22,7 +26,8 @@
 					<!-- Content -->
 					<section class="flex flex-row mt-20">
 						<nuxt-child
-							style="width: 750px; min-height: calc(100vh - 160px); height: calc(100vh - 160px)"
+							style="width: 750px; min-height: calc(100vh - 88px); height: calc(100vh - 88px)"
+							:class="$route.name === `discover` ? `` : `-mt-20`"
 							class="
 								fixed
 								overflow-y-auto
@@ -34,12 +39,15 @@
 								to-lightBGStop
 								backdrop-filter backdrop-blur-lg
 							"
-							:class="showWidgets ? `` : `z-10`"
 							:toggleFriend="toggleFriend"
 							:following="following"
 						/>
 						<!-- Widgets -->
-						<aside class="fixed" :class="showWidgets ? `z-10` : ``" style="margin-left: 770px; width: 450px">
+						<aside
+							:class="$route.name === `discover` ? `` : `-mt-20`"
+							class="fixed"
+							style="margin-left: 770px; width: 450px"
+						>
 							<TagsWidget
 								class="
 									rounded-lg
@@ -76,7 +84,6 @@ import { followChange, getFollowersAndFollowing } from '@/backend/following'
 interface IData {
 	profile: Profile | null
 	avatar: string | ArrayBuffer | null
-	showWidgets: boolean
 	following: Set<string>
 }
 
@@ -91,7 +98,6 @@ export default Vue.extend({
 		return {
 			profile: null,
 			avatar: null,
-			showWidgets: false,
 			following: new Set(),
 		}
 	},
@@ -120,9 +126,6 @@ export default Vue.extend({
 				const data = await getFollowersAndFollowing(this.$store.state.session.id, true)
 				this.following = data.following
 			}
-		},
-		toggleZIndex() {
-			this.showWidgets = !this.showWidgets
 		},
 	},
 })
