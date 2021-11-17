@@ -132,3 +132,8 @@ export async function getTags(): Promise<string[]> {
 	const res = await axios.get(`${capsuleOrbit}/content/tags`)
 	return res.data.data
 }
+
+export async function getOnePost(cid: string, bookmarker: string): Promise<IPostResponse> {
+	const res = await axios.get(`${capsuleOrbit}/content/${cid}`, { params: { bookmarker } })
+	return res.data.data
+}
