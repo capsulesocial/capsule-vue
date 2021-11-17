@@ -2,7 +2,7 @@
 	<section class="w-full">
 		<div>
 			<!-- Fixed top -->
-			<article ref="topContainer" class="fixed bg-white pt-5 -mt-5 z-20" style="width: 700px">
+			<article ref="topContainer" class="px-6 pt-6 z-20 w-full">
 				<!-- Back button -->
 				<div v-if="$route.params.id !== $store.state.session.id" class="px-4">
 					<nuxt-link to="/home" class="flex flex-row items-center">
@@ -74,7 +74,12 @@
 					</nuxt-link>
 				</div>
 			</article>
-			<article v-if="loadedContent()" :style="padding">
+			<article
+				v-if="loadedContent()"
+				class="fixed overflow-y-auto"
+				style="width: 748px"
+				:style="`min-height: calc(100vh - ` + padding + ` - 168px); height: calc(100vh - ` + padding + ` - 168px)`"
+			>
 				<nuxt-child :profile="visitProfile" :updateFollowers="updateFollowers" :followers="followers" />
 			</article>
 		</div>
@@ -171,7 +176,7 @@ export default Vue.extend({
 	},
 	mounted() {
 		// @ts-ignore
-		this.padding = `padding-top: ` + this.$refs.topContainer.clientHeight + `px`
+		this.padding = this.$refs.topContainer.clientHeight + `px`
 	},
 	destroyed() {
 		window.removeEventListener(`click`, this.handleClose)

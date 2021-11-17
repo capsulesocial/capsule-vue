@@ -1,5 +1,5 @@
 <template>
-	<article v-if="!postDeleted" class="py-5 mx-5 border-b object-contain z-auto">
+	<article v-if="!postDeleted" class="py-5 mx-6 border-b object-contain z-auto">
 		<!-- popup backdrop -->
 		<div
 			:class="

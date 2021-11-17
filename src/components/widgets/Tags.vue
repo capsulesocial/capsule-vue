@@ -4,7 +4,7 @@
 			<h3 v-if="!checkRoute()" class="text-primary text-base font-semibold">Trending tags</h3>
 			<h3 v-if="checkRoute()" class="text-primary text-base font-semibold">Featured tags</h3>
 			<div class="flex flex-row justify-end">
-				<h3 v-if="checkRoute()" class="self-center text-sm text-gray5">Top of</h3>
+				<h3 v-if="$route.name === `discover`" class="self-center text-sm text-gray5">Top of</h3>
 				<!-- Dropdown filter -->
 				<div v-if="$route.name === `discover`" class="relative inline">
 					<button

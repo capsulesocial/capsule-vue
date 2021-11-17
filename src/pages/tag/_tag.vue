@@ -1,35 +1,27 @@
 <template>
 	<section class="w-full border border-lightBorder">
 		<!--  -->
-		<div
-			class="
-				sticky
-				bg-primary bg-opacity-25
-				-mx-6
-				-mt-6
-				rounded-lg
-				flex flex-row
-				items-center
-				shadow-lg
-				p-2
-				border-lightBorder
-			"
-		>
+		<div class="bg-primary bg-opacity-25 rounded-lg flex flex-row items-center shadow-lg p-2 border-lightBorder">
 			<button class="bg-gray1 rounded-full flex-shrink-0 m-3 focus:outline-none" @click="$router.go(-1)">
 				<BackIcon />
 			</button>
 			<h2 class="text-2xl text-primary font-semibold">{{ $route.params.tag }}</h2>
 		</div>
 		<!-- Posts loaded -->
-		<article v-for="p in posts" :key="p.post._id">
-			<PostCard
-				:post="p.post"
-				:comments="p.comments"
-				:usersFollowing="following"
-				:toggleFriend="toggleFriend"
-				:bookmarked="p.bookmarked"
-			/>
-		</article>
+		<div
+			class="fixed overflow-y-auto"
+			style="width: 748px; min-height: calc(100vh - 226px); height: calc(100vh - 226px)"
+		>
+			<article v-for="p in posts" :key="p.post._id">
+				<PostCard
+					:post="p.post"
+					:comments="p.comments"
+					:usersFollowing="following"
+					:toggleFriend="toggleFriend"
+					:bookmarked="p.bookmarked"
+				/>
+			</article>
+		</div>
 		<!-- Not loaded yet -->
 		<article v-show="isLoading" class="flex justify-center" style="width: 660px">
 			<div class="loader m-6"></div>

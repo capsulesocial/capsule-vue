@@ -2,7 +2,8 @@
 	<section class="w-full border border-lightBorder">
 		<!-- Header -->
 		<div
-			class="sticky bg-primary -mx-6 -mt-6 rounded-lg flex flex-row items-center shadow-lg h-56 border-lightBorder"
+			class="bg-primary rounded-lg flex flex-row items-center shadow-lg h-56 border-lightBorder"
+			style="width: 748px"
 			:style="{
 				background: `linear-gradient(180deg, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.8) 100%), url(${require(`@/assets/images/category/` +
 					$route.params.category +
@@ -18,19 +19,24 @@
 					</div>
 					<p class="pl-3 font-semibold">All categories</p>
 				</button>
-				<h2 class="text-3xl text-lightOnPrimaryText font-semibold">{{ $route.params.category }}</h2>
+				<h2 class="text-3xl text-lightOnPrimaryText font-semibold capitalize">{{ $route.params.category }}</h2>
 			</div>
 		</div>
 		<!-- Posts loaded -->
-		<article v-for="p in posts" :key="p.post._id" class="pt-4">
-			<PostCard
-				:post="p.post"
-				:comments="p.comments"
-				:usersFollowing="following"
-				:toggleFriend="toggleFriend"
-				:bookmarked="p.bookmarked"
-			/>
-		</article>
+		<div
+			class="fixed overflow-y-auto"
+			style="width: 748px; min-height: calc(100vh - 312px); height: calc(100vh - 312px)"
+		>
+			<article v-for="p in posts" :key="p.post._id" class="pt-4">
+				<PostCard
+					:post="p.post"
+					:comments="p.comments"
+					:usersFollowing="following"
+					:toggleFriend="toggleFriend"
+					:bookmarked="p.bookmarked"
+				/>
+			</article>
+		</div>
 		<!-- Not loaded yet -->
 		<article v-show="isLoading" class="flex justify-center" style="width: 660px">
 			<div class="loader m-5"></div>
