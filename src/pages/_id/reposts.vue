@@ -2,6 +2,7 @@
 	<section v-if="reposts" class="px-6">
 		<div v-for="p in reposts" :key="p.repost._id">
 			<PostCard
+				:comments="p.comments"
 				:repost="p.repost"
 				:post="p.post"
 				:authorID="p.post.authorID"

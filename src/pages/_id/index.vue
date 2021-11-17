@@ -1,7 +1,14 @@
 <template>
 	<section class="w-full">
 		<article v-for="post in posts" :key="post.post._id">
-			<PostCard :post="post.post" :profile="profile" :comments="post.comments" :bookmarked="post.bookmarked" />
+			<PostCard
+				:post="post.post"
+				:profile="profile"
+				:comments="post.comments"
+				:bookmarked="post.bookmarked"
+				:repostCount="post.repostCount"
+				:bookmarksCount="post.bookmarksCount"
+			/>
 		</article>
 		<article v-show="isLoading" class="flex justify-center">
 			<div class="loader m-10"></div>
