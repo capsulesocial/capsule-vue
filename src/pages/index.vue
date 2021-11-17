@@ -29,7 +29,7 @@
 							<p class="whitespace-nowrap justify-between text-sm p-5 text-gray-600 font-sans">
 								Available funds: {{ funds }} yN
 							</p>
-							<article v-show="hasSufficientFunds()">
+							<article v-if="hasSufficientFunds()">
 								<label for="id" class="font-semibold text-sm text-gray-600 pb-1 block">ID</label>
 								<input
 									id="id"
@@ -52,8 +52,8 @@
 								/>
 								<BrandedButton :text="`Sign Up`" :action="verify" class="w-full" />
 							</article>
-							<article v-show="!hasSufficientFunds()">
-								<article v-show="!otpSent">
+							<article v-else>
+								<article v-if="!otpSent">
 									<label for="id" class="font-semibold text-sm text-gray-600 pb-1 block">Phone Number</label>
 									<input
 										id="phoneNumber"
@@ -76,7 +76,7 @@
 									/>
 									<BrandedButton :text="`Send Verification Code`" class="w-full" :action="sendOTP" />
 								</article>
-								<article v-show="phoneNumber.length > 12 && otpSent">
+								<article v-else>
 									<label for="id" class="font-semibold text-sm text-gray-600 pb-1 block">OTP</label>
 									<input
 										id="phoneNumber"
@@ -98,12 +98,12 @@
 										"
 									/>
 									<BrandedButton :text="`Verify`" class="w-full" :action="validateOTP" />
-									<article>
-										<p class="whitespace-nowrap justify-between text-sm p-5 text-gray-600 font-sans">
-											Ensure that the NEAR account with ID: "{{ accountId }}" has sufficient funds before signing up.
-										</p>
-										<BrandedButton :text="`Check funds`" class="w-full" :action="checkFunds" />
-									</article>
+								</article>
+								<article>
+									<p class="whitespace-nowrap justify-between text-sm p-5 text-gray-600 font-sans">
+										Ensure that the NEAR account with ID: "{{ accountId }}" has sufficient funds before signing up.
+									</p>
+									<BrandedButton :text="`Re-check funds`" class="w-full" :action="checkFunds" />
 								</article>
 							</article>
 						</article>
@@ -209,12 +209,14 @@ export default Vue.extend({
 			return BigInt(this.funds) >= BigInt(sufficientFunds)
 		},
 		async checkFunds() {
+			this.isLoading = true
 			const accountId = this.accountId
 			if (!accountId) {
 				return
 			}
 			const status = await checkAccountStatus(accountId)
 			this.funds = status.balance
+			this.isLoading = false
 		},
 		async torusLogin(type: TorusVerifiers) {
 			try {
@@ -230,12 +232,22 @@ export default Vue.extend({
 				await this.checkFunds()
 				this.isLoading = false
 			} catch (e) {
+				console.log(e)
 				this.isLoading = false
 			}
 		},
-		async validateOTP() {
+		async sendOTP() {
 			if (!this.$qualityPhoneNumber(this.phoneNumber)) {
 				return
+			}
+			this.isLoading = true
+			await requestOTP(this.phoneNumber)
+			this.otpSent = true
+			this.isLoading = false
+		},
+		async validateOTP() {
+			if (!this.$qualityPhoneNumber(this.phoneNumber)) {
+				throw new Error(`Invalid phone number`)
 			}
 
 			if (this.otp.length !== 6) {
@@ -249,16 +261,6 @@ export default Vue.extend({
 			this.isLoading = true
 			await requestSponsor(this.phoneNumber, this.otp, this.accountId)
 			await this.checkFunds()
-			this.isLoading = false
-		},
-		async sendOTP() {
-			// TODO: Think about phone number validation
-			if (this.phoneNumber.length < 12) {
-				return
-			}
-			this.isLoading = true
-			await requestOTP(this.phoneNumber)
-			this.otpSent = true
 			this.isLoading = false
 		},
 		loginOrRegister(privateKey: string) {
