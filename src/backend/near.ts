@@ -56,9 +56,16 @@ export async function getUsernameNEAR(accountId: string): Promise<string | null>
 	throw new Error(`Error in contract`)
 }
 
-export async function initContract(accountId: string) {
-	// Initialize connection to the NEAR network
+export async function initNear() {
 	_near = await connect({ deps: { keyStore: new keyStores.BrowserLocalStorageKeyStore() }, ...nearConfig })
+}
+
+export function initContract(accountId: string) {
+	// Initialize connection to the NEAR network
+	if (!_near) {
+		throw new Error(`NEAR not yet initialised!`)
+	}
+
 	// Initializing contract API
 	_contract = new Contract(new Account(_near.connection, accountId), nearConfig.contractName, {
 		viewMethods: [`getUserInfo`],

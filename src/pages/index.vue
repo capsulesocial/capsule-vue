@@ -226,9 +226,12 @@ export default Vue.extend({
 				this.accountId = getAccountIdFromPrivateKey(this.userInfo.privateKey)
 				this.username = await getUsernameNEAR(this.accountId)
 				if (this.username) {
+					// If a username is found then proceed to login...
 					this.verify()
 					return
 				}
+
+				// If no username is found then register...
 				await this.checkFunds()
 				this.isLoading = false
 			} catch (e) {
