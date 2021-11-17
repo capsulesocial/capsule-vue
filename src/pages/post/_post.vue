@@ -109,11 +109,11 @@
 								:cid="$route.params.post"
 								:class="'z-20'"
 								:hasRepost="hasReposted"
-								:repostCount="-1"
+								:repostCount="repostCount"
 							/>
 						</div>
 					</div>
-					<PostActions :postCID="$route.params.post" :authorID="author.id" :isCommenting="true" :tags="post.tags" />
+					<PostActions :postCID="$route.params.post" :initComments="comments" />
 				</article>
 			</section>
 			<section v-else>Post not found 😵‍💫</section>
@@ -135,11 +135,12 @@ import XIcon from '@/components/icons/X.vue'
 import FriendButton from '@/components/FriendButton.vue'
 
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
-import { getPost, Post } from '@/backend/post'
+import { getPost, getOnePost, Post } from '@/backend/post'
 import { getPhotoFromIPFS } from '@/backend/photos'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
 import { getReposts } from '@/backend/reposts'
 import { isPostBookmarkedByUser } from '@/backend/bookmarks'
+import { ICommentData } from '@/backend/comment'
 
 interface IData {
 	post: Post | null
@@ -153,6 +154,8 @@ interface IData {
 	isBookmarked: boolean
 	lastScroll: number
 	showHeader: boolean
+	repostCount: number
+	comments: ICommentData[]
 }
 
 export default Vue.extend({
@@ -183,6 +186,8 @@ export default Vue.extend({
 			isBookmarked: false,
 			lastScroll: 0,
 			showHeader: true,
+			repostCount: -1,
+			comments: [],
 		}
 	},
 	async created() {
@@ -191,6 +196,11 @@ export default Vue.extend({
 		if (this.post === null) {
 			throw new Error(`Post is null!`)
 		}
+		const postMetadata = await getOnePost(this.$route.params.post, this.$store.state.session.id)
+		this.isBookmarked = postMetadata.bookmarked
+		this.repostCount = postMetadata.repostCount
+		this.comments = postMetadata.comments
+
 		// Get author profile
 		this.author = createDefaultProfile(this.post.authorID)
 		getProfile(this.post.authorID).then((p) => {
@@ -216,8 +226,6 @@ export default Vue.extend({
 				this.authorAvatar = p
 			})
 		}
-		// Get bookmark status
-		this.getBookmarkStatus()
 		// Get reposts
 		const repostData = await getReposts(this.$store.state.session.id)
 		repostData.forEach((p) => {
