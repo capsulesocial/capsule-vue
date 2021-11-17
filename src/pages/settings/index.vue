@@ -2,7 +2,7 @@
 	<main>
 		<!-- Account Security -->
 		<div v-show="tab === `account`">
-			<h2 class="text-primary font-semibold mb-4">Account Security</h2>
+			<h2 class="text-primary font-semibold mb-4 text-sm">Account Security</h2>
 			<!-- ID -->
 			<div class="flex flex-row items-center w-full mb-4">
 				<label for="id" class="w-32 font-semibold">Identifier</label>
@@ -15,54 +15,32 @@
 				/>
 				<button class="w-32" disabled></button>
 			</div>
-			<!-- Phone -->
+			<!-- Export Private Key -->
 			<div class="flex flex-row items-center w-full mb-4">
-				<label for="phone" class="w-32 font-semibold">Phone #</label>
-				<input
-					id="phone"
-					type="tel"
-					:placeholder="$store.state.session.phone"
-					class="
-						flex-grow
-						bg-primary bg-opacity-25
-						text-primary
-						placeholder-primary
-						rounded-lg
-						px-2
-						py-1
-						focus:outline-none
-					"
-				/>
-				<button class="w-32 text-primary focus:outline-none">Edit</button>
+				<label for="export" class="w-32 font-semibold">Private Key</label>
+				<button id="export" class="text-primary">Export Private Key</button>
 			</div>
-			<!-- Email -->
+			<!-- Account Profile -->
+			<h2 class="text-primary font-semibold text-sm py-4">Account Profile</h2>
 			<div class="flex flex-row items-center w-full mb-4">
-				<label for="email" class="w-32 font-semibold">Email</label>
-				<input
-					id="email"
-					v-model="newEmail"
-					type="email"
-					:placeholder="$store.state.session.email"
-					class="
-						flex-grow
-						bg-primary bg-opacity-25
-						text-primary
-						placeholder-primary
-						rounded-lg
-						px-2
-						py-1
-						focus:outline-none
-					"
-				/>
-				<button class="w-32 text-primary focus:outline-none">Edit</button>
+				<label for="editProfile" class="w-32 font-semibold">Public Profile</label>
+				<nuxt-link :to="$store.state.session.id" class="bg-primary text-white rounded-lg focus:outline-none px-4 py-2">
+					Edit your Profile
+				</nuxt-link>
 			</div>
 			<!-- Account Data -->
-			<h2 class="text-primary font-semibold mb-4">Account Data</h2>
+			<h2 class="text-primary font-semibold pt-4 mb-4">Account Data</h2>
 			<div class="flex mb-4">
 				<h3 class="w-48 font-semibold">Your Capsule data</h3>
 				<button class="text-primary focus:outline-none">Request a download of your Capsule data</button>
 			</div>
+			<div class="flex mb-4">
+				<h3 class="w-48 font-semibold">Deactivate My Account</h3>
+				<button class="text-lightError focus:outline-none">Deactivate my Capsule Account</button>
+			</div>
 		</div>
+
+		<!-- Network Tab -->
 		<div v-show="tab === `network`">
 			<h2 class="text-primary font-semibold mb-4">OrbitDB</h2>
 			<div class="flex flex-row items-center w-full mb-4">
@@ -89,6 +67,7 @@
 		<!-- Submit button -->
 		<div class="w-full flex justify-center">
 			<button
+				v-show="tab !== `account`"
 				:class="hasChanged() ? '' : 'opacity-50'"
 				class="bg-primary text-white rounded-lg focus:outline-none px-4 py-2"
 				@click="updateSettings"
@@ -107,7 +86,6 @@ import { setProfile } from '@/backend/profile'
 
 interface IData {
 	nodeURL: string
-	newEmail: string
 }
 
 export default Vue.extend({
@@ -122,7 +100,6 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			nodeURL: this.$store.state.nodeURL,
-			newEmail: ``,
 		}
 	},
 	created() {
@@ -137,13 +114,12 @@ export default Vue.extend({
 			changeCID: MutationType.CHANGE_CID,
 			changeID: MutationType.CHANGE_ID,
 			changeName: MutationType.CHANGE_NAME,
-			changeEmail: MutationType.CHANGE_EMAIL,
 			changeAvatar: MutationType.CHANGE_AVATAR,
 			changeBio: MutationType.CHANGE_BIO,
 			changeLocation: MutationType.CHANGE_LOCATION,
 		}),
 		hasChanged() {
-			return this.nodeURL !== `` || this.newEmail !== ``
+			return this.nodeURL !== ``
 		},
 		async updateProfile() {
 			const backendProfile = getProfileFromSession(this.$store.state.session)
@@ -155,10 +131,6 @@ export default Vue.extend({
 			if (this.hasChanged() === false) {
 				alert(`Nothing to update!`)
 				return
-			}
-			// Run quality rules before saving
-			if (this.newEmail !== `` && this.$qualityEmail(this.newEmail)) {
-				this.changeEmail(this.newEmail.trim())
 			}
 			if (this.nodeURL && this.nodeURL !== this.$store.state.session.nodeURL) {
 				if (!/((http|https?):\/\/)?(www\.)?[a-z0-9\-.]{3,}\.[a-z]{3}$/.test(this.nodeURL)) {
