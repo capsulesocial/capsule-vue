@@ -3,7 +3,10 @@
 	<div class="flex items-center bg-gray1 px-3 rounded-lg">
 		<span class="text-sm mr-1 text-gray5">{{ nodes }} peered nodes</span>
 		<CapsuleIcon :shrink="true" />
-		<span class="bg-connectGreen rounded-xl w-3 h-3"></span>
+		<span class="flex h-3 w-3">
+			<span class="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-connectGreen opacity-75"></span>
+			<span class="relative inline-flex rounded-full h-3 w-3 bg-connectGreen"></span>
+		</span>
 	</div>
 </template>
 

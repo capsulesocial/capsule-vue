@@ -3,12 +3,12 @@
 		class="w-full border border-lightBorder"
 		style="width: 750px; min-height: calc(100vh - 160px); height: calc(100vh - 160px)"
 	>
-		<div class="px-6 pt-6">
+		<div class="px-6 pt-4">
 			<h2 class="text-xl text-primary font-semibold mb-2">Featured Categories</h2>
 			<p class="text-gray5">Read more of what you love by browsing top categories:</p>
 		</div>
 		<article
-			class="fixed overflow-y-auto grid grid-cols-2 gap-y-4 pb-4"
+			class="fixed overflow-y-auto grid grid-cols-2 gap-y-4 pb-4 pt-4 px-2"
 			style="width: 748px; min-height: calc(100vh - 254px); height: calc(100vh - 254px)"
 		>
 			<CategoryCard

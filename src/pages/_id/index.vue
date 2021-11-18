@@ -1,5 +1,13 @@
 <template>
 	<section class="w-full">
+		<article v-if="posts.length == 0" class="grid justify-items-center mt-32">
+			<p class="text-sm text-gray5 mb-5">It seems you didn't wrote any posts yet, it's not too late to start:</p>
+			<SecondaryButton
+				v-if="$store.state.session.id === $route.params.id"
+				:text="`Write a post`"
+				:action="togglePostEditor"
+			/>
+		</article>
 		<article v-for="post in posts" :key="post.post._id">
 			<PostCard
 				:post="post.post"
@@ -94,6 +102,9 @@ export default Vue.extend({
 			if (scrollTop + clientHeight >= scrollHeight - 5) {
 				await this.loadPosts()
 			}
+		},
+		togglePostEditor() {
+			this.$router.push(`/post`)
 		},
 	},
 })

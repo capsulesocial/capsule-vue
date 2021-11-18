@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<h2 class="text-xl text-primary font-semibold px-6 pt-6">My bookmarks</h2>
+		<h2 class="text-xl text-primary font-semibold px-6 pt-4">My bookmarks</h2>
 		<div
 			class="fixed overflow-y-auto"
 			style="width: 748px; min-height: calc(100vh - 226px); height: calc(100vh - 226px)"

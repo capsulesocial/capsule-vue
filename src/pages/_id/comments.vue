@@ -1,5 +1,13 @@
 <template>
 	<section class="px-10">
+		<article v-if="comments.length == 0" class="grid justify-items-center mt-32">
+			<p class="text-sm text-gray5 mb-5">It seems you didn't wrote any comments yet, you can comment any post:</p>
+			<SecondaryButton
+				v-if="$store.state.session.id === $route.params.id"
+				:text="`Comment a post`"
+				:action="toggleHomeFeed"
+			/>
+		</article>
 		<article v-for="comment in comments" :key="comment._id">
 			<CommentCard :comment="comment" :profile="profile" />
 		</article>
@@ -71,6 +79,9 @@ export default Vue.extend({
 				await this.loadComments()
 				this.currentOffset += this.limit
 			}
+		},
+		toggleHomeFeed() {
+			this.$router.push(`/home`)
 		},
 	},
 })
