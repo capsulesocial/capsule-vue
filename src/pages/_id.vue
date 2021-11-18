@@ -78,7 +78,7 @@
 				v-if="loadedContent()"
 				class="fixed overflow-y-auto"
 				style="width: 748px"
-				:style="`min-height: calc(100vh - ` + padding + ` - 168px); height: calc(100vh - ` + padding + ` - 168px)`"
+				:style="`min-height: calc(100vh - ` + padding + ` - 88px); height: calc(100vh - ` + padding + ` - 88px)`"
 			>
 				<nuxt-child :profile="visitProfile" :updateFollowers="updateFollowers" :followers="followers" />
 			</article>

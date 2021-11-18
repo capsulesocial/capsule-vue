@@ -57,7 +57,11 @@
 							:following="following"
 						/>
 						<!-- Widgets -->
-						<aside class="fixed" :class="showWidgets ? `z-10` : ``" style="margin-left: 770px; width: 450px">
+						<aside
+							class="fixed overflow-y-auto"
+							:class="showWidgets ? `z-10` : ``"
+							style="margin-left: 770px; width: 450px; min-height: calc(100vh - 178px); height: calc(100vh - 178px)"
+						>
 							<Widgets
 								:followers="followers"
 								:updateFollowers="updateFollowers"
