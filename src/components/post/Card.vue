@@ -79,8 +79,8 @@
 							<!-- Comment and share -->
 							<div class="flex mt-1">
 								<button
-									class="flex items-end focus:outline-none mr-2"
-									:class="getStyles()"
+									class="flex items-end focus:outline-none mr-2 text-gray7 hover:text-primary hover:fill-primary"
+									:class="showComments ? `text-primary` : ``"
 									@click="showComments = !showComments"
 								>
 									<CommentIcon :isActive="showComments" />
@@ -264,22 +264,8 @@ export default Vue.extend({
 		hasReposted(): boolean {
 			if (this.$store.state.session.id === this.$props.repostedBy) {
 				return true
-			} else {
-				return false
 			}
-		},
-		getStyles(): string {
-			let res = ``
-			if (this.showComments && this.$store.state.settings.darkMode) {
-				res += `text-lightActive`
-			} else if (this.showComments && !this.$store.state.settings.darkMode) {
-				res += `text-darkActive`
-			} else if (!this.showComments && this.$store.state.settings.darkMode) {
-				res += `hover:text-lightActive`
-			} else if (!this.showComments && !this.$store.state.settings.darkMode) {
-				res += `hover:text-darkActive`
-			}
-			return res
+			return false
 		},
 		postExcerpt(): string {
 			const excerpt = this.post.excerpt.slice(0, 177).trim()

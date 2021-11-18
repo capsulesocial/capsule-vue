@@ -5,8 +5,10 @@
 			:class="showSocialShares ? 'text-primary' : ''"
 			@click.stop="toggleDropdown"
 		>
-			<ShareIcon :isActive="showSocialShares" class="mr-2" />
-			{{ repostCount }}
+			<div class="flex text-gray7 hover:text-primary hover:fill-primary">
+				<ShareIcon :isActive="showSocialShares" />
+				<span class="ml-1">{{ repostCount }}</span>
+			</div>
 		</button>
 		<div
 			v-show="showSocialShares"
@@ -25,12 +27,7 @@
 				@click="handleRepost()"
 			>
 				<RepostIcon :isActive="isReposted()" :shrink="true" style="width: 13.7px" class="mr-2" />
-				<span
-					v-if="isReposted()"
-					:class="$store.state.settings.darkMode ? 'text-lightActive' : 'text-darkActive'"
-					class="text-xs self-center"
-					>Undo Repost</span
-				>
+				<span v-if="isReposted()" class="text-xs self-center">Undo Repost</span>
 				<span v-else class="text-xs self-center">Repost to Feed</span>
 			</button>
 			<!-- Twitter -->
