@@ -10,7 +10,7 @@
 		<!-- Posts loaded -->
 		<div
 			class="fixed overflow-y-auto"
-			style="width: 748px; min-height: calc(100vh - 226px); height: calc(100vh - 226px)"
+			style="width: 748px; min-height: calc(100vh - 150px); height: calc(100vh - 150px)"
 		>
 			<article v-for="p in posts" :key="p.post._id">
 				<PostCard

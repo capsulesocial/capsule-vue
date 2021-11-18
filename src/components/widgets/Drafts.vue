@@ -15,15 +15,15 @@
 					v-if="featuredPhoto !== null"
 					:src="featuredPhoto"
 					alt="$store.state.draft.title"
-					class="h-16 rounded-lg"
+					class="h-16 w-20 rounded-lg"
 				/>
-				<span v-else class="h-16 w-24 bg-gray1 text-gray7 rounded-lg flex items-center justify-center">
-					<ImageIcon class="w-6 h-6 fill-current" />
+				<span v-else class="h-16 w-20 bg-gray1 text-gray7 rounded-lg flex items-center justify-center">
+					<ImageIcon class="w-5 h-5 fill-current" />
 				</span>
 			</div>
 			<div class="flex items-center">
-				<nuxt-link to="/post" class="p-2 bg-primary text-white rounded-lg">
-					<PencilIcon class="fill-current w-6 h-6 p-" />
+				<nuxt-link to="/post" class="p-3 bg-primary text-white rounded-lg">
+					<PencilIcon class="fill-current w-5 h-5 p-" />
 				</nuxt-link>
 			</div>
 		</div>

@@ -4,34 +4,34 @@
 			<!-- Fixed top -->
 			<article ref="topContainer" class="px-6 pt-6 z-20 w-full">
 				<!-- Back button -->
-				<div v-if="$route.params.id !== $store.state.session.id" class="px-4">
-					<nuxt-link to="/home" class="flex flex-row items-center">
+				<div v-if="$route.params.id !== $store.state.session.id" class="pb-4">
+					<button class="flex flex-row items-center -mt-1" @click="$router.go(-1)">
 						<span class="bg-gray1 rounded-full p-1"><BackButton :reduceSize="true" /></span>
 						<h6 class="font-semibold ml-2 font-sans">Home</h6>
-					</nuxt-link>
+					</button>
 				</div>
 				<!-- Name, socials, follow, bio -->
-				<div class="flex flex-row justify-between px-4 pt-4">
+				<div class="flex flex-row justify-between">
 					<div class="flex items-center">
-						<Avatar :avatar="visitAvatar" :authorID="$route.params.id" size="w-24 h-24" class="mr-4" />
+						<Avatar :avatar="visitAvatar" :authorID="$route.params.id" size="w-24 h-24" class="mr-5" />
 						<div class="flex flex-col flex-grow">
 							<!-- Name Username, Follow button -->
 							<div class="flex flex-col">
-								<h3 class="text-xl pr-4 font-semibold">
+								<h3 class="text-2xl pr-4 font-semibold">
 									{{ visitProfile.name }}
 								</h3>
 								<h5 class="text-primary text-lg">@{{ visitProfile.id }}</h5>
 							</div>
-							<div class="flex flex-row pt-1 text-sm text-gray6">
+							<div class="flex flex-row pt-2 text-sm text-gray6">
 								<!-- posts, following, followers -->
-								<nuxt-link :to="'/' + $route.params.id" class="text-base" :class="getStyles(`id-categories`)">
-									<span class="font-bold text-primary">X</span>
+								<nuxt-link :to="'/' + $route.params.id" class="text-sm" :class="getStyles(`id-categories`)">
+									<span class="font-bold text-primary">{{ posts.length }}</span>
 									Posts
 								</nuxt-link>
 								<nuxt-link
 									:to="'/' + $route.params.id + '/followers'"
 									:class="getStyles(`id-followers`)"
-									class="pl-4 text-base"
+									class="pl-5 text-sm"
 								>
 									<span class="font-bold text-primary">{{ followers.size }}</span>
 									Followers
@@ -39,7 +39,7 @@
 								<nuxt-link
 									:to="'/' + $route.params.id + '/following'"
 									:class="getStyles(`id-following`)"
-									class="pl-4 text-base"
+									class="pl-5 text-sm"
 								>
 									<span class="font-bold text-primary">{{ following.size }}</span>
 									Following
@@ -48,7 +48,7 @@
 						</div>
 					</div>
 					<div class="flex items-center">
-						<BrandedButton
+						<SecondaryButton
 							v-if="$store.state.session.id === $route.params.id"
 							:text="`Edit Profile`"
 							:action="toggleSettings"
@@ -57,12 +57,12 @@
 					</div>
 				</div>
 				<!-- Bio -->
-				<div v-if="visitProfile.bio" class="pt-4 pl-4">
-					<p class="italic">
+				<div v-if="visitProfile.bio" class="pt-4 px-1">
+					<p class="">
 						{{ visitProfile.bio }}
 					</p>
 				</div>
-				<div class="flex flex-col md:flex-row w-full justify-between text-gray7 pt-4">
+				<div class="flex flex-col md:flex-row w-full justify-between text-gray7 pt-6">
 					<nuxt-link :to="'/' + $route.params.id" class="pb-1" :class="getStyles('id')">
 						<span class="px-4">Posts</span>
 					</nuxt-link>
@@ -112,7 +112,7 @@ import Vue from 'vue'
 import type { PropType } from 'vue'
 import Avatar from '@/components/Avatar.vue'
 import FriendButton from '@/components/FriendButton.vue'
-import BrandedButton from '@/components/BrandedButton.vue'
+import SecondaryButton from '@/components/SecondaryButton.vue'
 import SettingsPopup from '@/components/Settings.vue'
 import BackButton from '@/components/icons/ChevronLeft.vue'
 import { Post } from '@/backend/post'
@@ -129,7 +129,7 @@ export default Vue.extend({
 	components: {
 		Avatar,
 		FriendButton,
-		BrandedButton,
+		SecondaryButton,
 		SettingsPopup,
 		BackButton,
 	},
@@ -214,7 +214,7 @@ export default Vue.extend({
 					this.$route.name !== `id-following` &&
 					this.$route.name !== `id-categories`
 				) {
-					res += ` border-b-2`
+					res += ` border-b`
 				}
 			} else {
 				if (
@@ -222,9 +222,9 @@ export default Vue.extend({
 					this.$route.name !== `id-following` &&
 					this.$route.name !== `id-categories`
 				) {
-					res += ` text-gray7`
+					res += ` text-grey1`
 				}
-				res += ` text-lightPrimaryText`
+				res += ` text-gray5`
 			}
 			return res
 		},

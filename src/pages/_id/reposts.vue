@@ -1,5 +1,13 @@
 <template>
-	<section v-if="reposts" class="px-6">
+	<section class="px-6">
+		<article v-if="reposts.length == 0" class="grid justify-items-center mt-32">
+			<p class="text-sm text-gray5 mb-5">It seems you didn't repost any content yet, you can repost any post:</p>
+			<SecondaryButton
+				v-if="$store.state.session.id === $route.params.id"
+				:text="`Repost content`"
+				:action="toggleHomeFeed"
+			/>
+		</article>
 		<div v-for="p in reposts" :key="p.repost._id">
 			<PostCard
 				:comments="p.comments"
@@ -65,6 +73,9 @@ export default Vue.extend({
 				const data = await getFollowersAndFollowing(this.$store.state.session.id, true)
 				this.following = data.following
 			}
+		},
+		toggleHomeFeed() {
+			this.$router.push(`/home`)
 		},
 	},
 })
