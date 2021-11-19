@@ -66,6 +66,7 @@ module.exports = {
         lightOnSurfaceText: '#000000',
         lightOnSurfaceVariantText: '#000000',
         lightDialog: '#EEEEEE',
+        lightInput: 'rgba(46, 85, 106, 0.05)',
         lightButtonBG: '#2E556A',
         lightButtonText: '#FFFFFF',
         lightActive: '#2E556A',

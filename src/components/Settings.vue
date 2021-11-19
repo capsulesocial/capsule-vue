@@ -2,13 +2,32 @@
 	<div class="popup w-full p-5">
 		<!-- Header and Close button -->
 		<header class="flex flex-row justify-between mb-2">
-			<h2 class="font-bold text-xl">Edit Profile</h2>
+			<h2 class="font-bold text-xl">Edit your profile</h2>
 			<button class="rounded-full bg-gray1 p-1" @click="$emit(`close`)"><CloseIcon /></button>
 		</header>
 		<!-- Change avatar -->
-		<div class="flex justify-center w-full mb-2">
+		<div class="flex justify-center w-full mb-5">
 			<button class="focus:outline-none" @click="handleImageClick">
-				<Avatar :authorID="$store.state.session.id" :avatar="profilePic" :noClick="true" :size="`w-24 h-24`" />
+				<span class="absolute inline-flex">
+					<Avatar :authorID="$store.state.session.id" :avatar="profilePic" :noClick="true" :size="`w-24 h-24`" />
+				</span>
+				<span
+					class="
+						h-24
+						w-24
+						bg-lightOnSurfaceText
+						text-lightOnPrimaryText
+						relative
+						inline-flex
+						rounded-lg
+						flex
+						items-center
+						justify-center
+						bg-opacity-25
+					"
+				>
+					<PencilIcon class="w-5 h-5 fill-current" />
+				</span>
 			</button>
 			<input
 				id="file-input"
@@ -85,7 +104,7 @@
 			/>
 		</div>
 		<!-- Preferred Node -->
-		<div class="flex flex-row mb-2">
+		<!-- <div class="flex flex-row mb-2">
 			<label for="nodeURL" class="w-32">OrbitDB URL</label>
 			<input
 				id="nodeURL"
@@ -94,11 +113,11 @@
 				:placeholder="$store.state.nodeURL"
 				class="text-black placeholder-black px-2 py-1 bg-gray1 rounded-lg flex-grow"
 			/>
-		</div>
+		</div> -->
 		<!-- Socials -->
-		<div class="flex flex-row mb-2">
+		<!-- <div class="flex flex-row mb-2">
 			<label class="w-32">Socials</label>
-		</div>
+		</div> -->
 
 		<!-- Submit button -->
 		<div class="flex justify-end">
@@ -119,6 +138,7 @@ import BrandedButton from '@/components/BrandedButton.vue'
 import { MutationType, getProfileFromSession, namespace as sessionStoreNamespace } from '~/store/session'
 import { getProfile, setProfile } from '@/backend/profile'
 import { addPhotoToIPFS, getPhotoFromIPFS, preUploadPhoto } from '@/backend/photos'
+import PencilIcon from '@/components/icons/Pencil.vue'
 
 interface IData {
 	newName: string
@@ -137,6 +157,7 @@ export default Vue.extend({
 		CloseIcon,
 		Avatar,
 		BrandedButton,
+		PencilIcon,
 		// ColorMode,
 	},
 	data(): IData {

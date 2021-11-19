@@ -19,9 +19,10 @@
 			<div
 				v-show="showDropdown"
 				class="
+					dropdownOpen
 					absolute
 					flex flex-col
-					mt-12
+					mt-16
 					rounded-lg
 					shadow-lg
 					p-4
@@ -29,8 +30,8 @@
 					from-lightBGStart
 					to-lightBGStop
 					backdrop-filter backdrop-blur-lg
+					border border-lightBorder
 				"
-				style="margin-left: -6rem"
 			>
 				<nuxt-link :to="$store.state.session.id" class="text-left w-full flex flex-row items-center text-gray7 mb-4"
 					><ProfileIcon class="flex-shrink-0 w-5 h-5 mr-2" />Profile</nuxt-link
@@ -133,3 +134,20 @@ export default Vue.extend({
 	},
 })
 </script>
+<style>
+.dropdownOpen {
+	margin-left: -6rem;
+	backdrop-filter: blur(10px);
+}
+.dropdownOpen::before {
+	content: '';
+	position: absolute;
+	top: -0.5rem;
+	right: 0.95rem;
+	transform: rotate(45deg);
+	width: 1rem;
+	height: 1rem;
+	background-color: #fff;
+	border-radius: 2px;
+}
+</style>
