@@ -10,7 +10,7 @@
 					id="id"
 					type="text"
 					:placeholder="$store.state.session.id"
-					class="flex-grow bg-primary bg-opacity-25 text-primary placeholder-primary rounded-lg px-2 py-1"
+					class="flex-grow bg-gray1 text-gray5 placeholder-gray5 rounded-lg px-2 py-1"
 					disabled
 				/>
 				<button class="w-32" disabled></button>
@@ -24,25 +24,29 @@
 			<h2 class="text-primary font-semibold text-sm py-4">Account Profile</h2>
 			<div class="flex flex-row items-center w-full mb-4">
 				<label for="editProfile" class="w-32 font-semibold">Public Profile</label>
-				<nuxt-link :to="$store.state.session.id" class="bg-primary text-white rounded-lg focus:outline-none px-4 py-2">
+				<nuxt-link
+					:to="$store.state.session.id"
+					class="bg-secondary text-white rounded-lg focus:outline-none"
+					style="padding: 0.4rem 1.5rem"
+				>
 					Edit your Profile
 				</nuxt-link>
 			</div>
 			<!-- Account Data -->
-			<h2 class="text-primary font-semibold pt-4 mb-4">Account Data</h2>
+			<h2 class="text-primary font-semibold pt-4 mb-4 text-sm">Account Data</h2>
 			<div class="flex mb-4">
-				<h3 class="w-48 font-semibold">Your Capsule data</h3>
+				<h3 class="w-56 font-semibold">Your Capsule data</h3>
 				<button class="text-primary focus:outline-none">Request a download of your Capsule data</button>
 			</div>
 			<div class="flex mb-4">
-				<h3 class="w-48 font-semibold">Deactivate My Account</h3>
-				<button class="text-lightError focus:outline-none">Deactivate my Capsule Account</button>
+				<h3 class="w-56 font-semibold">Deactivate My Account</h3>
+				<button class="text-negative focus:outline-none">Deactivate my Capsule Account</button>
 			</div>
 		</div>
 
 		<!-- Network Tab -->
 		<div v-show="tab === `network`">
-			<h2 class="text-primary font-semibold mb-4">OrbitDB</h2>
+			<h2 class="text-primary font-semibold mb-4 text-sm">OrbitDB</h2>
 			<div class="flex flex-row items-center w-full mb-4">
 				<label for="node" class="w-48 font-semibold">Preferred Node URL:</label>
 				<input
@@ -50,16 +54,7 @@
 					v-model="nodeURL"
 					type="text"
 					:placeholder="$store.state.nodeURL"
-					class="
-						flex-grow
-						bg-primary bg-opacity-25
-						text-primary
-						placeholder-primary
-						rounded-lg
-						px-2
-						py-1
-						focus:outline-none
-					"
+					class="flex-grow bg-gray1 text-gray5 placeholder-gray5 rounded-lg px-2 py-1 focus:outline-none"
 				/>
 				<button class="w-48 focus:outline-none" disabled></button>
 			</div>

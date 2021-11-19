@@ -24,6 +24,7 @@
 								shadow-lg
 								mr-5
 								p-6
+								pt-4
 								z-10
 								bg-gradient-to-r
 								from-lightBGStart
@@ -47,26 +48,27 @@
 									mb-5
 									py-4
 									px-6
+									pb-2
 								"
 							>
 								<h3 class="text-primary text-base font-semibold pb-4">Settings</h3>
 								<button
-									:class="tab === `account` ? `bg-primary bg-opacity-25` : ``"
-									class="w-full rounded-lg text-primary py-2 px-4 mb-4 text-left focus:outline-none"
+									:class="tab === `account` ? `bg-lightInput font-semibold` : ``"
+									class="w-full rounded-lg text-gray5 py-2 px-4 mb-4 text-left focus:outline-none"
 									@click="changeTab(`account`)"
 								>
 									Account
 								</button>
 								<button
-									:class="tab === `security` ? `bg-primary bg-opacity-25` : ``"
-									class="w-full rounded-lg text-primary py-2 px-4 mb-4 text-left focus:outline-none"
+									:class="tab === `security` ? `bg-lightInput font-semibold` : ``"
+									class="w-full rounded-lg text-gray5 py-2 px-4 mb-4 text-left focus:outline-none"
 									@click="changeTab(`security`)"
 								>
 									Confidentiality and Security
 								</button>
 								<button
-									:class="tab === `network` ? `bg-primary bg-opacity-25` : ``"
-									class="w-full rounded-lg text-primary py-2 px-4 mb-4 text-left focus:outline-none"
+									:class="tab === `network` ? `bg-lightInput font-semibold` : ``"
+									class="w-full rounded-lg text-gray5 py-2 px-4 mb-4 text-left focus:outline-none"
 									@click="changeTab(`network`)"
 								>
 									Nodes and Network

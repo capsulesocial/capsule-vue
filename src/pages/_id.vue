@@ -5,9 +5,9 @@
 			<article ref="topContainer" class="px-6 pt-6 z-20 w-full">
 				<!-- Back button -->
 				<div v-if="$route.params.id !== $store.state.session.id" class="pb-4">
-					<button class="flex flex-row items-center -mt-1" @click="$router.go(-1)">
+					<button class="flex flex-row items-center -mt-1 focus:outline-none" @click="$router.go(-1)">
 						<span class="bg-gray1 rounded-full p-1"><BackButton :reduceSize="true" /></span>
-						<h6 class="font-semibold ml-2 font-sans">Home</h6>
+						<h6 class="font-semibold ml-2 font-sans">Back</h6>
 					</button>
 				</div>
 				<!-- Name, socials, follow, bio -->
@@ -102,7 +102,11 @@
 				bg-opacity-50
 			"
 		>
-			<SettingsPopup class="bg-white rounded-lg" style="width: 589px" @close="toggleSettings" />
+			<SettingsPopup
+				class="bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg shadow-lg rounded-lg"
+				style="width: 589px; backdrop-filter: blur(10px)"
+				@close="toggleSettings"
+			/>
 		</div>
 	</section>
 </template>

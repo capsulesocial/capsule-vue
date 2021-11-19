@@ -72,7 +72,10 @@
 			"
 		>
 			<h6 class="text-primary font-semibold">Category</h6>
-			<button class="w-full p-2 my-1 mt-3 rounded-lg bg-gray1" @click="showCategoryDropdown = !showCategoryDropdown">
+			<button
+				class="w-full p-2 my-1 mt-3 rounded-lg bg-gray1 focus:outline-none"
+				@click="showCategoryDropdown = !showCategoryDropdown"
+			>
 				<div class="flex justify-between items-center">
 					<div v-if="category" class="flex flex-row items-center">
 						<img
@@ -126,7 +129,7 @@
 					v-model="tag"
 					type="text"
 					placeholder="Add a tag..."
-					class="focus:outline-none bg-gray1"
+					class="focus:outline-none bg-gray1 placeholder-gray5"
 					@keyup.enter="addTag"
 				/>
 			</div>
