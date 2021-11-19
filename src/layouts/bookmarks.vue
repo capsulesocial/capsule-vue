@@ -39,10 +39,7 @@
 							:posts="posts"
 						/>
 						<!-- Widgets -->
-						<aside
-							class="fixed overflow-y-auto"
-							style="margin-left: 770px; width: 450px; min-height: calc(100vh - 178px); height: calc(100vh - 178px)"
-						>
+						<aside class="fixed" style="margin-left: 770px; width: 450px">
 							<article
 								class="
 									w-full

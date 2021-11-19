@@ -13,9 +13,9 @@
 				<!-- Body -->
 				<div>
 					<!-- Content -->
-					<section v-if="visitProfile" class="flex flex-row">
+					<section v-if="visitProfile" class="flex flex-row mt-20">
 						<nuxt-child
-							style="width: 750px; min-height: calc(100vh - 88px); height: calc(100vh - 88px)"
+							style="width: 750px; min-height: calc(100vh - 160px); height: calc(100vh - 160px)"
 							class="
 								fixed
 								overflow-y-auto
@@ -37,10 +37,7 @@
 							:userIsFollowed="userIsFollowed"
 						/>
 						<!-- Widgets -->
-						<aside
-							class="fixed overflow-y-auto"
-							style="margin-left: 770px; width: 450px; min-height: calc(100vh - 88px); height: calc(100vh - 88px)"
-						>
+						<aside class="fixed" style="margin-left: 770px; width: 450px">
 							<ProfileWidget :location="visitProfile.location" />
 							<FollowersWidget v-if="followers.size > 0" :followers="followers" :updateFollowers="updateFollowers" />
 							<Footer />

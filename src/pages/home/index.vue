@@ -1,7 +1,7 @@
 <template>
 	<div id="index" class="w-full border border-lightBorder">
 		<section :class="$store.state.settings.darkMode ? 'text-lightPrimaryText ' : 'text-darkPrimaryText bg-darkBG'">
-			<nav class="flex flex-row z-20 text-base w-full px-6 pt-4">
+			<nav class="flex flex-row z-20 text-base w-full px-6 pt-6">
 				<div class="flex items-center">
 					<button
 						:class="algorithm === `NEW` ? `text-primary border-b-2 border-primary font-semibold` : `text-gray5`"
@@ -33,7 +33,7 @@
 			<div
 				v-if="posts"
 				class="fixed overflow-y-auto"
-				style="width: 748px; min-height: calc(100vh - 218px); height: calc(100vh - 218px)"
+				style="width: 748px; min-height: calc(100vh - 226px); height: calc(100vh - 226px)"
 			>
 				<!-- content -->
 				<article v-for="post in posts" :key="post.post._id">

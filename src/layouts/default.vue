@@ -25,7 +25,7 @@
 						<PostEditor
 							v-if="$store.state.widgets.primary === `editor` && $route.name === `home`"
 							ref="editor"
-							style="width: 750px"
+							style="width: 750px; min-height: calc(100vh - 160px); height: calc(100vh - 160px)"
 							class="
 								fixed
 								overflow-y-auto
@@ -55,13 +55,12 @@
 							:class="showWidgets ? `` : `z-10`"
 							:toggleFriend="toggleFriend"
 							:following="following"
+							:followers="followers"
+							:updateFollowers="updateFollowers"
+							:userIsFollowed="userIsFollowed"
 						/>
 						<!-- Widgets -->
-						<aside
-							class="fixed overflow-y-auto"
-							:class="showWidgets ? `z-10` : ``"
-							style="margin-left: 770px; width: 450px; min-height: calc(100vh - 178px); height: calc(100vh - 178px)"
-						>
+						<aside class="fixed" :class="showWidgets ? `z-10` : ``" style="margin-left: 770px; width: 450px">
 							<Widgets
 								:followers="followers"
 								:updateFollowers="updateFollowers"
@@ -95,6 +94,7 @@ interface IData {
 	showWidgets: boolean
 	following: Set<string>
 	followers: Set<string>
+	userIsFollowed: boolean
 }
 
 export default Vue.extend({
@@ -112,6 +112,7 @@ export default Vue.extend({
 			showWidgets: false,
 			following: new Set(),
 			followers: new Set(),
+			userIsFollowed: false,
 		}
 	},
 	async created() {
@@ -131,6 +132,7 @@ export default Vue.extend({
 		const { followers, following } = await getFollowersAndFollowing(this.$store.state.session.id)
 		this.following = following
 		this.followers = followers
+		this.userIsFollowed = followers.has(this.$store.state.session.id)
 	},
 	methods: {
 		async toggleFriend(authorID: string) {

@@ -34,10 +34,7 @@
 							@update="updateWordCount"
 						/>
 						<!-- Widgets -->
-						<aside
-							class="fixed overflow-y-auto"
-							style="margin-left: 770px; width: 450px; min-height: calc(100vh - 90px); height: calc(100vh - 90px)"
-						>
+						<aside class="fixed" style="margin-left: 770px; width: 450px">
 							<EditorWidgets :wordCount="wordCount" @post="handlePost" />
 							<Footer />
 						</aside>

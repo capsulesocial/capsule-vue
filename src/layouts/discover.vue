@@ -45,8 +45,8 @@
 						<!-- Widgets -->
 						<aside
 							:class="$route.name === `discover` ? `` : `-mt-20`"
-							class="fixed overflow-y-auto"
-							style="margin-left: 770px; width: 450px; min-height: calc(100vh - 178px); height: calc(100vh - 178px)"
+							class="fixed"
+							style="margin-left: 770px; width: 450px"
 						>
 							<TagsWidget
 								class="
