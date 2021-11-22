@@ -1,6 +1,6 @@
 <template>
-	<div id="index" class="w-full border border-lightBorder">
-		<section :class="$store.state.settings.darkMode ? 'text-lightPrimaryText ' : 'text-darkPrimaryText bg-darkBG'">
+	<div class="w-full border border-lightBorder">
+		<section>
 			<nav class="flex flex-row z-20 text-base w-full px-6 pt-6">
 				<div class="flex items-center">
 					<button
@@ -32,6 +32,7 @@
 			</nav>
 			<div
 				v-if="posts"
+				ref="container"
 				class="fixed overflow-y-auto"
 				style="width: 748px; min-height: calc(100vh - 226px); height: calc(100vh - 226px)"
 			>
@@ -109,15 +110,14 @@ export default Vue.extend({
 		})
 		this.currentOffset += this.limit
 		this.isLoading = false
-		document.getElementById(`index`)?.addEventListener(`scroll`, this.handleScroll)
-	},
-	destroyed() {
-		window.removeEventListener(`scroll`, this.handleScroll)
+		const container = this.$refs.container as HTMLElement
+		container.addEventListener(`scroll`, this.handleScroll)
 	},
 	methods: {
 		getReposts,
 		async sortFeed(a: Algorithm) {
-			document.getElementById(`index`)?.addEventListener(`scroll`, this.handleScroll)
+			const container = this.$refs.container as HTMLElement
+			container.addEventListener(`scroll`, this.handleScroll)
 			this.posts = []
 			this.currentOffset = 0
 			this.isLoading = true
@@ -143,7 +143,8 @@ export default Vue.extend({
 				})
 				if (res.length === 0) {
 					this.isLoading = false
-					document.getElementById(`index`)?.removeEventListener(`scroll`, this.handleScroll)
+					const container = this.$refs.container as HTMLElement
+					container.removeEventListener(`scroll`, this.handleScroll)
 				}
 				this.posts = this.posts.concat(res)
 			} catch (err) {
@@ -152,8 +153,8 @@ export default Vue.extend({
 				this.isLoading = false
 			}
 		},
-		async handleScroll() {
-			const { scrollTop, scrollHeight, clientHeight } = document.getElementById(`index`) as Element
+		async handleScroll(e: Event) {
+			const { scrollTop, scrollHeight, clientHeight } = e.srcElement as HTMLElement
 			if (scrollTop + clientHeight >= scrollHeight - 5) {
 				await this.loadPosts()
 				this.currentOffset += this.limit
