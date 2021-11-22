@@ -13,9 +13,9 @@
 				<!-- Body -->
 				<div>
 					<!-- Content -->
-					<section v-if="visitProfile" class="flex flex-row mt-20">
+					<section v-if="visitProfile" class="flex flex-row">
 						<nuxt-child
-							style="width: 750px; min-height: calc(100vh - 160px); height: calc(100vh - 160px)"
+							style="width: 750px; min-height: calc(100vh - 90px); height: calc(100vh - 90px)"
 							class="
 								fixed
 								overflow-y-auto

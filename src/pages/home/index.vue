@@ -52,12 +52,11 @@
 						:repostCount="'repostCount' in post ? post.repostCount : -1"
 					/>
 				</article>
-
-				<!-- Not loaded yet -->
-				<article v-show="isLoading" class="flex justify-center h-screen pt-12" style="width: 660px">
-					<div class="loader m-5"></div>
-				</article>
 			</div>
+			<!-- Not loaded yet -->
+			<article v-show="isLoading" class="flex justify-center h-screen pt-12" style="width: 660px">
+				<div class="loader m-5"></div>
+			</article>
 		</section>
 	</div>
 </template>
