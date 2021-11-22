@@ -64,46 +64,40 @@ export default Vue.extend({
 			algorithm: `NEW`,
 		}
 	},
-	async created() {
-		// Fetch posts from Orbit DB by ID
-		this.posts = await getPosts({ authorID: this.$route.params.id }, this.$store.state.session.id, {
-			sort: this.algorithm,
-			limit: this.limit,
-			offset: this.currentOffset,
-			following: this.$store.state.session.id,
-			reposts: false,
-		})
-		this.currentOffset += this.limit
-		this.isLoading = false
-		window.addEventListener(`scroll`, this.handleScroll)
+	created() {
+		this.loadPosts()
 	},
-	destroyed() {
-		window.removeEventListener(`scroll`, this.handleScroll)
+	mounted() {
+		const container = this.$parent.$refs.scrollContainer as HTMLElement
+		container.addEventListener(`scroll`, this.handleScroll)
 	},
 	methods: {
+		// Fetch posts from Orbit DB by ID
 		async loadPosts() {
 			this.isLoading = true
 			try {
 				const res = await getPosts({ authorID: this.$route.params.id }, this.$store.state.session.id, {
 					sort: this.algorithm,
-					limit: this.limit,
 					offset: this.currentOffset,
+					limit: this.limit,
+					following: this.$store.state.session.id,
 					reposts: false,
 				})
 				if (res.length === 0) {
-					this.isLoading = false
-					window.removeEventListener(`scroll`, this.handleScroll)
+					const container = this.$parent.$refs.scrollContainer as HTMLElement
+					container.removeEventListener(`scroll`, this.handleScroll)
 				}
 				this.posts = this.posts.concat(res)
 				this.currentOffset += this.limit
+				this.isLoading = false
 			} catch (err) {
 				alert(err)
 			} finally {
 				this.isLoading = false
 			}
 		},
-		async handleScroll() {
-			const { scrollTop, scrollHeight, clientHeight } = document.documentElement
+		async handleScroll(e: Event) {
+			const { scrollTop, scrollHeight, clientHeight } = e.srcElement as HTMLElement
 			if (scrollTop + clientHeight >= scrollHeight - 5) {
 				await this.loadPosts()
 			}

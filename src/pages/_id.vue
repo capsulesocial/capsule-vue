@@ -58,7 +58,7 @@
 				</div>
 				<!-- Bio -->
 				<div v-if="visitProfile.bio" class="pt-4 px-1">
-					<p class="">
+					<p>
 						{{ visitProfile.bio }}
 					</p>
 				</div>
@@ -76,7 +76,8 @@
 			</article>
 			<article
 				v-if="loadedContent()"
-				class="fixed overflow-y-auto"
+				ref="scrollContainer"
+				class="fixed overflow-y-auto pb-24"
 				style="width: 748px"
 				:style="`min-height: calc(100vh - ` + padding + ` - 90px); height: calc(100vh - ` + padding + ` - 90px)`"
 			>
@@ -179,8 +180,8 @@ export default Vue.extend({
 		window.addEventListener(`click`, this.handleClose, false)
 	},
 	mounted() {
-		// @ts-ignore
-		this.padding = this.$refs.topContainer.clientHeight + `px`
+		const topContainer = this.$refs.topContainer as HTMLElement
+		this.padding = topContainer.clientHeight + `px`
 	},
 	destroyed() {
 		window.removeEventListener(`click`, this.handleClose)
