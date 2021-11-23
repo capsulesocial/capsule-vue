@@ -23,7 +23,7 @@
 			</article>
 		</div>
 		<!-- Not loaded yet -->
-		<article v-show="isLoading" class="flex justify-center" style="width: 660px">
+		<article v-show="isLoading" class="flex justify-center w-full">
 			<div class="loader m-6"></div>
 		</article>
 	</section>

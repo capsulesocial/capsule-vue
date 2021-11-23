@@ -57,7 +57,7 @@
 				</article>
 			</div>
 			<!-- Not loaded yet -->
-			<article v-show="isLoading" class="flex justify-center h-screen pt-12" style="width: 660px">
+			<article v-show="isLoading" class="flex justify-center h-screen pt-12 w-full">
 				<div class="loader m-5"></div>
 			</article>
 		</section>
