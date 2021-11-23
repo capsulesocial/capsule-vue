@@ -1,7 +1,7 @@
 <template>
 	<main
 		class="h-screen p-0 m-0 bg-img"
-		:style="{ backgroundImage: `url(${require(`@/assets/images/brand/mainBG.png`)})` }"
+		:style="{ backgroundImage: `url(${require(`@/assets/images/brand/settings.jpg`)})` }"
 	>
 		<!-- Wrapper -->
 		<div class="w-full flex justify-center">
@@ -22,12 +22,7 @@
 					<!-- Content -->
 					<section class="flex flex-row mt-20">
 						<nuxt-child
-							style="
-								width: 750px;
-								min-height: calc(100vh - 150px);
-								height: calc(100vh - 150px);
-								backdrop-filter: blur(10px);
-							"
+							style="width: 750px; min-height: calc(100vh - 150px); height: calc(100vh - 150px)"
 							class="
 								fixed
 								overflow-y-auto
