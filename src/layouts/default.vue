@@ -35,12 +35,7 @@
 						/>
 						<nuxt-child
 							v-else
-							style="
-								width: 750px;
-								min-height: calc(100vh - 160px);
-								height: calc(100vh - 160px);
-								backdrop-filter: blur(10px);
-							"
+							style="width: 750px; min-height: calc(100vh - 160px); height: calc(100vh - 160px)"
 							class="fixed overflow-y-auto rounded-lg shadow-lg mr-5 bg-gradient-to-r from-lightBGStart to-lightBGStop"
 							:class="showWidgets ? `` : `z-10`"
 							:toggleFriend="toggleFriend"

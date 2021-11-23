@@ -15,6 +15,7 @@
 						? `shadow-lg rounded-lg p-5 bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg mt-10 max-h-screen overflow-y-auto`
 						: ``
 				"
+				style="backdrop-filter: blur(10px)"
 				:style="showComments ? `width: 750px; backdrop-filter: blur(10px)` : ``"
 			>
 				<div class="sticky top-0 z-10">
