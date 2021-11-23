@@ -1,7 +1,7 @@
 <template>
 	<main
 		class="h-screen p-0 m-0 bg-img"
-		:style="{ backgroundImage: `url(${require(`@/assets/images/brand/mainBG.png`)})` }"
+		:style="{ backgroundImage: `url(${require(`@/assets/images/brand/settings.jpg`)})` }"
 	>
 		<!-- Wrapper -->
 		<div class="w-full flex justify-center">
@@ -28,12 +28,22 @@
 						<nuxt-child
 							style="
 								width: 750px;
-								min-height: calc(100vh - 88px);
-								height: calc(100vh - 88px);
+								min-height: calc(100vh - 80px);
+								height: calc(100vh - 80px);
 								backdrop-filter: blur(10px);
 							"
 							:class="$route.name === `discover` ? `` : `-mt-20`"
-							class="fixed overflow-y-auto rounded-lg shadow-lg mr-5 bg-gradient-to-r from-lightBGStart to-lightBGStop"
+							class="
+								fixed
+								overflow-y-auto
+								rounded-lg
+								shadow-lg
+								mr-5
+								bg-gradient-to-r
+								from-lightBGStart
+								to-lightBGStop
+								box-content
+							"
 							:toggleFriend="toggleFriend"
 							:following="following"
 						/>
@@ -50,11 +60,11 @@
 									bg-gradient-to-r
 									from-lightBGStart
 									to-lightBGStop
-									backdrop-filter backdrop-blur-lg
 									border border-lightBorder
 									overflow-hidden
 									mb-5
 								"
+								style="backdrop-filter: blur(10px)"
 							/>
 							<Footer />
 						</aside>

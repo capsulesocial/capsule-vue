@@ -2,8 +2,7 @@
 	<section class="w-full border border-lightBorder">
 		<!-- Header -->
 		<div
-			class="bg-primary rounded-lg flex flex-row items-center shadow-lg h-56 border-lightBorder"
-			style="width: 748px"
+			class="bg-primary rounded-lg flex flex-row items-center shadow-lg h-56 border-lightBorder w-full"
 			:style="{
 				background: `linear-gradient(180deg, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.8) 100%), url(${require(`@/assets/images/category/` +
 					$route.params.category +
