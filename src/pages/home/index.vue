@@ -40,7 +40,7 @@
 				style="width: 748px; min-height: calc(100vh - 220px); height: calc(100vh - 220px)"
 			>
 				<!-- content -->
-				<article v-for="post in posts" :key="post.post._id">
+				<article v-for="post in posts" :key="post.post._id" style="backdrop-filter: blur(10px)">
 					<PostCard
 						:repost="post.repost"
 						:post="post.post"
