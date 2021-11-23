@@ -101,6 +101,7 @@
 				background-repeat: no-repeat;
 				background-position: -6em center;
 				background-size: cover;
+				background-color: rgba(256, 256, 256, 0.9);
 				backdrop-filter: blur(10px);
 			"
 			:style="{ backgroundImage: `url(${require(`@/assets/images/brand/configure-my-capsule.png`)})` }"
