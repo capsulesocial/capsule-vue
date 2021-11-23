@@ -134,10 +134,10 @@ export default Vue.extend({
 					return true
 				}
 			} else {
-				// alert(`Cannot undo repost at this time`)
 				await sendPostDeletion(`HIDE`, this.$props.repost._id, this.$props.repost.authorID)
 				alert(`repost deleted`)
 			}
+			this.$emit(`repostAction`)
 		},
 		handleShare(type: string) {
 			const shareElement = document.createElement(`textarea`)
