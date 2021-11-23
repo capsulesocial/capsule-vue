@@ -22,7 +22,12 @@
 					<!-- Content -->
 					<section class="flex flex-row mt-20">
 						<nuxt-child
-							style="width: 750px; min-height: calc(100vh - 160px); height: calc(100vh - 160px)"
+							style="
+								width: 750px;
+								min-height: calc(100vh - 150px);
+								height: calc(100vh - 150px);
+								backdrop-filter: blur(10px);
+							"
 							class="
 								fixed
 								overflow-y-auto
@@ -33,7 +38,6 @@
 								bg-gradient-to-r
 								from-lightBGStart
 								to-lightBGStop
-								backdrop-filter backdrop-blur-lg
 								border border-lightBorder
 							"
 							:posts="posts"
@@ -41,7 +45,13 @@
 						<!-- Widgets -->
 						<aside
 							class="fixed"
-							style="margin-left: 770px; width: 450px; min-height: calc(80vh - 160px); height: calc(80vh - 160px)"
+							style="
+								margin-left: 770px;
+								width: 450px;
+								min-height: calc(80vh - 160px);
+								height: calc(80vh - 160px);
+								backdrop-filter: blur(10px);
+							"
 						>
 							<article
 								class="
@@ -53,7 +63,6 @@
 									bg-gradient-to-r
 									from-lightBGStart
 									to-lightBGStop
-									backdrop-filter backdrop-blur-lg
 									mb-5
 									px-6
 									py-4

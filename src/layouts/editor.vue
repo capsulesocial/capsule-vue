@@ -16,7 +16,12 @@
 					<section class="flex flex-row">
 						<PostEditor
 							ref="editor"
-							style="width: 750px; min-height: calc(100vh - 88px); height: calc(100vh - 88px)"
+							style="
+								width: 750px;
+								min-height: calc(100vh - 88px);
+								height: calc(100vh - 88px);
+								backdrop-filter: blur(10px);
+							"
 							class="
 								fixed
 								overflow-y-auto
@@ -28,7 +33,6 @@
 								bg-gradient-to-r
 								from-lightBGStart
 								to-lightBGStop
-								backdrop-filter backdrop-blur-lg
 								border-lightBorder
 							"
 							@update="updateWordCount"
