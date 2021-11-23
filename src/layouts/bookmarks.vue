@@ -7,7 +7,7 @@
 		<div class="w-full flex justify-center">
 			<div class="flex flex-col" style="width: 1220px">
 				<!-- Header -->
-				<header class="w-full sticky top-0 py-5 bg-gradient-to-r z-10">
+				<header class="w-full sticky top-0 py-5 bg-gradient-to-r z-10 pb-4">
 					<Header :avatar="avatar" />
 				</header>
 				<!-- Body -->
@@ -39,10 +39,15 @@
 							:posts="posts"
 						/>
 						<!-- Widgets -->
-						<aside class="fixed" style="margin-left: 770px; width: 450px">
+						<aside
+							class="fixed"
+							style="margin-left: 770px; width: 450px; min-height: calc(80vh - 160px); height: calc(80vh - 160px)"
+						>
 							<article
 								class="
 									w-full
+									h-full
+									overflow-y-scroll
 									rounded-lg
 									shadow-lg
 									bg-gradient-to-r
