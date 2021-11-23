@@ -1,5 +1,5 @@
 <template>
-	<article v-if="!postDeleted" class="py-5 mx-6 border-b object-contain z-auto">
+	<article v-if="!postDeleted" class="object-contain z-auto">
 		<!-- popup backdrop -->
 		<div
 			:class="
@@ -9,7 +9,7 @@
 			"
 		>
 			<div
-				class="card"
+				class="card pt-5 px-6"
 				:class="
 					showComments
 						? `shadow-lg rounded-lg p-5 bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg mt-10 max-h-screen overflow-y-auto`
@@ -18,7 +18,7 @@
 				:style="showComments ? `width: 750px; backdrop-filter: blur(10px)` : ``"
 				style="backdrop-filter: blur(10px)"
 			>
-				<div class="sticky top-0 z-10">
+				<div class="sticky top-0 z-10 pb-5 border-b">
 					<!-- IF reposted -->
 					<div v-if="repostedBy !== `` && !hideRepostIcon" class="flex w-full -mt-2">
 						<RepostIcon :shrink="true" />
