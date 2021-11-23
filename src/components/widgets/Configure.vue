@@ -1,7 +1,7 @@
 <template>
 	<div class="popup w-full flex justify-center">
 		<!-- Container -->
-		<section style="width: 1220px; margin-top: 11rem" class="flex flex-row">
+		<section style="width: 1220px; margin-top: 10.5rem" class="flex flex-row">
 			<!-- Primary widget -->
 			<article
 				style="width: 750px; min-height: calc(100vh - 160px); height: calc(100vh - 160px); backdrop-filter: blur(5px)"
@@ -45,7 +45,7 @@
 				</div>
 			</article>
 			<!-- Right side: side widgets -->
-			<div class="fixed" style="margin-left: 770px; width: 450px">
+			<div class="fixed" style="margin-left: 770px; width: 453px">
 				<article
 					class="
 						overflow-y-auto
