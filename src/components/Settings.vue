@@ -187,8 +187,8 @@ export default Vue.extend({
 	},
 	methods: {
 		handleImageClick(): void {
-			// @ts-ignore
-			this.$refs.uploadedPic.click()
+			const b = this.$refs.uploadedPic as HTMLElement
+			b.click()
 		},
 		...mapMutations(sessionStoreNamespace, {
 			changeCID: MutationType.CHANGE_CID,
