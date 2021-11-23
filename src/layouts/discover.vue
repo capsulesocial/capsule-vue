@@ -26,27 +26,22 @@
 					<!-- Content -->
 					<section class="flex flex-row mt-20">
 						<nuxt-child
-							style="width: 750px; min-height: calc(100vh - 88px); height: calc(100vh - 88px)"
-							:class="$route.name === `discover` ? `` : `-mt-20`"
-							class="
-								fixed
-								overflow-y-auto
-								rounded-lg
-								shadow-lg
-								mr-5
-								bg-gradient-to-r
-								from-lightBGStart
-								to-lightBGStop
-								backdrop-filter backdrop-blur-lg
+							style="
+								width: 750px;
+								min-height: calc(100vh - 88px);
+								height: calc(100vh - 88px);
+								backdrop-filter: blur(10px);
 							"
+							:class="$route.name === `discover` ? `` : `-mt-20`"
+							class="fixed overflow-y-auto rounded-lg shadow-lg mr-5 bg-gradient-to-r from-lightBGStart to-lightBGStop"
 							:toggleFriend="toggleFriend"
 							:following="following"
 						/>
 						<!-- Widgets -->
 						<aside
-							:class="$route.name === `discover` ? `` : `-mt-20`"
-							class="fixed overflow-y-auto"
-							style="margin-left: 770px; width: 450px; min-height: calc(100vh - 150px); height: calc(100vh - 150px)"
+							:class="$route.name === `discover` ? `` : `-mt-24`"
+							class="fixed overflow-y-auto p-4 -mt-4"
+							style="margin-left: 755px; width: 485px; min-height: calc(100vh - 150px); height: calc(100vh - 150px)"
 						>
 							<TagsWidget
 								class="

@@ -3,8 +3,8 @@
 		class="w-full border border-lightBorder"
 		style="width: 750px; min-height: calc(100vh - 160px); height: calc(100vh - 160px)"
 	>
-		<div class="px-6 pt-4 pb-3">
-			<h2 class="text-xl text-primary font-semibold mb-2">Featured Categories</h2>
+		<div class="px-6 pt-4 pb-2">
+			<h2 class="text-xl text-primary font-semibold mb-1">Featured Categories</h2>
 			<p class="text-gray5">Read more of what you love by browsing top categories:</p>
 		</div>
 		<article
