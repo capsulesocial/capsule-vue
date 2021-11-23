@@ -1,7 +1,7 @@
 <template>
 	<div
 		class="w-full border border-lightBorder"
-		style="width: 750px; min-height: calc(100vh - 160px); height: calc(100vh - 160px)"
+		style="width: 750px; min-height: calc(100vh - 160px); height: calc(100vh - 160px); backdrop-filter: blur(10px)"
 	>
 		<div class="px-6 pt-4 pb-2">
 			<h2 class="text-xl text-primary font-semibold mb-1">Featured Categories</h2>
