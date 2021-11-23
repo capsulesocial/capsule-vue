@@ -26,7 +26,7 @@
 			class="fixed overflow-y-auto"
 			style="width: 748px; min-height: calc(100vh - 312px); height: calc(100vh - 312px)"
 		>
-			<article v-for="p in posts" :key="p.post._id" class="pt-4">
+			<article v-for="p in posts" :key="p.post._id">
 				<PostCard
 					:post="p.post"
 					:comments="p.comments"
