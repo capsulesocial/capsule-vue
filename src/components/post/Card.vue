@@ -16,6 +16,7 @@
 						: ``
 				"
 				:style="showComments ? `width: 750px; backdrop-filter: blur(10px)` : ``"
+				style="backdrop-filter: blur(10px)"
 			>
 				<div class="sticky top-0 z-10">
 					<!-- IF reposted -->
