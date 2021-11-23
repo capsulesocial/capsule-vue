@@ -59,6 +59,23 @@
 				<button class="w-48 focus:outline-none" disabled></button>
 			</div>
 		</div>
+		<!-- Background image, styling tab -->
+		<div v-show="tab === `styling`">
+			<h2 class="text-primary font-semibold mb-4 text-sm">Upload a background image</h2>
+			<div class="flex flex-row items-center w-full mb-4">
+				<label for="backgroundImage" class="w-48 font-semibold">Choose a photo</label>
+				<input
+					id="backgroundImage"
+					ref="backgroundImage"
+					class="hidden"
+					name="file"
+					type="file"
+					accept="image/*"
+					@change="handleImage"
+				/>
+				<button @click="handleImageClick">Upload an Image</button>
+			</div>
+		</div>
 		<!-- Submit button -->
 		<div class="w-full flex justify-center">
 			<button
@@ -76,11 +93,16 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapMutations } from 'vuex'
+import imageCompression from 'browser-image-compression'
 import { MutationType, getProfileFromSession, namespace as sessionStoreNamespace } from '~/store/session'
-import { setProfile } from '@/backend/profile'
+import { getProfile, setProfile } from '@/backend/profile'
+
+import { HTMLInputEvent } from '@/interfaces/HTMLInputEvent'
+import { addPhotoToIPFS, preUploadPhoto } from '@/backend/photos'
 
 interface IData {
 	nodeURL: string
+	backgroundImage: null | string | ArrayBuffer
 }
 
 export default Vue.extend({
@@ -95,6 +117,7 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			nodeURL: this.$store.state.nodeURL,
+			backgroundImage: null,
 		}
 	},
 	created() {
@@ -113,6 +136,44 @@ export default Vue.extend({
 			changeBio: MutationType.CHANGE_BIO,
 			changeLocation: MutationType.CHANGE_LOCATION,
 		}),
+		handleImageClick(): void {
+			const b = this.$refs.backgroundImage as HTMLElement
+			b.click()
+		},
+		async handleImage(e: HTMLInputEvent) {
+			if (!e.target.files) {
+				return
+			}
+			const image = e.target.files[0]
+			if (image) {
+				const options = {
+					maxSizeMB: 5,
+					maxWidthOrHeight: 1024,
+					useWebWorker: true,
+					initialQuality: 0.9,
+				}
+				try {
+					const compressedImage = await imageCompression(image, options)
+					const reader = new FileReader()
+					reader.readAsDataURL(compressedImage)
+					reader.onload = (i: Event) => {
+						if (i.target !== null && reader.result !== null) {
+							this.uploadImage(reader.result, compressedImage)
+						}
+					}
+				} catch (err) {
+					alert(err)
+				}
+			}
+		},
+		async uploadImage(image: string | ArrayBuffer, blobImage: Blob) {
+			const avatarCID = await addPhotoToIPFS(image)
+			await preUploadPhoto(avatarCID, blobImage)
+			this.backgroundImage = image
+			this.$store.commit(`changeBackgroundImage`, this.backgroundImage)
+			await this.updateProfile()
+			getProfile(this.$store.state.session.id, true) // Update cached profile
+		},
 		hasChanged() {
 			return this.nodeURL !== ``
 		},

@@ -1,8 +1,5 @@
 <template>
-	<main
-		class="h-screen p-0 m-0 bg-img"
-		:style="{ backgroundImage: `url(${require(`@/assets/images/brand/mainBG.png`)})` }"
-	>
+	<main class="h-screen p-0 m-0 bg-img" :style="{ backgroundImage: `url(` + $store.state.backgroundImage + `)` }">
 		<!-- Wrapper -->
 		<div class="w-full flex justify-center">
 			<div class="flex flex-col" style="width: 1220px">

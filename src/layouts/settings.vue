@@ -1,8 +1,5 @@
 <template>
-	<main
-		class="h-screen p-0 m-0 bg-img"
-		:style="{ backgroundImage: `url(${require(`@/assets/images/brand/mainBG.png`)})` }"
-	>
+	<main class="h-screen p-0 m-0 bg-img" :style="{ backgroundImage: `url(` + $store.state.backgroundImage + `)` }">
 		<!-- Wrapper -->
 		<div class="w-full flex justify-center">
 			<div class="flex flex-col" style="width: 1220px">
@@ -72,6 +69,13 @@
 									@click="changeTab(`network`)"
 								>
 									Nodes and Network
+								</button>
+								<button
+									:class="tab === `network` ? `bg-lightInput font-semibold` : ``"
+									class="w-full rounded-lg text-gray5 py-2 px-4 mb-4 text-left focus:outline-none"
+									@click="changeTab(`styling`)"
+								>
+									Appearance and Styling
 								</button>
 							</div>
 							<Footer />
