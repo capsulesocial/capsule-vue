@@ -1,11 +1,14 @@
 <template>
 	<div class="w-full border border-lightBorder">
 		<section>
-			<nav class="flex flex-row z-20 text-base w-full px-6 pt-6">
+			<nav
+				class="flex flex-row z-20 text-base w-full px-6 pt-4 bg-gradient-to-r from-lightBGStart to-lightBGStop"
+				style="backdrop-filter: blur(10px)"
+			>
 				<div class="flex items-center">
 					<button
 						:class="algorithm === `NEW` ? `text-primary border-b-2 border-primary font-semibold` : `text-gray5`"
-						class="h-full focus:outline-none w-full pb-2"
+						class="h-full focus:outline-none w-full pb-3"
 						@click="sortFeed('NEW')"
 					>
 						New Posts
@@ -14,7 +17,7 @@
 				<div class="flex items-center px-12">
 					<button
 						:class="algorithm === `TOP` ? ` text-primary border-b-2 border-primary font-semibold` : `text-gray5`"
-						class="h-full focus:outline-none w-full pb-2"
+						class="h-full focus:outline-none w-full pb-3"
 						@click="sortFeed('TOP')"
 					>
 						Top
@@ -23,7 +26,7 @@
 				<div class="flex items-center">
 					<button
 						:class="algorithm === `FOLLOWING` ? ` text-primary border-b-2 border-primary font-semibold` : `text-gray5`"
-						class="h-full focus:outline-none w-full pb-2"
+						class="h-full focus:outline-none w-full pb-3"
 						@click="sortFeed('FOLLOWING')"
 					>
 						Following
@@ -34,7 +37,7 @@
 				v-if="posts"
 				ref="container"
 				class="fixed overflow-y-auto"
-				style="width: 748px; min-height: calc(100vh - 226px); height: calc(100vh - 226px)"
+				style="width: 748px; min-height: calc(100vh - 220px); height: calc(100vh - 220px)"
 			>
 				<!-- content -->
 				<article v-for="post in posts" :key="post.post._id">
@@ -54,7 +57,7 @@
 				</article>
 			</div>
 			<!-- Not loaded yet -->
-			<article v-show="isLoading" class="flex justify-center h-screen pt-12" style="width: 660px">
+			<article v-show="isLoading" class="flex justify-center h-screen pt-12 w-full">
 				<div class="loader m-5"></div>
 			</article>
 		</section>

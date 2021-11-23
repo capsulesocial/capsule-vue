@@ -37,6 +37,7 @@
 				overflow-hidden
 				mb-5
 			"
+			style="backdrop-filter: blur(10px)"
 		/>
 		<TagsWidget
 			v-if="$store.state.widgets.secondary2 === `tags`"
@@ -51,6 +52,7 @@
 				overflow-hidden
 				mb-5
 			"
+			style="backdrop-filter: blur(10px)"
 		/>
 		<DraftsWidget
 			v-if="$store.state.widgets.secondary === `drafts`"
@@ -64,6 +66,7 @@
 				border border-lightBorder
 				mb-5
 			"
+			style="backdrop-filter: blur(10px)"
 		/>
 		<BookmarksWidgets
 			v-if="$store.state.widgets.secondary === `bookmarks`"
@@ -77,6 +80,7 @@
 				border border-lightBorder
 				mb-5
 			"
+			style="backdrop-filter: blur(10px)"
 		/>
 		<!-- Configure my Capsule -->
 		<button
@@ -92,7 +96,14 @@
 				w-full
 				focus:outline-none
 			"
-			style="height: 80px; background-repeat: no-repeat; background-position: -6em center; background-size: cover"
+			style="
+				height: 80px;
+				background-repeat: no-repeat;
+				background-position: -6em center;
+				background-size: cover;
+				background-color: rgba(256, 256, 256, 0.9);
+				backdrop-filter: blur(10px);
+			"
 			:style="{ backgroundImage: `url(${require(`@/assets/images/brand/configure-my-capsule.png`)})` }"
 			@click="toggleConfigure"
 		>

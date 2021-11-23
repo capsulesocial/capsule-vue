@@ -5,7 +5,7 @@
 			<!-- Magic header that disappears on scroll down -->
 			<header
 				id="header"
-				class="page-header flex items-center fixed top-0 z-10 bg-white py-2 rounded-b-lg"
+				class="page-header flex items-center fixed top-0 z-10 py-2 rounded-b-lg"
 				style="width: 760px; max-width: 760px; margin-top: 89px"
 			>
 				<div class="trigger-menu-wrapper flex justify-center w-full py-2 ease-in-out">

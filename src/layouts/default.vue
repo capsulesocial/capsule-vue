@@ -7,7 +7,7 @@
 		<div class="w-full flex justify-center">
 			<div class="flex flex-col" style="width: 1220px">
 				<!-- Header -->
-				<header class="w-full sticky top-0 py-5 bg-gradient-to-r z-10">
+				<header class="w-full sticky top-0 py-5 bg-gradient-to-r z-10 pb-4">
 					<Header :avatar="avatar" />
 				</header>
 				<!-- Body -->
@@ -25,33 +25,18 @@
 						<PostEditor
 							v-if="$store.state.widgets.primary === `editor` && $route.name === `home`"
 							ref="editor"
-							style="width: 750px; min-height: calc(100vh - 160px); height: calc(100vh - 160px)"
-							class="
-								fixed
-								overflow-y-auto
-								rounded-lg
-								shadow-lg
-								p-6
-								bg-gradient-to-r
-								from-lightBGStart
-								to-lightBGStop
-								backdrop-filter backdrop-blur-lg
+							style="
+								width: 750px;
+								min-height: calc(100vh - 160px);
+								height: calc(100vh - 160px);
+								backdrop-filter: blur(10px);
 							"
+							class="fixed overflow-y-auto rounded-lg shadow-lg p-6 bg-gradient-to-r from-lightBGStart to-lightBGStop"
 						/>
 						<nuxt-child
 							v-else
 							style="width: 750px; min-height: calc(100vh - 160px); height: calc(100vh - 160px)"
-							class="
-								fixed
-								overflow-y-auto
-								rounded-lg
-								shadow-lg
-								mr-5
-								bg-gradient-to-r
-								from-lightBGStart
-								to-lightBGStop
-								backdrop-filter backdrop-blur-lg
-							"
+							class="fixed overflow-y-auto rounded-lg shadow-lg mr-5 bg-gradient-to-r from-lightBGStart to-lightBGStop"
 							:class="showWidgets ? `` : `z-10`"
 							:toggleFriend="toggleFriend"
 							:following="following"
@@ -60,7 +45,11 @@
 							:userIsFollowed="userIsFollowed"
 						/>
 						<!-- Widgets -->
-						<aside class="fixed" :class="showWidgets ? `z-10` : ``" style="margin-left: 770px; width: 450px">
+						<aside
+							class="fixed overflow-y-auto p-4 -mt-4"
+							:class="showWidgets ? `z-10` : ``"
+							style="margin-left: 755px; width: 485px; min-height: calc(100vh - 150px); height: calc(100vh - 150px)"
+						>
 							<Widgets
 								:followers="followers"
 								:updateFollowers="updateFollowers"

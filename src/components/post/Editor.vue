@@ -16,7 +16,7 @@
 						id="title"
 						ref="title"
 						placeholder="Enter Title"
-						class="text-h1 font-serif font-semibold break-words w-full focus:outline-none"
+						class="text-h1 font-serif font-semibold break-words w-full focus:outline-none bg-transparent"
 						wrap="soft"
 						@input="handleTitle"
 					/>
@@ -29,7 +29,7 @@
 						id="subtitle"
 						ref="subtitle"
 						placeholder="Enter Subtitle"
-						class="font-serif text-h2 mt-2 text-gray5 break-words focus:outline-none w-full"
+						class="font-serif text-h2 mt-2 text-gray5 break-words focus:outline-none w-full bg-transparent"
 						wrap="soft"
 						@input="handleSubtitle"
 					/>

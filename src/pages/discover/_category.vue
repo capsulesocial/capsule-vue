@@ -2,8 +2,7 @@
 	<section class="w-full border border-lightBorder">
 		<!-- Header -->
 		<div
-			class="bg-primary rounded-lg flex flex-row items-center shadow-lg h-56 border-lightBorder"
-			style="width: 748px"
+			class="bg-primary rounded-lg flex flex-row items-center shadow-lg h-56 border-lightBorder w-full"
 			:style="{
 				background: `linear-gradient(180deg, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.8) 100%), url(${require(`@/assets/images/category/` +
 					$route.params.category +
@@ -27,7 +26,7 @@
 			class="fixed overflow-y-auto"
 			style="width: 748px; min-height: calc(100vh - 312px); height: calc(100vh - 312px)"
 		>
-			<article v-for="p in posts" :key="p.post._id" class="pt-4">
+			<article v-for="p in posts" :key="p.post._id">
 				<PostCard
 					:post="p.post"
 					:comments="p.comments"
@@ -38,7 +37,7 @@
 			</article>
 		</div>
 		<!-- Not loaded yet -->
-		<article v-show="isLoading" class="flex justify-center" style="width: 660px">
+		<article v-show="isLoading" class="flex justify-center w-full">
 			<div class="loader m-5"></div>
 		</article>
 	</section>

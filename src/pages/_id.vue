@@ -1,8 +1,8 @@
 <template>
 	<section class="w-full">
 		<div>
-			<!-- Fixed top -->
-			<article ref="topContainer" class="px-6 pt-6 z-20 w-full">
+			<!-- top -->
+			<article ref="topContainer" class="px-6 pt-6 z-20 w-full" style="backdrop-filter: blur(10px)">
 				<!-- Back button -->
 				<div v-if="$route.params.id !== $store.state.session.id" class="pb-4">
 					<button class="flex flex-row items-center -mt-1 focus:outline-none" @click="$router.go(-1)">

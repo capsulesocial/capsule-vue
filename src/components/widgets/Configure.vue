@@ -1,36 +1,39 @@
 <template>
 	<div class="popup w-full flex justify-center">
 		<!-- Container -->
-		<section style="width: 1220px; margin-top: 11rem" class="flex flex-row">
+		<section style="width: 1220px; margin-top: 10.5rem" class="flex flex-row">
 			<!-- Primary widget -->
 			<article
-				style="width: 750px; min-height: calc(100vh - 160px); height: calc(100vh - 160px)"
+				style="width: 750px; min-height: calc(100vh - 160px); height: calc(100vh - 160px); backdrop-filter: blur(5px)"
 				class="
 					overflow-y-auto
 					rounded-lg
 					shadow-lg
 					mr-5
 					p-6
+					pt-4
 					z-10
 					bg-gradient-to-r
 					from-lightBGStart
 					to-lightBGStop
-					backdrop-filter backdrop-blur-lg
 				"
 			>
-				Primary widget
+				<h3 class="text-primary text-base font-semibold mb-4">Primary widget</h3>
 				<!-- Select a main widget -->
 				<div class="grid grid-cols-3 gap-5">
-					<button class="rounded-lg bg-gray1 h-64" @click="changePrimary(`feed`)">
+					<button class="rounded-lg bg-gray1 h-64 focus:outline-none border-lightBorder" @click="changePrimary(`feed`)">
 						<div class="flex flex-col items-center">
-							<h4 class="text-gray7">Feed</h4>
+							<h4 class="text-gray7 mb-2">Post feed</h4>
 							<div class="w-40 h-8 rounded-lg bg-primary my-2"></div>
 							<div class="w-40 h-8 rounded-lg bg-primary mb-2"></div>
 							<div class="w-40 h-8 rounded-lg bg-primary mb-2"></div>
-							<CheckCircle :isChecked="$store.state.widgets.primary === `feed` ? true : false" class="w-6 h-6" />
+							<CheckCircle :isChecked="$store.state.widgets.primary === `feed` ? true : false" class="w-6 h-6 mt-2" />
 						</div>
 					</button>
-					<button class="rounded-lg bg-gray1 h-64" @click="changePrimary(`editor`)">
+					<button
+						class="rounded-lg bg-gray1 h-64 focus:outline-none border-lightBorder"
+						@click="changePrimary(`editor`)"
+					>
 						<div class="flex flex-col items-center">
 							<h4 class="text-gray7">Editor</h4>
 							<div class="h-32 w-40">
@@ -42,7 +45,7 @@
 				</div>
 			</article>
 			<!-- Right side: side widgets -->
-			<div class="fixed" style="margin-left: 770px; width: 450px">
+			<div class="fixed" style="margin-left: 770px; width: 453px">
 				<article
 					class="
 						overflow-y-auto
@@ -50,34 +53,44 @@
 						shadow-lg
 						mb-5
 						p-6
+						pt-4
 						z-10
 						bg-gradient-to-r
 						from-lightBGStart
 						to-lightBGStop
-						backdrop-filter backdrop-blur-lg
 					"
+					style="backdrop-filter: blur(5px)"
 				>
-					Side widget
+					<h3 class="text-primary text-base font-semibold mb-4">Side widget</h3>
 					<div class="grid grid-cols-2 gap-5">
-						<button class="rounded-lg bg-gray1" @click="changeSecondary2(`tags`)">
+						<button
+							class="rounded-lg bg-gray1 p-4 focus:outline-none border-lightBorder"
+							@click="changeSecondary2(`tags`)"
+						>
 							<div class="flex flex-col items-center">
-								<h4 class="text-gray7">Tags</h4>
+								<h4 class="text-gray7 mb-2">Tags</h4>
 								<div class="w-32 h-8 my-2 flex items-center rounded-lg bg-primary">
 									<span class="text-white pl-3">#</span>
 								</div>
-								<CheckCircle :isChecked="$store.state.widgets.secondary2 === `tags` ? true : false" class="w-6 h-6" />
+								<CheckCircle
+									:isChecked="$store.state.widgets.secondary2 === `tags` ? true : false"
+									class="w-6 h-6 mt-2"
+								/>
 							</div>
 						</button>
-						<button class="rounded-lg bg-gray1 h-32" @click="changeSecondary2(`followers`)">
+						<button
+							class="rounded-lg bg-gray1 p-4 focus:outline-none border-lightBorder"
+							@click="changeSecondary2(`followers`)"
+						>
 							<div class="flex flex-col items-center">
-								<h4 class="text-gray7">Followers</h4>
+								<h4 class="text-gray7 mb-2">Followers</h4>
 								<div class="w-32 h-8 my-2 flex items-center">
 									<span class="w-8 h-8 bg-primary rounded-full flex-shrink-0 flex-grow-0"></span>
 									<span class="w-full h-4 bg-gray4 rounded-full ml-2"></span>
 								</div>
 								<CheckCircle
 									:isChecked="$store.state.widgets.secondary2 === `followers` ? true : false"
-									class="w-6 h-6"
+									class="w-6 h-6 mt-2"
 								/>
 							</div>
 						</button>
@@ -89,29 +102,40 @@
 						rounded-lg
 						shadow-lg
 						p-6
+						pt-4
 						z-10
 						bg-gradient-to-r
 						from-lightBGStart
 						to-lightBGStop
 						backdrop-filter backdrop-blur-lg
 					"
+					style="backdrop-filter: blur(5px)"
 				>
-					Side widget
+					<h3 class="text-primary text-base font-semibold mb-4">Side widget</h3>
 					<div class="grid grid-cols-2 gap-5">
-						<button class="rounded-lg bg-gray1 h-32" @click="changeSecondary(`drafts`)">
+						<button
+							class="rounded-lg bg-gray1 p-4 focus:outline-none border-lightBorder"
+							@click="changeSecondary(`drafts`)"
+						>
 							<div class="flex flex-col items-center">
-								<h4 class="text-gray7">Drafts</h4>
+								<h4 class="text-gray7 mb-2">Drafts</h4>
 								<div class="w-32 h-8 my-2 flex justify-center items-center">
 									<span class="bg-primary rounded-lg p-2 text-white">
-										<PencilIcon class="fill-current" />
+										<PencilIcon class="fill-current text-white" />
 									</span>
 								</div>
-								<CheckCircle :isChecked="$store.state.widgets.secondary === `drafts` ? true : false" class="w-6 h-6" />
+								<CheckCircle
+									:isChecked="$store.state.widgets.secondary === `drafts` ? true : false"
+									class="w-6 h-6 mt-2"
+								/>
 							</div>
 						</button>
-						<button class="rounded-lg bg-gray1 h-32" @click="changeSecondary(`bookmarks`)">
+						<button
+							class="rounded-lg bg-gray1 p-4 focus:outline-none border-lightBorder"
+							@click="changeSecondary(`bookmarks`)"
+						>
 							<div class="flex flex-col items-center">
-								<h4 class="text-gray7">Bookmarks</h4>
+								<h4 class="text-gray7 mb-2">Bookmarks</h4>
 								<div class="w-32 h-8 my-2 flex justify-center items-center">
 									<span class="bg-primary rounded-lg p-2 text-white">
 										<BookmarksIcon class="fill-current text-white" />
@@ -119,7 +143,7 @@
 								</div>
 								<CheckCircle
 									:isChecked="$store.state.widgets.secondary === `bookmarks` ? true : false"
-									class="w-6 h-6"
+									class="w-6 h-6 mt-2"
 								/>
 							</div>
 						</button>

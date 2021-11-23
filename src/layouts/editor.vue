@@ -16,7 +16,12 @@
 					<section class="flex flex-row">
 						<PostEditor
 							ref="editor"
-							style="width: 750px; min-height: calc(100vh - 88px); height: calc(100vh - 88px)"
+							style="
+								width: 750px;
+								min-height: calc(100vh - 88px);
+								height: calc(100vh - 88px);
+								backdrop-filter: blur(10px);
+							"
 							class="
 								fixed
 								overflow-y-auto
@@ -28,13 +33,15 @@
 								bg-gradient-to-r
 								from-lightBGStart
 								to-lightBGStop
-								backdrop-filter backdrop-blur-lg
 								border-lightBorder
 							"
 							@update="updateWordCount"
 						/>
 						<!-- Widgets -->
-						<aside class="fixed" style="margin-left: 770px; width: 450px">
+						<aside
+							class="fixed overflow-y-auto p-4 -mt-4"
+							style="margin-left: 755px; width: 485px; min-height: calc(100vh - 70px); height: calc(100vh - 70px)"
+						>
 							<EditorWidgets :wordCount="wordCount" @post="handlePost" />
 							<Footer />
 						</aside>
@@ -104,5 +111,15 @@ export default Vue.extend({
 .bg-img {
 	background-attachment: fixed;
 	background-size: cover;
+}
+/* Hide scrollbar for Chrome, Safari and Opera */
+aside::-webkit-scrollbar {
+	display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+aside {
+	-ms-overflow-style: none; /* IE and Edge */
+	scrollbar-width: none; /* Firefox */
 }
 </style>

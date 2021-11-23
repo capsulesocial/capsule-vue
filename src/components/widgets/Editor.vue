@@ -2,18 +2,8 @@
 	<div class="">
 		<!-- Featured image -->
 		<article
-			class="
-				rounded-lg
-				shadow-lg
-				bg-gradient-to-r
-				from-lightBGStart
-				to-lightBGStop
-				backdrop-filter backdrop-blur-lg
-				border-lightBorder
-				px-6
-				py-4
-				mb-5
-			"
+			class="rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop border-lightBorder px-6 py-4 mb-5"
+			style="backdrop-filter: blur(10px)"
 		>
 			<h6 class="text-primary font-semibold">Featured Image</h6>
 			<button
@@ -58,18 +48,8 @@
 		</article>
 		<!-- Category -->
 		<article
-			class="
-				rounded-lg
-				shadow-lg
-				bg-gradient-to-r
-				from-lightBGStart
-				to-lightBGStop
-				backdrop-filter backdrop-blur-lg
-				border-lightBorder
-				px-6
-				py-4
-				mb-5
-			"
+			class="rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop border-lightBorder px-6 py-4 mb-5"
+			style="backdrop-filter: blur(10px)"
 		>
 			<h6 class="text-primary font-semibold">Category</h6>
 			<button
@@ -114,13 +94,13 @@
 				bg-gradient-to-r
 				from-lightBGStart
 				to-lightBGStop
-				backdrop-filter backdrop-blur-lg
 				border-lightBorder
 				px-6
 				py-4
 				pb-6
 				mb-5
 			"
+			style="backdrop-filter: blur(10px)"
 		>
 			<h6 class="text-primary font-semibold mb-3">Tags</h6>
 			<div class="w-full p-2 my-1 rounded-lg bg-gray1">
@@ -146,17 +126,8 @@
 			</div>
 		</article>
 		<article
-			class="
-				rounded-lg
-				shadow-lg
-				bg-gradient-to-r
-				from-lightBGStart
-				to-lightBGStop
-				backdrop-filter backdrop-blur-lg
-				border-lightBorder
-				p-6
-				mb-5
-			"
+			class="rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop border-lightBorder p-6 mb-5"
+			style="backdrop-filter: blur(10px)"
 		>
 			<div class="flex flex-row justify-between items-center">
 				<div>

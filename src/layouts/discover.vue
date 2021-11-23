@@ -7,17 +7,13 @@
 		<div class="w-full flex justify-center">
 			<div class="flex flex-col" style="width: 1220px">
 				<!-- Header -->
-				<header class="w-full sticky top-0 py-5 bg-gradient-to-r z-10">
+				<header class="w-full sticky top-0 py-5 bg-gradient-to-r z-10 pb-4">
 					<Header :avatar="avatar" />
 				</header>
 				<!-- Body -->
 				<div>
 					<!-- Title and peered nodes -->
-					<div
-						v-if="$route.name === `discover`"
-						class="fixed w-full flex justify-between items-center"
-						style="width: 1220px; height: 62px"
-					>
+					<div class="fixed w-full flex justify-between items-center" style="width: 1220px; height: 62px">
 						<!-- Title -->
 						<h1 class="font-semibold text-primary" style="font-size: 2.6rem">Browse Capsule</h1>
 						<!-- Peered nodes -->
@@ -26,7 +22,7 @@
 					<!-- Content -->
 					<section class="flex flex-row mt-20">
 						<nuxt-child
-							style="width: 750px; min-height: calc(100vh - 88px); height: calc(100vh - 88px)"
+							style="width: 750px; min-height: calc(100vh - 80px); height: calc(100vh - 80px)"
 							:class="$route.name === `discover` ? `` : `-mt-20`"
 							class="
 								fixed
@@ -37,16 +33,16 @@
 								bg-gradient-to-r
 								from-lightBGStart
 								to-lightBGStop
-								backdrop-filter backdrop-blur-lg
+								box-content
 							"
 							:toggleFriend="toggleFriend"
 							:following="following"
 						/>
 						<!-- Widgets -->
 						<aside
-							:class="$route.name === `discover` ? `` : `-mt-20`"
-							class="fixed"
-							style="margin-left: 770px; width: 450px"
+							:class="$route.name === `discover` ? `` : `-mt-24`"
+							class="fixed overflow-y-auto p-4 -mt-4"
+							style="margin-left: 755px; width: 485px; min-height: calc(100vh - 150px); height: calc(100vh - 150px)"
 						>
 							<TagsWidget
 								class="
@@ -55,11 +51,11 @@
 									bg-gradient-to-r
 									from-lightBGStart
 									to-lightBGStop
-									backdrop-filter backdrop-blur-lg
 									border border-lightBorder
 									overflow-hidden
 									mb-5
 								"
+								style="backdrop-filter: blur(10px)"
 							/>
 							<Footer />
 						</aside>

@@ -7,7 +7,7 @@
 		<div class="w-full flex justify-center">
 			<div class="flex flex-col" style="width: 1220px">
 				<!-- Header -->
-				<header class="w-full sticky top-0 py-5 bg-gradient-to-r z-10">
+				<header class="w-full sticky top-0 py-5 bg-gradient-to-r z-10 pb-4">
 					<Header :avatar="avatar" />
 				</header>
 				<!-- Body -->
@@ -22,7 +22,7 @@
 					<!-- Content -->
 					<section class="flex flex-row mt-20">
 						<nuxt-child
-							style="width: 750px; min-height: calc(100vh - 160px); height: calc(100vh - 160px)"
+							style="width: 750px; min-height: calc(100vh - 150px); height: calc(100vh - 150px)"
 							class="
 								fixed
 								overflow-y-auto
@@ -33,22 +33,31 @@
 								bg-gradient-to-r
 								from-lightBGStart
 								to-lightBGStop
-								backdrop-filter backdrop-blur-lg
 								border border-lightBorder
 							"
 							:posts="posts"
 						/>
 						<!-- Widgets -->
-						<aside class="fixed" style="margin-left: 770px; width: 450px">
+						<aside
+							class="fixed"
+							style="
+								margin-left: 770px;
+								width: 450px;
+								min-height: calc(80vh - 160px);
+								height: calc(80vh - 160px);
+								backdrop-filter: blur(10px);
+							"
+						>
 							<article
 								class="
 									w-full
+									h-full
+									overflow-y-scroll
 									rounded-lg
 									shadow-lg
 									bg-gradient-to-r
 									from-lightBGStart
 									to-lightBGStop
-									backdrop-filter backdrop-blur-lg
 									mb-5
 									px-6
 									py-4
