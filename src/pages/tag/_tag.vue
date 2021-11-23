@@ -1,7 +1,10 @@
 <template>
 	<section class="w-full border border-lightBorder">
-		<!--  -->
-		<div class="bg-primary bg-opacity-25 rounded-lg flex flex-row items-center shadow-lg p-2 border-lightBorder">
+		<!-- Tag page header -->
+		<div
+			class="rounded-lg flex flex-row items-center shadow-lg p-2 border-lightBorder"
+			style="backdrop-filter: blur(10px)"
+		>
 			<button class="bg-gray1 rounded-full flex-shrink-0 m-3 focus:outline-none" @click="$router.go(-1)">
 				<BackIcon />
 			</button>
