@@ -1,7 +1,7 @@
 <template>
 	<main
 		class="h-screen p-0 m-0 bg-img"
-		:style="{ backgroundImage: `url(${require(`@/assets/images/brand/settings.jpg`)})` }"
+		:style="{ backgroundImage: `url(${require(`@/assets/images/brand/mainBG.png`)})` }"
 	>
 		<!-- Wrapper -->
 		<div class="w-full flex justify-center">
