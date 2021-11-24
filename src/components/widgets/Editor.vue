@@ -45,6 +45,16 @@
 				<button class="text-primary focus:outline-none text-sm" @click="handleUploadImageClick">Change Image</button>
 				<button class="text-lightError focus:outline-none text-sm ml-4" @click="removeImage()">Remove Image</button>
 			</div>
+			<div class="w-full p-2 my-1 rounded-lg bg-gray1" :class="featuredPhoto ? `` : `hidden`">
+				<label for="caption" class="hidden" value="Enter hashtags"></label>
+				<input
+					v-model="caption"
+					type="text"
+					placeholder="Image caption"
+					class="focus:outline-none bg-gray1 placeholder-gray5"
+					@keyup.enter="saveCaption"
+				/>
+			</div>
 		</article>
 		<!-- Category -->
 		<article
@@ -178,6 +188,7 @@ interface IData {
 	categoryList: string[]
 	category: string
 	tag: string
+	caption: string
 	showCategoryDropdown: boolean
 }
 
@@ -200,6 +211,7 @@ export default Vue.extend({
 			categoryList: categories,
 			category: this.$store.state.draft.category,
 			tag: ``,
+			caption: ``,
 			showCategoryDropdown: false,
 		}
 	},
@@ -209,6 +221,10 @@ export default Vue.extend({
 		}
 	},
 	methods: {
+		saveCaption(): void {
+			console.log(this.caption)
+			// Save caption to draft state
+		},
 		handlePost(): void {
 			this.$emit(`post`)
 		},
@@ -242,6 +258,7 @@ export default Vue.extend({
 		},
 		removeImage(): void {
 			this.featuredPhoto = null
+			this.caption = ``
 			this.$store.commit(`draft/updateFeaturedPhotoCID`, null)
 		},
 		async uploadImage(image: any, blobImage: Blob): Promise<void> {
