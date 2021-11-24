@@ -5,7 +5,7 @@
 			<!-- Magic header that disappears on scroll down -->
 			<header
 				id="header"
-				class="page-header flex items-center fixed top-0 z-10 py-2 rounded-b-lg"
+				class="page-header flex items-center fixed top-0 z-10 py-2 rounded-b-lg bg-white opacity-75"
 				style="width: 760px; max-width: 760px; margin-top: 89px"
 			>
 				<div class="trigger-menu-wrapper flex justify-center w-full py-2 ease-in-out">
@@ -32,10 +32,29 @@
 				</div>
 			</header>
 			<section v-if="post !== null" class="pb-16 md:pb-5 my-5 pt-10 px-1">
+				<!-- Featured Photo -->
+				<article v-if="featuredPhoto !== null" class="mb-5 flex justify-center">
+					<img v-if="featuredPhoto !== null" :src="featuredPhoto" class="rounded-lg w-full shadow-lg" />
+				</article>
+
 				<!-- Category and elipses -->
 				<article class="w-full flex justify-between my-2">
 					<nuxt-link :to="`/discover/` + post.category" class="text-primary capitalize">{{ post.category }}</nuxt-link>
-					<MoreIcon />
+					<div class="flex">
+						<BookmarkButton
+							:postID="$route.params.post"
+							:hasBookmark="isBookmarked"
+							class="pr-2"
+							@clicked="getBookmarkStatus"
+						/>
+						<ShareButton
+							:post="post"
+							:cid="$route.params.post"
+							:class="'z-20'"
+							:hasRepost="hasReposted"
+							:repostCount="repostCount"
+						/>
+					</div>
 				</article>
 				<article>
 					<h1
@@ -51,15 +70,6 @@
 					>
 						{{ post.subtitle }}
 					</h2>
-				</article>
-
-				<!-- Featured Photo -->
-				<article v-if="featuredPhoto !== null" class="my-5 flex justify-center">
-					<img
-						v-if="featuredPhoto !== null"
-						:src="featuredPhoto"
-						class="border-neutralLightest border-2 rounded h-64 shadow"
-					/>
 				</article>
 
 				<!-- <hr v-if="this.$store.state.settings.darkMode" class="style-two my-5" />
@@ -129,7 +139,6 @@ import AuthorCard from '@/components/AuthorCard.vue'
 import TagCard from '@/components/Tag.vue'
 import BookmarkButton from '@/components/post/BookmarkButton.vue'
 import ShareButton from '@/components/post/Share.vue'
-import MoreIcon from '@/components/icons/More.vue'
 import Avatar from '@/components/Avatar.vue'
 import XIcon from '@/components/icons/X.vue'
 import FriendButton from '@/components/FriendButton.vue'
@@ -166,7 +175,6 @@ export default Vue.extend({
 		TagCard,
 		BookmarkButton,
 		ShareButton,
-		MoreIcon,
 		Avatar,
 		XIcon,
 		FriendButton,
