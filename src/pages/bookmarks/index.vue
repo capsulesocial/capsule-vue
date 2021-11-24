@@ -14,11 +14,17 @@
 		</article>
 		<article v-for="p in $props.posts" :key="p.post._id">
 			<PostCard
+				:repost="p.repost"
 				:post="p.post"
-				:bookmarked="p.bookmarked"
-				:toggleFriend="toggleFriend"
-				:usersFollowing="followingList"
+				:cid="p.post._id"
 				:comments="p.comments"
+				:toggleFriend="toggleFriend"
+				:usersFollowing="following"
+				:repostedBy="p.repost ? p.repost.authorID : undefined"
+				:bookmarked="p.bookmarked"
+				:hideRepostIcon="algorithm === `NEW` || algorithm === `TOP`"
+				:bookmarksCount="p.bookmarksCount"
+				:repostCount="p.repostCount"
 			/>
 		</article>
 	</div>

@@ -17,11 +17,17 @@
 		>
 			<article v-for="p in posts" :key="p.post._id">
 				<PostCard
+					:repost="p.repost"
 					:post="p.post"
+					:cid="p.post._id"
 					:comments="p.comments"
-					:usersFollowing="following"
 					:toggleFriend="toggleFriend"
+					:usersFollowing="following"
+					:repostedBy="p.repost ? p.repost.authorID : undefined"
 					:bookmarked="p.bookmarked"
+					:hideRepostIcon="algorithm === `NEW` || algorithm === `TOP`"
+					:bookmarksCount="p.bookmarksCount"
+					:repostCount="p.repostCount"
 				/>
 			</article>
 		</div>

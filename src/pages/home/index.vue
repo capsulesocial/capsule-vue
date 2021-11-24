@@ -40,19 +40,19 @@
 				style="width: 748px; min-height: calc(100vh - 220px); height: calc(100vh - 220px)"
 			>
 				<!-- content -->
-				<article v-for="post in posts" :key="post.post._id">
+				<article v-for="p in posts" :key="p.post._id">
 					<PostCard
-						:repost="post.repost"
-						:post="post.post"
-						:cid="post.post._id"
-						:comments="post.comments"
+						:repost="p.repost"
+						:post="p.post"
+						:cid="p.post._id"
+						:comments="p.comments"
 						:toggleFriend="toggleFriend"
 						:usersFollowing="following"
-						:repostedBy="'repost' in post ? post.repost.authorID : undefined"
-						:bookmarked="'bookmarked' in post ? post.bookmarked : false"
+						:repostedBy="p.repost ? p.repost.authorID : undefined"
+						:bookmarked="p.bookmarked"
 						:hideRepostIcon="algorithm === `NEW` || algorithm === `TOP`"
-						:bookmarksCount="'bookmarksCount' in post ? post.bookmarksCount : -1"
-						:repostCount="'repostCount' in post ? post.repostCount : -1"
+						:bookmarksCount="p.bookmarksCount"
+						:repostCount="p.repostCount"
 					/>
 				</article>
 			</div>
@@ -68,11 +68,11 @@
 import Vue from 'vue'
 import type { PropType } from 'vue'
 import PostCard from '@/components/post/Card.vue'
-import { getPosts, Algorithm, IPostResponse } from '@/backend/post'
-import { getReposts, IRepostRetrieved } from '@/backend/reposts'
+import { getPosts, Algorithm, IRepostResponse, IPostResponse } from '@/backend/post'
+import { getReposts } from '@/backend/reposts'
 
 interface IData {
-	posts: Array<IPostResponse | IRepostRetrieved>
+	posts: Array<IRepostResponse | IPostResponse>
 	isLoading: boolean
 	algorithm: Algorithm
 	currentOffset: number

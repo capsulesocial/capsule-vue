@@ -13,14 +13,15 @@
 				:action="togglePostEditor"
 			/>
 		</article>
-		<article v-for="post in posts" :key="post.post._id">
+		<article v-for="p in posts" :key="p.post._id">
 			<PostCard
-				:post="post.post"
-				:profile="profile"
-				:comments="post.comments"
-				:bookmarked="post.bookmarked"
-				:repostCount="post.repostCount"
-				:bookmarksCount="post.bookmarksCount"
+				:post="p.post"
+				:cid="p.post._id"
+				:comments="p.comments"
+				:bookmarked="p.bookmarked"
+				:hideRepostIcon="algorithm === `NEW` || algorithm === `TOP`"
+				:bookmarksCount="p.bookmarksCount"
+				:repostCount="p.repostCount"
 			/>
 		</article>
 		<article v-show="isLoading" class="flex justify-center">

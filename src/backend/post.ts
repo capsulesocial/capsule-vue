@@ -4,7 +4,7 @@ import { signContent } from './utilities/keys'
 import ipfs from './utilities/ipfs'
 import { uint8ArrayToHexString } from './utilities/helpers'
 import { capsuleOrbit } from './utilities/config'
-import { IRepostRetrieved } from './reposts'
+import { IRepost } from './reposts'
 import { ICommentData } from './comment'
 export interface Tag {
 	name: string
@@ -23,13 +23,19 @@ export interface Post {
 
 export type RetrievedPost = Omit<Post, `content`> & { _id: string; excerpt: string }
 
-export interface IPostResponse {
+export interface IGenericPostResponse {
 	post: RetrievedPost
 	comments: ICommentData[]
 	bookmarked: boolean
 	usersParticipating: string[]
 	bookmarksCount: number
 	repostCount: number
+	repost?: IRepost
+}
+
+export type IPostResponse = Omit<IGenericPostResponse, `repost`>
+export interface IRepostResponse extends IGenericPostResponse {
+	repost: IRepost
 }
 
 export type Algorithm = `NEW` | `FOLLOWING` | `TOP`
@@ -104,12 +110,12 @@ export async function getPosts(
 	filter: { category?: string; authorID?: string; tag?: string; bookmarkedBy?: string },
 	bookmarker: string,
 	options: IGetPostsAndRepostsOptions,
-): Promise<IRepostRetrieved[]>
+): Promise<IRepostResponse[]>
 export async function getPosts(
 	filter: { category?: string; authorID?: string; tag?: string; bookmarkedBy?: string },
 	bookmarker: string,
 	options: IGetPostsOptions,
-): Promise<IPostResponse[] | IRepostRetrieved[]> {
+): Promise<IPostResponse[] | IRepostResponse[]> {
 	const { sort, offset = 0, limit = 10, following, reposts } = options
 	if (sort === `FOLLOWING` && !following) {
 		throw new Error(`No following provided`)

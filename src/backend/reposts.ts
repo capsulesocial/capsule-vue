@@ -1,10 +1,9 @@
 import axios from 'axios'
 import { signContent } from './utilities/keys'
-import { Algorithm, RetrievedPost } from './post'
+import { Algorithm, IRepostResponse } from './post'
 import { capsuleOrbit } from './utilities/config'
 import { uint8ArrayToHexString } from './utilities/helpers'
 import ipfs from './utilities/ipfs'
-import { ICommentData } from './comment'
 
 export async function sendRepost(authorID: string, postCID: string, content: string): Promise<string> {
 	const data = {
@@ -39,18 +38,12 @@ export interface IRepost {
 	_id: string
 }
 
-export interface IRepostRetrieved {
-	repost: IRepost
-	post: RetrievedPost
-	comments: ICommentData[]
-}
-
 export async function getReposts(
 	authorID: string,
 	sort: Algorithm = `NEW`,
 	postCID?: string,
 	following?: string,
-): Promise<IRepostRetrieved[]> {
+): Promise<IRepostResponse[]> {
 	if (sort === `FOLLOWING` && !following) {
 		throw new Error(`Following not specified`)
 	}

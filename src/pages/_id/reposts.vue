@@ -15,15 +15,16 @@
 		</article>
 		<div v-for="p in reposts" :key="p.repost._id">
 			<PostCard
-				:comments="p.comments"
 				:repost="p.repost"
 				:post="p.post"
-				:authorID="p.post.authorID"
-				:authorUsername="p.post.authorID"
 				:cid="p.post._id"
-				:repostedBy="$route.params.id"
+				:comments="p.comments"
 				:toggleFriend="toggleFriend"
 				:usersFollowing="following"
+				:repostedBy="p.repost.authorID"
+				:bookmarked="p.bookmarked"
+				:bookmarksCount="p.bookmarksCount"
+				:repostCount="p.repostCount"
 			/>
 		</div>
 	</section>
@@ -33,12 +34,13 @@
 import Vue from 'vue'
 import type { PropType } from 'vue'
 import PostCard from '@/components/post/Card.vue'
-import { getReposts, IRepostRetrieved } from '@/backend/reposts'
+import { getReposts } from '@/backend/reposts'
 import { Profile } from '@/backend/profile'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
+import { IRepostResponse } from '@/backend/post'
 
 interface IData {
-	reposts: Array<IRepostRetrieved>
+	reposts: Array<IRepostResponse>
 	isLoading: boolean
 	currentOffset: number
 	limit: number
