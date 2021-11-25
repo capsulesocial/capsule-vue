@@ -207,6 +207,11 @@ export default Vue.extend({
 			if (p) {
 				this.author = p
 			}
+			if (p && p.avatar.length > 1) {
+				getPhotoFromIPFS(p.avatar).then((photo) => {
+					this.authorAvatar = photo
+				})
+			}
 		})
 		getFollowersAndFollowing(this.$store.state.session.id).then((data) => {
 			if (this.post !== null) {
@@ -221,11 +226,7 @@ export default Vue.extend({
 		}
 		// Convert markdown to HTML
 		this.content = marked.parse(this.post.content)
-		if (this.author && this.author.avatar.length > 1) {
-			getPhotoFromIPFS(this.author.avatar).then((p) => {
-				this.authorAvatar = p
-			})
-		}
+
 		// Get reposts
 		const repostData = await getReposts(this.$store.state.session.id)
 		repostData.forEach((p) => {
