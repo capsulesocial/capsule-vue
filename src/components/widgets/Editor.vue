@@ -51,8 +51,8 @@
 					v-model="caption"
 					type="text"
 					placeholder="Image caption"
-					class="focus:outline-none bg-gray1 placeholder-gray5"
-					@keyup.enter="saveCaption"
+					class="focus:outline-none bg-gray1 placeholder-gray5 w-full"
+					@change="saveCaption"
 				/>
 			</div>
 		</article>

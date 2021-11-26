@@ -3,8 +3,8 @@
 		<div class="flex flex-row justify-between items-center">
 			<div>
 				<h6 class="text-sm text-gray6 mb-4 font-sans">Written By:</h6>
-				<div class="flex px-5">
-					<Avatar :avatar="authorAvatar" :authorID="authorID" size="w-16 h-16" />
+				<div class="flex pr-5">
+					<Avatar :avatar="authorAvatar" :authorID="authorID" size="w-16 h-16" class="flex-shrink-0 self-start" />
 					<div class="mx-4">
 						<nuxt-link :to="'/' + authorID" class="text-2xl">
 							{{ authorName }}

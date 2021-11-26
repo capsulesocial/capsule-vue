@@ -48,7 +48,7 @@
 				<!-- Featured Photo -->
 				<article v-if="featuredPhoto !== null" class="mb-5 flex flex-col justify-center">
 					<img :src="featuredPhoto" class="rounded-lg w-full shadow-lg" />
-					<p v-if="post.featuredPhotoCaption" class="-mt-8 ml-4">{{ post.featuredPhotoCaption }}</p>
+					<p v-if="post.featuredPhotoCaption">{{ post.featuredPhotoCaption }}</p>
 				</article>
 				<!-- Category and elipses -->
 				<article class="w-full flex justify-between my-2">
