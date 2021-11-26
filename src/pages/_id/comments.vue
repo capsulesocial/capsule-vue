@@ -1,5 +1,5 @@
 <template>
-	<section class="px-10">
+	<section class="px-6">
 		<article v-if="comments.length == 0" class="grid justify-items-center mt-32">
 			<p class="text-sm text-gray5 mb-5">
 				<span v-if="$route.params.id === $store.state.session.id">

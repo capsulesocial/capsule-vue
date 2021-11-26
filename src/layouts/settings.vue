@@ -13,7 +13,12 @@
 					<section class="flex flex-row">
 						<nuxt-child
 							:tab="tab"
-							style="width: 750px; min-height: calc(100vh - 88px); height: calc(100vh - 88px)"
+							style="
+								width: 750px;
+								min-height: calc(100vh - 88px);
+								height: calc(100vh - 88px);
+								backdrop-filter: blur(10px);
+							"
 							class="
 								fixed
 								overflow-y-auto
@@ -26,7 +31,6 @@
 								bg-gradient-to-r
 								from-lightBGStart
 								to-lightBGStop
-								backdrop-filter backdrop-blur-lg
 								border-lightBorder
 							"
 						/>
@@ -39,7 +43,6 @@
 									bg-gradient-to-r
 									from-lightBGStart
 									to-lightBGStop
-									backdrop-filter backdrop-blur-lg
 									border border-lightBorder
 									overflow-hidden
 									mb-5
@@ -47,6 +50,7 @@
 									px-6
 									pb-2
 								"
+								style="backdrop-filter: blur(10px)"
 							>
 								<h3 class="text-primary text-base font-semibold pb-4">Settings</h3>
 								<button
@@ -71,7 +75,7 @@
 									Nodes and Network
 								</button>
 								<button
-									:class="tab === `network` ? `bg-lightInput font-semibold` : ``"
+									:class="tab === `styling` ? `bg-lightInput font-semibold` : ``"
 									class="w-full rounded-lg text-gray5 py-2 px-4 mb-4 text-left focus:outline-none"
 									@click="changeTab(`styling`)"
 								>

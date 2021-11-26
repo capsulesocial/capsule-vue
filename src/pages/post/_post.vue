@@ -1,12 +1,25 @@
 <template>
 	<div v-if="post && author" id="post" class="w-full flex justify-center">
 		<!-- Inner post area -->
-		<div style="width: 760px; max-width: 760px">
+		<div style="width: 760px; max-width: 760px; height: fit-content">
 			<!-- Magic header that disappears on scroll down -->
 			<header
 				id="header"
-				class="page-header flex items-center fixed top-0 z-10 py-2 rounded-b-lg"
-				style="width: 760px; max-width: 760px; margin-top: 89px"
+				class="
+					page-header
+					flex
+					items-center
+					sticky
+					top-0
+					z-10
+					py-2
+					px-4
+					rounded-b-lg
+					bg-gradient-to-r
+					from-lightBGStart
+					to-lightBGStop
+				"
+				style="width: 760px; max-width: 760px; backdrop-filter: blur(10px)"
 			>
 				<div class="trigger-menu-wrapper flex justify-center w-full py-2 ease-in-out">
 					<div class="md:min-w-max md:max-w-3xl w-full flex justify-between">
@@ -31,7 +44,7 @@
 					</div>
 				</div>
 			</header>
-			<section v-if="post !== null" class="pb-16 md:pb-5 my-5 pt-10 px-1">
+			<section v-if="post !== null" class="pb-16 md:pb-5 my-5 pt-2 px-1">
 				<!-- Category and elipses -->
 				<article class="w-full flex justify-between my-2">
 					<nuxt-link :to="`/discover/` + post.category" class="text-primary capitalize">{{ post.category }}</nuxt-link>

@@ -32,7 +32,7 @@
 						/>
 						<nuxt-child
 							v-else
-							style="width: 750px; min-height: calc(100vh - 160px); height: calc(100vh - 160px)"
+							style="width: 750px; min-height: calc(100vh - 150px); height: calc(100vh - 150px)"
 							class="fixed overflow-y-auto rounded-lg shadow-lg mr-5 bg-gradient-to-r from-lightBGStart to-lightBGStop"
 							:class="showWidgets ? `` : `z-10`"
 							:toggleFriend="toggleFriend"

@@ -5,7 +5,7 @@
 			:class="showSocialShares ? 'text-primary' : ''"
 			@click.stop="toggleDropdown"
 		>
-			<div class="flex text-gray7 hover:text-primary hover:fill-primary">
+			<div class="flex text-gray5 hover:text-primary hover:fill-primary">
 				<ShareIcon :isActive="showSocialShares" />
 				<span class="ml-1">{{ repostCount }}</span>
 			</div>

@@ -17,7 +17,7 @@
 					alt="$store.state.draft.title"
 					class="h-16 w-20 rounded-lg"
 				/>
-				<span v-else class="h-16 w-20 bg-gray1 text-gray7 rounded-lg flex items-center justify-center">
+				<span v-else class="h-16 w-20 bg-gray1 text-gray5 rounded-lg flex items-center justify-center">
 					<ImageIcon class="w-5 h-5 fill-current" />
 				</span>
 			</div>

@@ -23,11 +23,14 @@
 				<div class="grid grid-cols-3 gap-5">
 					<button class="rounded-lg bg-gray1 h-64 focus:outline-none border-lightBorder" @click="changePrimary(`feed`)">
 						<div class="flex flex-col items-center">
-							<h4 class="text-gray7 mb-2">Post feed</h4>
+							<h4 class="text-gray5 mb-2">Post feed</h4>
 							<div class="w-40 h-8 rounded-lg bg-primary my-2"></div>
 							<div class="w-40 h-8 rounded-lg bg-primary mb-2"></div>
 							<div class="w-40 h-8 rounded-lg bg-primary mb-2"></div>
-							<CheckCircle :isChecked="$store.state.widgets.primary === `feed` ? true : false" class="w-6 h-6 mt-2" />
+							<CheckCircle
+								:isChecked="$store.state.widgets.primary === `feed` ? true : false"
+								class="w-6 h-6 mt-2 text-gray5"
+							/>
 						</div>
 					</button>
 					<button
@@ -35,11 +38,14 @@
 						@click="changePrimary(`editor`)"
 					>
 						<div class="flex flex-col items-center">
-							<h4 class="text-gray7">Editor</h4>
+							<h4 class="text-gray5">Editor</h4>
 							<div class="h-32 w-40">
 								<span class="text-6xl text-primary font-semibold">Aa</span>
 							</div>
-							<CheckCircle :isChecked="$store.state.widgets.primary === `editor` ? true : false" class="w-6 h-6" />
+							<CheckCircle
+								:isChecked="$store.state.widgets.primary === `editor` ? true : false"
+								class="w-6 h-6 text-gray5"
+							/>
 						</div>
 					</button>
 				</div>
@@ -68,13 +74,13 @@
 							@click="changeSecondary2(`tags`)"
 						>
 							<div class="flex flex-col items-center">
-								<h4 class="text-gray7 mb-2">Tags</h4>
+								<h4 class="text-gray5 mb-2">Tags</h4>
 								<div class="w-32 h-8 my-2 flex items-center rounded-lg bg-primary">
 									<span class="text-white pl-3">#</span>
 								</div>
 								<CheckCircle
 									:isChecked="$store.state.widgets.secondary2 === `tags` ? true : false"
-									class="w-6 h-6 mt-2"
+									class="w-6 h-6 mt-2 text-gray5"
 								/>
 							</div>
 						</button>
@@ -83,14 +89,14 @@
 							@click="changeSecondary2(`followers`)"
 						>
 							<div class="flex flex-col items-center">
-								<h4 class="text-gray7 mb-2">Followers</h4>
+								<h4 class="text-gray5 mb-2">Followers</h4>
 								<div class="w-32 h-8 my-2 flex items-center">
 									<span class="w-8 h-8 bg-primary rounded-full flex-shrink-0 flex-grow-0"></span>
 									<span class="w-full h-4 bg-gray4 rounded-full ml-2"></span>
 								</div>
 								<CheckCircle
 									:isChecked="$store.state.widgets.secondary2 === `followers` ? true : false"
-									class="w-6 h-6 mt-2"
+									class="w-6 h-6 mt-2 text-gray5"
 								/>
 							</div>
 						</button>
@@ -118,7 +124,7 @@
 							@click="changeSecondary(`drafts`)"
 						>
 							<div class="flex flex-col items-center">
-								<h4 class="text-gray7 mb-2">Drafts</h4>
+								<h4 class="text-gray5 mb-2">Drafts</h4>
 								<div class="w-32 h-8 my-2 flex justify-center items-center">
 									<span class="bg-primary rounded-lg p-2 text-white">
 										<PencilIcon class="fill-current text-white" />
@@ -126,7 +132,7 @@
 								</div>
 								<CheckCircle
 									:isChecked="$store.state.widgets.secondary === `drafts` ? true : false"
-									class="w-6 h-6 mt-2"
+									class="w-6 h-6 mt-2 text-gray5"
 								/>
 							</div>
 						</button>
@@ -135,7 +141,7 @@
 							@click="changeSecondary(`bookmarks`)"
 						>
 							<div class="flex flex-col items-center">
-								<h4 class="text-gray7 mb-2">Bookmarks</h4>
+								<h4 class="text-gray5 mb-2">Bookmarks</h4>
 								<div class="w-32 h-8 my-2 flex justify-center items-center">
 									<span class="bg-primary rounded-lg p-2 text-white">
 										<BookmarksIcon class="fill-current text-white" />
@@ -143,7 +149,7 @@
 								</div>
 								<CheckCircle
 									:isChecked="$store.state.widgets.secondary === `bookmarks` ? true : false"
-									class="w-6 h-6 mt-2"
+									class="w-6 h-6 mt-2 text-gray5"
 								/>
 							</div>
 						</button>

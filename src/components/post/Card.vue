@@ -20,9 +20,9 @@
 			>
 				<div class="sticky top-0 z-10 pb-5 border-b">
 					<!-- IF reposted -->
-					<div v-if="repostedBy !== `` && !hideRepostIcon" class="flex w-full -mt-2">
+					<div v-if="repostedBy !== `` && !hideRepostIcon" class="flex w-full -mt-2 mb-2 text-gray5">
 						<RepostIcon :shrink="true" />
-						<p class="pl-2 italic text-sm">
+						<p class="pl-2 text-sm text-gray5">
 							<nuxt-link :to="`/` + repostedBy">{{ repostedBy }} </nuxt-link>
 							reposted
 						</p>
@@ -82,9 +82,9 @@
 								<TagPill v-for="t in post.tags" :key="t.name" :tag="t.name" class="mr-4" />
 							</div>
 							<!-- Comment and share -->
-							<div class="flex mt-1">
+							<div class="flex mt-1 text-gray5">
 								<button
-									class="flex items-end focus:outline-none mr-2 text-gray7 hover:text-primary hover:fill-primary"
+									class="flex items-end focus:outline-none mr-2 text-gray5 hover:text-primary hover:fill-primary"
 									:class="showComments ? `text-primary` : ``"
 									@click="showComments = !showComments"
 								>
