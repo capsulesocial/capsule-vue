@@ -62,7 +62,7 @@
 						{{ visitProfile.bio }}
 					</p>
 				</div>
-				<div class="flex flex-col md:flex-row w-full justify-between text-gray7 pt-6">
+				<div class="flex flex-col md:flex-row w-full justify-between text-gray5 pt-6">
 					<nuxt-link :to="'/' + $route.params.id" class="pb-1" :class="getStyles('id')">
 						<span class="px-4">Posts</span>
 					</nuxt-link>

@@ -1,5 +1,5 @@
 <template>
-	<section class="px-6">
+	<section class="px-0">
 		<article v-if="reposts.length == 0" class="grid justify-items-center mt-32">
 			<p class="text-sm text-gray5 mb-5">
 				<span v-if="$route.params.id === $store.state.session.id"

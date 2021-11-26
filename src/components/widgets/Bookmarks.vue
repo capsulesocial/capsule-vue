@@ -10,7 +10,7 @@
 			<!-- Left side: title and author name -->
 			<div class="flex flex-col flex-grow">
 				<h5 class="font-semibold">{{ p.title }}</h5>
-				<h6 class="text-gray7">By {{ p.authorID }}</h6>
+				<h6 class="text-gray5">By {{ p.authorID }}</h6>
 			</div>
 			<!-- Right side: featured photo -->
 			<img v-if="p.featuredPhoto" :src="p.featuredPhoto" class="flex-shrink-0 h-12 object-contain rounded-lg" />

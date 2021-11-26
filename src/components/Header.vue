@@ -33,10 +33,10 @@
 					border border-lightBorder
 				"
 			>
-				<nuxt-link :to="$store.state.session.id" class="text-left w-full flex flex-row items-center text-gray7 mb-4"
+				<nuxt-link :to="$store.state.session.id" class="text-left w-full flex flex-row items-center text-gray5 mb-4"
 					><ProfileIcon class="flex-shrink-0 w-5 h-5 mr-2" />Profile</nuxt-link
 				>
-				<nuxt-link to="/settings" class="text-left w-full flex flex-row items-center text-gray7 mb-4">
+				<nuxt-link to="/settings" class="text-left w-full flex flex-row items-center text-gray5 mb-4">
 					<SettingsIcon class="flex-shrink-0 w-5 h-5 mr-2" />Settings</nuxt-link
 				>
 				<button
