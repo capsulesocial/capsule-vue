@@ -42,7 +42,7 @@ export async function signContent<T>(content: T) {
 
 export function verifyContent(content: Post, signature: Uint8Array, publicKey: Uint8Array) {
 	const ec = new TextEncoder()
-	const message = ec.encode(JSON.stringify(content))
+	const message = ec.encode(JSON.stringify(stableOrderObj(content)))
 	return sign.detached.verify(message, signature, publicKey)
 }
 
