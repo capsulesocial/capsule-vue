@@ -17,6 +17,7 @@ export interface Post {
 	content: string
 	category: string
 	featuredPhotoCID?: string | null
+	featuredPhotoCaption?: string | null
 	timestamp: number
 	tags: Tag[]
 }
@@ -48,6 +49,7 @@ export function createPost(
 	tags: Tag[],
 	authorID: string,
 	featuredPhotoCID?: string | null,
+	featuredPhotoCaption?: string | null,
 ): Post {
 	if (subtitle !== null) {
 		subtitle = subtitle.trim()
@@ -61,6 +63,7 @@ export function createPost(
 		tags,
 		authorID,
 		...(featuredPhotoCID ? { featuredPhotoCID } : {}),
+		...(featuredPhotoCaption ? { featuredPhotoCaption } : {}),
 	}
 }
 
