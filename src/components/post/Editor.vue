@@ -194,6 +194,7 @@ export default Vue.extend({
 				this.$store.state.draft.tags,
 				this.$store.state.session.id,
 				this.$store.state.draft.featuredPhotoCID,
+				this.$store.state.draft.featuredPhotoCaption,
 			)
 			const cid = await sendPost(p)
 			this.title = ``

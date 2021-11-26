@@ -45,10 +45,29 @@
 				</div>
 			</header>
 			<section v-if="post !== null" class="pb-16 md:pb-5 my-5 pt-2 px-1">
+				<!-- Featured Photo -->
+				<article v-if="featuredPhoto !== null" class="mb-5 flex flex-col justify-center">
+					<img :src="featuredPhoto" class="rounded-lg w-full shadow-lg" />
+					<p v-if="post.featuredPhotoCaption" class="-mt-8 ml-4">{{ post.featuredPhotoCaption }}</p>
+				</article>
 				<!-- Category and elipses -->
 				<article class="w-full flex justify-between my-2">
 					<nuxt-link :to="`/discover/` + post.category" class="text-primary capitalize">{{ post.category }}</nuxt-link>
-					<MoreIcon />
+					<div class="flex">
+						<BookmarkButton
+							:postID="$route.params.post"
+							:hasBookmark="isBookmarked"
+							class="pr-2"
+							@clicked="getBookmarkStatus"
+						/>
+						<ShareButton
+							:post="post"
+							:cid="$route.params.post"
+							:class="'z-20'"
+							:hasRepost="hasReposted"
+							:repostCount="repostCount"
+						/>
+					</div>
 				</article>
 				<article>
 					<h1
@@ -64,15 +83,6 @@
 					>
 						{{ post.subtitle }}
 					</h2>
-				</article>
-
-				<!-- Featured Photo -->
-				<article v-if="featuredPhoto !== null" class="my-5 flex justify-center">
-					<img
-						v-if="featuredPhoto !== null"
-						:src="featuredPhoto"
-						class="border-neutralLightest border-2 rounded h-64 shadow"
-					/>
 				</article>
 
 				<!-- <hr v-if="this.$store.state.settings.darkMode" class="style-two my-5" />
@@ -142,7 +152,6 @@ import AuthorCard from '@/components/AuthorCard.vue'
 import TagCard from '@/components/Tag.vue'
 import BookmarkButton from '@/components/post/BookmarkButton.vue'
 import ShareButton from '@/components/post/Share.vue'
-import MoreIcon from '@/components/icons/More.vue'
 import Avatar from '@/components/Avatar.vue'
 import XIcon from '@/components/icons/X.vue'
 import FriendButton from '@/components/FriendButton.vue'
@@ -179,7 +188,6 @@ export default Vue.extend({
 		TagCard,
 		BookmarkButton,
 		ShareButton,
-		MoreIcon,
 		Avatar,
 		XIcon,
 		FriendButton,
