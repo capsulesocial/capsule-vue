@@ -1,7 +1,7 @@
-import { sign } from 'tweetnacl'
+import { hexStringToUint8Array, uint8ArrayToHexString } from './utilities/helpers'
+import { Post } from './post'
+import { signContent, verifyContent } from './utilities/keys'
 import { getUserInfoNEAR } from './near'
-import { stableOrderObj } from './utilities/helpers'
-import { getSigningKey } from './utilities/keys'
 
 async function _encryptData(data: Uint8Array, counter: Uint8Array, key: Uint8Array) {
 	const derivedKey = await window.crypto.subtle.importKey(`raw`, key, { name: `AES-CTR` }, false, [
@@ -21,41 +21,45 @@ async function _decryptData(data: Uint8Array, counter: Uint8Array, key: Uint8Arr
 	return new Uint8Array(decryptedData)
 }
 
-export async function encryptAndSignData<T>(data: T) {
-	const signingKey = await getSigningKey()
-	if (!signingKey) {
-		throw new Error(`Signing key not found in localStorage`)
-	}
-
+export async function encryptAndSignData(data: Post) {
 	// 32-byte key for AES-256
 	const key = window.crypto.getRandomValues(new Uint8Array(32))
 	// 16-byte counter block for AES-256
 	const counter = window.crypto.getRandomValues(new Uint8Array(16))
 
 	const ec = new TextEncoder()
-	const byteData = ec.encode(JSON.stringify(stableOrderObj(data)))
+	const byteData = ec.encode(data.content)
 
 	const encryptedData = await _encryptData(byteData, counter, key)
-	const signature = sign.detached(encryptedData, signingKey)
+	data.content = uint8ArrayToHexString(encryptedData)
 
-	return { ciphertext: encryptedData, signature, key, counter }
+	const signature = await signContent(data)
+	if (!signature) {
+		throw new Error(`Data signing failed!`)
+	}
+
+	return {
+		post: data,
+		key: uint8ArrayToHexString(key),
+		counter: uint8ArrayToHexString(counter),
+		signature: uint8ArrayToHexString(signature),
+	}
 }
 
-export async function verifyAndDecryptData(
-	authorID: string,
-	ciphertext: Uint8Array,
-	signature: Uint8Array,
-	key: Uint8Array,
-	counter: Uint8Array,
-) {
-	const { publicKey } = await getUserInfoNEAR(authorID)
-
-	const verified = sign.detached.verify(ciphertext, signature, publicKey)
+export async function verifyAndDecryptData(data: Post, key: string, counter: string, signature: string) {
+	const { publicKey } = await getUserInfoNEAR(data.authorID)
+	const verified = verifyContent(data, hexStringToUint8Array(signature), publicKey)
 	if (!verified) {
 		throw new Error(`Signature not verified!`)
 	}
 
-	const decryptedData = await _decryptData(ciphertext, counter, key)
-	// TODO: transform this into an object
-	return Buffer.from(decryptedData).toString()
+	const dec = new TextDecoder()
+
+	const decryptedData = await _decryptData(
+		hexStringToUint8Array(data.content),
+		hexStringToUint8Array(counter),
+		hexStringToUint8Array(key),
+	)
+	data.content = dec.decode(decryptedData)
+	return data
 }
