@@ -43,7 +43,22 @@
 					</div>
 				</div>
 			</header>
-			<section v-if="post !== null" class="pb-16 md:pb-5 mb-5 -mt-16 pt-2">
+			<section v-if="post !== null" class="pb-16 md:pb-5 mb-5 pt-2">
+				<article>
+					<h1
+						:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
+						class="text-h1 font-serif font-semibold mb-3 break-words"
+					>
+						{{ post.title }}
+					</h1>
+					<h2
+						v-if="post.subtitle"
+						:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+						class="text-h2 font-serif font-medium mb-3 break-words"
+					>
+						{{ post.subtitle }}
+					</h2>
+				</article>
 				<!-- Featured Photo -->
 				<article v-if="featuredPhoto !== null" class="mb-5 flex flex-col justify-end relative">
 					<div
@@ -68,21 +83,6 @@
 						/>
 						<ShareButton :post="post" :cid="$route.params.post" :hasRepost="hasReposted" :repostCount="repostCount" />
 					</div>
-				</article>
-				<article>
-					<h1
-						:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-						class="text-h1 font-serif font-semibold mb-3 break-words"
-					>
-						{{ post.title }}
-					</h1>
-					<h2
-						v-if="post.subtitle"
-						:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-						class="text-h2 font-serif font-medium mb-3 break-words"
-					>
-						{{ post.subtitle }}
-					</h2>
 				</article>
 
 				<!-- <hr v-if="this.$store.state.settings.darkMode" class="style-two my-5" />
