@@ -1,33 +1,38 @@
 <template>
-	<main style="backdrop-filter: blur(10px)" class="bg-white bg-opacity-75 w-1/2 h-screen">
-		<CapsuleIcon class="pt-5 pl-10" />
-		<section class="flex justify-center items-center">
-			<div class="flex flex-col items-center w-full">
+	<main
+		style="backdrop-filter: blur(10px)"
+		class="bg-gradient-to-r from-lightBGStart to-lightBGStop w-3/5 h-screen overflow-y-scroll flex-col justify-between"
+	>
+		<CapsuleIcon class="pt-6 pl-10" />
+		<section class="flex justify-center items-center" style="height: 86%">
+			<div class="flex flex-col items-center w-full p-14 -mt-5">
 				<!-- Step 1: Choose Login / register -->
-				<article v-show="!userInfo" class="w-1/2">
-					<h1 class="mb-10 text-2xl text-primary font-bold text-center">Sign in or sign up using...</h1>
+				<article v-show="!userInfo && !isLoading" class="w-1/2">
+					<h1 class="font-semibold text-primary mb-10" style="font-size: 2.6rem">Signup</h1>
 					<button
-						class="w-full rounded-lg w-1/2 bg-gray2 mb-4 py-2 flex justify-center items-center"
+						class="w-full rounded-lg w-1/2 bg-gray2 mb-4 py-2 flex justify-center items-center focus:outline-none"
 						@click="() => torusLogin('discord')"
 					>
-						<DiscordIcon style="width: 32px; height: 32px" />
-						<h6 class="text-xl ml-2">Discord</h6>
+						<DiscordIcon style="width: 28px; height: 28px" />
+						<h6 class="font-semibold text-gray7 text-sm ml-4">Sign up with Discord</h6>
 					</button>
 					<button
-						class="w-full rounded-lg w-1/2 bg-gray2 mb-4 py-2 flex justify-center items-center"
+						class="w-full rounded-lg w-1/2 bg-gray2 py-2 flex justify-center items-center focus:outline-none"
 						@click="() => torusLogin('google')"
 					>
-						<GoogleIcon style="width: 32px; height: 32px" />
-						<h6 class="text-xl ml-2">Google</h6>
+						<GoogleIcon style="width: 28px; height: 28px" />
+						<h6 class="font-semibold text-gray7 text-sm ml-4">Sign up with Google</h6>
 					</button>
-					<div class="w-full flex justify-center items-center mb-4">
-						<span class="border border-black flex-grow" style="height: 1px"></span>
-						<p class="px-4">OR</p>
-						<span class="border border-black flex-grow" style="height: 1px"></span>
+					<div class="w-full flex justify-center items-center my-6">
+						<span class="border border-gray5 flex-grow rounded-lg" style="height: 1px"></span>
+						<p class="px-4 text-gray5 text-xs">OR</p>
+						<span class="border border-gray5 flex-grow rounded-lg" style="height: 1px"></span>
 					</div>
-					<button class="w-full rounded-lg w-1/2 bg-gray2 mb-4 py-2 flex justify-center items-center">
-						<NearIcon style="width: 28px; height: 28px" />
-						<h6 class="text-xl ml-2">Signup with NEAR</h6>
+					<button
+						class="w-full rounded-lg w-1/2 bg-gray2 mb-4 py-3 flex justify-center items-center focus:outline-none"
+					>
+						<NearIcon style="width: 22px; height: 22px" />
+						<h6 class="font-semibold text-gray7 text-sm ml-4">Signup with NEAR</h6>
 					</button>
 				</article>
 				<!-- Step 2: Sign up -->
@@ -41,14 +46,13 @@
 									Verify you’re a human with your phone number so that Capsule can fund your wallet. This is the last
 									step needed to create your Capsule account.
 								</p>
-								<label for="id" class="font-semibold text-sm text-gray-600 pb-1 block">Phone Number</label>
+								<label for="id" class="font-semibold text-sm text-gray5 pb-1 block">Phone Number</label>
 								<input
 									id="phoneNumber"
 									v-model="phoneNumber"
 									type="tel"
-									placeholder="Enter your phone number"
+									placeholder="+33"
 									class="
-										border
 										rounded-lg
 										px-3
 										py-2
@@ -59,26 +63,25 @@
 										focus:outline-none focus:border-primary
 										text-primary
 										font-sans
-										bg-gray1
+										bg-gray2
 									"
 								/>
 								<div class="w-full flex justify-end">
 									<BrandedButton :text="`Send Code`" :action="sendOTP" />
 								</div>
-								<p class="text-gray7 text-sm mt-5">
+								<p class="text-gray7 text-sm mt-10 text-center">
 									Already have a funded wallet? <button class="text-primary font-bold">Connect to NEAR</button>
 								</p>
 							</div>
 							<div v-else>
 								<!-- Enter SMS code to complete verify -->
-								<label for="id" class="font-semibold text-sm text-gray-600 pb-1 block">One-time Password</label>
+								<label for="id" class="font-semibold text-sm text-gray5 pb-1 block">One-time Password</label>
 								<input
 									id="phoneNumber"
 									v-model="otp"
 									type="text"
 									placeholder=""
 									class="
-										border
 										rounded-lg
 										px-3
 										py-2
@@ -89,6 +92,7 @@
 										focus:outline-none focus:border-primary
 										text-primary
 										font-sans
+										bg-gray2
 									"
 								/>
 								<BrandedButton :text="`Verify`" class="w-full" :action="validateOTP" />
@@ -96,14 +100,13 @@
 						</article>
 						<article v-else>
 							<!-- Step 3: Choose an ID -->
-							<label for="id" class="font-semibold text-sm text-gray-600 pb-1 block">ID</label>
+							<label for="id" class="font-semibold text-sm text-gray5 pb-1 block">ID</label>
 							<input
 								id="id"
 								v-model="id"
 								type="text"
 								placeholder=""
 								class="
-									border
 									rounded-lg
 									px-3
 									py-2
@@ -114,6 +117,7 @@
 									focus:outline-none focus:border-primary
 									text-primary
 									font-sans
+									bg-gray2
 								"
 							/>
 							<BrandedButton :text="`Sign Up`" :action="verify" class="w-full" />
@@ -130,10 +134,11 @@
 					</div>
 				</article>
 				<article v-show="isLoading" class="w-3/4 flex justify-center">
-					<div class="loader m-5 p-10 rounded-lg"></div>
+					<div class="loader m-5 rounded-lg"></div>
 				</article>
 			</div>
 		</section>
+		<p class="px-4 text-gray5 text-sm pl-10">© 2021 Capsule.Social</p>
 	</main>
 </template>
 
@@ -230,8 +235,8 @@ export default Vue.extend({
 			this.isLoading = false
 		},
 		async torusLogin(type: TorusVerifiers) {
+			this.isLoading = true
 			try {
-				this.isLoading = true
 				this.userInfo = await this.torus.triggerLogin(torusVerifiers[type])
 
 				this.accountId = getAccountIdFromPrivateKey(this.userInfo.privateKey)
@@ -310,7 +315,7 @@ export default Vue.extend({
 				this.changeAvatar(account.avatar)
 				this.changeBio(account.bio)
 				this.changeLocation(account.location)
-				this.$router.push(`/settings`)
+				this.$router.push(`/home`)
 			} catch (err: any) {
 				alert(err.message)
 			}
