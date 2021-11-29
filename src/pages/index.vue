@@ -1,35 +1,101 @@
 <template>
 	<main style="backdrop-filter: blur(10px)" class="bg-white bg-opacity-75 w-1/2 h-screen">
-		<CapsuleIcon />
+		<CapsuleIcon class="pt-5 pl-10" />
 		<section class="flex justify-center items-center">
 			<div class="flex flex-col items-center w-full">
-				<!-- Login / register -->
+				<!-- Step 1: Choose Login / register -->
 				<article v-show="!userInfo" class="w-1/2">
 					<h1 class="mb-10 text-2xl text-primary font-bold text-center">Sign in or sign up using...</h1>
 					<button
-						class="w-full rounded-lg w-1/2 bg-gray2 mb-2 py-2 flex justify-center items-center"
+						class="w-full rounded-lg w-1/2 bg-gray2 mb-4 py-2 flex justify-center items-center"
 						@click="() => torusLogin('discord')"
 					>
-						<DiscordIcon />
+						<DiscordIcon style="width: 32px; height: 32px" />
 						<h6 class="text-xl ml-2">Discord</h6>
 					</button>
 					<button
-						class="w-full rounded-lg w-1/2 bg-gray2 mb-2 py-2 flex justify-center items-center"
+						class="w-full rounded-lg w-1/2 bg-gray2 mb-4 py-2 flex justify-center items-center"
 						@click="() => torusLogin('google')"
 					>
-						<GoogleIcon />
+						<GoogleIcon style="width: 32px; height: 32px" />
 						<h6 class="text-xl ml-2">Google</h6>
 					</button>
+					<div class="w-full flex justify-center items-center mb-4">
+						<span class="border border-black flex-grow" style="height: 1px"></span>
+						<p class="px-4">OR</p>
+						<span class="border border-black flex-grow" style="height: 1px"></span>
+					</div>
+					<button class="w-full rounded-lg w-1/2 bg-gray2 mb-4 py-2 flex justify-center items-center">
+						<NearIcon style="width: 28px; height: 28px" />
+						<h6 class="text-xl ml-2">Signup with NEAR</h6>
+					</button>
 				</article>
-				<!-- Part 2: -->
-				<!-- Sign in + Register: ID -->
-				<article v-show="!isLoading" class="w-3/4">
-					<article v-show="userInfo && username === null">
-						<h1 class="mb-10 text-2xl text-primary font-bold text-center">Sign up</h1>
-						<p class="whitespace-nowrap justify-between text-sm p-5 text-gray-600 font-sans">
-							Available funds: {{ funds }} yN
-						</p>
-						<article v-if="hasSufficientFunds()">
+				<!-- Step 2: Sign up -->
+				<article v-show="!isLoading" class="w-1/2">
+					<div v-show="userInfo && username === null">
+						<h1 class="text-4xl text-primary font-bold">Signup</h1>
+						<article v-if="!hasSufficientFunds()">
+							<!-- Step 2a: Verify Phone # -->
+							<div v-if="!otpSent">
+								<p class="text-gray7 text-center my-10">
+									Verify you’re a human with your phone number so that Capsule can fund your wallet. This is the last
+									step needed to create your Capsule account.
+								</p>
+								<label for="id" class="font-semibold text-sm text-gray-600 pb-1 block">Phone Number</label>
+								<input
+									id="phoneNumber"
+									v-model="phoneNumber"
+									type="tel"
+									placeholder="Enter your phone number"
+									class="
+										border
+										rounded-lg
+										px-3
+										py-2
+										mt-1
+										mb-5
+										text-sm
+										w-full
+										focus:outline-none focus:border-primary
+										text-primary
+										font-sans
+										bg-gray1
+									"
+								/>
+								<div class="w-full flex justify-end">
+									<BrandedButton :text="`Send Code`" :action="sendOTP" />
+								</div>
+								<p class="text-gray7 text-sm mt-5">
+									Already have a funded wallet? <button class="text-primary font-bold">Connect to NEAR</button>
+								</p>
+							</div>
+							<div v-else>
+								<!-- Enter SMS code to complete verify -->
+								<label for="id" class="font-semibold text-sm text-gray-600 pb-1 block">One-time Password</label>
+								<input
+									id="phoneNumber"
+									v-model="otp"
+									type="text"
+									placeholder=""
+									class="
+										border
+										rounded-lg
+										px-3
+										py-2
+										mt-1
+										mb-5
+										text-sm
+										w-full
+										focus:outline-none focus:border-primary
+										text-primary
+										font-sans
+									"
+								/>
+								<BrandedButton :text="`Verify`" class="w-full" :action="validateOTP" />
+							</div>
+						</article>
+						<article v-else>
+							<!-- Step 3: Choose an ID -->
 							<label for="id" class="font-semibold text-sm text-gray-600 pb-1 block">ID</label>
 							<input
 								id="id"
@@ -51,66 +117,17 @@
 								"
 							/>
 							<BrandedButton :text="`Sign Up`" :action="verify" class="w-full" />
-						</article>
-						<article v-else>
-							<article v-if="!otpSent">
-								<p>
-									Verify you’re a human with your phone number so that Capsule can fund your wallet. This is the last
-									step needed to create your Capsule account.
-								</p>
-								<label for="id" class="font-semibold text-sm text-gray-600 pb-1 block">Phone Number</label>
-								<input
-									id="phoneNumber"
-									v-model="phoneNumber"
-									type="text"
-									placeholder=""
-									class="
-										border
-										rounded-lg
-										px-3
-										py-2
-										mt-1
-										mb-5
-										text-sm
-										w-full
-										focus:outline-none focus:border-primary
-										text-primary
-										font-sans
-									"
-								/>
-								<BrandedButton :text="`Send Verification Code`" class="w-full" :action="sendOTP" />
-							</article>
-							<article v-else>
-								<label for="id" class="font-semibold text-sm text-gray-600 pb-1 block">OTP</label>
-								<input
-									id="phoneNumber"
-									v-model="otp"
-									type="text"
-									placeholder=""
-									class="
-										border
-										rounded-lg
-										px-3
-										py-2
-										mt-1
-										mb-5
-										text-sm
-										w-full
-										focus:outline-none focus:border-primary
-										text-primary
-										font-sans
-									"
-								/>
-								<BrandedButton :text="`Verify`" class="w-full" :action="validateOTP" />
-							</article>
 							<article>
 								<p class="whitespace-nowrap justify-between text-sm p-5 text-gray-600 font-sans">
 									Ensure that the NEAR account with ID: "{{ accountId }}" has sufficient funds before signing up.
 								</p>
+								<p class="whitespace-nowrap justify-between text-sm p-5 text-gray-600 font-sans">
+									Available funds: {{ funds }} yN
+								</p>
 								<BrandedButton :text="`Re-check funds`" class="w-full" :action="checkFunds" />
 							</article>
 						</article>
-					</article>
+					</div>
 				</article>
 				<article v-show="isLoading" class="w-3/4 flex justify-center">
 					<div class="loader m-5 p-10 rounded-lg"></div>
@@ -129,6 +146,7 @@ import DirectWebSdk, { TorusLoginResponse } from '@toruslabs/customauth'
 import CapsuleIcon from '@/components/icons/Capsule.vue'
 import DiscordIcon from '@/components/icons/brands/Discord.vue'
 import GoogleIcon from '@/components/icons/brands/Google.vue'
+import NearIcon from '@/components/icons/brands/Near.vue'
 // import TwitterIcon from '@/components/icons/brands/Twitter.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 
@@ -159,6 +177,7 @@ export default Vue.extend({
 		DiscordIcon,
 		GoogleIcon,
 		BrandedButton,
+		NearIcon,
 	},
 	layout: `unauth`,
 	data(): IData {
