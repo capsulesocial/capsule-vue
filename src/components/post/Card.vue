@@ -62,7 +62,7 @@
 					<!-- Content -->
 					<div class="mt-4 flex justify-between">
 						<!-- Left side: Title, subtitle / preview, tags -->
-						<div>
+						<div class="mr-4">
 							<nuxt-link :to="'/post/' + post._id">
 								<div class="flex flex-col pr-4 max-w-full overflow-hidden">
 									<h3 class="text-lg font-semibold pb-2 break-words">
@@ -102,12 +102,12 @@
 							</div>
 						</div>
 						<!-- Right side: Image -->
-						<div class="flex-shrink-0">
+						<div class="flex-shrink-0 w-56">
 							<nuxt-link :to="'/post/' + post._id">
 								<img
 									v-if="featuredPhoto !== ``"
 									:src="featuredPhoto"
-									class="flex-shrink-0 h-32 object-contain rounded-lg"
+									class="flex-shrink-0 h-32 object-cover rounded-lg w-full"
 								/>
 							</nuxt-link>
 						</div>

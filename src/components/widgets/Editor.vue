@@ -45,7 +45,7 @@
 				<button class="text-primary focus:outline-none text-sm" @click="handleUploadImageClick">Change Image</button>
 				<button class="text-lightError focus:outline-none text-sm ml-4" @click="removeImage()">Remove Image</button>
 			</div>
-			<div class="w-full p-2 my-1 rounded-lg bg-gray1" :class="featuredPhoto ? `` : `hidden`">
+			<div class="w-full p-2 my-1 mt-3 rounded-lg bg-gray1" :class="featuredPhoto ? `` : `hidden`">
 				<label for="caption" class="hidden" value="Enter hashtags"></label>
 				<input
 					v-model="caption"

@@ -14,7 +14,6 @@
 					z-10
 					py-2
 					px-4
-					rounded-b-lg
 					bg-gradient-to-r
 					from-lightBGStart
 					to-lightBGStop
@@ -44,11 +43,18 @@
 					</div>
 				</div>
 			</header>
-			<section v-if="post !== null" class="pb-16 md:pb-5 my-5 pt-2 px-1">
+			<section v-if="post !== null" class="pb-16 md:pb-5 mb-5 -mt-16 pt-2">
 				<!-- Featured Photo -->
-				<article v-if="featuredPhoto !== null" class="mb-5 flex flex-col justify-center">
-					<img :src="featuredPhoto" class="rounded-lg w-full shadow-lg" />
-					<p v-if="post.featuredPhotoCaption">{{ post.featuredPhotoCaption }}</p>
+				<article v-if="featuredPhoto !== null" class="mb-5 flex flex-col justify-end relative">
+					<div
+						v-if="post.featuredPhotoCaption"
+						class="h-full w-full absolute rounded-lg"
+						style="background: linear-gradient(180deg, rgba(0, 0, 0, 0) 85%, rgba(0, 0, 0, 0.8) 100%)"
+					></div>
+					<img :src="featuredPhoto" class="rounded-lg w-full shadow-lg object-cover" style="max-height: 22rem" />
+					<p v-if="post.featuredPhotoCaption" class="absolute text-lightOnPrimaryText px-4 pb-3 text-sm">
+						{{ post.featuredPhotoCaption }}
+					</p>
 				</article>
 				<!-- Category and elipses -->
 				<article class="w-full flex justify-between my-2">
