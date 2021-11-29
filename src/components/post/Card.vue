@@ -9,16 +9,19 @@
 			"
 		>
 			<div
-				class="card pt-5 px-6"
+				class="card"
 				:class="
 					showComments
-						? `shadow-lg rounded-lg p-5 bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg mt-10 max-h-screen overflow-y-auto`
+						? `shadow-lg rounded-lg bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg mt-10 overflow-y-auto`
 						: ``
 				"
-				:style="showComments ? `width: 750px; backdrop-filter: blur(10px)` : ``"
+				:style="showComments ? `width: 750px; backdrop-filter: blur(10px); max-height: 90vh` : ``"
 				style="backdrop-filter: blur(10px)"
 			>
-				<div class="sticky top-0 z-10 pb-5 border-b">
+				<div
+					class="sticky top-0 z-10 pb-5 border-b bg-gradient-to-r from-lightBGStart to-lightBGStop px-6 pt-5"
+					style="backdrop-filter: blur(10px)"
+				>
 					<!-- IF reposted -->
 					<div v-if="repostedBy !== `` && !hideRepostIcon" class="flex w-full -mt-2 mb-2 text-gray5">
 						<RepostIcon :shrink="true" />
@@ -113,7 +116,7 @@
 						</div>
 					</div>
 				</div>
-				<PostActions v-if="showComments" :postCID="post._id" :initComments="comments" class="px-5" />
+				<PostActions v-if="showComments" :postCID="post._id" :initComments="comments" class="px-6 pb-6" />
 			</div>
 		</div>
 	</article>
