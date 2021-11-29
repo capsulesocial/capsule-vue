@@ -103,7 +103,7 @@ export default Vue.extend({
 		}),
 		disconnect(): void {
 			this.endSession()
-			this.$router.push(`/`)
+			this.$router.push(`/login`)
 		},
 		handleDropdown(e: any): void {
 			if (!e.target || e.target.parentNode === null || e.target.parentNode.classList === undefined) {
@@ -128,7 +128,7 @@ export default Vue.extend({
 			window.localStorage.removeItem(`accountId`)
 			const keystore = new keyStores.BrowserLocalStorageKeyStore()
 			keystore.clear()
-			this.$router.push(`/`)
+			this.$router.push(`/login`)
 		},
 		togglePostEditor() {
 			this.$router.push(`/post`)

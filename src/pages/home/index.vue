@@ -83,6 +83,7 @@ export default Vue.extend({
 	components: {
 		PostCard,
 	},
+	layout: `home`,
 	props: {
 		toggleFriend: {
 			type: Function as PropType<(id: string) => void>,
