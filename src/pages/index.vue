@@ -1,39 +1,67 @@
 <template>
-	<main>
-		<nav class="flex flex-row flex-wrap justify-between p-5">
-			<div class="flex items-center">
-				<span class="mr-5"><CapsuleIcon /></span>
-				<h1 class="text-3xl italic font-bold">Capsule Social</h1>
-			</div>
-			<section>
-				<p class="text-center">Join the Community</p>
-				<div class="flex items-center justify-center">
-					<a href="https://twitter.com/capsule_social" target="_blank">
-						<TwitterIcon />
-					</a>
-
-					<a href="https://discord.gg/sZWjf3E6bY" target="_blank" class="ml-6 bg-white rounded-lg">
-						<DiscordIcon class="w-24" />
-					</a>
-				</div>
-			</section>
-		</nav>
-
-		<div class="flex flex-col mt-10">
-			<!-- Login -->
-			<section class="bg-white mx-auto lg:w-full lg:max-w-md rounded shadow-lg divide-y divide-gray-200">
-				<article class="px-10 py-6 font-sans">
-					<!-- Sign in + Register: ID -->
-					<article v-show="!isLoading">
-						<article v-show="userInfo && username === null">
-							<p class="whitespace-nowrap justify-between text-sm p-5 text-gray-600 font-sans">
-								Available funds: {{ funds }} yN
-							</p>
-							<article v-if="hasSufficientFunds()">
-								<label for="id" class="font-semibold text-sm text-gray-600 pb-1 block">ID</label>
+	<main style="backdrop-filter: blur(10px)" class="bg-white bg-opacity-75 w-1/2 h-screen">
+		<CapsuleIcon />
+		<section class="flex justify-center items-center">
+			<div class="flex flex-col items-center w-full">
+				<!-- Login / register -->
+				<article v-show="!userInfo" class="w-1/2">
+					<h1 class="mb-10 text-2xl text-primary font-bold text-center">Sign in or sign up using...</h1>
+					<button
+						class="w-full rounded-lg w-1/2 bg-gray2 mb-2 py-2 flex justify-center items-center"
+						@click="() => torusLogin('discord')"
+					>
+						<DiscordIcon />
+						<h6 class="text-xl ml-2">Discord</h6>
+					</button>
+					<button
+						class="w-full rounded-lg w-1/2 bg-gray2 mb-2 py-2 flex justify-center items-center"
+						@click="() => torusLogin('google')"
+					>
+						<GoogleIcon />
+						<h6 class="text-xl ml-2">Google</h6>
+					</button>
+				</article>
+				<!-- Part 2: -->
+				<!-- Sign in + Register: ID -->
+				<article v-show="!isLoading" class="w-3/4">
+					<article v-show="userInfo && username === null">
+						<h1 class="mb-10 text-2xl text-primary font-bold text-center">Sign up</h1>
+						<p class="whitespace-nowrap justify-between text-sm p-5 text-gray-600 font-sans">
+							Available funds: {{ funds }} yN
+						</p>
+						<article v-if="hasSufficientFunds()">
+							<label for="id" class="font-semibold text-sm text-gray-600 pb-1 block">ID</label>
+							<input
+								id="id"
+								v-model="id"
+								type="text"
+								placeholder=""
+								class="
+									border
+									rounded-lg
+									px-3
+									py-2
+									mt-1
+									mb-5
+									text-sm
+									w-full
+									focus:outline-none focus:border-primary
+									text-primary
+									font-sans
+								"
+							/>
+							<BrandedButton :text="`Sign Up`" :action="verify" class="w-full" />
+						</article>
+						<article v-else>
+							<article v-if="!otpSent">
+								<p>
+									Verify you’re a human with your phone number so that Capsule can fund your wallet. This is the last
+									step needed to create your Capsule account.
+								</p>
+								<label for="id" class="font-semibold text-sm text-gray-600 pb-1 block">Phone Number</label>
 								<input
-									id="id"
-									v-model="id"
+									id="phoneNumber"
+									v-model="phoneNumber"
 									type="text"
 									placeholder=""
 									class="
@@ -50,83 +78,45 @@
 										font-sans
 									"
 								/>
-								<BrandedButton :text="`Sign Up`" :action="verify" class="w-full" />
+								<BrandedButton :text="`Send Verification Code`" class="w-full" :action="sendOTP" />
 							</article>
 							<article v-else>
-								<article v-if="!otpSent">
-									<label for="id" class="font-semibold text-sm text-gray-600 pb-1 block">Phone Number</label>
-									<input
-										id="phoneNumber"
-										v-model="phoneNumber"
-										type="text"
-										placeholder=""
-										class="
-											border
-											rounded-lg
-											px-3
-											py-2
-											mt-1
-											mb-5
-											text-sm
-											w-full
-											focus:outline-none focus:border-primary
-											text-primary
-											font-sans
-										"
-									/>
-									<BrandedButton :text="`Send Verification Code`" class="w-full" :action="sendOTP" />
-								</article>
-								<article v-else>
-									<label for="id" class="font-semibold text-sm text-gray-600 pb-1 block">OTP</label>
-									<input
-										id="phoneNumber"
-										v-model="otp"
-										type="text"
-										placeholder=""
-										class="
-											border
-											rounded-lg
-											px-3
-											py-2
-											mt-1
-											mb-5
-											text-sm
-											w-full
-											focus:outline-none focus:border-primary
-											text-primary
-											font-sans
-										"
-									/>
-									<BrandedButton :text="`Verify`" class="w-full" :action="validateOTP" />
-								</article>
-								<article>
-									<p class="whitespace-nowrap justify-between text-sm p-5 text-gray-600 font-sans">
-										Ensure that the NEAR account with ID: "{{ accountId }}" has sufficient funds before signing up.
-									</p>
-									<BrandedButton :text="`Re-check funds`" class="w-full" :action="checkFunds" />
-								</article>
+								<label for="id" class="font-semibold text-sm text-gray-600 pb-1 block">OTP</label>
+								<input
+									id="phoneNumber"
+									v-model="otp"
+									type="text"
+									placeholder=""
+									class="
+										border
+										rounded-lg
+										px-3
+										py-2
+										mt-1
+										mb-5
+										text-sm
+										w-full
+										focus:outline-none focus:border-primary
+										text-primary
+										font-sans
+									"
+								/>
+								<BrandedButton :text="`Verify`" class="w-full" :action="validateOTP" />
+							</article>
+							<article>
+								<p class="whitespace-nowrap justify-between text-sm p-5 text-gray-600 font-sans">
+									Ensure that the NEAR account with ID: "{{ accountId }}" has sufficient funds before signing up.
+								</p>
+								<BrandedButton :text="`Re-check funds`" class="w-full" :action="checkFunds" />
 							</article>
 						</article>
-						<article v-show="!userInfo">
-							<p style="margin-bottom: 10px" class="text-center">Sign in or sign up using...</p>
-							<BrandedButton :text="`Discord`" :action="() => torusLogin('discord')" class="w-full" />
-							<BrandedButton
-								style="margin-top: 10px"
-								:text="`Google`"
-								:action="() => torusLogin('google')"
-								class="w-full"
-							/>
-						</article>
 					</article>
-					<section v-show="this.isLoading" class="w-full flex justify-center">
-						<div class="loader m-5 p-10 rounded-lg"></div>
-					</section>
 				</article>
-				<article class="text-center whitespace-nowrap flex justify-between text-sm p-5 text-gray-600 font-sans">
-					<button class="px-4 py-2 focus:outline-none">Help</button>
+				<article v-show="isLoading" class="w-3/4 flex justify-center">
+					<div class="loader m-5 p-10 rounded-lg"></div>
 				</article>
-			</section>
-		</div>
+			</div>
+		</section>
 	</main>
 </template>
 
@@ -137,8 +127,9 @@ import { mapMutations } from 'vuex'
 import DirectWebSdk, { TorusLoginResponse } from '@toruslabs/customauth'
 
 import CapsuleIcon from '@/components/icons/Capsule.vue'
-import TwitterIcon from '@/components/icons/brands/Twitter.vue'
 import DiscordIcon from '@/components/icons/brands/Discord.vue'
+import GoogleIcon from '@/components/icons/brands/Google.vue'
+// import TwitterIcon from '@/components/icons/brands/Twitter.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 
 import { MutationType, createSessionFromProfile, namespace as sessionStoreNamespace } from '~/store/session'
@@ -164,8 +155,9 @@ interface IData {
 export default Vue.extend({
 	components: {
 		CapsuleIcon,
-		TwitterIcon,
+		// TwitterIcon,
 		DiscordIcon,
+		GoogleIcon,
 		BrandedButton,
 	},
 	layout: `unauth`,
