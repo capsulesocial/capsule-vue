@@ -13,7 +13,9 @@
 				<h6 class="text-gray5">By {{ p.authorID }}</h6>
 			</div>
 			<!-- Right side: featured photo -->
-			<img v-if="p.featuredPhoto" :src="p.featuredPhoto" class="flex-shrink-0 h-12 object-contain rounded-lg" />
+			<div class="w-24">
+				<img v-if="p.featuredPhoto" :src="p.featuredPhoto" class="flex-shrink-0 h-16 object-cover rounded-lg w-full" />
+			</div>
 		</nuxt-link>
 		<nuxt-link to="/bookmarks" class="px-6 text-sm italics text-primary">See More</nuxt-link>
 	</article>
