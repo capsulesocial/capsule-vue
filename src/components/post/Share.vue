@@ -152,7 +152,6 @@ export default Vue.extend({
 					return false
 				}
 				this.repostOffset -= 1
-				alert(`repost deleted`)
 			}
 			this.$emit(`repostAction`)
 		},
