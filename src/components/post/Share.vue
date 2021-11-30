@@ -128,16 +128,29 @@ export default Vue.extend({
 	methods: {
 		sendRepost,
 		async handleRepost() {
+			// Post has NOT been reposted
 			if (!this.isReposted()) {
 				await sendRepost(this.$store.state.session.id, this.$props.cid, ``)
 				this.isReposted = () => {
 					return true
 				}
 			} else {
-				await sendPostDeletion(`HIDE`, this.$props.repost._id, this.$props.repost.authorID)
+				// Undo repost
+				if (this.$props.repost?._id) {
+					await sendPostDeletion(`HIDE`, this.$props.repost._id, this.$store.state.session.id)
+				} else {
+					this.$store.state.reposts.forEach((r: any) => {
+						if (r.postID === this.$props.cid) {
+							this.undoRepost(r.repostID)
+						}
+					})
+				}
 				alert(`repost deleted`)
 			}
 			this.$emit(`repostAction`)
+		},
+		async undoRepost(repostID: string) {
+			await sendPostDeletion(`HIDE`, repostID, this.$store.state.session.id)
 		},
 		handleShare(type: string) {
 			const shareElement = document.createElement(`textarea`)
