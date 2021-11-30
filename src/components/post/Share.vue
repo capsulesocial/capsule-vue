@@ -7,7 +7,7 @@
 		>
 			<div class="flex text-gray5 hover:text-primary hover:fill-primary">
 				<ShareIcon :isActive="showSocialShares" />
-				<span class="ml-1">{{ repostCount }}</span>
+				<span class="ml-1">{{ repostCount + repostOffset }}</span>
 			</div>
 		</button>
 		<div
@@ -67,6 +67,7 @@ import { sendPostDeletion } from '@/backend/postDeletion'
 interface IData {
 	isReposted: Function
 	showSocialShares: boolean
+	repostOffset: number
 }
 
 export default Vue.extend({
@@ -104,6 +105,7 @@ export default Vue.extend({
 			isReposted: () => {
 				return false
 			},
+			repostOffset: 0,
 		}
 	},
 	created() {
@@ -134,6 +136,7 @@ export default Vue.extend({
 				this.isReposted = () => {
 					return true
 				}
+				this.repostOffset += 1
 			} else {
 				// Undo repost
 				if (this.$props.repost?._id) {
@@ -145,6 +148,10 @@ export default Vue.extend({
 						}
 					})
 				}
+				this.isReposted = () => {
+					return false
+				}
+				this.repostOffset -= 1
 				alert(`repost deleted`)
 			}
 			this.$emit(`repostAction`)
