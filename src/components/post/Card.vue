@@ -57,9 +57,29 @@
 						</div>
 						<div class="flex items-center" :class="repostedBy !== `` ? `-mt-4` : ``">
 							<BookmarkButton :postID="post._id" :hasBookmark="isBookmarked" @clicked="getBookmarkStatus" />
-							<button v-if="post.authorID === $store.state.session.id" @click="deletePost">
-								<XIcon />
+							<button
+								v-if="post.authorID === $store.state.session.id"
+								class="focus:outline-none ml-2"
+								@click.stop="toggleDropdownDelete"
+							>
+								<More />
 							</button>
+							<div
+								v-show="showDelete"
+								:class="
+									$store.state.settings.darkMode
+										? 'bg-lightBG text-lightPrimaryText border-lightBorder'
+										: 'bg-darkBG text-darkPrimaryText border-darkBorder'
+								"
+								class="absolute flex flex-col rounded-lg w-40 shadow-lg z-10 p-1"
+								style="top: 70px; right: 10px"
+							>
+								<!-- Delete -->
+								<button class="flex focus:outline-none text-negative" @click="deletePost">
+									<XIcon class="p-1" />
+									<span class="text-xs self-center text-negative">Delete this post</span>
+								</button>
+							</div>
 						</div>
 					</div>
 					<!-- Content -->
@@ -82,7 +102,7 @@
 							</nuxt-link>
 							<!-- Display tags -->
 							<div class="flex overflow-x-auto my-2">
-								<TagPill v-for="t in post.tags" :key="t.name" :tag="t.name" class="mr-4" />
+								<TagPill v-for="t in post.tags" :key="t.name" :tag="t.name" class="mr-4 my-2" />
 							</div>
 							<!-- Comment and share -->
 							<div class="flex mt-1 text-gray5">
@@ -131,6 +151,7 @@ import BookmarkButton from '@/components/post/BookmarkButton.vue'
 import Share from '@/components/post/Share.vue'
 import CommentIcon from '@/components/icons/Comment.vue'
 import TagPill from '@/components/Tag.vue'
+import More from '@/components/icons/More.vue'
 import XIcon from '@/components/icons/X.vue'
 import FriendButton from '@/components/FriendButton.vue'
 import RepostIcon from '@/components/icons/Repost.vue'
@@ -146,6 +167,7 @@ import { ICommentData } from '@/backend/comment'
 
 interface IData {
 	showComments: boolean
+	showDelete: boolean
 	authorName: string
 	avatar: string
 	featuredPhoto: string
@@ -163,6 +185,7 @@ export default Vue.extend({
 		Share,
 		CommentIcon,
 		TagPill,
+		More,
 		XIcon,
 		FriendButton,
 		RepostIcon,
@@ -216,6 +239,7 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			showComments: false,
+			showDelete: false,
 			authorName: ``,
 			avatar: ``,
 			featuredPhoto: ``,
@@ -256,6 +280,22 @@ export default Vue.extend({
 		this.isBookmarked = this.$props.bookmarked
 		// Close pop-up event listener
 		window.addEventListener(`click`, this.handleClose, false)
+		window.addEventListener(
+			`click`,
+			(e: any): void => {
+				if (!e.target) {
+					return
+				}
+				if (
+					e.target.parentNode === null ||
+					e.target.parentNode.classList === undefined ||
+					!e.target.parentNode.classList.contains(`toggle`)
+				) {
+					this.showDelete = false
+				}
+			},
+			false,
+		)
 	},
 	destroyed() {
 		window.removeEventListener(`click`, this.handleClose)
@@ -295,6 +335,9 @@ export default Vue.extend({
 			if (e.target.firstChild.classList[0] === `card`) {
 				this.showComments = false
 			}
+		},
+		toggleDropdownDelete() {
+			this.showDelete = !this.showDelete
 		},
 	},
 })

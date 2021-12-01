@@ -47,7 +47,7 @@
 				v-model="newName"
 				type="text"
 				:placeholder="$store.state.session.name"
-				class="text-black placeholder-black px-2 py-1 bg-gray1 rounded-lg flex-grow"
+				class="text-black placeholder-gray5 px-2 py-1 bg-gray1 rounded-lg flex-grow focus:outline-none"
 			/>
 		</div>
 		<!-- Bio -->
@@ -58,7 +58,7 @@
 					id="bio"
 					:maxlength="maxCharBio"
 					:value="bio"
-					class="text-black placeholder-black px-2 py-1 bg-gray1 rounded-lg w-full"
+					class="text-black placeholder-gray5 px-2 py-1 bg-gray1 rounded-lg w-full focus:outline-none"
 					@input="bio = $event.target.value"
 					@keyup="checkBio()"
 				></textarea>
@@ -78,7 +78,7 @@
 				v-model="location"
 				type="text"
 				:placeholder="$store.state.session.location === '' ? 'Enter Location' : $store.state.session.location"
-				class="text-black placeholder-black px-2 py-1 bg-gray1 rounded-lg flex-grow"
+				class="text-black placeholder-gray5 px-2 py-1 bg-gray1 rounded-lg flex-grow focus:outline-none"
 			/>
 		</div>
 		<!-- Website -->
@@ -89,7 +89,7 @@
 				v-model="website"
 				type="text"
 				:placeholder="$store.state.session.website === '' ? 'https://capsule.social' : $store.state.session.website"
-				class="text-black placeholder-black px-2 py-1 bg-gray1 rounded-lg flex-grow"
+				class="text-black placeholder-gray5 px-2 py-1 bg-gray1 rounded-lg flex-grow focus:outline-none"
 			/>
 		</div>
 		<!-- Email -->
@@ -100,7 +100,7 @@
 				v-model="newEmail"
 				type="email"
 				:placeholder="$store.state.session.email"
-				class="text-black placeholder-black px-2 py-1 bg-gray1 rounded-lg flex-grow"
+				class="text-black placeholder-gray5 px-2 py-1 bg-gray1 rounded-lg flex-grow focus:outline-none"
 			/>
 		</div>
 		<!-- Preferred Node -->

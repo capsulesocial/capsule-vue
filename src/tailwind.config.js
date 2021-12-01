@@ -70,7 +70,7 @@ module.exports = {
         lightButtonBG: '#2E556A',
         lightButtonText: '#FFFFFF',
         lightActive: '#2E556A',
-        lightError: '#B00020',
+        lightError: '#EE1F63',
         lightOnErrorText: '#FFFFFF',
 
         darkBG: '#121212',

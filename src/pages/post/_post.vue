@@ -14,6 +14,7 @@
 					z-10
 					py-2
 					px-4
+					rounded-b-lg
 					bg-gradient-to-r
 					from-lightBGStart
 					to-lightBGStop
@@ -44,6 +45,19 @@
 				</div>
 			</header>
 			<section v-if="post !== null" class="pb-16 md:pb-5 mb-5 pt-2">
+				<!-- Category and elipses -->
+				<article class="w-full flex justify-between my-5">
+					<nuxt-link :to="`/discover/` + post.category" class="text-primary capitalize">{{ post.category }}</nuxt-link>
+					<div class="flex">
+						<BookmarkButton
+							:postID="$route.params.post"
+							:hasBookmark="isBookmarked"
+							class="pr-2"
+							@clicked="getBookmarkStatus"
+						/>
+						<ShareButton :post="post" :cid="$route.params.post" :hasRepost="hasReposted" :repostCount="repostCount" />
+					</div>
+				</article>
 				<article>
 					<h1
 						:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
@@ -60,29 +74,16 @@
 					</h2>
 				</article>
 				<!-- Featured Photo -->
-				<article v-if="featuredPhoto !== null" class="mb-5 flex flex-col justify-end relative">
+				<article v-if="featuredPhoto !== null" class="mb-5 flex flex-col justify-end relative mt-5 -mx-16">
 					<div
 						v-if="post.featuredPhotoCaption"
 						class="h-full w-full absolute rounded-lg"
 						style="background: linear-gradient(180deg, rgba(0, 0, 0, 0) 85%, rgba(0, 0, 0, 0.8) 100%)"
 					></div>
-					<img :src="featuredPhoto" class="rounded-lg w-full shadow-lg object-cover" style="max-height: 22rem" />
+					<img :src="featuredPhoto" class="rounded-lg w-full shadow-lg object-cover" />
 					<p v-if="post.featuredPhotoCaption" class="absolute text-lightOnPrimaryText px-4 pb-3 text-sm">
 						{{ post.featuredPhotoCaption }}
 					</p>
-				</article>
-				<!-- Category and elipses -->
-				<article class="w-full flex justify-between my-2">
-					<nuxt-link :to="`/discover/` + post.category" class="text-primary capitalize">{{ post.category }}</nuxt-link>
-					<div class="flex">
-						<BookmarkButton
-							:postID="$route.params.post"
-							:hasBookmark="isBookmarked"
-							class="pr-2"
-							@clicked="getBookmarkStatus"
-						/>
-						<ShareButton :post="post" :cid="$route.params.post" :hasRepost="hasReposted" :repostCount="repostCount" />
-					</div>
 				</article>
 
 				<!-- <hr v-if="this.$store.state.settings.darkMode" class="style-two my-5" />
