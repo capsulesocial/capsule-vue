@@ -22,14 +22,13 @@ const toastSuccess: Success = (text: string): void => {
 	Toastify({
 		text,
 		duration: 3000,
-		close: true,
 		gravity: `top`, // `top` or `bottom`
-		position: `center`, // `left`, `center` or `right`
-		stopOnFocus: true, // Prevents dismissing of toast on hover
+		position: `left`,
+		avatar: require(`~/assets/images/util/success.png`),
 		// @ts-ignore
 		style: {
 			background: `rgba(31, 125, 173, .1)`,
-			border: `2px solid`,
+			border: `1px solid`,
 			borderColor: `#1F7DAD`,
 			borderRadius: `0.5rem`,
 			color: `#1F7DAD`,
@@ -38,7 +37,12 @@ const toastSuccess: Success = (text: string): void => {
 			paddingTop: `0.5rem`,
 			paddingBottom: `0.5rem`,
 			position: `fixed`,
+			left: `50%`,
 			zIndex: `999`,
+			display: `flex`,
+			alignItems: `center`,
+			justifyContent: `center`,
+			flexDirection: `row-reverse`,
 		},
 		onClick() {}, // Callback after click
 	}).showToast()
@@ -49,12 +53,12 @@ const toastWarning: Warning = (text: string): void => {
 		text,
 		duration: 3000,
 		gravity: `top`, // `top` or `bottom`
-		position: `left`, // `left`, `center` or `right`
-		stopOnFocus: true, // Prevents dismissing of toast on hover
+		position: `left`,
+		avatar: require(`~/assets/images/util/warning.png`),
 		// @ts-ignore
 		style: {
 			background: `rgba(240, 183, 133, .1)`,
-			border: `2px solid`,
+			border: `1px solid`,
 			borderColor: `#F0B785`,
 			borderRadius: `0.5rem`,
 			color: `#F0B785`,
@@ -63,7 +67,12 @@ const toastWarning: Warning = (text: string): void => {
 			paddingTop: `0.5rem`,
 			paddingBottom: `0.5rem`,
 			position: `fixed`,
+			left: `50%`,
 			zIndex: `999`,
+			display: `flex`,
+			alignItems: `center`,
+			justifyContent: `center`,
+			flexDirection: `row-reverse`,
 		},
 		onClick() {}, // Callback after click
 	}).showToast()
@@ -74,12 +83,12 @@ const toastError: Error = (text: string): void => {
 		text,
 		duration: 3000,
 		gravity: `top`, // `top` or `bottom`
-		position: `left`, // `left`, `center` or `right`
-		stopOnFocus: true, // Prevents dismissing of toast on hover
+		position: `left`,
+		avatar: require(`~/assets/images/util/error.png`),
 		// @ts-ignore
 		style: {
 			background: `rgba(238, 31, 99, .1)`,
-			border: `2px solid`,
+			border: `1px solid`,
 			borderColor: `#EE1F63`,
 			borderRadius: `0.5rem`,
 			color: `#EE1F63`,
@@ -88,7 +97,12 @@ const toastError: Error = (text: string): void => {
 			paddingTop: `0.5rem`,
 			paddingBottom: `0.5rem`,
 			position: `fixed`,
+			left: `50%`,
 			zIndex: `999`,
+			display: `flex`,
+			alignItems: `center`,
+			justifyContent: `center`,
+			flexDirection: `row-reverse`,
 		},
 		onClick() {}, // Callback after click
 	}).showToast()
@@ -99,12 +113,13 @@ const toastMessage: Message = (text: string): void => {
 		text,
 		duration: 3000,
 		gravity: `top`, // `top` or `bottom`
-		position: `left`, // `left`, `center` or `right`
+		position: `left`,
 		stopOnFocus: true, // Prevents dismissing of toast on hover
+		avatar: require(`~/assets/images/util/message.png`),
 		// @ts-ignore
 		style: {
 			background: `rgba(104, 104, 104, .1)`,
-			border: `2px solid`,
+			border: `1px solid`,
 			borderColor: `#686868`,
 			borderRadius: `0.5rem`,
 			color: `#686868`,
@@ -113,7 +128,12 @@ const toastMessage: Message = (text: string): void => {
 			paddingTop: `0.5rem`,
 			paddingBottom: `0.5rem`,
 			position: `fixed`,
+			left: `50%`,
 			zIndex: `999`,
+			display: `flex`,
+			alignItems: `center`,
+			justifyContent: `center`,
+			flexDirection: `row-reverse`,
 		},
 		onClick() {}, // Callback after click
 	}).showToast()

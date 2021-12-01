@@ -85,29 +85,29 @@
 	/* .medium-editor-toolbar {
     @apply bg-white border rounded-xl shadow-xl
   } */
-  	/* width */
+	/* width */
 	::-webkit-scrollbar {
 		padding-top: 5px;
 		margin-top: 5px;
 		width: 3px;
 	}
-	
+
 	/* Track */
 	::-webkit-scrollbar-track {
 		background: rgba(0, 0, 0, 0);
 	}
-	
+
 	/* Handle */
 	::-webkit-scrollbar-thumb {
-		background: #2E556A;
+		background: #2e556a;
 		border-radius: 50px;
 	}
-	
+
 	/* Handle on hover */
 	::-webkit-scrollbar-thumb:hover {
-		background: #7097AC; 
+		background: #7097ac;
 	}
-    h1 {
+	h1 {
 		@apply font-serif;
 	}
 	.editable h1 {
@@ -136,10 +136,10 @@
 		@apply text-p font-normal leading-relaxed my-3;
 	}
 	.editable ul {
-		@apply text-p font-normal leading-relaxed my-3 pl-6 list-disc
+		@apply text-p font-normal leading-relaxed my-3 pl-6 list-disc;
 	}
 	.editable ol {
-		@apply text-p font-normal leading-relaxed my-3 pl-6 list-decimal
+		@apply text-p font-normal leading-relaxed my-3 pl-6 list-decimal;
 	}
 	.editable code {
 		font-size: 85%;
@@ -164,6 +164,10 @@
 		border-left: 4px solid #ccc;
 		margin-bottom: 0.75rem;
 		margin-top: 0.75rem;
-		padding-left: 16px;	
+		padding-left: 16px;
 	}
+}
+
+.toastify-avatar {
+	margin-right: 10px;
 }
