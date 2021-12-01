@@ -162,7 +162,7 @@ export default Vue.extend({
 						}
 					}
 				} catch (err) {
-					alert(err)
+					this.$toastError(err)
 				}
 			}
 		},
@@ -185,12 +185,12 @@ export default Vue.extend({
 		},
 		async updateSettings() {
 			if (this.hasChanged() === false) {
-				alert(`Nothing to update!`)
+				this.$toastWarning(`Nothing to update!`)
 				return
 			}
 			if (this.nodeURL && this.nodeURL !== this.$store.state.session.nodeURL) {
 				if (!/((http|https?):\/\/)?(www\.)?[a-z0-9\-.]{3,}\.[a-z]{3}$/.test(this.nodeURL)) {
-					alert(`Invalid URL.`)
+					this.$toastError(`Invalid URL.`)
 					return
 				} else {
 					this.$store.commit(`changeNodeURL`, this.nodeURL)
@@ -198,7 +198,7 @@ export default Vue.extend({
 			}
 			const profileUpdated = await this.updateProfile()
 			if (profileUpdated) {
-				alert(`Settings updated!`)
+				this.$toastSuccess(`Settings updated!`)
 			}
 		},
 	},

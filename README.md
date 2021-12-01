@@ -53,3 +53,6 @@ $ yarn build:win
 - [DOMPurify](https://github.com/cure53/DOMPurify) - sanitize HTML output
 - [electron-nuxt](https://github.com/webspaceteam/electron-nuxt) - Electron scripts
 - [browser-image-compression](https://www.npmjs.com/package/browser-image-compression) - image compression
+- [toastify-js](https://github.com/apvarun/toastify-js) - toast messages
+- [Quill editor](https://quilljs.com/) - Text Editor
+- [Quill markdown](https://www.npmjs.com/package/quilljs-markdown) - Markdown for editor

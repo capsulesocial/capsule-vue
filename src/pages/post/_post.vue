@@ -260,6 +260,16 @@ export default Vue.extend({
 			container.addEventListener(`scroll`, this.handleScroll)
 		}
 	},
+	mounted() {
+		if (this.$store.state.settings.recentlyPosted) {
+			this.$toastSuccess(`You have successfully posted!`)
+		}
+	},
+	beforeDestroy() {
+		if (this.$store.state.settings.recentlyPosted) {
+			this.$store.commit(`settings/setRecentlyPosted`, false)
+		}
+	},
 	methods: {
 		getReposts,
 		isPostBookmarkedByUser,

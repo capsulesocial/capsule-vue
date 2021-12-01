@@ -133,6 +133,7 @@ export default Vue.extend({
 			// Post has NOT been reposted
 			if (!this.isReposted()) {
 				await sendRepost(this.$store.state.session.id, this.$props.cid, ``)
+				this.$toastSuccess(`You have successfully reposted this post`)
 				this.isReposted = () => {
 					return true
 				}
@@ -152,6 +153,7 @@ export default Vue.extend({
 					return false
 				}
 				this.repostOffset -= 1
+				this.$toastSuccess(`Repost removed from profile`)
 			}
 			this.$emit(`repostAction`)
 		},
@@ -168,7 +170,7 @@ export default Vue.extend({
 					shareElement.focus()
 					shareElement.select()
 					const copied = document.execCommand(`copy`)
-					alert(copied ? `Copied` : `Not copied`)
+					this.$toastMessage(copied ? `Copied URL to clipboard` : `Not copied`)
 					document.body.removeChild(shareElement)
 					break
 				case `TWITTER`:

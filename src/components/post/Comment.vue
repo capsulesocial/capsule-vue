@@ -193,7 +193,7 @@ export default Vue.extend({
 		},
 		async sendReply() {
 			if (!this.$qualityText(this.reply)) {
-				alert(`Invalid reply!`)
+				this.$toastError(`Invalid reply`)
 			} else {
 				const c = createComment(this.$store.state.session.id, this.reply, `no-emotion`, this.cid)
 				const _id = await sendComment(c, `reply`)

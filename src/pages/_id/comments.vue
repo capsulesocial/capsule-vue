@@ -73,7 +73,7 @@ export default Vue.extend({
 				}
 				this.comments = this.comments.concat(res)
 			} catch (err) {
-				alert(err)
+				this.$toastError(err)
 			} finally {
 				this.isLoading = false
 			}

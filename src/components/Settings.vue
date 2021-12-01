@@ -134,11 +134,11 @@ import { HTMLInputEvent } from '@/interfaces/HTMLInputEvent'
 import CloseIcon from '@/components/icons/X.vue'
 import Avatar from '@/components/Avatar.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
+import PencilIcon from '@/components/icons/Pencil.vue'
 // import ColorMode from '@/components/ColorMode.vue'
 import { MutationType, getProfileFromSession, namespace as sessionStoreNamespace } from '~/store/session'
 import { getProfile, setProfile } from '@/backend/profile'
 import { addPhotoToIPFS, getPhotoFromIPFS, preUploadPhoto } from '@/backend/photos'
-import PencilIcon from '@/components/icons/Pencil.vue'
 
 interface IData {
 	newName: string
@@ -231,7 +231,7 @@ export default Vue.extend({
 						}
 					}
 				} catch (err) {
-					alert(err)
+					this.$toastError(`Please try again`)
 				}
 			}
 		},
@@ -258,13 +258,13 @@ export default Vue.extend({
 		},
 		async updateSettings() {
 			if (this.hasChanged() === false) {
-				alert(`Nothing to update!`)
+				this.$toastWarning(`nothing to update`)
 				return
 			}
 			// Run quality rules before saving
 			if (this.newName !== ``) {
 				if (this.newName.length < 2 || this.newName.length > 32) {
-					alert(`Invalid name length`)
+					this.$toastError(`Invalid name length`)
 					return
 				} else {
 					this.changeName(this.newName.trim())
@@ -272,7 +272,7 @@ export default Vue.extend({
 			}
 			if (this.newID !== `` && this.$qualityID(this.newID)) {
 				if (this.newID.length < 2 || this.newID.length > 18) {
-					alert(`Invalid ID length`)
+					this.$toastError(`Invalid ID length`)
 					return
 				} else {
 					this.changeID(this.newID.trim())
@@ -289,7 +289,8 @@ export default Vue.extend({
 			}
 			if (this.nodeURL && this.nodeURL !== this.$store.state.session.nodeURL) {
 				if (!/((http|https?):\/\/)?(www\.)?[a-z0-9\-.]{3,}\.[a-z]{3}$/.test(this.nodeURL)) {
-					alert(`Invalid URL.`)
+					// Use HTML DOM styles: https://www.w3schools.com/jsref/dom_obj_style.asp
+					this.$toastError(`Invalid URL`)
 					return
 				} else {
 					this.$store.commit(`changeNodeURL`, this.nodeURL)
@@ -297,8 +298,10 @@ export default Vue.extend({
 			}
 			const profileUpdated = await this.updateProfile()
 			if (profileUpdated) {
-				alert(`Settings updated!`)
-				this.$router.push(`/` + this.$store.state.session.id)
+				this.$emit(`close`)
+				// Use HTML DOM styles: https://www.w3schools.com/jsref/dom_obj_style.asp
+				this.$toastSuccess(`Settings updated`)
+				this.$router.go(0)
 			}
 		},
 	},

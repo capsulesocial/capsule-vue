@@ -248,15 +248,15 @@ export default Vue.extend({
 		},
 		async sendComment() {
 			if (this.emotion === ``) {
-				alert(`Please select a reaction`)
+				this.$toastError(`Please select a reaction`)
 				return
 			}
 			if (this.comment.length < 1 || this.comment.length > 5000) {
-				alert(`Comment length too short or too long`)
+				this.$toastError(`Comment length too short or too long`)
 				return
 			}
 			if (!this.$qualityText(this.comment)) {
-				alert(`invalid comment!`)
+				this.$toastError(`invalid comment!`)
 			} else {
 				const c = createComment(this.$store.state.session.id, this.comment, this.emotion, this.postCID)
 				const _id = await sendComment(c, `comment`)

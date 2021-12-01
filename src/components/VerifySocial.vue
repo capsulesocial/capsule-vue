@@ -123,7 +123,8 @@ export default Vue.extend({
 		},
 		verifySocial() {
 			if (this.platform === `website` && !this.$qualityURL(this.handle)) {
-				alert(`Check URL!`)
+				// Use HTML DOM styles: https://www.w3schools.com/jsref/dom_obj_style.asp
+				this.$toastError(`Check URL`)
 				return
 			}
 			this.$store.commit(`me/addSocial`, {

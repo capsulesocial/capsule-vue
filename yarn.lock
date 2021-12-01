@@ -2360,6 +2360,11 @@
     "@types/webpack" "^4"
     terser "^4.6.13"
 
+"@types/toastify-js@^1.9.2":
+  version "1.9.2"
+  resolved "https://registry.yarnpkg.com/@types/toastify-js/-/toastify-js-1.9.2.tgz#de9ea5212f6adb73919a5dcc33158f30881d8c35"
+  integrity sha512-lIbjnaArz56dM++EsrMnt9OK9RSIMAcJGz2sfpuoblLeqYYzyvyDaJu306++K9CtvWWlmj5HXG5CnuqYJKxDbg==
+
 "@types/trusted-types@*":
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/@types/trusted-types/-/trusted-types-2.0.2.tgz#fc25ad9943bcac11cceb8168db4f275e0e72e756"
@@ -13193,6 +13198,11 @@ to-regex@^3.0.1, to-regex@^3.0.2:
     extend-shallow "^3.0.2"
     regex-not "^1.0.2"
     safe-regex "^1.1.0"
+
+toastify-js@^1.11.2:
+  version "1.11.2"
+  resolved "https://registry.yarnpkg.com/toastify-js/-/toastify-js-1.11.2.tgz#5c66cb05cee30b09e5bd8961ab809e41a3ce716c"
+  integrity sha512-bMBNKhZLPX/sDhpwM7KHIRUTtqCylQeoZDiEWy5zE7iDUJ92XmP8AKgDAp9rXx6pR5GXGFtQHHoH62toahbHgQ==
 
 toidentifier@1.0.0:
   version "1.0.0"
