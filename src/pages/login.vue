@@ -145,7 +145,7 @@ export default Vue.extend({
 				}
 
 				// If no username is found then register...
-				alert(`looks like you don't have an account`)
+				this.$toastWarning(`looks like you don't have an account`)
 				this.$router.push(`/register`)
 			} catch (e) {
 				// eslint-disable-next-line no-console
@@ -159,7 +159,7 @@ export default Vue.extend({
 			}
 			const idCheck = this.$qualityID(this.id)
 			if (!idCheck) {
-				alert(idCheck)
+				this.$toastError(`ID did not pass quality rules`)
 				return null
 			}
 			return register(this.id, privateKey)
@@ -187,7 +187,7 @@ export default Vue.extend({
 				this.changeLocation(account.location)
 				this.$router.push(`/home`)
 			} catch (err: any) {
-				alert(err.message)
+				this.$toastError(err.message)
 			}
 		},
 	},

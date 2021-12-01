@@ -168,7 +168,7 @@ export default Vue.extend({
 					shareElement.focus()
 					shareElement.select()
 					const copied = document.execCommand(`copy`)
-					alert(copied ? `Copied` : `Not copied`)
+					this.$toastWarning(copied ? `Copied` : `Not copied`)
 					document.body.removeChild(shareElement)
 					break
 				case `TWITTER`:

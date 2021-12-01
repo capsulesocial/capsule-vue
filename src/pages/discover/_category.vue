@@ -121,7 +121,7 @@ export default Vue.extend({
 				}
 				this.posts = this.posts.concat(res)
 			} catch (err) {
-				alert(err)
+				this.$toastError(err)
 			} finally {
 				this.isLoading = false
 			}

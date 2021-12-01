@@ -160,30 +160,30 @@ export default Vue.extend({
 			this.subtitle = this.$refs.subtitle.value
 			// Check for quality title
 			if (!this.$qualityText(this.title) || this.title.length < 12 || this.title.length > 90) {
-				alert(`Invalid title!`)
+				this.$toastError(`Invalid title!`)
 				return
 				// Check if using a subtitle
 			}
 			if (this.subtitle !== `` && this.subtitle && !this.$qualityText(this.subtitle)) {
-				alert(`Invalid subtitle!`)
+				this.$toastError(`Invalid subtitle!`)
 				return
 			}
 			if (this.subtitle !== `` && this.subtitle.length > 180) {
-				alert(`Subtitle too long!`)
+				this.$toastError(`Subtitle too long!`)
 				return
 			}
 			if (this.$store.state.draft.category === ``) {
-				alert(`Missing category`)
+				this.$toastError(`Missing category`)
 				return
 			}
 			const clean = this.getInputHTML()
 			// Check content quality
 			if (clean.length < 280) {
-				alert(`Post body too short. Write more before posting`)
+				this.$toastError(`Post body too short. Write more before posting`)
 				return
 			}
 			if (clean.length > 100000) {
-				alert(`Post body too long for IPFS deliverability`)
+				this.$toastError(`Post body too long for IPFS deliverability`)
 				return
 			}
 			const p = createPost(

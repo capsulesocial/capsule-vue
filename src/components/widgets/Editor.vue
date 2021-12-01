@@ -230,16 +230,16 @@ export default Vue.extend({
 		},
 		addTag(): void {
 			if (!this.$qualityText(this.tag) || this.tag.length < 1 || this.tag.length > 99) {
-				alert(`Invalid tag!`)
+				this.$toastError(`Invalid tag!`)
 				return
 			}
 			const tagList = this.$store.state.draft.tags
 			if (tagList.some((t: Tag) => t.name === this.tag)) {
-				alert(`Duplicate tag!`)
+				this.$toastWarning(`Duplicate tag!`)
 				return
 			}
 			if (tagList.length > 2) {
-				alert(`Max: 3 tags`)
+				this.$toastWarning(`Max: 3 tags`)
 				return
 			}
 			const t: Tag = {
@@ -299,7 +299,7 @@ export default Vue.extend({
 					}
 				}
 			} catch (err) {
-				alert(err)
+				this.$toastError(err)
 			}
 		},
 		handleCategoryDropdown(e: any): void {
