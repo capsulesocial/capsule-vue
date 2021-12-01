@@ -39,7 +39,7 @@ export async function encryptAndSignData(data: Post) {
 	}
 
 	return {
-		post: encryptedPost,
+		data: encryptedPost,
 		key: uint8ArrayToHexString(key),
 		counter: uint8ArrayToHexString(counter),
 		sig: uint8ArrayToHexString(signature),
