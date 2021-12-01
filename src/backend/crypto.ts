@@ -42,13 +42,13 @@ export async function encryptAndSignData(data: Post) {
 		post: data,
 		key: uint8ArrayToHexString(key),
 		counter: uint8ArrayToHexString(counter),
-		signature: uint8ArrayToHexString(signature),
+		sig: uint8ArrayToHexString(signature),
 	}
 }
 
-export async function verifyAndDecryptData(data: Post, key: string, counter: string, signature: string) {
+export async function verifyAndDecryptData(data: Post, key: string, counter: string, sig: string) {
 	const { publicKey } = await getUserInfoNEAR(data.authorID)
-	const verified = verifyContent(data, hexStringToUint8Array(signature), publicKey)
+	const verified = verifyContent(data, hexStringToUint8Array(sig), publicKey)
 	if (!verified) {
 		throw new Error(`Signature not verified!`)
 	}
