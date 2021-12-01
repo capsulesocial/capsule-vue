@@ -31,15 +31,15 @@ export async function encryptAndSignData(data: Post) {
 	const byteData = ec.encode(data.content)
 
 	const encryptedData = await _encryptData(byteData, counter, key)
-	data.content = uint8ArrayToHexString(encryptedData)
+	const encryptedPost = { ...data, content: uint8ArrayToHexString(encryptedData) } as Post
 
-	const signature = await signContent(data)
+	const signature = await signContent(encryptedPost)
 	if (!signature) {
 		throw new Error(`Data signing failed!`)
 	}
 
 	return {
-		post: data,
+		post: encryptedPost,
 		key: uint8ArrayToHexString(key),
 		counter: uint8ArrayToHexString(counter),
 		sig: uint8ArrayToHexString(signature),
@@ -60,6 +60,6 @@ export async function verifyAndDecryptData(data: Post, key: string, counter: str
 		hexStringToUint8Array(counter),
 		hexStringToUint8Array(key),
 	)
-	data.content = dec.decode(decryptedData)
-	return data
+	const decryptedPost = { ...data, content: dec.decode(decryptedData) }
+	return decryptedPost
 }
