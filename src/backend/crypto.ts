@@ -1,5 +1,5 @@
 import { hexStringToUint8Array, uint8ArrayToHexString } from './utilities/helpers'
-import { Post } from './post'
+import { IEncryptedPost } from './post'
 import { signContent, verifyContent } from './utilities/keys'
 import { getUserInfoNEAR } from './near'
 
@@ -21,7 +21,7 @@ async function _decryptData(data: Uint8Array, counter: Uint8Array, key: Uint8Arr
 	return new Uint8Array(decryptedData)
 }
 
-export async function encryptAndSignData(data: Post) {
+export async function encryptAndSignData(data: IEncryptedPost) {
 	// 32-byte key for AES-256
 	const key = window.crypto.getRandomValues(new Uint8Array(32))
 	// 16-byte counter block for AES-256
@@ -31,7 +31,7 @@ export async function encryptAndSignData(data: Post) {
 	const byteData = ec.encode(data.content)
 
 	const encryptedData = await _encryptData(byteData, counter, key)
-	const encryptedPost: Post = { ...data, content: uint8ArrayToHexString(encryptedData) }
+	const encryptedPost: IEncryptedPost = { ...data, content: uint8ArrayToHexString(encryptedData) }
 
 	const signature = await signContent(encryptedPost)
 	if (!signature) {
@@ -46,7 +46,7 @@ export async function encryptAndSignData(data: Post) {
 	}
 }
 
-export async function verifyAndDecryptData(data: Post, key: string, counter: string, sig: string) {
+export async function verifyAndDecryptData(data: IEncryptedPost, key: string, counter: string, sig: string) {
 	const { publicKey } = await getUserInfoNEAR(data.authorID)
 	const verified = verifyContent(data, hexStringToUint8Array(sig), publicKey)
 	if (!verified) {
@@ -60,6 +60,6 @@ export async function verifyAndDecryptData(data: Post, key: string, counter: str
 		hexStringToUint8Array(counter),
 		hexStringToUint8Array(key),
 	)
-	const decryptedPost: Post = { ...data, content: dec.decode(decryptedData) }
+	const decryptedPost: IEncryptedPost = { ...data, content: dec.decode(decryptedData) }
 	return decryptedPost
 }
