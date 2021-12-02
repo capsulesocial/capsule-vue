@@ -1,6 +1,6 @@
 import { hexStringToUint8Array, uint8ArrayToHexString } from './utilities/helpers'
 import { Post } from './post'
-import { signContent, verifyContent } from './utilities/keys'
+import { verifyContent } from './utilities/keys'
 import { getUserInfoNEAR } from './near'
 
 async function _encryptData(data: Uint8Array, counter: Uint8Array, key: Uint8Array) {
@@ -21,7 +21,7 @@ async function _decryptData(data: Uint8Array, counter: Uint8Array, key: Uint8Arr
 	return new Uint8Array(decryptedData)
 }
 
-export async function encryptAndSignData(data: Post) {
+export async function encryptData(data: Post) {
 	// 32-byte key for AES-256
 	const key = window.crypto.getRandomValues(new Uint8Array(32))
 	// 16-byte counter block for AES-256
@@ -33,16 +33,10 @@ export async function encryptAndSignData(data: Post) {
 	const encryptedData = await _encryptData(byteData, counter, key)
 	const encryptedPost: Post = { ...data, content: uint8ArrayToHexString(encryptedData) }
 
-	const signature = await signContent(encryptedPost)
-	if (!signature) {
-		throw new Error(`Data signing failed!`)
-	}
-
 	return {
 		data: encryptedPost,
 		key: uint8ArrayToHexString(key),
 		counter: uint8ArrayToHexString(counter),
-		sig: uint8ArrayToHexString(signature),
 	}
 }
 
