@@ -198,7 +198,7 @@ export default Vue.extend({
 			}
 			const profileUpdated = await this.updateProfile()
 			if (profileUpdated) {
-				this.$toastSuccess(`Settings updated!`)
+				this.$toastSuccess(`Your settings has been successfully updated`)
 			}
 		},
 	},

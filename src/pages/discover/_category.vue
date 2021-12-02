@@ -2,7 +2,18 @@
 	<section class="w-full border border-lightBorder">
 		<!-- Header -->
 		<div
-			class="bg-primary rounded-lg flex flex-row items-center shadow-lg h-56 border-lightBorder w-full"
+			id="header"
+			class="
+				bg-primary
+				rounded-lg
+				flex flex-row
+				items-center
+				shadow-lg
+				h-56
+				border-lightBorder
+				w-full
+				trigger-menu-wrapper
+			"
 			:style="{
 				background: `linear-gradient(180deg, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.8) 100%), url(${require(`@/assets/images/category/` +
 					$route.params.category +
@@ -23,8 +34,9 @@
 		</div>
 		<!-- Posts loaded -->
 		<div
+			id="column"
 			class="fixed overflow-y-auto"
-			style="width: 748px; min-height: calc(100vh - 312px); height: calc(100vh - 312px)"
+			style="width: 748px; min-height: calc(100vh - 300px); height: calc(100vh - 300px)"
 		>
 			<article v-for="p in posts" :key="p.post._id">
 				<PostCard
@@ -59,6 +71,7 @@ import { followChange, getFollowersAndFollowing } from '@/backend/following'
 interface IData {
 	posts: IPostResponse[]
 	isLoading: boolean
+	lastScroll: number
 	following: Set<string>
 	currentOffset: number
 	limit: number
@@ -79,6 +92,7 @@ export default Vue.extend({
 			currentOffset: 0,
 			limit: 10,
 			algorithm: `NEW`,
+			lastScroll: 0,
 		}
 	},
 	async created() {
@@ -94,8 +108,16 @@ export default Vue.extend({
 		})
 		this.isLoading = false
 		window.addEventListener(`scroll`, this.handleScroll)
+		const container = document.getElementById(`column`)
+		if (container) {
+			container.addEventListener(`scroll`, this.handleScrollHeader)
+		}
 	},
 	destroyed() {
+		const container = document.getElementById(`column`)
+		if (container) {
+			container.removeEventListener(`scroll`, this.handleScrollHeader)
+		}
 		window.removeEventListener(`scroll`, this.handleScroll)
 	},
 	methods: {
@@ -133,6 +155,55 @@ export default Vue.extend({
 				this.currentOffset += this.limit
 			}
 		},
+		handleScrollHeader() {
+			const body = document.getElementById(`column`)
+			const header = document.getElementById(`header`)
+			const scrollUp = `scrollup`
+			const scrollDown = `scrolldown`
+			if (!body) {
+				return
+			}
+			const currentScroll = body.scrollTop
+			if (!header) {
+				return
+			}
+			if (body.scrollTop <= 0) {
+				header.classList.remove(scrollUp)
+				return
+			}
+			if (currentScroll > this.lastScroll && !header.classList.contains(scrollDown)) {
+				// down
+				header.classList.remove(scrollUp)
+				header.classList.add(scrollDown)
+			} else if (currentScroll < this.lastScroll && header.classList.contains(scrollDown)) {
+				// up
+				header.classList.remove(scrollDown)
+				header.classList.add(scrollUp)
+			}
+			this.lastScroll = currentScroll
+		},
 	},
 })
 </script>
+
+<style>
+.trigger-menu-wrapper {
+	transition: all 0.4s;
+	z-index: 50;
+}
+.page-header {
+	transition: all 0.3s ease-in-out;
+}
+.trigger-menu-wrapper {
+	transition: all 0.4s;
+}
+.scrolldown {
+	background: linear-gradient(rgba(46, 85, 106, 0.25) 0%, rgba(46, 85, 106, 0.25) 100%) !important;
+	height: 4rem;
+	backdrop-filter: blur(10px);
+}
+.scrollup {
+	opacity: 1;
+	transform: none;
+}
+</style>

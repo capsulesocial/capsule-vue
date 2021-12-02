@@ -153,7 +153,7 @@ export default Vue.extend({
 					return false
 				}
 				this.repostOffset -= 1
-				this.$toastSuccess(`Repost removed from profile`)
+				this.$toastSuccess(`This repost has been successfully removed from your profile`)
 			}
 			this.$emit(`repostAction`)
 		},

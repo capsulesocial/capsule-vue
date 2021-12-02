@@ -305,7 +305,7 @@ export default Vue.extend({
 		async deletePost() {
 			await sendPostDeletion(`HIDE`, this.post._id, this.$store.state.session.id)
 			this.postDeleted = true
-			this.$toastSuccess(`Post successfully deleted`)
+			this.$toastSuccess(`This post has been successfully deleted`)
 		},
 		async getBookmarkStatus() {
 			this.isBookmarked = await isPostBookmarkedByUser(this.post._id, this.$store.state.session.id)
