@@ -3,9 +3,10 @@ import axios from 'axios'
 import { signContent } from './utilities/keys'
 import ipfs from './utilities/ipfs'
 import { uint8ArrayToHexString } from './utilities/helpers'
-import { capsuleOrbit } from './utilities/config'
+import { capsuleOrbit, capsuleServer } from './utilities/config'
 import { IRepost } from './reposts'
 import { ICommentData } from './comment'
+import { encryptAndSignData } from './crypto'
 export interface Tag {
 	name: string
 }
@@ -79,6 +80,21 @@ export async function sendPost(data: Post): Promise<string> {
 		cid,
 		data,
 		sig: uint8ArrayToHexString(signature),
+		type: `post`,
+	})
+
+	return cid
+}
+
+export async function sendEncryptedPost(data: Post): Promise<string> {
+	const { data: post, key, counter, sig } = await encryptAndSignData(data)
+
+	const cid = await ipfs().sendJSONData(post)
+	await axios.post(`${capsuleServer}/content`, { key, data: post, counter, sig, cid })
+	await axios.post(`${capsuleOrbit}/content`, {
+		cid,
+		data: post,
+		sig,
 		type: `post`,
 	})
 
