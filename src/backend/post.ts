@@ -1,12 +1,11 @@
 import axios from 'axios'
 
+import { signContent } from './utilities/keys'
 import ipfs from './utilities/ipfs'
-import { capsuleOrbit, capsuleServer } from './utilities/config'
+import { uint8ArrayToHexString } from './utilities/helpers'
+import { capsuleOrbit } from './utilities/config'
 import { IRepost } from './reposts'
 import { ICommentData } from './comment'
-import { encryptData } from './crypto'
-import { signContent } from './utilities/keys'
-import { uint8ArrayToHexString } from './utilities/helpers'
 export interface Tag {
 	name: string
 }
@@ -21,7 +20,6 @@ export interface Post {
 	featuredPhotoCaption?: string | null
 	timestamp: number
 	tags: Tag[]
-	encrypted?: boolean
 }
 
 export type RetrievedPost = Omit<Post, `content`> & { _id: string; excerpt: string }
@@ -52,7 +50,6 @@ export function createPost(
 	authorID: string,
 	featuredPhotoCID?: string | null,
 	featuredPhotoCaption?: string | null,
-	encrypted?: boolean,
 ): Post {
 	if (subtitle !== null) {
 		subtitle = subtitle.trim()
@@ -67,42 +64,19 @@ export function createPost(
 		authorID,
 		...(featuredPhotoCID ? { featuredPhotoCID } : {}),
 		...(featuredPhotoCaption ? { featuredPhotoCaption } : {}),
-		...(encrypted ? { encrypted } : {}),
 	}
 }
 
 export async function sendPost(data: Post): Promise<string> {
-	let post: Post = data
-	let key: string | null = null
-	let counter: string | null = null
-
-	if (data.encrypted) {
-		;({ data: post, key, counter } = await encryptData(data))
-	}
-
-	const signature = await signContent(post)
+	const signature = await signContent(data)
 	if (!signature) {
-		throw new Error(`Signature could not be generated`)
+		throw new Error(`Post signing failed`)
 	}
 
-	const cid = await ipfs().sendJSONData(post)
-
-	if (data.encrypted) {
-		if (!key || !counter) {
-			throw new Error(`Unexpected error occurred`)
-		}
-		await axios.post(`${capsuleServer}/content`, {
-			key,
-			data: post,
-			counter,
-			sig: uint8ArrayToHexString(signature),
-			cid,
-		})
-	}
-
+	const cid = await ipfs().sendJSONData(data)
 	await axios.post(`${capsuleOrbit}/content`, {
 		cid,
-		data: post,
+		data,
 		sig: uint8ArrayToHexString(signature),
 		type: `post`,
 	})
