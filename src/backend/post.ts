@@ -20,6 +20,7 @@ export interface Post {
 	featuredPhotoCaption?: string | null
 	timestamp: number
 	tags: Tag[]
+	encrypted?: boolean
 }
 
 export type RetrievedPost = Omit<Post, `content`> & { _id: string; excerpt: string }
