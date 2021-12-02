@@ -63,3 +63,15 @@ export async function verifyAndDecryptData(data: IEncryptedPost, key: string, co
 	const decryptedPost: IEncryptedPost = { ...data, content: dec.decode(decryptedData) }
 	return decryptedPost
 }
+
+export async function decryptData(data: IEncryptedPost, key: string, counter: string) {
+	const dec = new TextDecoder()
+
+	const decryptedData = await _decryptData(
+		hexStringToUint8Array(data.content),
+		hexStringToUint8Array(counter),
+		hexStringToUint8Array(key),
+	)
+	const decryptedPost: IEncryptedPost = { ...data, content: dec.decode(decryptedData) }
+	return decryptedPost
+}
