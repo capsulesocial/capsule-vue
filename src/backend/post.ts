@@ -6,7 +6,8 @@ import { uint8ArrayToHexString } from './utilities/helpers'
 import { capsuleOrbit, capsuleServer } from './utilities/config'
 import { IRepost } from './reposts'
 import { ICommentData } from './comment'
-import { encryptAndSignData } from './crypto'
+import { decryptData, encryptAndSignData } from './crypto'
+import { toastError } from '@/plugins/toast'
 export interface Tag {
 	name: string
 }
@@ -137,8 +138,53 @@ export async function sendEncryptedPost(data: IEncryptedPost): Promise<string> {
 	return cid
 }
 
-export function getPost(cid: string): Promise<Post> {
-	return ipfs().getJSONData(cid)
+export async function getPost(cid: string, username?: string): Promise<Post> {
+	let post: Post = await ipfs().getJSONData(cid)
+	if (!isEncryptedPost(post)) {
+		return post
+	}
+
+	if (!username) {
+		throw new Error(`Provide a username`)
+	}
+
+	const result = await getEncryptionKeys(username, cid)
+	if (!isError(result)) {
+		const { key, counter } = result
+		post = await decryptData(post, key, counter)
+	} else {
+		toastError(result.error)
+	}
+
+	return post
+}
+
+export function isEncryptedPost(post: Post): post is IEncryptedPost {
+	return `encrypted` in post && post.encrypted === true
+}
+
+export function isError(obj: Record<string, unknown>): obj is { error: any } {
+	return `error` in obj
+}
+
+async function getEncryptionKeys(username: string, cid: string) {
+	const signature = await signContent({ username, cid })
+	if (!signature) {
+		throw new Error(`Content signing failed`)
+	}
+	const sig = uint8ArrayToHexString(signature)
+
+	try {
+		const res = await axios.get<{ key: string; counter: string }>(
+			`${capsuleServer}/content/${cid}?username=${username}&sig=${sig}`,
+		)
+		return res.data
+	} catch (err) {
+		if (axios.isAxiosError(err) && err.response) {
+			return { error: err.response.data.error }
+		}
+		throw err
+	}
 }
 
 export interface IGetPostsOptions {
