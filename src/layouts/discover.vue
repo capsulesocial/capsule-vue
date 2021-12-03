@@ -12,7 +12,9 @@
 					<!-- Title and peered nodes -->
 					<div class="fixed w-full flex justify-between items-center" style="width: 1220px; height: 62px">
 						<!-- Title -->
-						<h1 class="font-semibold text-primary" style="font-size: 2.6rem">Browse Capsule</h1>
+						<h1 v-if="$route.name === `discover`" class="font-semibold text-primary" style="font-size: 2.6rem">
+							Browse Capsule
+						</h1>
 						<!-- Peered nodes -->
 						<Nodes />
 					</div>
