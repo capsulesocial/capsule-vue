@@ -36,7 +36,8 @@
 		<div
 			id="column"
 			class="fixed overflow-y-auto"
-			style="width: 748px; min-height: calc(100vh - 300px); height: calc(100vh - 300px)"
+			style="width: 748px"
+			:style="`min-height: calc(100vh - ` + padding + `); height: calc(100vh - ` + padding + `)`"
 		>
 			<article v-for="p in posts" :key="p.post._id">
 				<PostCard
@@ -76,6 +77,7 @@ interface IData {
 	currentOffset: number
 	limit: number
 	algorithm: Algorithm
+	padding: string
 }
 
 export default Vue.extend({
@@ -93,6 +95,7 @@ export default Vue.extend({
 			limit: 10,
 			algorithm: `NEW`,
 			lastScroll: 0,
+			padding: `0px`,
 		}
 	},
 	async created() {
@@ -143,7 +146,7 @@ export default Vue.extend({
 				}
 				this.posts = this.posts.concat(res)
 			} catch (err) {
-				this.$toastError(err)
+				this.$toastError(`error`)
 			} finally {
 				this.isLoading = false
 			}
@@ -158,6 +161,7 @@ export default Vue.extend({
 		handleScrollHeader() {
 			const body = document.getElementById(`column`)
 			const header = document.getElementById(`header`)
+			this.padding = header?.clientHeight + `px`
 			const scrollUp = `scrollup`
 			const scrollDown = `scrolldown`
 			if (!body) {

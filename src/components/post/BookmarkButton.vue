@@ -29,9 +29,11 @@ export default Vue.extend({
 			if (!this.$props.hasBookmark) {
 				// add bookmark
 				await sendBookmarkEvent(`ADD`, this.$store.state.session.id, this.$props.postID)
+				this.$toastSuccess(`You have added this post to your bookmarks`)
 			} else {
 				// Remove bookmark
 				await sendBookmarkEvent(`REMOVE`, this.$store.state.session.id, this.$props.postID)
+				this.$toastSuccess(`You have removed this post from your bookmarks`)
 			}
 			this.$emit(`clicked`)
 		},

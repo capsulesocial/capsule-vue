@@ -84,6 +84,7 @@
 								</span>
 							</div>
 							<div class="flex items-center" :class="repostedBy !== `` ? `-mt-4` : ``">
+								<!-- Bookmarks button -->
 								<BookmarkButton :postID="post._id" :hasBookmark="isBookmarked" @clicked="getBookmarkStatus" />
 								<button
 									v-if="post.authorID === $store.state.session.id"
