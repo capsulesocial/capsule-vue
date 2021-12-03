@@ -40,7 +40,7 @@
 				style="width: 748px; min-height: calc(100vh - 220px); height: calc(100vh - 220px)"
 			>
 				<!-- content -->
-				<article v-for="p in posts" :key="p.post._id">
+				<article v-for="p in posts" :key="generateKey(p)">
 					<PostCard
 						:repost="p.repost"
 						:post="p.post"
@@ -167,7 +167,7 @@ export default Vue.extend({
 				}
 				this.posts = this.posts.concat(res)
 			} catch (err) {
-				this.$toastError(err)
+				this.$toastError(`error`)
 			} finally {
 				this.isLoading = false
 			}
@@ -178,6 +178,15 @@ export default Vue.extend({
 				await this.loadPosts()
 				this.currentOffset += this.limit
 			}
+		},
+		generateKey(p: IPostResponse | IRepostResponse) {
+			let key: string = p.post._id
+			// @ts-ignore
+			if (p.repost) {
+				// @ts-ignore
+				key += p.repost._id
+			}
+			return key
 		},
 	},
 })

@@ -5,7 +5,7 @@ import { capsuleOrbit } from './utilities/config'
 import { uint8ArrayToHexString } from './utilities/helpers'
 import ipfs from './utilities/ipfs'
 
-export async function sendRepost(authorID: string, postCID: string, content: string): Promise<string> {
+export async function sendRepost(authorID: string, postCID: string, content: string, type: string): Promise<string> {
 	const data = {
 		authorID,
 		timestamp: Date.now(),
@@ -23,7 +23,7 @@ export async function sendRepost(authorID: string, postCID: string, content: str
 		cid,
 		data,
 		sig: uint8ArrayToHexString(signature),
-		type: `simple`,
+		type,
 	})
 
 	return cid
@@ -34,7 +34,7 @@ export interface IRepost {
 	postCID: string
 	sig: string
 	timestamp: number
-	type: `simple`
+	type: `simple` | `quote`
 	_id: string
 }
 

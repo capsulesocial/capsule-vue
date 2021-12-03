@@ -18,9 +18,9 @@
 					: 'bg-darkBG text-darkPrimaryText border-darkBorder'
 			"
 			class="absolute flex flex-col rounded-lg rounded-t-none w-40 shadow-lg z-10 p-1"
-			style="top: -17px; left: 32px"
+			style="top: -62px; left: 42px"
 		>
-			<!-- Repost -->
+			<!-- Simple Repost -->
 			<button
 				:class="$store.state.settings.darkMode ? 'hover:text-lightActive' : 'hover:text-darkActive'"
 				class="flex focus:outline-none"
@@ -29,6 +29,15 @@
 				<RepostIcon :isActive="isReposted()" :shrink="true" style="width: 13.7px" class="mr-2" />
 				<span v-if="isReposted()" class="text-xs self-center">Undo Repost</span>
 				<span v-else class="text-xs self-center">Repost to Feed</span>
+			</button>
+			<!-- Quote Repost -->
+			<button
+				:class="$store.state.settings.darkMode ? 'hover:text-lightActive' : 'hover:text-darkActive'"
+				class="flex focus:outline-none"
+				@click="$emit(`toggleRepost`)"
+			>
+				<RepostIcon :isActive="isReposted()" :shrink="true" style="width: 13.7px" class="mr-2" />
+				<span class="text-xs self-center">Quote Repost</span>
 			</button>
 			<!-- Twitter -->
 			<button
@@ -132,7 +141,7 @@ export default Vue.extend({
 		async handleRepost() {
 			// Post has NOT been reposted
 			if (!this.isReposted()) {
-				await sendRepost(this.$store.state.session.id, this.$props.cid, ``)
+				await sendRepost(this.$store.state.session.id, this.$props.cid, ``, `simple`)
 				this.$toastSuccess(`You have successfully reposted this post`)
 				this.isReposted = () => {
 					return true

@@ -3,7 +3,7 @@
 		<!-- popup backdrop -->
 		<div
 			:class="
-				showComments
+				showPopup
 					? `fixed w-full h-screen bg-primary top-0 bottom-0 left-0 right-0 z-30 flex justify-center items-center bg-opacity-50`
 					: ``
 			"
@@ -11,129 +11,163 @@
 			<div
 				class="card"
 				:class="
-					showComments
+					showPopup
 						? `shadow-lg rounded-lg bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg mt-10 overflow-y-auto`
 						: ``
 				"
-				:style="showComments ? `width: 750px; backdrop-filter: blur(10px); max-height: 90vh` : ``"
+				:style="showPopup ? `width: 750px; backdrop-filter: blur(10px); max-height: 90vh` : ``"
 				style="backdrop-filter: blur(10px)"
 			>
 				<div
 					class="sticky top-0 z-10 pb-5 border-b bg-gradient-to-r from-lightBGStart to-lightBGStop px-6 pt-5"
 					style="backdrop-filter: blur(10px)"
 				>
-					<!-- IF reposted -->
-					<div v-if="repostedBy !== `` && !hideRepostIcon" class="flex w-full -mt-2 mb-2 text-gray5">
-						<RepostIcon :shrink="true" />
-						<p class="pl-2 text-sm text-gray5">
-							<nuxt-link :to="`/` + repostedBy">{{ repostedBy }} </nuxt-link>
-							reposted
-						</p>
+					<!-- Show Quote Repost input -->
+					<div v-if="showRepostEditor" class="flex flex-row pb-2">
+						<Avatar :authorID="$store.state.session.id" :avatar="myAvatar" class="flex-shrink-0" />
+						<textarea
+							ref="repostText"
+							class="w-full ml-4 resize-none focus:outline-none"
+							placeholder="What's your response?"
+						></textarea>
 					</div>
-					<!-- Top: avatar, name, id, close -->
-					<div class="flex w-full">
-						<Avatar :avatar="avatar" :authorID="post.authorID" size="w-12 h-12" />
-						<div class="flex flex-col flex-grow ml-4">
-							<div class="flex" @mouseover="showFriendButton = true" @mouseleave="showFriendButton = false">
-								<nuxt-link :to="'/' + post.authorID" class="flex mr-4">
-									<span class="font-medium text-base">
-										{{ authorName }}
-									</span>
-									<span class="ml-2 text-primary"> @{{ post.authorID }} </span>
+					<!-- Quote repost -->
+					<div v-if="quote && !showRepostEditor">
+						<div class="flex w-full">
+							<Avatar :avatar="quote.avatar" :authorID="quote.authorID" size="w-12 h-12" />
+							<div class="flex flex-col flex-grow ml-4">
+								<nuxt-link :to="`/` + quote.authorID" class="flex mr-4">
+									<span class="font-medium text-base">{{ this.quote.name }}</span>
+									<span class="ml-2 text-primary">@{{ this.quote.authorID }}</span>
 								</nuxt-link>
-								<span v-show="showFriendButton">
-									<FriendButton
-										v-if="post.authorID !== $store.state.session.id && $route.name !== `id`"
-										:small="true"
-										:userIsFollowed="usersFollowing.has(post.authorID)"
-										:toggleFriend="() => toggleFriend(post.authorID)"
-									/>
+								<span class="text-xs ml-14">{{ $formatDate(this.quote.timestamp) }}</span>
+							</div>
+						</div>
+						<p class="break-words my-2">{{ this.quote.content }}</p>
+					</div>
+					<!-- Wrapper for rounded outline on quote repost -->
+					<div :class="showRepostEditor || quote ? `rounded-lg border border-primary border-dashed p-2` : ``">
+						<!-- Simple repost -->
+						<div
+							v-if="repostedBy !== `` && !hideRepostIcon && quote === null"
+							class="flex w-full -mt-2 mb-2 text-gray5"
+						>
+							<RepostIcon :shrink="true" />
+							<p class="pl-2 text-sm text-gray5">
+								<nuxt-link :to="`/` + repostedBy">{{ repostedBy }} </nuxt-link>
+								reposted
+							</p>
+						</div>
+						<!-- Top: avatar, name, id, close -->
+						<div class="flex w-full">
+							<Avatar :avatar="avatar" :authorID="post.authorID" size="w-12 h-12" />
+							<div class="flex flex-col flex-grow ml-4">
+								<div class="flex" @mouseover="showFriendButton = true" @mouseleave="showFriendButton = false">
+									<nuxt-link :to="'/' + post.authorID" class="flex mr-4">
+										<span class="font-medium text-base">
+											{{ authorName }}
+										</span>
+										<span class="ml-2 text-primary"> @{{ post.authorID }} </span>
+									</nuxt-link>
+									<span v-show="showFriendButton">
+										<FriendButton
+											v-if="post.authorID !== $store.state.session.id && $route.name !== `id`"
+											:small="true"
+											:userIsFollowed="usersFollowing.has(post.authorID)"
+											:toggleFriend="() => toggleFriend(post.authorID)"
+										/>
+									</span>
+								</div>
+								<!-- Timestamp -->
+								<span class="text-xs ml-14">
+									{{ $formatDate(post.timestamp) }}
 								</span>
 							</div>
-							<!-- Timestamp -->
-							<div class="text-xs ml-14">
-								{{ $formatDate(post.timestamp) }}
+							<div class="flex items-center" :class="repostedBy !== `` ? `-mt-4` : ``">
+								<BookmarkButton :postID="post._id" :hasBookmark="isBookmarked" @clicked="getBookmarkStatus" />
+								<button
+									v-if="post.authorID === $store.state.session.id"
+									class="focus:outline-none ml-2"
+									@click.stop="toggleDropdownDelete"
+								>
+									<More />
+								</button>
+								<div
+									v-show="showDelete"
+									:class="
+										$store.state.settings.darkMode
+											? 'bg-lightBG text-lightPrimaryText border-lightBorder'
+											: 'bg-darkBG text-darkPrimaryText border-darkBorder'
+									"
+									class="absolute flex flex-col rounded-lg w-40 shadow-lg z-10 p-1"
+									style="top: 70px; right: 10px"
+								>
+									<!-- Delete -->
+									<button class="flex focus:outline-none text-negative" @click="deletePost">
+										<XIcon class="p-1" />
+										<span class="text-xs self-center text-negative">Delete this post</span>
+									</button>
+								</div>
 							</div>
 						</div>
-						<div class="flex items-center" :class="repostedBy !== `` ? `-mt-4` : ``">
-							<BookmarkButton :postID="post._id" :hasBookmark="isBookmarked" @clicked="getBookmarkStatus" />
-							<button
-								v-if="post.authorID === $store.state.session.id"
-								class="focus:outline-none ml-2"
-								@click.stop="toggleDropdownDelete"
-							>
-								<More />
-							</button>
-							<div
-								v-show="showDelete"
-								:class="
-									$store.state.settings.darkMode
-										? 'bg-lightBG text-lightPrimaryText border-lightBorder'
-										: 'bg-darkBG text-darkPrimaryText border-darkBorder'
-								"
-								class="absolute flex flex-col rounded-lg w-40 shadow-lg z-10 p-1"
-								style="top: 70px; right: 10px"
-							>
-								<!-- Delete -->
-								<button class="flex focus:outline-none text-negative" @click="deletePost">
-									<XIcon class="p-1" />
-									<span class="text-xs self-center text-negative">Delete this post</span>
-								</button>
+						<!-- Content -->
+						<div class="mt-4 flex justify-between">
+							<!-- Left side: Title, subtitle / preview, tags -->
+							<div class="mr-4">
+								<nuxt-link :to="'/post/' + post._id">
+									<div class="flex flex-col pr-4 max-w-full overflow-hidden">
+										<h3 class="text-lg font-semibold pb-2 break-words">
+											{{ post.title }}
+										</h3>
+										<h6
+											v-if="post.subtitle || post.excerpt"
+											:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+											class="break-words"
+										>
+											{{ post.subtitle ? post.subtitle : postExcerpt() }}
+										</h6>
+									</div>
+								</nuxt-link>
+								<!-- Display tags -->
+								<div class="flex overflow-x-auto my-2">
+									<TagPill v-for="t in post.tags" :key="t.name" :tag="t.name" class="mr-4 my-2" />
+								</div>
+								<!-- Comment and share -->
+								<div class="flex mt-1 text-gray5">
+									<button
+										class="flex items-end focus:outline-none mr-2 text-gray5 hover:text-primary hover:fill-primary"
+										:class="showComments ? `text-primary` : ``"
+										@click="toggleComments"
+									>
+										<CommentIcon :isActive="showComments" />
+										<span v-if="comments" class="ml-1">{{ comments.length }}</span>
+									</button>
+									<Share
+										:repost="repost"
+										:post="post"
+										:cid="post._id"
+										class="fill-primary"
+										:hasRepost="hasReposted"
+										:repostCount="repostCount"
+										@toggleRepost="toggleQuoteRepost"
+									/>
+								</div>
+							</div>
+							<!-- Right side: Image -->
+							<div class="flex-shrink-0 w-56">
+								<nuxt-link :to="'/post/' + post._id">
+									<img
+										v-if="featuredPhoto !== ``"
+										:src="featuredPhoto"
+										class="flex-shrink-0 h-32 object-cover rounded-lg w-full"
+									/>
+								</nuxt-link>
 							</div>
 						</div>
 					</div>
-					<!-- Content -->
-					<div class="mt-4 flex justify-between">
-						<!-- Left side: Title, subtitle / preview, tags -->
-						<div class="mr-4">
-							<nuxt-link :to="'/post/' + post._id">
-								<div class="flex flex-col pr-4 max-w-full overflow-hidden">
-									<h3 class="text-lg font-semibold pb-2 break-words">
-										{{ post.title }}
-									</h3>
-									<h6
-										v-if="post.subtitle || post.excerpt"
-										:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-										class="break-words"
-									>
-										{{ post.subtitle ? post.subtitle : postExcerpt() }}
-									</h6>
-								</div>
-							</nuxt-link>
-							<!-- Display tags -->
-							<div class="flex overflow-x-auto my-2">
-								<TagPill v-for="t in post.tags" :key="t.name" :tag="t.name" class="mr-4 my-2" />
-							</div>
-							<!-- Comment and share -->
-							<div class="flex mt-1 text-gray5">
-								<button
-									class="flex items-end focus:outline-none mr-2 text-gray5 hover:text-primary hover:fill-primary"
-									:class="showComments ? `text-primary` : ``"
-									@click="showComments = !showComments"
-								>
-									<CommentIcon :isActive="showComments" />
-									<span v-if="comments" class="ml-1">{{ comments.length }}</span>
-								</button>
-								<Share
-									:repost="repost"
-									:post="post"
-									:cid="post._id"
-									class="fill-primary"
-									:hasRepost="hasReposted"
-									:repostCount="repostCount"
-								/>
-							</div>
-						</div>
-						<!-- Right side: Image -->
-						<div class="flex-shrink-0 w-56">
-							<nuxt-link :to="'/post/' + post._id">
-								<img
-									v-if="featuredPhoto !== ``"
-									:src="featuredPhoto"
-									class="flex-shrink-0 h-32 object-cover rounded-lg w-full"
-								/>
-							</nuxt-link>
-						</div>
+					<!-- Repost POST button -->
+					<div v-if="showRepostEditor" class="pt-2 flex flex-row-reverse">
+						<BrandedButton :action="handleSendRepost" :text="`Post`" />
 					</div>
 				</div>
 				<PostActions v-if="showComments" :postCID="post._id" :initComments="comments" class="px-6 pb-6" />
@@ -155,14 +189,15 @@ import More from '@/components/icons/More.vue'
 import XIcon from '@/components/icons/X.vue'
 import FriendButton from '@/components/FriendButton.vue'
 import RepostIcon from '@/components/icons/Repost.vue'
+import BrandedButton from '@/components/BrandedButton.vue'
 
-import { RetrievedPost } from '@/backend/post'
+import { RetrievedPost, getPost } from '@/backend/post'
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
 import { getProfileFromSession } from '@/store/session'
 import { isPostBookmarkedByUser } from '@/backend/bookmarks'
 import { sendPostDeletion } from '@/backend/postDeletion'
-import { IRepost } from '@/backend/reposts'
+import { IRepost, sendRepost } from '@/backend/reposts'
 import { ICommentData } from '@/backend/comment'
 
 interface IData {
@@ -170,10 +205,20 @@ interface IData {
 	showDelete: boolean
 	authorName: string
 	avatar: string
+	myAvatar: string
 	featuredPhoto: string
 	isBookmarked: boolean
 	postDeleted: boolean
 	showFriendButton: boolean
+	showRepostEditor: boolean
+	showPopup: boolean
+	quote: {
+		authorID: string
+		timestamp: number
+		content: string
+		avatar: string
+		name: string
+	} | null
 }
 
 export default Vue.extend({
@@ -189,6 +234,7 @@ export default Vue.extend({
 		XIcon,
 		FriendButton,
 		RepostIcon,
+		BrandedButton,
 	},
 	props: {
 		repost: {
@@ -242,10 +288,14 @@ export default Vue.extend({
 			showDelete: false,
 			authorName: ``,
 			avatar: ``,
+			myAvatar: ``,
 			featuredPhoto: ``,
 			isBookmarked: false,
 			postDeleted: false,
 			showFriendButton: false,
+			showRepostEditor: false,
+			showPopup: false,
+			quote: null,
 		}
 	},
 	async created() {
@@ -278,6 +328,14 @@ export default Vue.extend({
 		}
 		// Get bookmark status
 		this.isBookmarked = this.$props.bookmarked
+
+		// Check if this is a repost
+		if (this.$props.repost) {
+			if (this.$props.repost.type === `quote`) {
+				this.getQuoteRepost(this.$props.repost._id)
+			}
+		}
+
 		// Close pop-up event listener
 		window.addEventListener(`click`, this.handleClose, false)
 		window.addEventListener(
@@ -302,6 +360,9 @@ export default Vue.extend({
 	},
 	methods: {
 		isPostBookmarkedByUser,
+		getPost,
+		sendRepost,
+		getProfile,
 		async deletePost() {
 			await sendPostDeletion(`HIDE`, this.post._id, this.$store.state.session.id)
 			this.postDeleted = true
@@ -335,10 +396,54 @@ export default Vue.extend({
 			}
 			if (e.target.firstChild.classList[0] === `card`) {
 				this.showComments = false
+				this.showRepostEditor = false
+				this.showPopup = false
 			}
 		},
 		toggleDropdownDelete() {
 			this.showDelete = !this.showDelete
+		},
+		async toggleQuoteRepost() {
+			if (this.$store.state.session.avatar) {
+				this.myAvatar = await getPhotoFromIPFS(this.$store.state.session.avatar)
+			}
+			this.showPopup = true
+			if (this.showRepostEditor) {
+				this.showPopup = false
+			}
+			this.showRepostEditor = !this.showRepostEditor
+		},
+		toggleComments() {
+			this.showComments = !this.showComments
+			this.showPopup = true
+		},
+		handleSendRepost() {
+			const c = this.$refs.repostText as HTMLInputElement
+			this.sendRepost(this.$store.state.session.id, this.$props.post._id, c.value, `quote`)
+			this.showComments = false
+			this.showRepostEditor = false
+			this.showPopup = false
+			this.$toastSuccess(`Successfully quoted this post`)
+		},
+		async getQuoteRepost(postCID: string) {
+			const content = await this.getPost(postCID)
+			const profile = await this.getProfile(content.authorID)
+			const q = {
+				content: content.content,
+				timestamp: content.timestamp,
+				authorID: content.authorID,
+				name: ``,
+				avatar: ``,
+			}
+			if (profile) {
+				q.name = profile.name
+				if (profile.avatar && profile.avatar !== ``) {
+					getPhotoFromIPFS(profile.avatar).then((p) => {
+						q.avatar = p
+					})
+				}
+			}
+			this.quote = q
 		},
 	},
 })
