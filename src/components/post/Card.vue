@@ -85,7 +85,7 @@
 							</div>
 							<div class="flex items-center" :class="repostedBy !== `` ? `-mt-4` : ``">
 								<!-- Bookmarks button -->
-								<BookmarkButton :postID="post._id" :hasBookmark="isBookmarked" @clicked="getBookmarkStatus" />
+								<BookmarkButton :postID="postCID" :hasBookmark="isBookmarked" @clicked="getBookmarkStatus" />
 								<button
 									v-if="post.authorID === $store.state.session.id"
 									class="focus:outline-none ml-2"
@@ -115,7 +115,7 @@
 						<div class="mt-4 flex justify-between">
 							<!-- Left side: Title, subtitle / preview, tags -->
 							<div class="mr-4">
-								<nuxt-link :to="'/post/' + post._id">
+								<nuxt-link :to="'/post/' + postCID">
 									<div class="flex flex-col pr-4 max-w-full overflow-hidden">
 										<h3 class="text-lg font-semibold pb-2 break-words">
 											{{ post.title }}
@@ -146,7 +146,7 @@
 									<Share
 										:repost="repost"
 										:post="post"
-										:cid="post._id"
+										:cid="postCID"
 										class="fill-primary"
 										:hasRepost="hasReposted"
 										:repostCount="repostCount"
@@ -156,7 +156,7 @@
 							</div>
 							<!-- Right side: Image -->
 							<div class="flex-shrink-0 w-56">
-								<nuxt-link :to="'/post/' + post._id">
+								<nuxt-link :to="'/post/' + postCID">
 									<img
 										v-if="featuredPhoto !== ``"
 										:src="featuredPhoto"
@@ -171,7 +171,7 @@
 						<BrandedButton :action="handleSendRepost" :text="`Post`" />
 					</div>
 				</div>
-				<PostActions v-if="showComments" :postCID="post._id" :initComments="comments" class="px-6 pb-6" />
+				<PostActions v-if="showComments" :postCID="postCID" :initComments="comments" class="px-6 pb-6" />
 			</div>
 		</div>
 	</article>
@@ -220,6 +220,7 @@ interface IData {
 		avatar: string
 		name: string
 	} | null
+	postCID: string
 }
 
 export default Vue.extend({
@@ -278,9 +279,9 @@ export default Vue.extend({
 			type: Number,
 			default: 0,
 		},
-		bookmarksCount: {
-			type: Number,
-			default: 0,
+		displayRepost: {
+			type: Boolean,
+			default: false,
 		},
 	},
 	data(): IData {
@@ -297,9 +298,17 @@ export default Vue.extend({
 			showRepostEditor: false,
 			showPopup: false,
 			quote: null,
+			postCID: ``,
 		}
 	},
 	async created() {
+		// Get post CID if on full post page
+		if (this.post._id === undefined) {
+			this.postCID = this.$route.params.post
+		} else {
+			this.postCID = this.post._id
+		}
+		// Populate author profile
 		let profile = this.profile
 		if (!profile) {
 			if (this.$store.state.session.id === this.post.authorID) {
@@ -337,6 +346,13 @@ export default Vue.extend({
 			}
 		}
 
+		// Handle quote repost on full post page
+		if (this.$props.displayRepost) {
+			// this.showPopup = true
+			// this.showRepostEditor = true
+			this.toggleQuoteRepost()
+		}
+
 		// Close pop-up event listener
 		window.addEventListener(`click`, this.handleClose, false)
 		window.addEventListener(
@@ -365,15 +381,15 @@ export default Vue.extend({
 		sendRepost,
 		getProfile,
 		async deletePost() {
-			await sendPostDeletion(`HIDE`, this.post._id, this.$store.state.session.id)
+			await sendPostDeletion(`HIDE`, this.postCID, this.$store.state.session.id)
 			this.postDeleted = true
 			this.$toastSuccess(`This post has been successfully deleted`)
 		},
 		async getBookmarkStatus() {
-			this.isBookmarked = await isPostBookmarkedByUser(this.post._id, this.$store.state.session.id)
+			this.isBookmarked = await isPostBookmarkedByUser(this.postCID, this.$store.state.session.id)
 		},
 		hasReposted(): boolean {
-			if (this.$store.state.session.id === this.$props.repostedBy || this.$store.getters.checkReposts(this.post._id)) {
+			if (this.$store.state.session.id === this.$props.repostedBy || this.$store.getters.checkReposts(this.postCID)) {
 				return true
 			}
 			return false
@@ -399,6 +415,7 @@ export default Vue.extend({
 				this.showComments = false
 				this.showRepostEditor = false
 				this.showPopup = false
+				this.$emit(`closePopup`)
 			}
 		},
 		toggleDropdownDelete() {
@@ -420,10 +437,11 @@ export default Vue.extend({
 		},
 		handleSendRepost() {
 			const c = this.$refs.repostText as HTMLInputElement
-			this.sendRepost(this.$store.state.session.id, this.$props.post._id, c.value, `quote`)
+			this.sendRepost(this.$store.state.session.id, this.postCID, c.value, `quote`)
 			this.showComments = false
 			this.showRepostEditor = false
 			this.showPopup = false
+			this.$emit(`closePopup`)
 			this.$toastSuccess(`Successfully quoted this post`)
 		},
 		async getQuoteRepost(postCID: string) {

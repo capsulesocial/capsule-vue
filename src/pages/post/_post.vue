@@ -42,7 +42,13 @@
 							class="pr-2"
 							@clicked="getBookmarkStatus"
 						/>
-						<ShareButton :post="post" :cid="$route.params.post" :hasRepost="hasReposted" :repostCount="repostCount" />
+						<ShareButton
+							:post="post"
+							:cid="$route.params.post"
+							:hasRepost="hasReposted"
+							:repostCount="repostCount"
+							@toggleRepost="handleRepost"
+						/>
 					</div>
 				</article>
 				<article>
@@ -121,6 +127,7 @@
 								class="z-20"
 								:hasRepost="hasReposted"
 								:repostCount="repostCount"
+								@toggleRepost="handleRepost"
 							/>
 						</div>
 					</div>
@@ -128,6 +135,21 @@
 				</article>
 			</section>
 			<section v-else>Post not found 😵‍💫</section>
+		</div>
+		<!-- Show Post preview card on quote repost -->
+		<div v-if="showQuoteRepost">
+			<PostCard
+				:post="post"
+				:comments="comments"
+				:profile="author"
+				:usersFollowing="following"
+				:toggleFriend="toggleFriend"
+				:bookmarked="isBookmarked"
+				:repostCount="repostCount"
+				:bookmarksCount="bookmarksCount"
+				:displayRepost="true"
+				@closePopup="closePopup"
+			/>
 		</div>
 	</div>
 </template>
@@ -143,6 +165,7 @@ import ShareButton from '@/components/post/Share.vue'
 import Avatar from '@/components/Avatar.vue'
 import XIcon from '@/components/icons/X.vue'
 import FriendButton from '@/components/FriendButton.vue'
+import PostCard from '@/components/post/Card.vue'
 
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 import { getPost, getOnePost, Post } from '@/backend/post'
@@ -166,6 +189,9 @@ interface IData {
 	showHeader: boolean
 	repostCount: number
 	comments: ICommentData[]
+	showQuoteRepost: boolean
+	following: Set<string>
+	bookmarksCount: number
 }
 
 export default Vue.extend({
@@ -179,6 +205,7 @@ export default Vue.extend({
 		Avatar,
 		XIcon,
 		FriendButton,
+		PostCard,
 	},
 	layout: `reader`,
 	// mixins: [markdown],
@@ -197,6 +224,9 @@ export default Vue.extend({
 			showHeader: true,
 			repostCount: -1,
 			comments: [],
+			showQuoteRepost: false,
+			following: new Set(),
+			bookmarksCount: -1,
 		}
 	},
 	async created() {
@@ -206,6 +236,7 @@ export default Vue.extend({
 			throw new Error(`Post is null!`)
 		}
 		const postMetadata = await getOnePost(this.$route.params.post, this.$store.state.session.id)
+		this.bookmarksCount = postMetadata.bookmarksCount
 		this.isBookmarked = postMetadata.bookmarked
 		this.repostCount = postMetadata.repostCount
 		this.comments = postMetadata.comments
@@ -224,6 +255,7 @@ export default Vue.extend({
 		})
 		getFollowersAndFollowing(this.$store.state.session.id).then((data) => {
 			if (this.post !== null) {
+				this.following = data.following
 				this.userIsFollowed = data.following.has(this.post.authorID)
 			}
 		})
@@ -325,6 +357,12 @@ export default Vue.extend({
 			} else {
 				this.$router.go(-1)
 			}
+		},
+		handleRepost() {
+			this.showQuoteRepost = true
+		},
+		closePopup() {
+			this.showQuoteRepost = false
 		},
 	},
 })
