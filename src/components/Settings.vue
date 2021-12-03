@@ -3,7 +3,7 @@
 		<!-- Header and Close button -->
 		<header class="flex flex-row justify-between mb-2">
 			<h2 class="font-bold text-xl">Edit your profile</h2>
-			<button class="rounded-full bg-gray1 p-1" @click="$emit(`close`)"><CloseIcon /></button>
+			<button class="rounded-full bg-gray1 p-1 focus:outline-none" @click="$emit(`close`)"><CloseIcon /></button>
 		</header>
 		<!-- Change avatar -->
 		<div class="flex justify-center w-full mb-5">
@@ -300,8 +300,8 @@ export default Vue.extend({
 			if (profileUpdated) {
 				this.$emit(`close`)
 				// Use HTML DOM styles: https://www.w3schools.com/jsref/dom_obj_style.asp
-				this.$toastSuccess(`Settings updated`)
-				this.$router.go(0)
+				this.$toastSuccess(`Your profile has been successfully updated`)
+				// this.$router.go(0)
 			}
 		},
 	},

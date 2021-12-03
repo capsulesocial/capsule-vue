@@ -21,23 +21,25 @@ declare module 'vue/types/vue' {
 const toastSuccess: Success = (text: string): void => {
 	Toastify({
 		text,
-		duration: 3000,
-		gravity: `top`, // `top` or `bottom`
+		duration: 4000,
+		gravity: `bottom`, // `top` or `bottom`
 		position: `left`,
 		avatar: require(`~/assets/images/util/success.png`),
 		// @ts-ignore
 		style: {
-			background: `rgba(31, 125, 173, .1)`,
+			background: `rgba(233, 242, 247, .9)`,
 			border: `1px solid`,
 			borderColor: `#1F7DAD`,
 			borderRadius: `0.5rem`,
+			fontSize: `0.875rem`,
 			color: `#1F7DAD`,
 			paddingLeft: `1rem`,
 			paddingRight: `1rem`,
-			paddingTop: `0.5rem`,
-			paddingBottom: `0.5rem`,
+			paddingTop: `0.8rem`,
+			paddingBottom: `0.9rem`,
 			position: `fixed`,
-			left: `50%`,
+			right: `7.4%`,
+			marginBottom: `1%`,
 			zIndex: `999`,
 			display: `flex`,
 			alignItems: `center`,
@@ -51,7 +53,7 @@ const toastSuccess: Success = (text: string): void => {
 const toastWarning: Warning = (text: string): void => {
 	Toastify({
 		text,
-		duration: 3000,
+		duration: 4000,
 		gravity: `top`, // `top` or `bottom`
 		position: `left`,
 		avatar: require(`~/assets/images/util/warning.png`),
@@ -81,7 +83,7 @@ const toastWarning: Warning = (text: string): void => {
 const toastError: Error = (text: string): void => {
 	Toastify({
 		text,
-		duration: 3000,
+		duration: 4000,
 		gravity: `top`, // `top` or `bottom`
 		position: `left`,
 		avatar: require(`~/assets/images/util/error.png`),
@@ -111,7 +113,7 @@ const toastError: Error = (text: string): void => {
 const toastMessage: Message = (text: string): void => {
 	Toastify({
 		text,
-		duration: 3000,
+		duration: 4000,
 		gravity: `top`, // `top` or `bottom`
 		position: `left`,
 		stopOnFocus: true, // Prevents dismissing of toast on hover
