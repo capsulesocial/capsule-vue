@@ -1,7 +1,7 @@
 <template>
-	<div v-if="post && author" id="post" class="w-full flex justify-center">
+	<div id="post" class="w-full flex justify-center">
 		<!-- Inner post area -->
-		<div style="width: 760px; max-width: 760px; height: fit-content">
+		<div v-if="post && author" style="width: 760px; max-width: 760px; height: fit-content">
 			<!-- Magic header that disappears on scroll down -->
 			<header
 				id="header"
@@ -233,6 +233,7 @@ export default Vue.extend({
 		// Fetch post from IPFS,
 		this.post = await getRegularPost(this.$route.params.post)
 		if (this.post === null) {
+			this.$toastError(`This post has not been found`)
 			throw new Error(`Post is null!`)
 		}
 		const postMetadata = await getOnePost(this.$route.params.post, this.$store.state.session.id)
