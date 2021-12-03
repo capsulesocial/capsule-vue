@@ -55,7 +55,7 @@ import Quill from 'quill'
 // @ts-ignore
 import QuillMarkdown from 'quilljs-markdown'
 import XIcon from '@/components/icons/X.vue'
-import { createPost, sendPost } from '@/backend/post'
+import { createRegularPost, sendRegularPost } from '@/backend/post'
 interface IData {
 	title: string
 	subtitle: string
@@ -186,7 +186,7 @@ export default Vue.extend({
 				this.$toastError(`Post body too long for IPFS deliverability`)
 				return
 			}
-			const p = createPost(
+			const p = createRegularPost(
 				this.title,
 				this.subtitle === `` ? null : this.subtitle,
 				this.turndownService.turndown(clean),
@@ -196,7 +196,7 @@ export default Vue.extend({
 				this.$store.state.draft.featuredPhotoCID,
 				this.$store.state.draft.featuredPhotoCaption,
 			)
-			const cid = await sendPost(p)
+			const cid = await sendRegularPost(p)
 			this.title = ``
 			this.subtitle = ``
 			this.input = ``

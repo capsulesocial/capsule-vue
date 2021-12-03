@@ -3,9 +3,10 @@ import axios from 'axios'
 import { signContent } from './utilities/keys'
 import ipfs from './utilities/ipfs'
 import { uint8ArrayToHexString } from './utilities/helpers'
-import { capsuleOrbit } from './utilities/config'
+import { capsuleOrbit, capsuleServer } from './utilities/config'
 import { IRepost } from './reposts'
 import { ICommentData } from './comment'
+import { encryptAndSignData } from './crypto'
 export interface Tag {
 	name: string
 }
@@ -20,6 +21,15 @@ export interface Post {
 	featuredPhotoCaption?: string | null
 	timestamp: number
 	tags: Tag[]
+	encrypted?: boolean
+}
+
+export interface IRegularPost extends Post {
+	encrypted?: false
+}
+
+export interface IEncryptedPost extends Post {
+	encrypted: true
 }
 
 export type RetrievedPost = Omit<Post, `content`> & { _id: string; excerpt: string }
@@ -41,7 +51,7 @@ export interface IRepostResponse extends IGenericPostResponse {
 
 export type Algorithm = `NEW` | `FOLLOWING` | `TOP`
 
-export function createPost(
+export function createRegularPost(
 	title: string,
 	subtitle: string | null,
 	content: string,
@@ -50,7 +60,7 @@ export function createPost(
 	authorID: string,
 	featuredPhotoCID?: string | null,
 	featuredPhotoCaption?: string | null,
-): Post {
+): IRegularPost {
 	if (subtitle !== null) {
 		subtitle = subtitle.trim()
 	}
@@ -64,10 +74,38 @@ export function createPost(
 		authorID,
 		...(featuredPhotoCID ? { featuredPhotoCID } : {}),
 		...(featuredPhotoCaption ? { featuredPhotoCaption } : {}),
+		encrypted: false,
 	}
 }
 
-export async function sendPost(data: Post): Promise<string> {
+export function createEncryptedPost(
+	title: string,
+	subtitle: string | null,
+	content: string,
+	category: string,
+	tags: Tag[],
+	authorID: string,
+	featuredPhotoCID?: string | null,
+	featuredPhotoCaption?: string | null,
+): IEncryptedPost {
+	if (subtitle !== null) {
+		subtitle = subtitle.trim()
+	}
+	return {
+		title: title.trim(),
+		subtitle,
+		content,
+		category,
+		timestamp: Date.now(),
+		tags,
+		authorID,
+		...(featuredPhotoCID ? { featuredPhotoCID } : {}),
+		...(featuredPhotoCaption ? { featuredPhotoCaption } : {}),
+		encrypted: true,
+	}
+}
+
+export async function sendRegularPost(data: IRegularPost): Promise<string> {
 	const signature = await signContent(data)
 	if (!signature) {
 		throw new Error(`Post signing failed`)
@@ -78,6 +116,21 @@ export async function sendPost(data: Post): Promise<string> {
 		cid,
 		data,
 		sig: uint8ArrayToHexString(signature),
+		type: `post`,
+	})
+
+	return cid
+}
+
+export async function sendEncryptedPost(data: IEncryptedPost): Promise<string> {
+	const { data: post, key, counter, sig } = await encryptAndSignData(data)
+
+	const cid = await ipfs().sendJSONData(post)
+	await axios.post(`${capsuleServer}/content`, { key, data: post, counter, sig, cid })
+	await axios.post(`${capsuleOrbit}/content`, {
+		cid,
+		data: post,
+		sig,
 		type: `post`,
 	})
 
