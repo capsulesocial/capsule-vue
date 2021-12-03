@@ -12,19 +12,7 @@
 					<Avatar :authorID="$store.state.session.id" :avatar="profilePic" :noClick="true" :size="`w-24 h-24`" />
 				</span>
 				<span
-					class="
-						h-24
-						w-24
-						bg-lightOnSurfaceText
-						text-lightOnPrimaryText
-						relative
-						inline-flex
-						rounded-lg
-						flex
-						items-center
-						justify-center
-						bg-opacity-25
-					"
+					class="h-24 w-24 bg-lightOnSurfaceText text-lightOnPrimaryText relative inline-flex rounded-lg flex items-center justify-center bg-opacity-25"
 				>
 					<PencilIcon class="w-5 h-5 fill-current" />
 				</span>

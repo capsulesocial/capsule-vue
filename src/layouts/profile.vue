@@ -13,18 +13,7 @@
 					<section v-if="visitProfile" class="flex flex-row">
 						<nuxt-child
 							style="width: 750px; min-height: calc(100vh - 80px); height: calc(100vh - 80px)"
-							class="
-								fixed
-								overflow-y-auto
-								rounded-lg
-								shadow-lg
-								mr-5
-								z-10
-								bg-gradient-to-r
-								from-lightBGStart
-								to-lightBGStop
-								backdrop-filter backdrop-blur-lg
-							"
+							class="fixed overflow-y-auto rounded-lg shadow-lg mr-5 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg"
 							:visitProfile="visitProfile"
 							:visitAvatar="visitAvatar"
 							:followers="followers"

@@ -18,20 +18,7 @@
 			<!-- Dropdown: Profile, settings, disconnect -->
 			<div
 				v-show="showDropdown"
-				class="
-					dropdownOpen
-					absolute
-					flex flex-col
-					mt-16
-					rounded-lg
-					shadow-lg
-					p-4
-					bg-gradient-to-r
-					from-lightBGStart
-					to-lightBGStop
-					backdrop-filter backdrop-blur-lg
-					border border-lightBorder
-				"
+				class="dropdownOpen absolute flex flex-col mt-16 rounded-lg shadow-lg p-4 bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg border border-lightBorder"
 			>
 				<nuxt-link
 					:to="`/` + $store.state.session.id"

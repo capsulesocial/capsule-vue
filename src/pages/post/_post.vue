@@ -5,20 +5,7 @@
 			<!-- Magic header that disappears on scroll down -->
 			<header
 				id="header"
-				class="
-					page-header
-					flex
-					items-center
-					sticky
-					top-0
-					z-10
-					py-2
-					px-4
-					rounded-b-lg
-					bg-gradient-to-r
-					from-lightBGStart
-					to-lightBGStop
-				"
+				class="page-header flex items-center sticky top-0 z-10 py-2 px-4 rounded-b-lg bg-gradient-to-r from-lightBGStart to-lightBGStop"
 				style="width: 760px; max-width: 760px; backdrop-filter: blur(10px)"
 			>
 				<div class="trigger-menu-wrapper flex justify-center w-full py-2 ease-in-out">

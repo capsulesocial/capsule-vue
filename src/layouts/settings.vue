@@ -19,37 +19,12 @@
 								height: calc(100vh - 88px);
 								backdrop-filter: blur(10px);
 							"
-							class="
-								fixed
-								overflow-y-auto
-								rounded-t-lg
-								shadow-lg
-								mr-5
-								p-6
-								pt-4
-								z-10
-								bg-gradient-to-r
-								from-lightBGStart
-								to-lightBGStop
-								border-lightBorder
-							"
+							class="fixed overflow-y-auto rounded-t-lg shadow-lg mr-5 p-6 pt-4 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop border-lightBorder"
 						/>
 						<!-- Settings tabs -->
 						<aside class="fixed" style="margin-left: 770px; width: 450px">
 							<div
-								class="
-									rounded-lg
-									shadow-lg
-									bg-gradient-to-r
-									from-lightBGStart
-									to-lightBGStop
-									border border-lightBorder
-									overflow-hidden
-									mb-5
-									py-4
-									px-6
-									pb-2
-								"
+								class="rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop border border-lightBorder overflow-hidden mb-5 py-4 px-6 pb-2"
 								style="backdrop-filter: blur(10px)"
 							>
 								<h3 class="text-primary text-base font-semibold pb-4">Settings</h3>

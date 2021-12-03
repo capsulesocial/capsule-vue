@@ -20,18 +20,7 @@
 					<section class="flex flex-row mt-20">
 						<nuxt-child
 							style="width: 750px; min-height: calc(100vh - 150px); height: calc(100vh - 150px)"
-							class="
-								fixed
-								overflow-y-auto
-								rounded-lg
-								shadow-lg
-								mr-5
-								z-10
-								bg-gradient-to-r
-								from-lightBGStart
-								to-lightBGStop
-								border border-lightBorder
-							"
+							class="fixed overflow-y-auto rounded-lg shadow-lg mr-5 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop border border-lightBorder"
 							:posts="posts"
 						/>
 						<!-- Widgets -->
@@ -46,20 +35,7 @@
 							"
 						>
 							<article
-								class="
-									w-full
-									h-full
-									overflow-y-scroll
-									rounded-lg
-									shadow-lg
-									bg-gradient-to-r
-									from-lightBGStart
-									to-lightBGStop
-									mb-5
-									px-6
-									py-4
-									border border-lightBorder
-								"
+								class="w-full h-full overflow-y-scroll rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop mb-5 px-6 py-4 border border-lightBorder"
 							>
 								<div class="flex flex-row justify-between pb-4 items-center">
 									<h6 class="text-primary text-base font-semibold">Filter by Category</h6>

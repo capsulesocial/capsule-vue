@@ -8,20 +8,7 @@
 				<!-- Dropdown filter -->
 				<div v-if="$route.name === `discover`" class="relative inline">
 					<button
-						class="
-							flex
-							justify-between
-							items-center
-							toggle
-							rounded-lg
-							focus:outline-none
-							self-center
-							capitalize
-							text-gray5
-							font-bold
-							text-sm text-mr-2
-							px-2
-						"
+						class="flex justify-between items-center toggle rounded-lg focus:outline-none self-center capitalize text-gray5 font-bold text-sm text-mr-2 px-2"
 						style="width: 6rem"
 						@click.stop="showFilter = !showFilter"
 					>

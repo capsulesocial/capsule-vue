@@ -93,21 +93,7 @@
 										<button
 											v-if="e"
 											:class="`border-` + reactionList[e].filter"
-											class="
-												border
-												items-center
-												rounded-xl
-												shadow-lg
-												transition
-												duration-500
-												ease-in-out
-												transform
-												hover:scale-105
-												focus:outline-none
-												w-24
-												h-24
-												my-5
-											"
+											class="border items-center rounded-xl shadow-lg transition duration-500 ease-in-out transform hover:scale-105 focus:outline-none w-24 h-24 my-5"
 											@click="setEmotion(e, reactionList[e].filter)"
 										>
 											<img

@@ -3,20 +3,7 @@
 		<nuxt-link
 			v-if="layout === `block` && bgImage !== ``"
 			:to="'/discover/' + text"
-			class="
-				flex
-				items-end
-				transition
-				duration-500
-				ease-in-out
-				transform
-				hover:scale-105
-				overflow-hidden
-				rounded-lg
-				shadow-lg
-				bg-primary
-				w-full
-			"
+			class="flex items-end transition duration-500 ease-in-out transform hover:scale-105 overflow-hidden rounded-lg shadow-lg bg-primary w-full"
 			:style="{
 				background: `linear-gradient(180deg, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.8) 100%), url(` + bgImage + `)`,
 				backgroundSize: 'cover',

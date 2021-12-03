@@ -1,24 +1,9 @@
- <template>
+<template>
 	<div class="popup">
 		<!-- Configure my Capsule overlay -->
 		<div
 			v-if="configureWidgets"
-			class="
-				popup
-				fixed
-				w-full
-				h-screen
-				bg-primary
-				top-0
-				bottom-0
-				left-0
-				right-0
-				z-30
-				flex
-				justify-center
-				items-center
-				bg-opacity-50
-			"
+			class="popup fixed w-full h-screen bg-primary top-0 bottom-0 left-0 right-0 z-30 flex justify-center items-center bg-opacity-50"
 		>
 			<ConfigureWidgets @close="toggleConfigure" @save="saveDraft" />
 		</div>
@@ -26,76 +11,27 @@
 			v-if="$store.state.widgets.secondary2 === `followers` && followers.size > 0"
 			:followers="followers"
 			:updateFollowers="updateFollowers"
-			class="
-				rounded-lg
-				shadow-lg
-				bg-gradient-to-r
-				from-lightBGStart
-				to-lightBGStop
-				backdrop-filter backdrop-blur-lg
-				border border-lightBorder
-				overflow-hidden
-				mb-5
-			"
+			class="rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg border border-lightBorder overflow-hidden mb-5"
 			style="backdrop-filter: blur(10px)"
 		/>
 		<TagsWidget
 			v-if="$store.state.widgets.secondary2 === `tags`"
-			class="
-				rounded-lg
-				shadow-lg
-				bg-gradient-to-r
-				from-lightBGStart
-				to-lightBGStop
-				backdrop-filter backdrop-blur-lg
-				border border-lightBorder
-				overflow-hidden
-				mb-5
-			"
+			class="rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg border border-lightBorder overflow-hidden mb-5"
 			style="backdrop-filter: blur(10px)"
 		/>
 		<DraftsWidget
 			v-if="$store.state.widgets.secondary === `drafts`"
-			class="
-				rounded-lg
-				shadow-lg
-				bg-gradient-to-r
-				from-lightBGStart
-				to-lightBGStop
-				backdrop-filter backdrop-blur-lg
-				border border-lightBorder
-				mb-5
-			"
+			class="rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg border border-lightBorder mb-5"
 			style="backdrop-filter: blur(10px)"
 		/>
 		<BookmarksWidgets
 			v-if="$store.state.widgets.secondary === `bookmarks`"
-			class="
-				rounded-lg
-				shadow-lg
-				bg-gradient-to-r
-				from-lightBGStart
-				to-lightBGStop
-				backdrop-filter backdrop-blur-lg
-				border border-lightBorder
-				mb-5
-			"
+			class="rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg border border-lightBorder mb-5"
 			style="backdrop-filter: blur(10px)"
 		/>
 		<!-- Configure my Capsule -->
 		<button
-			class="
-				rounded-lg
-				shadow-lg
-				bg-gradient-to-r
-				from-lightBGStart
-				to-lightBGStop
-				backdrop-filter backdrop-blur-lg
-				border border-lightBorder
-				mb-5
-				w-full
-				focus:outline-none
-			"
+			class="rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg border border-lightBorder mb-5 w-full focus:outline-none"
 			style="
 				height: 80px;
 				background-repeat: no-repeat;

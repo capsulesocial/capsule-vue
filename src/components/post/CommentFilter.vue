@@ -5,20 +5,7 @@
 		<span class="px-2 text-xl font-sans">|</span>
 		<h6>Sort by:</h6>
 		<button
-			class="
-				toggle
-				focus:outline-none
-				flex
-				justify-between
-				items-center
-				border
-				rounded-lg
-				px-4
-				ml-4
-				text-sm
-				shadow-lg
-				w-32
-			"
+			class="toggle focus:outline-none flex justify-between items-center border rounded-lg px-4 ml-4 text-sm shadow-lg w-32"
 			@click.stop="showFilter = !showFilter"
 		>
 			<span v-if="filter === ``" class="toggle font-bold">All</span>
@@ -67,20 +54,7 @@
 				<button
 					v-for="r in feelingList[feeling]"
 					:key="r.label"
-					class="
-						tooltip
-						relative
-						inline-block
-						h-12
-						w-12
-						rounded-xl
-						shadow-lg
-						transition
-						duration-500
-						ease-in-out
-						transform
-						hover:scale-105
-					"
+					class="tooltip relative inline-block h-12 w-12 rounded-xl shadow-lg transition duration-500 ease-in-out transform hover:scale-105"
 				>
 					<img
 						:src="reactionList[r].imageLeft"

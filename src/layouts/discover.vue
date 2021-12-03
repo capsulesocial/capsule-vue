@@ -21,17 +21,7 @@
 						<nuxt-child
 							style="width: 750px; min-height: calc(100vh - 80px); height: calc(100vh - 80px)"
 							:class="$route.name === `discover` ? `` : `-mt-20`"
-							class="
-								fixed
-								overflow-y-auto
-								rounded-lg
-								shadow-lg
-								mr-5
-								bg-gradient-to-r
-								from-lightBGStart
-								to-lightBGStop
-								box-content
-							"
+							class="fixed overflow-y-auto rounded-lg shadow-lg mr-5 bg-gradient-to-r from-lightBGStart to-lightBGStop box-content"
 							:toggleFriend="toggleFriend"
 							:following="following"
 						/>
@@ -42,16 +32,7 @@
 							style="margin-left: 755px; width: 485px; min-height: calc(100vh - 150px); height: calc(100vh - 150px)"
 						>
 							<TagsWidget
-								class="
-									rounded-lg
-									shadow-lg
-									bg-gradient-to-r
-									from-lightBGStart
-									to-lightBGStop
-									border border-lightBorder
-									overflow-hidden
-									mb-5
-								"
+								class="rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop border border-lightBorder overflow-hidden mb-5"
 								style="backdrop-filter: blur(10px)"
 							/>
 							<Footer />

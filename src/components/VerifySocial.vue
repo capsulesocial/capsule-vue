@@ -56,18 +56,7 @@
 			</button>
 			<button
 				v-else
-				class="
-					flex
-					bg-white
-					border border-red-500
-					hover:bg-red-200
-					font-bold
-					py-2
-					px-4
-					rounded-lg
-					shadow-lg
-					focus:outline-none
-				"
+				class="flex bg-white border border-red-500 hover:bg-red-200 font-bold py-2 px-4 rounded-lg shadow-lg focus:outline-none"
 				@click="removeSocial()"
 			>
 				<TwitterIcon v-if="platform === 'twitter'" />

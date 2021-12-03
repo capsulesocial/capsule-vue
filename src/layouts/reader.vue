@@ -18,19 +18,7 @@
 								height: calc(100vh - 80px);
 								backdrop-filter: blur(10px);
 							"
-							class="
-								fixed
-								overflow-y-auto
-								rounded-lg
-								shadow-lg
-								mr-5
-								p-6
-								pt-0
-								border border-lightBorder
-								bg-gradient-to-r
-								from-lightBGStart
-								to-lightBGStop
-							"
+							class="fixed overflow-y-auto rounded-lg shadow-lg mr-5 p-6 pt-0 border border-lightBorder bg-gradient-to-r from-lightBGStart to-lightBGStop"
 						/>
 					</section>
 				</div>

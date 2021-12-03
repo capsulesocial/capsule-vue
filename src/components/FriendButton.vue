@@ -6,18 +6,7 @@
 			</div>
 			<div
 				v-else
-				class="
-					friendbtn
-					inline
-					text-grey5
-					bg-white
-					hover:bg-black hover:text-white
-					text-sm
-					shadow-lg
-					px-5
-					font-semibold
-					rounded-lg
-				"
+				class="friendbtn inline text-grey5 bg-white hover:bg-black hover:text-white text-sm shadow-lg px-5 font-semibold rounded-lg"
 				style="padding-top: 0.4rem; padding-bottom: 0.4rem"
 			>
 				<span class="following">Following</span>

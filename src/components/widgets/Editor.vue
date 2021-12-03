@@ -7,19 +7,7 @@
 		>
 			<h6 class="text-primary font-semibold">Featured Image</h6>
 			<button
-				class="
-					w-full
-					rounded-lg
-					border-2 border-primary border-dashed
-					h-40
-					flex
-					justify-center
-					items-center
-					mt-3
-					mb-2
-					focus:outline-none
-					overflow-hidden
-				"
+				class="w-full rounded-lg border-2 border-primary border-dashed h-40 flex justify-center items-center mt-3 mb-2 focus:outline-none overflow-hidden"
 				@click="handleUploadImageClick"
 			>
 				<input
@@ -98,18 +86,7 @@
 		</article>
 		<!-- Tags -->
 		<article
-			class="
-				rounded-lg
-				shadow-lg
-				bg-gradient-to-r
-				from-lightBGStart
-				to-lightBGStop
-				border-lightBorder
-				px-6
-				py-4
-				pb-6
-				mb-5
-			"
+			class="rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop border-lightBorder px-6 py-4 pb-6 mb-5"
 			style="backdrop-filter: blur(10px)"
 		>
 			<h6 class="text-primary font-semibold mb-3">Tags</h6>
@@ -147,21 +124,7 @@
 					<h5 class="text-sm text-gray5">Auto-save on close.</h5>
 				</div>
 				<button
-					class="
-						transition
-						duration-500
-						ease-in-out
-						transform
-						hover:scale-105
-						font-bold
-						rounded-lg
-						shadow-lg
-						focus:outline-none
-						bg-lightButtonBG
-						text-lightButtonText
-						px-12
-						py-2
-					"
+					class="transition duration-500 ease-in-out transform hover:scale-105 font-bold rounded-lg shadow-lg focus:outline-none bg-lightButtonBG text-lightButtonText px-12 py-2"
 					@click="handlePost"
 				>
 					Publish
@@ -299,7 +262,7 @@ export default Vue.extend({
 					}
 				}
 			} catch (err) {
-				this.$toastError(err)
+				this.$toastError(`error`)
 			}
 		},
 		handleCategoryDropdown(e: any): void {
