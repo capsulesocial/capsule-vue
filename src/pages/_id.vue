@@ -2,7 +2,7 @@
 	<section class="w-full">
 		<div>
 			<!-- top -->
-			<article ref="topContainer" class="px-6 pt-6 z-20 w-full" style="backdrop-filter: blur(10px)">
+			<article id="header" ref="topContainer" class="px-6 pt-6 z-20 w-full" style="backdrop-filter: blur(10px)">
 				<!-- Back button -->
 				<div v-if="$route.params.id !== $store.state.session.id" class="pb-4">
 					<button class="flex flex-row items-center -mt-1 focus:outline-none" @click="$router.go(-1)">
@@ -62,6 +62,7 @@
 						{{ visitProfile.bio }}
 					</p>
 				</div>
+				<!-- Tabs -->
 				<div class="flex flex-col md:flex-row w-full justify-between text-gray5 pt-6">
 					<nuxt-link :to="'/' + $route.params.id" class="pb-1" :class="getStyles('id')">
 						<span class="px-4">Posts</span>
@@ -81,7 +82,7 @@
 				style="width: 748px"
 				:style="`min-height: calc(100vh - ` + padding + ` - 90px); height: calc(100vh - ` + padding + ` - 90px)`"
 			>
-				<nuxt-child :profile="visitProfile" :updateFollowers="updateFollowers" :followers="followers" />
+				<nuxt-child id="column" :profile="visitProfile" :updateFollowers="updateFollowers" :followers="followers" />
 			</article>
 		</div>
 		<!-- Settings popup -->
@@ -113,6 +114,7 @@ interface IData {
 	posts: Post[]
 	padding: string
 	showSettings: boolean
+	lastScroll: number
 }
 
 export default Vue.extend({
@@ -160,10 +162,15 @@ export default Vue.extend({
 			posts: [],
 			padding: `0px`,
 			showSettings: false,
+			lastScroll: 0,
 		}
 	},
 	created() {
 		window.addEventListener(`click`, this.handleClose, false)
+		const container = document.getElementById(`column`)
+		if (container) {
+			container.addEventListener(`scroll`, this.handleScrollHeader)
+		}
 	},
 	mounted() {
 		const topContainer = this.$refs.topContainer as HTMLElement
@@ -171,6 +178,10 @@ export default Vue.extend({
 	},
 	destroyed() {
 		window.removeEventListener(`click`, this.handleClose)
+		const container = document.getElementById(`column`)
+		if (container) {
+			container.removeEventListener(`scroll`, this.handleScrollHeader)
+		}
 	},
 	methods: {
 		handleClose(e: any): void {
@@ -223,6 +234,56 @@ export default Vue.extend({
 			if (process.client) {
 				window.open(url, `_blank`)
 			}
+		},
+		handleScrollHeader() {
+			const body = document.getElementById(`column`)
+			const header = document.getElementById(`header`)
+			// const button = document.getElementById(`button`)
+			// const title = document.getElementById(`title`)
+			this.padding = header?.clientHeight + `px`
+			const scrollUp = `scrollup`
+			const scrollDown = `scrolldown`
+			// const buttoncollapsed = `buttoncollapsed`
+			// const buttonnotcollapsed = `buttonnotcollapsed`
+			// const titlecollapsed = `titlecollapsed`
+			// const titlenotcollapsed = `titlenotcollapsed`
+			if (!body) {
+				return
+			}
+			// if (!button) {
+			// 	return
+			// }
+			// if (!title) {
+			// 	return
+			// }
+			if (!header) {
+				return
+			}
+			const currentScroll = body.scrollTop
+			if (body.scrollTop <= 0) {
+				header.classList.remove(scrollUp)
+				// button.classList.remove(buttoncollapsed)
+				// title.classList.remove(titlecollapsed)
+				return
+			}
+			if (currentScroll > this.lastScroll && !header.classList.contains(scrollDown)) {
+				// down
+				header.classList.remove(scrollUp)
+				// button.classList.remove(buttonnotcollapsed)
+				// title.classList.remove(titlenotcollapsed)
+				header.classList.add(scrollDown)
+				// button.classList.add(buttoncollapsed)
+				// title.classList.add(titlecollapsed)
+			} else if (currentScroll < this.lastScroll && header.classList.contains(scrollDown)) {
+				// up
+				header.classList.remove(scrollDown)
+				// button.classList.remove(buttoncollapsed)
+				// title.classList.remove(titlecollapsed)
+				header.classList.add(scrollUp)
+				// button.classList.add(buttonnotcollapsed)
+				// title.classList.add(titlenotcollapsed)
+			}
+			this.lastScroll = currentScroll
 		},
 	},
 })
