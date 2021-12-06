@@ -55,14 +55,18 @@
 									Verify you’re a human with your phone number so that Capsule can fund your wallet. This is the last
 									step needed to create your Capsule account.
 								</p>
-								<label for="id" class="font-semibold text-sm text-gray5 pb-1 block">Phone Number</label>
-								<input
+								<vue-tel-input
 									id="phoneNumber"
 									v-model="phoneNumber"
-									type="tel"
-									placeholder="+33"
-									class="rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full focus:outline-none focus:border-primary text-primary font-sans bg-gray2"
+									:dropdownOptions="{
+										showSearchBox: true,
+										showFlags: true,
+									}"
+									:mode="`international`"
+									:validCharactersOnly="true"
+									@enter="sendOTP"
 								/>
+								<label for="phoneNumber" class="font-semibold text-sm text-gray5 pb-1 block">Phone Number</label>
 								<div class="w-full flex justify-end">
 									<BrandedButton :text="`Send Code`" :action="sendOTP" />
 								</div>
@@ -72,9 +76,9 @@
 							</div>
 							<div v-else>
 								<!-- Enter SMS code to complete verify -->
-								<label for="id" class="font-semibold text-sm text-gray5 pb-1 block">One-time Password</label>
+								<label for="otp" class="font-semibold text-sm text-gray5 pb-1 block">One-time Password</label>
 								<input
-									id="phoneNumber"
+									id="otp"
 									v-model="otp"
 									type="text"
 									placeholder=""
@@ -121,12 +125,14 @@ import { mapMutations } from 'vuex'
 // eslint-disable-next-line import/named
 import DirectWebSdk, { TorusLoginResponse } from '@toruslabs/customauth'
 
+import { VueTelInput } from 'vue-tel-input'
 import CapsuleIcon from '@/components/icons/Capsule.vue'
 import DiscordIcon from '@/components/icons/brands/Discord.vue'
 import GoogleIcon from '@/components/icons/brands/Google.vue'
 import NearIcon from '@/components/icons/brands/Near.vue'
 // import TwitterIcon from '@/components/icons/brands/Twitter.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
+import 'vue-tel-input/dist/vue-tel-input.css'
 
 import { MutationType, createSessionFromProfile, namespace as sessionStoreNamespace } from '~/store/session'
 
@@ -156,6 +162,7 @@ export default Vue.extend({
 		GoogleIcon,
 		BrandedButton,
 		NearIcon,
+		VueTelInput,
 	},
 	layout: `unauth`,
 	data(): IData {
@@ -230,27 +237,16 @@ export default Vue.extend({
 			}
 		},
 		async sendOTP() {
-			if (!this.$qualityPhoneNumber(this.phoneNumber)) {
-				return
-			}
+			this.phoneNumber = this.phoneNumber.replace(/\s/g, ``)
 			this.isLoading = true
 			await requestOTP(this.phoneNumber)
 			this.otpSent = true
 			this.isLoading = false
 		},
 		async validateOTP() {
-			if (!this.$qualityPhoneNumber(this.phoneNumber)) {
-				throw new Error(`Invalid phone number`)
-			}
-
-			if (this.otp.length !== 6) {
+			if (this.otp.length !== 6 || !this.accountId) {
 				return
 			}
-
-			if (!this.accountId) {
-				return
-			}
-
 			this.isLoading = true
 			await requestSponsor(this.phoneNumber, this.otp, this.accountId)
 			await this.checkFunds()
