@@ -18,7 +18,7 @@ declare module 'vue/types/vue' {
 
 // Use HTML DOM styles: https://www.w3schools.com/jsref/dom_obj_style.asp
 
-export const toastSuccess: Success = (text: string): void => {
+const toastSuccess: Success = (text: string): void => {
 	Toastify({
 		text,
 		duration: 4000,
@@ -50,7 +50,7 @@ export const toastSuccess: Success = (text: string): void => {
 	}).showToast()
 }
 
-export const toastWarning: Warning = (text: string): void => {
+const toastWarning: Warning = (text: string): void => {
 	Toastify({
 		text,
 		duration: 4000,
