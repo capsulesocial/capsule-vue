@@ -139,7 +139,7 @@ export async function sendEncryptedPost(data: IEncryptedPost): Promise<string> {
 }
 
 export async function getPost(cid: string, username?: string): Promise<Post> {
-	let post: Post = await ipfs().getJSONData(cid)
+	const post: Post = await ipfs().getJSONData(cid)
 	if (!isEncryptedPost(post)) {
 		return post
 	}
@@ -151,7 +151,7 @@ export async function getPost(cid: string, username?: string): Promise<Post> {
 	const result = await getEncryptionKeys(username, cid)
 	if (!isError(result)) {
 		const { key, counter } = result
-		post = await decryptData(post, key, counter)
+		post.content = await decryptData(post.content, key, counter)
 	} else {
 		toastError(result.error)
 	}
