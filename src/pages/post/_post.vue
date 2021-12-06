@@ -231,7 +231,7 @@ export default Vue.extend({
 	},
 	async created() {
 		// Fetch post from IPFS,
-		this.post = await getPost(this.$route.params.post, this.$store.state.session.id)
+		this.post = await getPost(this.$route.params.post)
 		if (this.post === null) {
 			throw new Error(`Post is null!`)
 		}
