@@ -75,15 +75,16 @@
 					</nuxt-link>
 				</div>
 			</article>
-			<article
+			<div
 				v-if="loadedContent()"
+				id="scrollContainer"
 				ref="scrollContainer"
 				class="fixed overflow-y-auto pb-24"
 				style="width: 748px"
 				:style="`min-height: calc(100vh - ` + padding + ` - 90px); height: calc(100vh - ` + padding + ` - 90px)`"
 			>
-				<nuxt-child id="column" :profile="visitProfile" :updateFollowers="updateFollowers" :followers="followers" />
-			</article>
+				<nuxt-child :profile="visitProfile" :updateFollowers="updateFollowers" :followers="followers" />
+			</div>
 		</div>
 		<!-- Settings popup -->
 		<div
@@ -167,18 +168,18 @@ export default Vue.extend({
 	},
 	created() {
 		window.addEventListener(`click`, this.handleClose, false)
-		const container = document.getElementById(`column`)
-		if (container) {
-			container.addEventListener(`scroll`, this.handleScrollHeader)
-		}
 	},
 	mounted() {
 		const topContainer = this.$refs.topContainer as HTMLElement
 		this.padding = topContainer.clientHeight + `px`
+		const container = document.getElementById(`scrollContainer`)
+		if (container) {
+			container.addEventListener(`scroll`, this.handleScrollHeader)
+		}
 	},
 	destroyed() {
 		window.removeEventListener(`click`, this.handleClose)
-		const container = document.getElementById(`column`)
+		const container = document.getElementById(`scrollContainer`)
 		if (container) {
 			container.removeEventListener(`scroll`, this.handleScrollHeader)
 		}
@@ -236,7 +237,7 @@ export default Vue.extend({
 			}
 		},
 		handleScrollHeader() {
-			const body = document.getElementById(`column`)
+			const body = document.getElementById(`scrollContainer`)
 			const header = document.getElementById(`header`)
 			// const button = document.getElementById(`button`)
 			// const title = document.getElementById(`title`)
@@ -288,3 +289,15 @@ export default Vue.extend({
 	},
 })
 </script>
+
+<style>
+.scrollup {
+	opacity: 1;
+	transform: none;
+}
+.scrolldown {
+	background: linear-gradient(180deg, rgba(46, 85, 106, 0.25) 0%, rgba(46, 85, 106, 0.25) 100%), none !important;
+	height: 4rem;
+	backdrop-filter: blur(10px);
+}
+</style>
