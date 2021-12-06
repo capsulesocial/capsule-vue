@@ -155,13 +155,9 @@
 								</div>
 							</div>
 							<!-- Right side: Image -->
-							<div class="flex-shrink-0 w-56">
+							<div v-if="featuredPhoto !== ``" class="flex-shrink-0 w-56">
 								<nuxt-link :to="'/post/' + postCID">
-									<img
-										v-if="featuredPhoto !== ``"
-										:src="featuredPhoto"
-										class="flex-shrink-0 h-32 object-cover rounded-lg w-full"
-									/>
+									<img :src="featuredPhoto" class="flex-shrink-0 h-32 object-cover rounded-lg w-full" />
 								</nuxt-link>
 							</div>
 						</div>
