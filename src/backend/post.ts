@@ -7,7 +7,6 @@ import { capsuleOrbit, capsuleServer } from './utilities/config'
 import { IRepost } from './reposts'
 import { ICommentData } from './comment'
 import { decryptData, encryptAndSignData } from './crypto'
-import { toastError } from '@/plugins/toast'
 export interface Tag {
 	name: string
 }
@@ -146,19 +145,18 @@ export async function getRegularPost(cid: string): Promise<IRegularPost> {
 	return post
 }
 
-export async function getEncryptedPost(cid: string, username: string): Promise<IEncryptedPost> {
+export async function getEncryptedPost(cid: string, username: string): Promise<IEncryptedPost | { error: string }> {
 	const post: Post = await ipfs().getJSONData(cid)
 	if (!isEncryptedPost(post)) {
 		throw new Error(`Post is not encrypted`)
 	}
 
 	const result = await getEncryptionKeys(username, cid)
-	if (!isError(result)) {
-		const { key, counter } = result
-		post.content = await decryptData(post.content, key, counter)
-	} else {
-		toastError(result.error)
+	if (isError(result)) {
+		return result
 	}
+	const { key, counter } = result
+	post.content = await decryptData(post.content, key, counter)
 	return post
 }
 

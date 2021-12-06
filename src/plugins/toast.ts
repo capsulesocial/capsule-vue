@@ -80,7 +80,7 @@ const toastWarning: Warning = (text: string): void => {
 	}).showToast()
 }
 
-export const toastError: Error = (text: string): void => {
+const toastError: Error = (text: string): void => {
 	Toastify({
 		text,
 		duration: 4000,
