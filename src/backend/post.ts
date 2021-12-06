@@ -2,7 +2,7 @@ import axios from 'axios'
 
 import { signContent } from './utilities/keys'
 import ipfs from './utilities/ipfs'
-import { uint8ArrayToHexString } from './utilities/helpers'
+import { isError, uint8ArrayToHexString } from './utilities/helpers'
 import { capsuleOrbit, capsuleServer } from './utilities/config'
 import { IRepost } from './reposts'
 import { ICommentData } from './comment'
@@ -161,10 +161,6 @@ export async function getPost(cid: string, username?: string): Promise<Post> {
 
 export function isEncryptedPost(post: Post): post is IEncryptedPost {
 	return `encrypted` in post && post.encrypted === true
-}
-
-export function isError(obj: Record<string, unknown>): obj is { error: any } {
-	return `error` in obj
 }
 
 async function getEncryptionKeys(username: string, cid: string) {
