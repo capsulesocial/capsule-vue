@@ -168,7 +168,7 @@ import FriendButton from '@/components/FriendButton.vue'
 import PostCard from '@/components/post/Card.vue'
 
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
-import { getPost, getOnePost, Post } from '@/backend/post'
+import { getRegularPost, getOnePost, Post } from '@/backend/post'
 import { getPhotoFromIPFS } from '@/backend/photos'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
 import { getReposts } from '@/backend/reposts'
@@ -231,7 +231,7 @@ export default Vue.extend({
 	},
 	async created() {
 		// Fetch post from IPFS,
-		this.post = await getPost(this.$route.params.post)
+		this.post = await getRegularPost(this.$route.params.post)
 		if (this.post === null) {
 			throw new Error(`Post is null!`)
 		}

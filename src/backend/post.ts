@@ -2,11 +2,11 @@ import axios from 'axios'
 
 import { signContent } from './utilities/keys'
 import ipfs from './utilities/ipfs'
-import { uint8ArrayToHexString } from './utilities/helpers'
+import { isError, uint8ArrayToHexString } from './utilities/helpers'
 import { capsuleOrbit, capsuleServer } from './utilities/config'
 import { IRepost } from './reposts'
 import { ICommentData } from './comment'
-import { encryptAndSignData } from './crypto'
+import { decryptData, encryptAndSignData } from './crypto'
 export interface Tag {
 	name: string
 }
@@ -137,8 +137,55 @@ export async function sendEncryptedPost(data: IEncryptedPost): Promise<string> {
 	return cid
 }
 
-export function getPost(cid: string): Promise<Post> {
-	return ipfs().getJSONData(cid)
+export async function getRegularPost(cid: string): Promise<IRegularPost> {
+	const post: Post = await ipfs().getJSONData(cid)
+	if (!isRegularPost(post)) {
+		throw new Error(`Post is encrypted`)
+	}
+	return post
+}
+
+export async function getEncryptedPost(cid: string, username: string): Promise<IEncryptedPost | { error: string }> {
+	const post: Post = await ipfs().getJSONData(cid)
+	if (!isEncryptedPost(post)) {
+		throw new Error(`Post is not encrypted`)
+	}
+
+	const result = await getEncryptionKeys(username, cid)
+	if (isError(result)) {
+		return result
+	}
+	const { key, counter } = result
+	post.content = await decryptData(post.content, key, counter)
+	return post
+}
+
+export function isEncryptedPost(post: Post): post is IEncryptedPost {
+	return `encrypted` in post && post.encrypted === true
+}
+
+export function isRegularPost(post: Post): post is IRegularPost {
+	return !post.encrypted
+}
+
+async function getEncryptionKeys(username: string, cid: string) {
+	const signature = await signContent({ username, cid })
+	if (!signature) {
+		throw new Error(`Content signing failed`)
+	}
+	const sig = uint8ArrayToHexString(signature)
+
+	try {
+		const res = await axios.get<{ key: string; counter: string }>(
+			`${capsuleServer}/content/${cid}?username=${username}&sig=${sig}`,
+		)
+		return res.data
+	} catch (err) {
+		if (axios.isAxiosError(err) && err.response) {
+			return { error: err.response.data.error }
+		}
+		throw err
+	}
 }
 
 export interface IGetPostsOptions {

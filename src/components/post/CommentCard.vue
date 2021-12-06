@@ -56,7 +56,7 @@ import { reactions, feelings } from '@/config'
 import { getComment, ICommentData, INewCommentData } from '@/backend/comment'
 import { Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
-import { getPost, Post } from '@/backend/post'
+import { getRegularPost, Post } from '@/backend/post'
 
 interface IData {
 	avatar: string
@@ -101,7 +101,7 @@ export default Vue.extend({
 			this.emotion = reactions[emotion]
 		}
 		// Get initial post
-		const p: Post = await getPost(this.commentData.parentCID)
+		const p = await getRegularPost(this.commentData.parentCID)
 		this.postData = p
 	},
 	methods: {
