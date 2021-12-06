@@ -192,7 +192,7 @@ import FriendButton from '@/components/FriendButton.vue'
 import RepostIcon from '@/components/icons/Repost.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 
-import { RetrievedPost, getPost } from '@/backend/post'
+import { RetrievedPost, getRegularPost } from '@/backend/post'
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
 import { getProfileFromSession } from '@/store/session'
@@ -377,7 +377,7 @@ export default Vue.extend({
 	},
 	methods: {
 		isPostBookmarkedByUser,
-		getPost,
+		getRegularPost,
 		sendRepost,
 		getProfile,
 		async deletePost() {
@@ -445,7 +445,7 @@ export default Vue.extend({
 			this.$toastSuccess(`Successfully quoted this post`)
 		},
 		async getQuoteRepost(postCID: string) {
-			const content = await this.getPost(postCID)
+			const content = await this.getRegularPost(postCID)
 			const profile = await this.getProfile(content.authorID)
 			const q = {
 				content: content.content,

@@ -138,14 +138,18 @@ export async function sendEncryptedPost(data: IEncryptedPost): Promise<string> {
 	return cid
 }
 
-export async function getPost(cid: string, username?: string): Promise<Post> {
+export async function getRegularPost(cid: string): Promise<IRegularPost> {
+	const post: Post = await ipfs().getJSONData(cid)
+	if (!isRegularPost(post)) {
+		throw new Error(`Post is encrypted`)
+	}
+	return post
+}
+
+export async function getEncryptedPost(cid: string, username: string): Promise<IEncryptedPost> {
 	const post: Post = await ipfs().getJSONData(cid)
 	if (!isEncryptedPost(post)) {
-		return post
-	}
-
-	if (!username) {
-		throw new Error(`Provide a username`)
+		throw new Error(`Post is not encrypted`)
 	}
 
 	const result = await getEncryptionKeys(username, cid)
@@ -155,12 +159,15 @@ export async function getPost(cid: string, username?: string): Promise<Post> {
 	} else {
 		toastError(result.error)
 	}
-
 	return post
 }
 
 export function isEncryptedPost(post: Post): post is IEncryptedPost {
 	return `encrypted` in post && post.encrypted === true
+}
+
+export function isRegularPost(post: Post): post is IRegularPost {
+	return !post.encrypted
 }
 
 async function getEncryptionKeys(username: string, cid: string) {
