@@ -92,13 +92,14 @@ export default Vue.extend({
 				this.currentOffset += this.limit
 				this.isLoading = false
 			} catch (err) {
-				this.$toastError(err)
+				this.$toastError(`err`)
 			} finally {
 				this.isLoading = false
 			}
 		},
 		async handleScroll(e: Event) {
 			const { scrollTop, scrollHeight, clientHeight } = e.srcElement as HTMLElement
+			// Fetch posts when reaching the bottom of page
 			if (scrollTop + clientHeight >= scrollHeight - 5) {
 				await this.loadPosts()
 			}
