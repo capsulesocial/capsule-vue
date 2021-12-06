@@ -121,9 +121,18 @@
 											{{ post.title }}
 										</h3>
 										<h6
-											v-if="post.subtitle || post.excerpt"
+											v-if="(post.subtitle || post.excerpt) && featuredPhoto"
 											:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 											class="break-words"
+											style="max-width: 420px"
+										>
+											{{ post.subtitle ? post.subtitle : postExcerpt() }}
+										</h6>
+										<h6
+											v-if="(post.subtitle || post.excerpt) && !featuredPhoto"
+											:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
+											class="break-words"
+											style="max-width: 700px"
 										>
 											{{ post.subtitle ? post.subtitle : postExcerpt() }}
 										</h6>

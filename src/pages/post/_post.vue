@@ -139,7 +139,6 @@
 		<article v-show="isLoading" class="flex justify-center w-full mt-20">
 			<div class="loader m-5"></div>
 		</article>
-<<<<<<< HEAD
 		<!-- Show Post preview card on quote repost -->
 		<div v-if="showQuoteRepost">
 			<PostCard
@@ -155,8 +154,6 @@
 				@closePopup="closePopup"
 			/>
 		</div>
-=======
->>>>>>> 5fe647d (add loader + error handling toast)
 	</div>
 </template>
 
@@ -196,12 +193,9 @@ interface IData {
 	repostCount: number
 	comments: ICommentData[]
 	isLoading: boolean
-<<<<<<< HEAD
 	showQuoteRepost: boolean
 	following: Set<string>
 	bookmarksCount: number
-=======
->>>>>>> 5fe647d (add loader + error handling toast)
 }
 
 export default Vue.extend({
@@ -235,12 +229,9 @@ export default Vue.extend({
 			repostCount: -1,
 			comments: [],
 			isLoading: true,
-<<<<<<< HEAD
 			showQuoteRepost: false,
 			following: new Set(),
 			bookmarksCount: -1,
-=======
->>>>>>> 5fe647d (add loader + error handling toast)
 		}
 	},
 	async created() {
