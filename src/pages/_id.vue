@@ -80,7 +80,7 @@
 					</p>
 				</div>
 				<!-- Tabs -->
-				<div id="tabs" class="flex flex-col md:flex-row w-full justify-between text-gray5 pt-6 header-profile">
+				<div id="tabs" class="flex flex-col md:flex-row w-full justify-between text-gray5 pt-6 header-profile px-6">
 					<nuxt-link :to="'/' + $route.params.id" class="pb-1" :class="getStyles('id')">
 						<span class="px-4">Posts</span>
 					</nuxt-link>
