@@ -60,7 +60,6 @@
 									id="phoneNumber"
 									v-model="phoneNumber"
 									type="tel"
-									placeholder="+33"
 									class="rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full focus:outline-none focus:border-primary text-primary font-sans bg-gray2"
 								/>
 								<div class="w-full flex justify-end">
@@ -120,6 +119,8 @@ import Vue from 'vue'
 import { mapMutations } from 'vuex'
 // eslint-disable-next-line import/named
 import DirectWebSdk, { TorusLoginResponse } from '@toruslabs/customauth'
+import 'intl-tel-input/build/css/intlTelInput.css'
+import intlTelInput from 'intl-tel-input'
 
 import CapsuleIcon from '@/components/icons/Capsule.vue'
 import DiscordIcon from '@/components/icons/brands/Discord.vue'
@@ -146,6 +147,7 @@ interface IData {
 	otp: string
 	otpSent: boolean
 	funds: string
+	iti: any
 }
 
 export default Vue.extend({
@@ -173,6 +175,7 @@ export default Vue.extend({
 			username: undefined,
 			otpSent: false,
 			funds: `0`,
+			iti: null,
 		}
 	},
 	async created() {
@@ -182,6 +185,13 @@ export default Vue.extend({
 		const accountId = window.localStorage.getItem(`accountId`)
 		if (this.$store.state.session.id !== `` && accountId) {
 			this.$router.push(`/home`)
+		}
+		const input = document.querySelector(`#phoneNumber`)
+		if (input) {
+			this.iti = intlTelInput(input, {
+				utilsScript: `https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.15/js/utils.min.js`,
+				// any initialisation options go here
+			})
 		}
 	},
 	methods: {
@@ -230,7 +240,9 @@ export default Vue.extend({
 			}
 		},
 		async sendOTP() {
-			if (!this.$qualityPhoneNumber(this.phoneNumber)) {
+			this.phoneNumber = this.iti.getNumber()
+			if (!this.iti.isValidNumber()) {
+				this.$toastError(`Invalid phone number`)
 				return
 			}
 			this.isLoading = true
