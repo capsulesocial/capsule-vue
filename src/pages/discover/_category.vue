@@ -27,7 +27,7 @@
 		<!-- Posts loaded -->
 		<div
 			id="column"
-			class="fixed overflow-y-auto"
+			class="fixed overflow-y-auto pb-56"
 			style="width: 748px"
 			:style="`min-height: calc(100vh - ` + padding + `); height: calc(100vh - ` + padding + `)`"
 		>
@@ -46,6 +46,7 @@
 					:repostCount="p.repostCount"
 				/>
 			</article>
+			<p v-if="noMorePosts" class="text-center text-primary pt-5">No more posts</p>
 		</div>
 		<!-- Not loaded yet -->
 		<article v-show="isLoading" class="flex justify-center w-full">
@@ -70,6 +71,7 @@ interface IData {
 	limit: number
 	algorithm: Algorithm
 	padding: string
+	noMorePosts: boolean
 }
 
 export default Vue.extend({
@@ -88,6 +90,7 @@ export default Vue.extend({
 			algorithm: `NEW`,
 			lastScroll: 0,
 			padding: `0px`,
+			noMorePosts: false,
 		}
 	},
 	async created() {
@@ -102,7 +105,6 @@ export default Vue.extend({
 			this.following = following
 		})
 		this.isLoading = false
-		window.addEventListener(`scroll`, this.handleScroll)
 		const container = document.getElementById(`column`)
 		if (container) {
 			container.addEventListener(`scroll`, this.handleScrollHeader)
@@ -113,7 +115,6 @@ export default Vue.extend({
 		if (container) {
 			container.removeEventListener(`scroll`, this.handleScrollHeader)
 		}
-		window.removeEventListener(`scroll`, this.handleScroll)
 	},
 	methods: {
 		async toggleFriend(authorID: string) {
@@ -134,7 +135,7 @@ export default Vue.extend({
 				})
 				if (res.length === 0) {
 					this.isLoading = false
-					window.removeEventListener(`scroll`, this.handleScroll)
+					this.noMorePosts = true
 				}
 				this.posts = this.posts.concat(res)
 			} catch (err) {
@@ -143,14 +144,7 @@ export default Vue.extend({
 				this.isLoading = false
 			}
 		},
-		async handleScroll() {
-			const { scrollTop, scrollHeight, clientHeight } = document.documentElement
-			if (scrollTop + clientHeight >= scrollHeight - 5) {
-				await this.loadPosts()
-				this.currentOffset += this.limit
-			}
-		},
-		handleScrollHeader() {
+		async handleScrollHeader() {
 			const body = document.getElementById(`column`)
 			const header = document.getElementById(`header`)
 			const button = document.getElementById(`button`)
@@ -199,6 +193,11 @@ export default Vue.extend({
 				title.classList.add(titlenotcollapsed)
 			}
 			this.lastScroll = currentScroll
+			// Reached bottom, fetch more posts
+			if (body.scrollTop + body.clientHeight === body.scrollHeight && !this.noMorePosts) {
+				await this.loadPosts()
+				this.currentOffset += this.limit
+			}
 		},
 	},
 })
