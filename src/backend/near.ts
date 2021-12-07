@@ -57,7 +57,7 @@ export async function getUsernameNEAR(accountId: string): Promise<string | null>
 }
 
 export async function initNear() {
-	_near = await connect({ deps: { keyStore: new keyStores.BrowserLocalStorageKeyStore() }, ...nearConfig })
+	_near = await connect({ deps: { keyStore: new keyStores.BrowserLocalStorageKeyStore() }, headers: {}, ...nearConfig })
 }
 
 export function initContract(accountId: string) {
