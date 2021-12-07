@@ -208,9 +208,6 @@ export default Vue.extend({
 	transition: all 0.4s;
 	z-index: 50;
 }
-.page-header {
-	transition: all 0.3s ease-in-out;
-}
 .scrolldown {
 	background: linear-gradient(180deg, rgba(46, 85, 106, 0.25) 0%, rgba(46, 85, 106, 0.25) 100%), none !important;
 	height: 4rem;

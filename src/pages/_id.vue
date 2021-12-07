@@ -2,27 +2,38 @@
 	<section class="w-full">
 		<div>
 			<!-- top -->
-			<article id="header" ref="topContainer" class="px-6 pt-6 z-20 w-full" style="backdrop-filter: blur(10px)">
+			<article
+				id="header"
+				ref="topContainer"
+				class="px-6 pt-6 z-20 w-full header-profile"
+				style="backdrop-filter: blur(10px); height: 17.5rem"
+			>
 				<!-- Back button -->
 				<div v-if="$route.params.id !== $store.state.session.id" class="pb-4">
 					<button class="flex flex-row items-center -mt-1 focus:outline-none" @click="$router.go(-1)">
 						<span class="bg-gray1 rounded-full p-1"><BackButton :reduceSize="true" /></span>
-						<h6 class="font-semibold ml-2 font-sans">Back</h6>
+						<h6 id="button" class="font-semibold ml-2 font-sans header-profile">Back</h6>
 					</button>
 				</div>
 				<!-- Name, socials, follow, bio -->
 				<div class="flex flex-row justify-between">
 					<div class="flex items-center">
-						<Avatar :avatar="visitAvatar" :authorID="$route.params.id" size="w-24 h-24" class="mr-5" />
-						<div class="flex flex-col flex-grow">
+						<Avatar
+							id="avatar"
+							:avatar="visitAvatar"
+							:authorID="$route.params.id"
+							size="w-24 h-24 profile-header"
+							class="header-profile rounded-lg"
+						/>
+						<div class="flex flex-col flex-grow ml-5">
 							<!-- Name Username, Follow button -->
 							<div class="flex flex-col">
-								<h3 class="text-2xl pr-4 font-semibold">
+								<h3 id="title" class="text-2xl pr-4 font-semibold header-profile">
 									{{ visitProfile.name }}
 								</h3>
-								<h5 class="text-primary text-lg">@{{ visitProfile.id }}</h5>
+								<h5 id="id" class="text-primary text-lg header-profile">@{{ visitProfile.id }}</h5>
 							</div>
-							<div class="flex flex-row pt-2 text-sm text-gray6">
+							<div id="stats" class="flex flex-row pt-2 text-sm text-gray6 header-profile">
 								<!-- posts, following, followers -->
 								<nuxt-link :to="'/' + $route.params.id" class="text-sm" :class="getStyles(`id-categories`)">
 									<span class="font-bold text-primary">{{ posts.length }}</span>
@@ -53,17 +64,23 @@
 							:text="`Edit Profile`"
 							:action="toggleSettings"
 						/>
-						<FriendButton v-else :toggleFriend="toggleFriend" :userIsFollowed="userIsFollowed" />
+						<FriendButton
+							v-else
+							id="follow"
+							:toggleFriend="toggleFriend"
+							:userIsFollowed="userIsFollowed"
+							class="header-profile"
+						/>
 					</div>
 				</div>
 				<!-- Bio -->
-				<div v-if="visitProfile.bio" class="pt-4 px-1">
+				<div v-if="visitProfile.bio" id="bio" class="pt-4 px-1 header-profile">
 					<p>
 						{{ visitProfile.bio }}
 					</p>
 				</div>
 				<!-- Tabs -->
-				<div class="flex flex-col md:flex-row w-full justify-between text-gray5 pt-6">
+				<div id="tabs" class="flex flex-col md:flex-row w-full justify-between text-gray5 pt-6 header-profile">
 					<nuxt-link :to="'/' + $route.params.id" class="pb-1" :class="getStyles('id')">
 						<span class="px-4">Posts</span>
 					</nuxt-link>
@@ -239,50 +256,110 @@ export default Vue.extend({
 		handleScrollHeader() {
 			const body = document.getElementById(`scrollContainer`)
 			const header = document.getElementById(`header`)
-			// const button = document.getElementById(`button`)
-			// const title = document.getElementById(`title`)
+			const button = document.getElementById(`button`)
+			const avatar = document.getElementById(`avatar`)
+			const title = document.getElementById(`title`)
+			const follow = document.getElementById(`follow`)
+			const tabs = document.getElementById(`tabs`)
+			const id = document.getElementById(`id`)
+			const stats = document.getElementById(`stats`)
+			const bio = document.getElementById(`bio`)
 			this.padding = header?.clientHeight + `px`
-			const scrollUp = `scrollup`
-			const scrollDown = `scrolldown`
-			// const buttoncollapsed = `buttoncollapsed`
-			// const buttonnotcollapsed = `buttonnotcollapsed`
-			// const titlecollapsed = `titlecollapsed`
-			// const titlenotcollapsed = `titlenotcollapsed`
+			const scrollUp = `scrollupprofile`
+			const scrollDown = `scrolldownprofile`
+			const buttoncollapsed = `buttoncollapsed`
+			const buttonnotcollapsed = `buttonnotcollapsed`
+			const avatarcollapsed = `avatarcollapsed`
+			const avatarnotcollapsed = `avatarnotcollapsed`
+			const titlecollapsed = `titlecollapsed`
+			const titlenotcollapsed = `titlenotcollapsed`
+			const followcollapsed = `followcollapsed`
+			const follownotcollapsed = `follownotcollapsed`
+			const tabscollapsed = `tabscollapsed`
+			const tabsnotcollapsed = `tabsnotcollapsed`
 			if (!body) {
 				return
 			}
-			// if (!button) {
-			// 	return
-			// }
-			// if (!title) {
-			// 	return
-			// }
+			if (!button) {
+				return
+			}
+			if (!follow) {
+				return
+			}
+			if (!avatar) {
+				return
+			}
+			if (!title) {
+				return
+			}
 			if (!header) {
+				return
+			}
+			if (!id) {
+				return
+			}
+			if (!stats) {
+				return
+			}
+			if (!tabs) {
+				return
+			}
+			if (!bio) {
 				return
 			}
 			const currentScroll = body.scrollTop
 			if (body.scrollTop <= 0) {
 				header.classList.remove(scrollUp)
-				// button.classList.remove(buttoncollapsed)
-				// title.classList.remove(titlecollapsed)
+				button.classList.remove(buttoncollapsed)
+				avatar.classList.remove(avatarcollapsed)
+				title.classList.remove(titlecollapsed)
+				follow.classList.remove(followcollapsed)
+				tabs.classList.remove(tabscollapsed)
+				id.classList.remove(buttoncollapsed)
+				stats.classList.remove(buttoncollapsed)
+				bio.classList.remove(buttoncollapsed)
 				return
 			}
 			if (currentScroll > this.lastScroll && !header.classList.contains(scrollDown)) {
 				// down
 				header.classList.remove(scrollUp)
-				// button.classList.remove(buttonnotcollapsed)
-				// title.classList.remove(titlenotcollapsed)
 				header.classList.add(scrollDown)
-				// button.classList.add(buttoncollapsed)
-				// title.classList.add(titlecollapsed)
+				button.classList.remove(buttonnotcollapsed)
+				button.classList.add(buttoncollapsed)
+				avatar.classList.remove(avatarnotcollapsed)
+				avatar.classList.add(avatarcollapsed)
+				title.classList.add(titlecollapsed)
+				title.classList.remove(titlenotcollapsed)
+				follow.classList.add(followcollapsed)
+				follow.classList.remove(follownotcollapsed)
+				tabs.classList.add(tabscollapsed)
+				tabs.classList.remove(tabsnotcollapsed)
+				id.classList.add(buttoncollapsed)
+				id.classList.remove(buttonnotcollapsed)
+				stats.classList.add(buttoncollapsed)
+				stats.classList.remove(buttonnotcollapsed)
+				bio.classList.add(buttoncollapsed)
+				bio.classList.remove(buttonnotcollapsed)
 			} else if (currentScroll < this.lastScroll && header.classList.contains(scrollDown)) {
 				// up
 				header.classList.remove(scrollDown)
-				// button.classList.remove(buttoncollapsed)
-				// title.classList.remove(titlecollapsed)
 				header.classList.add(scrollUp)
-				// button.classList.add(buttonnotcollapsed)
-				// title.classList.add(titlenotcollapsed)
+				button.classList.remove(buttoncollapsed)
+				button.classList.add(buttonnotcollapsed)
+				avatar.classList.remove(avatarcollapsed)
+				avatar.classList.add(avatarnotcollapsed)
+				title.classList.remove(titlecollapsed)
+				title.classList.add(titlenotcollapsed)
+				follow.classList.remove(followcollapsed)
+				follow.classList.add(follownotcollapsed)
+				tabs.classList.remove(tabscollapsed)
+				tabs.classList.add(tabsnotcollapsed)
+				id.classList.remove(buttoncollapsed)
+				id.classList.add(buttonnotcollapsed)
+				stats.classList.remove(buttoncollapsed)
+				stats.classList.add(buttonnotcollapsed)
+				bio.classList.remove(buttoncollapsed)
+				bio.classList.add(buttonnotcollapsed)
 			}
 			this.lastScroll = currentScroll
 		},
@@ -291,13 +368,48 @@ export default Vue.extend({
 </script>
 
 <style>
-.scrollup {
-	opacity: 1;
-	transform: none;
+.header-profile {
+	transition: all 0.4s;
+	z-index: 50;
 }
-.scrolldown {
-	background: linear-gradient(180deg, rgba(46, 85, 106, 0.25) 0%, rgba(46, 85, 106, 0.25) 100%), none !important;
-	height: 4rem;
-	backdrop-filter: blur(10px);
+.scrollupprofile {
+	height: 18rem;
+}
+.scrolldownprofile {
+	height: 6.9rem !important;
+}
+.buttoncollapsed {
+	opacity: 0;
+}
+.buttonnotcollapsed {
+	opacity: 1;
+}
+.avatarcollapsed {
+	height: 3rem;
+	width: 3rem;
+	transform: translate3d(45px, -75px, 0px);
+}
+.avatarnotcollapsed {
+	height: 6rem;
+	width: 6rem;
+	transform: translate3d(0, 0, 0);
+}
+.titlecollapsed {
+	transform: translate3d(40px, -47px, 0px);
+}
+.titlenotcollapsed {
+	transform: translate3d(0, 0, 0);
+}
+.followcollapsed {
+	transform: translate3d(0px, -75px, 0px);
+}
+.follownotcollapsed {
+	transform: translate3d(0, 0, 0);
+}
+.tabscollapsed {
+	transform: translate3d(0px, -165px, 0px);
+}
+.tabsnotcollapsed {
+	transform: translate3d(0, 0, 0);
 }
 </style>
