@@ -17,15 +17,17 @@
 					<div class="bg-gray1 rounded-full flex-shrink-0">
 						<BackIcon />
 					</div>
-					<p class="pl-3 font-semibold">All categories</p>
+					<p id="button" class="pl-3 font-semibold trigger-menu-wrapper">All categories</p>
 				</button>
-				<h2 class="text-3xl text-lightOnPrimaryText font-semibold capitalize">{{ $route.params.category }}</h2>
+				<h2 id="title" class="text-3xl text-lightOnPrimaryText font-semibold capitalize trigger-menu-wrapper">
+					{{ $route.params.category }}
+				</h2>
 			</div>
 		</div>
 		<!-- Posts loaded -->
 		<div
 			id="column"
-			class="fixed overflow-y-auto"
+			class="fixed overflow-y-auto pb-56"
 			style="width: 748px"
 			:style="`min-height: calc(100vh - ` + padding + `); height: calc(100vh - ` + padding + `)`"
 		>
@@ -44,6 +46,7 @@
 					:repostCount="p.repostCount"
 				/>
 			</article>
+			<p v-if="noMorePosts" class="text-center text-primary pt-5">No more posts</p>
 		</div>
 		<!-- Not loaded yet -->
 		<article v-show="isLoading" class="flex justify-center w-full">
@@ -68,6 +71,7 @@ interface IData {
 	limit: number
 	algorithm: Algorithm
 	padding: string
+	noMorePosts: boolean
 }
 
 export default Vue.extend({
@@ -86,6 +90,7 @@ export default Vue.extend({
 			algorithm: `NEW`,
 			lastScroll: 0,
 			padding: `0px`,
+			noMorePosts: false,
 		}
 	},
 	async created() {
@@ -100,7 +105,6 @@ export default Vue.extend({
 			this.following = following
 		})
 		this.isLoading = false
-		window.addEventListener(`scroll`, this.handleScroll)
 		const container = document.getElementById(`column`)
 		if (container) {
 			container.addEventListener(`scroll`, this.handleScrollHeader)
@@ -111,7 +115,6 @@ export default Vue.extend({
 		if (container) {
 			container.removeEventListener(`scroll`, this.handleScrollHeader)
 		}
-		window.removeEventListener(`scroll`, this.handleScroll)
 	},
 	methods: {
 		async toggleFriend(authorID: string) {
@@ -132,7 +135,7 @@ export default Vue.extend({
 				})
 				if (res.length === 0) {
 					this.isLoading = false
-					window.removeEventListener(`scroll`, this.handleScroll)
+					this.noMorePosts = true
 				}
 				this.posts = this.posts.concat(res)
 			} catch (err) {
@@ -141,40 +144,60 @@ export default Vue.extend({
 				this.isLoading = false
 			}
 		},
-		async handleScroll() {
-			const { scrollTop, scrollHeight, clientHeight } = document.documentElement
-			if (scrollTop + clientHeight >= scrollHeight - 5) {
-				await this.loadPosts()
-				this.currentOffset += this.limit
-			}
-		},
-		handleScrollHeader() {
+		async handleScrollHeader() {
 			const body = document.getElementById(`column`)
 			const header = document.getElementById(`header`)
+			const button = document.getElementById(`button`)
+			const title = document.getElementById(`title`)
 			this.padding = header?.clientHeight + `px`
 			const scrollUp = `scrollup`
 			const scrollDown = `scrolldown`
+			const buttoncollapsed = `buttoncollapsed`
+			const buttonnotcollapsed = `buttonnotcollapsed`
+			const titlecollapsed = `titlecollapsed`
+			const titlenotcollapsed = `titlenotcollapsed`
 			if (!body) {
 				return
 			}
-			const currentScroll = body.scrollTop
+			if (!button) {
+				return
+			}
+			if (!title) {
+				return
+			}
 			if (!header) {
 				return
 			}
+			const currentScroll = body.scrollTop
 			if (body.scrollTop <= 0) {
 				header.classList.remove(scrollUp)
+				button.classList.remove(buttoncollapsed)
+				title.classList.remove(titlecollapsed)
 				return
 			}
 			if (currentScroll > this.lastScroll && !header.classList.contains(scrollDown)) {
 				// down
 				header.classList.remove(scrollUp)
+				button.classList.remove(buttonnotcollapsed)
+				title.classList.remove(titlenotcollapsed)
 				header.classList.add(scrollDown)
+				button.classList.add(buttoncollapsed)
+				title.classList.add(titlecollapsed)
 			} else if (currentScroll < this.lastScroll && header.classList.contains(scrollDown)) {
 				// up
 				header.classList.remove(scrollDown)
+				button.classList.remove(buttoncollapsed)
+				title.classList.remove(titlecollapsed)
 				header.classList.add(scrollUp)
+				button.classList.add(buttonnotcollapsed)
+				title.classList.add(titlenotcollapsed)
 			}
 			this.lastScroll = currentScroll
+			// Reached bottom, fetch more posts
+			if (body.scrollTop + body.clientHeight === body.scrollHeight && !this.noMorePosts) {
+				await this.loadPosts()
+				this.currentOffset += this.limit
+			}
 		},
 	},
 })
@@ -185,19 +208,27 @@ export default Vue.extend({
 	transition: all 0.4s;
 	z-index: 50;
 }
-.page-header {
-	transition: all 0.3s ease-in-out;
-}
-.trigger-menu-wrapper {
-	transition: all 0.4s;
-}
 .scrolldown {
-	background: linear-gradient(rgba(46, 85, 106, 0.25) 0%, rgba(46, 85, 106, 0.25) 100%) !important;
+	background: linear-gradient(180deg, rgba(46, 85, 106, 0.25) 0%, rgba(46, 85, 106, 0.25) 100%), none !important;
 	height: 4rem;
 	backdrop-filter: blur(10px);
 }
 .scrollup {
 	opacity: 1;
 	transform: none;
+}
+.buttoncollapsed {
+	opacity: 0;
+}
+.buttonnotcollapsed {
+	opacity: 1;
+}
+.titlecollapsed {
+	transform: translate3d(35px, -31px, 0px);
+	font-size: 1.5rem;
+	color: #2e556a;
+}
+.titlenotcollapsed {
+	transform: translate3d(0, 0, 0);
 }
 </style>

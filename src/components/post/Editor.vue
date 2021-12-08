@@ -22,7 +22,7 @@
 					/>
 				</article>
 
-				<article class="flex flex-col px-2 mb-3">
+				<article class="flex flex-col px-2">
 					<p class="text-xs text-lightError">{{ subtitleError }}</p>
 					<label for="subtitle" class="hidden">Subtitle</label>
 					<textarea
@@ -257,13 +257,13 @@ textarea#title {
 	border: none;
 	resize: none;
 	overflow-y: hidden;
-	height: 4rem;
+	min-height: 4rem;
 }
 textarea#subtitle {
 	border: none;
 	resize: none;
 	overflow-y: hidden;
-	height: 2rem;
+	height: 2.5rem;
 }
 .content {
 	text-align: justify;

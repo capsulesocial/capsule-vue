@@ -1,7 +1,7 @@
 <template>
-	<div v-if="post && author" id="post" class="w-full flex justify-center">
+	<div id="post" class="w-full flex justify-center">
 		<!-- Inner post area -->
-		<div style="width: 760px; max-width: 760px; height: fit-content">
+		<div v-if="post && author" style="width: 760px; max-width: 760px; height: fit-content">
 			<!-- Magic header that disappears on scroll down -->
 			<header
 				id="header"
@@ -136,6 +136,9 @@
 			</section>
 			<section v-else>Post not found 😵‍💫</section>
 		</div>
+		<article v-show="isLoading" class="flex justify-center w-full mt-20">
+			<div class="loader m-5"></div>
+		</article>
 		<!-- Show Post preview card on quote repost -->
 		<div v-if="showQuoteRepost">
 			<PostCard
@@ -189,6 +192,7 @@ interface IData {
 	showHeader: boolean
 	repostCount: number
 	comments: ICommentData[]
+	isLoading: boolean
 	showQuoteRepost: boolean
 	following: Set<string>
 	bookmarksCount: number
@@ -224,6 +228,7 @@ export default Vue.extend({
 			showHeader: true,
 			repostCount: -1,
 			comments: [],
+			isLoading: true,
 			showQuoteRepost: false,
 			following: new Set(),
 			bookmarksCount: -1,
@@ -233,6 +238,7 @@ export default Vue.extend({
 		// Fetch post from IPFS,
 		this.post = await getRegularPost(this.$route.params.post)
 		if (this.post === null) {
+			this.$toastError(`This post has not been found`)
 			throw new Error(`Post is null!`)
 		}
 		const postMetadata = await getOnePost(this.$route.params.post, this.$store.state.session.id)
@@ -240,6 +246,7 @@ export default Vue.extend({
 		this.isBookmarked = postMetadata.bookmarked
 		this.repostCount = postMetadata.repostCount
 		this.comments = postMetadata.comments
+		this.isLoading = false
 
 		// Get author profile
 		this.author = createDefaultProfile(this.post.authorID)
