@@ -1,5 +1,14 @@
 <template>
 	<main class="h-screen p-0 m-0 bg-img" :style="{ backgroundImage: `url(` + $store.state.backgroundImage + `)` }">
+		<!-- Featured photo popup -->
+		<div
+			v-if="displayPhoto"
+			class="fixed w-full h-screen bg-primary bg-opacity-75 z-40 pt-24 overflow-auto"
+			@click="displayPhoto = false"
+		>
+			<img :src="featuredPhoto.photo" class="modal-content rounded-lg" />
+			<p v-if="featuredPhoto.caption" id="caption">{{ featuredPhoto.caption }}</p>
+		</div>
 		<!-- Wrapper -->
 		<div class="w-full flex justify-center">
 			<div class="flex flex-col" style="width: 1220px">
@@ -19,6 +28,7 @@
 								backdrop-filter: blur(10px);
 							"
 							class="fixed overflow-y-auto rounded-lg shadow-lg mr-5 p-6 pt-0 border border-lightBorder bg-gradient-to-r from-lightBGStart to-lightBGStop"
+							@showPhoto="showPhoto"
 						/>
 					</section>
 				</div>
@@ -34,9 +44,16 @@ import Header from '@/components/Header.vue'
 import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
 
+interface FeaturedPhoto {
+	photo: string | null
+	caption: string | null
+}
+
 interface IData {
 	profile: Profile | null
 	avatar: string | ArrayBuffer | null
+	displayPhoto: boolean
+	featuredPhoto: FeaturedPhoto
 }
 
 export default Vue.extend({
@@ -47,6 +64,11 @@ export default Vue.extend({
 		return {
 			profile: null,
 			avatar: null,
+			displayPhoto: false,
+			featuredPhoto: {
+				photo: null,
+				caption: null,
+			},
 		}
 	},
 	async created() {
@@ -63,6 +85,12 @@ export default Vue.extend({
 			})
 		}
 	},
+	methods: {
+		showPhoto(d: FeaturedPhoto): void {
+			this.featuredPhoto = d
+			this.displayPhoto = !this.displayPhoto
+		},
+	},
 })
 </script>
 
@@ -70,5 +98,40 @@ export default Vue.extend({
 .bg-img {
 	background-attachment: fixed;
 	background-size: cover;
+}
+.modal-content {
+	margin: auto;
+	display: block;
+	width: auto;
+	max-width: 100%;
+	height: auto;
+	max-height: 100%;
+}
+
+/* Caption of Modal Image */
+#caption {
+	margin: auto;
+	display: block;
+	width: 80%;
+	text-align: center;
+	color: #ccc;
+	padding: 10px 0;
+	height: 150px;
+}
+
+/* Add Animation */
+.modal-content,
+#caption {
+	animation-name: zoom;
+	animation-duration: 0.6s;
+}
+
+@keyframes zoom {
+	from {
+		transform: scale(0.1);
+	}
+	to {
+		transform: scale(1);
+	}
 }
 </style>

@@ -67,7 +67,7 @@
 					</h2>
 				</article>
 				<!-- Featured Photo -->
-				<article v-if="featuredPhoto !== null" class="mb-5 flex flex-col justify-end relative mt-5 -mx-16">
+				<article v-if="featuredPhoto !== null" class="mb-5 flex flex-col justify-end relative mt-5" @click="showPhoto">
 					<div
 						v-if="post.featuredPhotoCaption"
 						class="h-16 w-full absolute rounded-b-lg"
@@ -196,6 +196,7 @@ interface IData {
 	showQuoteRepost: boolean
 	following: Set<string>
 	bookmarksCount: number
+	popImage: boolean
 }
 
 export default Vue.extend({
@@ -232,6 +233,7 @@ export default Vue.extend({
 			showQuoteRepost: false,
 			following: new Set(),
 			bookmarksCount: -1,
+			popImage: false,
 		}
 	},
 	async created() {
@@ -370,6 +372,12 @@ export default Vue.extend({
 		},
 		closePopup() {
 			this.showQuoteRepost = false
+		},
+		showPhoto() {
+			this.$emit(`showPhoto`, {
+				photo: this.featuredPhoto,
+				caption: this.post?.featuredPhotoCaption,
+			})
 		},
 	},
 })
