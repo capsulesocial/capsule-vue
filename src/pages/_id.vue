@@ -6,7 +6,8 @@
 				id="header"
 				ref="topContainer"
 				class="px-6 pt-6 z-20 w-full header-profile"
-				style="backdrop-filter: blur(10px); height: 17.5rem"
+				:style="scrollingDown ? `height: 4rem !important;` : ``"
+				style="backdrop-filter: blur(10px)"
 			>
 				<!-- Back button -->
 				<div v-if="$route.params.id !== $store.state.session.id" class="pb-4">
@@ -22,7 +23,7 @@
 							id="avatar"
 							:avatar="visitAvatar"
 							:authorID="$route.params.id"
-							size="w-24 h-24 profile-header"
+							:size="scrollingDown ? `w-12 h-12` : `w-24 h-24`"
 							class="header-profile rounded-lg"
 						/>
 						<div class="flex flex-col flex-grow ml-5">
@@ -33,8 +34,8 @@
 								</h3>
 								<h5 id="id" class="text-primary text-lg header-profile">@{{ visitProfile.id }}</h5>
 							</div>
+							<!-- Tabs: posts, following, followers -->
 							<div id="stats" class="flex flex-row pt-2 text-sm text-gray6 header-profile">
-								<!-- posts, following, followers -->
 								<nuxt-link :to="'/' + $route.params.id" class="text-sm" :class="getStyles(`id-categories`)">
 									<span class="font-bold text-primary">{{ posts.length }}</span>
 									Posts
@@ -58,6 +59,7 @@
 							</div>
 						</div>
 					</div>
+					<!-- Profile buttons -->
 					<div class="flex items-center">
 						<SecondaryButton
 							v-if="$store.state.session.id === $route.params.id"
@@ -96,7 +98,7 @@
 				v-if="loadedContent()"
 				id="scrollContainer"
 				ref="scrollContainer"
-				class="fixed overflow-y-auto pb-24"
+				class="fixed overflow-y-auto"
 				style="width: 748px"
 				:style="`min-height: calc(100vh - ` + padding + ` - 90px); height: calc(100vh - ` + padding + ` - 90px)`"
 			>
@@ -133,6 +135,7 @@ interface IData {
 	padding: string
 	showSettings: boolean
 	lastScroll: number
+	scrollingDown: boolean
 }
 
 export default Vue.extend({
@@ -181,6 +184,7 @@ export default Vue.extend({
 			padding: `0px`,
 			showSettings: false,
 			lastScroll: 0,
+			scrollingDown: false,
 		}
 	},
 	created() {
@@ -322,6 +326,7 @@ export default Vue.extend({
 			}
 			if (currentScroll > this.lastScroll && !header.classList.contains(scrollDown)) {
 				// down
+				this.scrollingDown = true
 				header.classList.remove(scrollUp)
 				header.classList.add(scrollDown)
 				button.classList.remove(buttonnotcollapsed)
@@ -342,6 +347,7 @@ export default Vue.extend({
 				bio.classList.remove(buttonnotcollapsed)
 			} else if (currentScroll < this.lastScroll && header.classList.contains(scrollDown)) {
 				// up
+				this.scrollingDown = false
 				header.classList.remove(scrollDown)
 				header.classList.add(scrollUp)
 				button.classList.remove(buttoncollapsed)
@@ -371,12 +377,6 @@ export default Vue.extend({
 .header-profile {
 	transition: all 0.4s;
 	z-index: 50;
-}
-.scrollupprofile {
-	height: 18rem;
-}
-.scrolldownprofile {
-	height: 6.9rem !important;
 }
 .buttoncollapsed {
 	opacity: 0;
