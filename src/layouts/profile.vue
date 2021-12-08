@@ -8,7 +8,7 @@
 					<Header :avatar="myAvatar" />
 				</header>
 				<!-- Body -->
-				<div>
+				<div v-if="!noProfileFound">
 					<!-- Content -->
 					<section v-if="visitProfile" class="flex flex-row">
 						<nuxt-child
@@ -36,6 +36,7 @@
 						<div class="loader m-5 p-10 rounded-lg"></div>
 					</section>
 				</div>
+				<div v-else>No profile found</div>
 			</div>
 		</div>
 	</main>
@@ -60,6 +61,7 @@ interface IData {
 	followers: Set<string>
 	following: Set<string>
 	userIsFollowed: boolean
+	noProfileFound: boolean
 }
 
 export default Vue.extend({
@@ -78,6 +80,7 @@ export default Vue.extend({
 			followers: new Set(),
 			following: new Set(),
 			userIsFollowed: false,
+			noProfileFound: false,
 		}
 	},
 	watch: {
@@ -103,6 +106,11 @@ export default Vue.extend({
 			getPhotoFromIPFS(this.myProfile.avatar).then((p) => {
 				this.myAvatar = p
 			})
+		}
+		if (visitProfile === null) {
+			this.noProfileFound = true
+			this.$toastError(`Profile does not exist`)
+			return
 		}
 		// Get visiting profile and avatar
 		this.visitProfile = visitProfile || createDefaultProfile(this.$route.params.id)

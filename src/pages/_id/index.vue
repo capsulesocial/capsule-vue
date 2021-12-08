@@ -92,7 +92,6 @@ export default Vue.extend({
 				this.currentOffset += this.limit
 				this.isLoading = false
 			} catch (err) {
-				this.$toastError(`err`)
 			} finally {
 				this.isLoading = false
 			}
