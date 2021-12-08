@@ -227,6 +227,7 @@ export default Vue.extend({
 	transform: translate3d(35px, -31px, 0px);
 	font-size: 1.5rem;
 	color: #2e556a;
+	padding-top: 16px;
 }
 .titlenotcollapsed {
 	transform: translate3d(0, 0, 0);
