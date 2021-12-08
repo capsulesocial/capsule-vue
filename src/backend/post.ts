@@ -3,7 +3,7 @@ import axios from 'axios'
 import { signContent } from './utilities/keys'
 import ipfs from './utilities/ipfs'
 import { isError, uint8ArrayToHexString } from './utilities/helpers'
-import { capsuleOrbit, capsuleServer } from './utilities/config'
+import { capsuleOrbit, capsuleServer, sigValidity } from './utilities/config'
 import { IRepost } from './reposts'
 import { ICommentData } from './comment'
 import { decryptData, encryptAndSignData } from './crypto'
@@ -169,7 +169,8 @@ export function isRegularPost(post: Post): post is IRegularPost {
 }
 
 async function getEncryptionKeys(username: string, cid: string) {
-	const signature = await signContent({ username, cid })
+	const exp = Date.now() + sigValidity
+	const signature = await signContent({ username, cid, exp })
 	if (!signature) {
 		throw new Error(`Content signing failed`)
 	}
@@ -177,7 +178,7 @@ async function getEncryptionKeys(username: string, cid: string) {
 
 	try {
 		const res = await axios.get<{ key: string; counter: string }>(
-			`${capsuleServer}/content/${cid}?username=${username}&sig=${sig}`,
+			`${capsuleServer}/content/${cid}?username=${username}&sig=${sig}&exp=${exp}`,
 		)
 		return res.data
 	} catch (err) {

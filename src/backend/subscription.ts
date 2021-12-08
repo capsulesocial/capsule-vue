@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { capsuleServer } from './utilities/config'
+import { capsuleServer, sigValidity } from './utilities/config'
 import { uint8ArrayToHexString } from './utilities/helpers'
 import { signContent } from './utilities/keys'
 
@@ -7,7 +7,7 @@ export interface ISubscriptionEvent {
 	action: `SUBSCRIBE` | `UNSUBSCRIBE`
 	subject: string
 	object: string
-	timestamp: number
+	exp: number
 }
 
 export async function subscriptionChange(action: `SUBSCRIBE` | `UNSUBSCRIBE`, self: string, user: string) {
@@ -15,7 +15,7 @@ export async function subscriptionChange(action: `SUBSCRIBE` | `UNSUBSCRIBE`, se
 		action,
 		subject: self,
 		object: user,
-		timestamp: Date.now(),
+		exp: Date.now() + sigValidity,
 	}
 
 	const signature = await signContent(data)
