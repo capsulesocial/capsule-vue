@@ -35,7 +35,7 @@ function getRpcProviderUrl() {
 	}
 }
 
-const provider = new providers.JsonRpcProvider(getRpcProviderUrl())
+const provider = new providers.JsonRpcProvider({ url: getRpcProviderUrl() })
 
 export async function getUsernameNEAR(accountId: string): Promise<string | null> {
 	const rawResult = await provider.query({
