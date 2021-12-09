@@ -161,22 +161,24 @@ export default Vue.extend({
 					following: this.algorithm === `FOLLOWING` ? this.$store.state.session.id : undefined,
 				})
 				if (res.length === 0) {
-					this.isLoading = false
 					const container = this.$refs.container as HTMLElement
 					container.removeEventListener(`scroll`, this.handleScroll)
 				}
 				this.posts = this.posts.concat(res)
+				this.currentOffset += this.limit
+				this.isLoading = false
 			} catch (err) {
 				this.$toastError(`error`)
 			} finally {
 				this.isLoading = false
 			}
 		},
-		async handleScroll(e: Event) {
-			const { scrollTop, scrollHeight, clientHeight } = e.srcElement as HTMLElement
-			if (scrollTop + clientHeight >= scrollHeight - 5) {
-				await this.loadPosts()
-				this.currentOffset += this.limit
+		handleScroll(e: Event) {
+			if (!this.isLoading) {
+				const { scrollTop, scrollHeight, clientHeight } = e.srcElement as HTMLElement
+				if (scrollTop + clientHeight >= scrollHeight - 5) {
+					this.loadPosts()
+				}
 			}
 		},
 		generateKey(p: IPostResponse | IRepostResponse) {

@@ -23,7 +23,7 @@ export const MutationType = {
 	SET_REPOST: `setRepost`,
 	ADD_REPOST: `addRepost`,
 	REMOVE_REPOST: `removeRepost`,
-	RESET_REPOST: `ressetRepost`,
+	RESET_REPOST: `resetRepost`,
 }
 
 export const mutations: MutationTree<RootState> = {

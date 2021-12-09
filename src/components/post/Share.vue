@@ -70,8 +70,9 @@ import TwitterIcon from '@/components/icons/brands/Twitter.vue'
 import LinkIcon from '@/components/icons/Link.vue'
 import RepostIcon from '@/components/icons/Repost.vue'
 import { Post } from '@/backend/post'
-import { IRepost, sendRepost } from '@/backend/reposts'
+import { IRepost, sendRepost, getReposts } from '@/backend/reposts'
 import { sendPostDeletion } from '@/backend/postDeletion'
+import { RepostLink } from '@/store/index'
 
 interface IData {
 	isReposted: Function
@@ -138,6 +139,7 @@ export default Vue.extend({
 	},
 	methods: {
 		sendRepost,
+		getReposts,
 		async handleRepost() {
 			// Post has NOT been reposted
 			if (!this.isReposted()) {
@@ -164,6 +166,20 @@ export default Vue.extend({
 				this.repostOffset -= 1
 				this.$toastSuccess(`This repost has been successfully removed from your profile`)
 			}
+			// Update reposts store
+			await this.getReposts(this.$store.state.session.id).then((res) => {
+				if (res) {
+					const repost: RepostLink[] = []
+					res.forEach((r) => {
+						const link: RepostLink = {
+							postID: r.post._id,
+							repostID: r.repost._id,
+						}
+						repost.push(link)
+					})
+					this.$store.commit(`setRepost`, repost)
+				}
+			})
 			this.$emit(`repostAction`)
 		},
 		async undoRepost(repostID: string) {
