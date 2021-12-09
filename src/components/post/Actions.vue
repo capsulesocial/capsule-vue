@@ -4,25 +4,11 @@
 		<article class="py-5">
 			<div class="flex items-start">
 				<!-- Comment box Container -->
-				<div
-					class="comment-container relative flex shadow-xl rounded-xl w-full overflow-hidden p-4"
-					:class="`bg-` + emotionCategory"
-				>
-					<!-- Previous page Arrow -->
-					<button
-						v-show="showEmotions && page > 0"
-						class="absolute focus:outline-none left-0 mt-20 z-10 rounded-full border bg-white p-2"
-						@click="page -= 1"
-					>
-						<ChevronLeft />
-					</button>
-					<div
-						class="flip-container relative border shadow-inner rounded-xl overflow-hidden w-full h-40"
-						:class="showEmotions ? 'flip' : ''"
-					>
-						<div class="flipper flex flex-row absolute">
+				<div class="flex shadow-xl rounded-xl w-full overflow-hidden p-4" :class="`bg-` + emotionCategory">
+					<div class="rounded-xl overflow-hidden w-full" :class="showEmotions ? 'h-64' : 'h-40'">
+						<div class="flex flex-row">
 							<!-- Front side: Type comment -->
-							<div class="front w-full flex bg-white">
+							<div v-show="!showEmotions" class="w-full flex bg-white">
 								<button class="h-auto flex-shrink-0 focus:outline-none" @click="showEmotions = !showEmotions">
 									<span v-if="emotion !== ''">
 										<img
@@ -52,70 +38,28 @@
 								</div>
 							</div>
 							<!-- Back side: Choose reaction -->
-							<div class="back w-full h-40 bg-white">
-								<!-- Text and filter -->
-								<div class="flex justify-between w-full px-4">
-									<h6>Define your comments emotion</h6>
-									<!-- Sort by filter -->
-									<div class="flex">
-										<h6 class="mr-2">Sort by</h6>
-										<button v-show="!showDropdown" class="font-semibold" @click="showDropdown = !showDropdown">
-											{{ emotionCategory }}
-										</button>
-										<div v-show="showDropdown">
-											<button class="focus:outline-none mr-2 font-semibold" @click="setEmotionCategory(`default`)">
-												All
-											</button>
-											<button
-												class="focus:outline-none mr-2 text-positive font-semibold"
-												@click="setEmotionCategory(`positive`)"
-											>
-												Positive
-											</button>
-											<button
-												class="focus:outline-none mr-2 text-negative font-semibold"
-												@click="setEmotionCategory(`negative`)"
-											>
-												Negative
-											</button>
-											<button
-												class="focus:outline-none mr-2 text-neutral font-semibold"
-												@click="setEmotionCategory(`neutral`)"
-											>
-												Neutral
-											</button>
-										</div>
-									</div>
+							<div v-show="showEmotions" class="w-full h-64 overflow-y-auto bg-white">
+								<div
+									v-for="row in faceGroupings"
+									:key="row[0].label + row[1].label + row[2].label"
+									class="flex flex-row w-full"
+								>
+									<img
+										v-for="face in row"
+										:key="face.label"
+										:src="face.leftImage"
+										:alt="face.label"
+										class="w-24 h-24"
+									/>
+									<p v-for="face in row" :key="face.label + face.label" class="flex flex-grow">
+										{{ face.label }} <span class="px-2">*</span>
+									</p>
 								</div>
-								<!-- Grid of faces -->
-								<div class="faces flex flex-row justify-around flex-wrap w-full bg-white py-2">
-									<div v-for="e in getFaces()" :key="e">
-										<button
-											v-if="e"
-											:class="`border-` + reactionList[e].filter"
-											class="border items-center rounded-xl shadow-lg transition duration-500 ease-in-out transform hover:scale-105 focus:outline-none w-24 h-24 my-5"
-											@click="setEmotion(e, reactionList[e].filter)"
-										>
-											<img
-												:src="reactionList[e].imageLeft"
-												:alt="reactionList[e].label"
-												class="flex-shrink-0 h-24 w-24"
-											/>
-											<span class="text-xs text-center text-black w-24 -mt-1">{{ reactionList[e].label }}</span>
-										</button>
-									</div>
-								</div>
+								<!-- Overlay with selector -->
+								<div class="">How do you feel?</div>
 							</div>
 						</div>
 					</div>
-					<!-- Next page Arrow -->
-					<button
-						v-show="showEmotions"
-						class="absolute focus:outline-none right-0 mt-20 rounded-full border bg-white p-2"
-						@click="page += 1"
-					>
-						<ChevronRight />
-					</button>
 				</div>
 			</div>
 		</article>
@@ -136,15 +80,15 @@ import BrandedButton from '@/components/BrandedButton.vue'
 import Comment from '@/components/post/Comment.vue'
 import CommentFilter from '@/components/post/CommentFilter.vue'
 import FlipIcon from '@/components/icons/Flip.vue'
-import ChevronRight from '@/components/icons/ChevronRight.vue'
-import ChevronLeft from '@/components/icons/ChevronLeft.vue'
 
-import { backgrounds, reactions, feelings } from '@/config'
+import { backgrounds, reactions, feelings, faces, faceGroupings } from '@/config'
 import { createComment, sendComment, ICommentData, getCommentsOfPost } from '@/backend/comment'
 
 interface IData {
 	backgroundList: Record<string, string>
 	reactionList: Record<string, any>
+	facesList: Record<string, any>
+	faceGroupings: object[]
 	feelingList: Record<string, any>
 	comments: ICommentData[]
 	comment: string
@@ -164,8 +108,6 @@ export default Vue.extend({
 		Comment,
 		CommentFilter,
 		FlipIcon,
-		ChevronRight,
-		ChevronLeft,
 	},
 	props: {
 		postCID: {
@@ -181,6 +123,8 @@ export default Vue.extend({
 		return {
 			backgroundList: backgrounds,
 			reactionList: reactions,
+			facesList: faces,
+			faceGroupings,
 			feelingList: feelings,
 			comment: ``,
 			comments: [],
@@ -280,41 +224,6 @@ export default Vue.extend({
 </script>
 
 <style>
-/* entire container, keeps perspective */
-.flip-container {
-	perspective: 1000px;
-}
-.flip-container.flip .flipper {
-	transform: rotateY(180deg);
-}
-
-/* flip speed goes here */
-.flipper {
-	transition: 0.6s;
-	transform-style: preserve-3d;
-	position: relative;
-}
-
-/* hide back of pane during swap */
-.front,
-.back {
-	backface-visibility: hidden;
-	position: absolute;
-	top: 0;
-	left: 0;
-}
-
-/* front pane, placed above back */
-.front {
-	z-index: 2;
-	/* for firefox 31 */
-	transform: rotateY(0deg);
-}
-
-/* back, initially hidden pane */
-.back {
-	transform: rotateY(180deg);
-}
 /* Custom scrollbar */
 .faces::-webkit-scrollbar {
 	width: 10px;
