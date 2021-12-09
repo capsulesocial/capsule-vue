@@ -48,7 +48,7 @@
 									:to="`/bookmarks/` + c"
 									@click="setFilter(c)"
 								>
-									<img :src="require(`@/assets/images/category/` + c + `/icon.png`)" class="hotzone w-8 h-8 mr-1" />
+									<img :src="require(`@/assets/images/category/` + c + `/icon.webp`)" class="hotzone w-8 h-8 mr-1" />
 									<span
 										class="border-b ml-2"
 										:class="

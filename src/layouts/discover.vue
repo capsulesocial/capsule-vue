@@ -23,7 +23,7 @@
 						<nuxt-child
 							style="width: 750px; min-height: calc(100vh - 80px); height: calc(100vh - 80px)"
 							:class="$route.name === `discover` ? `` : `-mt-20`"
-							class="fixed overflow-y-auto rounded-lg shadow-lg mr-5 bg-gradient-to-r from-lightBGStart to-lightBGStop box-content"
+							class="fixed overflow-y-auto rounded-lg shadow-lg mr-5 bg-gradient-to-r from-lightBGStart to-lightBGStop box-content z-10"
 							:toggleFriend="toggleFriend"
 							:following="following"
 						/>

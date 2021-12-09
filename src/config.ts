@@ -408,8 +408,8 @@ export const categories = [
 ]
 
 export const backgrounds = {
-	positive: require(`@/assets/images/backgrounds/agree.png`),
-	negative: require(`@/assets/images/backgrounds/disagree.png`),
-	neutral: require(`@/assets/images/backgrounds/neutral.png`),
-	default: require(`@/assets/images/backgrounds/paper.png`),
+	positive: require(`@/assets/images/backgrounds/agree.webp`),
+	negative: require(`@/assets/images/backgrounds/disagree.webp`),
+	neutral: require(`@/assets/images/backgrounds/neutral.webp`),
+	default: require(`@/assets/images/backgrounds/paper.webp`),
 }

@@ -34,7 +34,7 @@
 		<div class="px-6 pb-4">
 			<TagCard v-for="t in tags" :key="t" :tag="t" class="text-lg mr-4 my-2" />
 		</div>
-		<img v-if="checkRoute()" :src="require(`@/assets/images/brand/discover.png`)" />
+		<img v-if="checkRoute()" :src="require(`@/assets/images/brand/discover.webp`)" />
 	</article>
 </template>
 

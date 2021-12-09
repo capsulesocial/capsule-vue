@@ -1,7 +1,7 @@
 <template>
 	<main
 		class="h-screen p-0 m-0 bg-img-unauth"
-		:style="{ backgroundImage: `url(${require(`@/assets/images/brand/auth.jpg`)})` }"
+		:style="{ backgroundImage: `url(${require(`@/assets/images/brand/auth.webp`)})` }"
 	>
 		<Nuxt />
 	</main>

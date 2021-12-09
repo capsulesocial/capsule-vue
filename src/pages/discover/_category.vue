@@ -8,7 +8,7 @@
 				background: `linear-gradient(180deg, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.8) 100%), url(${require(`@/assets/images/category/` +
 					$route.params.category +
 					`/` +
-					`header.png`)})`,
+					`header.webp`)})`,
 				backgroundSize: 'cover',
 			}"
 		>
@@ -31,7 +31,7 @@
 			style="width: 748px"
 			:style="`min-height: calc(100vh - ` + padding + `); height: calc(100vh - ` + padding + `)`"
 		>
-			<article v-for="p in posts" :key="p.post._id">
+			<article v-for="p in posts" :key="generateKey(p)">
 				<PostCard
 					:repost="p.repost"
 					:post="p.post"
@@ -59,11 +59,11 @@
 import Vue from 'vue'
 import PostCard from '@/components/post/Card.vue'
 import BackIcon from '@/components/icons/ChevronLeft.vue'
-import { getPosts, Algorithm, IPostResponse } from '@/backend/post'
+import { getPosts, Algorithm, IPostResponse, IRepostResponse } from '@/backend/post'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
 
 interface IData {
-	posts: IPostResponse[]
+	posts: Array<IRepostResponse | IPostResponse>
 	isLoading: boolean
 	lastScroll: number
 	following: Set<string>
@@ -198,6 +198,15 @@ export default Vue.extend({
 				await this.loadPosts()
 				this.currentOffset += this.limit
 			}
+		},
+		generateKey(p: IPostResponse | IRepostResponse) {
+			let key: string = p.post._id
+			// @ts-ignore
+			if (p.repost) {
+				// @ts-ignore
+				key += p.repost._id
+			}
+			return key
 		},
 	},
 })

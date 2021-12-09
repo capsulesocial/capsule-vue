@@ -57,7 +57,7 @@
 				<div class="flex justify-between items-center">
 					<div v-if="category" class="flex flex-row items-center">
 						<img
-							:src="require(`@/assets/images/category/` + $store.state.draft.category + `/icon.png`)"
+							:src="require(`@/assets/images/category/` + $store.state.draft.category + `/icon.webp`)"
 							class="hotzone w-10 h-10 mr-2"
 						/>
 						<span class="text-base text-primary">{{ $store.state.draft.category }}</span>
@@ -74,7 +74,7 @@
 					class="w-full flex items-center px-2 capitalize focus:outline-none h-10"
 					@click="changeCategory(c)"
 				>
-					<img :src="require(`@/assets/images/category/` + c + `/icon.png`)" class="hotzone w-6 h-6 mr-1 ml-2" />
+					<img :src="require(`@/assets/images/category/` + c + `/icon.webp`)" class="hotzone w-6 h-6 mr-1 ml-2" />
 					<span
 						class="border-b ml-2"
 						:class="category === c ? 'border-primary text-primary' : ' border-transparent text-lightPrimaryVariant'"
