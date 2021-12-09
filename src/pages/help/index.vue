@@ -1,7 +1,7 @@
 <template>
 	<main class="border-l border-r" style="width: 750px; height: calc(100vh - 95px)">
 		<section>
-			<img src="~/assets/images/brand/help-page.png" alt="" class="w-full" />
+			<img src="~/assets/images/brand/help-page.webp" alt="" class="w-full" />
 		</section>
 		<section>
 			<!-- Page title -->

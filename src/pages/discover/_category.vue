@@ -8,7 +8,7 @@
 				background: `linear-gradient(180deg, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.8) 100%), url(${require(`@/assets/images/category/` +
 					$route.params.category +
 					`/` +
-					`header.png`)})`,
+					`header.webp`)})`,
 				backgroundSize: 'cover',
 			}"
 		>

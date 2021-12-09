@@ -40,7 +40,7 @@
 				background-color: rgba(256, 256, 256, 0.9);
 				backdrop-filter: blur(10px);
 			"
-			:style="{ backgroundImage: `url(${require(`@/assets/images/brand/configure-my-capsule.png`)})` }"
+			:style="{ backgroundImage: `url(${require(`@/assets/images/brand/configure-my-capsule.webp`)})` }"
 			@click="toggleConfigure"
 		>
 			<p class="text-primary text-right text-sm">
