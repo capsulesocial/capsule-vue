@@ -2,17 +2,27 @@
 	<section>
 		<!-- Post a Comment -->
 		<article class="py-5">
+			<!-- Bottom overlay with selector -->
+			<div v-show="showEmotions" class="w-full flex flex-row-reverse">
+				<div class="h-24 -mb-24 z-10 bg-white" style="width: 450px">
+					<h6 class="text-primary text-2xl text-center self-center">How do you feel?</h6>
+				</div>
+			</div>
 			<div class="flex items-start">
 				<!-- Comment box Container -->
-				<div class="flex shadow-xl rounded-xl w-full overflow-hidden p-4" :class="`bg-` + emotionCategory">
+				<div
+					class="flex shadow-xl rounded-xl w-full overflow-hidden"
+					:class="showEmotions ? `` : `border p-4 bg-` + emotionCategory"
+				>
 					<div class="rounded-xl overflow-hidden w-full" :class="showEmotions ? 'h-64' : 'h-40'">
 						<div class="flex flex-row">
 							<!-- Front side: Type comment -->
 							<div v-show="!showEmotions" class="w-full flex bg-white">
 								<button class="h-auto flex-shrink-0 focus:outline-none" @click="showEmotions = !showEmotions">
-									<span v-if="emotion !== ''">
+									<span v-if="activeEmotion.label !== ''">
 										<img
-											:src="reactionList[emotion].imageRight"
+											:src="activeEmotion.rightImage"
+											:alt="activeEmotion.label"
 											class="object-contain"
 											style="width: 126px; height: 126px"
 										/>
@@ -44,23 +54,25 @@
 									:key="row[0].label + row[1].label + row[2].label"
 									class="flex flex-row w-full"
 								>
-									<img
+									<button v-for="face in row" :key="face.label" @click="setEmotion(face)">
+										<img :src="face.leftImage" :alt="face.label" class="w-24 h-24" />
+									</button>
+									<p
 										v-for="face in row"
-										:key="face.label"
-										:src="face.leftImage"
-										:alt="face.label"
-										class="w-24 h-24"
-									/>
-									<p v-for="face in row" :key="face.label + face.label" class="flex flex-grow">
+										:key="face.label + face.label"
+										class="flex flex-grow justify-center items-center"
+									>
 										{{ face.label }} <span class="px-2">*</span>
 									</p>
 								</div>
-								<!-- Overlay with selector -->
-								<div class="">How do you feel?</div>
 							</div>
 						</div>
 					</div>
 				</div>
+			</div>
+			<!-- Bottom overlay with selector -->
+			<div v-show="showEmotions" class="w-full flex flex-row-reverse">
+				<div class="h-24 -mt-24 z-10 bg-white" style="width: 450px"></div>
 			</div>
 		</article>
 		<article class="w-full flex justify-between">
@@ -90,6 +102,7 @@ interface IData {
 	facesList: Record<string, any>
 	faceGroupings: object[]
 	feelingList: Record<string, any>
+	activeEmotion: { label: string; leftImage: any; rightImage: any }
 	comments: ICommentData[]
 	comment: string
 	emotion: string
@@ -126,6 +139,7 @@ export default Vue.extend({
 			facesList: faces,
 			faceGroupings,
 			feelingList: feelings,
+			activeEmotion: { label: ``, leftImage: null, rightImage: null },
 			comment: ``,
 			comments: [],
 			emotion: ``,
@@ -165,16 +179,9 @@ export default Vue.extend({
 			this.filter = reaction
 			this.filterComments()
 		},
-		setEmotion(r: string, c: string) {
-			this.emotion = r
-			this.page = 0
+		setEmotion(r: { label: string; leftImage: any; rightImage: any }) {
+			this.activeEmotion = r
 			this.showEmotions = false
-			this.emotionCategory = c
-		},
-		setEmotionCategory(c: string) {
-			this.showDropdown = false
-			this.page = 0
-			this.emotionCategory = c
 		},
 		async sendComment() {
 			if (this.emotion === ``) {
