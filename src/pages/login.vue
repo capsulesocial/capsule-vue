@@ -30,9 +30,10 @@
 					</div>
 					<button
 						class="w-full rounded-lg w-1/2 bg-gray2 mb-4 py-3 flex justify-center items-center focus:outline-none"
+						@click="showKeyLoginPopup = !showKeyLoginPopup"
 					>
 						<FileIcon />
-						<h6 class="font-semibold text-gray7 text-sm ml-4">Import private key</h6>
+						<span class="font-semibold text-gray7 text-sm ml-4"> Import private key </span>
 					</button>
 					<p class="text-center text-gray7 mt-10">
 						Don't have an account yet?
@@ -52,6 +53,31 @@
 			</div>
 		</section>
 		<p class="px-4 text-gray5 text-sm pl-10">© 2021 Capsule.Social</p>
+		<!-- Key login popup -->
+		<div
+			v-if="showKeyLoginPopup"
+			class="w-full h-screen fixed top-0 bg-gradient-to-r from-lightBGStart to-lightBGStop flex justify-center"
+		>
+			<div class="popup w-64 flex flex-col self-center items-center p-5 border border-primary bg-white rounded-lg">
+				<label for="accountIdInput" class="text-primary">NEAR account ID</label>
+				<input
+					id="accountIdInput"
+					v-model="accountIdInput"
+					type="text"
+					class="w-full px-1 border rounded-lg"
+					placeholder="Account ID"
+				/>
+				<label for="privateKey" class="text-primary mt-4">Private Key</label>
+				<input
+					id="privateKey"
+					v-model="privateKey"
+					type="text"
+					class="w-full px-1 border rounded-lg"
+					placeholder="word1 word2 ..."
+				/>
+				<button class="bg-primary text-white rounded-lg px-4 py-2 mt-4" @click="walletLogin">Log In</button>
+			</div>
+		</div>
 	</main>
 </template>
 
@@ -65,7 +91,6 @@ import CapsuleIcon from '@/components/icons/Capsule.vue'
 import DiscordIcon from '@/components/icons/brands/Discord.vue'
 import GoogleIcon from '@/components/icons/brands/Google.vue'
 import FileIcon from '@/components/icons/File.vue'
-// import TwitterIcon from '@/components/icons/brands/Twitter.vue'
 
 import { MutationType, createSessionFromProfile, namespace as sessionStoreNamespace } from '~/store/session'
 
@@ -81,15 +106,14 @@ interface IData {
 	accountId: null | string
 	isLoading: boolean
 	phoneNumber: string
-	otp: string
-	otpSent: boolean
-	funds: string
+	showKeyLoginPopup: boolean
+	accountIdInput: string
+	privateKey: string
 }
 
 export default Vue.extend({
 	components: {
 		CapsuleIcon,
-		// TwitterIcon,
 		DiscordIcon,
 		GoogleIcon,
 		FileIcon,
@@ -99,7 +123,6 @@ export default Vue.extend({
 		return {
 			id: ``,
 			phoneNumber: ``,
-			otp: ``,
 			torus: new DirectWebSdk({
 				baseUrl: `${process.env.DOMAIN}/oauth`,
 				network: `testnet`, // details for test net
@@ -108,8 +131,9 @@ export default Vue.extend({
 			userInfo: null,
 			isLoading: false,
 			username: undefined,
-			otpSent: false,
-			funds: `0`,
+			showKeyLoginPopup: false,
+			accountIdInput: ``,
+			privateKey: ``,
 		}
 	},
 	async created() {
@@ -120,6 +144,7 @@ export default Vue.extend({
 		if (this.$store.state.session.id !== `` && accountId) {
 			this.$router.push(`/home`)
 		}
+		window.addEventListener(`click`, this.handleClose)
 	},
 	methods: {
 		...mapMutations(sessionStoreNamespace, {
@@ -176,7 +201,6 @@ export default Vue.extend({
 					return
 				}
 				const { profile, cid } = res
-
 				const account = createSessionFromProfile(cid, profile)
 				this.changeCID(cid)
 				this.changeID(account.id)
@@ -188,6 +212,19 @@ export default Vue.extend({
 				this.$router.push(`/home`)
 			} catch (err: any) {
 				this.$toastError(err.message)
+			}
+		},
+		walletLogin(): void {
+			this.$toastSuccess(this.accountIdInput)
+			this.$toastSuccess(this.privateKey)
+			this.showKeyLoginPopup = false
+		},
+		handleClose(e: any): void {
+			if (!e.target || e.target.firstChild === null || e.target.firstChild.classList === undefined) {
+				return
+			}
+			if (e.target.firstChild.classList[0] === `popup`) {
+				this.showKeyLoginPopup = false
 			}
 		},
 	},
