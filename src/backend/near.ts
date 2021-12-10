@@ -160,11 +160,17 @@ export async function setNearPrivateKey(privateKey: Uint8Array, accountId: strin
 	return true
 }
 
-export async function removeNearPrivateKey() {
-	if (!_contract) {
-		throw new Error(`Contract not yet initialised!`)
+export async function removeNearPrivateKey(nearAccountId?: string) {
+	let accountId: string | null = null
+
+	if (nearAccountId) {
+		accountId = nearAccountId
+	} else {
+		if (!_contract) {
+			throw new Error(`Contract not yet initialised!`)
+		}
+		accountId = _contract.account.accountId
 	}
-	const accountId = _contract.account.accountId
 
 	const keystore = new keyStores.BrowserLocalStorageKeyStore()
 	await keystore.removeKey(nearConfig.networkId, accountId)
