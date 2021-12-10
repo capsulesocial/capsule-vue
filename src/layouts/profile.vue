@@ -52,6 +52,7 @@ import Footer from '@/components/Footer.vue'
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
+import { getUserInfoNEAR } from '@/backend/near'
 
 interface IData {
 	myProfile: Profile
@@ -96,9 +97,10 @@ export default Vue.extend({
 			this.$router.push(`/`)
 		}
 
-		const [myProfile, visitProfile] = await Promise.all([
+		const [myProfile, visitProfile, profileExists] = await Promise.all([
 			getProfile(this.$store.state.session.id),
 			getProfile(this.$route.params.id),
+			this.checkAccountExists(),
 		])
 		// get my profile and avatar
 		this.myProfile = myProfile || createDefaultProfile(this.$store.state.session.id)
@@ -107,7 +109,7 @@ export default Vue.extend({
 				this.myAvatar = p
 			})
 		}
-		if (visitProfile === null) {
+		if (!profileExists) {
 			this.noProfileFound = true
 			this.$toastError(`Profile does not exist`)
 			return
@@ -138,6 +140,18 @@ export default Vue.extend({
 			this.followers = followers
 			this.following = following
 			this.userIsFollowed = followers.has(this.$store.state.session.id)
+		},
+		async checkAccountExists() {
+			try {
+				await getUserInfoNEAR(this.$route.params.id)
+				return true
+			} catch (err: any) {
+				if (err.message === `Username not found on NEAR!`) {
+					return false
+				}
+
+				throw err
+			}
 		},
 	},
 })
