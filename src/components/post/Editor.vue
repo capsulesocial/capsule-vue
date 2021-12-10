@@ -56,6 +56,7 @@ import Quill from 'quill'
 import QuillMarkdown from 'quilljs-markdown'
 import XIcon from '@/components/icons/X.vue'
 import { createRegularPost, sendRegularPost } from '@/backend/post'
+
 interface IData {
 	title: string
 	subtitle: string
@@ -65,7 +66,9 @@ interface IData {
 	wordCount: number
 	titleError: string
 	subtitleError: string
+	hasPosted: boolean
 }
+
 export default Vue.extend({
 	components: {
 		XIcon,
@@ -86,6 +89,7 @@ export default Vue.extend({
 			wordCount: 0,
 			titleError: ``,
 			subtitleError: ``,
+			hasPosted: false,
 		}
 	},
 	mounted() {
@@ -154,10 +158,10 @@ export default Vue.extend({
 			return clean
 		},
 		async post(): Promise<void> {
-			// @ts-ignore
-			this.title = this.$refs.title.value
-			// @ts-ignore
-			this.subtitle = this.$refs.subtitle.value
+			const title = this.$refs.title as HTMLInputElement
+			const subtitle = this.$refs.subtitle as HTMLInputElement
+			this.title = title.value
+			this.subtitle = subtitle.value
 			// Check for quality title
 			if (!this.$qualityText(this.title) || this.title.length < 12 || this.title.length > 90) {
 				this.$toastError(`Invalid title!`)
@@ -186,6 +190,10 @@ export default Vue.extend({
 				this.$toastError(`Post body too long for IPFS deliverability`)
 				return
 			}
+			if (this.hasPosted) {
+				return
+			}
+			this.hasPosted = true
 			const p = createRegularPost(
 				this.title,
 				this.subtitle === `` ? null : this.subtitle,
