@@ -37,6 +37,7 @@
 					</button>
 					<button
 						class="w-full rounded-lg w-1/2 bg-gray2 mb-4 py-3 flex justify-center items-center focus:outline-none"
+						@click="() => implicitAccountCreate()"
 					>
 						<h6 class="font-semibold text-gray7 text-sm ml-4">Create implicit account</h6>
 					</button>
@@ -135,6 +136,7 @@ import { MutationType, createSessionFromProfile, namespace as sessionStoreNamesp
 import { getAccountIdFromPrivateKey, IAuthResult, login, register, registerNearWallet } from '@/backend/auth'
 import {
 	checkAccountStatus,
+	generateAndSetKey,
 	getUsernameNEAR,
 	getWalletConnection,
 	removeNearPrivateKey,
@@ -277,6 +279,19 @@ export default Vue.extend({
 		},
 		isSignedInToWallet() {
 			return signedInToWallet()
+		},
+		async implicitAccountCreate() {
+			this.isLoading = true
+
+			this.accountId = await generateAndSetKey()
+			;[this.username] = await Promise.all([getUsernameNEAR(this.accountId), this.checkFunds()])
+			if (this.username) {
+				this.$toastError(`You cannot login with implicit account, please import your private key`)
+				removeNearPrivateKey(this.accountId)
+				this.isLoading = false
+			}
+			this.nearWallet = true
+			this.isLoading = false
 		},
 		async sendOTP() {
 			this.phoneNumber = this.iti.getNumber()
