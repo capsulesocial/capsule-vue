@@ -44,6 +44,20 @@ export async function register(id: string, privateKey: string): Promise<IAuthRes
 	return { profile, cid }
 }
 
+export async function registerNearWallet(id: string, accountId: string): Promise<IAuthResult> {
+	initContract(accountId)
+	window.localStorage.setItem(`accountId`, accountId)
+
+	const profile = createDefaultProfile(id)
+	const [cid, userSetStatus] = await Promise.all([addProfileToIPFS(profile), setUserInfoNEAR(id)])
+
+	if (!userSetStatus.success) {
+		throw new Error(userSetStatus.error)
+	}
+
+	return { profile, cid }
+}
+
 export async function login(id: string, privateKey: string): Promise<IAuthResult> {
 	await authUser(privateKey)
 
