@@ -2,6 +2,7 @@ import { Account, connect, Contract, keyStores, Near, providers, WalletConnectio
 import { KeyPairEd25519 } from 'near-api-js/lib/utils'
 import { base_decode as baseDecode, base_encode as baseEncode } from 'near-api-js/lib/utils/serialize'
 import { getNearConfig, domain } from './utilities/config'
+import { uint8ArrayToHexString } from './utilities/helpers'
 
 export interface INearConfig {
 	networkId: `testnet` | `mainnet` | `betanet` | `local`
@@ -158,6 +159,15 @@ export async function setNearPrivateKey(privateKey: Uint8Array, accountId: strin
 	const keystore = new keyStores.BrowserLocalStorageKeyStore()
 	await keystore.setKey(nearConfig.networkId, accountId, keypair)
 	return true
+}
+
+export async function generateAndSetKey() {
+	const keyRandom = KeyPairEd25519.fromRandom()
+	const accountId = uint8ArrayToHexString(keyRandom.publicKey.data)
+
+	const sk = new Uint8Array(baseDecode(keyRandom.secretKey))
+	await setNearPrivateKey(sk, accountId)
+	return accountId
 }
 
 export async function removeNearPrivateKey(nearAccountId?: string) {
