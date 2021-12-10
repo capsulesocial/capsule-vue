@@ -16,6 +16,7 @@ module.exports = {
 		"vue/no-v-html": 0,
 		"vue/html-self-closing": 0,
 		"vue/this-in-template": 0,
+		"vue/multi-word-component-names": 0,
 		"no-tabs": 0,
 		"indent": ["error", "tab", { "SwitchCase": 1 }],
 		"linebreak-style": ["error", "unix"],
