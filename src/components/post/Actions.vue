@@ -4,8 +4,14 @@
 		<article class="py-5">
 			<!-- Bottom overlay with selector -->
 			<div v-show="showEmotions" class="w-full flex flex-row-reverse">
-				<div class="h-24 -mb-24 z-10 bg-white" style="width: 450px">
+				<div class="h-24 -mb-24 z-10 bg-white flex flex-row justify-between p-5" style="width: 450px">
+					<div></div>
 					<h6 class="text-primary text-2xl text-center self-center">How do you feel?</h6>
+					<div>
+						<button class="p-2 bg-gray1 rounded-full focus:outline-none" @click="showEmotions = false">
+							<CloseIcon />
+						</button>
+					</div>
 				</div>
 			</div>
 			<div class="flex items-start">
@@ -14,7 +20,7 @@
 					class="flex shadow-xl rounded-xl w-full overflow-hidden"
 					:class="showEmotions ? `` : `border p-4 bg-` + emotionCategory"
 				>
-					<div class="rounded-xl overflow-hidden w-full" :class="showEmotions ? 'h-64' : 'h-40'">
+					<div class="rounded-xl overflow-hidden w-full" :style="showEmotions ? `height: 20rem` : `height: 10rem`">
 						<div class="flex flex-row">
 							<!-- Front side: Type comment -->
 							<div v-show="!showEmotions" class="w-full flex bg-white">
@@ -48,22 +54,39 @@
 								</div>
 							</div>
 							<!-- Back side: Choose reaction -->
-							<div v-show="showEmotions" class="w-full h-64 overflow-y-auto bg-white">
-								<div
-									v-for="row in faceGroupings"
-									:key="row[0].label + row[1].label + row[2].label"
-									class="flex flex-row w-full"
-								>
-									<button v-for="face in row" :key="face.label" @click="setEmotion(face)">
-										<img :src="face.leftImage" :alt="face.label" class="w-24 h-24" />
-									</button>
-									<p
-										v-for="face in row"
-										:key="face.label + face.label"
-										class="flex flex-grow justify-center items-center"
+							<div
+								v-show="showEmotions"
+								ref="scrollContainer"
+								class="w-full overflow-y-auto bg-white"
+								style="height: 20rem; box-shadow: rgba(0, 0, 0, 0.35) 0px -50px 36px -28px inset"
+							>
+								<!-- Middle selector area -->
+								<div class="h-24 absolute rounded-lg bg-primary bg-opacity-25 mt-24" style="width: 760px"></div>
+								<!-- Faces grid -->
+								<div class="pt-24" style="padding-bottom: 128px">
+									<div
+										v-for="row in faceGroupings"
+										:key="row[0].label + row[1].label + row[2].label"
+										class="flex flex-row w-full relative"
 									>
-										{{ face.label }} <span class="px-2">*</span>
-									</p>
+										<button
+											v-for="face in row"
+											:key="face.label"
+											class="rounded-lg focus:outline-none"
+											:class="selectedEmotion.label === face.label ? `border-2 border-primary` : ``"
+											@click="setEmotion(face)"
+										>
+											<img :src="face.leftImage" :alt="face.label" class="w-24 h-24" />
+										</button>
+										<p
+											v-for="face in row"
+											:key="face.label + face.label"
+											class="flex flex-grow justify-center items-center capitalize"
+											:class="selectedEmotion.label === face.label ? `font-bold text-primary` : `text-gray7`"
+										>
+											{{ face.label }}
+										</p>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -72,7 +95,14 @@
 			</div>
 			<!-- Bottom overlay with selector -->
 			<div v-show="showEmotions" class="w-full flex flex-row-reverse">
-				<div class="h-24 -mt-24 z-10 bg-white" style="width: 450px"></div>
+				<div
+					class="z-10 bg-white flex flex-row-reverse items-end p-5"
+					style="width: 450px; height: 128px; margin-top: -128px"
+				>
+					<button class="rounded-lg bg-primary text-white px-6 py-2 focus:outline-none" @click="confirmEmotion">
+						Select
+					</button>
+				</div>
 			</div>
 		</article>
 		<article class="w-full flex justify-between">
@@ -92,6 +122,7 @@ import BrandedButton from '@/components/BrandedButton.vue'
 import Comment from '@/components/post/Comment.vue'
 import CommentFilter from '@/components/post/CommentFilter.vue'
 import FlipIcon from '@/components/icons/Flip.vue'
+import CloseIcon from '@/components/icons/X.vue'
 
 import { backgrounds, reactions, feelings, faces, faceGroupings } from '@/config'
 import { createComment, sendComment, ICommentData, getCommentsOfPost } from '@/backend/comment'
@@ -103,6 +134,7 @@ interface IData {
 	faceGroupings: object[]
 	feelingList: Record<string, any>
 	activeEmotion: { label: string; leftImage: any; rightImage: any }
+	selectedEmotion: { label: string; leftImage: any; rightImage: any }
 	comments: ICommentData[]
 	comment: string
 	emotion: string
@@ -121,6 +153,7 @@ export default Vue.extend({
 		Comment,
 		CommentFilter,
 		FlipIcon,
+		CloseIcon,
 	},
 	props: {
 		postCID: {
@@ -140,6 +173,7 @@ export default Vue.extend({
 			faceGroupings,
 			feelingList: feelings,
 			activeEmotion: { label: ``, leftImage: null, rightImage: null },
+			selectedEmotion: { label: ``, leftImage: null, rightImage: null },
 			comment: ``,
 			comments: [],
 			emotion: ``,
@@ -160,7 +194,20 @@ export default Vue.extend({
 			this.comments = this.comments.reverse()
 		}
 	},
+	mounted() {
+		const scroller = this.$refs.scrollContainer as HTMLElement
+		scroller.addEventListener(`scroll`, this.handleScrollContainer)
+	},
 	methods: {
+		handleScrollContainer(e: Event): void {
+			if (e.target) {
+				const { scrollTop, scrollHeight } = e.srcElement as HTMLElement
+				// eslint-disable-next-line no-console
+				console.log(`scrollTop`, scrollTop)
+				// eslint-disable-next-line no-console
+				console.log(`scrollHeight`, scrollHeight)
+			}
+		},
 		getFaces(): string[] {
 			let list: string[] = []
 			if (this.emotionCategory === `default`) {
@@ -180,7 +227,15 @@ export default Vue.extend({
 			this.filterComments()
 		},
 		setEmotion(r: { label: string; leftImage: any; rightImage: any }) {
-			this.activeEmotion = r
+			this.selectedEmotion = r
+		},
+		confirmEmotion() {
+			if (this.selectedEmotion.label === ``) {
+				this.$toastWarning(`No face selected!`)
+				return
+			}
+			this.activeEmotion = this.selectedEmotion
+			this.$toastSuccess(`You're feeling ` + this.activeEmotion.label)
 			this.showEmotions = false
 		},
 		async sendComment() {

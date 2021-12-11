@@ -6,8 +6,8 @@ export const faces = {
 	},
 	aloof: {
 		label: `aloof`,
-		leftImage: require(`@/assets/images/reactions/left-side/admiration.webp`),
-		rightImage: require(`@/assets/images/reactions/right-side/admiration.webp`),
+		leftImage: require(`@/assets/images/reactions/left-side/aloof.webp`),
+		rightImage: require(`@/assets/images/reactions/right-side/aloof.webp`),
 	},
 	awe: {
 		label: `awe`,
@@ -318,12 +318,19 @@ export const faceGroupings = [
 	[faces.calm, faces.satisfied, faces.fulfilled],
 	[faces.mad, faces.hostile, faces.violent],
 	[faces.cringe, faces.offended, faces.hateful],
+	[faces.distracted, faces.bored, faces.spiritless],
 	[faces.triggered, faces.shocked, faces.furious],
 	[faces.disgusted, faces.sick, faces.revolted],
 	[faces.suspicious, faces.incredulous, faces.skeptical],
 	[faces.hesitant, faces.fearful, faces.terrified],
 	[faces.aloof, faces.indifferent, faces.detatched],
 	[faces.sad, faces.whine, faces.heartbroken],
+]
+
+export const faceExtras = [
+	[faces.hush, faces.incognito],
+	[faces.regret, faces.spunky, faces.trippy],
+	[faces.wild, faces.zzz],
 ]
 
 export const feelings = {
