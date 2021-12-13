@@ -2,6 +2,7 @@
 import type { GetterTree, MutationTree } from 'vuex'
 import type { RootState } from './index'
 import { Profile } from '@/backend/profile'
+import { removeNearPrivateKey, walletLogout } from '@/backend/near'
 export interface Session {
 	id: Profile[`id`]
 	name: Profile[`name`]
@@ -54,6 +55,9 @@ export const mutations: MutationTree<Session> = {
 	},
 	[MutationType.LOGOUT]: (state) => {
 		Object.assign(state, createDefaultSession(``))
+		removeNearPrivateKey()
+		window.localStorage.removeItem(`accountId`)
+		walletLogout()
 	},
 }
 

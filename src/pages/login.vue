@@ -71,9 +71,9 @@
 				<input
 					id="privateKey"
 					v-model="privateKey"
-					type="text"
+					type="password"
 					class="w-full px-1 border rounded-lg"
-					placeholder="word1 word2 ..."
+					placeholder="Base58 encoded private key"
 				/>
 				<button class="bg-primary text-white rounded-lg px-4 py-2 mt-4" @click="walletLogin">Log In</button>
 			</div>
@@ -94,7 +94,7 @@ import FileIcon from '@/components/icons/File.vue'
 
 import { MutationType, createSessionFromProfile, namespace as sessionStoreNamespace } from '~/store/session'
 
-import { getAccountIdFromPrivateKey, login, register } from '@/backend/auth'
+import { getAccountIdFromPrivateKey, login, loginNearAccount, register } from '@/backend/auth'
 import { getUsernameNEAR } from '@/backend/near'
 import { torusVerifiers, TorusVerifiers } from '@/backend/utilities/config'
 
@@ -214,10 +214,40 @@ export default Vue.extend({
 				this.$toastError(err.message)
 			}
 		},
-		walletLogin(): void {
-			this.$toastSuccess(this.accountIdInput)
-			this.$toastSuccess(this.privateKey)
+		async walletLogin(): Promise<void> {
+			this.username = await getUsernameNEAR(this.accountIdInput)
+			if (!this.username) {
+				this.$toastWarning(`looks like you don't have an account`)
+				this.$router.push(`/register`)
+			}
 			this.showKeyLoginPopup = false
+			this.walletVerify()
+		},
+		async walletVerify() {
+			try {
+				if (!this.accountIdInput || !this.privateKey || !this.username) {
+					throw new Error(`Unexpected condition!`)
+				}
+				this.isLoading = true
+
+				const res = await loginNearAccount(this.username, this.privateKey, this.accountIdInput)
+				if (!res) {
+					return
+				}
+
+				const { profile, cid } = res
+				const account = createSessionFromProfile(cid, profile)
+				this.changeCID(cid)
+				this.changeID(account.id)
+				this.changeName(account.name)
+				this.changeEmail(account.email)
+				this.changeAvatar(account.avatar)
+				this.changeBio(account.bio)
+				this.changeLocation(account.location)
+				this.$router.push(`/home`)
+			} catch (err: any) {
+				this.$toastError(err.message)
+			}
 		},
 		handleClose(e: any): void {
 			if (!e.target || e.target.firstChild === null || e.target.firstChild.classList === undefined) {

@@ -1,5 +1,5 @@
 import { getED25519Key } from '@toruslabs/openlogin-ed25519'
-import { base_encode as baseEncode } from 'near-api-js/lib/utils/serialize'
+import { base_decode as baseDecode, base_encode as baseEncode } from 'near-api-js/lib/utils/serialize'
 import { PublicKey } from 'near-api-js/lib/utils'
 
 import { initContract, setUserInfoNEAR, setNearPrivateKey } from './near'
@@ -44,6 +44,20 @@ export async function register(id: string, privateKey: string): Promise<IAuthRes
 	return { profile, cid }
 }
 
+export async function registerNearWallet(id: string, accountId: string): Promise<IAuthResult> {
+	initContract(accountId)
+	window.localStorage.setItem(`accountId`, accountId)
+
+	const profile = createDefaultProfile(id)
+	const [cid, userSetStatus] = await Promise.all([addProfileToIPFS(profile), setUserInfoNEAR(id)])
+
+	if (!userSetStatus.success) {
+		throw new Error(userSetStatus.error)
+	}
+
+	return { profile, cid }
+}
+
 export async function login(id: string, privateKey: string): Promise<IAuthResult> {
 	await authUser(privateKey)
 
@@ -52,6 +66,18 @@ export async function login(id: string, privateKey: string): Promise<IAuthResult
 	if (fetchedProfile) {
 		profile = fetchedProfile
 	}
+	const cid = await addProfileToIPFS(profile)
+
+	return { profile, cid }
+}
+
+export async function loginNearAccount(id: string, privateKey: string, accountId: string): Promise<IAuthResult> {
+	const [fetchedProfile] = await Promise.all([getProfile(id), setNearPrivateKey(baseDecode(privateKey), accountId)])
+
+	initContract(accountId)
+	window.localStorage.setItem(`accountId`, accountId)
+
+	const profile = fetchedProfile || createDefaultProfile(id)
 	const cid = await addProfileToIPFS(profile)
 
 	return { profile, cid }

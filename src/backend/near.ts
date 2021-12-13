@@ -1,7 +1,8 @@
-import { Account, connect, Contract, keyStores, Near, providers } from 'near-api-js'
+import { Account, connect, Contract, keyStores, Near, providers, WalletConnection } from 'near-api-js'
 import { KeyPairEd25519 } from 'near-api-js/lib/utils'
 import { base_decode as baseDecode, base_encode as baseEncode } from 'near-api-js/lib/utils/serialize'
-import { getNearConfig } from './utilities/config'
+import { getNearConfig, domain } from './utilities/config'
+import { uint8ArrayToHexString } from './utilities/helpers'
 
 export interface INearConfig {
 	networkId: `testnet` | `mainnet` | `betanet` | `local`
@@ -21,6 +22,7 @@ const nearConfig = getNearConfig()
 
 let _near: Near | null = null
 let _contract: Contract | null = null
+let _walletConnection: WalletConnection | null = null
 
 function getRpcProviderUrl() {
 	switch (nearConfig.networkId) {
@@ -58,6 +60,42 @@ export async function getUsernameNEAR(accountId: string): Promise<string | null>
 
 export async function initNear() {
 	_near = await connect({ deps: { keyStore: new keyStores.BrowserLocalStorageKeyStore() }, headers: {}, ...nearConfig })
+}
+
+export function initWalletConnection() {
+	// Initialize connection to the NEAR network
+	if (!_near) {
+		throw new Error(`NEAR not yet initialised!`)
+	}
+	_walletConnection = new WalletConnection(_near, null)
+}
+
+export function getWalletConnection() {
+	if (!_walletConnection) {
+		throw new Error(`Wallet Connection not yet initialised!`)
+	}
+	return _walletConnection
+}
+
+export async function walletLogin() {
+	const walletConnection = getWalletConnection()
+	if (!walletConnection.isSignedIn()) {
+		// Redirects to wallet login page
+		const redirectURL = new URL(`/`, domain)
+		await walletConnection.requestSignIn(nearConfig.contractName, undefined, redirectURL.toString())
+	}
+}
+
+export function walletLogout() {
+	const walletConnection = getWalletConnection()
+	if (walletConnection.isSignedIn()) {
+		walletConnection.signOut()
+	}
+}
+
+export function signedInToWallet() {
+	const walletConnection = getWalletConnection()
+	return walletConnection.isSignedIn()
 }
 
 export function initContract(accountId: string) {
@@ -123,11 +161,25 @@ export async function setNearPrivateKey(privateKey: Uint8Array, accountId: strin
 	return true
 }
 
-export async function removeNearPrivateKey() {
-	if (!_contract) {
+export async function generateAndSetKey() {
+	const keyRandom = KeyPairEd25519.fromRandom()
+	const accountId = uint8ArrayToHexString(keyRandom.publicKey.data)
+
+	const sk = new Uint8Array(baseDecode(keyRandom.secretKey))
+	await setNearPrivateKey(sk, accountId)
+	return accountId
+}
+
+export async function removeNearPrivateKey(nearAccountId?: string) {
+	let accountId: string | null = null
+
+	if (nearAccountId) {
+		accountId = nearAccountId
+	} else if (_contract) {
+		accountId = _contract.account.accountId
+	} else {
 		throw new Error(`Contract not yet initialised!`)
 	}
-	const accountId = _contract.account.accountId
 
 	const keystore = new keyStores.BrowserLocalStorageKeyStore()
 	await keystore.removeKey(nearConfig.networkId, accountId)
