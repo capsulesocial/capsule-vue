@@ -94,7 +94,7 @@
 								placeholder=""
 								class="rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full focus:outline-none focus:border-primary text-primary font-sans bg-gray2"
 							/>
-							<BrandedButton :text="`Sign Up`" :action="verify" class="w-full" />
+							<BrandedButton :text="`Sign Up`" :action="userInfo ? verify : walletVerify" class="w-full" />
 							<article>
 								<p class="whitespace-nowrap justify-between text-sm p-5 text-gray-600 font-sans">
 									Ensure that the NEAR account with ID: "{{ accountId }}" has sufficient funds before signing up.
@@ -133,7 +133,7 @@ import BrandedButton from '@/components/BrandedButton.vue'
 
 import { MutationType, createSessionFromProfile, namespace as sessionStoreNamespace } from '~/store/session'
 
-import { getAccountIdFromPrivateKey, IAuthResult, login, register, registerNearWallet } from '@/backend/auth'
+import { getAccountIdFromPrivateKey, login, register, registerNearWallet } from '@/backend/auth'
 import {
 	checkAccountStatus,
 	generateAndSetKey,
@@ -349,19 +349,39 @@ export default Vue.extend({
 		},
 		async verify() {
 			try {
-				if (!(this.userInfo || this.nearWallet) || !this.accountId) {
+				if (!this.userInfo || !this.accountId) {
+					throw new Error(`Unexpected condition!`)
+				}
+				this.isLoading = true
+				// Login
+				const res = await this.loginOrRegister(this.userInfo.privateKey)
+				if (!res) {
+					return
+				}
+				const { profile, cid } = res
+
+				const account = createSessionFromProfile(cid, profile)
+				this.changeCID(cid)
+				this.changeID(account.id)
+				this.changeName(account.name)
+				this.changeEmail(account.email)
+				this.changeAvatar(account.avatar)
+				this.changeBio(account.bio)
+				this.changeLocation(account.location)
+				this.$router.push(`/home`)
+			} catch (err: any) {
+				this.$toastError(err.message)
+			}
+		},
+		async walletVerify() {
+			try {
+				if (!this.nearWallet || !this.accountId) {
 					throw new Error(`Unexpected condition!`)
 				}
 				this.isLoading = true
 
-				// Login
-				let res: IAuthResult | null = null
-				if (this.nearWallet) {
-					res = await this.registerWallet()
-				} else if (this.userInfo) {
-					res = await this.loginOrRegister(this.userInfo.privateKey)
-				}
-
+				// Register
+				const res = await this.registerWallet()
 				if (!res) {
 					return
 				}
