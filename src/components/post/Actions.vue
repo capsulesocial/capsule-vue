@@ -4,7 +4,11 @@
 		<article class="py-5">
 			<!-- Bottom overlay with selector -->
 			<div v-show="showEmotions" class="w-full flex flex-row-reverse">
-				<div class="h-24 -mb-24 z-10 bg-white flex flex-row justify-between p-5" style="width: 450px">
+				<div
+					class="z-10 bg-white flex flex-row justify-between p-5"
+					:style="$route.name === `post-post` ? `width: 450px` : `width: 406px`"
+					style="margin-bottom: -112px"
+				>
 					<div></div>
 					<h6 class="text-primary text-2xl text-center self-center">How do you feel?</h6>
 					<div>
@@ -57,17 +61,27 @@
 							<div
 								v-show="showEmotions"
 								ref="scrollContainer"
-								class="w-full overflow-y-auto bg-white"
-								style="height: 20rem; box-shadow: rgba(0, 0, 0, 0.35) 0px -50px 36px -28px inset"
+								class="w-full overflow-y-scroll bg-white"
+								style="
+									height: 320px;
+									box-shadow: rgba(0, 0, 0, 0.35) 0px -50px 36px -28px inset;
+									scroll-snap-type: y mandatory;
+									scroll-snap-stop: always;
+								"
 							>
 								<!-- Middle selector area -->
-								<div class="h-24 absolute rounded-lg bg-primary bg-opacity-25 mt-24" style="width: 760px"></div>
+								<div
+									class="absolute rounded-lg bg-primary bg-opacity-25"
+									style="height: 96px; margin-top: 112px"
+									:style="$route.name === `post-post` ? `width: 760px` : `width: 699px`"
+								></div>
 								<!-- Faces grid -->
-								<div class="pt-24" style="padding-bottom: 128px">
+								<div style="padding-bottom: 112px; padding-top: 112px">
 									<div
 										v-for="row in faceGroupings"
 										:key="row[0].label + row[1].label + row[2].label"
 										class="flex flex-row w-full relative"
+										style="scroll-snap-align: center"
 									>
 										<button
 											v-for="face in row"
@@ -97,7 +111,8 @@
 			<div v-show="showEmotions" class="w-full flex flex-row-reverse">
 				<div
 					class="z-10 bg-white flex flex-row-reverse items-end p-5"
-					style="width: 450px; height: 128px; margin-top: -128px"
+					style="height: 112px; margin-top: -112px"
+					:style="$route.name === `post-post` ? `width: 450px` : `width: 406px`"
 				>
 					<button class="rounded-lg bg-primary text-white px-6 py-2 focus:outline-none" @click="confirmEmotion">
 						Select
