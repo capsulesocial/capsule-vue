@@ -107,6 +107,20 @@
 						</article>
 					</div>
 				</article>
+				<article v-if="downloadKeyStep" class="w-1/2">
+					<p class="text-gray7 text-center">
+						Here is your private key file. Download this file in a safe spot. You will need it to access your account.
+						To download your private keys again, visit the Settings page
+					</p>
+					<div class="bg-gray1 rounded-lg flex items-center p-4 my-10 justify-between">
+						<div class="flex flex-row items-center">
+							<FileDownloadIcon />
+							<h6 class="text-gray text-lg font-semibold pl-4">Private Key</h6>
+						</div>
+						<BrandedButton :text="`Download`" :action="downloadPrivateKey" />
+					</div>
+					<nuxt-link to="/home" class="text-primary text-center">Continue to Homepage</nuxt-link>
+				</article>
 				<article v-show="isLoading" class="w-3/4 flex justify-center">
 					<div class="loader m-5 rounded-lg"></div>
 				</article>
@@ -130,6 +144,7 @@ import GoogleIcon from '@/components/icons/brands/Google.vue'
 import NearIcon from '@/components/icons/brands/Near.vue'
 // import TwitterIcon from '@/components/icons/brands/Twitter.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
+import FileDownloadIcon from '@/components/icons/FileDownload.vue'
 
 import { MutationType, createSessionFromProfile, namespace as sessionStoreNamespace } from '~/store/session'
 
@@ -160,6 +175,7 @@ interface IData {
 	funds: string
 	iti: any
 	nearWallet: boolean
+	downloadKeyStep: boolean
 }
 
 export default Vue.extend({
@@ -170,6 +186,7 @@ export default Vue.extend({
 		GoogleIcon,
 		BrandedButton,
 		NearIcon,
+		FileDownloadIcon,
 	},
 	layout: `unauth`,
 	data(): IData {
@@ -189,6 +206,7 @@ export default Vue.extend({
 			funds: `0`,
 			iti: null,
 			nearWallet: false,
+			downloadKeyStep: false,
 		}
 	},
 	async created() {
@@ -395,10 +413,13 @@ export default Vue.extend({
 				this.changeAvatar(account.avatar)
 				this.changeBio(account.bio)
 				this.changeLocation(account.location)
-				this.$router.push(`/home`)
+				this.downloadKeyStep = true
 			} catch (err: any) {
 				this.$toastError(err.message)
 			}
+		},
+		downloadPrivateKey(): void {
+			this.$toastSuccess(`Downloaded private key`)
 		},
 	},
 })
