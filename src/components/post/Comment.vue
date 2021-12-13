@@ -38,8 +38,13 @@
 						</div>
 					</div>
 				</div>
+<<<<<<< HEAD
 				<div class="flex-shrink-0 flex justify-center items-center overflow-hidden">
 					<img :src="emotion.imageRight" class="w-32 h-32 -mb-2 mt-2" />
+=======
+				<div class="flex-shrink-0 flex justify-center items-center">
+					<img :src="emotion.leftImage" class="bg-white rounded-full w-32 h-32" />
+>>>>>>> display comments progress
 				</div>
 			</div>
 		</div>
@@ -99,7 +104,7 @@ import Avatar from '@/components/Avatar.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 import Reply from '@/components/post/Reply.vue'
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
-import { reactions, feelings } from '@/config'
+import { feelings, faces } from '@/config'
 import { createComment, getComment, getCommentsOfPost, ICommentData, sendComment } from '@/backend/comment'
 import { getPhotoFromIPFS } from '@/backend/photos'
 import { getProfileFromSession } from '@/store/session'
@@ -110,7 +115,7 @@ interface IData {
 	replies: ICommentData[]
 	avatar: string
 	name: string
-	emotion: { label: string; imageLeft: any; imageRight: any }
+	emotion: { label: string; leftImage: any; rightImage: any }
 	emotionType: string
 	content: string
 }
@@ -135,7 +140,7 @@ export default Vue.extend({
 			replies: [],
 			avatar: ``,
 			name: ``,
-			emotion: reactions.default,
+			emotion: faces.default,
 			emotionType: ``,
 			content: ``,
 		}
@@ -144,12 +149,12 @@ export default Vue.extend({
 		const comment = await getComment(this.cid)
 		this.content = comment.content
 		this.emotionType = comment.emotion
-		const emotion = comment.emotion as keyof typeof reactions
-		if (emotion in reactions) {
-			this.emotion = reactions[emotion]
-		} else {
-			this.emotion = reactions.default
+		const reaction = comment.emotion as keyof typeof faces
+		if (reaction in faces) {
+			this.emotion = faces[reaction]
+			return
 		}
+		this.emotion = faces.default
 	},
 	async mounted() {
 		let p = this.profile
@@ -187,7 +192,8 @@ export default Vue.extend({
 			} else if (feelings.negative.includes(this.emotionType)) {
 				res += `#EE1F63`
 			} else {
-				res += `#F0B785`
+				// res += `#F0B785`
+				res += `#1F7DAD`
 			}
 			return res
 		},

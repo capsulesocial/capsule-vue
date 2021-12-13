@@ -20,16 +20,13 @@
 			</div>
 			<div class="flex items-start">
 				<!-- Comment box Container -->
-				<div
-					class="flex shadow-xl rounded-xl w-full overflow-hidden"
-					:class="showEmotions ? `` : `border p-4 bg-` + emotionCategory"
-				>
+				<div class="flex shadow-xl rounded-xl w-full overflow-hidden" :class="showEmotions ? `` : `border p-4`">
 					<div class="rounded-xl overflow-hidden w-full" :style="showEmotions ? `height: 20rem` : `height: 10rem`">
 						<div class="flex flex-row">
 							<!-- Front side: Type comment -->
 							<div v-show="!showEmotions" class="w-full flex bg-white">
 								<button class="h-auto flex-shrink-0 focus:outline-none" @click="showEmotions = !showEmotions">
-									<span v-if="activeEmotion.label !== ''">
+									<span v-if="activeEmotion.label !== ``">
 										<img
 											:src="activeEmotion.rightImage"
 											:alt="activeEmotion.label"
@@ -153,7 +150,6 @@ interface IData {
 	comments: ICommentData[]
 	comment: string
 	emotion: string
-	emotionCategory: string
 	showEmotions: boolean
 	commentBackground: string
 	filter: string
@@ -192,7 +188,6 @@ export default Vue.extend({
 			comment: ``,
 			comments: [],
 			emotion: ``,
-			emotionCategory: `default`,
 			showEmotions: false,
 			commentBackground: `@/assets/images/brand/paper4.svg`,
 			filter: ``,
@@ -223,20 +218,6 @@ export default Vue.extend({
 				console.log(`scrollHeight`, scrollHeight)
 			}
 		},
-		getFaces(): string[] {
-			let list: string[] = []
-			if (this.emotionCategory === `default`) {
-				list.push(this.feelingList.positive[this.page])
-				list.push(this.feelingList.neutral[this.page])
-				list.push(this.feelingList.negative[this.page])
-				list.push(this.feelingList.positive[this.page + 1])
-				list.push(this.feelingList.neutral[this.page + 1])
-				list.push(this.feelingList.negative[this.page + 1])
-				return list
-			}
-			list = this.feelingList[this.emotionCategory].slice(this.page * 6, this.page * 6 + 6)
-			return list
-		},
 		setFilter(reaction: string): void {
 			this.filter = reaction
 			this.filterComments()
@@ -254,7 +235,7 @@ export default Vue.extend({
 			this.showEmotions = false
 		},
 		async sendComment() {
-			if (this.emotion === ``) {
+			if (this.activeEmotion.label === ``) {
 				this.$toastError(`Please select a reaction`)
 				return
 			}
@@ -264,19 +245,19 @@ export default Vue.extend({
 			}
 			if (!this.$qualityText(this.comment)) {
 				this.$toastError(`invalid comment!`)
-			} else {
-				const c = createComment(this.$store.state.session.id, this.comment, this.emotion, this.postCID)
-				const _id = await sendComment(c, `comment`)
-				// Send comment (c)
-				this.comments.push({ _id, ...c })
-				// Apply filter to comments, in case new comment was added in filtered category
-				this.filterComments()
-				this.comment = ``
-				this.emotion = ``
-				this.filter = ``
-				this.emotionCategory = `default`
-				this.filterComments()
+				return
 			}
+			const c = createComment(this.$store.state.session.id, this.comment, this.activeEmotion.label, this.postCID)
+			const _id = await sendComment(c, `comment`)
+			// Send comment (c)
+			this.comments.push({ _id, ...c })
+			// Apply filter to comments, in case new comment was added in filtered category
+			this.filterComments()
+			this.selectedEmotion = { label: ``, leftImage: null, rightImage: null }
+			this.activeEmotion = { label: ``, leftImage: null, rightImage: null }
+			this.emotion = ``
+			this.filter = ``
+			this.filterComments()
 		},
 		async filterComments() {
 			// Fetch comments
