@@ -4,7 +4,7 @@
 		<div
 			:class="
 				showPopup
-					? `fixed w-full h-screen bg-primary top-0 bottom-0 left-0 right-0 z-30 flex justify-center items-center bg-opacity-50`
+					? `fixed w-full h-screen bg-primary top-0 bottom-0 left-0 right-0 z-30 flex justify-center items-center bg-opacity-50 modal-animation`
 					: ``
 			"
 		>
@@ -23,13 +23,19 @@
 					style="backdrop-filter: blur(10px)"
 				>
 					<!-- Show Quote Repost input -->
-					<div v-if="showRepostEditor" class="flex flex-row pb-2">
+					<div v-if="showRepostEditor" class="flex flex-row pb-4">
 						<Avatar :authorID="$store.state.session.id" :avatar="myAvatar" class="flex-shrink-0" />
 						<textarea
 							ref="repostText"
 							class="w-full ml-4 resize-none focus:outline-none"
 							placeholder="What's your response?"
 						></textarea>
+						<button
+							class="absolute right-0 top-0 rounded-full bg-gray1 p-1 m-6 focus:outline-none"
+							@click="handleCloseButton"
+						>
+							<XIcon />
+						</button>
 					</div>
 					<!-- Quote repost -->
 					<div v-if="quote && !showRepostEditor">
@@ -50,9 +56,9 @@
 						<!-- Simple repost -->
 						<div
 							v-if="repostedBy !== `` && !hideRepostIcon && quote === null"
-							class="flex w-full -mt-2 mb-2 text-gray5"
+							class="flex w-full -mt-2 mb-2 text-gray5 items-center"
 						>
-							<RepostIcon :shrink="true" />
+							<RepostIcon />
 							<p class="pl-2 text-sm text-gray5">
 								<nuxt-link :to="`/` + repostedBy">{{ repostedBy }} </nuxt-link>
 								reposted
@@ -172,7 +178,7 @@
 						</div>
 					</div>
 					<!-- Repost POST button -->
-					<div v-if="showRepostEditor" class="pt-2 flex flex-row-reverse">
+					<div v-if="showRepostEditor" class="pt-4 flex flex-row-reverse">
 						<BrandedButton :action="handleSendRepost" :text="`Post`" />
 					</div>
 				</div>
@@ -423,6 +429,12 @@ export default Vue.extend({
 				this.$emit(`closePopup`)
 			}
 		},
+		handleCloseButton(): void {
+			this.showComments = false
+			this.showRepostEditor = false
+			this.showPopup = false
+			this.$emit(`closePopup`)
+		},
 		toggleDropdownDelete() {
 			this.showDelete = !this.showDelete
 		},
@@ -472,3 +484,21 @@ export default Vue.extend({
 	},
 })
 </script>
+
+<style >
+/* Add Animation */
+.modal-animation,
+#caption {
+	animation-name: zoom;
+	animation-duration: 0.6s;
+}
+
+@keyframes zoom {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+</style>

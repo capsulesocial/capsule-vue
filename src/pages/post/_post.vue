@@ -67,7 +67,11 @@
 					</h2>
 				</article>
 				<!-- Featured Photo -->
-				<article v-if="featuredPhoto !== null" class="mb-5 flex flex-col justify-end relative mt-5" @click="showPhoto">
+				<article
+					v-if="featuredPhoto !== null"
+					class="mb-5 flex flex-col justify-end relative mt-5 cursor-pointer"
+					@click="showPhoto"
+				>
 					<div
 						v-if="post.featuredPhotoCaption"
 						class="h-16 w-full absolute rounded-b-lg"

@@ -6,7 +6,7 @@
 				id="header"
 				ref="topContainer"
 				class="px-6 pt-6 z-20 w-full header-profile"
-				:style="scrollingDown ? `height: 4rem !important;` : ``"
+				:style="scrollingDown ? `height: 4.5rem !important;` : ``"
 				style="backdrop-filter: blur(10px)"
 			>
 				<!-- Back button -->

@@ -15,6 +15,7 @@
 						<h1 v-if="profile" class="font-semibold text-primary" style="font-size: 2.6rem">
 							Hello, {{ profile.name }}
 						</h1>
+						<h1 v-else class="font-semibold text-primary" style="font-size: 2.6rem">Hello,</h1>
 						<Nodes />
 					</div>
 					<!-- Content -->
