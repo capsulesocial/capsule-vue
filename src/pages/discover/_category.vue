@@ -233,6 +233,7 @@ export default Vue.extend({
 	opacity: 1;
 }
 .titlecollapsed {
+	position: relative;
 	transform: translate3d(35px, -31px, 0px);
 	font-size: 1.5rem;
 	color: #2e556a;

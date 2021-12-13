@@ -54,28 +54,28 @@
 		</section>
 		<p class="px-4 text-gray5 text-sm pl-10">© 2021 Capsule.Social</p>
 		<!-- Key login popup -->
-		<div
-			v-if="showKeyLoginPopup"
-			class="w-full h-screen fixed top-0 bg-gradient-to-r from-lightBGStart to-lightBGStop flex justify-center"
-		>
-			<div class="popup w-64 flex flex-col self-center items-center p-5 border border-primary bg-white rounded-lg">
-				<label for="accountIdInput" class="text-primary">NEAR account ID</label>
+		<div v-if="showKeyLoginPopup" class="w-full h-screen fixed top-0 bg-primary bg-opacity-50 flex justify-center">
+			<div
+				class="popup w-1/2 flex flex-col self-center items-center p-6 bg-gradient-to-r from-lightBGStart to-lightBGStop rounded-lg"
+				style="backdrop-filter: blur(10px)"
+			>
+				<label for="accountIdInput" class="text-primary mb-2 font-semibold w-full text-left">NEAR account ID</label>
 				<input
 					id="accountIdInput"
 					v-model="accountIdInput"
 					type="text"
-					class="w-full px-1 border rounded-lg"
+					class="text-black placeholder-gray5 px-2 py-1 bg-gray1 rounded-lg flex-grow focus:outline-none w-full"
 					placeholder="Account ID"
 				/>
-				<label for="privateKey" class="text-primary mt-4">Private Key</label>
+				<label for="privateKey" class="text-primary mt-4 mb-2 font-semibold w-full text-left">Private Key</label>
 				<input
 					id="privateKey"
 					v-model="privateKey"
 					type="text"
-					class="w-full px-1 border rounded-lg"
-					placeholder="word1 word2 ..."
+					class="text-black placeholder-gray5 px-2 py-1 bg-gray1 rounded-lg flex-grow focus:outline-none w-full"
+					placeholder="paste your NEAR private key"
 				/>
-				<button class="bg-primary text-white rounded-lg px-4 py-2 mt-4" @click="walletLogin">Log In</button>
+				<button class="bg-primary text-white rounded-lg px-4 py-2 mt-8" @click="walletLogin">Log In</button>
 			</div>
 		</div>
 	</main>

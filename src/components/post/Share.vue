@@ -17,44 +17,44 @@
 					? 'bg-lightBG text-lightPrimaryText border-lightBorder'
 					: 'bg-darkBG text-darkPrimaryText border-darkBorder'
 			"
-			class="absolute flex flex-col rounded-lg rounded-t-none w-40 shadow-lg z-10 p-1"
-			style="top: -62px; left: 42px"
+			class="absolute flex flex-col rounded-lg w-40 shadow-lg z-10 p-1"
+			style="top: -70px; left: 42px"
 		>
 			<!-- Simple Repost -->
 			<button
 				:class="$store.state.settings.darkMode ? 'hover:text-lightActive' : 'hover:text-darkActive'"
-				class="flex focus:outline-none"
+				class="flex focus:outline-none text-gray5"
 				@click="handleRepost()"
 			>
-				<RepostIcon :isActive="isReposted()" :shrink="true" style="width: 13.7px" class="mr-2" />
+				<RepostIcon :isActive="isReposted()" class="mr-2 p-1" />
 				<span v-if="isReposted()" class="text-xs self-center">Undo Repost</span>
 				<span v-else class="text-xs self-center">Repost to Feed</span>
 			</button>
 			<!-- Quote Repost -->
 			<button
 				:class="$store.state.settings.darkMode ? 'hover:text-lightActive' : 'hover:text-darkActive'"
-				class="flex focus:outline-none"
+				class="flex focus:outline-none text-gray5"
 				@click="$emit(`toggleRepost`)"
 			>
-				<RepostIcon :isActive="isReposted()" :shrink="true" style="width: 13.7px" class="mr-2" />
-				<span class="text-xs self-center">Quote Repost</span>
+				<QuoteIcon class="mr-2 p-1" />
+				<span class="text-xs self-center">Quote</span>
 			</button>
 			<!-- Twitter -->
 			<button
 				:class="$store.state.settings.darkMode ? 'hover:text-lightActive' : 'hover:text-darkActive'"
-				class="flex focus:outline-none"
+				class="flex focus:outline-none text-gray5"
 				@click="handleShare('TWITTER')"
 			>
-				<TwitterIcon style="width: 13.7px" class="mr-2" />
+				<TwitterIcon class="mr-2 p-1" />
 				<span class="text-xs self-center text-left">Share on Twitter</span>
 			</button>
 			<!-- Copy URL Link -->
 			<button
 				:class="$store.state.settings.darkMode ? 'hover:text-lightActive' : 'hover:text-darkActive'"
-				class="flex focus:outline-none"
+				class="flex focus:outline-none text-gray5"
 				@click="handleShare('URL')"
 			>
-				<LinkIcon style="width: 13.7px" class="mr-2" />
+				<LinkIcon class="mr-2 p-1" />
 				<span class="text-xs self-center">Copy Link</span>
 			</button>
 		</div>
@@ -69,6 +69,7 @@ import ShareIcon from '@/components/icons/Share.vue'
 import TwitterIcon from '@/components/icons/brands/Twitter.vue'
 import LinkIcon from '@/components/icons/Link.vue'
 import RepostIcon from '@/components/icons/Repost.vue'
+import QuoteIcon from '@/components/icons/Quote.vue'
 import { Post } from '@/backend/post'
 import { IRepost, sendRepost, getReposts } from '@/backend/reposts'
 import { sendPostDeletion } from '@/backend/postDeletion'
@@ -86,6 +87,7 @@ export default Vue.extend({
 		TwitterIcon,
 		LinkIcon,
 		RepostIcon,
+		QuoteIcon,
 	},
 	props: {
 		repost: {
