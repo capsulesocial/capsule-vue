@@ -72,16 +72,12 @@ export async function login(id: string, privateKey: string): Promise<IAuthResult
 }
 
 export async function loginNearAccount(id: string, privateKey: string, accountId: string): Promise<IAuthResult> {
-	let profile = createDefaultProfile(id)
-
 	const [fetchedProfile] = await Promise.all([getProfile(id), setNearPrivateKey(baseDecode(privateKey), accountId)])
 
 	initContract(accountId)
 	window.localStorage.setItem(`accountId`, accountId)
 
-	if (fetchedProfile) {
-		profile = fetchedProfile
-	}
+	const profile = fetchedProfile || createDefaultProfile(id)
 	const cid = await addProfileToIPFS(profile)
 
 	return { profile, cid }
