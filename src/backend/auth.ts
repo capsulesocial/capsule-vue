@@ -1,5 +1,5 @@
 import { getED25519Key } from '@toruslabs/openlogin-ed25519'
-import { base_encode as baseEncode } from 'near-api-js/lib/utils/serialize'
+import { base_decode as baseDecode, base_encode as baseEncode } from 'near-api-js/lib/utils/serialize'
 import { PublicKey } from 'near-api-js/lib/utils'
 
 import { initContract, setUserInfoNEAR, setNearPrivateKey } from './near'
@@ -63,6 +63,22 @@ export async function login(id: string, privateKey: string): Promise<IAuthResult
 
 	let profile = createDefaultProfile(id)
 	const fetchedProfile = await getProfile(id)
+	if (fetchedProfile) {
+		profile = fetchedProfile
+	}
+	const cid = await addProfileToIPFS(profile)
+
+	return { profile, cid }
+}
+
+export async function loginNearAccount(id: string, privateKey: string, accountId: string): Promise<IAuthResult> {
+	let profile = createDefaultProfile(id)
+
+	const [fetchedProfile] = await Promise.all([getProfile(id), setNearPrivateKey(baseDecode(privateKey), accountId)])
+
+	initContract(accountId)
+	window.localStorage.setItem(`accountId`, accountId)
+
 	if (fetchedProfile) {
 		profile = fetchedProfile
 	}
