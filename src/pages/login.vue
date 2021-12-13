@@ -94,7 +94,7 @@ import FileIcon from '@/components/icons/File.vue'
 
 import { MutationType, createSessionFromProfile, namespace as sessionStoreNamespace } from '~/store/session'
 
-import { getAccountIdFromPrivateKey, IAuthResult, login, loginNearAccount, register } from '@/backend/auth'
+import { getAccountIdFromPrivateKey, login, loginNearAccount, register } from '@/backend/auth'
 import { getUsernameNEAR } from '@/backend/near'
 import { torusVerifiers, TorusVerifiers } from '@/backend/utilities/config'
 
@@ -191,17 +191,12 @@ export default Vue.extend({
 		},
 		async verify() {
 			try {
-				if (!(this.userInfo && this.accountId) && !(this.accountIdInput && this.privateKey)) {
+				if (!this.userInfo || !this.accountId) {
 					throw new Error(`Unexpected condition!`)
 				}
 				this.isLoading = true
 				// Login
-				let res: IAuthResult | null = null
-				if (this.userInfo && this.accountId) {
-					res = await this.loginOrRegister(this.userInfo.privateKey)
-				} else if (this.accountIdInput && this.privateKey && this.username) {
-					res = await loginNearAccount(this.username, this.privateKey, this.accountIdInput)
-				}
+				const res = await this.loginOrRegister(this.userInfo.privateKey)
 				if (!res) {
 					return
 				}
@@ -226,7 +221,33 @@ export default Vue.extend({
 				this.$router.push(`/register`)
 			}
 			this.showKeyLoginPopup = false
-			this.verify()
+			this.walletVerify()
+		},
+		async walletVerify() {
+			try {
+				if (!this.accountIdInput || !this.privateKey || !this.username) {
+					throw new Error(`Unexpected condition!`)
+				}
+				this.isLoading = true
+
+				const res = await loginNearAccount(this.username, this.privateKey, this.accountIdInput)
+				if (!res) {
+					return
+				}
+
+				const { profile, cid } = res
+				const account = createSessionFromProfile(cid, profile)
+				this.changeCID(cid)
+				this.changeID(account.id)
+				this.changeName(account.name)
+				this.changeEmail(account.email)
+				this.changeAvatar(account.avatar)
+				this.changeBio(account.bio)
+				this.changeLocation(account.location)
+				this.$router.push(`/home`)
+			} catch (err: any) {
+				this.$toastError(err.message)
+			}
 		},
 		handleClose(e: any): void {
 			if (!e.target || e.target.firstChild === null || e.target.firstChild.classList === undefined) {
