@@ -7,7 +7,7 @@
 		<section class="flex justify-center items-center" style="height: 86%">
 			<div class="flex flex-col items-center w-full p-14 -mt-5">
 				<!-- Step 1: Choose Login / register -->
-				<article v-show="!userInfo && !isLoading" class="w-1/2">
+				<article v-show="!(userInfo || nearWallet) && !isLoading" class="w-1/2">
 					<h1 class="font-semibold text-primary mb-10" style="font-size: 2.6rem">Sign up</h1>
 					<button
 						class="w-full rounded-lg w-1/2 bg-gray2 mb-4 py-2 flex justify-center items-center focus:outline-none"
@@ -30,12 +30,14 @@
 					</div>
 					<button
 						class="w-full rounded-lg w-1/2 bg-gray2 mb-4 py-3 flex justify-center items-center focus:outline-none"
+						@click="() => walletLoginComponent()"
 					>
 						<NearIcon style="width: 22px; height: 22px" />
 						<h6 class="font-semibold text-gray7 text-sm ml-4">Signup with NEAR</h6>
 					</button>
 					<button
 						class="w-full rounded-lg w-1/2 bg-gray2 mb-4 py-3 flex justify-center items-center focus:outline-none"
+						@click="() => implicitAccountCreate()"
 					>
 						<h6 class="font-semibold text-gray7 text-sm ml-4">Create implicit account</h6>
 					</button>
@@ -46,7 +48,7 @@
 				</article>
 				<!-- Step 2: Sign up -->
 				<article v-show="!isLoading" class="w-1/2">
-					<div v-show="userInfo && username === null">
+					<div v-show="(userInfo || nearWallet) && username === null">
 						<h1 class="text-4xl text-primary font-bold">Sign up</h1>
 						<article v-if="!hasSufficientFunds()">
 							<!-- Step 2a: Verify Phone # -->
@@ -92,7 +94,7 @@
 								placeholder=""
 								class="rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full focus:outline-none focus:border-primary text-primary font-sans bg-gray2"
 							/>
-							<BrandedButton :text="`Sign Up`" :action="verify" class="w-full" />
+							<BrandedButton :text="`Sign Up`" :action="userInfo ? verify : walletVerify" class="w-full" />
 							<article>
 								<p class="whitespace-nowrap justify-between text-sm p-5 text-gray-600 font-sans">
 									Ensure that the NEAR account with ID: "{{ accountId }}" has sufficient funds before signing up.
@@ -104,6 +106,20 @@
 							</article>
 						</article>
 					</div>
+				</article>
+				<article v-if="downloadKeyStep" class="w-1/2">
+					<p class="text-gray7 text-center">
+						Here is your private key file. Download this file in a safe spot. You will need it to access your account.
+						To download your private keys again, visit the Settings page
+					</p>
+					<div class="bg-gray1 rounded-lg flex items-center p-4 my-10 justify-between">
+						<div class="flex flex-row items-center">
+							<FileDownloadIcon />
+							<h6 class="text-gray text-lg font-semibold pl-4">Private Key</h6>
+						</div>
+						<BrandedButton :text="`Download`" :action="downloadPrivateKey" />
+					</div>
+					<nuxt-link to="/home" class="text-primary text-center">Continue to Homepage</nuxt-link>
 				</article>
 				<article v-show="isLoading" class="w-3/4 flex justify-center">
 					<div class="loader m-5 rounded-lg"></div>
@@ -128,11 +144,21 @@ import GoogleIcon from '@/components/icons/brands/Google.vue'
 import NearIcon from '@/components/icons/brands/Near.vue'
 // import TwitterIcon from '@/components/icons/brands/Twitter.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
+import FileDownloadIcon from '@/components/icons/FileDownload.vue'
 
 import { MutationType, createSessionFromProfile, namespace as sessionStoreNamespace } from '~/store/session'
 
-import { getAccountIdFromPrivateKey, login, register } from '@/backend/auth'
-import { checkAccountStatus, getUsernameNEAR } from '@/backend/near'
+import { getAccountIdFromPrivateKey, login, register, registerNearWallet } from '@/backend/auth'
+import {
+	checkAccountStatus,
+	generateAndSetKey,
+	getUsernameNEAR,
+	getWalletConnection,
+	removeNearPrivateKey,
+	signedInToWallet,
+	walletLogin,
+	walletLogout,
+} from '@/backend/near'
 import { sufficientFunds, torusVerifiers, TorusVerifiers } from '@/backend/utilities/config'
 import { requestOTP, requestSponsor } from '@/backend/funder'
 
@@ -148,6 +174,8 @@ interface IData {
 	otpSent: boolean
 	funds: string
 	iti: any
+	nearWallet: boolean
+	downloadKeyStep: boolean
 }
 
 export default Vue.extend({
@@ -158,6 +186,7 @@ export default Vue.extend({
 		GoogleIcon,
 		BrandedButton,
 		NearIcon,
+		FileDownloadIcon,
 	},
 	layout: `unauth`,
 	data(): IData {
@@ -176,10 +205,13 @@ export default Vue.extend({
 			otpSent: false,
 			funds: `0`,
 			iti: null,
+			nearWallet: false,
+			downloadKeyStep: false,
 		}
 	},
 	async created() {
-		await this.torus.init()
+		await Promise.all([this.torus.init(), this.postWalletLogin()])
+		this.nearWallet = this.isSignedInToWallet()
 	},
 	mounted() {
 		const accountId = window.localStorage.getItem(`accountId`)
@@ -239,6 +271,46 @@ export default Vue.extend({
 				this.isLoading = false
 			}
 		},
+		async walletLoginComponent() {
+			this.isLoading = true
+			await walletLogin()
+			this.isLoading = false
+		},
+		async postWalletLogin() {
+			this.isLoading = true
+			const walletConnection = getWalletConnection()
+			this.accountId = walletConnection.getAccountId()
+			if (!this.accountId) {
+				this.isLoading = false
+				return false
+			}
+
+			;[this.username] = await Promise.all([getUsernameNEAR(this.accountId), this.checkFunds()])
+			if (this.username) {
+				this.$toastError(`You cannot login with wallet, please import your private key`)
+				removeNearPrivateKey(this.accountId)
+				walletLogout()
+				this.isLoading = false
+			}
+			this.isLoading = false
+			return true
+		},
+		isSignedInToWallet() {
+			return signedInToWallet()
+		},
+		async implicitAccountCreate() {
+			this.isLoading = true
+
+			this.accountId = await generateAndSetKey()
+			;[this.username] = await Promise.all([getUsernameNEAR(this.accountId), this.checkFunds()])
+			if (this.username) {
+				this.$toastError(`You cannot login with implicit account, please import your private key`)
+				removeNearPrivateKey(this.accountId)
+				this.isLoading = false
+			}
+			this.nearWallet = true
+			this.isLoading = false
+		},
 		async sendOTP() {
 			this.phoneNumber = this.iti.getNumber()
 			if (!this.iti.isValidNumber()) {
@@ -279,6 +351,20 @@ export default Vue.extend({
 			}
 			return register(this.id, privateKey)
 		},
+		registerWallet() {
+			if (!this.accountId) {
+				this.$toastError(`Unexpected condition`)
+				return null
+			}
+
+			const idCheck = this.$qualityID(this.id)
+			if (!idCheck) {
+				this.$toastError(`ID did not pass quality rules`)
+				return null
+			}
+
+			return registerNearWallet(this.id, this.accountId)
+		},
 		async verify() {
 			try {
 				if (!this.userInfo || !this.accountId) {
@@ -304,6 +390,36 @@ export default Vue.extend({
 			} catch (err: any) {
 				this.$toastError(err.message)
 			}
+		},
+		async walletVerify() {
+			try {
+				if (!this.nearWallet || !this.accountId) {
+					throw new Error(`Unexpected condition!`)
+				}
+				this.isLoading = true
+
+				// Register
+				const res = await this.registerWallet()
+				if (!res) {
+					return
+				}
+				const { profile, cid } = res
+
+				const account = createSessionFromProfile(cid, profile)
+				this.changeCID(cid)
+				this.changeID(account.id)
+				this.changeName(account.name)
+				this.changeEmail(account.email)
+				this.changeAvatar(account.avatar)
+				this.changeBio(account.bio)
+				this.changeLocation(account.location)
+				this.downloadKeyStep = true
+			} catch (err: any) {
+				this.$toastError(err.message)
+			}
+		},
+		downloadPrivateKey(): void {
+			this.$toastSuccess(`Downloaded private key`)
 		},
 	},
 })
