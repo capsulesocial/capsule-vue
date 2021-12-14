@@ -47,7 +47,7 @@
 					</p>
 				</article>
 				<!-- Step 2: Sign up -->
-				<article v-show="!isLoading" class="w-1/2">
+				<article v-show="!isLoading && !downloadKeyStep" class="w-1/2">
 					<div v-show="(userInfo || nearWallet) && username === null">
 						<h1 class="text-4xl text-primary font-bold">Sign up</h1>
 						<article v-if="!hasSufficientFunds()">
@@ -107,7 +107,7 @@
 						</article>
 					</div>
 				</article>
-				<article v-if="downloadKeyStep" class="w-1/2">
+				<article v-if="downloadKeyStep && !isLoading" class="w-1/2">
 					<p class="text-gray7 text-center">
 						Here is your private key file. Download this file in a safe spot. You will need it to access your account.
 						To download your private keys again, visit the Settings page
@@ -152,6 +152,7 @@ import { getAccountIdFromPrivateKey, login, register, registerNearWallet } from 
 import {
 	checkAccountStatus,
 	generateAndSetKey,
+	getNearPrivateKey,
 	getUsernameNEAR,
 	getWalletConnection,
 	removeNearPrivateKey,
@@ -413,12 +414,23 @@ export default Vue.extend({
 				this.changeAvatar(account.avatar)
 				this.changeBio(account.bio)
 				this.changeLocation(account.location)
+				this.isLoading = false
 				this.downloadKeyStep = true
 			} catch (err: any) {
 				this.$toastError(err.message)
 			}
 		},
-		downloadPrivateKey(): void {
+		async downloadPrivateKey(): Promise<void> {
+			if (!this.accountId) {
+				throw new Error(`Unexpected condition!`)
+			}
+			const privateKey = await getNearPrivateKey(this.accountId)
+			const blob = new Blob([JSON.stringify({ accountId: this.accountId, privateKey })], { type: `application/json` })
+			const link = document.createElement(`a`)
+			link.href = URL.createObjectURL(blob)
+			link.download = `capsule-priv-key-${this.id}`
+			link.click()
+			URL.revokeObjectURL(link.href)
 			this.$toastSuccess(`Downloaded private key`)
 		},
 	},
