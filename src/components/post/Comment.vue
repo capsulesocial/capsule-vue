@@ -38,13 +38,8 @@
 						</div>
 					</div>
 				</div>
-<<<<<<< HEAD
-				<div class="flex-shrink-0 flex justify-center items-center overflow-hidden">
-					<img :src="emotion.imageRight" class="w-32 h-32 -mb-2 mt-2" />
-=======
 				<div class="flex-shrink-0 flex justify-center items-center">
 					<img :src="emotion.leftImage" class="bg-white rounded-full w-32 h-32" />
->>>>>>> display comments progress
 				</div>
 			</div>
 		</div>
