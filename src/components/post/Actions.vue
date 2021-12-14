@@ -136,12 +136,11 @@ import CommentFilter from '@/components/post/CommentFilter.vue'
 import FlipIcon from '@/components/icons/Flip.vue'
 import CloseIcon from '@/components/icons/X.vue'
 
-import { backgrounds, reactions, feelings, faces, faceGroupings } from '@/config'
+import { backgrounds, feelings, faces, faceGroupings } from '@/config'
 import { createComment, sendComment, ICommentData, getCommentsOfPost } from '@/backend/comment'
 
 interface IData {
 	backgroundList: Record<string, string>
-	reactionList: Record<string, any>
 	facesList: Record<string, any>
 	faceGroupings: object[]
 	feelingList: Record<string, any>
@@ -179,7 +178,6 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			backgroundList: backgrounds,
-			reactionList: reactions,
 			facesList: faces,
 			faceGroupings,
 			feelingList: feelings,
@@ -211,11 +209,11 @@ export default Vue.extend({
 	methods: {
 		handleScrollContainer(e: Event): void {
 			if (e.target) {
-				const { scrollTop, scrollHeight } = e.srcElement as HTMLElement
+				// const { scrollTop, scrollHeight } = e.srcElement as HTMLElement
 				// eslint-disable-next-line no-console
-				console.log(`scrollTop`, scrollTop)
+				// console.log(`scrollTop`, scrollTop)
 				// eslint-disable-next-line no-console
-				console.log(`scrollHeight`, scrollHeight)
+				// console.log(`scrollHeight`, scrollHeight)
 			}
 		},
 		setFilter(reaction: string): void {
@@ -266,6 +264,7 @@ export default Vue.extend({
 				const cList: ICommentData[] = await getCommentsOfPost(this.postCID)
 				this.comments = cList.reverse()
 			} else {
+				// Get a list of comments with multiple emotions
 				if (this.filter === `positive` || this.filter === `neutral` || this.filter === `negative`) {
 					const cList: ICommentData[] = await getCommentsOfPost(this.postCID, undefined, this.filter)
 					this.comments = cList.reverse()

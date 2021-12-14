@@ -324,9 +324,13 @@ export const faceGroupings = [
 	[faces.empathy, faces.friendly, faces.lovely],
 	[faces.calm, faces.satisfied, faces.fulfilled],
 	[faces.mad, faces.hostile, faces.violent],
-	[faces.cringe, faces.offended, faces.hateful],
+
+	[faces.hush, faces.wild, faces.zzz],
+	[faces.regret, faces.spunky, faces.trippy],
+
 	// Negative
 	[faces.distracted, faces.bored, faces.spiritless],
+	[faces.cringe, faces.offended, faces.hateful],
 	[faces.triggered, faces.shocked, faces.furious],
 	[faces.disgusted, faces.sick, faces.revolted],
 	[faces.suspicious, faces.incredulous, faces.skeptical],
@@ -335,11 +339,7 @@ export const faceGroupings = [
 	[faces.sad, faces.whine, faces.heartbroken],
 ]
 
-export const faceExtras = [
-	[faces.hush, faces.incognito],
-	[faces.regret, faces.spunky, faces.trippy],
-	[faces.wild, faces.zzz],
-]
+export const faceExtras = []
 
 export const feelings = {
 	positive: [
@@ -384,6 +384,9 @@ export const feelings = {
 		`sad`,
 		`whine`,
 		`heartbroken`,
+		`cringe`,
+		`offended`,
+		`hateful`,
 	],
 	neutral: [
 		`empathy`,
@@ -395,9 +398,12 @@ export const feelings = {
 		`mad`,
 		`hostile`,
 		`violent`,
-		`cringe`,
-		`offended`,
-		`hateful`,
+		`hush`,
+		`wild`,
+		`zzz`,
+		`regret`,
+		`spunky`,
+		`trippy`,
 	],
 }
 
@@ -414,326 +420,6 @@ export const avatars = [
 	require(`@/assets/images/avatars/streetart.jpeg`),
 	require(`@/assets/images/avatars/strongwomen.jpeg`),
 ]
-
-export const reactions = {
-	face1: {
-		filter: `positive`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face1.png`),
-		rightImage: require(`@/assets/images/reactions/right/face1.png`),
-	},
-	face2: {
-		filter: `negative`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face2.png`),
-		rightImage: require(`@/assets/images/reactions/right/face2.png`),
-	},
-	face3: {
-		filter: `negative`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face3.png`),
-		rightImage: require(`@/assets/images/reactions/right/face3.png`),
-	},
-	face4: {
-		filter: `negative`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face4.png`),
-		rightImage: require(`@/assets/images/reactions/right/face4.png`),
-	},
-	face5: {
-		filter: `positive`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face5.png`),
-		rightImage: require(`@/assets/images/reactions/right/face5.png`),
-	},
-	face6: {
-		filter: `neutral`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face6.png`),
-		rightImage: require(`@/assets/images/reactions/right/face6.png`),
-	},
-	face7: {
-		filter: `neutral`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face7.png`),
-		rightImage: require(`@/assets/images/reactions/right/face7.png`),
-	},
-	face8: {
-		filter: `negative`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face8.png`),
-		rightImage: require(`@/assets/images/reactions/right/face8.png`),
-	},
-	face9: {
-		filter: `negative`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face9.png`),
-		rightImage: require(`@/assets/images/reactions/right/face9.png`),
-	},
-	face10: {
-		filter: `negative`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face10.png`),
-		rightImage: require(`@/assets/images/reactions/right/face10.png`),
-	},
-	face11: {
-		filter: `negative`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face11.png`),
-		rightImage: require(`@/assets/images/reactions/right/face11.png`),
-	},
-	face12: {
-		filter: `negative`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face12.png`),
-		rightImage: require(`@/assets/images/reactions/right/face12.png`),
-	},
-	face13: {
-		filter: `positive`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face13.png`),
-		rightImage: require(`@/assets/images/reactions/right/face13.png`),
-	},
-	face14: {
-		filter: `positive`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face14.png`),
-		rightImage: require(`@/assets/images/reactions/right/face14.png`),
-	},
-	face15: {
-		filter: `positive`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face15.png`),
-		rightImage: require(`@/assets/images/reactions/right/face15.png`),
-	},
-	face16: {
-		filter: `negative`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face16.png`),
-		rightImage: require(`@/assets/images/reactions/right/face16.png`),
-	},
-	face17: {
-		filter: `neutral`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face17.png`),
-		rightImage: require(`@/assets/images/reactions/right/face17.png`),
-	},
-	face18: {
-		filter: `positive`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face18.png`),
-		rightImage: require(`@/assets/images/reactions/right/face18.png`),
-	},
-	face19: {
-		filter: `positive`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face19.png`),
-		rightImage: require(`@/assets/images/reactions/right/face19.png`),
-	},
-	face20: {
-		filter: `neutral`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face20.png`),
-		rightImage: require(`@/assets/images/reactions/right/face20.png`),
-	},
-	face21: {
-		filter: `neutral`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face21.png`),
-		rightImage: require(`@/assets/images/reactions/right/face21.png`),
-	},
-	face22: {
-		filter: `neutral`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face22.png`),
-		rightImage: require(`@/assets/images/reactions/right/face22.png`),
-	},
-	face23: {
-		filter: `positive`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face23.png`),
-		rightImage: require(`@/assets/images/reactions/right/face23.png`),
-	},
-	face24: {
-		filter: `positive`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face24.png`),
-		rightImage: require(`@/assets/images/reactions/right/face24.png`),
-	},
-	face25: {
-		filter: `positive`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face25.png`),
-		rightImage: require(`@/assets/images/reactions/right/face25.png`),
-	},
-	face26: {
-		filter: `positive`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face26.png`),
-		rightImage: require(`@/assets/images/reactions/right/face26.png`),
-	},
-	face27: {
-		filter: `neutral`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face27.png`),
-		rightImage: require(`@/assets/images/reactions/right/face27.png`),
-	},
-	face28: {
-		filter: `positive`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face28.png`),
-		rightImage: require(`@/assets/images/reactions/right/face28.png`),
-	},
-	face29: {
-		filter: `negative`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face29.png`),
-		rightImage: require(`@/assets/images/reactions/right/face29.png`),
-	},
-	face30: {
-		filter: `negative`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face30.png`),
-		rightImage: require(`@/assets/images/reactions/right/face30.png`),
-	},
-	face31: {
-		filter: `neutral`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face31.png`),
-		rightImage: require(`@/assets/images/reactions/right/face31.png`),
-	},
-	face32: {
-		filter: `negative`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face32.png`),
-		rightImage: require(`@/assets/images/reactions/right/face32.png`),
-	},
-	face33: {
-		filter: `negative`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face33.png`),
-		rightImage: require(`@/assets/images/reactions/right/face33.png`),
-	},
-	face34: {
-		filter: `neutral`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face34.png`),
-		rightImage: require(`@/assets/images/reactions/right/face34.png`),
-	},
-	face35: {
-		filter: `positive`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face35.png`),
-		rightImage: require(`@/assets/images/reactions/right/face35.png`),
-	},
-	face36: {
-		filter: `positive`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face36.png`),
-		rightImage: require(`@/assets/images/reactions/right/face36.png`),
-	},
-	face37: {
-		filter: `positive`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face37.png`),
-		rightImage: require(`@/assets/images/reactions/right/face37.png`),
-	},
-	face38: {
-		filter: `negative`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face38.png`),
-		rightImage: require(`@/assets/images/reactions/right/face38.png`),
-	},
-	face39: {
-		filter: `neutral`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face39.png`),
-		rightImage: require(`@/assets/images/reactions/right/face39.png`),
-	},
-	face40: {
-		filter: `neutral`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face40.png`),
-		rightImage: require(`@/assets/images/reactions/right/face40.png`),
-	},
-	face41: {
-		filter: `neutral`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face41.png`),
-		rightImage: require(`@/assets/images/reactions/right/face41.png`),
-	},
-	face42: {
-		filter: `neutral`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face42.png`),
-		rightImage: require(`@/assets/images/reactions/right/face42.png`),
-	},
-	face43: {
-		filter: `negative`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face43.png`),
-		rightImage: require(`@/assets/images/reactions/right/face43.png`),
-	},
-	face44: {
-		filter: `positive`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face44.png`),
-		rightImage: require(`@/assets/images/reactions/right/face44.png`),
-	},
-	face45: {
-		filter: `positive`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face45.png`),
-		rightImage: require(`@/assets/images/reactions/right/face45.png`),
-	},
-	face46: {
-		filter: `positive`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face46.png`),
-		rightImage: require(`@/assets/images/reactions/right/face46.png`),
-	},
-	face47: {
-		filter: `positive`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face47.png`),
-		rightImage: require(`@/assets/images/reactions/right/face47.png`),
-	},
-	face48: {
-		filter: `positive`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face48.png`),
-		rightImage: require(`@/assets/images/reactions/right/face48.png`),
-	},
-	face49: {
-		filter: `positive`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face49.png`),
-		rightImage: require(`@/assets/images/reactions/right/face49.png`),
-	},
-	face50: {
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face50.png`),
-		rightImage: require(`@/assets/images/reactions/right/face50.png`),
-	},
-	face51: {
-		filter: `neutral`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face51.png`),
-		rightImage: require(`@/assets/images/reactions/right/face51.png`),
-	},
-	face52: {
-		filter: `neutral`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/left/face52.png`),
-		rightImage: require(`@/assets/images/reactions/right/face52.png`),
-	},
-	default: {
-		filter: `white`,
-		label: ``,
-		leftImage: require(`@/assets/images/reactions/default.png`),
-		rightImage: require(`@/assets/images/reactions/default.png`),
-	},
-}
 
 export const categories = [
 	`technology`,
