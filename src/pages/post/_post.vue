@@ -135,7 +135,12 @@
 							/>
 						</div>
 					</div>
-					<PostActions :postCID="$route.params.post" :initComments="comments" />
+					<PostActions
+						:postCID="$route.params.post"
+						:initComments="comments"
+						:bookmarksCount="bookmarksCount"
+						:repostsCount="repostCount"
+					/>
 				</article>
 			</section>
 			<section v-else>Post not found 😵‍💫</section>

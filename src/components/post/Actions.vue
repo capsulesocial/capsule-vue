@@ -1,7 +1,73 @@
 <template>
 	<section>
+		<article v-show="toggleStats" class="pt-5">
+			<!-- Back button -->
+			<div class="flex items-center">
+				<button class="rounded-full bg-gray1 focus:outline-none" @click="toggleStats = false"><ChevronLeft /></button>
+				<span class="pl-2 font-semibold">All comments</span>
+			</div>
+			<!-- Global Activity -->
+			<div class="pt-5 border-b h-32 flex justify-between">
+				<!-- Stats image -->
+				<img :src="require(`@/assets/images/brand/stats.webp`)" class="h-full flex-shrink-0 pl-5" />
+				<!-- Text stats -->
+				<div class="flex flex-col w-1/2">
+					<h6 class="text-sm pb-4">Global Post Activity</h6>
+					<div class="flex flex-row">
+						<!-- Bookmarks Count -->
+						<div class="flex flex-col pr-4">
+							<h2 class="text-2xl font-semibold">{{ bookmarksCount }}</h2>
+							<span>Bookmarks</span>
+						</div>
+						<!-- Reposts count -->
+						<div class="flex flex-col">
+							<h2 class="text-2xl font-semibold">{{ repostsCount }}</h2>
+							<span>Reposts</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Comments Activity -->
+			<div class="pt-5 border-b flex justify-between">
+				<!-- Graph breakdown -->
+				<div></div>
+				<!-- Text stats -->
+				<div class="flex flex-col w-1/2">
+					<h6 class="text-sm pb-4">Comment Activity</h6>
+					<!-- Bookmarks Count -->
+					<div class="flex flex-row">
+						<div class="flex flex-col pr-4">
+							<h2 class="text-2xl font-semibold">{{ getCommentCount(`total`) }}</h2>
+							<span>Total comments</span>
+						</div>
+					</div>
+					<!-- Type breakdown Count -->
+					<div class="flex flex-row">
+						<div class="flex flex-col pr-4">
+							<h2 class="text-2xl font-semibold text-lightPrimary">{{ getCommentCount(`positive`) }}</h2>
+							<span>Positive</span>
+						</div>
+						<div class="flex flex-col pr-4">
+							<h2 class="text-2xl font-semibold text-neutral">{{ getCommentCount(`neutral`) }}</h2>
+							<span>Neutral</span>
+						</div>
+						<div class="flex flex-col pr-4">
+							<h2 class="text-2xl font-semibold text-negative">{{ getCommentCount(`negative`) }}</h2>
+							<span>Negative</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</article>
 		<!-- Post a Comment -->
-		<article class="py-5">
+		<article v-show="!toggleStats" class="pb-5">
+			<div class="w-full flex justify-between py-5">
+				<div class="flex flex-row items-center">
+					<span class="pr-2 font-semibold">{{ getCommentCount(`total`) }} comments</span>
+					<button class="focus:outline-none" @click="toggleStats = true"><StatsIcon /></button>
+				</div>
+				<CommentFilter :filter="filter" @clicked="setFilter" />
+			</div>
 			<!-- Bottom overlay with selector -->
 			<div v-show="showEmotions" class="w-full flex flex-row-reverse">
 				<div
@@ -116,13 +182,14 @@
 					</button>
 				</div>
 			</div>
-		</article>
-		<article class="w-full flex justify-between">
-			<div>{{ comments.length }} comments</div>
-			<CommentFilter :filter="filter" @clicked="setFilter" />
-		</article>
-		<article v-for="c in comments" :key="c._id" class="py-2">
-			<Comment :authorID="c.authorID" :cid="c._id" :timestamp="c.timestamp" />
+			<Comment
+				v-for="c in comments"
+				:key="c._id"
+				class="py-2"
+				:authorID="c.authorID"
+				:cid="c._id"
+				:timestamp="c.timestamp"
+			/>
 		</article>
 	</section>
 </template>
@@ -135,13 +202,13 @@ import Comment from '@/components/post/Comment.vue'
 import CommentFilter from '@/components/post/CommentFilter.vue'
 import FlipIcon from '@/components/icons/Flip.vue'
 import CloseIcon from '@/components/icons/X.vue'
+import StatsIcon from '@/components/icons/Stats.vue'
+import ChevronLeft from '@/components/icons/ChevronLeft.vue'
 
-import { backgrounds, feelings, faces, faceGroupings } from '@/config'
+import { faces, feelings, faceGroupings } from '@/config'
 import { createComment, sendComment, ICommentData, getCommentsOfPost } from '@/backend/comment'
 
 interface IData {
-	backgroundList: Record<string, string>
-	facesList: Record<string, any>
 	faceGroupings: object[]
 	feelingList: Record<string, any>
 	activeEmotion: { label: string; leftImage: any; rightImage: any }
@@ -153,7 +220,8 @@ interface IData {
 	commentBackground: string
 	filter: string
 	showDropdown: boolean
-	page: number
+	showStats: boolean
+	toggleStats: boolean
 }
 
 export default Vue.extend({
@@ -164,6 +232,8 @@ export default Vue.extend({
 		CommentFilter,
 		FlipIcon,
 		CloseIcon,
+		StatsIcon,
+		ChevronLeft,
 	},
 	props: {
 		postCID: {
@@ -174,11 +244,17 @@ export default Vue.extend({
 			type: Array as PropType<ICommentData[] | null>,
 			default: null,
 		},
+		bookmarksCount: {
+			type: Number,
+			default: -1,
+		},
+		repostsCount: {
+			type: Number,
+			default: -1,
+		},
 	},
 	data(): IData {
 		return {
-			backgroundList: backgrounds,
-			facesList: faces,
 			faceGroupings,
 			feelingList: feelings,
 			activeEmotion: { label: ``, leftImage: null, rightImage: null },
@@ -190,7 +266,8 @@ export default Vue.extend({
 			commentBackground: `@/assets/images/brand/paper4.svg`,
 			filter: ``,
 			showDropdown: false,
-			page: 0,
+			showStats: false,
+			toggleStats: false,
 		}
 	},
 	async created() {
@@ -264,18 +341,38 @@ export default Vue.extend({
 				const cList: ICommentData[] = await getCommentsOfPost(this.postCID)
 				this.comments = cList.reverse()
 			} else {
-				// Get a list of comments with multiple emotions
+				// Get a list of comments with multiple emotions under the same category
 				if (this.filter === `positive` || this.filter === `neutral` || this.filter === `negative`) {
 					const cList: ICommentData[] = await getCommentsOfPost(this.postCID, undefined, this.filter)
 					this.comments = cList.reverse()
 					return
 				}
+				// Get a list of comments with a specific emotion
 				const cList: ICommentData[] = await getCommentsOfPost(
 					this.postCID,
 					this.filter.charAt(0).toLowerCase() + this.filter.replace(/\s/g, ``).substring(1),
 				)
 				this.comments = cList.reverse()
 			}
+		},
+		getCommentCount(type: `total` | `positive` | `neutral` | `negative`): number {
+			if (type === `total`) {
+				return this.comments.length
+			}
+			let count: number = 0
+			for (const c in this.comments) {
+				if (c) {
+					const reaction = this.comments[c].emotion as keyof typeof faces
+					if (reaction in faces) {
+						const label = faces[reaction].label
+						// console.log(label)
+						if (feelings[type].includes(label)) {
+							count++
+						}
+					}
+				}
+			}
+			return count
 		},
 	},
 })

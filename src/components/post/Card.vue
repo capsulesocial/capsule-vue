@@ -182,7 +182,14 @@
 						<BrandedButton :action="handleSendRepost" :text="`Post`" />
 					</div>
 				</div>
-				<PostActions v-if="showComments" :postCID="postCID" :initComments="comments" class="px-6 pb-6" />
+				<PostActions
+					v-if="showComments"
+					:postCID="postCID"
+					:initComments="comments"
+					:bookmarksCount="$props.bookmarksCount"
+					:repostsCount="$props.repostCount"
+					class="px-6 pb-6"
+				/>
 			</div>
 		</div>
 	</article>
@@ -285,6 +292,10 @@ export default Vue.extend({
 		bookmarked: {
 			type: Boolean,
 			default: false,
+		},
+		bookmarksCount: {
+			type: Number,
+			default: 0,
 		},
 		repostCount: {
 			type: Number,
@@ -485,7 +496,7 @@ export default Vue.extend({
 })
 </script>
 
-<style >
+<style>
 /* Add Animation */
 .modal-animation,
 #caption {

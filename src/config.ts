@@ -324,7 +324,6 @@ export const faceGroupings = [
 	[faces.empathy, faces.friendly, faces.lovely],
 	[faces.calm, faces.satisfied, faces.fulfilled],
 	[faces.mad, faces.hostile, faces.violent],
-
 	[faces.hush, faces.wild, faces.zzz],
 	[faces.regret, faces.spunky, faces.trippy],
 
@@ -338,8 +337,6 @@ export const faceGroupings = [
 	[faces.aloof, faces.indifferent, faces.detatched],
 	[faces.sad, faces.whine, faces.heartbroken],
 ]
-
-export const faceExtras = []
 
 export const feelings = {
 	positive: [
