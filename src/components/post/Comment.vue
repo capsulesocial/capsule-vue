@@ -187,8 +187,7 @@ export default Vue.extend({
 			} else if (feelings.negative.includes(this.emotionType)) {
 				res += `#EE1F63`
 			} else {
-				// res += `#F0B785`
-				res += `#1F7DAD`
+				res += `#F0B785`
 			}
 			return res
 		},

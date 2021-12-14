@@ -252,6 +252,7 @@ export default Vue.extend({
 			// Send comment (c)
 			this.comments.push({ _id, ...c })
 			// Apply filter to comments, in case new comment was added in filtered category
+			this.comment = ``
 			this.filterComments()
 			this.selectedEmotion = { label: ``, leftImage: null, rightImage: null }
 			this.activeEmotion = { label: ``, leftImage: null, rightImage: null }
