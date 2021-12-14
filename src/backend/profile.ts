@@ -14,6 +14,7 @@ export interface Profile {
 	location: string
 	avatar: string
 	socials: string[]
+	background?: string
 }
 
 export function createDefaultProfile(id: string): Profile {
