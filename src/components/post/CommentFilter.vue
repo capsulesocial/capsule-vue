@@ -57,7 +57,7 @@
 					class="tooltip relative inline-block h-12 w-12 rounded-xl shadow-lg transition duration-500 ease-in-out transform hover:scale-105"
 				>
 					<img
-						:src="reactionList[r].imageLeft"
+						:src="reactionList[r].leftImage"
 						:alt="reactionList[r].label"
 						class="flex-shrink-0 h-12 w-12"
 						@click="updateFilter(reactionList[r].label)"
@@ -75,7 +75,7 @@
 import Vue from 'vue'
 import ChevronUp from '@/components/icons/ChevronUp.vue'
 import ChevronDown from '@/components/icons/ChevronDown.vue'
-import { reactions, feelings } from '@/config'
+import { faces, feelings } from '@/config'
 
 interface IData {
 	reactionList: Record<string, any>
@@ -98,7 +98,7 @@ export default Vue.extend({
 	},
 	data(): IData {
 		return {
-			reactionList: reactions,
+			reactionList: faces,
 			feelingList: feelings,
 			feeling: `positive`,
 			showFilter: false,

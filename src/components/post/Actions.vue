@@ -2,31 +2,34 @@
 	<section>
 		<!-- Post a Comment -->
 		<article class="py-5">
+			<!-- Bottom overlay with selector -->
+			<div v-show="showEmotions" class="w-full flex flex-row-reverse">
+				<div
+					class="z-10 bg-white flex flex-row justify-between p-5"
+					:style="$route.name === `post-post` ? `width: 450px` : `width: 406px`"
+					style="margin-bottom: -112px"
+				>
+					<div></div>
+					<h6 class="text-primary text-2xl text-center self-center">How do you feel?</h6>
+					<div>
+						<button class="p-2 bg-gray1 rounded-full focus:outline-none" @click="showEmotions = false">
+							<CloseIcon />
+						</button>
+					</div>
+				</div>
+			</div>
 			<div class="flex items-start">
 				<!-- Comment box Container -->
-				<div
-					class="comment-container relative flex shadow-xl rounded-xl w-full overflow-hidden p-4"
-					:class="`bg-` + emotionCategory"
-				>
-					<!-- Previous page Arrow -->
-					<button
-						v-show="showEmotions && page > 0"
-						class="absolute focus:outline-none left-0 mt-20 z-10 rounded-full border bg-white p-2"
-						@click="page -= 1"
-					>
-						<ChevronLeft />
-					</button>
-					<div
-						class="flip-container relative border shadow-inner rounded-xl overflow-hidden w-full h-40"
-						:class="showEmotions ? 'flip' : ''"
-					>
-						<div class="flipper flex flex-row absolute">
+				<div class="flex shadow-xl rounded-xl w-full overflow-hidden" :class="showEmotions ? `` : `border p-4`">
+					<div class="rounded-xl overflow-hidden w-full" :style="showEmotions ? `height: 20rem` : `height: 10rem`">
+						<div class="flex flex-row">
 							<!-- Front side: Type comment -->
-							<div class="front w-full flex bg-white">
+							<div v-show="!showEmotions" class="w-full flex bg-white">
 								<button class="h-auto flex-shrink-0 focus:outline-none" @click="showEmotions = !showEmotions">
-									<span v-if="emotion !== ''">
+									<span v-if="activeEmotion.label !== ``">
 										<img
-											:src="reactionList[emotion].imageRight"
+											:src="activeEmotion.rightImage"
+											:alt="activeEmotion.label"
 											class="object-contain"
 											style="width: 126px; height: 126px"
 										/>
@@ -52,69 +55,64 @@
 								</div>
 							</div>
 							<!-- Back side: Choose reaction -->
-							<div class="back w-full h-40 bg-white">
-								<!-- Text and filter -->
-								<div class="flex justify-between w-full px-4">
-									<h6>Define your comments emotion</h6>
-									<!-- Sort by filter -->
-									<div class="flex">
-										<h6 class="mr-2">Sort by</h6>
-										<button v-show="!showDropdown" class="font-semibold" @click="showDropdown = !showDropdown">
-											{{ emotionCategory }}
-										</button>
-										<div v-show="showDropdown">
-											<button class="focus:outline-none mr-2 font-semibold" @click="setEmotionCategory(`default`)">
-												All
-											</button>
-											<button
-												class="focus:outline-none mr-2 text-positive font-semibold"
-												@click="setEmotionCategory(`positive`)"
-											>
-												Positive
-											</button>
-											<button
-												class="focus:outline-none mr-2 text-negative font-semibold"
-												@click="setEmotionCategory(`negative`)"
-											>
-												Negative
-											</button>
-											<button
-												class="focus:outline-none mr-2 text-neutral font-semibold"
-												@click="setEmotionCategory(`neutral`)"
-											>
-												Neutral
-											</button>
-										</div>
-									</div>
-								</div>
-								<!-- Grid of faces -->
-								<div class="faces flex flex-row justify-around flex-wrap w-full bg-white py-2">
-									<div v-for="e in getFaces()" :key="e">
+							<div
+								v-show="showEmotions"
+								ref="scrollContainer"
+								class="w-full overflow-y-scroll bg-white"
+								style="
+									height: 320px;
+									box-shadow: rgba(0, 0, 0, 0.35) 0px -50px 36px -28px inset;
+									scroll-snap-type: y mandatory;
+									scroll-snap-stop: always;
+								"
+							>
+								<!-- Middle selector area -->
+								<div
+									class="absolute rounded-lg bg-primary bg-opacity-25"
+									style="height: 96px; margin-top: 112px"
+									:style="$route.name === `post-post` ? `width: 760px` : `width: 699px`"
+								></div>
+								<!-- Faces grid -->
+								<div style="padding-bottom: 112px; padding-top: 112px">
+									<div
+										v-for="row in faceGroupings"
+										:key="row[0].label + row[1].label + row[2].label"
+										class="flex flex-row w-full relative"
+										style="scroll-snap-align: center"
+									>
 										<button
-											v-if="e"
-											:class="`border-` + reactionList[e].filter"
-											class="border items-center rounded-xl shadow-lg transition duration-500 ease-in-out transform hover:scale-105 focus:outline-none w-24 h-24 my-5"
-											@click="setEmotion(e, reactionList[e].filter)"
+											v-for="face in row"
+											:key="face.label"
+											class="rounded-lg focus:outline-none"
+											:class="selectedEmotion.label === face.label ? `border-2 border-primary` : ``"
+											@click="setEmotion(face)"
 										>
-											<img
-												:src="reactionList[e].imageLeft"
-												:alt="reactionList[e].label"
-												class="flex-shrink-0 h-24 w-24"
-											/>
-											<span class="text-xs text-center text-black w-24 -mt-1">{{ reactionList[e].label }}</span>
+											<img :src="face.leftImage" :alt="face.label" class="w-24 h-24" />
 										</button>
+										<p
+											v-for="face in row"
+											:key="face.label + face.label"
+											class="flex flex-grow justify-center items-center capitalize"
+											:class="selectedEmotion.label === face.label ? `font-bold text-primary` : `text-gray7`"
+										>
+											{{ face.label }}
+										</p>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-					<!-- Next page Arrow -->
-					<button
-						v-show="showEmotions"
-						class="absolute focus:outline-none right-0 mt-20 rounded-full border bg-white p-2"
-						@click="page += 1"
-					>
-						<ChevronRight />
+				</div>
+			</div>
+			<!-- Bottom overlay with selector -->
+			<div v-show="showEmotions" class="w-full flex flex-row-reverse">
+				<div
+					class="z-10 bg-white flex flex-row-reverse items-end p-5"
+					style="height: 112px; margin-top: -112px"
+					:style="$route.name === `post-post` ? `width: 450px` : `width: 406px`"
+				>
+					<button class="rounded-lg bg-primary text-white px-6 py-2 focus:outline-none" @click="confirmEmotion">
+						Select
 					</button>
 				</div>
 			</div>
@@ -136,20 +134,21 @@ import BrandedButton from '@/components/BrandedButton.vue'
 import Comment from '@/components/post/Comment.vue'
 import CommentFilter from '@/components/post/CommentFilter.vue'
 import FlipIcon from '@/components/icons/Flip.vue'
-import ChevronRight from '@/components/icons/ChevronRight.vue'
-import ChevronLeft from '@/components/icons/ChevronLeft.vue'
+import CloseIcon from '@/components/icons/X.vue'
 
-import { backgrounds, reactions, feelings } from '@/config'
+import { backgrounds, feelings, faces, faceGroupings } from '@/config'
 import { createComment, sendComment, ICommentData, getCommentsOfPost } from '@/backend/comment'
 
 interface IData {
 	backgroundList: Record<string, string>
-	reactionList: Record<string, any>
+	facesList: Record<string, any>
+	faceGroupings: object[]
 	feelingList: Record<string, any>
+	activeEmotion: { label: string; leftImage: any; rightImage: any }
+	selectedEmotion: { label: string; leftImage: any; rightImage: any }
 	comments: ICommentData[]
 	comment: string
 	emotion: string
-	emotionCategory: string
 	showEmotions: boolean
 	commentBackground: string
 	filter: string
@@ -164,8 +163,7 @@ export default Vue.extend({
 		Comment,
 		CommentFilter,
 		FlipIcon,
-		ChevronRight,
-		ChevronLeft,
+		CloseIcon,
 	},
 	props: {
 		postCID: {
@@ -180,12 +178,14 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			backgroundList: backgrounds,
-			reactionList: reactions,
+			facesList: faces,
+			faceGroupings,
 			feelingList: feelings,
+			activeEmotion: { label: ``, leftImage: null, rightImage: null },
+			selectedEmotion: { label: ``, leftImage: null, rightImage: null },
 			comment: ``,
 			comments: [],
 			emotion: ``,
-			emotionCategory: `default`,
 			showEmotions: false,
 			commentBackground: `@/assets/images/brand/paper4.svg`,
 			filter: ``,
@@ -202,38 +202,38 @@ export default Vue.extend({
 			this.comments = this.comments.reverse()
 		}
 	},
+	mounted() {
+		const scroller = this.$refs.scrollContainer as HTMLElement
+		scroller.addEventListener(`scroll`, this.handleScrollContainer)
+	},
 	methods: {
-		getFaces(): string[] {
-			let list: string[] = []
-			if (this.emotionCategory === `default`) {
-				list.push(this.feelingList.positive[this.page])
-				list.push(this.feelingList.neutral[this.page])
-				list.push(this.feelingList.negative[this.page])
-				list.push(this.feelingList.positive[this.page + 1])
-				list.push(this.feelingList.neutral[this.page + 1])
-				list.push(this.feelingList.negative[this.page + 1])
-				return list
+		handleScrollContainer(e: Event): void {
+			if (e.target) {
+				// const { scrollTop, scrollHeight } = e.srcElement as HTMLElement
+				// eslint-disable-next-line no-console
+				// console.log(`scrollTop`, scrollTop)
+				// eslint-disable-next-line no-console
+				// console.log(`scrollHeight`, scrollHeight)
 			}
-			list = this.feelingList[this.emotionCategory].slice(this.page * 6, this.page * 6 + 6)
-			return list
 		},
 		setFilter(reaction: string): void {
 			this.filter = reaction
 			this.filterComments()
 		},
-		setEmotion(r: string, c: string) {
-			this.emotion = r
-			this.page = 0
-			this.showEmotions = false
-			this.emotionCategory = c
+		setEmotion(r: { label: string; leftImage: any; rightImage: any }) {
+			this.selectedEmotion = r
 		},
-		setEmotionCategory(c: string) {
-			this.showDropdown = false
-			this.page = 0
-			this.emotionCategory = c
+		confirmEmotion() {
+			if (this.selectedEmotion.label === ``) {
+				this.$toastWarning(`No face selected!`)
+				return
+			}
+			this.activeEmotion = this.selectedEmotion
+			this.$toastSuccess(`You're feeling ` + this.activeEmotion.label)
+			this.showEmotions = false
 		},
 		async sendComment() {
-			if (this.emotion === ``) {
+			if (this.activeEmotion.label === ``) {
 				this.$toastError(`Please select a reaction`)
 				return
 			}
@@ -243,19 +243,20 @@ export default Vue.extend({
 			}
 			if (!this.$qualityText(this.comment)) {
 				this.$toastError(`invalid comment!`)
-			} else {
-				const c = createComment(this.$store.state.session.id, this.comment, this.emotion, this.postCID)
-				const _id = await sendComment(c, `comment`)
-				// Send comment (c)
-				this.comments.push({ _id, ...c })
-				// Apply filter to comments, in case new comment was added in filtered category
-				this.filterComments()
-				this.comment = ``
-				this.emotion = ``
-				this.filter = ``
-				this.emotionCategory = `default`
-				this.filterComments()
+				return
 			}
+			const c = createComment(this.$store.state.session.id, this.comment, this.activeEmotion.label, this.postCID)
+			const _id = await sendComment(c, `comment`)
+			// Send comment (c)
+			this.comments.push({ _id, ...c })
+			// Apply filter to comments, in case new comment was added in filtered category
+			this.comment = ``
+			this.filterComments()
+			this.selectedEmotion = { label: ``, leftImage: null, rightImage: null }
+			this.activeEmotion = { label: ``, leftImage: null, rightImage: null }
+			this.emotion = ``
+			this.filter = ``
+			this.filterComments()
 		},
 		async filterComments() {
 			// Fetch comments
@@ -263,6 +264,7 @@ export default Vue.extend({
 				const cList: ICommentData[] = await getCommentsOfPost(this.postCID)
 				this.comments = cList.reverse()
 			} else {
+				// Get a list of comments with multiple emotions
 				if (this.filter === `positive` || this.filter === `neutral` || this.filter === `negative`) {
 					const cList: ICommentData[] = await getCommentsOfPost(this.postCID, undefined, this.filter)
 					this.comments = cList.reverse()
@@ -280,41 +282,6 @@ export default Vue.extend({
 </script>
 
 <style>
-/* entire container, keeps perspective */
-.flip-container {
-	perspective: 1000px;
-}
-.flip-container.flip .flipper {
-	transform: rotateY(180deg);
-}
-
-/* flip speed goes here */
-.flipper {
-	transition: 0.6s;
-	transform-style: preserve-3d;
-	position: relative;
-}
-
-/* hide back of pane during swap */
-.front,
-.back {
-	backface-visibility: hidden;
-	position: absolute;
-	top: 0;
-	left: 0;
-}
-
-/* front pane, placed above back */
-.front {
-	z-index: 2;
-	/* for firefox 31 */
-	transform: rotateY(0deg);
-}
-
-/* back, initially hidden pane */
-.back {
-	transform: rotateY(180deg);
-}
 /* Custom scrollbar */
 .faces::-webkit-scrollbar {
 	width: 10px;

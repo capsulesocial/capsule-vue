@@ -14,7 +14,12 @@
 			/>
 		</article>
 		<article v-for="comment in comments" :key="comment._id">
-			<CommentCard :comment="comment" :profile="profile" />
+			<div class="pb-5">
+				<Comment :authorID="profile.id" :cid="comment._id" :timestamp="comment.timestamp" />
+				<p class="text-right">
+					<nuxt-link :to="`/post/` + comment.parentCID" class="text-primary">View Post</nuxt-link>
+				</p>
+			</div>
 		</article>
 	</section>
 </template>
@@ -23,7 +28,8 @@
 import Vue from 'vue'
 import type { PropType } from 'vue'
 import { Profile } from '@/backend/profile'
-import CommentCard from '@/components/post/CommentCard.vue'
+import Comment from '@/components/post/Comment.vue'
+
 import { getCommentsOfUser, ICommentData } from '@/backend/comment'
 
 interface IData {
@@ -36,7 +42,7 @@ interface IData {
 export default Vue.extend({
 	name: `IDCommentsPage`,
 	components: {
-		CommentCard,
+		Comment,
 	},
 	props: {
 		profile: {
