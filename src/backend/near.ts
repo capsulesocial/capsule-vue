@@ -135,6 +135,27 @@ function getContract() {
 	return _contract
 }
 
+export async function getNearPrivateKey(nearAccountId?: string) {
+	let accountId: string | null = null
+
+	if (nearAccountId) {
+		accountId = nearAccountId
+	} else if (_contract) {
+		accountId = _contract.account.accountId
+	} else {
+		throw new Error(`Contract not yet initialised!`)
+	}
+
+	const keystore = new keyStores.BrowserLocalStorageKeyStore()
+	const keypair = (await keystore.getKey(nearConfig.networkId, accountId)) as KeyPairEd25519 | null
+
+	if (!keypair) {
+		return null
+	}
+
+	return keypair.secretKey
+}
+
 export async function getNearPublicKey(accountId?: string) {
 	if (!accountId) {
 		if (!_contract) {
