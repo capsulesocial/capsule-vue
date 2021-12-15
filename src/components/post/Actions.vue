@@ -58,6 +58,20 @@
 					</div>
 				</div>
 			</div>
+			<!-- Comment Emoitons -->
+			<div class="pt-5 border-b">
+				<h6 class="text-sm pb-4 w-full text-center">Comment Emotions</h6>
+				<!-- Row of faces -->
+				<div class="flex flex-row justify-between">
+					<div v-for="f in faceStats" :key="f.face.label" class="flex flex-col w-20">
+						<div class="rounded-lg border flex flex-col p-1" :class="`border-` + getStyle(f.face.label)">
+							<span class="text-xs self-center">{{ f.face.label }}</span>
+							<img :src="f.face.leftImage" :alt="f.face.label" class="w-12 h-12 self-center" />
+						</div>
+						<span class="self-center">{{ ((f.count / getCommentCount(`total`)) * 100).toFixed(1) }}%</span>
+					</div>
+				</div>
+			</div>
 		</article>
 		<!-- Post a Comment -->
 		<article v-show="!toggleStats" class="pb-5">
@@ -197,6 +211,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import type { PropType } from 'vue'
+import _ from 'lodash'
 import BrandedButton from '@/components/BrandedButton.vue'
 import Comment from '@/components/post/Comment.vue'
 import CommentFilter from '@/components/post/CommentFilter.vue'
@@ -207,6 +222,11 @@ import ChevronLeft from '@/components/icons/ChevronLeft.vue'
 
 import { faces, feelings, faceGroupings } from '@/config'
 import { createComment, sendComment, ICommentData, getCommentsOfPost } from '@/backend/comment'
+
+interface FaceStat {
+	face: { label: string; leftImage: any; rightImage: any }
+	count: number
+}
 
 interface IData {
 	faceGroupings: object[]
@@ -222,6 +242,7 @@ interface IData {
 	showDropdown: boolean
 	showStats: boolean
 	toggleStats: boolean
+	faceStats: FaceStat[]
 }
 
 export default Vue.extend({
@@ -268,6 +289,7 @@ export default Vue.extend({
 			showDropdown: false,
 			showStats: false,
 			toggleStats: false,
+			faceStats: [],
 		}
 	},
 	async created() {
@@ -278,6 +300,8 @@ export default Vue.extend({
 			this.comments = this.initComments
 			this.comments = this.comments.reverse()
 		}
+		// get comment stats
+		this.updateFaceStats()
 	},
 	mounted() {
 		const scroller = this.$refs.scrollContainer as HTMLElement
@@ -334,6 +358,7 @@ export default Vue.extend({
 			this.emotion = ``
 			this.filter = ``
 			this.filterComments()
+			this.updateFaceStats()
 		},
 		async filterComments() {
 			// Fetch comments
@@ -373,6 +398,34 @@ export default Vue.extend({
 				}
 			}
 			return count
+		},
+		updateFaceStats(): void {
+			this.faceStats = []
+			for (const c in this.comments) {
+				if (c) {
+					const reaction = this.comments[c].emotion as keyof typeof faces
+					if (reaction in faces) {
+						const f = faces[reaction]
+						const i = this.faceStats.findIndex((x) => x.face === f)
+						if (i > -1) {
+							// Not the first entry
+							this.faceStats[i].count++
+						} else {
+							this.faceStats.push({ face: f, count: 1 })
+						}
+					}
+				}
+			}
+			this.faceStats = _.sortBy(this.faceStats, `count`).reverse()
+		},
+		getStyle(emotionType: string): string {
+			if (feelings.positive.includes(emotionType)) {
+				return `positive`
+			} else if (feelings.negative.includes(emotionType)) {
+				return `negative`
+			} else {
+				return `neutral`
+			}
 		},
 	},
 })
