@@ -28,7 +28,7 @@
 				</div>
 			</div>
 			<!-- Comments Activity -->
-			<div class="pt-5 border-b flex justify-between">
+			<div class="pt-5 pb-2 border-b flex justify-between">
 				<!-- Graph breakdown -->
 				<div></div>
 				<!-- Text stats -->
@@ -59,17 +59,23 @@
 				</div>
 			</div>
 			<!-- Comment Emoitons -->
-			<div class="pt-5 border-b">
+			<div class="pt-5 border-b pb-2">
 				<h6 class="text-sm pb-4 w-full text-center">Comment Emotions</h6>
 				<!-- Row of faces -->
-				<div class="flex flex-row justify-between">
-					<div v-for="f in faceStats" :key="f.face.label" class="flex flex-col w-20">
-						<div class="rounded-lg border flex flex-col p-1" :class="`border-` + getStyle(f.face.label)">
-							<span class="text-xs self-center">{{ f.face.label }}</span>
-							<img :src="f.face.leftImage" :alt="f.face.label" class="w-12 h-12 self-center" />
+				<div class="flex">
+					<button v-show="page > 0" class="focus:outline-none" @click="page = page - 1"><ChevronLeft /></button>
+					<div class="grid grid-cols-6 w-full">
+						<div v-for="f in faceStats.slice(page * 6, page * 6 + 6)" :key="f.face.label" class="flex flex-col w-24">
+							<div class="rounded-lg border flex flex-col p-1" :class="`border-` + getStyle(f.face.label)">
+								<span class="text-xs self-center">{{ f.face.label }}</span>
+								<img :src="f.face.leftImage" :alt="f.face.label" class="w-16 h-16 self-center" />
+							</div>
+							<span class="self-center">{{ ((f.count / getCommentCount(`total`)) * 100).toFixed(1) }}%</span>
 						</div>
-						<span class="self-center">{{ ((f.count / getCommentCount(`total`)) * 100).toFixed(1) }}%</span>
 					</div>
+					<button v-show="6 * page + 6 < faceStats.length" class="focus:outline-none" @click="page = page + 1">
+						<ChevronRight />
+					</button>
 				</div>
 			</div>
 		</article>
@@ -219,6 +225,7 @@ import FlipIcon from '@/components/icons/Flip.vue'
 import CloseIcon from '@/components/icons/X.vue'
 import StatsIcon from '@/components/icons/Stats.vue'
 import ChevronLeft from '@/components/icons/ChevronLeft.vue'
+import ChevronRight from '@/components/icons/ChevronRight.vue'
 
 import { faces, feelings, faceGroupings } from '@/config'
 import { createComment, sendComment, ICommentData, getCommentsOfPost } from '@/backend/comment'
@@ -243,6 +250,7 @@ interface IData {
 	showStats: boolean
 	toggleStats: boolean
 	faceStats: FaceStat[]
+	page: number
 }
 
 export default Vue.extend({
@@ -255,6 +263,7 @@ export default Vue.extend({
 		CloseIcon,
 		StatsIcon,
 		ChevronLeft,
+		ChevronRight,
 	},
 	props: {
 		postCID: {
@@ -290,6 +299,7 @@ export default Vue.extend({
 			showStats: false,
 			toggleStats: false,
 			faceStats: [],
+			page: 0,
 		}
 	},
 	async created() {
