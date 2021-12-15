@@ -111,7 +111,6 @@ export default Vue.extend({
 			limit: this.limit,
 			offset: this.currentOffset,
 			following: this.$store.state.session.id,
-			reposts: true,
 		})
 		// Fetch my reposts
 		await this.getReposts(this.$store.state.session.id).then((res) => {

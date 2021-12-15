@@ -194,33 +194,14 @@ export interface IGetPostsOptions {
 	offset?: number
 	limit?: number
 	following?: string
-	reposts?: boolean
 }
 
-export interface IGetPostsAndRepostsOptions extends IGetPostsOptions {
-	reposts: true
-}
-
-export interface IGetPostsOnlyOptions extends IGetPostsOptions {
-	reposts?: false
-}
-
-export async function getPosts(
-	filter: { category?: string; authorID?: string; tag?: string; bookmarkedBy?: string },
-	bookmarker: string,
-	options: IGetPostsOnlyOptions,
-): Promise<IPostResponse[]>
-export async function getPosts(
-	filter: { category?: string; authorID?: string; tag?: string; bookmarkedBy?: string },
-	bookmarker: string,
-	options: IGetPostsAndRepostsOptions,
-): Promise<IRepostResponse[]>
 export async function getPosts(
 	filter: { category?: string; authorID?: string; tag?: string; bookmarkedBy?: string },
 	bookmarker: string,
 	options: IGetPostsOptions,
 ): Promise<IPostResponse[] | IRepostResponse[]> {
-	const { sort, offset = 0, limit = 10, following, reposts } = options
+	const { sort, offset = 0, limit = 10, following } = options
 	if (sort === `FOLLOWING` && !following) {
 		throw new Error(`No following provided`)
 	}
@@ -231,7 +212,6 @@ export async function getPosts(
 			...(following && sort === `FOLLOWING` ? { following } : {}),
 			offset,
 			limit,
-			reposts,
 			bookmarker,
 		},
 	})
