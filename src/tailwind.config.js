@@ -27,7 +27,7 @@ module.exports = {
         h6: [`0.67em`, `1rem`],
         p: [`17.6px`, `28.6px`],
       },
-        colors: {
+      colors: {
         primary: '#2E556A', // Dark Teal
         secondary: '#7097AC', // Moss Teal
         teal: '#216B6A', //Teal
@@ -44,6 +44,7 @@ module.exports = {
         lightAuthorCard: '#E5E7EB',
         darkAuthorCard: '#777777',
         connectGreen: '#72D591',
+        connectOrange: '#F0B785',
         selectedBlue: '#0020ff',
         neutralLightest: '#F6F6F6',
 

@@ -49,7 +49,7 @@ export default Vue.extend({
 		this.bookmarks = await getPosts({ bookmarkedBy: this.$store.state.session.id }, this.$store.state.session.id, {
 			reposts: false,
 		})
-		this.bookmarks = this.bookmarks.slice(0, 2)
+		this.bookmarks = this.bookmarks.reverse().slice(0, 2)
 		this.bookmarks.forEach((p: IPostResponse) => {
 			if (p.post.featuredPhotoCID) {
 				getPhotoFromIPFS(p.post.featuredPhotoCID).then((res) => {

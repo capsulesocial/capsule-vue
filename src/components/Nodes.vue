@@ -4,8 +4,14 @@
 		<span class="text-sm mr-1 text-gray5">{{ nodes }} peered nodes</span>
 		<CapsuleIcon :shrink="true" />
 		<span class="flex h-3 w-3">
-			<span class="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-connectGreen opacity-75"></span>
-			<span class="relative inline-flex rounded-full h-3 w-3 bg-connectGreen"></span>
+			<span
+				class="animate-ping absolute inline-flex h-3 w-3 rounded-full opacity-75"
+				:class="nodes > 5 ? `bg-connectGreen` : `bg-connectOrange`"
+			></span>
+			<span
+				class="relative inline-flex rounded-full h-3 w-3"
+				:class="nodes > 5 ? `bg-connectGreen` : `bg-connectOrange`"
+			></span>
 		</span>
 	</div>
 </template>
