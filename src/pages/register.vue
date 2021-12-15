@@ -195,6 +195,7 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			id: ``,
+			// idSet: false,
 			phoneNumber: ``,
 			otp: ``,
 			torus: new DirectWebSdk({
@@ -350,7 +351,7 @@ export default Vue.extend({
 			await this.checkFunds()
 			this.isLoading = false
 		},
-		loginOrRegister(privateKey: string) {
+		async loginOrRegister(privateKey: string) {
 			if (this.username) {
 				return login(this.username, privateKey)
 			}
@@ -359,9 +360,14 @@ export default Vue.extend({
 				this.$toastError(`ID did not pass quality rules`)
 				return null
 			}
-			return register(this.id, privateKey)
+			const registerResult = await register(this.id, privateKey)
+			if (`error` in registerResult) {
+				this.$toastError(registerResult.error)
+				return null
+			}
+			return registerResult
 		},
-		registerWallet() {
+		async registerWallet() {
 			if (!this.accountId) {
 				this.$toastError(`Unexpected condition`)
 				return null
@@ -373,7 +379,13 @@ export default Vue.extend({
 				return null
 			}
 
-			return registerNearWallet(this.id, this.accountId)
+			const registerResult = await registerNearWallet(this.id, this.accountId)
+			if (`error` in registerResult) {
+				this.$toastError(registerResult.error)
+				return null
+			}
+
+			return registerResult
 		},
 		async verify() {
 			try {
@@ -384,6 +396,8 @@ export default Vue.extend({
 				// Login
 				const res = await this.loginOrRegister(this.userInfo.privateKey)
 				if (!res) {
+					// Next line ensures multiple attempts to pick a username
+					this.isLoading = false
 					return
 				}
 				const { profile, cid } = res
@@ -411,6 +425,8 @@ export default Vue.extend({
 				// Register
 				const res = await this.registerWallet()
 				if (!res) {
+					// Next line ensures multiple attempts to pick a username
+					this.isLoading = false
 					return
 				}
 				const { profile, cid } = res
