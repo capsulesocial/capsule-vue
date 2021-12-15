@@ -24,9 +24,9 @@ async function authUser(privateKey: string) {
 	const accountId = getAccountIdFromPrivateKey(privateKey)
 	const { sk } = getED25519Key(privateKey)
 
-	setNearPrivateKey(sk, accountId)
+	await setNearPrivateKey(sk, accountId)
 	// Reinitialise Smart Contract API
-	await initContract(accountId)
+	initContract(accountId)
 	window.localStorage.setItem(`accountId`, accountId)
 }
 
