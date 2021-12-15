@@ -28,12 +28,28 @@
 				</div>
 			</div>
 			<!-- Comments Activity -->
-			<div class="pt-5 pb-2 border-b flex justify-between">
+			<div class="border-b flex justify-between h-48">
 				<!-- Graph breakdown -->
-				<div></div>
+				<div class="flex flex-row h-full self-end ml-5">
+					<!-- Positive -->
+					<span
+						class="bg-positive w-6 self-end rounded-t-full"
+						:style="`height: ` + (getCommentCount(`positive`) / getCommentCount(`total`)) * 100 + `%`"
+					></span>
+					<!-- Neutral -->
+					<span
+						class="bg-neutral w-6 self-end rounded-t-full mx-2"
+						:style="`height: ` + (getCommentCount(`neutral`) / getCommentCount(`total`)) * 100 + `%`"
+					></span>
+					<!-- Negative -->
+					<span
+						class="bg-negative w-6 self-end rounded-t-full"
+						:style="`height: ` + (getCommentCount(`negative`) / getCommentCount(`total`)) * 100 + `%`"
+					></span>
+				</div>
 				<!-- Text stats -->
-				<div class="flex flex-col w-1/2">
-					<h6 class="text-sm pb-4">Comment Activity</h6>
+				<div class="flex flex-col w-1/2 pt-5">
+					<h6 class="text-sm pb-2">Comment Activity</h6>
 					<!-- Bookmarks Count -->
 					<div class="flex flex-row">
 						<div class="flex flex-col pr-4">
