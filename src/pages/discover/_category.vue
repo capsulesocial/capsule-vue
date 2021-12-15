@@ -233,11 +233,10 @@ export default Vue.extend({
 	opacity: 1;
 }
 .titlecollapsed {
-	position: relative;
 	transform: translate3d(35px, -31px, 0px);
 	font-size: 1.5rem;
 	color: #2e556a;
-	padding-top: 16px;
+	line-height: 64px;
 }
 .titlenotcollapsed {
 	transform: translate3d(0, 0, 0);
