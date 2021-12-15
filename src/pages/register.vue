@@ -137,6 +137,7 @@ import { mapMutations } from 'vuex'
 import DirectWebSdk, { TorusLoginResponse } from '@toruslabs/customauth'
 import 'intl-tel-input/build/css/intlTelInput.css'
 import intlTelInput from 'intl-tel-input'
+import axios from 'axios'
 
 import CapsuleIcon from '@/components/icons/Capsule.vue'
 import DiscordIcon from '@/components/icons/brands/Discord.vue'
@@ -324,11 +325,8 @@ export default Vue.extend({
 			this.isLoading = false
 		},
 		async validateOTP() {
-			if (!this.$qualityPhoneNumber(this.phoneNumber)) {
-				throw new Error(`Invalid phone number`)
-			}
-
 			if (this.otp.length !== 6) {
+				this.$toastError(`OTP should have 6 digits`)
 				return
 			}
 
@@ -337,7 +335,17 @@ export default Vue.extend({
 			}
 
 			this.isLoading = true
-			await requestSponsor(this.phoneNumber, this.otp, this.accountId)
+			try {
+				await requestSponsor(this.phoneNumber, this.otp, this.accountId)
+			} catch (err) {
+				if (axios.isAxiosError(err) && err.response) {
+					this.otp = ``
+					this.$toastError(err.response.data.error)
+					this.isLoading = false
+					return
+				}
+				throw err
+			}
 			await this.checkFunds()
 			this.isLoading = false
 		},
