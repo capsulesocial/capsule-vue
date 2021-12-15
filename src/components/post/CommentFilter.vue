@@ -1,8 +1,6 @@
 <template>
 	<div class="flex relative items-center">
 		<!-- Comment filter -->
-		<button class="text-primary font-bold font-sans">Statistics</button>
-		<span class="px-2 text-xl font-sans">|</span>
 		<h6>Sort by:</h6>
 		<button
 			class="toggle focus:outline-none flex justify-between items-center border rounded-lg px-4 ml-4 text-sm shadow-lg w-32"
