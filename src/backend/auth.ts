@@ -24,35 +24,35 @@ async function authUser(privateKey: string) {
 	const accountId = getAccountIdFromPrivateKey(privateKey)
 	const { sk } = getED25519Key(privateKey)
 
-	setNearPrivateKey(sk, accountId)
+	await setNearPrivateKey(sk, accountId)
 	// Reinitialise Smart Contract API
-	await initContract(accountId)
+	initContract(accountId)
 	window.localStorage.setItem(`accountId`, accountId)
 }
 
 // POST newly created account to IPFS
-export async function register(id: string, privateKey: string): Promise<IAuthResult> {
+export async function register(id: string, privateKey: string): Promise<IAuthResult | { error: string }> {
 	await authUser(privateKey)
 
 	const profile = createDefaultProfile(id)
 	const [cid, userSetStatus] = await Promise.all([addProfileToIPFS(profile), setUserInfoNEAR(id)])
 
-	if (!userSetStatus.success) {
-		throw new Error(userSetStatus.error)
+	if (userSetStatus.error) {
+		return { error: userSetStatus.error }
 	}
 
 	return { profile, cid }
 }
 
-export async function registerNearWallet(id: string, accountId: string): Promise<IAuthResult> {
+export async function registerNearWallet(id: string, accountId: string): Promise<IAuthResult | { error: string }> {
 	initContract(accountId)
 	window.localStorage.setItem(`accountId`, accountId)
 
 	const profile = createDefaultProfile(id)
 	const [cid, userSetStatus] = await Promise.all([addProfileToIPFS(profile), setUserInfoNEAR(id)])
 
-	if (!userSetStatus.success) {
-		throw new Error(userSetStatus.error)
+	if (userSetStatus.error) {
+		return { error: userSetStatus.error }
 	}
 
 	return { profile, cid }

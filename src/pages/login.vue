@@ -94,7 +94,7 @@ import FileIcon from '@/components/icons/File.vue'
 
 import { MutationType, createSessionFromProfile, namespace as sessionStoreNamespace } from '~/store/session'
 
-import { getAccountIdFromPrivateKey, login, loginNearAccount, register } from '@/backend/auth'
+import { getAccountIdFromPrivateKey, login, loginNearAccount } from '@/backend/auth'
 import { getUsernameNEAR } from '@/backend/near'
 import { torusVerifiers, TorusVerifiers } from '@/backend/utilities/config'
 
@@ -178,29 +178,21 @@ export default Vue.extend({
 				this.isLoading = false
 			}
 		},
-		loginOrRegister(privateKey: string) {
-			if (this.username) {
-				return login(this.username, privateKey)
-			}
-			const idCheck = this.$qualityID(this.id)
-			if (!idCheck) {
-				this.$toastError(`ID did not pass quality rules`)
-				return null
-			}
-			return register(this.id, privateKey)
-		},
 		async verify() {
 			try {
 				if (!this.userInfo || !this.accountId) {
 					throw new Error(`Unexpected condition!`)
 				}
 				this.isLoading = true
-				// Login
-				const res = await this.loginOrRegister(this.userInfo.privateKey)
-				if (!res) {
+
+				if (!this.username) {
+					this.$toastWarning(`looks like you don't have an account`)
+					this.$router.push(`/register`)
 					return
 				}
-				const { profile, cid } = res
+
+				// Login
+				const { profile, cid } = await login(this.username, this.userInfo.privateKey)
 				const account = createSessionFromProfile(cid, profile)
 				this.changeCID(cid)
 				this.changeID(account.id)
@@ -230,12 +222,7 @@ export default Vue.extend({
 				}
 				this.isLoading = true
 
-				const res = await loginNearAccount(this.username, this.privateKey, this.accountIdInput)
-				if (!res) {
-					return
-				}
-
-				const { profile, cid } = res
+				const { profile, cid } = await loginNearAccount(this.username, this.privateKey, this.accountIdInput)
 				const account = createSessionFromProfile(cid, profile)
 				this.changeCID(cid)
 				this.changeID(account.id)

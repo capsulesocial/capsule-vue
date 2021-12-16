@@ -137,6 +137,7 @@ import { mapMutations } from 'vuex'
 import DirectWebSdk, { TorusLoginResponse } from '@toruslabs/customauth'
 import 'intl-tel-input/build/css/intlTelInput.css'
 import intlTelInput from 'intl-tel-input'
+import axios from 'axios'
 
 import CapsuleIcon from '@/components/icons/Capsule.vue'
 import DiscordIcon from '@/components/icons/brands/Discord.vue'
@@ -324,11 +325,8 @@ export default Vue.extend({
 			this.isLoading = false
 		},
 		async validateOTP() {
-			if (!this.$qualityPhoneNumber(this.phoneNumber)) {
-				throw new Error(`Invalid phone number`)
-			}
-
 			if (this.otp.length !== 6) {
+				this.$toastError(`OTP should have 6 digits`)
 				return
 			}
 
@@ -337,11 +335,21 @@ export default Vue.extend({
 			}
 
 			this.isLoading = true
-			await requestSponsor(this.phoneNumber, this.otp, this.accountId)
+			try {
+				await requestSponsor(this.phoneNumber, this.otp, this.accountId)
+			} catch (err) {
+				if (axios.isAxiosError(err) && err.response) {
+					this.otp = ``
+					this.$toastError(err.response.data.error)
+					this.isLoading = false
+					return
+				}
+				throw err
+			}
 			await this.checkFunds()
 			this.isLoading = false
 		},
-		loginOrRegister(privateKey: string) {
+		async loginOrRegister(privateKey: string) {
 			if (this.username) {
 				return login(this.username, privateKey)
 			}
@@ -350,9 +358,14 @@ export default Vue.extend({
 				this.$toastError(`ID did not pass quality rules`)
 				return null
 			}
-			return register(this.id, privateKey)
+			const registerResult = await register(this.id, privateKey)
+			if (`error` in registerResult) {
+				this.$toastError(registerResult.error)
+				return null
+			}
+			return registerResult
 		},
-		registerWallet() {
+		async registerWallet() {
 			if (!this.accountId) {
 				this.$toastError(`Unexpected condition`)
 				return null
@@ -364,7 +377,13 @@ export default Vue.extend({
 				return null
 			}
 
-			return registerNearWallet(this.id, this.accountId)
+			const registerResult = await registerNearWallet(this.id, this.accountId)
+			if (`error` in registerResult) {
+				this.$toastError(registerResult.error)
+				return null
+			}
+
+			return registerResult
 		},
 		async verify() {
 			try {
@@ -375,6 +394,8 @@ export default Vue.extend({
 				// Login
 				const res = await this.loginOrRegister(this.userInfo.privateKey)
 				if (!res) {
+					// Next line ensures multiple attempts to pick a username
+					this.isLoading = false
 					return
 				}
 				const { profile, cid } = res
@@ -402,6 +423,8 @@ export default Vue.extend({
 				// Register
 				const res = await this.registerWallet()
 				if (!res) {
+					// Next line ensures multiple attempts to pick a username
+					this.isLoading = false
 					return
 				}
 				const { profile, cid } = res
