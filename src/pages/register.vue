@@ -195,7 +195,6 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			id: ``,
-			// idSet: false,
 			phoneNumber: ``,
 			otp: ``,
 			torus: new DirectWebSdk({
