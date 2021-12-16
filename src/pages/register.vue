@@ -78,7 +78,6 @@
 									id="phoneNumber"
 									v-model="otp"
 									type="text"
-									autocomplete="one-time-code"
 									placeholder=""
 									class="rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full focus:outline-none focus:border-primary text-primary font-sans bg-gray2"
 								/>
