@@ -61,7 +61,7 @@ async function createIPFSInterface(): Promise<IPFSInterface> {
 	}
 
 	const sendJSONData = async <T>(content: T) => {
-		const cid = await node.dag.put(content, { format: `dag-cbor`, hashAlg: `sha2-256` })
+		const cid = await node.dag.put(content)
 		return cid.toString()
 	}
 
