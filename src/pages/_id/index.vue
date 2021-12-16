@@ -82,7 +82,6 @@ export default Vue.extend({
 					offset: this.currentOffset,
 					limit: this.limit,
 					following: this.$store.state.session.id,
-					reposts: false,
 				})
 				if (res.length === 0) {
 					const container = this.$parent.$refs.scrollContainer as HTMLElement

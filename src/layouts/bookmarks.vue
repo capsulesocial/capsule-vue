@@ -125,7 +125,7 @@ export default Vue.extend({
 			this.posts = await getPosts(
 				{ category, bookmarkedBy: this.$store.state.session.id },
 				this.$store.state.session.id,
-				{ reposts: false },
+				{},
 			)
 		},
 	},
