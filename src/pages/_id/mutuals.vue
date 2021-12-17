@@ -1,10 +1,11 @@
 <template>
-	<section v-if="profile !== null" class="p-6">
-		<article>
+	<section class="p-6">
+		<article v-if="profiles !== []">
 			<div v-for="p in profiles" :key="p.id">
 				<ProfilePreview :profile="p" :updateFollowers="updateFollowers" class="pb-4" />
 			</div>
 		</article>
+		<article v-else>No mutual followers</article>
 	</section>
 </template>
 
