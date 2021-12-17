@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { capsuleOrbit } from './utilities/config'
+import { nodeUrl } from './utilities/config'
 import { signContent } from './utilities/keys'
 import { uint8ArrayToHexString } from './utilities/helpers'
 import cache from './utilities/caching'
@@ -25,14 +25,14 @@ export async function followChange(action: `FOLLOW` | `UNFOLLOW`, self: string, 
 		throw new Error(`Comment signing failed`)
 	}
 
-	await axios.post(`${capsuleOrbit}/follow`, {
+	await axios.post(`${nodeUrl()}/follow`, {
 		event: data,
 		sig: uint8ArrayToHexString(signature),
 	})
 }
 
 async function _getFollowersAndFollowing(user: string): Promise<{ followers: Set<string>; following: Set<string> }> {
-	const response = await axios.get(`${capsuleOrbit}/follow/${user}`)
+	const response = await axios.get(`${nodeUrl()}/follow/${user}`)
 
 	const { followers, following } = response.data.data
 

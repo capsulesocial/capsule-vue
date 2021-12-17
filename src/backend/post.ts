@@ -3,7 +3,7 @@ import axios from 'axios'
 import { signContent } from './utilities/keys'
 import ipfs from './utilities/ipfs'
 import { isError, uint8ArrayToHexString } from './utilities/helpers'
-import { capsuleOrbit, capsuleServer, sigValidity } from './utilities/config'
+import { nodeUrl, capsuleServer, sigValidity } from './utilities/config'
 import { IRepost } from './reposts'
 import { ICommentData } from './comment'
 import { decryptData, encryptAndSignData } from './crypto'
@@ -112,7 +112,7 @@ export async function sendRegularPost(data: IRegularPost): Promise<string> {
 	}
 
 	const cid = await ipfs().sendJSONData(data)
-	await axios.post(`${capsuleOrbit}/content`, {
+	await axios.post(`${nodeUrl()}/content`, {
 		cid,
 		data,
 		sig: uint8ArrayToHexString(signature),
@@ -127,7 +127,7 @@ export async function sendEncryptedPost(data: IEncryptedPost): Promise<string> {
 
 	const cid = await ipfs().sendJSONData(post)
 	await axios.post(`${capsuleServer}/content`, { key, data: post, counter, sig, cid })
-	await axios.post(`${capsuleOrbit}/content`, {
+	await axios.post(`${nodeUrl()}/content`, {
 		cid,
 		data: post,
 		sig,
@@ -205,7 +205,7 @@ export async function getPosts(
 	if (sort === `FOLLOWING` && !following) {
 		throw new Error(`No following provided`)
 	}
-	const res = await axios.get(`${capsuleOrbit}/content`, {
+	const res = await axios.get(`${nodeUrl()}/content`, {
 		params: {
 			...filter,
 			sort,
@@ -219,11 +219,11 @@ export async function getPosts(
 }
 
 export async function getTags(): Promise<string[]> {
-	const res = await axios.get(`${capsuleOrbit}/content/tags`)
+	const res = await axios.get(`${nodeUrl()}/content/tags`)
 	return res.data.data
 }
 
 export async function getOnePost(cid: string, bookmarker: string): Promise<IPostResponse> {
-	const res = await axios.get(`${capsuleOrbit}/content/${cid}`, { params: { bookmarker } })
+	const res = await axios.get(`${nodeUrl()}/content/${cid}`, { params: { bookmarker } })
 	return res.data.data
 }

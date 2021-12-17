@@ -12,6 +12,15 @@ export const sigValidity = 5 * 60000
 
 const nearNetwork = process.env.NEAR_NETWORK || `testnet`
 
+export function nodeUrl() {
+	const preferredNodeUrl = window.localStorage.getItem(`preferredNodeUrl`)
+	if (!preferredNodeUrl) {
+		return capsuleOrbit
+	}
+
+	return preferredNodeUrl + `/orbit`
+}
+
 // Environment variables only for NEAR localnet network
 const homeDir = process.env.HOME_DIR || `/home/capsule`
 const nearNodeUrl = process.env.NEAR_NODE_URL || `http://localhost:3030`
