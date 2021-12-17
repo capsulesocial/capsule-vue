@@ -102,7 +102,13 @@
 				style="width: 748px"
 				:style="`min-height: calc(100vh - ` + padding + ` - 90px); height: calc(100vh - ` + padding + ` - 90px)`"
 			>
-				<nuxt-child :profile="visitProfile" :updateFollowers="updateFollowers" :followers="followers" />
+				<nuxt-child
+					:profile="visitProfile"
+					:updateFollowers="updateFollowers"
+					:followers="followers"
+					:mutuals="mutuals"
+					:mutualProfiles="mutualProfiles"
+				/>
 			</div>
 		</div>
 		<!-- Settings popup -->
@@ -176,6 +182,16 @@ export default Vue.extend({
 		userIsFollowed: {
 			type: Boolean,
 			required: true,
+		},
+		mutuals: {
+			type: Set,
+			default: new Set(),
+		},
+		mutualProfiles: {
+			type: Array,
+			default: () => {
+				return []
+			},
 		},
 	},
 	data(): IData {

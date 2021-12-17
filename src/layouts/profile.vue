@@ -21,6 +21,8 @@
 							:toggleFriend="toggleFriend"
 							:updateFollowers="updateFollowers"
 							:userIsFollowed="userIsFollowed"
+							:mutuals="mutuals"
+							:mutualProfiles="mutualProfiles"
 						/>
 						<!-- Widgets -->
 						<aside
@@ -28,6 +30,11 @@
 							style="margin-left: 755px; width: 485px; min-height: calc(100vh - 70px); height: calc(100vh - 70px)"
 						>
 							<ProfileWidget :location="visitProfile.location" />
+							<MutualFollowersWidget
+								v-if="this.$route.params.id !== this.$store.state.session.id"
+								:mutuals="mutuals"
+								:mutualProfiles="mutualProfiles"
+							/>
 							<FollowersWidget v-if="followers.size > 0" :followers="followers" :updateFollowers="updateFollowers" />
 							<Footer />
 						</aside>
@@ -46,6 +53,7 @@
 import Vue from 'vue'
 import ProfileWidget from '@/components/widgets/Profile.vue'
 import FollowersWidget from '@/components/widgets/Followers.vue'
+import MutualFollowersWidget from '@/components/widgets/MutualFollowers.vue'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 
@@ -57,12 +65,15 @@ import { getUserInfoNEAR } from '@/backend/near'
 interface IData {
 	myProfile: Profile
 	myAvatar: string | ArrayBuffer | null
+	myFollowing: Set<string>
 	visitProfile: Profile
 	visitAvatar: string | ArrayBuffer | null
 	followers: Set<string>
 	following: Set<string>
 	userIsFollowed: boolean
 	noProfileFound: boolean
+	mutuals: Set<string>
+	mutualProfiles: Array<Profile>
 }
 
 export default Vue.extend({
@@ -71,17 +82,21 @@ export default Vue.extend({
 		FollowersWidget,
 		Header,
 		Footer,
+		MutualFollowersWidget,
 	},
 	data(): IData {
 		return {
 			myProfile: createDefaultProfile(this.$store.state.session.id),
 			myAvatar: null,
+			myFollowing: new Set(),
 			visitProfile: createDefaultProfile(this.$route.params.id),
 			visitAvatar: null,
 			followers: new Set(),
 			following: new Set(),
 			userIsFollowed: false,
 			noProfileFound: false,
+			mutuals: new Set(),
+			mutualProfiles: [],
 		}
 	},
 	watch: {
@@ -122,9 +137,15 @@ export default Vue.extend({
 			})
 		}
 		const { followers, following } = await getFollowersAndFollowing(this.$route.params.id)
+		const myConnections = await getFollowersAndFollowing(this.$store.state.session.id)
+		this.myFollowing = myConnections.following
 		this.followers = followers
 		this.following = following
 		this.userIsFollowed = followers.has(this.$store.state.session.id)
+
+		// Get mutual followers list
+		this.mutuals = new Set([...followers].filter((p) => this.myFollowing.has(p)))
+		this.mutuals.forEach(this.getMutualProfiles)
 	},
 	methods: {
 		async toggleFriend() {
@@ -151,6 +172,12 @@ export default Vue.extend({
 				}
 
 				throw err
+			}
+		},
+		async getMutualProfiles(id: string) {
+			const profile = await getProfile(id)
+			if (profile) {
+				this.mutualProfiles.push(profile)
 			}
 		},
 	},
