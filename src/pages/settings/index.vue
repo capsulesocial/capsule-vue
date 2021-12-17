@@ -188,7 +188,6 @@ export default Vue.extend({
 			return true
 		},
 		async updateSettings() {
-			console.log(this.nodeURL)
 			// if (!/((http|https?):\/\/)?(www\.)?[a-z0-9\-.]{3,}\.[a-z]{1-10}$/.test(this.nodeURL)) {
 			// 	this.$toastError(`Invalid URL.`)
 			// 	return
