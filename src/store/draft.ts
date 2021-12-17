@@ -4,16 +4,27 @@ import { Tag, Post } from '@/backend/post'
 
 export const namespace = `draft`
 
-type DraftPost = Omit<Post, `authorID` | `timestamp`>
+type DraftPost = Omit<Post, `authorID`>
 
-export const state = (): DraftPost => ({
-	title: ``,
-	subtitle: ``,
-	content: ``,
-	featuredPhotoCID: null,
-	featuredPhotoCaption: null,
-	tags: [],
-	category: ``,
+interface DraftState {
+	drafts: Array<DraftPost>
+	activeIndex: number
+}
+
+export const state = (): DraftState => ({
+	drafts: [
+		{
+			title: ``,
+			subtitle: ``,
+			content: ``,
+			featuredPhotoCID: null,
+			featuredPhotoCaption: null,
+			tags: [],
+			category: ``,
+			timestamp: 0,
+		},
+	],
+	activeIndex: 0,
 })
 
 export const getters: GetterTree<Post, RootState> = {}
@@ -27,44 +38,68 @@ export const MutationType = {
 	ADD_TAG: `addTag`,
 	REMOVE_TAG: `removeTag`,
 	UPDATE_CATEGORY: `updateCategory`,
+	SET_ACTIVE_DRAFT: `setActiveDraft`,
+	CREATE_DRAFT: `createDraft`,
 	RESET: `reset`,
 }
 
-export const mutations: MutationTree<DraftPost> = {
+export const mutations: MutationTree<DraftState> = {
 	[MutationType.UPDATE_TITLE]: (state, newTitle: string) => {
-		state.title = newTitle
+		state.drafts[state.activeIndex].title = newTitle
 	},
 	[MutationType.UPDATE_SUBTITLE]: (state, newSubtitle: string) => {
-		state.subtitle = newSubtitle
+		state.drafts[state.activeIndex].subtitle = newSubtitle
 	},
 	[MutationType.UPDATE_CONTENT]: (state, newContent: string) => {
-		state.content = newContent
+		state.drafts[state.activeIndex].content = newContent
 	},
 	[MutationType.UPDATE_FEATURED_PHOTO_CID]: (state, newFeaturedPhotoCID: string) => {
-		state.featuredPhotoCID = newFeaturedPhotoCID
+		state.drafts[state.activeIndex].featuredPhotoCID = newFeaturedPhotoCID
 	},
-	[MutationType.UPDATE_FEATURED_PHOTO_CAPTION]: (state, newFeaturedPhotoCaption: string) => {
-		state.featuredPhotoCaption = newFeaturedPhotoCaption
+	[MutationType.UPDATE_FEATURED_PHOTO_CAPTION]: (state, newFeaturedPhotoCaption) => {
+		state.drafts[state.activeIndex].featuredPhotoCaption = newFeaturedPhotoCaption
 	},
 	[MutationType.ADD_TAG]: (state, newTag: Tag) => {
-		state.tags.push(newTag)
+		state.drafts[state.activeIndex].tags.push(newTag)
 	},
 	[MutationType.REMOVE_TAG]: (state, oldTag: Tag) => {
-		const index = state.tags.indexOf(oldTag)
+		const index = state.drafts[state.activeIndex].tags.indexOf(oldTag)
 		if (index > -1) {
-			state.tags.splice(index, 1)
+			state.drafts[state.activeIndex].tags.splice(index, 1)
 		}
 	},
 	[MutationType.UPDATE_CATEGORY]: (state, newCategory: string) => {
-		state.category = newCategory
+		state.drafts[state.activeIndex].category = newCategory
 	},
-	[MutationType.RESET]: (state: DraftPost) => {
-		state.title = ``
-		state.subtitle = ``
-		state.content = ``
-		state.featuredPhotoCID = null
-		state.featuredPhotoCaption = null
-		state.tags = []
-		state.category = ``
+	[MutationType.SET_ACTIVE_DRAFT]: (state, index: number) => {
+		state.activeIndex = index
+	},
+	[MutationType.CREATE_DRAFT]: (state) => {
+		state.drafts.push({
+			title: ``,
+			subtitle: ``,
+			content: ``,
+			featuredPhotoCID: null,
+			featuredPhotoCaption: null,
+			tags: [],
+			category: ``,
+			timestamp: 0,
+		})
+		state.activeIndex = state.drafts.length - 1
+	},
+	[MutationType.RESET]: (state) => {
+		state.drafts.splice(state.activeIndex, 1)
+		if (state.drafts.length === 0) {
+			state.drafts.push({
+				title: ``,
+				subtitle: ``,
+				content: ``,
+				featuredPhotoCID: null,
+				featuredPhotoCaption: null,
+				tags: [],
+				category: ``,
+				timestamp: 0,
+			})
+		}
 	},
 }

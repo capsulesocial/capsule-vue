@@ -57,10 +57,16 @@
 				<div class="flex justify-between items-center">
 					<div v-if="category" class="flex flex-row items-center">
 						<img
-							:src="require(`@/assets/images/category/` + $store.state.draft.category + `/icon.webp`)"
+							:src="
+								require(`@/assets/images/category/` +
+									$store.state.draft.drafts[$store.state.draft.activeIndex].category +
+									`/icon.webp`)
+							"
 							class="hotzone w-10 h-10 mr-2"
 						/>
-						<span class="text-base text-primary">{{ $store.state.draft.category }}</span>
+						<span class="text-base text-primary">{{
+							$store.state.draft.drafts[$store.state.draft.activeIndex].category
+						}}</span>
 					</div>
 					<div v-else>Select a Category</div>
 					<ChevronUp v-if="showCategoryDropdown" />
@@ -102,7 +108,7 @@
 			</div>
 			<div class="flex flex-row">
 				<button
-					v-for="t in $store.state.draft.tags"
+					v-for="t in $store.state.draft.drafts[$store.state.draft.activeIndex].tags"
 					:key="t.name"
 					class="flex flex-row items-center z-10 focus:outline-none px-3 py-1 mr-4 mt-2 bg-gray1 rounded-lg"
 					@click="removeTag(t)"
@@ -172,15 +178,17 @@ export default Vue.extend({
 		return {
 			featuredPhoto: null,
 			categoryList: categories,
-			category: this.$store.state.draft.category,
+			category: this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].category,
 			tag: ``,
 			caption: ``,
 			showCategoryDropdown: false,
 		}
 	},
 	mounted() {
-		if (this.$store.state.draft.featuredPhotoCID !== null) {
-			this.featuredPhoto = this.downloadImage(this.$store.state.draft.featuredPhotoCID)
+		if (this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].featuredPhotoCID !== null) {
+			this.featuredPhoto = this.downloadImage(
+				this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].featuredPhotoCID,
+			)
 		}
 	},
 	methods: {
@@ -196,7 +204,7 @@ export default Vue.extend({
 				this.$toastError(`Invalid tag!`)
 				return
 			}
-			const tagList = this.$store.state.draft.tags
+			const tagList = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].tags
 			if (tagList.some((t: Tag) => t.name === this.tag)) {
 				this.$toastWarning(`Duplicate tag!`)
 				return

@@ -40,7 +40,7 @@
 					id="editor"
 					ref="editor"
 					class="max-w-none focus:outline-none p-2 content"
-					v-html="$store.state.draft.content"
+					v-html="$store.state.draft.drafts[$store.state.draft.activeIndex].content"
 				></div>
 			</section>
 		</div>
@@ -75,14 +75,14 @@ export default Vue.extend({
 	},
 	data(): IData {
 		let input: string = ``
-		if (this.$store.state.draft.content !== ``) {
-			input = this.$store.state.draft.content
+		if (this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].content !== ``) {
+			input = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].content
 		} else {
 			input = ``
 		}
 		return {
-			title: this.$store.state.draft.title,
-			subtitle: this.$store.state.draft.subtitle,
+			title: this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].title,
+			subtitle: this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].subtitle,
 			input,
 			// @ts-ignore
 			turndownService: Turndown,
@@ -126,10 +126,10 @@ export default Vue.extend({
 			},
 		})
 		// @ts-ignore
-		this.$refs.title.value = this.$store.state.draft.title
+		this.$refs.title.value = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].title
 		this.handleTitle(null)
 		// @ts-ignore
-		this.$refs.subtitle.value = this.$store.state.draft.subtitle
+		this.$refs.subtitle.value = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].subtitle
 	},
 	beforeDestroy() {
 		this.saveContent()
@@ -176,7 +176,7 @@ export default Vue.extend({
 				this.$toastError(`Subtitle too long!`)
 				return
 			}
-			if (this.$store.state.draft.category === ``) {
+			if (this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].category === ``) {
 				this.$toastError(`Missing category`)
 				return
 			}
@@ -198,11 +198,11 @@ export default Vue.extend({
 				this.title,
 				this.subtitle === `` ? null : this.subtitle,
 				this.turndownService.turndown(clean),
-				this.$store.state.draft.category,
-				this.$store.state.draft.tags,
+				this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].category,
+				this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].tags,
 				this.$store.state.session.id,
-				this.$store.state.draft.featuredPhotoCID,
-				this.$store.state.draft.featuredPhotoCaption,
+				this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].featuredPhotoCID,
+				this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].featuredPhotoCaption,
 			)
 			const cid = await sendRegularPost(p)
 			this.title = ``
