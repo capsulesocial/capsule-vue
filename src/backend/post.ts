@@ -218,6 +218,11 @@ export async function getPosts(
 	return res.data.data
 }
 
+export async function getAmountOfContent(authorID: string): Promise<{ totalPosts: number }> {
+	const res = await axios.get(`${capsuleOrbit}/content/${authorID}?totalPosts=true`)
+	return res.data
+}
+
 export async function getTags(): Promise<string[]> {
 	const res = await axios.get(`${capsuleOrbit}/content/tags`)
 	return res.data.data
