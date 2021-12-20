@@ -340,8 +340,8 @@ export default Vue.extend({
 				// Viewing someone else's post
 				profile = createDefaultProfile(this.post.authorID)
 				const fetchedProfile = await getProfile(this.post.authorID)
-				if (fetchedProfile) {
-					profile = fetchedProfile
+				if (fetchedProfile.profile) {
+					profile = fetchedProfile.profile
 				}
 			}
 		}
@@ -474,7 +474,7 @@ export default Vue.extend({
 		},
 		async getQuoteRepost(postCID: string) {
 			const content = await this.getRegularPost(postCID)
-			const profile = await this.getProfile(content.authorID)
+			const { profile } = await this.getProfile(content.authorID)
 			const q = {
 				content: content.content,
 				timestamp: content.timestamp,

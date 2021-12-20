@@ -37,7 +37,7 @@
 							<!-- Tabs: posts, following, followers -->
 							<div id="stats" class="flex flex-row pt-2 text-sm text-gray6 header-profile">
 								<nuxt-link :to="'/' + $route.params.id" class="text-sm" :class="getStyles(`id-categories`)">
-									<span class="font-bold text-primary">{{ posts.length }}</span>
+									<span class="font-bold text-primary">{{ totalPostsCount }}</span>
 									Posts
 								</nuxt-link>
 								<nuxt-link
@@ -133,11 +133,10 @@ import FriendButton from '@/components/FriendButton.vue'
 import SecondaryButton from '@/components/SecondaryButton.vue'
 import SettingsPopup from '@/components/Settings.vue'
 import BackButton from '@/components/icons/ChevronLeft.vue'
-import { Post } from '@/backend/post'
-import { Profile } from '@/backend/profile'
+import { getProfile, Profile } from '@/backend/profile'
 
 interface IData {
-	posts: Post[]
+	totalPostsCount: number
 	padding: string
 	showSettings: boolean
 	lastScroll: number
@@ -196,7 +195,7 @@ export default Vue.extend({
 	},
 	data(): IData {
 		return {
-			posts: [],
+			totalPostsCount: 0,
 			padding: `0px`,
 			showSettings: false,
 			lastScroll: 0,
@@ -205,6 +204,7 @@ export default Vue.extend({
 	},
 	created() {
 		window.addEventListener(`click`, this.handleClose, false)
+		this.fetchProfile()
 	},
 	mounted() {
 		const topContainer = this.$refs.topContainer as HTMLElement
@@ -384,6 +384,10 @@ export default Vue.extend({
 				bio.classList.add(buttonnotcollapsed)
 			}
 			this.lastScroll = currentScroll
+		},
+		async fetchProfile() {
+			const { totalPostsCount } = await getProfile(this.$route.params.id, true)
+			this.totalPostsCount = totalPostsCount
 		},
 	},
 })

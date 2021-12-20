@@ -72,7 +72,8 @@ export default Vue.extend({
 			this.$router.push(`/`)
 		}
 		// get logged in profile
-		this.profile = await getProfile(this.$store.state.session.id)
+		const { profile } = await getProfile(this.$store.state.session.id)
+		this.profile = profile
 		// Get avatar
 		if (this.profile && this.profile.avatar.length > 1) {
 			getPhotoFromIPFS(this.profile.avatar).then((p) => {

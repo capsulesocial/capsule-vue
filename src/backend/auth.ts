@@ -63,8 +63,8 @@ export async function login(id: string, privateKey: string): Promise<IAuthResult
 
 	let profile = createDefaultProfile(id)
 	const fetchedProfile = await getProfile(id)
-	if (fetchedProfile) {
-		profile = fetchedProfile
+	if (fetchedProfile.profile) {
+		profile = fetchedProfile.profile
 	}
 	const cid = await addProfileToIPFS(profile)
 
@@ -77,7 +77,7 @@ export async function loginNearAccount(id: string, privateKey: string, accountId
 	initContract(accountId)
 	window.localStorage.setItem(`accountId`, accountId)
 
-	const profile = fetchedProfile || createDefaultProfile(id)
+	const profile = fetchedProfile.profile || createDefaultProfile(id)
 	const cid = await addProfileToIPFS(profile)
 
 	return { profile, cid }
