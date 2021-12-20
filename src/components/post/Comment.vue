@@ -1,10 +1,15 @@
 <template>
 	<div class="object-contain">
 		<!-- Component that displays a posted comment -->
-		<div class="flex w-full">
+		<div class="flex w-full mt-4">
 			<div class="flex justify-between items-start mr-4">
 				<span class="rounded-lg px-1 pt-1 flex-shrink-0" :style="getStyle(`bg-`)">
-					<Avatar :avatar="avatar" :authorID="authorID" size="w-12 h-12" />
+					<Avatar
+						:avatar="avatar"
+						:authorID="authorID"
+						size="w-12 h-12"
+						style="margin-top: 2px; margin-left: 2px; margin-right: 2px"
+					/>
 				</span>
 			</div>
 			<!-- Dashed bubble -->
@@ -38,8 +43,8 @@
 						</div>
 					</div>
 				</div>
-				<div class="flex-shrink-0 flex justify-center items-center">
-					<img :src="emotion.leftImage" class="bg-white rounded-full w-32 h-32" />
+				<div class="flex-shrink-0 flex justify-center items-center overflow-hidden">
+					<img :src="emotion.leftImage" class="bg-transparent w-32 h-32 -mb-1 mt-2" />
 				</div>
 			</div>
 		</div>
