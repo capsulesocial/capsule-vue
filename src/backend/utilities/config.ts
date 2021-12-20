@@ -6,7 +6,7 @@ export const capsuleOrbit = process.env.ORBIT_URL || `https://test-node.capsule.
 export const capsuleServer = process.env.CAPSULE_SERVER || `https://test-node.capsule.social/server`
 export const domain = process.env.DOMAIN || `http://localhost:3000`
 export const contractName = process.env.CONTRACT_NAME || `capsule-vue`
-export const sufficientFunds = process.env.SUFFICIENT_ACCOUNT_FUNDS || `98180000000000000000000`
+export const sufficientFunds = process.env.SUFFICIENT_ACCOUNT_FUNDS || `8180000000000000000000`
 // Time-sensitive signatures are valid for 5 minutes
 export const sigValidity = 5 * 60000
 
