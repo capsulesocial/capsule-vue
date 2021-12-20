@@ -160,9 +160,9 @@ export default Vue.extend({
 			} else {
 				// Viewing someone else's post
 				p = createDefaultProfile(this.authorID)
-				const fetchedProfile = await getProfile(this.authorID)
-				if (fetchedProfile) {
-					p = fetchedProfile
+				const { profile } = await getProfile(this.authorID)
+				if (profile) {
+					p = profile
 				}
 			}
 		}

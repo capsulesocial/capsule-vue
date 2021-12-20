@@ -112,7 +112,7 @@ export default Vue.extend({
 			this.$router.push(`/`)
 		}
 
-		const [myProfile, visitProfile, profileExists] = await Promise.all([
+		const [{ profile: myProfile }, { profile: visitProfile }, profileExists] = await Promise.all([
 			getProfile(this.$store.state.session.id),
 			getProfile(this.$route.params.id),
 			this.checkAccountExists(),
@@ -175,7 +175,7 @@ export default Vue.extend({
 			}
 		},
 		async getMutualProfiles(id: string) {
-			const profile = await getProfile(id)
+			const { profile } = await getProfile(id)
 			if (profile) {
 				this.mutualProfiles.push(profile)
 			}

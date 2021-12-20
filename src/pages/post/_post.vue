@@ -262,11 +262,12 @@ export default Vue.extend({
 		// Get author profile
 		this.author = createDefaultProfile(this.post.authorID)
 		getProfile(this.post.authorID).then((p) => {
-			if (p) {
-				this.author = p
+			const { profile } = p
+			if (profile) {
+				this.author = profile
 			}
-			if (p && p.avatar.length > 1) {
-				getPhotoFromIPFS(p.avatar).then((photo) => {
+			if (profile && profile.avatar.length > 1) {
+				getPhotoFromIPFS(profile.avatar).then((photo) => {
 					this.authorAvatar = photo
 				})
 			}
