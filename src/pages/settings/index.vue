@@ -46,17 +46,17 @@
 
 		<!-- Network Tab -->
 		<div v-show="tab === `network`">
-			<h2 class="text-primary font-semibold mb-4 text-sm">OrbitDB</h2>
+			<h2 class="text-primary font-semibold mb-4 text-sm">Capsule Node</h2>
 			<div class="flex flex-row items-center w-full mb-4">
-				<label for="node" class="w-48 font-semibold">Preferred Node URL:</label>
+				<label for="node" class="w-48 font-semibold">Preferred Node:</label>
 				<input
 					id="node"
 					v-model="nodeURL"
 					type="text"
-					:placeholder="$store.state.nodeURL"
+					:placeholder="``"
 					class="flex-grow bg-gray1 text-gray5 placeholder-gray5 rounded-lg px-2 py-1 focus:outline-none"
 				/>
-				<button class="w-48 focus:outline-none" disabled></button>
+				<button class="w-48 focus:outline-none"></button>
 			</div>
 		</div>
 		<!-- Background image, styling tab -->
@@ -116,11 +116,15 @@ export default Vue.extend({
 	},
 	data(): IData {
 		return {
-			nodeURL: this.$store.state.nodeURL,
+			nodeURL: ``,
 			backgroundImage: null,
 		}
 	},
 	created() {
+		const nodeUrl = window.localStorage.getItem(`preferredNodeUrl`)
+		if (nodeUrl) {
+			this.nodeURL = nodeUrl
+		}
 		// Check for dark mode
 		// const prefersDarkMode = window.matchMedia(`(prefers-color-scheme: dark)`).matches
 		// if (prefersDarkMode) {
@@ -161,10 +165,13 @@ export default Vue.extend({
 							this.uploadImage(reader.result, compressedImage)
 						}
 					}
-				} catch (err) {
+				} catch (err: any) {
 					this.$toastError(err)
 				}
 			}
+		},
+		hasChanged() {
+			return this.nodeURL !== ``
 		},
 		async uploadImage(image: string | ArrayBuffer, blobImage: Blob) {
 			const avatarCID = await addPhotoToIPFS(image)
@@ -174,9 +181,6 @@ export default Vue.extend({
 			await this.updateProfile()
 			getProfile(this.$store.state.session.id, true) // Update cached profile
 		},
-		hasChanged() {
-			return this.nodeURL !== ``
-		},
 		async updateProfile() {
 			const backendProfile = getProfileFromSession(this.$store.state.session)
 			const cid = await setProfile(backendProfile)
@@ -184,17 +188,13 @@ export default Vue.extend({
 			return true
 		},
 		async updateSettings() {
-			if (this.hasChanged() === false) {
-				this.$toastWarning(`Nothing to update!`)
-				return
-			}
-			if (this.nodeURL && this.nodeURL !== this.$store.state.session.nodeURL) {
-				if (!/((http|https?):\/\/)?(www\.)?[a-z0-9\-.]{3,}\.[a-z]{3}$/.test(this.nodeURL)) {
-					this.$toastError(`Invalid URL.`)
-					return
-				} else {
-					this.$store.commit(`changeNodeURL`, this.nodeURL)
-				}
+			// if (!/((http|https?):\/\/)?(www\.)?[a-z0-9\-.]{3,}\.[a-z]{1-10}$/.test(this.nodeURL)) {
+			// 	this.$toastError(`Invalid URL.`)
+			// 	return
+			// }
+			if (this.nodeURL !== ``) {
+				window.localStorage.setItem(`preferredNodeUrl`, this.nodeURL)
+				window.location.href = `..`
 			}
 			const profileUpdated = await this.updateProfile()
 			if (profileUpdated) {

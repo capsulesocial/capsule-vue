@@ -2,7 +2,7 @@ import axios from 'axios'
 
 import ipfs from './utilities/ipfs'
 import cache from './utilities/caching'
-import { capsuleOrbit } from './utilities/config'
+import { nodeUrl } from './utilities/config'
 import { signContent } from './utilities/keys'
 import { uint8ArrayToHexString } from './utilities/helpers'
 
@@ -55,7 +55,7 @@ export async function sendProfileServer(
 	sig: Uint8Array,
 ): Promise<{ success: boolean; cid: string }> {
 	try {
-		const response = await axios.post(`${capsuleOrbit}/profile`, {
+		const response = await axios.post(`${nodeUrl()}/profile`, {
 			cid,
 			data,
 			sig: uint8ArrayToHexString(sig),
@@ -76,7 +76,7 @@ export function addProfileToIPFS(content: Profile) {
 }
 
 async function _getProfile(authorID: string) {
-	const response = await axios.get(`${capsuleOrbit}/profile/${authorID}`)
+	const response = await axios.get(`${nodeUrl()}/profile/${authorID}`)
 	if (response.data.data) {
 		return response.data.data as { profile: Profile | null; totalPostsCount: number }
 	}

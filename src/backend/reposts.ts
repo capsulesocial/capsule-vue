@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { signContent } from './utilities/keys'
 import { Algorithm, IRepostResponse } from './post'
-import { capsuleOrbit } from './utilities/config'
+import { nodeUrl } from './utilities/config'
 import { uint8ArrayToHexString } from './utilities/helpers'
 import ipfs from './utilities/ipfs'
 
@@ -19,7 +19,7 @@ export async function sendRepost(authorID: string, postCID: string, content: str
 	}
 
 	const cid = await ipfs().sendJSONData(data)
-	await axios.post(`${capsuleOrbit}/repost`, {
+	await axios.post(`${nodeUrl()}/repost`, {
 		cid,
 		data,
 		sig: uint8ArrayToHexString(signature),
@@ -48,7 +48,7 @@ export async function getReposts(
 		throw new Error(`Following not specified`)
 	}
 
-	const { data } = await axios.get(`${capsuleOrbit}/repost`, {
+	const { data } = await axios.get(`${nodeUrl()}/repost`, {
 		params: {
 			authorID,
 			sort,
