@@ -107,22 +107,43 @@
 			<!-- Bottom overlay with selector -->
 			<div v-show="showEmotions" class="w-full flex flex-row-reverse">
 				<div
-					class="z-10 bg-white flex flex-row justify-between p-5"
+					class="z-10 bg-white flex flex-row justify-between p-5 rounded-tr-lg"
 					:style="$route.name === `post-post` ? `width: 450px` : `width: 406px`"
 					style="margin-bottom: -112px"
 				>
-					<div></div>
-					<h6 class="text-primary text-2xl text-center self-center">How do you feel?</h6>
+					<h6 class="text-primary text-2xl text-center self-center font-semibold">How do you feel?</h6>
 					<div>
-						<button class="p-2 bg-gray1 rounded-full focus:outline-none" @click="showEmotions = false">
+						<button class="p-1 bg-gray1 rounded-full focus:outline-none" @click="showEmotions = false">
 							<CloseIcon />
 						</button>
 					</div>
 				</div>
+				<div
+					class="z-10 bg-white flex flex-row justify-between p-5 rounded-tl-lg"
+					:style="$route.name === `post-post` ? `width: 350px` : `width: 306px`"
+					style="
+						margin-bottom: -112px;
+						background: linear-gradient(#ffffff, rgba(255, 255, 255, 0));
+						pointer-events: none;
+					"
+				></div>
 			</div>
 			<div class="flex items-start">
 				<!-- Comment box Container -->
-				<div class="flex shadow-xl rounded-xl w-full overflow-hidden" :class="showEmotions ? `` : `border p-4`">
+				<!-- <div class="flex justify-between items-start mr-4">
+					<span class="rounded-lg flex-shrink-0" :style="getStyle(`bg-`)">
+						<Avatar
+							:avatar="avatar"
+							:authorID="authorID"
+							size="w-12 h-12"
+							style="margin-top: 2px; margin-left: 2px; margin-right: 2px"
+						/>
+					</span>
+				</div> -->
+				<div
+					class="flex rounded-xl w-full overflow-hidden bg-neutralLightest"
+					:class="showEmotions ? `` : `border border-lightBorder p-4`"
+				>
 					<div class="rounded-xl overflow-hidden w-full" :style="showEmotions ? `height: 20rem` : `height: 10rem`">
 						<div class="flex flex-row">
 							<!-- Front side: Type comment -->
@@ -136,7 +157,7 @@
 											style="width: 126px; height: 126px"
 										/>
 									</span>
-									<span v-else><FlipIcon style="width: 80px; height: 80px" /></span>
+									<span v-else><FlipIcon class="mx-4" style="width: 80px; height: 80px" /></span>
 								</button>
 								<textarea
 									v-model="comment"
@@ -160,45 +181,45 @@
 							<div
 								v-show="showEmotions"
 								ref="scrollContainer"
-								class="w-full overflow-y-scroll bg-white"
-								style="
-									height: 320px;
-									box-shadow: rgba(0, 0, 0, 0.35) 0px -50px 36px -28px inset;
-									scroll-snap-type: y mandatory;
-									scroll-snap-stop: always;
-								"
+								class="w-full overflow-y-scroll bg-white px-6"
+								style="height: 320px; scroll-snap-type: y mandatory; scroll-snap-stop: always"
 							>
 								<!-- Middle selector area -->
 								<div
-									class="absolute rounded-lg bg-primary bg-opacity-25"
+									class="absolute rounded-lg bg-positive bg-opacity-25 p-2"
 									style="height: 96px; margin-top: 112px"
-									:style="$route.name === `post-post` ? `width: 760px` : `width: 699px`"
+									:style="$route.name === `post-post` ? `width: 716px` : `width: 655px`"
 								></div>
 								<!-- Faces grid -->
-								<div style="padding-bottom: 112px; padding-top: 112px">
+								<div class="relative" style="padding-bottom: 120px; padding-top: 120px">
 									<div
 										v-for="row in faceGroupings"
 										:key="row[0].label + row[1].label + row[2].label"
-										class="flex flex-row w-full relative"
+										class="flex flex-row w-full relative px-2"
 										style="scroll-snap-align: center"
 									>
 										<button
 											v-for="face in row"
 											:key="face.label"
-											class="rounded-lg focus:outline-none"
+											class="rounded-lg focus:outline-none border-2 border-transparent outline-none"
 											:class="selectedEmotion.label === face.label ? `border-2 border-primary` : ``"
+											style="transition: all 0.3s ease-in-out"
 											@click="setEmotion(face)"
 										>
-											<img :src="face.leftImage" :alt="face.label" class="w-24 h-24" />
+											<img :src="face.leftImage" :alt="face.label" class="w-20 h-20" />
 										</button>
-										<p
+										<button
 											v-for="face in row"
 											:key="face.label + face.label"
-											class="flex flex-grow justify-center items-center capitalize"
-											:class="selectedEmotion.label === face.label ? `font-bold text-primary` : `text-gray7`"
+											class="flex flex-grow justify-center items-center focus:outline-none outline-none"
+											:class="selectedEmotion.label === face.label ? `font-bold text-positive` : `text-gray7`"
+											style="transition: all 0.3s ease-in-out"
+											@click="setEmotion(face)"
 										>
-											{{ face.label }}
-										</p>
+											<p class="capitalize">
+												{{ face.label }}
+											</p>
+										</button>
 									</div>
 								</div>
 							</div>
@@ -209,7 +230,7 @@
 			<!-- Bottom overlay with selector -->
 			<div v-show="showEmotions" class="w-full flex flex-row-reverse">
 				<div
-					class="z-10 bg-white flex flex-row-reverse items-end p-5"
+					class="z-10 bg-white flex flex-row-reverse items-end p-5 rounded-br-lg"
 					style="height: 112px; margin-top: -112px"
 					:style="$route.name === `post-post` ? `width: 450px` : `width: 406px`"
 				>
@@ -217,6 +238,16 @@
 						Select
 					</button>
 				</div>
+				<div
+					class="z-10 bg-white flex flex-row-reverse items-end p-5 rounded-bl-lg"
+					style="
+						height: 112px;
+						margin-top: -112px;
+						background: linear-gradient(rgba(255, 255, 255, 0), #ffffff);
+						pointer-events: none;
+					"
+					:style="$route.name === `post-post` ? `width: 350px` : `width: 306px`"
+				></div>
 			</div>
 			<Comment
 				v-for="c in comments"
@@ -356,7 +387,6 @@ export default Vue.extend({
 				return
 			}
 			this.activeEmotion = this.selectedEmotion
-			this.$toastSuccess(`You're feeling ` + this.activeEmotion.label)
 			this.showEmotions = false
 		},
 		async sendComment() {
