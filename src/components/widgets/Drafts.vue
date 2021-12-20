@@ -3,18 +3,9 @@
 		<h3 class="text-primary font-semibold">Drafts</h3>
 		<!-- Add a new draft -->
 		<!-- <DraftPreview :draft="$store.state.draft" /> -->
-		<DraftPreview
-			v-for="d in $store.state.draft.drafts"
-			:key="$store.state.draft.drafts.indexOf(d)"
-			:draft="d"
-			:index="$store.state.draft.drafts.indexOf(d)"
-		/>
-		<div>
-			<button @click="addNewDraft">Create a new Draft</button>
-		</div>
+		<DraftPreview v-for="d in draftSubset" :key="draftSubset.indexOf(d)" :draft="d" :index="draftSubset.indexOf(d)" />
 		<p class="text-primary">
-			<button class="text-sm">Show all</button>
-			<button class="text-sm" @click="clearDrafts">Clear all Drafts</button>
+			<button class="text-sm" @click="handleDraftPopup">Show all</button>
 		</p>
 	</article>
 </template>
@@ -37,13 +28,17 @@ export default Vue.extend({
 			showPopup: false,
 		}
 	},
-	methods: {
-		addNewDraft() {
-			this.$store.commit(`draft/createDraft`)
-			this.$router.push(`/post`)
+	computed: {
+		draftSubset() {
+			let s: Array<any> = new Array(...this.$store.state.draft.drafts)
+			s = s.reverse()
+			s = s.slice(0, 3)
+			return s
 		},
-		clearDrafts() {
-			// this.$store.commit(`clearDrafts`)
+	},
+	methods: {
+		handleDraftPopup(): void {
+			this.$emit(`handleDraftPopup`)
 		},
 	},
 })

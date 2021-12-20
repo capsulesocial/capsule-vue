@@ -40,6 +40,7 @@ export const MutationType = {
 	UPDATE_CATEGORY: `updateCategory`,
 	SET_ACTIVE_DRAFT: `setActiveDraft`,
 	CREATE_DRAFT: `createDraft`,
+	DELETE_DRAFT: `deleteDraft`,
 	RESET: `reset`,
 }
 
@@ -86,6 +87,9 @@ export const mutations: MutationTree<DraftState> = {
 			timestamp: 0,
 		})
 		state.activeIndex = state.drafts.length - 1
+	},
+	[MutationType.DELETE_DRAFT]: (state, index: number) => {
+		state.drafts.splice(index, 1)
 	},
 	[MutationType.RESET]: (state) => {
 		state.drafts.splice(state.activeIndex, 1)
