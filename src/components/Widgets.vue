@@ -7,6 +7,13 @@
 		>
 			<ConfigureWidgets @close="toggleConfigure" @save="saveDraft" />
 		</div>
+		<!-- Drafts popup -->
+		<div
+			v-if="showDraftsPopup"
+			class="popup fixed w-full h-screen bg-primary top-0 bottom-0 left-0 right-0 z-30 flex justify-center items-center bg-opacity-50"
+		>
+			<DraftsPopup @close="handleDraftPopup" />
+		</div>
 		<FollowersWidget
 			v-if="$store.state.widgets.secondary2 === `followers` && followers.size > 0"
 			:followers="followers"
@@ -23,6 +30,7 @@
 			v-if="$store.state.widgets.secondary === `drafts`"
 			class="rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg border border-lightBorder mb-5"
 			style="backdrop-filter: blur(10px)"
+			@handleDraftPopup="handleDraftPopup"
 		/>
 		<BookmarksWidgets
 			v-if="$store.state.widgets.secondary === `bookmarks`"
@@ -59,9 +67,11 @@ import DraftsWidget from '@/components/widgets/Drafts.vue'
 import ConfigureWidgets from '@/components/widgets/Configure.vue'
 import BookmarksWidgets from '@/components/widgets/Bookmarks.vue'
 import FollowersWidget from '@/components/widgets/Followers.vue'
+import DraftsPopup from '@/components/widgets/DraftsPopup.vue'
 
 interface IData {
 	configureWidgets: boolean
+	showDraftsPopup: boolean
 }
 
 export default Vue.extend({
@@ -71,6 +81,7 @@ export default Vue.extend({
 		ConfigureWidgets,
 		BookmarksWidgets,
 		FollowersWidget,
+		DraftsPopup,
 	},
 	props: {
 		followers: {
@@ -85,6 +96,7 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			configureWidgets: false,
+			showDraftsPopup: false,
 		}
 	},
 	methods: {
@@ -93,6 +105,10 @@ export default Vue.extend({
 		},
 		toggleConfigure() {
 			this.configureWidgets = !this.configureWidgets
+			this.$emit(`overlay`)
+		},
+		handleDraftPopup() {
+			this.showDraftsPopup = !this.showDraftsPopup
 			this.$emit(`overlay`)
 		},
 	},
