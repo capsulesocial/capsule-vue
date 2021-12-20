@@ -90,6 +90,24 @@ export const mutations: MutationTree<DraftState> = {
 	},
 	[MutationType.DELETE_DRAFT]: (state, index: number) => {
 		state.drafts.splice(index, 1)
+		// Check if all drafts are deleted
+		if (state.drafts.length === 0) {
+			state.drafts.push({
+				title: ``,
+				subtitle: ``,
+				content: ``,
+				featuredPhotoCID: null,
+				featuredPhotoCaption: null,
+				tags: [],
+				category: ``,
+				timestamp: 0,
+			})
+			state.activeIndex = 0
+		}
+		// Check if deleted draft was active
+		if (index === state.activeIndex) {
+			state.activeIndex = state.drafts.length - 1
+		}
 	},
 	[MutationType.RESET]: (state) => {
 		state.drafts.splice(state.activeIndex, 1)

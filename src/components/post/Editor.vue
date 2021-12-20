@@ -92,6 +92,9 @@ export default Vue.extend({
 			hasPosted: false,
 		}
 	},
+	created() {
+		window.addEventListener(`beforeunload`, this.saveContent)
+	},
 	mounted() {
 		Quill.register(`modules/counter`, (quill: Quill) => {
 			quill.on(`text-change`, () => {
@@ -108,6 +111,7 @@ export default Vue.extend({
 		]
 		const options = {
 			placeholder: `Start typing here...`,
+			readOnly: false,
 			theme: `bubble`,
 			bounds: `#editor`,
 			modules: {

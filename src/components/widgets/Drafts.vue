@@ -3,7 +3,12 @@
 		<h3 class="text-primary font-semibold">Drafts</h3>
 		<!-- Add a new draft -->
 		<!-- <DraftPreview :draft="$store.state.draft" /> -->
-		<DraftPreview v-for="d in draftSubset" :key="draftSubset.indexOf(d)" :draft="d" :index="draftSubset.indexOf(d)" />
+		<DraftPreview
+			v-for="d in draftSubset"
+			:key="$store.state.draft.drafts.indexOf(d)"
+			:draft="d"
+			:index="$store.state.draft.drafts.indexOf(d)"
+		/>
 		<p class="text-primary">
 			<button class="text-sm" @click="handleDraftPopup">Show all</button>
 		</p>
