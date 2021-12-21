@@ -9,12 +9,14 @@ export interface RootState {
 	nodeURL: string
 	backgroundImage: string | null
 	reposts: RepostLink[]
+	recentlyJoined: boolean
 }
 
 export const state = (): RootState => ({
 	nodeURL: ``,
 	backgroundImage: null,
 	reposts: [],
+	recentlyJoined: true,
 })
 
 export const MutationType = {
@@ -24,6 +26,7 @@ export const MutationType = {
 	ADD_REPOST: `addRepost`,
 	REMOVE_REPOST: `removeRepost`,
 	RESET_REPOST: `resetRepost`,
+	WELCOME: `setWelcome`,
 }
 
 export const mutations: MutationTree<RootState> = {
@@ -47,6 +50,9 @@ export const mutations: MutationTree<RootState> = {
 	},
 	[MutationType.RESET_REPOST]: (state) => {
 		state.reposts = []
+	},
+	[MutationType.WELCOME]: (state, type: boolean) => {
+		state.recentlyJoined = type
 	},
 }
 

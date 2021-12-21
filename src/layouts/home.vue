@@ -60,6 +60,8 @@
 				</div>
 			</div>
 		</div>
+		<!-- Onboarding Wizard -->
+		<OnboardingWizard v-if="$store.state.recentlyJoined" />
 	</main>
 </template>
 
@@ -70,6 +72,7 @@ import Widgets from '@/components/Widgets.vue'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 import PostEditor from '@/components/post/Editor.vue'
+import OnboardingWizard from '@/components/OnboardingWizard.vue'
 
 import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
@@ -91,6 +94,7 @@ export default Vue.extend({
 		Footer,
 		PostEditor,
 		Nodes,
+		OnboardingWizard,
 	},
 	data(): IData {
 		return {
