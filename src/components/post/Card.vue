@@ -99,6 +99,13 @@
 								>
 									<More />
 								</button>
+								<button
+									v-show="showPopup"
+									class="right-0 top-0 rounded-full bg-gray1 p-1 focus:outline-none ml-4"
+									@click="handleCloseButton"
+								>
+									<XIcon />
+								</button>
 								<div
 									v-show="showDelete"
 									:class="
@@ -149,7 +156,7 @@
 									<TagPill v-for="t in post.tags" :key="t.name" :tag="t.name" class="mr-4 my-2" />
 								</div>
 								<!-- Comment and share -->
-								<div class="flex mt-1 text-gray5">
+								<div v-show="!showPopup" class="flex mt-1 text-gray5">
 									<button
 										class="flex items-end focus:outline-none mr-2 text-gray5 hover:text-primary hover:fill-primary"
 										:class="showComments ? `text-primary` : ``"
@@ -167,6 +174,7 @@
 										:repostCount="repostCount"
 										@toggleRepost="toggleQuoteRepost"
 									/>
+									<button class="focus:outline-none ml-4" @click="toggleStatsCard"><StatsIcon /></button>
 								</div>
 							</div>
 							<!-- Right side: Image -->
@@ -183,11 +191,12 @@
 					</div>
 				</div>
 				<PostActions
-					v-if="showComments"
+					v-if="showComments || showStats"
 					:postCID="postCID"
 					:initComments="comments"
 					:bookmarksCount="$props.bookmarksCount"
 					:repostsCount="$props.repostCount"
+					:openStats="showStats"
 					class="px-6 pb-6"
 				/>
 			</div>
@@ -208,6 +217,7 @@ import More from '@/components/icons/More.vue'
 import XIcon from '@/components/icons/X.vue'
 import FriendButton from '@/components/FriendButton.vue'
 import RepostIcon from '@/components/icons/Repost.vue'
+import StatsIcon from '@/components/icons/Stats.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 
 import { RetrievedPost, getRegularPost } from '@/backend/post'
@@ -221,6 +231,7 @@ import { ICommentData } from '@/backend/comment'
 
 interface IData {
 	showComments: boolean
+	showStats: boolean
 	showDelete: boolean
 	authorName: string
 	avatar: string
@@ -252,6 +263,7 @@ export default Vue.extend({
 		TagPill,
 		More,
 		XIcon,
+		StatsIcon,
 		FriendButton,
 		RepostIcon,
 		BrandedButton,
@@ -309,6 +321,7 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			showComments: false,
+			showStats: false,
 			showDelete: false,
 			authorName: ``,
 			avatar: ``,
@@ -435,6 +448,7 @@ export default Vue.extend({
 			}
 			if (e.target.firstChild.classList[0] === `card`) {
 				this.showComments = false
+				this.showStats = false
 				this.showRepostEditor = false
 				this.showPopup = false
 				this.$emit(`closePopup`)
@@ -442,6 +456,7 @@ export default Vue.extend({
 		},
 		handleCloseButton(): void {
 			this.showComments = false
+			this.showStats = false
 			this.showRepostEditor = false
 			this.showPopup = false
 			this.$emit(`closePopup`)
@@ -463,10 +478,15 @@ export default Vue.extend({
 			this.showComments = !this.showComments
 			this.showPopup = true
 		},
+		toggleStatsCard() {
+			this.showStats = !this.showStats
+			this.showPopup = true
+		},
 		handleSendRepost() {
 			const c = this.$refs.repostText as HTMLInputElement
 			this.sendRepost(this.$store.state.session.id, this.postCID, c.value, `quote`)
 			this.showComments = false
+			this.showStats = false
 			this.showRepostEditor = false
 			this.showPopup = false
 			this.$emit(`closePopup`)
