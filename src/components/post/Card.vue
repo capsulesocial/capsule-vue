@@ -99,6 +99,13 @@
 								>
 									<More />
 								</button>
+								<button
+									v-show="showPopup"
+									class="right-0 top-0 rounded-full bg-gray1 p-1 focus:outline-none ml-4"
+									@click="handleCloseButton"
+								>
+									<XIcon />
+								</button>
 								<div
 									v-show="showDelete"
 									:class="
@@ -149,7 +156,7 @@
 									<TagPill v-for="t in post.tags" :key="t.name" :tag="t.name" class="mr-4 my-2" />
 								</div>
 								<!-- Comment and share -->
-								<div class="flex mt-1 text-gray5">
+								<div v-show="!showPopup" class="flex mt-1 text-gray5">
 									<button
 										class="flex items-end focus:outline-none mr-2 text-gray5 hover:text-primary hover:fill-primary"
 										:class="showComments ? `text-primary` : ``"
@@ -167,6 +174,7 @@
 										:repostCount="repostCount"
 										@toggleRepost="toggleQuoteRepost"
 									/>
+									<button class="focus:outline-none ml-4" @click="toggleStatsCard"><StatsIcon /></button>
 								</div>
 							</div>
 							<!-- Right side: Image -->
@@ -208,6 +216,7 @@ import More from '@/components/icons/More.vue'
 import XIcon from '@/components/icons/X.vue'
 import FriendButton from '@/components/FriendButton.vue'
 import RepostIcon from '@/components/icons/Repost.vue'
+import StatsIcon from '@/components/icons/Stats.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 
 import { RetrievedPost, getRegularPost } from '@/backend/post'
@@ -252,6 +261,7 @@ export default Vue.extend({
 		TagPill,
 		More,
 		XIcon,
+		StatsIcon,
 		FriendButton,
 		RepostIcon,
 		BrandedButton,
@@ -460,6 +470,10 @@ export default Vue.extend({
 			this.showRepostEditor = !this.showRepostEditor
 		},
 		toggleComments() {
+			this.showComments = !this.showComments
+			this.showPopup = true
+		},
+		toggleStatsCard() {
 			this.showComments = !this.showComments
 			this.showPopup = true
 		},

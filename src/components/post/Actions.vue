@@ -1,28 +1,29 @@
 <template>
 	<section>
+		<!-- Stats -->
 		<article v-show="toggleStats" class="pt-5">
 			<!-- Back button -->
 			<div class="flex items-center">
 				<button class="rounded-full bg-gray1 focus:outline-none" @click="toggleStats = false"><ChevronLeft /></button>
-				<span class="pl-2 font-semibold">All comments</span>
+				<span class="pl-2 font-semibold text-sm" style="margin-bottom: 2px">All comments</span>
 			</div>
 			<!-- Global Activity -->
 			<div class="pt-5 border-b h-32 flex justify-between">
 				<!-- Stats image -->
 				<img :src="require(`@/assets/images/brand/stats.webp`)" class="h-full flex-shrink-0 pl-5" />
 				<!-- Text stats -->
-				<div class="flex flex-col w-1/2">
-					<h6 class="text-sm pb-4">Global Post Activity</h6>
+				<div class="flex flex-col w-3/5">
+					<h6 class="text-sm pb-4 font-semibold">Global Post Activity</h6>
 					<div class="flex flex-row">
 						<!-- Bookmarks Count -->
-						<div class="flex flex-col pr-4">
+						<div class="flex flex-col pr-5">
 							<h2 class="text-2xl font-semibold">{{ bookmarksCount }}</h2>
-							<span>Bookmarks</span>
+							<span class="text-sm">Bookmarks</span>
 						</div>
 						<!-- Reposts count -->
 						<div class="flex flex-col">
 							<h2 class="text-2xl font-semibold">{{ repostsCount }}</h2>
-							<span>Reposts</span>
+							<span class="text-sm">Reposts</span>
 						</div>
 					</div>
 				</div>
@@ -48,35 +49,35 @@
 					></span>
 				</div>
 				<!-- Text stats -->
-				<div class="flex flex-col w-1/2 pt-5">
-					<h6 class="text-sm pb-2">Comment Activity</h6>
+				<div class="flex flex-col w-3/5 pt-5">
+					<h6 class="text-sm pb-4 font-semibold">Comment Activity</h6>
 					<!-- Bookmarks Count -->
-					<div class="flex flex-row">
+					<div class="flex flex-row mb-2">
 						<div class="flex flex-col pr-4">
 							<h2 class="text-2xl font-semibold">{{ getCommentCount(`total`) }}</h2>
-							<span>Total comments</span>
+							<span class="text-sm">Total comments</span>
 						</div>
 					</div>
 					<!-- Type breakdown Count -->
 					<div class="flex flex-row">
 						<div class="flex flex-col pr-4">
 							<h2 class="text-2xl font-semibold text-lightPrimary">{{ getCommentCount(`positive`) }}</h2>
-							<span>Positive</span>
+							<span class="text-sm">Positive</span>
 						</div>
 						<div class="flex flex-col pr-4">
 							<h2 class="text-2xl font-semibold text-neutral">{{ getCommentCount(`neutral`) }}</h2>
-							<span>Neutral</span>
+							<span class="text-sm">Neutral</span>
 						</div>
 						<div class="flex flex-col pr-4">
 							<h2 class="text-2xl font-semibold text-negative">{{ getCommentCount(`negative`) }}</h2>
-							<span>Negative</span>
+							<span class="text-sm">Negative</span>
 						</div>
 					</div>
 				</div>
 			</div>
 			<!-- Comment Emoitons -->
 			<div class="pt-5 border-b pb-2">
-				<h6 class="text-sm pb-4 w-full text-center">Comment Emotions</h6>
+				<h6 class="text-sm pb-4 w-full text-center font-semibold">Comment Emotions</h6>
 				<!-- Row of faces -->
 				<div class="flex">
 					<button v-show="page > 0" class="focus:outline-none" @click="page = page - 1"><ChevronLeft /></button>
@@ -86,7 +87,9 @@
 								<span class="text-xs self-center">{{ f.face.label }}</span>
 								<img :src="f.face.leftImage" :alt="f.face.label" class="w-16 h-16 self-center" />
 							</div>
-							<span class="self-center">{{ ((f.count / getCommentCount(`total`)) * 100).toFixed(1) }}%</span>
+							<span class="self-center text-sm font-semibold mt-1"
+								>{{ ((f.count / getCommentCount(`total`)) * 100).toFixed(1) }}%</span
+							>
 						</div>
 					</div>
 					<button v-show="6 * page + 6 < faceStats.length" class="focus:outline-none" @click="page = page + 1">
@@ -100,7 +103,7 @@
 			<div class="w-full flex justify-between py-5">
 				<div class="flex flex-row items-center">
 					<span class="pr-2 font-semibold">{{ getCommentCount(`total`) }} comments</span>
-					<button class="focus:outline-none" @click="toggleStats = true"><StatsIcon /></button>
+					<button class="focus:outline-none ml-2" @click="toggleStats = true"><StatsIcon /></button>
 				</div>
 				<CommentFilter :filter="filter" @clicked="setFilter" />
 			</div>
@@ -277,6 +280,7 @@ import CloseIcon from '@/components/icons/X.vue'
 import StatsIcon from '@/components/icons/Stats.vue'
 import ChevronLeft from '@/components/icons/ChevronLeft.vue'
 import ChevronRight from '@/components/icons/ChevronRight.vue'
+import Avatar from '@/components/Avatar.vue'
 
 import { faces, feelings, faceGroupings } from '@/config'
 import { createComment, sendComment, ICommentData, getCommentsOfPost } from '@/backend/comment'
@@ -292,6 +296,7 @@ interface IData {
 	activeEmotion: { label: string; leftImage: any; rightImage: any }
 	selectedEmotion: { label: string; leftImage: any; rightImage: any }
 	comments: ICommentData[]
+	avatar: string
 	comment: string
 	emotion: string
 	showEmotions: boolean
@@ -309,6 +314,7 @@ export default Vue.extend({
 	components: {
 		BrandedButton,
 		Comment,
+		Avatar,
 		CommentFilter,
 		FlipIcon,
 		CloseIcon,
@@ -338,6 +344,7 @@ export default Vue.extend({
 		return {
 			faceGroupings,
 			feelingList: feelings,
+			avatar: ``,
 			activeEmotion: { label: ``, leftImage: null, rightImage: null },
 			selectedEmotion: { label: ``, leftImage: null, rightImage: null },
 			comment: ``,
