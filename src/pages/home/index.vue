@@ -7,6 +7,15 @@
 			>
 				<div class="flex items-center">
 					<button
+						:class="algorithm === `FOLLOWING` ? ` text-primary border-b-2 border-primary font-semibold` : `text-gray5`"
+						class="h-full focus:outline-none w-full pb-3"
+						@click="sortFeed('FOLLOWING')"
+					>
+						Following
+					</button>
+				</div>
+				<div class="flex items-center px-12">
+					<button
 						:class="algorithm === `NEW` ? `text-primary border-b-2 border-primary font-semibold` : `text-gray5`"
 						class="h-full focus:outline-none w-full pb-3"
 						@click="sortFeed('NEW')"
@@ -14,22 +23,13 @@
 						New Posts
 					</button>
 				</div>
-				<div class="flex items-center px-12">
+				<div class="flex items-center">
 					<button
 						:class="algorithm === `TOP` ? ` text-primary border-b-2 border-primary font-semibold` : `text-gray5`"
 						class="h-full focus:outline-none w-full pb-3"
 						@click="sortFeed('TOP')"
 					>
 						Top
-					</button>
-				</div>
-				<div class="flex items-center">
-					<button
-						:class="algorithm === `FOLLOWING` ? ` text-primary border-b-2 border-primary font-semibold` : `text-gray5`"
-						class="h-full focus:outline-none w-full pb-3"
-						@click="sortFeed('FOLLOWING')"
-					>
-						Following
 					</button>
 				</div>
 			</nav>
@@ -39,6 +39,11 @@
 				class="fixed overflow-y-auto"
 				style="width: 748px; min-height: calc(100vh - 220px); height: calc(100vh - 220px)"
 			>
+				<div v-if="!isLoading && algorithm === `FOLLOWING` && following.size === 0">
+					You are not following anyone, therefore no posts are showing up. Add Henry's image here (TODO)
+					<button @click="algorithm = `NEW`">New</button>
+					<button @click="algorithm = `TOP`">Top</button>
+				</div>
 				<!-- content -->
 				<article v-for="p in posts" :key="generateKey(p)">
 					<PostCard
@@ -97,7 +102,7 @@ export default Vue.extend({
 	},
 	data(): IData {
 		return {
-			algorithm: `NEW`,
+			algorithm: `FOLLOWING`,
 			posts: [],
 			isLoading: true,
 			currentOffset: 0,
