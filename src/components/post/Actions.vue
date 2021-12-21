@@ -303,7 +303,6 @@ interface IData {
 	commentBackground: string
 	filter: string
 	showDropdown: boolean
-	showStats: boolean
 	toggleStats: boolean
 	faceStats: FaceStat[]
 	page: number
@@ -339,6 +338,10 @@ export default Vue.extend({
 			type: Number,
 			default: -1,
 		},
+		openStats: {
+			type: Boolean,
+			default: false,
+		},
 	},
 	data(): IData {
 		return {
@@ -354,8 +357,7 @@ export default Vue.extend({
 			commentBackground: `@/assets/images/brand/paper4.svg`,
 			filter: ``,
 			showDropdown: false,
-			showStats: false,
-			toggleStats: false,
+			toggleStats: this.$props.openStats,
 			faceStats: [],
 			page: 0,
 		}

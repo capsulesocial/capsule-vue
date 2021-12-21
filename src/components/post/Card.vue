@@ -191,11 +191,12 @@
 					</div>
 				</div>
 				<PostActions
-					v-if="showComments"
+					v-if="showComments || showStats"
 					:postCID="postCID"
 					:initComments="comments"
 					:bookmarksCount="$props.bookmarksCount"
 					:repostsCount="$props.repostCount"
+					:openStats="showStats"
 					class="px-6 pb-6"
 				/>
 			</div>
@@ -230,6 +231,7 @@ import { ICommentData } from '@/backend/comment'
 
 interface IData {
 	showComments: boolean
+	showStats: boolean
 	showDelete: boolean
 	authorName: string
 	avatar: string
@@ -319,6 +321,7 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			showComments: false,
+			showStats: false,
 			showDelete: false,
 			authorName: ``,
 			avatar: ``,
@@ -445,6 +448,7 @@ export default Vue.extend({
 			}
 			if (e.target.firstChild.classList[0] === `card`) {
 				this.showComments = false
+				this.showStats = false
 				this.showRepostEditor = false
 				this.showPopup = false
 				this.$emit(`closePopup`)
@@ -452,6 +456,7 @@ export default Vue.extend({
 		},
 		handleCloseButton(): void {
 			this.showComments = false
+			this.showStats = false
 			this.showRepostEditor = false
 			this.showPopup = false
 			this.$emit(`closePopup`)
@@ -474,13 +479,14 @@ export default Vue.extend({
 			this.showPopup = true
 		},
 		toggleStatsCard() {
-			this.showComments = !this.showComments
+			this.showStats = !this.showStats
 			this.showPopup = true
 		},
 		handleSendRepost() {
 			const c = this.$refs.repostText as HTMLInputElement
 			this.sendRepost(this.$store.state.session.id, this.postCID, c.value, `quote`)
 			this.showComments = false
+			this.showStats = false
 			this.showRepostEditor = false
 			this.showPopup = false
 			this.$emit(`closePopup`)
