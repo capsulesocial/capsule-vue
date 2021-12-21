@@ -401,6 +401,7 @@ export default Vue.extend({
 				const { profile, cid } = res
 
 				const account = createSessionFromProfile(cid, profile)
+				this.$store.commit(`setWelcome`, true)
 				this.changeCID(cid)
 				this.changeID(account.id)
 				this.changeName(account.name)
