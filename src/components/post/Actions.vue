@@ -107,9 +107,9 @@
 			<!-- Bottom overlay with selector -->
 			<div v-show="showEmotions" class="w-full flex flex-row-reverse">
 				<div
-					class="z-10 bg-white flex flex-row justify-between p-5 rounded-tr-lg"
-					:style="$route.name === `post-post` ? `width: 450px` : `width: 406px`"
-					style="margin-bottom: -112px"
+					class="z-10 bg-white flex flex-row justify-between p-5 rounded-tr-lg mr-1"
+					:style="$route.name === `post-post` ? `width: 490px` : `width: 406px`"
+					style="margin-bottom: -112px; margin-top: 1px"
 				>
 					<h6 class="text-primary text-2xl text-center self-center font-semibold">How do you feel?</h6>
 					<div>
@@ -125,23 +125,20 @@
 						margin-bottom: -112px;
 						background: linear-gradient(#ffffff, rgba(255, 255, 255, 0));
 						pointer-events: none;
+						margin-top: 1px;
+						margin-left: 1px;
 					"
 				></div>
 			</div>
 			<div class="flex items-start">
 				<!-- Comment box Container -->
-				<!-- <div class="flex justify-between items-start mr-4">
+				<div v-show="!showEmotions" class="flex justify-between items-start mr-4" style="width: 60px; height: 60px">
 					<span class="rounded-lg flex-shrink-0" :style="getStyle(`bg-`)">
-						<Avatar
-							:avatar="avatar"
-							:authorID="authorID"
-							size="w-12 h-12"
-							style="margin-top: 2px; margin-left: 2px; margin-right: 2px"
-						/>
+						<Avatar :avatar="avatar" :authorID="$store.state.session.id" />
 					</span>
-				</div> -->
+				</div>
 				<div
-					class="flex rounded-xl w-full overflow-hidden bg-neutralLightest"
+					class="flex rounded-xl w-full overflow-hidden bg-neutralLightest border border-lightBorder"
 					:class="showEmotions ? `` : `border border-lightBorder p-4`"
 				>
 					<div class="rounded-xl overflow-hidden w-full" :style="showEmotions ? `height: 20rem` : `height: 10rem`">
@@ -208,18 +205,23 @@
 										>
 											<img :src="face.leftImage" :alt="face.label" class="w-20 h-20" />
 										</button>
-										<button
+										<div
 											v-for="face in row"
 											:key="face.label + face.label"
-											class="flex flex-grow justify-center items-center focus:outline-none outline-none"
-											:class="selectedEmotion.label === face.label ? `font-bold text-positive` : `text-gray7`"
-											style="transition: all 0.3s ease-in-out"
-											@click="setEmotion(face)"
+											class="flex flex-grow justify-center items-center face-tag"
 										>
-											<p class="capitalize">
-												{{ face.label }}
-											</p>
-										</button>
+											<button
+												class="flex flex-grow justify-center items-center focus:outline-none outline-none"
+												:class="selectedEmotion.label === face.label ? `font-bold text-positive` : `text-gray7`"
+												style="transition: all 0.3s ease-in-out"
+												@click="setEmotion(face)"
+											>
+												<p class="capitalize">
+													{{ face.label }}
+												</p>
+											</button>
+											<div class="h-1 w-1 rounded-full bg-gray5 separator"></div>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -230,9 +232,9 @@
 			<!-- Bottom overlay with selector -->
 			<div v-show="showEmotions" class="w-full flex flex-row-reverse">
 				<div
-					class="z-10 bg-white flex flex-row-reverse items-end p-5 rounded-br-lg"
-					style="height: 112px; margin-top: -112px"
-					:style="$route.name === `post-post` ? `width: 450px` : `width: 406px`"
+					class="z-10 bg-white flex flex-row-reverse items-end p-5 rounded-br-lg mr-1"
+					style="height: 111px; margin-top: -112px; margin-bottom: 1px"
+					:style="$route.name === `post-post` ? `width: 490px` : `width: 406px`"
 				>
 					<button class="rounded-lg bg-primary text-white px-6 py-2 focus:outline-none" @click="confirmEmotion">
 						Select
@@ -241,10 +243,12 @@
 				<div
 					class="z-10 bg-white flex flex-row-reverse items-end p-5 rounded-bl-lg"
 					style="
-						height: 112px;
+						height: 111px;
 						margin-top: -112px;
 						background: linear-gradient(rgba(255, 255, 255, 0), #ffffff);
 						pointer-events: none;
+						margin-bottom: 1px;
+						margin-left: 1px;
 					"
 					:style="$route.name === `post-post` ? `width: 350px` : `width: 306px`"
 				></div>
@@ -506,5 +510,9 @@ export default Vue.extend({
 /* Handle on hover */
 .faces::-webkit-scrollbar-thumb:hover {
 	background: #1e566c;
+}
+
+.face-tag:last-child .separator {
+	display: none;
 }
 </style>
