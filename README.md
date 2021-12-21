@@ -1,58 +1,95 @@
-# capsule-vue
+<div align="center">
 
-Capsule Vue.js front-end, to be integrated into main client codebase.
+<h1>Capsule-Vue</h1>
 
-## Build Setup
+Capsule-Vue is the Front-End powering Capsule Social's platform interface.
 
-#### To deploy a Web app
+</div>
 
-Create a copy of `example.env` named `.env`. Change value of environment variables if required.
+## Requirements
+
+- NodeJS v14.5.0 or higher.
+
+## Getting started
+
+### .env Setup
+
+```bash
+CONTRACT_NAME=dev-1635323648697-81373157539648
+CAPSULE_SERVER=https://alpha.capsule.social/server
+DOMAIN=http://localhost:3000
+
+# URL of capsule-orbit node running on our server
+# ORBIT_URL=https://test-node.capsule.social/orbit
+# URL of local capsule-orbit node
+# ORBIT_URL=http://localhost:3100
+
+NEAR_NETWORK=testnet
+
+# Torus Environment
+
+# Google
+TORUS_GOOGLE_VERIFIER="capsule-social-test-google"
+TORUS_GOOGLE_CLIENTID="653379121360-j8t9ua763vfvd86d1qjguonhrgqvkigo.apps.googleusercontent.com"
+
+# Discord
+TORUS_DISCORD_VERIFIER="capsule-social-test-discord"
+TORUS_DISCORD_CLIENTID="906210984396468275"
+
+```
+
+### Deploy Web App
 
 ```bash
 # install dependencies
-$ yarn install
+$ `yarn install`
 
-# Development: Serve with hot reload on http://localhost:3000
-$ yarn web
+# Server with hot reload on http://localhost:3000
+$ `yarn web`
 
-# Production: Build
+# Production build
 $ yarn build:web
 
-#Production: Launch Server
+# Launch production Server
 $ yarn start
-```
 
-#### To deploy an Electron App (Mac/Windows)
+```
+### Deploy an Electron App (Mac/Windows)
 
 ```bash
 # install dependencies
-$ yarn install
+$ `yarn install`
 
-# serve with hot reload on Electron App
-$ yarn dev
+# Server with hot reload on Electron App
+$ `yarn dev`
 
-# build production electron app, delivered to /dist
+# Production build of electron app, delivered to /dist
 # MacOS
 $ yarn build:mac
+
 # Windows
 $ yarn build:win
+
 ```
 
-### Folder Structure
+## Folder Structure
 
-- `/build` stores icon and additional scripts for Electron builder
-- `/mainprocess` includes JS for Electron main process
-- `src` includes Nuxt.js project
+- `/build` - stores icon and additional scripts for Electron builder
+- `/mainprocess` - includes JS for Electron main process
+- `/src` - includes Nuxt.js project
 
-### Dependencies:
+## Dependencies/Packages:
 
-- [Nuxt.js docs](https://nuxtjs.org) - Vue Framework
+- [Nuxt.js docs](https://nuxtjs.org) - Vue.js Framework.
 - [Vuex persisted state](https://www.npmjs.com/package/vuex-persistedstate) - Rehydrates Vuex state between page reloads.
-- [TailwindCSS](https://tailwindcss.com) - CSS Framework
-- [Marked.js](https://marked.js.org/) - markdown parsing
-- [DOMPurify](https://github.com/cure53/DOMPurify) - sanitize HTML output
-- [electron-nuxt](https://github.com/webspaceteam/electron-nuxt) - Electron scripts
-- [browser-image-compression](https://www.npmjs.com/package/browser-image-compression) - image compression
-- [toastify-js](https://github.com/apvarun/toastify-js) - toast messages
-- [Quill editor](https://quilljs.com/) - Text Editor
-- [Quill markdown](https://www.npmjs.com/package/quilljs-markdown) - Markdown for editor
+- [TailwindCSS](https://tailwindcss.com/) - CSS Framework.
+- [Marked.js](https://marked.js.org/) - markdown parsing.
+- [DOMPurify](https://github.com/cure53/DOMPurify) - sanitize HTML output.
+- [electron-nuxt](https://github.com/webspaceteam/electron-nuxt) - Electron scripts.
+- [browser-image-compression](https://www.npmjs.com/package/browser-image-compression) - image compression.
+- [toastify-js](https://github.com/apvarun/toastify-js) - toast messages.
+- [Quill editor](https://quilljs.com/) - Text Editor.
+- [Quill markdown](https://www.npmjs.com/package/quilljs-markdown) - Markdown for editor.
+
+
+For detailed explanation on how to setup your development environment, check out [Setting up Capsule-Vue/Capsule-Orbit](https://www.notion.so/capsulesocial/Setting-up-Capsule-Vue-Capsule-Orbit-dfb4c81bc9b342c5a45559f78c5d9b47).
