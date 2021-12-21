@@ -47,7 +47,7 @@ export default Vue.extend({
 	methods: {
 		async getFollowing(p: string) {
 			let profile = createDefaultProfile(p)
-			const fetchedProfile = await getProfile(p)
+			const { profile: fetchedProfile } = await getProfile(p)
 			if (fetchedProfile) {
 				profile = fetchedProfile
 			}

@@ -48,7 +48,7 @@ export default Vue.extend({
 	},
 	methods: {
 		async getFollowers(p: string) {
-			const profile = await getProfile(p)
+			const { profile } = await getProfile(p)
 			if (profile) {
 				this.profiles.push(profile)
 			}

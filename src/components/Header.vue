@@ -118,6 +118,11 @@ export default Vue.extend({
 			this.$router.push(`/login`)
 		},
 		togglePostEditor() {
+			if (this.$route.name === `post`) {
+				this.$store.commit(`draft/createDraft`)
+				location.reload()
+			}
+			this.$store.commit(`draft/createDraft`)
 			this.$router.push(`/post`)
 		},
 	},

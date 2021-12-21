@@ -22,6 +22,9 @@
 							class="fixed overflow-y-auto rounded-t-lg shadow-lg mr-5 p-8 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop border-lightBorder"
 							@update="updateWordCount"
 						/>
+						<div class="fixed bottom-0 z-10 m-5">
+							Resume writing? <button class="text-primary" @click="showDraftsPopup">Show drafts</button>
+						</div>
 						<!-- Widgets -->
 						<aside
 							class="fixed overflow-y-auto p-4 -mt-4"
@@ -34,6 +37,12 @@
 				</div>
 			</div>
 		</div>
+		<div
+			v-if="showDrafts"
+			class="popup fixed w-full h-screen bg-primary top-0 bottom-0 left-0 right-0 z-30 flex justify-center items-center bg-opacity-50"
+		>
+			<DraftsPopup @close="showDraftsPopup" />
+		</div>
 	</main>
 </template>
 
@@ -43,6 +52,7 @@ import EditorWidgets from '@/components/widgets/Editor.vue'
 import PostEditor from '@/components/post/Editor.vue'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
+import DraftsPopup from '@/components/widgets/DraftsPopup.vue'
 import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
 
@@ -50,6 +60,7 @@ interface IData {
 	profile: Profile | null
 	avatar: string | ArrayBuffer | null
 	wordCount: number
+	showDrafts: boolean
 }
 
 export default Vue.extend({
@@ -58,12 +69,14 @@ export default Vue.extend({
 		PostEditor,
 		Header,
 		Footer,
+		DraftsPopup,
 	},
 	data(): IData {
 		return {
 			profile: null,
 			avatar: null,
 			wordCount: 0,
+			showDrafts: false,
 		}
 	},
 	async created() {
@@ -72,12 +85,17 @@ export default Vue.extend({
 			this.$router.push(`/`)
 		}
 		// get logged in profile
-		this.profile = await getProfile(this.$store.state.session.id)
+		const { profile } = await getProfile(this.$store.state.session.id)
+		this.profile = profile
 		// Get avatar
 		if (this.profile && this.profile.avatar.length > 1) {
 			getPhotoFromIPFS(this.profile.avatar).then((p) => {
 				this.avatar = p
 			})
+		}
+		// Check if the active draft exists
+		if (this.$store.state.draft.drafts[this.$store.state.draft.activeIndex] === undefined) {
+			this.$store.commit(`draft/setActiveDraft`, 0)
 		}
 	},
 	methods: {
@@ -87,6 +105,11 @@ export default Vue.extend({
 		},
 		updateWordCount(num: number) {
 			this.wordCount = num
+		},
+		showDraftsPopup(): void {
+			// @ts-ignore
+			this.$refs.editor.saveContent()
+			this.showDrafts = !this.showDrafts
 		},
 	},
 })
