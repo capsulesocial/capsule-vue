@@ -1,8 +1,7 @@
 <template>
-	<article class="w-full rounded-lg shadow-lg bg-white mb-5 p-4">
+	<article v-if="mutuals.size !== 0" class="w-full rounded-lg shadow-lg bg-white mb-5 p-4">
 		<h6 class="font-semibold text-primary mb-2">Mutual Followers</h6>
-		<div v-if="mutuals.size === 0">No mutual followers</div>
-		<div v-else>
+		<div>
 			<!-- Profile photos -->
 			<div class="flex flex-row pl-4 flex-wrap">
 				<Avatar
@@ -16,7 +15,7 @@
 			</div>
 			<!-- Names -->
 			<div v-if="featuredProfiles">
-				<p class="text-gray7">
+				<p class="text-gray7 text-sm mb-4 mt-1">
 					{{ getText() }}
 				</p>
 			</div>
