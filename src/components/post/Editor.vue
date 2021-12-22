@@ -18,7 +18,7 @@
 						placeholder="Enter Title"
 						class="text-h1 font-serif font-semibold break-words w-full focus:outline-none bg-transparent"
 						wrap="soft"
-						@input="handleTitle"
+						@beforeinput="handleTitle"
 					/>
 				</article>
 
@@ -31,7 +31,7 @@
 						placeholder="Enter Subtitle"
 						class="font-serif text-h2 mt-2 text-gray5 break-words focus:outline-none w-full bg-transparent"
 						wrap="soft"
-						@input="handleSubtitle"
+						@beforeinput="handleSubtitle"
 					/>
 				</article>
 
@@ -129,11 +129,11 @@ export default Vue.extend({
 				return '``` \n' + content + '```'
 			},
 		})
-		// @ts-ignore
-		this.$refs.title.value = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].title
+		const titleInput = this.$refs.title as HTMLInputElement
+		const subtitleInput = this.$refs.subtitle as HTMLInputElement
+		titleInput.value = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].title
+		subtitleInput.value = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].subtitle
 		this.handleTitle(null)
-		// @ts-ignore
-		this.$refs.subtitle.value = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].subtitle
 	},
 	beforeDestroy() {
 		this.saveContent()
@@ -223,10 +223,11 @@ export default Vue.extend({
 			const titleInput = this.$refs.title as HTMLTextAreaElement
 			this.$store.commit(`draft/updateTitle`, titleInput.value)
 			const subtitleInput = this.$refs.subtitle as HTMLTextAreaElement
-			if (e.keyCode === 13 || e.keyCode === 9) {
+			if (e.inputType === `insertLineBreak` || (e.inputType === `insertText` && e.data === null)) {
 				e.preventDefault()
 				subtitleInput.focus()
 			}
+			titleInput.style.height = `auto`
 			titleInput.style.height = `${titleInput.scrollHeight}px`
 			if (titleInput.value.length === 0) {
 				this.titleError = `Please enter a title.`
@@ -242,9 +243,14 @@ export default Vue.extend({
 			}
 			this.titleError = ``
 		},
-		handleSubtitle() {
+		handleSubtitle(e: any) {
 			const subtitleInput = this.$refs.subtitle as HTMLTextAreaElement
 			this.$store.commit(`draft/updateSubtitle`, subtitleInput.value)
+			subtitleInput.style.height = `${subtitleInput.scrollHeight}px`
+			if (e.inputType === `insertLineBreak` || (e.inputType === `insertText` && e.data === null)) {
+				e.preventDefault()
+			}
+			subtitleInput.style.height = `auto`
 			subtitleInput.style.height = `${subtitleInput.scrollHeight}px`
 			if (subtitleInput.value.length === 0) {
 				this.subtitleError = ``
@@ -255,7 +261,7 @@ export default Vue.extend({
 				return
 			}
 			if (subtitleInput.value.length > 180) {
-				this.subtitleError = `Title is too long.`
+				this.subtitleError = `Subtitle is too long.`
 				return
 			}
 			this.subtitleError = ``
@@ -270,12 +276,14 @@ textarea#title {
 	resize: none;
 	overflow-y: hidden;
 	min-height: 4rem;
+	box-sizing: border-box;
 }
 textarea#subtitle {
 	border: none;
 	resize: none;
 	overflow-y: hidden;
-	height: 2.5rem;
+	min-height: 2.5rem;
+	box-sizing: border-box;
 }
 .content {
 	text-align: justify;
