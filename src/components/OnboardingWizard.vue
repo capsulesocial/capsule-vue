@@ -3,52 +3,81 @@
 		class="popup fixed w-full h-screen bg-primary top-0 bottom-0 left-0 right-0 z-30 flex justify-center items-start bg-opacity-50"
 	>
 		<div
-			class="popup shadow-lg rounded-lg bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg p-5 mt-12"
-			style="width: 750px"
+			class="popup shadow-lg rounded-lg bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg p-6 pt-4 mt-12"
+			style="width: 650px; backdrop-filter: blur(10px)"
 		>
 			<!-- Header and close icon -->
-			<div class="flex justify-between items-center pb-10">
-				<h1 class="text-3xl text-primary font-semibold">Welcome!</h1>
+			<div class="flex justify-between items-center pb-6">
+				<h1 class="text-4xl text-primary font-semibold">Welcome!</h1>
 				<button class="p-1 bg-gray1 rounded-full focus:outline-none" @click="closeWizard"><CloseIcon /></button>
 			</div>
 			<!-- Slide 1 -->
-			<article class="text-center">
-				<img v-show="step === 0" :src="require(`@/assets/images/onboarding/slide1.gif`)" class="rounded-lg mb-10" />
-				<img v-show="step === 1" :src="require(`@/assets/images/onboarding/slide2.gif`)" class="rounded-lg mb-10" />
-				<img v-show="step === 2" :src="require(`@/assets/images/onboarding/slide3.gif`)" class="rounded-lg mb-10" />
-				<img v-show="step === 3" :src="require(`@/assets/images/onboarding/slide4.gif`)" class="rounded-lg mb-10" />
-				<img v-show="step === 4" :src="require(`@/assets/images/onboarding/slide5.gif`)" class="rounded-lg mb-10" />
-				<h6 class="text-xl mb-5 font-semibold">{{ getTitle() }}</h6>
-				<p class="text-gray7 mb-10">
-					Welcome to your Capsule, customize it as you want it to be. With quick access to your favorite decentralized
-					content!
+			<article class="text-center flex flex-col items-center">
+				<img
+					v-show="step === 0"
+					:src="require(`@/assets/images/onboarding/slide1.gif`)"
+					class="rounded-lg mb-10 w-5/6 shadow-lg"
+				/>
+				<img
+					v-show="step === 1"
+					:src="require(`@/assets/images/onboarding/slide2.gif`)"
+					class="rounded-lg mb-10 w-5/6 shadow-lg"
+				/>
+				<img
+					v-show="step === 2"
+					:src="require(`@/assets/images/onboarding/slide3.gif`)"
+					class="rounded-lg mb-10 w-5/6 shadow-lg"
+				/>
+				<img
+					v-show="step === 3"
+					:src="require(`@/assets/images/onboarding/slide4.gif`)"
+					class="rounded-lg mb-10 w-5/6 shadow-lg"
+				/>
+				<img
+					v-show="step === 4"
+					:src="require(`@/assets/images/onboarding/slide5.gif`)"
+					class="rounded-lg mb-10 w-5/6 shadow-lg"
+				/>
+				<h6 class="text-xl mb-5 font-bold">{{ getTitle() }}</h6>
+				<p class="text-gray5 mb-10 px-10">
+					{{ getText() }}
 				</p>
 				<!-- progress circles -->
 				<div class="self-center mb-10">
-					<button class="p-1 bg-primary rounded-full focus:outline-none" @click="setStep(0)"></button>
+					<button class="p-1 mx-1 bg-primary rounded-full focus:outline-none" @click="setStep(0)"></button>
 					<button
 						:class="step > 0 ? `bg-primary` : `bg-gray1`"
-						class="p-1 rounded-full focus:outline-none"
+						class="p-1 mx-1 rounded-full focus:outline-none"
 						@click="setStep(1)"
 					></button>
 					<button
 						:class="step > 1 ? `bg-primary` : `bg-gray1`"
-						class="p-1 rounded-full focus:outline-none"
+						class="p-1 mx-1 rounded-full focus:outline-none"
 						@click="setStep(2)"
 					></button>
 					<button
 						:class="step > 2 ? `bg-primary` : `bg-gray1`"
-						class="p-1 rounded-full focus:outline-none"
+						class="p-1 mx-1 rounded-full focus:outline-none"
 						@click="setStep(3)"
 					></button>
 					<button
 						:class="step > 3 ? `bg-primary` : `bg-gray1`"
-						class="p-1 rounded-full focus:outline-none"
+						class="p-1 mx-1 rounded-full focus:outline-none"
 						@click="setStep(4)"
 					></button>
 				</div>
 				<!-- Next button -->
-				<div>
+				<div v-if="step === 4" class="mb-2">
+					<BrandedButton
+						:action="
+							() => {
+								setStep(step + 1)
+							}
+						"
+						:text="`Let's start! 🚀`"
+					/>
+				</div>
+				<div v-else class="mb-2">
 					<BrandedButton
 						:action="
 							() => {

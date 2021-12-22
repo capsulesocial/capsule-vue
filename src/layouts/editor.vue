@@ -22,8 +22,10 @@
 							class="fixed overflow-y-auto rounded-t-lg shadow-lg mr-5 p-8 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop border-lightBorder"
 							@update="updateWordCount"
 						/>
-						<div class="fixed bottom-0 z-10 m-5">
-							Resume writing? <button class="text-primary" @click="showDraftsPopup">Show drafts</button>
+						<div
+							class="fixed bottom-0 z-10 m-4 px-5 py-3 bg-gradient-to-r from-lightBGStart to-lightBGStop border-lightBorder rounded-lg shadow-lg test-xs text-gray5"
+						>
+							Resume writing? <button class="text-primary ml-2" @click="showDraftsPopup">Show drafts</button>
 						</div>
 						<!-- Widgets -->
 						<aside
