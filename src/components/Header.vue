@@ -44,7 +44,7 @@ import Vue from 'vue'
 import { mapMutations } from 'vuex'
 import { keyStores } from 'near-api-js'
 
-import CapsuleIcon from '@/components/icons/Capsule.vue'
+import CapsuleIcon from '@/components/icons/CapsuleNew.vue'
 import Avatar from '@/components/Avatar.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 import ProfileIcon from '@/components/icons/Profile.vue'

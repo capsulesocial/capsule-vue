@@ -87,7 +87,7 @@ import { mapMutations } from 'vuex'
 // eslint-disable-next-line import/named
 import DirectWebSdk, { TorusLoginResponse } from '@toruslabs/customauth'
 
-import CapsuleIcon from '@/components/icons/Capsule.vue'
+import CapsuleIcon from '@/components/icons/CapsuleNew.vue'
 import DiscordIcon from '@/components/icons/brands/Discord.vue'
 import GoogleIcon from '@/components/icons/brands/Google.vue'
 import FileIcon from '@/components/icons/File.vue'
