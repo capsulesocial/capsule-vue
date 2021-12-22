@@ -126,13 +126,13 @@ export default Vue.extend({
 				case 0:
 					return `Customize your homepage`
 				case 1:
-					return `Browse Capsule`
+					return `Discover great content`
 				case 2:
-					return `Bookmarks`
+					return `Save and share bookmarks`
 				case 3:
-					return `Create content`
+					return `Create content easily `
 				case 4:
-					return `React easily`
+					return `Join the conversation `
 				default:
 					return `out of scope`
 			}
@@ -140,15 +140,15 @@ export default Vue.extend({
 		getText(): string {
 			switch (this.step) {
 				case 0:
-					return `Welcome to your Capsule, customize it as you want it to be. With quick access to your favorite decentralized content!`
+					return `As your daily entry point to Blogchain, this screen is important. Make it truly your own by picking whichever options you prefer for displaying content, editing tools, widgets, and more.`
 				case 1:
-					return `Browse new content on the Discover page with categories search, featured tags and trending topics`
+					return `On this page, we make it easy for you to find posts by writers who suit your interests well. Browse categories, featured tags, or trending topics to get started.`
 				case 2:
-					return `Bookmark your favorite content to read them later and share them to your Capsule network`
+					return `Sometimes a post or headline catches your attention, but there’s no time to read it now. That’s why Blogchain makes it easy to highlight such content for later and then share with friends if you want.`
 				case 3:
-					return `Use the super simple Capsule editor to create new post and share your though on the decentralized network`
+					return `Have an idea you’d like to share with the world? Blogchain’s simple editing tool will make it easy for you to craft and publish your post.`
 				case 4:
-					return `Share your thoughts with advanced reactions in comments to really give you opinion that matter`
+					return `Agree or disagree with something you’ve read on Blogchain? Use our comment features to talk about it with other readers. You can even include one of our custom reaction illustrations to make your point artfully.`
 				default:
 					return `out of scope`
 			}
