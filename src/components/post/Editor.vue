@@ -261,7 +261,7 @@ export default Vue.extend({
 				return
 			}
 			if (subtitleInput.value.length > 180) {
-				this.subtitleError = `Title is too long.`
+				this.subtitleError = `Subtitle is too long.`
 				return
 			}
 			this.subtitleError = ``
