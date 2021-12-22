@@ -10,7 +10,7 @@
 			:index="$store.state.draft.drafts.indexOf(d)"
 		/>
 		<p class="text-primary">
-			<button class="text-sm" @click="handleDraftPopup">Show all</button>
+			<button class="text-sm focus:outline-none" @click="handleDraftPopup">Show all</button>
 		</p>
 	</article>
 </template>
