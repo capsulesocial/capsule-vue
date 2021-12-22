@@ -16,8 +16,8 @@
 		<article v-for="comment in comments" :key="comment._id">
 			<div class="pb-5">
 				<Comment :authorID="profile.id" :cid="comment._id" :timestamp="comment.timestamp" />
-				<p class="text-right">
-					<nuxt-link :to="`/post/` + comment.parentCID" class="text-primary">View Post</nuxt-link>
+				<p class="text-right mt-1">
+					<nuxt-link :to="`/post/` + comment.parentCID" class="text-gray5 text-xs">View Post</nuxt-link>
 				</p>
 			</div>
 		</article>
