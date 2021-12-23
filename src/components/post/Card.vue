@@ -94,7 +94,7 @@
 								<BookmarkButton :postID="postCID" :hasBookmark="isBookmarked" @clicked="getBookmarkStatus" />
 								<button
 									v-if="post.authorID === $store.state.session.id"
-									class="focus:outline-none ml-2"
+									class="focus:outline-none ml-2 text-gray5"
 									@click.stop="toggleDropdownDelete"
 								>
 									<More />
