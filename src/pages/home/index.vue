@@ -20,7 +20,7 @@
 						class="h-full focus:outline-none w-full pb-3"
 						@click="sortFeed('NEW')"
 					>
-						New Posts
+						New
 					</button>
 				</div>
 				<div class="flex items-center">

@@ -139,7 +139,7 @@ import 'intl-tel-input/build/css/intlTelInput.css'
 import intlTelInput from 'intl-tel-input'
 import axios from 'axios'
 
-import CapsuleIcon from '@/components/icons/Capsule.vue'
+import CapsuleIcon from '@/components/icons/CapsuleNew.vue'
 import DiscordIcon from '@/components/icons/brands/Discord.vue'
 import GoogleIcon from '@/components/icons/brands/Google.vue'
 import NearIcon from '@/components/icons/brands/Near.vue'

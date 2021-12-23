@@ -94,7 +94,7 @@
 								<BookmarkButton :postID="postCID" :hasBookmark="isBookmarked" @clicked="getBookmarkStatus" />
 								<button
 									v-if="post.authorID === $store.state.session.id"
-									class="focus:outline-none ml-2"
+									class="focus:outline-none ml-2 text-gray5"
 									@click.stop="toggleDropdownDelete"
 								>
 									<More />
@@ -113,12 +113,12 @@
 											? 'bg-lightBG text-lightPrimaryText border-lightBorder'
 											: 'bg-darkBG text-darkPrimaryText border-darkBorder'
 									"
-									class="absolute flex flex-col rounded-lg w-40 shadow-lg z-10 p-1"
+									class="absolute flex flex-col rounded-lg w-32 shadow-lg z-10 p-1"
 									style="top: 70px; right: 10px"
 								>
 									<!-- Delete -->
 									<button class="flex focus:outline-none text-negative" @click="deletePost">
-										<XIcon class="p-1" />
+										<BinIcon class="p-1" />
 										<span class="text-xs self-center text-negative">Delete this post</span>
 									</button>
 								</div>
@@ -218,6 +218,7 @@ import XIcon from '@/components/icons/X.vue'
 import FriendButton from '@/components/FriendButton.vue'
 import RepostIcon from '@/components/icons/Repost.vue'
 import StatsIcon from '@/components/icons/Stats.vue'
+import BinIcon from '@/components/icons/Bin.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 
 import { RetrievedPost, getRegularPost } from '@/backend/post'
@@ -263,6 +264,7 @@ export default Vue.extend({
 		TagPill,
 		More,
 		XIcon,
+		BinIcon,
 		StatsIcon,
 		FriendButton,
 		RepostIcon,

@@ -3,7 +3,7 @@
 	<div class="flex items-center bg-gray1 px-3 rounded-lg">
 		<span class="text-sm mr-1 text-gray5">{{ nodes }} peered nodes</span>
 		<CapsuleIcon :shrink="true" />
-		<span class="flex h-3 w-3">
+		<span class="flex h-3 w-3 ml-1">
 			<span
 				class="animate-ping absolute inline-flex h-3 w-3 rounded-full opacity-75"
 				:class="nodes > 5 ? `bg-connectGreen` : `bg-connectOrange`"
@@ -18,7 +18,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import CapsuleIcon from '@/components/icons/Capsule.vue'
+import CapsuleIcon from '@/components/icons/CapsuleNew.vue'
 import ipfs from '@/backend/utilities/ipfs'
 
 export interface IData {

@@ -76,7 +76,7 @@
 				</div>
 			</div>
 			<!-- Comment Emoitons -->
-			<div class="pt-5 border-b pb-2">
+			<div v-if="getCommentCount(`total`) !== 0" class="pt-5 border-b pb-2">
 				<h6 class="text-sm pb-4 w-full text-center font-semibold">Comment Emotions</h6>
 				<!-- Row of faces -->
 				<div class="flex">
