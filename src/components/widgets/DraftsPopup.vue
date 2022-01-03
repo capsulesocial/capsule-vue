@@ -4,7 +4,7 @@
 		<section>
 			<div
 				style="width: 600px; min-height: calc(100vh - 260px); height: calc(100vh - 260px); backdrop-filter: blur(5px)"
-				class="overflow-y-auto rounded-lg shadow-lg mr-5 p-6 pt-4 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop"
+				class="overflow-y-auto rounded-lg shadow-lg mr-5 p-6 pt-4 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop card-animation"
 			>
 				<div class="flex sticky justify-between items-center">
 					<h2 class="text-primary text-3xl font-semibold">Drafts</h2>

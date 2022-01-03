@@ -13,13 +13,22 @@
 			}"
 		>
 			<div class="px-6 py-5 flex flex-col justify-between h-full">
-				<button class="flex focus:outline-none" @click="$router.go(-1)">
-					<div class="bg-gray1 rounded-full flex-shrink-0">
+				<button class="flex focus:outline-none relative" @click="$router.go(-1)">
+					<div class="bg-gray1 rounded-full flex-shrink-0 z-10">
 						<BackIcon />
 					</div>
-					<p id="button" class="pl-3 font-semibold trigger-menu-wrapper">All categories</p>
+					<p id="buttontitle" class="pl-3 font-semibold trigger-menu-wrapper pr-4">All categories</p>
+					<div
+						id="button"
+						class="bg-lightBG bg-opacity-25 h-full absolute rounded-full trigger-menu-wrapper"
+						style="backdrop-filter: blur(10px); width: 155px; z-index: 0"
+					></div>
 				</button>
-				<h2 id="title" class="text-3xl text-lightOnPrimaryText font-semibold capitalize trigger-menu-wrapper">
+				<h2
+					id="title"
+					class="text-lightOnPrimaryText font-semibold capitalize trigger-menu-wrapper"
+					style="font-size: 1.875rem; line-height: 38px"
+				>
 					{{ $route.params.category }}
 				</h2>
 			</div>
@@ -49,7 +58,7 @@
 			<p v-if="noMorePosts" class="text-center text-primary pt-5">No more posts</p>
 		</div>
 		<!-- Not loaded yet -->
-		<article v-show="isLoading" class="flex justify-center w-full">
+		<article v-show="isLoading" class="flex justify-center w-full modal-animation">
 			<div class="loader m-5"></div>
 		</article>
 	</section>
@@ -147,16 +156,22 @@ export default Vue.extend({
 		async handleScrollHeader() {
 			const body = document.getElementById(`column`)
 			const header = document.getElementById(`header`)
+			const buttontitle = document.getElementById(`buttontitle`)
 			const button = document.getElementById(`button`)
 			const title = document.getElementById(`title`)
 			this.padding = header?.clientHeight + `px`
 			const scrollUp = `scrollup`
 			const scrollDown = `scrolldown`
-			const buttoncollapsed = `buttoncollapsed`
-			const buttonnotcollapsed = `buttonnotcollapsed`
+			const buttontitlecollapsed = `buttontitlecollapsed`
+			const buttontitlenotcollapsed = `buttontitlenotcollapsed`
+			const buttoncollapsed = `buttonbgcollapsed`
+			const buttonnotcollapsed = `buttonbgnotcollapsed`
 			const titlecollapsed = `titlecollapsed`
 			const titlenotcollapsed = `titlenotcollapsed`
 			if (!body) {
+				return
+			}
+			if (!buttontitle) {
 				return
 			}
 			if (!button) {
@@ -171,6 +186,7 @@ export default Vue.extend({
 			const currentScroll = body.scrollTop
 			if (body.scrollTop <= 0) {
 				header.classList.remove(scrollUp)
+				buttontitle.classList.remove(buttontitlecollapsed)
 				button.classList.remove(buttoncollapsed)
 				title.classList.remove(titlecollapsed)
 				return
@@ -178,18 +194,21 @@ export default Vue.extend({
 			if (currentScroll > this.lastScroll && !header.classList.contains(scrollDown)) {
 				// down
 				header.classList.remove(scrollUp)
+				buttontitle.classList.remove(buttontitlenotcollapsed)
 				button.classList.remove(buttonnotcollapsed)
 				title.classList.remove(titlenotcollapsed)
 				header.classList.add(scrollDown)
+				buttontitle.classList.add(buttontitlecollapsed)
 				button.classList.add(buttoncollapsed)
 				title.classList.add(titlecollapsed)
 			} else if (currentScroll < this.lastScroll && header.classList.contains(scrollDown)) {
 				// up
 				header.classList.remove(scrollDown)
+				buttontitle.classList.remove(buttontitlecollapsed)
 				button.classList.remove(buttoncollapsed)
 				title.classList.remove(titlecollapsed)
 				header.classList.add(scrollUp)
-				button.classList.add(buttonnotcollapsed)
+				buttontitle.classList.add(buttontitlenotcollapsed)
 				title.classList.add(titlenotcollapsed)
 			}
 			this.lastScroll = currentScroll
@@ -226,17 +245,25 @@ export default Vue.extend({
 	opacity: 1;
 	transform: none;
 }
-.buttoncollapsed {
+.buttonbgcollapsed {
 	opacity: 0;
 }
-.buttonnotcollapsed {
+.buttonbgnotcollapsed {
+	opacity: 1;
+}
+.buttontitlecollapsed {
+	opacity: 0;
+}
+.buttontitlenotcollapsed {
 	opacity: 1;
 }
 .titlecollapsed {
 	transform: translate3d(35px, -31px, 0px);
-	font-size: 1.5rem;
+	font-size: 1.5rem !important;
 	color: #2e556a;
-	line-height: 64px;
+	line-height: 38px !important;
+	margin-top: 2px;
+	padding-top: 13px;
 }
 .titlenotcollapsed {
 	transform: translate3d(0, 0, 0);

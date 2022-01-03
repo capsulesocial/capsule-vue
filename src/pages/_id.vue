@@ -114,10 +114,10 @@
 		<!-- Settings popup -->
 		<div
 			v-if="showSettings"
-			class="fixed w-full h-screen bg-primary top-0 bottom-0 left-0 right-0 z-30 flex justify-center items-center bg-opacity-50"
+			class="fixed w-full h-screen bg-primary top-0 bottom-0 left-0 right-0 z-30 flex justify-center items-center bg-opacity-50 modal-animation"
 		>
 			<SettingsPopup
-				class="bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg shadow-lg rounded-lg"
+				class="bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg shadow-lg rounded-lg card-animation"
 				style="width: 589px; backdrop-filter: blur(10px)"
 				@close="toggleSettings"
 			/>

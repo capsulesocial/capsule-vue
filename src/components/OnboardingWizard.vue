@@ -1,10 +1,10 @@
 <template>
 	<section
-		class="popup fixed w-full h-screen bg-primary top-0 bottom-0 left-0 right-0 z-30 flex justify-center items-start bg-opacity-50"
+		class="popup fixed w-full h-screen bg-primary top-0 bottom-0 left-0 right-0 z-30 flex justify-center items-start bg-opacity-50 modal-animation"
 	>
 		<div
-			class="popup shadow-lg rounded-lg bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg p-6 pt-4 mt-12"
-			style="width: 650px; backdrop-filter: blur(10px)"
+			class="popup shadow-lg rounded-lg bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg p-6 pt-4 mt-12 overflow-y-auto card-animation"
+			style="height: 90%; width: 650px; backdrop-filter: blur(10px)"
 		>
 			<!-- Header and close icon -->
 			<div class="flex justify-between items-center pb-6">

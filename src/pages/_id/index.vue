@@ -24,7 +24,7 @@
 				:repostCount="p.repostCount"
 			/>
 		</article>
-		<article v-show="isLoading" class="flex justify-center">
+		<article v-show="isLoading" class="flex justify-center modal-animation">
 			<div class="loader m-10"></div>
 		</article>
 	</section>

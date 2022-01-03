@@ -77,7 +77,7 @@
 				<button
 					v-for="c in categoryList"
 					:key="c"
-					class="w-full flex items-center px-2 capitalize focus:outline-none h-10"
+					class="w-full flex items-center px-2 capitalize focus:outline-none h-10 modal-animation"
 					@click="changeCategory(c)"
 				>
 					<img :src="require(`@/assets/images/category/` + c + `/icon.webp`)" class="hotzone w-6 h-6 mr-1 ml-2" />

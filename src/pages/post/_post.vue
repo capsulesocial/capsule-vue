@@ -1,5 +1,5 @@
 <template>
-	<div id="post" class="w-full flex justify-center">
+	<div id="post" class="w-full flex justify-center modal-animation card-animation">
 		<!-- Inner post area -->
 		<div v-if="post && author" style="width: 760px; max-width: 760px; height: fit-content">
 			<!-- Magic header that disappears on scroll down -->
@@ -145,7 +145,7 @@
 			</section>
 			<section v-else>Post not found 😵‍💫</section>
 		</div>
-		<article v-show="isLoading" class="flex justify-center w-full mt-20">
+		<article v-show="isLoading" class="flex justify-center w-full mt-20 modal-animation">
 			<div class="loader m-5"></div>
 		</article>
 		<!-- Show Post preview card on quote repost -->

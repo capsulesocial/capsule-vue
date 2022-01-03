@@ -24,7 +24,7 @@
 						<!-- Settings tabs -->
 						<aside class="fixed" style="margin-left: 770px; width: 450px">
 							<div
-								class="rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop border border-lightBorder overflow-hidden mb-5 py-4 px-6 pb-2"
+								class="rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop border border-lightBorder overflow-hidden mb-5 py-4 px-6 pb-2 modal-animation"
 								style="backdrop-filter: blur(10px)"
 							>
 								<h3 class="text-primary text-base font-semibold pb-4">Settings</h3>

@@ -5,7 +5,7 @@
 			<!-- Primary widget -->
 			<article
 				style="width: 750px; min-height: calc(100vh - 160px); height: calc(100vh - 160px); backdrop-filter: blur(5px)"
-				class="overflow-y-auto rounded-lg shadow-lg mr-5 p-6 pt-4 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop"
+				class="overflow-y-auto rounded-lg shadow-lg mr-5 p-6 pt-4 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop card-animation"
 			>
 				<h3 class="text-primary text-base font-semibold mb-4">Primary widget</h3>
 				<!-- Select a main widget -->
@@ -27,7 +27,7 @@
 						@click="changePrimary(`editor`)"
 					>
 						<div class="flex flex-col items-center">
-							<h4 class="text-gray5">Editor</h4>
+							<h4 class="text-gray5">Draft Editor</h4>
 							<div class="h-32 w-40">
 								<span class="text-6xl text-primary font-semibold">Aa</span>
 							</div>
@@ -42,7 +42,7 @@
 			<!-- Right side: side widgets -->
 			<div class="fixed" style="margin-left: 770px; width: 453px">
 				<article
-					class="overflow-y-auto rounded-lg shadow-lg mb-5 p-6 pt-4 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop"
+					class="overflow-y-auto rounded-lg shadow-lg mb-5 p-6 pt-4 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop card-animation-delay1"
 					style="backdrop-filter: blur(5px)"
 				>
 					<h3 class="text-primary text-base font-semibold mb-4">Side widget</h3>
@@ -81,7 +81,7 @@
 					</div>
 				</article>
 				<article
-					class="overflow-y-auto rounded-lg shadow-lg p-6 pt-4 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg"
+					class="overflow-y-auto rounded-lg shadow-lg p-6 pt-4 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg card-animation-delay2"
 					style="backdrop-filter: blur(5px)"
 				>
 					<h3 class="text-primary text-base font-semibold mb-4">Side widget</h3>

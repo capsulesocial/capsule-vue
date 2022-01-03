@@ -19,17 +19,17 @@
 								height: calc(100vh - 88px);
 								backdrop-filter: blur(10px);
 							"
-							class="fixed overflow-y-auto rounded-t-lg shadow-lg mr-5 p-8 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop border-lightBorder"
+							class="fixed overflow-y-auto rounded-t-lg shadow-lg mr-5 p-8 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop border-lightBorder modal-animation"
 							@update="updateWordCount"
 						/>
 						<div
-							class="fixed bottom-0 z-10 m-4 px-5 py-3 bg-gradient-to-r from-lightBGStart to-lightBGStop border-lightBorder rounded-lg shadow-lg test-xs text-gray5"
+							class="fixed bottom-0 z-10 m-4 px-5 py-3 bg-gradient-to-r from-lightBGStart to-lightBGStop border-lightBorder rounded-lg shadow-lg test-xs text-gray5 modal-animation card-animation-delay1"
 						>
 							Resume writing? <button class="text-primary ml-2" @click="showDraftsPopup">Show drafts</button>
 						</div>
 						<!-- Widgets -->
 						<aside
-							class="fixed overflow-y-auto p-4 -mt-4"
+							class="fixed overflow-y-auto p-4 -mt-4 modal-animation"
 							style="margin-left: 755px; width: 485px; min-height: calc(100vh - 70px); height: calc(100vh - 70px)"
 						>
 							<EditorWidgets :wordCount="wordCount" @post="handlePost" />
@@ -41,7 +41,7 @@
 		</div>
 		<div
 			v-if="showDrafts"
-			class="popup fixed w-full h-screen bg-primary top-0 bottom-0 left-0 right-0 z-30 flex justify-center items-center bg-opacity-50"
+			class="popup fixed w-full h-screen bg-primary top-0 bottom-0 left-0 right-0 z-30 flex justify-center items-center bg-opacity-50 modal-animation"
 		>
 			<DraftsPopup @close="showDraftsPopup" />
 		</div>

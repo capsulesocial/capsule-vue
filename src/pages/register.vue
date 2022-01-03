@@ -10,14 +10,14 @@
 				<article v-show="!(userInfo || nearWallet) && !isLoading" class="w-1/2">
 					<h1 class="font-semibold text-primary mb-10" style="font-size: 2.6rem">Sign up</h1>
 					<button
-						class="w-full rounded-lg w-1/2 bg-gray2 mb-4 py-2 flex justify-center items-center focus:outline-none"
+						class="w-full rounded-lg bg-gray2 mb-4 py-2 flex justify-center items-center focus:outline-none"
 						@click="() => torusLogin('discord')"
 					>
 						<DiscordIcon style="width: 28px; height: 28px" />
 						<h6 class="font-semibold text-gray7 text-sm ml-4">Sign up with Discord</h6>
 					</button>
 					<button
-						class="w-full rounded-lg w-1/2 bg-gray2 py-2 flex justify-center items-center focus:outline-none"
+						class="w-full rounded-lg bg-gray2 py-2 flex justify-center items-center focus:outline-none"
 						@click="() => torusLogin('google')"
 					>
 						<GoogleIcon style="width: 28px; height: 28px" />
@@ -29,14 +29,14 @@
 						<span class="border border-gray5 flex-grow rounded-lg" style="height: 1px"></span>
 					</div>
 					<button
-						class="w-full rounded-lg w-1/2 bg-gray2 mb-4 py-3 flex justify-center items-center focus:outline-none"
+						class="w-full rounded-lg bg-gray2 mb-4 py-3 flex justify-center items-center focus:outline-none"
 						@click="() => walletLoginComponent()"
 					>
 						<NearIcon style="width: 22px; height: 22px" />
 						<h6 class="font-semibold text-gray7 text-sm ml-4">Signup with NEAR</h6>
 					</button>
 					<button
-						class="w-full rounded-lg w-1/2 bg-gray2 mb-4 py-3 flex justify-center items-center focus:outline-none"
+						class="w-full rounded-lg bg-gray2 mb-4 py-3 flex justify-center items-center focus:outline-none"
 						@click="() => implicitAccountCreate()"
 					>
 						<h6 class="font-semibold text-gray7 text-sm ml-4">Create implicit account</h6>
@@ -121,7 +121,7 @@
 					</div>
 					<nuxt-link to="/home" class="text-primary text-center">Continue to Homepage</nuxt-link>
 				</article>
-				<article v-show="isLoading" class="w-3/4 flex justify-center">
+				<article v-show="isLoading" class="w-3/4 flex justify-center modal-animation">
 					<div class="loader m-5 rounded-lg"></div>
 				</article>
 			</div>

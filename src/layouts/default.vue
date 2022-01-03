@@ -8,22 +8,28 @@
 					<Header :avatar="myAvatar" />
 				</header>
 				<div
-					style="width: 1220px; min-height: calc(100vh - 80px); height: calc(100vh - 80px)"
-					class="fixed bottom-0 overflow-y-auto rounded-lg shadow-lg mr-5 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg"
+					style="
+						width: 1220px;
+						min-height: calc(100vh - 80px);
+						height: calc(100vh - 80px);
+						bottom: -10px;
+						backdrop-filter: blur(10px);
+					"
+					class="fixed overflow-y-auto rounded-lg shadow-lg mr-5 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg"
 				>
 					<div class="w-full p-5 flex flex-col items-ceter">
-						<h1 class="font-bold text-negative text-6xl font-sans text-center">500</h1>
+						<h1 class="font-bold text-negative text-6xl font-sans text-center mt-16">500</h1>
 						<h2 class="text-center font-semibold text-2xl">Something went wrong</h2>
-						<p class="text-center text-gray7 self-center my-5" style="width: 360px">
-							We apologize for the issue, we suggest you go back to the previous page
+						<p class="text-center text-gray7 self-center mb-5 mt-2" style="width: 360px">
+							We apologize for the issue, we suggest you go back home
 						</p>
 						<div class="flex justify-center">
-							<BrandedButton :action="handleReload" :text="`Return`" />
+							<BrandedButton :action="handleReload" :text="`Back to home`" />
 						</div>
 						<img
 							:src="require(`@/assets/images/brand/error.webp`)"
 							alt="error image"
-							class="self-center mt-5"
+							class="self-center mt-10"
 							style="width: 500px"
 						/>
 					</div>
@@ -78,7 +84,7 @@ export default Vue.extend({
 	},
 	methods: {
 		handleReload(): void {
-			location.reload()
+			this.$router.push(`/home`)
 		},
 	},
 })
