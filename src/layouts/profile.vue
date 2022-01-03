@@ -45,13 +45,13 @@
 				</div>
 				<div
 					v-else
-					style="width: 1220px; min-height: calc(100vh - 80px); height: calc(100vh - 80px)"
-					class="fixed bottom-0 overflow-y-auto rounded-lg shadow-lg mr-5 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg"
+					style="width: 1220px; min-height: calc(100vh - 80px); height: calc(100vh - 80px) bottom: -10px; backdrop-filter: blur(10px);"
+					class="fixed overflow-y-auto rounded-lg shadow-lg mr-5 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg"
 				>
 					<div class="w-full p-5 flex flex-col items-ceter">
-						<h1 class="font-bold text-negative text-6xl font-sans text-center">404</h1>
+						<h1 class="font-bold text-negative text-6xl font-sans text-center mt-16">404</h1>
 						<h2 class="text-center font-semibold text-2xl">This page was not found</h2>
-						<p class="text-center text-gray7 self-center my-5" style="width: 360px">
+						<p class="text-center text-gray7 self-center mb-5 mt-2" style="width: 360px">
 							It seems that this page doesn't exist, we suggest you to go back home
 						</p>
 						<div class="flex justify-center">
@@ -67,7 +67,7 @@
 						<img
 							:src="require(`@/assets/images/brand/error.webp`)"
 							alt="error image"
-							class="self-center mt-5"
+							class="self-center mt-10"
 							style="width: 500px"
 						/>
 					</div>
