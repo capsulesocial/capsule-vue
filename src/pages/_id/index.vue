@@ -83,7 +83,7 @@ export default Vue.extend({
 					limit: this.limit,
 					following: this.$store.state.session.id,
 				})
-				if (res.length === 0) {
+				if (res.length < this.limit) {
 					const container = this.$parent.$refs.scrollContainer as HTMLElement
 					container.removeEventListener(`scroll`, this.handleScroll)
 				}
@@ -96,10 +96,12 @@ export default Vue.extend({
 			}
 		},
 		async handleScroll(e: Event) {
-			const { scrollTop, scrollHeight, clientHeight } = e.srcElement as HTMLElement
-			// Fetch posts when reaching the bottom of page
-			if (scrollTop + clientHeight >= scrollHeight - 5) {
-				await this.loadPosts()
+			if (!this.isLoading) {
+				const { scrollTop, scrollHeight, clientHeight } = e.srcElement as HTMLElement
+				// Fetch posts when reaching the bottom of page
+				if (scrollTop + clientHeight >= scrollHeight - 5) {
+					await this.loadPosts()
+				}
 			}
 		},
 		togglePostEditor() {
