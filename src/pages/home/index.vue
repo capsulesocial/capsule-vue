@@ -39,10 +39,8 @@
 				class="fixed overflow-y-auto"
 				style="width: 748px; min-height: calc(100vh - 220px); height: calc(100vh - 220px)"
 			>
-				<div v-if="!isLoading && algorithm === `FOLLOWING` && following.size === 0">
-					You are not following anyone, therefore no posts are showing up. Add Henry's image here (TODO)
-					<button @click="algorithm = `NEW`">New</button>
-					<button @click="algorithm = `TOP`">Top</button>
+				<div v-if="!isLoading && algorithm === `FOLLOWING` && following.size === 0" class="relative">
+					<img :src="require(`@/assets/images/brand/follow-window.webp`)" class="absolute top-0" />
 				</div>
 				<!-- content -->
 				<article v-for="p in posts" :key="generateKey(p)">
