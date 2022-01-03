@@ -46,6 +46,10 @@ export default Vue.extend({
 		}
 	},
 	async created() {
+		// Check if logged in user
+		if (this.$store.state.session.id === ``) {
+			return
+		}
 		this.bookmarks = await getPosts({ bookmarkedBy: this.$store.state.session.id }, this.$store.state.session.id, {})
 		this.bookmarks = this.bookmarks.reverse().slice(0, 2)
 		this.bookmarks.forEach((p: IPostResponse) => {

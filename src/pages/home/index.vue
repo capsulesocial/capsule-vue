@@ -108,7 +108,17 @@ export default Vue.extend({
 		}
 	},
 	async created() {
-		// Fetch posts
+		if (this.$store.state.session.id === ``) {
+			this.algorithm = `TOP`
+			this.posts = await getPosts({}, ``, {
+				sort: this.algorithm,
+				limit: this.limit,
+				offset: this.currentOffset,
+				following: this.$store.state.session.id,
+			})
+			return
+		}
+		// Fetch posts if logged in
 		this.posts = await getPosts({}, this.$store.state.session.id, {
 			sort: this.algorithm,
 			limit: this.limit,
