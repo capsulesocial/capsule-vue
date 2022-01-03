@@ -33,7 +33,7 @@
 		</div>
 		<!-- Not loaded yet -->
 		<article v-show="isLoading" class="flex justify-center w-full">
-			<div class="loader m-6"></div>
+			<div class="loader m-6 modal-animation"></div>
 		</article>
 	</section>
 </template>

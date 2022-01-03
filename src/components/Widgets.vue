@@ -3,14 +3,14 @@
 		<!-- Configure my Capsule overlay -->
 		<div
 			v-if="configureWidgets"
-			class="popup fixed w-full h-screen bg-primary top-0 bottom-0 left-0 right-0 z-30 flex justify-center items-center bg-opacity-50"
+			class="popup fixed w-full h-screen bg-primary top-0 bottom-0 left-0 right-0 z-30 flex justify-center items-center bg-opacity-50 modal-animation"
 		>
 			<ConfigureWidgets @close="toggleConfigure" @save="saveDraft" />
 		</div>
 		<!-- Drafts popup -->
 		<div
 			v-if="showDraftsPopup"
-			class="popup fixed w-full h-screen bg-primary top-0 bottom-0 left-0 right-0 z-30 flex justify-center items-center bg-opacity-50"
+			class="popup fixed w-full h-screen bg-primary top-0 bottom-0 left-0 right-0 z-30 flex justify-center items-center bg-opacity-50 modal-animation"
 		>
 			<DraftsPopup @close="handleDraftPopup" />
 		</div>

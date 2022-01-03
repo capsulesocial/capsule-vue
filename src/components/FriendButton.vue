@@ -6,7 +6,7 @@
 			</div>
 			<div
 				v-else
-				class="friendbtn inline text-grey5 bg-white hover:bg-black hover:text-white text-sm shadow-lg px-5 font-semibold rounded-lg"
+				class="friendbtn inline text-grey5 transition ease-in-out bg-white hover:bg-black hover:text-white duration-300 text-sm shadow-lg px-5 font-semibold rounded-lg"
 				style="padding-top: 0.4rem; padding-bottom: 0.4rem"
 			>
 				<span class="following">Following</span>
@@ -19,7 +19,7 @@
 			</div>
 			<span
 				v-else
-				class="text-white font-semibold rounded-lg text-sm shadow-lg px-5 bg-secondary"
+				class="text-white font-semibold rounded-lg text-sm shadow-lg px-5 transition ease-in-out bg-secondary hover:bg-primary duration-300"
 				style="padding-top: 0.4rem; padding-bottom: 0.4rem"
 				>Follow</span
 			>

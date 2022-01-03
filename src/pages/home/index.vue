@@ -36,7 +36,7 @@
 			<div
 				v-if="posts"
 				ref="container"
-				class="fixed overflow-y-auto"
+				class="fixed overflow-y-auto modal-animation"
 				style="width: 748px; min-height: calc(100vh - 220px); height: calc(100vh - 220px)"
 			>
 				<div v-if="!isLoading && algorithm === `FOLLOWING` && following.size === 0">
@@ -62,7 +62,7 @@
 				</article>
 			</div>
 			<!-- Not loaded yet -->
-			<article v-show="isLoading" class="flex justify-center h-screen pt-12 w-full">
+			<article v-show="isLoading" class="flex justify-center h-screen pt-12 w-full modal-animation">
 				<div class="loader m-5"></div>
 			</article>
 		</section>

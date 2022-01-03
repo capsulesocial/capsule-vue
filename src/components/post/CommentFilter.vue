@@ -17,7 +17,7 @@
 		<!-- comment filter dropdown -->
 		<div
 			v-show="showFilter"
-			class="absolute hotzone top-0 z-10 bg-white rounded-lg shadow-lg p-2 w-full"
+			class="absolute hotzone top-0 z-10 bg-white rounded-lg shadow-lg p-2 w-full modal-animation"
 			style="margin-top: 28px"
 		>
 			<!-- Select charge of reaction button -->

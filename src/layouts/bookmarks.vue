@@ -10,7 +10,10 @@
 				<!-- Body -->
 				<div>
 					<!-- Title and peered nodes -->
-					<div class="fixed w-full flex justify-between items-center" style="width: 1220px; height: 62px">
+					<div
+						class="fixed w-full flex justify-between items-center modal-animation"
+						style="width: 1220px; height: 62px"
+					>
 						<!-- Title -->
 						<h1 class="font-semibold text-primary" style="font-size: 2.6rem">Bookmarks list</h1>
 						<!-- Peered nodes -->
@@ -20,12 +23,12 @@
 					<section class="flex flex-row mt-20">
 						<nuxt-child
 							style="width: 750px; min-height: calc(100vh - 150px); height: calc(100vh - 150px)"
-							class="fixed overflow-y-auto rounded-lg shadow-lg mr-5 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop border border-lightBorder"
+							class="fixed overflow-y-auto rounded-lg shadow-lg mr-5 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop border border-lightBorder modal-animation"
 							:posts="posts"
 						/>
 						<!-- Widgets -->
 						<aside
-							class="fixed"
+							class="fixed modal-animation"
 							style="
 								margin-left: 770px;
 								width: 450px;

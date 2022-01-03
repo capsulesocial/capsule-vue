@@ -121,7 +121,7 @@
 					</div>
 					<nuxt-link to="/home" class="text-primary text-center">Continue to Homepage</nuxt-link>
 				</article>
-				<article v-show="isLoading" class="w-3/4 flex justify-center">
+				<article v-show="isLoading" class="w-3/4 flex justify-center modal-animation">
 					<div class="loader m-5 rounded-lg"></div>
 				</article>
 			</div>

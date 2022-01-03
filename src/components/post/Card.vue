@@ -12,7 +12,7 @@
 				class="card"
 				:class="
 					showPopup
-						? `shadow-lg rounded-lg bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg mt-10 overflow-y-auto`
+						? `shadow-lg rounded-lg bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg mt-10 overflow-y-auto card-animation`
 						: ``
 				"
 				:style="showPopup ? `width: 750px; backdrop-filter: blur(10px); max-height: 90vh` : ``"
@@ -52,11 +52,11 @@
 						<p class="break-words my-2">{{ this.quote.content }}</p>
 					</div>
 					<!-- Wrapper for rounded outline on quote repost -->
-					<div :class="showRepostEditor || quote ? `rounded-lg border border-primary border-dashed p-2` : ``">
+					<div :class="showRepostEditor || quote ? `rounded-lg bg-lightBorder p-4` : ``">
 						<!-- Simple repost -->
 						<div
 							v-if="repostedBy !== `` && !hideRepostIcon && quote === null"
-							class="flex w-full -mt-2 mb-2 text-gray5 items-center"
+							class="flex w-full -mt-2 mb-2 text-gray5 items-center pt-2"
 						>
 							<RepostIcon />
 							<p class="pl-2 text-sm text-gray5">
@@ -75,7 +75,7 @@
 										</span>
 										<span class="ml-2 text-primary"> @{{ post.authorID }} </span>
 									</nuxt-link>
-									<span v-show="showFriendButton">
+									<span v-show="showFriendButton" class="modal-animation">
 										<FriendButton
 											v-if="post.authorID !== $store.state.session.id && $route.name !== `id`"
 											:small="true"
@@ -113,7 +113,7 @@
 											? 'bg-lightBG text-lightPrimaryText border-lightBorder'
 											: 'bg-darkBG text-darkPrimaryText border-darkBorder'
 									"
-									class="absolute flex flex-col rounded-lg w-32 shadow-lg z-10 p-1"
+									class="absolute flex flex-col rounded-lg w-32 shadow-lg z-10 p-1 modal-animation"
 									style="top: 70px; right: 10px"
 								>
 									<!-- Delete -->
@@ -517,21 +517,3 @@ export default Vue.extend({
 	},
 })
 </script>
-
-<style>
-/* Add Animation */
-.modal-animation,
-#caption {
-	animation-name: zoom;
-	animation-duration: 0.6s;
-}
-
-@keyframes zoom {
-	from {
-		opacity: 0;
-	}
-	to {
-		opacity: 1;
-	}
-}
-</style>

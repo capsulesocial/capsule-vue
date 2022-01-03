@@ -13,7 +13,7 @@
 					<section v-if="visitProfile" class="flex flex-row">
 						<nuxt-child
 							style="width: 750px; min-height: calc(100vh - 80px); height: calc(100vh - 80px)"
-							class="fixed overflow-y-auto rounded-lg shadow-lg mr-5 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg"
+							class="fixed overflow-y-auto rounded-lg shadow-lg mr-5 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg modal-animation"
 							:visitProfile="visitProfile"
 							:visitAvatar="visitAvatar"
 							:followers="followers"
@@ -26,7 +26,7 @@
 						/>
 						<!-- Widgets -->
 						<aside
-							class="fixed overflow-y-auto p-4 -mt-4"
+							class="fixed overflow-y-auto p-4 -mt-4 modal-animation"
 							style="margin-left: 755px; width: 485px; min-height: calc(100vh - 70px); height: calc(100vh - 70px)"
 						>
 							<ProfileWidget :location="visitProfile.location" />
@@ -39,7 +39,7 @@
 							<Footer />
 						</aside>
 					</section>
-					<section v-else class="w-full flex justify-center">
+					<section v-else class="w-full flex justify-center modal-animation">
 						<div class="loader m-5 p-10 rounded-lg"></div>
 					</section>
 				</div>

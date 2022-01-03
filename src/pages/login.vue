@@ -47,7 +47,7 @@
 						Looks like you don't have an account. Sign up
 					</div>
 				</article>
-				<article v-show="isLoading" class="w-3/4 flex justify-center">
+				<article v-show="isLoading" class="w-3/4 flex justify-center modal-animation">
 					<div class="loader m-5 rounded-lg"></div>
 				</article>
 			</div>
@@ -56,7 +56,7 @@
 		<!-- Key login popup -->
 		<div v-if="showKeyLoginPopup" class="w-full h-screen fixed top-0 bg-primary bg-opacity-50 flex justify-center">
 			<div
-				class="popup w-1/2 flex flex-col self-center items-center p-6 bg-gradient-to-r from-lightBGStart to-lightBGStop rounded-lg"
+				class="popup w-1/2 flex flex-col self-center items-center p-6 bg-gradient-to-r from-lightBGStart to-lightBGStop rounded-lg card-animation"
 				style="backdrop-filter: blur(10px)"
 			>
 				<label for="accountIdInput" class="text-primary mb-2 font-semibold w-full text-left">NEAR account ID</label>

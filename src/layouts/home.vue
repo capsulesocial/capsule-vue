@@ -10,7 +10,10 @@
 				<!-- Body -->
 				<div>
 					<!-- Title and peered nodes -->
-					<div class="fixed w-full flex justify-between items-center" style="width: 1220px; height: 62px">
+					<div
+						class="fixed w-full flex justify-between items-center modal-animation"
+						style="width: 1220px; height: 62px"
+					>
 						<!-- Title -->
 						<h1 v-if="profile" class="font-semibold text-primary" style="font-size: 2.6rem">
 							Hello, {{ profile.name }}
@@ -29,12 +32,12 @@
 								height: calc(100vh - 160px);
 								backdrop-filter: blur(10px);
 							"
-							class="fixed overflow-y-auto rounded-lg shadow-lg p-6 bg-gradient-to-r from-lightBGStart to-lightBGStop"
+							class="fixed overflow-y-auto rounded-lg shadow-lg p-6 bg-gradient-to-r from-lightBGStart to-lightBGStop modal-animation"
 						/>
 						<nuxt-child
 							v-else
 							style="width: 750px; min-height: calc(100vh - 150px); height: calc(100vh - 150px)"
-							class="fixed overflow-y-auto rounded-lg shadow-lg mr-5 bg-gradient-to-r from-lightBGStart to-lightBGStop"
+							class="fixed overflow-y-auto rounded-lg shadow-lg mr-5 bg-gradient-to-r from-lightBGStart to-lightBGStop modal-animation"
 							:class="showWidgets ? `` : `z-10`"
 							:toggleFriend="toggleFriend"
 							:following="following"
@@ -44,7 +47,7 @@
 						/>
 						<!-- Widgets -->
 						<aside
-							class="fixed overflow-y-auto p-4 -mt-4"
+							class="fixed overflow-y-auto p-4 -mt-4 modal-animation"
 							:class="showWidgets ? `z-10` : ``"
 							style="margin-left: 755px; width: 485px; min-height: calc(100vh - 150px); height: calc(100vh - 150px)"
 						>

@@ -10,7 +10,10 @@
 				<!-- Body -->
 				<div>
 					<!-- Title and peered nodes -->
-					<div class="fixed w-full flex justify-between items-center" style="width: 1220px; height: 62px">
+					<div
+						class="fixed w-full flex justify-between items-center modal-animation"
+						style="width: 1220px; height: 62px"
+					>
 						<!-- Title -->
 						<h1 v-if="$route.name === `discover`" class="font-semibold text-primary" style="font-size: 2.6rem">
 							Browse Capsule
@@ -19,7 +22,7 @@
 						<Nodes />
 					</div>
 					<!-- Content -->
-					<section class="flex flex-row mt-20">
+					<section class="flex flex-row mt-20 modal-animation">
 						<nuxt-child
 							style="width: 750px; min-height: calc(100vh - 80px); height: calc(100vh - 80px)"
 							:class="$route.name === `discover` ? `` : `-mt-20`"

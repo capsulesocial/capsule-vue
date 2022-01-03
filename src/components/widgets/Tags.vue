@@ -17,7 +17,10 @@
 						<ChevronDown v-else />
 					</button>
 					<!-- Dropdown -->
-					<div v-show="showFilter" class="absolute z-10 top-0 bg-white rounded-lg shadow-lg p-2 mt-10 w-full text-sm">
+					<div
+						v-show="showFilter"
+						class="absolute z-10 top-0 bg-white rounded-lg shadow-lg p-2 mt-10 w-full text-sm modal-animation"
+					>
 						<button class="w-full text-left text-gray7 focus:outline-none p-2" @click="setTagFilter(`Today`)">
 							Today
 						</button>

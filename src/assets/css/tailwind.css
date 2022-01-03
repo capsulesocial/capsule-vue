@@ -181,3 +181,64 @@
 	box-shadow: 0 3px 6px -1px rgba(0, 0, 0, 0.12), 0 10px 36px -4px rgba(77, 96, 232, 0.1);
 	transition: all 0.4s cubic-bezier(0.215, 0.61, 0.355, 1);
 }
+
+/* Add Animation */
+.modal-animation,
+#caption {
+	animation-name: fade;
+	animation-duration: 0.4s;
+}
+
+.card-animation,
+#caption {
+	animation-name: enter;
+	animation-duration: 0.6s;
+}
+
+.card-animation-delay1,
+#caption {
+	animation-name: enterdelay1;
+	animation-duration: 0.8s;
+}
+
+.card-animation-delay2,
+#caption {
+	animation-name: enterdelay2;
+	animation-duration: 1s;
+}
+
+@keyframes fade {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes enter {
+	from {
+		transform: translate(0px, 10px);
+	}
+	to {
+		transform: translate(0px, 0px);
+	}
+}
+
+@keyframes enterdelay1 {
+	from {
+		transform: translate(0px, 20px);
+	}
+	to {
+		transform: translate(0px, 0px);
+	}
+}
+
+@keyframes enterdelay2 {
+	from {
+		transform: translate(0px, 40px);
+	}
+	to {
+		transform: translate(0px, 0px);
+	}
+}

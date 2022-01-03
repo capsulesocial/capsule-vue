@@ -58,7 +58,7 @@
 			<p v-if="noMorePosts" class="text-center text-primary pt-5">No more posts</p>
 		</div>
 		<!-- Not loaded yet -->
-		<article v-show="isLoading" class="flex justify-center w-full">
+		<article v-show="isLoading" class="flex justify-center w-full modal-animation">
 			<div class="loader m-5"></div>
 		</article>
 	</section>
@@ -261,8 +261,9 @@ export default Vue.extend({
 	transform: translate3d(35px, -31px, 0px);
 	font-size: 1.5rem !important;
 	color: #2e556a;
-	line-height: 64px !important;
+	line-height: 38px !important;
 	margin-top: 2px;
+	padding-top: 13px;
 }
 .titlenotcollapsed {
 	transform: translate3d(0, 0, 0);

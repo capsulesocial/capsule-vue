@@ -51,7 +51,7 @@
 		<!-- Reply button -->
 		<div class="ml-10 pl-1">
 			<!-- Active reply state -->
-			<div v-if="isReplying" class="border-l pl-2 mr-5">
+			<div v-if="isReplying" class="border-l pl-2 mr-5 modal-animation mt-4">
 				<!-- Reply Input box -->
 				<div
 					:class="
@@ -89,7 +89,7 @@
 						:authorID="r.authorID"
 						:cid="r._id"
 						:timestamp="r.timestamp"
-						class="pt-1"
+						class="pt-1 pb-2"
 					/>
 				</div>
 			</div>
