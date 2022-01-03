@@ -71,8 +71,10 @@ export default Vue.extend({
 			algorithm: `NEW`,
 		}
 	},
-	created() {
-		this.loadReposts()
+	async created() {
+		await this.loadReposts()
+		const followersAndFollowing = await getFollowersAndFollowing(this.$store.state.session.id)
+		this.following = followersAndFollowing.following
 	},
 	mounted() {
 		const container = this.$parent.$refs.scrollContainer as HTMLElement
@@ -93,8 +95,6 @@ export default Vue.extend({
 				this.reposts = this.reposts.concat(res)
 				this.currentOffset += this.limit
 				this.isLoading = false
-				const followersAndFollowing = await getFollowersAndFollowing(this.$store.state.session.id)
-				this.following = followersAndFollowing.following
 			} catch (error) {
 			} finally {
 				this.isLoading = false
