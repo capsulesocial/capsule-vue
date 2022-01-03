@@ -82,6 +82,16 @@ export default Vue.extend({
 			following: new Set(),
 		}
 	},
+	watch: {
+		$route(n, o) {
+			if (n.params.tag === undefined) {
+				return
+			}
+			if (o.params.tag !== undefined) {
+				location.reload()
+			}
+		},
+	},
 	async created() {
 		// Check if logged in user
 		if (this.$store.state.session.id === ``) {
