@@ -43,7 +43,35 @@
 						<div class="loader m-5 p-10 rounded-lg"></div>
 					</section>
 				</div>
-				<div v-else>No profile found</div>
+				<div
+					v-else
+					style="width: 1220px; min-height: calc(100vh - 80px); height: calc(100vh - 80px)"
+					class="fixed bottom-0 overflow-y-auto rounded-lg shadow-lg mr-5 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg"
+				>
+					<div class="w-full p-5 flex flex-col items-ceter">
+						<h1 class="font-bold text-negative text-6xl font-sans text-center">404</h1>
+						<h2 class="text-center font-semibold text-2xl">This page was not found</h2>
+						<p class="text-center text-gray7 self-center my-5" style="width: 360px">
+							It seems that this page doesn't exist, we suggest you to go back home
+						</p>
+						<div class="flex justify-center">
+							<BrandedButton
+								:action="
+									() => {
+										this.$router.push(`/home`)
+									}
+								"
+								:text="`Back to Home`"
+							/>
+						</div>
+						<img
+							:src="require(`@/assets/images/brand/error.webp`)"
+							alt="error image"
+							class="self-center mt-5"
+							style="width: 500px"
+						/>
+					</div>
+				</div>
 			</div>
 		</div>
 	</main>
@@ -56,6 +84,7 @@ import FollowersWidget from '@/components/widgets/Followers.vue'
 import MutualFollowersWidget from '@/components/widgets/MutualFollowers.vue'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
+import BrandedButton from '@/components/BrandedButton.vue'
 
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
@@ -83,6 +112,7 @@ export default Vue.extend({
 		Header,
 		Footer,
 		MutualFollowersWidget,
+		BrandedButton,
 	},
 	data(): IData {
 		return {

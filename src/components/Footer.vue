@@ -8,6 +8,6 @@
 			<nuxt-link to="/terms" class="pr-6">Terms</nuxt-link>
 			<a href="https://www.capsule.social/about/overview" target="_blank" class="pr-6">About</a>
 		</div>
-		© 2021 Capsule.Social, Inc.
+		© 2021 Capsule Social, Inc.
 	</footer>
 </template>

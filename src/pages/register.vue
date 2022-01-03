@@ -86,7 +86,7 @@
 						</article>
 						<article v-else>
 							<!-- Step 3: Choose an ID -->
-							<label for="id" class="font-semibold text-sm text-gray5 pb-1 block">ID</label>
+							<label for="id" class="font-semibold text-sm text-gray5 pb-1 block">Pick your Capsule name</label>
 							<input
 								id="id"
 								v-model="id"
