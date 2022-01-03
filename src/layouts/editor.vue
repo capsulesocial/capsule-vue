@@ -19,7 +19,7 @@
 								height: calc(100vh - 88px);
 								backdrop-filter: blur(10px);
 							"
-							class="fixed overflow-y-auto rounded-t-lg shadow-lg mr-5 p-8 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop border-lightBorder modal-animation card-animation"
+							class="fixed overflow-y-auto rounded-t-lg shadow-lg mr-5 p-8 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop border-lightBorder modal-animation"
 							@update="updateWordCount"
 						/>
 						<div
@@ -29,7 +29,7 @@
 						</div>
 						<!-- Widgets -->
 						<aside
-							class="fixed overflow-y-auto p-4 -mt-4 modal-animation card-animation-delay1"
+							class="fixed overflow-y-auto p-4 -mt-4 modal-animation"
 							style="margin-left: 755px; width: 485px; min-height: calc(100vh - 70px); height: calc(100vh - 70px)"
 						>
 							<EditorWidgets :wordCount="wordCount" @post="handlePost" />

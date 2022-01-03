@@ -21,7 +21,7 @@
 					<div
 						id="button"
 						class="bg-lightBG bg-opacity-25 h-full absolute rounded-full trigger-menu-wrapper"
-						style="backdrop-filter: blur(10px); width: 94%; z-index: 0"
+						style="backdrop-filter: blur(10px); width: 155px; z-index: 0"
 					></div>
 				</button>
 				<h2
