@@ -88,7 +88,7 @@ export default Vue.extend({
 					{ authorID: this.$route.params.id },
 					{ sort: this.algorithm, offset: this.currentOffset, limit: this.limit },
 				)
-				if (res.length === 0) {
+				if (res.length < this.limit) {
 					const container = this.$parent.$refs.scrollContainer as HTMLElement
 					container.removeEventListener(`scroll`, this.handleScroll)
 				}
@@ -101,10 +101,12 @@ export default Vue.extend({
 			}
 		},
 		async handleScroll(e: Event) {
-			const { scrollTop, scrollHeight, clientHeight } = e.srcElement as HTMLElement
-			// Fetch reposts when reaching the bottom of page
-			if (scrollTop + clientHeight >= scrollHeight - 5) {
-				await this.loadReposts()
+			if (!this.isLoading) {
+				const { scrollTop, scrollHeight, clientHeight } = e.srcElement as HTMLElement
+				// Fetch reposts when reaching the bottom of page
+				if (scrollTop + clientHeight >= scrollHeight - 5) {
+					await this.loadReposts()
+				}
 			}
 		},
 		async toggleFriend(authorID: string) {
