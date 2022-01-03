@@ -288,7 +288,7 @@ export default Vue.extend({
 		this.content = marked.parse(this.post.content)
 
 		// Get reposts
-		const repostData = await getReposts(this.$store.state.session.id)
+		const repostData = await getReposts({ authorID: this.$store.state.session.id }, {})
 		repostData.forEach((p) => {
 			// @ts-ignore
 			this.myReposts.push(p.repost.postCID)

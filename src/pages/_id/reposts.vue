@@ -67,7 +67,7 @@ export default Vue.extend({
 		}
 	},
 	async created() {
-		this.reposts = await getReposts(this.$route.params.id)
+		this.reposts = await getReposts({ authorID: this.$route.params.id }, {})
 		getFollowersAndFollowing(this.$store.state.session.id).then(({ following }) => {
 			this.following = following
 		})
