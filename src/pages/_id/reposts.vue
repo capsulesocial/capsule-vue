@@ -13,7 +13,7 @@
 				:action="toggleHomeFeed"
 			/>
 		</article>
-		<div v-for="p in reposts" :key="p.repost._id">
+		<article v-for="p in reposts" :key="p.repost._id">
 			<PostCard
 				:repost="p.repost"
 				:post="p.post"
@@ -26,7 +26,10 @@
 				:bookmarksCount="p.bookmarksCount"
 				:repostCount="p.repostCount"
 			/>
-		</div>
+		</article>
+		<article v-show="isLoading" class="flex justify-center">
+			<div class="loader m-10"></div>
+		</article>
 	</section>
 </template>
 
@@ -37,7 +40,7 @@ import PostCard from '@/components/post/Card.vue'
 import { getReposts } from '@/backend/reposts'
 import { Profile } from '@/backend/profile'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
-import { IRepostResponse } from '@/backend/post'
+import { IRepostResponse, Algorithm } from '@/backend/post'
 
 interface IData {
 	reposts: Array<IRepostResponse>
@@ -45,6 +48,7 @@ interface IData {
 	currentOffset: number
 	limit: number
 	following: Set<string>
+	algorithm: Algorithm
 }
 
 export default Vue.extend({
@@ -64,16 +68,45 @@ export default Vue.extend({
 			currentOffset: 0,
 			limit: 10,
 			following: new Set(),
+			algorithm: `NEW`,
 		}
 	},
-	async created() {
-		this.reposts = await getReposts({ authorID: this.$route.params.id }, {})
-		getFollowersAndFollowing(this.$store.state.session.id).then(({ following }) => {
-			this.following = following
-		})
+	created() {
+		this.loadReposts()
+	},
+	mounted() {
+		const container = this.$parent.$refs.scrollContainer as HTMLElement
+		container.addEventListener(`scroll`, this.handleScroll)
 	},
 	methods: {
-		getReposts,
+		async loadReposts() {
+			this.isLoading = true
+			try {
+				const res = await getReposts(
+					{ authorID: this.$route.params.id },
+					{ sort: this.algorithm, offset: this.currentOffset, limit: this.limit },
+				)
+				if (res.length === 0) {
+					const container = this.$parent.$refs.scrollContainer as HTMLElement
+					container.removeEventListener(`scroll`, this.handleScroll)
+				}
+				this.reposts = this.reposts.concat(res)
+				this.currentOffset += this.limit
+				this.isLoading = false
+				const followersAndFollowing = await getFollowersAndFollowing(this.$store.state.session.id)
+				this.following = followersAndFollowing.following
+			} catch (error) {
+			} finally {
+				this.isLoading = false
+			}
+		},
+		async handleScroll(e: Event) {
+			const { scrollTop, scrollHeight, clientHeight } = e.srcElement as HTMLElement
+			// Fetch reposts when reaching the bottom of page
+			if (scrollTop + clientHeight >= scrollHeight - 5) {
+				await this.loadReposts()
+			}
+		},
 		async toggleFriend(authorID: string) {
 			if (authorID !== this.$store.state.session.id) {
 				await followChange(this.following.has(authorID) ? `UNFOLLOW` : `FOLLOW`, this.$store.state.session.id, authorID)
