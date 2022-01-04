@@ -25,7 +25,9 @@
 						<div
 							class="fixed bottom-0 z-10 m-4 px-5 py-3 bg-gradient-to-r from-lightBGStart to-lightBGStop border-lightBorder rounded-lg shadow-lg test-xs text-gray5 modal-animation card-animation-delay1"
 						>
-							Resume writing? <button class="text-primary ml-2" @click="showDraftsPopup">Show drafts</button>
+							Resume writing?<button class="text-primary ml-2 focus:outline-none" @click="showDraftsPopup">
+								Show drafts
+							</button>
 						</div>
 						<!-- Widgets -->
 						<aside

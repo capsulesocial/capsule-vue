@@ -49,6 +49,15 @@
 					class="max-w-none focus:outline-none p-2 content"
 					v-html="$store.state.draft.drafts[$store.state.draft.activeIndex].content"
 				></div>
+
+				<div
+					v-if="this.$store.state.widgets.primary === `editor` && this.$route.name === `home`"
+					class="absolute bottom-0 right-0 z-10 m-4 px-5 py-3 bg-gradient-to-r from-lightBGStart to-lightBGStop border-lightBorder rounded-lg shadow-lg test-xs text-gray5 modal-animation card-animation-delay1"
+				>
+					Time to publish?<button class="text-primary ml-2 focus:outline-none" @click="$router.push(`/post`)">
+						Add meta
+					</button>
+				</div>
 			</section>
 		</div>
 	</div>
