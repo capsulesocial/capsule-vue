@@ -5,11 +5,16 @@
 				<!-- Title, subtitle -->
 				<article class="flex flex-col px-2">
 					<button
+						v-if="isSaving === `false`"
 						class="absolute right-0 top-0 rounded-full bg-gray1 p-1 m-8 focus:outline-none"
-						@click="$router.go(-1)"
+						@click="saveContent"
 					>
 						<XIcon />
 					</button>
+					<article v-else-if="isSaving === `true`" class="absolute right-0 top-0 p-8 modal-animation">
+						<div class="loader"></div>
+					</article>
+					<p v-else class="absolute right-0 top-0 p-8 pt-10 text-positive modal-animation">Saved!</p>
 					<p class="text-xs text-lightError">{{ titleError }}</p>
 					<label for="title" class="hidden">Title</label>
 					<textarea
@@ -67,6 +72,7 @@ interface IData {
 	titleError: string
 	subtitleError: string
 	hasPosted: boolean
+	isSaving: string
 }
 
 export default Vue.extend({
@@ -90,6 +96,7 @@ export default Vue.extend({
 			titleError: ``,
 			subtitleError: ``,
 			hasPosted: false,
+			isSaving: `false`,
 		}
 	},
 	created() {
@@ -135,14 +142,30 @@ export default Vue.extend({
 		subtitleInput.value = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].subtitle
 		this.handleTitle(null)
 	},
-	beforeDestroy() {
-		this.saveContent()
-	},
 	methods: {
-		saveContent(): void {
+		async saveContent(): Promise<void> {
+			const titleInput = this.$refs.title as HTMLInputElement
+			const subtitleInput = this.$refs.subtitle as HTMLInputElement
 			const input = this.getInputHTML()
-			if (input !== ``) {
-				this.$store.commit(`draft/updateContent`, input)
+			if (input.length > 11 || titleInput.value !== `` || subtitleInput.value !== ``) {
+				this.isSaving = `true`
+				if (input.length > 11) {
+					this.$store.commit(`draft/updateContent`, input)
+				}
+				if (titleInput.value !== ``) {
+					this.$store.commit(`draft/updateTitle`, titleInput.value)
+				}
+				if (subtitleInput.value !== ``) {
+					this.$store.commit(`draft/updateSubtitle`, subtitleInput.value)
+				}
+				await this.sleep(600)
+				this.isSaving = `done`
+				await this.sleep(800)
+				this.$router.go(-1)
+			} else {
+				this.$router.go(-1)
+				const i: number = this.$store.state.draft.drafts.length - 1
+				this.$store.commit(`draft/deleteDraft`, i)
 			}
 		},
 		updateWordCount(n: number) {
@@ -265,6 +288,9 @@ export default Vue.extend({
 				return
 			}
 			this.subtitleError = ``
+		},
+		sleep(ms: any) {
+			return new Promise((resolve) => setTimeout(resolve, ms))
 		},
 	},
 })
