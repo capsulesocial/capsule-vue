@@ -5,11 +5,18 @@
 				<!-- Title, subtitle -->
 				<article class="flex flex-col px-2">
 					<button
+						v-if="isSaving === `false` && this.$route.name !== 'home'"
 						class="absolute right-0 top-0 rounded-full bg-gray1 p-1 m-8 focus:outline-none"
-						@click="$router.go(-1)"
+						@click="saveContent"
 					>
 						<XIcon />
 					</button>
+					<article v-else-if="isSaving === `true`" class="absolute right-0 top-0 p-8 modal-animation">
+						<div class="loader"></div>
+					</article>
+					<p v-else class="absolute right-0 top-0 p-8 pt-10 text-positive modal-animation">
+						<span v-if="this.$route.name !== 'home'">Saved!</span>
+					</p>
 					<p class="text-xs text-lightError">{{ titleError }}</p>
 					<label for="title" class="hidden">Title</label>
 					<textarea
@@ -42,6 +49,15 @@
 					class="max-w-none focus:outline-none p-2 content"
 					v-html="$store.state.draft.drafts[$store.state.draft.activeIndex].content"
 				></div>
+
+				<div
+					v-if="this.$store.state.widgets.primary === `editor` && this.$route.name === `home`"
+					class="absolute bottom-0 right-0 z-10 m-4 px-5 py-3 bg-gradient-to-r from-lightBGStart to-lightBGStop border-lightBorder rounded-lg shadow-lg test-xs text-gray5 modal-animation card-animation-delay1"
+				>
+					Time to publish?<button class="text-primary ml-2 focus:outline-none" @click="$router.push(`/post`)">
+						Add meta
+					</button>
+				</div>
 			</section>
 		</div>
 	</div>
@@ -67,6 +83,8 @@ interface IData {
 	titleError: string
 	subtitleError: string
 	hasPosted: boolean
+	isSaving: string
+	isX: boolean
 }
 
 export default Vue.extend({
@@ -90,10 +108,31 @@ export default Vue.extend({
 			titleError: ``,
 			subtitleError: ``,
 			hasPosted: false,
+			isSaving: `false`,
+			isX: false,
 		}
 	},
-	created() {
-		window.addEventListener(`beforeunload`, this.saveContent)
+	beforeDestroy() {
+		if (this.isX) {
+			return
+		}
+		const titleInput = this.$refs.title as HTMLInputElement
+		const subtitleInput = this.$refs.subtitle as HTMLInputElement
+		const input = this.getInputHTML()
+		if (input.length > 11 || titleInput.value !== `` || subtitleInput.value !== ``) {
+			if (input.length > 11) {
+				this.$store.commit(`draft/updateContent`, input)
+			}
+			if (titleInput.value !== ``) {
+				this.$store.commit(`draft/updateTitle`, titleInput.value)
+			}
+			if (subtitleInput.value !== ``) {
+				this.$store.commit(`draft/updateSubtitle`, subtitleInput.value)
+			}
+		} else {
+			const i: number = this.$store.state.draft.activeIndex
+			this.$store.commit(`draft/deleteDraft`, i)
+		}
 	},
 	mounted() {
 		Quill.register(`modules/counter`, (quill: Quill) => {
@@ -135,14 +174,35 @@ export default Vue.extend({
 		subtitleInput.value = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].subtitle
 		this.handleTitle(null)
 	},
-	beforeDestroy() {
-		this.saveContent()
-	},
 	methods: {
-		saveContent(): void {
+		async saveContent(): Promise<void> {
+			this.isX = true
+			const titleInput = this.$refs.title as HTMLInputElement
+			const subtitleInput = this.$refs.subtitle as HTMLInputElement
 			const input = this.getInputHTML()
-			if (input !== ``) {
-				this.$store.commit(`draft/updateContent`, input)
+			if (input.length > 11 || titleInput.value !== `` || subtitleInput.value !== ``) {
+				this.isSaving = `true`
+				if (input.length > 11) {
+					this.$store.commit(`draft/updateContent`, input)
+				}
+				if (titleInput.value !== ``) {
+					this.$store.commit(`draft/updateTitle`, titleInput.value)
+				}
+				if (subtitleInput.value !== ``) {
+					this.$store.commit(`draft/updateSubtitle`, subtitleInput.value)
+				}
+				await this.sleep(600)
+				this.isSaving = `done`
+				await this.sleep(800)
+				if (this.$route.name === `post`) {
+					this.$router.go(-1)
+				}
+			} else {
+				if (this.$route.name === `post`) {
+					this.$router.go(-1)
+				}
+				const i: number = this.$store.state.draft.activeIndex
+				this.$store.commit(`draft/deleteDraft`, i)
 			}
 		},
 		updateWordCount(n: number) {
@@ -265,6 +325,9 @@ export default Vue.extend({
 				return
 			}
 			this.subtitleError = ``
+		},
+		sleep(ms: any) {
+			return new Promise((resolve) => setTimeout(resolve, ms))
 		},
 	},
 })

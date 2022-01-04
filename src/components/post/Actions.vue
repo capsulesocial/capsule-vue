@@ -172,7 +172,7 @@
 											text="Post"
 											:action="sendComment"
 											:thin="true"
-											:class="comment !== '' ? '' : 'opacity-50'"
+											:class="comment !== '' && activeEmotion.label !== '' ? '' : 'opacity-50'"
 										/>
 									</span>
 								</div>

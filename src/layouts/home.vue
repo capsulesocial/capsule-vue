@@ -22,14 +22,14 @@
 						<Nodes />
 					</div>
 					<!-- Content -->
-					<section class="flex flex-row mt-20">
+					<section class="flex flex-row mt-20 relative">
 						<PostEditor
 							v-if="$store.state.widgets.primary === `editor` && $route.name === `home`"
 							ref="editor"
 							style="
 								width: 750px;
-								min-height: calc(100vh - 160px);
-								height: calc(100vh - 160px);
+								min-height: calc(100vh - 150px);
+								height: calc(100vh - 150px);
 								backdrop-filter: blur(10px);
 							"
 							class="fixed overflow-y-auto rounded-lg shadow-lg p-6 bg-gradient-to-r from-lightBGStart to-lightBGStop modal-animation"

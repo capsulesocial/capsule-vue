@@ -21,7 +21,7 @@
 						<h1 class="font-bold text-negative text-6xl font-sans text-center mt-16">500</h1>
 						<h2 class="text-center font-semibold text-2xl">Something went wrong</h2>
 						<p class="text-center text-gray7 self-center mb-5 mt-2" style="width: 360px">
-							We apologize for the issue, we suggest you go back home
+							We apologize for the issue, we suggest you to go back home
 						</p>
 						<div class="flex justify-center">
 							<BrandedButton :action="handleReload" :text="`Back to home`" />
