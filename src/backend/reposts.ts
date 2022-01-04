@@ -38,22 +38,30 @@ export interface IRepost {
 	_id: string
 }
 
+export interface IGetRepostsOptions {
+	sort?: Algorithm
+	offset?: number
+	limit?: number
+	following?: string
+}
+
 export async function getReposts(
-	authorID: string,
-	sort: Algorithm = `NEW`,
-	postCID?: string,
-	following?: string,
+	filter: { authorID: string; postCID?: string },
+	options: IGetRepostsOptions,
 ): Promise<IRepostResponse[]> {
+	const { sort, offset = 0, limit = 10, following } = options
 	if (sort === `FOLLOWING` && !following) {
 		throw new Error(`Following not specified`)
 	}
 
 	const { data } = await axios.get(`${nodeUrl()}/repost`, {
 		params: {
-			authorID,
+			...filter,
 			sort,
+			...(following && sort === `FOLLOWING` ? { following } : {}),
 			following,
-			postCID,
+			offset,
+			limit,
 		},
 	})
 

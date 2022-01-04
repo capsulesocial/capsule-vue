@@ -169,7 +169,7 @@ export default Vue.extend({
 				this.$toastSuccess(`This repost has been successfully removed from your profile`)
 			}
 			// Update reposts store
-			await this.getReposts(this.$store.state.session.id).then((res) => {
+			await this.getReposts({ authorID: this.$store.state.session.id }, {}).then((res) => {
 				if (res) {
 					const repost: RepostLink[] = []
 					res.forEach((r) => {

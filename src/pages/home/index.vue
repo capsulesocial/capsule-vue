@@ -119,7 +119,7 @@ export default Vue.extend({
 			following: this.$store.state.session.id,
 		})
 		// Fetch my reposts
-		await this.getReposts(this.$store.state.session.id).then((res) => {
+		await this.getReposts({ authorID: this.$store.state.session.id }, {}).then((res) => {
 			if (res) {
 				const repost: RepostLink[] = []
 				res.forEach((r) => {
