@@ -109,8 +109,6 @@ export default Vue.extend({
 			this.wordCount = num
 		},
 		showDraftsPopup(): void {
-			// @ts-ignore
-			this.$refs.editor.saveContent()
 			this.showDrafts = !this.showDrafts
 		},
 	},

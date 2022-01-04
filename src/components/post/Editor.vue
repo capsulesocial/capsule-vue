@@ -5,7 +5,7 @@
 				<!-- Title, subtitle -->
 				<article class="flex flex-col px-2">
 					<button
-						v-if="isSaving === `false`"
+						v-if="isSaving === `false` && this.$route.name !== 'home'"
 						class="absolute right-0 top-0 rounded-full bg-gray1 p-1 m-8 focus:outline-none"
 						@click="saveContent"
 					>
@@ -14,7 +14,9 @@
 					<article v-else-if="isSaving === `true`" class="absolute right-0 top-0 p-8 modal-animation">
 						<div class="loader"></div>
 					</article>
-					<p v-else class="absolute right-0 top-0 p-8 pt-10 text-positive modal-animation">Saved!</p>
+					<p v-else class="absolute right-0 top-0 p-8 pt-10 text-positive modal-animation">
+						<span v-if="this.$route.name !== 'home'">Saved!</span>
+					</p>
 					<p class="text-xs text-lightError">{{ titleError }}</p>
 					<label for="title" class="hidden">Title</label>
 					<textarea
@@ -73,6 +75,7 @@ interface IData {
 	subtitleError: string
 	hasPosted: boolean
 	isSaving: string
+	isX: boolean
 }
 
 export default Vue.extend({
@@ -97,10 +100,30 @@ export default Vue.extend({
 			subtitleError: ``,
 			hasPosted: false,
 			isSaving: `false`,
+			isX: false,
 		}
 	},
-	created() {
-		window.addEventListener(`beforeunload`, this.saveContent)
+	beforeDestroy() {
+		if (this.isX) {
+			return
+		}
+		const titleInput = this.$refs.title as HTMLInputElement
+		const subtitleInput = this.$refs.subtitle as HTMLInputElement
+		const input = this.getInputHTML()
+		if (input.length > 11 || titleInput.value !== `` || subtitleInput.value !== ``) {
+			if (input.length > 11) {
+				this.$store.commit(`draft/updateContent`, input)
+			}
+			if (titleInput.value !== ``) {
+				this.$store.commit(`draft/updateTitle`, titleInput.value)
+			}
+			if (subtitleInput.value !== ``) {
+				this.$store.commit(`draft/updateSubtitle`, subtitleInput.value)
+			}
+		} else {
+			const i: number = this.$store.state.draft.activeIndex
+			this.$store.commit(`draft/deleteDraft`, i)
+		}
 	},
 	mounted() {
 		Quill.register(`modules/counter`, (quill: Quill) => {
@@ -144,6 +167,7 @@ export default Vue.extend({
 	},
 	methods: {
 		async saveContent(): Promise<void> {
+			this.isX = true
 			const titleInput = this.$refs.title as HTMLInputElement
 			const subtitleInput = this.$refs.subtitle as HTMLInputElement
 			const input = this.getInputHTML()
@@ -161,10 +185,14 @@ export default Vue.extend({
 				await this.sleep(600)
 				this.isSaving = `done`
 				await this.sleep(800)
-				this.$router.go(-1)
+				if (this.$route.name === `post`) {
+					this.$router.go(-1)
+				}
 			} else {
-				this.$router.go(-1)
-				const i: number = this.$store.state.draft.drafts.length - 1
+				if (this.$route.name === `post`) {
+					this.$router.go(-1)
+				}
+				const i: number = this.$store.state.draft.activeIndex
 				this.$store.commit(`draft/deleteDraft`, i)
 			}
 		},
