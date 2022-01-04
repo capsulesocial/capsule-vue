@@ -42,7 +42,6 @@
 							:toggleFriend="toggleFriend"
 							:following="following"
 							:followers="followers"
-							:updateFollowers="updateFollowers"
 							:userIsFollowed="userIsFollowed"
 						/>
 						<!-- Widgets -->
@@ -138,7 +137,7 @@ export default Vue.extend({
 			}
 		},
 		async updateFollowers() {
-			const { followers, following } = await getFollowersAndFollowing(this.$route.params.id, true)
+			const { followers, following } = await getFollowersAndFollowing(this.$store.state.session.id, true)
 			this.followers = followers
 			this.following = following
 		},

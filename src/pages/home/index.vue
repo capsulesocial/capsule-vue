@@ -39,7 +39,10 @@
 				class="fixed overflow-y-auto modal-animation"
 				style="width: 748px; min-height: calc(100vh - 220px); height: calc(100vh - 220px)"
 			>
-				<div v-if="!isLoading && algorithm === `FOLLOWING` && following.size === 0" class="relative">
+				<div
+					v-if="!isLoading && algorithm === `FOLLOWING` && following.size === 0 && posts.length === 0"
+					class="relative"
+				>
 					<img :src="require(`@/assets/images/brand/follow-window.webp`)" class="absolute top-0" />
 				</div>
 				<!-- content -->
