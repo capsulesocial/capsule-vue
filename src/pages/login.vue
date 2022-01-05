@@ -30,10 +30,11 @@
 					</div>
 					<button
 						class="w-full rounded-lg bg-gray2 mb-4 py-3 flex justify-center items-center focus:outline-none"
-						@click="showKeyLoginPopup = !showKeyLoginPopup"
+						@click="handleKeyClick"
 					>
 						<FileIcon />
 						<span class="font-semibold text-gray7 text-sm ml-4"> Import private key </span>
+						<input id="key" ref="key" type="file" name="key" accept=".json" class="hidden" @change="handleKey" />
 					</button>
 					<p class="text-center text-gray7 mt-10">
 						Don't have an account yet?
@@ -53,31 +54,6 @@
 			</div>
 		</section>
 		<p class="px-4 text-gray5 text-sm pl-10">© 2021 Capsule.Social</p>
-		<!-- Key login popup -->
-		<div v-if="showKeyLoginPopup" class="w-full h-screen fixed top-0 bg-primary bg-opacity-50 flex justify-center">
-			<div
-				class="popup w-1/2 flex flex-col self-center items-center p-6 bg-gradient-to-r from-lightBGStart to-lightBGStop rounded-lg card-animation"
-				style="backdrop-filter: blur(10px)"
-			>
-				<label for="accountIdInput" class="text-primary mb-2 font-semibold w-full text-left">NEAR account ID</label>
-				<input
-					id="accountIdInput"
-					v-model="accountIdInput"
-					type="text"
-					class="text-black placeholder-gray5 px-2 py-1 bg-gray1 rounded-lg flex-grow focus:outline-none w-full"
-					placeholder="Account ID"
-				/>
-				<label for="privateKey" class="text-primary mt-4 mb-2 font-semibold w-full text-left">Private Key</label>
-				<input
-					id="privateKey"
-					v-model="privateKey"
-					type="text"
-					class="text-black placeholder-gray5 px-2 py-1 bg-gray1 rounded-lg flex-grow focus:outline-none w-full"
-					placeholder="paste your NEAR private key"
-				/>
-				<button class="bg-primary text-white rounded-lg px-4 py-2 mt-8" @click="walletLogin">Log In</button>
-			</div>
-		</div>
 	</main>
 </template>
 
@@ -97,6 +73,7 @@ import { MutationType, createSessionFromProfile, namespace as sessionStoreNamesp
 import { getAccountIdFromPrivateKey, login, loginNearAccount } from '@/backend/auth'
 import { getUsernameNEAR } from '@/backend/near'
 import { torusVerifiers, TorusVerifiers } from '@/backend/utilities/config'
+import { HTMLInputEvent } from '@/interfaces/HTMLInputEvent'
 
 interface IData {
 	id: string
@@ -106,7 +83,6 @@ interface IData {
 	accountId: null | string
 	isLoading: boolean
 	phoneNumber: string
-	showKeyLoginPopup: boolean
 	accountIdInput: string
 	privateKey: string
 }
@@ -131,7 +107,6 @@ export default Vue.extend({
 			userInfo: null,
 			isLoading: false,
 			username: undefined,
-			showKeyLoginPopup: false,
 			accountIdInput: ``,
 			privateKey: ``,
 		}
@@ -144,7 +119,6 @@ export default Vue.extend({
 		if (this.$store.state.session.id !== `` && accountId) {
 			this.$router.push(`/home`)
 		}
-		window.addEventListener(`click`, this.handleClose)
 	},
 	methods: {
 		...mapMutations(sessionStoreNamespace, {
@@ -176,6 +150,28 @@ export default Vue.extend({
 				// eslint-disable-next-line no-console
 				console.log(e)
 				this.isLoading = false
+			}
+		},
+		handleKeyClick(): void {
+			const b = this.$refs.key as HTMLElement
+			b.click()
+		},
+		handleKey(e: HTMLInputEvent): void {
+			if (!e.target.files) {
+				return
+			}
+			const keyFile = e.target.files[0]
+			if (keyFile) {
+				const reader = new FileReader()
+				reader.readAsText(keyFile)
+				reader.onload = (i: Event) => {
+					if (i.target !== null && reader.result !== null) {
+						const key = JSON.parse(reader.result as string)
+						this.accountIdInput = key.accountId
+						this.privateKey = key.privateKey
+						this.walletLogin()
+					}
+				}
 			}
 		},
 		async verify() {
@@ -212,7 +208,6 @@ export default Vue.extend({
 				this.$toastWarning(`looks like you don't have an account`)
 				this.$router.push(`/register`)
 			}
-			this.showKeyLoginPopup = false
 			this.walletVerify()
 		},
 		async walletVerify() {
@@ -234,14 +229,6 @@ export default Vue.extend({
 				this.$router.push(`/home`)
 			} catch (err: any) {
 				this.$toastError(err.message)
-			}
-		},
-		handleClose(e: any): void {
-			if (!e.target || e.target.firstChild === null || e.target.firstChild.classList === undefined) {
-				return
-			}
-			if (e.target.firstChild.classList[0] === `popup`) {
-				this.showKeyLoginPopup = false
 			}
 		},
 	},
