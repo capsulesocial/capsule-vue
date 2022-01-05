@@ -3,7 +3,7 @@
 		<!-- Header -->
 		<div
 			id="header"
-			class="bg-primary rounded-lg flex flex-row items-center shadow-lg h-56 border-lightBorder w-full trigger-menu-wrapper"
+			class="bg-primary rounded-lg flex flex-row items-center shadow-lg h-56 border-lightBorder w-full animatefast"
 			:style="{
 				background: `linear-gradient(180deg, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.8) 100%), url(${require(`@/assets/images/category/` +
 					$route.params.category +
@@ -17,16 +17,22 @@
 					<div class="bg-gray1 rounded-full flex-shrink-0 z-10">
 						<BackIcon />
 					</div>
-					<p id="buttontitle" class="pl-3 font-semibold trigger-menu-wrapper pr-4">All categories</p>
+					<p id="buttontitle" class="pl-3 font-semibold animatefast pr-4">All categories</p>
+					<h2
+						id="hiddentitle"
+						class="text-primary font-semibold capitalize animatelong absolute ml-8 px-2 text-xl -mt-1 opacity-0"
+					>
+						{{ $route.params.category }}
+					</h2>
 					<div
-						id="button"
-						class="bg-lightBG bg-opacity-25 h-full absolute rounded-full trigger-menu-wrapper"
+						id="buttonbg"
+						class="bg-lightBG bg-opacity-25 h-full absolute rounded-full animatefast"
 						style="backdrop-filter: blur(10px); width: 155px; z-index: 0"
 					></div>
 				</button>
 				<h2
 					id="title"
-					class="text-lightOnPrimaryText font-semibold capitalize trigger-menu-wrapper"
+					class="text-lightOnPrimaryText font-semibold capitalize animatefast"
 					style="font-size: 1.875rem; line-height: 38px"
 				>
 					{{ $route.params.category }}
@@ -157,27 +163,27 @@ export default Vue.extend({
 			const body = document.getElementById(`column`)
 			const header = document.getElementById(`header`)
 			const buttontitle = document.getElementById(`buttontitle`)
-			const button = document.getElementById(`button`)
+			const buttonbg = document.getElementById(`buttonbg`)
 			const title = document.getElementById(`title`)
+			const hiddentitle = document.getElementById(`hiddentitle`)
 			this.padding = header?.clientHeight + `px`
 			const scrollUp = `scrollup`
 			const scrollDown = `scrolldown`
-			const buttontitlecollapsed = `buttontitlecollapsed`
-			const buttontitlenotcollapsed = `buttontitlenotcollapsed`
-			const buttoncollapsed = `buttonbgcollapsed`
-			const buttonnotcollapsed = `buttonbgnotcollapsed`
-			const titlecollapsed = `titlecollapsed`
-			const titlenotcollapsed = `titlenotcollapsed`
+			const opacity0 = `opacity0`
+			const opacity1 = `opacity1`
 			if (!body) {
 				return
 			}
 			if (!buttontitle) {
 				return
 			}
-			if (!button) {
+			if (!buttonbg) {
 				return
 			}
 			if (!title) {
+				return
+			}
+			if (!hiddentitle) {
 				return
 			}
 			if (!header) {
@@ -186,30 +192,35 @@ export default Vue.extend({
 			const currentScroll = body.scrollTop
 			if (body.scrollTop <= 0) {
 				header.classList.remove(scrollUp)
-				buttontitle.classList.remove(buttontitlecollapsed)
-				button.classList.remove(buttoncollapsed)
-				title.classList.remove(titlecollapsed)
+				buttontitle.classList.remove(opacity0)
+				buttonbg.classList.remove(opacity0)
+				title.classList.remove(opacity0)
+				hiddentitle.classList.remove(opacity1)
 				return
 			}
 			if (currentScroll > this.lastScroll && !header.classList.contains(scrollDown)) {
 				// down
 				header.classList.remove(scrollUp)
-				buttontitle.classList.remove(buttontitlenotcollapsed)
-				button.classList.remove(buttonnotcollapsed)
-				title.classList.remove(titlenotcollapsed)
+				buttontitle.classList.remove(opacity1)
+				buttonbg.classList.remove(opacity1)
+				title.classList.remove(opacity1)
+				hiddentitle.classList.remove(opacity0)
 				header.classList.add(scrollDown)
-				buttontitle.classList.add(buttontitlecollapsed)
-				button.classList.add(buttoncollapsed)
-				title.classList.add(titlecollapsed)
+				buttontitle.classList.add(opacity0)
+				buttonbg.classList.add(opacity0)
+				title.classList.add(opacity0)
+				hiddentitle.classList.add(opacity1)
 			} else if (currentScroll < this.lastScroll && header.classList.contains(scrollDown)) {
 				// up
 				header.classList.remove(scrollDown)
-				buttontitle.classList.remove(buttontitlecollapsed)
-				button.classList.remove(buttoncollapsed)
-				title.classList.remove(titlecollapsed)
+				buttontitle.classList.remove(opacity0)
+				buttonbg.classList.remove(opacity0)
+				title.classList.remove(opacity0)
+				hiddentitle.classList.remove(opacity1)
 				header.classList.add(scrollUp)
-				buttontitle.classList.add(buttontitlenotcollapsed)
-				title.classList.add(titlenotcollapsed)
+				buttontitle.classList.add(opacity1)
+				title.classList.add(opacity1)
+				hiddentitle.classList.add(opacity0)
 			}
 			this.lastScroll = currentScroll
 			// Reached bottom, fetch more posts
@@ -232,8 +243,12 @@ export default Vue.extend({
 </script>
 
 <style>
-.trigger-menu-wrapper {
+.animatefast {
 	transition: all 0.4s;
+	z-index: 50;
+}
+.animatelong {
+	transition: all 0.6s;
 	z-index: 50;
 }
 .scrolldown {
@@ -245,27 +260,10 @@ export default Vue.extend({
 	opacity: 1;
 	transform: none;
 }
-.buttonbgcollapsed {
+.opacity0 {
 	opacity: 0;
 }
-.buttonbgnotcollapsed {
+.opacity1 {
 	opacity: 1;
-}
-.buttontitlecollapsed {
-	opacity: 0;
-}
-.buttontitlenotcollapsed {
-	opacity: 1;
-}
-.titlecollapsed {
-	transform: translate3d(35px, -31px, 0px);
-	font-size: 1.5rem !important;
-	color: #2e556a;
-	line-height: 38px !important;
-	margin-top: 2px;
-	padding-top: 13px;
-}
-.titlenotcollapsed {
-	transform: translate3d(0, 0, 0);
 }
 </style>

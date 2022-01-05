@@ -291,8 +291,8 @@ export default Vue.extend({
 			const buttonnotcollapsed = `buttonnotcollapsed`
 			const avatarcollapsed = `avatarcollapsed`
 			const avatarnotcollapsed = `avatarnotcollapsed`
-			const titlecollapsed = `titlecollapsed`
-			const titlenotcollapsed = `titlenotcollapsed`
+			const titlecollapsed = `namecollapsed`
+			const titlenotcollapsed = `namenotcollapsed`
 			const followcollapsed = `followcollapsed`
 			const follownotcollapsed = `follownotcollapsed`
 			const tabscollapsed = `tabscollapsed`
@@ -414,10 +414,10 @@ export default Vue.extend({
 	width: 6rem;
 	transform: translate3d(0, 0, 0);
 }
-.titlecollapsed {
+.namecollapsed {
 	transform: translate3d(40px, -47px, 0px);
 }
-.titlenotcollapsed {
+.namenotcollapsed {
 	transform: translate3d(0, 0, 0);
 }
 .followcollapsed {
