@@ -5,11 +5,19 @@ export interface RepostLink {
 	repostID: string
 }
 
+interface PostPreview {
+	title: string
+	authorID: string
+	featuredPhoto: string | null
+	postCID: string
+}
+
 export interface RootState {
 	nodeURL: string
 	backgroundImage: string | null
 	reposts: RepostLink[]
 	recentlyJoined: boolean
+	recentBookmarks: Set<PostPreview>
 }
 
 export const state = (): RootState => ({
@@ -17,6 +25,7 @@ export const state = (): RootState => ({
 	backgroundImage: null,
 	reposts: [],
 	recentlyJoined: true,
+	recentBookmarks: new Set(),
 })
 
 export const MutationType = {
@@ -26,6 +35,7 @@ export const MutationType = {
 	ADD_REPOST: `addRepost`,
 	REMOVE_REPOST: `removeRepost`,
 	RESET_REPOST: `resetRepost`,
+	SET_RECENT_BOOKMARKS: `setRecentBookmarks`,
 	WELCOME: `setWelcome`,
 }
 
@@ -50,6 +60,14 @@ export const mutations: MutationTree<RootState> = {
 	},
 	[MutationType.RESET_REPOST]: (state) => {
 		state.reposts = []
+	},
+	[MutationType.SET_RECENT_BOOKMARKS]: (state, recentBookmarks) => {
+		recentBookmarks.array.forEach((e: PostPreview) => {
+			console.log(e)
+			state.recentBookmarks.add(e)
+		})
+		console.log(state.recentBookmarks)
+		// state.recentBookmarks = recentBookmarks
 	},
 	[MutationType.WELCOME]: (state, type: boolean) => {
 		state.recentlyJoined = type

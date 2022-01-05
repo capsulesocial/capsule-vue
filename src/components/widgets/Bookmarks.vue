@@ -2,7 +2,7 @@
 	<article class="py-4">
 		<h3 class="text-primary text-base font-semibold px-6 pb-4">Recent Bookmarks</h3>
 		<nuxt-link
-			v-for="p in posts"
+			v-for="p in this.$store.state.recentBookmarks"
 			:key="p.postCID"
 			:to="`/post/` + p.postCID"
 			class="w-full flex flex-row items-center px-6 pb-4"
@@ -45,20 +45,24 @@ export default Vue.extend({
 			posts: [],
 		}
 	},
-	async created() {
-		this.bookmarks = await getPosts({ bookmarkedBy: this.$store.state.session.id }, this.$store.state.session.id, {})
-		this.bookmarks = this.bookmarks.reverse().slice(0, 2)
-		this.bookmarks.forEach((p: IPostResponse) => {
-			if (p.post.featuredPhotoCID) {
-				getPhotoFromIPFS(p.post.featuredPhotoCID).then((res) => {
-					const post = { title: p.post.title, authorID: p.post.authorID, featuredPhoto: res, postCID: p.post._id }
+	created() {},
+	methods: {
+		async fetchBookmarks() {
+			this.bookmarks = await getPosts({ bookmarkedBy: this.$store.state.session.id }, this.$store.state.session.id, {})
+			this.bookmarks = this.bookmarks.reverse().slice(0, 2)
+			this.bookmarks.forEach((p: IPostResponse) => {
+				if (p.post.featuredPhotoCID) {
+					getPhotoFromIPFS(p.post.featuredPhotoCID).then((res) => {
+						const post = { title: p.post.title, authorID: p.post.authorID, featuredPhoto: res, postCID: p.post._id }
+						this.posts.push(post)
+					})
+				} else {
+					const post = { title: p.post.title, authorID: p.post.authorID, featuredPhoto: null, postCID: p.post._id }
 					this.posts.push(post)
-				})
-			} else {
-				const post = { title: p.post.title, authorID: p.post.authorID, featuredPhoto: null, postCID: p.post._id }
-				this.posts.push(post)
-			}
-		})
+				}
+			})
+			this.$store.commit(`setRecentBookmarks`, this.posts)
+		},
 	},
 })
 </script>
