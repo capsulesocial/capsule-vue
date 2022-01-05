@@ -108,14 +108,17 @@ export default Vue.extend({
 		}
 	},
 	async created() {
+		// Unauthenticated view
 		if (this.$store.state.session.id === ``) {
 			this.algorithm = `TOP`
-			this.posts = await getPosts({}, ``, {
+			this.posts = await getPosts({}, `x`, {
 				sort: this.algorithm,
 				limit: this.limit,
 				offset: this.currentOffset,
-				following: this.$store.state.session.id,
+				following: undefined,
 			})
+			this.currentOffset += this.limit
+			this.isLoading = false
 			return
 		}
 		// Fetch posts if logged in
@@ -141,6 +144,8 @@ export default Vue.extend({
 		})
 		this.currentOffset += this.limit
 		this.isLoading = false
+	},
+	mounted() {
 		const container = this.$refs.container as HTMLElement
 		container.addEventListener(`scroll`, this.handleScroll)
 	},
@@ -153,7 +158,7 @@ export default Vue.extend({
 			this.currentOffset = 0
 			this.isLoading = true
 			this.algorithm = a
-			this.posts = await getPosts({}, this.$store.state.session.id, {
+			this.posts = await getPosts({}, this.$store.state.session.id !== `` ? this.$store.state.session.id : `x`, {
 				sort: a,
 				limit: this.limit,
 				offset: this.currentOffset,
@@ -165,6 +170,23 @@ export default Vue.extend({
 		},
 		async loadPosts() {
 			this.isLoading = true
+			// unauthenticated
+			if (this.$store.state.session.id === ``) {
+				const res = await getPosts({}, `x`, {
+					sort: this.algorithm,
+					offset: this.currentOffset,
+					limit: this.limit,
+					following: undefined,
+				})
+				if (res.length === 0) {
+					const container = this.$refs.container as HTMLElement
+					container.removeEventListener(`scroll`, this.handleScroll)
+				}
+				this.posts = this.posts.concat(res)
+				this.currentOffset += this.limit
+				this.isLoading = false
+				return
+			}
 			try {
 				const res = await getPosts({}, this.$store.state.session.id, {
 					sort: this.algorithm,
