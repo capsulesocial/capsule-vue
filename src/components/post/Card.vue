@@ -424,6 +424,7 @@ export default Vue.extend({
 		},
 		async getBookmarkStatus() {
 			this.isBookmarked = await isPostBookmarkedByUser(this.postCID, this.$store.state.session.id)
+			this.$emit(`updateBookmarks`)
 		},
 		hasReposted(): boolean {
 			if (this.$store.state.session.id === this.$props.repostedBy || this.$store.getters.checkReposts(this.postCID)) {

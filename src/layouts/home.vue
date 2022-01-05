@@ -43,6 +43,7 @@
 							:following="following"
 							:followers="followers"
 							:userIsFollowed="userIsFollowed"
+							@updateBookmarks="fetchBookmarks"
 						/>
 						<!-- Widgets -->
 						<aside
@@ -79,6 +80,14 @@ import OnboardingWizard from '@/components/OnboardingWizard.vue'
 import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
+import { IPostResponse, getPosts } from '@/backend/post'
+
+interface PostPreview {
+	title: string
+	authorID: string
+	featuredPhoto: string | null
+	postCID: string
+}
 
 interface IData {
 	profile: Profile | null
@@ -127,8 +136,27 @@ export default Vue.extend({
 		this.following = following
 		this.followers = followers
 		this.userIsFollowed = followers.has(this.$store.state.session.id)
+		// Get recent bookmarks
+		this.fetchBookmarks()
 	},
 	methods: {
+		async fetchBookmarks() {
+			const bookmarkPreviews = new Set<PostPreview>()
+			let bookmarks = await getPosts({ bookmarkedBy: this.$store.state.session.id }, this.$store.state.session.id, {})
+			bookmarks = bookmarks.reverse().slice(0, 2)
+			bookmarks.forEach((p: IPostResponse) => {
+				if (p.post.featuredPhotoCID) {
+					getPhotoFromIPFS(p.post.featuredPhotoCID).then((res) => {
+						const post = { title: p.post.title, authorID: p.post.authorID, featuredPhoto: res, postCID: p.post._id }
+						bookmarkPreviews.add(post)
+					})
+				} else {
+					const post = { title: p.post.title, authorID: p.post.authorID, featuredPhoto: null, postCID: p.post._id }
+					bookmarkPreviews.add(post)
+				}
+			})
+			this.$store.commit(`setRecentBookmarks`, bookmarkPreviews)
+		},
 		async toggleFriend(authorID: string) {
 			if (authorID !== this.$store.state.session.id) {
 				await followChange(this.following.has(authorID) ? `UNFOLLOW` : `FOLLOW`, this.$store.state.session.id, authorID)
