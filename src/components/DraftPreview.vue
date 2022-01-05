@@ -65,6 +65,7 @@ type DraftPost = Omit<Post, `authorID`>
 interface IData {
 	featuredPhoto: any
 	showDelete: boolean
+	delayActiveDraft: boolean
 }
 
 export default Vue.extend({
@@ -91,6 +92,7 @@ export default Vue.extend({
 		return {
 			featuredPhoto: null,
 			showDelete: false,
+			delayActiveDraft: false,
 		}
 	},
 	async created() {
@@ -101,6 +103,11 @@ export default Vue.extend({
 			window.addEventListener(`click`, this.handleDropdown, false)
 		}
 	},
+	destroyed() {
+		if (this.delayActiveDraft) {
+			this.$store.commit(`draft/setActiveDraft`, this.$props.index)
+		}
+	},
 	methods: {
 		setActiveDraft() {
 			if (this.$route.name === `post`) {
@@ -108,8 +115,14 @@ export default Vue.extend({
 				this.$store.commit(`draft/setActiveDraft`, this.$props.index)
 				return
 			}
-			this.$store.commit(`draft/setActiveDraft`, this.$props.index)
+			// Prevent overwriting of selected draft
+			if (this.$store.state.widgets.primary === `editor` && this.$route.name === `home`) {
+				this.$router.push(`/post`)
+				this.delayActiveDraft = true
+				return
+			}
 			this.$router.push(`/post`)
+			this.$store.commit(`draft/setActiveDraft`, this.$props.index)
 		},
 		toggleDropdownDelete() {
 			this.showDelete = !this.showDelete
