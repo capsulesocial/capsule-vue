@@ -19,10 +19,10 @@
 				:cid="p.post._id"
 				:comments="p.comments"
 				:toggleFriend="toggleFriend"
-				:usersFollowing="following"
+				:usersFollowing="followingList"
 				:repostedBy="p.repost ? p.repost.authorID : undefined"
 				:bookmarked="p.bookmarked"
-				:hideRepostIcon="algorithm === `NEW` || algorithm === `TOP`"
+				:hideRepostIcon="true"
 				:bookmarksCount="p.bookmarksCount"
 				:repostCount="p.repostCount"
 			/>
