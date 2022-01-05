@@ -59,6 +59,7 @@
 						:hideRepostIcon="algorithm === `NEW` || algorithm === `TOP`"
 						:bookmarksCount="p.bookmarksCount"
 						:repostCount="p.repostCount"
+						@updateBookmarks="updateBookmarks"
 					/>
 				</article>
 			</div>
@@ -194,6 +195,9 @@ export default Vue.extend({
 				key += p.repost._id
 			}
 			return key
+		},
+		updateBookmarks(): void {
+			this.$emit(`updateBookmarks`)
 		},
 	},
 })

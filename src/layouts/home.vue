@@ -43,6 +43,7 @@
 							:following="following"
 							:followers="followers"
 							:userIsFollowed="userIsFollowed"
+							@updateBookmarks="fetchBookmarks"
 						/>
 						<!-- Widgets -->
 						<aside
@@ -81,6 +82,13 @@ import { getPhotoFromIPFS } from '@/backend/photos'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
 import { IPostResponse, getPosts } from '@/backend/post'
 
+interface PostPreview {
+	title: string
+	authorID: string
+	featuredPhoto: string | null
+	postCID: string
+}
+
 interface IData {
 	profile: Profile | null
 	avatar: string | ArrayBuffer | null
@@ -88,13 +96,6 @@ interface IData {
 	following: Set<string>
 	followers: Set<string>
 	userIsFollowed: boolean
-}
-
-interface PostPreview {
-	title: string
-	authorID: string
-	featuredPhoto: string | null
-	postCID: string
 }
 
 export default Vue.extend({
@@ -140,25 +141,21 @@ export default Vue.extend({
 	},
 	methods: {
 		async fetchBookmarks() {
-			const posts: PostPreview[] = []
-			let bookmarks: IPostResponse[] = await getPosts(
-				{ bookmarkedBy: this.$store.state.session.id },
-				this.$store.state.session.id,
-				{},
-			)
+			const bookmarkPreviews = new Set<PostPreview>()
+			let bookmarks = await getPosts({ bookmarkedBy: this.$store.state.session.id }, this.$store.state.session.id, {})
 			bookmarks = bookmarks.reverse().slice(0, 2)
 			bookmarks.forEach((p: IPostResponse) => {
 				if (p.post.featuredPhotoCID) {
 					getPhotoFromIPFS(p.post.featuredPhotoCID).then((res) => {
 						const post = { title: p.post.title, authorID: p.post.authorID, featuredPhoto: res, postCID: p.post._id }
-						posts.push(post)
+						bookmarkPreviews.add(post)
 					})
 				} else {
 					const post = { title: p.post.title, authorID: p.post.authorID, featuredPhoto: null, postCID: p.post._id }
-					posts.push(post)
+					bookmarkPreviews.add(post)
 				}
 			})
-			this.$store.commit(`setRecentBookmarks`, posts)
+			this.$store.commit(`setRecentBookmarks`, bookmarkPreviews)
 		},
 		async toggleFriend(authorID: string) {
 			if (authorID !== this.$store.state.session.id) {

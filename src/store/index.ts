@@ -62,11 +62,8 @@ export const mutations: MutationTree<RootState> = {
 		state.reposts = []
 	},
 	[MutationType.SET_RECENT_BOOKMARKS]: (state, recentBookmarks) => {
-		recentBookmarks.array.forEach((e: PostPreview) => {
-			console.log(e)
-			state.recentBookmarks.add(e)
-		})
-		console.log(state.recentBookmarks)
+		state.recentBookmarks = new Set()
+		state.recentBookmarks = recentBookmarks
 		// state.recentBookmarks = recentBookmarks
 	},
 	[MutationType.WELCOME]: (state, type: boolean) => {
