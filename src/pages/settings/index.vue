@@ -18,7 +18,7 @@
 			<!-- Export Private Key -->
 			<div class="flex flex-row items-center w-full mb-4">
 				<label for="export" class="w-32 font-semibold">Private Key</label>
-				<button id="export" class="text-primary">Export Private Key</button>
+				<button id="export" class="text-primary" @click="downloadPrivateKey">Export Private Key</button>
 			</div>
 			<!-- Account Profile -->
 			<h2 class="text-primary font-semibold text-sm py-4">Account Profile</h2>
@@ -96,9 +96,9 @@ import { mapMutations } from 'vuex'
 import imageCompression from 'browser-image-compression'
 import { MutationType, getProfileFromSession, namespace as sessionStoreNamespace } from '~/store/session'
 import { getProfile, setProfile } from '@/backend/profile'
-
 import { HTMLInputEvent } from '@/interfaces/HTMLInputEvent'
 import { addPhotoToIPFS, preUploadPhoto } from '@/backend/photos'
+import { getNearPrivateKey, getWalletConnection } from '@/backend/near'
 
 interface IData {
 	nodeURL: string
@@ -140,6 +140,18 @@ export default Vue.extend({
 			changeBio: MutationType.CHANGE_BIO,
 			changeLocation: MutationType.CHANGE_LOCATION,
 		}),
+		async downloadPrivateKey(): Promise<void> {
+			const walletConnection = getWalletConnection()
+			const accountId = walletConnection.getAccountId()
+			const privateKey = await getNearPrivateKey(accountId)
+			const blob = new Blob([JSON.stringify({ accountId, privateKey })], { type: `application/json` })
+			const link = document.createElement(`a`)
+			link.href = URL.createObjectURL(blob)
+			link.download = `capsule-priv-key-${this.$store.state.session.id}`
+			link.click()
+			URL.revokeObjectURL(link.href)
+			this.$toastSuccess(`Downloaded private key`)
+		},
 		handleImageClick(): void {
 			const b = this.$refs.backgroundImage as HTMLElement
 			b.click()
