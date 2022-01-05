@@ -8,22 +8,26 @@
 			team on Discord, or directly send us an email:
 		</p>
 		<div class="flex justify-between items-center mb-12 px-6">
-			<button
-				style="padding: 0.8rem 1.7rem; background-color: #7289da"
-				class="transition duration-500 ease-in-out transform font-bold rounded-lg hover:shadow-lg focus:outline-none flex justify-between items-center"
-				@click="action"
-			>
-				<DiscordIcon :class="isOpen1 ? `plus0` : `plus1`" class="icon fill-current w-6 h-6 text-lightOnPrimaryText" />
-				<span class="font-sans text-lightOnPrimaryText ml-2" style="font-size: 0.95rem"> Join Discord </span>
-			</button>
-			<button
-				style="padding: 0.8rem 1.7rem"
-				class="transition duration-500 ease-in-out transform font-bold rounded-lg hover:shadow-lg focus:outline-none flex justify-between items-center shadow-lg border-lightBorder"
-				@click="action"
-			>
-				<MailIcon :class="isOpen1 ? `plus0` : `plus1`" class="icon fill-current w-5 h-5 opacity-25" />
-				<span class="font-sans text-lightPrimaryText ml-2" style="font-size: 0.95rem"> Send Email </span>
-			</button>
+			<a href="https://discord.gg/sZWjf3E6bY" target="_blank">
+				<button
+					style="padding: 0.8rem 1.7rem; background-color: #7289da"
+					class="transition duration-500 ease-in-out transform font-bold rounded-lg hover:shadow-lg focus:outline-none flex justify-between items-center"
+					@click="action"
+				>
+					<DiscordIcon :class="isOpen1 ? `plus0` : `plus1`" class="icon fill-current w-6 h-6 text-lightOnPrimaryText" />
+					<span class="font-sans text-lightOnPrimaryText ml-2" style="font-size: 0.95rem"> Join Discord </span>
+				</button>
+			</a>
+			<a href="mailto:support@capsule.social" target="_blank">
+				<button
+					style="padding: 0.8rem 1.7rem"
+					class="transition duration-500 ease-in-out transform font-bold rounded-lg hover:shadow-lg focus:outline-none flex justify-between items-center shadow-lg border-lightBorder"
+					@click="action"
+				>
+					<MailIcon :class="isOpen1 ? `plus0` : `plus1`" class="icon fill-current w-5 h-5 opacity-25" />
+					<span class="font-sans text-lightPrimaryText ml-2" style="font-size: 0.95rem"> Send Email </span>
+				</button>
+			</a>
 		</div>
 		<section>
 			<img src="~/assets/images/brand/help-page.webp" alt="" class="w-full" />
