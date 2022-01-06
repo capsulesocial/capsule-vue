@@ -43,7 +43,7 @@
 						<div class="flex w-full">
 							<Avatar :avatar="quote.avatar" :authorID="quote.authorID" size="w-12 h-12" />
 							<div class="flex flex-col flex-grow ml-4">
-								<nuxt-link :to="`/` + quote.authorID" class="flex mr-4">
+								<nuxt-link :to="`/id/` + quote.authorID" class="flex mr-4">
 									<span class="font-medium text-base">{{ this.quote.name }}</span>
 									<span class="ml-2 text-primary">@{{ this.quote.authorID }}</span>
 								</nuxt-link>
@@ -78,7 +78,7 @@
 						>
 							<RepostIcon />
 							<p class="pl-2 text-sm text-gray5">
-								<nuxt-link :to="`/` + repostedBy">{{ repostedBy }} </nuxt-link>
+								<nuxt-link :to="`/id/` + repostedBy">{{ repostedBy }} </nuxt-link>
 								reposted
 							</p>
 						</div>
@@ -87,7 +87,7 @@
 							<Avatar :avatar="avatar" :authorID="post.authorID" size="w-12 h-12" />
 							<div class="flex flex-col flex-grow ml-4">
 								<div class="flex" @mouseover="showFriendButton = true" @mouseleave="showFriendButton = false">
-									<nuxt-link :to="'/' + post.authorID" class="flex mr-4">
+									<nuxt-link :to="'/id/' + post.authorID" class="flex mr-4">
 										<span class="font-medium text-base">
 											{{ authorName }}
 										</span>

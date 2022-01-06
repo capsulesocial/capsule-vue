@@ -25,7 +25,7 @@
 			<div class="flex flex-row items-center w-full mb-4">
 				<label for="editProfile" class="w-32 font-semibold">Public Profile</label>
 				<nuxt-link
-					:to="$store.state.session.id"
+					:to="`/id/` + $store.state.session.id"
 					class="bg-secondary text-white rounded-lg focus:outline-none"
 					style="padding: 0.4rem 1.5rem"
 				>

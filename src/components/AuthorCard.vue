@@ -6,7 +6,7 @@
 				<div class="flex pr-5">
 					<Avatar :avatar="authorAvatar" :authorID="authorID" size="w-16 h-16" class="flex-shrink-0 self-start" />
 					<div class="mx-4">
-						<nuxt-link :to="'/' + authorID" class="text-2xl">
+						<nuxt-link :to="'/id/' + authorID" class="text-2xl">
 							{{ authorName }}
 						</nuxt-link>
 						<p class="w-full text-gray6">

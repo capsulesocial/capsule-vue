@@ -4,7 +4,7 @@
 		<div v-for="p in profiles" :key="p.id">
 			<ProfilePreview :profile="p" :updateFollowers="updateFollowers" class="pb-4" />
 		</div>
-		<nuxt-link :to="`/` + $route.params.id + `/followers`" class="text-sm text-primary">Show more</nuxt-link>
+		<nuxt-link :to="`/id/` + $route.params.id + `/followers`" class="text-sm text-primary">Show more</nuxt-link>
 	</article>
 </template>
 
