@@ -13,22 +13,48 @@
 		<!-- Right side: icons and avatar -->
 		<div class="flex flex-row relative">
 			<button class="dropdown focus:outline-none" @click="showDropdown = !showDropdown">
-				<Avatar class="dropdown" :avatar="avatar" :authorID="$store.state.session.id" :noClick="true" />
+				<Avatar
+					class="dropdown"
+					:avatar="$store.state.session.id === `` ? require(`@/assets/images/avatars/unauthenticated.webp`) : avatar"
+					:authorID="$store.state.session.id"
+					:noClick="true"
+				/>
 			</button>
 			<!-- Dropdown: Profile, settings, disconnect -->
 			<div
 				v-show="showDropdown"
 				class="dropdownOpen absolute flex flex-col mt-16 rounded-lg shadow-lg p-4 bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg border border-lightBorder modal-animation"
 			>
+				<!-- Unauthenticated: Log in -->
 				<nuxt-link
+					v-if="$store.state.session.id === ``"
+					to="/login"
+					class="text-center flex flex-row items-center text-gray5 mb-4 w-24 px-4 mx-2"
+					>Log In</nuxt-link
+				>
+				<!-- Unauthenticated: Register -->
+				<nuxt-link
+					v-if="$store.state.session.id === ``"
+					to="/register"
+					class="text-center flex flex-row items-center text-gray5 w-24 px-4 mx-2"
+					>Register</nuxt-link
+				>
+				<!-- Authenticated -->
+				<nuxt-link
+					v-if="$store.state.session.id !== ``"
 					:to="`/` + $store.state.session.id"
 					class="text-left w-full flex flex-row items-center text-gray5 mb-4"
 					><ProfileIcon class="flex-shrink-0 w-5 h-5 mr-2" />Profile</nuxt-link
 				>
-				<nuxt-link to="/settings" class="text-left w-full flex flex-row items-center text-gray5 mb-4">
+				<nuxt-link
+					v-if="$store.state.session.id !== ``"
+					to="/settings"
+					class="text-left w-full flex flex-row items-center text-gray5 mb-4"
+				>
 					<SettingsIcon class="flex-shrink-0 w-5 h-5 mr-2" />Settings</nuxt-link
 				>
 				<button
+					v-if="$store.state.session.id !== ``"
 					class="focus:outline-none w-full text-left flex flex-row items-center text-lightError"
 					@click="disconnect"
 				>

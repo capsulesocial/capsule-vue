@@ -326,10 +326,6 @@ export default Vue.extend({
 			type: String as PropType<string>,
 			required: true,
 		},
-		initComments: {
-			type: Array as PropType<ICommentData[] | null>,
-			default: null,
-		},
 		bookmarksCount: {
 			type: Number,
 			default: -1,
@@ -363,13 +359,8 @@ export default Vue.extend({
 		}
 	},
 	async created() {
-		if (!this.initComments) {
-			this.comments = await getCommentsOfPost(this.postCID)
-			this.comments = this.comments.reverse()
-		} else {
-			this.comments = this.initComments
-			this.comments = this.comments.reverse()
-		}
+		this.comments = await getCommentsOfPost(this.postCID)
+		this.comments = this.comments.reverse()
 		// get comment stats
 		this.updateFaceStats()
 	},

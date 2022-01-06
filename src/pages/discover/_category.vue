@@ -109,6 +109,17 @@ export default Vue.extend({
 		}
 	},
 	async created() {
+		// Unauthenticated view
+		if (this.$store.state.session.id === ``) {
+			this.posts = await getPosts({ category: this.$route.params.category }, `x`, {
+				sort: this.algorithm,
+				limit: this.limit,
+				offset: 0,
+			})
+			this.currentOffset += this.limit
+			this.isLoading = false
+			return
+		}
 		// Fetch posts from Orbit DB by ID
 		this.posts = await getPosts({ category: this.$route.params.category }, this.$store.state.session.id, {
 			sort: this.algorithm,
@@ -120,6 +131,8 @@ export default Vue.extend({
 			this.following = following
 		})
 		this.isLoading = false
+	},
+	mounted() {
 		const container = document.getElementById(`column`)
 		if (container) {
 			container.addEventListener(`scroll`, this.handleScrollHeader)
@@ -141,6 +154,23 @@ export default Vue.extend({
 		},
 		async loadPosts() {
 			this.isLoading = true
+			// Unauthenticated
+			if (this.$store.state.session.id === ``) {
+				const res = await getPosts({ category: this.$route.params.category }, `x`, {
+					sort: this.algorithm,
+					limit: this.limit,
+					offset: this.currentOffset,
+					following: undefined,
+				})
+				if (res.length === 0) {
+					this.isLoading = false
+					this.noMorePosts = true
+				}
+				this.posts = this.posts.concat(res)
+				this.isLoading = false
+				return
+			}
+			// Authenticated
 			try {
 				const res = await getPosts({ category: this.$route.params.category }, this.$store.state.session.id, {
 					sort: this.algorithm,
@@ -225,6 +255,9 @@ export default Vue.extend({
 			this.lastScroll = currentScroll
 			// Reached bottom, fetch more posts
 			if (body.scrollTop + body.clientHeight === body.scrollHeight && !this.noMorePosts) {
+				if (this.isLoading) {
+					return
+				}
 				await this.loadPosts()
 				this.currentOffset += this.limit
 			}

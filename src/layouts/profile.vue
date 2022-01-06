@@ -137,11 +137,27 @@ export default Vue.extend({
 		},
 	},
 	async created() {
-		// Check if logged in user
+		// Unauthenticated
 		if (this.$store.state.session.id === ``) {
-			this.$router.push(`/`)
+			const [{ profile: visitProfile }, profileExists] = await Promise.all([
+				getProfile(this.$route.params.id),
+				this.checkAccountExists(),
+			])
+			if (!profileExists) {
+				this.noProfileFound = true
+				this.$toastError(`Profile does not exist`)
+				return
+			}
+			// Get visiting profile and avatar
+			this.visitProfile = visitProfile || createDefaultProfile(this.$route.params.id)
+			if (this.visitProfile.avatar !== ``) {
+				getPhotoFromIPFS(this.visitProfile.avatar).then((p) => {
+					this.visitAvatar = p
+				})
+			}
+			return
 		}
-
+		// Authenticated
 		const [{ profile: myProfile }, { profile: visitProfile }, profileExists] = await Promise.all([
 			getProfile(this.$store.state.session.id),
 			getProfile(this.$route.params.id),

@@ -12,6 +12,7 @@
 		</div>
 		<!-- Posts loaded -->
 		<div
+			ref="container"
 			class="fixed overflow-y-auto"
 			style="width: 748px; min-height: calc(100vh - 150px); height: calc(100vh - 150px)"
 		>
@@ -74,21 +75,32 @@ export default Vue.extend({
 		}
 	},
 	async created() {
-		// Fetch posts with tag
+		// Fetch posts with tag (unauthenticated)
+		if (this.$store.state.session.id === ``) {
+			this.posts = await getPosts({ tag: this.$route.params.tag }, `x`, {
+				sort: this.algorithm,
+				limit: this.limit,
+				offset: this.currentOffset,
+			})
+			this.currentOffset += this.limit
+			this.isLoading = false
+			return
+		}
+		// Fetch posts with tag (authenticated)
 		this.posts = await getPosts({ tag: this.$route.params.tag }, this.$store.state.session.id, {
 			sort: this.algorithm,
 			limit: this.limit,
 			offset: this.currentOffset,
 		})
 		this.currentOffset += this.limit
+		this.isLoading = false
 		getFollowersAndFollowing(this.$store.state.session.id).then(({ following }) => {
 			this.following = following
 		})
-		this.isLoading = false
-		window.addEventListener(`scroll`, this.handleScroll)
 	},
-	destroyed() {
-		window.removeEventListener(`scroll`, this.handleScroll)
+	mounted() {
+		const container = this.$refs.container as HTMLElement
+		container.addEventListener(`scroll`, this.handleScroll)
 	},
 	methods: {
 		async toggleFriend(authorID: string) {
@@ -100,6 +112,30 @@ export default Vue.extend({
 		},
 		async loadPosts() {
 			this.isLoading = true
+			// Unauthenticated
+			if (this.$store.state.session.id === ``) {
+				try {
+					const res = await getPosts({ tag: this.$route.params.tag }, `x`, {
+						sort: this.algorithm,
+						offset: this.currentOffset,
+						limit: this.limit,
+					})
+					if (res.length === 0) {
+						this.isLoading = false
+						const container = this.$refs.container as HTMLElement
+						container.removeEventListener(`scroll`, this.handleScroll)
+						return
+					}
+					this.posts = this.posts.concat(res)
+					this.currentOffset += this.limit
+				} catch (err) {
+					this.$toastError(`An error has occured`)
+				} finally {
+					this.isLoading = false
+				}
+				return
+			}
+			// Authenticated
 			try {
 				const res = await getPosts({ tag: this.$route.params.tag }, this.$store.state.session.id, {
 					sort: this.algorithm,
@@ -108,20 +144,24 @@ export default Vue.extend({
 				})
 				if (res.length === 0) {
 					this.isLoading = false
-					window.removeEventListener(`scroll`, this.handleScroll)
+					const container = this.$refs.container as HTMLElement
+					container.removeEventListener(`scroll`, this.handleScroll)
 				}
 				this.posts = this.posts.concat(res)
+				this.currentOffset += this.limit
 			} catch (err) {
-				this.$toastError(err)
+				this.$toastError(`An error has occured`)
 			} finally {
 				this.isLoading = false
 			}
 		},
-		async handleScroll() {
-			const { scrollTop, scrollHeight, clientHeight } = document.documentElement
+		async handleScroll(e: Event) {
+			if (this.isLoading) {
+				return
+			}
+			const { scrollTop, scrollHeight, clientHeight } = e.srcElement as HTMLElement
 			if (scrollTop + clientHeight >= scrollHeight - 5) {
 				await this.loadPosts()
-				this.currentOffset += this.limit
 			}
 		},
 	},
