@@ -98,7 +98,7 @@ import { MutationType, getProfileFromSession, namespace as sessionStoreNamespace
 import { getProfile, setProfile } from '@/backend/profile'
 import { HTMLInputEvent } from '@/interfaces/HTMLInputEvent'
 import { addPhotoToIPFS, preUploadPhoto } from '@/backend/photos'
-import { getNearPrivateKey, getWalletConnection } from '@/backend/near'
+import { getNearPrivateKey } from '@/backend/near'
 
 interface IData {
 	nodeURL: string
@@ -141,8 +141,11 @@ export default Vue.extend({
 			changeLocation: MutationType.CHANGE_LOCATION,
 		}),
 		async downloadPrivateKey(): Promise<void> {
-			const walletConnection = getWalletConnection()
-			const accountId = walletConnection.getAccountId()
+			const accountId = window.localStorage.getItem(`accountId`)
+			if (!accountId) {
+				this.$toastError(`Account not found, are you signed in?`)
+				return
+			}
 			const privateKey = await getNearPrivateKey(accountId)
 			const blob = new Blob([JSON.stringify({ accountId, privateKey })], { type: `application/json` })
 			const link = document.createElement(`a`)
