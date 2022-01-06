@@ -76,6 +76,30 @@ export default Vue.extend({
 		// Fetch posts from Orbit DB by ID
 		async loadPosts() {
 			this.isLoading = true
+			// Unauthenticated
+			if (this.$store.state.session.id === ``) {
+				try {
+					const res = await getPosts({ authorID: this.$route.params.id }, `x`, {
+						sort: this.algorithm,
+						offset: this.currentOffset,
+						limit: this.limit,
+						following: this.$store.state.session.id,
+					})
+					if (res.length === 0) {
+						const container = this.$parent.$refs.scrollContainer as HTMLElement
+						container.removeEventListener(`scroll`, this.handleScroll)
+					}
+					this.posts = this.posts.concat(res)
+					this.currentOffset += this.limit
+					this.isLoading = false
+				} catch (err) {
+				} finally {
+					this.isLoading = false
+				}
+
+				return
+			}
+			// Authenticated
 			try {
 				const res = await getPosts({ authorID: this.$route.params.id }, this.$store.state.session.id, {
 					sort: this.algorithm,
