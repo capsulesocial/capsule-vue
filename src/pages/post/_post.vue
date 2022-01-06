@@ -252,13 +252,14 @@ export default Vue.extend({
 			this.$toastError(`This post has not been found`)
 			throw new Error(`Post is null!`)
 		}
-		const postMetadata = await getOnePost(this.$route.params.post, this.$store.state.session.id)
-		this.bookmarksCount = postMetadata.bookmarksCount
-		this.isBookmarked = postMetadata.bookmarked
-		this.repostCount = postMetadata.repostCount
-		this.comments = postMetadata.comments
-		this.isLoading = false
-
+		// Get featured photo
+		if (this.post.featuredPhotoCID) {
+			getPhotoFromIPFS(this.post.featuredPhotoCID).then((p) => {
+				this.featuredPhoto = p
+			})
+		}
+		// Convert markdown to HTML
+		this.content = marked.parse(this.post.content)
 		// Get author profile
 		this.author = createDefaultProfile(this.post.authorID)
 		getProfile(this.post.authorID).then((p) => {
@@ -272,33 +273,43 @@ export default Vue.extend({
 				})
 			}
 		})
+
+		// unauthenticated
+		if (this.$store.state.session.id === ``) {
+			const postMetadata = await getOnePost(this.$route.params.post, `x`)
+			this.bookmarksCount = postMetadata.bookmarksCount
+			this.isBookmarked = postMetadata.bookmarked
+			this.repostCount = postMetadata.repostCount
+			this.comments = postMetadata.comments
+			this.isLoading = false
+			return
+		}
+		// Authenticated
+		const postMetadata = await getOnePost(this.$route.params.post, this.$store.state.session.id)
+		this.bookmarksCount = postMetadata.bookmarksCount
+		this.isBookmarked = postMetadata.bookmarked
+		this.repostCount = postMetadata.repostCount
+		this.comments = postMetadata.comments
+		this.isLoading = false
+		// Get my followers
 		getFollowersAndFollowing(this.$store.state.session.id).then((data) => {
 			if (this.post !== null) {
 				this.following = data.following
 				this.userIsFollowed = data.following.has(this.post.authorID)
 			}
 		})
-		// Get featured photo
-		if (this.post.featuredPhotoCID) {
-			getPhotoFromIPFS(this.post.featuredPhotoCID).then((p) => {
-				this.featuredPhoto = p
-			})
-		}
-		// Convert markdown to HTML
-		this.content = marked.parse(this.post.content)
-
 		// Get reposts
 		const repostData = await getReposts(this.$store.state.session.id)
 		repostData.forEach((p) => {
 			// @ts-ignore
 			this.myReposts.push(p.repost.postCID)
 		})
+	},
+	mounted() {
 		const container = document.getElementById(`post`)
 		if (container) {
 			container.addEventListener(`scroll`, this.handleScroll)
 		}
-	},
-	mounted() {
 		if (this.$store.state.settings.recentlyPosted) {
 			this.$toastSuccess(`This post has been successfully published`)
 		}

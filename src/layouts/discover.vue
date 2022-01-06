@@ -95,7 +95,7 @@ export default Vue.extend({
 	async created() {
 		// Check if logged in user
 		if (this.$store.state.session.id === ``) {
-			this.$router.push(`/`)
+			return
 		}
 		// get logged in profile
 		const { profile } = await getProfile(this.$store.state.session.id)
