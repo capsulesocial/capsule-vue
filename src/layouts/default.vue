@@ -84,7 +84,11 @@ export default Vue.extend({
 	},
 	methods: {
 		handleReload(): void {
-			this.$router.push(`/home`)
+			if (this.$route.name !== `home`) {
+				this.$router.push(`/home`)
+			} else {
+				location.reload()
+			}
 		},
 	},
 })

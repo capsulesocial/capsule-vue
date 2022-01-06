@@ -17,17 +17,9 @@
 				<ImageIcon class="w-5 h-5 fill-current" />
 			</span>
 		</div>
-		<div class="icon flex items-center">
-			<button class="p-3 bg-primary text-white rounded-lg" @click="setActiveDraft">
-				<PencilIcon class="fill-current w-5 h-5 p-" />
-			</button>
-			<button
-				v-if="displayDeleteButton"
-				class="icon p-3 bg-negative text-white rounded-lg ml-4 focus:outline-none"
-				style="padding-left: 0.88rem"
-				@click="toggleDropdownDelete"
-			>
-				<BinIcon class="icon fill-current w-5 h-5" />
+		<div class="icon flex items-center relative">
+			<button class="focus:outline-none ml-2 text-gray5" @click.stop="toggleDropdownDelete">
+				<MoreIcon />
 			</button>
 			<div
 				v-show="showDelete"
@@ -36,13 +28,17 @@
 						? 'bg-lightBG text-lightPrimaryText border-lightBorder'
 						: 'bg-darkBG text-darkPrimaryText border-darkBorder'
 				"
-				class="absolute flex flex-col rounded-lg w-32 shadow-lg z-10 p-1 modal-animation"
-				style="top: 80px; right: 0px"
+				class="absolute flex flex-col rounded-lg w-40 shadow-lg z-10 p-2 modal-animation dropdownDraftOpen"
+				style="top: 35px; right: -5px"
 			>
+				<button class="flex focus:outline-none text-primary mb-2" @click="setActiveDraft(draft)">
+					<PencilIcon class="fill-current p-1" />
+					<span class="text-sm self-center text-primary ml-1">Edit this draft</span>
+				</button>
 				<!-- Delete -->
 				<button class="flex focus:outline-none text-negative" @click="deleteDraft(draft)">
 					<BinIcon class="p-1" />
-					<span class="text-xs self-center text-negative">Delete this draft</span>
+					<span class="text-sm self-center text-negative ml-1">Delete this draft</span>
 				</button>
 			</div>
 		</div>
@@ -55,6 +51,7 @@ import type { PropType } from 'vue'
 
 import PencilIcon from '@/components/icons/Pencil.vue'
 import ImageIcon from '@/components/icons/Image.vue'
+import MoreIcon from '@/components/icons/More.vue'
 import BinIcon from '@/components/icons/Bin.vue'
 
 import { getPhotoFromIPFS } from '@/backend/photos'
@@ -73,6 +70,7 @@ export default Vue.extend({
 		PencilIcon,
 		ImageIcon,
 		BinIcon,
+		MoreIcon,
 	},
 	props: {
 		draft: {
@@ -99,9 +97,7 @@ export default Vue.extend({
 		if (this.$props.draft.featuredPhotoCID) {
 			this.featuredPhoto = await getPhotoFromIPFS(this.$props.draft.featuredPhotoCID)
 		}
-		if (this.$props.displayDeleteButton) {
-			window.addEventListener(`click`, this.handleDropdown, false)
-		}
+		window.addEventListener(`click`, this.handleDropdown, false)
 	},
 	destroyed() {
 		if (this.delayActiveDraft) {
@@ -142,3 +138,16 @@ export default Vue.extend({
 	},
 })
 </script>
+<style>
+.dropdownDraftOpen::before {
+	content: '';
+	position: absolute;
+	top: -0.5rem;
+	right: 0.5rem;
+	transform: rotate(45deg);
+	width: 1rem;
+	height: 1rem;
+	background-color: #fff;
+	border-radius: 2px;
+}
+</style>

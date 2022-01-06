@@ -5,7 +5,7 @@
 			<a href="https://www.capsule.social/writers" target="_blank" class="pr-6">Writers</a>
 			<a href="https://blog.capsule.social/" target="_blank" class="pr-6">Blog</a>
 			<a href="https://www.capsule.social/careers" target="_blank" class="pr-6">Careers</a>
-			<nuxt-link to="/terms" class="pr-6">Terms</nuxt-link>
+			<a href="https://www.iubenda.com/terms-and-conditions/40723363" target="_blank" class="pr-6">Terms</a>
 			<a href="https://www.capsule.social/about/overview" target="_blank" class="pr-6">About</a>
 		</div>
 		© 2021 Capsule Social, Inc.
