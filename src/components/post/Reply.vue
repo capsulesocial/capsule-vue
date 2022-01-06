@@ -11,7 +11,7 @@
 				{{ name }}
 			</strong>
 			<nuxt-link
-				:to="authorID"
+				:to="`/id/` + authorID"
 				:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 				class="text-sm mr-2"
 			>

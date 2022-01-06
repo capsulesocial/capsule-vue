@@ -48,12 +48,12 @@
 							</div>
 							<!-- Tabs: posts, following, followers -->
 							<div class="flex flex-row pt-2 text-sm text-gray6">
-								<nuxt-link :to="'/' + $route.params.id" class="text-sm" :class="getStyles(`id-categories`)">
+								<nuxt-link :to="'/id/' + $route.params.id" class="text-sm" :class="getStyles(`id-categories`)">
 									<span class="font-bold text-primary">{{ totalPostsCount }}</span>
 									Posts
 								</nuxt-link>
 								<nuxt-link
-									:to="'/' + $route.params.id + '/followers'"
+									:to="'/id/' + $route.params.id + '/followers'"
 									:class="getStyles(`id-followers`)"
 									class="pl-5 text-sm"
 								>
@@ -61,7 +61,7 @@
 									Followers
 								</nuxt-link>
 								<nuxt-link
-									:to="'/' + $route.params.id + '/following'"
+									:to="'/id/' + $route.params.id + '/following'"
 									:class="getStyles(`id-following`)"
 									class="pl-5 text-sm"
 								>
@@ -89,13 +89,13 @@
 				</div>
 				<!-- Tabs -->
 				<div id="tabs" class="flex flex-col md:flex-row w-full justify-between text-gray5 pt-6 header-profile px-6">
-					<nuxt-link :to="'/' + $route.params.id" class="pb-1" :class="getStyles('id')">
+					<nuxt-link :to="'/id/' + $route.params.id" class="pb-1" :class="getStyles('id')">
 						<span class="px-4">Posts</span>
 					</nuxt-link>
-					<nuxt-link :to="'/' + $route.params.id + '/comments'" class="pb-1" :class="getStyles('id-comments')">
+					<nuxt-link :to="'/id/' + $route.params.id + '/comments'" class="pb-1" :class="getStyles('id-comments')">
 						<span class="px-4">Comments</span>
 					</nuxt-link>
-					<nuxt-link :to="'/' + $route.params.id + '/reposts'" class="pb-1" :class="getStyles('id-reposts')">
+					<nuxt-link :to="'/id/' + $route.params.id + '/reposts'" class="pb-1" :class="getStyles('id-reposts')">
 						<span class="px-4">Reposts</span>
 					</nuxt-link>
 				</div>

@@ -14,7 +14,7 @@
 						<div class="items-center flex">
 							<Avatar :avatar="authorAvatar" :authorID="post.authorID" size="w-10 h-10" class="mr-4" />
 							<div class="pr-8">
-								<nuxt-link :to="`/` + post.authorID" class="font-semibold">{{ author.name }}</nuxt-link>
+								<nuxt-link :to="`/id/` + post.authorID" class="font-semibold">{{ author.name }}</nuxt-link>
 								<h6 class="font-sans text-sm text-gray6">{{ $formatDate(post.timestamp) }}</h6>
 							</div>
 							<FriendButton
@@ -375,7 +375,7 @@ export default Vue.extend({
 				this.$router.push(`/home`)
 			} else if (this.$store.state.settings.recentlyPosted) {
 				// IF coming from after recently posting:
-				this.$router.push(`/` + this.$store.state.session.id)
+				this.$router.push(`/id/` + this.$store.state.session.id)
 				this.$store.commit(`settings/setRecentlyPosted`, false)
 			} else {
 				this.$router.go(-1)
