@@ -27,6 +27,7 @@
 						<Avatar :authorID="$store.state.session.id" :avatar="myAvatar" class="flex-shrink-0" />
 						<textarea
 							ref="repostText"
+							v-model="quoteContent"
 							class="w-full ml-4 resize-none focus:outline-none"
 							placeholder="What's your response?"
 						></textarea>
@@ -100,7 +101,7 @@
 									<More />
 								</button>
 								<button
-									v-show="showPopup"
+									v-show="showPopup && !showRepostEditor"
 									class="right-0 top-0 rounded-full bg-gray1 p-1 focus:outline-none ml-4"
 									@click="handleCloseButton"
 								>
@@ -186,7 +187,12 @@
 						</div>
 					</div>
 					<!-- Repost POST button -->
-					<div v-if="showRepostEditor" class="pt-4 flex flex-row-reverse">
+					<div
+						v-if="showRepostEditor"
+						class="pt-4 flex flex-row-reverse"
+						:class="quoteContent !== `` ? '' : 'opacity-50'"
+						style="transition: all 0.4s"
+					>
 						<BrandedButton :action="handleSendRepost" :text="`Post`" />
 					</div>
 				</div>
@@ -243,6 +249,7 @@ interface IData {
 	showFriendButton: boolean
 	showRepostEditor: boolean
 	showPopup: boolean
+	quoteContent: string
 	quote: {
 		authorID: string
 		timestamp: number
@@ -336,6 +343,7 @@ export default Vue.extend({
 			showPopup: false,
 			quote: null,
 			postCID: ``,
+			quoteContent: ``,
 		}
 	},
 	async created() {
