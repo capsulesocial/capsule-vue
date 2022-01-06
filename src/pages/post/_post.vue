@@ -251,7 +251,20 @@ export default Vue.extend({
 	},
 	async created() {
 		// Fetch post from IPFS,
-		this.post = await getRegularPost(this.$route.params.post)
+		const post = await getRegularPost(this.$route.params.post)
+
+		const images = post.content.match(/!\\\[[^\]]*\\\]\((?<filename>.*?)(?=\"|\))(?<optionalpart>\".*\")?\)/gm) //eslint-disable-line
+		if (images) {
+			for (const i of images) {
+				const indexOfCid = i.indexOf(`Qm`)
+				const cid = i.slice(indexOfCid, 52)
+				const photo = await getPhotoFromIPFS(cid)
+				post.content = post.content.replace(i, `![](${photo})`)
+			}
+		}
+
+		this.post = post
+
 		if (this.post === null) {
 			this.$toastError(`This post has not been found`)
 			throw new Error(`Post is null!`)

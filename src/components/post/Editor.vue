@@ -353,7 +353,7 @@ export default Vue.extend({
 				for (const i of images) {
 					const img = parser.parseFromString(i, `text/html`)
 					const cid = img.querySelector(`img`)?.getAttribute(`alt`)
-					clean = clean.replace(i, `<ipfsimage cid=${cid}>`)
+					clean = clean.replace(i, `![](${cid})`)
 				}
 			}
 			// Check content quality
