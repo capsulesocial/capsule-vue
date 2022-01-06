@@ -23,46 +23,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { IPostResponse, getPosts } from '@/backend/post'
-import { getPhotoFromIPFS } from '@/backend/photos'
 
-interface PostPreview {
-	title: string
-	authorID: string
-	featuredPhoto: string | null
-	postCID: string
-}
-
-interface IData {
-	bookmarks: IPostResponse[]
-	posts: PostPreview[]
-}
-
-export default Vue.extend({
-	data(): IData {
-		return {
-			bookmarks: [],
-			posts: [],
-		}
-	},
-	async created() {
-		// Check if logged in user
-		if (this.$store.state.session.id === ``) {
-			return
-		}
-		this.bookmarks = await getPosts({ bookmarkedBy: this.$store.state.session.id }, this.$store.state.session.id, {})
-		this.bookmarks = this.bookmarks.reverse().slice(0, 2)
-		this.bookmarks.forEach((p: IPostResponse) => {
-			if (p.post.featuredPhotoCID) {
-				getPhotoFromIPFS(p.post.featuredPhotoCID).then((res) => {
-					const post = { title: p.post.title, authorID: p.post.authorID, featuredPhoto: res, postCID: p.post._id }
-					this.posts.push(post)
-				})
-			} else {
-				const post = { title: p.post.title, authorID: p.post.authorID, featuredPhoto: null, postCID: p.post._id }
-				this.posts.push(post)
-			}
-		})
-	},
-})
+export default Vue.extend({})
 </script>
