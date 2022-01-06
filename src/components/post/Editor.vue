@@ -45,6 +45,7 @@
 				</article>
 
 				<!-- WYSIWYG -->
+				<input v-show="false" id="getFile" type="file" @change="uploadFunction($event)" />
 				<div
 					id="editor"
 					ref="editor"
@@ -73,15 +74,38 @@ import Turndown from 'turndown'
 import Quill from 'quill'
 // @ts-ignore
 import QuillMarkdown from 'quilljs-markdown'
+import imageCompression from 'browser-image-compression'
 import XIcon from '@/components/icons/X.vue'
 import PencilIcon from '@/components/icons/Pencil.vue'
 import { createRegularPost, sendRegularPost } from '@/backend/post'
+import { addPhotoToIPFS, getPhotoFromIPFS, preUploadPhoto } from '@/backend/photos'
+const BlockEmbed = Quill.import(`blots/block/embed`)
+
+class ImageBlot extends BlockEmbed {
+	static create(value: any) {
+		const node = super.create()
+		node.setAttribute(`alt`, value.alt)
+		node.setAttribute(`src`, value.url)
+		return node
+	}
+
+	static value(node: any) {
+		return {
+			alt: node.getAttribute(`alt`),
+			url: node.getAttribute(`src`),
+		}
+	}
+}
+
+ImageBlot.blotName = `image`
+ImageBlot.tagName = `img`
 
 interface IData {
 	title: string
 	subtitle: string
 	input: string
 	editor: Quill
+	qeditor: Quill
 	turndownService: Turndown
 	wordCount: number
 	titleError: string
@@ -97,8 +121,8 @@ const toolbarOptions = [
 	[`blockquote`, `code-block`, `link`],
 	[{ header: 2 }],
 	[{ list: `ordered` }, { list: `bullet` }],
+	[`image`],
 ]
-
 const options = {
 	placeholder: `Start typing here...`,
 	readOnly: false,
@@ -106,7 +130,14 @@ const options = {
 	bounds: `#editor`,
 	modules: {
 		counter: true,
-		toolbar: toolbarOptions,
+		toolbar: {
+			container: toolbarOptions,
+			handlers: {
+				image() {
+					document.getElementById(`getFile`)?.click()
+				},
+			},
+		},
 	},
 }
 
@@ -153,6 +184,7 @@ export default Vue.extend({
 		}
 	},
 	mounted() {
+		Quill.register(ImageBlot)
 		Quill.register(`modules/counter`, (quill: Quill) => {
 			const metaButton = document.getElementById(`metaButton`)
 			quill.on(`text-change`, () => {
@@ -176,6 +208,7 @@ export default Vue.extend({
 			})
 		})
 		const editor = new Quill(`#editor`, options)
+		this.qeditor = editor
 		this.editor = new QuillMarkdown(editor, {})
 		this.turndownService = new Turndown()
 		this.turndownService.addRule(`codeblock`, {
@@ -218,6 +251,35 @@ export default Vue.extend({
 			const input = this.getInputHTML()
 			if (input !== ``) {
 				this.$store.commit(`draft/updateContent`, input)
+			}
+		},
+		async uploadFunction(e: { target: HTMLInputElement }) {
+			const target = e.target
+			const image: File = (target.files as FileList)[0]
+			if (!image) {
+				return
+			}
+
+			try {
+				const compressedImage = await imageCompression(image, {
+					maxSizeMB: 5,
+					maxWidthOrHeight: 1920,
+					useWebWorker: true,
+					initialQuality: 0.9,
+				})
+				const reader = new FileReader()
+				reader.readAsDataURL(compressedImage)
+				reader.onload = async (i) => {
+					if (i.target !== null) {
+						const cid = await addPhotoToIPFS(i.target.result as any)
+						await preUploadPhoto(cid, compressedImage)
+						const photo = await getPhotoFromIPFS(cid)
+						const range = this.qeditor.getSelection(true)
+						this.qeditor.insertEmbed(range.index, `image`, { alt: cid.toString(), url: photo }, `user`)
+					}
+				}
+			} catch (err) {
+				this.$toastError(`error`)
 			}
 		},
 		async saveContent(): Promise<void> {
@@ -285,7 +347,16 @@ export default Vue.extend({
 				this.$toastError(`Missing category`)
 				return
 			}
-			const clean = this.getInputHTML()
+			let clean = this.getInputHTML()
+			const images = clean.match(/<img.*?[^\>]+>/gm)
+			const parser = new DOMParser()
+			if (images) {
+				for (const i of images) {
+					const img = parser.parseFromString(i, `text/html`)
+					const cid = img.querySelector(`img`)?.getAttribute(`alt`)
+					clean = clean.replace(i, `<ipfsimage cid=${cid}>`)
+				}
+			}
 			// Check content quality
 			if (clean.length < 280) {
 				this.$toastError(`Post body too short. Write more before posting`)
