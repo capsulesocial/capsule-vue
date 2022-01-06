@@ -193,7 +193,6 @@
 				<PostActions
 					v-if="showComments || showStats"
 					:postCID="postCID"
-					:initComments="comments"
 					:bookmarksCount="$props.bookmarksCount"
 					:repostsCount="$props.repostCount"
 					:openStats="showStats"

@@ -135,12 +135,7 @@
 							/>
 						</div>
 					</div>
-					<PostActions
-						:postCID="$route.params.post"
-						:initComments="comments"
-						:bookmarksCount="bookmarksCount"
-						:repostsCount="repostCount"
-					/>
+					<PostActions :postCID="$route.params.post" :bookmarksCount="bookmarksCount" :repostsCount="repostCount" />
 				</article>
 			</section>
 			<section v-else>Post not found 😵‍💫</section>
@@ -254,9 +249,7 @@ export default Vue.extend({
 		}
 		// Get featured photo
 		if (this.post.featuredPhotoCID) {
-			getPhotoFromIPFS(this.post.featuredPhotoCID).then((p) => {
-				this.featuredPhoto = p
-			})
+			this.featuredPhoto = await getPhotoFromIPFS(this.post.featuredPhotoCID)
 		}
 		// Convert markdown to HTML
 		this.content = marked.parse(this.post.content)
