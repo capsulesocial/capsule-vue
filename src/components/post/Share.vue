@@ -18,7 +18,7 @@
 					: 'bg-darkBG text-darkPrimaryText border-darkBorder'
 			"
 			class="absolute flex flex-col rounded-lg w-40 shadow-lg z-10 p-2 modal-animation dropdownShareOpen"
-			style="left: 150px"
+			style="left: 53px"
 		>
 			<!-- Simple Repost -->
 			<button
