@@ -78,7 +78,7 @@ import imageCompression from 'browser-image-compression'
 import XIcon from '@/components/icons/X.vue'
 import PencilIcon from '@/components/icons/Pencil.vue'
 import { createRegularPost, sendRegularPost } from '@/backend/post'
-import { addPhotoToIPFS, getPhotoFromIPFS, preUploadPhoto } from '@/backend/photos'
+import { addPhotoToIPFS, preUploadPhoto } from '@/backend/photos'
 const BlockEmbed = Quill.import(`blots/block/embed`)
 
 class ImageBlot extends BlockEmbed {
@@ -273,9 +273,8 @@ export default Vue.extend({
 					if (i.target !== null) {
 						const cid = await addPhotoToIPFS(i.target.result as any)
 						await preUploadPhoto(cid, compressedImage)
-						const photo = await getPhotoFromIPFS(cid)
 						const range = this.qeditor.getSelection(true)
-						this.qeditor.insertEmbed(range.index, `image`, { alt: cid.toString(), url: photo }, `user`)
+						this.qeditor.insertEmbed(range.index, `image`, { alt: cid.toString(), url: i.target.result }, `user`)
 					}
 				}
 			} catch (err) {
@@ -348,7 +347,7 @@ export default Vue.extend({
 				return
 			}
 			let clean = this.getInputHTML()
-			const images = clean.match(/<img.*?[^\>]+>/gm)
+			const images = clean.match(/<img.*?[^\>]+>/gm) // eslint-disable-line
 			const parser = new DOMParser()
 			if (images) {
 				for (const i of images) {
