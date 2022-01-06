@@ -49,6 +49,23 @@
 								</nuxt-link>
 								<span class="text-xs ml-14">{{ $formatDate(this.quote.timestamp) }}</span>
 							</div>
+							<!-- Delete quote repost button -->
+							<div v-if="quote.authorID === $store.state.session.id" class="relative">
+								<button class="focus:outline-none ml-2 text-gray5" @click.stop="toggleDropdownQuoteDelete">
+									<More />
+								</button>
+								<div
+									v-show="showQuoteDelete"
+									class="absolute flex flex-col rounded-lg w-32 shadow-lg z-10 p-1 modal-animation"
+									style="top: 25px; right: 0px"
+								>
+									<!-- Delete -->
+									<button class="flex focus:outline-none text-negative" @click="deleteQuote">
+										<BinIcon class="p-1" />
+										<span class="text-xs self-center text-negative">Delete Quote</span>
+									</button>
+								</div>
+							</div>
 						</div>
 						<p class="break-words my-2">{{ this.quote.content }}</p>
 					</div>
@@ -90,7 +107,7 @@
 									{{ $formatDate(post.timestamp) }}
 								</span>
 							</div>
-							<div class="flex items-center" :class="repostedBy !== `` ? `-mt-4` : ``">
+							<div class="flex items-center relative" :class="repostedBy !== `` ? `-mt-4` : ``">
 								<!-- Bookmarks button -->
 								<BookmarkButton :postID="postCID" :hasBookmark="isBookmarked" @clicked="getBookmarkStatus" />
 								<button
@@ -109,13 +126,12 @@
 								</button>
 								<div
 									v-show="showDelete"
-									:class="
-										$store.state.settings.darkMode
-											? 'bg-lightBG text-lightPrimaryText border-lightBorder'
-											: 'bg-darkBG text-darkPrimaryText border-darkBorder'
-									"
 									class="absolute flex flex-col rounded-lg w-32 shadow-lg z-10 p-1 modal-animation"
-									style="top: 70px; right: 10px"
+									:style="
+										quote && quote.authorID === $store.state.session.id
+											? `top: 45px; right: 10px`
+											: `top: 35px; right: 0px`
+									"
 								>
 									<!-- Delete -->
 									<button class="flex focus:outline-none text-negative" @click="deletePost">
@@ -239,6 +255,7 @@ interface IData {
 	showComments: boolean
 	showStats: boolean
 	showDelete: boolean
+	showQuoteDelete: boolean
 	authorName: string
 	avatar: string
 	myAvatar: string
@@ -331,6 +348,7 @@ export default Vue.extend({
 			showComments: false,
 			showStats: false,
 			showDelete: false,
+			showQuoteDelete: false,
 			authorName: ``,
 			avatar: ``,
 			myAvatar: ``,
@@ -410,6 +428,7 @@ export default Vue.extend({
 					e.target.parentNode.classList === undefined ||
 					!e.target.parentNode.classList.contains(`toggle`)
 				) {
+					this.showQuoteDelete = false
 					this.showDelete = false
 				}
 			},
@@ -428,6 +447,11 @@ export default Vue.extend({
 			await sendPostDeletion(`HIDE`, this.postCID, this.$store.state.session.id)
 			this.postDeleted = true
 			this.$toastSuccess(`This post has been successfully deleted`)
+		},
+		async deleteQuote() {
+			await sendPostDeletion(`HIDE`, this.repost._id, this.$store.state.session.id)
+			this.postDeleted = true
+			this.$toastSuccess(`This quote has been successfully deleted`)
 		},
 		async getBookmarkStatus() {
 			this.isBookmarked = await isPostBookmarkedByUser(this.postCID, this.$store.state.session.id)
@@ -473,6 +497,9 @@ export default Vue.extend({
 		},
 		toggleDropdownDelete() {
 			this.showDelete = !this.showDelete
+		},
+		toggleDropdownQuoteDelete() {
+			this.showQuoteDelete = !this.showQuoteDelete
 		},
 		async toggleQuoteRepost() {
 			if (this.$store.state.session.avatar) {

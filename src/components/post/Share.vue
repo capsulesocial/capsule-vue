@@ -153,6 +153,7 @@ export default Vue.extend({
 				this.repostOffset += 1
 			} else {
 				// Undo repost
+				// What do I call to undo a simple repost???
 				if (this.$props.repost?._id) {
 					await sendPostDeletion(`HIDE`, this.$props.repost._id, this.$store.state.session.id)
 				} else {
@@ -236,4 +237,3 @@ export default Vue.extend({
 	border-radius: 2px;
 }
 </style>
-
