@@ -4,7 +4,15 @@
 		<div v-for="p in profiles" :key="p.id">
 			<ProfilePreview :profile="p" :updateFollowers="updateFollowers" class="pb-4" />
 		</div>
-		<nuxt-link :to="`/id/` + $route.params.id + `/followers`" class="text-sm text-primary">Show more</nuxt-link>
+		<nuxt-link
+			:to="
+				this.$route.name === `home`
+					? `/id/` + this.$store.state.session.id + `/followers`
+					: `/id/` + this.$route.params.id + `/followers`
+			"
+			class="text-sm text-primary"
+			>Show more</nuxt-link
+		>
 	</article>
 </template>
 
@@ -16,6 +24,7 @@ import { Profile, getProfile } from '@/backend/profile'
 
 interface IData {
 	profiles: Array<Profile>
+	route: string
 }
 
 export default Vue.extend({
@@ -35,6 +44,7 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			profiles: [],
+			route: ``,
 		}
 	},
 	mounted() {
