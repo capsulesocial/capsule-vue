@@ -42,7 +42,7 @@
 				<!-- Authenticated -->
 				<nuxt-link
 					v-if="$store.state.session.id !== ``"
-					:to="`/` + $store.state.session.id"
+					:to="`/id/` + $store.state.session.id"
 					class="text-left w-full flex flex-row items-center text-gray5 mb-4"
 					><ProfileIcon class="flex-shrink-0 w-5 h-5 mr-2" />Profile</nuxt-link
 				>

@@ -2,7 +2,7 @@
 	<div class="flex">
 		<Avatar :authorID="$props.profile.id" :avatar="avatar" size="w-12 h-12" />
 		<div class="h-12 flex-grow px-4">
-			<nuxt-link :to="`/` + $props.profile.id" class="flex flex-col">
+			<nuxt-link :to="`/id/` + $props.profile.id" class="flex flex-col">
 				<span class="font-medium text-base">
 					{{ $props.profile.name }}
 				</span>

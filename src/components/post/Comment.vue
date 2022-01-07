@@ -18,7 +18,7 @@
 				<div class="flex flex-col flex-grow w-full px-4 py-2">
 					<!-- Top row: name, id, timestamp -->
 					<div class="flex">
-						<nuxt-link :to="`/` + authorID" class="flex mr-4 flex-row items-center">
+						<nuxt-link :to="`/id/` + authorID" class="flex mr-4 flex-row items-center">
 							<span class="font-medium">
 								{{ name }}
 							</span>

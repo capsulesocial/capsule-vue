@@ -20,7 +20,7 @@
 				</p>
 			</div>
 		</div>
-		<nuxt-link :to="`/` + $route.params.id + `/mutuals`" class="text-sm text-primary">Show more</nuxt-link>
+		<nuxt-link :to="`/id/` + $route.params.id + `/mutuals`" class="text-sm text-primary">Show more</nuxt-link>
 	</article>
 </template>
 
