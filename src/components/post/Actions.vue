@@ -241,11 +241,14 @@
 			<div v-show="showEmotions" class="w-full flex flex-row-reverse absolute">
 				<div
 					class="z-10 bg-white flex flex-row-reverse items-end p-5 rounded-br-xl mr-1"
-					style="height: 111px; margin-top: -112px; margin-bottom: 1px; margin-right: 53px; pointer-events: none"
-					:style="$route.name === `post-post` ? `width: 490px` : `width: 406px`"
+					style="height: 111px; margin-top: -112px; margin-bottom: 1px; pointer-events: none"
+					:style="
+						$route.name === `post-post` ? `width: 490px; margin-right: 490px` : `width: 406px;  margin-right: 53px;`
+					"
 				></div>
 				<button
-					class="rounded-lg bg-primary text-white px-6 py-2 focus:outline-none absolute bottom-0 right-0 z-10 mb-4 mr-16"
+					class="rounded-lg bg-primary text-white px-6 py-2 focus:outline-none absolute bottom-0 right-0 z-10 mb-4"
+					:style="$route.name === `post-post` ? `margin-right: 490px` : `margin-right: 67px;`"
 					@click="confirmEmotion"
 				>
 					Select
