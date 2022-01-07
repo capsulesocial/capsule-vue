@@ -75,7 +75,7 @@
 					</div>
 				</div>
 			</div>
-			<!-- Comment Emoitons -->
+			<!-- Comment Emotions -->
 			<div v-if="getCommentCount(`total`) !== 0" class="pt-5 border-b pb-2">
 				<h6 class="text-sm pb-4 w-full text-center font-semibold">Comment Emotions</h6>
 				<!-- Row of faces -->
@@ -107,19 +107,19 @@
 				</div>
 				<CommentFilter :filter="filter" @clicked="setFilter" />
 			</div>
-			<!-- Bottom overlay with selector -->
-			<div v-show="showEmotions" class="w-full flex flex-row-reverse">
+			<!-- Top overlay with selector -->
+			<div v-show="showEmotions" class="w-full flex flex-row-reverse relative">
 				<div
 					class="z-10 bg-white flex flex-row justify-between p-5 rounded-tr-lg mr-1"
 					:style="$route.name === `post-post` ? `width: 490px` : `width: 406px`"
-					style="margin-bottom: -112px; margin-top: 1px"
+					style="margin-bottom: -112px; margin-top: 1px; pointer-events: none"
 				>
 					<h6 class="text-primary text-2xl text-center self-center font-semibold">How do you feel?</h6>
-					<div>
-						<button class="p-1 bg-gray1 rounded-full focus:outline-none" @click="showEmotions = false">
-							<CloseIcon />
-						</button>
-					</div>
+				</div>
+				<div class="absolute z-10 flex items-center mt-10 mr-12">
+					<button class="p-1 bg-gray1 rounded-full focus:outline-none" @click="showEmotions = false">
+						<CloseIcon />
+					</button>
 				</div>
 				<div
 					class="z-10 bg-white flex flex-row justify-between p-5 rounded-tl-lg"
@@ -136,13 +136,16 @@
 			<div class="flex items-start">
 				<!-- Comment box Container -->
 				<div v-show="!showEmotions" class="flex justify-between items-start mr-4" style="width: 60px; height: 60px">
-					<span class="rounded-lg flex-shrink-0" :style="getStyle(`bg-`)">
-						<Avatar :avatar="avatar" :authorID="$store.state.session.id" />
-					</span>
+					<Avatar
+						:avatar="avatar"
+						:authorID="$store.state.session.id"
+						class="rounded-xl flex-shrink-0 border-4"
+						:class="`border-` + selectedEmotionColor"
+					/>
 				</div>
 				<div
-					class="flex rounded-xl w-full overflow-hidden bg-neutralLightest border border-lightBorder"
-					:class="showEmotions ? `` : `border border-lightBorder p-4`"
+					class="flex rounded-xl w-full overflow-hidden border border-lightBorder"
+					:class="showEmotions ? `` : `border p-4 bg-` + selectedEmotionColor"
 				>
 					<div class="rounded-xl overflow-hidden w-full" :style="showEmotions ? `height: 20rem` : `height: 10rem`">
 						<div class="flex flex-row">
@@ -202,7 +205,7 @@
 											v-for="face in row"
 											:key="face.label"
 											class="rounded-lg focus:outline-none border-2 border-transparent outline-none"
-											:class="selectedEmotion.label === face.label ? `border-2 border-primary` : ``"
+											:class="selectedEmotion.label === face.label ? `border-2 border-` + selectedEmotionColor : ``"
 											style="transition: all 0.3s ease-in-out"
 											@click="setEmotion(face)"
 										>
@@ -215,7 +218,9 @@
 										>
 											<button
 												class="flex flex-grow justify-center items-center focus:outline-none outline-none"
-												:class="selectedEmotion.label === face.label ? `font-bold text-positive` : `text-gray7`"
+												:class="
+													selectedEmotion.label === face.label ? `font-bold text-` + selectedEmotionColor : `text-gray7`
+												"
 												style="transition: all 0.3s ease-in-out"
 												@click="setEmotion(face)"
 											>
@@ -233,16 +238,18 @@
 				</div>
 			</div>
 			<!-- Bottom overlay with selector -->
-			<div v-show="showEmotions" class="w-full flex flex-row-reverse">
+			<div v-show="showEmotions" class="w-full flex flex-row-reverse absolute">
 				<div
-					class="z-10 bg-white flex flex-row-reverse items-end p-5 rounded-br-lg mr-1"
-					style="height: 111px; margin-top: -112px; margin-bottom: 1px"
+					class="z-10 bg-white flex flex-row-reverse items-end p-5 rounded-br-xl mr-1"
+					style="height: 111px; margin-top: -112px; margin-bottom: 1px; margin-right: 53px; pointer-events: none"
 					:style="$route.name === `post-post` ? `width: 490px` : `width: 406px`"
+				></div>
+				<button
+					class="rounded-lg bg-primary text-white px-6 py-2 focus:outline-none absolute bottom-0 right-0 z-10 mb-4 mr-16"
+					@click="confirmEmotion"
 				>
-					<button class="rounded-lg bg-primary text-white px-6 py-2 focus:outline-none" @click="confirmEmotion">
-						Select
-					</button>
-				</div>
+					Select
+				</button>
 				<div
 					class="z-10 bg-white flex flex-row-reverse items-end p-5 rounded-bl-lg"
 					style="
@@ -284,6 +291,7 @@ import Avatar from '@/components/Avatar.vue'
 
 import { faces, feelings, faceGroupings } from '@/config'
 import { createComment, sendComment, ICommentData, getCommentsOfPost } from '@/backend/comment'
+import { getPhotoFromIPFS } from '@/backend/photos'
 
 interface FaceStat {
 	face: { label: string; leftImage: any; rightImage: any }
@@ -306,6 +314,7 @@ interface IData {
 	toggleStats: boolean
 	faceStats: FaceStat[]
 	page: number
+	selectedEmotionColor: `positive` | `neutral` | `negative` | `neutralLightest`
 }
 
 export default Vue.extend({
@@ -356,6 +365,7 @@ export default Vue.extend({
 			toggleStats: this.$props.openStats,
 			faceStats: [],
 			page: 0,
+			selectedEmotionColor: `neutralLightest`,
 		}
 	},
 	async created() {
@@ -363,27 +373,24 @@ export default Vue.extend({
 		this.comments = this.comments.reverse()
 		// get comment stats
 		this.updateFaceStats()
-	},
-	mounted() {
-		const scroller = this.$refs.scrollContainer as HTMLElement
-		scroller.addEventListener(`scroll`, this.handleScrollContainer)
+		if (this.$store.state.session.avatar !== ``) {
+			this.avatar = await getPhotoFromIPFS(this.$store.state.session.avatar)
+		}
 	},
 	methods: {
-		handleScrollContainer(e: Event): void {
-			if (e.target) {
-				// const { scrollTop, scrollHeight } = e.srcElement as HTMLElement
-				// eslint-disable-next-line no-console
-				// console.log(`scrollTop`, scrollTop)
-				// eslint-disable-next-line no-console
-				// console.log(`scrollHeight`, scrollHeight)
-			}
-		},
 		setFilter(reaction: string): void {
 			this.filter = reaction
 			this.filterComments()
 		},
 		setEmotion(r: { label: string; leftImage: any; rightImage: any }) {
 			this.selectedEmotion = r
+			if (feelings.positive.includes(r.label)) {
+				this.selectedEmotionColor = `positive`
+			} else if (feelings.negative.includes(r.label)) {
+				this.selectedEmotionColor = `negative`
+			} else {
+				this.selectedEmotionColor = `neutral`
+			}
 		},
 		confirmEmotion() {
 			if (this.selectedEmotion.label === ``) {
@@ -417,6 +424,7 @@ export default Vue.extend({
 			this.activeEmotion = { label: ``, leftImage: null, rightImage: null }
 			this.emotion = ``
 			this.filter = ``
+			this.selectedEmotionColor = `neutralLightest`
 			this.filterComments()
 			this.updateFaceStats()
 		},
