@@ -138,7 +138,7 @@ export default Vue.extend({
 		},
 	},
 	async created() {
-		// Unauthenticated
+		// Fetch visiting profile
 		const [{ profile: visitProfile }, profileExists] = await Promise.all([
 			getProfile(this.$route.params.id),
 			this.checkAccountExists(),
@@ -148,27 +148,22 @@ export default Vue.extend({
 			this.$toastError(`Profile does not exist`)
 			return
 		}
-
 		this.visitProfile = visitProfile || createDefaultProfile(this.$route.params.id)
 		if (this.visitProfile.avatar !== ``) {
 			getPhotoFromIPFS(this.visitProfile.avatar).then((p) => {
 				this.visitAvatar = p
 			})
 		}
-
 		const { followers, following } = await getFollowersAndFollowing(this.$route.params.id)
-
 		this.followers = followers
 		this.following = following
 		this.userIsFollowed = followers.has(this.$store.state.session.id)
 
 		if (this.$store.state.session.id !== ``) {
-			// Get visiting profile and avatar
 			// get my profile and avatar
 			this.getMyProfile()
 			const myConnections = await getFollowersAndFollowing(this.$store.state.session.id)
 			this.myFollowing = myConnections.following
-
 			// Get mutual followers list
 			this.mutuals = new Set([...followers].filter((p) => this.myFollowing.has(p)))
 			this.mutuals.forEach(this.getMutualProfiles) // TODO: This is not the best way to do this
@@ -182,6 +177,11 @@ export default Vue.extend({
 				getPhotoFromIPFS(this.myProfile.avatar).then((p) => {
 					this.myAvatar = p
 				})
+			}
+			// Set visitProfile to myProfile if viewing my own profile
+			if (this.$store.state.session.id !== `` && this.$store.state.session.id === this.$route.params.id) {
+				this.visitProfile = this.myProfile
+				this.visitAvatar = this.myAvatar
 			}
 		},
 		async toggleFriend() {
