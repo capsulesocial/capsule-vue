@@ -4,7 +4,7 @@
 		<div
 			:class="
 				showPopup
-					? `fixed w-full h-screen bg-primary top-0 bottom-0 left-0 right-0 z-30 flex justify-center items-center bg-opacity-50 modal-animation`
+					? `fixed w-full h-screen bg-primary top-0 bottom-0 left-0 right-0 z-30 flex justify-center bg-opacity-50 modal-animation`
 					: ``
 			"
 		>
@@ -19,7 +19,7 @@
 				style="backdrop-filter: blur(10px)"
 			>
 				<div
-					class="sticky top-0 z-10 pb-5 border-b bg-gradient-to-r from-lightBGStart to-lightBGStop px-6 pt-5"
+					class="sticky top-0 z-20 pb-5 border-b bg-gradient-to-r from-lightBGStart to-lightBGStop px-6 pt-5"
 					style="backdrop-filter: blur(10px)"
 				>
 					<!-- Show Quote Repost input -->

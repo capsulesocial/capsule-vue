@@ -1,19 +1,21 @@
 <template>
-	<div class="flex relative items-center">
+	<div class="flex flex-grow relative items-center">
 		<!-- Comment filter -->
-		<h6>Sort by:</h6>
-		<button
-			class="toggle focus:outline-none flex justify-between items-center border rounded-lg px-4 ml-4 text-sm shadow-lg w-32"
-			@click.stop="showFilter = !showFilter"
-		>
-			<span v-if="filter === ``" class="toggle font-bold">All</span>
-			<span v-else class="toggle capitalize font-bold">{{ filter }}</span>
-			<ChevronUp v-if="showFilter" />
-			<ChevronDown v-else />
-		</button>
-		<button v-show="filter !== ``" @click="$emit(`clicked`, ``)">
-			<span class="text-sm italic ml-2">Clear</span>
-		</button>
+		<div class="flex flex-row w-full justify-end">
+			<h6>Sort by:</h6>
+			<button
+				class="toggle focus:outline-none flex justify-between items-center border rounded-lg px-4 ml-4 text-sm shadow-lg w-32"
+				@click.stop="showFilter = !showFilter"
+			>
+				<span v-if="filter === ``" class="toggle font-bold">All</span>
+				<span v-else class="toggle capitalize font-bold">{{ filter }}</span>
+				<ChevronUp v-if="showFilter" />
+				<ChevronDown v-else />
+			</button>
+			<button v-show="filter !== ``" @click="$emit(`clicked`, ``)">
+				<span class="text-sm italic ml-2">Clear</span>
+			</button>
+		</div>
 		<!-- comment filter dropdown -->
 		<div
 			v-show="showFilter"
@@ -24,21 +26,21 @@
 			<div class="hotzone flex justify-between mb-2">
 				<button
 					class="hotzone focus:outline-none border-b-4"
-					:class="feeling === `positive` ? `border-green-500` : `border-transparent`"
+					:class="feeling === `positive` ? `border-positive` : `border-transparent`"
 					@click="setCommentFilterFeeling(`positive`)"
 				>
 					Positive
 				</button>
 				<button
 					class="hotzone focus:outline-none border-b-4"
-					:class="feeling === `neutral` ? `border-yellow-500` : `border-transparent`"
+					:class="feeling === `neutral` ? `border-neutral` : `border-transparent`"
 					@click="setCommentFilterFeeling(`neutral`)"
 				>
 					Neutral
 				</button>
 				<button
 					class="hotzone focus:outline-none border-b-4"
-					:class="feeling === `negative` ? ` border-red-500` : `border-transparent`"
+					:class="feeling === `negative` ? ` border-negative` : `border-transparent`"
 					@click="setCommentFilterFeeling(`negative`)"
 				>
 					Negative
@@ -47,17 +49,17 @@
 			<!-- Show faces -->
 			<div
 				class="grid grid-cols-5 gap-x-1 gap-y-4 overflow-y-auto overflow-x-hidden faces"
-				style="height: 155px; padding-right: 5px"
+				style="height: 225px; padding-right: 5px"
 			>
 				<button
 					v-for="r in feelingList[feeling]"
 					:key="r.label"
-					class="tooltip relative inline-block h-12 w-12 rounded-xl shadow-lg transition duration-500 ease-in-out transform hover:scale-105"
+					class="tooltip relative inline-block h-24 w-24 rounded-xl shadow-lg transition duration-500 ease-in-out transform hover:scale-105 focus:outline-none"
 				>
 					<img
 						:src="reactionList[r].leftImage"
 						:alt="reactionList[r].label"
-						class="flex-shrink-0 h-12 w-12"
+						class="flex-shrink-0 h-24 w-24"
 						@click="updateFilter(reactionList[r].label)"
 					/>
 					<span class="tooltiptext bg-white bg-opacity-75 text-xs text-center text-black w-16 -ml-8 -mt-1">{{
