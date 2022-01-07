@@ -319,10 +319,7 @@ export default Vue.extend({
 			this.isBookmarked = await isPostBookmarkedByUser(this.$route.params.post, this.$store.state.session.id)
 		},
 		hasReposted(): boolean {
-			if (this.myReposts.includes(this.$route.params.post)) {
-				return true
-			}
-			return false
+			return this.myReposts.includes(this.$route.params.post)
 		},
 		async toggleFriend() {
 			if (this.post) {

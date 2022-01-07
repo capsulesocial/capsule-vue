@@ -394,9 +394,9 @@ export default Vue.extend({
 		},
 		setEmotion(r: { label: string; leftImage: any; rightImage: any }) {
 			this.selectedEmotion = r
-			if (feelings.positive.includes(r.label)) {
+			if (feelings.positive.has(r.label)) {
 				this.selectedEmotionColor = `positive`
-			} else if (feelings.negative.includes(r.label)) {
+			} else if (feelings.negative.has(r.label)) {
 				this.selectedEmotionColor = `negative`
 			} else {
 				this.selectedEmotionColor = `neutral`
@@ -469,7 +469,7 @@ export default Vue.extend({
 					if (reaction in faces) {
 						const label = faces[reaction].label
 						// console.log(label)
-						if (feelings[type].includes(label)) {
+						if (feelings[type].has(label)) {
 							count++
 						}
 					}
@@ -497,9 +497,9 @@ export default Vue.extend({
 			this.faceStats = _.sortBy(this.faceStats, `count`).reverse()
 		},
 		getStyle(emotionType: string): string {
-			if (feelings.positive.includes(emotionType)) {
+			if (feelings.positive.has(emotionType)) {
 				return `positive`
-			} else if (feelings.negative.includes(emotionType)) {
+			} else if (feelings.negative.has(emotionType)) {
 				return `negative`
 			} else {
 				return `neutral`
