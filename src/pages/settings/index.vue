@@ -125,7 +125,6 @@ export default Vue.extend({
 		if (nodeUrl) {
 			this.nodeURL = nodeUrl
 		}
-		console.log(this.$props.tab)
 		// Check for dark mode
 		// const prefersDarkMode = window.matchMedia(`(prefers-color-scheme: dark)`).matches
 		// if (prefersDarkMode) {
