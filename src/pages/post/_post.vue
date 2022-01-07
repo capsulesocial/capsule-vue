@@ -188,6 +188,7 @@ import { followChange, getFollowersAndFollowing } from '@/backend/following'
 import { getReposts } from '@/backend/reposts'
 import { isPostBookmarkedByUser } from '@/backend/bookmarks'
 import { ICommentData } from '@/backend/comment'
+import { parseRegularPost } from '@/plugins/QuillImage'
 
 marked.use({ renderer: markedRenderer })
 
@@ -252,18 +253,7 @@ export default Vue.extend({
 	async created() {
 		// Fetch post from IPFS,
 		const post = await getRegularPost(this.$route.params.post)
-
-		const images = post.content.match(/!\\\[[^\]]*\\\]\((?<filename>.*?)(?="|\))(?<optionalpart>".*")?\)/gm)
-		if (images) {
-			for (const i of images) {
-				const indexOfCid = i.indexOf(`Qm`)
-				const cid = i.slice(indexOfCid, 52)
-				const photo = await getPhotoFromIPFS(cid)
-				post.content = post.content.replace(i, `![](${photo})`)
-			}
-		}
-
-		this.post = post
+		this.post = await parseRegularPost(post)
 
 		if (this.post === null) {
 			this.$toastError(`This post has not been found`)

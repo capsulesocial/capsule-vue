@@ -77,28 +77,9 @@ import QuillMarkdown from 'quilljs-markdown'
 import imageCompression from 'browser-image-compression'
 import XIcon from '@/components/icons/X.vue'
 import PencilIcon from '@/components/icons/Pencil.vue'
+import { ImageBlot, transformEditorPost } from '@/plugins/QuillImage'
 import { createRegularPost, sendRegularPost } from '@/backend/post'
 import { addPhotoToIPFS, preUploadPhoto } from '@/backend/photos'
-const BlockEmbed = Quill.import(`blots/block/embed`)
-
-class ImageBlot extends BlockEmbed {
-	static create(value: any) {
-		const node = super.create()
-		node.setAttribute(`alt`, value.alt)
-		node.setAttribute(`src`, value.url)
-		return node
-	}
-
-	static value(node: any) {
-		return {
-			alt: node.getAttribute(`alt`),
-			url: node.getAttribute(`src`),
-		}
-	}
-}
-
-ImageBlot.blotName = `image`
-ImageBlot.tagName = `img`
 
 interface IData {
 	title: string
@@ -346,16 +327,7 @@ export default Vue.extend({
 				this.$toastError(`Missing category`)
 				return
 			}
-			let clean = this.getInputHTML()
-			const images = clean.match(/<img.*?[^>]+>/gm)
-			const parser = new DOMParser()
-			if (images) {
-				for (const i of images) {
-					const img = parser.parseFromString(i, `text/html`)
-					const cid = img.querySelector(`img`)?.getAttribute(`alt`)
-					clean = clean.replace(i, `![](${cid})`)
-				}
-			}
+			const clean = transformEditorPost(this.getInputHTML())
 			// Check content quality
 			if (clean.length < 280) {
 				this.$toastError(`Post body too short. Write more before posting`)
