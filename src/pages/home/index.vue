@@ -238,9 +238,7 @@ export default Vue.extend({
 		},
 		generateKey(p: IPostResponse | IRepostResponse) {
 			let key: string = p.post._id
-			// @ts-ignore
-			if (p.repost) {
-				// @ts-ignore
+			if (`repost` in p) {
 				key += p.repost._id
 			}
 			return key

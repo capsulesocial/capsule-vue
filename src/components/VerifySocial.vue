@@ -98,11 +98,11 @@ export default Vue.extend({
 	},
 	mounted() {
 		const socials = this.$store.state.session.socials
-		for (const s in socials) {
-			if (socials[s].platform === this.platform) {
+		for (const s of socials) {
+			if (s.platform === this.platform) {
 				this.isActive = true
 				this.isVerified = true
-				this.handle = socials[s].username
+				this.handle = s.username
 			}
 		}
 	},

@@ -175,20 +175,20 @@ export default Vue.extend({
 		},
 	},
 	data(): IData {
+		const { category } = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex]
 		return {
 			featuredPhoto: null,
 			categoryList: categories,
-			category: this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].category,
+			category,
 			tag: ``,
 			caption: ``,
 			showCategoryDropdown: false,
 		}
 	},
 	mounted() {
-		if (this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].featuredPhotoCID !== null) {
-			this.featuredPhoto = this.downloadImage(
-				this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].featuredPhotoCID,
-			)
+		const { featuredPhotoCID } = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex]
+		if (featuredPhotoCID !== null) {
+			this.featuredPhoto = this.downloadImage(featuredPhotoCID)
 		}
 	},
 	methods: {
@@ -204,15 +204,16 @@ export default Vue.extend({
 				this.$toastError(`Invalid tag!`)
 				return
 			}
-			const tagList = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].tags
-			if (tagList.some((t: Tag) => t.name === this.tag)) {
-				this.$toastWarning(`Duplicate tag!`)
-				return
-			}
-			if (tagList.length > 2) {
+			const { tags } = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex]
+			if (tags.length > 2) {
 				this.$toastWarning(`Max: 3 tags`)
 				return
 			}
+			if (tags.some((t: Tag) => t.name === this.tag)) {
+				this.$toastWarning(`Duplicate tag!`)
+				return
+			}
+
 			const t: Tag = {
 				name: this.tag,
 			}

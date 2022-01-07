@@ -172,14 +172,10 @@ export default Vue.extend({
 			// Update reposts store
 			await this.getReposts({ authorID: this.$store.state.session.id }, {}).then((res) => {
 				if (res) {
-					const repost: RepostLink[] = []
-					res.forEach((r) => {
-						const link: RepostLink = {
-							postID: r.post._id,
-							repostID: r.repost._id,
-						}
-						repost.push(link)
-					})
+					const repost: RepostLink[] = res.map((r) => ({
+						postID: r.post._id,
+						repostID: r.repost._id,
+					}))
 					this.$store.commit(`setRepost`, repost)
 				}
 			})
@@ -203,14 +199,9 @@ export default Vue.extend({
 					break
 				case `TWITTER`:
 					window.open(
-						`https://twitter.com/share?url=` +
-							encodeURIComponent(shareElement.value) +
-							`&text=` +
-							`📰 ` +
-							this.post.title +
-							`\n 🔏 ` +
-							this.post.authorID +
-							` on @CapsuleSoc 🔗`,
+						`https://twitter.com/share?url=${encodeURIComponent(shareElement.value)}&text=📰 ${this.post.title}\n 🔏 ${
+							this.post.authorID
+						} on @CapsuleSoc 🔗`,
 					)
 					break
 				default:

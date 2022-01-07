@@ -141,21 +141,21 @@ export default Vue.extend({
 	},
 	methods: {
 		async fetchBookmarks() {
-			const bookmarkPreviews = new Set<PostPreview>()
 			let bookmarks = await getPosts({ bookmarkedBy: this.$store.state.session.id }, this.$store.state.session.id, {})
 			bookmarks = bookmarks.reverse().slice(0, 2)
-			bookmarks.forEach((p: IPostResponse) => {
-				if (p.post.featuredPhotoCID) {
-					getPhotoFromIPFS(p.post.featuredPhotoCID).then((res) => {
-						const post = { title: p.post.title, authorID: p.post.authorID, featuredPhoto: res, postCID: p.post._id }
-						bookmarkPreviews.add(post)
-					})
-				} else {
-					const post = { title: p.post.title, authorID: p.post.authorID, featuredPhoto: null, postCID: p.post._id }
-					bookmarkPreviews.add(post)
+			const bookmarkPreviews = bookmarks.map(async (p: IPostResponse) => {
+				const post: PostPreview = {
+					title: p.post.title,
+					authorID: p.post.authorID,
+					featuredPhoto: null,
+					postCID: p.post._id,
 				}
+				if (p.post.featuredPhotoCID) {
+					post.featuredPhoto = await getPhotoFromIPFS(p.post.featuredPhotoCID)
+				}
+				return post
 			})
-			this.$store.commit(`setRecentBookmarks`, bookmarkPreviews)
+			this.$store.commit(`setRecentBookmarks`, await Promise.all(bookmarkPreviews))
 		},
 		async toggleFriend(authorID: string) {
 			if (authorID !== this.$store.state.session.id) {

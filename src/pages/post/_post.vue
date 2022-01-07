@@ -367,13 +367,15 @@ export default Vue.extend({
 			if (this.$router.history._startLocation === this.$route.path) {
 				// IF they started on this page:
 				this.$router.push(`/home`)
-			} else if (this.$store.state.settings.recentlyPosted) {
+				return
+			}
+			if (this.$store.state.settings.recentlyPosted) {
 				// IF coming from after recently posting:
 				this.$router.push(`/id/` + this.$store.state.session.id)
 				this.$store.commit(`settings/setRecentlyPosted`, false)
-			} else {
-				this.$router.go(-1)
+				return
 			}
+			this.$router.go(-1)
 		},
 		handleRepost() {
 			this.showQuoteRepost = true

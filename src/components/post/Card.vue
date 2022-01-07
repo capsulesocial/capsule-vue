@@ -399,17 +399,15 @@ export default Vue.extend({
 			})
 		}
 		// Get bookmark status
-		this.isBookmarked = this.$props.bookmarked
+		this.isBookmarked = this.bookmarked
 
 		// Check if this is a repost
-		if (this.$props.repost) {
-			if (this.$props.repost.type === `quote`) {
-				this.getQuoteRepost(this.$props.repost._id)
-			}
+		if (this.repost && this.repost.type === `quote`) {
+			this.getQuoteRepost(this.repost._id)
 		}
 
 		// Handle quote repost on full post page
-		if (this.$props.displayRepost) {
+		if (this.displayRepost) {
 			// this.showPopup = true
 			// this.showRepostEditor = true
 			this.toggleQuoteRepost()
@@ -458,10 +456,7 @@ export default Vue.extend({
 			this.$emit(`updateBookmarks`)
 		},
 		hasReposted(): boolean {
-			if (this.$store.state.session.id === this.$props.repostedBy || this.$store.getters.checkReposts(this.postCID)) {
-				return true
-			}
-			return false
+			return this.$store.state.session.id === this.$props.repostedBy || this.$store.getters.checkReposts(this.postCID)
 		},
 		postExcerpt(): string {
 			const excerpt = this.post.excerpt.slice(0, 177).trim()

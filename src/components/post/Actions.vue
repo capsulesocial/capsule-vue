@@ -384,7 +384,9 @@ export default Vue.extend({
 		// get comment stats
 		this.updateFaceStats()
 		if (this.$store.state.session.avatar !== ``) {
-			this.avatar = await getPhotoFromIPFS(this.$store.state.session.avatar)
+			getPhotoFromIPFS(this.$store.state.session.avatar).then((a) => {
+				this.avatar = a
+			})
 		}
 	},
 	methods: {
@@ -396,11 +398,14 @@ export default Vue.extend({
 			this.selectedEmotion = r
 			if (feelings.positive.has(r.label)) {
 				this.selectedEmotionColor = `positive`
-			} else if (feelings.negative.has(r.label)) {
-				this.selectedEmotionColor = `negative`
-			} else {
-				this.selectedEmotionColor = `neutral`
+				return
 			}
+			if (feelings.negative.has(r.label)) {
+				this.selectedEmotionColor = `negative`
+				return
+			}
+
+			this.selectedEmotionColor = `neutral`
 		},
 		confirmEmotion() {
 			if (this.selectedEmotion.label === ``) {
@@ -440,70 +445,68 @@ export default Vue.extend({
 		},
 		async filterComments() {
 			// Fetch comments
+			let cList: ICommentData[] = []
 			if (this.filter === ``) {
-				const cList: ICommentData[] = await getCommentsOfPost(this.postCID)
-				this.comments = cList.reverse()
-			} else {
+				cList = await getCommentsOfPost(this.postCID)
+			} else if (this.filter === `positive` || this.filter === `neutral` || this.filter === `negative`) {
 				// Get a list of comments with multiple emotions under the same category
-				if (this.filter === `positive` || this.filter === `neutral` || this.filter === `negative`) {
-					const cList: ICommentData[] = await getCommentsOfPost(this.postCID, undefined, this.filter)
-					this.comments = cList.reverse()
-					return
-				}
+				cList = await getCommentsOfPost(this.postCID, undefined, this.filter)
+			} else {
 				// Get a list of comments with a specific emotion
-				const cList: ICommentData[] = await getCommentsOfPost(
+				cList = await getCommentsOfPost(
 					this.postCID,
 					this.filter.charAt(0).toLowerCase() + this.filter.replace(/\s/g, ``).substring(1),
 				)
-				this.comments = cList.reverse()
 			}
+
+			this.comments = cList.reverse()
 		},
 		getCommentCount(type: `total` | `positive` | `neutral` | `negative`): number {
 			if (type === `total`) {
 				return this.comments.length
 			}
 			let count: number = 0
-			for (const c in this.comments) {
-				if (c) {
-					const reaction = this.comments[c].emotion as keyof typeof faces
-					if (reaction in faces) {
-						const label = faces[reaction].label
-						// console.log(label)
-						if (feelings[type].has(label)) {
-							count++
-						}
-					}
+			for (const c of this.comments) {
+				const reaction = c.emotion as keyof typeof faces
+				if (!(reaction in faces)) {
+					continue
+				}
+
+				const label = faces[reaction].label
+				if (feelings[type].has(label)) {
+					count++
 				}
 			}
 			return count
 		},
 		updateFaceStats(): void {
-			this.faceStats = []
-			for (const c in this.comments) {
-				if (c) {
-					const reaction = this.comments[c].emotion as keyof typeof faces
-					if (reaction in faces) {
-						const f = faces[reaction]
-						const i = this.faceStats.findIndex((x) => x.face === f)
-						if (i > -1) {
-							// Not the first entry
-							this.faceStats[i].count++
-						} else {
-							this.faceStats.push({ face: f, count: 1 })
-						}
-					}
+			const stats: Record<string, FaceStat> = {}
+			for (const c of this.comments) {
+				const reaction = c.emotion as keyof typeof faces
+				if (!(reaction in faces)) {
+					continue
 				}
+
+				const f = faces[reaction]
+				if (stats[f.label]) {
+					// Not the first entry
+					stats[f.label].count++
+					continue
+				}
+
+				stats[f.label] = { face: f, count: 1 }
 			}
-			this.faceStats = _.sortBy(this.faceStats, `count`).reverse()
+			this.faceStats = _.sortBy(Object.values(stats), `count`).reverse()
 		},
 		getStyle(emotionType: string): string {
 			if (feelings.positive.has(emotionType)) {
 				return `positive`
-			} else if (feelings.negative.has(emotionType)) {
-				return `negative`
-			} else {
-				return `neutral`
 			}
+			if (feelings.negative.has(emotionType)) {
+				return `negative`
+			}
+
+			return `neutral`
 		},
 	},
 })

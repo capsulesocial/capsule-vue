@@ -239,12 +239,9 @@ export default Vue.extend({
 		toggleSettings(): void {
 			this.showSettings = !this.showSettings
 		},
-		loadedContent(): Boolean {
+		loadedContent(): boolean {
 			// Check follow page
-			if (this.$route.name === `id-followers` && this.followers.size === 0) {
-				return false
-			}
-			return true
+			return !(this.$route.name === `id-followers` && this.followers.size === 0)
 		},
 		getStyles(tab: string): string {
 			let res = ``

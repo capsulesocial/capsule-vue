@@ -256,17 +256,16 @@ export default Vue.extend({
 				if (this.newName.length < 2 || this.newName.length > 32) {
 					this.$toastError(`Invalid name length`)
 					return
-				} else {
-					this.changeName(this.newName.trim())
 				}
+				this.changeName(this.newName.trim())
 			}
 			if (this.newID !== `` && this.$qualityID(this.newID)) {
 				if (this.newID.length < 2 || this.newID.length > 18) {
 					this.$toastError(`Invalid ID length`)
 					return
-				} else {
-					this.changeID(this.newID.trim())
 				}
+
+				this.changeID(this.newID.trim())
 			}
 			if (this.bio !== this.$store.state.session.bio && this.checkBio() > 0) {
 				this.changeBio(this.bio.trim())
@@ -277,7 +276,7 @@ export default Vue.extend({
 			if (this.location !== this.$store.state.session.location && this.$qualityText(this.location)) {
 				this.changeLocation(this.location.trim())
 			}
-			if (this.website !== this.$store.state.session.website && this.website) {
+			if (this.website !== this.$store.state.session.website && this.website && this.website !== ``) {
 				try {
 					const url = new URL(this.website)
 					if (!url) {
@@ -295,9 +294,9 @@ export default Vue.extend({
 					// Use HTML DOM styles: https://www.w3schools.com/jsref/dom_obj_style.asp
 					this.$toastError(`Invalid URL`)
 					return
-				} else {
-					this.$store.commit(`changeNodeURL`, this.nodeURL)
 				}
+
+				this.$store.commit(`changeNodeURL`, this.nodeURL)
 			}
 			const profileUpdated = await this.updateProfile()
 			if (profileUpdated) {
