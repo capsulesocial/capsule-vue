@@ -207,6 +207,12 @@
 	animation-duration: 1s;
 }
 
+.card-animation-delay3,
+#caption {
+	animation-name: enterdelay3;
+	animation-duration: 1s;
+}
+
 @keyframes fade {
 	from {
 		opacity: 0;
@@ -237,6 +243,15 @@
 @keyframes enterdelay2 {
 	from {
 		transform: translate(0px, 40px);
+	}
+	to {
+		transform: translate(0px, 0px);
+	}
+}
+
+@keyframes enterdelay3 {
+	from {
+		transform: translate(0px, 60px);
 	}
 	to {
 		transform: translate(0px, 0px);

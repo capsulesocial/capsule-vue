@@ -184,12 +184,19 @@
 							<div
 								v-show="showEmotions"
 								ref="scrollContainer"
-								class="w-full overflow-y-scroll bg-white px-6"
+								class="w-full overflow-y-scroll bg-white px-6 modal-animation"
 								style="height: 320px; scroll-snap-type: y mandatory; scroll-snap-stop: always"
 							>
 								<!-- Middle selector area -->
 								<div
-									class="absolute rounded-lg bg-positive bg-opacity-25 p-2"
+									class="absolute rounded-lg p-2"
+									:class="
+										selectedEmotionColor === `positive` ||
+										selectedEmotionColor === `neutral` ||
+										selectedEmotionColor === `negative`
+											? `bg-opacity-25 bg-` + selectedEmotionColor
+											: `bg-gray1`
+									"
 									style="height: 96px; margin-top: 112px"
 									:style="$route.name === `post-post` ? `width: 716px` : `width: 655px`"
 								></div>
@@ -505,12 +512,13 @@ export default Vue.extend({
 <style>
 /* Custom scrollbar */
 .faces::-webkit-scrollbar {
-	width: 10px;
+	width: 5px;
+	border-radius: 50px;
 }
 /* Track */
 .faces::-webkit-scrollbar-track {
-	box-shadow: inset 0 0 5px #888888;
 	border-radius: 0.75rem;
+	background: #eeeeee;
 }
 /* Handle */
 .faces::-webkit-scrollbar-thumb {

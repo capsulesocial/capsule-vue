@@ -14,7 +14,7 @@
 					class="transition duration-500 ease-in-out transform font-bold rounded-lg hover:shadow-lg focus:outline-none flex justify-between items-center"
 					@click="action"
 				>
-					<DiscordIcon :class="isOpen1 ? `plus0` : `plus1`" class="icon fill-current w-6 h-6 text-lightOnPrimaryText" />
+					<DiscordIcon class="icon fill-current w-6 h-6 text-lightOnPrimaryText" />
 					<span class="font-sans text-lightOnPrimaryText ml-2" style="font-size: 0.95rem"> Join Discord </span>
 				</button>
 			</a>
@@ -24,7 +24,7 @@
 					class="transition duration-500 ease-in-out transform font-bold rounded-lg hover:shadow-lg focus:outline-none flex justify-between items-center shadow-lg border-lightBorder"
 					@click="action"
 				>
-					<MailIcon :class="isOpen1 ? `plus0` : `plus1`" class="icon fill-current w-5 h-5 opacity-25" />
+					<MailIcon class="icon fill-current w-5 h-5" />
 					<span class="font-sans text-lightPrimaryText ml-2" style="font-size: 0.95rem"> Send Email </span>
 				</button>
 			</a>

@@ -81,7 +81,7 @@
 					</div>
 				</article>
 				<article
-					class="overflow-y-auto rounded-lg shadow-lg p-6 pt-4 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg card-animation-delay2"
+					class="overflow-y-auto rounded-lg shadow-lg p-6 pt-4 z-10 mb-5 bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg card-animation-delay2"
 					style="backdrop-filter: blur(5px)"
 				>
 					<h3 class="text-primary text-base font-semibold mb-4">Side widget</h3>
@@ -122,6 +122,19 @@
 						</button>
 					</div>
 				</article>
+				<div
+					class="rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg border border-lightBorder mb-5 w-full focus:outline-none flex-row items-center flex card-animation-delay3"
+					style="height: 60px; backdrop-filter: blur(10px)"
+				>
+					<div class="flex flex-row justify-between items-center px-6">
+						<p class="text-gray5 text-sm">
+							<span style="background: opacity 0.9em">Change background, theme and accessibilty:</span>
+						</p>
+						<button class="text-primary text-sm ml-2" @click="toggleSettings">
+							<span style="background: opacity 0.9em">Styling settings</span>
+						</button>
+					</div>
+				</div>
 			</div>
 		</section>
 	</div>
@@ -169,6 +182,15 @@ export default Vue.extend({
 		},
 		handleClose() {
 			this.$emit(`close`)
+		},
+		toggleSettings() {
+			// this.$router.push(`/settings`)
+			this.$router.push({
+				name: `settings`,
+				params: {
+					tab: `styling`,
+				},
+			})
 		},
 	},
 })
