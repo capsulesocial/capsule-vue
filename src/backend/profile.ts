@@ -14,6 +14,7 @@ export interface Profile {
 	location: string
 	avatar: string
 	socials: string[]
+	website?: string
 	background?: string
 }
 
@@ -25,6 +26,7 @@ export function createDefaultProfile(id: string): Profile {
 		bio: ``,
 		location: ``,
 		avatar: ``,
+		website: ``,
 		socials: [],
 	}
 }
