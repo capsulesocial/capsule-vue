@@ -9,6 +9,8 @@ const backend: Plugin = async (_context) => {
 	const accountId = window.localStorage.getItem(`accountId`)
 	if (accountId) {
 		initContract(accountId)
+	} else {
+		initContract(``)
 	}
 }
 
