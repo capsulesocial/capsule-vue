@@ -190,7 +190,7 @@ interface IData {
 	featuredPhoto: null | string
 	showFilter: boolean
 	userIsFollowed: boolean
-	myReposts: string[]
+	myReposts: Set<string>
 	isBookmarked: boolean
 	lastScroll: number
 	showHeader: boolean
@@ -227,7 +227,7 @@ export default Vue.extend({
 			featuredPhoto: null,
 			showFilter: false,
 			userIsFollowed: false,
-			myReposts: [],
+			myReposts: new Set(),
 			isBookmarked: false,
 			lastScroll: 0,
 			showHeader: true,
@@ -293,10 +293,7 @@ export default Vue.extend({
 		})
 		// Get reposts
 		const repostData = await getReposts({ authorID: this.$store.state.session.id }, {})
-		repostData.forEach((p) => {
-			// @ts-ignore
-			this.myReposts.push(p.repost.postCID)
-		})
+		this.myReposts = new Set(repostData.map((p) => p.repost.postCID))
 	},
 	mounted() {
 		const container = document.getElementById(`post`)
@@ -319,7 +316,7 @@ export default Vue.extend({
 			this.isBookmarked = await isPostBookmarkedByUser(this.$route.params.post, this.$store.state.session.id)
 		},
 		hasReposted(): boolean {
-			return this.myReposts.includes(this.$route.params.post)
+			return this.myReposts.has(this.$route.params.post)
 		},
 		async toggleFriend() {
 			if (this.post) {
