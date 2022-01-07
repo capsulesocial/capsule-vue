@@ -253,7 +253,7 @@ export default Vue.extend({
 		// Fetch post from IPFS,
 		const post = await getRegularPost(this.$route.params.post)
 
-		const images = post.content.match(/!\\\[[^\]]*\\\]\((?<filename>.*?)(?=\"|\))(?<optionalpart>\".*\")?\)/gm) //eslint-disable-line
+		const images = post.content.match(/!\\\[[^\]]*\\\]\((?<filename>.*?)(?="|\))(?<optionalpart>".*")?\)/gm)
 		if (images) {
 			for (const i of images) {
 				const indexOfCid = i.indexOf(`Qm`)

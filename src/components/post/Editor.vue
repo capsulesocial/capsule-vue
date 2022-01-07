@@ -347,7 +347,7 @@ export default Vue.extend({
 				return
 			}
 			let clean = this.getInputHTML()
-			const images = clean.match(/<img.*?[^\>]+>/gm) // eslint-disable-line
+			const images = clean.match(/<img.*?[^>]+>/gm)
 			const parser = new DOMParser()
 			if (images) {
 				for (const i of images) {
