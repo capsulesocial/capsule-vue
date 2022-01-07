@@ -2,6 +2,8 @@
 	<article class="w-full rounded-lg shadow-lg bg-white mb-5 p-4">
 		<h6 class="font-semibold text-primary mb-2">About</h6>
 		<div class="flex flex-row items-center"><PinIcon class="w-4 h-4 mr-2" /> {{ location }}</div>
+		<div class="flex flex-row items-center">{{ email }}</div>
+		<div class="flex flex-row items-center">{{ website }}</div>
 	</article>
 </template>
 
@@ -16,7 +18,15 @@ export default Vue.extend({
 	props: {
 		location: {
 			type: String,
-			default: `not set`,
+			default: ``,
+		},
+		email: {
+			type: String,
+			default: ``,
+		},
+		website: {
+			type: String,
+			default: ``,
 		},
 	},
 })

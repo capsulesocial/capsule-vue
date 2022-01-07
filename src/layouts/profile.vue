@@ -29,7 +29,11 @@
 							class="fixed overflow-y-auto p-4 -mt-4 modal-animation"
 							style="margin-left: 755px; width: 485px; min-height: calc(100vh - 70px); height: calc(100vh - 70px)"
 						>
-							<ProfileWidget :location="visitProfile.location" />
+							<ProfileWidget
+								:location="visitProfile.location"
+								:email="visitProfile.email"
+								:website="visitProfile.website"
+							/>
 							<MutualFollowersWidget
 								v-if="this.$route.params.id !== this.$store.state.session.id"
 								:mutuals="mutuals"

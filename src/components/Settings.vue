@@ -186,6 +186,7 @@ export default Vue.extend({
 			changeAvatar: MutationType.CHANGE_AVATAR,
 			changeBio: MutationType.CHANGE_BIO,
 			changeLocation: MutationType.CHANGE_LOCATION,
+			changeWebsite: MutationType.CHANGE_WEBSITE,
 		}),
 		hasChanged() {
 			return (
@@ -193,6 +194,7 @@ export default Vue.extend({
 				this.newID !== `` ||
 				this.newEmail !== `` ||
 				this.location !== `` ||
+				this.website !== `` ||
 				this.bio !== this.$store.state.session.bio ||
 				this.nodeURL !== ``
 			)
@@ -274,6 +276,19 @@ export default Vue.extend({
 			}
 			if (this.location !== this.$store.state.session.location && this.$qualityText(this.location)) {
 				this.changeLocation(this.location.trim())
+			}
+			if (this.website !== this.$store.state.session.website && this.website) {
+				try {
+					const url = new URL(this.website)
+					if (!url) {
+						return
+					}
+					this.changeWebsite(this.website)
+					return
+				} catch {
+					this.$toastError(`Invalid website URL!`)
+					return
+				}
 			}
 			if (this.nodeURL && this.nodeURL !== this.$store.state.session.nodeURL) {
 				if (!/((http|https?):\/\/)?(www\.)?[a-z0-9\-.]{3,}\.[a-z]{3}$/.test(this.nodeURL)) {
