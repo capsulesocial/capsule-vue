@@ -6,8 +6,65 @@
 		<CapsuleIcon class="pt-6 pl-10" />
 		<section class="flex justify-center items-center" style="height: 86%">
 			<div class="flex flex-col items-center w-full p-14 -mt-5">
+				<!-- Step 0: Code redeem -->
+				<article v-if="!inviteCode && !isLoading" class="w-1/2">
+					<h1 class="font-semibold text-primary mb-10" style="font-size: 2.6rem">Welcome</h1>
+					<p class="text-center text-gray7 mt-10">
+						Blogchain is a place for writers to do great work and for readers to discover it. For now, during our beta
+						release, we are offering access to Blogchain on an invitation-only basis. We believe this is the best way to
+						seed a vibrant community that will grow over time.
+					</p>
+					<div
+						class="p-4 rounded-lg mt-6 h-60 overflow-hidden relative"
+						style="background-size: cover; background-repeat: no-repeat"
+						:style="{ backgroundImage: `url(` + require(`@/assets/images/backgrounds/ticket.png`) + `)` }"
+					>
+						<label for="id" class="font-semibold text-sm text-gray5 pb-1 block">You have an invite code?</label>
+						<input
+							id="id"
+							v-model="inputCode"
+							type="text"
+							placeholder="Paste it here to get started"
+							class="rounded-lg px-4 py-2 mt-1 mb-5 text-sm w-full focus:outline-none focus:border-primary text-primary font-sans bg-gray2 border border-dashed border-primary"
+							style="height: 3rem"
+						/>
+						<div class="flex flex-row justify-between">
+							<img :src="require(`@/assets/images/brand/discover.webp`)" class="w-6/12 -ml-4 -mb-5" />
+							<BrandedButton :text="`Sign Up`" :action="verifyCode" class="w-2/5 absolute bottom-0 right-0 m-6" />
+						</div>
+					</div>
+					<p class="text-center text-gray7 mt-6 text-sm">
+						Already have an account?
+						<nuxt-link to="/login" class="text-center font-bold text-primary">Log in</nuxt-link>
+					</p>
+					<p class="text-center text-gray7 mt-10 text-sm">
+						you don't have an invite code yet ? join the community on Discord, or check the latest news on the blog:
+					</p>
+					<div class="flex justify-between items-center p-6">
+						<a href="https://discord.gg/sZWjf3E6bY" target="_blank">
+							<button
+								style="padding: 0.8rem 1.7rem; background-color: #7289da"
+								class="transition duration-500 ease-in-out transform font-bold rounded-lg hover:shadow-lg focus:outline-none flex justify-between items-center"
+								@click="action"
+							>
+								<DiscordIcon class="icon fill-current w-6 h-6 text-lightOnPrimaryText" />
+								<span class="font-sans text-lightOnPrimaryText ml-2" style="font-size: 0.95rem"> Join Discord </span>
+							</button>
+						</a>
+						<a href="https://blog.capsule.social/" target="_blank">
+							<button
+								style="padding: 0.8rem 1.7rem"
+								class="transition duration-500 ease-in-out transform font-bold rounded-lg hover:shadow-lg focus:outline-none flex justify-between items-center shadow-lg border-lightBorder text-lightPrimaryText bg-lightBG"
+								@click="action"
+							>
+								<CapsuleLogo class="icon fill-current w-5 h-5 text-lightPrimaryText" />
+								<span class="font-sans text-lightPrimaryText ml-3" style="font-size: 0.95rem ml-1"> Latest news </span>
+							</button>
+						</a>
+					</div>
+				</article>
 				<!-- Step 1: Choose Login / register -->
-				<article v-show="!(userInfo || nearWallet) && !isLoading" class="w-1/2">
+				<article v-show="inviteCode && !(userInfo || nearWallet) && !isLoading" class="w-1/2">
 					<h1 class="font-semibold text-primary mb-10" style="font-size: 2.6rem">Sign up</h1>
 					<button
 						class="w-full rounded-lg bg-gray2 mb-4 py-2 flex justify-center items-center focus:outline-none"
@@ -140,9 +197,10 @@ import intlTelInput from 'intl-tel-input'
 import axios from 'axios'
 
 import CapsuleIcon from '@/components/icons/CapsuleNew.vue'
-import DiscordIcon from '@/components/icons/brands/Discord.vue'
+import CapsuleLogo from '@/components/icons/CapsuleLogo.vue'
 import GoogleIcon from '@/components/icons/brands/Google.vue'
 import NearIcon from '@/components/icons/brands/Near.vue'
+import DiscordIcon from '@/components/icons/Discord.vue'
 // import TwitterIcon from '@/components/icons/brands/Twitter.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 import FileDownloadIcon from '@/components/icons/FileDownload.vue'
@@ -170,6 +228,8 @@ interface IData {
 	userInfo: null | TorusLoginResponse
 	username?: null | string
 	accountId: null | string
+	inviteCode: null | string
+	inputCode: string
 	isLoading: boolean
 	phoneNumber: string
 	otp: string
@@ -183,7 +243,7 @@ interface IData {
 export default Vue.extend({
 	components: {
 		CapsuleIcon,
-		// TwitterIcon,
+		CapsuleLogo,
 		DiscordIcon,
 		GoogleIcon,
 		BrandedButton,
@@ -201,6 +261,8 @@ export default Vue.extend({
 				network: `testnet`, // details for test net
 			}),
 			accountId: null,
+			inviteCode: null,
+			inputCode: ``,
 			userInfo: null,
 			isLoading: false,
 			username: undefined,
