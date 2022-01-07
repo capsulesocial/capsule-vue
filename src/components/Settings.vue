@@ -116,6 +116,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import type { PropType } from 'vue'
 import { mapMutations } from 'vuex'
 import imageCompression from 'browser-image-compression'
 import { HTMLInputEvent } from '@/interfaces/HTMLInputEvent'
@@ -148,6 +149,9 @@ export default Vue.extend({
 		PencilIcon,
 		// ColorMode,
 	},
+	props: {
+		updateProfileMethod: { type: Function as PropType<(update: boolean) => void>, required: true },
+	},
 	data(): IData {
 		return {
 			newName: ``,
@@ -161,6 +165,7 @@ export default Vue.extend({
 			maxCharBio: 256,
 		}
 	},
+
 	created() {
 		if (this.$store.state.session.avatar !== ``) {
 			getPhotoFromIPFS(this.$store.state.session.avatar).then((p) => {
@@ -227,6 +232,7 @@ export default Vue.extend({
 			const backendProfile = getProfileFromSession(this.$store.state.session)
 			const cid = await setProfile(backendProfile)
 			this.changeCID(cid)
+			this.updateProfileMethod(true)
 			return true
 		},
 		async uploadImage(image: string | ArrayBuffer, blobImage: Blob) {

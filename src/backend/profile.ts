@@ -47,6 +47,7 @@ export async function setProfile(p: Profile) {
 	if (!res.success) {
 		throw new Error(`Profile didn't update on the server!`)
 	}
+	await getProfile(p.id, true)
 
 	return cid
 }

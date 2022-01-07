@@ -125,6 +125,7 @@
 			<SettingsPopup
 				class="bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg shadow-lg rounded-lg card-animation"
 				style="width: 589px; backdrop-filter: blur(10px)"
+				:updateProfileMethod="updateProfileMethod"
 				@close="toggleSettings"
 			/>
 		</div>
@@ -198,6 +199,7 @@ export default Vue.extend({
 				return []
 			},
 		},
+		updateProfileMethod: { type: Function as PropType<() => void>, required: true },
 	},
 	data(): IData {
 		return {
