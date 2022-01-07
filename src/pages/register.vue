@@ -38,7 +38,14 @@
 						<nuxt-link to="/login" class="text-center font-bold text-primary">Log in</nuxt-link>
 					</p>
 					<p class="text-center text-gray7 mt-10 text-sm">
-						you don't have an invite code yet ? join the community on Discord, or check the latest news on the blog:
+						Don’t have an invite yet? Request one
+						<a
+							href="https://forms.zohopublic.com/peter96/form/BlogchainInviteRequests/formperma/7xCuELT6HdgR08w13-Nt8WFx9SmsnZh1YFL9mcP_oCc"
+							target="_blank"
+							class="text-primary font-semibold"
+							>here.</a
+						>
+						You can also join our community on Discord, or follow our company blog to receive future updates.
 					</p>
 					<div class="flex justify-between items-center p-6">
 						<a href="https://discord.gg/sZWjf3E6bY" target="_blank">
