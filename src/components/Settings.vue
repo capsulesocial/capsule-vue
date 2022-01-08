@@ -29,7 +29,7 @@
 		</div>
 		<!-- Name -->
 		<div class="flex flex-row mb-2">
-			<label for="newID" class="w-32">Name</label>
+			<label for="newName" class="w-32">Name</label>
 			<input
 				id="newName"
 				v-model="newName"
@@ -132,7 +132,6 @@ interface IData {
 	newName: string
 	nodeURL: string
 	profilePic: null | string | ArrayBuffer
-	newID: string
 	newEmail: string
 	location: string
 	website: string
@@ -153,7 +152,6 @@ export default Vue.extend({
 			newName: ``,
 			nodeURL: ``,
 			profilePic: null,
-			newID: ``,
 			newEmail: ``,
 			location: ``,
 			website: ``,
@@ -180,7 +178,6 @@ export default Vue.extend({
 		},
 		...mapMutations(sessionStoreNamespace, {
 			changeCID: MutationType.CHANGE_CID,
-			changeID: MutationType.CHANGE_ID,
 			changeName: MutationType.CHANGE_NAME,
 			changeEmail: MutationType.CHANGE_EMAIL,
 			changeAvatar: MutationType.CHANGE_AVATAR,
@@ -191,7 +188,6 @@ export default Vue.extend({
 		hasChanged() {
 			return (
 				this.newName !== `` ||
-				this.newID !== `` ||
 				this.newEmail !== `` ||
 				this.location !== `` ||
 				this.website !== `` ||
@@ -258,14 +254,6 @@ export default Vue.extend({
 					return
 				}
 				this.changeName(this.newName.trim())
-			}
-			if (this.newID !== `` && this.$qualityID(this.newID)) {
-				if (this.newID.length < 2 || this.newID.length > 18) {
-					this.$toastError(`Invalid ID length`)
-					return
-				}
-
-				this.changeID(this.newID.trim())
 			}
 			if (this.bio !== this.$store.state.session.bio && this.checkBio() > 0) {
 				this.changeBio(this.bio.trim())

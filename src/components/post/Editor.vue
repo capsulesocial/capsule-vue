@@ -201,7 +201,6 @@ export default Vue.extend({
 				const i: number = this.$store.state.draft.activeIndex
 				this.$store.commit(`draft/deleteDraft`, i)
 			}
-
 			if (this.$route.name === `post`) {
 				this.$router.go(-1)
 			}
