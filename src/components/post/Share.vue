@@ -104,7 +104,7 @@ export default Vue.extend({
 		},
 		hasRepost: {
 			type: Function,
-			default: () => {},
+			required: true,
 		},
 		repostCount: {
 			type: Number,
@@ -121,7 +121,7 @@ export default Vue.extend({
 		}
 	},
 	created() {
-		this.isReposted = this.$props.hasRepost
+		this.isReposted = this.hasRepost
 		window.addEventListener(
 			`click`,
 			(e: any): void => {
@@ -145,7 +145,7 @@ export default Vue.extend({
 		async handleRepost() {
 			// Post has NOT been reposted
 			if (!this.isReposted()) {
-				await sendRepost(this.$store.state.session.id, this.$props.cid, ``, `simple`)
+				await sendRepost(this.$store.state.session.id, this.cid, ``, `simple`)
 				this.$toastSuccess(`You have successfully reposted this post`)
 				this.isReposted = () => {
 					return true
@@ -154,11 +154,11 @@ export default Vue.extend({
 			} else {
 				// Undo repost
 				// What do I call to undo a simple repost???
-				if (this.$props.repost?._id) {
-					await sendPostDeletion(`HIDE`, this.$props.repost._id, this.$store.state.session.id)
+				if (this.repost?._id) {
+					await sendPostDeletion(`HIDE`, this.repost._id, this.$store.state.session.id)
 				} else {
 					this.$store.state.reposts.forEach((r: any) => {
-						if (r.postID === this.$props.cid) {
+						if (r.postID === this.cid) {
 							this.undoRepost(r.repostID)
 						}
 					})

@@ -1,21 +1,11 @@
 <template>
-	<button v-if="!noClick" class="focus:outline-none" @click="$router.push('/id/' + $props.authorID)">
-		<img
-			v-if="$props.avatar !== `` && $props.avatar !== null"
-			:src="$props.avatar"
-			class="rounded-lg object-cover"
-			:class="size"
-		/>
-		<img v-else :src="avatarList[usernameToPicture($props.authorID)]" class="rounded-lg object-cover" :class="size" />
+	<button v-if="!noClick" class="focus:outline-none" @click="$router.push('/id/' + authorID)">
+		<img v-if="avatar !== `` && avatar !== null" :src="avatar" class="rounded-lg object-cover" :class="size" />
+		<img v-else :src="avatarList[usernameToPicture(authorID)]" class="rounded-lg object-cover" :class="size" />
 	</button>
 	<span v-else>
-		<img
-			v-if="$props.avatar !== `` && $props.avatar !== null"
-			:src="$props.avatar"
-			class="rounded-lg object-cover"
-			:class="size"
-		/>
-		<img v-else :src="avatarList[usernameToPicture($props.authorID)]" class="rounded-lg object-cover" :class="size" />
+		<img v-if="avatar !== `` && avatar !== null" :src="avatar" class="rounded-lg object-cover" :class="size" />
+		<img v-else :src="avatarList[usernameToPicture(authorID)]" class="rounded-lg object-cover" :class="size" />
 	</span>
 </template>
 

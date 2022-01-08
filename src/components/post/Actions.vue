@@ -372,7 +372,7 @@ export default Vue.extend({
 			commentBackground: `@/assets/images/brand/paper4.svg`,
 			filter: ``,
 			showDropdown: false,
-			toggleStats: this.$props.openStats,
+			toggleStats: this.openStats,
 			faceStats: [],
 			page: 0,
 			selectedEmotionColor: `neutralLightest`,

@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<article v-if="$props.posts.length == 0" class="grid justify-items-center mt-32">
+		<article v-if="posts.length == 0" class="grid justify-items-center mt-32">
 			<p class="text-sm text-gray5 mb-1 flex items-end align-end" style="max-width: 366px">
 				It seems you don't have any bookmarked posts yet,
 			</p>
@@ -12,7 +12,7 @@
 			</p>
 			<SecondaryButton :text="`Home`" :action="toggleHomeFeed" />
 		</article>
-		<article v-for="p in $props.posts" :key="p.post._id">
+		<article v-for="p in posts" :key="p.post._id">
 			<PostCard
 				:repost="p.repost"
 				:post="p.post"

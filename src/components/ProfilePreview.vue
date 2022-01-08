@@ -1,16 +1,16 @@
 <template>
 	<div class="flex">
-		<Avatar :authorID="$props.profile.id" :avatar="avatar" size="w-12 h-12" />
+		<Avatar :authorID="profile.id" :avatar="avatar" size="w-12 h-12" />
 		<div class="h-12 flex-grow px-4">
-			<nuxt-link :to="`/id/` + $props.profile.id" class="flex flex-col">
+			<nuxt-link :to="`/id/` + profile.id" class="flex flex-col">
 				<span class="font-medium text-base">
-					{{ $props.profile.name }}
+					{{ profile.name }}
 				</span>
-				<span class="text-primary text-sm">@{{ $props.profile.id }}</span>
+				<span class="text-primary text-sm">@{{ profile.id }}</span>
 			</nuxt-link>
 		</div>
 		<FriendButton
-			v-if="$props.profile.id !== $store.state.session.id"
+			v-if="profile.id !== $store.state.session.id"
 			:userIsFollowed="isFollowing"
 			:toggleFriend="toggleFriend"
 			class="justify-self-end"
@@ -55,25 +55,21 @@ export default Vue.extend({
 	},
 	async created() {
 		// fetch avatar
-		if (this.$props.profile.avatar !== null && this.$props.profile.avatar !== ``) {
-			this.avatar = await getPhotoFromIPFS(this.$props.profile.avatar)
+		if (this.profile.avatar !== null && this.profile.avatar !== ``) {
+			this.avatar = await getPhotoFromIPFS(this.profile.avatar)
 		}
 		// Check if I am following the listed person
-		getFollowersAndFollowing(this.$props.profile.id, true).then(({ followers }) => {
+		getFollowersAndFollowing(this.profile.id, true).then(({ followers }) => {
 			this.isFollowing = followers.has(this.$store.state.session.id)
 		})
 	},
 	methods: {
 		getPhotoFromIPFS,
 		async toggleFriend() {
-			if (this.$props.profile.id !== this.$store.state.session.id) {
-				await followChange(
-					this.isFollowing ? `UNFOLLOW` : `FOLLOW`,
-					this.$store.state.session.id,
-					this.$props.profile.id,
-				)
+			if (this.profile.id !== this.$store.state.session.id) {
+				await followChange(this.isFollowing ? `UNFOLLOW` : `FOLLOW`, this.$store.state.session.id, this.profile.id)
 				this.isFollowing = !this.isFollowing
-				if (this.$props.updateFollowers) {
+				if (this.updateFollowers) {
 					this.updateFollowers()
 				}
 			}

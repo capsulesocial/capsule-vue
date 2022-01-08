@@ -124,8 +124,8 @@
 		>
 			<div class="flex flex-row justify-between items-center">
 				<div>
-					<h5 v-show="$props.wordCount > 1" class="text-sm text-gray5">
-						<span class="text-primary">{{ $props.wordCount }}</span> words
+					<h5 v-show="wordCount > 1" class="text-sm text-gray5">
+						<span class="text-primary">{{ wordCount }}</span> words
 					</h5>
 					<h5 class="text-sm text-gray5">Auto-save on close.</h5>
 				</div>

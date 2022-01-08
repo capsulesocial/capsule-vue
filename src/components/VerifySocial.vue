@@ -125,10 +125,10 @@ export default Vue.extend({
 		removeSocial() {
 			// this.$api.settings.removeSocial(
 			//   this.$store.state.me.id,
-			//   this.$props.platform,
+			//   this.platform,
 			// )
 			// this.$store.commit('me/removeSocial', {
-			//   platform: this.$props.platform,
+			//   platform: this.platform,
 			// })
 			this.isVerified = false
 			this.isActive = false

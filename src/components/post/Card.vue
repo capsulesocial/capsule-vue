@@ -215,8 +215,8 @@
 				<PostActions
 					v-if="showComments || showStats"
 					:postCID="postCID"
-					:bookmarksCount="$props.bookmarksCount"
-					:repostsCount="$props.repostCount"
+					:bookmarksCount="bookmarksCount"
+					:repostsCount="repostCount"
 					:openStats="showStats"
 					class="px-6 pb-6"
 				/>
@@ -456,7 +456,7 @@ export default Vue.extend({
 			this.$emit(`updateBookmarks`)
 		},
 		hasReposted(): boolean {
-			return this.$store.state.session.id === this.$props.repostedBy || this.$store.getters.checkReposts(this.postCID)
+			return this.$store.state.session.id === this.repostedBy || this.$store.getters.checkReposts(this.postCID)
 		},
 		postExcerpt(): string {
 			const excerpt = this.post.excerpt.slice(0, 177).trim()

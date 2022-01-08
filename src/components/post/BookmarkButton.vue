@@ -1,6 +1,6 @@
 <template>
 	<button class="focus:outline-none hover:text-primary" @click="handleBookmark()">
-		<BookmarkIcon :isActive="$props.hasBookmark" class="fill-none" />
+		<BookmarkIcon :isActive="hasBookmark" class="fill-none" />
 	</button>
 </template>
 
@@ -26,13 +26,13 @@ export default Vue.extend({
 	methods: {
 		sendBookmarkEvent,
 		async handleBookmark() {
-			if (!this.$props.hasBookmark) {
+			if (!this.hasBookmark) {
 				// add bookmark
-				await sendBookmarkEvent(`ADD`, this.$store.state.session.id, this.$props.postID)
+				await sendBookmarkEvent(`ADD`, this.$store.state.session.id, this.postID)
 				this.$toastSuccess(`You have added this post to your bookmarks`)
 			} else {
 				// Remove bookmark
-				await sendBookmarkEvent(`REMOVE`, this.$store.state.session.id, this.$props.postID)
+				await sendBookmarkEvent(`REMOVE`, this.$store.state.session.id, this.postID)
 				this.$toastSuccess(`You have removed this post from your bookmarks`)
 			}
 			this.$emit(`clicked`)

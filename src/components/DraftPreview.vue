@@ -94,21 +94,21 @@ export default Vue.extend({
 		}
 	},
 	async created() {
-		if (this.$props.draft.featuredPhotoCID) {
-			this.featuredPhoto = await getPhotoFromIPFS(this.$props.draft.featuredPhotoCID)
+		if (this.draft.featuredPhotoCID) {
+			this.featuredPhoto = await getPhotoFromIPFS(this.draft.featuredPhotoCID)
 		}
 		window.addEventListener(`click`, this.handleDropdown, false)
 	},
 	destroyed() {
 		if (this.delayActiveDraft) {
-			this.$store.commit(`draft/setActiveDraft`, this.$props.index)
+			this.$store.commit(`draft/setActiveDraft`, this.index)
 		}
 	},
 	methods: {
 		setActiveDraft() {
 			if (this.$route.name === `post`) {
 				location.reload()
-				this.$store.commit(`draft/setActiveDraft`, this.$props.index)
+				this.$store.commit(`draft/setActiveDraft`, this.index)
 				return
 			}
 			// Prevent overwriting of selected draft
@@ -118,7 +118,7 @@ export default Vue.extend({
 				return
 			}
 			this.$router.push(`/post`)
-			this.$store.commit(`draft/setActiveDraft`, this.$props.index)
+			this.$store.commit(`draft/setActiveDraft`, this.index)
 		},
 		toggleDropdownDelete() {
 			this.showDelete = !this.showDelete
