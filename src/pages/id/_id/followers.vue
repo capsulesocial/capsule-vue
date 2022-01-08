@@ -42,7 +42,7 @@ export default Vue.extend({
 		}
 	},
 	mounted() {
-		this.$props.followers.forEach(this.getFollowers)
+		this.followers.forEach(this.getFollowers)
 	},
 	methods: {
 		async getFollowers(p: string) {
