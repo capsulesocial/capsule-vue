@@ -187,9 +187,9 @@ export default Vue.extend({
 			} else if (prefix === `bg-`) {
 				res = `background-color: `
 			}
-			if (feelings.positive.includes(this.emotionType)) {
+			if (feelings.positive.has(this.emotionType)) {
 				res += `#1F7DAD`
-			} else if (feelings.negative.includes(this.emotionType)) {
+			} else if (feelings.negative.has(this.emotionType)) {
 				res += `#EE1F63`
 			} else {
 				res += `#F0B785`

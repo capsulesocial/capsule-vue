@@ -339,7 +339,7 @@ export const faceGroupings = [
 ]
 
 export const feelings = {
-	positive: [
+	positive: new Set([
 		`curious`,
 		`informed`,
 		`enlighten`,
@@ -358,8 +358,8 @@ export const feelings = {
 		`proud`,
 		`admiration`,
 		`awe`,
-	],
-	negative: [
+	]),
+	negative: new Set([
 		`distracted`,
 		`bored`,
 		`spiritless`,
@@ -384,8 +384,8 @@ export const feelings = {
 		`cringe`,
 		`offended`,
 		`hateful`,
-	],
-	neutral: [
+	]),
+	neutral: new Set([
 		`empathy`,
 		`friendly`,
 		`lovely`,
@@ -401,7 +401,7 @@ export const feelings = {
 		`regret`,
 		`spunky`,
 		`trippy`,
-	],
+	]),
 }
 
 export const avatars = [

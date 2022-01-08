@@ -35,10 +35,9 @@ export default Vue.extend({
 	},
 	computed: {
 		draftSubset() {
-			let s: Array<any> = new Array(...this.$store.state.draft.drafts)
-			s = s.reverse()
-			s = s.slice(0, 3)
-			return s
+			const s = [...this.$store.state.draft.drafts]
+			s.reverse()
+			return s.slice(0, 3)
 		},
 	},
 	methods: {

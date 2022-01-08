@@ -134,7 +134,6 @@ export default Vue.extend({
 	methods: {
 		...mapMutations(sessionStoreNamespace, {
 			changeCID: MutationType.CHANGE_CID,
-			changeID: MutationType.CHANGE_ID,
 			changeName: MutationType.CHANGE_NAME,
 			changeAvatar: MutationType.CHANGE_AVATAR,
 			changeBio: MutationType.CHANGE_BIO,

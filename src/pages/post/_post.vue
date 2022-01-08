@@ -190,7 +190,7 @@ interface IData {
 	featuredPhoto: null | string
 	showFilter: boolean
 	userIsFollowed: boolean
-	myReposts: string[]
+	myReposts: Set<string>
 	isBookmarked: boolean
 	lastScroll: number
 	showHeader: boolean
@@ -227,7 +227,7 @@ export default Vue.extend({
 			featuredPhoto: null,
 			showFilter: false,
 			userIsFollowed: false,
-			myReposts: [],
+			myReposts: new Set(),
 			isBookmarked: false,
 			lastScroll: 0,
 			showHeader: true,
@@ -293,10 +293,7 @@ export default Vue.extend({
 		})
 		// Get reposts
 		const repostData = await getReposts({ authorID: this.$store.state.session.id }, {})
-		repostData.forEach((p) => {
-			// @ts-ignore
-			this.myReposts.push(p.repost.postCID)
-		})
+		this.myReposts = new Set(repostData.map((p) => p.repost.postCID))
 	},
 	mounted() {
 		const container = document.getElementById(`post`)
@@ -319,10 +316,7 @@ export default Vue.extend({
 			this.isBookmarked = await isPostBookmarkedByUser(this.$route.params.post, this.$store.state.session.id)
 		},
 		hasReposted(): boolean {
-			if (this.myReposts.includes(this.$route.params.post)) {
-				return true
-			}
-			return false
+			return this.myReposts.has(this.$route.params.post)
 		},
 		async toggleFriend() {
 			if (this.post) {
@@ -373,13 +367,15 @@ export default Vue.extend({
 			if (this.$router.history._startLocation === this.$route.path) {
 				// IF they started on this page:
 				this.$router.push(`/home`)
-			} else if (this.$store.state.settings.recentlyPosted) {
+				return
+			}
+			if (this.$store.state.settings.recentlyPosted) {
 				// IF coming from after recently posting:
 				this.$router.push(`/id/` + this.$store.state.session.id)
 				this.$store.commit(`settings/setRecentlyPosted`, false)
-			} else {
-				this.$router.go(-1)
+				return
 			}
+			this.$router.go(-1)
 		},
 		handleRepost() {
 			this.showQuoteRepost = true

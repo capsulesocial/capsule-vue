@@ -29,7 +29,7 @@
 		</div>
 		<!-- Name -->
 		<div class="flex flex-row mb-2">
-			<label for="newID" class="w-32">Name</label>
+			<label for="newName" class="w-32">Name</label>
 			<input
 				id="newName"
 				v-model="newName"
@@ -133,7 +133,6 @@ interface IData {
 	newName: string
 	nodeURL: string
 	profilePic: null | string | ArrayBuffer
-	newID: string
 	newEmail: string
 	location: string
 	website: string
@@ -157,7 +156,6 @@ export default Vue.extend({
 			newName: ``,
 			nodeURL: ``,
 			profilePic: null,
-			newID: ``,
 			newEmail: ``,
 			location: ``,
 			website: ``,
@@ -185,7 +183,6 @@ export default Vue.extend({
 		},
 		...mapMutations(sessionStoreNamespace, {
 			changeCID: MutationType.CHANGE_CID,
-			changeID: MutationType.CHANGE_ID,
 			changeName: MutationType.CHANGE_NAME,
 			changeEmail: MutationType.CHANGE_EMAIL,
 			changeAvatar: MutationType.CHANGE_AVATAR,
@@ -196,7 +193,6 @@ export default Vue.extend({
 		hasChanged() {
 			return (
 				this.newName !== `` ||
-				this.newID !== `` ||
 				this.newEmail !== `` ||
 				this.location !== `` ||
 				this.website !== `` ||
@@ -262,17 +258,8 @@ export default Vue.extend({
 				if (this.newName.length < 2 || this.newName.length > 32) {
 					this.$toastError(`Invalid name length`)
 					return
-				} else {
-					this.changeName(this.newName.trim())
 				}
-			}
-			if (this.newID !== `` && this.$qualityID(this.newID)) {
-				if (this.newID.length < 2 || this.newID.length > 18) {
-					this.$toastError(`Invalid ID length`)
-					return
-				} else {
-					this.changeID(this.newID.trim())
-				}
+				this.changeName(this.newName.trim())
 			}
 			if (this.bio !== this.$store.state.session.bio && this.checkBio() > 0) {
 				this.changeBio(this.bio.trim())
@@ -283,7 +270,7 @@ export default Vue.extend({
 			if (this.location !== this.$store.state.session.location && this.$qualityText(this.location)) {
 				this.changeLocation(this.location.trim())
 			}
-			if (this.website !== this.$store.state.session.website && this.website) {
+			if (this.website !== this.$store.state.session.website && this.website && this.website !== ``) {
 				try {
 					const url = new URL(this.website)
 					if (!url) {
@@ -301,9 +288,9 @@ export default Vue.extend({
 					// Use HTML DOM styles: https://www.w3schools.com/jsref/dom_obj_style.asp
 					this.$toastError(`Invalid URL`)
 					return
-				} else {
-					this.$store.commit(`changeNodeURL`, this.nodeURL)
 				}
+
+				this.$store.commit(`changeNodeURL`, this.nodeURL)
 			}
 			const profileUpdated = await this.updateProfile()
 			if (profileUpdated) {

@@ -65,17 +65,13 @@ export default Vue.extend({
 		getPairings(newValue: Array<{ id: string; avatar: string }>) {
 			const list = newValue
 			const res = []
-			for (const p in list) {
-				if (p) {
-					const item = { id: ``, avatar: `` }
-					if (list[p]) {
-						item.id = list[p].id
-						getPhotoFromIPFS(list[p].avatar).then((img) => {
-							item.avatar = img
-						})
-						res.push(item)
-					}
-				}
+			for (const p of list) {
+				const item = { id: ``, avatar: `` }
+				item.id = p.id
+				getPhotoFromIPFS(p.avatar).then((img) => {
+					item.avatar = img
+				})
+				res.push(item)
 			}
 			this.featuredProfiles = res
 		},

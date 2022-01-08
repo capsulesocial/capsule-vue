@@ -33,7 +33,7 @@ export default Vue.extend({
 	},
 	props: {
 		followers: {
-			type: Set,
+			type: Set as PropType<Set<string>>,
 			required: true,
 		},
 		updateFollowers: {
@@ -49,12 +49,9 @@ export default Vue.extend({
 	},
 	mounted() {
 		// Only display the most recent three followers
-		if (this.$props.followers.length > 3) {
-			const list: Set<string> = this.$props.followers.slice(0, 3)
-			list.forEach(this.getFollowers)
-			return
-		}
-		this.$props.followers.forEach(this.getFollowers)
+		const followers = Array.from(this.followers)
+		const list = followers.slice(0, 3)
+		list.forEach(this.getFollowers)
 	},
 	methods: {
 		async getFollowers(p: string) {

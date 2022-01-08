@@ -13,7 +13,7 @@ import Vue from 'vue'
 import type { PropType } from 'vue'
 import ProfilePreview from '@/components/ProfilePreview.vue'
 import { getFollowersAndFollowing } from '@/backend/following'
-import { createDefaultProfile, getProfile } from '@/backend/profile'
+import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 interface IData {
 	isLoading: boolean
 	profiles: any
@@ -25,7 +25,7 @@ export default Vue.extend({
 	},
 	props: {
 		profile: {
-			type: Object,
+			type: Object as PropType<Profile | null>,
 			default: null,
 		},
 		updateFollowers: {

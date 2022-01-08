@@ -87,20 +87,39 @@ interface IData {
 	isX: boolean
 }
 
+const toolbarOptions = [
+	[`bold`, `italic`, `underline`, `strike`],
+	[`blockquote`, `code-block`, `link`],
+	[{ header: 2 }],
+	[{ list: `ordered` }, { list: `bullet` }],
+]
+
+const options = {
+	placeholder: `Start typing here...`,
+	readOnly: false,
+	theme: `bubble`,
+	bounds: `#editor`,
+	modules: {
+		counter: true,
+		toolbar: toolbarOptions,
+	},
+}
+
 export default Vue.extend({
 	components: {
 		XIcon,
 	},
 	data(): IData {
 		let input: string = ``
-		if (this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].content !== ``) {
-			input = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].content
+		const { content, title, subtitle } = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex]
+		if (content !== ``) {
+			input = content
 		} else {
 			input = ``
 		}
 		return {
-			title: this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].title,
-			subtitle: this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].subtitle,
+			title,
+			subtitle,
 			input,
 			// @ts-ignore
 			turndownService: Turndown,
@@ -120,15 +139,7 @@ export default Vue.extend({
 		const subtitleInput = this.$refs.subtitle as HTMLInputElement
 		const input = this.getInputHTML()
 		if (input.length > 11 || titleInput.value !== `` || subtitleInput.value !== ``) {
-			if (input.length > 11) {
-				this.$store.commit(`draft/updateContent`, input)
-			}
-			if (titleInput.value !== ``) {
-				this.$store.commit(`draft/updateTitle`, titleInput.value)
-			}
-			if (subtitleInput.value !== ``) {
-				this.$store.commit(`draft/updateSubtitle`, subtitleInput.value)
-			}
+			this.doSave()
 		} else {
 			const i: number = this.$store.state.draft.activeIndex
 			this.$store.commit(`draft/deleteDraft`, i)
@@ -142,22 +153,6 @@ export default Vue.extend({
 				this.updateWordCount(n)
 			})
 		})
-		const toolbarOptions = [
-			[`bold`, `italic`, `underline`, `strike`],
-			[`blockquote`, `code-block`, `link`],
-			[{ header: 2 }],
-			[{ list: `ordered` }, { list: `bullet` }],
-		]
-		const options = {
-			placeholder: `Start typing here...`,
-			readOnly: false,
-			theme: `bubble`,
-			bounds: `#editor`,
-			modules: {
-				counter: true,
-				toolbar: toolbarOptions,
-			},
-		}
 		const editor = new Quill(`#editor`, options)
 		this.editor = new QuillMarkdown(editor, {})
 		this.turndownService = new Turndown()
@@ -170,11 +165,27 @@ export default Vue.extend({
 		})
 		const titleInput = this.$refs.title as HTMLInputElement
 		const subtitleInput = this.$refs.subtitle as HTMLInputElement
-		titleInput.value = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].title
-		subtitleInput.value = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].subtitle
+
+		const { title, subtitle } = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex]
+		titleInput.value = title
+		subtitleInput.value = subtitle
 		this.handleTitle(null)
 	},
 	methods: {
+		doSave() {
+			const titleInput = this.$refs.title as HTMLInputElement
+			const subtitleInput = this.$refs.subtitle as HTMLInputElement
+			const input = this.getInputHTML()
+			if (input.length > 11) {
+				this.$store.commit(`draft/updateContent`, input)
+			}
+			if (titleInput.value !== ``) {
+				this.$store.commit(`draft/updateTitle`, titleInput.value)
+			}
+			if (subtitleInput.value !== ``) {
+				this.$store.commit(`draft/updateSubtitle`, subtitleInput.value)
+			}
+		},
 		async saveContent(): Promise<void> {
 			this.isX = true
 			const titleInput = this.$refs.title as HTMLInputElement
@@ -182,27 +193,16 @@ export default Vue.extend({
 			const input = this.getInputHTML()
 			if (input.length > 11 || titleInput.value !== `` || subtitleInput.value !== ``) {
 				this.isSaving = `true`
-				if (input.length > 11) {
-					this.$store.commit(`draft/updateContent`, input)
-				}
-				if (titleInput.value !== ``) {
-					this.$store.commit(`draft/updateTitle`, titleInput.value)
-				}
-				if (subtitleInput.value !== ``) {
-					this.$store.commit(`draft/updateSubtitle`, subtitleInput.value)
-				}
+				this.doSave()
 				await this.sleep(600)
 				this.isSaving = `done`
 				await this.sleep(800)
-				if (this.$route.name === `post`) {
-					this.$router.go(-1)
-				}
 			} else {
-				if (this.$route.name === `post`) {
-					this.$router.go(-1)
-				}
 				const i: number = this.$store.state.draft.activeIndex
 				this.$store.commit(`draft/deleteDraft`, i)
+			}
+			if (this.$route.name === `post`) {
+				this.$router.go(-1)
 			}
 		},
 		updateWordCount(n: number) {
@@ -226,6 +226,10 @@ export default Vue.extend({
 			const subtitle = this.$refs.subtitle as HTMLInputElement
 			this.title = title.value
 			this.subtitle = subtitle.value
+
+			const { category, tags, featuredPhotoCID, featuredPhotoCaption } =
+				this.$store.state.draft.drafts[this.$store.state.draft.activeIndex]
+
 			// Check for quality title
 			if (!this.$qualityText(this.title) || this.title.length < 12 || this.title.length > 90) {
 				this.$toastError(`Invalid title!`)
@@ -240,7 +244,7 @@ export default Vue.extend({
 				this.$toastError(`Subtitle too long!`)
 				return
 			}
-			if (this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].category === ``) {
+			if (category === ``) {
 				this.$toastError(`Missing category`)
 				return
 			}
@@ -262,11 +266,11 @@ export default Vue.extend({
 				this.title,
 				this.subtitle === `` ? null : this.subtitle,
 				this.turndownService.turndown(clean),
-				this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].category,
-				this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].tags,
+				category,
+				tags,
 				this.$store.state.session.id,
-				this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].featuredPhotoCID,
-				this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].featuredPhotoCaption,
+				featuredPhotoCID,
+				featuredPhotoCaption,
 			)
 			const cid = await sendRegularPost(p)
 			this.title = ``
