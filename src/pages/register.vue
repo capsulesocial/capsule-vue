@@ -221,6 +221,7 @@ import {
 } from '@/backend/near'
 import { sufficientFunds, torusVerifiers, TorusVerifiers } from '@/backend/utilities/config'
 import { requestOTP, requestSponsor } from '@/backend/funder'
+import { verifyCodeAndGetToken, verifyTokenAndOnboard } from '@/backend/invite'
 
 interface IData {
 	id: string
@@ -228,8 +229,9 @@ interface IData {
 	userInfo: null | TorusLoginResponse
 	username?: null | string
 	accountId: null | string
-	inviteCode: null | string
+	inviteCode: boolean
 	inputCode: string
+	inviteToken: string
 	isLoading: boolean
 	phoneNumber: string
 	otp: string
@@ -261,8 +263,9 @@ export default Vue.extend({
 				network: `testnet`, // details for test net
 			}),
 			accountId: null,
-			inviteCode: null,
+			inviteCode: false,
 			inputCode: ``,
+			inviteToken: ``,
 			userInfo: null,
 			isLoading: false,
 			username: undefined,
@@ -276,6 +279,7 @@ export default Vue.extend({
 	async created() {
 		await Promise.all([this.torus.init(), this.postWalletLogin()])
 		this.nearWallet = this.isSignedInToWallet()
+		console.log(this.$data)
 	},
 	mounted() {
 		const accountId = window.localStorage.getItem(`accountId`)
@@ -319,7 +323,7 @@ export default Vue.extend({
 				this.userInfo = await this.torus.triggerLogin(torusVerifiers[type])
 
 				this.accountId = getAccountIdFromPrivateKey(this.userInfo.privateKey)
-				this.username = await getUsernameNEAR(this.accountId)
+				;[this.username] = await Promise.all([getUsernameNEAR(this.accountId), this.onboardAccount()])
 				if (this.username) {
 					// If a username is found then proceed to login...
 					this.verify()
@@ -349,7 +353,7 @@ export default Vue.extend({
 				return false
 			}
 
-			;[this.username] = await Promise.all([getUsernameNEAR(this.accountId), this.checkFunds()])
+			;[this.username] = await Promise.all([getUsernameNEAR(this.accountId), this.checkFunds(), this.onboardAccount()])
 			if (this.username) {
 				this.$toastError(`You cannot login with wallet, please import your private key`)
 				removeNearPrivateKey(this.accountId)
@@ -366,7 +370,7 @@ export default Vue.extend({
 			this.isLoading = true
 
 			this.accountId = await generateAndSetKey()
-			;[this.username] = await Promise.all([getUsernameNEAR(this.accountId), this.checkFunds()])
+			;[this.username] = await Promise.all([getUsernameNEAR(this.accountId), this.checkFunds(), this.onboardAccount()])
 			if (this.username) {
 				this.$toastError(`You cannot login with implicit account, please import your private key`)
 				removeNearPrivateKey(this.accountId)
@@ -517,6 +521,38 @@ export default Vue.extend({
 			link.click()
 			URL.revokeObjectURL(link.href)
 			this.$toastSuccess(`Downloaded private key`)
+		},
+		async verifyCode() {
+			this.isLoading = true
+			if (this.inputCode.length !== 8) {
+				this.$toastError(`Invite codes should be of length 8`)
+				return
+			}
+			const token = await verifyCodeAndGetToken(this.inputCode)
+			this.inviteToken = token
+			this.inviteCode = true
+
+			console.log(
+				!this.inviteCode && !this.isLoading,
+				this.inviteCode && !(this.userInfo || this.nearWallet) && !this.isLoading,
+				this.isLoading,
+			)
+			console.log(this.$data)
+			this.isLoading = false
+		},
+		async onboardAccount() {
+			if (!this.accountId) {
+				this.$toastError(`AccountId missing`)
+				return
+			}
+
+			if (!this.inviteToken) {
+				this.$toastError(`Invite token missing`)
+				return
+			}
+
+			const res = await verifyTokenAndOnboard(this.inviteToken, this.accountId)
+			console.log(res)
 		},
 	},
 })
