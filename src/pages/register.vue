@@ -523,7 +523,6 @@ export default Vue.extend({
 			this.$toastSuccess(`Downloaded private key`)
 		},
 		async verifyCode() {
-			this.isLoading = true
 			if (this.inputCode.length !== 8) {
 				this.$toastError(`Invite codes should be of length 8`)
 				return
@@ -538,7 +537,6 @@ export default Vue.extend({
 				this.isLoading,
 			)
 			console.log(this.$data)
-			this.isLoading = false
 		},
 		async onboardAccount() {
 			if (!this.accountId) {
