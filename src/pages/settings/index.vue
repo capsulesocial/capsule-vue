@@ -105,7 +105,7 @@
 					class="hidden"
 					name="file"
 					type="file"
-					accept="image/*"
+					accept="image/jpeg, imag/png"
 					@change="handleImage"
 				/>
 				<button @click="handleImageClick">Upload an Image</button>

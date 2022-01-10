@@ -16,7 +16,7 @@
 					class="hidden"
 					name="photo"
 					type="file"
-					accept="image/*"
+					accept="image/jpeg, imag/png"
 					@change="handleImage"
 				/>
 				<!-- No Photo Uploaded -->
