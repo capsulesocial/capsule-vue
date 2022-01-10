@@ -21,12 +21,7 @@
 					<!-- Content -->
 					<section class="flex flex-row">
 						<nuxt-child
-							style="
-								width: 1220px;
-								min-height: calc(100vh - 80px);
-								height: calc(100vh - 80px);
-								backdrop-filter: blur(10px);
-							"
+							style="width: 1220px; min-height: calc(100vh - 80px); height: calc(100vh - 80px)"
 							class="fixed overflow-y-auto rounded-lg shadow-lg mr-5 p-6 pt-0 border border-lightBorder bg-gradient-to-r from-lightBGStart to-lightBGStop"
 							@showPhoto="showPhoto"
 						/>
