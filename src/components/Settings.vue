@@ -34,7 +34,7 @@
 				id="newName"
 				v-model="newName"
 				type="text"
-				:placeholder="$store.state.session.name"
+				:placeholder="`Your Capsule username`"
 				class="text-black placeholder-gray5 px-2 py-1 bg-gray1 rounded-lg flex-grow focus:outline-none"
 			/>
 		</div>
@@ -46,6 +46,7 @@
 					id="bio"
 					:maxlength="maxCharBio"
 					:value="bio"
+					:placeholder="`Your Capsule Bio`"
 					class="text-black placeholder-gray5 px-2 py-1 bg-gray1 rounded-lg w-full focus:outline-none"
 					@input="bio = $event.target.value"
 					@keyup="checkBio()"
@@ -65,7 +66,7 @@
 				id="location"
 				v-model="location"
 				type="text"
-				:placeholder="$store.state.session.location === '' ? 'Enter Location' : $store.state.session.location"
+				:placeholder="`Display your location`"
 				class="text-black placeholder-gray5 px-2 py-1 bg-gray1 rounded-lg flex-grow focus:outline-none"
 			/>
 		</div>
@@ -76,7 +77,7 @@
 				id="website"
 				v-model="website"
 				type="text"
-				:placeholder="$store.state.session.website === '' ? 'https://capsule.social' : $store.state.session.website"
+				:placeholder="`Display a website`"
 				class="text-black placeholder-gray5 px-2 py-1 bg-gray1 rounded-lg flex-grow focus:outline-none"
 			/>
 		</div>
@@ -87,7 +88,7 @@
 				id="newEmail"
 				v-model="newEmail"
 				type="email"
-				:placeholder="$store.state.session.email"
+				:placeholder="`Display a contact email`"
 				class="text-black placeholder-gray5 px-2 py-1 bg-gray1 rounded-lg flex-grow focus:outline-none"
 			/>
 		</div>
@@ -159,7 +160,7 @@ export default Vue.extend({
 			newEmail: ``,
 			location: ``,
 			website: ``,
-			bio: this.$store.state.session.bio,
+			bio: ``,
 			maxCharBio: 256,
 		}
 	},
@@ -169,6 +170,21 @@ export default Vue.extend({
 			getPhotoFromIPFS(this.$store.state.session.avatar).then((p) => {
 				this.profilePic = p
 			})
+		}
+		if (this.$store.state.session.name !== ``) {
+			this.newName = this.$store.state.session.name
+		}
+		if (this.$store.state.session.bio !== ``) {
+			this.bio = this.$store.state.session.bio
+		}
+		if (this.$store.state.session.location !== ``) {
+			this.location = this.$store.state.session.location
+		}
+		if (this.$store.state.session.website !== ``) {
+			this.website = this.$store.state.session.website
+		}
+		if (this.$store.state.session.email !== ``) {
+			this.newEmail = this.$store.state.session.email
 		}
 		// Check for dark mode
 		// const prefersDarkMode = window.matchMedia(`(prefers-color-scheme: dark)`).matches
@@ -196,7 +212,7 @@ export default Vue.extend({
 				this.newEmail !== `` ||
 				this.location !== `` ||
 				this.website !== `` ||
-				this.bio !== this.$store.state.session.bio ||
+				this.bio !== `` ||
 				this.nodeURL !== ``
 			)
 		},
@@ -264,13 +280,13 @@ export default Vue.extend({
 			if (this.bio !== this.$store.state.session.bio && this.checkBio() > 0) {
 				this.changeBio(this.bio.trim())
 			}
-			if (this.newEmail !== `` && this.$qualityEmail(this.newEmail)) {
+			if (this.$qualityEmail(this.newEmail)) {
 				this.changeEmail(this.newEmail.trim())
 			}
-			if (this.location !== this.$store.state.session.location && this.$qualityText(this.location)) {
+			if (this.location !== this.$store.state.session.location) {
 				this.changeLocation(this.location.trim())
 			}
-			if (this.website !== this.$store.state.session.website && this.website && this.website !== ``) {
+			if (this.website !== this.$store.state.session.website) {
 				try {
 					const url = new URL(this.website)
 					if (!url) {
