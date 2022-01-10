@@ -1,10 +1,7 @@
 <template>
 	<div class="w-full border border-lightBorder">
 		<section>
-			<nav
-				class="flex flex-row z-20 text-base w-full px-6 pt-4 bg-gradient-to-r from-lightBGStart to-lightBGStop"
-				style="backdrop-filter: blur(10px)"
-			>
+			<nav class="flex flex-row z-20 text-base w-full px-6 pt-4" style="backdrop-filter: blur(10px)">
 				<div class="flex items-center">
 					<button
 						:class="algorithm === `FOLLOWING` ? ` text-primary border-b-2 border-primary font-semibold` : `text-gray5`"

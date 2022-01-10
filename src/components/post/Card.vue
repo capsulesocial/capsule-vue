@@ -164,10 +164,7 @@
 		<!-- Feed view -->
 		<div v-if="this.$route.name !== `post-post`">
 			<div class="card" style="backdrop-filter: blur(10px)">
-				<div
-					class="sticky top-0 z-20 pb-5 border-b bg-gradient-to-r from-lightBGStart to-lightBGStop px-6 pt-5"
-					style="backdrop-filter: blur(10px)"
-				>
+				<div class="sticky top-0 z-20 pb-5 border-b px-6 pt-5" style="backdrop-filter: blur(10px)">
 					<!-- Quote repost -->
 					<div v-if="quote">
 						<div class="flex w-full">
