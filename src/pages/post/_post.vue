@@ -91,7 +91,7 @@
 					<div
 						:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 						class="editable prose max-w-none content break-words"
-						v-html="content"
+						v-html="sanitizeHTML(content)"
 					></div>
 				</article>
 
@@ -254,11 +254,6 @@ export default Vue.extend({
 		}
 		// Convert markdown to HTML
 		this.content = marked.parse(this.post.content)
-		// Sanitize HTML
-		this.content = DOMPurify.sanitize(this.content, {
-			USE_PROFILES: { html: true, svg: true },
-			ALLOWED_TAGS: [`pre`],
-		})
 		// Get author profile
 		this.author = createDefaultProfile(this.post.authorID)
 		getProfile(this.post.authorID).then((p) => {
@@ -318,6 +313,12 @@ export default Vue.extend({
 	methods: {
 		getReposts,
 		isPostBookmarkedByUser,
+		sanitizeHTML(input: string) {
+			return DOMPurify.sanitize(input, {
+				USE_PROFILES: { html: true, svg: true },
+				ALLOWED_TAGS: [`pre`],
+			})
+		},
 		async getBookmarkStatus() {
 			this.isBookmarked = await isPostBookmarkedByUser(this.$route.params.post, this.$store.state.session.id)
 		},
