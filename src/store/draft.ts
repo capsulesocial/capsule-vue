@@ -9,6 +9,7 @@ type DraftPost = Omit<Post, `authorID`>
 interface DraftState {
 	drafts: Array<DraftPost>
 	activeIndex: number
+	handleDraftWidget: boolean
 }
 
 export const state = (): DraftState => ({
@@ -25,6 +26,7 @@ export const state = (): DraftState => ({
 		},
 	],
 	activeIndex: 0,
+	handleDraftWidget: false,
 })
 
 export const getters: GetterTree<Post, RootState> = {}
@@ -42,6 +44,7 @@ export const MutationType = {
 	CREATE_DRAFT: `createDraft`,
 	DELETE_DRAFT: `deleteDraft`,
 	RESET: `reset`,
+	HANDLE_DRAFT_WIDGET: `handleDraftWidget`,
 }
 
 export const mutations: MutationTree<DraftState> = {
@@ -123,5 +126,8 @@ export const mutations: MutationTree<DraftState> = {
 				timestamp: 0,
 			})
 		}
+	},
+	[MutationType.HANDLE_DRAFT_WIDGET]: (state, v) => {
+		state.handleDraftWidget = v
 	},
 }

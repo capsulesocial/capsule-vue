@@ -188,6 +188,10 @@ export default Vue.extend({
 			if (subtitleInput.value !== ``) {
 				this.$store.commit(`draft/updateSubtitle`, subtitleInput.value)
 			}
+			if (this.$store.state.draft.handleDraftWidget) {
+				this.$store.commit(`draft/createDraft`)
+				this.$store.commit(`draft/handleDraftWidget`, false)
+			}
 		},
 		updateContent() {
 			const input = this.getInputHTML()

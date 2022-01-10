@@ -146,6 +146,7 @@ export default Vue.extend({
 		togglePostEditor() {
 			if (this.$route.name !== `post`) {
 				if (this.$route.name === `home` && this.$store.state.widgets.primary === `editor`) {
+					this.$store.commit(`draft/handleDraftWidget`, true)
 					this.$router.push(`/post`)
 					return
 				}
