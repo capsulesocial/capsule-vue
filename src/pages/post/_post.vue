@@ -253,12 +253,12 @@ export default Vue.extend({
 	async created() {
 		// Fetch post from IPFS,
 		const post = await getRegularPost(this.$route.params.post)
-		this.post = await parseRegularPost(post)
-
-		if (this.post === null) {
+		if (!post) {
 			this.$toastError(`This post has not been found`)
 			throw new Error(`Post is null!`)
 		}
+
+		this.post = await parseRegularPost(post)
 		// Get featured photo
 		if (this.post.featuredPhotoCID) {
 			getPhotoFromIPFS(this.post.featuredPhotoCID).then((p) => {
