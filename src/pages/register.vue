@@ -322,7 +322,8 @@ export default Vue.extend({
 				this.userInfo = await this.torus.triggerLogin(torusVerifiers[type])
 
 				this.accountId = getAccountIdFromPrivateKey(this.userInfo.privateKey)
-				;[this.username] = await Promise.all([getUsernameNEAR(this.accountId), this.onboardAccount()])
+				const [username] = await Promise.all([getUsernameNEAR(this.accountId), this.onboardAccount()])
+				this.username = username
 				if (this.username) {
 					// If a username is found then proceed to login...
 					this.verify()
@@ -352,7 +353,8 @@ export default Vue.extend({
 				return false
 			}
 
-			;[this.username] = await Promise.all([getUsernameNEAR(this.accountId), this.checkFunds(), this.onboardAccount()])
+			const [username] = await Promise.all([getUsernameNEAR(this.accountId), this.checkFunds(), this.onboardAccount()])
+			this.username = username
 			if (this.username) {
 				this.$toastError(`You cannot login with wallet, please import your private key`)
 				removeNearPrivateKey(this.accountId)
@@ -369,7 +371,8 @@ export default Vue.extend({
 			this.isLoading = true
 
 			this.accountId = await generateAndSetKey()
-			;[this.username] = await Promise.all([getUsernameNEAR(this.accountId), this.checkFunds(), this.onboardAccount()])
+			const [username] = await Promise.all([getUsernameNEAR(this.accountId), this.checkFunds(), this.onboardAccount()])
+			this.username = username
 			if (this.username) {
 				this.$toastError(`You cannot login with implicit account, please import your private key`)
 				removeNearPrivateKey(this.accountId)
