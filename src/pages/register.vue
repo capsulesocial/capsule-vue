@@ -279,7 +279,6 @@ export default Vue.extend({
 	async created() {
 		await Promise.all([this.torus.init(), this.postWalletLogin()])
 		this.nearWallet = this.isSignedInToWallet()
-		console.log(this.$data)
 	},
 	mounted() {
 		const accountId = window.localStorage.getItem(`accountId`)
@@ -530,13 +529,6 @@ export default Vue.extend({
 			const token = await verifyCodeAndGetToken(this.inputCode)
 			this.inviteToken = token
 			this.inviteCode = true
-
-			console.log(
-				!this.inviteCode && !this.isLoading,
-				this.inviteCode && !(this.userInfo || this.nearWallet) && !this.isLoading,
-				this.isLoading,
-			)
-			console.log(this.$data)
 		},
 		async onboardAccount() {
 			if (!this.accountId) {
@@ -549,8 +541,7 @@ export default Vue.extend({
 				return
 			}
 
-			const res = await verifyTokenAndOnboard(this.inviteToken, this.accountId)
-			console.log(res)
+			await verifyTokenAndOnboard(this.inviteToken, this.accountId)
 		},
 	},
 })
