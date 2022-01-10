@@ -7,7 +7,7 @@
 		<section class="flex justify-center items-center" style="height: 86%">
 			<div class="flex flex-col items-center w-full p-14 -mt-5">
 				<!-- Step 0: Code redeem -->
-				<article v-if="!inviteCode && !isLoading" class="w-1/2">
+				<article v-if="!inviteCode && !(userInfo || nearWallet) && !isLoading" class="w-1/2">
 					<h1 class="font-semibold text-primary mb-10" style="font-size: 2.6rem">Welcome</h1>
 					<p class="text-center text-gray7 mt-10">
 						Blogchain is a place for writers to do great work and for readers to discover it. For now, during our beta
@@ -231,7 +231,6 @@ interface IData {
 	accountId: null | string
 	inviteCode: boolean
 	inputCode: string
-	inviteToken: string
 	isLoading: boolean
 	phoneNumber: string
 	otp: string
@@ -265,7 +264,6 @@ export default Vue.extend({
 			accountId: null,
 			inviteCode: false,
 			inputCode: ``,
-			inviteToken: ``,
 			userInfo: null,
 			isLoading: false,
 			username: undefined,
@@ -529,8 +527,7 @@ export default Vue.extend({
 				this.$toastError(`Invite codes should be of length 8`)
 				return
 			}
-			const token = await verifyCodeAndGetToken(this.inputCode)
-			this.inviteToken = token
+			await verifyCodeAndGetToken(this.inputCode)
 			this.inviteCode = true
 		},
 		async onboardAccount() {
@@ -539,12 +536,7 @@ export default Vue.extend({
 				return
 			}
 
-			if (!this.inviteToken) {
-				this.$toastError(`Invite token missing`)
-				return
-			}
-
-			await verifyTokenAndOnboard(this.inviteToken, this.accountId)
+			await verifyTokenAndOnboard(this.accountId)
 		},
 	},
 })
