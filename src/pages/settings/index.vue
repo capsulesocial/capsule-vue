@@ -42,6 +42,41 @@
 				<h3 class="w-56 font-semibold">Deactivate My Account</h3>
 				<button class="text-negative focus:outline-none">Deactivate my Capsule Account</button>
 			</div>
+			<!-- Account Invites -->
+			<h2 v-if="generatedNumber < 1" class="text-primary font-semibold pt-4 mb-4 text-sm">Account Invites</h2>
+			<div
+				v-if="generatedNumber < 1"
+				class="p-5 rounded-lg mt-4 overflow-hidden relative bg-gradient-to-r from-lightBGStart to-lightBGStop border-lightBorder shadow-lg"
+			>
+				<label for="id" class="font-semibold text-sm pb-1 block mb-2">Generate an invite code</label>
+				<p class="text-gray5">
+					Blogchain is a place for writers to do great work and for readers to discover it. For now, during our beta
+					release, we are offering access to Blogchain on an invitation-only basis. We believe this is the best way to
+					seed a vibrant community that will grow over time. As an already registered user, you can invite one member
+					your social circle to participate to the Blogchain beta by sharing the following invite code:
+				</p>
+				<div class="flex items-center mt-5">
+					<h3 class="font-semibold mr-4">Invite code</h3>
+					<div class="relative w-2/5 mr-4 flex items-center">
+						<input
+							id="id"
+							ref="code"
+							v-model="generatedInviteCode"
+							type="text"
+							placeholder="No more code available"
+							class="rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-primary text-primary font-sans bg-gray2 border border-dashed border-primary w-full"
+							style="height: 3rem"
+							@focus="$event.target.select()"
+						/>
+						<button class="text-primary focus:outline-none text-xs absolute right-0 mr-4" @click="copyURL">
+							<CopyIcon class="w-5 h-5 fill-current" />
+						</button>
+					</div>
+					<button class="text-primary focus:outline-none text-sm" @click="generateNewInviteCode">
+						Generate a new code
+					</button>
+				</div>
+			</div>
 		</div>
 
 		<!-- Network Tab -->
@@ -99,14 +134,19 @@ import { getProfile, setProfile } from '@/backend/profile'
 import { HTMLInputEvent } from '@/interfaces/HTMLInputEvent'
 import { addPhotoToIPFS, preUploadPhoto } from '@/backend/photos'
 import { getNearPrivateKey } from '@/backend/near'
+import CopyIcon from '@/components/icons/Copy.vue'
 
 interface IData {
 	nodeURL: string
 	backgroundImage: null | string | ArrayBuffer
+	generatedInviteCode: string
+	generatedNumber: number
 }
 
 export default Vue.extend({
-	components: {},
+	components: {
+		CopyIcon,
+	},
 	layout: `settings`,
 	props: {
 		tab: {
@@ -118,6 +158,8 @@ export default Vue.extend({
 		return {
 			nodeURL: ``,
 			backgroundImage: null,
+			generatedInviteCode: ``,
+			generatedNumber: 0,
 		}
 	},
 	created() {
@@ -125,6 +167,7 @@ export default Vue.extend({
 		if (nodeUrl) {
 			this.nodeURL = nodeUrl
 		}
+		this.generateNewInviteCode()
 		// Check for dark mode
 		// const prefersDarkMode = window.matchMedia(`(prefers-color-scheme: dark)`).matches
 		// if (prefersDarkMode) {
@@ -214,6 +257,16 @@ export default Vue.extend({
 			if (profileUpdated) {
 				this.$toastSuccess(`Your settings has been successfully updated`)
 			}
+		},
+		generateNewInviteCode() {
+			// generate a new invite code
+			this.generatedInviteCode = `TEST`
+		},
+		copyURL(): void {
+			const code = this.$refs.code as HTMLElement
+			code.focus()
+			document.execCommand(`copy`)
+			this.$toastSuccess(`code copied to clipboard!`)
 		},
 	},
 })

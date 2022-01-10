@@ -12,7 +12,7 @@
 					<Avatar :authorID="$store.state.session.id" :avatar="profilePic" :noClick="true" :size="`w-24 h-24`" />
 				</span>
 				<span
-					class="h-24 w-24 bg-lightOnSurfaceText text-lightOnPrimaryText relative inline-flex rounded-lg flex items-center justify-center bg-opacity-25"
+					class="h-24 w-24 bg-lightOnSurfaceText text-lightOnPrimaryText relative inline-flex rounded-lg items-center justify-center bg-opacity-25"
 				>
 					<PencilIcon class="w-5 h-5 fill-current" />
 				</span>
@@ -287,16 +287,20 @@ export default Vue.extend({
 				this.changeLocation(this.location.trim())
 			}
 			if (this.website !== this.$store.state.session.website) {
-				try {
-					const url = new URL(this.website)
-					if (!url) {
+				if (this.website) {
+					try {
+						const url = new URL(this.website)
+						if (!url) {
+							return
+						}
+						this.changeWebsite(this.website)
+						return
+					} catch {
+						this.$toastError(`Invalid website URL!`)
 						return
 					}
+				} else {
 					this.changeWebsite(this.website)
-					return
-				} catch {
-					this.$toastError(`Invalid website URL!`)
-					return
 				}
 			}
 			if (this.nodeURL && this.nodeURL !== this.$store.state.session.nodeURL) {
