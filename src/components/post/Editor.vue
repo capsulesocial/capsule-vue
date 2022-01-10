@@ -26,6 +26,7 @@
 						class="text-h1 font-serif font-semibold break-words w-full focus:outline-none bg-transparent"
 						wrap="soft"
 						@beforeinput="handleTitle"
+						@input="updateTitle"
 					/>
 				</article>
 
@@ -39,6 +40,7 @@
 						class="font-serif text-h2 mt-2 text-gray5 break-words focus:outline-none w-full bg-transparent"
 						wrap="soft"
 						@beforeinput="handleSubtitle"
+						@input="updateSubtitle"
 					/>
 				</article>
 
@@ -132,7 +134,7 @@ export default Vue.extend({
 		}
 	},
 	beforeDestroy() {
-		if (this.isX) {
+		if (this.isX || this.$store.state.settings.recentlyPosted) {
 			return
 		}
 		const titleInput = this.$refs.title as HTMLInputElement
@@ -169,21 +171,28 @@ export default Vue.extend({
 		const { title, subtitle } = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex]
 		titleInput.value = title
 		subtitleInput.value = subtitle
-		this.handleTitle(null)
+		this.handleTitle(true)
+		this.updateTitle(false)
+		this.handleSubtitle(true)
+		this.updateSubtitle(false)
 	},
 	methods: {
 		doSave() {
 			const titleInput = this.$refs.title as HTMLInputElement
 			const subtitleInput = this.$refs.subtitle as HTMLInputElement
 			const input = this.getInputHTML()
-			if (input.length > 11) {
-				this.$store.commit(`draft/updateContent`, input)
-			}
+			this.$store.commit(`draft/updateContent`, input)
 			if (titleInput.value !== ``) {
 				this.$store.commit(`draft/updateTitle`, titleInput.value)
 			}
 			if (subtitleInput.value !== ``) {
 				this.$store.commit(`draft/updateSubtitle`, subtitleInput.value)
+			}
+		},
+		updateContent() {
+			const input = this.getInputHTML()
+			if (input !== ``) {
+				this.$store.commit(`draft/updateContent`, input)
 			}
 		},
 		async saveContent(): Promise<void> {
@@ -226,17 +235,20 @@ export default Vue.extend({
 			const subtitle = this.$refs.subtitle as HTMLInputElement
 			this.title = title.value
 			this.subtitle = subtitle.value
-
 			const { category, tags, featuredPhotoCID, featuredPhotoCaption } =
 				this.$store.state.draft.drafts[this.$store.state.draft.activeIndex]
-
 			// Check for quality title
-			if (!this.$qualityText(this.title) || this.title.length < 12 || this.title.length > 90) {
+			if (
+				!this.$qualityText(this.title) ||
+				this.title.length < 12 ||
+				this.title.length > 90 ||
+				this.titleError !== ``
+			) {
 				this.$toastError(`Invalid title!`)
 				return
-				// Check if using a subtitle
 			}
-			if (this.subtitle !== `` && this.subtitle && !this.$qualityText(this.subtitle)) {
+			// Check if using a subtitle
+			if (this.subtitle !== `` && (!this.$qualityText(this.subtitle) || this.subtitleError !== ``)) {
 				this.$toastError(`Invalid subtitle!`)
 				return
 			}
@@ -285,7 +297,6 @@ export default Vue.extend({
 				return
 			}
 			const titleInput = this.$refs.title as HTMLTextAreaElement
-			this.$store.commit(`draft/updateTitle`, titleInput.value)
 			const subtitleInput = this.$refs.subtitle as HTMLTextAreaElement
 			if (e.inputType === `insertLineBreak` || (e.inputType === `insertText` && e.data === null)) {
 				e.preventDefault()
@@ -293,6 +304,24 @@ export default Vue.extend({
 			}
 			titleInput.style.height = `auto`
 			titleInput.style.height = `${titleInput.scrollHeight}px`
+		},
+		handleSubtitle(e: any) {
+			if (!e) {
+				return
+			}
+			const subtitleInput = this.$refs.subtitle as HTMLTextAreaElement
+			subtitleInput.style.height = `${subtitleInput.scrollHeight}px`
+			if (e.inputType === `insertLineBreak` || (e.inputType === `insertText` && e.data === null)) {
+				e.preventDefault()
+			}
+			subtitleInput.style.height = `auto`
+			subtitleInput.style.height = `${subtitleInput.scrollHeight}px`
+		},
+		updateTitle(updateStore: boolean = true) {
+			const titleInput = this.$refs.title as HTMLTextAreaElement
+			if (updateStore) {
+				this.$store.commit(`draft/updateTitle`, titleInput.value)
+			}
 			if (titleInput.value.length === 0) {
 				this.titleError = `Please enter a title.`
 				return
@@ -307,15 +336,11 @@ export default Vue.extend({
 			}
 			this.titleError = ``
 		},
-		handleSubtitle(e: any) {
+		updateSubtitle(updateStore: boolean = true) {
 			const subtitleInput = this.$refs.subtitle as HTMLTextAreaElement
-			this.$store.commit(`draft/updateSubtitle`, subtitleInput.value)
-			subtitleInput.style.height = `${subtitleInput.scrollHeight}px`
-			if (e.inputType === `insertLineBreak` || (e.inputType === `insertText` && e.data === null)) {
-				e.preventDefault()
+			if (updateStore) {
+				this.$store.commit(`draft/updateSubtitle`, subtitleInput.value)
 			}
-			subtitleInput.style.height = `auto`
-			subtitleInput.style.height = `${subtitleInput.scrollHeight}px`
 			if (subtitleInput.value.length === 0) {
 				this.subtitleError = ``
 				return

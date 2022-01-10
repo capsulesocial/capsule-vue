@@ -71,6 +71,9 @@ export default Vue.extend({
 		}
 	},
 	async created() {
+		if (this.$store.state.session.id === ``) {
+			return
+		}
 		const [{ profile: myProfile }] = await Promise.all([getProfile(this.$store.state.session.id)])
 		// get my profile and avatar
 		this.myProfile = myProfile || createDefaultProfile(this.$store.state.session.id)
