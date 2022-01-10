@@ -91,6 +91,7 @@
 		"core-js": "^3.20.2",
 		"dompurify": "^2.3.4",
 		"electron-serve": "^0.4.1",
+		"highlight.js": "^11.4.0",
 		"intl-tel-input": "^17.0.15",
 		"ipfs-core": "0.13.0",
 		"lodash": "^4.17.21",
