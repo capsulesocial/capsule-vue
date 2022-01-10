@@ -164,6 +164,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { marked } from 'marked'
+import DOMPurify from 'dompurify'
 import PostActions from '@/components/post/Actions.vue'
 import AuthorCard from '@/components/AuthorCard.vue'
 import TagCard from '@/components/Tag.vue'
@@ -253,6 +254,11 @@ export default Vue.extend({
 		}
 		// Convert markdown to HTML
 		this.content = marked.parse(this.post.content)
+		// Sanitize HTML
+		this.content = DOMPurify.sanitize(this.content, {
+			USE_PROFILES: { html: true, svg: true },
+			ALLOWED_TAGS: [`pre`],
+		})
 		// Get author profile
 		this.author = createDefaultProfile(this.post.authorID)
 		getProfile(this.post.authorID).then((p) => {
