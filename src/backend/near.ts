@@ -81,7 +81,7 @@ export async function walletLogin() {
 	const walletConnection = getWalletConnection()
 	if (!walletConnection.isSignedIn()) {
 		// Redirects to wallet login page
-		const redirectURL = new URL(`/`, domain)
+		const redirectURL = new URL(`/register`, domain)
 		await walletConnection.requestSignIn(nearConfig.contractName, undefined, redirectURL.toString())
 	}
 }
