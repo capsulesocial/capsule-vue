@@ -42,9 +42,8 @@
 			<button class="text-negative focus:outline-none">Deactivate my Capsule Account</button>
 		</div>
 		<!-- Account Invites -->
-		<h2 v-if="generatedNumber < 1" class="text-primary font-semibold pt-4 mb-4 text-sm">Account Invites</h2>
+		<h2 class="text-primary font-semibold pt-4 mb-4 text-sm">Account Invites</h2>
 		<div
-			v-if="generatedNumber < 1"
 			class="p-5 rounded-lg mt-4 overflow-hidden relative bg-gradient-to-r from-lightBGStart to-lightBGStop border-lightBorder shadow-lg"
 		>
 			<label for="id" class="font-semibold text-sm pb-1 block mb-2">Generate an invite code</label>
@@ -62,7 +61,7 @@
 						ref="code"
 						v-model="generatedInviteCode"
 						type="text"
-						placeholder="No more code available"
+						placeholder="Eg. a5bX2cYY"
 						class="rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-primary text-primary font-sans bg-gray2 border border-dashed border-primary w-full"
 						style="height: 3rem"
 						@focus="$event.target.select()"
@@ -71,10 +70,16 @@
 						<CopyIcon class="w-5 h-5 fill-current" />
 					</button>
 				</div>
-				<button class="text-primary focus:outline-none text-sm" @click="generateNewInviteCode">
+				<button
+					v-if="inviteCodesRemaining >= 1"
+					class="text-primary focus:outline-none text-sm"
+					@click="generateNewInviteCode"
+				>
 					Generate a new code
 				</button>
 			</div>
+			<br />
+			<p class="text-gray5">You have {{ inviteCodesRemaining }} invites remaining</p>
 		</div>
 
 		<!-- Submit button -->
@@ -93,11 +98,12 @@ import { MutationType, getProfileFromSession, namespace as sessionStoreNamespace
 import { setProfile } from '@/backend/profile'
 import { getNearPrivateKey } from '@/backend/near'
 import CopyIcon from '@/components/icons/Copy.vue'
+import { generateInviteCode, getInvitesRemaining } from '@/backend/invite'
 
 interface IData {
 	backgroundImage: null | string | ArrayBuffer
 	generatedInviteCode: string
-	generatedNumber: number
+	inviteCodesRemaining: number
 }
 
 export default Vue.extend({
@@ -109,8 +115,11 @@ export default Vue.extend({
 		return {
 			backgroundImage: null,
 			generatedInviteCode: ``,
-			generatedNumber: 0,
+			inviteCodesRemaining: 1,
 		}
+	},
+	created() {
+		this.getInviteCodesRemaining()
 	},
 	methods: {
 		...mapMutations(sessionStoreNamespace, {
@@ -147,15 +156,21 @@ export default Vue.extend({
 				this.$toastSuccess(`Your settings has been successfully updated`)
 			}
 		},
-		generateNewInviteCode() {
+		async generateNewInviteCode() {
 			// generate a new invite code
-			this.generatedInviteCode = `TEST`
+			const { inviteCode, invitesRemaining } = await generateInviteCode(this.$store.state.session.id)
+			this.generatedInviteCode = inviteCode
+			this.inviteCodesRemaining = invitesRemaining
 		},
 		copyURL(): void {
 			const code = this.$refs.code as HTMLElement
 			code.focus()
 			document.execCommand(`copy`)
-			this.$toastSuccess(`code copied to clipboard!`)
+			this.$toastSuccess(`Code copied to clipboard!`)
+		},
+		async getInviteCodesRemaining() {
+			const response = await getInvitesRemaining(this.$store.state.session.id)
+			this.inviteCodesRemaining = response
 		},
 	},
 })
