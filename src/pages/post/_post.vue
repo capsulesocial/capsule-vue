@@ -169,7 +169,7 @@
 import Vue from 'vue'
 import { marked } from 'marked'
 import DOMPurify from 'dompurify'
-import hljs from 'highlight.js'
+import { markedRenderer } from '@/plugins/markedExtensions'
 import PostActions from '@/components/post/Actions.vue'
 import AuthorCard from '@/components/AuthorCard.vue'
 import TagCard from '@/components/Tag.vue'
@@ -258,6 +258,7 @@ export default Vue.extend({
 			this.featuredPhoto = await getPhotoFromIPFS(this.post.featuredPhotoCID)
 		}
 		// Convert markdown to HTML
+		marked.use({ renderer: markedRenderer })
 		this.content = marked.parse(this.post.content)
 		// Get author profile
 		this.author = createDefaultProfile(this.post.authorID)
@@ -309,11 +310,6 @@ export default Vue.extend({
 		if (this.$store.state.settings.recentlyPosted) {
 			this.$toastSuccess(`This post has been successfully published`)
 		}
-		setTimeout(function () {
-			document.querySelectorAll(`pre`).forEach((block) => {
-				hljs.highlightBlock(block)
-			})
-		}, 1000)
 	},
 	beforeDestroy() {
 		if (this.$store.state.settings.recentlyPosted) {
