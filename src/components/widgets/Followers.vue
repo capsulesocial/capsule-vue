@@ -1,5 +1,9 @@
 <template>
-	<article v-if="profiles.length !== 0" class="w-full rounded-lg shadow-lg bg-white mb-5 p-4">
+	<article
+		v-if="profiles.length !== 0"
+		class="w-full rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop mb-5 p-4 border border-lightBorder"
+		style="backdrop-filter: blur(10px)"
+	>
 		<h6 class="font-semibold text-primary mb-2">Recent Followers</h6>
 		<div v-for="p in profiles" :key="p.id">
 			<ProfilePreview :profile="p" :updateFollowers="updateFollowers" class="pb-4" />

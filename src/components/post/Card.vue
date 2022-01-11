@@ -6,7 +6,7 @@
 			class="fixed w-full h-screen bg-primary top-0 bottom-0 left-0 right-0 z-30 flex justify-center items-center bg-opacity-50 modal-animation"
 		>
 			<div
-				class="card shadow-lg rounded-lg bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg mt-10 overflow-y-auto card-animation"
+				class="card shadow-lg rounded-lg bg-gradient-to-r from-lightBGStart to-lightBGStop mt-10 overflow-y-auto card-animation"
 				style="backdrop-filter: blur(10px); width: 750px; backdrop-filter: blur(10px); max-height: 90vh"
 			>
 				<div

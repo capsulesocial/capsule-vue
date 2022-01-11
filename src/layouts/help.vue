@@ -18,7 +18,7 @@
 								height: calc(100vh - 70px);
 								backdrop-filter: blur(10px);
 							"
-							class="fixed overflow-y-auto rounded-lg shadow-lg mr-5 bg-gradient-to-r from-lightBGStart to-lightBGStop modal-animation"
+							class="fixed overflow-y-auto rounded-lg shadow-lg mr-5 bg-gradient-to-r from-lightBGStart to-lightBGStop border border-lightBorder modal-animation"
 							:class="showWidgets ? `` : `z-10`"
 							:toggleFriend="toggleFriend"
 							:following="following"
@@ -32,6 +32,7 @@
 							style="margin-left: 755px; width: 485px; min-height: calc(100vh - 150px); height: calc(100vh - 150px)"
 						>
 							<SupportWidget />
+							<RessourcesWidget @overlay="openOnboarding" />
 							<Footer />
 						</aside>
 					</section>
@@ -39,7 +40,7 @@
 			</div>
 		</div>
 		<!-- Onboarding Wizard -->
-		<OnboardingWizard v-if="$store.state.recentlyJoined" />
+		<OnboardingWizard v-if="displayOnboarding" @closePopup="openOnboarding" />
 	</main>
 </template>
 
@@ -48,6 +49,7 @@ import Vue from 'vue'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 import SupportWidget from '@/components/widgets/Support.vue'
+import RessourcesWidget from '@/components/widgets/Ressources.vue'
 import OnboardingWizard from '@/components/OnboardingWizard.vue'
 
 import { getProfile, Profile } from '@/backend/profile'
@@ -61,6 +63,7 @@ interface IData {
 	following: Set<string>
 	followers: Set<string>
 	userIsFollowed: boolean
+	displayOnboarding: boolean
 }
 
 export default Vue.extend({
@@ -68,6 +71,7 @@ export default Vue.extend({
 		Header,
 		Footer,
 		SupportWidget,
+		RessourcesWidget,
 		OnboardingWizard,
 	},
 	data(): IData {
@@ -78,6 +82,7 @@ export default Vue.extend({
 			following: new Set(),
 			followers: new Set(),
 			userIsFollowed: false,
+			displayOnboarding: false,
 		}
 	},
 	async created() {
@@ -121,6 +126,9 @@ export default Vue.extend({
 				// @ts-ignore
 				this.$refs.editor.saveContent()
 			}
+		},
+		openOnboarding() {
+			this.displayOnboarding = !this.displayOnboarding
 		},
 	},
 })
