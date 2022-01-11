@@ -75,7 +75,7 @@
 						class="w-full rounded-lg bg-gray2 mb-4 py-2 flex justify-center items-center focus:outline-none"
 						@click="() => torusLogin('discord')"
 					>
-						<DiscordIcon style="width: 28px; height: 28px" />
+						<DiscordIcon style="width: 28px; height: 28px; color: #8c9eff" />
 						<h6 class="font-semibold text-gray7 text-sm ml-4">Sign up with Discord</h6>
 					</button>
 					<button
