@@ -17,7 +17,7 @@
 					<div
 						class="p-4 rounded-lg mt-6 h-60 overflow-hidden relative"
 						style="background-size: cover; background-repeat: no-repeat"
-						:style="{ backgroundImage: `url(` + require(`@/assets/images/backgrounds/ticket.png`) + `)` }"
+						:style="{ backgroundImage: `url(` + require(`@/assets/images/util/ticket.png`) + `)` }"
 					>
 						<label for="id" class="font-semibold text-sm text-gray5 pb-1 block">You have an invite code?</label>
 						<input

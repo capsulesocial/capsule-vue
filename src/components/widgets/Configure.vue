@@ -130,9 +130,9 @@
 						<p class="text-gray5 text-sm">
 							<span style="background: opacity 0.9em">Change background, theme and accessibilty:</span>
 						</p>
-						<button class="text-primary text-sm ml-2" @click="toggleSettings">
+						<nuxt-link to="/settings/styling" class="text-primary text-sm ml-2">
 							<span style="background: opacity 0.9em">Styling settings</span>
-						</button>
+						</nuxt-link>
 					</div>
 				</div>
 			</div>
@@ -182,15 +182,6 @@ export default Vue.extend({
 		},
 		handleClose() {
 			this.$emit(`close`)
-		},
-		toggleSettings() {
-			// this.$router.push(`/settings`)
-			this.$router.push({
-				name: `settings`,
-				params: {
-					tab: `styling`,
-				},
-			})
 		},
 	},
 })
