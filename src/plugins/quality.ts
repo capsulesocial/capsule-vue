@@ -32,16 +32,13 @@ const qualityID: Id = (input) => {
 		return `Missing ID!`
 	}
 	if (input.length < 3) {
-		return `ID must be > 3 characters`
+		return `ID must be longer than 3 characters`
 	}
-	if (input.length > 25) {
-		return `ID must be <= 25 characters`
+	if (input.length > 16) {
+		return `ID must be 16 characters or less`
 	}
-	if (input.search(/\s/) !== -1) {
-		return `ID must not contain a space!`
-	}
-	if (!/^[a-zA-Z0-9]+$/.test(input)) {
-		return `ID must only contain numbers and letters`
+	if (!/^\w{3,16}$/.test(input)) {
+		return `ID must only contain numbers, letters, and underscores`
 	}
 	return true
 }

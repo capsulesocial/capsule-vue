@@ -421,10 +421,11 @@ export default Vue.extend({
 				return login(this.username, privateKey)
 			}
 			const idCheck = this.$qualityID(this.id)
-			if (!idCheck) {
-				this.$toastError(`ID did not pass quality rules`)
+			if (idCheck !== true) {
+				this.$toastError(`ID did not pass quality rules: ` + idCheck)
 				return null
 			}
+			this.id = this.id.toLowerCase()
 			const registerResult = await register(this.id, privateKey)
 			if (`error` in registerResult) {
 				this.$toastError(registerResult.error)
