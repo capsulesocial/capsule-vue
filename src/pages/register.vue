@@ -438,19 +438,17 @@ export default Vue.extend({
 				this.$toastError(`Unexpected condition`)
 				return null
 			}
-
 			const idCheck = this.$qualityID(this.id)
-			if (!idCheck) {
-				this.$toastError(`ID did not pass quality rules`)
+			if (idCheck !== true) {
+				this.$toastError(`ID did not pass quality rules: ` + idCheck)
 				return null
 			}
-
+			this.id = this.id.toLowerCase()
 			const registerResult = await registerNearWallet(this.id, this.accountId)
 			if (`error` in registerResult) {
 				this.$toastError(registerResult.error)
 				return null
 			}
-
 			return registerResult
 		},
 		async verify() {
