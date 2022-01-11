@@ -19,7 +19,7 @@
 								height: calc(100vh - 88px);
 								backdrop-filter: blur(10px);
 							"
-							class="fixed overflow-y-auto rounded-t-lg shadow-lg mr-5 p-6 pt-4 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop border border-lightBorder"
+							class="fixed overflow-y-auto rounded-t-lg shadow-lg mr-5 p-6 pt-4 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop border-lightBorder"
 						/>
 						<!-- Settings tabs -->
 						<aside class="fixed" style="margin-left: 770px; width: 450px">
