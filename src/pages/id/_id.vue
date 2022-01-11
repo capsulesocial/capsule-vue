@@ -48,13 +48,13 @@
 							</div>
 							<!-- Tabs: posts, following, followers -->
 							<div class="flex flex-row pt-2 text-sm text-gray6">
-								<nuxt-link :to="'/id/' + $route.params.id" class="text-sm" :class="getStyles(`id-categories`)">
+								<nuxt-link :to="'/id/' + $route.params.id" class="text-sm">
 									<span class="font-bold text-primary">{{ totalPostsCount }}</span>
 									Posts
 								</nuxt-link>
 								<nuxt-link
 									:to="'/id/' + $route.params.id + '/followers'"
-									:class="getStyles(`id-followers`)"
+									:class="getStyles(`id-id-followers`)"
 									class="pl-5 text-sm"
 								>
 									<span class="font-bold text-primary">{{ followers.size }}</span>
@@ -62,7 +62,7 @@
 								</nuxt-link>
 								<nuxt-link
 									:to="'/id/' + $route.params.id + '/following'"
-									:class="getStyles(`id-following`)"
+									:class="getStyles(`id-id-following`)"
 									class="pl-5 text-sm"
 								>
 									<span class="font-bold text-primary">{{ following.size }}</span>
@@ -89,13 +89,13 @@
 				</div>
 				<!-- Tabs -->
 				<div id="tabs" class="flex flex-col md:flex-row w-full justify-between text-gray5 pt-6 header-profile px-6">
-					<nuxt-link :to="'/id/' + $route.params.id" class="pb-1" :class="getStyles('id')">
+					<nuxt-link :to="'/id/' + $route.params.id" class="pb-1" :class="getStyles('id-id')">
 						<span class="px-4">Posts</span>
 					</nuxt-link>
-					<nuxt-link :to="'/id/' + $route.params.id + '/comments'" class="pb-1" :class="getStyles('id-comments')">
+					<nuxt-link :to="'/id/' + $route.params.id + '/comments'" class="pb-1" :class="getStyles('id-id-comments')">
 						<span class="px-4">Comments</span>
 					</nuxt-link>
-					<nuxt-link :to="'/id/' + $route.params.id + '/reposts'" class="pb-1" :class="getStyles('id-reposts')">
+					<nuxt-link :to="'/id/' + $route.params.id + '/reposts'" class="pb-1" :class="getStyles('id-id-reposts')">
 						<span class="px-4">Reposts</span>
 					</nuxt-link>
 				</div>
@@ -247,26 +247,13 @@ export default Vue.extend({
 		},
 		getStyles(tab: string): string {
 			let res = ``
-			if (this.$store.state.settings.darkMode) {
-				res += `border-lightActive`
-			} else {
-				res += `border-darkActive`
-			}
 			if (this.$route.name === tab) {
 				res += ` text-primary font-bold`
-				if (
-					this.$route.name !== `id-followers` &&
-					this.$route.name !== `id-following` &&
-					this.$route.name !== `id-categories`
-				) {
+				if (this.$route.name !== `id-id-followers` && this.$route.name !== `id-id-following`) {
 					res += ` border-b`
 				}
 			} else {
-				if (
-					this.$route.name !== `id-followers` &&
-					this.$route.name !== `id-following` &&
-					this.$route.name !== `id-categories`
-				) {
+				if (this.$route.name !== `id-followers` && this.$route.name !== `id-following`) {
 					res += ` text-grey1`
 				}
 				res += ` text-gray5`
