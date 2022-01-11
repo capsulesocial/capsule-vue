@@ -487,7 +487,7 @@ export const backgrounds = [
 		label: `Urban 01`,
 	},
 	{
-		image: require(`@/assets/images/backgrounds/Urbanstuff001.webp`),
+		image: require(`@/assets/images/backgrounds/urbanstuff001.webp`),
 		label: `Urban 02`,
 	},
 ]
