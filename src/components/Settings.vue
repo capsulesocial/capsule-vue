@@ -265,6 +265,7 @@ export default Vue.extend({
 			return this.maxCharBio - charCount
 		},
 		async updateSettings() {
+			console.log(`here`)
 			if (this.hasChanged() === false) {
 				this.$toastWarning(`nothing to update`)
 				return
@@ -294,7 +295,6 @@ export default Vue.extend({
 							return
 						}
 						this.changeWebsite(this.website)
-						return
 					} catch {
 						this.$toastError(`Invalid website URL!`)
 						return
