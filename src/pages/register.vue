@@ -135,14 +135,9 @@
 							</div>
 							<div v-else>
 								<!-- Enter SMS code to complete verify -->
-								<label for="id" class="font-semibold text-sm text-gray5 pb-1 block">One-time Password</label>
-								<input
-									id="phoneNumber"
-									v-model="otp"
-									type="text"
-									placeholder=""
-									class="rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full focus:outline-none focus:border-primary text-primary font-sans bg-gray2"
-								/>
+								<label for="id" class="font-semibold text-sm text-gray5 pb-1 block"
+									>Enter the one-time verification code sent to your phone number.</label
+								>
 								<BrandedButton :text="`Verify`" class="w-full" :action="validateOTP" />
 							</div>
 						</article>
