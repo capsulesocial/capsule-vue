@@ -286,22 +286,17 @@ export default Vue.extend({
 			if (this.location !== this.$store.state.session.location) {
 				this.changeLocation(this.location.trim())
 			}
-			if (this.website !== this.$store.state.session.website) {
-				if (this.website) {
-					try {
-						const url = new URL(this.website)
-						if (!url) {
-							return
-						}
-						this.changeWebsite(this.website)
-						return
-					} catch {
-						this.$toastError(`Invalid website URL!`)
-						return
-					}
-				} else {
+			if (this.website !== this.$store.state.session.website && this.website && this.website !== ``) {
+				if (
+					/^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([-.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/.test(
+						this.website,
+					)
+				) {
 					this.changeWebsite(this.website)
+					return
 				}
+				this.$toastError(`Invalid website URL!`)
+				return
 			}
 			if (this.nodeURL && this.nodeURL !== this.$store.state.session.nodeURL) {
 				if (!/((http|https?):\/\/)?(www\.)?[a-z0-9\-.]{3,}\.[a-z]{3}$/.test(this.nodeURL)) {
