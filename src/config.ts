@@ -433,9 +433,61 @@ export const categories = [
 	`sports`,
 ]
 
-export const backgrounds = {
-	positive: require(`@/assets/images/backgrounds/agree.webp`),
-	negative: require(`@/assets/images/backgrounds/disagree.webp`),
-	neutral: require(`@/assets/images/backgrounds/neutral.webp`),
-	default: require(`@/assets/images/backgrounds/paper.webp`),
-}
+export const backgrounds = [
+	{
+		image: require(`@/assets/images/backgrounds/blogn_life_neon-green.webp`),
+		label: `Bloggin' life (neon green)`,
+	},
+	{
+		image: require(`@/assets/images/backgrounds/blogn_life.webp`),
+		label: `Bloggin' life`,
+	},
+	{
+		image: require(`@/assets/images/backgrounds/blue_stroke-jelly.webp`),
+		label: `Blue stroke w/ Jelly`,
+	},
+	{
+		image: require(`@/assets/images/backgrounds/blue_stroke.webp`),
+		label: `Blue stroke`,
+	},
+	{
+		image: require(`@/assets/images/backgrounds/buoy.webp`),
+		label: `Buoy`,
+	},
+	{
+		image: require(`@/assets/images/backgrounds/green_stroke.webp`),
+		label: `Green stroke`,
+	},
+	{
+		image: require(`@/assets/images/backgrounds/jelly.webp`),
+		label: `Jelly`,
+	},
+	{
+		image: require(`@/assets/images/backgrounds/neon_pink_stroke.webp`),
+		label: `Neon pink stroke`,
+	},
+	{
+		image: require(`@/assets/images/backgrounds/neon_stroke.webp`),
+		label: `Neon stroke`,
+	},
+	{
+		image: require(`@/assets/images/backgrounds/pink_stroke.webp`),
+		label: `Pink stroke`,
+	},
+	{
+		image: require(`@/assets/images/backgrounds/sharkman_pink.webp`),
+		label: `Sharkman (pink)`,
+	},
+	{
+		image: require(`@/assets/images/backgrounds/texture-text01.webp`),
+		label: `Texture text 01`,
+	},
+	{
+		image: require(`@/assets/images/backgrounds/urbanstuff.webp`),
+		label: `Urban 01`,
+	},
+	{
+		image: require(`@/assets/images/backgrounds/urbanstuff001.webp`),
+		label: `Urban 02`,
+	},
+]

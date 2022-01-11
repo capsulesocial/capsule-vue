@@ -17,7 +17,7 @@
 					<div
 						class="p-4 rounded-lg mt-6 h-60 overflow-hidden relative"
 						style="background-size: cover; background-repeat: no-repeat"
-						:style="{ backgroundImage: `url(` + require(`@/assets/images/backgrounds/ticket.png`) + `)` }"
+						:style="{ backgroundImage: `url(` + require(`@/assets/images/util/ticket.png`) + `)` }"
 					>
 						<label for="id" class="font-semibold text-sm text-gray5 pb-1 block">You have an invite code?</label>
 						<input
@@ -135,14 +135,9 @@
 							</div>
 							<div v-else>
 								<!-- Enter SMS code to complete verify -->
-								<label for="id" class="font-semibold text-sm text-gray5 pb-1 block">One-time Password</label>
-								<input
-									id="phoneNumber"
-									v-model="otp"
-									type="text"
-									placeholder=""
-									class="rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full focus:outline-none focus:border-primary text-primary font-sans bg-gray2"
-								/>
+								<label for="id" class="font-semibold text-sm text-gray5 pb-1 block"
+									>Enter the one-time verification code sent to your phone number.</label
+								>
 								<BrandedButton :text="`Verify`" class="w-full" :action="validateOTP" />
 							</div>
 						</article>
@@ -421,10 +416,11 @@ export default Vue.extend({
 				return login(this.username, privateKey)
 			}
 			const idCheck = this.$qualityID(this.id)
-			if (!idCheck) {
-				this.$toastError(`ID did not pass quality rules`)
+			if (idCheck !== true) {
+				this.$toastError(`ID did not pass quality rules: ` + idCheck)
 				return null
 			}
+			this.id = this.id.toLowerCase()
 			const registerResult = await register(this.id, privateKey)
 			if (`error` in registerResult) {
 				this.$toastError(registerResult.error)
@@ -437,19 +433,17 @@ export default Vue.extend({
 				this.$toastError(`Unexpected condition`)
 				return null
 			}
-
 			const idCheck = this.$qualityID(this.id)
-			if (!idCheck) {
-				this.$toastError(`ID did not pass quality rules`)
+			if (idCheck !== true) {
+				this.$toastError(`ID did not pass quality rules: ` + idCheck)
 				return null
 			}
-
+			this.id = this.id.toLowerCase()
 			const registerResult = await registerNearWallet(this.id, this.accountId)
 			if (`error` in registerResult) {
 				this.$toastError(registerResult.error)
 				return null
 			}
-
 			return registerResult
 		},
 		async verify() {

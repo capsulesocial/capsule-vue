@@ -13,49 +13,46 @@
 					<section class="flex flex-row">
 						<nuxt-child
 							:tab="tab"
-							style="
-								width: 750px;
-								min-height: calc(100vh - 88px);
-								height: calc(100vh - 88px);
-								backdrop-filter: blur(10px);
-							"
+							style="width: 750px; min-height: calc(100vh - 88px); height: calc(100vh - 88px)"
+							:style="showPopup ? `` : `backdrop-filter: blur(10px);`"
 							class="fixed overflow-y-auto rounded-t-lg shadow-lg mr-5 p-6 pt-4 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop border-lightBorder"
+							@togglePopup="togglePopup"
 						/>
 						<!-- Settings tabs -->
 						<aside class="fixed" style="margin-left: 770px; width: 450px">
 							<div
-								class="rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop border border-lightBorder overflow-hidden mb-5 py-4 px-6 pb-2 modal-animation"
+								class="rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop border border-lightBorder overflow-hidden mb-5 py-4 px-6 pb-2 modal-animation flex flex-col"
 								style="backdrop-filter: blur(10px)"
 							>
 								<h3 class="text-primary text-base font-semibold pb-4">Settings</h3>
-								<button
-									:class="tab === `account` ? `bg-lightInput font-semibold` : ``"
+								<nuxt-link
+									:class="$route.name === `settings-account` ? `bg-lightInput font-semibold` : ``"
 									class="w-full rounded-lg text-gray5 py-2 px-4 mb-4 text-left focus:outline-none"
-									@click="changeTab(`account`)"
+									to="/settings/account"
 								>
 									Account
-								</button>
-								<button
-									:class="tab === `security` ? `bg-lightInput font-semibold` : ``"
+								</nuxt-link>
+								<!-- <nuxt-link
+									:class="$route.name === `settings-security` ? `bg-lightInput font-semibold` : ``"
 									class="w-full rounded-lg text-gray5 py-2 px-4 mb-4 text-left focus:outline-none"
-									@click="changeTab(`security`)"
+									to="/settings/security"
 								>
 									Confidentiality and Security
-								</button>
-								<button
-									:class="tab === `network` ? `bg-lightInput font-semibold` : ``"
+								</nuxt-link> -->
+								<nuxt-link
+									:class="$route.name === `settings-network` ? `bg-lightInput font-semibold` : ``"
 									class="w-full rounded-lg text-gray5 py-2 px-4 mb-4 text-left focus:outline-none"
-									@click="changeTab(`network`)"
+									to="/settings/network"
 								>
 									Nodes and Network
-								</button>
-								<button
-									:class="tab === `styling` ? `bg-lightInput font-semibold` : ``"
+								</nuxt-link>
+								<nuxt-link
+									to="/settings/styling"
+									:class="$route.name === `settings-styling` ? `bg-lightInput font-semibold` : ``"
 									class="w-full rounded-lg text-gray5 py-2 px-4 mb-4 text-left focus:outline-none"
-									@click="changeTab(`styling`)"
 								>
 									Appearance and Styling
-								</button>
+								</nuxt-link>
 							</div>
 							<Footer />
 						</aside>
@@ -77,6 +74,7 @@ interface IData {
 	profile: Profile | null
 	avatar: string | ArrayBuffer | null
 	tab: string
+	showPopup: boolean
 }
 
 export default Vue.extend({
@@ -89,6 +87,7 @@ export default Vue.extend({
 			profile: null,
 			avatar: null,
 			tab: `account`,
+			showPopup: false,
 		}
 	},
 	async created() {
@@ -109,6 +108,9 @@ export default Vue.extend({
 	methods: {
 		changeTab(t: string): void {
 			this.tab = t
+		},
+		togglePopup(): void {
+			this.showPopup = !this.showPopup
 		},
 	},
 })

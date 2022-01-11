@@ -300,7 +300,10 @@ export default Vue.extend({
 					}
 				} else {
 					this.changeWebsite(this.website)
+					return
 				}
+				this.$toastError(`Invalid website URL!`)
+				return
 			}
 			if (this.nodeURL && this.nodeURL !== this.$store.state.session.nodeURL) {
 				if (!/((http|https?):\/\/)?(www\.)?[a-z0-9\-.]{3,}\.[a-z]{3}$/.test(this.nodeURL)) {
