@@ -181,7 +181,7 @@ export default Vue.extend({
 			categoryList: categories,
 			category,
 			tag: ``,
-			caption: ``,
+			caption: this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].featuredPhotoCaption,
 			showCategoryDropdown: false,
 		}
 	},
