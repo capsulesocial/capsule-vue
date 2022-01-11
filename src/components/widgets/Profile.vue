@@ -1,5 +1,8 @@
 <template>
-	<article class="w-full rounded-lg shadow-lg bg-white mb-5 p-4">
+	<article
+		class="w-full rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop mb-5 p-4 border border-lightBorder"
+		style="backdrop-filter: blur(10px)"
+	>
 		<h6 class="font-semibold text-primary mb-2">About</h6>
 		<div v-if="location === `` && email === `` && website === ``">
 			<p class="text-sm text-gray5">

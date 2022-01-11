@@ -1,7 +1,7 @@
 <template>
 	<div class="popup w-full p-5">
 		<!-- Header and Close button -->
-		<header class="flex flex-row justify-between mb-2">
+		<header v-if="$store.state.session.id === $route.params.id" class="flex flex-row justify-between mb-2">
 			<h2 class="font-bold text-xl">Edit your profile</h2>
 			<button class="rounded-full bg-gray1 p-1 focus:outline-none" @click="$emit(`close`)"><CloseIcon /></button>
 		</header>
@@ -60,7 +60,7 @@
 			</div>
 		</div>
 		<!-- Location -->
-		<div class="flex flex-row mb-2">
+		<div v-if="$store.state.session.id === $route.params.id" class="flex flex-row mb-2">
 			<label for="location" class="w-32">Location</label>
 			<input
 				id="location"
@@ -71,7 +71,7 @@
 			/>
 		</div>
 		<!-- Website -->
-		<div class="flex flex-row mb-2">
+		<div v-if="$store.state.session.id === $route.params.id" class="flex flex-row mb-2">
 			<label for="website" class="w-32">Website</label>
 			<input
 				id="website"
@@ -82,7 +82,7 @@
 			/>
 		</div>
 		<!-- Email -->
-		<div class="flex flex-row mb-2">
+		<div v-if="$store.state.session.id === $route.params.id" class="flex flex-row mb-2">
 			<label for="newEmail" class="w-32">Email</label>
 			<input
 				id="newEmail"
@@ -286,12 +286,19 @@ export default Vue.extend({
 			if (this.location !== this.$store.state.session.location) {
 				this.changeLocation(this.location.trim())
 			}
-			if (this.website !== this.$store.state.session.website && this.website && this.website !== ``) {
-				if (
-					/^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([-.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/.test(
-						this.website,
-					)
-				) {
+			if (this.website !== this.$store.state.session.website) {
+				if (this.website) {
+					try {
+						const url = new URL(this.website)
+						if (!url) {
+							return
+						}
+						this.changeWebsite(this.website)
+					} catch {
+						this.$toastError(`Invalid website URL!`)
+						return
+					}
+				} else {
 					this.changeWebsite(this.website)
 					return
 				}

@@ -4,7 +4,7 @@
 	>
 		<div
 			class="popup shadow-lg rounded-lg bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg p-6 pt-4 mt-12 overflow-y-auto card-animation"
-			style="height: 90%; width: 650px; backdrop-filter: blur(10px)"
+			style="max-height: 90%; width: 650px; backdrop-filter: blur(10px)"
 		>
 			<!-- Header and close icon -->
 			<div class="flex justify-between items-center pb-6">
@@ -39,6 +39,7 @@
 					class="rounded-lg mb-10 w-5/6 shadow-lg"
 				/>
 				<h6 class="text-xl mb-5 font-bold">{{ getTitle() }}</h6>
+				<EditProfile v-show="step === 5" :updateProfileMethod="getMyProfile" class="mb-4 mt-10" />
 				<p class="text-gray5 mb-10 px-10">
 					{{ getText() }}
 				</p>
@@ -65,9 +66,14 @@
 						class="p-1 mx-1 rounded-full focus:outline-none"
 						@click="setStep(4)"
 					></button>
+					<button
+						:class="step > 4 ? `bg-primary` : `bg-gray1`"
+						class="p-1 mx-1 rounded-full focus:outline-none"
+						@click="setStep(5)"
+					></button>
 				</div>
 				<!-- Next button -->
-				<div v-if="step === 4" class="mb-2">
+				<div v-if="step === 5" class="mb-2">
 					<BrandedButton
 						:action="
 							() => {
@@ -94,21 +100,35 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
+import { getPhotoFromIPFS } from '@/backend/photos'
 import CloseIcon from '@/components/icons/X.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
+import EditProfile from '@/components/Settings.vue'
 
 interface IData {
 	step: number
+	myProfile: Profile
+	myAvatar: string | ArrayBuffer | null
+	myFollowing: Set<string>
+	visitProfile: Profile
+	visitAvatar: string | ArrayBuffer | null
 }
 
 export default Vue.extend({
 	components: {
 		CloseIcon,
 		BrandedButton,
+		EditProfile,
 	},
 	data(): IData {
 		return {
 			step: 0,
+			myProfile: createDefaultProfile(this.$store.state.session.id),
+			myAvatar: null,
+			myFollowing: new Set(),
+			visitProfile: createDefaultProfile(this.$route.params.id),
+			visitAvatar: null,
 		}
 	},
 	created() {
@@ -117,7 +137,7 @@ export default Vue.extend({
 	methods: {
 		setStep(i: number | null) {
 			i === null ? (this.step = this.step + 1) : (this.step = i)
-			if (this.step >= 5) {
+			if (this.step >= 6) {
 				this.closeWizard()
 			}
 		},
@@ -133,6 +153,8 @@ export default Vue.extend({
 					return `Create content easily `
 				case 4:
 					return `Join the conversation `
+				case 5:
+					return `Start by editing your profile`
 				default:
 					return `out of scope`
 			}
@@ -149,6 +171,8 @@ export default Vue.extend({
 					return `Have an idea you’d like to share with the world? Blogchain’s simple editing tool will make it easy for you to craft and publish your post.`
 				case 4:
 					return `Agree or disagree with something you’ve read on Blogchain? Use our comment features to talk about it with other readers. You can even include one of our custom reaction illustrations to make your point artfully.`
+				case 5:
+					return `You will be able to change your profile and add more informations later on your profile page.`
 				default:
 					return `out of scope`
 			}
@@ -161,8 +185,23 @@ export default Vue.extend({
 				this.closeWizard()
 			}
 		},
+		async getMyProfile(update: boolean = false) {
+			const { profile } = await getProfile(this.$store.state.session.id, update)
+			this.myProfile = profile || createDefaultProfile(this.$store.state.session.id)
+			if (this.myProfile.avatar.length > 1) {
+				getPhotoFromIPFS(this.myProfile.avatar).then((p) => {
+					this.myAvatar = p
+				})
+			}
+			// Set visitProfile to myProfile if viewing my own profile
+			if (this.$store.state.session.id !== `` && this.$store.state.session.id === this.$route.params.id) {
+				this.visitProfile = this.myProfile
+				this.visitAvatar = this.myAvatar
+			}
+		},
 		closeWizard(): void {
 			this.$store.commit(`setWelcome`, false)
+			this.$emit(`closePopup`)
 		},
 	},
 })

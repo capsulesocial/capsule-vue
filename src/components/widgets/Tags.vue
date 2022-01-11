@@ -35,6 +35,11 @@
 			</div>
 		</div>
 		<div class="px-6 pb-4">
+			<article v-if="tags.length == 0">
+				<p class="text-sm text-gray5 mb-4 mt-3">
+					<span> It seems no trending tags are available at the moment </span>
+				</p>
+			</article>
 			<TagCard v-for="t in tags" :key="t" :tag="t" class="text-lg mr-4 my-2" />
 		</div>
 		<img v-if="checkRoute()" :src="require(`@/assets/images/brand/discover.webp`)" />

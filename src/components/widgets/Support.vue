@@ -1,6 +1,6 @@
 <template>
 	<article
-		class="w-full rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop modal-animation mb-5 p-4"
+		class="w-full rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop border border-lightBorder modal-animation mb-5 p-4"
 	>
 		<h6 class="font-semibold text-primary mb-6">Contact Support</h6>
 		<p class="text-sm text-gray5 mb-6 px-6 text-center">

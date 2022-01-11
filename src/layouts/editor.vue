@@ -19,7 +19,7 @@
 								height: calc(100vh - 88px);
 								backdrop-filter: blur(10px);
 							"
-							class="fixed overflow-y-auto rounded-t-lg shadow-lg mr-5 p-8 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop border-lightBorder modal-animation"
+							class="fixed overflow-y-auto rounded-t-lg shadow-lg mr-5 p-8 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop border border-lightBorder modal-animation"
 							@update="updateWordCount"
 						/>
 						<div

@@ -2,7 +2,7 @@
 	<div class="">
 		<!-- Featured image -->
 		<article
-			class="rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop border-lightBorder px-6 py-4 mb-5"
+			class="rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop border border-lightBorder px-6 py-4 mb-5"
 			style="backdrop-filter: blur(10px)"
 		>
 			<h6 class="text-primary font-semibold">Featured Image</h6>
@@ -46,7 +46,7 @@
 		</article>
 		<!-- Category -->
 		<article
-			class="rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop border-lightBorder px-6 py-4 mb-5"
+			class="rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop border border-lightBorder px-6 py-4 mb-5"
 			style="backdrop-filter: blur(10px)"
 		>
 			<h6 class="text-primary font-semibold">Category</h6>
@@ -92,7 +92,7 @@
 		</article>
 		<!-- Tags -->
 		<article
-			class="rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop border-lightBorder px-6 py-4 pb-6 mb-5"
+			class="rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop border border-lightBorder px-6 py-4 pb-6 mb-5"
 			style="backdrop-filter: blur(10px)"
 		>
 			<h6 class="text-primary font-semibold mb-3">Tags</h6>
@@ -119,7 +119,7 @@
 			</div>
 		</article>
 		<article
-			class="rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop border-lightBorder p-6 mb-5"
+			class="rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop border border-lightBorder p-6 mb-5"
 			style="backdrop-filter: blur(10px)"
 		>
 			<div class="flex flex-row justify-between items-center">
