@@ -1,10 +1,7 @@
-<template>
-	<main></main>
-</template>
+<template><main>Nothing here yet</main></template>
 
 <script lang="ts">
 import Vue from 'vue'
-
 export default Vue.extend({
 	layout: `settings`,
 })
