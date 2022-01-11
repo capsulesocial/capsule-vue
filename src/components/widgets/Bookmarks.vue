@@ -1,6 +1,13 @@
 <template>
 	<article class="py-4">
 		<h3 class="text-primary text-base font-semibold px-6 pb-4">Recent Bookmarks</h3>
+		<article v-if="this.$store.state.recentBookmarks.length == 0">
+			<p class="text-sm text-gray5 mb-4 px-6">
+				<span>
+					You didn't bookmarked any posts yet. Click the bookmark icon on a post to add it to your bookmark list
+				</span>
+			</p>
+		</article>
 		<nuxt-link
 			v-for="p in this.$store.state.recentBookmarks"
 			:key="p.postCID"

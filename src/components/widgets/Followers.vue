@@ -1,10 +1,14 @@
 <template>
 	<article
-		v-if="profiles.length !== 0"
 		class="w-full rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop mb-5 p-4 border border-lightBorder"
 		style="backdrop-filter: blur(10px)"
 	>
 		<h6 class="font-semibold text-primary mb-2">Recent Followers</h6>
+		<article v-if="profiles.length == 0">
+			<p class="text-sm text-gray5 mb-5 mt-3">
+				<span> It seems no one is following you yet </span>
+			</p>
+		</article>
 		<div v-for="p in profiles" :key="p.id">
 			<ProfilePreview :profile="p" :updateFollowers="updateFollowers" class="pb-4" />
 		</div>
