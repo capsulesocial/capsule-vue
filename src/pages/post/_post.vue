@@ -169,6 +169,7 @@
 import Vue from 'vue'
 import { marked } from 'marked'
 import DOMPurify from 'dompurify'
+import { markedRenderer } from '@/plugins/markedExtensions'
 import PostActions from '@/components/post/Actions.vue'
 import AuthorCard from '@/components/AuthorCard.vue'
 import TagCard from '@/components/Tag.vue'
@@ -186,6 +187,8 @@ import { followChange, getFollowersAndFollowing } from '@/backend/following'
 import { getReposts } from '@/backend/reposts'
 import { isPostBookmarkedByUser } from '@/backend/bookmarks'
 import { ICommentData } from '@/backend/comment'
+
+marked.use({ renderer: markedRenderer })
 
 interface IData {
 	post: Post | null
