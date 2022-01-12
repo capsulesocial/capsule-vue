@@ -78,8 +78,9 @@ import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
-import { IPostResponse, getPosts } from '@/backend/post'
+import { IPostResponse } from '@/backend/post'
 import { categories } from '@/config'
+import { getBookmarksOfUser } from '@/backend/bookmarks'
 
 interface IData {
 	profile: Profile | null
@@ -125,12 +126,8 @@ export default Vue.extend({
 			this.fetchPosts(c)
 			this.active = c
 		},
-		async fetchPosts(category: string | undefined = undefined) {
-			this.posts = await getPosts(
-				{ category, bookmarkedBy: this.$store.state.session.id },
-				this.$store.state.session.id,
-				{},
-			)
+		async fetchPosts(category?: string) {
+			this.posts = await getBookmarksOfUser(this.$store.state.session.id, category)
 		},
 	},
 })
