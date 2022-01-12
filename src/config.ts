@@ -435,20 +435,24 @@ export const categories = [
 
 export const backgrounds = [
 	{
-		image: require(`@/assets/images/backgrounds/blogn_life_neon-green.webp`),
-		label: `Bloggin' life (neon green)`,
+		image: require(`@/assets/images/backgrounds/mainBG.webp`),
+		label: `Default`,
 	},
 	{
 		image: require(`@/assets/images/backgrounds/blogn_life.webp`),
 		label: `Bloggin' life`,
 	},
 	{
-		image: require(`@/assets/images/backgrounds/blue_stroke-jelly.webp`),
-		label: `Blue stroke w/ Jelly`,
+		image: require(`@/assets/images/backgrounds/blogn_life_neon-green.webp`),
+		label: `Bloggin' life (neon green)`,
 	},
 	{
 		image: require(`@/assets/images/backgrounds/blue_stroke.webp`),
 		label: `Blue stroke`,
+	},
+	{
+		image: require(`@/assets/images/backgrounds/blue_stroke-jelly.webp`),
+		label: `Blue stroke w/ Jelly`,
 	},
 	{
 		image: require(`@/assets/images/backgrounds/buoy.webp`),
@@ -473,6 +477,10 @@ export const backgrounds = [
 	{
 		image: require(`@/assets/images/backgrounds/pink_stroke.webp`),
 		label: `Pink stroke`,
+	},
+	{
+		image: require(`@/assets/images/backgrounds/sharkman.webp`),
+		label: `Sharkman`,
 	},
 	{
 		image: require(`@/assets/images/backgrounds/sharkman_pink.webp`),

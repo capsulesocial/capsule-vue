@@ -320,7 +320,6 @@ interface IData {
 	comment: string
 	emotion: string
 	showEmotions: boolean
-	commentBackground: string
 	filter: string
 	showDropdown: boolean
 	toggleStats: boolean
@@ -371,7 +370,6 @@ export default Vue.extend({
 			comments: [],
 			emotion: ``,
 			showEmotions: false,
-			commentBackground: `@/assets/images/brand/paper4.svg`,
 			filter: ``,
 			showDropdown: false,
 			toggleStats: this.openStats,

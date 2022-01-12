@@ -198,11 +198,6 @@ export default Vue.extend({
 					this.myAvatar = p
 				})
 			}
-			// Set visitProfile to myProfile if viewing my own profile
-			if (this.$store.state.session.id !== `` && this.$store.state.session.id === this.$route.params.id) {
-				this.visitProfile = this.myProfile
-				this.visitAvatar = this.myAvatar
-			}
 		},
 		async toggleFriend() {
 			// Unauth
