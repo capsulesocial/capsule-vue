@@ -160,9 +160,9 @@ export default Vue.extend({
 		this.turndownService = new Turndown()
 		this.turndownService.addRule(`codeblock`, {
 			filter: [`pre`],
-			replacement: (content) => {
+			replacement: (_, node) => {
 				// eslint-disable-next-line quotes
-				return '``` \n' + content + '```'
+				return '```\n' + node.textContent + '```'
 			},
 		})
 		const titleInput = this.$refs.title as HTMLInputElement
