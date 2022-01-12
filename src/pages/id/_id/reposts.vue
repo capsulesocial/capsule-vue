@@ -5,7 +5,7 @@
 				<span v-if="$route.params.id === $store.state.session.id"
 					>It seems you haven't reposted any content yet, you can repost any post:</span
 				>
-				<span v-else>{{ $route.params.id }} hasn't reposted any content yet :(</span>
+				<span v-else>{{ $route.params.id }} hasn't reposted any content yet</span>
 			</p>
 			<SecondaryButton
 				v-if="$store.state.session.id === $route.params.id"

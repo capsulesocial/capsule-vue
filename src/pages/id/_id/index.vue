@@ -5,7 +5,7 @@
 				<span v-if="$route.params.id === $store.state.session.id">
 					It seems you haven't written any posts yet, it's never too late to start:
 				</span>
-				<span v-else> {{ $route.params.id }} hasn't written any posts yet :( </span>
+				<span v-else> {{ $route.params.id }} hasn't written any posts yet</span>
 			</p>
 			<SecondaryButton
 				v-if="$store.state.session.id === $route.params.id"
