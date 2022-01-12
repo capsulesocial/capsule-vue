@@ -527,16 +527,39 @@ export default Vue.extend({
 				this.$toastError(`Invite codes should be of length 8`)
 				return
 			}
-			await verifyCodeAndGetToken(this.inputCode)
-			this.inviteCode = true
+			try {
+				await verifyCodeAndGetToken(this.inputCode)
+				this.inviteCode = true
+			} catch (error: any) {
+				if (axios.isAxiosError(error) && error.response) {
+					if (error.response.status === 429) {
+						this.$toastWarning(`Too many requests`)
+						return
+					}
+					this.$toastError(error.response.data.error)
+					return
+				}
+				throw error
+			}
 		},
 		async onboardAccount() {
 			if (!this.accountId) {
 				this.$toastError(`AccountId missing`)
 				return
 			}
-
-			await verifyTokenAndOnboard(this.accountId)
+			try {
+				await verifyTokenAndOnboard(this.accountId)
+			} catch (error: any) {
+				if (axios.isAxiosError(error) && error.response) {
+					if (error.response.status === 429) {
+						this.$toastWarning(`Too many requests`)
+						return
+					}
+					this.$toastError(error.response.data.error)
+					return
+				}
+				throw error
+			}
 		},
 	},
 })
