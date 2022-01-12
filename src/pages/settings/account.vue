@@ -17,7 +17,9 @@
 		<!-- Export Private Key -->
 		<div class="flex flex-row items-center w-full mb-4">
 			<label for="export" class="w-32 font-semibold">Private Key</label>
-			<button id="export" class="text-primary" @click="downloadPrivateKey">Export Private Key</button>
+			<button id="export" class="text-primary focus:outline-none" @click="downloadPrivateKey">
+				Export Private Key
+			</button>
 		</div>
 		<!-- Account Profile -->
 		<h2 class="text-primary font-semibold text-sm py-4">Account Profile</h2>
@@ -32,7 +34,7 @@
 			</nuxt-link>
 		</div>
 		<!-- Account Data -->
-		<h2 class="text-primary font-semibold pt-4 mb-4 text-sm">Account Data</h2>
+		<!-- <h2 class="text-primary font-semibold pt-4 mb-4 text-sm">Account Data</h2>
 		<div class="flex mb-4">
 			<h3 class="w-56 font-semibold">Your Capsule data</h3>
 			<button class="text-primary focus:outline-none">Request a download of your Capsule data</button>
@@ -40,7 +42,7 @@
 		<div class="flex mb-4">
 			<h3 class="w-56 font-semibold">Deactivate My Account</h3>
 			<button class="text-negative focus:outline-none">Deactivate my Capsule Account</button>
-		</div>
+		</div> -->
 		<!-- Account Invites -->
 		<h2 class="text-primary font-semibold pt-4 mb-4 text-sm">Account Invites</h2>
 		<div
@@ -53,7 +55,8 @@
 				seed a vibrant community that will grow over time. As an already registered user, you can invite one member your
 				social circle to participate to the Blogchain beta by sharing the following invite code:
 			</p>
-			<div class="flex items-center mt-5">
+			<p class="text-negative text-sm mt-4">You have {{ inviteCodesRemaining }} invites remaining</p>
+			<div class="flex items-center mt-3">
 				<h3 class="font-semibold mr-4">Invite code</h3>
 				<div class="relative w-2/5 mr-4 flex items-center">
 					<input
@@ -77,16 +80,10 @@
 				>
 					Generate a new code
 				</button>
+				<button v-else class="text-gray5 focus:outline-none text-sm" style="cursor: not-allowed">
+					Generate a new code
+				</button>
 			</div>
-			<br />
-			<p class="text-gray5">You have {{ inviteCodesRemaining }} invites remaining</p>
-		</div>
-
-		<!-- Submit button -->
-		<div class="w-full flex justify-center">
-			<button class="bg-primary text-white rounded-lg focus:outline-none px-4 py-2" @click="updateSettings">
-				Save Changes
-			</button>
 		</div>
 	</main>
 </template>

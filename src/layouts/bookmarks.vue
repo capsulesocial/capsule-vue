@@ -42,7 +42,7 @@
 							>
 								<div class="flex flex-row justify-between pb-4 items-center">
 									<h6 class="text-primary text-base font-semibold">Filter by Category</h6>
-									<button class="focus:outline-none text-sm text-primary pr-1" @click="setFilter(``)">Show All</button>
+									<button class="focus:outline-none text-sm text-primary pr-1" @click="setFilter(``)">Clear</button>
 								</div>
 								<button
 									v-for="c in categoryList"

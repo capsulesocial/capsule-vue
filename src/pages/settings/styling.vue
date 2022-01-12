@@ -1,38 +1,49 @@
 <template>
 	<main>
 		<h2 class="text-primary font-semibold mb-4 text-sm">Display</h2>
-		<div class="flex mb-4 justify-between">
+		<div class="flex mb-4 justify-between items-center w-4/5">
 			<h3 class="w-56 font-semibold">App Background</h3>
-			<button class="text-primary focus:outline-none" @click="toggleSelector">
-				<img :src="$store.state.backgroundImage" class="w-32 h-24 rounded-lg border-2" />
-				Choose
+			<button class="text-primary focus:outline-none flex flex-row items-center" @click="toggleSelector">
+				<img :src="$store.state.backgroundImage" class="w-32 h-20 rounded-lg border-2" />
+				<p class="ml-4">Change</p>
 			</button>
 		</div>
 		<!-- Popup background selector -->
 		<div
 			v-if="showPopup"
-			class="popup fixed w-full h-screen bg-primary top-0 bottom-0 left-0 right-0 z-30 flex justify-center items-center items-start bg-opacity-50 modal-animation"
+			class="popup fixed w-full h-screen bg-primary top-0 bottom-0 left-0 right-0 z-30 flex justify-center items-center bg-opacity-50 modal-animation"
 		>
 			<!-- Inner space -->
 			<div
-				style="width: 750px"
-				class="popup rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop border-lightBorder"
+				style="width: 650px; backdrop-filter: blur(10px)"
+				class="popup rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop border-lightBorder card-animation"
 			>
 				<!-- Header and close icon -->
-				<div class="flex justify-between items-center p-6">
+				<div class="flex justify-between items-center p-6 pb-2">
 					<h4 class="text-xl font-semibold text-primary mb-4">Change your Capsule background</h4>
 					<button class="rounded-full bg-gray1 p-1 focus:outline-none" @click="toggleSelector"><XIcon /></button>
 				</div>
 				<!-- Background grid -->
-				<div class="grid grid-cols-2 gap-1 overflow-y-scroll py-6" style="height: 600px">
+				<div class="grid grid-cols-2 gap-1 overflow-y-scroll p-6 pt-4" style="height: 500px">
 					<button
 						v-for="x of backgrounds"
 						:key="x.label"
-						class="flex flex-col flex-shrink-0 items-center focus:outline-none"
+						class="flex flex-col flex-shrink-0 items-center focus:outline-none mb-4"
 						@click="setBackgroundImage(x.image)"
 					>
-						<img :src="x.image" class="rounded-lg w-64 h-48 border border-gray1" />
-						<span class="text-center text-primary">{{ x.label }}</span>
+						<img
+							v-if="$store.state.backgroundImage === x.image"
+							:src="x.image"
+							class="rounded-lg w-64 h-44 border border-primary shadow-lg"
+						/>
+						<img v-else :src="x.image" class="rounded-lg w-64 h-44 border border-gray1 shadow-lg" />
+						<span class="text-center text-primary mt-1">{{ x.label }}</span>
+					</button>
+				</div>
+				<!-- Select button -->
+				<div class="flex justify-center items-center p-6 pt-5">
+					<button class="bg-primary text-white rounded-lg focus:outline-none px-4 py-2" @click="confirmBackgroundImage">
+						Select
 					</button>
 				</div>
 			</div>
@@ -83,6 +94,14 @@ export default Vue.extend({
 		},
 		setBackgroundImage(img: string | ArrayBuffer): void {
 			this.$store.commit(`changeBackgroundImage`, img)
+		},
+		confirmBackgroundImage(): void {
+			if (this.$store.state.backgroundImage) {
+				this.toggleSelector()
+				this.$toastSuccess(`Your background has been updated`)
+			} else {
+				this.$toastError(`Unable to save your new background`)
+			}
 		},
 	},
 })
