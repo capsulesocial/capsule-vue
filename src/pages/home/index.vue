@@ -170,6 +170,11 @@ export default Vue.extend({
 	methods: {
 		getReposts,
 		async sortFeed(a: Algorithm) {
+			// Unauth
+			if (this.$store.state.session.id === `` && a === `FOLLOWING`) {
+				this.$store.commit(`settings/toggleUnauthPopup`)
+				return this.posts
+			}
 			const container = this.$refs.container as HTMLElement
 			container.addEventListener(`scroll`, this.handleScroll)
 			this.posts = []

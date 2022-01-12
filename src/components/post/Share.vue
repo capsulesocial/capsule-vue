@@ -122,6 +122,12 @@ export default Vue.extend({
 	},
 	created() {
 		this.isReposted = this.hasRepost
+		// Unauth
+		if (this.$store.state.session.id === ``) {
+			this.isReposted = () => {
+				return false
+			}
+		}
 		window.addEventListener(
 			`click`,
 			(e: any): void => {
@@ -143,6 +149,11 @@ export default Vue.extend({
 		sendRepost,
 		getReposts,
 		async handleRepost() {
+			// Unauth
+			if (this.$store.state.session.id === ``) {
+				this.$store.commit(`settings/toggleUnauthPopup`)
+				return
+			}
 			// Post has NOT been reposted
 			if (!this.isReposted()) {
 				await sendRepost(this.$store.state.session.id, this.cid, ``, `simple`)
@@ -182,6 +193,11 @@ export default Vue.extend({
 			this.$emit(`repostAction`)
 		},
 		async undoRepost(repostID: string) {
+			// Unauth
+			if (this.$store.state.session.id === ``) {
+				this.$store.commit(`settings/toggleUnauthPopup`)
+				return
+			}
 			await sendPostDeletion(`HIDE`, repostID, this.$store.state.session.id)
 		},
 		handleShare(type: string) {

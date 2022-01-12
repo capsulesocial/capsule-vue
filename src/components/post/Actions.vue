@@ -137,10 +137,11 @@
 				<!-- Comment box Container -->
 				<div v-show="!showEmotions" class="flex justify-between items-start mr-4" style="width: 60px; height: 60px">
 					<Avatar
-						:avatar="avatar"
+						:avatar="$store.state.session.id === `` ? require(`@/assets/images/avatars/unauthenticated.webp`) : avatar"
 						:authorID="$store.state.session.id"
 						class="rounded-xl flex-shrink-0 border-4"
 						:class="`border-` + selectedEmotionColor"
+						:noClick="true"
 					/>
 				</div>
 				<div
@@ -148,7 +149,7 @@
 					:class="showEmotions ? `` : `border p-4 bg-` + selectedEmotionColor"
 				>
 					<div class="rounded-xl overflow-hidden w-full" :style="showEmotions ? `height: 20rem` : `height: 10rem`">
-						<div class="flex flex-row">
+						<div v-if="this.$store.state.session.id !== ``" class="flex flex-row">
 							<!-- Front side: Type comment -->
 							<div v-show="!showEmotions" class="w-full flex bg-white">
 								<button class="h-auto flex-shrink-0 focus:outline-none" @click="showEmotions = !showEmotions">
@@ -241,6 +242,7 @@
 								</div>
 							</div>
 						</div>
+						<div v-else>Sign up</div>
 					</div>
 				</div>
 			</div>

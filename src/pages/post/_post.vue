@@ -335,6 +335,11 @@ export default Vue.extend({
 			return this.myReposts.has(this.$route.params.post)
 		},
 		async toggleFriend() {
+			// Unauth
+			if (this.$store.state.session.id === ``) {
+				this.$store.commit(`settings/toggleUnauthPopup`)
+				return
+			}
 			if (this.post) {
 				await followChange(
 					this.userIsFollowed ? `UNFOLLOW` : `FOLLOW`,

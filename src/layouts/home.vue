@@ -65,6 +65,7 @@
 		</div>
 		<!-- Onboarding Wizard -->
 		<OnboardingWizard v-if="$store.state.recentlyJoined" />
+		<UnauthPopup />
 	</main>
 </template>
 
@@ -76,6 +77,7 @@ import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 import PostEditor from '@/components/post/Editor.vue'
 import OnboardingWizard from '@/components/OnboardingWizard.vue'
+import UnauthPopup from '@/components/UnauthPopup.vue'
 
 import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
@@ -106,6 +108,7 @@ export default Vue.extend({
 		PostEditor,
 		Nodes,
 		OnboardingWizard,
+		UnauthPopup,
 	},
 	data(): IData {
 		return {
@@ -158,6 +161,11 @@ export default Vue.extend({
 			this.$store.commit(`setRecentBookmarks`, await Promise.all(bookmarkPreviews))
 		},
 		async toggleFriend(authorID: string) {
+			// Unauth
+			if (this.$store.state.session.id === ``) {
+				this.$store.commit(`settings/toggleUnauthPopup`)
+				return
+			}
 			if (authorID !== this.$store.state.session.id) {
 				await followChange(this.following.has(authorID) ? `UNFOLLOW` : `FOLLOW`, this.$store.state.session.id, authorID)
 				const data = await getFollowersAndFollowing(this.$store.state.session.id, true)

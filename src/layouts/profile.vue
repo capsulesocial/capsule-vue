@@ -79,6 +79,7 @@
 				</div>
 			</div>
 		</div>
+		<UnauthPopup />
 	</main>
 </template>
 
@@ -90,6 +91,7 @@ import MutualFollowersWidget from '@/components/widgets/MutualFollowers.vue'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
+import UnauthPopup from '@/components/UnauthPopup.vue'
 
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
@@ -118,6 +120,7 @@ export default Vue.extend({
 		Footer,
 		MutualFollowersWidget,
 		BrandedButton,
+		UnauthPopup,
 	},
 	data(): IData {
 		return {
@@ -202,6 +205,11 @@ export default Vue.extend({
 			}
 		},
 		async toggleFriend() {
+			// Unauth
+			if (this.$store.state.session.id === ``) {
+				this.$store.commit(`settings/toggleUnauthPopup`)
+				return
+			}
 			await followChange(
 				this.userIsFollowed ? `UNFOLLOW` : `FOLLOW`,
 				this.$store.state.session.id,

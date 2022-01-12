@@ -600,6 +600,11 @@ export default Vue.extend({
 			this.showQuoteDelete = !this.showQuoteDelete
 		},
 		async toggleQuoteRepost() {
+			// Unauth
+			if (this.$store.state.session.id === ``) {
+				this.$store.commit(`settings/toggleUnauthPopup`)
+				return
+			}
 			if (this.$store.state.session.avatar) {
 				this.myAvatar = await getPhotoFromIPFS(this.$store.state.session.avatar)
 			}

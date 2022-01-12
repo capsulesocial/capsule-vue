@@ -54,6 +54,7 @@
 			<div v-if="isReplying" class="border-l pl-2 mr-5 modal-animation mt-4">
 				<!-- Reply Input box -->
 				<div
+					v-if="$store.state.session.id !== ``"
 					:class="
 						$store.state.settings.darkMode
 							? 'bg-lightBG text-lightPrimaryText border-lightBorder'
