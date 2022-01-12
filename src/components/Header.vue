@@ -144,6 +144,12 @@ export default Vue.extend({
 			this.$router.push(`/login`)
 		},
 		togglePostEditor() {
+			// Check auth
+			if (this.$store.state.session.id === ``) {
+				// trigger popup
+				this.$store.commit(`settings/toggleUnauthPopup`)
+				return
+			}
 			if (this.$route.name !== `post`) {
 				if (this.$route.name === `home` && this.$store.state.widgets.primary === `editor`) {
 					this.$store.commit(`draft/handleDraftWidget`, true)

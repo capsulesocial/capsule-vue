@@ -111,6 +111,11 @@ export default Vue.extend({
 			}
 		},
 		async toggleFriend(authorID: string) {
+			// Unauth
+			if (this.$store.state.session.id === ``) {
+				this.$store.commit(`settings/toggleUnauthPopup`)
+				return
+			}
 			if (authorID !== this.$store.state.session.id) {
 				await followChange(this.following.has(authorID) ? `UNFOLLOW` : `FOLLOW`, this.$store.state.session.id, authorID)
 				const data = await getFollowersAndFollowing(this.$store.state.session.id, true)

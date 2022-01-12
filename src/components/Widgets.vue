@@ -104,6 +104,11 @@ export default Vue.extend({
 			this.$emit(`saveDraft`)
 		},
 		toggleConfigure() {
+			// Unauth
+			if (this.$store.state.session.id === ``) {
+				this.$store.commit(`settings/toggleUnauthPopup`)
+				return
+			}
 			this.configureWidgets = !this.configureWidgets
 			this.$emit(`overlay`)
 		},

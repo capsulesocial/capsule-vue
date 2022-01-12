@@ -24,7 +24,7 @@ export const state = (): RootState => ({
 	nodeURL: ``,
 	backgroundImage: null,
 	reposts: [],
-	recentlyJoined: true,
+	recentlyJoined: false,
 	recentBookmarks: new Set(),
 })
 

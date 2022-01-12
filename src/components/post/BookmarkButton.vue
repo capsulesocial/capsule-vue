@@ -26,6 +26,11 @@ export default Vue.extend({
 	methods: {
 		sendBookmarkEvent,
 		async handleBookmark() {
+			// Unauth
+			if (this.$store.state.session.id === ``) {
+				this.$store.commit(`settings/toggleUnauthPopup`)
+				return
+			}
 			if (!this.hasBookmark) {
 				// add bookmark
 				await sendBookmarkEvent(`ADD`, this.$store.state.session.id, this.postID)

@@ -7,11 +7,13 @@ export const namespace = `settings`
 export interface SettingState {
 	darkMode: boolean
 	recentlyPosted: boolean
+	showUnauthPopup: boolean
 }
 
 export const state = (): SettingState => ({
 	darkMode: true,
 	recentlyPosted: false,
+	showUnauthPopup: false,
 })
 
 export const getters: GetterTree<SettingState, RootState> = {}
@@ -19,6 +21,7 @@ export const getters: GetterTree<SettingState, RootState> = {}
 export const MutationType = {
 	CHANGE_DARK_MODE: `changeDarkMode`,
 	SET_RECENTLY_POSTED: `setRecentlyPosted`,
+	TOGGLE_UNAUTH_POPUP: `toggleUnauthPopup`,
 }
 
 export const mutations: MutationTree<SettingState> = {
@@ -27,6 +30,9 @@ export const mutations: MutationTree<SettingState> = {
 	},
 	[MutationType.SET_RECENTLY_POSTED]: (state, recentlyPosted: boolean) => {
 		state.recentlyPosted = recentlyPosted
+	},
+	[MutationType.TOGGLE_UNAUTH_POPUP]: (state) => {
+		state.showUnauthPopup = !state.showUnauthPopup
 	},
 }
 

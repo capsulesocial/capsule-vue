@@ -66,6 +66,11 @@ export default Vue.extend({
 	methods: {
 		getPhotoFromIPFS,
 		async toggleFriend() {
+			// Unauth
+			if (this.$store.state.session.id === ``) {
+				this.$store.commit(`settings/toggleUnauthPopup`)
+				return
+			}
 			if (this.profile.id !== this.$store.state.session.id) {
 				await followChange(this.isFollowing ? `UNFOLLOW` : `FOLLOW`, this.$store.state.session.id, this.profile.id)
 				this.isFollowing = !this.isFollowing

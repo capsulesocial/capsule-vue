@@ -20,10 +20,6 @@
 							"
 							class="fixed overflow-y-auto rounded-lg shadow-lg mr-5 bg-gradient-to-r from-lightBGStart to-lightBGStop border border-lightBorder modal-animation"
 							:class="showWidgets ? `` : `z-10`"
-							:toggleFriend="toggleFriend"
-							:following="following"
-							:followers="followers"
-							:userIsFollowed="userIsFollowed"
 						/>
 						<!-- Widgets -->
 						<aside
@@ -32,7 +28,7 @@
 							style="margin-left: 755px; width: 485px; min-height: calc(100vh - 150px); height: calc(100vh - 150px)"
 						>
 							<SupportWidget />
-							<RessourcesWidget @overlay="openOnboarding" />
+							<RessourcesWidget v-if="this.$store.state.session.id !== ``" @overlay="openOnboarding" />
 							<Footer />
 						</aside>
 					</section>
@@ -86,9 +82,9 @@ export default Vue.extend({
 		}
 	},
 	async created() {
-		// Check if logged in user
+		// unauth
 		if (this.$store.state.session.id === ``) {
-			this.$router.push(`/`)
+			return
 		}
 		// get logged in profile
 		const { profile } = await getProfile(this.$store.state.session.id)
@@ -107,6 +103,11 @@ export default Vue.extend({
 	},
 	methods: {
 		async toggleFriend(authorID: string) {
+			// Unauth
+			if (this.$store.state.session.id === ``) {
+				this.$store.commit(`settings/toggleUnauthPopup`)
+				return
+			}
 			if (authorID !== this.$store.state.session.id) {
 				await followChange(this.following.has(authorID) ? `UNFOLLOW` : `FOLLOW`, this.$store.state.session.id, authorID)
 				const data = await getFollowersAndFollowing(this.$store.state.session.id, true)
