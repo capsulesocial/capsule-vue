@@ -137,43 +137,56 @@ export default Vue.extend({
 	watch: {
 		$route(n, o) {
 			if (n.params.id !== o.params.id) {
-				location.reload()
+				this.getVisitingProfile()
 			}
 		},
 	},
-	async created() {
+	created() {
 		// Fetch visiting profile
-		const [{ profile: visitProfile }, profileExists] = await Promise.all([
-			getProfile(this.$route.params.id),
-			this.checkAccountExists(),
-		])
-		if (!profileExists) {
-			this.noProfileFound = true
-			this.$toastError(`Profile does not exist`)
-			return
-		}
-		this.visitProfile = visitProfile || createDefaultProfile(this.$route.params.id)
-		if (this.visitProfile.avatar !== ``) {
-			getPhotoFromIPFS(this.visitProfile.avatar).then((p) => {
-				this.visitAvatar = p
-			})
-		}
-		const { followers, following } = await getFollowersAndFollowing(this.$route.params.id)
-		this.followers = followers
-		this.following = following
-		this.userIsFollowed = followers.has(this.$store.state.session.id)
-
-		if (this.$store.state.session.id !== ``) {
-			// get my profile and avatar
-			this.getMyProfile()
-			const myConnections = await getFollowersAndFollowing(this.$store.state.session.id)
-			this.myFollowing = myConnections.following
-			// Get mutual followers list
-			this.mutuals = new Set([...followers].filter((p) => this.myFollowing.has(p)))
-			this.mutuals.forEach(this.getMutualProfiles) // TODO: This is not the best way to do this
-		}
+		this.getVisitingProfile()
 	},
 	methods: {
+		async getVisitingProfile() {
+			const [{ profile: visitProfile }, profileExists] = await Promise.all([
+				getProfile(this.$route.params.id),
+				this.checkAccountExists(),
+			])
+			if (!profileExists) {
+				this.noProfileFound = true
+				this.$toastError(`Profile does not exist`)
+				return
+			}
+			this.visitProfile = visitProfile || createDefaultProfile(this.$route.params.id)
+			this.visitAvatar = null
+			if (this.visitProfile.avatar !== ``) {
+				getPhotoFromIPFS(this.visitProfile.avatar).then((p) => {
+					this.visitAvatar = p
+				})
+			}
+			const { followers, following } = await getFollowersAndFollowing(this.$route.params.id)
+			this.followers = followers
+			this.following = following
+			this.userIsFollowed = followers.has(this.$store.state.session.id)
+
+			if (this.$store.state.session.id !== ``) {
+				// get my profile and avatar
+				this.getMyProfile()
+				const myConnections = await getFollowersAndFollowing(this.$store.state.session.id)
+				this.myFollowing = myConnections.following
+				// Get mutual followers list
+				this.mutuals = new Set([...followers].filter((p) => this.myFollowing.has(p)))
+				this.mutualProfiles = []
+				for (const p of this.mutuals) {
+					if (this.mutualProfiles.length > 3) {
+						return
+					}
+					const { profile } = await getProfile(p)
+					if (profile) {
+						this.mutualProfiles.push(profile)
+					}
+				}
+			}
+		},
 		async getMyProfile(update: boolean = false) {
 			const { profile } = await getProfile(this.$store.state.session.id, update)
 			this.myProfile = profile || createDefaultProfile(this.$store.state.session.id)
@@ -212,12 +225,6 @@ export default Vue.extend({
 				}
 
 				throw err
-			}
-		},
-		async getMutualProfiles(id: string) {
-			const { profile } = await getProfile(id)
-			if (profile) {
-				this.mutualProfiles.push(profile)
 			}
 		},
 	},

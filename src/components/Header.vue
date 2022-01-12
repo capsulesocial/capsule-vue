@@ -48,7 +48,7 @@
 				>
 				<nuxt-link
 					v-if="$store.state.session.id !== ``"
-					to="/settings"
+					to="/settings/account"
 					class="text-left w-full flex flex-row items-center text-gray5 mb-4"
 				>
 					<SettingsIcon class="flex-shrink-0 w-5 h-5 mr-2" />Settings</nuxt-link
