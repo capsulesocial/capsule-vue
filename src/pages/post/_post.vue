@@ -257,7 +257,9 @@ export default Vue.extend({
 		}
 		// Get featured photo
 		if (this.post.featuredPhotoCID) {
-			this.featuredPhoto = await getPhotoFromIPFS(this.post.featuredPhotoCID)
+			getPhotoFromIPFS(this.post.featuredPhotoCID).then((p) => {
+				this.featuredPhoto = p
+			})
 		}
 		// Convert markdown to HTML
 		this.content = marked.parse(this.post.content)
