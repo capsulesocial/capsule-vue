@@ -188,6 +188,8 @@ import { getReposts } from '@/backend/reposts'
 import { isPostBookmarkedByUser } from '@/backend/bookmarks'
 import { ICommentData } from '@/backend/comment'
 
+marked.use({ renderer: markedRenderer })
+
 interface IData {
 	post: Post | null
 	author: Profile | null
@@ -258,7 +260,6 @@ export default Vue.extend({
 			this.featuredPhoto = await getPhotoFromIPFS(this.post.featuredPhotoCID)
 		}
 		// Convert markdown to HTML
-		marked.use({ renderer: markedRenderer })
 		this.content = marked.parse(this.post.content)
 		// Get author profile
 		this.author = createDefaultProfile(this.post.authorID)
