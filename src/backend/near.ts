@@ -81,7 +81,7 @@ export async function walletLogin() {
 	const walletConnection = getWalletConnection()
 	if (!walletConnection.isSignedIn()) {
 		// Redirects to wallet login page
-		const redirectURL = new URL(`/`, domain)
+		const redirectURL = new URL(`/register`, domain)
 		await walletConnection.requestSignIn(nearConfig.contractName, undefined, redirectURL.toString())
 	}
 }
@@ -228,6 +228,7 @@ enum SetUserInfoStatus {
 	UsernameAlreadyExists,
 	UsernameTooLarge,
 	NearAccountAlreadyLinked,
+	AccountNotOnboarded,
 }
 
 export async function setUserInfoNEAR(username: string) {
@@ -244,6 +245,8 @@ export async function setUserInfoNEAR(username: string) {
 			return { success: false, error: `Username should not contain more than 18 characters!` }
 		case SetUserInfoStatus.NearAccountAlreadyLinked:
 			return { success: false, error: `Your NEAR Account is already linked to another username` }
+		case SetUserInfoStatus.AccountNotOnboarded:
+			return { success: false, error: `Account does not have a valid invite code` }
 		default:
 			throw new Error(`Unknown status encountered while updating info on NEAR`)
 	}

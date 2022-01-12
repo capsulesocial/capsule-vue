@@ -7,7 +7,7 @@
 		<section class="flex justify-center items-center" style="height: 86%">
 			<div class="flex flex-col items-center w-full p-14 -mt-5">
 				<!-- Step 0: Code redeem -->
-				<article v-if="!inviteCode && !isLoading" class="w-1/2">
+				<article v-if="!hasInviteCode && !(userInfo || nearWallet) && !isLoading" class="w-1/2">
 					<h1 class="font-semibold text-primary mb-10" style="font-size: 2.6rem">Welcome</h1>
 					<p class="text-center text-gray7 mt-10">
 						Blogchain is a place for writers to do great work and for readers to discover it. For now, during our beta
@@ -69,7 +69,7 @@
 					</div>
 				</article>
 				<!-- Step 1: Choose Login / register -->
-				<article v-show="inviteCode && !(userInfo || nearWallet) && !isLoading" class="w-1/2">
+				<article v-show="hasInviteCode && !(userInfo || nearWallet) && !isLoading" class="w-1/2">
 					<h1 class="font-semibold text-primary mb-10" style="font-size: 2.6rem">Sign up</h1>
 					<button
 						class="w-full rounded-lg bg-gray2 mb-4 py-2 flex justify-center items-center focus:outline-none"
@@ -221,6 +221,7 @@ import {
 } from '@/backend/near'
 import { sufficientFunds, torusVerifiers, TorusVerifiers } from '@/backend/utilities/config'
 import { requestOTP, requestSponsor } from '@/backend/funder'
+import { verifyCodeAndGetToken, verifyTokenAndOnboard } from '@/backend/invite'
 
 interface IData {
 	id: string
@@ -228,7 +229,7 @@ interface IData {
 	userInfo: null | TorusLoginResponse
 	username?: null | string
 	accountId: null | string
-	inviteCode: null | string
+	hasInviteCode: boolean
 	inputCode: string
 	isLoading: boolean
 	phoneNumber: string
@@ -261,7 +262,7 @@ export default Vue.extend({
 				network: `testnet`, // details for test net
 			}),
 			accountId: null,
-			inviteCode: null,
+			hasInviteCode: false,
 			inputCode: ``,
 			userInfo: null,
 			isLoading: false,
@@ -319,7 +320,8 @@ export default Vue.extend({
 				this.userInfo = await this.torus.triggerLogin(torusVerifiers[type])
 
 				this.accountId = getAccountIdFromPrivateKey(this.userInfo.privateKey)
-				this.username = await getUsernameNEAR(this.accountId)
+				const [username] = await Promise.all([getUsernameNEAR(this.accountId), this.onboardAccount()])
+				this.username = username
 				if (this.username) {
 					// If a username is found then proceed to login...
 					this.verify()
@@ -349,7 +351,8 @@ export default Vue.extend({
 				return false
 			}
 
-			;[this.username] = await Promise.all([getUsernameNEAR(this.accountId), this.checkFunds()])
+			const [username] = await Promise.all([getUsernameNEAR(this.accountId), this.checkFunds(), this.onboardAccount()])
+			this.username = username
 			if (this.username) {
 				this.$toastError(`You cannot login with wallet, please import your private key`)
 				removeNearPrivateKey(this.accountId)
@@ -366,7 +369,8 @@ export default Vue.extend({
 			this.isLoading = true
 
 			this.accountId = await generateAndSetKey()
-			;[this.username] = await Promise.all([getUsernameNEAR(this.accountId), this.checkFunds()])
+			const [username] = await Promise.all([getUsernameNEAR(this.accountId), this.checkFunds(), this.onboardAccount()])
+			this.username = username
 			if (this.username) {
 				this.$toastError(`You cannot login with implicit account, please import your private key`)
 				removeNearPrivateKey(this.accountId)
@@ -517,6 +521,45 @@ export default Vue.extend({
 			link.click()
 			URL.revokeObjectURL(link.href)
 			this.$toastSuccess(`Downloaded private key`)
+		},
+		async verifyCode() {
+			if (this.inputCode.length !== 8) {
+				this.$toastError(`Invite codes should be of length 8`)
+				return
+			}
+			try {
+				await verifyCodeAndGetToken(this.inputCode)
+				this.hasInviteCode = true
+			} catch (error: any) {
+				if (axios.isAxiosError(error) && error.response) {
+					if (error.response.status === 429) {
+						this.$toastWarning(`Too many requests`)
+						return
+					}
+					this.$toastError(error.response.data.error)
+					return
+				}
+				throw error
+			}
+		},
+		async onboardAccount() {
+			if (!this.accountId) {
+				this.$toastError(`AccountId missing`)
+				return
+			}
+			try {
+				await verifyTokenAndOnboard(this.accountId)
+			} catch (error: any) {
+				if (axios.isAxiosError(error) && error.response) {
+					if (error.response.status === 429) {
+						this.$toastWarning(`Too many requests`)
+						return
+					}
+					this.$toastError(error.response.data.error)
+					return
+				}
+				throw error
+			}
 		},
 	},
 })
