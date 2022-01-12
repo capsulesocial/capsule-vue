@@ -55,13 +55,22 @@ export default Vue.extend({
 			route: ``,
 		}
 	},
+	watch: {
+		followers(newValue) {
+			this.handleProfiles(newValue)
+		},
+	},
 	mounted() {
 		// Only display the most recent three followers
-		const followers = Array.from(this.followers)
-		const list = followers.slice(0, 3)
-		list.forEach(this.getFollowers)
+		this.handleProfiles(this.followers)
 	},
 	methods: {
+		handleProfiles(fList: Set<string>) {
+			this.profiles = []
+			const followers = Array.from(fList)
+			const list = followers.slice(0, 3)
+			list.forEach(this.getFollowers)
+		},
 		async getFollowers(p: string) {
 			const { profile } = await getProfile(p)
 			if (profile) {
