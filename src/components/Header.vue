@@ -116,6 +116,12 @@ export default Vue.extend({
 		}),
 		disconnect(): void {
 			this.endSession()
+			window.localStorage.removeItem(`accountId`)
+			const keystore = new keyStores.BrowserLocalStorageKeyStore()
+			keystore.clear()
+			this.$store.commit(`draft/clearDrafts`)
+			this.$store.commit(`reset`)
+			this.$store.commit(`widgets/reset`)
 			this.$router.push(`/login`)
 		},
 		handleDropdown(e: any): void {
@@ -135,13 +141,6 @@ export default Vue.extend({
 				res += `font-regular text-gray5`
 			}
 			return res
-		},
-		logout() {
-			this.endSession()
-			window.localStorage.removeItem(`accountId`)
-			const keystore = new keyStores.BrowserLocalStorageKeyStore()
-			keystore.clear()
-			this.$router.push(`/login`)
 		},
 		togglePostEditor() {
 			// Check auth

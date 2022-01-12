@@ -45,6 +45,7 @@ export const MutationType = {
 	DELETE_DRAFT: `deleteDraft`,
 	RESET: `reset`,
 	HANDLE_DRAFT_WIDGET: `handleDraftWidget`,
+	CLEAR_DRAFTS: `clearDrafts`,
 }
 
 export const mutations: MutationTree<DraftState> = {
@@ -129,5 +130,21 @@ export const mutations: MutationTree<DraftState> = {
 	},
 	[MutationType.HANDLE_DRAFT_WIDGET]: (state, v) => {
 		state.handleDraftWidget = v
+	},
+	[MutationType.CLEAR_DRAFTS]: (state) => {
+		state.drafts = [
+			{
+				title: ``,
+				subtitle: ``,
+				content: ``,
+				featuredPhotoCID: null,
+				featuredPhotoCaption: null,
+				tags: [],
+				category: ``,
+				timestamp: 0,
+			},
+		]
+		state.activeIndex = 0
+		state.handleDraftWidget = false
 	},
 }

@@ -16,6 +16,7 @@ export const MutationType = {
 	CHANGE_PRIMARY: `changePrimary`,
 	CHANGE_SECONDARY: `changeSecondary`,
 	CHANGE_SECONDARY2: `changeSecondary2`,
+	RESET: `reset`,
 }
 
 export const mutations: MutationTree<Widgets> = {
@@ -27,5 +28,10 @@ export const mutations: MutationTree<Widgets> = {
 	},
 	[MutationType.CHANGE_SECONDARY2]: (state, newSecondary2: string) => {
 		state.secondary2 = newSecondary2
+	},
+	[MutationType.RESET]: (state) => {
+		state.primary = `feed`
+		state.secondary = `drafts`
+		state.secondary2 = `tags`
 	},
 }

@@ -37,6 +37,7 @@ export const MutationType = {
 	RESET_REPOST: `resetRepost`,
 	SET_RECENT_BOOKMARKS: `setRecentBookmarks`,
 	WELCOME: `setWelcome`,
+	RESET: `reset`,
 }
 
 export const mutations: MutationTree<RootState> = {
@@ -68,6 +69,13 @@ export const mutations: MutationTree<RootState> = {
 	},
 	[MutationType.WELCOME]: (state, type: boolean) => {
 		state.recentlyJoined = type
+	},
+	[MutationType.RESET]: (state) => {
+		state.nodeURL = ``
+		state.backgroundImage = null
+		state.reposts = []
+		state.recentlyJoined = false
+		state.recentBookmarks = new Set()
 	},
 }
 
