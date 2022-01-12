@@ -7,7 +7,7 @@
 		<section class="flex justify-center items-center" style="height: 86%">
 			<div class="flex flex-col items-center w-full p-14 -mt-5">
 				<!-- Step 0: Code redeem -->
-				<article v-if="!inviteCode && !(userInfo || nearWallet) && !isLoading" class="w-1/2">
+				<article v-if="!hasInviteCode && !(userInfo || nearWallet) && !isLoading" class="w-1/2">
 					<h1 class="font-semibold text-primary mb-10" style="font-size: 2.6rem">Welcome</h1>
 					<p class="text-center text-gray7 mt-10">
 						Blogchain is a place for writers to do great work and for readers to discover it. For now, during our beta
@@ -69,7 +69,7 @@
 					</div>
 				</article>
 				<!-- Step 1: Choose Login / register -->
-				<article v-show="inviteCode && !(userInfo || nearWallet) && !isLoading" class="w-1/2">
+				<article v-show="hasInviteCode && !(userInfo || nearWallet) && !isLoading" class="w-1/2">
 					<h1 class="font-semibold text-primary mb-10" style="font-size: 2.6rem">Sign up</h1>
 					<button
 						class="w-full rounded-lg bg-gray2 mb-4 py-2 flex justify-center items-center focus:outline-none"
@@ -229,7 +229,7 @@ interface IData {
 	userInfo: null | TorusLoginResponse
 	username?: null | string
 	accountId: null | string
-	inviteCode: boolean
+	hasInviteCode: boolean
 	inputCode: string
 	isLoading: boolean
 	phoneNumber: string
@@ -262,7 +262,7 @@ export default Vue.extend({
 				network: `testnet`, // details for test net
 			}),
 			accountId: null,
-			inviteCode: false,
+			hasInviteCode: false,
 			inputCode: ``,
 			userInfo: null,
 			isLoading: false,
@@ -529,7 +529,7 @@ export default Vue.extend({
 			}
 			try {
 				await verifyCodeAndGetToken(this.inputCode)
-				this.inviteCode = true
+				this.hasInviteCode = true
 			} catch (error: any) {
 				if (axios.isAxiosError(error) && error.response) {
 					if (error.response.status === 429) {
