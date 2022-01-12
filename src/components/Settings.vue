@@ -256,6 +256,7 @@ export default Vue.extend({
 			this.changeAvatar(avatarCID)
 			await this.updateProfile()
 			getProfile(this.$store.state.session.id, true) // Update cached profile
+			this.updateSettings()
 		},
 		async downloadImage(cid: string) {
 			this.profilePic = await addPhotoToIPFS(cid)
