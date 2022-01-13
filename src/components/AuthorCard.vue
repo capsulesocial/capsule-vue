@@ -1,6 +1,6 @@
 <template>
 	<div class="border-t border-b py-5 my-5">
-		<div class="flex flex-row justify-between items-center">
+		<div class="flex flex-col xl:flex-row justify-between items-center">
 			<div>
 				<h6 class="text-sm text-gray6 mb-4 font-sans">Written By:</h6>
 				<div class="flex pr-5">
@@ -20,7 +20,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="mr-5">
+			<div class="mr-5 mt-3 xl:mt-0">
 				<FriendButton
 					v-if="authorID !== $store.state.session.id"
 					class="justify-self-end"

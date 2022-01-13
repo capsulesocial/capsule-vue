@@ -20,22 +20,19 @@
 		</div>
 		<!-- Wrapper -->
 		<div class="w-full flex justify-center">
-			<div class="flex flex-col" style="width: 1220px">
+			<div class="flex flex-col w-full xl:w-1220">
 				<!-- Header -->
-				<header class="w-full sticky top-0 py-5 bg-gradient-to-r z-10">
+				<header class="sticky hidden xl:block xl:min-w-1220 top-0 py-5 bg-gradient-to-r xl:z-10">
 					<Header :avatar="avatar" />
 				</header>
 				<!-- Body -->
-				<div>
-					<!-- Content -->
-					<section class="flex flex-row">
-						<nuxt-child
-							style="width: 1220px; min-height: calc(100vh - 80px); height: calc(100vh - 80px)"
-							class="fixed overflow-y-auto rounded-lg shadow-lg mr-5 p-6 pt-0 border border-lightBorder bg-gradient-to-r from-lightBGStart to-lightBGStop"
-							@showPhoto="showPhoto"
-						/>
-					</section>
-				</div>
+				<!-- Content -->
+				<section class="flex flex-row">
+					<nuxt-child
+						class="fixed w-full h-full xl:w-1220 xl:h-80 xl:min-h-80 overflow-y-auto rounded-lg shadow-lg mr-5 p-6 pt-0 border border-lightBorder bg-gradient-to-r from-lightBGStart to-lightBGStop"
+						@showPhoto="showPhoto"
+					/>
+				</section>
 			</div>
 		</div>
 		<UnauthPopup />

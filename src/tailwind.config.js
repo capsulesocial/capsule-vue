@@ -96,7 +96,25 @@ module.exports = {
       },
       boxShadow: {
         lg: '1px 2px 20px rgba(0, 0, 0, 0.07)',
-      }
+      },
+      width: {
+        1220: `1220px`,
+        760: `760px`,
+      },
+      minWidth: {
+        760: `760px`,
+        1220: `1220px`
+      },
+      maxWidth: {
+        760: `760px`,
+      },
+      height: {
+        80: `calc(100vh - 80px)`,
+        fit: `fit-content`
+      },
+      minHeight: {
+        80: `calc(100vh - 80px)`
+      },
     }
   },
   plugins: [
