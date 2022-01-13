@@ -3,9 +3,8 @@
 		<div class="flex flex-row justify-between p-6 pt-4 pb-2 items-center">
 			<h3 v-if="!checkRoute()" class="text-primary text-base font-semibold">Trending tags</h3>
 			<h3 v-if="checkRoute()" class="text-primary text-base font-semibold">Featured tags</h3>
-			<div class="flex flex-row justify-end">
+			<!-- <div class="flex flex-row justify-end">
 				<h3 v-if="$route.name === `discover`" class="self-center text-sm text-gray5">Top of</h3>
-				<!-- Dropdown filter -->
 				<div v-if="$route.name === `discover`" class="relative inline">
 					<button
 						class="flex justify-between items-center toggle rounded-lg focus:outline-none self-center capitalize text-gray5 font-bold text-sm text-mr-2 px-2"
@@ -16,7 +15,6 @@
 						<ChevronUp v-if="showFilter" />
 						<ChevronDown v-else />
 					</button>
-					<!-- Dropdown -->
 					<div
 						v-show="showFilter"
 						class="absolute z-10 top-0 bg-white rounded-lg shadow-lg p-2 mt-10 w-full text-sm modal-animation"
@@ -32,7 +30,7 @@
 						</button>
 					</div>
 				</div>
-			</div>
+			</div> -->
 		</div>
 		<div class="px-6 pb-4">
 			<article v-if="tags.length == 0">
@@ -49,8 +47,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import TagCard from '@/components/Tag.vue'
-import ChevronUp from '@/components/icons/ChevronUp.vue'
-import ChevronDown from '@/components/icons/ChevronDown.vue'
+// import ChevronUp from '@/components/icons/ChevronUp.vue'
+// import ChevronDown from '@/components/icons/ChevronDown.vue'
 
 import { getTags } from '@/backend/post'
 
@@ -63,8 +61,8 @@ interface IData {
 export default Vue.extend({
 	components: {
 		TagCard,
-		ChevronUp,
-		ChevronDown,
+		// ChevronUp,
+		// ChevronDown,
 	},
 	data(): IData {
 		return {

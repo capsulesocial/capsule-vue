@@ -182,6 +182,7 @@ export default Vue.extend({
 			const subtitleInput = this.$refs.subtitle as HTMLInputElement
 			const input = this.getInputHTML()
 			this.$store.commit(`draft/updateContent`, input)
+			this.$store.commit(`draft/setTimestamp`, new Date())
 			if (titleInput.value !== ``) {
 				this.$store.commit(`draft/updateTitle`, titleInput.value)
 			}

@@ -40,6 +40,7 @@ export const MutationType = {
 	ADD_TAG: `addTag`,
 	REMOVE_TAG: `removeTag`,
 	UPDATE_CATEGORY: `updateCategory`,
+	SET_TIMESTAMP: `setTimestamp`,
 	SET_ACTIVE_DRAFT: `setActiveDraft`,
 	CREATE_DRAFT: `createDraft`,
 	DELETE_DRAFT: `deleteDraft`,
@@ -75,6 +76,9 @@ export const mutations: MutationTree<DraftState> = {
 	},
 	[MutationType.UPDATE_CATEGORY]: (state, newCategory: string) => {
 		state.drafts[state.activeIndex].category = newCategory
+	},
+	[MutationType.SET_TIMESTAMP]: (state, newTimestamp) => {
+		state.drafts[state.activeIndex].timestamp = newTimestamp
 	},
 	[MutationType.SET_ACTIVE_DRAFT]: (state, index: number) => {
 		state.activeIndex = index

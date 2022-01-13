@@ -3,7 +3,7 @@
 		<!-- Title -->
 		<div class="flex flex-col flex-grow">
 			<h6 class="text-base font-semibold">{{ draft.title === `` ? `New Post` : draft.title }}</h6>
-			<p class="text-sm text-gray5">Last saved __ ago</p>
+			<p class="text-sm text-gray5">Last saved {{ $formatDate(draft.timestamp) }}</p>
 		</div>
 		<!-- Featured image -->
 		<div class="flex flex-shrink-0 items-center mx-4">
