@@ -133,7 +133,7 @@
 					"
 				></div>
 			</div>
-			<div class="flex items-start">
+			<div class="flex flex-col xl:flex-row items-start">
 				<!-- Comment box Container -->
 				<div v-show="!showEmotions" class="flex justify-between items-start mr-4" style="width: 60px; height: 60px">
 					<Avatar

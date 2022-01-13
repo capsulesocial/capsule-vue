@@ -2,7 +2,7 @@
 	<div class="flex flex-grow relative items-center">
 		<!-- Comment filter -->
 		<div class="flex flex-row w-full justify-end items-center">
-			<h6>Sort by:</h6>
+			<h6 class="hidden xl:block">Sort by:</h6>
 			<button
 				class="toggle focus:outline-none flex justify-between items-center border rounded-lg px-4 ml-4 text-sm shadow-lg w-32"
 				@click.stop="showFilter = !showFilter"
@@ -23,7 +23,7 @@
 			style="margin-top: 28px"
 		>
 			<!-- Select charge of reaction button -->
-			<div class="hotzone flex justify-start mb-6">
+			<div class="hotzone flex flex-col xl:flex-row justify-start mb-6">
 				<button
 					class="hotzone focus:outline-none border-b-2 mr-4"
 					:class="feeling === `positive` ? `border-positive` : `border-transparent`"
@@ -48,7 +48,7 @@
 			</div>
 			<!-- Show faces -->
 			<div
-				class="grid grid-cols-5 gap-x-1 gap-y-4 overflow-y-auto overflow-x-hidden faces"
+				class="grid grid-cols-1 xl:grid-cols-5 gap-x-1 gap-y-4 overflow-y-auto overflow-x-hidden faces"
 				style="height: 225px; padding-right: 5px"
 			>
 				<button

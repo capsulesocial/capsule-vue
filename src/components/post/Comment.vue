@@ -13,12 +13,15 @@
 				</span>
 			</div>
 			<!-- Dashed bubble -->
-			<div class="border rounded-lg w-full flex justify-between border-dashed" :style="getStyle(`border-`)">
+			<div
+				class="border rounded-lg w-full flex flex-wrap xl:flex-no-wrap justify-between border-dashed"
+				:style="getStyle(`border-`)"
+			>
 				<!-- Text -->
 				<div class="flex flex-col flex-grow w-full px-4 py-2">
 					<!-- Top row: name, id, timestamp -->
-					<div class="flex">
-						<nuxt-link :to="`/id/` + authorID" class="flex mr-4 flex-row items-center">
+					<div class="flex flex-col xl:flex-row">
+						<nuxt-link :to="`/id/` + authorID" class="flex flex-col xl:flex-row mr-4 items-center">
 							<span class="font-medium">
 								{{ name }}
 							</span>
