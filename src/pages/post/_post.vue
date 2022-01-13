@@ -170,7 +170,7 @@
 import Vue from 'vue'
 import { marked } from 'marked'
 import DOMPurify from 'dompurify'
-import { markedRenderer } from '@/plugins/markedExtensions'
+import { ipfsImgExtension, markedRenderer } from '@/plugins/markedExtensions'
 import PostActions from '@/components/post/Actions.vue'
 import AuthorCard from '@/components/AuthorCard.vue'
 import TagCard from '@/components/Tag.vue'
@@ -190,7 +190,7 @@ import { isPostBookmarkedByUser } from '@/backend/bookmarks'
 import { ICommentData } from '@/backend/comment'
 import { parseRegularPost } from '@/plugins/QuillImage'
 
-marked.use({ renderer: markedRenderer })
+marked.use({ renderer: markedRenderer, extensions: [ipfsImgExtension] })
 
 interface IData {
 	post: Post | null
@@ -258,7 +258,7 @@ export default Vue.extend({
 			throw new Error(`Post is null!`)
 		}
 
-		this.post = await parseRegularPost(post)
+		this.post = parseRegularPost(post)
 		// Get featured photo
 		if (this.post.featuredPhotoCID) {
 			getPhotoFromIPFS(this.post.featuredPhotoCID).then((p) => {
