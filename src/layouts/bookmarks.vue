@@ -77,6 +77,7 @@
 				</div>
 			</div>
 		</div>
+		<UnauthPopup />
 	</main>
 </template>
 
@@ -85,6 +86,7 @@ import Vue from 'vue'
 import Nodes from '@/components/Nodes.vue'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
+import UnauthPopup from '@/components/UnauthPopup.vue'
 import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
 import { IPostResponse } from '@/backend/post'
@@ -104,6 +106,7 @@ export default Vue.extend({
 		Nodes,
 		Header,
 		Footer,
+		UnauthPopup,
 	},
 	data(): IData {
 		return {
@@ -132,6 +135,9 @@ export default Vue.extend({
 	},
 	methods: {
 		setFilter(c: string) {
+			if (this.$store.state.session.id === ``) {
+				return
+			}
 			this.fetchPosts(c)
 			this.active = c
 		},

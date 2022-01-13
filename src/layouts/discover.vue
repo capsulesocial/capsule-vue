@@ -60,6 +60,7 @@
 				</div>
 			</div>
 		</div>
+		<UnauthPopup />
 	</main>
 </template>
 
@@ -67,6 +68,7 @@
 import Vue from 'vue'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
+import UnauthPopup from '@/components/UnauthPopup.vue'
 import TagsWidget from '@/components/widgets/Tags.vue'
 import Nodes from '@/components/Nodes.vue'
 
@@ -86,6 +88,7 @@ export default Vue.extend({
 		Header,
 		Footer,
 		Nodes,
+		UnauthPopup,
 	},
 	data(): IData {
 		return {

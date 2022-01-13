@@ -29,14 +29,14 @@
 				<nuxt-link
 					v-if="$store.state.session.id === ``"
 					to="/login"
-					class="text-center flex flex-row items-center text-gray5 mb-4 w-24 px-4 mx-2"
+					class="text-left flex flex-row items-center text-gray5 mb-4 w-24 mx-2"
 					>Log In</nuxt-link
 				>
 				<!-- Unauthenticated: Register -->
 				<nuxt-link
 					v-if="$store.state.session.id === ``"
 					to="/register"
-					class="text-center flex flex-row items-center text-gray5 w-24 px-4 mx-2"
+					class="text-left flex flex-row items-center text-gray5 w-24 mx-2"
 					>Register</nuxt-link
 				>
 				<!-- Authenticated -->

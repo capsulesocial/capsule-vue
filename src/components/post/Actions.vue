@@ -148,8 +148,11 @@
 					class="flex rounded-xl w-full overflow-hidden border border-lightBorder"
 					:class="showEmotions ? `` : `border p-4 bg-` + selectedEmotionColor"
 				>
-					<div class="rounded-xl overflow-hidden w-full" :style="showEmotions ? `height: 20rem` : `height: 10rem`">
-						<div v-if="this.$store.state.session.id !== ``" class="flex flex-row">
+					<div
+						class="rounded-xl overflow-hidden w-full flex justify-center items-center"
+						:style="showEmotions ? `height: 20rem` : `height: 10rem`"
+					>
+						<div v-if="this.$store.state.session.id !== ``" class="flex flex-row w-full">
 							<!-- Front side: Type comment -->
 							<div v-show="!showEmotions" class="w-full flex bg-white">
 								<button class="h-auto flex-shrink-0 focus:outline-none" @click="showEmotions = !showEmotions">
@@ -242,7 +245,10 @@
 								</div>
 							</div>
 						</div>
-						<div v-else>Sign up</div>
+						<div v-else class="text-sm pt-3 text-gray5">
+							<button class="text-primary focus:outline-none ml-1" @click="$router.push(`/register`)">Sign up</button>
+							to comment on this post and be part of the debate
+						</div>
 					</div>
 				</div>
 			</div>
