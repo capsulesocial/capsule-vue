@@ -1,5 +1,14 @@
 <template>
-	<main class="h-screen p-0 m-0 bg-img" :style="{ backgroundImage: `url(` + $store.state.backgroundImage + `)` }">
+	<main
+		class="h-screen p-0 m-0 bg-img"
+		:style="{
+			background:
+				`linear-gradient(180deg, rgba(46, 85, 106, 0.02) 0%, rgba(46, 85, 106, 0) 50%), url(` +
+				$store.state.backgroundImage +
+				`)`,
+			backgroundSize: `contain`,
+		}"
+	>
 		<!-- Wrapper -->
 		<div class="w-full flex justify-center">
 			<div class="flex flex-col" style="width: 1220px">
@@ -10,7 +19,7 @@
 				<!-- Body -->
 				<div>
 					<!-- Content -->
-					<section class="flex flex-row">
+					<section class="flex flex-row overflow-x-hidden relative">
 						<PostEditor
 							ref="editor"
 							style="
@@ -21,12 +30,19 @@
 							"
 							class="fixed overflow-y-auto rounded-t-lg shadow-lg mr-5 p-8 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop border border-lightBorder modal-animation"
 							@update="updateWordCount"
+							@isWriting="hideDraftButton"
 						/>
 						<div
-							class="fixed bottom-0 z-10 m-4 px-5 py-3 bg-gradient-to-r from-lightBGStart to-lightBGStop border-lightBorder rounded-lg shadow-lg test-xs text-gray5 modal-animation card-animation-delay1"
+							id="draftButton"
+							class="absolute bottom-0 z-10 m-4 px-5 py-3 animatedraftButton bg-gradient-to-r from-lightBGStart to-lightBGStop border-lightBorder rounded-lg shadow-lg test-xs text-gray5 modal-animation card-animation-delay1 flex"
+							style="backdrop-filter: blur(10px)"
 						>
-							Resume writing?<button class="text-primary ml-2 focus:outline-none" @click="showDraftsPopup">
+							Resume writing?
+							<button v-if="!buttonHidden" class="text-primary ml-2 focus:outline-none" @click="showDraftsPopup">
 								Show drafts
+							</button>
+							<button v-else class="text-primary ml-2 focus:outline-none" @click="showDraftsPopup">
+								<PencilIcon class="fill-current p-1" />
 							</button>
 						</div>
 						<!-- Widgets -->
@@ -56,6 +72,7 @@ import EditorWidgets from '@/components/widgets/Editor.vue'
 import PostEditor from '@/components/post/Editor.vue'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
+import PencilIcon from '@/components/icons/Pencil.vue'
 import DraftsPopup from '@/components/widgets/DraftsPopup.vue'
 import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
@@ -65,6 +82,7 @@ interface IData {
 	avatar: string | ArrayBuffer | null
 	wordCount: number
 	showDrafts: boolean
+	buttonHidden: boolean
 }
 
 export default Vue.extend({
@@ -74,6 +92,7 @@ export default Vue.extend({
 		Header,
 		Footer,
 		DraftsPopup,
+		PencilIcon,
 	},
 	data(): IData {
 		return {
@@ -81,6 +100,7 @@ export default Vue.extend({
 			avatar: null,
 			wordCount: 0,
 			showDrafts: false,
+			buttonHidden: false,
 		}
 	},
 	async created() {
@@ -110,6 +130,19 @@ export default Vue.extend({
 		updateWordCount(num: number) {
 			this.wordCount = num
 		},
+		hideDraftButton(value: boolean) {
+			const draftButton = document.getElementById(`draftButton`)
+			if (!draftButton) {
+				return
+			}
+			if (value === true) {
+				draftButton.classList.add(`hidedraftButton`)
+				this.buttonHidden = true
+			} else {
+				draftButton.classList.remove(`hidedraftButton`)
+				this.buttonHidden = false
+			}
+		},
 		showDraftsPopup(): void {
 			if (!this.showDrafts) {
 				// @ts-ignore
@@ -125,6 +158,13 @@ export default Vue.extend({
 .bg-img {
 	background-attachment: fixed;
 	background-size: cover;
+}
+.animatedraftButton {
+	transition: all 0.4s;
+}
+.hidedraftButton {
+	transform: translateX(-9.5rem);
+	padding: 0.7rem;
 }
 /* Hide scrollbar for Chrome, Safari and Opera */
 aside::-webkit-scrollbar {

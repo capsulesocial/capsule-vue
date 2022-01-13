@@ -1,5 +1,14 @@
 <template>
-	<main class="h-screen p-0 m-0 bg-img" :style="{ backgroundImage: `url(` + $store.state.backgroundImage + `)` }">
+	<main
+		class="h-screen p-0 m-0 bg-img"
+		:style="{
+			background:
+				`linear-gradient(180deg, rgba(46, 85, 106, 0.02) 0%, rgba(46, 85, 106, 0) 50%), url(` +
+				$store.state.backgroundImage +
+				`)`,
+			backgroundSize: `contain`,
+		}"
+	>
 		<!-- Wrapper -->
 		<div class="w-full flex justify-center">
 			<div class="flex flex-col" style="width: 1220px">
@@ -51,6 +60,7 @@
 				</div>
 			</div>
 		</div>
+		<UnauthPopup />
 	</main>
 </template>
 
@@ -58,6 +68,7 @@
 import Vue from 'vue'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
+import UnauthPopup from '@/components/UnauthPopup.vue'
 import TagsWidget from '@/components/widgets/Tags.vue'
 import Nodes from '@/components/Nodes.vue'
 
@@ -77,6 +88,7 @@ export default Vue.extend({
 		Header,
 		Footer,
 		Nodes,
+		UnauthPopup,
 	},
 	data(): IData {
 		return {
@@ -129,6 +141,6 @@ export default Vue.extend({
 <style>
 .bg-img {
 	background-attachment: fixed;
-	background-size: cover;
+	background-size: contain;
 }
 </style>

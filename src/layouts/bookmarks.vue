@@ -1,5 +1,14 @@
 <template>
-	<main class="h-screen p-0 m-0 bg-img" :style="{ backgroundImage: `url(` + $store.state.backgroundImage + `)` }">
+	<main
+		class="h-screen p-0 m-0 bg-img"
+		:style="{
+			background:
+				`linear-gradient(180deg, rgba(46, 85, 106, 0.02) 0%, rgba(46, 85, 106, 0) 50%), url(` +
+				$store.state.backgroundImage +
+				`)`,
+			backgroundSize: `contain`,
+		}"
+	>
 		<!-- Wrapper -->
 		<div class="w-full flex justify-center">
 			<div class="flex flex-col" style="width: 1220px">
@@ -68,6 +77,7 @@
 				</div>
 			</div>
 		</div>
+		<UnauthPopup />
 	</main>
 </template>
 
@@ -76,6 +86,7 @@ import Vue from 'vue'
 import Nodes from '@/components/Nodes.vue'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
+import UnauthPopup from '@/components/UnauthPopup.vue'
 import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
 import { IPostResponse } from '@/backend/post'
@@ -95,6 +106,7 @@ export default Vue.extend({
 		Nodes,
 		Header,
 		Footer,
+		UnauthPopup,
 	},
 	data(): IData {
 		return {
@@ -123,6 +135,9 @@ export default Vue.extend({
 	},
 	methods: {
 		setFilter(c: string) {
+			if (this.$store.state.session.id === ``) {
+				return
+			}
 			this.fetchPosts(c)
 			this.active = c
 		},
@@ -136,6 +151,6 @@ export default Vue.extend({
 <style>
 .bg-img {
 	background-attachment: fixed;
-	background-size: cover;
+	background-size: contain;
 }
 </style>

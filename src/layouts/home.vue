@@ -1,5 +1,14 @@
 <template>
-	<main class="h-screen p-0 m-0 bg-img" :style="{ backgroundImage: `url(` + $store.state.backgroundImage + `)` }">
+	<main
+		class="h-screen p-0 m-0 bg-img overflow-y-hidden"
+		:style="{
+			background:
+				`linear-gradient(180deg, rgba(46, 85, 106, 0.02) 0%, rgba(46, 85, 106, 0) 50%), url(` +
+				$store.state.backgroundImage +
+				`)`,
+			backgroundSize: `contain`,
+		}"
+	>
 		<!-- Wrapper -->
 		<div class="w-full flex justify-center">
 			<div class="flex flex-col" style="width: 1220px">
@@ -32,7 +41,7 @@
 								height: calc(100vh - 150px);
 								backdrop-filter: blur(10px);
 							"
-							class="fixed overflow-y-auto rounded-lg shadow-lg p-6 bg-gradient-to-r from-lightBGStart to-lightBGStop modal-animation"
+							class="fixed overflow-y-auto overflow-x-hidden rounded-lg shadow-lg p-6 bg-gradient-to-r from-lightBGStart to-lightBGStop modal-animation"
 						/>
 						<nuxt-child
 							v-else
@@ -193,6 +202,6 @@ export default Vue.extend({
 <style>
 .bg-img {
 	background-attachment: fixed;
-	background-size: cover;
+	background-size: contain;
 }
 </style>

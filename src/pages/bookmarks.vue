@@ -33,6 +33,10 @@ export default Vue.extend({
 		}
 	},
 	created() {
+		// Check if logged in user
+		if (this.$store.state.session.id === ``) {
+			return
+		}
 		getFollowersAndFollowing(this.$store.state.session.id).then(({ following }) => {
 			this.following = following
 		})

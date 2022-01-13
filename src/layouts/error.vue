@@ -1,5 +1,14 @@
 <template>
-	<main class="h-screen p-0 m-0 bg-img" :style="{ backgroundImage: `url(` + $store.state.backgroundImage + `)` }">
+	<main
+		class="h-screen p-0 m-0 bg-img"
+		:style="{
+			background:
+				`linear-gradient(180deg, rgba(46, 85, 106, 0.02) 0%, rgba(46, 85, 106, 0) 50%), url(` +
+				$store.state.backgroundImage +
+				`)`,
+			backgroundSize: `contain`,
+		}"
+	>
 		<div class="w-full flex justify-center">
 			<div class="flex flex-col" style="width: 1220px">
 				<!-- Header -->
@@ -7,7 +16,7 @@
 					<Header :avatar="myAvatar" />
 				</header>
 				<h1 class="text-4xl font-bold text-red-500 text-center">{{ error['statusCode'] }}: {{ error['message'] }}</h1>
-				<h6 class="text-xl text-center p-10">😰 We're so sorry... An error has occurred 😓</h6>
+				<h6 class="text-xl text-center p-10">An error has occurred</h6>
 				<div class="flex justify-center">
 					<BrandedButton text="Return" :action="goBack" class="w-64" />
 				</div>

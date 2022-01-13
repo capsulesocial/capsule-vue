@@ -147,8 +147,7 @@ export default Vue.extend({
 				this.$toastWarning(`looks like you don't have an account`)
 				this.$router.push(`/register`)
 			} catch (e) {
-				// eslint-disable-next-line no-console
-				console.log(e)
+				this.$toastError(`oops, ` + e)
 				this.isLoading = false
 			}
 		},

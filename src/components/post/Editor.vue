@@ -54,11 +54,12 @@
 
 				<div
 					v-if="this.$store.state.widgets.primary === `editor` && this.$route.name === `home`"
-					class="absolute bottom-0 right-0 z-10 m-4 px-5 py-3 bg-gradient-to-r from-lightBGStart to-lightBGStop border-lightBorder rounded-lg shadow-lg test-xs text-gray5 modal-animation card-animation-delay1"
+					id="metaButton"
+					class="absolute bottom-0 right-0 z-10 m-4 px-5 py-3 mb-8 bg-gradient-to-r from-lightBGStart to-lightBGStop border-lightBorder rounded-lg shadow-lg test-xs text-gray5 modal-animation card-animation-delay1 animatedraftButton flex"
 				>
-					Time to publish?<button class="text-primary ml-2 focus:outline-none" @click="$router.push(`/post`)">
-						Add meta
-					</button>
+					<p v-if="!isCollapsed">Time to publish?</p>
+					<PencilIcon v-else class="fill-current p-1" @close="$router.push(`/post`)" />
+					<button class="text-primary ml-2 focus:outline-none" @click="$router.push(`/post`)">Add meta</button>
 				</div>
 			</section>
 		</div>
@@ -73,6 +74,7 @@ import Quill from 'quill'
 // @ts-ignore
 import QuillMarkdown from 'quilljs-markdown'
 import XIcon from '@/components/icons/X.vue'
+import PencilIcon from '@/components/icons/Pencil.vue'
 import { createRegularPost, sendRegularPost } from '@/backend/post'
 
 interface IData {
@@ -87,6 +89,7 @@ interface IData {
 	hasPosted: boolean
 	isSaving: string
 	isX: boolean
+	isCollapsed: boolean
 }
 
 const toolbarOptions = [
@@ -110,6 +113,7 @@ const options = {
 export default Vue.extend({
 	components: {
 		XIcon,
+		PencilIcon,
 	},
 	data(): IData {
 		let input: string = ``
@@ -131,6 +135,7 @@ export default Vue.extend({
 			hasPosted: false,
 			isSaving: `false`,
 			isX: false,
+			isCollapsed: false,
 		}
 	},
 	beforeDestroy() {
@@ -149,10 +154,25 @@ export default Vue.extend({
 	},
 	mounted() {
 		Quill.register(`modules/counter`, (quill: Quill) => {
+			const metaButton = document.getElementById(`metaButton`)
 			quill.on(`text-change`, () => {
+				this.$emit(`isWriting`, true)
+				if (metaButton) {
+					metaButton.classList.add(`hidemetaButton`)
+				}
+				this.isCollapsed = true
 				const text = quill.getText()
 				const n = text.split(/\s+/).length
 				this.updateWordCount(n)
+			})
+			quill.on(`selection-change`, (range) => {
+				if (!range) {
+					this.$emit(`isWriting`, false)
+					if (metaButton) {
+						metaButton.classList.remove(`hidemetaButton`)
+					}
+					this.isCollapsed = false
+				}
 			})
 		})
 		const editor = new Quill(`#editor`, options)
@@ -381,6 +401,10 @@ textarea#subtitle {
 	overflow-y: hidden;
 	min-height: 2.5rem;
 	box-sizing: border-box;
+}
+.hidemetaButton {
+	transform: translateX(6.4rem);
+	padding: 0.7rem;
 }
 .content {
 	text-align: justify;

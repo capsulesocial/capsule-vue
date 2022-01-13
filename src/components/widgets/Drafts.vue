@@ -12,7 +12,10 @@
 				<button class="text-sm focus:outline-none" @click="handleDraftPopup">Show all</button>
 			</p>
 		</div>
-		<div v-else>Log in to create drafts</div>
+		<div v-else class="text-sm pt-3 text-gray5">
+			<button class="text-primary focus:outline-none ml-1" @click="$router.push(`/register`)">Sign up</button>
+			to create drafts and save content
+		</div>
 	</article>
 </template>
 
