@@ -25,6 +25,19 @@ const ipfsConfig: Options = {
 async function createIPFSInterface(): Promise<IPFSInterface> {
 	const node = await create(ipfsConfig)
 
+	function maintainConnection() {
+		setTimeout(async () => {
+			const peers = await node.swarm.peers()
+			for (const p of peers) {
+				await node.swarm.disconnect(p.addr)
+				await node.swarm.connect(p.addr)
+			}
+			maintainConnection()
+		}, 120000)
+	}
+
+	maintainConnection()
+
 	const getData = async (cid: string) => {
 		const content: Buffer[] = []
 		for await (const chunk of node.cat(cid)) {
