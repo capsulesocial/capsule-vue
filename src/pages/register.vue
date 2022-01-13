@@ -332,8 +332,7 @@ export default Vue.extend({
 				await this.checkFunds()
 				this.isLoading = false
 			} catch (e) {
-				// eslint-disable-next-line no-console
-				console.log(e)
+				this.$toastError(`oops, ` + e)
 				this.isLoading = false
 			}
 		},

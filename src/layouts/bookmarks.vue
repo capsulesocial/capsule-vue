@@ -1,5 +1,14 @@
 <template>
-	<main class="h-screen p-0 m-0 bg-img" :style="{ backgroundImage: `url(` + $store.state.backgroundImage + `)` }">
+	<main
+		class="h-screen p-0 m-0 bg-img"
+		:style="{
+			background:
+				`linear-gradient(180deg, rgba(46, 85, 106, 0.02) 0%, rgba(46, 85, 106, 0) 50%), url(` +
+				$store.state.backgroundImage +
+				`)`,
+			backgroundSize: `contain`,
+		}"
+	>
 		<!-- Wrapper -->
 		<div class="w-full flex justify-center">
 			<div class="flex flex-col" style="width: 1220px">
@@ -136,6 +145,6 @@ export default Vue.extend({
 <style>
 .bg-img {
 	background-attachment: fixed;
-	background-size: cover;
+	background-size: contain;
 }
 </style>

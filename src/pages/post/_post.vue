@@ -110,7 +110,7 @@
 						target="_blank"
 						class="flex justify-between bg-gray1 rounded-lg text-gray5 px-3 py-1"
 					>
-						<span>IPFS dag get </span>
+						<span>IPFS address </span>
 						<span>{{ $route.params.post }}</span>
 					</a>
 				</div>
