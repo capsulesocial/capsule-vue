@@ -5,18 +5,18 @@
 		:style="showQuoteRepost ? `background-color: #fff` : `backdrop-filter: blur(10px)`"
 	>
 		<!-- Inner post area -->
-		<div v-if="post && author" style="width: 760px; max-width: 760px; height: fit-content">
+		<div v-if="post && author" class="w-full xl:w-760 xl:max-w-760 h-fit">
 			<!-- Magic header that disappears on scroll down -->
 			<header
 				id="header"
-				class="page-header flex items-center sticky top-0 z-10 py-2 px-4 rounded-b-lg bg-gradient-to-r from-lightBGStart to-lightBGStop"
-				style="width: 760px; max-width: 760px; backdrop-filter: blur(10px)"
+				class="page-header w-full xl:w-760 xl:max-w-760 flex items-center sticky top-0 z-10 py-2 xl:px-4 rounded-b-lg bg-gradient-to-r from-lightBGStart to-lightBGStop"
+				style="backdrop-filter: blur(10px)"
 			>
 				<div class="trigger-menu-wrapper flex justify-center w-full py-2 ease-in-out">
-					<div class="md:min-w-max md:max-w-3xl w-full flex justify-between">
+					<div class="xl:min-w-max xl:max-w-3xl w-full flex justify-between">
 						<!-- Left side: name, avatar, date -->
 						<div class="items-center flex">
-							<Avatar :avatar="authorAvatar" :authorID="post.authorID" size="w-10 h-10" class="mr-4" />
+							<Avatar :avatar="authorAvatar" :authorID="post.authorID" size="w-10 h-10" class="mr-4 flex-shrink-0" />
 							<div class="pr-8">
 								<nuxt-link :to="`/id/` + post.authorID" class="font-semibold">{{ author.name }}</nuxt-link>
 								<h6 class="font-sans text-sm text-gray6">{{ $formatDate(post.timestamp) }}</h6>
@@ -108,10 +108,10 @@
 					<a
 						:href="`https://ipfs.io/api/v0/dag/get?arg=` + $route.params.post"
 						target="_blank"
-						class="flex justify-between bg-gray1 rounded-lg text-gray5 px-3 py-1"
+						class="flex flex-col xl:flex-row justify-between bg-gray1 rounded-lg text-gray5 px-3 py-1"
 					>
 						<span>IPFS address </span>
-						<span>{{ $route.params.post }}</span>
+						<span class="break-words">{{ $route.params.post }}</span>
 					</a>
 				</div>
 				<AuthorCard
