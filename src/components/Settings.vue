@@ -109,7 +109,7 @@
 		</div> -->
 
 		<!-- Submit button -->
-		<div class="flex justify-end">
+		<div v-if="$store.state.session.id === $route.params.id" class="flex justify-end">
 			<BrandedButton :class="hasChanged() ? '' : 'opacity-50'" :action="updateSettings" :text="`Save Changes`" />
 		</div>
 	</div>

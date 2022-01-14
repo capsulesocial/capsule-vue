@@ -39,7 +39,7 @@
 					class="rounded-lg mb-10 w-5/6 shadow-lg"
 				/>
 				<h6 class="text-xl mb-5 font-bold">{{ getTitle() }}</h6>
-				<EditProfile v-show="step === 5" :updateProfileMethod="getMyProfile" class="mb-4" />
+				<EditProfile v-show="step === 5" ref="settings" :updateProfileMethod="getMyProfile" class="mb-4" />
 				<p class="text-gray5 mb-10 px-10">
 					{{ getText() }}
 				</p>
@@ -138,6 +138,8 @@ export default Vue.extend({
 		setStep(i: number | null) {
 			i === null ? (this.step = this.step + 1) : (this.step = i)
 			if (this.step >= 6) {
+				// @ts-ignore
+				this.$refs.settings.updateSettings()
 				this.closeWizard()
 			}
 		},
