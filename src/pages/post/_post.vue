@@ -97,7 +97,7 @@
 						:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 						class="editable prose max-w-none content break-words"
 					>
-						<component :is="vm" v-if="vm"></component>
+						<component :is="readerViewElement" v-if="readerViewElement"></component>
 					</div>
 				</article>
 
@@ -169,10 +169,8 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { marked } from 'marked'
-import DOMPurify from 'dompurify'
 import readerViewFactory from './readerView'
-import { ipfsImgExtension, markedRenderer } from '@/plugins/markedExtensions'
+
 import PostActions from '@/components/post/Actions.vue'
 import AuthorCard from '@/components/AuthorCard.vue'
 import TagCard from '@/components/Tag.vue'
@@ -190,9 +188,6 @@ import { followChange, getFollowersAndFollowing } from '@/backend/following'
 import { getReposts } from '@/backend/reposts'
 import { isPostBookmarkedByUser } from '@/backend/bookmarks'
 import { ICommentData } from '@/backend/comment'
-import { transformPostToTemplate } from '@/plugins/QuillImage'
-
-marked.use({ renderer: markedRenderer, extensions: [ipfsImgExtension] })
 
 interface IData {
 	post: Post | null
@@ -213,7 +208,7 @@ interface IData {
 	following: Set<string>
 	bookmarksCount: number
 	popImage: boolean
-	vm: any | null
+	readerViewElement: any | null
 }
 
 export default Vue.extend({
@@ -251,7 +246,7 @@ export default Vue.extend({
 			following: new Set(),
 			bookmarksCount: -1,
 			popImage: false,
-			vm: null,
+			readerViewElement: null,
 		}
 	},
 	async created() {
@@ -268,12 +263,8 @@ export default Vue.extend({
 				this.featuredPhoto = p
 			})
 		}
-		// Convert markdown to HTML
-		const html = marked.parse(this.post.content)
-		const sanitizedHtml = this.sanitizeHTML(html)
-		const template = `<div>${transformPostToTemplate(sanitizedHtml)}</div>`
-		const el = readerViewFactory(template)
-		this.vm = el
+		// Create the ReaderView element from Markdown. This is a dynamic vue element.
+		this.readerViewElement = readerViewFactory(this.post.content)
 		// Get author profile
 		this.author = createDefaultProfile(this.post.authorID)
 		getProfile(this.post.authorID).then((p) => {
@@ -333,14 +324,6 @@ export default Vue.extend({
 	methods: {
 		getReposts,
 		isPostBookmarkedByUser,
-		sanitizeHTML(input: string) {
-			return DOMPurify.sanitize(input, {
-				USE_PROFILES: { html: true },
-				ALLOWED_TAGS: [`pre`],
-				ADD_TAGS: [`ipfsimage`],
-				ADD_ATTR: [`cid`],
-			})
-		},
 		async getBookmarkStatus() {
 			this.isBookmarked = await isPostBookmarkedByUser(this.$route.params.post, this.$store.state.session.id)
 		},
