@@ -45,7 +45,7 @@ export default Vue.extend({
 			.catch((error) => {
 				this.loading = false
 				this.imageError = `error malformed image`
-				console.log(error)
+				this.$toastError(error)
 			})
 	},
 })

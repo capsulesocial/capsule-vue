@@ -259,6 +259,7 @@ export default Vue.extend({
 						await preUploadPhoto(cid, compressedImage)
 						const range = this.qeditor.getSelection(true)
 						this.qeditor.insertEmbed(range.index, `image`, { alt: cid.toString(), url: i.target.result }, `user`)
+						this.updateContent()
 					}
 				}
 			} catch (err) {
