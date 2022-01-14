@@ -1,5 +1,5 @@
 import Quill from 'quill'
-import { IRegularPost } from '@/backend/post'
+import { getPhotoFromIPFS } from '@/backend/photos'
 const BlockEmbed = Quill.import(`blots/block/embed`)
 
 export class ImageBlot extends BlockEmbed {
@@ -21,10 +21,18 @@ export class ImageBlot extends BlockEmbed {
 	}
 }
 
-export function parseRegularPost(post: IRegularPost) {
-	const ipfsImages = document.getElementsByClassName(`ipfs_img`)
-	console.log(ipfsImages, ipfsImages.length)
-	return post
+export async function parseRegularPost(content: string) {
+	const element = document.createElement(`div`)
+	element.innerHTML = content
+	const images: HTMLImageElement[] = element.getElementsByClassName(`ipfs_img`) as unknown as Array<HTMLImageElement>
+	for (const i in images) {
+		if (images[i].nodeName === `IMG`) {
+			const img: HTMLImageElement = images[i] as HTMLImageElement
+			const cid = img.alt
+			images[i].src = await getPhotoFromIPFS(cid)
+		}
+	}
+	return element
 }
 
 export function transformEditorPost(body: string) {

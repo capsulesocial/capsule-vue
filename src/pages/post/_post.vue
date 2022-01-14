@@ -96,7 +96,7 @@
 					<div
 						:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
 						class="editable ql-bubble ql-editor max-w-none content break-words"
-						v-html="sanitizeHTML(content)"
+						v-html="sanitizeHTML(contentElement)"
 					></div>
 				</article>
 
@@ -211,6 +211,7 @@ interface IData {
 	following: Set<string>
 	bookmarksCount: number
 	popImage: boolean
+	contentElement: HTMLDivElement | null
 }
 
 export default Vue.extend({
@@ -248,17 +249,17 @@ export default Vue.extend({
 			following: new Set(),
 			bookmarksCount: -1,
 			popImage: false,
+			contentElement: null,
 		}
 	},
 	async created() {
 		// Fetch post from IPFS,
-		const post = await getRegularPost(this.$route.params.post)
-		if (!post) {
+		this.post = await getRegularPost(this.$route.params.post)
+		if (!this.post) {
 			this.$toastError(`This post has not been found`)
 			throw new Error(`Post is null!`)
 		}
 
-		this.post = parseRegularPost(post)
 		// Get featured photo
 		if (this.post.featuredPhotoCID) {
 			getPhotoFromIPFS(this.post.featuredPhotoCID).then((p) => {
@@ -266,7 +267,9 @@ export default Vue.extend({
 			})
 		}
 		// Convert markdown to HTML
-		this.content = marked.parse(this.post.content)
+		const html = marked.parse(this.post.content)
+		this.contentElement = await parseRegularPost(html)
+		// this.content = this.contentElement
 		// Get author profile
 		this.author = createDefaultProfile(this.post.authorID)
 		getProfile(this.post.authorID).then((p) => {
