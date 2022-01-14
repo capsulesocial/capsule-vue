@@ -22,7 +22,7 @@ export interface Post {
 	timestamp: number
 	tags: Tag[]
 	encrypted?: boolean
-	postImages?: Array<string> | null
+	postImages?: Array<string>
 }
 
 export interface IRegularPost extends Post {
