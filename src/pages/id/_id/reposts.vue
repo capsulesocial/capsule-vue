@@ -73,6 +73,9 @@ export default Vue.extend({
 	},
 	async created() {
 		await this.loadReposts()
+		if (this.$store.state.session.id === ``) {
+			return
+		}
 		const followersAndFollowing = await getFollowersAndFollowing(this.$store.state.session.id)
 		this.following = followersAndFollowing.following
 	},

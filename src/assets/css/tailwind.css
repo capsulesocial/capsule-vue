@@ -257,3 +257,10 @@
 		transform: translate(0px, 0px);
 	}
 }
+
+/* Background image */
+.bg-img {
+	background-attachment: fixed;
+	background-size: contain !important;
+	background-repeat: no-repeat !important;
+}

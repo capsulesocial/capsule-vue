@@ -242,10 +242,3 @@ export default Vue.extend({
 	},
 })
 </script>
-
-<style>
-.bg-img {
-	background-attachment: fixed;
-	background-size: contain;
-}
-</style>

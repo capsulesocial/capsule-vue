@@ -155,10 +155,6 @@ export default Vue.extend({
 </script>
 
 <style>
-.bg-img {
-	background-attachment: fixed;
-	background-size: cover;
-}
 .animatedraftButton {
 	transition: all 0.4s;
 }

@@ -347,6 +347,9 @@ export default Vue.extend({
 			this.lastScroll = currentScroll
 		},
 		async fetchProfile() {
+			if (this.$route.params.id === null) {
+				return
+			}
 			const { totalPostsCount } = await getProfile(this.$route.params.id, true)
 			this.totalPostsCount = totalPostsCount
 		},

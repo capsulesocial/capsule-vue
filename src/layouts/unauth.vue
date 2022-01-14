@@ -12,11 +12,3 @@ import Vue from 'vue'
 
 export default Vue.extend({})
 </script>
-
-<style>
-.bg-img-unauth {
-	background-position: right top;
-	background-size: cover;
-	background-repeat: no-repeat;
-}
-</style>
