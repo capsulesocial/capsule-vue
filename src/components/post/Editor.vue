@@ -95,6 +95,7 @@ interface IData {
 	isSaving: string
 	isX: boolean
 	isCollapsed: boolean
+	postImages: Array<string>
 }
 
 const toolbarOptions = [
@@ -148,6 +149,7 @@ export default Vue.extend({
 			isSaving: `false`,
 			isX: false,
 			isCollapsed: false,
+			postImages: [],
 		}
 	},
 	beforeDestroy() {
@@ -253,6 +255,7 @@ export default Vue.extend({
 				reader.onload = async (i) => {
 					if (i.target !== null) {
 						const cid = await addPhotoToIPFS(i.target.result as any)
+						this.postImages.push(cid)
 						await preUploadPhoto(cid, compressedImage)
 						const range = this.qeditor.getSelection(true)
 						this.qeditor.insertEmbed(range.index, `image`, { alt: cid.toString(), url: i.target.result }, `user`)
@@ -350,6 +353,7 @@ export default Vue.extend({
 				this.$store.state.session.id,
 				featuredPhotoCID,
 				featuredPhotoCaption,
+				this.postImages,
 			)
 			const cid = await sendRegularPost(p)
 			this.title = ``

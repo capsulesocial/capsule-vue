@@ -22,6 +22,7 @@ export interface Post {
 	timestamp: number
 	tags: Tag[]
 	encrypted?: boolean
+	postImages?: Array<string> | null
 }
 
 export interface IRegularPost extends Post {
@@ -60,6 +61,7 @@ export function createRegularPost(
 	authorID: string,
 	featuredPhotoCID?: string | null,
 	featuredPhotoCaption?: string | null,
+	postImages?: Array<string>,
 ): IRegularPost {
 	if (subtitle !== null) {
 		subtitle = subtitle.trim()
@@ -75,6 +77,7 @@ export function createRegularPost(
 		...(featuredPhotoCID ? { featuredPhotoCID } : {}),
 		...(featuredPhotoCaption ? { featuredPhotoCaption } : {}),
 		encrypted: false,
+		postImages,
 	}
 }
 
