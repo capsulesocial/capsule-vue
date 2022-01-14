@@ -95,9 +95,10 @@
 				<article class="mt-5">
 					<div
 						:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-						class="editable ql-bubble ql-editor max-w-none content break-words"
-						v-html="sanitizeHTML(contentElement)"
-					></div>
+						class="editable prose max-w-none content break-words"
+					>
+						<component :is="vm" v-if="vm"></component>
+					</div>
 				</article>
 
 				<!-- Tags -->
@@ -170,6 +171,7 @@
 import Vue from 'vue'
 import { marked } from 'marked'
 import DOMPurify from 'dompurify'
+import readerViewFactory from './readerView'
 import { ipfsImgExtension, markedRenderer } from '@/plugins/markedExtensions'
 import PostActions from '@/components/post/Actions.vue'
 import AuthorCard from '@/components/AuthorCard.vue'
@@ -188,7 +190,7 @@ import { followChange, getFollowersAndFollowing } from '@/backend/following'
 import { getReposts } from '@/backend/reposts'
 import { isPostBookmarkedByUser } from '@/backend/bookmarks'
 import { ICommentData } from '@/backend/comment'
-import { parseRegularPost } from '@/plugins/QuillImage'
+import { transformPostToTemplate } from '@/plugins/QuillImage'
 
 marked.use({ renderer: markedRenderer, extensions: [ipfsImgExtension] })
 
@@ -211,7 +213,7 @@ interface IData {
 	following: Set<string>
 	bookmarksCount: number
 	popImage: boolean
-	contentElement: HTMLDivElement | null
+	vm: any | null
 }
 
 export default Vue.extend({
@@ -249,7 +251,7 @@ export default Vue.extend({
 			following: new Set(),
 			bookmarksCount: -1,
 			popImage: false,
-			contentElement: null,
+			vm: null,
 		}
 	},
 	async created() {
@@ -268,8 +270,10 @@ export default Vue.extend({
 		}
 		// Convert markdown to HTML
 		const html = marked.parse(this.post.content)
-		this.contentElement = await parseRegularPost(html)
-		// this.content = this.contentElement
+		const sanitizedHtml = this.sanitizeHTML(html)
+		const template = `<div>${transformPostToTemplate(sanitizedHtml)}</div>`
+		const el = readerViewFactory(template)
+		this.vm = el
 		// Get author profile
 		this.author = createDefaultProfile(this.post.authorID)
 		getProfile(this.post.authorID).then((p) => {
@@ -331,8 +335,10 @@ export default Vue.extend({
 		isPostBookmarkedByUser,
 		sanitizeHTML(input: string) {
 			return DOMPurify.sanitize(input, {
-				USE_PROFILES: { html: true, svg: true },
+				USE_PROFILES: { html: true },
 				ALLOWED_TAGS: [`pre`],
+				ADD_TAGS: [`ipfsimage`],
+				ADD_ATTR: [`cid`],
 			})
 		},
 		async getBookmarkStatus() {

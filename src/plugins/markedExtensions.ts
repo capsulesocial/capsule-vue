@@ -32,6 +32,6 @@ export const ipfsImgExtension = {
 		}
 	},
 	renderer(token: any) {
-		return `<img alt="${token.cid}" class="ipfs_img" />`
+		return `<ipfsimage alt="${token.cid}" class="ipfs_img" cid="${token.cid}" />`
 	},
 }

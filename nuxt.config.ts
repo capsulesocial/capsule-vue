@@ -57,6 +57,9 @@ const config: NuxtConfig = {
 		extractCSS: {
 			ignoreOrder: false,
 		},
+		extend(config, ctx) {
+			config.resolve.alias['vue'] = 'vue/dist/vue.common'
+		},
 	},
 	typescript: {
 		typeCheck: {
