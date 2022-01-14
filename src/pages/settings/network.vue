@@ -2,7 +2,12 @@
 	<main>
 		<!-- Network Tab -->
 		<h2 class="text-primary font-semibold mb-4 text-sm">Capsule Node</h2>
-		<div class="flex flex-row items-center w-full mb-4">
+		<p class="text-gray5 mb-6">
+			Blogchain rely on the Capsule network technology composed of multiple nodes. You can choose to connect and
+			interact with a trusted node or a geographically close-by one. <br />Leaving it by default will chose the closest
+			one.
+		</p>
+		<div class="flex flex-row items-center w-full mb-6">
 			<label for="node" class="w-48 font-semibold">Preferred Node:</label>
 			<input
 				id="node"
@@ -14,7 +19,7 @@
 			<button class="w-48 focus:outline-none"></button>
 		</div>
 		<!-- Submit button -->
-		<div class="w-full flex justify-center">
+		<div class="w-full flex justify-end">
 			<button
 				:class="hasChanged() ? '' : 'opacity-50'"
 				class="bg-primary text-white rounded-lg focus:outline-none px-4 py-2"

@@ -86,11 +86,11 @@
 								</button>
 								<div
 									v-show="showDelete"
-									class="absolute flex flex-col rounded-lg w-32 shadow-lg z-10 p-1 modal-animation"
+									class="absolute dropdownDeleteOpen flex flex-col rounded-lg w-32 bg-white shadow-lg border border-lightBorder z-10 p-1 modal-animation"
 									:style="
 										quote && quote.authorID === $store.state.session.id
-											? `top: 45px; right: 10px`
-											: `top: 35px; right: 0px`
+											? `top: 55px; right: 40px`
+											: `top: 45px; right: 40px`
 									"
 								>
 									<!-- Delete -->
@@ -183,8 +183,8 @@
 								</button>
 								<div
 									v-show="showQuoteDelete"
-									class="absolute flex flex-col rounded-lg w-32 shadow-lg z-10 p-1 modal-animation"
-									style="top: 25px; right: 0px"
+									class="absolute dropdownDeleteOpen flex flex-col bg-white rounded-lg border border-lightBorder w-32 shadow-lg z-10 p-1 modal-animation"
+									style="top: 35px; right: -10px"
 								>
 									<!-- Delete -->
 									<button class="flex focus:outline-none text-negative" @click="deleteQuote">
@@ -246,11 +246,11 @@
 								</button>
 								<div
 									v-show="showDelete"
-									class="absolute flex flex-col rounded-lg w-32 shadow-lg z-10 p-1 modal-animation"
+									class="absolute dropdownDeleteOpen flex flex-col rounded-lg w-32 bg-white shadow-lg border border-lightBorder z-10 p-1 modal-animation"
 									:style="
 										quote && quote.authorID === $store.state.session.id
-											? `top: 45px; right: 10px`
-											: `top: 35px; right: 0px`
+											? `top: 55px; right: -10px`
+											: `top: 45px; right: -10px`
 									"
 								>
 									<!-- Delete -->
@@ -655,3 +655,16 @@ export default Vue.extend({
 	},
 })
 </script>
+<style>
+.dropdownDeleteOpen::before {
+	content: '';
+	position: absolute;
+	top: -0.5rem;
+	right: 0.8rem;
+	transform: rotate(45deg);
+	width: 1rem;
+	height: 1rem;
+	background-color: #fff;
+	border-radius: 2px;
+}
+</style>

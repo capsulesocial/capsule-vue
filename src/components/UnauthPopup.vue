@@ -30,6 +30,10 @@
 						:text="`Create an account 🚀`"
 					/>
 				</div>
+				<p class="text-center text-gray7 mt-2 text-sm mb-4">
+					Already have an account?
+					<nuxt-link to="/login" class="text-center font-bold text-primary">Log in</nuxt-link>
+				</p>
 			</article>
 		</div>
 	</div>

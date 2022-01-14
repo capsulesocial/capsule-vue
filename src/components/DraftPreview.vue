@@ -28,17 +28,24 @@
 						? 'bg-lightBG text-lightPrimaryText border-lightBorder'
 						: 'bg-darkBG text-darkPrimaryText border-darkBorder'
 				"
-				class="absolute flex flex-col rounded-lg w-40 shadow-lg z-10 p-2 modal-animation dropdownDraftOpen"
+				class="absolute flex flex-col rounded-lg w-40 shadow-lg border border-lightBorder z-10 p-2 modal-animation dropdownDraftOpen"
 				style="top: 35px; right: -5px"
 			>
-				<button class="flex focus:outline-none text-primary mb-2" @click="setActiveDraft(draft)">
+				<button class="flex focus:outline-none text-primary" @click="setActiveDraft(draft)">
 					<PencilIcon class="fill-current p-1" />
 					<span class="text-sm self-center text-primary ml-1">Edit this draft</span>
 				</button>
 				<!-- Delete -->
-				<button class="flex focus:outline-none text-negative" @click="deleteDraft(draft)">
+				<button
+					v-if="numberOfDrafts > 1"
+					class="flex focus:outline-none text-negative mt-2"
+					@click="deleteDraft(draft)"
+				>
 					<BinIcon class="p-1" />
 					<span class="text-sm self-center text-negative ml-1">Delete this draft</span>
+				</button>
+				<button v-else class="flex focus:outline-none text-gray5 mt-2 cursor-not-allowed" disabled>
+					<span class="text-sm self-center text-gray5 ml-1">Default draft</span>
 				</button>
 			</div>
 		</div>
@@ -84,6 +91,10 @@ export default Vue.extend({
 		displayDeleteButton: {
 			type: Boolean,
 			default: false,
+		},
+		numberOfDrafts: {
+			type: Number,
+			default: 0,
 		},
 	},
 	data(): IData {

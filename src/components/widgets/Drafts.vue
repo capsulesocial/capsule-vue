@@ -7,6 +7,7 @@
 				:key="$store.state.draft.drafts.indexOf(d)"
 				:draft="d"
 				:index="$store.state.draft.drafts.indexOf(d)"
+				:numberOfDrafts="draftSubset.length"
 			/>
 			<p class="text-primary">
 				<button class="text-sm focus:outline-none" @click="handleDraftPopup">Show all</button>
