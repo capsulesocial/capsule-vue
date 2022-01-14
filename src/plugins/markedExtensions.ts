@@ -6,9 +6,6 @@ export const markedRenderer: marked.RendererObject = {
 		const highlightedCode = hljs.highlightAuto(src).value
 		return `<pre><code class="hljs">${highlightedCode}</code></pre>`
 	},
-	image(href: string | null, title: string | null, text: string | null) {
-		return `<img src="${href}" alt="${title}" alt="${text}">`
-	},
 }
 
 export const ipfsImgExtension = {
@@ -17,7 +14,6 @@ export const ipfsImgExtension = {
 	start(src: string) {
 		return src.match(/\\\[ipfs\\_img/)?.index
 	},
-	// eslint-disable-next-line consistent-return
 	tokenizer(src: string) {
 		const ipfsImgRule = /\\\[ipfs\\_img [^>]*cid="[^"]*"\\]/
 		const ipfsCidRule = /cid="([A-Za-z0-9]*)"/
@@ -30,6 +26,8 @@ export const ipfsImgExtension = {
 				cid: ipfsCidMatch[1],
 			}
 		}
+
+		return null
 	},
 	renderer(token: any) {
 		return `<ipfsimage alt="${token.cid}" class="ipfs_img" cid="${token.cid}" />`
