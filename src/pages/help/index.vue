@@ -39,11 +39,11 @@
 					</div>
 					<div :class="isOpen2 ? `` : `is-closed`" class="message-body w-10/12">
 						<div class="message-content py-2 text-gray5 text-sm">
-							It’s the main way we implement our broader idea of decentralization. <br />
-							At present, we use the NEAR protocol to host users’ content on-chain, which makes the information more
-							resistant to censorship and thus enhances free speech. On a public chain like NEAR’s, no one company
-							(including us) can take down a user’s content, since other nodes that maintain the chain will continue to
-							verify new information to be posted. <br /><br />
+							It’s an important tool to implement our broader idea of decentralization, enhancing writers’ freedom of
+							speech and overall independence. <br /><br />
+							We use the NEAR protocol to manage the flow of user activity on the platform, with users’ content stored
+							to OrbitDB. The latter is a decentralized database that ensures immutability the replication of data
+							across multiple nodes. Thus the content is more resistant to censorship. <br /><br />
 							This is a fundamental change from existing social networks’ use of company-controlled servers that
 							ultimately give those companies say in who gets to post what, and when. <br /><br />
 							In the future, we also plan to add blockchain-based features to enable payments to creators for their work
