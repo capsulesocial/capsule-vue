@@ -31,8 +31,8 @@ export const mutations: MutationTree<SettingState> = {
 	[MutationType.SET_RECENTLY_POSTED]: (state, recentlyPosted: boolean) => {
 		state.recentlyPosted = recentlyPosted
 	},
-	[MutationType.TOGGLE_UNAUTH_POPUP]: (state) => {
-		state.showUnauthPopup = !state.showUnauthPopup
+	[MutationType.TOGGLE_UNAUTH_POPUP]: (state, c: boolean = !state.showUnauthPopup) => {
+		state.showUnauthPopup = c
 	},
 }
 

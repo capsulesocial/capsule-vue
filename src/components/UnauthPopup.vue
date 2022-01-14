@@ -1,10 +1,10 @@
 <template>
 	<div
-		v-if="this.$store.state.settings.showUnauthPopup"
+		v-if="this.$store.state.settings.showUnauthPopup && this.$store.state.session.id === ``"
 		class="fixed w-full h-screen bg-primary top-0 bottom-0 left-0 right-0 z-30 flex justify-center items-start bg-opacity-50 modal-animation"
 	>
 		<div
-			class="card shadow-lg rounded-lg bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg p-6 pt-4 mt-12 overflow-y-auto card-animation"
+			class="popupCard shadow-lg rounded-lg bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg p-6 pt-4 mt-12 overflow-y-auto card-animation"
 			style="max-height: 90%; width: 650px; backdrop-filter: blur(10px)"
 		>
 			<!-- Header and close icon -->
@@ -54,12 +54,12 @@ export default Vue.extend({
 			if (!e.target || e.target.firstChild === null || e.target.firstChild.classList === undefined) {
 				return
 			}
-			if (e.target.firstChild.classList[0] === `card`) {
+			if (e.target.firstChild.classList[0] === `popupCard`) {
 				this.closePopup()
 			}
 		},
 		closePopup() {
-			this.$store.commit(`settings/toggleUnauthPopup`)
+			this.$store.commit(`settings/toggleUnauthPopup`, false)
 		},
 	},
 })
