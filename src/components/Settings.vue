@@ -28,7 +28,7 @@
 			/>
 		</div>
 		<!-- Name -->
-		<div class="flex flex-row mb-2">
+		<div class="flex flex-row mb-4">
 			<label for="newName" class="w-32">Name</label>
 			<input
 				id="newName"
@@ -39,7 +39,7 @@
 			/>
 		</div>
 		<!-- Bio -->
-		<div class="flex flex-row mb-2">
+		<div class="flex flex-row mb-6">
 			<label for="bio" class="w-32"> Bio: </label>
 			<div class="flex-grow">
 				<textarea
@@ -60,7 +60,7 @@
 			</div>
 		</div>
 		<!-- Location -->
-		<div v-if="$store.state.session.id === $route.params.id" class="flex flex-row mb-2">
+		<div v-if="$store.state.session.id === $route.params.id" class="flex flex-row mb-4">
 			<label for="location" class="w-32">Location</label>
 			<input
 				id="location"
@@ -71,7 +71,7 @@
 			/>
 		</div>
 		<!-- Website -->
-		<div v-if="$store.state.session.id === $route.params.id" class="flex flex-row mb-2">
+		<div v-if="$store.state.session.id === $route.params.id" class="flex flex-row mb-4">
 			<label for="website" class="w-32">Website</label>
 			<input
 				id="website"
@@ -82,7 +82,7 @@
 			/>
 		</div>
 		<!-- Email -->
-		<div v-if="$store.state.session.id === $route.params.id" class="flex flex-row mb-2">
+		<div v-if="$store.state.session.id === $route.params.id" class="flex flex-row mb-4">
 			<label for="newEmail" class="w-32">Email</label>
 			<input
 				id="newEmail"

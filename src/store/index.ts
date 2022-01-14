@@ -22,7 +22,7 @@ export interface RootState {
 
 export const state = (): RootState => ({
 	nodeURL: ``,
-	backgroundImage: null,
+	backgroundImage: `/_nuxt/src/assets/images/backgrounds/mainBG.webp`,
 	reposts: [],
 	recentlyJoined: false,
 	recentBookmarks: new Set(),

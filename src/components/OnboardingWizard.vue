@@ -39,7 +39,7 @@
 					class="rounded-lg mb-10 w-5/6 shadow-lg"
 				/>
 				<h6 class="text-xl mb-5 font-bold">{{ getTitle() }}</h6>
-				<EditProfile v-show="step === 5" :updateProfileMethod="getMyProfile" class="mb-4 mt-10" />
+				<EditProfile v-show="step === 5" :updateProfileMethod="getMyProfile" class="mb-4" />
 				<p class="text-gray5 mb-10 px-10">
 					{{ getText() }}
 				</p>
@@ -168,9 +168,9 @@ export default Vue.extend({
 				case 2:
 					return `Sometimes a post or headline catches your attention, but there’s no time to read it now. That’s why Blogchain makes it easy to highlight such content for later and then share with friends if you want.`
 				case 3:
-					return `Have an idea you’d like to share with the world? Blogchain’s simple editing tool will make it easy for you to craft and publish your post.`
+					return `Have an idea you’d like to share with the world? Blogchain’s simple editing tool will make it easy for you to craft and publish your post in a intuitive writing experience.`
 				case 4:
-					return `Agree or disagree with something you’ve read on Blogchain? Use our comment features to talk about it with other readers. You can even include one of our custom reaction illustrations to make your point artfully.`
+					return `Agree or disagree with something you’ve read on Blogchain? Use our comment features to talk about it with other readers. You can even include one of our custom reaction illustrations to make your point.`
 				case 5:
 					return `You will be able to change your profile and add more informations later on your profile page.`
 				default:

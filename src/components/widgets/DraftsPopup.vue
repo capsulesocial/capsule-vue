@@ -20,6 +20,7 @@
 							:draft="d"
 							:index="$store.state.draft.drafts.indexOf(d)"
 							:displayDeleteButton="true"
+							:numberOfDrafts="$store.state.draft.drafts.length"
 							class="flex-grow"
 						/>
 					</div>

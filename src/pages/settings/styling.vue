@@ -41,7 +41,7 @@
 					</button>
 				</div>
 				<!-- Select button -->
-				<div class="flex justify-center items-center p-6 pt-5">
+				<div class="flex justify-end items-center p-6 pt-5">
 					<button class="bg-primary text-white rounded-lg focus:outline-none px-4 py-2" @click="confirmBackgroundImage">
 						Select
 					</button>
@@ -61,6 +61,7 @@ interface IData {
 	backgroundImage: null | string | ArrayBuffer
 	showPopup: boolean
 	backgrounds: any
+	currentbg: null | string
 }
 
 export default Vue.extend({
@@ -71,6 +72,7 @@ export default Vue.extend({
 			backgroundImage: null,
 			showPopup: false,
 			backgrounds,
+			currentbg: null,
 		}
 	},
 	created() {
@@ -80,6 +82,9 @@ export default Vue.extend({
 		toggleSelector() {
 			this.$emit(`togglePopup`)
 			this.showPopup = !this.showPopup
+			if (this.showPopup === true) {
+				this.currentbg = this.$store.state.backgroundImage
+			}
 		},
 		handleDropdown(e: any): void {
 			if (!this.showPopup) {
@@ -98,7 +103,9 @@ export default Vue.extend({
 		confirmBackgroundImage(): void {
 			if (this.$store.state.backgroundImage) {
 				this.toggleSelector()
-				this.$toastSuccess(`Your background has been updated`)
+				if (this.currentbg !== this.$store.state.backgroundImage) {
+					this.$toastSuccess(`Your background has been updated`)
+				}
 			} else {
 				this.$toastError(`Unable to save your new background`)
 			}

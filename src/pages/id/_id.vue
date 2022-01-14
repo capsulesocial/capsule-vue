@@ -48,10 +48,14 @@
 							</div>
 							<!-- Tabs: posts, following, followers -->
 							<div class="flex flex-row pt-2 text-sm text-gray6">
-								<nuxt-link :to="'/id/' + $route.params.id" class="text-sm">
+								<div v-if="totalPostsCount === 1" class="text-sm">
+									<span class="font-bold text-primary">{{ totalPostsCount }}</span>
+									Post
+								</div>
+								<div v-else class="text-sm">
 									<span class="font-bold text-primary">{{ totalPostsCount }}</span>
 									Posts
-								</nuxt-link>
+								</div>
 								<nuxt-link
 									:to="'/id/' + $route.params.id + '/followers'"
 									:class="getStyles(`id-id-followers`)"

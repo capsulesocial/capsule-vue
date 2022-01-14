@@ -128,6 +128,6 @@ export default Vue.extend({
 <style>
 .bg-img {
 	background-attachment: fixed;
-	background-size: contain;
+	background-size: contain !important;
 }
 </style>

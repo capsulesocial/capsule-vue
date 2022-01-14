@@ -26,7 +26,7 @@
 					</h2>
 					<div
 						id="buttonbg"
-						class="bg-lightBG bg-opacity-25 h-full absolute rounded-full animatefast"
+						class="bg-lightBG bg-opacity-50 h-full absolute rounded-full animatefast"
 						style="backdrop-filter: blur(10px); width: 155px; z-index: 0"
 					></div>
 				</button>
