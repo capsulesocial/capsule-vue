@@ -61,13 +61,12 @@
 					</div>
 					<div :class="isOpen3 ? `` : `is-closed`" class="message-body w-10/12">
 						<div class="message-content py-2 text-gray5 text-sm">
-							To post to the platform or make comments, yes, you will need a NEAR wallet. But to simply read posts, you
-							do <b>not</b> need a wallet. Links to articles on Blogchain can be shared across the internet like any
-							other web page. <br /><br />
-
-							This structure is roughly comparable to that of Twitter, where you need to have a membership to post
-							updates. But anyone on the internet, regardless of whether they’re a Twitter member, can read tweets that
-							have been posted publicly.
+							Technically, yes. But if you don’t have one, we make setup really easy for newbies: <br />
+							Simply sign in with your existing Google or Discord identity, and the software will automatically create a
+							wallet for you on the NEAR network, which Blogchain uses to handle on-chain transactions. That’s it.
+							<br /><br />
+							Of course, if you <b>do</b> already have a NEAR-compatible wallet, no need to set up a new one. Just use
+							your your existing wallet to sign in.
 						</div>
 					</div>
 				</article>
