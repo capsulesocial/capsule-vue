@@ -86,6 +86,7 @@ import PencilIcon from '@/components/icons/Pencil.vue'
 import { ImageBlot, transformEditorPost } from '@/plugins/QuillImage'
 import { createRegularPost, sendRegularPost } from '@/backend/post'
 import { addPhotoToIPFS, preUploadPhoto } from '@/backend/photos'
+import { parseIpfsImage } from '@/plugins/markedExtensions'
 
 interface IData {
 	title: string
@@ -265,7 +266,7 @@ export default Vue.extend({
 						await preUploadPhoto(cid, compressedImage)
 						const range = this.qeditor.getSelection(true)
 						this.qeditor.insertEmbed(range.index, `image`, { alt: cid.toString(), url: i.target.result }, `user`)
-						this.updateContent()
+						// this.updateContent()
 					}
 				}
 			} catch (err) {
@@ -351,6 +352,7 @@ export default Vue.extend({
 				return
 			}
 			this.hasPosted = true
+			const postImages = new Set(parseIpfsImage(clean).filter((i) => this.postImages.includes(i)))
 			const p = createRegularPost(
 				this.title,
 				this.subtitle === `` ? null : this.subtitle,
@@ -360,7 +362,7 @@ export default Vue.extend({
 				this.$store.state.session.id,
 				featuredPhotoCID,
 				featuredPhotoCaption,
-				this.postImages,
+				Array.from(postImages),
 			)
 			const cid = await sendRegularPost(p)
 			this.title = ``
