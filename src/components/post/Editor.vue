@@ -45,7 +45,13 @@
 				</article>
 
 				<!-- WYSIWYG -->
-				<input v-show="false" id="getFile" type="file" @change="uploadFunction($event)" />
+				<input
+					v-show="false"
+					id="getFile"
+					accept="image/png, image/jpeg"
+					type="file"
+					@change="uploadFunction($event)"
+				/>
 				<div
 					id="editor"
 					ref="editor"
