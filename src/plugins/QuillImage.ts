@@ -38,9 +38,15 @@ export function transformEditorPost(body: string) {
 	return body
 }
 
-export function transformPostToTemplate(body: string) {
-	return body.replace(
-		/<ipfsimage cid="([A-Za-z0-9]*)" class="ipfs_img" alt="([A-Za-z0-9]*)"><\/ipfsimage>/g,
-		`<IpfsImage alt="$2" class="ipfs_img" :cid="'$1'" />`,
-	)
+export function transformPostToTemplate(body: string, postImages?: Array<string>) {
+	if (!postImages) {
+		return body
+	}
+	for (const p of postImages) {
+		body = body.replace(
+			new RegExp(`<ipfsimage cid="${p}" class="ipfs_img" alt="${p}"></ipfsimage>`, `g`),
+			`<IpfsImage alt="${p}" class="ipfs_img" :cid="'${p}'" />`,
+		)
+	}
+	return body
 }

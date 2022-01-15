@@ -264,7 +264,7 @@ export default Vue.extend({
 			})
 		}
 		// Create the ReaderView element from Markdown. This is a dynamic vue element.
-		this.readerViewElement = readerViewFactory(this.post.content)
+		this.readerViewElement = readerViewFactory(this.post.content, this.post.postImages)
 		// Get author profile
 		this.author = createDefaultProfile(this.post.authorID)
 		getProfile(this.post.authorID).then((p) => {
