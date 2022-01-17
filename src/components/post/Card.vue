@@ -63,7 +63,7 @@
 									</span>
 								</div>
 								<!-- Timestamp -->
-								<span class="text-xs ml-14">
+								<span class="text-xs">
 									{{ $formatDate(post.timestamp) }}
 								</span>
 							</div>
@@ -174,7 +174,7 @@
 									<span class="font-medium text-base">{{ this.quote.name }}</span>
 									<span class="ml-2 text-primary">@{{ this.quote.authorID }}</span>
 								</nuxt-link>
-								<span class="text-xs ml-14">{{ $formatDate(this.quote.timestamp) }}</span>
+								<span class="text-xs">{{ $formatDate(this.quote.timestamp) }}</span>
 							</div>
 							<!-- Delete quote repost button -->
 							<div v-if="quote.authorID === $store.state.session.id" class="relative">
@@ -230,7 +230,7 @@
 									</span>
 								</div>
 								<!-- Timestamp -->
-								<span class="text-xs ml-14">
+								<span class="text-xs">
 									{{ $formatDate(post.timestamp) }}
 								</span>
 							</div>
