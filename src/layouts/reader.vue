@@ -22,7 +22,7 @@
 		<div class="w-full flex justify-center">
 			<div class="flex flex-col w-full xl:w-1220">
 				<!-- Header -->
-				<header class="sticky hidden xl:block xl:min-w-1220 top-0 py-5 bg-gradient-to-r xl:z-10">
+				<header class="sticky w-full top-0 bg-gradient-to-r z-10">
 					<Header :avatar="avatar" />
 				</header>
 				<!-- Body -->
