@@ -25,6 +25,7 @@
 								v-if="post.authorID !== $store.state.session.id"
 								:toggleFriend="toggleFriend"
 								:userIsFollowed="userIsFollowed"
+								class="hidden xl:block"
 							/>
 						</div>
 						<span class="flex items-center">
@@ -43,7 +44,7 @@
 						<BookmarkButton
 							:postID="$route.params.post"
 							:hasBookmark="isBookmarked"
-							class="pr-2"
+							class="pr-2 hidden xl:block"
 							@clicked="getBookmarkStatus"
 						/>
 						<ShareButton
@@ -94,7 +95,7 @@
 				<article class="mt-5">
 					<div
 						:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-						class="editable prose max-w-none content break-words"
+						class="editable ql-bubble ql-editor max-w-none content break-words"
 						v-html="sanitizeHTML(content)"
 					></div>
 				</article>

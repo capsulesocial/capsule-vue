@@ -48,7 +48,7 @@
 				<div
 					id="editor"
 					ref="editor"
-					class="max-w-none focus:outline-none p-2 content"
+					class="max-w-none editable prose focus:outline-none p-2 content"
 					v-html="$store.state.draft.drafts[$store.state.draft.activeIndex].content"
 				></div>
 

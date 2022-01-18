@@ -110,7 +110,7 @@
 	h1 {
 		@apply font-serif;
 	}
-	.editable h1 {
+	.editable .ql-bubble .ql-editor h1 {
 		@apply text-h1 font-serif font-semibold mt-6 mb-3;
 	}
 	.editable h2 {

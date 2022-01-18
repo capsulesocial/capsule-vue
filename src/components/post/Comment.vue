@@ -2,7 +2,8 @@
 	<div class="object-contain">
 		<!-- Component that displays a posted comment -->
 		<div class="flex w-full mt-4">
-			<div class="flex justify-between items-start mr-4">
+			<!-- Desktop avatar -->
+			<div class="hidden xl:flex justify-between items-start mr-4">
 				<span class="rounded-lg px-1 pt-1 flex-shrink-0" :style="getStyle(`bg-`)">
 					<Avatar
 						:avatar="avatar"
@@ -13,15 +14,13 @@
 				</span>
 			</div>
 			<!-- Dashed bubble -->
-			<div
-				class="border rounded-lg w-full flex flex-wrap xl:flex-no-wrap justify-between border-dashed"
-				:style="getStyle(`border-`)"
-			>
+			<div class="border rounded-lg w-full flex justify-between border-dashed" :style="getStyle(`border-`)">
 				<!-- Text -->
 				<div class="flex flex-col flex-grow w-full px-4 py-2">
 					<!-- Top row: name, id, timestamp -->
-					<div class="flex flex-col xl:flex-row">
-						<nuxt-link :to="`/id/` + authorID" class="flex flex-col xl:flex-row mr-4 items-center">
+					<div class="flex flex-wrap">
+						<nuxt-link :to="`/id/` + authorID" class="flex mr-4 xl:items-center">
+							<Avatar :avatar="avatar" :authorID="authorID" size="w-8 h-8" class="xl:hidden flex-shrink-0 mr-4" />
 							<span class="font-medium">
 								{{ name }}
 							</span>
@@ -32,21 +31,27 @@
 						</span>
 					</div>
 					<!-- Content -->
-					<div class="flex flex-col flex-grow w-full overflow-hidden">
-						<p class="text-lg py-1 font-sans break-words leading-relaxed">
-							{{ content }}
-						</p>
-						<div class="h-full flex flex-col-reverse">
-							<button
-								class="font-sans text-sm text-lightSecondaryText focus:outline-none flex-grow-0 w-24 text-left"
-								@click="isReplying = !isReplying"
-							>
-								{{ replies.length }} Replies
-							</button>
+					<div class="flex">
+						<div class="flex flex-col flex-grow w-full overflow-hidden">
+							<p class="text-lg py-1 font-sans break-words leading-relaxed">
+								{{ content }}
+							</p>
+							<div class="h-full flex flex-col-reverse">
+								<button
+									class="font-sans text-sm text-lightSecondaryText focus:outline-none flex-grow-0 w-24 text-left"
+									@click="isReplying = !isReplying"
+								>
+									{{ replies.length }} Replies
+								</button>
+							</div>
+						</div>
+						<div class="xl:hidden flex-shrink-0 flex justify-center items-center overflow-hidden">
+							<img :src="emotion.leftImage" class="bg-transparent w-24 h-24 -mb-1 mt-2" />
 						</div>
 					</div>
 				</div>
-				<div class="flex-shrink-0 flex justify-center items-center overflow-hidden">
+				<!-- Desktop reaction face -->
+				<div class="hidden xl:block flex-shrink-0 flex justify-center items-center overflow-hidden">
 					<img :src="emotion.leftImage" class="bg-transparent w-32 h-32 -mb-1 mt-2" />
 				</div>
 			</div>

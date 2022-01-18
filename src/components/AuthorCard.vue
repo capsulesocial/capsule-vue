@@ -23,7 +23,7 @@
 			<div class="mr-5 mt-3 xl:mt-0">
 				<FriendButton
 					v-if="authorID !== $store.state.session.id"
-					class="justify-self-end"
+					class="justify-self-end hidden xl:block"
 					:userIsFollowed="isFollowed"
 					:toggleFriend="toggleFriend"
 				/>
