@@ -25,8 +25,13 @@ export function transformPostToTemplate(body: string, postImages?: Array<string>
 		return body
 	}
 	for (const p of postImages) {
-		const regex = /<ipfsimage \w*="\w*" \w*="\w*" \w*="\w*"><\/ipfsimage>/gm
-		body = body.replace(new RegExp(regex, `g`), `<IpfsImage alt="${p}" class="ipfs_img" :cid="'${p}'" />`)
+		body = body.replace(
+			new RegExp(
+				`<ipfsimage ((alt="${p}")|(cid="${p}")|(class="ipfs_img"))\\s+((alt="${p}")|(class="ipfs_img")|(cid="${p}"))\\s+((alt="${p}")|(class="ipfs_img")|(cid="${p}"))></ipfsimage>`,
+				`g`,
+			),
+			`<IpfsImage alt="${p}" class="ipfs_img" :cid="'${p}'" />`,
+		)
 	}
 	return body
 }
