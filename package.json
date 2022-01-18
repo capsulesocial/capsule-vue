@@ -37,47 +37,12 @@
 			"!nuxt.config.js",
 			"!package-lock.json",
 			"!README.md"
-		],
-		"win": {
-			"target": [
-				"nsis"
-			]
-		},
-		"nsis": {
-			"oneClick": false,
-			"allowToChangeInstallationDirectory": true,
-			"deleteAppDataOnUninstall": true,
-			"perMachine": true,
-			"include": "build/installer.nsh"
-		},
-		"afterSign": "build/afterSignHook.js",
-		"mac": {
-			"target": [
-				"dmg"
-			],
-			"provisioningProfile": "build/embedded.provisionprofile",
-			"hardenedRuntime": true,
-			"gatekeeperAssess": false,
-			"entitlements": "build/entitlements.mac.plist"
-		},
-		"mas": {
-			"hardenedRuntime": false,
-			"provisioningProfile": "build/embedded.provisionprofile",
-			"entitlements": "build/entitlements.mas.plist",
-			"entitlementsInherit": "build/entitlements.mas.inherit.plist",
-			"gatekeeperAssess": false,
-			"asarUnpack": []
-		}
+		]
 	},
 	"scripts": {
 		"web": "nuxt",
 		"start": "nuxt start",
-		"dev": "webpack --mode=development && electron ./main.dev.js",
 		"build:web": "nuxt build",
-		"build:win": "nuxt build && webpack && electron-builder --win --x64",
-		"build:mac": "nuxt build && webpack && export CSC_IDENTITY_AUTO_DISCOVERY=false && electron-builder --mac --x64",
-		"build:mac:dmg": "nuxt build && webpack && CSC_NAME=\"CERTIFICATE NAME (***********)\" appleId='apple@developer.id' appleIdPassword='application password' electron-builder",
-		"build:mac:store": "nuxt build && webpack && CSC_NAME=\"CERTIFICATE NAME (***********)\" electron-builder && bash build/resignAndPackage.sh",
 		"lint": "yarn eslint -c .eslintrc.js --ext .ts,.js,.vue ./src",
 		"lint-fix": "yarn eslint -c .eslintrc.js --fix --ext .ts,.js,.vue ./src"
 	},
@@ -88,9 +53,7 @@
 		"@toruslabs/openlogin-ed25519": "^1.3.4",
 		"axios": "^0.24.0",
 		"browser-image-compression": "^1.0.17",
-		"core-js": "^3.20.3",
 		"dompurify": "^2.3.4",
-		"electron-serve": "^0.4.1",
 		"highlight.js": "^11.4.0",
 		"intl-tel-input": "^17.0.15",
 		"ipfs-core": "0.13.0",
@@ -107,7 +70,6 @@
 		"vuex-persistedstate": "^3.2.0"
 	},
 	"devDependencies": {
-		"@babel/runtime-corejs2": "^7.16.7",
 		"@nuxt/types": "^2.15.8",
 		"@nuxt/typescript-build": "^2.1.0",
 		"@nuxtjs/eslint-config-typescript": "^8.0.0",
@@ -119,18 +81,11 @@
 		"@types/quill": "^2.0.9",
 		"@types/toastify-js": "^1.11.0",
 		"@types/turndown": "^5.0.1",
-		"cross-env": "^6.0.3",
-		"electron": "^12.0.5",
-		"electron-builder": "^21.2.0",
-		"electron-devtools-installer": "^3.1.1",
-		"electron-notarize": "^0.2.1",
 		"eslint": "^8.7.0",
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-plugin-prettier-vue": "^3.1.0",
 		"prettier": "^2.5.1",
 		"ts-loader": "^8.3.0",
-		"typescript": "^4.5.4",
-		"webpack": "^4.46.0",
-		"webpack-cli": "^4.9.1"
+		"typescript": "^4.5.4"
 	}
 }
