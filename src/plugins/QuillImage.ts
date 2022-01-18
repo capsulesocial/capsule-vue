@@ -25,7 +25,7 @@ export function transformPostToTemplate(body: string, postImages?: Array<string>
 		return body
 	}
 	for (const p of postImages) {
-		const regex = `<ipfsimage alt="${p}" class="ipfs_img" cid="${p}"></ipfsimage>`
+		const regex = /<ipfsimage \w*="\w*" \w*="\w*" \w*="\w*"><\/ipfsimage>/gm
 		body = body.replace(new RegExp(regex, `g`), `<IpfsImage alt="${p}" class="ipfs_img" :cid="'${p}'" />`)
 	}
 	return body
