@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<header class="w-full sticky top-0 bg-gradient-to-r" :class="showMobileMenu || showDropdown ? `z-20` : ``">
 		<!-- Desktop header -->
 		<nav class="hidden xl:min-w-1220 xl:flex py-5 flex-row flex-no-wrap justify-between items-center">
 			<!-- Left side: Links + write post button -->
@@ -144,7 +144,7 @@
 				</div>
 			</div>
 		</nav>
-	</div>
+	</header>
 </template>
 
 <script lang="ts">
