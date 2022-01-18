@@ -22,7 +22,6 @@ export default function readerViewFactory(markdown: string, postImages?: Array<s
 	const html = marked.parse(markdown)
 	const sanitizedHtml = sanitizeHTML(html)
 	const template = `<div>${transformPostToTemplate(sanitizedHtml, postImages)}</div>`
-
 	return Vue.component(`ReaderView`, {
 		components: { IpfsImage },
 		template,

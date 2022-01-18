@@ -83,7 +83,7 @@ import QuillMarkdown from 'quilljs-markdown'
 import imageCompression from 'browser-image-compression'
 import XIcon from '@/components/icons/X.vue'
 import PencilIcon from '@/components/icons/Pencil.vue'
-import { ImageBlot, transformEditorPost } from '@/plugins/QuillImage'
+import { ImageBlot } from '@/plugins/QuillImage'
 import { createRegularPost, sendRegularPost } from '@/backend/post'
 import { addPhotoToIPFS, preUploadPhoto } from '@/backend/photos'
 import { parseIpfsImage } from '@/plugins/markedExtensions'
@@ -206,6 +206,19 @@ export default Vue.extend({
 			replacement: (_, node) => {
 				// eslint-disable-next-line quotes
 				return '```\n' + node.textContent + '```'
+			},
+		})
+		this.turndownService.addRule(`ipfsimage`, {
+			filter: [`img`],
+			replacement: (_, node) => {
+				if (`getAttribute` in node) {
+					// return `[ipfs_img cid="${node.getAttribute(`alt`)}"]`
+					return `<ipfsimage alt="${node.getAttribute(`alt`)}" class="ipfs_img" cid="${node.getAttribute(
+						`alt`,
+					)}"></ipfsimage>`
+				}
+
+				throw new Error(`getAttributes does not exist on node`)
 			},
 		})
 		const titleInput = this.$refs.title as HTMLInputElement
@@ -338,7 +351,7 @@ export default Vue.extend({
 				this.$toastError(`Missing category`)
 				return
 			}
-			const clean = transformEditorPost(this.getInputHTML())
+			const clean = this.turndownService.turndown(this.getInputHTML())
 			// Check content quality
 			if (clean.length < 280) {
 				this.$toastError(`Post body too short. Write more before posting`)
@@ -356,7 +369,7 @@ export default Vue.extend({
 			const p = createRegularPost(
 				this.title,
 				this.subtitle === `` ? null : this.subtitle,
-				this.turndownService.turndown(clean),
+				clean,
 				category,
 				tags,
 				this.$store.state.session.id,
