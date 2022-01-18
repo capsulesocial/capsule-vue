@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { checkAccountStatus } from './near'
-import { capsuleServer } from './utilities/config'
+import { capsuleServer, sufficientFunds } from './utilities/config'
 
 export async function requestOTP(phoneNumber: string) {
 	const response = await axios.post(`${capsuleServer}/sendOtp`, {
@@ -14,12 +14,16 @@ export async function getFundTransferStatus(accountId: string) {
 	return response.data.data
 }
 
+export function hasSufficientFunds(currentFunds: string) {
+	return BigInt(currentFunds) >= BigInt(sufficientFunds)
+}
+
 export function waitForFunds(accountId: string) {
 	let secWaited = 0
 	return new Promise<{ balance?: string; error?: string }>((resolve) => {
 		const waiter = async () => {
 			const { balance } = await checkAccountStatus(accountId)
-			if (parseInt(balance) > 0) {
+			if (hasSufficientFunds(balance)) {
 				resolve({ balance })
 				return
 			}

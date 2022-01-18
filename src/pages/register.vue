@@ -226,8 +226,8 @@ import {
 	walletLogin,
 	walletLogout,
 } from '@/backend/near'
-import { sufficientFunds, torusVerifiers, TorusVerifiers } from '@/backend/utilities/config'
-import { requestOTP, requestSponsor, waitForFunds } from '@/backend/funder'
+import { torusVerifiers, TorusVerifiers } from '@/backend/utilities/config'
+import { hasSufficientFunds, requestOTP, requestSponsor, waitForFunds } from '@/backend/funder'
 import { verifyCodeAndGetToken, verifyTokenAndOnboard } from '@/backend/invite'
 
 interface IData {
@@ -309,7 +309,7 @@ export default Vue.extend({
 			changeLocation: MutationType.CHANGE_LOCATION,
 		}),
 		hasSufficientFunds() {
-			return BigInt(this.funds) >= BigInt(sufficientFunds)
+			return hasSufficientFunds(this.funds)
 		},
 		async checkFunds() {
 			this.isLoading = true
