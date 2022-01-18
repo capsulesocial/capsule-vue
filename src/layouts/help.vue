@@ -13,9 +13,7 @@
 		<div class="w-full flex justify-center">
 			<div class="flex flex-col" style="width: 1220px">
 				<!-- Header -->
-				<header class="w-full sticky top-0 py-5 bg-gradient-to-r z-10 pb-4">
-					<Header :avatar="avatar" />
-				</header>
+				<Header :avatar="avatar" />
 				<!-- Body -->
 				<div>
 					<!-- Content -->

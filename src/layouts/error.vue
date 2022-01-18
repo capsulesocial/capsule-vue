@@ -12,9 +12,7 @@
 		<div class="w-full flex justify-center">
 			<div class="flex flex-col" style="width: 1220px">
 				<!-- Header -->
-				<header class="w-full sticky top-0 py-5 bg-gradient-to-r z-10">
-					<Header :avatar="myAvatar" />
-				</header>
+				<Header :avatar="myAvatar" />
 				<h1 class="text-4xl font-bold text-red-500 text-center">{{ error['statusCode'] }}: {{ error['message'] }}</h1>
 				<h6 class="text-xl text-center p-10">An error has occurred</h6>
 				<div class="flex justify-center">
