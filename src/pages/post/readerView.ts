@@ -2,12 +2,10 @@ import Vue from 'vue'
 import DOMPurify from 'dompurify'
 import { marked } from 'marked'
 
+import { transformPostToTemplate, markedRenderer } from './editorExtensions'
 import IpfsImage from '@/components/IpfsImage.vue'
 
-import { ipfsImgExtension, markedRenderer } from '@/plugins/markedExtensions'
-import { transformPostToTemplate } from '@/plugins/QuillImage'
-
-marked.use({ renderer: markedRenderer, extensions: [ipfsImgExtension] })
+marked.use({ renderer: markedRenderer })
 
 function sanitizeHTML(input: string) {
 	return DOMPurify.sanitize(input, {

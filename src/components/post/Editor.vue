@@ -83,26 +83,24 @@ import QuillMarkdown from 'quilljs-markdown'
 import imageCompression from 'browser-image-compression'
 import XIcon from '@/components/icons/X.vue'
 import PencilIcon from '@/components/icons/Pencil.vue'
-import { ImageBlot } from '@/plugins/QuillImage'
+import { ImageBlot, preRule, ipfsImageRule, createPostImagesArray } from '@/pages/post/editorExtensions'
 import { createRegularPost, sendRegularPost } from '@/backend/post'
 import { addPhotoToIPFS, preUploadPhoto } from '@/backend/photos'
-import { parseIpfsImage } from '@/plugins/markedExtensions'
 
 interface IData {
 	title: string
 	subtitle: string
 	input: string
-	editor: Quill
-	qeditor: Quill
-	turndownService: Turndown
+	editor: Quill | null
+	qeditor: Quill | null
 	wordCount: number
 	titleError: string
 	subtitleError: string
 	hasPosted: boolean
-	isSaving: string
+	isSaving: `true` | `false` | `done`
 	isX: boolean
 	isCollapsed: boolean
-	postImages: Array<string>
+	postImages: Set<string>
 }
 
 const toolbarOptions = [
@@ -130,6 +128,10 @@ const options = {
 	},
 }
 
+const turndownService = new Turndown()
+turndownService.addRule(`codeblock`, preRule)
+turndownService.addRule(`ipfsimage`, ipfsImageRule)
+
 export default Vue.extend({
 	components: {
 		XIcon,
@@ -147,8 +149,6 @@ export default Vue.extend({
 			title,
 			subtitle,
 			input,
-			// @ts-ignore
-			turndownService: Turndown,
 			wordCount: 0,
 			titleError: ``,
 			subtitleError: ``,
@@ -156,7 +156,9 @@ export default Vue.extend({
 			isSaving: `false`,
 			isX: false,
 			isCollapsed: false,
-			postImages: [],
+			postImages: new Set(),
+			qeditor: null,
+			editor: null,
 		}
 	},
 	beforeDestroy() {
@@ -174,53 +176,36 @@ export default Vue.extend({
 		}
 	},
 	mounted() {
-		Quill.register(ImageBlot)
-		Quill.register(`modules/counter`, (quill: Quill) => {
-			const metaButton = document.getElementById(`metaButton`)
-			quill.on(`text-change`, () => {
-				this.$emit(`isWriting`, true)
-				if (metaButton) {
-					metaButton.classList.add(`hidemetaButton`)
-				}
-				this.isCollapsed = true
-				const text = quill.getText()
-				const n = text.split(/\s+/).length
-				this.updateWordCount(n)
-			})
-			quill.on(`selection-change`, (range) => {
-				if (!range) {
-					this.$emit(`isWriting`, false)
+		Quill.register(ImageBlot, true)
+		Quill.register(
+			`modules/counter`,
+			(quill: Quill) => {
+				const metaButton = document.getElementById(`metaButton`)
+				quill.on(`text-change`, () => {
+					this.$emit(`isWriting`, true)
 					if (metaButton) {
-						metaButton.classList.remove(`hidemetaButton`)
+						metaButton.classList.add(`hidemetaButton`)
 					}
-					this.isCollapsed = false
-				}
-			})
-		})
+					this.isCollapsed = true
+					const text = quill.getText()
+					const n = text.split(/\s+/).length
+					this.updateWordCount(n)
+				})
+				quill.on(`selection-change`, (range) => {
+					if (!range) {
+						this.$emit(`isWriting`, false)
+						if (metaButton) {
+							metaButton.classList.remove(`hidemetaButton`)
+						}
+						this.isCollapsed = false
+					}
+				})
+			},
+			true,
+		)
 		const editor = new Quill(`#editor`, options)
 		this.qeditor = editor
 		this.editor = new QuillMarkdown(editor, {})
-		this.turndownService = new Turndown()
-		this.turndownService.addRule(`codeblock`, {
-			filter: [`pre`],
-			replacement: (_, node) => {
-				// eslint-disable-next-line quotes
-				return '```\n' + node.textContent + '```'
-			},
-		})
-		this.turndownService.addRule(`ipfsimage`, {
-			filter: [`img`],
-			replacement: (_, node) => {
-				if (`getAttribute` in node) {
-					// return `[ipfs_img cid="${node.getAttribute(`alt`)}"]`
-					return `<ipfsimage alt="${node.getAttribute(`alt`)}" class="ipfs_img" cid="${node.getAttribute(
-						`alt`,
-					)}"></ipfsimage>`
-				}
-
-				throw new Error(`getAttributes does not exist on node`)
-			},
-		})
 		const titleInput = this.$refs.title as HTMLInputElement
 		const subtitleInput = this.$refs.subtitle as HTMLInputElement
 
@@ -275,11 +260,16 @@ export default Vue.extend({
 				reader.onload = async (i) => {
 					if (i.target !== null) {
 						const cid = await addPhotoToIPFS(i.target.result as any)
-						this.postImages.push(cid)
-						await preUploadPhoto(cid, compressedImage)
+						// If we have already added this image in the past, we don't need to reupload it to the server
+						if (!this.postImages.has(cid)) {
+							this.postImages.add(cid)
+							await preUploadPhoto(cid, compressedImage)
+						}
+						if (!this.qeditor) {
+							return
+						}
 						const range = this.qeditor.getSelection(true)
 						this.qeditor.insertEmbed(range.index, `image`, { alt: cid.toString(), url: i.target.result }, `user`)
-						// this.updateContent()
 					}
 				}
 			} catch (err) {
@@ -315,7 +305,7 @@ export default Vue.extend({
 				return ``
 			}
 			// Sanitize HTML
-			const clean: string = DOMPurify.sanitize(input.innerHTML, {
+			const clean = DOMPurify.sanitize(input.innerHTML, {
 				USE_PROFILES: { html: true, svg: true },
 				ALLOWED_TAGS: [`pre`],
 			})
@@ -351,7 +341,7 @@ export default Vue.extend({
 				this.$toastError(`Missing category`)
 				return
 			}
-			const clean = this.turndownService.turndown(this.getInputHTML())
+			const clean = turndownService.turndown(this.getInputHTML())
 			// Check content quality
 			if (clean.length < 280) {
 				this.$toastError(`Post body too short. Write more before posting`)
@@ -365,7 +355,7 @@ export default Vue.extend({
 				return
 			}
 			this.hasPosted = true
-			const postImages = new Set(parseIpfsImage(clean).filter((i) => this.postImages.includes(i)))
+			const postImages = createPostImagesArray(clean, this.postImages)
 			const p = createRegularPost(
 				this.title,
 				this.subtitle === `` ? null : this.subtitle,
@@ -375,7 +365,7 @@ export default Vue.extend({
 				this.$store.state.session.id,
 				featuredPhotoCID,
 				featuredPhotoCaption,
-				Array.from(postImages),
+				postImages,
 			)
 			const cid = await sendRegularPost(p)
 			this.title = ``
