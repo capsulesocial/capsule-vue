@@ -45,6 +45,13 @@
 				</article>
 
 				<!-- WYSIWYG -->
+				<input
+					v-show="false"
+					id="getFile"
+					accept="image/png, image/jpeg"
+					type="file"
+					@change="uploadFunction($event)"
+				/>
 				<div
 					id="editor"
 					ref="editor"
@@ -73,23 +80,27 @@ import Turndown from 'turndown'
 import Quill from 'quill'
 // @ts-ignore
 import QuillMarkdown from 'quilljs-markdown'
+import imageCompression from 'browser-image-compression'
 import XIcon from '@/components/icons/X.vue'
 import PencilIcon from '@/components/icons/Pencil.vue'
+import { ImageBlot, preRule, ipfsImageRule, createPostImagesArray } from '@/pages/post/editorExtensions'
 import { createRegularPost, sendRegularPost } from '@/backend/post'
+import { addPhotoToIPFS, preUploadPhoto } from '@/backend/photos'
 
 interface IData {
 	title: string
 	subtitle: string
 	input: string
-	editor: Quill
-	turndownService: Turndown
+	editor: Quill | null
+	qeditor: Quill | null
 	wordCount: number
 	titleError: string
 	subtitleError: string
 	hasPosted: boolean
-	isSaving: string
+	isSaving: `true` | `false` | `done`
 	isX: boolean
 	isCollapsed: boolean
+	postImages: Set<string>
 }
 
 const toolbarOptions = [
@@ -97,8 +108,8 @@ const toolbarOptions = [
 	[`blockquote`, `code-block`, `link`],
 	[{ header: 2 }],
 	[{ list: `ordered` }, { list: `bullet` }],
+	[`image`],
 ]
-
 const options = {
 	placeholder: `Start typing here...`,
 	readOnly: false,
@@ -106,9 +117,20 @@ const options = {
 	bounds: `#editor`,
 	modules: {
 		counter: true,
-		toolbar: toolbarOptions,
+		toolbar: {
+			container: toolbarOptions,
+			handlers: {
+				image() {
+					document.getElementById(`getFile`)?.click()
+				},
+			},
+		},
 	},
 }
+
+const turndownService = new Turndown()
+turndownService.addRule(`codeblock`, preRule)
+turndownService.addRule(`ipfsimage`, ipfsImageRule)
 
 export default Vue.extend({
 	components: {
@@ -127,8 +149,6 @@ export default Vue.extend({
 			title,
 			subtitle,
 			input,
-			// @ts-ignore
-			turndownService: Turndown,
 			wordCount: 0,
 			titleError: ``,
 			subtitleError: ``,
@@ -136,6 +156,9 @@ export default Vue.extend({
 			isSaving: `false`,
 			isX: false,
 			isCollapsed: false,
+			postImages: new Set(),
+			qeditor: null,
+			editor: null,
 		}
 	},
 	beforeDestroy() {
@@ -153,38 +176,36 @@ export default Vue.extend({
 		}
 	},
 	mounted() {
-		Quill.register(`modules/counter`, (quill: Quill) => {
-			const metaButton = document.getElementById(`metaButton`)
-			quill.on(`text-change`, () => {
-				this.$emit(`isWriting`, true)
-				if (metaButton) {
-					metaButton.classList.add(`hidemetaButton`)
-				}
-				this.isCollapsed = true
-				const text = quill.getText()
-				const n = text.split(/\s+/).length
-				this.updateWordCount(n)
-			})
-			quill.on(`selection-change`, (range) => {
-				if (!range) {
-					this.$emit(`isWriting`, false)
+		Quill.register(ImageBlot, true)
+		Quill.register(
+			`modules/counter`,
+			(quill: Quill) => {
+				const metaButton = document.getElementById(`metaButton`)
+				quill.on(`text-change`, () => {
+					this.$emit(`isWriting`, true)
 					if (metaButton) {
-						metaButton.classList.remove(`hidemetaButton`)
+						metaButton.classList.add(`hidemetaButton`)
 					}
-					this.isCollapsed = false
-				}
-			})
-		})
-		const editor = new Quill(`#editor`, options)
-		this.editor = new QuillMarkdown(editor, {})
-		this.turndownService = new Turndown()
-		this.turndownService.addRule(`codeblock`, {
-			filter: [`pre`],
-			replacement: (_, node) => {
-				// eslint-disable-next-line quotes
-				return '```\n' + node.textContent + '```'
+					this.isCollapsed = true
+					const text = quill.getText()
+					const n = text.split(/\s+/).length
+					this.updateWordCount(n)
+				})
+				quill.on(`selection-change`, (range) => {
+					if (!range) {
+						this.$emit(`isWriting`, false)
+						if (metaButton) {
+							metaButton.classList.remove(`hidemetaButton`)
+						}
+						this.isCollapsed = false
+					}
+				})
 			},
-		})
+			true,
+		)
+		const editor = new Quill(`#editor`, options)
+		this.qeditor = editor
+		this.editor = new QuillMarkdown(editor, {})
 		const titleInput = this.$refs.title as HTMLInputElement
 		const subtitleInput = this.$refs.subtitle as HTMLInputElement
 
@@ -220,6 +241,44 @@ export default Vue.extend({
 				this.$store.commit(`draft/updateContent`, input)
 			}
 		},
+		async uploadFunction(e: { target: HTMLInputElement }) {
+			const target = e.target
+			if (e.target.files?.length !== 1) {
+				return
+			}
+			const image: File = (target.files as FileList)[0]
+			if (!image) {
+				return
+			}
+
+			try {
+				const compressedImage = await imageCompression(image, {
+					maxSizeMB: 5,
+					maxWidthOrHeight: 1920,
+					useWebWorker: true,
+					initialQuality: 0.9,
+				})
+				const reader = new FileReader()
+				reader.readAsDataURL(compressedImage)
+				reader.onload = async (i) => {
+					if (i.target !== null) {
+						const cid = await addPhotoToIPFS(i.target.result as any)
+						// If we have already added this image in the past, we don't need to reupload it to the server
+						if (!this.postImages.has(cid)) {
+							this.postImages.add(cid)
+							await preUploadPhoto(cid, compressedImage)
+						}
+						if (!this.qeditor) {
+							return
+						}
+						const range = this.qeditor.getSelection(true)
+						this.qeditor.insertEmbed(range.index, `image`, { alt: cid.toString(), url: i.target.result }, `user`)
+					}
+				}
+			} catch (err) {
+				this.$toastError(`error`)
+			}
+		},
 		async saveContent(): Promise<void> {
 			this.isX = true
 			const titleInput = this.$refs.title as HTMLInputElement
@@ -249,7 +308,7 @@ export default Vue.extend({
 				return ``
 			}
 			// Sanitize HTML
-			const clean: string = DOMPurify.sanitize(input.innerHTML, {
+			const clean = DOMPurify.sanitize(input.innerHTML, {
 				USE_PROFILES: { html: true, svg: true },
 				ALLOWED_TAGS: [`pre`],
 			})
@@ -285,7 +344,7 @@ export default Vue.extend({
 				this.$toastError(`Missing category`)
 				return
 			}
-			const clean = this.getInputHTML()
+			const clean = turndownService.turndown(this.getInputHTML())
 			// Check content quality
 			if (clean.length < 280) {
 				this.$toastError(`Post body too short. Write more before posting`)
@@ -299,15 +358,17 @@ export default Vue.extend({
 				return
 			}
 			this.hasPosted = true
+			const postImages = createPostImagesArray(clean, this.postImages)
 			const p = createRegularPost(
 				this.title,
 				this.subtitle === `` ? null : this.subtitle,
-				this.turndownService.turndown(clean),
+				clean,
 				category,
 				tags,
 				this.$store.state.session.id,
 				featuredPhotoCID,
 				featuredPhotoCaption,
+				postImages,
 			)
 			const cid = await sendRegularPost(p)
 			this.title = ``

@@ -131,6 +131,7 @@ export const mutations: MutationTree<DraftState> = {
 				timestamp: 0,
 			})
 		}
+		state.activeIndex = state.drafts.length - 1
 	},
 	[MutationType.HANDLE_DRAFT_WIDGET]: (state, v) => {
 		state.handleDraftWidget = v
