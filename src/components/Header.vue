@@ -78,15 +78,27 @@
 				</button>
 				<div
 					v-show="showMobileMenu"
-					class="absolute flex flex-col mt-2 ml-0 rounded-lg shadow-lg p-4 bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg border border-lightBorder modal-animation"
+					class="dropdownMainOpen absolute flex flex-col mt-2 ml-0 rounded-lg shadow-lg p-4 bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg border border-lightBorder modal-animation"
 				>
-					<nuxt-link to="/home" class="text-left w-full flex flex-row items-center text-gray5 mb-4">
+					<nuxt-link
+						to="/home"
+						class="text-left w-full flex flex-row items-center mb-4 border-none"
+						:class="getStyles(`home`)"
+					>
 						<HomeIcon class="flex-shrink-0 w-5 h-5 mr-2" />Home</nuxt-link
 					>
-					<nuxt-link to="/discover" class="text-left w-full flex flex-row items-center text-gray5 mb-4">
+					<nuxt-link
+						to="/discover"
+						class="text-left w-full flex flex-row items-center mb-4 border-none"
+						:class="getStyles(`discover`)"
+					>
 						<DiscoverIcon class="flex-shrink-0 w-5 h-5 mr-2" />Discover</nuxt-link
 					>
-					<nuxt-link to="/bookmarks" class="text-left w-full flex flex-row items-center text-gray5">
+					<nuxt-link
+						to="/bookmarks"
+						class="text-left w-full flex flex-row items-center border-none"
+						:class="getStyles(`bookmarks`)"
+					>
 						<BookmarksIcon class="flex-shrink-0 w-5 h-5 mr-2" />Bookmarks</nuxt-link
 					>
 				</div>
@@ -276,6 +288,22 @@ export default Vue.extend({
 	position: absolute;
 	top: -0.5rem;
 	right: 0.95rem;
+	transform: rotate(45deg);
+	width: 1rem;
+	height: 1rem;
+	background-color: #fff;
+	border-radius: 2px;
+}
+.dropdownMainOpen {
+	margin-top: 1rem !important;
+	margin-left: -1rem !important;
+	backdrop-filter: blur(10px);
+}
+.dropdownMainOpen::before {
+	content: '';
+	position: absolute;
+	top: -0.5rem;
+	left: 0.95rem;
 	transform: rotate(45deg);
 	width: 1rem;
 	height: 1rem;

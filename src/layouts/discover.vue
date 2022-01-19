@@ -39,7 +39,7 @@
 						<!-- Widgets -->
 						<aside
 							:class="$route.name === `discover` ? `` : `-mt-24`"
-							class="fixed overflow-y-auto p-4 -mt-4"
+							class="fixed hidden xl:block overflow-y-auto p-4 -mt-4"
 							:style="
 								$route.name === `discover`
 									? `min-height: calc(100vh - 150px); height: calc(100vh - 80px)`

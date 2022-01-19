@@ -18,24 +18,23 @@
 				<div>
 					<!-- Title and peered nodes -->
 					<div
-						class="fixed w-full flex justify-between items-center modal-animation"
+						class="fixed w-full flex justify-between items-center modal-animation px-3 xl:px-0"
 						style="width: 1220px; height: 62px"
 					>
 						<!-- Title -->
-						<h1 class="font-semibold text-primary" style="font-size: 2.6rem">Bookmarks list</h1>
+						<h1 class="font-semibold text-primary text-3xl xl:text-4xl">Bookmarks list</h1>
 						<!-- Peered nodes -->
 						<Nodes />
 					</div>
 					<!-- Content -->
-					<section class="flex flex-row mt-20">
+					<section class="flex flex-row mt-16 xl:mt-20">
 						<nuxt-child
-							style="width: 750px; min-height: calc(100vh - 150px); height: calc(100vh - 150px)"
-							class="fixed overflow-y-auto rounded-lg shadow-lg mr-5 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop border border-lightBorder modal-animation"
+							class="fixed w-full xl:w-750 min-h-120 h-120 xl:min-h-150 xl:h-150 overflow-y-auto rounded-lg shadow-lg mr-5 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop border border-lightBorder modal-animation"
 							:posts="posts"
 						/>
 						<!-- Widgets -->
 						<aside
-							class="fixed modal-animation"
+							class="fixed hidden xl:block modal-animation"
 							style="
 								margin-left: 770px;
 								width: 450px;
