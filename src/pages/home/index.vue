@@ -1,5 +1,5 @@
 <template>
-	<div class="w-full border border-lightBorder">
+	<div class="border border-lightBorder">
 		<section>
 			<nav class="flex flex-row z-20 text-base w-full px-6 pt-4" style="backdrop-filter: blur(10px)">
 				<div class="flex items-center">
@@ -30,12 +30,7 @@
 					</button>
 				</div>
 			</nav>
-			<div
-				v-if="posts"
-				ref="container"
-				class="fixed overflow-y-auto modal-animation"
-				style="width: 748px; min-height: calc(100vh - 220px); height: calc(100vh - 220px)"
-			>
+			<div v-if="posts" ref="container" class="fixed w-full xl:w-748 min-h-220 h-220 overflow-y-auto modal-animation">
 				<div
 					v-if="!isLoading && algorithm === `FOLLOWING` && following.size === 0 && posts.length === 0"
 					class="relative h-full overflow-y-hidden"

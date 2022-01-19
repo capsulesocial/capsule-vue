@@ -98,6 +98,8 @@ module.exports = {
         lg: '1px 2px 20px rgba(0, 0, 0, 0.07)',
       },
       width: {
+        748: `748px`,
+        750: `750px`,
         1220: `1220px`,
         760: `760px`,
       },
@@ -106,14 +108,24 @@ module.exports = {
         1220: `1220px`
       },
       maxWidth: {
+        420: `420px`,
+        700: `700px`,
         760: `760px`,
+        mobileCard: `calc(100vw - 50px)`
       },
       height: {
         80: `calc(100vh - 80px)`,
+        150: `calc(100vh - 150px)`,
+        220: `calc(100vh - 220px)`,
         fit: `fit-content`
       },
       minHeight: {
-        80: `calc(100vh - 80px)`
+        80: `calc(100vh - 80px)`,
+        150: `calc(100vh - 150px)`,
+        220: `calc(100vh - 220px)`,
+      },
+      maxHeight: {
+        90: `90vh`,
       },
     }
   },
