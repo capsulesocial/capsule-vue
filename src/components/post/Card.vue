@@ -6,8 +6,8 @@
 			class="fixed w-full h-screen bg-primary top-0 bottom-0 left-0 right-0 z-30 flex justify-center items-center bg-opacity-50 modal-animation"
 		>
 			<div
-				class="card shadow-lg rounded-lg bg-gradient-to-r from-lightBGStart to-lightBGStop mt-10 overflow-y-auto card-animation"
-				style="backdrop-filter: blur(10px); width: 750px; backdrop-filter: blur(10px); max-height: 90vh"
+				class="card w-full xl:w-750 max-h-90 shadow-lg rounded-lg bg-gradient-to-r from-lightBGStart to-lightBGStop mt-10 overflow-y-auto card-animation"
+				style="backdrop-filter: blur(10px)"
 			>
 				<div
 					class="sticky top-0 z-20 pb-5 border-b bg-gradient-to-r from-lightBGStart to-lightBGStop px-6 pt-5"
@@ -102,7 +102,7 @@
 							</div>
 						</div>
 						<!-- Content -->
-						<div class="mt-4 flex justify-between">
+						<div class="mt-4 flex flex-col xl:flex-row justify-between">
 							<!-- Left side: Title, subtitle / preview, tags -->
 							<div class="mr-4">
 								<nuxt-link :to="'/post/' + postCID">
@@ -110,35 +110,32 @@
 										<h3 class="text-lg font-semibold pb-2 break-words">
 											{{ post.title }}
 										</h3>
-										<h6
-											v-if="(post.subtitle || post.excerpt) && featuredPhoto"
-											:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-											class="break-words"
-											style="max-width: 420px"
-										>
+										<h6 v-if="(post.subtitle || post.excerpt) && featuredPhoto" class="break-words max-w-420">
 											{{ post.subtitle ? post.subtitle : postExcerpt() }}
 										</h6>
 										<h6
 											v-if="(post.subtitle || post.excerpt) && !featuredPhoto"
-											:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-											class="break-words"
-											style="max-width: 700px"
+											class="break-words max-w-mobileCard xl:max-w-700"
 										>
 											{{ post.subtitle ? post.subtitle : postExcerpt() }}
 										</h6>
 									</div>
 								</nuxt-link>
-								<!-- Display tags -->
-								<div class="flex overflow-x-auto my-2">
+								<!-- Display tags (Desktop) -->
+								<div class="hidden xl:flex overflow-x-auto my-2">
 									<TagPill v-for="t in post.tags" :key="t.name" :tag="t.name" class="mr-4 my-2" />
 								</div>
 							</div>
 							<!-- Right side: Image -->
-							<div v-if="featuredPhoto !== ``" class="flex-shrink-0 w-56">
+							<div v-if="featuredPhoto !== ``" class="flex-shrink-0 w-full mt-2 xl:mt-0 xl:w-56">
 								<nuxt-link :to="'/post/' + postCID">
 									<img :src="featuredPhoto" class="flex-shrink-0 h-32 object-cover rounded-lg w-full" />
 								</nuxt-link>
 							</div>
+						</div>
+						<!-- Display tags (mobile) -->
+						<div class="flex xl:hidden overflow-x-auto mt-2">
+							<TagPill v-for="t in post.tags" :key="t.name" :tag="t.name" class="mr-4 mt-2 xl:my-2" />
 						</div>
 					</div>
 					<!-- Repost POST button -->
@@ -262,7 +259,7 @@
 							</div>
 						</div>
 						<!-- Content -->
-						<div class="mt-4 flex justify-between">
+						<div class="mt-4 flex flex-col xl:flex-row justify-between">
 							<!-- Left side: Title, subtitle / preview, tags -->
 							<div class="mr-4">
 								<nuxt-link :to="'/post/' + postCID">
@@ -270,30 +267,24 @@
 										<h3 class="text-lg font-semibold pb-2 break-words">
 											{{ post.title }}
 										</h3>
-										<h6
-											v-if="(post.subtitle || post.excerpt) && featuredPhoto"
-											:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-											class="break-words"
-											style="max-width: 420px"
-										>
+										<h6 v-if="(post.subtitle || post.excerpt) && featuredPhoto" class="break-words max-w-420">
 											{{ post.subtitle ? post.subtitle : postExcerpt() }}
 										</h6>
 										<h6
 											v-if="(post.subtitle || post.excerpt) && !featuredPhoto"
 											:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-											class="break-words"
-											style="max-width: 700px"
+											class="break-words max-w-mobileCard xl:max-w-700"
 										>
 											{{ post.subtitle ? post.subtitle : postExcerpt() }}
 										</h6>
 									</div>
 								</nuxt-link>
-								<!-- Display tags -->
-								<div class="flex overflow-x-auto my-2">
+								<!-- Display tags (Desktop) -->
+								<div class="hidden xl:flex overflow-x-auto my-2">
 									<TagPill v-for="t in post.tags" :key="t.name" :tag="t.name" class="mr-4 my-2" />
 								</div>
-								<!-- Comment and share -->
-								<div class="flex mt-1 text-gray5">
+								<!-- Comment and share (Desktop) -->
+								<div class="hidden xl:flex mt-1 text-gray5">
 									<button
 										class="flex items-end focus:outline-none mr-2 text-gray5 hover:text-primary hover:fill-primary"
 										:class="showComments ? `text-primary` : ``"
@@ -315,11 +306,36 @@
 								</div>
 							</div>
 							<!-- Right side: Image -->
-							<div v-if="featuredPhoto !== ``" class="flex-shrink-0 w-56">
+							<div v-if="featuredPhoto !== ``" class="flex-shrink-0 w-full mt-2 xl:mt-0 xl:w-56">
 								<nuxt-link :to="'/post/' + postCID">
 									<img :src="featuredPhoto" class="flex-shrink-0 h-32 object-cover rounded-lg w-full" />
 								</nuxt-link>
 							</div>
+						</div>
+						<!-- Display tags (Mobile) -->
+						<div class="flex xl:hidden overflow-x-auto my-2">
+							<TagPill v-for="t in post.tags" :key="t.name" :tag="t.name" class="mr-4 my-2" />
+						</div>
+						<!-- Comment and share (Mobile) -->
+						<div class="flex xl:hidden mt-1 text-gray5">
+							<button
+								class="flex items-end focus:outline-none mr-2 text-gray5 hover:text-primary hover:fill-primary"
+								:class="showComments ? `text-primary` : ``"
+								@click="toggleComments"
+							>
+								<CommentIcon :isActive="showComments" />
+								<span v-if="comments" class="ml-1">{{ comments.length }}</span>
+							</button>
+							<Share
+								:repost="repost"
+								:post="post"
+								:cid="postCID"
+								class="fill-primary"
+								:hasRepost="hasReposted"
+								:repostCount="repostCount"
+								@toggleRepost="toggleQuoteRepost"
+							/>
+							<button class="focus:outline-none ml-4" @click="toggleStatsCard"><StatsIcon /></button>
 						</div>
 					</div>
 				</div>

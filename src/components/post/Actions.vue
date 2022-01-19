@@ -135,7 +135,11 @@
 			</div>
 			<div class="flex flex-col xl:flex-row items-start">
 				<!-- Comment box Container -->
-				<div v-show="!showEmotions" class="flex justify-between items-start mr-4" style="width: 60px; height: 60px">
+				<div
+					v-show="!showEmotions"
+					class="hidden xl:flex justify-between items-start mr-4"
+					style="width: 60px; height: 60px"
+				>
 					<Avatar
 						:avatar="$store.state.session.id === `` ? require(`@/assets/images/avatars/unauthenticated.webp`) : avatar"
 						:authorID="$store.state.session.id"
