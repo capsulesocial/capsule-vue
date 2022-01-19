@@ -243,6 +243,9 @@ export default Vue.extend({
 		},
 		async uploadFunction(e: { target: HTMLInputElement }) {
 			const target = e.target
+			if (e.target.files?.length !== 1) {
+				return
+			}
 			const image: File = (target.files as FileList)[0]
 			if (!image) {
 				return
