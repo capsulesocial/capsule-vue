@@ -10,7 +10,7 @@
 			<!-- Global Activity -->
 			<div class="pt-5 border-b h-32 flex justify-between">
 				<!-- Stats image -->
-				<img :src="require(`@/assets/images/brand/stats.webp`)" class="h-full flex-shrink-0 pl-5" />
+				<img :src="require(`@/assets/images/brand/stats.webp`)" class="h-full flex-shrink-0 pl-5 hidden xl:block" />
 				<!-- Text stats -->
 				<div class="flex flex-col w-3/5">
 					<h6 class="text-sm pb-4 font-semibold">Global Post Activity</h6>
@@ -31,7 +31,7 @@
 			<!-- Comments Activity -->
 			<div class="border-b flex justify-between h-48">
 				<!-- Graph breakdown -->
-				<div class="flex flex-row h-full self-end ml-5">
+				<div class="hidden xl:flex flex-row h-full self-end ml-5">
 					<!-- Positive -->
 					<span
 						class="bg-positive w-6 self-end rounded-t-full"

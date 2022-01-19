@@ -16,15 +16,15 @@
 			<!-- Dashed bubble -->
 			<div class="border rounded-lg w-full flex justify-between border-dashed" :style="getStyle(`border-`)">
 				<!-- Text -->
-				<div class="flex flex-col flex-grow w-full px-4 py-2">
+				<div class="flex flex-col flex-grow w-full px-3 py-2 pt-3">
 					<!-- Top row: name, id, timestamp -->
 					<div class="flex flex-wrap">
-						<nuxt-link :to="`/id/` + authorID" class="flex mr-4 xl:items-center">
-							<Avatar :avatar="avatar" :authorID="authorID" size="w-8 h-8" class="xl:hidden flex-shrink-0 mr-4" />
+						<nuxt-link :to="`/id/` + authorID" class="flex mr-4 items-center mb-2 xl:mb-0">
+							<Avatar :avatar="avatar" :authorID="authorID" size="w-8 h-8" class="xl:hidden flex-shrink-0 mr-2" />
 							<span class="font-medium">
 								{{ name }}
 							</span>
-							<span class="ml-2 text-primary"> @{{ authorID }} </span>
+							<span class="ml-2 text-primary text-sm xl:text-base"> @{{ authorID }} </span>
 						</nuxt-link>
 						<span v-if="timestamp" class="text-xs self-center">
 							{{ $formatDate(timestamp) }}
@@ -51,13 +51,13 @@
 					</div>
 				</div>
 				<!-- Desktop reaction face -->
-				<div class="hidden xl:block flex-shrink-0 flex justify-center items-center overflow-hidden">
+				<div class="hidden xl:flex flex-shrink-0 justify-center items-center overflow-hidden">
 					<img :src="emotion.leftImage" class="bg-transparent w-32 h-32 -mb-1 mt-2" />
 				</div>
 			</div>
 		</div>
 		<!-- Reply button -->
-		<div class="ml-10 pl-1">
+		<div class="ml-3 xl:ml-10 pl-1">
 			<!-- Active reply state -->
 			<div v-if="isReplying" class="border-l pl-2 mr-5 modal-animation mt-4">
 				<!-- Reply Input box -->
