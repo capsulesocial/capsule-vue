@@ -6,7 +6,6 @@
 				`linear-gradient(180deg, rgba(46, 85, 106, 0.02) 0%, rgba(46, 85, 106, 0) 50%), url(` +
 				$store.state.backgroundImage +
 				`)`,
-			backgroundSize: `contain`,
 		}"
 	>
 		<!-- Wrapper -->
@@ -18,18 +17,16 @@
 				<div>
 					<!-- Title and peered nodes -->
 					<div
-						class="fixed w-full flex justify-between items-center modal-animation"
+						class="fixed w-full flex justify-between items-center modal-animation px-3 xl:px-0"
 						style="width: 1220px; height: 62px"
 					>
 						<!-- Title -->
-						<h1 v-if="profile" class="font-semibold text-primary" style="font-size: 2.6rem">
-							Hello, {{ profile.name }}
-						</h1>
-						<h1 v-else class="font-semibold text-primary" style="font-size: 2.6rem">Hello,</h1>
+						<h1 v-if="profile" class="font-semibold text-primary text-3xl xl:text-4xl">Hello, {{ profile.name }}</h1>
+						<h1 v-else class="font-semibold text-primary text-4xl">Hello,</h1>
 						<Nodes />
 					</div>
 					<!-- Content -->
-					<section class="flex flex-row mt-20 relative">
+					<section class="flex flex-row mt-16 xl:mt-20 relative">
 						<PostEditor
 							v-if="$store.state.widgets.primary === `editor` && $route.name === `home`"
 							ref="editor"
@@ -43,7 +40,7 @@
 						/>
 						<nuxt-child
 							v-else
-							class="fixed w-full xl:w-750 min-h-150 h-150 overflow-y-auto rounded-lg shadow-lg mr-5 bg-gradient-to-r from-lightBGStart to-lightBGStop modal-animation"
+							class="fixed w-full xl:w-750 box-border min-h-120 h-120 overflow-y-auto rounded-lg shadow-lg xl:mr-5 bg-gradient-to-r from-lightBGStart to-lightBGStop modal-animation"
 							:class="showWidgets ? `` : `z-10`"
 							:toggleFriend="toggleFriend"
 							:following="following"

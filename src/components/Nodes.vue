@@ -1,6 +1,6 @@
 <template>
 	<!-- Peered nodes -->
-	<div class="flex items-center bg-gray1 px-3 rounded-lg">
+	<div class="hidden xl:flex items-center bg-gray1 px-3 rounded-lg">
 		<span class="text-sm mr-1 text-gray5">{{ nodes }} peered nodes</span>
 		<CapsuleIcon :shrink="true" />
 		<span class="flex h-3 w-3 ml-1">

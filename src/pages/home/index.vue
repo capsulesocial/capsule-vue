@@ -1,7 +1,7 @@
 <template>
 	<div class="border border-lightBorder">
 		<section>
-			<nav class="flex flex-row z-20 text-base w-full px-6 pt-4" style="backdrop-filter: blur(10px)">
+			<nav class="flex flex-row z-20 text-base w-full px-5 xl:px-6 pt-3 xl:pt-4" style="backdrop-filter: blur(10px)">
 				<div class="flex items-center">
 					<button
 						:class="algorithm === `FOLLOWING` ? ` text-primary border-b-2 border-primary font-semibold` : `text-gray5`"
@@ -30,7 +30,11 @@
 					</button>
 				</div>
 			</nav>
-			<div v-if="posts" ref="container" class="fixed w-full xl:w-748 min-h-220 h-220 overflow-y-auto modal-animation">
+			<div
+				v-if="posts"
+				ref="container"
+				class="fixed w-full xl:w-748 min-h-180 h-180 xl:min-h-200 xl:h-200 overflow-y-auto modal-animation"
+			>
 				<div
 					v-if="!isLoading && algorithm === `FOLLOWING` && following.size === 0 && posts.length === 0"
 					class="relative h-full overflow-y-hidden"

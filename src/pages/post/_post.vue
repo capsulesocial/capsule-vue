@@ -44,7 +44,7 @@
 						<BookmarkButton
 							:postID="$route.params.post"
 							:hasBookmark="isBookmarked"
-							class="pr-2 hidden xl:block"
+							class="pr-2"
 							@clicked="getBookmarkStatus"
 						/>
 						<ShareButton
@@ -109,10 +109,11 @@
 					<a
 						:href="`https://ipfs.io/api/v0/dag/get?arg=` + $route.params.post"
 						target="_blank"
-						class="flex flex-col xl:flex-row justify-between bg-gray1 rounded-lg text-gray5 px-3 py-1"
+						class="flex flex-row justify-between bg-gray1 rounded-lg text-gray5 px-3 py-1"
 					>
 						<span>IPFS address </span>
-						<span class="break-words">{{ $route.params.post }}</span>
+						<span class="break-words hidden xl:block">{{ $route.params.post }}</span>
+						<span class="block"><LinkIcon class="py-1" /></span>
 					</a>
 				</div>
 				<AuthorCard
@@ -178,6 +179,7 @@ import BookmarkButton from '@/components/post/BookmarkButton.vue'
 import ShareButton from '@/components/post/Share.vue'
 import Avatar from '@/components/Avatar.vue'
 import XIcon from '@/components/icons/X.vue'
+import LinkIcon from '@/components/icons/Link.vue'
 import FriendButton from '@/components/FriendButton.vue'
 import PostCard from '@/components/post/Card.vue'
 
@@ -221,6 +223,7 @@ export default Vue.extend({
 		BookmarkButton,
 		ShareButton,
 		Avatar,
+		LinkIcon,
 		XIcon,
 		FriendButton,
 		PostCard,

@@ -161,7 +161,7 @@
 		<!-- Feed view -->
 		<div v-if="this.$route.name !== `post-post`">
 			<div class="card" style="backdrop-filter: blur(10px)">
-				<div class="sticky top-0 z-20 pb-5 border-b px-6 pt-5" style="backdrop-filter: blur(10px)">
+				<div class="sticky top-0 z-20 py-4 xl:py-5 border-b px-5 xl:px-6" style="backdrop-filter: blur(10px)">
 					<!-- Quote repost -->
 					<div v-if="quote">
 						<div class="flex w-full">
@@ -308,7 +308,7 @@
 							<!-- Right side: Image -->
 							<div v-if="featuredPhoto !== ``" class="flex-shrink-0 w-full mt-2 xl:mt-0 xl:w-56">
 								<nuxt-link :to="'/post/' + postCID">
-									<img :src="featuredPhoto" class="flex-shrink-0 h-32 object-cover rounded-lg w-full" />
+									<img :src="featuredPhoto" class="flex-shrink-0 h-48 xl:h-32 object-cover rounded-lg w-full" />
 								</nuxt-link>
 							</div>
 						</div>

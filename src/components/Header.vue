@@ -1,5 +1,8 @@
 <template>
-	<header class="w-full sticky top-0 bg-gradient-to-r" :class="showMobileMenu || showDropdown ? `z-20` : ``">
+	<header
+		class="w-full sticky top-0 bg-gradient-to-r px-3 xl:px-0"
+		:class="showMobileMenu || showDropdown ? `z-20` : ``"
+	>
 		<!-- Desktop header -->
 		<nav class="hidden xl:min-w-1220 xl:flex py-5 flex-row flex-no-wrap justify-between items-center">
 			<!-- Left side: Links + write post button -->
@@ -20,6 +23,7 @@
 						:avatar="$store.state.session.id === `` ? require(`@/assets/images/avatars/unauthenticated.webp`) : avatar"
 						:authorID="$store.state.session.id"
 						:noClick="true"
+						:size="`w-10 h-10 xl:w-12 xl:h-12`"
 					/>
 				</button>
 				<!-- Dropdown: Profile, settings, disconnect -->
@@ -88,11 +92,13 @@
 				</div>
 			</div>
 			<!-- Middle branding -->
-			<div class="flex items-center">
-				<CapsuleIcon />
-				<h1 class="text-xl font-semibold font-sans text-primary">Blogchain</h1>
-			</div>
-			<div class="relative">
+			<nuxt-link to="/home">
+				<div class="flex items-center">
+					<CapsuleIcon />
+					<h1 class="text-xl font-bold font-sans text-primary">Blogchain</h1>
+				</div>
+			</nuxt-link>
+			<div class="relative mt-2">
 				<button class="dropdown focus:outline-none" @click="toggleMobileMenu">
 					<Avatar
 						class="dropdown"
