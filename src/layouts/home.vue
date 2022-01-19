@@ -10,7 +10,7 @@
 	>
 		<!-- Wrapper -->
 		<div class="w-full flex justify-center">
-			<div class="flex flex-col" style="width: 1220px">
+			<div class="flex flex-col w-full" style="width: 1220px">
 				<!-- Header -->
 				<Header :avatar="avatar" />
 				<!-- Body -->
@@ -18,11 +18,11 @@
 					<!-- Title and peered nodes -->
 					<div
 						class="fixed w-full flex justify-between items-center modal-animation px-3 xl:px-0"
-						style="width: 1220px; height: 62px"
+						style="height: 62px; width: 1220px"
 					>
 						<!-- Title -->
 						<h1 v-if="profile" class="font-semibold text-primary text-3xl xl:text-4xl">Hello, {{ profile.name }}</h1>
-						<h1 v-else class="font-semibold text-primary text-4xl">Hello,</h1>
+						<h1 v-else class="font-semibold text-primary text-3xl xl:text-4xl">Hello,</h1>
 						<Nodes />
 					</div>
 					<!-- Content -->
@@ -50,7 +50,7 @@
 						/>
 						<!-- Widgets -->
 						<aside
-							class="fixed overflow-y-auto p-4 -mt-4 modal-animation"
+							class="fixed hidden xl:block overflow-y-auto p-4 -mt-4 modal-animation"
 							:class="showWidgets ? `z-10` : ``"
 							style="margin-left: 755px; width: 485px; min-height: calc(100vh - 150px); height: calc(100vh - 150px)"
 						>

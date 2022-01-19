@@ -115,21 +115,31 @@ module.exports = {
         mobileCard: `calc(100vw - 50px)`
       },
       height: {
+        60: `calc(100vh - 60px)`,
         80: `calc(100vh - 80px)`,
         120: `calc(100vh - 120px)`,
+        130: `calc(100vh - 130px)`,
         150: `calc(100vh - 150px)`,
+        160: `calc(100vh - 160px)`,
         180: `calc(100vh - 180px)`,
         200: `calc(100vh - 200px)`,
         220: `calc(100vh - 220px)`,
+        230: `calc(100vh - 230px)`,
+        240: `calc(100vh - 240px)`,
         fit: `fit-content`
       },
       minHeight: {
+        60: `calc(100vh - 60px)`,
         80: `calc(100vh - 80px)`,
         120: `calc(100vh - 120px)`,
+        130: `calc(100vh - 130px)`,
         150: `calc(100vh - 150px)`,
+        160: `calc(100vh - 160px)`,
         180: `calc(100vh - 180px)`,
         200: `calc(100vh - 200px)`,
         220: `calc(100vh - 220px)`,
+        230: `calc(100vh - 230px)`,
+        240: `calc(100vh - 240px)`,
       },
       maxHeight: {
         90: `90vh`,

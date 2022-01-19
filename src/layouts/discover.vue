@@ -18,22 +18,21 @@
 				<div>
 					<!-- Title and peered nodes -->
 					<div
-						class="fixed w-full flex justify-between items-center modal-animation"
+						class="fixed w-full flex justify-between items-center modal-animation px-3 xl:px-0"
 						style="width: 1220px; height: 62px"
 					>
 						<!-- Title -->
-						<h1 v-if="$route.name === `discover`" class="font-semibold text-primary" style="font-size: 2.6rem">
+						<h1 v-if="$route.name === `discover`" class="font-semibold text-primary text-3xl xl:text-4xl">
 							Browse Capsule
 						</h1>
 						<!-- Peered nodes -->
 						<Nodes />
 					</div>
 					<!-- Content -->
-					<section class="flex flex-row mt-20 modal-animation">
+					<section class="flex flex-row mt-16 xl:mt-20 modal-animation">
 						<nuxt-child
-							style="width: 750px; min-height: calc(100vh - 80px); height: calc(100vh - 80px)"
-							:class="$route.name === `discover` ? `` : `-mt-20`"
-							class="fixed overflow-y-auto rounded-lg shadow-lg mr-5 bg-gradient-to-r from-lightBGStart to-lightBGStop box-content z-10"
+							:class="$route.name === `discover` ? `` : `-mt-16 xl:-mt-20`"
+							class="fixed w-full xl:w-750 min-h-60 h-60 xl:min-h-80 xl:h-80 overflow-y-auto rounded-lg shadow-lg mr-5 bg-gradient-to-r from-lightBGStart to-lightBGStop box-content z-10"
 							:toggleFriend="toggleFriend"
 							:following="following"
 						/>

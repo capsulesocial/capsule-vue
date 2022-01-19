@@ -11,11 +11,7 @@
 			<h2 class="text-2xl text-primary font-semibold">{{ $route.params.tag }}</h2>
 		</div>
 		<!-- Posts loaded -->
-		<div
-			ref="container"
-			class="fixed overflow-y-auto"
-			style="width: 748px; min-height: calc(100vh - 150px); height: calc(100vh - 150px)"
-		>
+		<div ref="container" class="fixed overflow-y-auto w-full xl:w-750 min-h-130 h-130 xl:min-h-150 xl:h-150">
 			<article v-for="p in posts" :key="p.post._id">
 				<PostCard
 					:repost="p.repost"
