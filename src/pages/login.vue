@@ -1,13 +1,13 @@
 <template>
 	<main
 		style="backdrop-filter: blur(10px)"
-		class="bg-gradient-to-r from-lightBGStart to-lightBGStop w-3/5 h-screen overflow-y-scroll flex-col justify-between"
+		class="bg-gradient-to-r from-lightBGStart to-lightBGStop w-full xl:w-3/5 h-screen overflow-y-scroll flex-col justify-between"
 	>
 		<CapsuleIcon class="pt-6 pl-10" />
 		<section class="flex justify-center items-center" style="height: 86%">
 			<div class="flex flex-col items-center w-full p-14 -mt-5">
 				<!-- Step 1: Choose Login / register -->
-				<article v-show="!userInfo && !isLoading" class="w-1/2">
+				<article v-show="!userInfo && !isLoading" class="w-full xl:w-1/2">
 					<h1 class="font-semibold text-primary mb-10" style="font-size: 2.6rem">Log in</h1>
 					<button
 						class="w-full rounded-lg bg-gray2 mb-4 py-2 flex justify-center items-center focus:outline-none"
@@ -36,19 +36,19 @@
 						<span class="font-semibold text-gray7 text-sm ml-4"> Import private key </span>
 						<input id="key" ref="key" type="file" name="key" accept=".json" class="hidden" @change="handleKey" />
 					</button>
-					<p class="text-center text-gray7 mt-10">
+					<p class="text-center text-gray7 mt-10 text-sm xl:text-base">
 						Don't have an account yet?
 						<nuxt-link to="/register" class="text-center font-bold text-primary">Sign up</nuxt-link>
 					</p>
 				</article>
 				<!-- Step 2: Sign up -->
-				<article v-show="!isLoading" class="w-1/2">
+				<article v-show="!isLoading" class="w-full xl:w-1/2">
 					<div v-show="userInfo && username === null">
 						<h1 class="text-4xl text-primary font-bold">Signup</h1>
 						Looks like you don't have an account. Sign up
 					</div>
 				</article>
-				<article v-show="isLoading" class="w-3/4 flex justify-center modal-animation">
+				<article v-show="isLoading" class="w-full xl:w-3/4 flex justify-center modal-animation">
 					<div class="loader m-5 rounded-lg"></div>
 				</article>
 			</div>

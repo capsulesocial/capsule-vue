@@ -264,3 +264,9 @@
 	background-size: cover !important;
 	background-repeat: no-repeat !important;
 }
+
+.bg-img-unauth {
+	background-size: cover !important;
+	background-repeat: no-repeat !important;
+	background-position: center right !important;
+}
