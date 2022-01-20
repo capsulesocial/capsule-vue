@@ -90,7 +90,6 @@ import type { PropType } from 'vue'
 import PostCard from '@/components/post/Card.vue'
 import { getPosts, Algorithm, IRepostResponse, IPostResponse } from '@/backend/post'
 import { getReposts } from '@/backend/reposts'
-import { RepostLink } from '@/store/index'
 
 interface IData {
 	posts: Array<IRepostResponse | IPostResponse>
@@ -153,20 +152,6 @@ export default Vue.extend({
 		})
 		console.log(JSON.stringify(this.$store.state.reposts))
 		console.log(this.$store.state)
-		// Fetch my reposts
-		await this.getReposts({ authorID: this.$store.state.session.id }, {}).then((res) => {
-			if (res) {
-				const repost: RepostLink[] = []
-				res.forEach((r) => {
-					const link: RepostLink = {
-						postID: r.post._id,
-						repostID: r.repost._id,
-					}
-					repost.push(link)
-				})
-				this.$store.commit(`setRepost`, repost)
-			}
-		})
 		this.currentOffset += this.limit
 		this.isLoading = false
 	},
