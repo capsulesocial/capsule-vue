@@ -18,7 +18,10 @@
 						<div class="items-center flex">
 							<Avatar :avatar="authorAvatar" :authorID="post.authorID" size="w-10 h-10" class="mr-4 flex-shrink-0" />
 							<div class="pr-8">
-								<nuxt-link :to="`/id/` + post.authorID" class="font-semibold">{{ author.name }}</nuxt-link>
+								<nuxt-link v-if="author.name != ``" :to="`/id/` + post.authorID" class="font-semibold">{{
+									author.name
+								}}</nuxt-link>
+								<nuxt-link v-else :to="`/id/` + post.authorID" class="font-semibold text-gray5">User</nuxt-link>
 								<h6 class="font-sans text-sm text-gray6">{{ $formatDate(post.timestamp) }}</h6>
 							</div>
 							<FriendButton

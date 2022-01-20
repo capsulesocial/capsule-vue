@@ -12,7 +12,7 @@
 				backgroundSize: 'cover',
 			}"
 		>
-			<div class="px-6 py-5 flex flex-col justify-between h-full">
+			<div class="px-4 xl:px-6 py-5 flex flex-col justify-between h-full">
 				<button class="flex focus:outline-none relative" @click="$router.go(-1)">
 					<div class="bg-gray1 rounded-full flex-shrink-0 z-10">
 						<BackIcon />
@@ -42,7 +42,7 @@
 		<!-- Posts loaded -->
 		<div
 			id="column"
-			class="fixed w-full xl:w-750 overflow-y-auto pb-56"
+			class="fixed w-full xl:w-750 overflow-y-auto"
 			:style="`min-height: calc(100vh - ` + padding + `); height: calc(100vh - ` + padding + `)`"
 		>
 			<article v-for="p in posts" :key="generateKey(p)">

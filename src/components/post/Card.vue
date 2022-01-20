@@ -6,11 +6,11 @@
 			class="fixed w-full h-screen bg-primary top-0 bottom-0 left-0 right-0 z-30 flex justify-center items-center bg-opacity-50 modal-animation"
 		>
 			<div
-				class="card w-full xl:w-750 max-h-90 shadow-lg rounded-lg bg-gradient-to-r from-lightBGStart to-lightBGStop mt-10 overflow-y-auto card-animation"
+				class="card w-full xl:w-750 max-h-90 shadow-lg rounded-lg bg-gradient-to-r from-lightBGStart to-lightBGStop mt-10 overflow-y-auto card-animation m-2 xl:m-0"
 				style="backdrop-filter: blur(10px)"
 			>
 				<div
-					class="sticky top-0 z-20 pb-5 border-b bg-gradient-to-r from-lightBGStart to-lightBGStop px-6 pt-5"
+					class="sticky top-0 z-20 border-b bg-gradient-to-r from-lightBGStart to-lightBGStop px-4 xl:px-6 py-4 xl:py-5"
 					style="backdrop-filter: blur(10px)"
 				>
 					<!-- Show Quote Repost input -->
@@ -19,7 +19,7 @@
 						<textarea
 							ref="repostText"
 							v-model="quoteContent"
-							class="w-full ml-4 resize-none focus:outline-none"
+							class="w-full ml-4 resize-none focus:outline-none mt-2"
 							placeholder="What's your response?"
 						></textarea>
 						<button
@@ -30,7 +30,7 @@
 						</button>
 					</div>
 					<!-- Wrapper for rounded outline on quote repost -->
-					<div :class="showRepostEditor || quote ? `rounded-lg bg-lightBorder p-4` : ``">
+					<div :class="showRepostEditor || quote ? `rounded-lg xl:bg-lightBorder xl:p-4` : ``">
 						<!-- Simple repost -->
 						<div
 							v-if="repostedBy !== `` && !hideRepostIcon && quote === null"
@@ -38,7 +38,8 @@
 						>
 							<RepostIcon class="hidden xl:block" />
 							<p class="hidden xl:block pl-2 text-sm text-gray5">
-								<nuxt-link :to="`/id/` + repostedBy">{{ repostedBy }} </nuxt-link>
+								<nuxt-link v-if="repostedBy != ``" :to="`/id/` + repostedBy">{{ repostedBy }} </nuxt-link>
+								<nuxt-link v-else :to="`/id/` + repostedBy">A user </nuxt-link>
 								reposted
 							</p>
 						</div>
@@ -48,9 +49,10 @@
 							<div class="flex-col flex-grow ml-4 hidden xl:flex">
 								<div class="flex" @mouseover="showFriendButton = true" @mouseleave="showFriendButton = false">
 									<nuxt-link :to="'/id/' + post.authorID" class="flex mr-4">
-										<span class="font-medium text-base">
+										<span v-if="authorName != ``" class="font-medium text-base">
 											{{ authorName }}
 										</span>
+										<span v-else class="font-medium text-base text-gray5"> User </span>
 										<span class="ml-2 text-primary"> @{{ post.authorID }} </span>
 									</nuxt-link>
 									<span v-show="showFriendButton" class="modal-animation">
@@ -68,7 +70,7 @@
 								</span>
 							</div>
 							<div
-								class="flex w-full justify-center xl:justify-between items-center relative"
+								class="flex w-full xl:w-1/5 justify-center xl:justify-end items-center relative"
 								:class="repostedBy !== `` ? `-mt-4` : ``"
 							>
 								<!-- Bookmarks button -->
@@ -80,7 +82,7 @@
 								/>
 								<button
 									v-if="post.authorID === $store.state.session.id"
-									class="focus:outline-none ml-2 text-gray5"
+									class="focus:outline-none ml-2 text-gray5 hidden xl:block"
 									@click.stop="toggleDropdownDelete"
 								>
 									<More />
@@ -158,7 +160,7 @@
 					:bookmarksCount="bookmarksCount"
 					:repostsCount="repostCount"
 					:openStats="showStats"
-					class="px-6 pb-6"
+					class="px-4 xl:px-6 pb-4 xl:pb-6"
 				/>
 			</div>
 		</div>
@@ -172,7 +174,8 @@
 							<Avatar :avatar="quote.avatar" :authorID="quote.authorID" size="w-12 h-12" />
 							<div class="flex flex-col flex-grow ml-4">
 								<nuxt-link :to="`/id/` + quote.authorID" class="flex mr-4">
-									<span class="font-medium text-base">{{ this.quote.name }}</span>
+									<span v-if="this.quote.name != ``" class="font-medium text-base">{{ this.quote.name }}</span>
+									<span v-else class="font-medium text-base text-gray5">User</span>
 									<span class="ml-2 text-primary">@{{ this.quote.authorID }}</span>
 								</nuxt-link>
 								<span class="text-xs">{{ $formatDate(this.quote.timestamp) }}</span>
@@ -206,7 +209,8 @@
 						>
 							<RepostIcon />
 							<p class="pl-2 text-sm text-gray5">
-								<nuxt-link :to="`/id/` + repostedBy">{{ repostedBy }} </nuxt-link>
+								<nuxt-link v-if="repostedBy != ``" :to="`/id/` + repostedBy">{{ repostedBy }} </nuxt-link>
+								<nuxt-link v-else :to="`/id/` + repostedBy">A user </nuxt-link>
 								reposted
 							</p>
 						</div>
@@ -216,9 +220,10 @@
 							<div class="flex flex-col flex-grow ml-4">
 								<div class="flex" @mouseover="showFriendButton = true" @mouseleave="showFriendButton = false">
 									<nuxt-link :to="'/id/' + post.authorID" class="flex mr-4">
-										<span class="font-medium text-base">
+										<span v-if="authorName != ``" class="font-medium text-base">
 											{{ authorName }}
 										</span>
+										<span v-else class="font-medium text-base text-gray5"> User </span>
 										<span class="ml-2 text-primary"> @{{ post.authorID }} </span>
 									</nuxt-link>
 									<span v-show="showFriendButton" class="modal-animation">

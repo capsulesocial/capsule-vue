@@ -1,6 +1,6 @@
 <template>
-	<section class="px-6">
-		<article v-if="comments.length == 0" class="grid justify-items-center mt-32">
+	<section class="px-5 xl:px-6">
+		<article v-if="comments.length == 0" class="grid justify-items-center mt-32 px-10 xl:px-0">
 			<p class="text-sm text-gray5 mb-5">
 				<span v-if="$route.params.id === $store.state.session.id">
 					It seems you haven't written any comments yet, you can comment on any post:

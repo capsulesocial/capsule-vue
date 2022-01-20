@@ -28,8 +28,8 @@
 			/>
 		</div>
 		<!-- Name -->
-		<div class="flex flex-row mb-4">
-			<label for="newName" class="w-32">Name</label>
+		<div class="flex flex-col xl:flex-row mb-4">
+			<label for="newName" class="w-32 font-semibold mb-2 xl:mb-0">Name</label>
 			<input
 				id="newName"
 				v-model="newName"
@@ -39,8 +39,8 @@
 			/>
 		</div>
 		<!-- Bio -->
-		<div class="flex flex-row mb-6">
-			<label for="bio" class="w-32"> Bio: </label>
+		<div class="flex flex-col xl:flex-row mb-6">
+			<label for="bio" class="w-32 font-semibold mb-2 xl:mb-0"> Bio: </label>
 			<div class="flex-grow">
 				<textarea
 					id="bio"
@@ -60,8 +60,8 @@
 			</div>
 		</div>
 		<!-- Location -->
-		<div v-if="$store.state.session.id === $route.params.id" class="flex flex-row mb-4">
-			<label for="location" class="w-32">Location</label>
+		<div v-if="$store.state.session.id === $route.params.id" class="flex flex-col xl:flex-row mb-4">
+			<label for="location" class="w-32 font-semibold mb-2 xl:mb-0">Location</label>
 			<input
 				id="location"
 				v-model="location"
@@ -71,8 +71,8 @@
 			/>
 		</div>
 		<!-- Website -->
-		<div v-if="$store.state.session.id === $route.params.id" class="flex flex-row mb-4">
-			<label for="website" class="w-32">Website</label>
+		<div v-if="$store.state.session.id === $route.params.id" class="flex flex-col xl:flex-row mb-4">
+			<label for="website" class="w-32 font-semibold mb-2 xl:mb-0">Website</label>
 			<input
 				id="website"
 				v-model="website"
@@ -82,8 +82,8 @@
 			/>
 		</div>
 		<!-- Email -->
-		<div v-if="$store.state.session.id === $route.params.id" class="flex flex-row mb-4">
-			<label for="newEmail" class="w-32">Email</label>
+		<div v-if="$store.state.session.id === $route.params.id" class="flex flex-col xl:flex-row mb-4">
+			<label for="newEmail" class="w-32 font-semibold mb-2 xl:mb-0">Email</label>
 			<input
 				id="newEmail"
 				v-model="newEmail"
@@ -295,7 +295,7 @@ export default Vue.extend({
 				) {
 					this.changeWebsite(this.website)
 				} else {
-					this.$toastError(`Invalid website URL!`)
+					this.$toastError(`Invalid URL`)
 					return
 				}
 			}

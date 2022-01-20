@@ -19,7 +19,7 @@
 					<!-- Content -->
 					<section v-if="visitProfile" class="flex flex-row">
 						<nuxt-child
-							class="fixed xl:w-750 xl:min-h-80 xl:h-80 overflow-y-auto rounded-lg shadow-lg mr-5 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop border border-lightBorder modal-animation"
+							class="fixed xl:w-750 min-h-61 h-61 overflow-y-auto rounded-lg shadow-lg mr-5 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop border border-lightBorder modal-animation"
 							:visitProfile="visitProfile"
 							:visitAvatar="visitAvatar"
 							:followers="followers"

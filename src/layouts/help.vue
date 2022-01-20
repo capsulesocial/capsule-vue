@@ -19,18 +19,13 @@
 					<!-- Content -->
 					<section class="flex flex-row relative">
 						<nuxt-child
-							style="
-								width: 750px;
-								min-height: calc(100vh - 70px);
-								height: calc(100vh - 70px);
-								backdrop-filter: blur(10px);
-							"
-							class="fixed overflow-y-auto rounded-lg shadow-lg mr-5 bg-gradient-to-r from-lightBGStart to-lightBGStop border border-lightBorder modal-animation"
+							style="backdrop-filter: blur(10px); min-height: calc(100vh - 60px); height: calc(100vh - 60px)"
+							class="fixed w-full xl:w-750 box-border overflow-y-auto rounded-lg shadow-lg mr-5 bg-gradient-to-r from-lightBGStart to-lightBGStop border border-lightBorder modal-animation"
 							:class="showWidgets ? `` : `z-10`"
 						/>
 						<!-- Widgets -->
 						<aside
-							class="fixed overflow-y-auto p-4 -mt-4 modal-animation"
+							class="fixed hidden xl:block overflow-y-auto p-4 -mt-4 modal-animation"
 							:class="showWidgets ? `z-10` : ``"
 							style="margin-left: 755px; width: 485px; min-height: calc(100vh - 150px); height: calc(100vh - 150px)"
 						>

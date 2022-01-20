@@ -8,6 +8,26 @@
 			<a href="https://www.iubenda.com/terms-and-conditions/40723363" target="_blank" class="pr-6">Terms</a>
 			<a href="https://www.capsule.social/about/overview" target="_blank" class="pr-6">About</a>
 		</div>
-		© 2021 Capsule Social, Inc.
+		<p>© {{ currentYear }} Capsule Social, Inc.</p>
 	</footer>
 </template>
+<script lang="ts">
+import Vue from 'vue'
+
+interface IData {
+	currentYear: string
+}
+
+export default Vue.extend({
+	data(): IData {
+		return {
+			currentYear: ``,
+		}
+	},
+
+	created() {
+		const theDate = new Date()
+		this.currentYear = theDate.getFullYear().toString()
+	},
+})
+</script>

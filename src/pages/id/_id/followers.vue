@@ -1,6 +1,6 @@
 <template>
 	<section v-if="profile !== null" class="p-6">
-		<article v-if="profiles.length == 0" class="grid justify-items-center mt-32">
+		<article v-if="profiles.length == 0" class="grid justify-items-center mt-32 px-10 xl:px-0">
 			<p class="text-sm text-gray5 mb-5 text-center">
 				<span v-if="$route.params.id === $store.state.session.id">
 					It seems you're not following anyone yet!<br />

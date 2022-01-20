@@ -29,7 +29,7 @@
 					<!-- Content -->
 					<section class="flex flex-row mt-16 xl:mt-20">
 						<nuxt-child
-							class="fixed w-full xl:w-750 min-h-120 h-120 xl:min-h-150 xl:h-150 overflow-y-auto rounded-lg shadow-lg mr-5 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop border border-lightBorder modal-animation"
+							class="fixed w-full xl:w-750 min-h-120 h-120 xl:min-h-150 xl:h-150 overflow-y-hidden rounded-lg shadow-lg mr-5 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop border border-lightBorder modal-animation"
 							:posts="posts"
 						/>
 						<!-- Widgets -->
