@@ -11,7 +11,7 @@
 	>
 		<!-- Wrapper -->
 		<div class="w-full flex justify-center">
-			<div class="flex flex-col" style="width: 1220px">
+			<div class="flex flex-col w-full xl:w-1220">
 				<!-- Header -->
 				<Header :avatar="myAvatar" />
 				<!-- Body -->
@@ -19,8 +19,7 @@
 					<!-- Content -->
 					<section v-if="visitProfile" class="flex flex-row">
 						<nuxt-child
-							style="width: 750px; min-height: calc(100vh - 80px); height: calc(100vh - 80px)"
-							class="fixed overflow-y-auto rounded-lg shadow-lg mr-5 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop border border-lightBorder modal-animation"
+							class="fixed xl:w-750 xl:min-h-80 xl:h-80 overflow-y-auto rounded-lg shadow-lg mr-5 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop border border-lightBorder modal-animation"
 							:visitProfile="visitProfile"
 							:visitAvatar="visitAvatar"
 							:followers="followers"
@@ -57,8 +56,8 @@
 				</div>
 				<div
 					v-else
-					style="width: 1220px; min-height: calc(100vh - 80px); height: calc(100vh - 80px) bottom: -10px; backdrop-filter: blur(10px);"
-					class="fixed overflow-y-auto rounded-lg shadow-lg mr-5 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop border border-lightBorder"
+					style="bottom: -10px; backdrop-filter: blur(10px)"
+					class="fixed xl:w-1220 xl:min-h-80 xl:h-80 overflow-y-auto rounded-lg shadow-lg mr-5 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop border border-lightBorder"
 				>
 					<div class="w-full p-5 flex flex-col items-ceter">
 						<h1 class="font-bold text-negative text-6xl font-sans text-center mt-16">404</h1>

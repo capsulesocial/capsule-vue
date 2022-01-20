@@ -5,8 +5,8 @@
 			<article
 				id="header"
 				ref="topContainer"
-				class="px-6 pt-4 z-20 w-full header-profile"
-				style="backdrop-filter: blur(10px); min-height: 15rem"
+				class="px-6 pt-4 z-20 w-full min-h-fit header-profile"
+				style="backdrop-filter: blur(10px)"
 			>
 				<!-- Back button -->
 				<div v-if="$route.params.id !== $store.state.session.id" class="pb-4 flex flex-row items-center">
@@ -16,7 +16,12 @@
 					</button>
 					<div id="small" class="flex flex-row justify-between items-center w-full header-profile ml-6 opacity-0">
 						<div class="flex flex-row items-center">
-							<Avatar :avatar="visitAvatar" :authorID="$route.params.id" :size="`w-8 h-8`" class="rounded-base" />
+							<Avatar
+								:avatar="visitAvatar"
+								:authorID="$route.params.id"
+								:size="`w-8 h-8`"
+								class="rounded-base flex-shrink-0"
+							/>
 							<h6 class="font-semibold ml-2 font-sans">{{ visitProfile.name }}</h6>
 						</div>
 						<div class="flex items-center">
@@ -37,7 +42,12 @@
 				<!-- Name, socials, follow, bio -->
 				<div class="flex flex-row justify-between">
 					<div id="infos" class="flex items-center header-profile">
-						<Avatar :avatar="visitAvatar" :authorID="$route.params.id" :size="`w-24 h-24`" class="rounded-lg" />
+						<Avatar
+							:avatar="visitAvatar"
+							:authorID="$route.params.id"
+							:size="`w-24 h-24`"
+							class="rounded-lg flex-shrink-0"
+						/>
 						<div class="flex flex-col flex-grow ml-5">
 							<!-- Name Username, Follow button -->
 							<div class="flex flex-col">
@@ -47,7 +57,7 @@
 								<h5 class="text-primary text-lg">@{{ visitProfile.id }}</h5>
 							</div>
 							<!-- Tabs: posts, following, followers -->
-							<div class="flex flex-row pt-2 text-sm text-gray6">
+							<div class="flex flex-row pt-2 text-sm text-gray6 -mr-12">
 								<div v-if="totalPostsCount === 1" class="text-sm">
 									<span class="font-bold text-primary">{{ totalPostsCount }}</span>
 									Post
@@ -76,13 +86,20 @@
 						</div>
 					</div>
 					<!-- Profile buttons -->
-					<div id="buttons" class="flex items-center header-profile">
-						<SecondaryButton
-							v-if="$store.state.session.id === $route.params.id"
-							:text="`Edit Profile`"
-							:action="toggleSettings"
+					<div id="buttons" class="flex items-center header-profile h-fit xl:h-auto">
+						<!-- Edit profile button -->
+						<span v-if="$store.state.session.id === $route.params.id">
+							<button class="block xl:hidden bg-primary rounded-lg focus:outline-none" @click="toggleSettings">
+								<PencilIcon class="text-white m-2 w-5 h-5" />
+							</button>
+							<SecondaryButton :text="`Edit Profile`" :action="toggleSettings" class="hidden xl:block" />
+						</span>
+						<FriendButton
+							v-else
+							:toggleFriend="toggleFriend"
+							:userIsFollowed="userIsFollowed"
+							class="header-profile flex-shrink-0"
 						/>
-						<FriendButton v-else :toggleFriend="toggleFriend" :userIsFollowed="userIsFollowed" class="header-profile" />
 					</div>
 				</div>
 				<!-- Bio -->
@@ -92,7 +109,7 @@
 					</p>
 				</div>
 				<!-- Tabs -->
-				<div id="tabs" class="flex flex-col md:flex-row w-full justify-between text-gray5 pt-6 header-profile px-6">
+				<div id="tabs" class="flex w-full justify-between text-gray5 pt-6 header-profile xl:px-6">
 					<nuxt-link :to="'/id/' + $route.params.id" class="pb-1" :class="getStyles('id-id')">
 						<span class="px-4">Posts</span>
 					</nuxt-link>
@@ -108,8 +125,7 @@
 				v-if="loadedContent()"
 				id="scrollContainer"
 				ref="scrollContainer"
-				class="fixed overflow-y-auto"
-				style="width: 748px"
+				class="fixed w-full xl:w-748 overflow-y-auto"
 				:style="`min-height: calc(100vh - ` + padding + ` - 90px); height: calc(100vh - ` + padding + ` - 90px)`"
 			>
 				<nuxt-child
@@ -127,8 +143,8 @@
 			class="fixed w-full h-screen bg-primary top-0 bottom-0 left-0 right-0 z-30 flex justify-center items-center bg-opacity-50 modal-animation"
 		>
 			<SettingsPopup
-				class="bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg shadow-lg rounded-lg card-animation"
-				style="width: 589px; backdrop-filter: blur(10px)"
+				class="w-full xl:w-589 bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg shadow-lg rounded-lg card-animation"
+				style="backdrop-filter: blur(10px)"
 				:updateProfileMethod="updateProfileMethod"
 				@close="toggleSettings"
 			/>
@@ -144,6 +160,7 @@ import FriendButton from '@/components/FriendButton.vue'
 import SecondaryButton from '@/components/SecondaryButton.vue'
 import SettingsPopup from '@/components/Settings.vue'
 import BackButton from '@/components/icons/ChevronLeft.vue'
+import PencilIcon from '@/components/icons/Pencil.vue'
 import { getProfile, Profile } from '@/backend/profile'
 
 interface IData {
@@ -162,6 +179,7 @@ export default Vue.extend({
 		SecondaryButton,
 		SettingsPopup,
 		BackButton,
+		PencilIcon,
 	},
 	layout: `profile`,
 	props: {
