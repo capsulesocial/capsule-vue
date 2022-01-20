@@ -55,7 +55,7 @@
 				<div
 					id="editor"
 					ref="editor"
-					class="max-w-none editable prose focus:outline-none p-2 content"
+					class="max-w-none editable focus:outline-none p-2 content"
 					v-html="$store.state.draft.drafts[$store.state.draft.activeIndex].content"
 				></div>
 
@@ -139,7 +139,7 @@ export default Vue.extend({
 	},
 	data(): IData {
 		let input: string = ``
-		const { content, title, subtitle } = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex]
+		const { content, title, subtitle, postImages } = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex]
 		if (content !== ``) {
 			input = content
 		} else {
@@ -156,7 +156,7 @@ export default Vue.extend({
 			isSaving: `false`,
 			isX: false,
 			isCollapsed: false,
-			postImages: new Set(),
+			postImages: new Set(postImages),
 			qeditor: null,
 			editor: null,
 		}
@@ -266,6 +266,7 @@ export default Vue.extend({
 						// If we have already added this image in the past, we don't need to reupload it to the server
 						if (!this.postImages.has(cid)) {
 							this.postImages.add(cid)
+							this.$store.commit(`draft/updatePostImages`, Array.from(this.postImages))
 							await preUploadPhoto(cid, compressedImage)
 						}
 						if (!this.qeditor) {

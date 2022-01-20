@@ -23,6 +23,7 @@ export const state = (): DraftState => ({
 			tags: [],
 			category: ``,
 			timestamp: 0,
+			postImages: [],
 		},
 	],
 	activeIndex: 0,
@@ -37,6 +38,7 @@ export const MutationType = {
 	UPDATE_CONTENT: `updateContent`,
 	UPDATE_FEATURED_PHOTO_CID: `updateFeaturedPhotoCID`,
 	UPDATE_FEATURED_PHOTO_CAPTION: `updateFeaturedPhotoCaption`,
+	UPDATE_POST_IMAGES: `updatePostImages`,
 	ADD_TAG: `addTag`,
 	REMOVE_TAG: `removeTag`,
 	UPDATE_CATEGORY: `updateCategory`,
@@ -64,6 +66,9 @@ export const mutations: MutationTree<DraftState> = {
 	},
 	[MutationType.UPDATE_FEATURED_PHOTO_CAPTION]: (state, newFeaturedPhotoCaption) => {
 		state.drafts[state.activeIndex].featuredPhotoCaption = newFeaturedPhotoCaption
+	},
+	[MutationType.UPDATE_POST_IMAGES]: (state, newPostImages) => {
+		state.drafts[state.activeIndex].postImages = newPostImages
 	},
 	[MutationType.ADD_TAG]: (state, newTag: Tag) => {
 		state.drafts[state.activeIndex].tags.push(newTag)
