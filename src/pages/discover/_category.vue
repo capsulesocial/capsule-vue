@@ -42,8 +42,7 @@
 		<!-- Posts loaded -->
 		<div
 			id="column"
-			class="fixed overflow-y-auto pb-56"
-			style="width: 748px"
+			class="fixed w-full xl:w-750 overflow-y-auto pb-56"
 			:style="`min-height: calc(100vh - ` + padding + `); height: calc(100vh - ` + padding + `)`"
 		>
 			<article v-for="p in posts" :key="generateKey(p)">
@@ -61,7 +60,7 @@
 					:repostCount="p.repostCount"
 				/>
 			</article>
-			<p v-if="noMorePosts" class="text-center text-primary pt-5">No more posts</p>
+			<p v-if="noMorePosts" class="text-center text-gray5 pt-5">No more posts</p>
 		</div>
 		<!-- Not loaded yet -->
 		<article v-show="isLoading" class="flex justify-center w-full modal-animation">

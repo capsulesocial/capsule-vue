@@ -1,10 +1,12 @@
 <template>
 	<div>
-		<h2 class="text-xl text-primary font-semibold px-6 pt-4 pb-3" style="backdrop-filter: blur(10px)">My bookmarks</h2>
-		<div
-			class="fixed overflow-y-auto"
-			style="width: 748px; min-height: calc(100vh - 220px); height: calc(100vh - 220px)"
+		<h2
+			class="text-lg xl:text-xl text-primary font-semibold px-5 xl:px-6 pt-3 xl:pt-4 pb-3"
+			style="backdrop-filter: blur(10px)"
 		>
+			My bookmarks
+		</h2>
+		<div class="fixed w-full xl:w-750 min-h-180 h-180 xl:min-h-220 xl:h-220 overflow-y-auto">
 			<nuxt-child :posts="posts" :followingList="following" :toggleFriend="toggleFriend" />
 		</div>
 	</div>

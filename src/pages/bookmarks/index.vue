@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<article v-if="posts.length == 0" class="grid justify-items-center mt-32">
+		<article v-if="posts.length == 0" class="grid justify-items-center mt-32 px-6 xl:px-0">
 			<p class="text-sm text-gray5 mb-1 flex items-end align-end" style="max-width: 366px">
 				It seems you don't have any bookmarked posts yet,
 			</p>

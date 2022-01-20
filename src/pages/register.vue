@@ -1,22 +1,22 @@
 <template>
 	<main
 		style="backdrop-filter: blur(10px)"
-		class="bg-gradient-to-r from-lightBGStart to-lightBGStop w-3/5 h-screen overflow-y-scroll flex-col justify-between"
+		class="bg-gradient-to-r from-lightBGStart to-lightBGStop w-full xl:w-3/5 h-screen overflow-y-scroll flex-col justify-between"
 	>
 		<CapsuleIcon class="pt-6 pl-10" />
 		<section class="flex justify-center items-center" style="height: 86%">
 			<div class="flex flex-col items-center w-full p-14 -mt-5">
 				<!-- Step 0: Code redeem -->
-				<article v-if="!hasInviteCode && !(userInfo || nearWallet) && !isLoading" class="w-1/2">
-					<h1 class="font-semibold text-primary mb-10" style="font-size: 2.6rem">Welcome</h1>
-					<p class="text-center text-gray7 mt-10">
+				<article v-if="!hasInviteCode && !(userInfo || nearWallet) && !isLoading" class="w-full xl:w-1/2">
+					<h1 class="font-semibold text-primary mb-5 xl:mb-10" style="font-size: 2.6rem">Welcome</h1>
+					<p class="text-center text-gray7 mt-5 xl:mt-10 text-sm xl:text-base">
 						Blogchain is a place for writers to do great work and for readers to discover it. For now, during our beta
 						release, we are offering access to Blogchain on an invitation-only basis. We believe this is the best way to
 						seed a vibrant community that will grow over time.
 					</p>
 					<div
-						class="p-4 rounded-lg mt-6 h-60 overflow-hidden relative"
-						style="background-size: cover; background-repeat: no-repeat"
+						class="p-4 rounded-lg mt-6 h-44 xl:h-52 overflow-hidden relative"
+						style="background-size: cover; background-repeat: no-repeat; background-position: center"
 						:style="{ backgroundImage: `url(` + require(`@/assets/images/util/ticket.png`) + `)` }"
 					>
 						<label for="id" class="font-semibold text-sm text-gray5 pb-1 block">You have an invite code?</label>
@@ -29,8 +29,15 @@
 							style="height: 3rem"
 						/>
 						<div class="flex flex-row justify-between">
-							<img :src="require(`@/assets/images/brand/discover.webp`)" class="w-6/12 -ml-4 -mb-5" />
-							<BrandedButton :text="`Sign Up`" :action="verifyCode" class="w-2/5 absolute bottom-0 right-0 m-6" />
+							<img
+								:src="require(`@/assets/images/brand/discover.webp`)"
+								class="w-6/12 -ml-4 -mb-8 hidden xl:block rounded-lg"
+							/>
+							<BrandedButton
+								:text="`Sign Up`"
+								:action="verifyCode"
+								class="w-full xl:w-2/5 relative xl:absolute bottom-0 right-0 m-1 xl:m-6"
+							/>
 						</div>
 					</div>
 					<p class="text-center text-gray7 mt-6 text-sm">
@@ -47,29 +54,31 @@
 						>
 						You can also join our community on Discord, or follow our company blog to receive future updates.
 					</p>
-					<div class="flex justify-between items-center p-6">
+					<div class="flex justify-between items-center py-6">
 						<a href="https://discord.gg/sZWjf3E6bY" target="_blank">
 							<button
-								style="padding: 0.8rem 1.7rem; background-color: #7289da"
+								style="padding: 0.8rem 1.5rem; background-color: #7289da"
 								class="transition duration-500 ease-in-out transform font-bold rounded-lg hover:shadow-lg focus:outline-none flex justify-between items-center"
 							>
-								<DiscordIcon class="icon fill-current w-6 h-6 text-lightOnPrimaryText" />
-								<span class="font-sans text-lightOnPrimaryText ml-2" style="font-size: 0.95rem"> Join Discord </span>
+								<DiscordIcon class="icon fill-current w-6 h-6 text-lightOnPrimaryText mr-2" />
+								<span class="hidden xl:block font-sans text-lightOnPrimaryText text-sm xl:text-base"> Join </span>
+								<span class="font-sans text-lightOnPrimaryText ml-1 text-sm xl:text-base"> Discord </span>
 							</button>
 						</a>
 						<a href="https://blog.capsule.social/" target="_blank">
 							<button
-								style="padding: 0.8rem 1.7rem"
+								style="padding: 0.9rem 1.7rem"
 								class="transition duration-500 ease-in-out transform font-bold rounded-lg hover:shadow-lg focus:outline-none flex justify-between items-center shadow-lg border-lightBorder text-lightPrimaryText bg-lightBG"
 							>
-								<CapsuleLogo class="icon fill-current w-5 h-5 text-lightPrimaryText" />
-								<span class="font-sans text-lightPrimaryText ml-3" style="font-size: 0.95rem ml-1"> Latest news </span>
+								<CapsuleLogo class="icon fill-current w-5 h-5 text-lightPrimaryText mr-3" />
+								<span class="hidden xl:block font-sans text-lightPrimaryText text-sm xl:text-base"> Latest </span>
+								<span class="font-sans text-lightPrimaryText ml-1 text-sm xl:text-base"> news </span>
 							</button>
 						</a>
 					</div>
 				</article>
 				<!-- Step 1: Choose Login / register -->
-				<article v-show="hasInviteCode && !(userInfo || nearWallet) && !isLoading" class="w-1/2">
+				<article v-show="hasInviteCode && !(userInfo || nearWallet) && !isLoading" class="w-full xl:w-1/2">
 					<h1 class="font-semibold text-primary mb-10" style="font-size: 2.6rem">Sign up</h1>
 					<button
 						class="w-full rounded-lg bg-gray2 mb-4 py-2 flex justify-center items-center focus:outline-none"
@@ -109,7 +118,7 @@
 					</p>
 				</article>
 				<!-- Step 2: Sign up -->
-				<article v-show="!isLoading && !downloadKeyStep" class="w-1/2">
+				<article v-show="!isLoading && !downloadKeyStep" class="w-full xl:w-1/2">
 					<div v-show="(userInfo || nearWallet) && username === null">
 						<h1 class="text-4xl text-primary font-bold">Sign up</h1>
 						<article v-if="!hasSufficientFunds()">
@@ -171,7 +180,7 @@
 						</article>
 					</div>
 				</article>
-				<article v-if="downloadKeyStep && !isLoading" class="w-1/2">
+				<article v-if="downloadKeyStep && !isLoading" class="w-full xl:w-1/2">
 					<p class="text-gray7 text-center">
 						Here is your private key file. Download this file in a safe spot. You will need it to access your account.
 						To download your private keys again, visit the Settings page
@@ -185,7 +194,7 @@
 					</div>
 					<nuxt-link to="/home" class="text-primary text-center">Continue to Homepage</nuxt-link>
 				</article>
-				<article v-show="isLoading" class="w-3/4 flex justify-center modal-animation">
+				<article v-show="isLoading" class="w-full xl:w-3/4 flex justify-center modal-animation">
 					<div class="loader m-5 rounded-lg"></div>
 				</article>
 			</div>

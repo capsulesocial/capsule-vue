@@ -50,7 +50,7 @@ export default Vue.extend({
 		},
 		size: {
 			type: String,
-			default: `w-12 h-12`,
+			default: `w-10 h-10`,
 		},
 		noClick: {
 			type: Boolean,

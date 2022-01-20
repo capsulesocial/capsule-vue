@@ -1,5 +1,8 @@
 <template>
-	<header class="w-full sticky top-0 bg-gradient-to-r" :class="showMobileMenu || showDropdown ? `z-20` : ``">
+	<header
+		class="w-full sticky top-0 bg-gradient-to-r px-3 xl:px-0"
+		:class="showMobileMenu || showDropdown ? `z-20` : ``"
+	>
 		<!-- Desktop header -->
 		<nav class="hidden xl:min-w-1220 xl:flex py-5 flex-row flex-no-wrap justify-between items-center">
 			<!-- Left side: Links + write post button -->
@@ -20,6 +23,7 @@
 						:avatar="$store.state.session.id === `` ? require(`@/assets/images/avatars/unauthenticated.webp`) : avatar"
 						:authorID="$store.state.session.id"
 						:noClick="true"
+						:size="`w-10 h-10 xl:w-12 xl:h-12`"
 					/>
 				</button>
 				<!-- Dropdown: Profile, settings, disconnect -->
@@ -74,25 +78,39 @@
 				</button>
 				<div
 					v-show="showMobileMenu"
-					class="absolute flex flex-col mt-2 ml-0 rounded-lg shadow-lg p-4 bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg border border-lightBorder modal-animation"
+					class="dropdownMainOpen absolute flex flex-col mt-2 ml-0 rounded-lg shadow-lg p-4 bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg border border-lightBorder modal-animation"
 				>
-					<nuxt-link to="/home" class="text-left w-full flex flex-row items-center text-gray5 mb-4">
+					<nuxt-link
+						to="/home"
+						class="text-left w-full flex flex-row items-center mb-4 border-none"
+						:class="getStyles(`home`)"
+					>
 						<HomeIcon class="flex-shrink-0 w-5 h-5 mr-2" />Home</nuxt-link
 					>
-					<nuxt-link to="/discover" class="text-left w-full flex flex-row items-center text-gray5 mb-4">
+					<nuxt-link
+						to="/discover"
+						class="text-left w-full flex flex-row items-center mb-4 border-none"
+						:class="getStyles(`discover`)"
+					>
 						<DiscoverIcon class="flex-shrink-0 w-5 h-5 mr-2" />Discover</nuxt-link
 					>
-					<nuxt-link to="/bookmarks" class="text-left w-full flex flex-row items-center text-gray5">
+					<nuxt-link
+						to="/bookmarks"
+						class="text-left w-full flex flex-row items-center border-none"
+						:class="getStyles(`bookmarks`)"
+					>
 						<BookmarksIcon class="flex-shrink-0 w-5 h-5 mr-2" />Bookmarks</nuxt-link
 					>
 				</div>
 			</div>
 			<!-- Middle branding -->
-			<div class="flex items-center">
-				<CapsuleIcon />
-				<h1 class="text-xl font-semibold font-sans text-primary">Blogchain</h1>
-			</div>
-			<div class="relative">
+			<nuxt-link to="/home">
+				<div class="flex items-center">
+					<CapsuleIcon />
+					<h1 class="text-xl font-bold font-sans text-primary">Blogchain</h1>
+				</div>
+			</nuxt-link>
+			<div class="relative mt-2">
 				<button class="dropdown focus:outline-none" @click="toggleMobileMenu">
 					<Avatar
 						class="dropdown"
@@ -270,6 +288,22 @@ export default Vue.extend({
 	position: absolute;
 	top: -0.5rem;
 	right: 0.95rem;
+	transform: rotate(45deg);
+	width: 1rem;
+	height: 1rem;
+	background-color: #fff;
+	border-radius: 2px;
+}
+.dropdownMainOpen {
+	margin-top: 1rem !important;
+	margin-left: -1rem !important;
+	backdrop-filter: blur(10px);
+}
+.dropdownMainOpen::before {
+	content: '';
+	position: absolute;
+	top: -0.5rem;
+	left: 0.95rem;
 	transform: rotate(45deg);
 	width: 1rem;
 	height: 1rem;

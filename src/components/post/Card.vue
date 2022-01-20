@@ -34,18 +34,18 @@
 						<!-- Simple repost -->
 						<div
 							v-if="repostedBy !== `` && !hideRepostIcon && quote === null"
-							class="flex w-full -mt-2 mb-2 text-gray5 items-center pt-2"
+							class="flex w-full -mt-2 mb-4 xl:mb-2 text-gray5 items-center pt-2"
 						>
-							<RepostIcon />
-							<p class="pl-2 text-sm text-gray5">
+							<RepostIcon class="hidden xl:block" />
+							<p class="hidden xl:block pl-2 text-sm text-gray5">
 								<nuxt-link :to="`/id/` + repostedBy">{{ repostedBy }} </nuxt-link>
 								reposted
 							</p>
 						</div>
 						<!-- Top: avatar, name, id, close -->
 						<div class="flex w-full">
-							<Avatar :avatar="avatar" :authorID="post.authorID" size="w-12 h-12" />
-							<div class="flex flex-col flex-grow ml-4">
+							<Avatar :avatar="avatar" :authorID="post.authorID" size="w-12 h-12" class="hidden xl:block" />
+							<div class="flex-col flex-grow ml-4 hidden xl:flex">
 								<div class="flex" @mouseover="showFriendButton = true" @mouseleave="showFriendButton = false">
 									<nuxt-link :to="'/id/' + post.authorID" class="flex mr-4">
 										<span class="font-medium text-base">
@@ -67,9 +67,17 @@
 									{{ $formatDate(post.timestamp) }}
 								</span>
 							</div>
-							<div class="flex items-center relative" :class="repostedBy !== `` ? `-mt-4` : ``">
+							<div
+								class="flex w-full justify-center xl:justify-between items-center relative"
+								:class="repostedBy !== `` ? `-mt-4` : ``"
+							>
 								<!-- Bookmarks button -->
-								<BookmarkButton :postID="postCID" :hasBookmark="isBookmarked" @clicked="getBookmarkStatus" />
+								<BookmarkButton
+									:postID="postCID"
+									:hasBookmark="isBookmarked"
+									class="hidden xl:block"
+									@clicked="getBookmarkStatus"
+								/>
 								<button
 									v-if="post.authorID === $store.state.session.id"
 									class="focus:outline-none ml-2 text-gray5"
@@ -79,7 +87,7 @@
 								</button>
 								<button
 									v-show="!showRepostEditor"
-									class="right-0 top-0 rounded-full bg-gray1 p-1 focus:outline-none ml-4"
+									class="right-0 top-0 rounded-full bg-gray1 p-1 focus:outline-none ml-0 xl:ml-4"
 									@click="handleCloseButton"
 								>
 									<XIcon />
@@ -102,7 +110,7 @@
 							</div>
 						</div>
 						<!-- Content -->
-						<div class="mt-4 flex flex-col xl:flex-row justify-between">
+						<div class="mt-4 hidden xl:flex flex-col xl:flex-row justify-between">
 							<!-- Left side: Title, subtitle / preview, tags -->
 							<div class="mr-4">
 								<nuxt-link :to="'/post/' + postCID">
@@ -129,13 +137,9 @@
 							<!-- Right side: Image -->
 							<div v-if="featuredPhoto !== ``" class="flex-shrink-0 w-full mt-2 xl:mt-0 xl:w-56">
 								<nuxt-link :to="'/post/' + postCID">
-									<img :src="featuredPhoto" class="flex-shrink-0 h-32 object-cover rounded-lg w-full" />
+									<img :src="featuredPhoto" class="flex-shrink-0 h-48 xl:h-32 object-cover rounded-lg w-full" />
 								</nuxt-link>
 							</div>
-						</div>
-						<!-- Display tags (mobile) -->
-						<div class="flex xl:hidden overflow-x-auto mt-2">
-							<TagPill v-for="t in post.tags" :key="t.name" :tag="t.name" class="mr-4 mt-2 xl:my-2" />
 						</div>
 					</div>
 					<!-- Repost POST button -->
@@ -161,7 +165,7 @@
 		<!-- Feed view -->
 		<div v-if="this.$route.name !== `post-post`">
 			<div class="card" style="backdrop-filter: blur(10px)">
-				<div class="sticky top-0 z-20 pb-5 border-b px-6 pt-5" style="backdrop-filter: blur(10px)">
+				<div class="sticky top-0 z-20 py-4 xl:py-5 border-b px-5 xl:px-6" style="backdrop-filter: blur(10px)">
 					<!-- Quote repost -->
 					<div v-if="quote">
 						<div class="flex w-full">
@@ -308,7 +312,7 @@
 							<!-- Right side: Image -->
 							<div v-if="featuredPhoto !== ``" class="flex-shrink-0 w-full mt-2 xl:mt-0 xl:w-56">
 								<nuxt-link :to="'/post/' + postCID">
-									<img :src="featuredPhoto" class="flex-shrink-0 h-32 object-cover rounded-lg w-full" />
+									<img :src="featuredPhoto" class="flex-shrink-0 h-48 xl:h-32 object-cover rounded-lg w-full" />
 								</nuxt-link>
 							</div>
 						</div>
