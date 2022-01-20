@@ -157,6 +157,7 @@ export default Vue.extend({
 			if (!this.isReposted()) {
 				const repostCID = await sendRepost(this.$store.state.session.id, this.cid, ``, `simple`)
 				this.$store.commit(`addRepost`, { postID: this.cid, repostID: repostCID })
+				console.log(`Reposts state`, JSON.stringify(this.$store.state.reposts))
 				this.$toastSuccess(`You have successfully reposted this post`)
 				this.isReposted = () => {
 					return true
@@ -168,12 +169,10 @@ export default Vue.extend({
 				if (this.repost?._id) {
 					await sendPostDeletion(`HIDE`, this.repost._id, this.$store.state.session.id)
 				} else {
-					this.$store.state.reposts.forEach((r: any) => {
-						if (r.postID === this.cid) {
-							this.undoRepost(r.repostID)
-						}
-					})
+					const repostID = this.$store.state.reposts[this.cid]
+					this.undoRepost(repostID)
 				}
+				this.$store.commit(`removeRepost`, this.cid)
 				this.isReposted = () => {
 					return false
 				}

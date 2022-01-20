@@ -148,10 +148,8 @@ export default Vue.extend({
 			if (post.reposted) {
 				this.$store.commit(`addRepost`, { postID: post.post._id, repostID: post.reposted })
 			}
-			console.log(`postcid reposted?`, post.post._id, post.reposted)
 		})
-		console.log(JSON.stringify(this.$store.state.reposts))
-		console.log(this.$store.state)
+		console.log(`Reposts state`, JSON.stringify(this.$store.state.reposts))
 		this.currentOffset += this.limit
 		this.isLoading = false
 	},
