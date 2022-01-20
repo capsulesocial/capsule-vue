@@ -9,7 +9,7 @@
 						<nuxt-link v-if="authorName != ``" :to="'/id/' + authorID" class="text-2xl">
 							{{ authorName }}
 						</nuxt-link>
-						<nuxt-link v-else :to="'/id/' + authorID" class="text-2xl text-gray5"> User </nuxt-link>
+						<nuxt-link v-else :to="'/id/' + authorID" class="text-2xl text-gray5"> {{ authorID }} </nuxt-link>
 						<p class="w-full text-gray6">
 							{{ authorBio }}
 						</p>

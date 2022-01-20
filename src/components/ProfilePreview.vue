@@ -6,7 +6,7 @@
 				<span v-if="profile.name != ``" class="font-medium text-base">
 					{{ profile.name }}
 				</span>
-				<span v-else class="font-medium text-base text-gray5"> User </span>
+				<span v-else class="font-medium text-base text-gray5"> {{ profile.id }} </span>
 				<span class="text-primary text-sm">@{{ profile.id }}</span>
 			</nuxt-link>
 		</div>

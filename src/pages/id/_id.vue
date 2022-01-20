@@ -23,7 +23,7 @@
 								class="rounded-base flex-shrink-0"
 							/>
 							<h6 v-if="visitProfile.name != ``" class="font-semibold ml-2 font-sans">{{ visitProfile.name }}</h6>
-							<h6 v-else class="font-semibold ml-2 font-sans text-gray5">User</h6>
+							<h6 v-else class="font-semibold ml-2 font-sans text-gray5">{{ visitProfile.id }}</h6>
 						</div>
 						<div class="flex items-center">
 							<SecondaryButton
@@ -55,7 +55,7 @@
 								<h3 v-if="visitProfile.name != ``" class="text-2xl pr-4 font-semibold">
 									{{ visitProfile.name }}
 								</h3>
-								<h3 v-else class="text-2xl pr-4 font-semibold text-gray5">User</h3>
+								<h3 v-else class="text-2xl pr-4 font-semibold text-gray5">{{ visitProfile.id }}</h3>
 								<h5 class="text-primary text-lg">@{{ visitProfile.id }}</h5>
 							</div>
 							<!-- Tabs: posts, following, followers -->

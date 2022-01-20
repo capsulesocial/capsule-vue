@@ -28,7 +28,7 @@
 							<span v-if="name != ``" class="font-medium">
 								{{ name }}
 							</span>
-							<span v-else class="font-medium text-gray5"> User </span>
+							<span v-else class="font-medium text-gray5">{{ authorID }}</span>
 							<span class="ml-2 text-primary text-sm xl:text-base"> @{{ authorID }} </span>
 						</nuxt-link>
 						<span v-if="timestamp" class="text-xs self-center">

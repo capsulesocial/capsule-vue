@@ -21,7 +21,9 @@
 								<nuxt-link v-if="author.name != ``" :to="`/id/` + post.authorID" class="font-semibold">{{
 									author.name
 								}}</nuxt-link>
-								<nuxt-link v-else :to="`/id/` + post.authorID" class="font-semibold text-gray5">User</nuxt-link>
+								<nuxt-link v-else :to="`/id/` + post.authorID" class="font-semibold text-gray5">{{
+									post.authorID
+								}}</nuxt-link>
 								<h6 class="font-sans text-sm text-gray6">{{ $formatDate(post.timestamp) }}</h6>
 							</div>
 							<FriendButton

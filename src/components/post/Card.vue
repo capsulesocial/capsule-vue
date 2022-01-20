@@ -39,7 +39,7 @@
 							<RepostIcon class="hidden xl:block" />
 							<p class="hidden xl:block pl-2 text-sm text-gray5">
 								<nuxt-link v-if="repostedBy != ``" :to="`/id/` + repostedBy">{{ repostedBy }} </nuxt-link>
-								<nuxt-link v-else :to="`/id/` + repostedBy">A user </nuxt-link>
+								<nuxt-link v-else :to="`/id/` + repostedBy">{{ repostedBy }}</nuxt-link>
 								reposted
 							</p>
 						</div>
@@ -52,7 +52,7 @@
 										<span v-if="authorName != ``" class="font-medium text-base">
 											{{ authorName }}
 										</span>
-										<span v-else class="font-medium text-base text-gray5"> User </span>
+										<span v-else class="font-medium text-base text-gray5"> {{ post.authorID }} </span>
 										<span class="ml-2 text-primary"> @{{ post.authorID }} </span>
 									</nuxt-link>
 									<span v-show="showFriendButton" class="modal-animation">
@@ -175,7 +175,7 @@
 							<div class="flex flex-col flex-grow ml-4">
 								<nuxt-link :to="`/id/` + quote.authorID" class="flex mr-4">
 									<span v-if="this.quote.name != ``" class="font-medium text-base">{{ this.quote.name }}</span>
-									<span v-else class="font-medium text-base text-gray5">User</span>
+									<span v-else class="font-medium text-base text-gray5">{{ this.quote.authorID }}</span>
 									<span class="ml-2 text-primary">@{{ this.quote.authorID }}</span>
 								</nuxt-link>
 								<span class="text-xs">{{ $formatDate(this.quote.timestamp) }}</span>
@@ -210,7 +210,7 @@
 							<RepostIcon />
 							<p class="pl-2 text-sm text-gray5">
 								<nuxt-link v-if="repostedBy != ``" :to="`/id/` + repostedBy">{{ repostedBy }} </nuxt-link>
-								<nuxt-link v-else :to="`/id/` + repostedBy">A user </nuxt-link>
+								<nuxt-link v-else :to="`/id/` + repostedBy">{{ repostedBy }}</nuxt-link>
 								reposted
 							</p>
 						</div>
@@ -223,7 +223,7 @@
 										<span v-if="authorName != ``" class="font-medium text-base">
 											{{ authorName }}
 										</span>
-										<span v-else class="font-medium text-base text-gray5"> User </span>
+										<span v-else class="font-medium text-base text-gray5"> {{ post.authorID }} </span>
 										<span class="ml-2 text-primary"> @{{ post.authorID }} </span>
 									</nuxt-link>
 									<span v-show="showFriendButton" class="modal-animation">
