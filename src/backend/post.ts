@@ -39,7 +39,7 @@ export interface IGenericPostResponse {
 	post: RetrievedPost
 	comments: ICommentData[]
 	bookmarked: boolean
-	reposted: boolean
+	reposted?: string
 	usersParticipating: string[]
 	bookmarksCount: number
 	repostCount: number

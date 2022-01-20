@@ -73,7 +73,6 @@ import QuoteIcon from '@/components/icons/Quote.vue'
 import { Post } from '@/backend/post'
 import { IRepost, sendRepost, getReposts } from '@/backend/reposts'
 import { sendPostDeletion } from '@/backend/postDeletion'
-import { RepostLink } from '@/store/index'
 
 interface IData {
 	isReposted: Function
@@ -156,7 +155,8 @@ export default Vue.extend({
 			}
 			// Post has NOT been reposted
 			if (!this.isReposted()) {
-				await sendRepost(this.$store.state.session.id, this.cid, ``, `simple`)
+				const repostCID = await sendRepost(this.$store.state.session.id, this.cid, ``, `simple`)
+				this.$store.commit(`addRepost`, { postID: this.cid, repostID: repostCID })
 				this.$toastSuccess(`You have successfully reposted this post`)
 				this.isReposted = () => {
 					return true
@@ -180,16 +180,6 @@ export default Vue.extend({
 				this.repostOffset -= 1
 				this.$toastSuccess(`This repost has been successfully removed from your profile`)
 			}
-			// Update reposts store
-			await this.getReposts({ authorID: this.$store.state.session.id }, {}).then((res) => {
-				if (res) {
-					const repost: RepostLink[] = res.map((r) => ({
-						postID: r.post._id,
-						repostID: r.repost._id,
-					}))
-					this.$store.commit(`setRepost`, repost)
-				}
-			})
 			this.$emit(`repostAction`)
 		},
 		async undoRepost(repostID: string) {

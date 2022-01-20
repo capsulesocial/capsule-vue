@@ -145,6 +145,14 @@ export default Vue.extend({
 			offset: this.currentOffset,
 			following: this.$store.state.session.id,
 		})
+		this.posts.forEach((post) => {
+			if (post.reposted) {
+				this.$store.commit(`addRepost`, { postID: post.post._id, repostID: post.reposted })
+			}
+			console.log(`postcid reposted?`, post.post._id, post.reposted)
+		})
+		console.log(JSON.stringify(this.$store.state.reposts))
+		console.log(this.$store.state)
 		// Fetch my reposts
 		await this.getReposts({ authorID: this.$store.state.session.id }, {}).then((res) => {
 			if (res) {
