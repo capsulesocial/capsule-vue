@@ -15,7 +15,7 @@ interface PostPreview {
 export interface RootState {
 	nodeURL: string
 	backgroundImage: string | null
-	reposts: Map<string, string>
+	reposts: RepostLink[]
 	recentlyJoined: boolean
 	recentBookmarks: Set<PostPreview>
 }
@@ -23,7 +23,7 @@ export interface RootState {
 export const state = (): RootState => ({
 	nodeURL: ``,
 	backgroundImage: `/_nuxt/src/assets/images/backgrounds/mainBG.webp`,
-	reposts: new Map(),
+	reposts: [],
 	recentlyJoined: false,
 	recentBookmarks: new Set(),
 })
@@ -47,25 +47,20 @@ export const mutations: MutationTree<RootState> = {
 	[MutationType.CHANGE_BACKGROUND_IMAGE]: (state, newBackgroundImage: string) => {
 		state.backgroundImage = newBackgroundImage
 	},
-	[MutationType.SET_REPOST]: (state, reposts: RepostLink[]) => {
-		reposts.forEach((repost) => {
-			state.reposts.set(repost.postID, repost.repostID)
-		})
+	[MutationType.SET_REPOST]: (state, reposts) => {
+		state.reposts = reposts
 	},
 	[MutationType.ADD_REPOST]: (state, repost: RepostLink) => {
-		state.reposts.set(repost.postID, repost.repostID)
+		state.reposts.push(repost)
 	},
 	[MutationType.REMOVE_REPOST]: (state, repost: RepostLink) => {
-		const repostCIDRecv = state.reposts.get(repost.postID)
-		if (!repostCIDRecv) {
-			return
-		}
-		if (repostCIDRecv === repost.repostID) {
-			state.reposts.delete(repost.postID)
+		const i = state.reposts.indexOf(repost)
+		if (i > -1) {
+			state.reposts = state.reposts.splice(i, 1)
 		}
 	},
 	[MutationType.RESET_REPOST]: (state) => {
-		state.reposts = new Map()
+		state.reposts = []
 	},
 	[MutationType.SET_RECENT_BOOKMARKS]: (state, recentBookmarks) => {
 		state.recentBookmarks = new Set()
@@ -78,7 +73,7 @@ export const mutations: MutationTree<RootState> = {
 	[MutationType.RESET]: (state) => {
 		state.nodeURL = ``
 		state.backgroundImage = null
-		state.reposts = new Map()
+		state.reposts = []
 		state.recentlyJoined = false
 		state.recentBookmarks = new Set()
 	},
@@ -86,9 +81,19 @@ export const mutations: MutationTree<RootState> = {
 
 export const getters = {
 	getRepostedPosts: (state: RootState) => {
+		const posts: string[] = []
+		state.reposts.forEach((r: RepostLink) => {
+			posts.push(r.postID)
+		})
 		return state.reposts
 	},
 	checkReposts: (state: RootState) => (id: string) => {
-		return Boolean(state.reposts.get(id))
+		let hasReposted: boolean = false
+		state.reposts.forEach((r: RepostLink) => {
+			if (r.postID === id) {
+				hasReposted = true
+			}
+		})
+		return hasReposted
 	},
 }
