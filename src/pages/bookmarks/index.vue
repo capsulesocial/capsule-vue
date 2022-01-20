@@ -11,7 +11,7 @@
 				icon:
 			</p>
 			<SecondaryButton :text="`Home`" :action="toggleHomeFeed" />
-			<img :src="require(`@/assets/images/brand/bookmarks.webp`)" class="top-0 mt-64 xl:-mt-2" />
+			<img :src="require(`@/assets/images/brand/Bookmarks.webp`)" class="top-0 mt-64 xl:-mt-2" />
 		</article>
 		<article v-for="p in posts" :key="p.post._id">
 			<PostCard
