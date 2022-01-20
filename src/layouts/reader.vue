@@ -27,7 +27,7 @@
 				<!-- Content -->
 				<section class="flex flex-row">
 					<nuxt-child
-						class="fixed w-full h-full xl:w-1220 xl:h-80 xl:min-h-80 overflow-y-auto rounded-lg shadow-lg mr-5 p-5 xl:p-6 pt-0 border border-lightBorder bg-gradient-to-r from-lightBGStart to-lightBGStop"
+						class="fixed w-full h-full xl:w-1220 xl:h-80 xl:min-h-80 overflow-y-auto rounded-lg shadow-lg mr-5 p-5 xl:p-6 pt-0 xl:pt-0 border border-lightBorder bg-gradient-to-r from-lightBGStart to-lightBGStop"
 						@showPhoto="showPhoto"
 					/>
 				</section>

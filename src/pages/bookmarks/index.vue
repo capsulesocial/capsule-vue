@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<article v-if="posts.length == 0" class="grid justify-items-center mt-32 px-6 xl:px-0">
+		<article v-if="posts.length == 0" class="grid justify-items-center mt-12 px-6 xl:px-0 overflow-y-hidden">
 			<p class="text-sm text-gray5 mb-1 flex items-end align-end" style="max-width: 366px">
 				It seems you don't have any bookmarked posts yet,
 			</p>
@@ -11,6 +11,7 @@
 				icon:
 			</p>
 			<SecondaryButton :text="`Home`" :action="toggleHomeFeed" />
+			<img :src="require(`@/assets/images/brand/Bookmarks.webp`)" class="top-0 mt-64 xl:-mt-2" />
 		</article>
 		<article v-for="p in posts" :key="p.post._id">
 			<PostCard

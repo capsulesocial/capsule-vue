@@ -99,7 +99,7 @@
 			</div>
 		</article>
 		<!-- Post a Comment -->
-		<article v-show="!toggleStats" class="pb-5">
+		<article v-show="!toggleStats" class="xl:pb-5">
 			<div class="w-full flex justify-between py-5">
 				<div class="flex flex-row items-center">
 					<span class="pr-2 font-semibold">{{ getCommentCount(`total`) }} comments</span>

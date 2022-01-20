@@ -3,9 +3,10 @@
 		<Avatar :authorID="profile.id" :avatar="avatar" size="w-12 h-12" />
 		<div class="h-12 flex-grow px-4">
 			<nuxt-link :to="`/id/` + profile.id" class="flex flex-col">
-				<span class="font-medium text-base">
+				<span v-if="profile.name != ``" class="font-medium text-base">
 					{{ profile.name }}
 				</span>
+				<span v-else class="font-medium text-base text-gray5"> {{ profile.id }} </span>
 				<span class="text-primary text-sm">@{{ profile.id }}</span>
 			</nuxt-link>
 		</div>

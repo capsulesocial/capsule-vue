@@ -41,7 +41,7 @@
 				>
 					<div class="p-12 flex flex-col justify-center">
 						<h2 class="text-center font-semibold text-2xl">Welcome 🚀</h2>
-						<p class="text-center text-gray7 self-center mb-5 mt-2" style="width: 520px">
+						<p class="text-center text-gray7 self-center mb-5 mt-2 xl:mx-14">
 							It seems that you don't follow anyone yet. You can go to the Top feed to follow top rated content creator
 							and start your Capsule experience
 						</p>
@@ -56,7 +56,7 @@
 							/>
 						</div>
 					</div>
-					<img :src="require(`@/assets/images/brand/follow-window.webp`)" class="top-0" />
+					<img :src="require(`@/assets/images/brand/follow-window.webp`)" class="top-0 mt-24 xl:mt-0" />
 				</div>
 				<!-- content -->
 				<article v-for="p in posts" :key="generateKey(p)">

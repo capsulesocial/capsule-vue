@@ -1,7 +1,7 @@
 <template>
 	<div class="object-contain">
 		<!-- Component that displays a posted comment -->
-		<div class="flex w-full mt-4">
+		<div class="flex w-full mt-2">
 			<!-- Desktop avatar -->
 			<div class="hidden xl:flex justify-between items-start mr-4">
 				<span class="rounded-lg px-1 pt-1 flex-shrink-0" :style="getStyle(`bg-`)">
@@ -14,16 +14,21 @@
 				</span>
 			</div>
 			<!-- Dashed bubble -->
-			<div class="border rounded-lg w-full flex justify-between border-dashed" :style="getStyle(`border-`)">
+			<div
+				class="border rounded-lg w-full flex justify-between border-dashed"
+				:style="getStyle(`border-`)"
+				style="backdrop-filter: blur(10px)"
+			>
 				<!-- Text -->
-				<div class="flex flex-col flex-grow w-full px-3 py-2 pt-3">
+				<div class="flex flex-col flex-grow w-full px-3 py-1 pt-3">
 					<!-- Top row: name, id, timestamp -->
 					<div class="flex flex-wrap">
 						<nuxt-link :to="`/id/` + authorID" class="flex mr-4 items-center mb-2 xl:mb-0">
 							<Avatar :avatar="avatar" :authorID="authorID" size="w-8 h-8" class="xl:hidden flex-shrink-0 mr-2" />
-							<span class="font-medium">
+							<span v-if="name != ``" class="font-medium">
 								{{ name }}
 							</span>
+							<span v-else class="font-medium text-gray5">{{ authorID }}</span>
 							<span class="ml-2 text-primary text-sm xl:text-base"> @{{ authorID }} </span>
 						</nuxt-link>
 						<span v-if="timestamp" class="text-xs self-center">

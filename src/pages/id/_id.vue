@@ -5,7 +5,7 @@
 			<article
 				id="header"
 				ref="topContainer"
-				class="px-6 pt-4 z-20 w-full min-h-fit header-profile"
+				class="px-4 xl:px-6 pt-3 xl:pt-4 z-20 w-full min-h-fit header-profile"
 				style="backdrop-filter: blur(10px)"
 			>
 				<!-- Back button -->
@@ -22,7 +22,8 @@
 								:size="`w-8 h-8`"
 								class="rounded-base flex-shrink-0"
 							/>
-							<h6 class="font-semibold ml-2 font-sans">{{ visitProfile.name }}</h6>
+							<h6 v-if="visitProfile.name != ``" class="font-semibold ml-2 font-sans">{{ visitProfile.name }}</h6>
+							<h6 v-else class="font-semibold ml-2 font-sans text-gray5">{{ visitProfile.id }}</h6>
 						</div>
 						<div class="flex items-center">
 							<SecondaryButton
@@ -45,15 +46,16 @@
 						<Avatar
 							:avatar="visitAvatar"
 							:authorID="$route.params.id"
-							:size="`w-24 h-24`"
+							:size="`w-20 h-20`"
 							class="rounded-lg flex-shrink-0"
 						/>
 						<div class="flex flex-col flex-grow ml-5">
 							<!-- Name Username, Follow button -->
 							<div class="flex flex-col">
-								<h3 class="text-2xl pr-4 font-semibold">
+								<h3 v-if="visitProfile.name != ``" class="text-2xl pr-4 font-semibold">
 									{{ visitProfile.name }}
 								</h3>
+								<h3 v-else class="text-2xl pr-4 font-semibold text-gray5">{{ visitProfile.id }}</h3>
 								<h5 class="text-primary text-lg">@{{ visitProfile.id }}</h5>
 							</div>
 							<!-- Tabs: posts, following, followers -->
@@ -108,6 +110,7 @@
 						{{ visitProfile.bio }}
 					</p>
 				</div>
+				<div v-else id="bio" class="header-profile"></div>
 				<!-- Tabs -->
 				<div id="tabs" class="flex w-full justify-between text-gray5 pt-6 header-profile xl:px-6">
 					<nuxt-link :to="'/id/' + $route.params.id" class="pb-1" :class="getStyles('id-id')">

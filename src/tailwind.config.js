@@ -116,6 +116,7 @@ module.exports = {
         mobileCard: `calc(100vw - 50px)`
       },
       height: {
+        61: `calc(100vh - 61px)`,
         80: `calc(100vh - 80px)`,
         120: `calc(100vh - 120px)`,
         130: `calc(100vh - 130px)`,
@@ -129,6 +130,7 @@ module.exports = {
         fit: `fit-content`
       },
       minHeight: {
+        61: `calc(100vh - 61px)`,
         80: `calc(100vh - 80px)`,
         120: `calc(100vh - 120px)`,
         130: `calc(100vh - 130px)`,
