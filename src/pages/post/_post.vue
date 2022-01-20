@@ -98,7 +98,7 @@
 				<article class="mt-5">
 					<div
 						:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-						class="editable prose max-w-none content break-words"
+						class="editable max-w-none content break-words"
 					>
 						<component :is="readerViewElement" v-if="readerViewElement"></component>
 					</div>
