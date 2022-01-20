@@ -149,7 +149,6 @@ export default Vue.extend({
 				this.$store.commit(`addRepost`, { postID: post.post._id, repostID: post.reposted })
 			}
 		})
-		console.log(`Reposts state`, JSON.stringify(this.$store.state.reposts))
 		this.currentOffset += this.limit
 		this.isLoading = false
 	},

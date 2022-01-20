@@ -157,7 +157,6 @@ export default Vue.extend({
 			if (!this.isReposted()) {
 				const repostCID = await sendRepost(this.$store.state.session.id, this.cid, ``, `simple`)
 				this.$store.commit(`addRepost`, { postID: this.cid, repostID: repostCID })
-				console.log(`Reposts state`, JSON.stringify(this.$store.state.reposts))
 				this.$toastSuccess(`You have successfully reposted this post`)
 				this.isReposted = () => {
 					return true
