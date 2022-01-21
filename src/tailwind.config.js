@@ -117,6 +117,7 @@ module.exports = {
       },
       height: {
         61: `calc(100vh - 61px)`,
+        70: `calc(100vh - 70px)`,
         80: `calc(100vh - 80px)`,
         120: `calc(100vh - 120px)`,
         130: `calc(100vh - 130px)`,
@@ -131,6 +132,7 @@ module.exports = {
       },
       minHeight: {
         61: `calc(100vh - 61px)`,
+        70: `calc(100vh - 70px)`,
         80: `calc(100vh - 80px)`,
         120: `calc(100vh - 120px)`,
         130: `calc(100vh - 130px)`,

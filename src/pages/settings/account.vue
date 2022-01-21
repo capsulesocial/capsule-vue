@@ -1,5 +1,10 @@
 <template>
 	<main>
+		<!-- Mobile back button -->
+		<nuxt-link to="/settings" class="block xl:hidden flex items-center mb-4">
+			<span class="p-1 rounded-full bg-gray1 mr-2"><ChevronLeft /></span>
+			<h6 class="font-semibold">All Settings</h6>
+		</nuxt-link>
 		<!-- Account Security -->
 		<h2 class="text-primary font-semibold mb-4 text-sm">Account Security</h2>
 		<!-- ID -->
@@ -12,7 +17,6 @@
 				class="flex-grow bg-gray1 text-gray5 placeholder-gray5 rounded-lg px-2 py-1"
 				disabled
 			/>
-			<button class="w-32" disabled></button>
 		</div>
 		<!-- Export Private Key -->
 		<div class="flex flex-row items-center w-full mb-4">
@@ -23,14 +27,15 @@
 		</div>
 		<!-- Account Profile -->
 		<h2 class="text-primary font-semibold text-sm py-4">Account Profile</h2>
-		<div class="flex flex-row items-center w-full mb-4">
+		<div class="flex flex-row items-center w-full justify-between xl:justify-start mb-4">
 			<label for="editProfile" class="w-32 font-semibold">Public Profile</label>
 			<nuxt-link
 				:to="`/id/` + $store.state.session.id"
 				class="bg-secondary text-white rounded-lg focus:outline-none"
 				style="padding: 0.4rem 1.5rem"
 			>
-				Edit your Profile
+				<h6 class="hidden xl:block">Edit your Profile</h6>
+				<span class="xl:hidden rounded-lg bg-primary w-5 h-5"><PencilIcon /></span>
 			</nuxt-link>
 		</div>
 		<!-- Account Data -->
@@ -56,16 +61,16 @@
 				social circle to participate to the Blogchain beta by sharing the following invite code:
 			</p>
 			<p class="text-negative text-sm mt-4">You have {{ inviteCodesRemaining }} invites remaining</p>
-			<div class="flex items-center mt-3">
+			<div class="flex flex-col xl:flex-row items-center mt-3">
 				<h3 class="font-semibold mr-4">Invite code</h3>
-				<div class="relative w-2/5 mr-4 flex items-center">
+				<div class="relative w-48 xl:w-2/5 mr-4 flex items-center">
 					<input
 						id="id"
 						ref="code"
 						v-model="generatedInviteCode"
 						type="text"
 						placeholder="Eg. a5bX2cYY"
-						class="rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-primary text-primary font-sans bg-gray2 border border-dashed border-primary w-full"
+						class="rounded-lg px-4 py-2 w-full text-sm focus:outline-none focus:border-primary text-primary font-sans bg-gray2 border border-dashed border-primary"
 						style="height: 3rem"
 						@focus="$event.target.select()"
 					/>
@@ -96,6 +101,8 @@ import { MutationType, getProfileFromSession, namespace as sessionStoreNamespace
 import { setProfile } from '@/backend/profile'
 import { getNearPrivateKey } from '@/backend/near'
 import CopyIcon from '@/components/icons/Copy.vue'
+import ChevronLeft from '@/components/icons/ChevronLeft.vue'
+import PencilIcon from '@/components/icons/Pencil.vue'
 import { generateInviteCode, getInvitesRemaining } from '@/backend/invite'
 
 interface IData {
@@ -107,6 +114,8 @@ interface IData {
 export default Vue.extend({
 	components: {
 		CopyIcon,
+		ChevronLeft,
+		PencilIcon,
 	},
 	layout: `settings`,
 	data(): IData {

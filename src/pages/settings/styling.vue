@@ -1,5 +1,10 @@
 <template>
 	<main>
+		<!-- Mobile back button -->
+		<nuxt-link to="/settings" class="block xl:hidden flex items-center mb-4">
+			<span class="p-1 rounded-full bg-gray1 mr-2"><ChevronLeft /></span>
+			<h6 class="font-semibold">All Settings</h6>
+		</nuxt-link>
 		<h2 class="text-primary font-semibold mb-4 text-sm">Display</h2>
 		<div class="flex mb-4 justify-between items-center w-4/5">
 			<h3 class="w-56 font-semibold">App Background</h3>
@@ -54,6 +59,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import XIcon from '@/components/icons/X.vue'
+import ChevronLeft from '@/components/icons/ChevronLeft.vue'
 
 import { backgrounds } from '@/config'
 
@@ -65,7 +71,7 @@ interface IData {
 }
 
 export default Vue.extend({
-	components: { XIcon },
+	components: { XIcon, ChevronLeft },
 	layout: `settings`,
 	data(): IData {
 		return {

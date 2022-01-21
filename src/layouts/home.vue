@@ -10,7 +10,7 @@
 	>
 		<!-- Wrapper -->
 		<div class="w-full flex justify-center">
-			<div class="flex flex-col w-full" style="width: 1220px">
+			<div class="flex flex-col w-full xl:w-1220">
 				<!-- Header -->
 				<Header :avatar="avatar" />
 				<!-- Body -->

@@ -1,5 +1,10 @@
 <template>
 	<main>
+		<!-- Mobile back button -->
+		<nuxt-link to="/settings" class="block xl:hidden flex items-center mb-4">
+			<span class="p-1 rounded-full bg-gray1 mr-2"><ChevronLeft /></span>
+			<h6 class="font-semibold">All Settings</h6>
+		</nuxt-link>
 		<!-- Network Tab -->
 		<h2 class="text-primary font-semibold mb-4 text-sm">Capsule Node</h2>
 		<p class="text-gray5 mb-6">
@@ -7,8 +12,8 @@
 			interact with a trusted node or a geographically close-by one. <br />Leaving it by default will chose the closest
 			one.
 		</p>
-		<div class="flex flex-row items-center w-full mb-6">
-			<label for="node" class="w-48 font-semibold">Preferred Node:</label>
+		<div class="flex flex-col xl:flex-row xl:items-center w-full mb-6">
+			<label for="node" class="w-48 font-semibold mb-2 xl:mb-0">Preferred Node:</label>
 			<input
 				id="node"
 				v-model="nodeURL"
@@ -33,12 +38,14 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import ChevronLeft from '@/components/icons/ChevronLeft.vue'
 
 interface IData {
 	nodeURL: string
 }
 
 export default Vue.extend({
+	components: { ChevronLeft },
 	layout: `settings`,
 	props: {
 		tab: {
