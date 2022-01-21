@@ -26,8 +26,8 @@
 				class="flex focus:outline-none text-gray5"
 				@click="handleRepost()"
 			>
-				<RepostIcon :isActive="isReposted()" class="mr-2 p-1" />
-				<span v-if="isReposted()" class="text-xs self-center">Undo Repost</span>
+				<RepostIcon :isActive="isReposted" class="mr-2 p-1" />
+				<span v-if="isReposted" class="text-xs self-center">Undo Repost</span>
 				<span v-else class="text-xs self-center">Repost to Feed</span>
 			</button>
 			<!-- Quote Repost -->
@@ -75,7 +75,7 @@ import { IRepost, sendRepost, getReposts } from '@/backend/reposts'
 import { sendPostDeletion } from '@/backend/postDeletion'
 
 interface IData {
-	isReposted: Function
+	isReposted: boolean
 	showSocialShares: boolean
 	repostOffset: number
 }
@@ -113,19 +113,15 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			showSocialShares: false,
-			isReposted: () => {
-				return false
-			},
+			isReposted: false,
 			repostOffset: 0,
 		}
 	},
 	created() {
-		this.isReposted = this.hasRepost
+		this.isReposted = this.$store.getters.checkReposts(this.cid)
 		// Unauth
 		if (this.$store.state.session.id === ``) {
-			this.isReposted = () => {
-				return false
-			}
+			this.isReposted = false
 		}
 		window.addEventListener(
 			`click`,
@@ -154,27 +150,19 @@ export default Vue.extend({
 				return
 			}
 			// Post has NOT been reposted
-			if (!this.isReposted()) {
+			if (!this.isReposted) {
 				const repostCID = await sendRepost(this.$store.state.session.id, this.cid, ``, `simple`)
 				this.$store.commit(`addRepost`, { postID: this.cid, repostID: repostCID })
 				this.$toastSuccess(`You have successfully reposted this post`)
-				this.isReposted = () => {
-					return true
-				}
+				this.isReposted = true
 				this.repostOffset += 1
 			} else {
 				// Undo repost
 				// What do I call to undo a simple repost???
-				if (this.repost?._id) {
-					await sendPostDeletion(`HIDE`, this.repost._id, this.$store.state.session.id)
-				} else {
-					const repostID = this.$store.state.reposts[this.cid]
-					this.undoRepost(repostID)
-				}
+				const repostID = this.$store.state.reposts[this.cid]
+				this.undoRepost(repostID)
 				this.$store.commit(`removeRepost`, this.cid)
-				this.isReposted = () => {
-					return false
-				}
+				this.isReposted = false
 				this.repostOffset -= 1
 				this.$toastSuccess(`This repost has been successfully removed from your profile`)
 			}
