@@ -26,8 +26,8 @@
 				class="flex focus:outline-none text-gray5"
 				@click="handleRepost()"
 			>
-				<RepostIcon :isActive="isReposted()" class="mr-2 p-1" />
-				<span v-if="isReposted()" class="text-xs self-center">Undo Repost</span>
+				<RepostIcon :isActive="isReposted" class="mr-2 p-1" />
+				<span v-if="isReposted" class="text-xs self-center">Undo Repost</span>
 				<span v-else class="text-xs self-center">Repost to Feed</span>
 			</button>
 			<!-- Quote Repost -->
@@ -73,10 +73,9 @@ import QuoteIcon from '@/components/icons/Quote.vue'
 import { Post } from '@/backend/post'
 import { IRepost, sendRepost, getReposts } from '@/backend/reposts'
 import { sendPostDeletion } from '@/backend/postDeletion'
-import { RepostLink } from '@/store/index'
 
 interface IData {
-	isReposted: Function
+	isReposted: boolean
 	showSocialShares: boolean
 	repostOffset: number
 }
@@ -114,19 +113,15 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			showSocialShares: false,
-			isReposted: () => {
-				return false
-			},
+			isReposted: false,
 			repostOffset: 0,
 		}
 	},
 	created() {
-		this.isReposted = this.hasRepost
+		this.isReposted = this.$store.getters.checkReposts(this.cid)
 		// Unauth
 		if (this.$store.state.session.id === ``) {
-			this.isReposted = () => {
-				return false
-			}
+			this.isReposted = false
 		}
 		window.addEventListener(
 			`click`,
@@ -155,50 +150,23 @@ export default Vue.extend({
 				return
 			}
 			// Post has NOT been reposted
-			if (!this.isReposted()) {
-				await sendRepost(this.$store.state.session.id, this.cid, ``, `simple`)
+			if (!this.isReposted) {
+				const repostCID = await sendRepost(this.$store.state.session.id, this.cid, ``, `simple`)
+				this.$store.commit(`addRepost`, { postID: this.cid, repostID: repostCID })
 				this.$toastSuccess(`You have successfully reposted this post`)
-				this.isReposted = () => {
-					return true
-				}
+				this.isReposted = true
 				this.repostOffset += 1
 			} else {
 				// Undo repost
 				// What do I call to undo a simple repost???
-				if (this.repost?._id) {
-					await sendPostDeletion(`HIDE`, this.repost._id, this.$store.state.session.id)
-				} else {
-					this.$store.state.reposts.forEach((r: any) => {
-						if (r.postID === this.cid) {
-							this.undoRepost(r.repostID)
-						}
-					})
-				}
-				this.isReposted = () => {
-					return false
-				}
+				const repostID = this.$store.state.reposts[this.cid]
+				await sendPostDeletion(`HIDE`, repostID, this.$store.state.session.id)
+				this.$store.commit(`removeRepost`, this.cid)
+				this.isReposted = false
 				this.repostOffset -= 1
 				this.$toastSuccess(`This repost has been successfully removed from your profile`)
 			}
-			// Update reposts store
-			await this.getReposts({ authorID: this.$store.state.session.id }, {}).then((res) => {
-				if (res) {
-					const repost: RepostLink[] = res.map((r) => ({
-						postID: r.post._id,
-						repostID: r.repost._id,
-					}))
-					this.$store.commit(`setRepost`, repost)
-				}
-			})
 			this.$emit(`repostAction`)
-		},
-		async undoRepost(repostID: string) {
-			// Unauth
-			if (this.$store.state.session.id === ``) {
-				this.$store.commit(`settings/toggleUnauthPopup`)
-				return
-			}
-			await sendPostDeletion(`HIDE`, repostID, this.$store.state.session.id)
 		},
 		handleShare(type: string) {
 			const shareElement = document.createElement(`textarea`)
