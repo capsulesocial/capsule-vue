@@ -11,22 +11,21 @@
 	>
 		<!-- Wrapper -->
 		<div class="w-full flex justify-center">
-			<div class="flex flex-col" style="width: 1220px">
+			<div class="flex flex-col w-full xl:w-1220">
 				<!-- Header -->
-				<Header :avatar="avatar" class="w-full sticky top-0 py-5 bg-gradient-to-r z-10" />
+				<Header :avatar="avatar" />
 				<!-- Body -->
 				<div>
 					<!-- Content -->
 					<section class="flex flex-row">
 						<nuxt-child
 							:tab="tab"
-							style="width: 750px; min-height: calc(100vh - 88px); height: calc(100vh - 88px)"
 							:style="showPopup ? `` : `backdrop-filter: blur(10px);`"
-							class="fixed overflow-y-auto rounded-t-lg shadow-lg mr-5 p-6 pt-4 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop border-lightBorder"
+							class="fixed w-full xl:w-750 min-h-70 h-70 overflow-y-auto rounded-t-lg shadow-lg mr-5 p-6 pt-4 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop border-lightBorder"
 							@togglePopup="togglePopup"
 						/>
 						<!-- Settings tabs -->
-						<aside class="fixed" style="margin-left: 770px; width: 450px">
+						<aside class="hidden xl:block fixed" style="margin-left: 770px; width: 450px">
 							<div
 								class="rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop border border-lightBorder overflow-hidden mb-5 py-4 px-6 pb-2 modal-animation flex flex-col"
 								style="backdrop-filter: blur(10px)"
