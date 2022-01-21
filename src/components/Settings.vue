@@ -262,7 +262,7 @@ export default Vue.extend({
 			this.profilePic = await addPhotoToIPFS(cid)
 		},
 		checkBio() {
-			const charCount = this.bio.length
+			const charCount = this.bio.trim().length
 			return this.maxCharBio - charCount
 		},
 		async updateSettings() {
