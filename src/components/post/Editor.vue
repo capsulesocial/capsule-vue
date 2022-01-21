@@ -168,7 +168,7 @@ export default Vue.extend({
 		const titleInput = this.$refs.title as HTMLInputElement
 		const subtitleInput = this.$refs.subtitle as HTMLInputElement
 		const input = this.getInputHTML()
-		if (input.length > 11 || titleInput.value !== `` || subtitleInput.value !== ``) {
+		if (input.length > 11 || titleInput.value.trim() !== `` || subtitleInput.value.trim() !== ``) {
 			this.doSave()
 		} else {
 			const i: number = this.$store.state.draft.activeIndex
@@ -220,15 +220,17 @@ export default Vue.extend({
 	methods: {
 		doSave() {
 			const titleInput = this.$refs.title as HTMLInputElement
+			const titleInputValue = titleInput.value.trim()
 			const subtitleInput = this.$refs.subtitle as HTMLInputElement
+			const subtitleInputValue = subtitleInput.value.trim()
 			const input = this.getInputHTML()
 			this.$store.commit(`draft/updateContent`, input)
 			this.$store.commit(`draft/setTimestamp`, new Date())
-			if (titleInput.value !== ``) {
-				this.$store.commit(`draft/updateTitle`, titleInput.value)
+			if (titleInputValue !== ``) {
+				this.$store.commit(`draft/updateTitle`, titleInputValue)
 			}
-			if (subtitleInput.value !== ``) {
-				this.$store.commit(`draft/updateSubtitle`, subtitleInput.value)
+			if (subtitleInputValue !== ``) {
+				this.$store.commit(`draft/updateSubtitle`, subtitleInputValue)
 			}
 			if (this.$store.state.draft.handleDraftWidget) {
 				this.$store.commit(`draft/createDraft`)
@@ -285,7 +287,7 @@ export default Vue.extend({
 			const titleInput = this.$refs.title as HTMLInputElement
 			const subtitleInput = this.$refs.subtitle as HTMLInputElement
 			const input = this.getInputHTML()
-			if (input.length > 11 || titleInput.value !== `` || subtitleInput.value !== ``) {
+			if (input.length > 11 || titleInput.value.trim() !== `` || subtitleInput.value.trim() !== ``) {
 				this.isSaving = `true`
 				this.doSave()
 				await this.sleep(600)
@@ -318,8 +320,8 @@ export default Vue.extend({
 		async post(): Promise<void> {
 			const title = this.$refs.title as HTMLInputElement
 			const subtitle = this.$refs.subtitle as HTMLInputElement
-			this.title = title.value
-			this.subtitle = subtitle.value
+			this.title = title.value.trim()
+			this.subtitle = subtitle.value.trim()
 			const { category, tags, featuredPhotoCID, featuredPhotoCaption } =
 				this.$store.state.draft.drafts[this.$store.state.draft.activeIndex]
 			// Check for quality title
@@ -406,18 +408,19 @@ export default Vue.extend({
 		},
 		updateTitle(updateStore: boolean = true) {
 			const titleInput = this.$refs.title as HTMLTextAreaElement
+			const titleInputValue = titleInput.value.trim()
 			if (updateStore) {
-				this.$store.commit(`draft/updateTitle`, titleInput.value)
+				this.$store.commit(`draft/updateTitle`, titleInputValue.trim())
 			}
-			if (titleInput.value.length === 0) {
+			if (titleInputValue.trim().length === 0) {
 				this.titleError = `Please enter a title.`
 				return
 			}
-			if (titleInput.value.length < 12) {
+			if (titleInputValue.trim().length < 12) {
 				this.titleError = `Title is too short.`
 				return
 			}
-			if (titleInput.value.length > 90) {
+			if (titleInputValue.trim().length > 90) {
 				this.titleError = `Title is too long.`
 				return
 			}
@@ -425,18 +428,19 @@ export default Vue.extend({
 		},
 		updateSubtitle(updateStore: boolean = true) {
 			const subtitleInput = this.$refs.subtitle as HTMLTextAreaElement
+			const subtitleInputValue = subtitleInput.value.trim()
 			if (updateStore) {
-				this.$store.commit(`draft/updateSubtitle`, subtitleInput.value)
+				this.$store.commit(`draft/updateSubtitle`, subtitleInputValue)
 			}
-			if (subtitleInput.value.length === 0) {
+			if (subtitleInputValue.length === 0) {
 				this.subtitleError = ``
 				return
 			}
-			if (subtitleInput.value.length > 0 && subtitleInput.value.length < 12) {
+			if (subtitleInputValue.length > 0 && subtitleInputValue.length < 12) {
 				this.subtitleError = `Subtitle is too short.`
 				return
 			}
-			if (subtitleInput.value.length > 180) {
+			if (subtitleInputValue.length > 180) {
 				this.subtitleError = `Subtitle is too long.`
 				return
 			}
