@@ -48,6 +48,7 @@ export interface IGenericPostResponse {
 export type IPostResponse = Omit<IGenericPostResponse, `repost`>
 export interface IRepostResponse extends IGenericPostResponse {
 	repost: IRepost
+	deleted: boolean
 }
 
 export type Algorithm = `NEW` | `FOLLOWING` | `TOP`
