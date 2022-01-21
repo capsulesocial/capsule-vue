@@ -19,6 +19,7 @@
 					<!-- Content -->
 					<section v-if="visitProfile" class="flex flex-row">
 						<nuxt-child
+							:key="componentKey"
 							class="fixed xl:w-750 min-h-61 h-61 overflow-y-auto rounded-lg shadow-lg mr-5 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop border border-lightBorder modal-animation"
 							:visitProfile="visitProfile"
 							:visitAvatar="visitAvatar"
@@ -37,6 +38,7 @@
 							style="margin-left: 755px; width: 485px; min-height: calc(100vh - 70px); height: calc(100vh - 70px)"
 						>
 							<ProfileWidget
+								:key="componentKey"
 								:location="visitProfile.location"
 								:email="visitProfile.email"
 								:website="visitProfile.website"
@@ -116,6 +118,7 @@ interface IData {
 	noProfileFound: boolean
 	mutuals: Set<string>
 	mutualProfiles: Array<Profile>
+	componentKey: number
 }
 
 export default Vue.extend({
@@ -141,6 +144,7 @@ export default Vue.extend({
 			noProfileFound: false,
 			mutuals: new Set(),
 			mutualProfiles: [],
+			componentKey: 0,
 		}
 	},
 	watch: {
@@ -148,6 +152,32 @@ export default Vue.extend({
 			if (n.params.id !== o.params.id) {
 				this.getVisitingProfile()
 			}
+		},
+		'$store.state.session.name'() {
+			this.visitProfile.name = this.$store.state.session.name
+			this.componentKey += 1
+		},
+		'$store.state.session.bio'() {
+			this.visitProfile.bio = this.$store.state.session.bio
+			this.componentKey += 1
+		},
+		'$store.state.session.location'() {
+			this.visitProfile.location = this.$store.state.session.location
+			this.componentKey += 1
+		},
+		'$store.state.session.website'() {
+			this.visitProfile.website = this.$store.state.session.website
+			this.componentKey += 1
+		},
+		'$store.state.session.email'() {
+			this.visitProfile.email = this.$store.state.session.email
+			this.componentKey += 1
+		},
+		'$store.state.session.avatar'() {
+			getPhotoFromIPFS(this.$store.state.session.avatar).then((p) => {
+				this.visitAvatar = p
+				this.componentKey += 1
+			})
 		},
 	},
 	created() {

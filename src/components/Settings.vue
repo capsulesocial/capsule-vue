@@ -34,7 +34,7 @@
 				id="newName"
 				v-model="newName"
 				type="text"
-				:placeholder="`Your Capsule username`"
+				:placeholder="`Enter display name`"
 				class="text-black placeholder-gray5 px-2 py-1 bg-gray1 rounded-lg flex-grow focus:outline-none"
 			/>
 		</div>
@@ -110,7 +110,7 @@
 
 		<!-- Submit button -->
 		<div v-if="$store.state.session.id === $route.params.id" class="flex justify-end">
-			<BrandedButton :class="hasChanged() ? '' : 'opacity-50'" :action="updateSettings" :text="`Save Changes`" />
+			<BrandedButton :class="hasChanged() ? '' : 'opacity-50'" :action="updateSettings" :text="`Save changes`" />
 		</div>
 	</div>
 </template>
