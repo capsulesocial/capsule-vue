@@ -160,21 +160,13 @@ export default Vue.extend({
 				// Undo repost
 				// What do I call to undo a simple repost???
 				const repostID = this.$store.state.reposts[this.cid]
-				this.undoRepost(repostID)
+				await sendPostDeletion(`HIDE`, repostID, this.$store.state.session.id)
 				this.$store.commit(`removeRepost`, this.cid)
 				this.isReposted = false
 				this.repostOffset -= 1
 				this.$toastSuccess(`This repost has been successfully removed from your profile`)
 			}
 			this.$emit(`repostAction`)
-		},
-		async undoRepost(repostID: string) {
-			// Unauth
-			if (this.$store.state.session.id === ``) {
-				this.$store.commit(`settings/toggleUnauthPopup`)
-				return
-			}
-			await sendPostDeletion(`HIDE`, repostID, this.$store.state.session.id)
 		},
 		handleShare(type: string) {
 			const shareElement = document.createElement(`textarea`)
