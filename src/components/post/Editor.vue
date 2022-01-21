@@ -347,6 +347,14 @@ export default Vue.extend({
 				this.$toastError(`Missing category`)
 				return
 			}
+
+			for (const { name } of tags) {
+				if (name.replace(/\s/, ``).trim() !== name) {
+					this.$toastError(`Tag with spaces is not allowed`)
+					return
+				}
+			}
+
 			const clean = turndownService.turndown(this.getInputHTML())
 			// Check content quality
 			if (clean.length < 280) {
