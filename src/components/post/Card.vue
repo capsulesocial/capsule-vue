@@ -106,7 +106,7 @@
 									<!-- Delete -->
 									<button class="flex focus:outline-none text-negative" @click="deletePost">
 										<BinIcon class="p-1" />
-										<span class="text-xs self-center text-negative">Delete this post</span>
+										<span class="text-xs self-center text-negative">Remove from feed</span>
 									</button>
 								</div>
 							</div>
@@ -262,7 +262,7 @@
 									<!-- Delete -->
 									<button class="flex focus:outline-none text-negative" @click="deletePost">
 										<BinIcon class="p-1" />
-										<span class="text-xs self-center text-negative">Delete this post</span>
+										<span class="text-xs self-center text-negative">Remove from feed</span>
 									</button>
 								</div>
 							</div>
