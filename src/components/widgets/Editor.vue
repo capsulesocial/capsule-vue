@@ -204,6 +204,10 @@ export default Vue.extend({
 				this.$toastError(`Invalid tag!`)
 				return
 			}
+			if (this.tag.replace(/\s/, ``).trim() !== this.tag) {
+				this.$toastError(`Tag with spaces is not allowed`)
+				return
+			}
 			const { tags } = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex]
 			if (tags.length > 2) {
 				this.$toastWarning(`Max: 3 tags`)
