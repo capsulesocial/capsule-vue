@@ -1,20 +1,20 @@
 <template>
 	<div class="popup w-full p-5">
 		<!-- Header and Close button -->
-		<header v-if="$store.state.session.id === $route.params.id" class="flex flex-row justify-between mb-2">
-			<h2 class="font-bold text-xl">Edit your profile</h2>
-			<button class="rounded-full bg-gray1 p-1 focus:outline-none" @click="$emit(`close`)"><CloseIcon /></button>
+		<header v-if="$store.state.session.id === $route.params.id" class="mb-2 flex flex-row justify-between">
+			<h2 class="text-xl font-bold">Edit your profile</h2>
+			<button class="bg-gray1 focus:outline-none rounded-full p-1" @click="$emit(`close`)"><CloseIcon /></button>
 		</header>
 		<!-- Change avatar -->
-		<div class="flex justify-center w-full mb-5">
+		<div class="mb-5 flex w-full justify-center">
 			<button class="focus:outline-none" @click="handleImageClick">
 				<span class="absolute inline-flex">
 					<Avatar :authorID="$store.state.session.id" :avatar="profilePic" :noClick="true" :size="`w-24 h-24`" />
 				</span>
 				<span
-					class="h-24 w-24 bg-lightOnSurfaceText text-lightOnPrimaryText relative inline-flex rounded-lg items-center justify-center bg-opacity-25"
+					class="bg-lightOnSurfaceText text-lightOnPrimaryText relative inline-flex h-24 w-24 items-center justify-center rounded-lg bg-opacity-25"
 				>
-					<PencilIcon class="w-5 h-5 fill-current" />
+					<PencilIcon class="h-5 w-5 fill-current" />
 				</span>
 			</button>
 			<input
@@ -28,31 +28,31 @@
 			/>
 		</div>
 		<!-- Name -->
-		<div class="flex flex-col xl:flex-row mb-4">
-			<label for="newName" class="w-32 font-semibold mb-2 xl:mb-0">Name</label>
+		<div class="mb-4 flex flex-col xl:flex-row">
+			<label for="newName" class="mb-2 w-32 font-semibold xl:mb-0">Name</label>
 			<input
 				id="newName"
 				v-model="newName"
 				type="text"
 				:placeholder="`Enter display name`"
-				class="text-black placeholder-gray5 px-2 py-1 bg-gray1 rounded-lg flex-grow focus:outline-none"
+				class="placeholder-gray5 bg-gray1 focus:outline-none flex-grow rounded-lg px-2 py-1 text-black"
 			/>
 		</div>
 		<!-- Bio -->
-		<div class="flex flex-col xl:flex-row mb-6">
-			<label for="bio" class="w-32 font-semibold mb-2 xl:mb-0"> Bio: </label>
+		<div class="mb-6 flex flex-col xl:flex-row">
+			<label for="bio" class="mb-2 w-32 font-semibold xl:mb-0"> Bio: </label>
 			<div class="flex-grow">
 				<textarea
 					id="bio"
 					:maxlength="maxCharBio"
 					:value="bio"
 					:placeholder="`Your Capsule Bio`"
-					class="text-black placeholder-gray5 px-2 py-1 bg-gray1 rounded-lg w-full focus:outline-none"
+					class="placeholder-gray5 bg-gray1 focus:outline-none w-full rounded-lg px-2 py-1 text-black"
 					@input="bio = $event.target.value"
 					@keyup="checkBio()"
 				></textarea>
 				<p
-					class="text-xs text-right"
+					class="text-right text-xs"
 					:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 				>
 					{{ checkBio() }} Characters Remaining
@@ -60,36 +60,36 @@
 			</div>
 		</div>
 		<!-- Location -->
-		<div v-if="$store.state.session.id === $route.params.id" class="flex flex-col xl:flex-row mb-4">
-			<label for="location" class="w-32 font-semibold mb-2 xl:mb-0">Location</label>
+		<div v-if="$store.state.session.id === $route.params.id" class="mb-4 flex flex-col xl:flex-row">
+			<label for="location" class="mb-2 w-32 font-semibold xl:mb-0">Location</label>
 			<input
 				id="location"
 				v-model="location"
 				type="text"
 				:placeholder="`Display your location`"
-				class="text-black placeholder-gray5 px-2 py-1 bg-gray1 rounded-lg flex-grow focus:outline-none"
+				class="placeholder-gray5 bg-gray1 focus:outline-none flex-grow rounded-lg px-2 py-1 text-black"
 			/>
 		</div>
 		<!-- Website -->
-		<div v-if="$store.state.session.id === $route.params.id" class="flex flex-col xl:flex-row mb-4">
-			<label for="website" class="w-32 font-semibold mb-2 xl:mb-0">Website</label>
+		<div v-if="$store.state.session.id === $route.params.id" class="mb-4 flex flex-col xl:flex-row">
+			<label for="website" class="mb-2 w-32 font-semibold xl:mb-0">Website</label>
 			<input
 				id="website"
 				v-model="website"
 				type="text"
 				:placeholder="`Display a website`"
-				class="text-black placeholder-gray5 px-2 py-1 bg-gray1 rounded-lg flex-grow focus:outline-none"
+				class="placeholder-gray5 bg-gray1 focus:outline-none flex-grow rounded-lg px-2 py-1 text-black"
 			/>
 		</div>
 		<!-- Email -->
-		<div v-if="$store.state.session.id === $route.params.id" class="flex flex-col xl:flex-row mb-4">
-			<label for="newEmail" class="w-32 font-semibold mb-2 xl:mb-0">Email</label>
+		<div v-if="$store.state.session.id === $route.params.id" class="mb-4 flex flex-col xl:flex-row">
+			<label for="newEmail" class="mb-2 w-32 font-semibold xl:mb-0">Email</label>
 			<input
 				id="newEmail"
 				v-model="newEmail"
 				type="email"
 				:placeholder="`Display a contact email`"
-				class="text-black placeholder-gray5 px-2 py-1 bg-gray1 rounded-lg flex-grow focus:outline-none"
+				class="placeholder-gray5 bg-gray1 focus:outline-none flex-grow rounded-lg px-2 py-1 text-black"
 			/>
 		</div>
 		<!-- Preferred Node -->

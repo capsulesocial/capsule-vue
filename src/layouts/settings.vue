@@ -1,6 +1,6 @@
 <template>
 	<main
-		class="h-screen p-0 m-0 bg-img"
+		class="bg-img m-0 h-screen p-0"
 		:style="{
 			background:
 				`linear-gradient(180deg, rgba(46, 85, 106, 0.02) 0%, rgba(46, 85, 106, 0) 50%), url(` +
@@ -10,8 +10,8 @@
 		}"
 	>
 		<!-- Wrapper -->
-		<div class="w-full flex justify-center">
-			<div class="flex flex-col w-full xl:w-1220">
+		<div class="flex w-full justify-center">
+			<div class="xl:w-1220 flex w-full flex-col">
 				<!-- Header -->
 				<Header :avatar="avatar" />
 				<!-- Body -->
@@ -21,19 +21,19 @@
 						<nuxt-child
 							:tab="tab"
 							:style="showPopup ? `` : `backdrop-filter: blur(10px);`"
-							class="fixed w-full xl:w-750 min-h-70 h-70 overflow-y-auto rounded-t-lg shadow-lg mr-5 p-6 pt-4 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop border-lightBorder"
+							class="xl:w-750 min-h-70 h-70 from-lightBGStart to-lightBGStop border-lightBorder fixed z-10 mr-5 w-full overflow-y-auto rounded-t-lg bg-gradient-to-r p-6 pt-4 shadow-lg"
 							@togglePopup="togglePopup"
 						/>
 						<!-- Settings tabs -->
-						<aside class="hidden xl:block fixed" style="margin-left: 770px; width: 450px">
+						<aside class="fixed hidden xl:block" style="margin-left: 770px; width: 450px">
 							<div
-								class="rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop border border-lightBorder overflow-hidden mb-5 py-4 px-6 pb-2 modal-animation flex flex-col"
+								class="from-lightBGStart to-lightBGStop border-lightBorder modal-animation mb-5 flex flex-col overflow-hidden rounded-lg border bg-gradient-to-r py-4 px-6 pb-2 shadow-lg"
 								style="backdrop-filter: blur(10px)"
 							>
-								<h3 class="text-primary text-base font-semibold pb-4">Settings</h3>
+								<h3 class="text-primary pb-4 text-base font-semibold">Settings</h3>
 								<nuxt-link
 									:class="$route.name === `settings-account` ? `bg-lightInput font-semibold` : ``"
-									class="w-full rounded-lg text-gray5 py-2 px-4 mb-4 text-left focus:outline-none"
+									class="text-gray5 focus:outline-none mb-4 w-full rounded-lg py-2 px-4 text-left"
 									to="/settings/account"
 								>
 									Account
@@ -47,7 +47,7 @@
 								</nuxt-link> -->
 								<nuxt-link
 									:class="$route.name === `settings-network` ? `bg-lightInput font-semibold` : ``"
-									class="w-full rounded-lg text-gray5 py-2 px-4 mb-4 text-left focus:outline-none"
+									class="text-gray5 focus:outline-none mb-4 w-full rounded-lg py-2 px-4 text-left"
 									to="/settings/network"
 								>
 									Nodes and Network
@@ -55,7 +55,7 @@
 								<nuxt-link
 									to="/settings/styling"
 									:class="$route.name === `settings-styling` ? `bg-lightInput font-semibold` : ``"
-									class="w-full rounded-lg text-gray5 py-2 px-4 mb-4 text-left focus:outline-none"
+									class="text-gray5 focus:outline-none mb-4 w-full rounded-lg py-2 px-4 text-left"
 								>
 									Appearance and Styling
 								</nuxt-link>

@@ -3,9 +3,9 @@
 		class="w-full"
 		:class="$store.state.settings.darkMode ? 'text-lightPrimaryText bg-lightBG' : 'text-darkPrimaryText bg-darkBG'"
 	>
-		<section class="flex flex-row h-screen pt-12">
-			<article class="flex flex-row flex-shrink-0 p-4" style="width: 240px">
-				<div class="flex flex-col w-full h-full pl-4 pr-4 py-4 -mr-4">
+		<section class="flex h-screen flex-row pt-12">
+			<article class="flex flex-shrink-0 flex-row p-4" style="width: 240px">
+				<div class="-mr-4 flex h-full w-full flex-col py-4 pl-4 pr-4">
 					<!-- Left Column: Messages list -->
 					<div class="flex flex-row items-center">
 						<span class="flex flex-row items-center">
@@ -16,7 +16,7 @@
 										? 'text-lightOnSecondaryText bg-lightSecondary'
 										: 'text-darkOnSecondaryText bg-darkSecondary'
 								"
-								class="flex items-center justify-center h-6 w-6 ml-2 text-sm rounded-full shadow-lg"
+								class="ml-2 flex h-6 w-6 items-center justify-center rounded-full text-sm shadow-lg"
 							>
 								5
 							</h6>
@@ -28,14 +28,14 @@
 										? 'text-lightOnPrimaryText bg-lightPrimary'
 										: 'text-darkOnPrimaryText bg-darkPrimary'
 								"
-								class="flex items-center justify-center p-2 rounded-full"
+								class="flex items-center justify-center rounded-full p-2"
 							>
 								<MailIcon />
 							</button>
 						</div>
 					</div>
 					<div class="mt-2">
-						<div class="flex flex-col -mx-4 w-64">
+						<div class="-mx-4 flex w-64 flex-col">
 							<!-- Name & Contact card / button (active) -->
 							<div
 								:class="
@@ -43,13 +43,13 @@
 										? 'text-lightPrimaryText bg-lightPrimary bg-opacity-25'
 										: 'text-darkPrimaryText bg-darkPrimary bg-opacity-75'
 								"
-								class="relative flex flex-row items-center py-4 pl-2 my-2 rounded-lg"
+								class="relative my-2 flex flex-row items-center rounded-lg py-4 pl-2"
 							>
-								<div class="absolute text-xs right-0 top-0 mr-4 mt-4">5 min</div>
-								<img :src="friendAvatar" class="w-10 h-10 rounded-lg flex-shrink-0 m-2" />
-								<div class="flex flex-col flex-grow ml-2">
+								<div class="absolute right-0 top-0 mr-4 mt-4 text-xs">5 min</div>
+								<img :src="friendAvatar" class="m-2 h-10 w-10 flex-shrink-0 rounded-lg" />
+								<div class="ml-2 flex flex-grow flex-col">
 									<div class="text-sm font-bold">Jack Dishman</div>
-									<div class="text-xs truncate w-40">
+									<div class="w-40 truncate text-xs">
 										Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, doloribus?
 									</div>
 								</div>
@@ -61,13 +61,13 @@
 										? 'text-lightOnSurfaceText bg-lightSurface'
 										: 'text-darkOnSurfaceVariantText bg-darkSurface'
 								"
-								class="relative flex flex-row items-center py-4 pl-2 my-2 rounded-lg shadow-lg"
+								class="relative my-2 flex flex-row items-center rounded-lg py-4 pl-2 shadow-lg"
 							>
-								<div class="absolute text-xs right-0 top-0 mr-4 mt-4">1 day ago</div>
-								<img :src="friendAvatar" class="w-10 h-10 rounded-lg flex-shrink-0 m-2" />
-								<div class="flex flex-col flex-grow ml-2">
+								<div class="absolute right-0 top-0 mr-4 mt-4 text-xs">1 day ago</div>
+								<img :src="friendAvatar" class="m-2 h-10 w-10 flex-shrink-0 rounded-lg" />
+								<div class="ml-2 flex flex-grow flex-col">
 									<div class="text-sm font-bold">Jack Dishman</div>
-									<div class="text-xs truncate w-40">
+									<div class="w-40 truncate text-xs">
 										Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis, doloribus?
 									</div>
 								</div>
@@ -77,10 +77,10 @@
 				</div>
 			</article>
 			<!-- Right column -->
-			<article class="flex flex-col h-full w-full px-4 py-6" style="width: 660px">
+			<article class="flex h-full w-full flex-col px-4 py-6" style="width: 660px">
 				<!-- Header for selected chat -->
-				<div class="p-4 flex">
-					<img :src="friendAvatar" class="w-10 h-10 rounded-lg" />
+				<div class="flex p-4">
+					<img :src="friendAvatar" class="h-10 w-10 rounded-lg" />
 					<span class="pl-2">
 						<h4 class="text-lg font-bold">Jack Dishman</h4>
 						<h6 class="text-xs">Last seen today</h6>
@@ -90,33 +90,33 @@
 					<div class="h-full overflow-y-auto">
 						<!-- Response message -->
 						<div class="flex items-end p-4">
-							<img :src="friendAvatar" class="w-10 h-10 rounded-lg flex-shrink-0 m-2" />
+							<img :src="friendAvatar" class="m-2 h-10 w-10 flex-shrink-0 rounded-lg" />
 							<div
 								:class="
 									$store.state.settings.darkMode
-										? 'bg-lightSecondary shadow-lg bg-opacity-25'
+										? 'bg-lightSecondary bg-opacity-25 shadow-lg'
 										: 'bg-darkSecondary bg-opacity-75'
 								"
-								class="my-2 ml-2 mr-12 pt-4 px-2 rounded-lg"
+								class="my-2 ml-2 mr-12 rounded-lg px-2 pt-4"
 							>
 								<p>Hey! Welcome to your messages inbox. Full functionality coming soon</p>
-								<h6 class="text-xs text-right p-4">10:00 AM</h6>
+								<h6 class="p-4 text-right text-xs">10:00 AM</h6>
 							</div>
 						</div>
 
 						<!-- Sent message -->
 						<div class="flex flex-row-reverse items-end">
-							<img :src="avatar" class="w-10 h-10 rounded-lg flex-shrink-0 m-2" />
+							<img :src="avatar" class="m-2 h-10 w-10 flex-shrink-0 rounded-lg" />
 							<div
 								:class="
 									$store.state.settings.darkMode
 										? 'bg-lightSurfaceVariant bg-opacity-25'
 										: 'text-darkOnSurfaceVariantText bg-darkSurface'
 								"
-								class="my-2 mr-2 ml-12 pt-4 px-2 rounded-lg"
+								class="my-2 mr-2 ml-12 rounded-lg px-2 pt-4"
 							>
 								<p>Looking forward to it!</p>
-								<h6 class="text-xs text-right p-4">10:03 AM</h6>
+								<h6 class="p-4 text-right text-xs">10:03 AM</h6>
 							</div>
 						</div>
 					</div>
@@ -129,9 +129,9 @@
 								? 'text-lightPrimaryText bg-lightBG border-lightBorder'
 								: 'text-darkPrimaryText bg-darkBG border-darkBorder'
 						"
-						class="flex flex-row items-center w-full border rounded-xl h-10 px-2"
+						class="flex h-10 w-full flex-row items-center rounded-xl border px-2"
 					>
-						<button class="flex items-center justify-center h-10 w-10 ml-1">
+						<button class="ml-1 flex h-10 w-10 items-center justify-center">
 							<AttachmentIcon />
 						</button>
 						<div class="w-full">
@@ -142,12 +142,12 @@
 										? 'text-lightPrimaryText placeholder-lightSecondaryText bg-lightBG border-lightBorder'
 										: 'text-darkPrimaryText placeholder-darkSecondaryText bg-darkBG border-darkBorder'
 								"
-								class="border-t border-b w-full focus:outline-none text-sm h-10 flex items-center"
+								class="focus:outline-none flex h-10 w-full items-center border-t border-b text-sm"
 								placeholder="Type your message...."
 							/>
 						</div>
 						<div class="flex flex-row">
-							<button class="flex items-center justify-center h-10 w-8 ml-1 mr-2">
+							<button class="ml-1 mr-2 flex h-10 w-8 items-center justify-center">
 								<SendIcon />
 							</button>
 						</div>

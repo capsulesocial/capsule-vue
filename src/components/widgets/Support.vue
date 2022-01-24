@@ -1,29 +1,29 @@
 <template>
 	<article
-		class="w-full rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop border border-lightBorder modal-animation mb-5 p-4"
+		class="from-lightBGStart to-lightBGStop border-lightBorder modal-animation mb-5 w-full rounded-lg border bg-gradient-to-r p-4 shadow-lg"
 	>
-		<h6 class="font-semibold text-primary mb-6">Contact Support</h6>
-		<p class="text-sm text-gray5 mb-6 px-6 text-center">
+		<h6 class="text-primary mb-6 font-semibold">Contact Support</h6>
+		<p class="text-gray5 mb-6 px-6 text-center text-sm">
 			Do you need any help with your Capsule experience ? If you face any technical difficulties, you can contact the
 			team on Discord, or directly send us an email:
 		</p>
-		<div class="flex justify-between items-center mb-12 px-6">
+		<div class="mb-12 flex items-center justify-between px-6">
 			<a href="https://discord.gg/sZWjf3E6bY" target="_blank">
 				<button
 					style="padding: 0.8rem 1.7rem; background-color: #7289da"
-					class="transition duration-500 ease-in-out transform font-bold rounded-lg hover:shadow-lg focus:outline-none flex justify-between items-center"
+					class="focus:outline-none flex transform items-center justify-between rounded-lg font-bold transition duration-500 ease-in-out hover:shadow-lg"
 				>
-					<DiscordIcon class="icon fill-current w-6 h-6 text-lightOnPrimaryText" />
-					<span class="font-sans text-lightOnPrimaryText ml-2" style="font-size: 0.95rem"> Join Discord </span>
+					<DiscordIcon class="icon text-lightOnPrimaryText h-6 w-6 fill-current" />
+					<span class="text-lightOnPrimaryText ml-2 font-sans" style="font-size: 0.95rem"> Join Discord </span>
 				</button>
 			</a>
 			<a href="mailto:support@capsule.social" target="_blank">
 				<button
 					style="padding: 0.8rem 1.7rem"
-					class="transition duration-500 ease-in-out transform font-bold rounded-lg hover:shadow-lg focus:outline-none flex justify-between items-center shadow-lg border-lightBorder"
+					class="focus:outline-none border-lightBorder flex transform items-center justify-between rounded-lg font-bold shadow-lg transition duration-500 ease-in-out hover:shadow-lg"
 				>
-					<MailIcon class="icon fill-current w-5 h-5" />
-					<span class="font-sans text-lightPrimaryText ml-2" style="font-size: 0.95rem"> Send Email </span>
+					<MailIcon class="icon h-5 w-5 fill-current" />
+					<span class="text-lightPrimaryText ml-2 font-sans" style="font-size: 0.95rem"> Send Email </span>
 				</button>
 			</a>
 		</div>

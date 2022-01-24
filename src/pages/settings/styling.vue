@@ -1,53 +1,53 @@
 <template>
 	<main>
 		<!-- Mobile back button -->
-		<nuxt-link to="/settings" class="block xl:hidden flex items-center mb-4">
-			<span class="p-1 rounded-full bg-gray1 mr-2"><ChevronLeft /></span>
+		<nuxt-link to="/settings" class="mb-4 block flex items-center xl:hidden">
+			<span class="bg-gray1 mr-2 rounded-full p-1"><ChevronLeft /></span>
 			<h6 class="font-semibold">All Settings</h6>
 		</nuxt-link>
-		<h2 class="text-primary font-semibold mb-4 text-sm">Display</h2>
-		<div class="flex mb-4 justify-between items-center w-4/5">
+		<h2 class="text-primary mb-4 text-sm font-semibold">Display</h2>
+		<div class="mb-4 flex w-4/5 items-center justify-between">
 			<h3 class="w-56 font-semibold">App Background</h3>
 			<button class="text-primary focus:outline-none flex flex-row items-center" @click="toggleSelector">
-				<img :src="$store.state.backgroundImage" class="w-32 h-20 rounded-lg border-2" />
+				<img :src="$store.state.backgroundImage" class="h-20 w-32 rounded-lg border-2" />
 				<p class="ml-4">Change</p>
 			</button>
 		</div>
 		<!-- Popup background selector -->
 		<div
 			v-if="showPopup"
-			class="popup fixed w-full h-screen bg-primary top-0 bottom-0 left-0 right-0 z-30 flex justify-center items-center bg-opacity-50 modal-animation"
+			class="popup bg-primary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50"
 		>
 			<!-- Inner space -->
 			<div
 				style="width: 650px; backdrop-filter: blur(10px)"
-				class="popup rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop border-lightBorder card-animation"
+				class="popup from-lightBGStart to-lightBGStop border-lightBorder card-animation rounded-lg bg-gradient-to-r shadow-lg"
 			>
 				<!-- Header and close icon -->
-				<div class="flex justify-between items-center p-6 pb-2">
-					<h4 class="text-xl font-semibold text-primary mb-4">Change your Capsule background</h4>
-					<button class="rounded-full bg-gray1 p-1 focus:outline-none" @click="toggleSelector"><XIcon /></button>
+				<div class="flex items-center justify-between p-6 pb-2">
+					<h4 class="text-primary mb-4 text-xl font-semibold">Change your Capsule background</h4>
+					<button class="bg-gray1 focus:outline-none rounded-full p-1" @click="toggleSelector"><XIcon /></button>
 				</div>
 				<!-- Background grid -->
 				<div class="grid grid-cols-2 gap-1 overflow-y-scroll p-6 pt-4" style="height: 500px">
 					<button
 						v-for="x of backgrounds"
 						:key="x.label"
-						class="flex flex-col flex-shrink-0 items-center focus:outline-none mb-4"
+						class="focus:outline-none mb-4 flex flex-shrink-0 flex-col items-center"
 						@click="setBackgroundImage(x.image)"
 					>
 						<img
 							v-if="$store.state.backgroundImage === x.image"
 							:src="x.image"
-							class="rounded-lg w-64 h-44 border border-primary shadow-lg"
+							class="border-primary h-44 w-64 rounded-lg border shadow-lg"
 						/>
-						<img v-else :src="x.image" class="rounded-lg w-64 h-44 border border-gray1 shadow-lg" />
-						<span class="text-center text-primary mt-1">{{ x.label }}</span>
+						<img v-else :src="x.image" class="border-gray1 h-44 w-64 rounded-lg border shadow-lg" />
+						<span class="text-primary mt-1 text-center">{{ x.label }}</span>
 					</button>
 				</div>
 				<!-- Select button -->
-				<div class="flex justify-end items-center p-6 pt-5">
-					<button class="bg-primary text-white rounded-lg focus:outline-none px-4 py-2" @click="confirmBackgroundImage">
+				<div class="flex items-center justify-end p-6 pt-5">
+					<button class="bg-primary focus:outline-none rounded-lg px-4 py-2 text-white" @click="confirmBackgroundImage">
 						Select
 					</button>
 				</div>

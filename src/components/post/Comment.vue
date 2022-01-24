@@ -1,10 +1,10 @@
 <template>
 	<div class="object-contain">
 		<!-- Component that displays a posted comment -->
-		<div class="flex w-full mt-2">
+		<div class="mt-2 flex w-full">
 			<!-- Desktop avatar -->
-			<div class="hidden xl:flex justify-between items-start mr-4">
-				<span class="rounded-lg px-1 pt-1 flex-shrink-0" :style="getStyle(`bg-`)">
+			<div class="mr-4 hidden items-start justify-between xl:flex">
+				<span class="flex-shrink-0 rounded-lg px-1 pt-1" :style="getStyle(`bg-`)">
 					<Avatar
 						:avatar="avatar"
 						:authorID="authorID"
@@ -15,56 +15,56 @@
 			</div>
 			<!-- Dashed bubble -->
 			<div
-				class="border rounded-lg w-full flex justify-between border-dashed"
+				class="flex w-full justify-between rounded-lg border border-dashed"
 				:style="getStyle(`border-`)"
 				style="backdrop-filter: blur(10px)"
 			>
 				<!-- Text -->
-				<div class="flex flex-col flex-grow w-full px-3 py-1 pt-3">
+				<div class="flex w-full flex-grow flex-col px-3 py-1 pt-3">
 					<!-- Top row: name, id, timestamp -->
 					<div class="flex flex-wrap">
-						<nuxt-link :to="`/id/` + authorID" class="flex mr-4 items-center mb-2 xl:mb-0">
-							<Avatar :avatar="avatar" :authorID="authorID" size="w-8 h-8" class="xl:hidden flex-shrink-0 mr-2" />
+						<nuxt-link :to="`/id/` + authorID" class="mr-4 mb-2 flex items-center xl:mb-0">
+							<Avatar :avatar="avatar" :authorID="authorID" size="w-8 h-8" class="mr-2 flex-shrink-0 xl:hidden" />
 							<span v-if="name != ``" class="font-medium">
 								{{ name }}
 							</span>
-							<span v-else class="font-medium text-gray5">{{ authorID }}</span>
-							<span class="ml-2 text-primary text-sm xl:text-base"> @{{ authorID }} </span>
+							<span v-else class="text-gray5 font-medium">{{ authorID }}</span>
+							<span class="text-primary ml-2 text-sm xl:text-base"> @{{ authorID }} </span>
 						</nuxt-link>
-						<span v-if="timestamp" class="text-xs self-center">
+						<span v-if="timestamp" class="self-center text-xs">
 							{{ $formatDate(timestamp) }}
 						</span>
 					</div>
 					<!-- Content -->
 					<div class="flex">
-						<div class="flex flex-col flex-grow w-full overflow-hidden">
-							<p class="text-lg py-1 font-sans break-words leading-relaxed">
+						<div class="flex w-full flex-grow flex-col overflow-hidden">
+							<p class="break-words py-1 font-sans text-lg leading-relaxed">
 								{{ content }}
 							</p>
-							<div class="h-full flex flex-col-reverse">
+							<div class="flex h-full flex-col-reverse">
 								<button
-									class="font-sans text-sm text-lightSecondaryText focus:outline-none flex-grow-0 w-24 text-left"
+									class="text-lightSecondaryText focus:outline-none w-24 flex-grow-0 text-left font-sans text-sm"
 									@click="isReplying = !isReplying"
 								>
 									{{ replies.length }} Replies
 								</button>
 							</div>
 						</div>
-						<div class="xl:hidden flex-shrink-0 flex justify-center items-center overflow-hidden">
-							<img :src="emotion.leftImage" class="bg-transparent w-24 h-24 -mb-1 mt-2" />
+						<div class="flex flex-shrink-0 items-center justify-center overflow-hidden xl:hidden">
+							<img :src="emotion.leftImage" class="-mb-1 mt-2 h-24 w-24 bg-transparent" />
 						</div>
 					</div>
 				</div>
 				<!-- Desktop reaction face -->
-				<div class="hidden xl:flex flex-shrink-0 justify-center items-center overflow-hidden">
-					<img :src="emotion.leftImage" class="bg-transparent w-32 h-32 -mb-1 mt-2" />
+				<div class="hidden flex-shrink-0 items-center justify-center overflow-hidden xl:flex">
+					<img :src="emotion.leftImage" class="-mb-1 mt-2 h-32 w-32 bg-transparent" />
 				</div>
 			</div>
 		</div>
 		<!-- Reply button -->
-		<div class="ml-3 xl:ml-10 pl-1">
+		<div class="ml-3 pl-1 xl:ml-10">
 			<!-- Active reply state -->
-			<div v-if="isReplying" class="border-l pl-2 mr-5 modal-animation mt-4">
+			<div v-if="isReplying" class="modal-animation mr-5 mt-4 border-l pl-2">
 				<!-- Reply Input box -->
 				<div
 					v-if="$store.state.session.id !== ``"
@@ -73,7 +73,7 @@
 							? 'bg-lightBG text-lightPrimaryText border-lightBorder'
 							: 'bg-darkBG text-darkPrimaryText border-darkBorder'
 					"
-					class="flex border-2 rounded-xl my-1 p-1 ml-5 w-full"
+					class="my-1 ml-5 flex w-full rounded-xl border-2 p-1"
 				>
 					<textarea
 						v-model="reply"
@@ -82,7 +82,7 @@
 						:class="
 							$store.state.settings.darkMode ? 'bg-lightBG text-lightPrimaryText' : 'bg-darkBG text-darkPrimaryText'
 						"
-						class="leading-normal resize-vertical overflow-y-auto w-full focus:outline-none py-1 px-2 text-sm"
+						class="resize-vertical focus:outline-none w-full overflow-y-auto py-1 px-2 text-sm leading-normal"
 					>
 					</textarea>
 					<span class="relative">
@@ -91,7 +91,7 @@
 							text="Post"
 							:action="sendReply"
 							:thin="true"
-							class="text-sm absolute bottom-0 right-0"
+							class="absolute bottom-0 right-0 text-sm"
 						/>
 					</span>
 				</div>

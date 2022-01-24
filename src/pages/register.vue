@@ -1,50 +1,50 @@
 <template>
 	<main
 		style="backdrop-filter: blur(10px)"
-		class="bg-gradient-to-r from-lightBGStart to-lightBGStop w-full xl:w-3/5 h-screen overflow-y-scroll flex-col justify-between"
+		class="from-lightBGStart to-lightBGStop h-screen w-full flex-col justify-between overflow-y-scroll bg-gradient-to-r xl:w-3/5"
 	>
 		<CapsuleIcon class="pt-6 pl-10" />
-		<section class="flex justify-center items-center" style="height: 86%">
-			<div class="flex flex-col items-center w-full p-14 -mt-5">
+		<section class="flex items-center justify-center" style="height: 86%">
+			<div class="-mt-5 flex w-full flex-col items-center p-14">
 				<!-- Step 0: Code redeem -->
 				<article v-if="!hasInviteCode && !(userInfo || nearWallet) && !isLoading" class="w-full xl:w-1/2">
-					<h1 class="font-semibold text-primary mb-5 xl:mb-10" style="font-size: 2.6rem">Welcome</h1>
-					<p class="text-center text-gray7 mt-5 xl:mt-10 text-sm xl:text-base">
+					<h1 class="text-primary mb-5 font-semibold xl:mb-10" style="font-size: 2.6rem">Welcome</h1>
+					<p class="text-gray7 mt-5 text-center text-sm xl:mt-10 xl:text-base">
 						Blogchain is a place for writers to do great work and for readers to discover it. For now, during our beta
 						release, we are offering access to Blogchain on an invitation-only basis. We believe this is the best way to
 						seed a vibrant community that will grow over time.
 					</p>
 					<div
-						class="p-4 rounded-lg mt-6 h-44 xl:h-52 overflow-hidden relative"
+						class="relative mt-6 h-44 overflow-hidden rounded-lg p-4 xl:h-52"
 						style="background-size: cover; background-repeat: no-repeat; background-position: center"
 						:style="{ backgroundImage: `url(` + require(`@/assets/images/util/ticket.png`) + `)` }"
 					>
-						<label for="id" class="font-semibold text-sm text-gray5 pb-1 block">You have an invite code?</label>
+						<label for="id" class="text-gray5 block pb-1 text-sm font-semibold">You have an invite code?</label>
 						<input
 							id="id"
 							v-model="inputCode"
 							type="text"
 							placeholder="Paste it here to get started"
-							class="rounded-lg px-4 py-2 mt-1 mb-5 text-sm w-full focus:outline-none focus:border-primary text-primary font-sans bg-gray2 border border-dashed border-primary"
+							class="focus:outline-none focus:border-primary text-primary bg-gray2 border-primary mt-1 mb-5 w-full rounded-lg border border-dashed px-4 py-2 font-sans text-sm"
 							style="height: 3rem"
 						/>
 						<div class="flex flex-row justify-between">
 							<img
 								:src="require(`@/assets/images/brand/discover.webp`)"
-								class="w-6/12 -ml-4 -mb-8 hidden xl:block rounded-lg"
+								class="-ml-4 -mb-8 hidden w-6/12 rounded-lg xl:block"
 							/>
 							<BrandedButton
 								:text="`Sign Up`"
 								:action="verifyCode"
-								class="w-full xl:w-2/5 relative xl:absolute bottom-0 right-0 m-1 xl:m-6"
+								class="relative bottom-0 right-0 m-1 w-full xl:absolute xl:m-6 xl:w-2/5"
 							/>
 						</div>
 					</div>
-					<p class="text-center text-gray7 mt-6 text-sm">
+					<p class="text-gray7 mt-6 text-center text-sm">
 						Already have an account?
-						<nuxt-link to="/login" class="text-center font-bold text-primary">Log in</nuxt-link>
+						<nuxt-link to="/login" class="text-primary text-center font-bold">Log in</nuxt-link>
 					</p>
-					<p class="text-center text-gray7 mt-10 text-sm">
+					<p class="text-gray7 mt-10 text-center text-sm">
 						Don’t have an invite yet? Request one
 						<a
 							href="https://forms.zohopublic.com/peter96/form/BlogchainInviteRequests/formperma/7xCuELT6HdgR08w13-Nt8WFx9SmsnZh1YFL9mcP_oCc"
@@ -54,97 +54,97 @@
 						>
 						You can also join our community on Discord, or follow our company blog to receive future updates.
 					</p>
-					<div class="flex justify-between items-center py-6">
+					<div class="flex items-center justify-between py-6">
 						<a href="https://discord.gg/sZWjf3E6bY" target="_blank">
 							<button
 								style="padding: 0.8rem 1.5rem; background-color: #7289da"
-								class="transition duration-500 ease-in-out transform font-bold rounded-lg hover:shadow-lg focus:outline-none flex justify-between items-center"
+								class="focus:outline-none flex transform items-center justify-between rounded-lg font-bold transition duration-500 ease-in-out hover:shadow-lg"
 							>
-								<DiscordIcon class="icon fill-current w-6 h-6 text-lightOnPrimaryText mr-2" />
-								<span class="hidden xl:block font-sans text-lightOnPrimaryText text-sm xl:text-base"> Join </span>
-								<span class="font-sans text-lightOnPrimaryText ml-1 text-sm xl:text-base"> Discord </span>
+								<DiscordIcon class="icon text-lightOnPrimaryText mr-2 h-6 w-6 fill-current" />
+								<span class="text-lightOnPrimaryText hidden font-sans text-sm xl:block xl:text-base"> Join </span>
+								<span class="text-lightOnPrimaryText ml-1 font-sans text-sm xl:text-base"> Discord </span>
 							</button>
 						</a>
 						<a href="https://blog.capsule.social/" target="_blank">
 							<button
 								style="padding: 0.9rem 1.7rem"
-								class="transition duration-500 ease-in-out transform font-bold rounded-lg hover:shadow-lg focus:outline-none flex justify-between items-center shadow-lg border-lightBorder text-lightPrimaryText bg-lightBG"
+								class="focus:outline-none border-lightBorder text-lightPrimaryText bg-lightBG flex transform items-center justify-between rounded-lg font-bold shadow-lg transition duration-500 ease-in-out hover:shadow-lg"
 							>
-								<CapsuleLogo class="icon fill-current w-5 h-5 text-lightPrimaryText mr-3" />
-								<span class="hidden xl:block font-sans text-lightPrimaryText text-sm xl:text-base"> Latest </span>
-								<span class="font-sans text-lightPrimaryText ml-1 text-sm xl:text-base"> news </span>
+								<CapsuleLogo class="icon text-lightPrimaryText mr-3 h-5 w-5 fill-current" />
+								<span class="text-lightPrimaryText hidden font-sans text-sm xl:block xl:text-base"> Latest </span>
+								<span class="text-lightPrimaryText ml-1 font-sans text-sm xl:text-base"> news </span>
 							</button>
 						</a>
 					</div>
 				</article>
 				<!-- Step 1: Choose Login / register -->
 				<article v-show="hasInviteCode && !(userInfo || nearWallet) && !isLoading" class="w-full xl:w-1/2">
-					<h1 class="font-semibold text-primary mb-10" style="font-size: 2.6rem">Sign up</h1>
+					<h1 class="text-primary mb-10 font-semibold" style="font-size: 2.6rem">Sign up</h1>
 					<button
-						class="w-full rounded-lg bg-gray2 mb-4 py-2 flex justify-center items-center focus:outline-none"
+						class="bg-gray2 focus:outline-none mb-4 flex w-full items-center justify-center rounded-lg py-2"
 						@click="() => torusLogin('discord')"
 					>
 						<DiscordIcon style="width: 28px; height: 28px; color: #8c9eff" />
-						<h6 class="font-semibold text-gray7 text-sm ml-4">Sign up with Discord</h6>
+						<h6 class="text-gray7 ml-4 text-sm font-semibold">Sign up with Discord</h6>
 					</button>
 					<button
-						class="w-full rounded-lg bg-gray2 py-2 flex justify-center items-center focus:outline-none"
+						class="bg-gray2 focus:outline-none flex w-full items-center justify-center rounded-lg py-2"
 						@click="() => torusLogin('google')"
 					>
 						<GoogleIcon style="width: 28px; height: 28px" />
-						<h6 class="font-semibold text-gray7 text-sm ml-4">Sign up with Google</h6>
+						<h6 class="text-gray7 ml-4 text-sm font-semibold">Sign up with Google</h6>
 					</button>
-					<div class="w-full flex justify-center items-center my-6">
-						<span class="border border-gray5 flex-grow rounded-lg" style="height: 1px"></span>
-						<p class="px-4 text-gray5 text-xs">OR</p>
-						<span class="border border-gray5 flex-grow rounded-lg" style="height: 1px"></span>
+					<div class="my-6 flex w-full items-center justify-center">
+						<span class="border-gray5 flex-grow rounded-lg border" style="height: 1px"></span>
+						<p class="text-gray5 px-4 text-xs">OR</p>
+						<span class="border-gray5 flex-grow rounded-lg border" style="height: 1px"></span>
 					</div>
 					<button
-						class="w-full rounded-lg bg-gray2 mb-4 py-3 flex justify-center items-center focus:outline-none"
+						class="bg-gray2 focus:outline-none mb-4 flex w-full items-center justify-center rounded-lg py-3"
 						@click="() => walletLoginComponent()"
 					>
 						<NearIcon style="width: 22px; height: 22px" />
-						<h6 class="font-semibold text-gray7 text-sm ml-4">Signup with NEAR</h6>
+						<h6 class="text-gray7 ml-4 text-sm font-semibold">Signup with NEAR</h6>
 					</button>
 					<button
-						class="w-full rounded-lg bg-gray2 mb-4 py-3 flex justify-center items-center focus:outline-none"
+						class="bg-gray2 focus:outline-none mb-4 flex w-full items-center justify-center rounded-lg py-3"
 						@click="() => implicitAccountCreate()"
 					>
-						<h6 class="font-semibold text-gray7 text-sm ml-4">Create implicit account</h6>
+						<h6 class="text-gray7 ml-4 text-sm font-semibold">Create implicit account</h6>
 					</button>
-					<p class="text-center text-gray7 mt-10">
+					<p class="text-gray7 mt-10 text-center">
 						Already have an account?
-						<nuxt-link to="/login" class="text-center font-bold text-primary">Log in</nuxt-link>
+						<nuxt-link to="/login" class="text-primary text-center font-bold">Log in</nuxt-link>
 					</p>
 				</article>
 				<!-- Step 2: Sign up -->
 				<article v-show="!isLoading && !downloadKeyStep" class="w-full xl:w-1/2">
 					<div v-show="(userInfo || nearWallet) && username === null">
-						<h1 class="text-4xl text-primary font-bold">Sign up</h1>
+						<h1 class="text-primary text-4xl font-bold">Sign up</h1>
 						<article v-if="!hasSufficientFunds()">
 							<!-- Step 2a: Verify Phone # -->
 							<div v-if="!otpSent">
-								<p class="text-gray7 text-center my-10">
+								<p class="text-gray7 my-10 text-center">
 									Verify you’re a human with your phone number so that Capsule can fund your wallet. This is the last
 									step needed to create your Capsule account.
 								</p>
-								<label for="id" class="font-semibold text-sm text-gray5 pb-1 block">Phone Number</label>
+								<label for="id" class="text-gray5 block pb-1 text-sm font-semibold">Phone Number</label>
 								<input
 									id="phoneNumber"
 									v-model="phoneNumber"
 									type="tel"
-									class="rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full focus:outline-none focus:border-primary text-primary font-sans bg-gray2"
+									class="focus:outline-none focus:border-primary text-primary bg-gray2 mt-1 mb-5 w-full rounded-lg px-3 py-2 font-sans text-sm"
 								/>
-								<div class="w-full flex justify-end">
+								<div class="flex w-full justify-end">
 									<BrandedButton :text="`Send Code`" :action="sendOTP" />
 								</div>
-								<p class="text-gray7 text-sm mt-10 text-center">
+								<p class="text-gray7 mt-10 text-center text-sm">
 									Already have a funded wallet? <button class="text-primary font-bold">Connect to NEAR</button>
 								</p>
 							</div>
 							<div v-else>
 								<!-- Enter SMS code to complete verify -->
-								<label for="id" class="font-semibold text-sm text-gray5 pb-1 block"
+								<label for="id" class="text-gray5 block pb-1 text-sm font-semibold"
 									>Enter the one-time verification code sent to your phone number.</label
 								>
 								<input
@@ -152,27 +152,27 @@
 									v-model="otp"
 									type="text"
 									placeholder=""
-									class="rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full focus:outline-none focus:border-primary text-primary font-sans bg-gray2"
+									class="focus:outline-none focus:border-primary text-primary bg-gray2 mt-1 mb-5 w-full rounded-lg px-3 py-2 font-sans text-sm"
 								/>
 								<BrandedButton :text="`Verify`" class="w-full" :action="validateOTP" />
 							</div>
 						</article>
 						<article v-else>
 							<!-- Step 3: Choose an ID -->
-							<label for="id" class="font-semibold text-sm text-gray5 pb-1 block">Pick your Capsule name</label>
+							<label for="id" class="text-gray5 block pb-1 text-sm font-semibold">Pick your Capsule name</label>
 							<input
 								id="id"
 								v-model="id"
 								type="text"
 								placeholder=""
-								class="rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full focus:outline-none focus:border-primary text-primary font-sans bg-gray2"
+								class="focus:outline-none focus:border-primary text-primary bg-gray2 mt-1 mb-5 w-full rounded-lg px-3 py-2 font-sans text-sm"
 							/>
 							<BrandedButton :text="`Sign Up`" :action="userInfo ? verify : walletVerify" class="w-full" />
 							<article>
-								<p class="whitespace-nowrap justify-between text-sm p-5 text-gray-600 font-sans">
+								<p class="justify-between whitespace-nowrap p-5 font-sans text-sm text-gray-600">
 									Ensure that the NEAR account with ID: "{{ accountId }}" has sufficient funds before signing up.
 								</p>
-								<p class="whitespace-nowrap justify-between text-sm p-5 text-gray-600 font-sans">
+								<p class="justify-between whitespace-nowrap p-5 font-sans text-sm text-gray-600">
 									Available funds: {{ funds }} yN
 								</p>
 								<BrandedButton :text="`Re-check funds`" class="w-full" :action="checkFunds" />
@@ -185,21 +185,21 @@
 						Here is your private key file. Download this file in a safe spot. You will need it to access your account.
 						To download your private keys again, visit the Settings page
 					</p>
-					<div class="bg-gray1 rounded-lg flex items-center p-4 my-10 justify-between">
+					<div class="bg-gray1 my-10 flex items-center justify-between rounded-lg p-4">
 						<div class="flex flex-row items-center">
 							<FileDownloadIcon />
-							<h6 class="text-gray text-lg font-semibold pl-4">Private Key</h6>
+							<h6 class="text-gray pl-4 text-lg font-semibold">Private Key</h6>
 						</div>
 						<BrandedButton :text="`Download`" :action="downloadPrivateKey" />
 					</div>
 					<nuxt-link to="/home" class="text-primary text-center">Continue to Homepage</nuxt-link>
 				</article>
-				<article v-show="isLoading" class="w-full xl:w-3/4 flex justify-center modal-animation">
+				<article v-show="isLoading" class="modal-animation flex w-full justify-center xl:w-3/4">
 					<div class="loader m-5 rounded-lg"></div>
 				</article>
 			</div>
 		</section>
-		<p class="px-4 text-gray5 text-sm pl-10">© 2021 Capsule.Social</p>
+		<p class="text-gray5 px-4 pl-10 text-sm">© 2021 Capsule.Social</p>
 	</main>
 </template>
 

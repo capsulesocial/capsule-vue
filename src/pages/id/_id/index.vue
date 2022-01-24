@@ -1,7 +1,7 @@
 <template>
 	<section class="w-full">
-		<article v-if="posts.length == 0 && !isLoading" class="grid justify-items-center mt-32 px-10 xl:px-0">
-			<p class="text-sm text-gray5 mb-5">
+		<article v-if="posts.length == 0 && !isLoading" class="mt-32 grid justify-items-center px-10 xl:px-0">
+			<p class="text-gray5 mb-5 text-sm">
 				<span v-if="$route.params.id === $store.state.session.id">
 					It seems you haven't written any posts yet, it's never too late to start:
 				</span>
@@ -24,7 +24,7 @@
 				:repostCount="p.repostCount"
 			/>
 		</article>
-		<article v-show="isLoading" class="flex justify-center modal-animation">
+		<article v-show="isLoading" class="modal-animation flex justify-center">
 			<div class="loader m-10"></div>
 		</article>
 	</section>

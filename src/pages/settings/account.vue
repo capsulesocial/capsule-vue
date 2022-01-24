@@ -1,41 +1,41 @@
 <template>
 	<main>
 		<!-- Mobile back button -->
-		<nuxt-link to="/settings" class="block xl:hidden flex items-center mb-4">
-			<span class="p-1 rounded-full bg-gray1 mr-2"><ChevronLeft /></span>
+		<nuxt-link to="/settings" class="mb-4 block flex items-center xl:hidden">
+			<span class="bg-gray1 mr-2 rounded-full p-1"><ChevronLeft /></span>
 			<h6 class="font-semibold">All Settings</h6>
 		</nuxt-link>
 		<!-- Account Security -->
-		<h2 class="text-primary font-semibold mb-4 text-sm">Account Security</h2>
+		<h2 class="text-primary mb-4 text-sm font-semibold">Account Security</h2>
 		<!-- ID -->
-		<div class="flex flex-row items-center w-full mb-4">
+		<div class="mb-4 flex w-full flex-row items-center">
 			<label for="id" class="w-32 font-semibold">Identifier</label>
 			<input
 				id="id"
 				type="text"
 				:placeholder="$store.state.session.id"
-				class="flex-grow bg-gray1 text-gray5 placeholder-gray5 rounded-lg px-2 py-1"
+				class="bg-gray1 text-gray5 placeholder-gray5 flex-grow rounded-lg px-2 py-1"
 				disabled
 			/>
 		</div>
 		<!-- Export Private Key -->
-		<div class="flex flex-row items-center w-full mb-4">
+		<div class="mb-4 flex w-full flex-row items-center">
 			<label for="export" class="w-32 font-semibold">Private Key</label>
 			<button id="export" class="text-primary focus:outline-none" @click="downloadPrivateKey">
 				Export Private Key
 			</button>
 		</div>
 		<!-- Account Profile -->
-		<h2 class="text-primary font-semibold text-sm py-4">Account Profile</h2>
-		<div class="flex flex-row items-center w-full justify-between xl:justify-start mb-4">
+		<h2 class="text-primary py-4 text-sm font-semibold">Account Profile</h2>
+		<div class="mb-4 flex w-full flex-row items-center justify-between xl:justify-start">
 			<label for="editProfile" class="w-32 font-semibold">Public Profile</label>
 			<nuxt-link
 				:to="`/id/` + $store.state.session.id"
-				class="bg-secondary text-white rounded-lg focus:outline-none"
+				class="bg-secondary focus:outline-none rounded-lg text-white"
 				style="padding: 0.4rem 1.5rem"
 			>
 				<h6 class="hidden xl:block">Edit your Profile</h6>
-				<span class="xl:hidden rounded-lg bg-primary w-5 h-5"><PencilIcon /></span>
+				<span class="bg-primary h-5 w-5 rounded-lg xl:hidden"><PencilIcon /></span>
 			</nuxt-link>
 		</div>
 		<!-- Account Data -->
@@ -49,33 +49,33 @@
 			<button class="text-negative focus:outline-none">Deactivate my Capsule Account</button>
 		</div> -->
 		<!-- Account Invites -->
-		<h2 class="text-primary font-semibold pt-4 mb-4 text-sm">Account Invites</h2>
+		<h2 class="text-primary mb-4 pt-4 text-sm font-semibold">Account Invites</h2>
 		<div
-			class="p-5 rounded-lg mt-4 overflow-hidden relative bg-gradient-to-r from-lightBGStart to-lightBGStop border-lightBorder shadow-lg"
+			class="from-lightBGStart to-lightBGStop border-lightBorder relative mt-4 overflow-hidden rounded-lg bg-gradient-to-r p-5 shadow-lg"
 		>
-			<label for="id" class="font-semibold text-sm pb-1 block mb-2">Generate an invite code</label>
+			<label for="id" class="mb-2 block pb-1 text-sm font-semibold">Generate an invite code</label>
 			<p class="text-gray5">
 				Blogchain is a place for writers to do great work and for readers to discover it. For now, during our beta
 				release, we are offering access to Blogchain on an invitation-only basis. We believe this is the best way to
 				seed a vibrant community that will grow over time. As an already registered user, you can invite one member your
 				social circle to participate to the Blogchain beta by sharing the following invite code:
 			</p>
-			<p class="text-negative text-sm mt-4">You have {{ inviteCodesRemaining }} invites remaining</p>
-			<div class="flex flex-col xl:flex-row items-center mt-3">
-				<h3 class="font-semibold mr-4">Invite code</h3>
-				<div class="relative w-48 xl:w-2/5 mr-4 flex items-center">
+			<p class="text-negative mt-4 text-sm">You have {{ inviteCodesRemaining }} invites remaining</p>
+			<div class="mt-3 flex flex-col items-center xl:flex-row">
+				<h3 class="mr-4 font-semibold">Invite code</h3>
+				<div class="relative mr-4 flex w-48 items-center xl:w-2/5">
 					<input
 						id="id"
 						ref="code"
 						v-model="generatedInviteCode"
 						type="text"
 						placeholder="Eg. a5bX2cYY"
-						class="rounded-lg px-4 py-2 w-full text-sm focus:outline-none focus:border-primary text-primary font-sans bg-gray2 border border-dashed border-primary"
+						class="focus:outline-none focus:border-primary text-primary bg-gray2 border-primary w-full rounded-lg border border-dashed px-4 py-2 font-sans text-sm"
 						style="height: 3rem"
 						@focus="$event.target.select()"
 					/>
-					<button class="text-primary focus:outline-none text-xs absolute right-0 mr-4" @click="copyURL">
-						<CopyIcon class="w-5 h-5 fill-current" />
+					<button class="text-primary focus:outline-none absolute right-0 mr-4 text-xs" @click="copyURL">
+						<CopyIcon class="h-5 w-5 fill-current" />
 					</button>
 				</div>
 				<button

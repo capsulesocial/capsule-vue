@@ -10,15 +10,15 @@
 				class="flex flex-row items-center text-xl"
 				:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
 			>
-				<TwitterIcon v-if="platform === 'twitter'" class="mr-4 text-gray7" />
-				<GitHubIcon v-if="platform === 'github'" class="mr-4 text-gray7" />
-				<ExternalURLIcon v-if="platform === 'website'" class="mr-4 text-gray7" />
-				<span class="capitalize text-gray7">{{ platform }}</span>
+				<TwitterIcon v-if="platform === 'twitter'" class="text-gray7 mr-4" />
+				<GitHubIcon v-if="platform === 'github'" class="text-gray7 mr-4" />
+				<ExternalURLIcon v-if="platform === 'website'" class="text-gray7 mr-4" />
+				<span class="text-gray7 capitalize">{{ platform }}</span>
 			</div>
-			<button class="focus:outline-none font-bold text-primary" @click="toggleVerify">Connect</button>
+			<button class="focus:outline-none text-primary font-bold" @click="toggleVerify">Connect</button>
 		</div>
 
-		<div v-else class="h-12 w-full flex justify-between items-center">
+		<div v-else class="flex h-12 w-full items-center justify-between">
 			<div v-if="!isVerified">
 				<label for="handle" :class="$store.state.settings.darkMode ? 'text-gray7' : 'text-darkSecondaryText'">
 					<span v-if="platform !== 'website'">handle: @</span><span v-else>URL:</span>
@@ -33,7 +33,7 @@
 							? 'bg-lightBG text-lightPrimaryText border-lightBorder'
 							: 'bg-darkBG text-darkPrimaryText border-darkBorder'
 					"
-					class="border-b focus:outline-none"
+					class="focus:outline-none border-b"
 				/>
 			</div>
 			<div v-else>
@@ -46,7 +46,7 @@
 						? 'bg-lightButtonBG text-lightButtonText hover:bg-lightActive'
 						: 'bg-darkButtonBG text-darkButtonText hover:bg-darkActive'
 				"
-				class="flex font-bold py-2 px-4 rounded-lg shadow-lg focus:outline-none"
+				class="focus:outline-none flex rounded-lg py-2 px-4 font-bold shadow-lg"
 				@click="verifySocial()"
 			>
 				<span class="mr-2">Verify</span>
@@ -56,7 +56,7 @@
 			</button>
 			<button
 				v-else
-				class="flex bg-white border border-red-500 hover:bg-red-200 font-bold py-2 px-4 rounded-lg shadow-lg focus:outline-none"
+				class="focus:outline-none flex rounded-lg border border-red-500 bg-white py-2 px-4 font-bold shadow-lg hover:bg-red-200"
 				@click="removeSocial()"
 			>
 				<TwitterIcon v-if="platform === 'twitter'" />

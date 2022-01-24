@@ -1,59 +1,59 @@
 <template>
 	<main
 		style="backdrop-filter: blur(10px)"
-		class="bg-gradient-to-r from-lightBGStart to-lightBGStop w-full xl:w-3/5 h-screen overflow-y-scroll flex-col justify-between"
+		class="from-lightBGStart to-lightBGStop h-screen w-full flex-col justify-between overflow-y-scroll bg-gradient-to-r xl:w-3/5"
 	>
 		<CapsuleIcon class="pt-6 pl-10" />
-		<section class="flex justify-center items-center" style="height: 86%">
-			<div class="flex flex-col items-center w-full p-14 -mt-5">
+		<section class="flex items-center justify-center" style="height: 86%">
+			<div class="-mt-5 flex w-full flex-col items-center p-14">
 				<!-- Step 1: Choose Login / register -->
 				<article v-show="!userInfo && !isLoading" class="w-full xl:w-1/2">
-					<h1 class="font-semibold text-primary mb-10" style="font-size: 2.6rem">Log in</h1>
+					<h1 class="text-primary mb-10 font-semibold" style="font-size: 2.6rem">Log in</h1>
 					<button
-						class="w-full rounded-lg bg-gray2 mb-4 py-2 flex justify-center items-center focus:outline-none"
+						class="bg-gray2 focus:outline-none mb-4 flex w-full items-center justify-center rounded-lg py-2"
 						@click="() => torusLogin('discord')"
 					>
 						<DiscordIcon style="width: 28px; height: 28px" />
-						<h6 class="font-semibold text-gray7 text-sm ml-4">Log in with Discord</h6>
+						<h6 class="text-gray7 ml-4 text-sm font-semibold">Log in with Discord</h6>
 					</button>
 					<button
-						class="w-full rounded-lg bg-gray2 py-2 flex justify-center items-center focus:outline-none"
+						class="bg-gray2 focus:outline-none flex w-full items-center justify-center rounded-lg py-2"
 						@click="() => torusLogin('google')"
 					>
 						<GoogleIcon style="width: 28px; height: 28px" />
-						<h6 class="font-semibold text-gray7 text-sm ml-4">Log in with Google</h6>
+						<h6 class="text-gray7 ml-4 text-sm font-semibold">Log in with Google</h6>
 					</button>
-					<div class="w-full flex justify-center items-center my-6">
-						<span class="border border-gray5 flex-grow rounded-lg" style="height: 1px"></span>
-						<p class="px-4 text-gray5 text-xs">OR</p>
-						<span class="border border-gray5 flex-grow rounded-lg" style="height: 1px"></span>
+					<div class="my-6 flex w-full items-center justify-center">
+						<span class="border-gray5 flex-grow rounded-lg border" style="height: 1px"></span>
+						<p class="text-gray5 px-4 text-xs">OR</p>
+						<span class="border-gray5 flex-grow rounded-lg border" style="height: 1px"></span>
 					</div>
 					<button
-						class="w-full rounded-lg bg-gray2 mb-4 py-3 flex justify-center items-center focus:outline-none"
+						class="bg-gray2 focus:outline-none mb-4 flex w-full items-center justify-center rounded-lg py-3"
 						@click="handleKeyClick"
 					>
 						<FileIcon />
-						<span class="font-semibold text-gray7 text-sm ml-4"> Import private key </span>
+						<span class="text-gray7 ml-4 text-sm font-semibold"> Import private key </span>
 						<input id="key" ref="key" type="file" name="key" accept=".json" class="hidden" @change="handleKey" />
 					</button>
-					<p class="text-center text-gray7 mt-10 text-sm xl:text-base">
+					<p class="text-gray7 mt-10 text-center text-sm xl:text-base">
 						Don't have an account yet?
-						<nuxt-link to="/register" class="text-center font-bold text-primary">Sign up</nuxt-link>
+						<nuxt-link to="/register" class="text-primary text-center font-bold">Sign up</nuxt-link>
 					</p>
 				</article>
 				<!-- Step 2: Sign up -->
 				<article v-show="!isLoading" class="w-full xl:w-1/2">
 					<div v-show="userInfo && username === null">
-						<h1 class="text-4xl text-primary font-bold">Signup</h1>
+						<h1 class="text-primary text-4xl font-bold">Signup</h1>
 						Looks like you don't have an account. Sign up
 					</div>
 				</article>
-				<article v-show="isLoading" class="w-full xl:w-3/4 flex justify-center modal-animation">
+				<article v-show="isLoading" class="modal-animation flex w-full justify-center xl:w-3/4">
 					<div class="loader m-5 rounded-lg"></div>
 				</article>
 			</div>
 		</section>
-		<p class="px-4 text-gray5 text-sm pl-10">© 2021 Capsule.Social</p>
+		<p class="text-gray5 px-4 pl-10 text-sm">© 2021 Capsule.Social</p>
 	</main>
 </template>
 

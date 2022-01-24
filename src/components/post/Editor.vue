@@ -6,24 +6,24 @@
 				<article class="flex flex-col px-2">
 					<button
 						v-if="isSaving === `false` && this.$route.name !== 'home'"
-						class="absolute right-0 top-0 rounded-full bg-gray1 p-1 m-8 focus:outline-none"
+						class="bg-gray1 focus:outline-none absolute right-0 top-0 m-8 rounded-full p-1"
 						@click="saveContent"
 					>
 						<XIcon />
 					</button>
-					<article v-else-if="isSaving === `true`" class="absolute right-0 top-0 p-8 modal-animation">
+					<article v-else-if="isSaving === `true`" class="modal-animation absolute right-0 top-0 p-8">
 						<div class="loader"></div>
 					</article>
-					<p v-else class="absolute right-0 top-0 p-8 pt-10 text-positive modal-animation">
+					<p v-else class="text-positive modal-animation absolute right-0 top-0 p-8 pt-10">
 						<span v-if="this.$route.name !== 'home'">Saved!</span>
 					</p>
-					<p class="text-xs text-lightError">{{ titleError }}</p>
+					<p class="text-lightError text-xs">{{ titleError }}</p>
 					<label for="title" class="hidden">Title</label>
 					<textarea
 						id="title"
 						ref="title"
 						placeholder="Enter Title"
-						class="text-h1 font-serif font-semibold break-words w-full focus:outline-none bg-transparent"
+						class="text-h1 focus:outline-none w-full break-words bg-transparent font-serif font-semibold"
 						wrap="soft"
 						@beforeinput="handleTitle"
 						@input="updateTitle"
@@ -31,13 +31,13 @@
 				</article>
 
 				<article class="flex flex-col px-2">
-					<p class="text-xs text-lightError">{{ subtitleError }}</p>
+					<p class="text-lightError text-xs">{{ subtitleError }}</p>
 					<label for="subtitle" class="hidden">Subtitle</label>
 					<textarea
 						id="subtitle"
 						ref="subtitle"
 						placeholder="Enter Subtitle"
-						class="font-serif text-h2 mt-2 text-gray5 break-words focus:outline-none w-full bg-transparent"
+						class="text-h2 text-gray5 focus:outline-none mt-2 w-full break-words bg-transparent font-serif"
 						wrap="soft"
 						@beforeinput="handleSubtitle"
 						@input="updateSubtitle"
@@ -55,18 +55,18 @@
 				<div
 					id="editor"
 					ref="editor"
-					class="max-w-none editable focus:outline-none p-2 content"
+					class="editable focus:outline-none content max-w-none p-2"
 					v-html="$store.state.draft.drafts[$store.state.draft.activeIndex].content"
 				></div>
 
 				<div
 					v-if="this.$store.state.widgets.primary === `editor` && this.$route.name === `home`"
 					id="metaButton"
-					class="absolute bottom-0 right-0 z-10 m-4 px-5 py-3 mb-8 bg-gradient-to-r from-lightBGStart to-lightBGStop border-lightBorder rounded-lg shadow-lg test-xs text-gray5 modal-animation card-animation-delay1 animatedraftButton flex"
+					class="from-lightBGStart to-lightBGStop border-lightBorder test-xs text-gray5 modal-animation card-animation-delay1 animatedraftButton absolute bottom-0 right-0 z-10 m-4 mb-8 flex rounded-lg bg-gradient-to-r px-5 py-3 shadow-lg"
 				>
 					<p v-if="!isCollapsed">Time to publish?</p>
 					<PencilIcon v-else class="fill-current p-1" @close="$router.push(`/post`)" />
-					<button class="text-primary ml-2 focus:outline-none" @click="$router.push(`/post`)">Add meta</button>
+					<button class="text-primary focus:outline-none ml-2" @click="$router.push(`/post`)">Add meta</button>
 				</div>
 			</section>
 		</div>

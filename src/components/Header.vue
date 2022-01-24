@@ -1,10 +1,10 @@
 <template>
 	<header
-		class="w-full sticky top-0 bg-gradient-to-r px-3 xl:px-0"
+		class="sticky top-0 w-full bg-gradient-to-r px-3 xl:px-0"
 		:class="showMobileMenu || showDropdown ? `z-20` : ``"
 	>
 		<!-- Desktop header -->
-		<nav class="hidden xl:min-w-1220 xl:flex py-5 flex-row flex-no-wrap justify-between items-center">
+		<nav class="xl:min-w-1220 flex-no-wrap hidden flex-row items-center justify-between py-5 xl:flex">
 			<!-- Left side: Links + write post button -->
 			<div class="flex flex-row items-center" style="font-size: 0.95rem">
 				<nuxt-link to="/home" class="mr-5">
@@ -16,7 +16,7 @@
 				<BrandedButton :text="`Write a Post`" :action="togglePostEditor" class="mx-4" />
 			</div>
 			<!-- Right side: icons and avatar -->
-			<div class="flex flex-row relative">
+			<div class="relative flex flex-row">
 				<button class="dropdown focus:outline-none" @click="showDropdown = !showDropdown">
 					<Avatar
 						class="dropdown"
@@ -29,48 +29,48 @@
 				<!-- Dropdown: Profile, settings, disconnect -->
 				<div
 					v-show="showDropdown"
-					class="dropdownOpen absolute flex flex-col mt-16 rounded-lg shadow-lg p-4 bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg border border-lightBorder modal-animation"
+					class="dropdownOpen from-lightBGStart to-lightBGStop border-lightBorder modal-animation absolute mt-16 flex flex-col rounded-lg border bg-gradient-to-r p-4 shadow-lg backdrop-blur-lg backdrop-filter"
 				>
 					<!-- Unauthenticated: Log in -->
 					<nuxt-link
 						v-if="$store.state.session.id === ``"
 						to="/login"
-						class="text-left flex flex-row items-center text-gray5 mb-4 w-24 mx-2"
+						class="text-gray5 mx-2 mb-4 flex w-24 flex-row items-center text-left"
 						>Log In</nuxt-link
 					>
 					<!-- Unauthenticated: Register -->
 					<nuxt-link
 						v-if="$store.state.session.id === ``"
 						to="/register"
-						class="text-left flex flex-row items-center text-gray5 w-24 mx-2"
+						class="text-gray5 mx-2 flex w-24 flex-row items-center text-left"
 						>Register</nuxt-link
 					>
 					<!-- Authenticated -->
 					<nuxt-link
 						v-if="$store.state.session.id !== ``"
 						:to="`/id/` + $store.state.session.id"
-						class="text-left w-full flex flex-row items-center text-gray5 mb-4"
-						><ProfileIcon class="flex-shrink-0 w-5 h-5 mr-2" />Profile</nuxt-link
+						class="text-gray5 mb-4 flex w-full flex-row items-center text-left"
+						><ProfileIcon class="mr-2 h-5 w-5 flex-shrink-0" />Profile</nuxt-link
 					>
 					<nuxt-link
 						v-if="$store.state.session.id !== ``"
 						to="/settings/account"
-						class="text-left w-full flex flex-row items-center text-gray5 mb-4"
+						class="text-gray5 mb-4 flex w-full flex-row items-center text-left"
 					>
-						<SettingsIcon class="flex-shrink-0 w-5 h-5 mr-2" />Settings</nuxt-link
+						<SettingsIcon class="mr-2 h-5 w-5 flex-shrink-0" />Settings</nuxt-link
 					>
 					<button
 						v-if="$store.state.session.id !== ``"
-						class="focus:outline-none w-full text-left flex flex-row items-center text-lightError"
+						class="focus:outline-none text-lightError flex w-full flex-row items-center text-left"
 						@click="disconnect"
 					>
-						<LogoutIcon class="flex-shrink-0 w-5 h-5 mr-2" />Disconnect
+						<LogoutIcon class="mr-2 h-5 w-5 flex-shrink-0" />Disconnect
 					</button>
 				</div>
 			</div>
 		</nav>
 		<!-- Mobile header -->
-		<nav class="flex xl:hidden w-full p-2 justify-between items-center">
+		<nav class="flex w-full items-center justify-between p-2 xl:hidden">
 			<!-- Mobile menu dropdown -->
 			<div class="relative">
 				<button class="mobileDropdown" @click="showMobileMenu = !showMobileMenu">
@@ -78,28 +78,28 @@
 				</button>
 				<div
 					v-show="showMobileMenu"
-					class="dropdownMainOpen absolute flex flex-col mt-2 ml-0 rounded-lg shadow-lg p-4 bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg border border-lightBorder modal-animation"
+					class="dropdownMainOpen from-lightBGStart to-lightBGStop border-lightBorder modal-animation absolute mt-2 ml-0 flex flex-col rounded-lg border bg-gradient-to-r p-4 shadow-lg backdrop-blur-lg backdrop-filter"
 				>
 					<nuxt-link
 						to="/home"
-						class="text-left w-full flex flex-row items-center mb-4 border-none"
+						class="mb-4 flex w-full flex-row items-center border-none text-left"
 						:class="getStyles(`home`)"
 					>
-						<HomeIcon class="flex-shrink-0 w-5 h-5 mr-2" />Home</nuxt-link
+						<HomeIcon class="mr-2 h-5 w-5 flex-shrink-0" />Home</nuxt-link
 					>
 					<nuxt-link
 						to="/discover"
-						class="text-left w-full flex flex-row items-center mb-4 border-none"
+						class="mb-4 flex w-full flex-row items-center border-none text-left"
 						:class="getStyles(`discover`)"
 					>
-						<DiscoverIcon class="flex-shrink-0 w-5 h-5 mr-2" />Discover</nuxt-link
+						<DiscoverIcon class="mr-2 h-5 w-5 flex-shrink-0" />Discover</nuxt-link
 					>
 					<nuxt-link
 						to="/bookmarks"
-						class="text-left w-full flex flex-row items-center border-none"
+						class="flex w-full flex-row items-center border-none text-left"
 						:class="getStyles(`bookmarks`)"
 					>
-						<BookmarksIcon class="flex-shrink-0 w-5 h-5 mr-2" />Bookmarks</nuxt-link
+						<BookmarksIcon class="mr-2 h-5 w-5 flex-shrink-0" />Bookmarks</nuxt-link
 					>
 				</div>
 			</div>
@@ -107,7 +107,7 @@
 			<nuxt-link to="/home">
 				<div class="flex items-center">
 					<CapsuleIcon />
-					<h1 class="text-xl font-bold font-sans text-primary">Blogchain</h1>
+					<h1 class="text-primary font-sans text-xl font-bold">Blogchain</h1>
 				</div>
 			</nuxt-link>
 			<div class="relative mt-2">
@@ -122,42 +122,42 @@
 				<!-- Dropdown: Profile, settings, disconnect -->
 				<div
 					v-show="showDropdown"
-					class="dropdownOpen absolute flex flex-col mt-2 rounded-lg shadow-lg p-4 bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg border border-lightBorder modal-animation"
+					class="dropdownOpen from-lightBGStart to-lightBGStop border-lightBorder modal-animation absolute mt-2 flex flex-col rounded-lg border bg-gradient-to-r p-4 shadow-lg backdrop-blur-lg backdrop-filter"
 				>
 					<!-- Unauthenticated: Log in -->
 					<nuxt-link
 						v-if="$store.state.session.id === ``"
 						to="/login"
-						class="text-left flex flex-row items-center text-gray5 mb-4 w-24 mx-2"
+						class="text-gray5 mx-2 mb-4 flex w-24 flex-row items-center text-left"
 						>Log In</nuxt-link
 					>
 					<!-- Unauthenticated: Register -->
 					<nuxt-link
 						v-if="$store.state.session.id === ``"
 						to="/register"
-						class="text-left flex flex-row items-center text-gray5 w-24 mx-2"
+						class="text-gray5 mx-2 flex w-24 flex-row items-center text-left"
 						>Register</nuxt-link
 					>
 					<!-- Authenticated -->
 					<nuxt-link
 						v-if="$store.state.session.id !== ``"
 						:to="`/id/` + $store.state.session.id"
-						class="text-left w-full flex flex-row items-center text-gray5 mb-4"
-						><ProfileIcon class="flex-shrink-0 w-5 h-5 mr-2" />Profile</nuxt-link
+						class="text-gray5 mb-4 flex w-full flex-row items-center text-left"
+						><ProfileIcon class="mr-2 h-5 w-5 flex-shrink-0" />Profile</nuxt-link
 					>
 					<nuxt-link
 						v-if="$store.state.session.id !== ``"
 						to="/settings/account"
-						class="text-left w-full flex flex-row items-center text-gray5 mb-4"
+						class="text-gray5 mb-4 flex w-full flex-row items-center text-left"
 					>
-						<SettingsIcon class="flex-shrink-0 w-5 h-5 mr-2" />Settings</nuxt-link
+						<SettingsIcon class="mr-2 h-5 w-5 flex-shrink-0" />Settings</nuxt-link
 					>
 					<button
 						v-if="$store.state.session.id !== ``"
-						class="focus:outline-none w-full text-left flex flex-row items-center text-lightError"
+						class="focus:outline-none text-lightError flex w-full flex-row items-center text-left"
 						@click="disconnect"
 					>
-						<LogoutIcon class="flex-shrink-0 w-5 h-5 mr-2" />Disconnect
+						<LogoutIcon class="mr-2 h-5 w-5 flex-shrink-0" />Disconnect
 					</button>
 				</div>
 			</div>

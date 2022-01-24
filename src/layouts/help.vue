@@ -1,6 +1,6 @@
 <template>
 	<main
-		class="h-screen p-0 m-0 bg-img"
+		class="bg-img m-0 h-screen p-0"
 		:style="{
 			background:
 				`linear-gradient(180deg, rgba(46, 85, 106, 0.02) 0%, rgba(46, 85, 106, 0) 50%), url(` +
@@ -10,22 +10,22 @@
 		}"
 	>
 		<!-- Wrapper -->
-		<div class="w-full flex justify-center">
+		<div class="flex w-full justify-center">
 			<div class="flex flex-col" style="width: 1220px">
 				<!-- Header -->
 				<Header :avatar="avatar" />
 				<!-- Body -->
 				<div>
 					<!-- Content -->
-					<section class="flex flex-row relative">
+					<section class="relative flex flex-row">
 						<nuxt-child
 							style="backdrop-filter: blur(10px); min-height: calc(100vh - 60px); height: calc(100vh - 60px)"
-							class="fixed w-full xl:w-750 box-border overflow-y-auto rounded-lg shadow-lg mr-5 bg-gradient-to-r from-lightBGStart to-lightBGStop border border-lightBorder modal-animation"
+							class="xl:w-750 from-lightBGStart to-lightBGStop border-lightBorder modal-animation fixed mr-5 box-border w-full overflow-y-auto rounded-lg border bg-gradient-to-r shadow-lg"
 							:class="showWidgets ? `` : `z-10`"
 						/>
 						<!-- Widgets -->
 						<aside
-							class="fixed hidden xl:block overflow-y-auto p-4 -mt-4 modal-animation"
+							class="modal-animation fixed -mt-4 hidden overflow-y-auto p-4 xl:block"
 							:class="showWidgets ? `z-10` : ``"
 							style="margin-left: 755px; width: 485px; min-height: calc(100vh - 150px); height: calc(100vh - 150px)"
 						>

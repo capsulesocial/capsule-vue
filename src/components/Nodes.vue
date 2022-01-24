@@ -1,15 +1,15 @@
 <template>
 	<!-- Peered nodes -->
-	<div class="hidden xl:flex items-center bg-gray1 px-3 rounded-lg">
-		<span class="text-sm mr-1 text-gray5">{{ nodes }} peered nodes</span>
+	<div class="bg-gray1 hidden items-center rounded-lg px-3 xl:flex">
+		<span class="text-gray5 mr-1 text-sm">{{ nodes }} peered nodes</span>
 		<CapsuleIcon :shrink="true" />
-		<span class="flex h-3 w-3 ml-1">
+		<span class="ml-1 flex h-3 w-3">
 			<span
-				class="animate-ping absolute inline-flex h-3 w-3 rounded-full opacity-75"
+				class="absolute inline-flex h-3 w-3 animate-ping rounded-full opacity-75"
 				:class="nodes > 5 ? `bg-connectGreen` : `bg-connectOrange`"
 			></span>
 			<span
-				class="relative inline-flex rounded-full h-3 w-3"
+				class="relative inline-flex h-3 w-3 rounded-full"
 				:class="nodes > 5 ? `bg-connectGreen` : `bg-connectOrange`"
 			></span>
 		</span>

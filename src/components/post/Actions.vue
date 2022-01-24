@@ -4,16 +4,16 @@
 		<article v-show="toggleStats" class="pt-5">
 			<!-- Back button -->
 			<div class="flex items-center">
-				<button class="rounded-full bg-gray1 focus:outline-none" @click="toggleStats = false"><ChevronLeft /></button>
-				<span class="pl-2 font-semibold text-sm" style="margin-bottom: 2px">All comments</span>
+				<button class="bg-gray1 focus:outline-none rounded-full" @click="toggleStats = false"><ChevronLeft /></button>
+				<span class="pl-2 text-sm font-semibold" style="margin-bottom: 2px">All comments</span>
 			</div>
 			<!-- Global Activity -->
-			<div class="pt-5 border-b h-32 flex justify-between">
+			<div class="flex h-32 justify-between border-b pt-5">
 				<!-- Stats image -->
-				<img :src="require(`@/assets/images/brand/stats.webp`)" class="h-full flex-shrink-0 pl-5 hidden xl:block" />
+				<img :src="require(`@/assets/images/brand/stats.webp`)" class="hidden h-full flex-shrink-0 pl-5 xl:block" />
 				<!-- Text stats -->
-				<div class="flex flex-col w-3/5">
-					<h6 class="text-sm pb-4 font-semibold">Global Post Activity</h6>
+				<div class="flex w-3/5 flex-col">
+					<h6 class="pb-4 text-sm font-semibold">Global Post Activity</h6>
 					<div class="flex flex-row">
 						<!-- Bookmarks Count -->
 						<div class="flex flex-col pr-5">
@@ -29,9 +29,9 @@
 				</div>
 			</div>
 			<!-- Comments Activity -->
-			<div class="border-b flex justify-between h-48">
+			<div class="flex h-48 justify-between border-b">
 				<!-- Graph breakdown -->
-				<div class="hidden xl:flex flex-row h-full self-end ml-5">
+				<div class="ml-5 hidden h-full flex-row self-end xl:flex">
 					<!-- Positive -->
 					<span
 						class="bg-positive w-6 self-end rounded-t-full"
@@ -39,7 +39,7 @@
 					></span>
 					<!-- Neutral -->
 					<span
-						class="bg-neutral w-6 self-end rounded-t-full mx-2"
+						class="bg-neutral mx-2 w-6 self-end rounded-t-full"
 						:style="`height: ` + (getCommentCount(`neutral`) / getCommentCount(`total`)) * 100 + `%`"
 					></span>
 					<!-- Negative -->
@@ -49,10 +49,10 @@
 					></span>
 				</div>
 				<!-- Text stats -->
-				<div class="flex flex-col w-3/5 pt-5">
-					<h6 class="text-sm pb-4 font-semibold">Comment Activity</h6>
+				<div class="flex w-3/5 flex-col pt-5">
+					<h6 class="pb-4 text-sm font-semibold">Comment Activity</h6>
 					<!-- Bookmarks Count -->
-					<div class="flex flex-row mb-2">
+					<div class="mb-2 flex flex-row">
 						<div class="flex flex-col pr-4">
 							<h2 class="text-2xl font-semibold">{{ getCommentCount(`total`) }}</h2>
 							<span class="text-sm">Total comments</span>
@@ -61,33 +61,33 @@
 					<!-- Type breakdown Count -->
 					<div class="flex flex-row">
 						<div class="flex flex-col pr-4">
-							<h2 class="text-2xl font-semibold text-lightPrimary">{{ getCommentCount(`positive`) }}</h2>
+							<h2 class="text-lightPrimary text-2xl font-semibold">{{ getCommentCount(`positive`) }}</h2>
 							<span class="text-sm">Positive</span>
 						</div>
 						<div class="flex flex-col pr-4">
-							<h2 class="text-2xl font-semibold text-neutral">{{ getCommentCount(`neutral`) }}</h2>
+							<h2 class="text-neutral text-2xl font-semibold">{{ getCommentCount(`neutral`) }}</h2>
 							<span class="text-sm">Neutral</span>
 						</div>
 						<div class="flex flex-col pr-4">
-							<h2 class="text-2xl font-semibold text-negative">{{ getCommentCount(`negative`) }}</h2>
+							<h2 class="text-negative text-2xl font-semibold">{{ getCommentCount(`negative`) }}</h2>
 							<span class="text-sm">Negative</span>
 						</div>
 					</div>
 				</div>
 			</div>
 			<!-- Comment Emotions -->
-			<div v-if="getCommentCount(`total`) !== 0" class="pt-5 border-b pb-2">
-				<h6 class="text-sm pb-4 w-full text-center font-semibold">Comment Emotions</h6>
+			<div v-if="getCommentCount(`total`) !== 0" class="border-b pt-5 pb-2">
+				<h6 class="w-full pb-4 text-center text-sm font-semibold">Comment Emotions</h6>
 				<!-- Row of faces -->
 				<div class="flex">
 					<button v-show="page > 0" class="focus:outline-none" @click="page = page - 1"><ChevronLeft /></button>
-					<div class="grid grid-cols-3 xl:grid-cols-6 w-full">
-						<div v-for="f in faceStats.slice(page * 6, page * 6 + 6)" :key="f.face.label" class="flex flex-col w-24">
-							<div class="rounded-lg border flex flex-col p-1" :class="`border-` + getStyle(f.face.label)">
-								<span class="text-xs self-center">{{ f.face.label }}</span>
-								<img :src="f.face.leftImage" :alt="f.face.label" class="w-16 h-16 self-center" />
+					<div class="grid w-full grid-cols-3 xl:grid-cols-6">
+						<div v-for="f in faceStats.slice(page * 6, page * 6 + 6)" :key="f.face.label" class="flex w-24 flex-col">
+							<div class="flex flex-col rounded-lg border p-1" :class="`border-` + getStyle(f.face.label)">
+								<span class="self-center text-xs">{{ f.face.label }}</span>
+								<img :src="f.face.leftImage" :alt="f.face.label" class="h-16 w-16 self-center" />
 							</div>
-							<span class="self-center text-sm font-semibold mt-1"
+							<span class="mt-1 self-center text-sm font-semibold"
 								>{{ ((f.count / getCommentCount(`total`)) * 100).toFixed(1) }}%</span
 							>
 						</div>
@@ -100,7 +100,7 @@
 		</article>
 		<!-- Post a Comment -->
 		<article v-show="!toggleStats" class="xl:pb-5">
-			<div class="w-full flex justify-between py-5">
+			<div class="flex w-full justify-between py-5">
 				<div class="flex flex-row items-center">
 					<span class="pr-2 font-semibold">{{ getCommentCount(`total`) }} comments</span>
 					<button class="focus:outline-none ml-2" @click="toggleStats = true"><StatsIcon /></button>
@@ -108,21 +108,21 @@
 				<CommentFilter :filter="filter" @clicked="setFilter" />
 			</div>
 			<!-- Top overlay with selector -->
-			<div v-show="showEmotions" class="w-full flex flex-row-reverse relative">
+			<div v-show="showEmotions" class="relative flex w-full flex-row-reverse">
 				<div
-					class="z-10 bg-white flex flex-row justify-between p-5 rounded-tr-lg mr-1"
+					class="z-10 mr-1 flex flex-row justify-between rounded-tr-lg bg-white p-5"
 					:style="$route.name === `post-post` ? `width: 490px` : `width: 406px`"
 					style="margin-bottom: -112px; margin-top: 1px; pointer-events: none"
 				>
-					<h6 class="text-primary text-2xl text-center self-center font-semibold">How do you feel?</h6>
+					<h6 class="text-primary self-center text-center text-2xl font-semibold">How do you feel?</h6>
 				</div>
-				<div class="absolute z-10 flex items-center mt-10 mr-12">
-					<button class="p-1 bg-gray1 rounded-full focus:outline-none" @click="showEmotions = false">
+				<div class="absolute z-10 mt-10 mr-12 flex items-center">
+					<button class="bg-gray1 focus:outline-none rounded-full p-1" @click="showEmotions = false">
 						<CloseIcon />
 					</button>
 				</div>
 				<div
-					class="z-10 bg-white flex flex-row justify-between p-5 rounded-tl-lg"
+					class="z-10 flex flex-row justify-between rounded-tl-lg bg-white p-5"
 					:style="$route.name === `post-post` ? `width: 350px` : `width: 306px`"
 					style="
 						margin-bottom: -112px;
@@ -133,33 +133,33 @@
 					"
 				></div>
 			</div>
-			<div class="flex flex-col xl:flex-row items-start">
+			<div class="flex flex-col items-start xl:flex-row">
 				<!-- Comment box Container -->
 				<div
 					v-show="!showEmotions"
-					class="hidden xl:flex justify-between items-start mr-4"
+					class="mr-4 hidden items-start justify-between xl:flex"
 					style="width: 60px; height: 60px"
 				>
 					<Avatar
 						:avatar="$store.state.session.id === `` ? require(`@/assets/images/avatars/unauthenticated.webp`) : avatar"
 						:authorID="$store.state.session.id"
-						class="rounded-xl flex-shrink-0 border-4"
+						class="flex-shrink-0 rounded-xl border-4"
 						:class="`border-` + selectedEmotionColor"
 						:noClick="true"
 					/>
 				</div>
 				<div
-					class="flex rounded-xl w-full overflow-hidden border border-lightBorder"
-					:class="showEmotions ? `` : `border p-4 bg-` + selectedEmotionColor"
+					class="border-lightBorder flex w-full overflow-hidden rounded-xl border"
+					:class="showEmotions ? `` : `bg- border p-4` + selectedEmotionColor"
 				>
 					<div
-						class="rounded-xl overflow-hidden w-full flex justify-center items-center"
+						class="flex w-full items-center justify-center overflow-hidden rounded-xl"
 						:style="showEmotions ? `height: 20rem` : `height: 10rem`"
 					>
-						<div v-if="this.$store.state.session.id !== ``" class="flex flex-row w-full">
+						<div v-if="this.$store.state.session.id !== ``" class="flex w-full flex-row">
 							<!-- Front side: Type comment -->
-							<div v-show="!showEmotions" class="w-full flex bg-white">
-								<button class="h-auto flex-shrink-0 focus:outline-none" @click="showEmotions = !showEmotions">
+							<div v-show="!showEmotions" class="flex w-full bg-white">
+								<button class="focus:outline-none h-auto flex-shrink-0" @click="showEmotions = !showEmotions">
 									<span v-if="activeEmotion.label !== ``">
 										<img
 											:src="activeEmotion.rightImage"
@@ -172,7 +172,7 @@
 								</button>
 								<textarea
 									v-model="comment"
-									class="leading-normal resize-none overflow-y-auto w-full h-40 pl-2 py-4 pr-16 mr-6 focus:outline-none"
+									class="focus:outline-none mr-6 h-40 w-full resize-none overflow-y-auto py-4 pl-2 pr-16 leading-normal"
 									name="body"
 									placeholder="What's your response?"
 								/>
@@ -192,7 +192,7 @@
 							<div
 								v-show="showEmotions"
 								ref="scrollContainer"
-								class="w-full overflow-y-scroll bg-white px-6 modal-animation"
+								class="modal-animation w-full overflow-y-scroll bg-white px-6"
 								style="height: 320px; scroll-snap-type: y mandatory; scroll-snap-stop: always"
 							>
 								<!-- Middle selector area -->
@@ -202,7 +202,7 @@
 										selectedEmotionColor === `positive` ||
 										selectedEmotionColor === `neutral` ||
 										selectedEmotionColor === `negative`
-											? `bg-opacity-25 bg-` + selectedEmotionColor
+											? `bg- bg-opacity-25` + selectedEmotionColor
 											: `bg-gray1`
 									"
 									style="height: 96px; margin-top: 112px"
@@ -213,28 +213,28 @@
 									<div
 										v-for="row in faceGroupings"
 										:key="row[0].label + row[1].label + row[2].label"
-										class="flex flex-row w-full relative px-2"
+										class="relative flex w-full flex-row px-2"
 										style="scroll-snap-align: center"
 									>
 										<button
 											v-for="face in row"
 											:key="face.label"
-											class="rounded-lg focus:outline-none border-2 border-transparent outline-none"
-											:class="selectedEmotion.label === face.label ? `border-2 border-` + selectedEmotionColor : ``"
+											class="focus:outline-none outline-none rounded-lg border-2 border-transparent"
+											:class="selectedEmotion.label === face.label ? `border- border-2` + selectedEmotionColor : ``"
 											style="transition: all 0.3s ease-in-out"
 											@click="setEmotion(face)"
 										>
-											<img :src="face.leftImage" :alt="face.label" class="w-20 h-20" />
+											<img :src="face.leftImage" :alt="face.label" class="h-20 w-20" />
 										</button>
 										<div
 											v-for="face in row"
 											:key="face.label + face.label"
-											class="flex flex-grow justify-center items-center face-tag"
+											class="face-tag flex flex-grow items-center justify-center"
 										>
 											<button
-												class="flex flex-grow justify-center items-center focus:outline-none outline-none"
+												class="focus:outline-none outline-none flex flex-grow items-center justify-center"
 												:class="
-													selectedEmotion.label === face.label ? `font-bold text-` + selectedEmotionColor : `text-gray7`
+													selectedEmotion.label === face.label ? `text- font-bold` + selectedEmotionColor : `text-gray7`
 												"
 												style="transition: all 0.3s ease-in-out"
 												@click="setEmotion(face)"
@@ -243,13 +243,13 @@
 													{{ face.label }}
 												</p>
 											</button>
-											<div class="h-1 w-1 rounded-full bg-gray5 separator"></div>
+											<div class="bg-gray5 separator h-1 w-1 rounded-full"></div>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-						<div v-else class="text-sm pt-3 text-gray5">
+						<div v-else class="text-gray5 pt-3 text-sm">
 							<button class="text-primary focus:outline-none ml-1" @click="$router.push(`/register`)">Sign up</button>
 							to comment on this post and be part of the debate
 						</div>
@@ -257,23 +257,23 @@
 				</div>
 			</div>
 			<!-- Bottom overlay with selector -->
-			<div v-show="showEmotions" class="w-full flex flex-row-reverse absolute">
+			<div v-show="showEmotions" class="absolute flex w-full flex-row-reverse">
 				<div
-					class="z-10 bg-white flex flex-row-reverse items-end p-5 rounded-br-xl mr-1"
+					class="z-10 mr-1 flex flex-row-reverse items-end rounded-br-xl bg-white p-5"
 					style="height: 111px; margin-top: -112px; margin-bottom: 1px; pointer-events: none"
 					:style="
 						$route.name === `post-post` ? `width: 490px; margin-right: 490px` : `width: 406px;  margin-right: 53px;`
 					"
 				></div>
 				<button
-					class="rounded-lg bg-primary text-white px-6 py-2 focus:outline-none absolute bottom-0 right-0 z-10 mb-4"
+					class="bg-primary focus:outline-none absolute bottom-0 right-0 z-10 mb-4 rounded-lg px-6 py-2 text-white"
 					:style="$route.name === `post-post` ? `margin-right: 490px` : `margin-right: 67px;`"
 					@click="confirmEmotion"
 				>
 					Select
 				</button>
 				<div
-					class="z-10 bg-white flex flex-row-reverse items-end p-5 rounded-bl-lg"
+					class="z-10 flex flex-row-reverse items-end rounded-bl-lg bg-white p-5"
 					style="
 						height: 111px;
 						margin-top: -112px;

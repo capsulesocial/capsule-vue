@@ -10,10 +10,10 @@
 				:numberOfDrafts="draftSubset.length"
 			/>
 			<p class="text-primary">
-				<button class="text-sm focus:outline-none" @click="handleDraftPopup">Show all</button>
+				<button class="focus:outline-none text-sm" @click="handleDraftPopup">Show all</button>
 			</p>
 		</div>
-		<div v-else class="text-sm pt-3 text-gray5">
+		<div v-else class="text-gray5 pt-3 text-sm">
 			<button class="text-primary focus:outline-none ml-1" @click="$router.push(`/register`)">Sign up</button>
 			to create drafts and save content
 		</div>

@@ -1,14 +1,14 @@
 <template>
 	<div
-		class="w-full xl:w-750 min-h-120 h-120 xl:min-h-160 xl:h-160 border border-lightBorder"
+		class="xl:w-750 min-h-120 h-120 xl:min-h-160 xl:h-160 border-lightBorder w-full border"
 		style="backdrop-filter: blur(10px)"
 	>
-		<div class="pb-2 px-5 xl:px-6 pt-3 xl:pt-4">
-			<h2 class="text-lg xl:text-xl text-primary font-semibold mb-1">Featured Categories</h2>
+		<div class="px-5 pb-2 pt-3 xl:px-6 xl:pt-4">
+			<h2 class="text-primary mb-1 text-lg font-semibold xl:text-xl">Featured Categories</h2>
 			<p class="text-gray5">Read more of what you love by browsing top categories:</p>
 		</div>
 		<article
-			class="fixed w-full xl:w-750 box-border min-h-230 h-230 xl:min-h-240 xl:h-240 overflow-y-auto grid grid-cols-1 xl:grid-cols-2 gap-y-4 pb-4 pt-4 px-0 xl:px-2"
+			class="xl:w-750 min-h-230 h-230 xl:min-h-240 xl:h-240 fixed box-border grid w-full grid-cols-1 gap-y-4 overflow-y-auto px-0 pb-4 pt-4 xl:grid-cols-2 xl:px-2"
 		>
 			<CategoryCard
 				v-for="c in categoryList"

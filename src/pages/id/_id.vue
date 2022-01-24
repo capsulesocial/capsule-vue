@@ -5,16 +5,16 @@
 			<article
 				id="header"
 				ref="topContainer"
-				class="px-4 xl:px-6 pt-3 xl:pt-4 z-20 w-full min-h-fit header-profile"
+				class="min-h-fit header-profile z-20 w-full px-4 pt-3 xl:px-6 xl:pt-4"
 				style="backdrop-filter: blur(10px)"
 			>
 				<!-- Back button -->
-				<div v-if="$route.params.id !== $store.state.session.id" class="pb-4 flex flex-row items-center">
-					<button class="flex flex-row items-center focus:outline-none" @click="$router.go(-1)">
+				<div v-if="$route.params.id !== $store.state.session.id" class="flex flex-row items-center pb-4">
+					<button class="focus:outline-none flex flex-row items-center" @click="$router.go(-1)">
 						<span class="bg-gray1 rounded-full p-1"><BackButton :reduceSize="true" /></span>
-						<h6 class="font-semibold ml-2 font-sans">Back</h6>
+						<h6 class="ml-2 font-sans font-semibold">Back</h6>
 					</button>
-					<div id="small" class="flex flex-row justify-between items-center w-full header-profile ml-6 opacity-0">
+					<div id="small" class="header-profile ml-6 flex w-full flex-row items-center justify-between opacity-0">
 						<div class="flex flex-row items-center">
 							<Avatar
 								:avatar="visitAvatar"
@@ -22,8 +22,8 @@
 								:size="`w-8 h-8`"
 								class="rounded-base flex-shrink-0"
 							/>
-							<h6 v-if="visitProfile.name != ``" class="font-semibold ml-2 font-sans">{{ visitProfile.name }}</h6>
-							<h6 v-else class="font-semibold ml-2 font-sans text-gray5">{{ visitProfile.id }}</h6>
+							<h6 v-if="visitProfile.name != ``" class="ml-2 font-sans font-semibold">{{ visitProfile.name }}</h6>
+							<h6 v-else class="text-gray5 ml-2 font-sans font-semibold">{{ visitProfile.id }}</h6>
 						</div>
 						<div class="flex items-center">
 							<SecondaryButton
@@ -42,30 +42,30 @@
 				</div>
 				<!-- Name, socials, follow, bio -->
 				<div class="flex flex-row justify-between">
-					<div id="infos" class="flex items-center header-profile">
+					<div id="infos" class="header-profile flex items-center">
 						<Avatar
 							:avatar="visitAvatar"
 							:authorID="$route.params.id"
 							:size="`w-20 h-20`"
-							class="rounded-lg flex-shrink-0"
+							class="flex-shrink-0 rounded-lg"
 						/>
-						<div class="flex flex-col flex-grow ml-5">
+						<div class="ml-5 flex flex-grow flex-col">
 							<!-- Name Username, Follow button -->
 							<div class="flex flex-col">
-								<h3 v-if="visitProfile.name != ``" class="text-2xl pr-4 font-semibold">
+								<h3 v-if="visitProfile.name != ``" class="pr-4 text-2xl font-semibold">
 									{{ visitProfile.name }}
 								</h3>
-								<h3 v-else class="text-2xl pr-4 font-semibold text-gray5">{{ visitProfile.id }}</h3>
+								<h3 v-else class="text-gray5 pr-4 text-2xl font-semibold">{{ visitProfile.id }}</h3>
 								<h5 class="text-primary text-lg">@{{ visitProfile.id }}</h5>
 							</div>
 							<!-- Tabs: posts, following, followers -->
-							<div class="flex flex-row pt-2 text-sm text-gray6 -mr-12">
+							<div class="text-gray6 -mr-12 flex flex-row pt-2 text-sm">
 								<div v-if="totalPostsCount === 1" class="text-sm">
-									<span class="font-bold text-primary">{{ totalPostsCount }}</span>
+									<span class="text-primary font-bold">{{ totalPostsCount }}</span>
 									Post
 								</div>
 								<div v-else class="text-sm">
-									<span class="font-bold text-primary">{{ totalPostsCount }}</span>
+									<span class="text-primary font-bold">{{ totalPostsCount }}</span>
 									Posts
 								</div>
 								<nuxt-link
@@ -73,7 +73,7 @@
 									:class="getStyles(`id-id-followers`)"
 									class="pl-5 text-sm"
 								>
-									<span class="font-bold text-primary">{{ followers.size }}</span>
+									<span class="text-primary font-bold">{{ followers.size }}</span>
 									Followers
 								</nuxt-link>
 								<nuxt-link
@@ -81,18 +81,18 @@
 									:class="getStyles(`id-id-following`)"
 									class="pl-5 text-sm"
 								>
-									<span class="font-bold text-primary">{{ following.size }}</span>
+									<span class="text-primary font-bold">{{ following.size }}</span>
 									Following
 								</nuxt-link>
 							</div>
 						</div>
 					</div>
 					<!-- Profile buttons -->
-					<div id="buttons" class="flex items-center header-profile h-fit xl:h-auto">
+					<div id="buttons" class="header-profile h-fit flex items-center xl:h-auto">
 						<!-- Edit profile button -->
 						<span v-if="$store.state.session.id === $route.params.id">
-							<button class="block xl:hidden bg-primary rounded-lg focus:outline-none" @click="toggleSettings">
-								<PencilIcon class="text-white m-2 w-5 h-5" />
+							<button class="bg-primary focus:outline-none block rounded-lg xl:hidden" @click="toggleSettings">
+								<PencilIcon class="m-2 h-5 w-5 text-white" />
 							</button>
 							<SecondaryButton :text="`Edit Profile`" :action="toggleSettings" class="hidden xl:block" />
 						</span>
@@ -105,14 +105,14 @@
 					</div>
 				</div>
 				<!-- Bio -->
-				<div v-if="visitProfile.bio" id="bio" class="pt-4 px-1 header-profile">
+				<div v-if="visitProfile.bio" id="bio" class="header-profile px-1 pt-4">
 					<p>
 						{{ visitProfile.bio }}
 					</p>
 				</div>
 				<div v-else id="bio" class="header-profile"></div>
 				<!-- Tabs -->
-				<div id="tabs" class="flex w-full justify-between text-gray5 pt-6 header-profile xl:px-6">
+				<div id="tabs" class="text-gray5 header-profile flex w-full justify-between pt-6 xl:px-6">
 					<nuxt-link :to="'/id/' + $route.params.id" class="pb-1" :class="getStyles('id-id')">
 						<span class="px-4">Posts</span>
 					</nuxt-link>
@@ -128,7 +128,7 @@
 				v-if="loadedContent()"
 				id="scrollContainer"
 				ref="scrollContainer"
-				class="fixed w-full xl:w-748 overflow-y-auto"
+				class="xl:w-748 fixed w-full overflow-y-auto"
 				:style="`min-height: calc(100vh - ` + padding + ` - 90px); height: calc(100vh - ` + padding + ` - 90px)`"
 			>
 				<nuxt-child
@@ -143,10 +143,10 @@
 		<!-- Settings popup -->
 		<div
 			v-if="showSettings"
-			class="fixed w-full h-screen bg-primary top-0 bottom-0 left-0 right-0 z-30 flex justify-center items-center bg-opacity-50 modal-animation"
+			class="bg-primary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50"
 		>
 			<SettingsPopup
-				class="w-full xl:w-589 bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg shadow-lg rounded-lg card-animation"
+				class="xl:w-589 from-lightBGStart to-lightBGStop card-animation w-full rounded-lg bg-gradient-to-r shadow-lg backdrop-blur-lg backdrop-filter"
 				style="backdrop-filter: blur(10px)"
 				:updateProfileMethod="updateProfileMethod"
 				@close="toggleSettings"

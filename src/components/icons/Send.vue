@@ -1,6 +1,6 @@
 <template>
 	<svg
-		class="w-5 h-5 transform rotate-90 -mr-px"
+		class="-mr-px h-5 w-5 rotate-90 transform"
 		fill="none"
 		stroke="currentColor"
 		viewBox="0 0 24 24"

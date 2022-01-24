@@ -1,6 +1,6 @@
 <template>
 	<main
-		class="h-screen p-0 m-0 bg-img"
+		class="bg-img m-0 h-screen p-0"
 		:style="{
 			background:
 				`linear-gradient(180deg, rgba(46, 85, 106, 0.02) 0%, rgba(46, 85, 106, 0) 50%), url(` +
@@ -10,8 +10,8 @@
 		}"
 	>
 		<!-- Wrapper -->
-		<div class="w-full flex justify-center">
-			<div class="flex flex-col w-full xl:w-1220">
+		<div class="flex w-full justify-center">
+			<div class="xl:w-1220 flex w-full flex-col">
 				<!-- Header -->
 				<Header :avatar="myAvatar" />
 				<!-- Body -->
@@ -20,7 +20,7 @@
 					<section v-if="visitProfile" class="flex flex-row">
 						<nuxt-child
 							:key="componentKey"
-							class="fixed xl:w-750 min-h-61 h-61 overflow-y-auto rounded-lg shadow-lg mr-5 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop border border-lightBorder modal-animation"
+							class="xl:w-750 min-h-61 h-61 from-lightBGStart to-lightBGStop border-lightBorder modal-animation fixed z-10 mr-5 overflow-y-auto rounded-lg border bg-gradient-to-r shadow-lg"
 							:visitProfile="visitProfile"
 							:visitAvatar="visitAvatar"
 							:followers="followers"
@@ -34,7 +34,7 @@
 						/>
 						<!-- Widgets -->
 						<aside
-							class="fixed overflow-y-auto p-4 -mt-4 modal-animation"
+							class="modal-animation fixed -mt-4 overflow-y-auto p-4"
 							style="margin-left: 755px; width: 485px; min-height: calc(100vh - 70px); height: calc(100vh - 70px)"
 						>
 							<ProfileWidget
@@ -52,19 +52,19 @@
 							<Footer />
 						</aside>
 					</section>
-					<section v-else class="w-full flex justify-center modal-animation">
-						<div class="loader m-5 p-10 rounded-lg"></div>
+					<section v-else class="modal-animation flex w-full justify-center">
+						<div class="loader m-5 rounded-lg p-10"></div>
 					</section>
 				</div>
 				<div
 					v-else
 					style="bottom: -10px; backdrop-filter: blur(10px)"
-					class="fixed xl:w-1220 xl:min-h-80 xl:h-80 overflow-y-auto rounded-lg shadow-lg mr-5 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop border border-lightBorder"
+					class="xl:w-1220 xl:min-h-80 from-lightBGStart to-lightBGStop border-lightBorder fixed z-10 mr-5 overflow-y-auto rounded-lg border bg-gradient-to-r shadow-lg xl:h-80"
 				>
-					<div class="w-full p-5 flex flex-col items-ceter">
-						<h1 class="font-bold text-negative text-6xl font-sans text-center mt-16">404</h1>
-						<h2 class="text-center font-semibold text-2xl">This page was not found</h2>
-						<p class="text-center text-gray7 self-center mb-5 mt-2" style="width: 360px">
+					<div class="items-ceter flex w-full flex-col p-5">
+						<h1 class="text-negative mt-16 text-center font-sans text-6xl font-bold">404</h1>
+						<h2 class="text-center text-2xl font-semibold">This page was not found</h2>
+						<p class="text-gray7 mb-5 mt-2 self-center text-center" style="width: 360px">
 							It seems that this page doesn't exist, we suggest you to go back home
 						</p>
 						<div class="flex justify-center">
@@ -80,7 +80,7 @@
 						<img
 							:src="require(`@/assets/images/brand/error.webp`)"
 							alt="error image"
-							class="self-center mt-10"
+							class="mt-10 self-center"
 							style="width: 500px"
 						/>
 					</div>

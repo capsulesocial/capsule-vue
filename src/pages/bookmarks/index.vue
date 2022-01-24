@@ -1,12 +1,12 @@
 <template>
 	<div>
-		<article v-if="posts.length == 0" class="grid justify-items-center mt-12 px-6 xl:px-0 overflow-y-hidden">
-			<p class="text-sm text-gray5 mb-1 flex items-end align-end" style="max-width: 366px">
+		<article v-if="posts.length == 0" class="mt-12 grid justify-items-center overflow-y-hidden px-6 xl:px-0">
+			<p class="text-gray5 align-end mb-1 flex items-end text-sm" style="max-width: 366px">
 				It seems you don't have any bookmarked posts yet,
 			</p>
-			<p class="text-sm text-gray5 mb-5 flex items-end align-end" style="max-width: 366px">
+			<p class="text-gray5 align-end mb-5 flex items-end text-sm" style="max-width: 366px">
 				you can bookmark any post by clicking the<span>
-					<BookmarkIcon class="w-5 h-5 fill-current" />
+					<BookmarkIcon class="h-5 w-5 fill-current" />
 				</span>
 				icon:
 			</p>

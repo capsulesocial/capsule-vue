@@ -1,5 +1,5 @@
 <template>
-	<div class="rounded-full bg-gray-100 m-4 flex flex-start">
+	<div class="flex-start m-4 flex rounded-full bg-gray-100">
 		<button type="submit" class="px-4">
 			<SearchIcon />
 		</button>
@@ -7,7 +7,7 @@
 			v-model="keyword"
 			type="search"
 			placeholder="Type your keywords..."
-			class="rounded-full bg-gray-100 text-black focus:outline-none flex-grow mr-10"
+			class="focus:outline-none mr-10 flex-grow rounded-full bg-gray-100 text-black"
 		/>
 	</div>
 </template>

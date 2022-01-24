@@ -1,11 +1,11 @@
 <template>
-	<div class="border border-lightBorder">
+	<div class="border-lightBorder border">
 		<section>
-			<nav class="flex flex-row z-20 text-base w-full px-5 xl:px-6 pt-3 xl:pt-4" style="backdrop-filter: blur(10px)">
+			<nav class="z-20 flex w-full flex-row px-5 pt-3 text-base xl:px-6 xl:pt-4" style="backdrop-filter: blur(10px)">
 				<div class="flex items-center">
 					<button
-						:class="algorithm === `FOLLOWING` ? ` text-primary border-b-2 border-primary font-semibold` : `text-gray5`"
-						class="h-full focus:outline-none w-full pb-3"
+						:class="algorithm === `FOLLOWING` ? ` text-primary border-primary border-b-2 font-semibold` : `text-gray5`"
+						class="focus:outline-none h-full w-full pb-3"
 						@click="sortFeed('FOLLOWING')"
 					>
 						Following
@@ -13,8 +13,8 @@
 				</div>
 				<div class="flex items-center px-12">
 					<button
-						:class="algorithm === `NEW` ? `text-primary border-b-2 border-primary font-semibold` : `text-gray5`"
-						class="h-full focus:outline-none w-full pb-3"
+						:class="algorithm === `NEW` ? `text-primary border-primary border-b-2 font-semibold` : `text-gray5`"
+						class="focus:outline-none h-full w-full pb-3"
 						@click="sortFeed('NEW')"
 					>
 						New
@@ -22,8 +22,8 @@
 				</div>
 				<div class="flex items-center">
 					<button
-						:class="algorithm === `TOP` ? ` text-primary border-b-2 border-primary font-semibold` : `text-gray5`"
-						class="h-full focus:outline-none w-full pb-3"
+						:class="algorithm === `TOP` ? ` text-primary border-primary border-b-2 font-semibold` : `text-gray5`"
+						class="focus:outline-none h-full w-full pb-3"
 						@click="sortFeed('TOP')"
 					>
 						Top
@@ -33,15 +33,15 @@
 			<div
 				v-if="posts"
 				ref="container"
-				class="fixed w-full xl:w-748 min-h-180 h-180 xl:min-h-200 xl:h-200 overflow-y-auto modal-animation"
+				class="xl:w-748 min-h-180 h-180 xl:min-h-200 xl:h-200 modal-animation fixed w-full overflow-y-auto"
 			>
 				<div
 					v-if="!isLoading && algorithm === `FOLLOWING` && following.size === 0 && posts.length === 0"
 					class="relative h-full overflow-y-hidden"
 				>
-					<div class="p-12 flex flex-col justify-center">
-						<h2 class="text-center font-semibold text-2xl">Welcome 🚀</h2>
-						<p class="text-center text-gray7 self-center mb-5 mt-2 xl:mx-14">
+					<div class="flex flex-col justify-center p-12">
+						<h2 class="text-center text-2xl font-semibold">Welcome 🚀</h2>
+						<p class="text-gray7 mb-5 mt-2 self-center text-center xl:mx-14">
 							It seems that you don't follow anyone yet. You can go to the Top feed to follow top rated content creator
 							and start your Capsule experience
 						</p>
@@ -77,7 +77,7 @@
 				</article>
 			</div>
 			<!-- Not loaded yet -->
-			<article v-show="isLoading" class="flex justify-center h-screen pt-12 w-full modal-animation">
+			<article v-show="isLoading" class="modal-animation flex h-screen w-full justify-center pt-12">
 				<div class="loader m-5"></div>
 			</article>
 		</section>

@@ -1,30 +1,30 @@
 <template>
 	<div
 		id="post"
-		class="w-full flex justify-center modal-animation card-animation"
+		class="modal-animation card-animation flex w-full justify-center"
 		:style="showQuoteRepost ? `background-color: #fff` : `backdrop-filter: blur(10px)`"
 	>
 		<!-- Inner post area -->
-		<div v-if="post && author" class="w-full xl:w-760 xl:max-w-760 h-fit">
+		<div v-if="post && author" class="xl:w-760 xl:max-w-760 h-fit w-full">
 			<!-- Magic header that disappears on scroll down -->
 			<header
 				id="header"
-				class="page-header w-full xl:w-760 xl:max-w-760 flex items-center sticky top-0 z-10 py-2 xl:px-4 rounded-b-lg bg-gradient-to-r from-lightBGStart to-lightBGStop"
+				class="page-header xl:w-760 xl:max-w-760 from-lightBGStart to-lightBGStop sticky top-0 z-10 flex w-full items-center rounded-b-lg bg-gradient-to-r py-2 xl:px-4"
 				style="backdrop-filter: blur(10px)"
 			>
-				<div class="trigger-menu-wrapper flex justify-center w-full py-2 ease-in-out">
-					<div class="xl:min-w-max xl:max-w-3xl w-full flex justify-between">
+				<div class="trigger-menu-wrapper flex w-full justify-center py-2 ease-in-out">
+					<div class="flex w-full justify-between xl:min-w-max xl:max-w-3xl">
 						<!-- Left side: name, avatar, date -->
-						<div class="items-center flex">
+						<div class="flex items-center">
 							<Avatar :avatar="authorAvatar" :authorID="post.authorID" size="w-10 h-10" class="mr-4 flex-shrink-0" />
 							<div class="pr-8">
 								<nuxt-link v-if="author.name != ``" :to="`/id/` + post.authorID" class="font-semibold">{{
 									author.name
 								}}</nuxt-link>
-								<nuxt-link v-else :to="`/id/` + post.authorID" class="font-semibold text-gray5">{{
+								<nuxt-link v-else :to="`/id/` + post.authorID" class="text-gray5 font-semibold">{{
 									post.authorID
 								}}</nuxt-link>
-								<h6 class="font-sans text-sm text-gray6">{{ $formatDate(post.timestamp) }}</h6>
+								<h6 class="text-gray6 font-sans text-sm">{{ $formatDate(post.timestamp) }}</h6>
 							</div>
 							<FriendButton
 								v-if="post.authorID !== $store.state.session.id"
@@ -34,16 +34,16 @@
 							/>
 						</div>
 						<span class="flex items-center">
-							<button class="bg-lightSecondary rounded-full p-1 focus:outline-none" @click="handleClose">
+							<button class="bg-lightSecondary focus:outline-none rounded-full p-1" @click="handleClose">
 								<XIcon />
 							</button>
 						</span>
 					</div>
 				</div>
 			</header>
-			<section v-if="post !== null" class="pb-16 md:pb-5 mb-5 pt-2">
+			<section v-if="post !== null" class="mb-5 pb-16 pt-2 md:pb-5">
 				<!-- Category and elipses -->
-				<article class="w-full flex justify-between my-5">
+				<article class="my-5 flex w-full justify-between">
 					<nuxt-link :to="`/discover/` + post.category" class="text-primary capitalize">{{ post.category }}</nuxt-link>
 					<div class="flex">
 						<BookmarkButton
@@ -64,14 +64,14 @@
 				<article>
 					<h1
 						:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-						class="text-h1 font-serif font-semibold mb-3 break-words"
+						class="text-h1 mb-3 break-words font-serif font-semibold"
 					>
 						{{ post.title }}
 					</h1>
 					<h2
 						v-if="post.subtitle"
 						:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-						class="text-h2 font-serif font-medium mb-3 break-words"
+						class="text-h2 mb-3 break-words font-serif font-medium"
 					>
 						{{ post.subtitle }}
 					</h2>
@@ -79,16 +79,16 @@
 				<!-- Featured Photo -->
 				<article
 					v-if="featuredPhoto !== null"
-					class="mb-5 flex flex-col justify-end relative mt-5 cursor-pointer"
+					class="relative mb-5 mt-5 flex cursor-pointer flex-col justify-end"
 					@click="showPhoto"
 				>
 					<div
 						v-if="post.featuredPhotoCaption"
-						class="h-16 w-full absolute rounded-b-lg"
+						class="absolute h-16 w-full rounded-b-lg"
 						style="background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.8) 100%)"
 					></div>
-					<img :src="featuredPhoto" class="rounded-lg w-full shadow-lg object-cover" />
-					<p v-if="post.featuredPhotoCaption" class="absolute text-lightOnPrimaryText px-4 pb-3 text-sm">
+					<img :src="featuredPhoto" class="w-full rounded-lg object-cover shadow-lg" />
+					<p v-if="post.featuredPhotoCaption" class="text-lightOnPrimaryText absolute px-4 pb-3 text-sm">
 						{{ post.featuredPhotoCaption }}
 					</p>
 				</article>
@@ -100,7 +100,7 @@
 				<article class="mt-5">
 					<div
 						:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-						class="editable max-w-none content break-words"
+						class="editable content max-w-none break-words"
 					>
 						<component :is="readerViewElement" v-if="readerViewElement"></component>
 					</div>
@@ -115,10 +115,10 @@
 					<a
 						:href="`https://ipfs.io/api/v0/dag/get?arg=` + $route.params.post"
 						target="_blank"
-						class="flex flex-row justify-between bg-gray1 rounded-lg text-gray5 px-3 py-1"
+						class="bg-gray1 text-gray5 flex flex-row justify-between rounded-lg px-3 py-1"
 					>
 						<span>IPFS address </span>
-						<span class="break-words hidden xl:block">{{ $route.params.post }}</span>
+						<span class="hidden break-words xl:block">{{ $route.params.post }}</span>
 						<span class="block"><LinkIcon class="py-1" /></span>
 					</a>
 				</div>
@@ -152,7 +152,7 @@
 			</section>
 			<section v-else>Post not found 😵‍💫</section>
 		</div>
-		<article v-show="isLoading" class="flex fixed justify-center w-full mt-20 modal-animation">
+		<article v-show="isLoading" class="modal-animation fixed mt-20 flex w-full justify-center">
 			<div class="loader m-5"></div>
 		</article>
 		<!-- Show Post preview card on quote repost -->

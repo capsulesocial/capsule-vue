@@ -1,6 +1,6 @@
 <template>
 	<main
-		class="h-screen p-0 m-0 bg-img"
+		class="bg-img m-0 h-screen p-0"
 		:style="{
 			background:
 				`linear-gradient(180deg, rgba(46, 85, 106, 0.02) 0%, rgba(46, 85, 106, 0) 50%), url(` +
@@ -9,12 +9,12 @@
 			backgroundSize: `contain`,
 		}"
 	>
-		<div class="w-full flex justify-center">
+		<div class="flex w-full justify-center">
 			<div class="flex flex-col" style="width: 1220px">
 				<!-- Header -->
 				<Header :avatar="myAvatar" />
-				<h1 class="text-4xl font-bold text-red-500 text-center">{{ error['statusCode'] }}: {{ error['message'] }}</h1>
-				<h6 class="text-xl text-center p-10">An error has occurred</h6>
+				<h1 class="text-center text-4xl font-bold text-red-500">{{ error['statusCode'] }}: {{ error['message'] }}</h1>
+				<h6 class="p-10 text-center text-xl">An error has occurred</h6>
 				<div class="flex justify-center">
 					<BrandedButton text="Return" :action="goBack" class="w-64" />
 				</div>

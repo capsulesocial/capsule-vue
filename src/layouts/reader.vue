@@ -1,6 +1,6 @@
 <template>
 	<main
-		class="h-screen p-0 m-0 bg-img"
+		class="bg-img m-0 h-screen p-0"
 		:style="{
 			background:
 				`linear-gradient(180deg, rgba(46, 85, 106, 0.02) 0%, rgba(46, 85, 106, 0) 50%), url(` +
@@ -12,22 +12,22 @@
 		<!-- Featured photo popup -->
 		<div
 			v-if="displayPhoto"
-			class="fixed w-full h-screen bg-primary bg-opacity-75 z-40 pt-24 overflow-auto"
+			class="bg-primary fixed z-40 h-screen w-full overflow-auto bg-opacity-75 pt-24"
 			@click="displayPhoto = false"
 		>
 			<img :src="featuredPhoto.photo" class="modal-content rounded-lg" />
 			<p v-if="featuredPhoto.caption" id="caption">{{ featuredPhoto.caption }}</p>
 		</div>
 		<!-- Wrapper -->
-		<div class="w-full flex justify-center">
-			<div class="flex flex-col w-full xl:w-1220">
+		<div class="flex w-full justify-center">
+			<div class="xl:w-1220 flex w-full flex-col">
 				<!-- Header -->
 				<Header :avatar="avatar" />
 				<!-- Body -->
 				<!-- Content -->
 				<section class="flex flex-row">
 					<nuxt-child
-						class="fixed w-full h-full xl:w-1220 xl:h-80 xl:min-h-80 overflow-y-auto rounded-lg shadow-lg mr-5 p-5 xl:p-6 pt-0 xl:pt-0 border border-lightBorder bg-gradient-to-r from-lightBGStart to-lightBGStop"
+						class="xl:w-1220 xl:min-h-80 border-lightBorder from-lightBGStart to-lightBGStop fixed mr-5 h-full w-full overflow-y-auto rounded-lg border bg-gradient-to-r p-5 pt-0 shadow-lg xl:h-80 xl:p-6 xl:pt-0"
 						@showPhoto="showPhoto"
 					/>
 				</section>

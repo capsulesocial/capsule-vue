@@ -2,7 +2,7 @@
 	<button
 		style="padding: 0.6rem 1.7rem"
 		:class="getStyles()"
-		class="transition duration-500 ease-in-out transform font-bold rounded-lg hover:shadow-lg focus:outline-none"
+		class="focus:outline-none transform rounded-lg font-bold transition duration-500 ease-in-out hover:shadow-lg"
 		@click="action"
 	>
 		<span class="font-sans" style="font-size: 0.95rem">

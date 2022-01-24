@@ -1,11 +1,11 @@
 <template>
-	<div class="flex items-end relative">
+	<div class="relative flex items-end">
 		<button
-			class="flex items-end focus:outline-none hover:text-primary toggle"
+			class="focus:outline-none hover:text-primary toggle flex items-end"
 			:class="showSocialShares ? 'text-primary' : ''"
 			@click.stop="toggleDropdown"
 		>
-			<div class="flex text-gray5 hover:text-primary hover:fill-primary">
+			<div class="text-gray5 hover:text-primary hover:fill-primary flex">
 				<ShareIcon :isActive="showSocialShares" />
 				<span class="ml-1">{{ repostCount + repostOffset }}</span>
 			</div>
@@ -17,45 +17,45 @@
 					? 'bg-lightBG text-lightPrimaryText border-lightBorder'
 					: 'bg-darkBG text-darkPrimaryText border-darkBorder'
 			"
-			class="absolute flex flex-col rounded-lg w-40 shadow-lg border border-lightBorder z-10 p-2 modal-animation dropdownShareOpen"
+			class="border-lightBorder modal-animation dropdownShareOpen absolute z-10 flex w-40 flex-col rounded-lg border p-2 shadow-lg"
 			style="left: 53px"
 		>
 			<!-- Simple Repost -->
 			<button
 				:class="$store.state.settings.darkMode ? 'hover:text-lightActive' : 'hover:text-darkActive'"
-				class="flex focus:outline-none text-gray5"
+				class="focus:outline-none text-gray5 flex"
 				@click="handleRepost()"
 			>
 				<RepostIcon :isActive="isReposted" class="mr-2 p-1" />
-				<span v-if="isReposted" class="text-xs self-center">Undo Repost</span>
-				<span v-else class="text-xs self-center">Repost to Feed</span>
+				<span v-if="isReposted" class="self-center text-xs">Undo Repost</span>
+				<span v-else class="self-center text-xs">Repost to Feed</span>
 			</button>
 			<!-- Quote Repost -->
 			<button
 				:class="$store.state.settings.darkMode ? 'hover:text-lightActive' : 'hover:text-darkActive'"
-				class="flex focus:outline-none text-gray5"
+				class="focus:outline-none text-gray5 flex"
 				@click="$emit(`toggleRepost`)"
 			>
 				<QuoteIcon class="mr-2 p-1" />
-				<span class="text-xs self-center">Quote</span>
+				<span class="self-center text-xs">Quote</span>
 			</button>
 			<!-- Twitter -->
 			<button
 				:class="$store.state.settings.darkMode ? 'hover:text-lightActive' : 'hover:text-darkActive'"
-				class="flex focus:outline-none text-gray5"
+				class="focus:outline-none text-gray5 flex"
 				@click="handleShare('TWITTER')"
 			>
 				<TwitterIcon class="mr-2 p-1" />
-				<span class="text-xs self-center text-left">Share on Twitter</span>
+				<span class="self-center text-left text-xs">Share on Twitter</span>
 			</button>
 			<!-- Copy URL Link -->
 			<button
 				:class="$store.state.settings.darkMode ? 'hover:text-lightActive' : 'hover:text-darkActive'"
-				class="flex focus:outline-none text-gray5"
+				class="focus:outline-none text-gray5 flex"
 				@click="handleShare('URL')"
 			>
 				<LinkIcon class="mr-2 p-1" />
-				<span class="text-xs self-center">Copy Link</span>
+				<span class="self-center text-xs">Copy Link</span>
 			</button>
 		</div>
 		<input :id="cid" type="hidden" value="" class="hidden" />

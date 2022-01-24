@@ -1,6 +1,6 @@
 <template>
 	<main
-		class="h-screen p-0 m-0 bg-img overflow-y-hidden"
+		class="bg-img m-0 h-screen overflow-y-hidden p-0"
 		:style="{
 			background:
 				`linear-gradient(180deg, rgba(46, 85, 106, 0.02) 0%, rgba(46, 85, 106, 0) 50%), url(` +
@@ -9,24 +9,24 @@
 		}"
 	>
 		<!-- Wrapper -->
-		<div class="w-full flex justify-center">
-			<div class="flex flex-col w-full xl:w-1220">
+		<div class="flex w-full justify-center">
+			<div class="xl:w-1220 flex w-full flex-col">
 				<!-- Header -->
 				<Header :avatar="avatar" />
 				<!-- Body -->
 				<div>
 					<!-- Title and peered nodes -->
 					<div
-						class="fixed w-full flex justify-between items-center modal-animation px-3 xl:px-0"
+						class="modal-animation fixed flex w-full items-center justify-between px-3 xl:px-0"
 						style="height: 62px; width: 1220px"
 					>
 						<!-- Title -->
-						<h1 v-if="profile" class="font-semibold text-primary text-3xl xl:text-4xl">Hello, {{ profile.name }}</h1>
-						<h1 v-else class="font-semibold text-primary text-3xl xl:text-4xl">Hello,</h1>
+						<h1 v-if="profile" class="text-primary text-3xl font-semibold xl:text-4xl">Hello, {{ profile.name }}</h1>
+						<h1 v-else class="text-primary text-3xl font-semibold xl:text-4xl">Hello,</h1>
 						<Nodes />
 					</div>
 					<!-- Content -->
-					<section class="flex flex-row mt-16 xl:mt-20 relative">
+					<section class="relative mt-16 flex flex-row xl:mt-20">
 						<PostEditor
 							v-if="$store.state.widgets.primary === `editor` && $route.name === `home`"
 							ref="editor"
@@ -36,11 +36,11 @@
 								height: calc(100vh - 150px);
 								backdrop-filter: blur(10px);
 							"
-							class="fixed overflow-y-auto overflow-x-hidden rounded-lg shadow-lg p-6 bg-gradient-to-r from-lightBGStart to-lightBGStop modal-animation"
+							class="from-lightBGStart to-lightBGStop modal-animation fixed overflow-y-auto overflow-x-hidden rounded-lg bg-gradient-to-r p-6 shadow-lg"
 						/>
 						<nuxt-child
 							v-else
-							class="fixed w-full xl:w-750 box-border min-h-120 h-120 overflow-y-auto rounded-lg shadow-lg xl:mr-5 bg-gradient-to-r from-lightBGStart to-lightBGStop modal-animation"
+							class="xl:w-750 min-h-120 h-120 from-lightBGStart to-lightBGStop modal-animation fixed box-border w-full overflow-y-auto rounded-lg bg-gradient-to-r shadow-lg xl:mr-5"
 							:class="showWidgets ? `` : `z-10`"
 							:toggleFriend="toggleFriend"
 							:following="following"
@@ -50,7 +50,7 @@
 						/>
 						<!-- Widgets -->
 						<aside
-							class="fixed hidden xl:block overflow-y-auto p-4 -mt-4 modal-animation"
+							class="modal-animation fixed -mt-4 hidden overflow-y-auto p-4 xl:block"
 							:class="showWidgets ? `z-10` : ``"
 							style="margin-left: 755px; width: 485px; min-height: calc(100vh - 150px); height: calc(100vh - 150px)"
 						>

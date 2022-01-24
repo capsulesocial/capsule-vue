@@ -1,11 +1,11 @@
 <template>
 	<article
-		class="w-full rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop mb-5 p-4 border border-lightBorder"
+		class="from-lightBGStart to-lightBGStop border-lightBorder mb-5 w-full rounded-lg border bg-gradient-to-r p-4 shadow-lg"
 		style="backdrop-filter: blur(10px)"
 	>
-		<h6 class="font-semibold text-primary mb-2">About</h6>
+		<h6 class="text-primary mb-2 font-semibold">About</h6>
 		<div v-if="location === `` && email === `` && website === ``">
-			<p class="text-sm text-gray5">
+			<p class="text-gray5 text-sm">
 				<span v-if="$route.params.id === $store.state.session.id">
 					You can display more informations about you by editing your profile!
 				</span>
@@ -14,15 +14,15 @@
 		</div>
 		<div v-else>
 			<div v-if="location !== ``" class="flex flex-row items-center">
-				<PinIcon class="w-4 h-4 mr-3 text-primary" /> {{ location }}
+				<PinIcon class="text-primary mr-3 h-4 w-4" /> {{ location }}
 			</div>
 			<div v-if="website !== `` && location !== ``" class="mb-2"></div>
-			<div v-if="website !== ``" class="flex flex-row items-center text-secondary">
-				<LinkIcon class="w-4 h-4 mr-3 text-primary" /><a :href="website" target="_blank">{{ website }}</a>
+			<div v-if="website !== ``" class="text-secondary flex flex-row items-center">
+				<LinkIcon class="text-primary mr-3 h-4 w-4" /><a :href="website" target="_blank">{{ website }}</a>
 			</div>
 			<div v-if="email !== `` && (location !== `` || website !== ``)" class="mb-2"></div>
 			<div v-if="email !== ``" class="flex flex-row items-center">
-				<MailIcon class="w-4 h-4 mr-3 text-primary" /><a :href="`mailto:` + email" target="_blank">{{ email }}</a>
+				<MailIcon class="text-primary mr-3 h-4 w-4" /><a :href="`mailto:` + email" target="_blank">{{ email }}</a>
 			</div>
 		</div>
 	</article>
