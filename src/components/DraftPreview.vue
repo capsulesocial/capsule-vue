@@ -2,7 +2,12 @@
 	<div class="flex flex-row justify-between my-4 items-center">
 		<!-- Title -->
 		<div class="flex flex-col flex-grow">
-			<h6 class="text-base font-semibold">{{ draft.title === `` ? `New Post` : draft.title }}</h6>
+			<h6
+				class="text-base font-semibold truncate"
+				:style="$route.name === `home` ? `max-width: 259px` : `max-width: 408px`"
+			>
+				{{ draft.title === `` ? `New Post` : draft.title }}
+			</h6>
 			<p class="text-sm text-gray5">Last saved {{ $formatDate(draft.timestamp) }}</p>
 		</div>
 		<!-- Featured image -->

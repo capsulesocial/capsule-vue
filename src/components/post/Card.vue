@@ -572,7 +572,7 @@ export default Vue.extend({
 		async deletePost() {
 			await sendPostDeletion(`HIDE`, this.postCID, this.$store.state.session.id)
 			this.postDeleted = true
-			this.$toastSuccess(`This post has been successfully deleted`)
+			this.$toastSuccess(`This post has been successfully removed`)
 		},
 		async deleteQuote() {
 			await sendPostDeletion(`HIDE`, this.repost._id, this.$store.state.session.id)

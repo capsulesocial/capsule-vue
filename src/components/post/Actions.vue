@@ -81,7 +81,7 @@
 				<!-- Row of faces -->
 				<div class="flex">
 					<button v-show="page > 0" class="focus:outline-none" @click="page = page - 1"><ChevronLeft /></button>
-					<div class="grid grid-cols-6 w-full">
+					<div class="grid grid-cols-3 xl:grid-cols-6 w-full">
 						<div v-for="f in faceStats.slice(page * 6, page * 6 + 6)" :key="f.face.label" class="flex flex-col w-24">
 							<div class="rounded-lg border flex flex-col p-1" :class="`border-` + getStyle(f.face.label)">
 								<span class="text-xs self-center">{{ f.face.label }}</span>
