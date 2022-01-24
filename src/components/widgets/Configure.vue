@@ -1,39 +1,39 @@
 <template>
-	<div class="popup w-full flex justify-center">
+	<div class="popup flex w-full justify-center">
 		<!-- Container -->
 		<section style="width: 1220px; margin-top: 10.5rem" class="flex flex-row">
 			<!-- Primary widget -->
 			<article
 				style="width: 750px; min-height: calc(100vh - 160px); height: calc(100vh - 160px); backdrop-filter: blur(5px)"
-				class="overflow-y-auto rounded-lg shadow-lg mr-5 p-6 pt-4 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop card-animation"
+				class="from-lightBGStart to-lightBGStop card-animation z-10 mr-5 overflow-y-auto rounded-lg bg-gradient-to-r p-6 pt-4 shadow-lg"
 			>
-				<h3 class="text-primary text-base font-semibold mb-4">Primary widget</h3>
+				<h3 class="text-primary mb-4 text-base font-semibold">Primary widget</h3>
 				<!-- Select a main widget -->
 				<div class="grid grid-cols-3 gap-5">
-					<button class="rounded-lg bg-gray1 h-64 focus:outline-none border-lightBorder" @click="changePrimary(`feed`)">
+					<button class="bg-gray1 focus:outline-none border-lightBorder h-64 rounded-lg" @click="changePrimary(`feed`)">
 						<div class="flex flex-col items-center">
 							<h4 class="text-gray5 mb-2">Post feed</h4>
-							<div class="w-40 h-8 rounded-lg bg-primary my-2"></div>
-							<div class="w-40 h-8 rounded-lg bg-primary mb-2"></div>
-							<div class="w-40 h-8 rounded-lg bg-primary mb-2"></div>
+							<div class="bg-primary my-2 h-8 w-40 rounded-lg"></div>
+							<div class="bg-primary mb-2 h-8 w-40 rounded-lg"></div>
+							<div class="bg-primary mb-2 h-8 w-40 rounded-lg"></div>
 							<CheckCircle
 								:isChecked="$store.state.widgets.primary === `feed` ? true : false"
-								class="w-6 h-6 mt-2 text-gray5"
+								class="text-gray5 mt-2 h-6 w-6"
 							/>
 						</div>
 					</button>
 					<button
-						class="rounded-lg bg-gray1 h-64 focus:outline-none border-lightBorder"
+						class="bg-gray1 focus:outline-none border-lightBorder h-64 rounded-lg"
 						@click="changePrimary(`editor`)"
 					>
 						<div class="flex flex-col items-center">
 							<h4 class="text-gray5">Draft Editor</h4>
 							<div class="h-32 w-40">
-								<span class="text-6xl text-primary font-semibold">Aa</span>
+								<span class="text-primary text-6xl font-semibold">Aa</span>
 							</div>
 							<CheckCircle
 								:isChecked="$store.state.widgets.primary === `editor` ? true : false"
-								class="w-6 h-6 text-gray5"
+								class="text-gray5 h-6 w-6"
 							/>
 						</div>
 					</button>
@@ -42,95 +42,95 @@
 			<!-- Right side: side widgets -->
 			<div class="fixed" style="margin-left: 770px; width: 453px">
 				<article
-					class="overflow-y-auto rounded-lg shadow-lg mb-5 p-6 pt-4 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop card-animation-delay1"
+					class="from-lightBGStart to-lightBGStop card-animation-delay1 z-10 mb-5 overflow-y-auto rounded-lg bg-gradient-to-r p-6 pt-4 shadow-lg"
 					style="backdrop-filter: blur(5px)"
 				>
-					<h3 class="text-primary text-base font-semibold mb-4">Side widget</h3>
+					<h3 class="text-primary mb-4 text-base font-semibold">Side widget</h3>
 					<div class="grid grid-cols-2 gap-5">
 						<button
-							class="rounded-lg bg-gray1 p-4 focus:outline-none border-lightBorder"
+							class="bg-gray1 focus:outline-none border-lightBorder rounded-lg p-4"
 							@click="changeSecondary2(`tags`)"
 						>
 							<div class="flex flex-col items-center">
 								<h4 class="text-gray5 mb-2">Tags</h4>
-								<div class="w-32 h-8 my-2 flex items-center rounded-lg bg-primary">
-									<span class="text-white pl-3">#</span>
+								<div class="bg-primary my-2 flex h-8 w-32 items-center rounded-lg">
+									<span class="pl-3 text-white">#</span>
 								</div>
 								<CheckCircle
 									:isChecked="$store.state.widgets.secondary2 === `tags` ? true : false"
-									class="w-6 h-6 mt-2 text-gray5"
+									class="text-gray5 mt-2 h-6 w-6"
 								/>
 							</div>
 						</button>
 						<button
-							class="rounded-lg bg-gray1 p-4 focus:outline-none border-lightBorder"
+							class="bg-gray1 focus:outline-none border-lightBorder rounded-lg p-4"
 							@click="changeSecondary2(`followers`)"
 						>
 							<div class="flex flex-col items-center">
 								<h4 class="text-gray5 mb-2">Followers</h4>
-								<div class="w-32 h-8 my-2 flex items-center">
-									<span class="w-8 h-8 bg-primary rounded-full flex-shrink-0 flex-grow-0"></span>
-									<span class="w-full h-4 bg-gray4 rounded-full ml-2"></span>
+								<div class="my-2 flex h-8 w-32 items-center">
+									<span class="bg-primary h-8 w-8 flex-shrink-0 flex-grow-0 rounded-full"></span>
+									<span class="bg-gray4 ml-2 h-4 w-full rounded-full"></span>
 								</div>
 								<CheckCircle
 									:isChecked="$store.state.widgets.secondary2 === `followers` ? true : false"
-									class="w-6 h-6 mt-2 text-gray5"
+									class="text-gray5 mt-2 h-6 w-6"
 								/>
 							</div>
 						</button>
 					</div>
 				</article>
 				<article
-					class="overflow-y-auto rounded-lg shadow-lg p-6 pt-4 z-10 mb-5 bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg card-animation-delay2"
+					class="from-lightBGStart to-lightBGStop card-animation-delay2 z-10 mb-5 overflow-y-auto rounded-lg bg-gradient-to-r p-6 pt-4 shadow-lg backdrop-blur-lg backdrop-filter"
 					style="backdrop-filter: blur(5px)"
 				>
-					<h3 class="text-primary text-base font-semibold mb-4">Side widget</h3>
+					<h3 class="text-primary mb-4 text-base font-semibold">Side widget</h3>
 					<div class="grid grid-cols-2 gap-5">
 						<button
-							class="rounded-lg bg-gray1 p-4 focus:outline-none border-lightBorder"
+							class="bg-gray1 focus:outline-none border-lightBorder rounded-lg p-4"
 							@click="changeSecondary(`drafts`)"
 						>
 							<div class="flex flex-col items-center">
 								<h4 class="text-gray5 mb-2">Drafts</h4>
-								<div class="w-32 h-8 my-2 flex justify-center items-center">
+								<div class="my-2 flex h-8 w-32 items-center justify-center">
 									<span class="bg-primary rounded-lg p-2 text-white">
 										<PencilIcon class="fill-current text-white" />
 									</span>
 								</div>
 								<CheckCircle
 									:isChecked="$store.state.widgets.secondary === `drafts` ? true : false"
-									class="w-6 h-6 mt-2 text-gray5"
+									class="text-gray5 mt-2 h-6 w-6"
 								/>
 							</div>
 						</button>
 						<button
-							class="rounded-lg bg-gray1 p-4 focus:outline-none border-lightBorder"
+							class="bg-gray1 focus:outline-none border-lightBorder rounded-lg p-4"
 							@click="changeSecondary(`bookmarks`)"
 						>
 							<div class="flex flex-col items-center">
 								<h4 class="text-gray5 mb-2">Bookmarks</h4>
-								<div class="w-32 h-8 my-2 flex justify-center items-center">
+								<div class="my-2 flex h-8 w-32 items-center justify-center">
 									<span class="bg-primary rounded-lg p-2 text-white">
 										<BookmarksIcon class="fill-current text-white" />
 									</span>
 								</div>
 								<CheckCircle
 									:isChecked="$store.state.widgets.secondary === `bookmarks` ? true : false"
-									class="w-6 h-6 mt-2 text-gray5"
+									class="text-gray5 mt-2 h-6 w-6"
 								/>
 							</div>
 						</button>
 					</div>
 				</article>
 				<div
-					class="rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop backdrop-filter backdrop-blur-lg border border-lightBorder mb-5 w-full focus:outline-none flex-row items-center flex card-animation-delay3"
+					class="from-lightBGStart to-lightBGStop border-lightBorder focus:outline-none card-animation-delay3 mb-5 flex w-full flex-row items-center rounded-lg border bg-gradient-to-r shadow-lg backdrop-blur-lg backdrop-filter"
 					style="height: 60px; backdrop-filter: blur(10px)"
 				>
-					<div class="flex flex-row justify-between items-center px-6">
+					<div class="flex flex-row items-center justify-between px-6">
 						<p class="text-gray5 text-sm">
 							<span style="background: opacity 0.9em">Change background, theme and accessibilty:</span>
 						</p>
-						<nuxt-link to="/settings/styling" class="text-primary text-sm ml-2">
+						<nuxt-link to="/settings/styling" class="text-primary ml-2 text-sm">
 							<span style="background: opacity 0.9em">Styling settings</span>
 						</nuxt-link>
 					</div>

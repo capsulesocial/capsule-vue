@@ -1,9 +1,9 @@
 <template>
-	<section class="w-full border border-lightBorder">
+	<section class="border-lightBorder w-full border">
 		<!-- Header -->
 		<div
 			id="header"
-			class="bg-primary rounded-lg flex flex-row items-center shadow-lg h-56 border-lightBorder w-full animatefast"
+			class="bg-primary border-lightBorder animatefast flex h-56 w-full flex-row items-center rounded-lg shadow-lg"
 			:style="{
 				background: `linear-gradient(180deg, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.8) 100%), url(${require(`@/assets/images/category/` +
 					$route.params.category +
@@ -12,27 +12,27 @@
 				backgroundSize: 'cover',
 			}"
 		>
-			<div class="px-4 xl:px-6 py-5 flex flex-col justify-between h-full">
-				<button class="flex focus:outline-none relative" @click="$router.go(-1)">
-					<div class="bg-gray1 rounded-full flex-shrink-0 z-10">
+			<div class="flex h-full flex-col justify-between px-4 py-5 xl:px-6">
+				<button class="focus:outline-none relative flex" @click="$router.go(-1)">
+					<div class="bg-gray1 z-10 flex-shrink-0 rounded-full">
 						<BackIcon />
 					</div>
-					<p id="buttontitle" class="pl-3 font-semibold animatefast pr-4">All categories</p>
+					<p id="buttontitle" class="animatefast pl-3 pr-4 font-semibold">All categories</p>
 					<h2
 						id="hiddentitle"
-						class="text-primary font-semibold capitalize animatelong absolute ml-8 px-2 text-xl -mt-1 opacity-0"
+						class="text-primary animatelong absolute ml-8 -mt-1 px-2 text-xl font-semibold capitalize opacity-0"
 					>
 						{{ $route.params.category }}
 					</h2>
 					<div
 						id="buttonbg"
-						class="bg-lightBG bg-opacity-50 h-full absolute rounded-full animatefast"
+						class="bg-lightBG animatefast absolute h-full rounded-full bg-opacity-50"
 						style="backdrop-filter: blur(10px); width: 155px; z-index: 0"
 					></div>
 				</button>
 				<h2
 					id="title"
-					class="text-lightOnPrimaryText font-semibold capitalize animatefast"
+					class="text-lightOnPrimaryText animatefast font-semibold capitalize"
 					style="font-size: 1.875rem; line-height: 38px"
 				>
 					{{ $route.params.category }}
@@ -42,7 +42,7 @@
 		<!-- Posts loaded -->
 		<div
 			id="column"
-			class="fixed w-full xl:w-750 overflow-y-auto"
+			class="xl:w-750 fixed w-full overflow-y-auto"
 			:style="`min-height: calc(100vh - ` + padding + `); height: calc(100vh - ` + padding + `)`"
 		>
 			<article v-for="p in posts" :key="generateKey(p)">
@@ -60,10 +60,10 @@
 					:repostCount="p.repostCount"
 				/>
 			</article>
-			<p v-if="noMorePosts" class="text-center text-gray5 pt-5">No more posts</p>
+			<p v-if="noMorePosts" class="text-gray5 pt-5 text-center">No more posts</p>
 		</div>
 		<!-- Not loaded yet -->
-		<article v-show="isLoading" class="flex justify-center w-full modal-animation">
+		<article v-show="isLoading" class="modal-animation flex w-full justify-center">
 			<div class="loader m-5"></div>
 		</article>
 	</section>

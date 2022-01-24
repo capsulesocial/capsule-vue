@@ -4,7 +4,7 @@
 			<div class="loader"></div>
 		</article>
 		<article v-if="imageError">
-			<div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+			<div class="relative rounded border border-red-400 bg-red-100 px-4 py-3 text-red-700" role="alert">
 				{{ imageError }}
 			</div>
 		</article>

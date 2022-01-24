@@ -1,17 +1,17 @@
 <template>
 	<main>
 		<div
-			class="rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop border border-lightBorder overflow-hidden py-4 px-6 pb-2 modal-animation flex flex-col"
+			class="from-lightBGStart to-lightBGStop border-lightBorder modal-animation flex flex-col overflow-hidden rounded-lg border bg-gradient-to-r py-4 px-6 pb-2 shadow-lg"
 			style="backdrop-filter: blur(10px)"
 		>
-			<h3 class="text-primary text-base font-semibold pb-4">Settings</h3>
+			<h3 class="text-primary pb-4 text-base font-semibold">Settings</h3>
 			<nuxt-link
 				:class="$route.name === `settings-account` ? `bg-lightInput font-semibold` : ``"
-				class="w-full flex justify-between items-center rounded-lg text-gray5 py-2 px-4 mb-4 text-left focus:outline-none"
+				class="text-gray5 focus:outline-none mb-4 flex w-full items-center justify-between rounded-lg py-2 px-4 text-left"
 				to="/settings/account"
 			>
 				<h6>Account</h6>
-				<span class="rounded-full p-1 bg-gray1"><ChevronRight /></span>
+				<span class="bg-gray1 rounded-full p-1"><ChevronRight /></span>
 			</nuxt-link>
 			<!-- <nuxt-link
 									:class="$route.name === `settings-security` ? `bg-lightInput font-semibold` : ``"
@@ -22,19 +22,19 @@
 								</nuxt-link> -->
 			<nuxt-link
 				:class="$route.name === `settings-network` ? `bg-lightInput font-semibold` : ``"
-				class="w-full flex justify-between items-center rounded-lg text-gray5 py-2 px-4 mb-4 text-left focus:outline-none"
+				class="text-gray5 focus:outline-none mb-4 flex w-full items-center justify-between rounded-lg py-2 px-4 text-left"
 				to="/settings/network"
 			>
 				<h6>Nodes and Network</h6>
-				<span class="rounded-full p-1 bg-gray1"><ChevronRight /></span>
+				<span class="bg-gray1 rounded-full p-1"><ChevronRight /></span>
 			</nuxt-link>
 			<nuxt-link
 				to="/settings/styling"
 				:class="$route.name === `settings-styling` ? `bg-lightInput font-semibold` : ``"
-				class="w-full flex justify-between items-center rounded-lg text-gray5 py-2 px-4 mb-4 text-left focus:outline-none"
+				class="text-gray5 focus:outline-none mb-4 flex w-full items-center justify-between rounded-lg py-2 px-4 text-left"
 			>
 				<h6>Appearance and Styling</h6>
-				<span class="rounded-full p-1 bg-gray1"><ChevronRight /></span>
+				<span class="bg-gray1 rounded-full p-1"><ChevronRight /></span>
 			</nuxt-link>
 		</div>
 	</main>

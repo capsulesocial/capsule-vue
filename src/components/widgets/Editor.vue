@@ -2,12 +2,12 @@
 	<div class="">
 		<!-- Featured image -->
 		<article
-			class="rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop border border-lightBorder px-6 py-4 mb-5"
+			class="from-lightBGStart to-lightBGStop border-lightBorder mb-5 rounded-lg border bg-gradient-to-r px-6 py-4 shadow-lg"
 			style="backdrop-filter: blur(10px)"
 		>
 			<h6 class="text-primary font-semibold">Featured Image</h6>
 			<button
-				class="w-full rounded-lg border-2 border-primary border-dashed h-40 flex justify-center items-center mt-3 mb-2 focus:outline-none overflow-hidden"
+				class="border-primary focus:outline-none mt-3 mb-2 flex h-40 w-full items-center justify-center overflow-hidden rounded-lg border-2 border-dashed"
 				@click="handleUploadImageClick"
 			>
 				<input
@@ -22,7 +22,7 @@
 				<!-- No Photo Uploaded -->
 				<div v-if="featuredPhoto === null" class="flex flex-col justify-center">
 					<UploadIcon class="self-center" />
-					<p class="text-primary text-left font-light text-sm mt-2">Upload an Image</p>
+					<p class="text-primary mt-2 text-left text-sm font-light">Upload an Image</p>
 				</div>
 				<div v-else class="h-full w-full">
 					<img :src="featuredPhoto" class="h-40 w-full object-cover" />
@@ -31,9 +31,9 @@
 			<!-- Photo Uploaded -->
 			<div v-if="featuredPhoto !== null" class="w-full">
 				<button class="text-primary focus:outline-none text-sm" @click="handleUploadImageClick">Change Image</button>
-				<button class="text-lightError focus:outline-none text-sm ml-4" @click="removeImage()">Remove Image</button>
+				<button class="text-lightError focus:outline-none ml-4 text-sm" @click="removeImage()">Remove Image</button>
 			</div>
-			<div class="w-full p-2 my-1 mt-3 rounded-lg bg-gray1" :class="featuredPhoto ? `` : `hidden`">
+			<div class="bg-gray1 my-1 mt-3 w-full rounded-lg p-2" :class="featuredPhoto ? `` : `hidden`">
 				<label for="caption" class="hidden" value="Enter hashtags"></label>
 				<input
 					v-model="caption"
@@ -46,15 +46,15 @@
 		</article>
 		<!-- Category -->
 		<article
-			class="rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop border border-lightBorder px-6 py-4 mb-5"
+			class="from-lightBGStart to-lightBGStop border-lightBorder mb-5 rounded-lg border bg-gradient-to-r px-6 py-4 shadow-lg"
 			style="backdrop-filter: blur(10px)"
 		>
 			<h6 class="text-primary font-semibold">Category</h6>
 			<button
-				class="w-full p-2 my-1 mt-3 rounded-lg bg-gray1 focus:outline-none"
+				class="bg-gray1 focus:outline-none my-1 mt-3 w-full rounded-lg p-2"
 				@click="showCategoryDropdown = !showCategoryDropdown"
 			>
-				<div class="flex justify-between items-center">
+				<div class="flex items-center justify-between">
 					<div v-if="category" class="flex flex-row items-center">
 						<img
 							:src="
@@ -62,9 +62,9 @@
 									$store.state.draft.drafts[$store.state.draft.activeIndex].category +
 									`/icon.webp`)
 							"
-							class="hotzone w-10 h-10 mr-2"
+							class="hotzone mr-2 h-10 w-10"
 						/>
-						<span class="text-base text-primary">{{
+						<span class="text-primary text-base">{{
 							$store.state.draft.drafts[$store.state.draft.activeIndex].category
 						}}</span>
 					</div>
@@ -77,13 +77,13 @@
 				<button
 					v-for="c in categoryList"
 					:key="c"
-					class="w-full flex items-center px-2 capitalize focus:outline-none h-10 modal-animation"
+					class="focus:outline-none modal-animation flex h-10 w-full items-center px-2 capitalize"
 					@click="changeCategory(c)"
 				>
-					<img :src="require(`@/assets/images/category/` + c + `/icon.webp`)" class="hotzone w-6 h-6 mr-1 ml-2" />
+					<img :src="require(`@/assets/images/category/` + c + `/icon.webp`)" class="hotzone mr-1 ml-2 h-6 w-6" />
 					<span
-						class="border-b ml-2"
-						:class="category === c ? 'border-primary text-primary' : ' border-transparent text-lightPrimaryVariant'"
+						class="ml-2 border-b"
+						:class="category === c ? 'border-primary text-primary' : ' text-lightPrimaryVariant border-transparent'"
 					>
 						{{ c }}</span
 					>
@@ -92,11 +92,11 @@
 		</article>
 		<!-- Tags -->
 		<article
-			class="rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop border border-lightBorder px-6 py-4 pb-6 mb-5"
+			class="from-lightBGStart to-lightBGStop border-lightBorder mb-5 rounded-lg border bg-gradient-to-r px-6 py-4 pb-6 shadow-lg"
 			style="backdrop-filter: blur(10px)"
 		>
-			<h6 class="text-primary font-semibold mb-3">Tags</h6>
-			<div class="w-full p-2 my-1 rounded-lg bg-gray1">
+			<h6 class="text-primary mb-3 font-semibold">Tags</h6>
+			<div class="bg-gray1 my-1 w-full rounded-lg p-2">
 				<label for="tag" class="hidden" value="Enter hashtags"></label>
 				<input
 					v-model="tag"
@@ -110,27 +110,27 @@
 				<button
 					v-for="t in $store.state.draft.drafts[$store.state.draft.activeIndex].tags"
 					:key="t.name"
-					class="flex flex-row items-center z-10 focus:outline-none px-3 py-1 mr-4 mt-2 bg-gray1 rounded-lg"
+					class="focus:outline-none bg-gray1 z-10 mr-4 mt-2 flex flex-row items-center rounded-lg px-3 py-1"
 					@click="removeTag(t)"
 				>
-					<span class="font-semibold text-gray5 text-sm">{{ t.name }}</span
-					><XIcon class="p-1 pr-0 text-gray5" />
+					<span class="text-gray5 text-sm font-semibold">{{ t.name }}</span
+					><XIcon class="text-gray5 p-1 pr-0" />
 				</button>
 			</div>
 		</article>
 		<article
-			class="rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop border border-lightBorder p-6 mb-5"
+			class="from-lightBGStart to-lightBGStop border-lightBorder mb-5 rounded-lg border bg-gradient-to-r p-6 shadow-lg"
 			style="backdrop-filter: blur(10px)"
 		>
-			<div class="flex flex-row justify-between items-center">
+			<div class="flex flex-row items-center justify-between">
 				<div>
-					<h5 v-show="wordCount > 1" class="text-sm text-gray5">
+					<h5 v-show="wordCount > 1" class="text-gray5 text-sm">
 						<span class="text-primary">{{ wordCount }}</span> words
 					</h5>
-					<h5 class="text-sm text-gray5">Auto-save on close.</h5>
+					<h5 class="text-gray5 text-sm">Auto-save on close.</h5>
 				</div>
 				<button
-					class="transition duration-500 ease-in-out transform hover:scale-105 font-bold rounded-lg shadow-lg focus:outline-none bg-lightButtonBG text-lightButtonText px-12 py-2"
+					class="focus:outline-none bg-lightButtonBG text-lightButtonText transform rounded-lg px-12 py-2 font-bold shadow-lg transition duration-500 ease-in-out hover:scale-105"
 					@click="handlePost"
 				>
 					Publish

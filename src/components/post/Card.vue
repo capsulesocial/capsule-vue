@@ -1,16 +1,16 @@
 <template>
-	<article v-if="!postDeleted" class="object-contain z-auto">
+	<article v-if="!postDeleted" class="z-auto object-contain">
 		<!-- popup post -->
 		<div
 			v-if="showPopup"
-			class="fixed w-full h-screen bg-primary top-0 bottom-0 left-0 right-0 z-30 flex justify-center items-center bg-opacity-50 modal-animation"
+			class="bg-primary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50"
 		>
 			<div
-				class="card w-full xl:w-750 max-h-90 shadow-lg rounded-lg bg-gradient-to-r from-lightBGStart to-lightBGStop mt-10 overflow-y-auto card-animation m-2 xl:m-0"
+				class="card xl:w-750 max-h-90 from-lightBGStart to-lightBGStop card-animation m-2 mt-10 w-full overflow-y-auto rounded-lg bg-gradient-to-r shadow-lg xl:m-0"
 				style="backdrop-filter: blur(10px)"
 			>
 				<div
-					class="sticky top-0 z-20 border-b bg-gradient-to-r from-lightBGStart to-lightBGStop px-4 xl:px-6 py-4 xl:py-5"
+					class="from-lightBGStart to-lightBGStop sticky top-0 z-20 border-b bg-gradient-to-r px-4 py-4 xl:px-6 xl:py-5"
 					style="backdrop-filter: blur(10px)"
 				>
 					<!-- Show Quote Repost input -->
@@ -19,25 +19,25 @@
 						<textarea
 							ref="repostText"
 							v-model="quoteContent"
-							class="w-full ml-4 resize-none focus:outline-none mt-2"
+							class="focus:outline-none ml-4 mt-2 w-full resize-none"
 							placeholder="What's your response?"
 						></textarea>
 						<button
-							class="absolute right-0 top-0 rounded-full bg-gray1 p-1 m-6 focus:outline-none"
+							class="bg-gray1 focus:outline-none absolute right-0 top-0 m-6 rounded-full p-1"
 							@click="handleCloseButton"
 						>
 							<XIcon />
 						</button>
 					</div>
 					<!-- Wrapper for rounded outline on quote repost -->
-					<div :class="showRepostEditor || quote ? `rounded-lg xl:bg-lightBorder xl:p-4` : ``">
+					<div :class="showRepostEditor || quote ? `xl:bg-lightBorder rounded-lg xl:p-4` : ``">
 						<!-- Simple repost -->
 						<div
 							v-if="repostedBy !== `` && !hideRepostIcon && quote === null"
-							class="flex w-full -mt-2 mb-4 xl:mb-2 text-gray5 items-center pt-2"
+							class="text-gray5 -mt-2 mb-4 flex w-full items-center pt-2 xl:mb-2"
 						>
 							<RepostIcon class="hidden xl:block" />
-							<p class="hidden xl:block pl-2 text-sm text-gray5">
+							<p class="text-gray5 hidden pl-2 text-sm xl:block">
 								<nuxt-link v-if="repostedBy != ``" :to="`/id/` + repostedBy">{{ repostedBy }} </nuxt-link>
 								<nuxt-link v-else :to="`/id/` + repostedBy">{{ repostedBy }}</nuxt-link>
 								reposted
@@ -46,14 +46,14 @@
 						<!-- Top: avatar, name, id, close -->
 						<div class="flex w-full">
 							<Avatar :avatar="avatar" :authorID="post.authorID" size="w-12 h-12" class="hidden xl:block" />
-							<div class="flex-col flex-grow ml-4 hidden xl:flex">
+							<div class="ml-4 hidden flex-grow flex-col xl:flex">
 								<div class="flex" @mouseover="showFriendButton = true" @mouseleave="showFriendButton = false">
-									<nuxt-link :to="'/id/' + post.authorID" class="flex mr-4">
-										<span v-if="authorName != ``" class="font-medium text-base">
+									<nuxt-link :to="'/id/' + post.authorID" class="mr-4 flex">
+										<span v-if="authorName != ``" class="text-base font-medium">
 											{{ authorName }}
 										</span>
-										<span v-else class="font-medium text-base text-gray5"> {{ post.authorID }} </span>
-										<span class="ml-2 text-primary"> @{{ post.authorID }} </span>
+										<span v-else class="text-gray5 text-base font-medium"> {{ post.authorID }} </span>
+										<span class="text-primary ml-2"> @{{ post.authorID }} </span>
 									</nuxt-link>
 									<span v-show="showFriendButton" class="modal-animation">
 										<FriendButton
@@ -70,7 +70,7 @@
 								</span>
 							</div>
 							<div
-								class="flex w-full xl:w-1/5 justify-center xl:justify-end items-center relative"
+								class="relative flex w-full items-center justify-center xl:w-1/5 xl:justify-end"
 								:class="repostedBy !== `` ? `-mt-4` : ``"
 							>
 								<!-- Bookmarks button -->
@@ -82,21 +82,21 @@
 								/>
 								<button
 									v-if="post.authorID === $store.state.session.id"
-									class="focus:outline-none ml-2 text-gray5 hidden xl:block"
+									class="focus:outline-none text-gray5 ml-2 hidden xl:block"
 									@click.stop="toggleDropdownDelete"
 								>
 									<More />
 								</button>
 								<button
 									v-show="!showRepostEditor"
-									class="right-0 top-0 rounded-full bg-gray1 p-1 focus:outline-none ml-0 xl:ml-4"
+									class="bg-gray1 focus:outline-none right-0 top-0 ml-0 rounded-full p-1 xl:ml-4"
 									@click="handleCloseButton"
 								>
 									<XIcon />
 								</button>
 								<div
 									v-show="showDelete"
-									class="absolute dropdownDeleteOpen flex flex-col rounded-lg w-32 bg-white shadow-lg border border-lightBorder z-10 p-1 modal-animation"
+									class="dropdownDeleteOpen border-lightBorder modal-animation absolute z-10 flex w-32 flex-col rounded-lg border bg-white p-1 shadow-lg"
 									:style="
 										quote && quote.authorID === $store.state.session.id
 											? `top: 55px; right: 40px`
@@ -104,42 +104,42 @@
 									"
 								>
 									<!-- Delete -->
-									<button class="flex focus:outline-none text-negative" @click="deletePost">
+									<button class="focus:outline-none text-negative flex" @click="deletePost">
 										<BinIcon class="p-1" />
-										<span class="text-xs self-center text-negative">Remove from feed</span>
+										<span class="text-negative self-center text-xs">Remove from feed</span>
 									</button>
 								</div>
 							</div>
 						</div>
 						<!-- Content -->
-						<div class="mt-4 hidden xl:flex flex-col xl:flex-row justify-between">
+						<div class="mt-4 hidden flex-col justify-between xl:flex xl:flex-row">
 							<!-- Left side: Title, subtitle / preview, tags -->
 							<div class="mr-4">
 								<nuxt-link :to="'/post/' + postCID">
-									<div class="flex flex-col pr-4 max-w-full overflow-hidden">
-										<h3 class="text-lg font-semibold pb-2 break-words">
+									<div class="flex max-w-full flex-col overflow-hidden pr-4">
+										<h3 class="break-words pb-2 text-lg font-semibold">
 											{{ post.title }}
 										</h3>
-										<h6 v-if="(post.subtitle || post.excerpt) && featuredPhoto" class="break-words max-w-420">
+										<h6 v-if="(post.subtitle || post.excerpt) && featuredPhoto" class="max-w-420 break-words">
 											{{ post.subtitle ? post.subtitle : postExcerpt() }}
 										</h6>
 										<h6
 											v-if="(post.subtitle || post.excerpt) && !featuredPhoto"
-											class="break-words max-w-mobileCard xl:max-w-700"
+											class="max-w-mobileCard xl:max-w-700 break-words"
 										>
 											{{ post.subtitle ? post.subtitle : postExcerpt() }}
 										</h6>
 									</div>
 								</nuxt-link>
 								<!-- Display tags (Desktop) -->
-								<div class="hidden xl:flex overflow-x-auto my-2">
-									<TagPill v-for="t in post.tags" :key="t.name" :tag="t.name" class="mr-4 my-2" />
+								<div class="my-2 hidden overflow-x-auto xl:flex">
+									<TagPill v-for="t in post.tags" :key="t.name" :tag="t.name" class="my-2 mr-4" />
 								</div>
 							</div>
 							<!-- Right side: Image -->
-							<div v-if="featuredPhoto !== ``" class="flex-shrink-0 w-full mt-2 xl:mt-0 xl:w-56">
+							<div v-if="featuredPhoto !== ``" class="mt-2 w-full flex-shrink-0 xl:mt-0 xl:w-56">
 								<nuxt-link :to="'/post/' + postCID">
-									<img :src="featuredPhoto" class="flex-shrink-0 h-48 xl:h-32 object-cover rounded-lg w-full" />
+									<img :src="featuredPhoto" class="h-48 w-full flex-shrink-0 rounded-lg object-cover xl:h-32" />
 								</nuxt-link>
 							</div>
 						</div>
@@ -147,7 +147,7 @@
 					<!-- Repost POST button -->
 					<div
 						v-if="showRepostEditor"
-						class="pt-4 flex flex-row-reverse"
+						class="flex flex-row-reverse pt-4"
 						:class="quoteContent !== `` ? '' : 'opacity-50'"
 						style="transition: all 0.4s"
 					>
@@ -160,55 +160,55 @@
 					:bookmarksCount="bookmarksCount"
 					:repostsCount="repostCount"
 					:openStats="showStats"
-					class="px-4 xl:px-6 pb-4 xl:pb-6"
+					class="px-4 pb-4 xl:px-6 xl:pb-6"
 				/>
 			</div>
 		</div>
 		<!-- Feed view -->
 		<div v-if="this.$route.name !== `post-post`">
 			<div class="card" style="backdrop-filter: blur(10px)">
-				<div class="sticky top-0 z-20 py-4 xl:py-5 border-b px-5 xl:px-6" style="backdrop-filter: blur(10px)">
+				<div class="sticky top-0 z-20 border-b py-4 px-5 xl:py-5 xl:px-6" style="backdrop-filter: blur(10px)">
 					<!-- Quote repost -->
 					<div v-if="quote">
 						<div class="flex w-full">
 							<Avatar :avatar="quote.avatar" :authorID="quote.authorID" size="w-12 h-12" />
-							<div class="flex flex-col flex-grow ml-4">
-								<nuxt-link :to="`/id/` + quote.authorID" class="flex mr-4">
-									<span v-if="this.quote.name != ``" class="font-medium text-base">{{ this.quote.name }}</span>
-									<span v-else class="font-medium text-base text-gray5">{{ this.quote.authorID }}</span>
-									<span class="ml-2 text-primary">@{{ this.quote.authorID }}</span>
+							<div class="ml-4 flex flex-grow flex-col">
+								<nuxt-link :to="`/id/` + quote.authorID" class="mr-4 flex">
+									<span v-if="this.quote.name != ``" class="text-base font-medium">{{ this.quote.name }}</span>
+									<span v-else class="text-gray5 text-base font-medium">{{ this.quote.authorID }}</span>
+									<span class="text-primary ml-2">@{{ this.quote.authorID }}</span>
 								</nuxt-link>
 								<span class="text-xs">{{ $formatDate(this.quote.timestamp) }}</span>
 							</div>
 							<!-- Delete quote repost button -->
 							<div v-if="quote.authorID === $store.state.session.id" class="relative">
-								<button class="focus:outline-none ml-2 text-gray5" @click.stop="toggleDropdownQuoteDelete">
+								<button class="focus:outline-none text-gray5 ml-2" @click.stop="toggleDropdownQuoteDelete">
 									<More />
 								</button>
 								<div
 									v-show="showQuoteDelete"
-									class="absolute dropdownDeleteOpen flex flex-col bg-white rounded-lg border border-lightBorder w-32 shadow-lg z-10 p-1 modal-animation"
+									class="dropdownDeleteOpen border-lightBorder modal-animation absolute z-10 flex w-32 flex-col rounded-lg border bg-white p-1 shadow-lg"
 									style="top: 35px; right: -10px"
 								>
 									<!-- Delete -->
-									<button class="flex focus:outline-none text-negative" @click="deleteQuote">
+									<button class="focus:outline-none text-negative flex" @click="deleteQuote">
 										<BinIcon class="p-1" />
-										<span class="text-xs self-center text-negative">Delete Quote</span>
+										<span class="text-negative self-center text-xs">Delete Quote</span>
 									</button>
 								</div>
 							</div>
 						</div>
-						<p class="break-words my-2">{{ this.quote.content }}</p>
+						<p class="my-2 break-words">{{ this.quote.content }}</p>
 					</div>
 					<!-- Wrapper for rounded outline on quote repost -->
-					<div :class="quote ? `rounded-lg bg-lightBorder p-4` : ``">
+					<div :class="quote ? `bg-lightBorder rounded-lg p-4` : ``">
 						<!-- Simple repost -->
 						<div
 							v-if="repostedBy !== `` && !hideRepostIcon && quote === null"
-							class="flex w-full -mt-2 mb-2 text-gray5 items-center pt-2"
+							class="text-gray5 -mt-2 mb-2 flex w-full items-center pt-2"
 						>
 							<RepostIcon />
-							<p class="pl-2 text-sm text-gray5">
+							<p class="text-gray5 pl-2 text-sm">
 								<nuxt-link v-if="repostedBy != ``" :to="`/id/` + repostedBy">{{ repostedBy }} </nuxt-link>
 								<nuxt-link v-else :to="`/id/` + repostedBy">{{ repostedBy }}</nuxt-link>
 								reposted
@@ -217,14 +217,14 @@
 						<!-- Top: avatar, name, id, close -->
 						<div class="flex w-full">
 							<Avatar :avatar="avatar" :authorID="post.authorID" size="w-12 h-12" />
-							<div class="flex flex-col flex-grow ml-4">
+							<div class="ml-4 flex flex-grow flex-col">
 								<div class="flex" @mouseover="showFriendButton = true" @mouseleave="showFriendButton = false">
-									<nuxt-link :to="'/id/' + post.authorID" class="flex mr-4">
-										<span v-if="authorName != ``" class="font-medium text-base">
+									<nuxt-link :to="'/id/' + post.authorID" class="mr-4 flex">
+										<span v-if="authorName != ``" class="text-base font-medium">
 											{{ authorName }}
 										</span>
-										<span v-else class="font-medium text-base text-gray5"> {{ post.authorID }} </span>
-										<span class="ml-2 text-primary"> @{{ post.authorID }} </span>
+										<span v-else class="text-gray5 text-base font-medium"> {{ post.authorID }} </span>
+										<span class="text-primary ml-2"> @{{ post.authorID }} </span>
 									</nuxt-link>
 									<span v-show="showFriendButton" class="modal-animation">
 										<FriendButton
@@ -240,19 +240,19 @@
 									{{ $formatDate(post.timestamp) }}
 								</span>
 							</div>
-							<div class="flex items-center relative" :class="repostedBy !== `` ? `-mt-4` : ``">
+							<div class="relative flex items-center" :class="repostedBy !== `` ? `-mt-4` : ``">
 								<!-- Bookmarks button -->
 								<BookmarkButton :postID="postCID" :hasBookmark="isBookmarked" @clicked="getBookmarkStatus" />
 								<button
 									v-if="post.authorID === $store.state.session.id"
-									class="focus:outline-none ml-2 text-gray5"
+									class="focus:outline-none text-gray5 ml-2"
 									@click.stop="toggleDropdownDelete"
 								>
 									<More />
 								</button>
 								<div
 									v-show="showDelete"
-									class="absolute dropdownDeleteOpen flex flex-col rounded-lg w-32 bg-white shadow-lg border border-lightBorder z-10 p-1 modal-animation"
+									class="dropdownDeleteOpen border-lightBorder modal-animation absolute z-10 flex w-32 flex-col rounded-lg border bg-white p-1 shadow-lg"
 									:style="
 										quote && quote.authorID === $store.state.session.id
 											? `top: 55px; right: -10px`
@@ -260,42 +260,42 @@
 									"
 								>
 									<!-- Delete -->
-									<button class="flex focus:outline-none text-negative" @click="deletePost">
+									<button class="focus:outline-none text-negative flex" @click="deletePost">
 										<BinIcon class="p-1" />
-										<span class="text-xs self-center text-negative">Remove from feed</span>
+										<span class="text-negative self-center text-xs">Remove from feed</span>
 									</button>
 								</div>
 							</div>
 						</div>
 						<!-- Content -->
-						<div class="mt-4 flex flex-col xl:flex-row justify-between">
+						<div class="mt-4 flex flex-col justify-between xl:flex-row">
 							<!-- Left side: Title, subtitle / preview, tags -->
 							<div class="mr-4">
 								<nuxt-link :to="'/post/' + postCID">
-									<div class="flex flex-col pr-4 max-w-full overflow-hidden">
-										<h3 class="text-lg font-semibold pb-2 break-words">
+									<div class="flex max-w-full flex-col overflow-hidden pr-4">
+										<h3 class="break-words pb-2 text-lg font-semibold">
 											{{ post.title }}
 										</h3>
-										<h6 v-if="(post.subtitle || post.excerpt) && featuredPhoto" class="break-words max-w-420">
+										<h6 v-if="(post.subtitle || post.excerpt) && featuredPhoto" class="max-w-420 break-words">
 											{{ post.subtitle ? post.subtitle : postExcerpt() }}
 										</h6>
 										<h6
 											v-if="(post.subtitle || post.excerpt) && !featuredPhoto"
 											:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-											class="break-words max-w-mobileCard xl:max-w-700"
+											class="max-w-mobileCard xl:max-w-700 break-words"
 										>
 											{{ post.subtitle ? post.subtitle : postExcerpt() }}
 										</h6>
 									</div>
 								</nuxt-link>
 								<!-- Display tags (Desktop) -->
-								<div class="hidden xl:flex overflow-x-auto my-2">
-									<TagPill v-for="t in post.tags" :key="t.name" :tag="t.name" class="mr-4 my-2" />
+								<div class="my-2 hidden overflow-x-auto xl:flex">
+									<TagPill v-for="t in post.tags" :key="t.name" :tag="t.name" class="my-2 mr-4" />
 								</div>
 								<!-- Comment and share (Desktop) -->
-								<div class="hidden xl:flex mt-1 text-gray5">
+								<div class="text-gray5 mt-1 hidden xl:flex">
 									<button
-										class="flex items-end focus:outline-none mr-2 text-gray5 hover:text-primary hover:fill-primary"
+										class="focus:outline-none text-gray5 hover:text-primary hover:fill-primary mr-2 flex items-end"
 										:class="showComments ? `text-primary` : ``"
 										@click="toggleComments"
 									>
@@ -315,20 +315,20 @@
 								</div>
 							</div>
 							<!-- Right side: Image -->
-							<div v-if="featuredPhoto !== ``" class="flex-shrink-0 w-full mt-2 xl:mt-0 xl:w-56">
+							<div v-if="featuredPhoto !== ``" class="mt-2 w-full flex-shrink-0 xl:mt-0 xl:w-56">
 								<nuxt-link :to="'/post/' + postCID">
-									<img :src="featuredPhoto" class="flex-shrink-0 h-48 xl:h-32 object-cover rounded-lg w-full" />
+									<img :src="featuredPhoto" class="h-48 w-full flex-shrink-0 rounded-lg object-cover xl:h-32" />
 								</nuxt-link>
 							</div>
 						</div>
 						<!-- Display tags (Mobile) -->
-						<div class="flex xl:hidden overflow-x-auto my-2">
-							<TagPill v-for="t in post.tags" :key="t.name" :tag="t.name" class="mr-4 my-2" />
+						<div class="my-2 flex overflow-x-auto xl:hidden">
+							<TagPill v-for="t in post.tags" :key="t.name" :tag="t.name" class="my-2 mr-4" />
 						</div>
 						<!-- Comment and share (Mobile) -->
-						<div class="flex xl:hidden mt-1 text-gray5">
+						<div class="text-gray5 mt-1 flex xl:hidden">
 							<button
-								class="flex items-end focus:outline-none mr-2 text-gray5 hover:text-primary hover:fill-primary"
+								class="focus:outline-none text-gray5 hover:text-primary hover:fill-primary mr-2 flex items-end"
 								:class="showComments ? `text-primary` : ``"
 								@click="toggleComments"
 							>

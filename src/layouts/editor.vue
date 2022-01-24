@@ -1,6 +1,6 @@
 <template>
 	<main
-		class="h-screen p-0 m-0 bg-img"
+		class="bg-img m-0 h-screen p-0"
 		:style="{
 			background:
 				`linear-gradient(180deg, rgba(46, 85, 106, 0.02) 0%, rgba(46, 85, 106, 0) 50%), url(` +
@@ -10,14 +10,14 @@
 		}"
 	>
 		<!-- Wrapper -->
-		<div class="w-full flex justify-center">
+		<div class="flex w-full justify-center">
 			<div class="flex flex-col" style="width: 1220px">
 				<!-- Header -->
 				<Header :avatar="avatar" />
 				<!-- Body -->
 				<div>
 					<!-- Content -->
-					<section class="flex flex-row overflow-x-hidden relative">
+					<section class="relative flex flex-row overflow-x-hidden">
 						<PostEditor
 							ref="editor"
 							style="
@@ -26,26 +26,26 @@
 								height: calc(100vh - 88px);
 								backdrop-filter: blur(10px);
 							"
-							class="fixed overflow-y-auto rounded-t-lg shadow-lg mr-5 p-8 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop border border-lightBorder modal-animation"
+							class="from-lightBGStart to-lightBGStop border-lightBorder modal-animation fixed z-10 mr-5 overflow-y-auto rounded-t-lg border bg-gradient-to-r p-8 shadow-lg"
 							@update="updateWordCount"
 							@isWriting="hideDraftButton"
 						/>
 						<div
 							id="draftButton"
-							class="absolute bottom-0 z-10 m-4 px-5 py-3 animatedraftButton bg-gradient-to-r from-lightBGStart to-lightBGStop border-lightBorder rounded-lg shadow-lg test-xs text-gray5 modal-animation card-animation-delay1 flex"
+							class="animatedraftButton from-lightBGStart to-lightBGStop border-lightBorder test-xs text-gray5 modal-animation card-animation-delay1 absolute bottom-0 z-10 m-4 flex rounded-lg bg-gradient-to-r px-5 py-3 shadow-lg"
 							style="backdrop-filter: blur(10px)"
 						>
 							Resume writing?
-							<button v-if="!buttonHidden" class="text-primary ml-2 focus:outline-none" @click="showDraftsPopup">
+							<button v-if="!buttonHidden" class="text-primary focus:outline-none ml-2" @click="showDraftsPopup">
 								Show drafts
 							</button>
-							<button v-else class="text-primary ml-2 focus:outline-none" @click="showDraftsPopup">
+							<button v-else class="text-primary focus:outline-none ml-2" @click="showDraftsPopup">
 								<PencilIcon class="fill-current p-1" />
 							</button>
 						</div>
 						<!-- Widgets -->
 						<aside
-							class="fixed overflow-y-auto p-4 -mt-4 modal-animation"
+							class="modal-animation fixed -mt-4 overflow-y-auto p-4"
 							style="margin-left: 755px; width: 485px; min-height: calc(100vh - 70px); height: calc(100vh - 70px)"
 						>
 							<EditorWidgets :wordCount="wordCount" @post="handlePost" />
@@ -57,7 +57,7 @@
 		</div>
 		<div
 			v-if="showDrafts"
-			class="popup fixed w-full h-screen bg-primary top-0 bottom-0 left-0 right-0 z-30 flex justify-center items-center bg-opacity-50 modal-animation"
+			class="popup bg-primary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50"
 		>
 			<DraftsPopup @close="showDraftsPopup" />
 		</div>

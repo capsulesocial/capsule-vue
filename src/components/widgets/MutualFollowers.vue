@@ -1,26 +1,26 @@
 <template>
-	<article v-if="mutuals.size !== 0" class="w-full rounded-lg shadow-lg bg-white mb-5 p-4">
-		<h6 class="font-semibold text-primary mb-2">Mutual Followers</h6>
+	<article v-if="mutuals.size !== 0" class="mb-5 w-full rounded-lg bg-white p-4 shadow-lg">
+		<h6 class="text-primary mb-2 font-semibold">Mutual Followers</h6>
 		<div>
 			<!-- Profile photos -->
-			<div class="flex flex-row pl-4 flex-wrap">
+			<div class="flex flex-row flex-wrap pl-4">
 				<Avatar
 					v-for="f in featuredProfiles"
 					:key="f.id"
 					:authorID="f.id"
 					:avatar="f.avatar"
 					:size="`w-10 h-10`"
-					class="-ml-4 p-1 bg-white rounded-xl"
+					class="-ml-4 rounded-xl bg-white p-1"
 				/>
 			</div>
 			<!-- Names -->
 			<div v-if="featuredProfiles">
-				<p class="text-gray7 text-sm mb-4 mt-1">
+				<p class="text-gray7 mb-4 mt-1 text-sm">
 					{{ getText() }}
 				</p>
 			</div>
 		</div>
-		<nuxt-link :to="`/id/` + $route.params.id + `/mutuals`" class="text-sm text-primary">Show more</nuxt-link>
+		<nuxt-link :to="`/id/` + $route.params.id + `/mutuals`" class="text-primary text-sm">Show more</nuxt-link>
 	</article>
 </template>
 

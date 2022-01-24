@@ -1,11 +1,11 @@
 <template>
 	<article
-		class="w-full rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop mb-5 p-4 border border-lightBorder"
+		class="from-lightBGStart to-lightBGStop border-lightBorder mb-5 w-full rounded-lg border bg-gradient-to-r p-4 shadow-lg"
 		style="backdrop-filter: blur(10px)"
 	>
-		<h6 class="font-semibold text-primary mb-2">Recent Followers</h6>
+		<h6 class="text-primary mb-2 font-semibold">Recent Followers</h6>
 		<article v-if="profiles.length == 0">
-			<p class="text-sm text-gray5 mb-5 mt-3">
+			<p class="text-gray5 mb-5 mt-3 text-sm">
 				<span> It seems no one is following you yet </span>
 			</p>
 		</article>
@@ -18,7 +18,7 @@
 					? `/id/` + this.$store.state.session.id + `/followers`
 					: `/id/` + this.$route.params.id + `/followers`
 			"
-			class="text-sm text-primary"
+			class="text-primary text-sm"
 			>Show more</nuxt-link
 		>
 	</article>

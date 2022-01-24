@@ -1,6 +1,6 @@
 <template>
 	<article class="w-full">
-		<div class="flex flex-row justify-between p-6 pt-4 pb-2 items-center">
+		<div class="flex flex-row items-center justify-between p-6 pt-4 pb-2">
 			<h3 v-if="!checkRoute()" class="text-primary text-base font-semibold">Trending tags</h3>
 			<h3 v-if="checkRoute()" class="text-primary text-base font-semibold">Featured tags</h3>
 			<!-- <div class="flex flex-row justify-end">
@@ -34,11 +34,11 @@
 		</div>
 		<div class="px-6 pb-4">
 			<article v-if="tags.length == 0">
-				<p class="text-sm text-gray5 mb-4 mt-3">
+				<p class="text-gray5 mb-4 mt-3 text-sm">
 					<span> It seems no trending tags are available at the moment </span>
 				</p>
 			</article>
-			<TagCard v-for="t in tags" :key="t" :tag="t" class="text-lg mr-4 my-2" />
+			<TagCard v-for="t in tags" :key="t" :tag="t" class="my-2 mr-4 text-lg" />
 		</div>
 		<img v-if="checkRoute()" :src="require(`@/assets/images/brand/discover.webp`)" />
 	</article>

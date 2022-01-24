@@ -3,17 +3,17 @@
 		<div class="flex-shrink-0">
 			<Avatar :avatar="avatar" :authorID="authorID" size="w-10 h-10" />
 		</div>
-		<div class="flex-1 leading-relaxed ml-2">
+		<div class="ml-2 flex-1 leading-relaxed">
 			<strong
 				:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-				class="font-bold bold mr-1"
+				class="bold mr-1 font-bold"
 			>
 				{{ name }}
 			</strong>
 			<nuxt-link
 				:to="`/id/` + authorID"
 				:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-				class="text-sm mr-2"
+				class="mr-2 text-sm"
 			>
 				@{{ authorID }}
 			</nuxt-link>
@@ -26,7 +26,7 @@
 			</span>
 			<p
 				:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-				class="text-sm py-1"
+				class="py-1 text-sm"
 			>
 				{{ content }}
 			</p>

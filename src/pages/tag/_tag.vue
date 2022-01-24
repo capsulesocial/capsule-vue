@@ -1,17 +1,17 @@
 <template>
-	<section class="w-full border border-lightBorder">
+	<section class="border-lightBorder w-full border">
 		<!-- Tag page header -->
 		<div
-			class="rounded-lg flex flex-row items-center shadow-lg p-2 border-lightBorder bg-primary bg-opacity-25"
+			class="border-lightBorder bg-primary flex flex-row items-center rounded-lg bg-opacity-25 p-2 shadow-lg"
 			style="backdrop-filter: blur(10px)"
 		>
-			<button class="bg-gray1 rounded-full flex-shrink-0 m-3 focus:outline-none" @click="$router.go(-1)">
+			<button class="bg-gray1 focus:outline-none m-3 flex-shrink-0 rounded-full" @click="$router.go(-1)">
 				<BackIcon />
 			</button>
-			<h2 class="text-2xl text-primary font-semibold">{{ $route.params.tag }}</h2>
+			<h2 class="text-primary text-2xl font-semibold">{{ $route.params.tag }}</h2>
 		</div>
 		<!-- Posts loaded -->
-		<div ref="container" class="fixed overflow-y-auto w-full xl:w-750 min-h-130 h-130 xl:min-h-150 xl:h-150">
+		<div ref="container" class="xl:w-750 min-h-130 h-130 xl:min-h-150 xl:h-150 fixed w-full overflow-y-auto">
 			<article v-for="p in posts" :key="p.post._id">
 				<PostCard
 					:repost="p.repost"
@@ -29,8 +29,8 @@
 			</article>
 		</div>
 		<!-- Not loaded yet -->
-		<article v-show="isLoading" class="flex justify-center w-full">
-			<div class="loader m-6 modal-animation"></div>
+		<article v-show="isLoading" class="flex w-full justify-center">
+			<div class="loader modal-animation m-6"></div>
 		</article>
 	</section>
 </template>

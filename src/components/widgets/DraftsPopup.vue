@@ -1,20 +1,20 @@
 <template>
-	<div class="popup w-full flex justify-center">
+	<div class="popup flex w-full justify-center">
 		<!-- Container -->
 		<section>
 			<div
 				style="width: 600px; min-height: calc(100vh - 260px); height: calc(100vh - 260px); backdrop-filter: blur(5px)"
-				class="overflow-y-auto rounded-lg shadow-lg mr-5 p-6 pt-4 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop card-animation"
+				class="from-lightBGStart to-lightBGStop card-animation z-10 mr-5 overflow-y-auto rounded-lg bg-gradient-to-r p-6 pt-4 shadow-lg"
 			>
-				<div class="flex sticky justify-between items-center">
+				<div class="sticky flex items-center justify-between">
 					<h2 class="text-primary text-3xl font-semibold">Drafts</h2>
-					<button class="rounded-full focus:outline-none bg-gray1 p-1" @click="$emit(`close`)"><CloseIcon /></button>
+					<button class="focus:outline-none bg-gray1 rounded-full p-1" @click="$emit(`close`)"><CloseIcon /></button>
 				</div>
-				<div class="flex flex-col-reverse w-full items-center">
+				<div class="flex w-full flex-col-reverse items-center">
 					<div
 						v-for="d in $store.state.draft.drafts"
 						:key="$store.state.draft.drafts.indexOf(d)"
-						class="flex w-full items-center relative"
+						class="relative flex w-full items-center"
 					>
 						<DraftPreview
 							:draft="d"

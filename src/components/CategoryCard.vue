@@ -3,7 +3,7 @@
 		<nuxt-link
 			v-if="layout === `block` && bgImage !== ``"
 			:to="'/discover/' + text"
-			class="flex items-end transition duration-500 ease-in-out transform hover:scale-105 overflow-hidden rounded-lg shadow-lg bg-primary w-full"
+			class="bg-primary flex w-full transform items-end overflow-hidden rounded-lg shadow-lg transition duration-500 ease-in-out hover:scale-105"
 			:style="{
 				background: `linear-gradient(180deg, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.8) 100%), url(` + bgImage + `)`,
 				backgroundSize: 'cover',
@@ -12,8 +12,8 @@
 			}"
 		>
 			<!-- <img v-if="bgImage !== ``" :src="bgImage" :alt="text" class="absolute left-0 top-0 object-contain w-full" /> -->
-			<div class="flex flex-col font-sans p-4">
-				<h4 class="text-2xl text-white font-extrabold capitalize z-20">
+			<div class="flex flex-col p-4 font-sans">
+				<h4 class="z-20 text-2xl font-extrabold capitalize text-white">
 					{{ text }}
 				</h4>
 			</div>
@@ -21,8 +21,8 @@
 		<!-- List View -->
 		<div v-else class="flex flex-row justify-between">
 			<nuxt-link :to="'/discover/' + text" class="flex w-full">
-				<img v-if="bgImage !== ``" :src="bgImage" :alt="text" class="h-20 w-24 object-cover rounded-lg shadow-lg" />
-				<div class="px-4 w-full flex items-center">
+				<img v-if="bgImage !== ``" :src="bgImage" :alt="text" class="h-20 w-24 rounded-lg object-cover shadow-lg" />
+				<div class="flex w-full items-center px-4">
 					<span>
 						<h4 class="text-lg capitalize">
 							{{ text }}
@@ -32,7 +32,7 @@
 				</div>
 			</nuxt-link>
 			<div class="flex items-center">
-				<button class="border border-white rounded-full p-2 bg-primary shadow-lg focus:outline-none">
+				<button class="bg-primary focus:outline-none rounded-full border border-white p-2 shadow-lg">
 					<span class="text-white"><PlusIcon /></span>
 				</button>
 			</div>

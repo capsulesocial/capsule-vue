@@ -1,6 +1,6 @@
 <template>
 	<main
-		class="h-screen p-0 m-0 bg-img"
+		class="bg-img m-0 h-screen p-0"
 		:style="{
 			background:
 				`linear-gradient(180deg, rgba(46, 85, 106, 0.02) 0%, rgba(46, 85, 106, 0) 50%), url(` +
@@ -10,7 +10,7 @@
 		}"
 	>
 		<!-- Wrapper -->
-		<div class="w-full flex justify-center">
+		<div class="flex w-full justify-center">
 			<div class="flex flex-col" style="width: 1220px">
 				<!-- Header -->
 				<Header :avatar="avatar" />
@@ -18,23 +18,23 @@
 				<div>
 					<!-- Title and peered nodes -->
 					<div
-						class="fixed w-full flex justify-between items-center modal-animation px-3 xl:px-0"
+						class="modal-animation fixed flex w-full items-center justify-between px-3 xl:px-0"
 						style="width: 1220px; height: 62px"
 					>
 						<!-- Title -->
-						<h1 class="font-semibold text-primary text-3xl xl:text-4xl">Bookmarks list</h1>
+						<h1 class="text-primary text-3xl font-semibold xl:text-4xl">Bookmarks list</h1>
 						<!-- Peered nodes -->
 						<Nodes />
 					</div>
 					<!-- Content -->
-					<section class="flex flex-row mt-16 xl:mt-20">
+					<section class="mt-16 flex flex-row xl:mt-20">
 						<nuxt-child
-							class="fixed w-full xl:w-750 min-h-120 h-120 xl:min-h-150 xl:h-150 overflow-y-hidden rounded-lg shadow-lg mr-5 z-10 bg-gradient-to-r from-lightBGStart to-lightBGStop border border-lightBorder modal-animation"
+							class="xl:w-750 min-h-120 h-120 xl:min-h-150 xl:h-150 from-lightBGStart to-lightBGStop border-lightBorder modal-animation fixed z-10 mr-5 w-full overflow-y-hidden rounded-lg border bg-gradient-to-r shadow-lg"
 							:posts="posts"
 						/>
 						<!-- Widgets -->
 						<aside
-							class="fixed hidden xl:block modal-animation"
+							class="modal-animation fixed hidden xl:block"
 							style="
 								margin-left: 770px;
 								width: 450px;
@@ -44,24 +44,24 @@
 							"
 						>
 							<article
-								class="w-full h-full overflow-y-scroll rounded-lg shadow-lg bg-gradient-to-r from-lightBGStart to-lightBGStop mb-5 px-6 py-4 border border-lightBorder"
+								class="from-lightBGStart to-lightBGStop border-lightBorder mb-5 h-full w-full overflow-y-scroll rounded-lg border bg-gradient-to-r px-6 py-4 shadow-lg"
 							>
-								<div class="flex flex-row justify-between pb-4 items-center">
+								<div class="flex flex-row items-center justify-between pb-4">
 									<h6 class="text-primary text-base font-semibold">Filter by Category</h6>
-									<button class="focus:outline-none text-sm text-primary pr-1" @click="setFilter(``)">Clear</button>
+									<button class="focus:outline-none text-primary pr-1 text-sm" @click="setFilter(``)">Clear</button>
 								</div>
 								<button
 									v-for="c in categoryList"
 									:key="c"
-									class="w-full flex items-center pb-2 capitalize focus:outline-none"
+									class="focus:outline-none flex w-full items-center pb-2 capitalize"
 									:to="`/bookmarks/` + c"
 									@click="setFilter(c)"
 								>
-									<img :src="require(`@/assets/images/category/` + c + `/icon.webp`)" class="hotzone w-8 h-8 mr-1" />
+									<img :src="require(`@/assets/images/category/` + c + `/icon.webp`)" class="hotzone mr-1 h-8 w-8" />
 									<span
-										class="border-b ml-2"
+										class="ml-2 border-b"
 										:class="
-											active === c ? 'border-primary text-primary' : ' border-transparent text-lightPrimaryVariant'
+											active === c ? 'border-primary text-primary' : ' text-lightPrimaryVariant border-transparent'
 										"
 									>
 										{{ c }}</span

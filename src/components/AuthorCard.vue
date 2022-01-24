@@ -1,16 +1,16 @@
 <template>
-	<div class="border-t border-b py-5 my-5">
-		<div class="flex flex-col xl:flex-row justify-between items-center">
+	<div class="my-5 border-t border-b py-5">
+		<div class="flex flex-col items-center justify-between xl:flex-row">
 			<div>
-				<h6 class="text-sm text-gray6 mb-4 font-sans">Written By:</h6>
+				<h6 class="text-gray6 mb-4 font-sans text-sm">Written By:</h6>
 				<div class="flex pr-5">
 					<Avatar :avatar="authorAvatar" :authorID="authorID" size="w-16 h-16" class="flex-shrink-0 self-start" />
 					<div class="mx-4">
 						<nuxt-link v-if="authorName != ``" :to="'/id/' + authorID" class="text-2xl">
 							{{ authorName }}
 						</nuxt-link>
-						<nuxt-link v-else :to="'/id/' + authorID" class="text-2xl text-gray5"> {{ authorID }} </nuxt-link>
-						<p class="w-full text-gray6">
+						<nuxt-link v-else :to="'/id/' + authorID" class="text-gray5 text-2xl"> {{ authorID }} </nuxt-link>
+						<p class="text-gray6 w-full">
 							{{ authorBio }}
 						</p>
 					</div>
@@ -19,7 +19,7 @@
 			<div class="mr-5 mt-3 xl:mt-0">
 				<FriendButton
 					v-if="authorID !== $store.state.session.id"
-					class="justify-self-end hidden xl:block"
+					class="hidden justify-self-end xl:block"
 					:userIsFollowed="isFollowed"
 					:toggleFriend="toggleFriend"
 				/>

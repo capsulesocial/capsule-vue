@@ -1,7 +1,7 @@
 <template>
 	<section v-if="profile !== null" class="p-6">
-		<article v-if="profiles.length == 0" class="grid justify-items-center mt-32 px-10 xl:px-0">
-			<p class="text-sm text-gray5 mb-5 text-center">
+		<article v-if="profiles.length == 0" class="mt-32 grid justify-items-center px-10 xl:px-0">
+			<p class="text-gray5 mb-5 text-center text-sm">
 				<span v-if="$route.params.id === $store.state.session.id">
 					It seems you don't have any followers yet!<br />
 				</span>
