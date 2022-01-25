@@ -444,8 +444,8 @@ export default Vue.extend({
 				return login(this.username, privateKey)
 			}
 			const idCheck = this.$qualityID(this.id)
-			if (idCheck !== true) {
-				this.$toastError(`ID did not pass quality rules: ` + idCheck)
+			if (this.$isError(idCheck)) {
+				this.$toastError(idCheck.error)
 				return null
 			}
 			this.id = this.id.toLowerCase()
@@ -462,8 +462,8 @@ export default Vue.extend({
 				return null
 			}
 			const idCheck = this.$qualityID(this.id)
-			if (idCheck !== true) {
-				this.$toastError(`ID did not pass quality rules: ` + idCheck)
+			if (this.$isError(idCheck)) {
+				this.$toastError(idCheck.error)
 				return null
 			}
 			this.id = this.id.toLowerCase()

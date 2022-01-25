@@ -1,7 +1,7 @@
 import type { Plugin } from '@nuxt/types'
 
 // Declare types of functions
-type Id = (input: string) => string | boolean
+type Id = (input: string) => { error: string } | { success: boolean }
 type Email = (input: string) => { error: string } | { success: boolean }
 type URL = (url: string) => boolean
 type Text = (input: string) => boolean
@@ -30,24 +30,24 @@ const qualityPhoneNumber: PhoneNumber = (input: string): boolean => {
 const qualityID: Id = (input) => {
 	const blockListed = new Set<string>([`root`, `support`, `admin`])
 	if (input === `` || input === null) {
-		return `Missing ID!`
+		return { error: `Missing ID!` }
 	}
 	if (input.length < 3) {
-		return `ID must be longer than 3 characters`
+		return { error: `ID must be longer than 3 characters` }
 	}
 	if (input.length > 16) {
-		return `ID must be 16 characters or less`
+		return { error: `ID must be 16 characters or less` }
 	}
 	if (!/^\w{3,16}$/.test(input)) {
-		return `ID must only contain numbers, letters, and underscores`
+		return { error: `ID must only contain numbers, letters, and underscores` }
 	}
 	if (blockListed.has(input)) {
-		return `ID unavailable`
+		return { error: `ID unavailable` }
 	}
 	if (input.includes(`capsule`)) {
-		return `ID cannot contain capsule as a keyword`
+		return { error: `ID cannot contain capsule as a keyword` }
 	}
-	return true
+	return { success: true }
 }
 
 const qualityEmail: Email = (input) => {
