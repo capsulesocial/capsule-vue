@@ -28,6 +28,7 @@ const qualityPhoneNumber: PhoneNumber = (input: string): boolean => {
 }
 
 const qualityID: Id = (input) => {
+	const blockListed = new Set<string>([`root`, `support`, `admin`])
 	if (input === `` || input === null) {
 		return `Missing ID!`
 	}
@@ -39,6 +40,12 @@ const qualityID: Id = (input) => {
 	}
 	if (!/^\w{3,16}$/.test(input)) {
 		return `ID must only contain numbers, letters, and underscores`
+	}
+	if (blockListed.has(input)) {
+		return `ID unavailable`
+	}
+	if (input.includes(`capsule`)) {
+		return `ID cannot contain capsule as a keyword`
 	}
 	return true
 }
