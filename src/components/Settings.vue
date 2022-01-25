@@ -281,9 +281,14 @@ export default Vue.extend({
 			if (this.bio !== this.$store.state.session.bio && this.checkBio() > 0) {
 				this.changeBio(this.bio.trim())
 			}
-			if (this.$qualityEmail(this.newEmail)) {
-				this.changeEmail(this.newEmail.trim())
+
+			const qualityEmail = this.$qualityEmail(this.newEmail)
+			if (this.$isError(qualityEmail)) {
+				this.$toastError(qualityEmail.error)
+				return
 			}
+			this.changeEmail(this.newEmail.trim())
+
 			if (this.location !== this.$store.state.session.location) {
 				this.changeLocation(this.location.trim())
 			}
