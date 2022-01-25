@@ -1,6 +1,9 @@
 <template>
 	<div>
-		<article v-if="posts.length == 0" class="mt-12 grid justify-items-center overflow-y-hidden px-6 xl:px-0">
+		<article
+			v-if="posts.length == 0 && !isLoading"
+			class="mt-12 grid justify-items-center overflow-y-hidden px-6 xl:px-0"
+		>
 			<p class="text-gray5 align-end mb-1 flex items-end text-sm" style="max-width: 366px">
 				It seems you don't have any bookmarked posts yet,
 			</p>
@@ -28,6 +31,10 @@
 				:repostCount="p.repostCount"
 			/>
 		</article>
+		<!-- Not loaded yet -->
+		<article v-if="isLoading" class="flex w-full justify-center">
+			<div class="loader modal-animation m-6"></div>
+		</article>
 	</div>
 </template>
 
@@ -54,6 +61,10 @@ export default Vue.extend({
 		posts: {
 			type: Array as () => IPostResponse[],
 			required: true,
+		},
+		isLoading: {
+			type: Boolean,
+			required: false,
 		},
 	},
 	methods: {

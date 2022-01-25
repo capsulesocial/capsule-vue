@@ -7,7 +7,7 @@
 			My bookmarks
 		</h2>
 		<div class="xl:w-750 min-h-180 h-180 xl:min-h-220 xl:h-220 fixed w-full overflow-y-auto">
-			<nuxt-child :posts="posts" :followingList="following" :toggleFriend="toggleFriend" />
+			<nuxt-child :posts="posts" :followingList="following" :toggleFriend="toggleFriend" :isLoading="isLoading" />
 		</div>
 	</div>
 </template>
@@ -27,6 +27,10 @@ export default Vue.extend({
 		posts: {
 			type: Array as () => IPostResponse[],
 			required: true,
+		},
+		isLoading: {
+			type: Boolean,
+			required: false,
 		},
 	},
 	data(): IData {
