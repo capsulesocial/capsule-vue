@@ -1,7 +1,9 @@
 import type { Plugin } from '@nuxt/types'
+import { Tag } from '@/backend/post'
 
 // Declare types of functions
 type StringInputCheck = (input: string) => { error: string } | { success: boolean }
+type TagsCheck = (tag: string, tags?: Array<string>) => { error: string } | { success: boolean }
 type Text = (input: string) => boolean
 
 // eslint-disable-next-line quotes
@@ -10,6 +12,7 @@ declare module 'vue/types/vue' {
 		$qualityID: StringInputCheck
 		$qualityEmail: StringInputCheck
 		$qualityURL: StringInputCheck
+		$qualityTags: TagsCheck
 		$qualityText: Text
 	}
 }
@@ -63,6 +66,24 @@ const qualityURL: StringInputCheck = (url) => {
 	return { success: true }
 }
 
+const qualityTags: TagsCheck = (tag, tags?: Array<any>) => {
+	if (tag.trim().length < 1 || tag.trim().length > 99) {
+		return { error: `Invalid tag!` }
+	}
+	if (tag.replace(/\s/, ``).trim() !== tag) {
+		return { error: `Tag with spaces is not allowed` }
+	}
+	if (tags) {
+		if (tags.length > 2) {
+			return { error: `Maximum 3 tags are allowed` }
+		}
+		if (tags.some((t: Tag) => t.name === tag)) {
+			return { error: `Duplicate tags are not allowed` }
+		}
+	}
+	return { success: true }
+}
+
 const qualityText: Text = (input) => {
 	return input.trim().length > 0
 }
@@ -71,6 +92,7 @@ const qualityPlugin: Plugin = (_context, inject) => {
 	inject(`qualityID`, qualityID)
 	inject(`qualityEmail`, qualityEmail)
 	inject(`qualityURL`, qualityURL)
+	inject(`qualityTags`, qualityTags)
 	inject(`qualityText`, qualityText)
 }
 
