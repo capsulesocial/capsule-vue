@@ -3,6 +3,7 @@ import { Tag } from '@/backend/post'
 
 // Declare types of functions
 type StringInputCheck = (input: string) => { error: string } | { success: boolean }
+type TitleCheck = (title: string, titleError?: string) => { error: string } | { success: boolean }
 type TagsCheck = (tag: string, tags?: Array<string>) => { error: string } | { success: boolean }
 type Text = (input: string) => boolean
 
@@ -12,6 +13,7 @@ declare module 'vue/types/vue' {
 		$qualityID: StringInputCheck
 		$qualityEmail: StringInputCheck
 		$qualityURL: StringInputCheck
+		$qualityTitle: TitleCheck
 		$qualityTags: TagsCheck
 		$qualityText: Text
 	}
@@ -66,6 +68,22 @@ const qualityURL: StringInputCheck = (url) => {
 	return { success: true }
 }
 
+const qualityTitle: TitleCheck = (title, titleError) => {
+	if (title.length === 0) {
+		return { error: `Please enter a title.` }
+	}
+	if (title.length < 12) {
+		return { error: `Title length cannot be less than 12 characters` }
+	}
+	if (title.length > 90) {
+		return { error: `Title length cannot be more than 90 characters` }
+	}
+	if (titleError && titleError !== ``) {
+		return { error: titleError }
+	}
+	return { success: true }
+}
+
 const qualityTags: TagsCheck = (tag, tags?: Array<any>) => {
 	if (tag.trim().length < 1 || tag.trim().length > 99) {
 		return { error: `Invalid tag!` }
@@ -92,6 +110,7 @@ const qualityPlugin: Plugin = (_context, inject) => {
 	inject(`qualityID`, qualityID)
 	inject(`qualityEmail`, qualityEmail)
 	inject(`qualityURL`, qualityURL)
+	inject(`qualityTitle`, qualityTitle)
 	inject(`qualityTags`, qualityTags)
 	inject(`qualityText`, qualityText)
 }

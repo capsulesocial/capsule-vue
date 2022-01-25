@@ -325,13 +325,9 @@ export default Vue.extend({
 			const { category, tags, featuredPhotoCID, featuredPhotoCaption } =
 				this.$store.state.draft.drafts[this.$store.state.draft.activeIndex]
 			// Check for quality title
-			if (
-				!this.$qualityText(this.title) ||
-				this.title.length < 12 ||
-				this.title.length > 90 ||
-				this.titleError !== ``
-			) {
-				this.$toastError(`Invalid title!`)
+			const titleCheck = this.$qualityTitle(this.title)
+			if (this.$isError(titleCheck)) {
+				this.$toastError(titleCheck.error)
 				return
 			}
 			// Check if using a subtitle
