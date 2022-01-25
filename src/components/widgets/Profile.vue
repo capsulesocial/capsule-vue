@@ -9,7 +9,7 @@
 				<span v-if="$route.params.id === $store.state.session.id">
 					You can display more informations about you by editing your profile!
 				</span>
-				<span v-else> {{ $route.params.id }} didn't updated any informations about him yet</span>
+				<span v-else> {{ $route.params.id }} hasn't updated their bio yet</span>
 			</p>
 		</div>
 		<div v-else>

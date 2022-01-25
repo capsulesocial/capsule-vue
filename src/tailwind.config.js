@@ -2,9 +2,7 @@
 const { fontFamily } = require('tailwindcss/defaultTheme')
 
 module.exports = {
-  future: {
-    purgeLayersByDefault: true
-  },
+  darkMode: `class`,
   theme: {
     fontFamily: {
       sans: ['Noto', 'sans-serif'],

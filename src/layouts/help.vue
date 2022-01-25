@@ -30,7 +30,7 @@
 							style="margin-left: 755px; width: 485px; min-height: calc(100vh - 150px); height: calc(100vh - 150px)"
 						>
 							<SupportWidget />
-							<RessourcesWidget v-if="this.$store.state.session.id !== ``" @overlay="openOnboarding" />
+							<ResourcesWidget v-if="this.$store.state.session.id !== ``" @overlay="openOnboarding" />
 							<Footer />
 						</aside>
 					</section>
@@ -47,7 +47,7 @@ import Vue from 'vue'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 import SupportWidget from '@/components/widgets/Support.vue'
-import RessourcesWidget from '@/components/widgets/Ressources.vue'
+import ResourcesWidget from '@/components/widgets/Resources.vue'
 import OnboardingWizard from '@/components/OnboardingWizard.vue'
 
 import { getProfile, Profile } from '@/backend/profile'
@@ -69,7 +69,7 @@ export default Vue.extend({
 		Header,
 		Footer,
 		SupportWidget,
-		RessourcesWidget,
+		ResourcesWidget,
 		OnboardingWizard,
 	},
 	data(): IData {

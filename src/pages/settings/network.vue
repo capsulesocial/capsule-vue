@@ -8,9 +8,9 @@
 		<!-- Network Tab -->
 		<h2 class="text-primary mb-4 text-sm font-semibold">Capsule Node</h2>
 		<p class="text-gray5 mb-6">
-			Blogchain rely on the Capsule network technology composed of multiple nodes. You can choose to connect and
-			interact with a trusted node or a geographically close-by one. <br />Leaving it by default will chose the closest
-			one.
+			Blogchain relies on the Capsule network technology composed of multiple nodes. You can choose to connect and
+			interact with a trusted node or one close by geographically<br />By default, you will be connected to the closest
+			node. one.
 		</p>
 		<div class="mb-6 flex w-full flex-col xl:flex-row xl:items-center">
 			<label for="node" class="mb-2 w-48 font-semibold xl:mb-0">Preferred Node:</label>
