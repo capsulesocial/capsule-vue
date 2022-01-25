@@ -115,28 +115,13 @@ export default Vue.extend({
 		}
 	},
 	async created() {
-		// Unauthenticated view
+		this.posts = await this.fetchPosts()
 		if (this.$store.state.session.id === ``) {
-			this.posts = await getPosts({ category: this.$route.params.category }, `x`, {
-				sort: this.algorithm,
-				limit: this.limit,
-				offset: 0,
-			})
-			this.currentOffset += this.limit
-			this.isLoading = false
 			return
 		}
-		// Fetch posts from Orbit DB by ID
-		this.posts = await getPosts({ category: this.$route.params.category }, this.$store.state.session.id, {
-			sort: this.algorithm,
-			limit: this.limit,
-			offset: 0,
-		})
-		this.currentOffset += this.limit
 		getFollowersAndFollowing(this.$store.state.session.id).then(({ following }) => {
 			this.following = following
 		})
-		this.isLoading = false
 	},
 	mounted() {
 		const container = document.getElementById(`column`)
@@ -151,6 +136,21 @@ export default Vue.extend({
 		}
 	},
 	methods: {
+		async fetchPosts() {
+			this.isLoading = true
+			const id = this.$store.state.session.id === `` ? `x` : this.$store.state.session.id
+			const posts = await getPosts({ category: this.$route.params.category }, id, {
+				sort: this.algorithm,
+				limit: this.limit,
+				offset: this.currentOffset,
+			})
+			this.currentOffset += this.limit
+			if (posts.length === 0) {
+				this.noMorePosts = true
+			}
+			this.isLoading = false
+			return this.posts.concat(posts)
+		},
 		async toggleFriend(authorID: string) {
 			// Unauth
 			if (this.$store.state.session.id === ``) {
@@ -161,43 +161,6 @@ export default Vue.extend({
 				await followChange(this.following.has(authorID) ? `UNFOLLOW` : `FOLLOW`, this.$store.state.session.id, authorID)
 				const data = await getFollowersAndFollowing(this.$store.state.session.id, true)
 				this.following = data.following
-			}
-		},
-		async loadPosts() {
-			this.isLoading = true
-			// Unauthenticated
-			if (this.$store.state.session.id === ``) {
-				const res = await getPosts({ category: this.$route.params.category }, `x`, {
-					sort: this.algorithm,
-					limit: this.limit,
-					offset: this.currentOffset,
-					following: undefined,
-				})
-				if (res.length === 0) {
-					this.isLoading = false
-					this.noMorePosts = true
-				}
-				this.posts = this.posts.concat(res)
-				this.isLoading = false
-				return
-			}
-			// Authenticated
-			try {
-				const res = await getPosts({ category: this.$route.params.category }, this.$store.state.session.id, {
-					sort: this.algorithm,
-					limit: this.limit,
-					offset: this.currentOffset,
-					following: this.$store.state.session.id,
-				})
-				if (res.length === 0) {
-					this.isLoading = false
-					this.noMorePosts = true
-				}
-				this.posts = this.posts.concat(res)
-			} catch (err) {
-				this.$toastError(`error`)
-			} finally {
-				this.isLoading = false
 			}
 		},
 		async handleScrollHeader() {
@@ -269,8 +232,7 @@ export default Vue.extend({
 				if (this.isLoading) {
 					return
 				}
-				await this.loadPosts()
-				this.currentOffset += this.limit
+				this.posts = await this.fetchPosts()
 			}
 		},
 		generateKey(p: IPostResponse | IRepostResponse) {

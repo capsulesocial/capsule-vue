@@ -65,67 +65,38 @@ export default Vue.extend({
 			algorithm: `NEW`,
 		}
 	},
-	created() {
-		this.loadPosts()
+	async created() {
+		this.posts = await this.fetchPosts()
 	},
 	mounted() {
 		const container = this.$parent.$refs.scrollContainer as HTMLElement
 		container.addEventListener(`scroll`, this.handleScroll)
 	},
 	methods: {
-		// Fetch posts from Orbit DB by ID
-		async loadPosts() {
+		// Fetch posts from Orbit DB
+		async fetchPosts() {
 			this.isLoading = true
-			// Unauthenticated
-			if (this.$store.state.session.id === ``) {
-				try {
-					const res = await getPosts({ authorID: this.$route.params.id }, `x`, {
-						sort: this.algorithm,
-						offset: this.currentOffset,
-						limit: this.limit,
-						following: this.$store.state.session.id,
-					})
-					if (res.length === 0) {
-						const container = this.$parent.$refs.scrollContainer as HTMLElement
-						container.removeEventListener(`scroll`, this.handleScroll)
-					}
-					this.posts = this.posts.concat(res)
-					this.currentOffset += this.limit
-					this.isLoading = false
-				} catch (err) {
-					// TODO
-				} finally {
-					this.isLoading = false
-				}
-
-				return
+			const id = this.$store.state.session.id === `` ? `x` : this.$store.state.session.id
+			const posts = await getPosts({ authorID: this.$route.params.id }, id, {
+				sort: this.algorithm,
+				offset: this.currentOffset,
+				limit: this.limit,
+				following: id === `x` ? undefined : this.$store.state.session.id,
+			})
+			if (posts.length === 0) {
+				const container = this.$parent.$refs.scrollContainer as HTMLElement
+				container.removeEventListener(`scroll`, this.handleScroll)
 			}
-			// Authenticated
-			try {
-				const res = await getPosts({ authorID: this.$route.params.id }, this.$store.state.session.id, {
-					sort: this.algorithm,
-					offset: this.currentOffset,
-					limit: this.limit,
-					following: this.$store.state.session.id,
-				})
-				if (res.length < this.limit) {
-					const container = this.$parent.$refs.scrollContainer as HTMLElement
-					container.removeEventListener(`scroll`, this.handleScroll)
-				}
-				this.posts = this.posts.concat(res)
-				this.currentOffset += this.limit
-				this.isLoading = false
-			} catch (err) {
-			} finally {
-				this.isLoading = false
-			}
+			this.currentOffset += this.limit
+			this.isLoading = false
+			return this.posts.concat(posts)
 		},
 		async handleScroll(e: Event) {
 			if (!this.isLoading) {
 				const { scrollTop, scrollHeight, clientHeight } = e.srcElement as HTMLElement
 				// Fetch posts when reaching the bottom of page
 				if (scrollTop + clientHeight >= scrollHeight - 5) {
-					await this.loadPosts()
+					this.posts = await this.fetchPosts()
 				}
 			}
 		},

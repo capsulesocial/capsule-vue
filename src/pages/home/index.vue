@@ -116,7 +116,7 @@ export default Vue.extend({
 	},
 	data(): IData {
 		return {
-			algorithm: `FOLLOWING`,
+			algorithm: this.$store.state.session.id === `` ? `TOP` : `FOLLOWING`,
 			posts: [],
 			isLoading: true,
 			currentOffset: 0,
@@ -125,32 +125,7 @@ export default Vue.extend({
 	},
 	async created() {
 		// Unauthenticated view
-		if (this.$store.state.session.id === ``) {
-			this.algorithm = `TOP`
-			this.posts = await getPosts({}, `x`, {
-				sort: this.algorithm,
-				limit: this.limit,
-				offset: this.currentOffset,
-				following: undefined,
-			})
-			this.currentOffset += this.limit
-			this.isLoading = false
-			return
-		}
-		// Fetch posts if logged in
-		this.posts = await getPosts({}, this.$store.state.session.id, {
-			sort: this.algorithm,
-			limit: this.limit,
-			offset: this.currentOffset,
-			following: this.$store.state.session.id,
-		})
-		this.posts.forEach((post) => {
-			if (post.reposted) {
-				this.$store.commit(`addRepost`, { postID: post.post._id, repostID: post.reposted })
-			}
-		})
-		this.currentOffset += this.limit
-		this.isLoading = false
+		this.posts = await this.fetchPosts(this.algorithm)
 	},
 	mounted() {
 		const container = this.$refs.container as HTMLElement
@@ -158,6 +133,31 @@ export default Vue.extend({
 	},
 	methods: {
 		getReposts,
+		async fetchPosts(alg: Algorithm) {
+			this.isLoading = true
+			const id = this.$store.state.session.id === `` ? `x` : this.$store.state.session.id
+			const followingParam: string | undefined = id === `x` ? undefined : this.$store.state.session.id
+			const payload = {
+				sort: alg,
+				limit: this.limit,
+				offset: this.currentOffset,
+				following: followingParam,
+			}
+			const posts = await getPosts({}, id, payload)
+			this.currentOffset += this.limit
+			this.isLoading = false
+			// End of unauth functions
+			if (id === `x`) {
+				return posts
+			}
+			// Only get reposts if logged in
+			posts.forEach((post) => {
+				if (post.reposted) {
+					this.$store.commit(`addRepost`, { postID: post.post._id, repostID: post.reposted })
+				}
+			})
+			return posts
+		},
 		async sortFeed(a: Algorithm) {
 			// Unauth
 			if (this.$store.state.session.id === `` && a === `FOLLOWING`) {
@@ -170,53 +170,15 @@ export default Vue.extend({
 			this.currentOffset = 0
 			this.isLoading = true
 			this.algorithm = a
-			this.posts = await getPosts({}, this.$store.state.session.id !== `` ? this.$store.state.session.id : `x`, {
-				sort: a,
-				limit: this.limit,
-				offset: this.currentOffset,
-				following: this.$store.state.session.id,
-			})
-			this.currentOffset += this.limit
-			this.isLoading = false
+			this.posts = await this.fetchPosts(a)
 			return this.posts
 		},
 		async loadPosts() {
-			this.isLoading = true
-			// unauthenticated
-			if (this.$store.state.session.id === ``) {
-				const res = await getPosts({}, `x`, {
-					sort: this.algorithm,
-					offset: this.currentOffset,
-					limit: this.limit,
-					following: undefined,
-				})
-				if (res.length === 0) {
-					const container = this.$refs.container as HTMLElement
-					container.removeEventListener(`scroll`, this.handleScroll)
-				}
-				this.posts = this.posts.concat(res)
-				this.currentOffset += this.limit
-				this.isLoading = false
-				return
-			}
-			try {
-				const res = await getPosts({}, this.$store.state.session.id, {
-					sort: this.algorithm,
-					offset: this.currentOffset,
-					limit: this.limit,
-					following: this.algorithm === `FOLLOWING` ? this.$store.state.session.id : undefined,
-				})
-				if (res.length === 0) {
-					const container = this.$refs.container as HTMLElement
-					container.removeEventListener(`scroll`, this.handleScroll)
-				}
-				this.posts = this.posts.concat(res)
-				this.currentOffset += this.limit
-				this.isLoading = false
-			} catch (err) {
-				this.$toastError(`error`)
-			} finally {
-				this.isLoading = false
+			const res = await this.fetchPosts(this.algorithm)
+			this.posts = this.posts.concat(res)
+			if (res.length === 0) {
+				const container = this.$refs.container as HTMLElement
+				container.removeEventListener(`scroll`, this.handleScroll)
 			}
 		},
 		handleScroll(e: Event) {
