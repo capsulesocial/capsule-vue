@@ -2,12 +2,14 @@ import type { Plugin } from '@nuxt/types'
 
 type dateString = (date: Date, hideYear?: boolean, preformattedDate?: string | null) => string
 type dateFormat = (input: object | Date | number) => string
+type isErrorFormat = (obj: Record<string, unknown>) => obj is { error: string }
 
 // eslint-disable-next-line quotes
 declare module 'vue/types/vue' {
 	interface Vue {
 		$getFormat: dateString
 		$formatDate: dateFormat
+		$isError: isErrorFormat
 	}
 }
 
@@ -87,9 +89,14 @@ const formatDate = (input: string | Date | number) => {
 	return getFormat(date)
 }
 
+const isError = (obj: Record<string, unknown>) => {
+	return `error` in obj
+}
+
 const helperPlugin: Plugin = (_context, inject) => {
 	inject(`getFormat`, getFormat)
 	inject(`formatDate`, formatDate)
+	inject(`isError`, isError)
 }
 
 export default helperPlugin

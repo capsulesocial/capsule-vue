@@ -2,7 +2,7 @@ import type { Plugin } from '@nuxt/types'
 
 // Declare types of functions
 type Id = (input: string) => string | boolean
-type Email = (input: string) => string | boolean
+type Email = (input: string) => { error: string } | { success: boolean }
 type URL = (url: string) => boolean
 type Text = (input: string) => boolean
 type PhoneNumber = (input: string) => boolean
@@ -45,12 +45,17 @@ const qualityID: Id = (input) => {
 
 const qualityEmail: Email = (input) => {
 	if (input === `` || input === null) {
-		return `Missing Email!`
+		return { error: `Missing Email!` }
 	}
-	if (!/\S+@\S+\.\S+/.test(input)) {
-		return `Invalid email syntax!`
+
+	const regex =
+		// eslint-disable-next-line no-control-regex
+		/(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0B\x0C\x0E-\x1F\x21\x23-\x5B\x5D-\x7F]|\\[\x01-\x09\x0B\x0C\x0E-\x7F])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0B\x0C\x0E-\x1F\x21-\x5A\x53-\x7F]|\\[\x01-\x09\x0B\x0C\x0E-\x7F])+)\])/
+
+	if (!regex.test(input)) {
+		return { error: `Invalid email syntax!` }
 	}
-	return true
+	return { success: true }
 }
 
 const qualityURL: URL = (url) => {
