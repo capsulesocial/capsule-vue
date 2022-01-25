@@ -3,7 +3,7 @@ import type { Plugin } from '@nuxt/types'
 // Declare types of functions
 type Id = (input: string) => { error: string } | { success: boolean }
 type Email = (input: string) => { error: string } | { success: boolean }
-type URL = (url: string) => boolean
+type URL = (url: string) => { error: string } | { success: boolean }
 type Text = (input: string) => boolean
 type PhoneNumber = (input: string) => boolean
 
@@ -68,7 +68,12 @@ const qualityEmail: Email = (input) => {
 const qualityURL: URL = (url) => {
 	// URL starting with http://, https://, or www.
 	const regex = /^((https?:\/\/(www\.)?|www\.)[a-zA-Z0-9][\w+\d+&@\-#/%?=~_|!:,.;+]*)$/gi
-	return regex.test(url)
+
+	if (!regex.test(url)) {
+		return { error: `Invalid URL` }
+	}
+
+	return { success: true }
 }
 
 const qualityText: Text = (input) => {
