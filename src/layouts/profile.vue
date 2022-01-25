@@ -241,12 +241,14 @@ export default Vue.extend({
 				this.$store.commit(`settings/toggleUnauthPopup`)
 				return
 			}
-			await followChange(
-				this.userIsFollowed ? `UNFOLLOW` : `FOLLOW`,
-				this.$store.state.session.id,
-				this.$route.params.id,
-			)
-			this.updateFollowers()
+			if (this.$route.params.id !== this.$store.state.session.id) {
+				await followChange(
+					this.userIsFollowed ? `UNFOLLOW` : `FOLLOW`,
+					this.$store.state.session.id,
+					this.$route.params.id,
+				)
+				this.updateFollowers()
+			}
 		},
 		async updateFollowers() {
 			const { followers, following } = await getFollowersAndFollowing(this.$route.params.id, true)
