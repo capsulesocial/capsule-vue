@@ -30,7 +30,7 @@
 							</span>
 							<span v-else class="text-gray5 font-medium">{{ authorID }}</span>
 							<span class="text-primary ml-2 text-sm xl:text-base"> @{{ authorID }} </span>
-							<span v-if="authorID === postAuthor" class="text-xs bg-opacity-25 bg-primary rounded-2xl py-1 px-2 ml-2">
+							<span v-if="authorID === postAuthor" class="bg-primary ml-2 rounded-2xl bg-opacity-25 py-1 px-2 text-xs">
 								Author
 							</span>
 						</nuxt-link>
@@ -44,7 +44,7 @@
 							<p class="break-words py-1 font-sans text-lg leading-relaxed">
 								{{ content }}
 							</p>
-							<div class="flex h-full flex-col-reverse mt-8">
+							<div class="mt-8 flex h-full flex-col-reverse">
 								<button
 									class="text-lightSecondaryText focus:outline-none w-24 flex-grow-0 text-left font-sans text-sm"
 									@click="isReplying = !isReplying"
