@@ -290,6 +290,7 @@
 				:key="c._id"
 				class="py-2"
 				:authorID="c.authorID"
+				:postAuthor="postAuthor"
 				:cid="c._id"
 				:timestamp="c.timestamp"
 			/>
@@ -355,6 +356,10 @@ export default Vue.extend({
 		postCID: {
 			type: String as PropType<string>,
 			required: true,
+		},
+		postAuthor: {
+			type: String,
+			default: ``,
 		},
 		bookmarksCount: {
 			type: Number,

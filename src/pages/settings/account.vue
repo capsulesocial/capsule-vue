@@ -1,7 +1,7 @@
 <template>
 	<main>
 		<!-- Mobile back button -->
-		<nuxt-link to="/settings" class="mb-4 block flex items-center xl:hidden">
+		<nuxt-link to="/settings" class="mb-4 flex items-center xl:hidden">
 			<span class="bg-gray1 mr-2 rounded-full p-1"><ChevronLeft /></span>
 			<h6 class="font-semibold">All Settings</h6>
 		</nuxt-link>
@@ -29,14 +29,10 @@
 		<h2 class="text-primary py-4 text-sm font-semibold">Account Profile</h2>
 		<div class="mb-4 flex w-full flex-row items-center justify-between xl:justify-start">
 			<label for="editProfile" class="w-32 font-semibold">Public Profile</label>
-			<nuxt-link
-				:to="`/id/` + $store.state.session.id"
-				class="bg-secondary focus:outline-none rounded-lg text-white"
-				style="padding: 0.4rem 1.5rem"
-			>
-				<h6 class="hidden xl:block">Edit your Profile</h6>
-				<span class="bg-primary h-5 w-5 rounded-lg xl:hidden"><PencilIcon /></span>
-			</nuxt-link>
+			<button class="bg-secondary focus:outline-none block rounded-lg xl:hidden" @click="redirectProfile">
+				<PencilIcon class="m-2 h-5 w-5 text-white" />
+			</button>
+			<SecondaryButton :text="`Edit Profile`" :action="redirectProfile" class="hidden xl:block" />
 		</div>
 		<!-- Account Data -->
 		<!-- <h2 class="text-primary font-semibold pt-4 mb-4 text-sm">Account Data</h2>
@@ -190,6 +186,10 @@ export default Vue.extend({
 		async getInviteCodesRemaining() {
 			const response = await getInvitesRemaining(this.$store.state.session.id)
 			this.inviteCodesRemaining = response
+		},
+		redirectProfile() {
+			this.$store.commit(`settings/setRecentlyInSettings`, true)
+			this.$router.push(`/id/` + this.$store.state.session.id)
 		},
 	},
 })

@@ -150,7 +150,7 @@
 					<PostActions :postCID="$route.params.post" :bookmarksCount="bookmarksCount" :repostsCount="repostCount" />
 				</article>
 			</section>
-			<section v-else>Post not found 😵‍💫</section>
+			<section v-else>Post not found</section>
 		</div>
 		<article v-show="isLoading" class="modal-animation fixed mt-20 flex w-full justify-center">
 			<div class="loader m-5"></div>

@@ -45,6 +45,13 @@
 			class="xl:w-750 fixed w-full overflow-y-auto"
 			:style="`min-height: calc(100vh - ` + padding + `); height: calc(100vh - ` + padding + `)`"
 		>
+			<article v-if="posts.length == 0" class="mt-12 grid justify-items-center overflow-y-hidden px-6 xl:px-0">
+				<p class="text-gray5 align-end mb-5 flex items-end text-sm" style="max-width: 366px">
+					It seems that there is no posts of that category yet
+				</p>
+				<SecondaryButton :text="`All categories`" :action="toggleCategories" />
+				<img :src="require(`@/assets/images/brand/Bookmarks.webp`)" class="top-0 mt-64 xl:-mt-2" />
+			</article>
 			<article v-for="p in posts" :key="generateKey(p)">
 				<PostCard
 					:repost="p.repost"
@@ -274,6 +281,9 @@ export default Vue.extend({
 				key += p.repost._id
 			}
 			return key
+		},
+		toggleCategories() {
+			this.$router.push(`/discover`)
 		},
 	},
 })

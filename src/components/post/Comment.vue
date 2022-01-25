@@ -30,6 +30,9 @@
 							</span>
 							<span v-else class="text-gray5 font-medium">{{ authorID }}</span>
 							<span class="text-primary ml-2 text-sm xl:text-base"> @{{ authorID }} </span>
+							<span v-if="authorID === postAuthor" class="text-xs bg-opacity-25 bg-primary rounded-2xl py-1 px-2 ml-2">
+								Author
+							</span>
 						</nuxt-link>
 						<span v-if="timestamp" class="self-center text-xs">
 							{{ $formatDate(timestamp) }}
@@ -41,7 +44,7 @@
 							<p class="break-words py-1 font-sans text-lg leading-relaxed">
 								{{ content }}
 							</p>
-							<div class="flex h-full flex-col-reverse">
+							<div class="flex h-full flex-col-reverse mt-8">
 								<button
 									class="text-lightSecondaryText focus:outline-none w-24 flex-grow-0 text-left font-sans text-sm"
 									@click="isReplying = !isReplying"
@@ -62,7 +65,7 @@
 			</div>
 		</div>
 		<!-- Reply button -->
-		<div class="ml-3 pl-1 xl:ml-10">
+		<div class="ml-3 pl-1 xl:ml-20">
 			<!-- Active reply state -->
 			<div v-if="isReplying" class="modal-animation mr-5 mt-4 border-l pl-2">
 				<!-- Reply Input box -->
@@ -143,6 +146,10 @@ export default Vue.extend({
 	},
 	props: {
 		authorID: { type: String, required: true },
+		postAuthor: {
+			type: String,
+			default: ``,
+		},
 		cid: { type: String, required: true },
 		timestamp: { type: Number, required: true },
 		profile: { type: Object as PropType<Profile>, default: null },

@@ -31,6 +31,7 @@
 						<nuxt-child
 							class="xl:w-750 min-h-120 h-120 xl:min-h-150 xl:h-150 from-lightBGStart to-lightBGStop border-lightBorder modal-animation fixed z-10 mr-5 w-full overflow-y-hidden rounded-lg border bg-gradient-to-r shadow-lg"
 							:posts="posts"
+							:isLoading="isLoading"
 						/>
 						<!-- Widgets -->
 						<aside
@@ -96,6 +97,7 @@ interface IData {
 	posts: IPostResponse[]
 	categoryList: string[]
 	active: string
+	isLoading: boolean
 }
 
 export default Vue.extend({
@@ -112,6 +114,7 @@ export default Vue.extend({
 			posts: [],
 			categoryList: categories,
 			active: ``,
+			isLoading: true,
 		}
 	},
 	async created() {
@@ -140,6 +143,7 @@ export default Vue.extend({
 		},
 		async fetchPosts(category?: string) {
 			this.posts = await getBookmarksOfUser(this.$store.state.session.id, category)
+			this.isLoading = false
 		},
 	},
 })

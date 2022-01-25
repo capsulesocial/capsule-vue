@@ -20,6 +20,7 @@
 								:avatar="visitAvatar"
 								:authorID="$route.params.id"
 								:size="`w-8 h-8`"
+								:noClick="true"
 								class="rounded-base flex-shrink-0"
 							/>
 							<h6 v-if="visitProfile.name != ``" class="ml-2 font-sans font-semibold">{{ visitProfile.name }}</h6>
@@ -47,6 +48,7 @@
 							:avatar="visitAvatar"
 							:authorID="$route.params.id"
 							:size="`w-20 h-20`"
+							:noClick="true"
 							class="flex-shrink-0 rounded-lg"
 						/>
 						<div class="ml-5 flex flex-grow flex-col">
@@ -91,7 +93,7 @@
 					<div id="buttons" class="header-profile h-fit flex items-center xl:h-auto">
 						<!-- Edit profile button -->
 						<span v-if="$store.state.session.id === $route.params.id">
-							<button class="bg-primary focus:outline-none block rounded-lg xl:hidden" @click="toggleSettings">
+							<button class="bg-secondary focus:outline-none block rounded-lg xl:hidden" @click="toggleSettings">
 								<PencilIcon class="m-2 h-5 w-5 text-white" />
 							</button>
 							<SecondaryButton :text="`Edit Profile`" :action="toggleSettings" class="hidden xl:block" />
@@ -224,6 +226,10 @@ export default Vue.extend({
 				return []
 			},
 		},
+		toggleEdit: {
+			type: Boolean,
+			required: false,
+		},
 		updateProfileMethod: { type: Function as PropType<() => void>, required: true },
 	},
 	data(): IData {
@@ -246,12 +252,18 @@ export default Vue.extend({
 		if (container) {
 			container.addEventListener(`scroll`, this.handleScrollHeader)
 		}
+		if (this.$store.state.settings.recentlyInSettings) {
+			this.showSettings = true
+		}
 	},
 	destroyed() {
 		window.removeEventListener(`click`, this.handleClose)
 		const container = document.getElementById(`scrollContainer`)
 		if (container) {
 			container.removeEventListener(`scroll`, this.handleScrollHeader)
+		}
+		if (this.$store.state.settings.recentlyInSettings) {
+			this.$store.commit(`settings/setRecentlyInSettings`, false)
 		}
 	},
 	methods: {

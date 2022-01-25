@@ -96,7 +96,7 @@
 								</button>
 								<div
 									v-show="showDelete"
-									class="dropdownDeleteOpen border-lightBorder modal-animation absolute z-10 flex w-32 flex-col rounded-lg border bg-white p-1 shadow-lg"
+									class="dropdownDeleteOpen border-lightBorder modal-animation absolute z-10 flex w-36 flex-col rounded-lg border bg-white p-1 shadow-lg"
 									:style="
 										quote && quote.authorID === $store.state.session.id
 											? `top: 55px; right: 40px`
@@ -157,6 +157,7 @@
 				<PostActions
 					v-if="showComments || showStats"
 					:postCID="postCID"
+					:postAuthor="post.authorID"
 					:bookmarksCount="bookmarksCount"
 					:repostsCount="repostCount"
 					:openStats="showStats"
@@ -187,13 +188,13 @@
 								</button>
 								<div
 									v-show="showQuoteDelete"
-									class="dropdownDeleteOpen border-lightBorder modal-animation absolute z-10 flex w-32 flex-col rounded-lg border bg-white p-1 shadow-lg"
+									class="dropdownDeleteOpen border-lightBorder modal-animation absolute z-10 flex w-48 flex-col rounded-lg border bg-white p-1 shadow-lg"
 									style="top: 35px; right: -10px"
 								>
 									<!-- Delete -->
 									<button class="focus:outline-none text-negative flex" @click="deleteQuote">
 										<BinIcon class="p-1" />
-										<span class="text-negative self-center text-xs">Delete Quote</span>
+										<span class="text-negative self-center text-xs">Remove Quote from feed</span>
 									</button>
 								</div>
 							</div>
@@ -252,7 +253,7 @@
 								</button>
 								<div
 									v-show="showDelete"
-									class="dropdownDeleteOpen border-lightBorder modal-animation absolute z-10 flex w-32 flex-col rounded-lg border bg-white p-1 shadow-lg"
+									class="dropdownDeleteOpen border-lightBorder modal-animation absolute z-10 flex w-36 flex-col rounded-lg border bg-white p-1 shadow-lg"
 									:style="
 										quote && quote.authorID === $store.state.session.id
 											? `top: 55px; right: -10px`
@@ -577,7 +578,7 @@ export default Vue.extend({
 		async deleteQuote() {
 			await sendPostDeletion(`HIDE`, this.repost._id, this.$store.state.session.id)
 			this.postDeleted = true
-			this.$toastSuccess(`This quote has been successfully deleted`)
+			this.$toastSuccess(`This quote has been successfully removed`)
 		},
 		async getBookmarkStatus() {
 			this.isBookmarked = await isPostBookmarkedByUser(this.postCID, this.$store.state.session.id)
