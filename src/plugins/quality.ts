@@ -1,33 +1,20 @@
 import type { Plugin } from '@nuxt/types'
 
 // Declare types of functions
-type Id = (input: string) => { error: string } | { success: boolean }
-type Email = (input: string) => { error: string } | { success: boolean }
-type URL = (url: string) => { error: string } | { success: boolean }
+type StringInputCheck = (input: string) => { error: string } | { success: boolean }
 type Text = (input: string) => boolean
-type PhoneNumber = (input: string) => boolean
 
 // eslint-disable-next-line quotes
 declare module 'vue/types/vue' {
 	interface Vue {
-		$qualityPhoneNumber: PhoneNumber
-		$qualityID: Id
-		$qualityEmail: Email
-		$qualityURL: URL
+		$qualityID: StringInputCheck
+		$qualityEmail: StringInputCheck
+		$qualityURL: StringInputCheck
 		$qualityText: Text
 	}
 }
 
-const phoneRegex = /^\+(?:[0-9] ?){6,14}[0-9]$/
-
-const qualityPhoneNumber: PhoneNumber = (input: string): boolean => {
-	if (input.length < 10) {
-		return false
-	}
-	return phoneRegex.test(input)
-}
-
-const qualityID: Id = (input) => {
+const qualityID: StringInputCheck = (input) => {
 	const blockListed = new Set<string>([`root`, `support`, `admin`])
 	if (input === `` || input === null) {
 		return { error: `Missing ID!` }
@@ -50,7 +37,7 @@ const qualityID: Id = (input) => {
 	return { success: true }
 }
 
-const qualityEmail: Email = (input) => {
+const qualityEmail: StringInputCheck = (input) => {
 	if (input === `` || input === null) {
 		return { error: `Missing Email!` }
 	}
@@ -65,7 +52,7 @@ const qualityEmail: Email = (input) => {
 	return { success: true }
 }
 
-const qualityURL: URL = (url) => {
+const qualityURL: StringInputCheck = (url) => {
 	// URL starting with http://, https://, or www.
 	const regex = /^((https?:\/\/(www\.)?|www\.)[a-zA-Z0-9][\w+\d+&@\-#/%?=~_|!:,.;+]*)$/gi
 
@@ -81,7 +68,6 @@ const qualityText: Text = (input) => {
 }
 
 const qualityPlugin: Plugin = (_context, inject) => {
-	inject(`qualityPhoneNumber`, qualityPhoneNumber)
 	inject(`qualityID`, qualityID)
 	inject(`qualityEmail`, qualityEmail)
 	inject(`qualityURL`, qualityURL)
