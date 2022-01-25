@@ -230,6 +230,7 @@ enum SetUserInfoStatus {
 	NearAccountAlreadyLinked,
 	AccountNotOnboarded,
 	UsernameBlockListed,
+	InvalidCharsUsername,
 }
 
 export async function setUserInfoNEAR(username: string) {
@@ -250,6 +251,8 @@ export async function setUserInfoNEAR(username: string) {
 			return { success: false, error: `Account does not have a valid invite code` }
 		case SetUserInfoStatus.UsernameBlockListed:
 			return { success: false, error: `Username should not contain blocklisted keywords` }
+		case SetUserInfoStatus.InvalidCharsUsername:
+			return { success: false, error: `Username can only contain lowercase alphanumeric characters or underscores` }
 		default:
 			throw new Error(`Unknown status encountered while updating info on NEAR`)
 	}
