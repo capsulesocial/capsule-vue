@@ -330,13 +330,10 @@ export default Vue.extend({
 				this.$toastError(titleCheck.error)
 				return
 			}
-			// Check if using a subtitle
-			if (this.subtitle !== `` && (!this.$qualityText(this.subtitle) || this.subtitleError !== ``)) {
-				this.$toastError(`Invalid subtitle!`)
-				return
-			}
-			if (this.subtitle !== `` && this.subtitle.length > 180) {
-				this.$toastError(`Subtitle too long!`)
+			// Check if using a subtitle and is a quality subtitle
+			const subtitleCheck = this.$qualitySubtitle(this.subtitle)
+			if (this.$isError(subtitleCheck)) {
+				this.$toastError(subtitleCheck.error)
 				return
 			}
 			if (category === ``) {

@@ -14,6 +14,7 @@ declare module 'vue/types/vue' {
 		$qualityEmail: StringInputCheck
 		$qualityURL: StringInputCheck
 		$qualityTitle: TitleCheck
+		$qualitySubtitle: TitleCheck
 		$qualityTags: TagsCheck
 		$qualityText: Text
 	}
@@ -84,6 +85,19 @@ const qualityTitle: TitleCheck = (title, titleError) => {
 	return { success: true }
 }
 
+const qualitySubtitle: TitleCheck = (subtitle, subtitleError) => {
+	if (subtitle.length !== 0 && subtitle.length < 12) {
+		return { error: `Subtitle length can not be less than 12 characters` }
+	}
+	if (subtitle.length !== 0 && subtitle.length > 180) {
+		return { error: `Subtitle length can not be more than 180 characters` }
+	}
+	if (subtitleError && subtitleError !== ``) {
+		return { error: subtitleError }
+	}
+	return { success: true }
+}
+
 const qualityTags: TagsCheck = (tag, tags?: Array<any>) => {
 	if (tag.trim().length < 1 || tag.trim().length > 99) {
 		return { error: `Invalid tag!` }
@@ -111,6 +125,7 @@ const qualityPlugin: Plugin = (_context, inject) => {
 	inject(`qualityEmail`, qualityEmail)
 	inject(`qualityURL`, qualityURL)
 	inject(`qualityTitle`, qualityTitle)
+	inject(`qualitySubtitle`, qualitySubtitle)
 	inject(`qualityTags`, qualityTags)
 	inject(`qualityText`, qualityText)
 }
