@@ -229,6 +229,7 @@ enum SetUserInfoStatus {
 	UsernameTooLarge,
 	NearAccountAlreadyLinked,
 	AccountNotOnboarded,
+	UsernameBlockListed,
 }
 
 export async function setUserInfoNEAR(username: string) {
@@ -247,6 +248,8 @@ export async function setUserInfoNEAR(username: string) {
 			return { success: false, error: `Your NEAR Account is already linked to another username` }
 		case SetUserInfoStatus.AccountNotOnboarded:
 			return { success: false, error: `Account does not have a valid invite code` }
+		case SetUserInfoStatus.UsernameBlockListed:
+			return { success: false, error: `Username should not contain blocklisted keywords` }
 		default:
 			throw new Error(`Unknown status encountered while updating info on NEAR`)
 	}
