@@ -6,7 +6,7 @@
 			class="bg-primary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50"
 		>
 			<div
-				class="card xl:w-750 max-h-90 from-lightBGStart to-lightBGStop card-animation m-2 mt-10 w-full overflow-y-auto rounded-lg bg-gradient-to-r shadow-lg xl:m-0"
+				class="card xl:w-750 max-h-90 from-lightBGStart to-lightBGStop card-animation m-2 mt-10 w-full overflow-y-auto overflow-x-hidden rounded-lg bg-gradient-to-r shadow-lg xl:m-0"
 				style="backdrop-filter: blur(10px)"
 			>
 				<div

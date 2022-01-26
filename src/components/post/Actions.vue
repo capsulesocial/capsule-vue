@@ -150,7 +150,7 @@
 				</div>
 				<div
 					class="border-lightBorder flex w-full overflow-hidden rounded-xl border"
-					:class="showEmotions ? `` : `bg- border p-4` + selectedEmotionColor"
+					:class="showEmotions ? `` : `border p-4 bg-` + selectedEmotionColor"
 				>
 					<div
 						class="flex w-full items-center justify-center overflow-hidden rounded-xl"
@@ -202,7 +202,7 @@
 										selectedEmotionColor === `positive` ||
 										selectedEmotionColor === `neutral` ||
 										selectedEmotionColor === `negative`
-											? `bg- bg-opacity-25` + selectedEmotionColor
+											? `bg-opacity-25 bg-` + selectedEmotionColor
 											: `bg-gray1`
 									"
 									style="height: 96px; margin-top: 112px"
@@ -220,7 +220,7 @@
 											v-for="face in row"
 											:key="face.label"
 											class="focus:outline-none outline-none rounded-lg border-2 border-transparent"
-											:class="selectedEmotion.label === face.label ? `border- border-2` + selectedEmotionColor : ``"
+											:class="selectedEmotion.label === face.label ? `border-2 border-` + selectedEmotionColor : ``"
 											style="transition: all 0.3s ease-in-out"
 											@click="setEmotion(face)"
 										>
@@ -234,7 +234,7 @@
 											<button
 												class="focus:outline-none outline-none flex flex-grow items-center justify-center"
 												:class="
-													selectedEmotion.label === face.label ? `text- font-bold` + selectedEmotionColor : `text-gray7`
+													selectedEmotion.label === face.label ? `font-bold text-` + selectedEmotionColor : `text-gray7`
 												"
 												style="transition: all 0.3s ease-in-out"
 												@click="setEmotion(face)"
