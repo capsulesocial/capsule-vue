@@ -218,15 +218,16 @@ export default Vue.extend({
 			return res
 		},
 		async sendReply() {
-			if (!this.$qualityText(this.reply)) {
-				this.$toastError(`Invalid reply`)
-			} else {
-				const c = createComment(this.$store.state.session.id, this.reply, `no-emotion`, this.cid)
-				const _id = await sendComment(c, `reply`)
-				this.replies.push({ _id, ...c })
-				this.filterReplies()
-				this.reply = ``
+			const replyQualityCheck = this.$qualityComment(this.reply)
+			if (this.$isError(replyQualityCheck)) {
+				this.$toastError(replyQualityCheck.error)
+				return
 			}
+			const c = createComment(this.$store.state.session.id, this.reply, `no-emotion`, this.cid)
+			const _id = await sendComment(c, `reply`)
+			this.replies.push({ _id, ...c })
+			this.filterReplies()
+			this.reply = ``
 		},
 		filterReplies(): ICommentData[] {
 			return this.replies.slice().sort((p0, p1) => p1.timestamp - p0.timestamp)

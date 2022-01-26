@@ -1,56 +1,51 @@
 import type { Plugin } from '@nuxt/types'
+import { Tag } from '@/backend/post'
+import textLimits from '@/backend/utilities/text_limits'
 
 // Declare types of functions
-type Id = (input: string) => string | boolean
-type Email = (input: string) => { error: string } | { success: boolean }
-type URL = (url: string) => boolean
-type Text = (input: string) => boolean
-type PhoneNumber = (input: string) => boolean
+type CheckResult = { error: string } | { success: boolean }
+type StringInputCheck = (input: string) => CheckResult
+type TitleCheck = (title: string, titleError?: string) => CheckResult
+type TagsCheck = (tag: string, tags?: Array<string>) => CheckResult
 
 // eslint-disable-next-line quotes
 declare module 'vue/types/vue' {
 	interface Vue {
-		$qualityPhoneNumber: PhoneNumber
-		$qualityID: Id
-		$qualityEmail: Email
-		$qualityURL: URL
-		$qualityText: Text
+		$qualityID: StringInputCheck
+		$qualityEmail: StringInputCheck
+		$qualityURL: StringInputCheck
+		$qualityTitle: TitleCheck
+		$qualitySubtitle: TitleCheck
+		$qualityTags: TagsCheck
+		$qualityComment: StringInputCheck
+		$qualityContent: StringInputCheck
 	}
 }
 
-const phoneRegex = /^\+(?:[0-9] ?){6,14}[0-9]$/
-
-const qualityPhoneNumber: PhoneNumber = (input: string): boolean => {
-	if (input.length < 10) {
-		return false
-	}
-	return phoneRegex.test(input)
-}
-
-const qualityID: Id = (input) => {
+const qualityID: StringInputCheck = (input) => {
 	const blockListed = new Set<string>([`root`, `support`, `admin`])
 	if (input === `` || input === null) {
-		return `Missing ID!`
+		return { error: `Missing ID!` }
 	}
 	if (input.length < 3) {
-		return `ID must be longer than 3 characters`
+		return { error: `ID must be longer than 3 characters` }
 	}
 	if (input.length > 16) {
-		return `ID must be 16 characters or less`
+		return { error: `ID must be 16 characters or less` }
 	}
 	if (!/^\w{3,16}$/.test(input)) {
-		return `ID must only contain numbers, letters, and underscores`
+		return { error: `ID must only contain numbers, letters, and underscores` }
 	}
 	if (blockListed.has(input)) {
-		return `ID unavailable`
+		return { error: `ID unavailable` }
 	}
 	if (input.includes(`capsule`)) {
-		return `ID cannot contain capsule as a keyword`
+		return { error: `ID cannot contain capsule as a keyword` }
 	}
-	return true
+	return { success: true }
 }
 
-const qualityEmail: Email = (input) => {
+const qualityEmail: StringInputCheck = (input) => {
 	if (input === `` || input === null) {
 		return { error: `Missing Email!` }
 	}
@@ -65,22 +60,96 @@ const qualityEmail: Email = (input) => {
 	return { success: true }
 }
 
-const qualityURL: URL = (url) => {
+const qualityURL: StringInputCheck = (url) => {
 	// URL starting with http://, https://, or www.
 	const regex = /^((https?:\/\/(www\.)?|www\.)[a-zA-Z0-9][\w+\d+&@\-#/%?=~_|!:,.;+]*)$/gi
-	return regex.test(url)
+
+	if (!regex.test(url)) {
+		return { error: `Invalid URL` }
+	}
+
+	return { success: true }
 }
 
-const qualityText: Text = (input) => {
-	return input.trim().length > 0
+const qualityTitle: TitleCheck = (title, titleError) => {
+	if (title.length === 0) {
+		return { error: `Please enter a title.` }
+	}
+	if (title.length < textLimits.post_title.min) {
+		return { error: `Title length cannot be less than ${textLimits.post_title.min} characters` }
+	}
+	if (title.length > textLimits.post_title.max) {
+		return { error: `Title length cannot be more than ${textLimits.post_title.max} characters` }
+	}
+	if (titleError && titleError !== ``) {
+		return { error: titleError }
+	}
+	return { success: true }
+}
+
+const qualitySubtitle: TitleCheck = (subtitle, subtitleError) => {
+	if (subtitle.length !== 0 && subtitle.length < textLimits.post_subtitle.min) {
+		return { error: `Subtitle length cannot be less than ${textLimits.post_subtitle.min} characters` }
+	}
+	if (subtitle.length !== 0 && subtitle.length > textLimits.post_subtitle.max) {
+		return { error: `Subtitle length cannot be more than ${textLimits.post_subtitle.max} characters` }
+	}
+	if (subtitleError && subtitleError !== ``) {
+		return { error: subtitleError }
+	}
+	return { success: true }
+}
+
+const qualityTags: TagsCheck = (tag, tags?: Array<any>) => {
+	if (tag.trim().length < textLimits.post_tag.min) {
+		return { error: `Tag length cannot be less than ${textLimits.post_tag.min} characters` }
+	}
+	if (tag.trim().length > textLimits.post_tag.max) {
+		return { error: `Tag length cannot be more than ${textLimits.post_tag.max} characters` }
+	}
+	if (tag.replace(/\s/, ``).trim() !== tag) {
+		return { error: `Tag with spaces is not allowed` }
+	}
+	if (tags) {
+		if (tags.length > 2) {
+			return { error: `Maximum 3 tags are allowed` }
+		}
+		if (tags.some((t: Tag) => t.name === tag)) {
+			return { error: `Duplicate tags are not allowed` }
+		}
+	}
+	return { success: true }
+}
+
+const qualityComment: StringInputCheck = (input) => {
+	if (input.length < textLimits.comment_content.min) {
+		return { error: `Comment length cannot be less than ${textLimits.comment_content.min} characters` }
+	}
+	if (input.length > textLimits.comment_content.max) {
+		return { error: `Comment length cannot be more than ${textLimits.comment_content.max} characters` }
+	}
+	return { success: true }
+}
+
+const qualityContent: StringInputCheck = (input) => {
+	if (input.length < textLimits.post_content.min) {
+		return { error: `Content length cannot be less than ${textLimits.post_content.min} characters` }
+	}
+	if (input.length > textLimits.post_content.max) {
+		return { error: `Content length cannot be more than ${textLimits.post_content.max} characters` }
+	}
+	return { success: true }
 }
 
 const qualityPlugin: Plugin = (_context, inject) => {
-	inject(`qualityPhoneNumber`, qualityPhoneNumber)
 	inject(`qualityID`, qualityID)
 	inject(`qualityEmail`, qualityEmail)
 	inject(`qualityURL`, qualityURL)
-	inject(`qualityText`, qualityText)
+	inject(`qualityTitle`, qualityTitle)
+	inject(`qualitySubtitle`, qualitySubtitle)
+	inject(`qualityTags`, qualityTags)
+	inject(`qualityContent`, qualityContent)
+	inject(`qualityComment`, qualityComment)
 }
 
 export default qualityPlugin

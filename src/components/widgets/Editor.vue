@@ -200,21 +200,11 @@ export default Vue.extend({
 			this.$emit(`post`)
 		},
 		addTag(): void {
-			if (!this.$qualityText(this.tag) || this.tag.length < 1 || this.tag.length > 99) {
-				this.$toastError(`Invalid tag!`)
-				return
-			}
-			if (this.tag.replace(/\s/, ``).trim() !== this.tag) {
-				this.$toastError(`Tag with spaces is not allowed`)
-				return
-			}
 			const { tags } = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex]
-			if (tags.length > 2) {
-				this.$toastWarning(`Max: 3 tags`)
-				return
-			}
-			if (tags.some((t: Tag) => t.name === this.tag)) {
-				this.$toastWarning(`Duplicate tag!`)
+
+			const tagsCheck = this.$qualityTags(this.tag, tags)
+			if (this.$isError(tagsCheck)) {
+				this.$toastError(tagsCheck.error)
 				return
 			}
 
