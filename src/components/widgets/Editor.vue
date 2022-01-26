@@ -131,7 +131,7 @@
 				</div>
 				<button
 					class="focus:outline-none bg-lightButtonBG text-lightButtonText transform rounded-lg px-12 py-2 font-bold shadow-lg transition duration-500 ease-in-out hover:scale-105"
-					@click="handlePost"
+					@click="confirmPost"
 				>
 					Publish
 				</button>
@@ -196,8 +196,8 @@ export default Vue.extend({
 			// save caption to draft state
 			this.$store.commit(`draft/updateFeaturedPhotoCaption`, this.caption)
 		},
-		handlePost(): void {
-			this.$emit(`post`)
+		confirmPost(): void {
+			this.$emit(`confirm`)
 		},
 		addTag(): void {
 			if (!this.$qualityText(this.tag) || this.tag.length < 1 || this.tag.length > 99) {
