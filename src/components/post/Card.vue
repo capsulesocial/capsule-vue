@@ -227,14 +227,6 @@
 										<span v-else class="text-gray5 text-base font-medium"> {{ post.authorID }} </span>
 										<span class="text-primary ml-2"> @{{ post.authorID }} </span>
 									</nuxt-link>
-									<span v-show="showFriendButton" class="modal-animation">
-										<FriendButton
-											v-if="post.authorID !== $store.state.session.id"
-											:small="true"
-											:userIsFollowed="$route.name === `id-id` ? userIsFollowed : usersFollowing.has(post.authorID)"
-											:toggleFriend="() => toggleFriend(post.authorID)"
-										/>
-									</span>
 								</div>
 								<!-- Timestamp -->
 								<span class="text-xs">
