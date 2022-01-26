@@ -146,6 +146,14 @@ export default Vue.extend({
 			const posts = await getPosts({}, id, payload)
 			this.currentOffset += this.limit
 			this.isLoading = false
+			// Remove deleted reposts
+			if (alg === `FOLLOWING`) {
+				posts.forEach((post: IRepostResponse | any) => {
+					if (post.deleted) {
+						posts.splice(posts.indexOf(post), 1)
+					}
+				})
+			}
 			// End of unauth functions
 			if (id === `x`) {
 				return posts

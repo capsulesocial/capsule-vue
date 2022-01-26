@@ -91,6 +91,12 @@ export default Vue.extend({
 					{ authorID: this.$route.params.id },
 					{ sort: this.algorithm, offset: this.currentOffset, limit: this.limit },
 				)
+				// Remove deleted reposts
+				res.forEach((post: IRepostResponse | any) => {
+					if (post.deleted) {
+						res.splice(res.indexOf(post), 1)
+					}
+				})
 				if (res.length < this.limit) {
 					const container = this.$parent.$refs.scrollContainer as HTMLElement
 					container.removeEventListener(`scroll`, this.handleScroll)
