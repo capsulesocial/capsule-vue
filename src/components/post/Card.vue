@@ -57,9 +57,9 @@
 									</nuxt-link>
 									<span v-show="showFriendButton" class="modal-animation">
 										<FriendButton
-											v-if="post.authorID !== $store.state.session.id && $route.name !== `id`"
+											v-if="post.authorID !== $store.state.session.id"
 											:small="true"
-											:userIsFollowed="usersFollowing.has(post.authorID)"
+											:userIsFollowed="$route.name === `id-id` ? userIsFollowed : usersFollowing.has(post.authorID)"
 											:toggleFriend="() => toggleFriend(post.authorID)"
 										/>
 									</span>
@@ -229,9 +229,9 @@
 									</nuxt-link>
 									<span v-show="showFriendButton" class="modal-animation">
 										<FriendButton
-											v-if="post.authorID !== $store.state.session.id && $route.name !== `id`"
+											v-if="post.authorID !== $store.state.session.id"
 											:small="true"
-											:userIsFollowed="usersFollowing.has(post.authorID)"
+											:userIsFollowed="$route.name === `id-id` ? userIsFollowed : usersFollowing.has(post.authorID)"
 											:toggleFriend="() => toggleFriend(post.authorID)"
 										/>
 									</span>
@@ -468,6 +468,11 @@ export default Vue.extend({
 			default: 0,
 		},
 		displayRepost: {
+			type: Boolean,
+			default: false,
+		},
+		// Only relevant on profile index page
+		userIsFollowed: {
 			type: Boolean,
 			default: false,
 		},

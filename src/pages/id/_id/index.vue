@@ -22,6 +22,8 @@
 				:hideRepostIcon="algorithm === `NEW` || algorithm === `TOP`"
 				:bookmarksCount="p.bookmarksCount"
 				:repostCount="p.repostCount"
+				:toggleFriend="toggleFriend"
+				:userIsFollowed="userIsFollowed"
 			/>
 		</article>
 		<article v-show="isLoading" class="modal-animation flex justify-center">
@@ -54,6 +56,14 @@ export default Vue.extend({
 		profile: {
 			type: Object as PropType<Profile>,
 			required: true,
+		},
+		toggleFriend: {
+			type: Function as PropType<() => void>,
+			required: true,
+		},
+		userIsFollowed: {
+			type: Boolean,
+			default: false,
 		},
 	},
 	data(): IData {

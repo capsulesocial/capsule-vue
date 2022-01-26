@@ -139,6 +139,8 @@
 					:followers="followers"
 					:mutuals="mutuals"
 					:mutualProfiles="mutualProfiles"
+					:toggleFriend="toggleFriend"
+					:userIsFollowed="userIsFollowed"
 				/>
 			</div>
 		</div>
@@ -230,7 +232,10 @@ export default Vue.extend({
 			type: Boolean,
 			required: false,
 		},
-		updateProfileMethod: { type: Function as PropType<() => void>, required: true },
+		updateProfileMethod: {
+			type: Function as PropType<() => void>,
+			required: true,
+		},
 	},
 	data(): IData {
 		return {
@@ -240,6 +245,15 @@ export default Vue.extend({
 			lastScroll: 0,
 			scrollingDown: false,
 		}
+	},
+	watch: {
+		$route(n, o) {
+			if (n.params.id !== o.params.id) {
+				// Updates post count
+				window.addEventListener(`click`, this.handleClose, false)
+				this.fetchProfile()
+			}
+		},
 	},
 	created() {
 		window.addEventListener(`click`, this.handleClose, false)
