@@ -249,9 +249,9 @@
 								<div class="mb-4 flex w-full flex-row items-center justify-between">
 									<Avatar :avatar="avatar" :authorID="post.authorID" size="w-16 h-16" />
 									<FriendButton
-										v-if="post.authorID !== $store.state.session.id && $route.name !== `id`"
+										v-if="post.authorID !== $store.state.session.id"
 										:small="true"
-										:userIsFollowed="usersFollowing.has(post.authorID)"
+										:userIsFollowed="$route.name === `id-id` ? userIsFollowed : usersFollowing.has(post.authorID)"
 										:toggleFriend="() => toggleFriend(post.authorID)"
 									/>
 								</div>
