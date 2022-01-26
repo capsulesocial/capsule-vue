@@ -12,9 +12,9 @@
 				</div>
 				<div class="flex items-center">
 					<div @mouseover="showInfoBubble = true" @mouseleave="showInfoBubble = false">
-						<InfoIcon class="mr-4 h-8 w-8 text-gray5" />
+						<InfoIcon class="text-gray5 mr-4 h-8 w-8" />
 					</div>
-					<p class="my-4 text-gray5">
+					<p class="text-gray5 my-4">
 						Attention, after you publish this post, it can't be edited or
 						<span
 							class="text-secondary cursor-default"
@@ -26,18 +26,18 @@
 					</p>
 					<div
 						v-show="showInfoBubble"
-						class="dropdownInfoOpen border-lightBorder modal-animation absolute z-10 flex flex-col rounded-lg border bg-white p-2 shadow-lg mx-4"
+						class="dropdownInfoOpen border-lightBorder modal-animation absolute z-10 mx-4 flex flex-col rounded-lg border bg-white p-2 shadow-lg"
 						style="top: 120px; left: 0px"
 					>
 						<!-- Delete -->
-						<span class="text-gray5 self-center text-xs z-10"
+						<span class="text-gray5 z-10 self-center text-xs"
 							>After a post is published, you can remove it from your profile and make it undiscoverable, but, due to
 							content permanence, you can't delete it entirely from Blogchain's network. This means that people who have
 							the direct link to that post or its IPFS CID, might be able to access it forever.</span
 						>
 					</div>
 				</div>
-				<div class="flex justify-end items-center">
+				<div class="flex items-center justify-end">
 					<button class="text-primary focus:outline-none mr-6" @click="$emit(`close`)">Keep writing</button>
 					<button
 						class="focus:outline-none bg-lightButtonBG text-lightButtonText transform rounded-lg px-12 py-2 font-bold shadow-lg transition duration-500 ease-in-out hover:scale-105"

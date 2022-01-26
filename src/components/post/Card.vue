@@ -169,7 +169,7 @@
 		<div v-if="this.$route.name !== `post-post`">
 			<div class="card">
 				<div
-					class="sticky top-0 border-b py-4 px-5 xl:py-5 xl:px-6 transition ease-in-out hover:bg-gray1 hover:bg-opacity-25"
+					class="hover:bg-gray1 sticky top-0 border-b py-4 px-5 transition ease-in-out hover:bg-opacity-25 xl:py-5 xl:px-6"
 					style="backdrop-filter: blur(10px)"
 					:class="showFriendButton ? `z-20` : `z-10`"
 				>
@@ -246,7 +246,7 @@
 								@mouseover="triggerTrue"
 								@mouseleave="showFriendButton = false"
 							>
-								<div class="w-full flex flex-row justify-between items-center mb-4">
+								<div class="mb-4 flex w-full flex-row items-center justify-between">
 									<Avatar :avatar="avatar" :authorID="post.authorID" size="w-16 h-16" />
 									<FriendButton
 										v-if="post.authorID !== $store.state.session.id && $route.name !== `id`"
