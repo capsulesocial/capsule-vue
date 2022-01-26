@@ -1,11 +1,12 @@
 import type { Plugin } from '@nuxt/types'
 import { Tag } from '@/backend/post'
+import textLimits from '@/backend/utilities/text_limits'
 
 // Declare types of functions
-type StringInputCheck = (input: string) => { error: string } | { success: boolean }
-type TitleCheck = (title: string, titleError?: string) => { error: string } | { success: boolean }
-type TagsCheck = (tag: string, tags?: Array<string>) => { error: string } | { success: boolean }
-type Text = (input: string) => boolean
+type CheckResult = { error: string } | { success: boolean }
+type StringInputCheck = (input: string) => CheckResult
+type TitleCheck = (title: string, titleError?: string) => CheckResult
+type TagsCheck = (tag: string, tags?: Array<string>) => CheckResult
 
 // eslint-disable-next-line quotes
 declare module 'vue/types/vue' {
@@ -16,7 +17,8 @@ declare module 'vue/types/vue' {
 		$qualityTitle: TitleCheck
 		$qualitySubtitle: TitleCheck
 		$qualityTags: TagsCheck
-		$qualityText: Text
+		$qualityComment: StringInputCheck
+		$qualityContent: StringInputCheck
 	}
 }
 
@@ -73,11 +75,11 @@ const qualityTitle: TitleCheck = (title, titleError) => {
 	if (title.length === 0) {
 		return { error: `Please enter a title.` }
 	}
-	if (title.length < 12) {
-		return { error: `Title length cannot be less than 12 characters` }
+	if (title.length < textLimits.post_title.min) {
+		return { error: `Title length cannot be less than ${textLimits.post_title.min} characters` }
 	}
-	if (title.length > 90) {
-		return { error: `Title length cannot be more than 90 characters` }
+	if (title.length > textLimits.post_title.max) {
+		return { error: `Title length cannot be more than ${textLimits.post_title.max} characters` }
 	}
 	if (titleError && titleError !== ``) {
 		return { error: titleError }
@@ -86,11 +88,11 @@ const qualityTitle: TitleCheck = (title, titleError) => {
 }
 
 const qualitySubtitle: TitleCheck = (subtitle, subtitleError) => {
-	if (subtitle.length !== 0 && subtitle.length < 12) {
-		return { error: `Subtitle length can not be less than 12 characters` }
+	if (subtitle.length !== 0 && subtitle.length < textLimits.post_subtitle.min) {
+		return { error: `Subtitle length cannot be less than ${textLimits.post_subtitle.min} characters` }
 	}
-	if (subtitle.length !== 0 && subtitle.length > 180) {
-		return { error: `Subtitle length can not be more than 180 characters` }
+	if (subtitle.length !== 0 && subtitle.length > textLimits.post_subtitle.max) {
+		return { error: `Subtitle length cannot be more than ${textLimits.post_subtitle.max} characters` }
 	}
 	if (subtitleError && subtitleError !== ``) {
 		return { error: subtitleError }
@@ -99,8 +101,11 @@ const qualitySubtitle: TitleCheck = (subtitle, subtitleError) => {
 }
 
 const qualityTags: TagsCheck = (tag, tags?: Array<any>) => {
-	if (tag.trim().length < 1 || tag.trim().length > 99) {
-		return { error: `Invalid tag!` }
+	if (tag.trim().length < textLimits.post_tag.min) {
+		return { error: `Tag length cannot be less than ${textLimits.post_tag.min} characters` }
+	}
+	if (tag.trim().length > textLimits.post_tag.max) {
+		return { error: `Tag length cannot be more than ${textLimits.post_tag.max} characters` }
 	}
 	if (tag.replace(/\s/, ``).trim() !== tag) {
 		return { error: `Tag with spaces is not allowed` }
@@ -116,8 +121,24 @@ const qualityTags: TagsCheck = (tag, tags?: Array<any>) => {
 	return { success: true }
 }
 
-const qualityText: Text = (input) => {
-	return input.trim().length > 0
+const qualityComment: StringInputCheck = (input) => {
+	if (input.length < textLimits.comment_content.min) {
+		return { error: `Comment length cannot be less than ${textLimits.comment_content.min} characters` }
+	}
+	if (input.length > textLimits.comment_content.max) {
+		return { error: `Comment length cannot be more than ${textLimits.comment_content.max} characters` }
+	}
+	return { success: true }
+}
+
+const qualityContent: StringInputCheck = (input) => {
+	if (input.length < textLimits.post_content.min) {
+		return { error: `Content length cannot be less than ${textLimits.post_content.min} characters` }
+	}
+	if (input.length > textLimits.post_content.max) {
+		return { error: `Content length cannot be more than ${textLimits.post_content.max} characters` }
+	}
+	return { success: true }
 }
 
 const qualityPlugin: Plugin = (_context, inject) => {
@@ -127,7 +148,8 @@ const qualityPlugin: Plugin = (_context, inject) => {
 	inject(`qualityTitle`, qualityTitle)
 	inject(`qualitySubtitle`, qualitySubtitle)
 	inject(`qualityTags`, qualityTags)
-	inject(`qualityText`, qualityText)
+	inject(`qualityContent`, qualityContent)
+	inject(`qualityComment`, qualityComment)
 }
 
 export default qualityPlugin

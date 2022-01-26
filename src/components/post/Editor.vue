@@ -350,12 +350,9 @@ export default Vue.extend({
 
 			const clean = turndownService.turndown(this.getInputHTML())
 			// Check content quality
-			if (clean.length < 280) {
-				this.$toastError(`Post body too short. Write more before posting`)
-				return
-			}
-			if (clean.length > 100000) {
-				this.$toastError(`Post body too long for IPFS deliverability`)
+			const contentQualityCheck = this.$qualityContent(clean)
+			if (this.$isError(contentQualityCheck)) {
+				this.$toastError(contentQualityCheck.error)
 				return
 			}
 			if (this.hasPosted) {
@@ -411,18 +408,11 @@ export default Vue.extend({
 			const titleInput = this.$refs.title as HTMLTextAreaElement
 			const titleInputValue = titleInput.value.trim()
 			if (updateStore) {
-				this.$store.commit(`draft/updateTitle`, titleInputValue.trim())
+				this.$store.commit(`draft/updateTitle`, titleInputValue)
 			}
-			if (titleInputValue.trim().length === 0) {
-				this.titleError = `Please enter a title.`
-				return
-			}
-			if (titleInputValue.trim().length < 12) {
-				this.titleError = `Title is too short.`
-				return
-			}
-			if (titleInputValue.trim().length > 90) {
-				this.titleError = `Title is too long.`
+			const titleQualityCheck = this.$qualityTitle(titleInputValue)
+			if (this.$isError(titleQualityCheck)) {
+				this.titleError = titleQualityCheck.error
 				return
 			}
 			this.titleError = ``
@@ -433,16 +423,9 @@ export default Vue.extend({
 			if (updateStore) {
 				this.$store.commit(`draft/updateSubtitle`, subtitleInputValue)
 			}
-			if (subtitleInputValue.length === 0) {
-				this.subtitleError = ``
-				return
-			}
-			if (subtitleInputValue.length > 0 && subtitleInputValue.length < 12) {
-				this.subtitleError = `Subtitle is too short.`
-				return
-			}
-			if (subtitleInputValue.length > 180) {
-				this.subtitleError = `Subtitle is too long.`
+			const subtitleQualityCheck = this.$qualitySubtitle(subtitleInputValue)
+			if (this.$isError(subtitleQualityCheck)) {
+				this.subtitleError = subtitleQualityCheck.error
 				return
 			}
 			this.subtitleError = ``

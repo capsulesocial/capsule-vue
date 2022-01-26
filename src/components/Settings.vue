@@ -283,7 +283,7 @@ export default Vue.extend({
 			}
 
 			const qualityEmail = this.$qualityEmail(this.newEmail)
-			if (this.$isError(qualityEmail)) {
+			if (this.newEmail.length > 0 && this.$isError(qualityEmail)) {
 				this.$toastError(qualityEmail.error)
 				return
 			}

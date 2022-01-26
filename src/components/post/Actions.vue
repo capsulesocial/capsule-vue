@@ -430,12 +430,9 @@ export default Vue.extend({
 				this.$toastError(`Please select a reaction`)
 				return
 			}
-			if (this.comment.length < 1 || this.comment.length > 5000) {
-				this.$toastError(`Comment length too short or too long`)
-				return
-			}
-			if (!this.$qualityText(this.comment)) {
-				this.$toastError(`invalid comment!`)
+			const commentQualityCheck = this.$qualityComment(this.comment)
+			if (this.$isError(commentQualityCheck)) {
+				this.$toastError(commentQualityCheck.error)
 				return
 			}
 			const c = createComment(this.$store.state.session.id, this.comment, this.activeEmotion.label, this.postCID)
