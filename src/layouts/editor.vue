@@ -48,7 +48,7 @@
 							class="modal-animation fixed -mt-4 overflow-y-auto p-4"
 							style="margin-left: 755px; width: 485px; min-height: calc(100vh - 70px); height: calc(100vh - 70px)"
 						>
-							<EditorWidgets :wordCount="wordCount" @post="handlePost" />
+							<EditorWidgets :wordCount="wordCount" @confirm="toggleConfirmPost" />
 							<Footer />
 						</aside>
 					</section>
@@ -61,6 +61,12 @@
 		>
 			<DraftsPopup @close="showDraftsPopup" />
 		</div>
+		<div
+			v-if="showConfirm"
+			class="popup bg-primary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50"
+		>
+			<ConfirmPopup @close="showConfirmPopup" @post="handlePost" />
+		</div>
 	</main>
 </template>
 
@@ -72,6 +78,7 @@ import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 import PencilIcon from '@/components/icons/Pencil.vue'
 import DraftsPopup from '@/components/widgets/DraftsPopup.vue'
+import ConfirmPopup from '@/components/widgets/ConfirmPopup.vue'
 import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
 
@@ -80,6 +87,7 @@ interface IData {
 	avatar: string | ArrayBuffer | null
 	wordCount: number
 	showDrafts: boolean
+	showConfirm: boolean
 	buttonHidden: boolean
 }
 
@@ -90,6 +98,7 @@ export default Vue.extend({
 		Header,
 		Footer,
 		DraftsPopup,
+		ConfirmPopup,
 		PencilIcon,
 	},
 	data(): IData {
@@ -98,6 +107,7 @@ export default Vue.extend({
 			avatar: null,
 			wordCount: 0,
 			showDrafts: false,
+			showConfirm: false,
 			buttonHidden: false,
 		}
 	},
@@ -121,6 +131,9 @@ export default Vue.extend({
 		}
 	},
 	methods: {
+		toggleConfirmPost() {
+			this.showConfirm = true
+		},
 		async handlePost() {
 			// @ts-ignore
 			await this.$refs.editor.post()
@@ -147,6 +160,9 @@ export default Vue.extend({
 				this.$refs.editor.updateContent()
 			}
 			this.showDrafts = !this.showDrafts
+		},
+		showConfirmPopup(): void {
+			this.showConfirm = !this.showConfirm
 		},
 	},
 })
