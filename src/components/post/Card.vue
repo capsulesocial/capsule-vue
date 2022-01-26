@@ -1,5 +1,5 @@
 <template>
-	<article v-if="!postDeleted" class="z-auto object-contain">
+	<article v-if="!postDeleted" class="object-contain" :class="showFriendButton ? `z-20` : `z-10`">
 		<!-- popup post -->
 		<div
 			v-if="showPopup"
@@ -47,7 +47,7 @@
 						<div class="flex w-full">
 							<Avatar :avatar="avatar" :authorID="post.authorID" size="w-12 h-12" class="hidden xl:block" />
 							<div class="ml-4 hidden flex-grow flex-col xl:flex">
-								<div class="flex" @mouseover="showFriendButton = true" @mouseleave="showFriendButton = false">
+								<div class="flex" @mouseover="showFriendButtonPopup = true" @mouseleave="showFriendButtonPopup = false">
 									<nuxt-link :to="'/id/' + post.authorID" class="mr-4 flex">
 										<span v-if="authorName != ``" class="text-base font-medium">
 											{{ authorName }}
@@ -167,8 +167,12 @@
 		</div>
 		<!-- Feed view -->
 		<div v-if="this.$route.name !== `post-post`">
-			<div class="card" style="backdrop-filter: blur(10px)">
-				<div class="sticky top-0 z-20 border-b py-4 px-5 xl:py-5 xl:px-6" style="backdrop-filter: blur(10px)">
+			<div class="card">
+				<div
+					class="sticky top-0 border-b py-4 px-5 xl:py-5 xl:px-6 transition ease-in-out hover:bg-gray1 hover:bg-opacity-25"
+					style="backdrop-filter: blur(10px)"
+					:class="showFriendButton ? `z-20` : `z-10`"
+				>
 					<!-- Quote repost -->
 					<div v-if="quote">
 						<div class="flex w-full">
@@ -217,9 +221,11 @@
 						</div>
 						<!-- Top: avatar, name, id, close -->
 						<div class="flex w-full">
-							<Avatar :avatar="avatar" :authorID="post.authorID" size="w-12 h-12" />
+							<div @mouseover="triggerTrue" @mouseleave="triggerFalse">
+								<Avatar :avatar="avatar" :authorID="post.authorID" size="w-12 h-12" />
+							</div>
 							<div class="ml-4 flex flex-grow flex-col">
-								<div class="flex" @mouseover="showFriendButton = true" @mouseleave="showFriendButton = false">
+								<div class="flex" @mouseover="triggerTrue" @mouseleave="triggerFalse">
 									<nuxt-link :to="'/id/' + post.authorID" class="mr-4 flex">
 										<span v-if="authorName != ``" class="text-base font-medium">
 											{{ authorName }}
@@ -227,19 +233,32 @@
 										<span v-else class="text-gray5 text-base font-medium"> {{ post.authorID }} </span>
 										<span class="text-primary ml-2"> @{{ post.authorID }} </span>
 									</nuxt-link>
-									<span v-show="showFriendButton" class="modal-animation">
-										<FriendButton
-											v-if="post.authorID !== $store.state.session.id && $route.name !== `id`"
-											:small="true"
-											:userIsFollowed="usersFollowing.has(post.authorID)"
-											:toggleFriend="() => toggleFriend(post.authorID)"
-										/>
-									</span>
 								</div>
 								<!-- Timestamp -->
 								<span class="text-xs">
 									{{ $formatDate(post.timestamp) }}
 								</span>
+							</div>
+							<div
+								v-show="showFriendButton"
+								class="border-lightBorder modal-animation-delay absolute z-40 flex w-72 flex-col rounded-lg border bg-white p-4 shadow-lg"
+								:style="repostedBy ? `top: 110px` : `top: 80px`"
+								@mouseover="triggerTrue"
+								@mouseleave="showFriendButton = false"
+							>
+								<div class="w-full flex flex-row justify-between items-center mb-4">
+									<Avatar :avatar="avatar" :authorID="post.authorID" size="w-16 h-16" />
+									<FriendButton
+										v-if="post.authorID !== $store.state.session.id && $route.name !== `id`"
+										:small="true"
+										:userIsFollowed="usersFollowing.has(post.authorID)"
+										:toggleFriend="() => toggleFriend(post.authorID)"
+									/>
+								</div>
+								<span v-if="authorName != ``" class="text-base font-bold"> {{ authorName }} </span>
+								<span v-else class="text-gray5 text-base font-bold"> {{ post.authorID }} </span>
+								<span class="text-primary"> @{{ post.authorID }} </span>
+								<span v-if="authorBio !== ``" class="mt-2"> {{ authorBio }} </span>
 							</div>
 							<div class="relative flex items-center" :class="repostedBy !== `` ? `-mt-4` : ``">
 								<!-- Bookmarks button -->
@@ -386,12 +405,14 @@ interface IData {
 	showDelete: boolean
 	showQuoteDelete: boolean
 	authorName: string
+	authorBio: string
 	avatar: string
 	myAvatar: string
 	featuredPhoto: string
 	isBookmarked: boolean
 	postDeleted: boolean
 	showFriendButton: boolean
+	hasEntered: boolean
 	showRepostEditor: boolean
 	showPopup: boolean
 	quoteContent: string
@@ -479,12 +500,14 @@ export default Vue.extend({
 			showDelete: false,
 			showQuoteDelete: false,
 			authorName: ``,
+			authorBio: ``,
 			avatar: ``,
 			myAvatar: ``,
 			featuredPhoto: ``,
 			isBookmarked: false,
 			postDeleted: false,
 			showFriendButton: false,
+			hasEntered: false,
 			showRepostEditor: false,
 			showPopup: false,
 			quote: null,
@@ -521,6 +544,7 @@ export default Vue.extend({
 				this.avatar = p
 			})
 		}
+		this.authorBio = profile.bio
 		// Populate Featured Photo
 		if (this.post.featuredPhotoCID) {
 			getPhotoFromIPFS(this.post.featuredPhotoCID).then((p) => {
@@ -677,6 +701,19 @@ export default Vue.extend({
 				}
 			}
 			this.quote = q
+		},
+		triggerFalse() {
+			setTimeout(() => {
+				if (this.hasEntered !== true) {
+					this.showFriendButton = false
+					this.hasEntered = false
+				}
+			}, 200)
+			this.hasEntered = false
+		},
+		triggerTrue() {
+			this.hasEntered = true
+			this.showFriendButton = true
 		},
 	},
 })

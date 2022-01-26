@@ -3,10 +3,18 @@
 		<!-- Title -->
 		<div class="flex flex-grow flex-col">
 			<h6
+				v-if="numberOfDrafts > 1"
 				class="truncate text-base font-semibold"
 				:style="$route.name === `home` ? `max-width: 259px` : `max-width: 408px`"
 			>
 				{{ draft.title === `` ? `New Post` : draft.title }}
+			</h6>
+			<h6
+				v-else
+				class="truncate text-base font-semibold"
+				:style="$route.name === `home` ? `max-width: 259px` : `max-width: 408px`"
+			>
+				{{ draft.title === `` ? `Default draft` : draft.title }}
 			</h6>
 			<p class="text-gray5 text-sm">Last saved {{ $formatDate(draft.timestamp) }}</p>
 		</div>

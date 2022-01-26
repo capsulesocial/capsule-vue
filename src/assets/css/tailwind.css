@@ -189,6 +189,12 @@
 	animation-duration: 0.4s;
 }
 
+.modal-animation-delay,
+#caption {
+	animation-name: fadedelay1;
+	animation-duration: 0.6s;
+}
+
 .card-animation,
 #caption {
 	animation-name: enter;
@@ -220,6 +226,12 @@
 	to {
 		opacity: 1;
 	}
+}
+
+@keyframes fadedelay1 {
+	0% { opacity: 0 }
+	75% { opacity: 0 }
+	100% { opacity: 1 }
 }
 
 @keyframes enter {
