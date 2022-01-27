@@ -108,10 +108,10 @@
 
 				<!-- Tags -->
 				<article class="mt-5">
-					<TagCard v-for="t in post.tags" :key="t.name" class="mr-2" :tag="t.name" />
+					<TagCard v-for="t in post.tags" :key="t.name" class="mr-2 mb-2" :tag="t.name" />
 				</article>
 				<!-- IPFS CID -->
-				<div class="mt-5">
+				<div class="mt-3">
 					<a
 						:href="`https://ipfs.io/api/v0/dag/get?arg=` + $route.params.post"
 						target="_blank"

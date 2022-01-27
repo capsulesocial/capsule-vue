@@ -158,7 +158,7 @@
 									</div>
 								</nuxt-link>
 								<!-- Display tags (Desktop) -->
-								<div class="my-2 hidden overflow-x-auto xl:flex">
+								<div class="my-2 hidden overflow-x-auto xl:flex xl:flex-wrap">
 									<TagPill v-for="t in post.tags" :key="t.name" :tag="t.name" class="my-2 mr-4" />
 								</div>
 							</div>
@@ -389,7 +389,7 @@
 									</div>
 								</nuxt-link>
 								<!-- Display tags (Desktop) -->
-								<div class="my-2 hidden overflow-x-auto xl:flex">
+								<div class="my-2 hidden overflow-x-auto xl:flex xl:flex-wrap">
 									<TagPill v-for="t in post.tags" :key="t.name" :tag="t.name" class="my-2 mr-4" />
 								</div>
 								<!-- Comment and share (Desktop) -->
