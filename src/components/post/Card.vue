@@ -1,5 +1,5 @@
 <template>
-	<article v-if="!postDeleted" class="object-contain" :class="showFriendButton ? `z-20` : `z-10`">
+	<article v-if="!postDeleted" class="object-contain" :class="showProfileCard ? `z-20` : `z-10`">
 		<!-- popup post -->
 		<div
 			v-if="showPopup"
@@ -44,30 +44,56 @@
 							</p>
 						</div>
 						<!-- Top: avatar, name, id, close -->
-						<div class="flex w-full">
-							<Avatar :avatar="avatar" :authorID="post.authorID" size="w-12 h-12" class="hidden xl:block" />
-							<div class="ml-4 hidden flex-grow flex-col xl:flex">
-								<div class="flex" @mouseover="showFriendButtonPopup = true" @mouseleave="showFriendButtonPopup = false">
+						<div class="flex w-full justify-between">
+							<div class="flex flex-row" @mouseover="triggerPopupCardTrue" @mouseleave="triggerPopupCardFalse">
+								<Avatar
+									:avatar="avatar"
+									:authorID="post.authorID"
+									size="w-12 h-12"
+									class="hidden xl:block transition ease-in-out hover:opacity-75"
+								/>
+								<div class="ml-4 hidden flex-grow flex-col xl:flex">
 									<nuxt-link :to="'/id/' + post.authorID" class="mr-4 flex">
-										<span v-if="authorName != ``" class="text-base font-medium">
+										<span v-if="authorName != ``" class="text-base font-medium transition ease-in-out hover:underline">
 											{{ authorName }}
 										</span>
-										<span v-else class="text-gray5 text-base font-medium"> {{ post.authorID }} </span>
+										<span v-else class="text-gray5 text-base font-medium transition ease-in-out hover:underline">
+											{{ post.authorID }}
+										</span>
 										<span class="text-primary ml-2"> @{{ post.authorID }} </span>
 									</nuxt-link>
-									<span v-show="showFriendButton" class="modal-animation">
-										<FriendButton
-											v-if="post.authorID !== $store.state.session.id"
-											:small="true"
-											:userIsFollowed="$route.name === `id-id` ? userIsFollowed : usersFollowing.has(post.authorID)"
-											:toggleFriend="() => toggleFriend(post.authorID)"
-										/>
+									<!-- Timestamp -->
+									<span class="text-xs">
+										{{ $formatDate(post.timestamp) }}
 									</span>
 								</div>
-								<!-- Timestamp -->
-								<span class="text-xs">
-									{{ $formatDate(post.timestamp) }}
-								</span>
+							</div>
+							<div
+								v-show="showPopupCard && !showRepostEditor"
+								class="border-lightBorder modal-animation-delay absolute z-40 flex w-72 flex-col rounded-lg border bg-white p-4 shadow-lg"
+								:style="repostedBy ? (quote ? `top: 100px` : `top: 110px`) : `top: 80px`"
+								@mouseover="triggerPopupCardTrue"
+								@mouseleave="showPopupCard = false"
+							>
+								<div class="w-full flex flex-row justify-between items-center mb-4">
+									<Avatar :avatar="avatar" :authorID="post.authorID" size="w-16 h-16" />
+									<FriendButton
+										v-if="post.authorID !== $store.state.session.id && $route.name !== `id`"
+										:small="true"
+										:userIsFollowed="usersFollowing.has(post.authorID)"
+										:toggleFriend="() => toggleFriend(post.authorID)"
+									/>
+								</div>
+								<nuxt-link :to="'/id/' + post.authorID" class="mr-4 flex flex-col">
+									<span v-if="authorName != ``" class="text-base font-bold transition ease-in-out hover:underline">
+										{{ authorName }}
+									</span>
+									<span v-else class="text-gray5 text-base font-bold transition ease-in-out hover:underline">
+										{{ post.authorID }}
+									</span>
+									<span class="text-primary"> @{{ post.authorID }} </span>
+								</nuxt-link>
+								<span v-if="authorBio !== ``" class="mt-2"> {{ authorBio }} </span>
 							</div>
 							<div
 								class="relative flex w-full items-center justify-center xl:w-1/5 xl:justify-end"
@@ -171,19 +197,58 @@
 				<div
 					class="sticky top-0 border-b py-4 px-5 xl:py-5 xl:px-6 transition ease-in-out hover:bg-gray1 hover:bg-opacity-25"
 					style="backdrop-filter: blur(10px)"
-					:class="showFriendButton ? `z-20` : `z-10`"
+					:class="showProfileCard ? `z-20` : `z-10`"
 				>
 					<!-- Quote repost -->
 					<div v-if="quote">
-						<div class="flex w-full">
-							<Avatar :avatar="quote.avatar" :authorID="quote.authorID" size="w-12 h-12" />
-							<div class="ml-4 flex flex-grow flex-col">
-								<nuxt-link :to="`/id/` + quote.authorID" class="mr-4 flex">
-									<span v-if="this.quote.name != ``" class="text-base font-medium">{{ this.quote.name }}</span>
-									<span v-else class="text-gray5 text-base font-medium">{{ this.quote.authorID }}</span>
-									<span class="text-primary ml-2">@{{ this.quote.authorID }}</span>
+						<div class="flex w-full justify-between">
+							<div class="flex flex-row" @mouseover="triggerQuoteCardTrue" @mouseleave="triggerQuoteCardFalse">
+								<Avatar
+									:avatar="quote.avatar"
+									:authorID="quote.authorID"
+									size="w-12 h-12 transition ease-in-out hover:opacity-75"
+								/>
+								<div class="ml-4 flex flex-grow flex-col">
+									<nuxt-link :to="`/id/` + quote.authorID" class="mr-4 flex">
+										<span
+											v-if="this.quote.name != ``"
+											class="text-base font-medium transition ease-in-out hover:underline"
+											>{{ this.quote.name }}</span
+										>
+										<span v-else class="text-gray5 text-base font-medium transition ease-in-out hover:underline">{{
+											this.quote.authorID
+										}}</span>
+										<span class="text-primary ml-2">@{{ this.quote.authorID }}</span>
+									</nuxt-link>
+									<span class="text-xs">{{ $formatDate(this.quote.timestamp) }}</span>
+								</div>
+							</div>
+							<div
+								v-show="showQuoteCard"
+								class="border-lightBorder modal-animation-delay absolute z-40 flex w-72 flex-col rounded-lg border bg-white p-4 shadow-lg"
+								style="top: 80px"
+								@mouseover="triggerQuoteCardTrue"
+								@mouseleave="showQuoteCard = false"
+							>
+								<div class="w-full flex flex-row justify-between items-center mb-4">
+									<Avatar :avatar="quote.avatar" :authorID="quote.authorID" size="w-16 h-16 transition ease-in-out" />
+									<FriendButton
+										v-if="quote.authorID !== $store.state.session.id && $route.name !== `id`"
+										:small="true"
+										:userIsFollowed="usersFollowing.has(quote.authorID)"
+										:toggleFriend="() => toggleFriend(quote.authorID)"
+									/>
+								</div>
+								<nuxt-link :to="'/id/' + quote.authorID" class="mr-4 flex flex-col">
+									<span v-if="quote.name != ``" class="text-base font-bold transition ease-in-out hover:underline">
+										{{ quote.name }}
+									</span>
+									<span v-else class="text-gray5 text-base font-bold transition ease-in-out hover:underline">
+										{{ quote.authorID }}
+									</span>
+									<span class="text-primary"> @{{ quote.authorID }} </span>
 								</nuxt-link>
-								<span class="text-xs">{{ $formatDate(this.quote.timestamp) }}</span>
+								<span v-if="quote.bio !== ``" class="mt-2"> {{ quote.bio }} </span>
 							</div>
 							<!-- Delete quote repost button -->
 							<div v-if="quote.authorID === $store.state.session.id" class="relative">
@@ -220,31 +285,40 @@
 							</p>
 						</div>
 						<!-- Top: avatar, name, id, close -->
-						<div class="flex w-full">
-							<div @mouseover="triggerTrue" @mouseleave="triggerFalse">
-								<Avatar :avatar="avatar" :authorID="post.authorID" size="w-12 h-12" />
-							</div>
-							<div class="ml-4 flex flex-grow flex-col">
-								<div class="flex" @mouseover="triggerTrue" @mouseleave="triggerFalse">
-									<nuxt-link :to="'/id/' + post.authorID" class="mr-4 flex">
-										<span v-if="authorName != ``" class="text-base font-medium">
-											{{ authorName }}
-										</span>
-										<span v-else class="text-gray5 text-base font-medium"> {{ post.authorID }} </span>
-										<span class="text-primary ml-2"> @{{ post.authorID }} </span>
-									</nuxt-link>
+						<div class="flex w-full justify-between">
+							<div class="flex flex-row" @mouseover="triggerProfileCardTrue" @mouseleave="triggerProfileCardFalse">
+								<Avatar
+									:avatar="avatar"
+									:authorID="post.authorID"
+									size="w-12 h-12 transition ease-in-out hover:opacity-75"
+								/>
+								<div class="ml-4 flex flex-grow flex-col">
+									<div class="flex">
+										<nuxt-link :to="'/id/' + post.authorID" class="mr-4 flex">
+											<span
+												v-if="authorName != ``"
+												class="text-base font-medium transition ease-in-out hover:underline"
+											>
+												{{ authorName }}
+											</span>
+											<span v-else class="text-gray5 text-base font-medium transition ease-in-out hover:underline">
+												{{ post.authorID }}
+											</span>
+											<span class="text-primary ml-2"> @{{ post.authorID }} </span>
+										</nuxt-link>
+									</div>
+									<!-- Timestamp -->
+									<span class="text-xs">
+										{{ $formatDate(post.timestamp) }}
+									</span>
 								</div>
-								<!-- Timestamp -->
-								<span class="text-xs">
-									{{ $formatDate(post.timestamp) }}
-								</span>
 							</div>
 							<div
-								v-show="showFriendButton"
+								v-show="showProfileCard"
 								class="border-lightBorder modal-animation-delay absolute z-40 flex w-72 flex-col rounded-lg border bg-white p-4 shadow-lg"
-								:style="repostedBy ? `top: 110px` : `top: 80px`"
-								@mouseover="triggerTrue"
-								@mouseleave="showFriendButton = false"
+								:style="quote ? `top: 185px` : repostedBy ? `top: 110px` : `top: 80px`"
+								@mouseover="triggerProfileCardTrue"
+								@mouseleave="showProfileCard = false"
 							>
 								<div class="w-full flex flex-row justify-between items-center mb-4">
 									<Avatar :avatar="avatar" :authorID="post.authorID" size="w-16 h-16" />
@@ -255,9 +329,15 @@
 										:toggleFriend="() => toggleFriend(post.authorID)"
 									/>
 								</div>
-								<span v-if="authorName != ``" class="text-base font-bold"> {{ authorName }} </span>
-								<span v-else class="text-gray5 text-base font-bold"> {{ post.authorID }} </span>
-								<span class="text-primary"> @{{ post.authorID }} </span>
+								<nuxt-link :to="'/id/' + post.authorID" class="mr-4 flex flex-col">
+									<span v-if="authorName != ``" class="text-base font-bold transition ease-in-out hover:underline">
+										{{ authorName }}
+									</span>
+									<span v-else class="text-gray5 text-base font-bold transition ease-in-out hover:underline">
+										{{ post.authorID }}
+									</span>
+									<span class="text-primary"> @{{ post.authorID }} </span>
+								</nuxt-link>
 								<span v-if="authorBio !== ``" class="mt-2"> {{ authorBio }} </span>
 							</div>
 							<div class="relative flex items-center" :class="repostedBy !== `` ? `-mt-4` : ``">
@@ -411,7 +491,9 @@ interface IData {
 	featuredPhoto: string
 	isBookmarked: boolean
 	postDeleted: boolean
-	showFriendButton: boolean
+	showProfileCard: boolean
+	showQuoteCard: boolean
+	showPopupCard: boolean
 	hasEntered: boolean
 	showRepostEditor: boolean
 	showPopup: boolean
@@ -511,7 +593,9 @@ export default Vue.extend({
 			featuredPhoto: ``,
 			isBookmarked: false,
 			postDeleted: false,
-			showFriendButton: false,
+			showProfileCard: false,
+			showQuoteCard: false,
+			showPopupCard: false,
 			hasEntered: false,
 			showRepostEditor: false,
 			showPopup: false,
@@ -696,9 +780,11 @@ export default Vue.extend({
 				authorID: content.authorID,
 				name: ``,
 				avatar: ``,
+				bio: ``,
 			}
 			if (profile) {
 				q.name = profile.name
+				q.bio = profile.bio
 				if (profile.avatar && profile.avatar !== ``) {
 					getPhotoFromIPFS(profile.avatar).then((p) => {
 						q.avatar = p
@@ -707,18 +793,44 @@ export default Vue.extend({
 			}
 			this.quote = q
 		},
-		triggerFalse() {
+		triggerProfileCardFalse() {
 			setTimeout(() => {
 				if (this.hasEntered !== true) {
-					this.showFriendButton = false
+					this.showProfileCard = false
 					this.hasEntered = false
 				}
-			}, 200)
+			}, 70)
 			this.hasEntered = false
 		},
-		triggerTrue() {
+		triggerProfileCardTrue() {
 			this.hasEntered = true
-			this.showFriendButton = true
+			this.showProfileCard = true
+		},
+		triggerQuoteCardFalse() {
+			setTimeout(() => {
+				if (this.hasEntered !== true) {
+					this.showQuoteCard = false
+					this.hasEntered = false
+				}
+			}, 70)
+			this.hasEntered = false
+		},
+		triggerQuoteCardTrue() {
+			this.hasEntered = true
+			this.showQuoteCard = true
+		},
+		triggerPopupCardFalse() {
+			setTimeout(() => {
+				if (this.hasEntered !== true) {
+					this.showPopupCard = false
+					this.hasEntered = false
+				}
+			}, 70)
+			this.hasEntered = false
+		},
+		triggerPopupCardTrue() {
+			this.hasEntered = true
+			this.showPopupCard = true
 		},
 	},
 })
