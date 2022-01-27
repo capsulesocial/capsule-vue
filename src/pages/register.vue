@@ -148,7 +148,7 @@
 									>Enter the one-time verification code sent to your phone number.</label
 								>
 								<input
-									id="phoneNumber"
+									id="otp"
 									v-model="otp"
 									type="text"
 									placeholder=""
