@@ -422,7 +422,7 @@
 							</div>
 						</div>
 						<!-- Display tags (Mobile) -->
-						<div class="my-2 flex overflow-x-auto xl:hidden">
+						<div class="my-2 flex flex-wrap overflow-x-auto xl:hidden">
 							<TagPill v-for="t in post.tags" :key="t.name" :tag="t.name" class="my-2 mr-4" />
 						</div>
 						<!-- Comment and share (Mobile) -->
