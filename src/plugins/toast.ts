@@ -27,7 +27,7 @@ const toastSuccess: Success = (text: string): void => {
 		avatar: require(`~/assets/images/util/success.png`),
 		// @ts-ignore
 		style: {
-			background: `rgba(233, 242, 247, .9)`,
+			background: `#E9F2F7`,
 			border: `1px solid`,
 			borderColor: `#1F7DAD`,
 			borderRadius: `0.5rem`,
@@ -54,22 +54,23 @@ const toastWarning: Warning = (text: string): void => {
 	Toastify({
 		text,
 		duration: 4000,
-		gravity: `top`, // `top` or `bottom`
+		gravity: `bottom`, // `top` or `bottom`
 		position: `left`,
 		avatar: require(`~/assets/images/util/warning.png`),
 		// @ts-ignore
 		style: {
-			background: `rgba(240, 183, 133, .1)`,
+			background: `#FEF8F3`,
 			border: `1px solid`,
 			borderColor: `#F0B785`,
 			borderRadius: `0.5rem`,
 			color: `#F0B785`,
 			paddingLeft: `1rem`,
 			paddingRight: `1rem`,
-			paddingTop: `0.5rem`,
-			paddingBottom: `0.5rem`,
+			paddingTop: `0.8rem`,
+			paddingBottom: `0.9rem`,
 			position: `fixed`,
-			left: `50%`,
+			right: `7.4%`,
+			marginBottom: `1%`,
 			zIndex: `999`,
 			display: `flex`,
 			alignItems: `center`,
@@ -84,22 +85,23 @@ const toastError: Error = (text: string): void => {
 	Toastify({
 		text,
 		duration: 4000,
-		gravity: `top`, // `top` or `bottom`
+		gravity: `bottom`, // `top` or `bottom`
 		position: `left`,
 		avatar: require(`~/assets/images/util/error.png`),
 		// @ts-ignore
 		style: {
-			background: `rgba(238, 31, 99, .1)`,
+			background: `#FDE9EF`,
 			border: `1px solid`,
 			borderColor: `#EE1F63`,
 			borderRadius: `0.5rem`,
 			color: `#EE1F63`,
 			paddingLeft: `1rem`,
 			paddingRight: `1rem`,
-			paddingTop: `0.5rem`,
-			paddingBottom: `0.5rem`,
+			paddingTop: `0.8rem`,
+			paddingBottom: `0.9rem`,
 			position: `fixed`,
-			left: `50%`,
+			right: `7.4%`,
+			marginBottom: `1%`,
 			zIndex: `999`,
 			display: `flex`,
 			alignItems: `center`,
@@ -114,23 +116,24 @@ const toastMessage: Message = (text: string): void => {
 	Toastify({
 		text,
 		duration: 4000,
-		gravity: `top`, // `top` or `bottom`
+		gravity: `bottom`, // `top` or `bottom`
 		position: `left`,
 		stopOnFocus: true, // Prevents dismissing of toast on hover
 		avatar: require(`~/assets/images/util/message.png`),
 		// @ts-ignore
 		style: {
-			background: `rgba(104, 104, 104, .1)`,
+			background: `#E8E8E8`,
 			border: `1px solid`,
 			borderColor: `#686868`,
 			borderRadius: `0.5rem`,
 			color: `#686868`,
 			paddingLeft: `1rem`,
 			paddingRight: `1rem`,
-			paddingTop: `0.5rem`,
-			paddingBottom: `0.5rem`,
+			paddingTop: `0.8rem`,
+			paddingBottom: `0.9rem`,
 			position: `fixed`,
-			left: `50%`,
+			right: `7.4%`,
+			marginBottom: `1%`,
 			zIndex: `999`,
 			display: `flex`,
 			alignItems: `center`,

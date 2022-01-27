@@ -57,9 +57,9 @@
 				social circle to participate to the Blogchain beta by sharing the following invite code:
 			</p>
 			<p class="text-negative mt-4 text-sm">You have {{ inviteCodesRemaining }} invites remaining</p>
-			<div class="mt-3 flex flex-col items-center xl:flex-row">
+			<div class="mt-3 flex flex-col items-strat xl:items-center xl:flex-row">
 				<h3 class="mr-4 font-semibold">Invite code</h3>
-				<div class="relative mr-4 flex w-48 items-center xl:w-2/5">
+				<div class="relative mr-0 xl:mr-4 flex my-4 xl:my-0 w-full items-center xl:w-2/5">
 					<input
 						id="id"
 						ref="code"
@@ -76,7 +76,7 @@
 				</div>
 				<button
 					v-if="inviteCodesRemaining >= 1"
-					class="text-primary focus:outline-none text-sm"
+					class="text-primary focus:outline-none text-sm text-right"
 					@click="generateNewInviteCode"
 				>
 					Generate a new code

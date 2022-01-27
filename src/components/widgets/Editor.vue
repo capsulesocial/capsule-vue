@@ -102,11 +102,11 @@
 					v-model="tag"
 					type="text"
 					placeholder="Add a tag..."
-					class="focus:outline-none bg-gray1 placeholder-gray5"
+					class="focus:outline-none bg-gray1 placeholder-gray5 w-full"
 					@keyup.enter="addTag"
 				/>
 			</div>
-			<div class="flex flex-row">
+			<div class="flex flex-row flex-wrap">
 				<button
 					v-for="t in $store.state.draft.drafts[$store.state.draft.activeIndex].tags"
 					:key="t.name"
