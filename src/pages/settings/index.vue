@@ -36,6 +36,14 @@
 				<h6>Appearance and Styling</h6>
 				<span class="bg-gray1 rounded-full p-1"><ChevronRight /></span>
 			</nuxt-link>
+			<nuxt-link
+				to="/settings/notifications"
+				:class="$route.name === `settings-notificationns` ? `bg-lightInput font-semibold` : ``"
+				class="text-gray5 focus:outline-none mb-4 flex w-full items-center justify-between rounded-lg py-2 px-4 text-left"
+			>
+				<h6>Notifications</h6>
+				<span class="bg-gray1 rounded-full p-1"><ChevronRight /></span>
+			</nuxt-link>
 		</div>
 	</main>
 </template>

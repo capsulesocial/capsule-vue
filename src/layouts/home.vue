@@ -80,7 +80,7 @@ import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 import PostEditor from '@/components/post/Editor.vue'
 import OnboardingWizard from '@/components/OnboardingWizard.vue'
-import UnauthPopup from '@/components/UnauthPopup.vue'
+import UnauthPopup from '@/components/popups/UnauthPopup.vue'
 
 import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'

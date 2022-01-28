@@ -43,6 +43,7 @@
 								:email="visitProfile.email"
 								:website="visitProfile.website"
 							/>
+							<SubscribtionsWidget @toggleNotificationsPopup="toggleNotificationsPopup" />
 							<MutualFollowersWidget
 								v-if="this.$route.params.id !== this.$store.state.session.id"
 								:mutuals="mutuals"
@@ -88,6 +89,12 @@
 			</div>
 		</div>
 		<UnauthPopup />
+		<ConfigureNotificationsPopup
+			v-if="showNotificationsPopup"
+			:profile="visitProfile"
+			:avatar="visitAvatar"
+			@toggleNotificationsPopup="toggleNotificationsPopup"
+		/>
 	</main>
 </template>
 
@@ -96,10 +103,12 @@ import Vue from 'vue'
 import ProfileWidget from '@/components/widgets/Profile.vue'
 import FollowersWidget from '@/components/widgets/Followers.vue'
 import MutualFollowersWidget from '@/components/widgets/MutualFollowers.vue'
+import SubscribtionsWidget from '@/components/widgets/Subscriptions.vue'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
-import UnauthPopup from '@/components/UnauthPopup.vue'
+import UnauthPopup from '@/components/popups/UnauthPopup.vue'
+import ConfigureNotificationsPopup from '@/components/popups/ConfigureNotifications.vue'
 
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
@@ -119,6 +128,7 @@ interface IData {
 	mutuals: Set<string>
 	mutualProfiles: Array<Profile>
 	componentKey: number
+	showNotificationsPopup: boolean
 }
 
 export default Vue.extend({
@@ -130,6 +140,8 @@ export default Vue.extend({
 		MutualFollowersWidget,
 		BrandedButton,
 		UnauthPopup,
+		SubscribtionsWidget,
+		ConfigureNotificationsPopup,
 	},
 	data(): IData {
 		return {
@@ -145,6 +157,7 @@ export default Vue.extend({
 			mutuals: new Set(),
 			mutualProfiles: [],
 			componentKey: 0,
+			showNotificationsPopup: false,
 		}
 	},
 	watch: {
@@ -267,6 +280,9 @@ export default Vue.extend({
 
 				throw err
 			}
+		},
+		toggleNotificationsPopup() {
+			this.showNotificationsPopup = !this.showNotificationsPopup
 		},
 	},
 })
