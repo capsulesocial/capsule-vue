@@ -59,6 +59,13 @@
 								>
 									Appearance and Styling
 								</nuxt-link>
+								<nuxt-link
+									to="/settings/notifications"
+									:class="$route.name === `settings-notifications` ? `bg-lightInput font-semibold` : ``"
+									class="text-gray5 focus:outline-none mb-4 w-full rounded-lg py-2 px-4 text-left"
+								>
+									Notifications
+								</nuxt-link>
 							</div>
 							<Footer />
 						</aside>
