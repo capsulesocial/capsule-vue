@@ -199,7 +199,7 @@
 				</article>
 			</div>
 		</section>
-		<p class="text-gray5 px-4 pl-10 text-sm">© 2021 Capsule.Social</p>
+		<p class="text-gray5 px-4 pl-10 text-sm">© {{ currentYear }} Capsule Social, Inc.</p>
 	</main>
 </template>
 
@@ -255,6 +255,7 @@ interface IData {
 	iti: any
 	nearWallet: boolean
 	downloadKeyStep: boolean
+	currentYear: string
 }
 
 export default Vue.extend({
@@ -288,6 +289,7 @@ export default Vue.extend({
 			iti: null,
 			nearWallet: false,
 			downloadKeyStep: false,
+			currentYear: ``,
 		}
 	},
 	async created() {
@@ -306,6 +308,8 @@ export default Vue.extend({
 				// any initialisation options go here
 			})
 		}
+		const theDate = new Date()
+		this.currentYear = theDate.getFullYear().toString()
 	},
 	methods: {
 		...mapMutations(sessionStoreNamespace, {

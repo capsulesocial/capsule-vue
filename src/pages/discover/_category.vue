@@ -43,9 +43,16 @@
 		<div
 			id="column"
 			class="xl:w-750 fixed w-full overflow-y-auto"
-			:style="`min-height: calc(100vh - ` + padding + `); height: calc(100vh - ` + padding + `)`"
+			:style="
+				!scrollDown
+					? `min-height: calc(100vh - ` + `310px` + `); height: calc(100vh - ` + `310px` + `)`
+					: `min-height: calc(100vh - ` + `160px` + `); height: calc(100vh - ` + `160px` + `)`
+			"
 		>
-			<article v-if="posts.length == 0" class="mt-12 grid justify-items-center overflow-y-hidden px-6 xl:px-0">
+			<article
+				v-if="posts.length == 0 && !isLoading"
+				class="mt-12 grid justify-items-center overflow-y-hidden px-6 xl:px-0"
+			>
 				<p class="text-gray5 align-end mb-5 flex items-end text-sm" style="max-width: 366px">
 					It seems that there is no posts of that category yet
 				</p>
@@ -67,10 +74,10 @@
 					:repostCount="p.repostCount"
 				/>
 			</article>
-			<p v-if="noMorePosts" class="text-gray5 pt-5 text-center">No more posts</p>
+			<p v-if="noMorePosts" class="text-gray5 py-5 text-center text-sm">No more posts</p>
 		</div>
 		<!-- Not loaded yet -->
-		<article v-show="isLoading" class="modal-animation flex w-full justify-center">
+		<article v-show="isLoading" class="modal-animation flex w-full justify-center mt-20">
 			<div class="loader m-5"></div>
 		</article>
 	</section>
@@ -91,7 +98,8 @@ interface IData {
 	currentOffset: number
 	limit: number
 	algorithm: Algorithm
-	padding: string
+	padding: number
+	scrollDown: boolean
 	noMorePosts: boolean
 }
 
@@ -110,7 +118,8 @@ export default Vue.extend({
 			limit: 10,
 			algorithm: `NEW`,
 			lastScroll: 0,
-			padding: `0px`,
+			padding: 224,
+			scrollDown: false,
 			noMorePosts: false,
 		}
 	},
@@ -170,7 +179,6 @@ export default Vue.extend({
 			const buttonbg = document.getElementById(`buttonbg`)
 			const title = document.getElementById(`title`)
 			const hiddentitle = document.getElementById(`hiddentitle`)
-			this.padding = header?.clientHeight + `px`
 			const scrollUp = `scrollup`
 			const scrollDown = `scrolldown`
 			const opacity0 = `opacity0`
@@ -193,6 +201,7 @@ export default Vue.extend({
 			if (!header) {
 				return
 			}
+			this.padding = header?.clientHeight
 			const currentScroll = body.scrollTop
 			if (body.scrollTop <= 0) {
 				header.classList.remove(scrollUp)
@@ -204,6 +213,7 @@ export default Vue.extend({
 			}
 			if (currentScroll > this.lastScroll && !header.classList.contains(scrollDown)) {
 				// down
+				this.scrollDown = true
 				header.classList.remove(scrollUp)
 				buttontitle.classList.remove(opacity1)
 				buttonbg.classList.remove(opacity1)
@@ -214,8 +224,13 @@ export default Vue.extend({
 				buttonbg.classList.add(opacity0)
 				title.classList.add(opacity0)
 				hiddentitle.classList.add(opacity1)
-			} else if (currentScroll < this.lastScroll && header.classList.contains(scrollDown)) {
+			} else if (
+				currentScroll < this.lastScroll &&
+				header.classList.contains(scrollDown) &&
+				body.scrollTop + body.clientHeight !== body.scrollHeight
+			) {
 				// up
+				this.scrollDown = false
 				header.classList.remove(scrollDown)
 				buttontitle.classList.remove(opacity0)
 				buttonbg.classList.remove(opacity0)

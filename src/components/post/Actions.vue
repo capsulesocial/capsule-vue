@@ -150,7 +150,7 @@
 				</div>
 				<div
 					class="border-lightBorder flex w-full overflow-hidden rounded-xl border"
-					:class="showEmotions ? `` : `border p-4 bg-` + selectedEmotionColor"
+					:class="showEmotions ? `` : `border p-2 bg-` + selectedEmotionColor"
 				>
 					<div
 						class="flex w-full items-center justify-center overflow-hidden rounded-xl"
