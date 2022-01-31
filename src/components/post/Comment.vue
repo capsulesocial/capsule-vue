@@ -44,13 +44,16 @@
 							<p class="break-words py-1 font-sans text-lg leading-relaxed">
 								{{ content }}
 							</p>
-							<div class="mt-8 flex h-full flex-col-reverse">
+							<div class="mt-8 flex h-full flex-row">
 								<button
-									class="text-lightSecondaryText focus:outline-none w-24 flex-grow-0 text-left font-sans text-sm"
+									class="text-primary focus:outline-none text-left font-sans text-sm"
 									@click="isReplying = !isReplying"
 								>
-									{{ replies.length }} Replies
+									Reply
 								</button>
+								<p class="text-gray5 focus:outline-none text-left font-sans text-sm ml-4">
+									{{ replies.length }} Replies
+								</p>
 							</div>
 						</div>
 						<div class="flex flex-shrink-0 items-center justify-center overflow-hidden xl:hidden">
@@ -85,17 +88,18 @@
 						:class="
 							$store.state.settings.darkMode ? 'bg-lightBG text-lightPrimaryText' : 'bg-darkBG text-darkPrimaryText'
 						"
-						class="resize-vertical focus:outline-none w-full overflow-y-auto py-1 px-2 text-sm leading-normal"
+						class="resize-vertical focus:outline-none w-4/5 overflow-y-auto py-1 px-2 text-sm leading-normal"
+						style="resize: none"
 					>
 					</textarea>
-					<span class="relative">
-						<BrandedButton
+					<span class="relative w-1/5 flex justify-end items-end">
+						<button
 							v-if="reply !== ''"
-							text="Post"
-							:action="sendReply"
-							:thin="true"
-							class="absolute bottom-0 right-0 text-sm"
-						/>
+							class="text-primary focus:outline-none text-left font-sans text-sm p-4"
+							@click="sendReply"
+						>
+							Post reply
+						</button>
 					</span>
 				</div>
 				<!-- List replies -->
@@ -118,7 +122,6 @@
 import Vue from 'vue'
 import type { PropType } from 'vue'
 import Avatar from '@/components/Avatar.vue'
-import BrandedButton from '@/components/BrandedButton.vue'
 import Reply from '@/components/post/Reply.vue'
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 import { feelings, faces } from '@/config'
@@ -140,7 +143,6 @@ interface IData {
 export default Vue.extend({
 	name: `Comment`,
 	components: {
-		BrandedButton,
 		Reply,
 		Avatar,
 	},

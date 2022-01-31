@@ -8,7 +8,7 @@
 			<p class="text-gray5">Read more of what you love by browsing top categories:</p>
 		</div>
 		<article
-			class="xl:w-750 min-h-230 h-230 xl:min-h-240 xl:h-240 fixed box-border grid w-full grid-cols-1 gap-y-4 overflow-y-auto px-0 pb-4 pt-4 xl:grid-cols-2 xl:px-2"
+			class="xl:w-750 min-h-230 h-230 xl:min-h-240 xl:h-240 fixed box-border grid w-full grid-cols-1 gap-4 overflow-y-auto px-6 pb-4 pt-4 xl:grid-cols-2"
 		>
 			<CategoryCard
 				v-for="c in categoryList"

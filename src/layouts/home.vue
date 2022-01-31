@@ -22,7 +22,7 @@
 					>
 						<!-- Title -->
 						<h1 v-if="profile" class="text-primary text-3xl font-semibold xl:text-4xl">Hello, {{ profile.name }}</h1>
-						<h1 v-else class="text-primary text-3xl font-semibold xl:text-4xl">Hello,</h1>
+						<h1 v-else class="text-primary text-3xl font-semibold xl:text-4xl">Hello!</h1>
 						<Nodes />
 					</div>
 					<!-- Content -->

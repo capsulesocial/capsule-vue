@@ -150,7 +150,7 @@
 				</div>
 				<div
 					class="border-lightBorder flex w-full overflow-hidden rounded-xl border"
-					:class="showEmotions ? `` : `border p-4 bg-` + selectedEmotionColor"
+					:class="showEmotions ? `` : `border p-2 bg-` + selectedEmotionColor"
 				>
 					<div
 						class="flex w-full items-center justify-center overflow-hidden rounded-xl"
@@ -168,7 +168,11 @@
 											style="width: 126px; height: 126px"
 										/>
 									</span>
-									<span v-else><FlipIcon class="mx-4" style="width: 80px; height: 80px" /></span>
+									<span v-else
+										><FlipIcon
+											class="transition duration-500 ease-in-out opacity-50 hover:opacity-100"
+											style="width: 140px; height: 140px"
+									/></span>
 								</button>
 								<textarea
 									v-model="comment"

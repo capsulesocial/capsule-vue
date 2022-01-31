@@ -7,7 +7,6 @@
 			:style="{
 				background: `linear-gradient(180deg, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.8) 100%), url(` + bgImage + `)`,
 				backgroundSize: 'cover',
-				width: '340px',
 				height: '200px',
 			}"
 		>

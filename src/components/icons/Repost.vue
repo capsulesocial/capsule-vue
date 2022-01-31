@@ -2,10 +2,10 @@
 	<span>
 		<svg
 			v-if="!isActive"
-			style="width: 15px; height: 15px"
 			xmlns="http://www.w3.org/2000/svg"
-			width="24"
-			height="24"
+			width="22"
+			height="22"
+			:style="shrink ? `width: 15px; height: 15px` : ``"
 			viewBox="0 0 24 24"
 			fill="none"
 			stroke="currentColor"
@@ -20,10 +20,10 @@
 		</svg>
 		<svg
 			v-else
-			style="width: 15px; height: 15px"
 			xmlns="http://www.w3.org/2000/svg"
-			width="24"
-			height="24"
+			width="22"
+			height="22"
+			:style="shrink ? `width: 15px; height: 15px` : ``"
 			viewBox="0 0 24 24"
 			fill="none"
 			stroke="#1E566C"

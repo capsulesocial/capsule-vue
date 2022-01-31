@@ -53,7 +53,7 @@
 				</article>
 			</div>
 		</section>
-		<p class="text-gray5 px-4 pl-10 text-sm">© 2021 Capsule.Social</p>
+		<p class="text-gray5 px-4 pl-10 text-sm">© {{ currentYear }} Capsule Social, Inc.</p>
 	</main>
 </template>
 
@@ -85,6 +85,7 @@ interface IData {
 	phoneNumber: string
 	accountIdInput: string
 	privateKey: string
+	currentYear: string
 }
 
 export default Vue.extend({
@@ -109,6 +110,7 @@ export default Vue.extend({
 			username: undefined,
 			accountIdInput: ``,
 			privateKey: ``,
+			currentYear: ``,
 		}
 	},
 	async created() {
@@ -119,6 +121,8 @@ export default Vue.extend({
 		if (this.$store.state.session.id !== `` && accountId) {
 			this.$router.push(`/home`)
 		}
+		const theDate = new Date()
+		this.currentYear = theDate.getFullYear().toString()
 	},
 	methods: {
 		...mapMutations(sessionStoreNamespace, {
