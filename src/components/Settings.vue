@@ -23,7 +23,7 @@
 				class="hidden"
 				name="file"
 				type="file"
-				accept="image/jpeg, imag/png"
+				accept="image/jpeg, image/png"
 				@change="handleImage"
 			/>
 		</div>
