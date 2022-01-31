@@ -36,7 +36,7 @@
 							v-if="repostedBy !== `` && !hideRepostIcon && quote === null"
 							class="text-gray5 -mt-2 mb-4 flex w-full items-center pt-2 xl:mb-2"
 						>
-							<RepostIcon class="hidden xl:block" />
+							<RepostIcon class="hidden xl:block" style="width: 15px; height: 15px" />
 							<p class="text-gray5 hidden pl-2 text-sm xl:block">
 								<nuxt-link v-if="repostedBy != ``" :to="`/id/` + repostedBy">{{ repostedBy }} </nuxt-link>
 								<nuxt-link v-else :to="`/id/` + repostedBy">{{ repostedBy }}</nuxt-link>
@@ -277,7 +277,7 @@
 							v-if="repostedBy !== `` && !hideRepostIcon && quote === null"
 							class="text-gray5 -mt-2 mb-2 flex w-full items-center pt-2"
 						>
-							<RepostIcon />
+							<RepostIcon :shrink="true" />
 							<p class="text-gray5 pl-2 text-sm">
 								<nuxt-link v-if="repostedBy != ``" :to="`/id/` + repostedBy">{{ repostedBy }} </nuxt-link>
 								<nuxt-link v-else :to="`/id/` + repostedBy">{{ repostedBy }}</nuxt-link>
@@ -392,16 +392,34 @@
 								<div class="my-2 hidden overflow-x-auto xl:flex xl:flex-wrap">
 									<TagPill v-for="t in post.tags" :key="t.name" :tag="t.name" class="my-2 mr-4" />
 								</div>
-								<!-- Comment and share (Desktop) -->
+								<!-- Actions buttons (Desktop) -->
 								<div class="text-gray5 mt-1 hidden xl:flex">
+									<!-- Comment -->
 									<button
-										class="focus:outline-none text-gray5 hover:text-primary hover:fill-primary mr-2 flex items-end"
+										class="focus:outline-none text-gray5 hover:text-primary mr-4 hover:fill-primary flex items-center"
 										:class="showComments ? `text-primary` : ``"
 										@click="toggleComments"
 									>
 										<CommentIcon :isActive="showComments" />
 										<span v-if="comments" class="ml-1">{{ comments.length }}</span>
 									</button>
+									<!-- Simple Repost -->
+									<button
+										:class="$store.state.settings.darkMode ? 'hover:text-lightActive' : 'hover:text-darkActive'"
+										class="focus:outline-none text-gray5 flex mr-4 items-center"
+										@click="handleRepost()"
+									>
+										<RepostIcon :isActive="isReposted" />
+										<span class="ml-1">{{ repostCount + repostOffset }}</span>
+									</button>
+									<button
+										:class="$store.state.settings.darkMode ? 'hover:text-lightActive' : 'hover:text-darkActive'"
+										class="focus:outline-none text-gray5 flex mr-4 items-center"
+										@click="toggleQuoteRepost"
+									>
+										<QuoteIcon />
+									</button>
+									<!-- Share popup -->
 									<Share
 										:repost="repost"
 										:post="post"
@@ -409,7 +427,6 @@
 										class="fill-primary"
 										:hasRepost="hasReposted"
 										:repostCount="repostCount"
-										@toggleRepost="toggleQuoteRepost"
 									/>
 									<button class="focus:outline-none ml-4" @click="toggleStatsCard"><StatsIcon /></button>
 								</div>
@@ -461,6 +478,7 @@ import Avatar from '@/components/Avatar.vue'
 import BookmarkButton from '@/components/post/BookmarkButton.vue'
 import Share from '@/components/post/Share.vue'
 import CommentIcon from '@/components/icons/Comment.vue'
+import QuoteIcon from '@/components/icons/Quote.vue'
 import TagPill from '@/components/Tag.vue'
 import More from '@/components/icons/More.vue'
 import XIcon from '@/components/icons/X.vue'
@@ -476,7 +494,7 @@ import { getPhotoFromIPFS } from '@/backend/photos'
 import { getProfileFromSession } from '@/store/session'
 import { isPostBookmarkedByUser } from '@/backend/bookmarks'
 import { sendPostDeletion } from '@/backend/postDeletion'
-import { IRepost, sendRepost } from '@/backend/reposts'
+import { IRepost, sendRepost, getReposts } from '@/backend/reposts'
 import { ICommentData } from '@/backend/comment'
 
 interface IData {
@@ -490,6 +508,8 @@ interface IData {
 	myAvatar: string
 	featuredPhoto: string
 	isBookmarked: boolean
+	isReposted: boolean
+	repostOffset: number
 	postDeleted: boolean
 	showProfileCard: boolean
 	showQuoteCard: boolean
@@ -520,6 +540,7 @@ export default Vue.extend({
 		More,
 		XIcon,
 		BinIcon,
+		QuoteIcon,
 		StatsIcon,
 		FriendButton,
 		RepostIcon,
@@ -592,6 +613,8 @@ export default Vue.extend({
 			myAvatar: ``,
 			featuredPhoto: ``,
 			isBookmarked: false,
+			isReposted: false,
+			repostOffset: 0,
 			postDeleted: false,
 			showProfileCard: false,
 			showQuoteCard: false,
@@ -625,6 +648,11 @@ export default Vue.extend({
 					profile = fetchedProfile.profile
 				}
 			}
+		}
+		this.isReposted = this.$store.getters.checkReposts(this.postCID)
+		// Unauth
+		if (this.$store.state.session.id === ``) {
+			this.isReposted = false
 		}
 		// Populate Avatar
 		this.authorName = profile.name
@@ -792,6 +820,32 @@ export default Vue.extend({
 				}
 			}
 			this.quote = q
+		},
+		getReposts,
+		async handleRepost() {
+			// Unauth
+			if (this.$store.state.session.id === ``) {
+				this.$store.commit(`settings/toggleUnauthPopup`)
+				return
+			}
+			// Post has NOT been reposted
+			if (!this.isReposted) {
+				const repostCID = await sendRepost(this.$store.state.session.id, this.postCID, ``, `simple`)
+				this.$store.commit(`addRepost`, { postID: this.postCID, repostID: repostCID })
+				this.$toastSuccess(`You have successfully reposted this post`)
+				this.isReposted = true
+				this.repostOffset += 1
+			} else {
+				// Undo repost
+				// What do I call to undo a simple repost???
+				const repostID = this.$store.state.reposts[this.postCID]
+				await sendPostDeletion(`HIDE`, repostID, this.$store.state.session.id)
+				this.$store.commit(`removeRepost`, this.postCID)
+				this.isReposted = false
+				this.repostOffset -= 1
+				this.$toastSuccess(`This repost has been successfully removed from your profile`)
+			}
+			this.$emit(`repostAction`)
 		},
 		triggerProfileCardFalse() {
 			setTimeout(() => {

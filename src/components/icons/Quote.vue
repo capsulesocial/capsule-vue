@@ -2,8 +2,8 @@
 	<svg
 		xmlns="http://www.w3.org/2000/svg"
 		xmlns:xlink="http://www.w3.org/1999/xlink"
-		width="24px"
-		height="24px"
+		width="22px"
+		height="22px"
 		viewBox="0 0 24 24"
 		fill="currentColor"
 		stroke="currentColor"

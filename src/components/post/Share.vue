@@ -7,7 +7,6 @@
 		>
 			<div class="text-gray5 hover:text-primary hover:fill-primary flex">
 				<ShareIcon :isActive="showSocialShares" />
-				<span class="ml-1">{{ repostCount + repostOffset }}</span>
 			</div>
 		</button>
 		<div
@@ -18,27 +17,8 @@
 					: 'bg-darkBG text-darkPrimaryText border-darkBorder'
 			"
 			class="border-lightBorder modal-animation dropdownShareOpen absolute z-10 flex w-40 flex-col rounded-lg border p-2 shadow-lg"
-			style="left: 53px"
+			style="left: 40px"
 		>
-			<!-- Simple Repost -->
-			<button
-				:class="$store.state.settings.darkMode ? 'hover:text-lightActive' : 'hover:text-darkActive'"
-				class="focus:outline-none text-gray5 flex"
-				@click="handleRepost()"
-			>
-				<RepostIcon :isActive="isReposted" class="mr-2 p-1" />
-				<span v-if="isReposted" class="self-center text-xs">Undo Repost</span>
-				<span v-else class="self-center text-xs">Repost to Feed</span>
-			</button>
-			<!-- Quote Repost -->
-			<button
-				:class="$store.state.settings.darkMode ? 'hover:text-lightActive' : 'hover:text-darkActive'"
-				class="focus:outline-none text-gray5 flex"
-				@click="$emit(`toggleRepost`)"
-			>
-				<QuoteIcon class="mr-2 p-1" />
-				<span class="self-center text-xs">Quote</span>
-			</button>
 			<!-- Twitter -->
 			<button
 				:class="$store.state.settings.darkMode ? 'hover:text-lightActive' : 'hover:text-darkActive'"
@@ -68,16 +48,11 @@ import type { PropType } from 'vue'
 import ShareIcon from '@/components/icons/Share.vue'
 import TwitterIcon from '@/components/icons/brands/Twitter.vue'
 import LinkIcon from '@/components/icons/Link.vue'
-import RepostIcon from '@/components/icons/Repost.vue'
-import QuoteIcon from '@/components/icons/Quote.vue'
 import { Post } from '@/backend/post'
-import { IRepost, sendRepost, getReposts } from '@/backend/reposts'
-import { sendPostDeletion } from '@/backend/postDeletion'
+import { IRepost } from '@/backend/reposts'
 
 interface IData {
-	isReposted: boolean
 	showSocialShares: boolean
-	repostOffset: number
 }
 
 export default Vue.extend({
@@ -85,8 +60,6 @@ export default Vue.extend({
 		ShareIcon,
 		TwitterIcon,
 		LinkIcon,
-		RepostIcon,
-		QuoteIcon,
 	},
 	props: {
 		repost: {
@@ -113,16 +86,9 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			showSocialShares: false,
-			isReposted: false,
-			repostOffset: 0,
 		}
 	},
 	created() {
-		this.isReposted = this.$store.getters.checkReposts(this.cid)
-		// Unauth
-		if (this.$store.state.session.id === ``) {
-			this.isReposted = false
-		}
 		window.addEventListener(
 			`click`,
 			(e: any): void => {
@@ -141,33 +107,6 @@ export default Vue.extend({
 		)
 	},
 	methods: {
-		sendRepost,
-		getReposts,
-		async handleRepost() {
-			// Unauth
-			if (this.$store.state.session.id === ``) {
-				this.$store.commit(`settings/toggleUnauthPopup`)
-				return
-			}
-			// Post has NOT been reposted
-			if (!this.isReposted) {
-				const repostCID = await sendRepost(this.$store.state.session.id, this.cid, ``, `simple`)
-				this.$store.commit(`addRepost`, { postID: this.cid, repostID: repostCID })
-				this.$toastSuccess(`You have successfully reposted this post`)
-				this.isReposted = true
-				this.repostOffset += 1
-			} else {
-				// Undo repost
-				// What do I call to undo a simple repost???
-				const repostID = this.$store.state.reposts[this.cid]
-				await sendPostDeletion(`HIDE`, repostID, this.$store.state.session.id)
-				this.$store.commit(`removeRepost`, this.cid)
-				this.isReposted = false
-				this.repostOffset -= 1
-				this.$toastSuccess(`This repost has been successfully removed from your profile`)
-			}
-			this.$emit(`repostAction`)
-		},
 		handleShare(type: string) {
 			const shareElement = document.createElement(`textarea`)
 			shareElement.value = `${document.location.origin}/post/${this.cid}`
@@ -203,7 +142,7 @@ export default Vue.extend({
 .dropdownShareOpen::before {
 	content: '';
 	position: absolute;
-	top: 5.5rem;
+	top: 2.6rem;
 	left: -0.5rem;
 	transform: rotate(45deg);
 	width: 1rem;
