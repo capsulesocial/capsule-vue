@@ -45,6 +45,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import type { PropType } from 'vue'
+import DOMPurify from 'dompurify'
 import ShareIcon from '@/components/icons/Share.vue'
 import TwitterIcon from '@/components/icons/brands/Twitter.vue'
 import LinkIcon from '@/components/icons/Link.vue'
@@ -112,17 +113,17 @@ export default Vue.extend({
 			shareElement.value = `${document.location.origin}/post/${this.cid}`
 			shareElement.style.opacity = `0`
 			document.body.appendChild(shareElement)
+			const title = DOMPurify.sanitize(this.post.title)
 			switch (type) {
 				case `URL`:
 					shareElement.focus()
 					shareElement.select()
 					const copied = document.execCommand(`copy`)
 					this.$toastMessage(copied ? `Copied URL to clipboard` : `Not copied`)
-					document.body.removeChild(shareElement)
 					break
 				case `TWITTER`:
 					window.open(
-						`https://twitter.com/share?url=${encodeURIComponent(shareElement.value)}&text=📰 ${this.post.title}\n 🔏 ${
+						`https://twitter.com/share?url=${encodeURIComponent(shareElement.value)}&text=📰 ${title}\n 🔏 ${
 							this.post.authorID
 						} on @CapsuleSoc 🔗`,
 					)
@@ -130,6 +131,7 @@ export default Vue.extend({
 				default:
 					break
 			}
+			document.body.removeChild(shareElement)
 			this.showSocialShares = false
 		},
 		toggleDropdown() {
