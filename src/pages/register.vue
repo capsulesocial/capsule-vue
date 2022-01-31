@@ -302,7 +302,7 @@ export default Vue.extend({
 		const input = document.querySelector(`#phoneNumber`)
 		if (input) {
 			this.iti = intlTelInput(input, {
-				utilsScript: `https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.15/js/utils.min.js`,
+				utilsScript: require(`intl-tel-input/build/js/utils`),
 				// any initialisation options go here
 			})
 		}
