@@ -13,20 +13,7 @@ declare module 'vue/types/vue' {
 	}
 }
 
-const MONTH_NAMES = [
-	`January`,
-	`February`,
-	`March`,
-	`April`,
-	`May`,
-	`June`,
-	`July`,
-	`August`,
-	`September`,
-	`October`,
-	`November`,
-	`December`,
-]
+const MONTH_NAMES = [`Jan`, `Feb`, `Mar`, `Apr`, `May`, `Jun`, `Jul`, `Aug`, `Sep`, `Oct`, `Nov`, `Dec`]
 
 const getFormat: dateString = (date, hideYear = false, preformattedDate = null) => {
 	const day = date.getDate()
@@ -47,10 +34,10 @@ const getFormat: dateString = (date, hideYear = false, preformattedDate = null) 
 	}
 
 	if (hideYear) {
-		return `${day}. ${month} at ${hours}:${minutesString}`
+		return `${day} ${month} at ${hours}:${minutesString}`
 	}
 
-	return `${day}. ${month} ${year}. at ${hours}:${minutesString}`
+	return `${day} ${month} ${year} at ${hours}:${minutesString}`
 }
 
 const formatDate = (input: string | Date | number) => {

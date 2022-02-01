@@ -16,7 +16,8 @@
 			>
 				{{ draft.title === `` ? `Default draft` : draft.title }}
 			</h6>
-			<p class="text-gray5 text-sm">Last saved {{ $formatDate(draft.timestamp) }}</p>
+			<p v-if="draft.timestamp !== 0" class="text-gray5 text-sm">Last saved {{ $formatDate(draft.timestamp) }}</p>
+			<p v-else class="text-gray5 text-sm">No save</p>
 		</div>
 		<!-- Featured image -->
 		<div class="mx-4 flex flex-shrink-0 items-center">
