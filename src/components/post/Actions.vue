@@ -99,13 +99,13 @@
 			</div>
 		</article>
 		<!-- Post a Comment -->
-		<article v-show="!toggleStats" class="xl:pb-5">
+		<article v-show="!toggleStats" id="section" class="xl:pb-5">
 			<div class="flex w-full justify-between py-5">
 				<div class="flex flex-row items-center">
 					<span class="pr-2 font-semibold">{{ getCommentCount(`total`) }} comments</span>
 					<button class="focus:outline-none ml-2" @click="toggleStats = true"><StatsIcon /></button>
 				</div>
-				<CommentFilter :filter="filter" @clicked="setFilter" />
+				<CommentFilter v-show="!showEmotions" :filter="filter" class="modal-animation" @clicked="setFilter" />
 			</div>
 			<!-- Top overlay with selector -->
 			<div v-show="showEmotions" class="relative flex w-full flex-row-reverse">
@@ -116,7 +116,7 @@
 				>
 					<h6 class="text-primary self-center text-center text-2xl font-semibold">How do you feel?</h6>
 				</div>
-				<div class="absolute z-10 mt-10 mr-12 flex items-center">
+				<div class="absolute z-10 mt-10 mr-8 flex items-center">
 					<button class="bg-gray1 focus:outline-none rounded-full p-1" @click="showEmotions = false">
 						<CloseIcon />
 					</button>
@@ -149,6 +149,7 @@
 					/>
 				</div>
 				<div
+					id="faceSelector"
 					class="border-lightBorder flex w-full overflow-hidden rounded-xl border"
 					:class="showEmotions ? `` : `border p-2 bg-` + selectedEmotionColor"
 				>
@@ -159,7 +160,7 @@
 						<div v-if="this.$store.state.session.id !== ``" class="flex w-full flex-row">
 							<!-- Front side: Type comment -->
 							<div v-show="!showEmotions" class="flex w-full bg-white">
-								<button class="focus:outline-none h-auto flex-shrink-0" @click="showEmotions = !showEmotions">
+								<button class="focus:outline-none h-auto flex-shrink-0" @click="toggleShowEmotions">
 									<span v-if="activeEmotion.label !== ``">
 										<img
 											:src="activeEmotion.rightImage"
@@ -210,7 +211,7 @@
 											: `bg-gray1`
 									"
 									style="height: 96px; margin-top: 112px"
-									:style="$route.name === `post-post` ? `width: 716px` : `width: 655px`"
+									:style="$route.name === `post-post` ? `width: 716px` : `width: 646px`"
 								></div>
 								<!-- Faces grid -->
 								<div class="relative" style="padding-bottom: 120px; padding-top: 120px">
@@ -261,17 +262,14 @@
 				</div>
 			</div>
 			<!-- Bottom overlay with selector -->
-			<div v-show="showEmotions" class="absolute flex w-full flex-row-reverse">
+			<div v-show="showEmotions" class="relative flex w-full flex-row-reverse">
 				<div
 					class="z-10 mr-1 flex flex-row-reverse items-end rounded-br-xl bg-white p-5"
 					style="height: 111px; margin-top: -112px; margin-bottom: 1px; pointer-events: none"
-					:style="
-						$route.name === `post-post` ? `width: 490px; margin-right: 490px` : `width: 406px;  margin-right: 53px;`
-					"
+					:style="$route.name === `post-post` ? `width: 490px` : `width: 406px;  margin-right: 53px;`"
 				></div>
 				<button
-					class="bg-primary focus:outline-none absolute bottom-0 right-0 z-10 mb-4 rounded-lg px-6 py-2 text-white"
-					:style="$route.name === `post-post` ? `margin-right: 490px` : `margin-right: 67px;`"
+					class="bg-primary focus:outline-none absolute bottom-0 right-0 z-10 mb-7 mr-7 rounded-lg px-6 py-2 text-white"
 					@click="confirmEmotion"
 				>
 					Select
@@ -409,6 +407,17 @@ export default Vue.extend({
 		}
 	},
 	methods: {
+		async toggleShowEmotions() {
+			this.showEmotions = !this.showEmotions
+			if (this.comments.length === 0) {
+				await this.sleep(100)
+			}
+			const body = document.getElementById(`faceSelector`)
+			if (!body) {
+				return
+			}
+			body.scrollIntoView({ block: `center` })
+		},
 		setFilter(reaction: string): void {
 			this.filter = reaction
 			this.filterComments()
@@ -523,6 +532,9 @@ export default Vue.extend({
 			}
 
 			return `neutral`
+		},
+		sleep(ms: any) {
+			return new Promise((resolve) => setTimeout(resolve, ms))
 		},
 	},
 })

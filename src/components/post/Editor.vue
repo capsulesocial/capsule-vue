@@ -412,6 +412,9 @@ export default Vue.extend({
 			}
 			const titleQualityCheck = this.$qualityTitle(titleInputValue)
 			if (this.$isError(titleQualityCheck)) {
+				if (titleQualityCheck.error === `Please enter a title.`) {
+					return
+				}
 				this.titleError = titleQualityCheck.error
 				return
 			}

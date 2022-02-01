@@ -50,7 +50,6 @@ import ShareIcon from '@/components/icons/Share.vue'
 import TwitterIcon from '@/components/icons/brands/Twitter.vue'
 import LinkIcon from '@/components/icons/Link.vue'
 import { Post } from '@/backend/post'
-import { IRepost } from '@/backend/reposts'
 
 interface IData {
 	showSocialShares: boolean
@@ -63,24 +62,12 @@ export default Vue.extend({
 		LinkIcon,
 	},
 	props: {
-		repost: {
-			type: Object as PropType<IRepost>,
-			default: null,
-		},
 		post: {
 			type: Object as PropType<Post>, // TODO fix the post type,
 			required: true,
 		},
 		cid: {
 			type: String,
-			required: true,
-		},
-		hasRepost: {
-			type: Function,
-			required: true,
-		},
-		repostCount: {
-			type: Number,
 			required: true,
 		},
 	},
