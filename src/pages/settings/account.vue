@@ -121,6 +121,12 @@ export default Vue.extend({
 			inviteCodesRemaining: 1,
 		}
 	},
+	head() {
+		return {
+			title: `Account Settings - Capsule Social`,
+			meta: [{ hid: `settings-account`, name: `settings-account`, content: `Account settings on Capsule Social` }],
+		}
+	},
 	created() {
 		this.getInviteCodesRemaining()
 	},

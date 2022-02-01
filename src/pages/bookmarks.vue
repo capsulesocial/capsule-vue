@@ -38,6 +38,12 @@ export default Vue.extend({
 			following: new Set(),
 		}
 	},
+	head() {
+		return {
+			title: `Bookmarks - Capsule Social`,
+			meta: [{ hid: `bookmarks`, name: `bookmarks`, content: `View your bookmarked posts` }],
+		}
+	},
 	created() {
 		// Check if logged in user
 		if (this.$store.state.session.id === ``) {

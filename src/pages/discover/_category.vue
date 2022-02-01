@@ -89,6 +89,8 @@ import PostCard from '@/components/post/Card.vue'
 import BackIcon from '@/components/icons/ChevronLeft.vue'
 import { getPosts, Algorithm, IPostResponse, IRepostResponse } from '@/backend/post'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
+// @ts-ignore
+import ogImage from '@/assets/images/util/ogImage.png'
 
 interface IData {
 	posts: Array<IRepostResponse | IPostResponse>
@@ -123,6 +125,19 @@ export default Vue.extend({
 			noMorePosts: false,
 		}
 	},
+	head() {
+		return {
+			title: `${this.$route.params.category} category on Capsule Social`,
+			meta: [
+				{
+					hid: `${this.$route.params.category}`,
+					name: `${this.$route.params.category}`,
+					content: `${this.$route.params.category} category on Capsule Social`,
+				},
+				{ hid: `og:image`, property: `og:image`, content: `${document.location.origin}` + ogImage },
+			],
+		}
+	},
 	async created() {
 		this.posts = await this.fetchPosts()
 		if (this.$store.state.session.id === ``) {
@@ -145,7 +160,7 @@ export default Vue.extend({
 		}
 	},
 	methods: {
-		async fetchPosts() {
+		async fetchPosts(): Promise<(IRepostResponse | IPostResponse)[]> {
 			this.isLoading = true
 			const id = this.$store.state.session.id === `` ? `x` : this.$store.state.session.id
 			const posts = await getPosts({ category: this.$route.params.category }, id, {

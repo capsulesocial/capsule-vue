@@ -87,6 +87,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import type { PropType } from 'vue'
+// @ts-ignore
+import ogImage from '@/assets/images/util/ogImage.png'
 import PostCard from '@/components/post/Card.vue'
 import { getPosts, Algorithm, IRepostResponse, IPostResponse } from '@/backend/post'
 import { getReposts } from '@/backend/reposts'
@@ -121,6 +123,19 @@ export default Vue.extend({
 			isLoading: true,
 			currentOffset: 0,
 			limit: 10,
+		}
+	},
+	head() {
+		return {
+			title: `Home - Capsule Social`,
+			meta: [
+				{
+					hid: `home`,
+					name: `home`,
+					content: `Home - Capsule Social`,
+				},
+				{ hid: `og:image`, property: `og:image`, content: `${document.location.origin}` + ogImage },
+			],
 		}
 	},
 	async created() {

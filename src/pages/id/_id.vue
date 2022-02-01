@@ -169,6 +169,8 @@ import SettingsPopup from '@/components/Settings.vue'
 import BackButton from '@/components/icons/ChevronLeft.vue'
 import PencilIcon from '@/components/icons/Pencil.vue'
 import { getProfile, Profile } from '@/backend/profile'
+// @ts-ignore
+import ogImage from '@/assets/images/util/ogImage.png'
 
 interface IData {
 	totalPostsCount: number
@@ -244,6 +246,19 @@ export default Vue.extend({
 			showSettings: false,
 			lastScroll: 0,
 			scrollingDown: false,
+		}
+	},
+	head() {
+		return {
+			title: `${this.visitProfile.name} (${this.$route.params.id}) on Capsule Social`,
+			meta: [
+				{
+					hid: `profile`,
+					name: `profile`,
+					content: `${this.visitProfile.name} (${this.$route.params.id}) on Capsule Social`,
+				},
+				{ hid: `og:image`, property: `og:image`, content: `${document.location.origin}` + ogImage },
+			],
 		}
 	},
 	watch: {

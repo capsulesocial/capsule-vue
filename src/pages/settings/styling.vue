@@ -81,6 +81,12 @@ export default Vue.extend({
 			currentbg: null,
 		}
 	},
+	head() {
+		return {
+			title: `Style settings - Capsule Social`,
+			meta: [{ hid: `settings-styling`, name: `settings-styling`, content: `Style settings on Capsule Social` }],
+		}
+	},
 	created() {
 		window.addEventListener(`click`, this.handleDropdown, false)
 	},

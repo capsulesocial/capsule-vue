@@ -58,6 +58,12 @@ export default Vue.extend({
 			nodeURL: ``,
 		}
 	},
+	head() {
+		return {
+			title: `Network settings - Capsule Social`,
+			meta: [{ hid: `settings-network`, name: `settings-network`, content: `Network settings on Capsule Social` }],
+		}
+	},
 	created() {
 		const nodeUrl = window.localStorage.getItem(`preferredNodeUrl`)
 		if (nodeUrl) {
@@ -65,7 +71,7 @@ export default Vue.extend({
 		}
 	},
 	methods: {
-		hasChanged() {
+		hasChanged(): boolean {
 			return this.nodeURL !== ``
 		},
 		updateSettings() {

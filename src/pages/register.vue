@@ -220,6 +220,8 @@ import DiscordIcon from '@/components/icons/Discord.vue'
 // import TwitterIcon from '@/components/icons/brands/Twitter.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 import FileDownloadIcon from '@/components/icons/FileDownload.vue'
+// @ts-ignore
+import ogImage from '@/assets/images/util/ogImage.png'
 
 import { MutationType, createSessionFromProfile, namespace as sessionStoreNamespace } from '~/store/session'
 
@@ -292,6 +294,15 @@ export default Vue.extend({
 			currentYear: ``,
 		}
 	},
+	head() {
+		return {
+			title: `Create an account on Capsule Social`,
+			meta: [
+				{ hid: `register`, name: `register`, content: `Create a Capsule Social account` },
+				{ hid: `og:image`, property: `og:image`, content: `${document.location.origin}` + ogImage },
+			],
+		}
+	},
 	async created() {
 		await Promise.all([this.torus.init(), this.postWalletLogin()])
 		this.nearWallet = this.isSignedInToWallet()
@@ -321,7 +332,7 @@ export default Vue.extend({
 			changeBio: MutationType.CHANGE_BIO,
 			changeLocation: MutationType.CHANGE_LOCATION,
 		}),
-		hasSufficientFunds() {
+		hasSufficientFunds(): boolean {
 			return hasSufficientFunds(this.funds)
 		},
 		async checkFunds() {

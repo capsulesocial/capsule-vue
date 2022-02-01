@@ -26,6 +26,8 @@ import CategoryCard from '@/components/CategoryCard.vue'
 
 import { categories } from '@/config'
 import { getTags } from '@/backend/post'
+// @ts-ignore
+import ogImage from '@/assets/images/util/ogImage.png'
 
 interface IData {
 	categoryList: string[]
@@ -45,6 +47,19 @@ export default Vue.extend({
 			tags: [],
 			tagFilter: `Top Today`,
 			showFilter: false,
+		}
+	},
+	head() {
+		return {
+			title: `Discover posts on Capsule Social`,
+			meta: [
+				{
+					hid: `discover`,
+					name: `discover`,
+					content: `Discover new posts on Capsule Social`,
+				},
+				{ hid: `og:image`, property: `og:image`, content: `${document.location.origin}` + ogImage },
+			],
 		}
 	},
 	async created() {

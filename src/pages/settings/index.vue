@@ -49,5 +49,11 @@ export default Vue.extend({
 		ChevronRight,
 	},
 	layout: `settings`,
+	head() {
+		return {
+			title: `Settings - Capsule Social`,
+			meta: [{ hid: `settings`, name: `settings`, content: `Settings on Capsule Social` }],
+		}
+	},
 })
 </script>
