@@ -7,7 +7,7 @@
 		>
 			<h6 class="text-primary font-semibold">Featured Image</h6>
 			<button
-				class="border-primary focus:outline-none mt-3 mb-2 flex h-40 w-full items-center justify-center overflow-hidden rounded-lg border-2 border-dashed"
+				class="border-gray5 transition duration-500 ease-in-out hover:border-primary focus:outline-none mt-3 mb-2 flex h-40 w-full items-center justify-center overflow-hidden rounded-lg border border-dashed"
 				@click="handleUploadImageClick"
 			>
 				<input
@@ -21,7 +21,7 @@
 				/>
 				<!-- No Photo Uploaded -->
 				<div v-if="featuredPhoto === null" class="flex flex-col justify-center">
-					<UploadIcon class="self-center" />
+					<UploadIcon class="self-center text-gray5" />
 					<p class="text-primary mt-2 text-left text-sm font-light">Upload an Image</p>
 				</div>
 				<div v-else class="h-full w-full">

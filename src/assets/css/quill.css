@@ -384,12 +384,11 @@
 .ql-editor.ql-blank::before {
 	color: rgba(0, 0, 0, 0.6);
 	content: attr(data-placeholder);
-	font-style: italic;
 	/* left: 15px; */
 	pointer-events: none;
 	position: absolute;
 	top: 25px;
-	font-size: 1.5rem;
+	font-size: 1.2rem;
 	/* right: 15px; */
 }
 .ql-bubble.ql-toolbar:after,
