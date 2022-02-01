@@ -176,6 +176,18 @@ export default Vue.extend({
 			isOpen7: false,
 		}
 	},
+	head() {
+		return {
+			title: `Help - Capsule Social`,
+			meta: [
+				{
+					hid: `help`,
+					name: `help`,
+					content: `Help - Capsule Social`,
+				},
+			],
+		}
+	},
 	methods: {
 		toggleAccordion1() {
 			this.isOpen1 = !this.isOpen1

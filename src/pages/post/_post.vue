@@ -195,6 +195,8 @@ import { followChange, getFollowersAndFollowing } from '@/backend/following'
 import { getReposts } from '@/backend/reposts'
 import { isPostBookmarkedByUser } from '@/backend/bookmarks'
 import { ICommentData } from '@/backend/comment'
+// @ts-ignore
+import ogImage from '@/assets/images/util/ogImage.png'
 
 interface IData {
 	post: Post | null
@@ -255,6 +257,21 @@ export default Vue.extend({
 			bookmarksCount: -1,
 			popImage: false,
 			readerViewElement: null,
+		}
+	},
+	head() {
+		return {
+			// @ts-ignore
+			title: `${this.post?.title} by ${this.post?.authorID} on Capsule Social`,
+			meta: [
+				{
+					hid: `post - ${this.$route.params.post}`,
+					name: `Post`,
+					// @ts-ignore
+					content: `${this.post?.title} by ${this.post?.authorID} on Capsule Social`,
+				},
+				{ hid: `og:image`, property: `og:image`, content: `${document.location.origin}` + ogImage },
+			],
 		}
 	},
 	async created() {

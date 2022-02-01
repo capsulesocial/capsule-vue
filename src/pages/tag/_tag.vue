@@ -77,6 +77,12 @@ export default Vue.extend({
 			algorithm: `NEW`,
 		}
 	},
+	head() {
+		return {
+			title: `${this.$route.params.tag} posts on Capsule Social`,
+			meta: [{ hid: `tags`, name: `tags`, content: `View posts with tag: ${this.$route.params.tag}` }],
+		}
+	},
 	async created() {
 		// Fetch posts with tag (unauthenticated)
 		this.posts = await this.fetchPosts()

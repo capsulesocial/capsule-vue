@@ -74,6 +74,8 @@ import { getAccountIdFromPrivateKey, login, loginNearAccount } from '@/backend/a
 import { getUsernameNEAR } from '@/backend/near'
 import { torusVerifiers, TorusVerifiers } from '@/backend/utilities/config'
 import { HTMLInputEvent } from '@/interfaces/HTMLInputEvent'
+// @ts-ignore
+import ogImage from '@/assets/images/util/ogImage.png'
 
 interface IData {
 	id: string
@@ -111,6 +113,15 @@ export default Vue.extend({
 			accountIdInput: ``,
 			privateKey: ``,
 			currentYear: ``,
+		}
+	},
+	head() {
+		return {
+			title: `Login - Capsule Social`,
+			meta: [
+				{ hid: `login`, name: `login`, content: `Log into Capsule Social` },
+				{ hid: `og:image`, property: `og:image`, content: `${document.location.origin}` + ogImage },
+			],
 		}
 	},
 	async created() {
