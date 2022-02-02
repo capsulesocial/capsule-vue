@@ -22,8 +22,8 @@
 					<textarea
 						id="title"
 						ref="title"
-						placeholder="Enter Title"
-						class="text-h1 focus:outline-none w-full break-words bg-transparent font-serif font-semibold"
+						placeholder="Title"
+						class="text-4xl focus:outline-none w-11/12 break-words -mt-2 mb-2 bg-transparent font-serif"
 						wrap="soft"
 						@beforeinput="handleTitle"
 						@input="updateTitle"
@@ -36,7 +36,7 @@
 					<textarea
 						id="subtitle"
 						ref="subtitle"
-						placeholder="Enter Subtitle"
+						placeholder="Subtitle"
 						class="text-h2 text-gray5 focus:outline-none mt-2 w-full break-words bg-transparent font-serif"
 						wrap="soft"
 						@beforeinput="handleSubtitle"
@@ -52,17 +52,24 @@
 					type="file"
 					@change="uploadFunction($event)"
 				/>
-				<div
-					id="editor"
-					ref="editor"
-					class="editable focus:outline-none content max-w-none p-2"
-					v-html="$store.state.draft.drafts[$store.state.draft.activeIndex].content"
-				></div>
-
+				<div class="relative">
+					<div
+						id="editor"
+						ref="editor"
+						class="editable focus:outline-none content max-w-none p-2"
+						v-html="$store.state.draft.drafts[$store.state.draft.activeIndex].content"
+					></div>
+					<AddContent
+						v-show="toggleAddContent"
+						class="absolute modal-animation"
+						:style="`top:` + this.addContentPosTop + `px;` + `left:` + this.addContentPosLeft + `px`"
+						@image="actionsUpload"
+					/>
+				</div>
 				<div
 					v-if="this.$store.state.widgets.primary === `editor` && this.$route.name === `home`"
 					id="metaButton"
-					class="from-lightBGStart to-lightBGStop border-lightBorder test-xs text-gray5 modal-animation card-animation-delay1 animatedraftButton absolute bottom-0 right-0 z-10 m-4 mb-8 flex rounded-lg bg-gradient-to-r px-5 py-3 shadow-lg"
+					class="from-lightBGStart to-lightBGStop border-lightBorder text-xs text-gray5 modal-animation card-animation-delay1 animatedraftButton absolute bottom-0 right-0 z-10 m-4 mb-8 flex rounded-lg bg-gradient-to-r px-5 py-3 shadow-lg"
 				>
 					<p v-if="!isCollapsed">Time to publish?</p>
 					<PencilIcon v-else class="fill-current p-1" @close="$router.push(`/post`)" />
@@ -83,6 +90,7 @@ import QuillMarkdown from 'quilljs-markdown'
 import imageCompression from 'browser-image-compression'
 import XIcon from '@/components/icons/X.vue'
 import PencilIcon from '@/components/icons/Pencil.vue'
+import AddContent from '@/components/post/EditorActions.vue'
 import { ImageBlot, preRule, ipfsImageRule, createPostImagesArray } from '@/pages/post/editorExtensions'
 import { createRegularPost, sendRegularPost } from '@/backend/post'
 import { addPhotoToIPFS, preUploadPhoto } from '@/backend/photos'
@@ -101,6 +109,9 @@ interface IData {
 	isX: boolean
 	isCollapsed: boolean
 	postImages: Set<string>
+	toggleAddContent: boolean
+	addContentPosTop: number
+	addContentPosLeft: number
 }
 
 const toolbarOptions = [
@@ -108,7 +119,6 @@ const toolbarOptions = [
 	[`blockquote`, `code-block`, `link`],
 	[{ header: 2 }],
 	[{ list: `ordered` }, { list: `bullet` }],
-	[`image`],
 ]
 const options = {
 	placeholder: `Start typing here...`,
@@ -119,11 +129,6 @@ const options = {
 		counter: true,
 		toolbar: {
 			container: toolbarOptions,
-			handlers: {
-				image() {
-					document.getElementById(`getFile`)?.click()
-				},
-			},
 		},
 	},
 }
@@ -136,6 +141,7 @@ export default Vue.extend({
 	components: {
 		XIcon,
 		PencilIcon,
+		AddContent,
 	},
 	data(): IData {
 		let input: string = ``
@@ -159,6 +165,9 @@ export default Vue.extend({
 			postImages: new Set(postImages),
 			qeditor: null,
 			editor: null,
+			toggleAddContent: false,
+			addContentPosTop: 0,
+			addContentPosLeft: 0,
 		}
 	},
 	beforeDestroy() {
@@ -200,11 +209,20 @@ export default Vue.extend({
 						this.isCollapsed = false
 					}
 				})
+				quill.on(`editor-change`, (eventName: string, ...args: any) => {
+					if (eventName === `selection-change`) {
+						if (!args[0]) {
+							return
+						}
+						this.calculateAddPos(args[0].index)
+					}
+				})
 			},
 			true,
 		)
 		const editor = new Quill(`#editor`, options)
 		this.qeditor = editor
+		this.qeditor.focus()
 		this.editor = new QuillMarkdown(editor, {})
 		const titleInput = this.$refs.title as HTMLInputElement
 		const subtitleInput = this.$refs.subtitle as HTMLInputElement
@@ -218,6 +236,28 @@ export default Vue.extend({
 		this.updateSubtitle(false)
 	},
 	methods: {
+		actionsUpload() {
+			document.getElementById(`getFile`)?.click()
+		},
+		calculateAddPos(index: number) {
+			if (!this.qeditor) {
+				return
+			}
+			const line = this.qeditor.getLine(index)
+			const pos = this.qeditor.getBounds(index)
+			if (line[1] === 0 && line[0].domNode.innerHTML === `<br>`) {
+				this.toggleAddContent = true
+				if (index === 0) {
+					this.addContentPosTop = pos.top + 40
+					this.addContentPosLeft = pos.left
+				} else {
+					this.addContentPosTop = pos.top
+					this.addContentPosLeft = pos.left + 20
+				}
+			} else {
+				this.toggleAddContent = false
+			}
+		},
 		doSave() {
 			const titleInput = this.$refs.title as HTMLInputElement
 			const titleInputValue = titleInput.value.trim()
@@ -275,7 +315,8 @@ export default Vue.extend({
 							return
 						}
 						const range = this.qeditor.getSelection(true)
-						this.qeditor.insertEmbed(range.index, `image`, { alt: cid.toString(), url: i.target.result }, `user`)
+						await this.qeditor.insertEmbed(range.index, `image`, { alt: cid.toString(), url: i.target.result }, `user`)
+						this.qeditor.setSelection(range.index + 1, 0)
 					}
 				}
 			} catch (err) {
@@ -389,7 +430,7 @@ export default Vue.extend({
 				e.preventDefault()
 				subtitleInput.focus()
 			}
-			titleInput.style.height = `auto`
+			titleInput.style.height = `60px`
 			titleInput.style.height = `${titleInput.scrollHeight}px`
 		},
 		handleSubtitle(e: any) {
@@ -401,7 +442,7 @@ export default Vue.extend({
 			if (e.inputType === `insertLineBreak` || (e.inputType === `insertText` && e.data === null)) {
 				e.preventDefault()
 			}
-			subtitleInput.style.height = `auto`
+			subtitleInput.style.height = `40px`
 			subtitleInput.style.height = `${subtitleInput.scrollHeight}px`
 		},
 		updateTitle(updateStore: boolean = true) {

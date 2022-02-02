@@ -68,7 +68,7 @@
 							$store.state.draft.drafts[$store.state.draft.activeIndex].category
 						}}</span>
 					</div>
-					<div v-else>Select a Category</div>
+					<div v-else class="text-gray5">Select a Category</div>
 					<ChevronUp v-if="showCategoryDropdown" />
 					<ChevronDown v-else />
 				</div>
