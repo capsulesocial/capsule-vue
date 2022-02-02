@@ -84,6 +84,9 @@ export default Vue.extend({
 			}),
 		}
 	},
+	async created() {
+		await Promise.all([this.torus.init()])
+	},
 	methods: {
 		async torusLogin(type: TorusVerifiers) {
 			try {

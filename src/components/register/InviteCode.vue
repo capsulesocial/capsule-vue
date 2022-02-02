@@ -53,7 +53,7 @@
 					style="padding: 0.8rem 1.5rem; background-color: #7289da"
 					class="focus:outline-none flex transform items-center justify-between rounded-lg font-bold transition duration-500 ease-in-out hover:shadow-lg"
 				>
-					<DiscordIcon class="icon text-lightOnPrimaryText mr-2 h-6 w-6 fill-current" />
+					<DiscordLogo class="icon text-lightOnPrimaryText mr-2 h-6 w-6 fill-current" />
 					<span class="text-lightOnPrimaryText hidden font-sans text-sm xl:block xl:text-base"> Join </span>
 					<span class="text-lightOnPrimaryText ml-1 font-sans text-sm xl:text-base"> Discord </span>
 				</button>
@@ -77,6 +77,7 @@ import Vue from 'vue'
 import axios from 'axios'
 
 import CapsuleLogo from '@/components/icons/CapsuleLogo.vue'
+import DiscordLogo from '@/components/icons/Discord.vue'
 
 import { verifyCodeAndGetToken } from '@/backend/invite'
 
@@ -87,6 +88,7 @@ interface IData {
 export default Vue.extend({
 	components: {
 		CapsuleLogo,
+		DiscordLogo,
 	},
 	data(): IData {
 		return {
