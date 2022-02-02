@@ -269,7 +269,7 @@ export default Vue.extend({
 						if (!this.postImages.has(cid)) {
 							this.postImages.add(cid)
 							this.$store.commit(`draft/updatePostImages`, Array.from(this.postImages))
-							await preUploadPhoto(cid, compressedImage)
+							await preUploadPhoto(cid, compressedImage, image.name)
 						}
 						if (!this.qeditor) {
 							return
