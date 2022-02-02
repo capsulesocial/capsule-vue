@@ -234,7 +234,7 @@ export default Vue.extend({
 					reader.readAsDataURL(compressedImage)
 					reader.onload = (i: Event) => {
 						if (i.target !== null && reader.result !== null) {
-							this.uploadImage(reader.result, compressedImage)
+							this.uploadImage(reader.result, compressedImage, image.name)
 						}
 					}
 				} catch (err) {
@@ -249,9 +249,9 @@ export default Vue.extend({
 			this.updateProfileMethod(true)
 			return true
 		},
-		async uploadImage(image: string | ArrayBuffer, blobImage: Blob) {
+		async uploadImage(image: string | ArrayBuffer, blobImage: Blob, filename: string) {
 			const avatarCID = await addPhotoToIPFS(image)
-			await preUploadPhoto(avatarCID, blobImage)
+			await preUploadPhoto(avatarCID, blobImage, filename)
 			this.profilePic = image
 			this.changeAvatar(avatarCID)
 			await this.updateProfile()

@@ -3,9 +3,9 @@ import cache from './utilities/caching'
 import ipfs from './utilities/ipfs'
 import { nodeUrl } from './utilities/config'
 
-export function preUploadPhoto(cid: string, photo: Blob) {
+export function preUploadPhoto(cid: string, photo: Blob, filename: string) {
 	const formData = new FormData()
-	formData.append(`photo`, photo)
+	formData.append(`photo`, photo, filename)
 	formData.append(`cid`, cid)
 
 	return axios.post(`${nodeUrl()}/photos/upload`, formData)

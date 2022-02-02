@@ -228,9 +228,9 @@ export default Vue.extend({
 			this.$store.commit(`draft/updateFeaturedPhotoCaption`, null)
 			this.$store.commit(`draft/updateFeaturedPhotoCID`, null)
 		},
-		async uploadImage(image: any, blobImage: Blob): Promise<void> {
+		async uploadImage(image: any, blobImage: Blob, filename: string): Promise<void> {
 			const cid = await addPhotoToIPFS(image)
-			await preUploadPhoto(cid, blobImage)
+			await preUploadPhoto(cid, blobImage, filename)
 			this.$store.commit(`draft/updateFeaturedPhotoCID`, cid)
 			this.downloadImage(cid)
 		},
@@ -261,7 +261,7 @@ export default Vue.extend({
 				reader.readAsDataURL(compressedImage)
 				reader.onload = (i) => {
 					if (i.target !== null) {
-						this.uploadImage(i.target.result, compressedImage)
+						this.uploadImage(i.target.result, compressedImage, image.name)
 					}
 				}
 			} catch (err) {
