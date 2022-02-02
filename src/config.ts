@@ -59,10 +59,10 @@ export const faces = {
 		leftImage: require(`@/assets/images/reactions/left-side/defiant.webp`),
 		rightImage: require(`@/assets/images/reactions/right-side/defiant.webp`),
 	},
-	detatched: {
-		label: `detatched`,
-		leftImage: require(`@/assets/images/reactions/left-side/detatched.webp`),
-		rightImage: require(`@/assets/images/reactions/right-side/detatched.webp`),
+	detached: {
+		label: `detached`,
+		leftImage: require(`@/assets/images/reactions/left-side/detached.webp`),
+		rightImage: require(`@/assets/images/reactions/right-side/detached.webp`),
 	},
 	determined: {
 		label: `determined`,
@@ -334,7 +334,7 @@ export const faceGroupings = [
 	[faces.disgusted, faces.sick, faces.revolted],
 	[faces.suspicious, faces.incredulous, faces.skeptical],
 	[faces.hesitant, faces.fearful, faces.terrified],
-	[faces.aloof, faces.indifferent, faces.detatched],
+	[faces.aloof, faces.indifferent, faces.detached],
 	[faces.sad, faces.whine, faces.heartbroken],
 ]
 
@@ -377,7 +377,7 @@ export const feelings = {
 		`terrified`,
 		`aloof`,
 		`indifferent`,
-		`detatched`,
+		`detached`,
 		`sad`,
 		`whine`,
 		`heartbroken`,
