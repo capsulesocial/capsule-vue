@@ -212,6 +212,7 @@ export default Vue.extend({
 				quill.on(`editor-change`, (eventName: string, ...args: any) => {
 					if (eventName === `selection-change`) {
 						if (!args[0]) {
+							this.toggleAddContent = false
 							return
 						}
 						this.calculateAddPos(args[0].index)

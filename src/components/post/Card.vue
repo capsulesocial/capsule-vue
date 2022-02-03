@@ -158,7 +158,7 @@
 									</div>
 								</nuxt-link>
 								<!-- Display tags (Desktop) -->
-								<div class="my-2 hidden overflow-x-auto xl:flex xl:flex-wrap">
+								<div class="my-2 hidden overflow-x-auto xl:flex xl:flex-wrap text-lg">
 									<TagPill v-for="t in post.tags" :key="t.name" :tag="t.name" class="my-2 mr-4" />
 								</div>
 							</div>
@@ -197,7 +197,7 @@
 				<div
 					class="sticky top-0 border-b py-4 px-5 xl:py-5 xl:px-6 transition ease-in-out hover:bg-gray1 hover:bg-opacity-25"
 					style="backdrop-filter: blur(10px)"
-					:class="showProfileCard ? `z-20` : `z-10`"
+					:class="showProfileCard || showQuoteCard ? `z-20` : `z-10`"
 				>
 					<!-- Quote repost -->
 					<div v-if="quote">
@@ -271,7 +271,7 @@
 						<p class="my-2 break-words">{{ this.quote.content }}</p>
 					</div>
 					<!-- Wrapper for rounded outline on quote repost -->
-					<div :class="quote ? `bg-lightBorder rounded-lg p-4` : ``">
+					<div v-if="!isDeleted" :class="quote ? `bg-lightBorder rounded-lg p-4` : ``">
 						<!-- Simple repost -->
 						<div
 							v-if="repostedBy !== `` && !hideRepostIcon && quote === null"
@@ -370,7 +370,7 @@
 						<!-- Content -->
 						<div class="mt-4 flex flex-col justify-between xl:flex-row">
 							<!-- Left side: Title, subtitle / preview, tags -->
-							<div class="mr-4">
+							<div class="mr-4 flex flex-col justify-between">
 								<nuxt-link :to="'/post/' + postCID">
 									<div class="flex max-w-full flex-col overflow-hidden pr-4">
 										<h3 class="break-words pb-2 text-lg font-semibold">
@@ -389,7 +389,7 @@
 									</div>
 								</nuxt-link>
 								<!-- Display tags (Desktop) -->
-								<div class="my-2 hidden overflow-x-auto xl:flex xl:flex-wrap">
+								<div class="my-2 hidden overflow-x-auto xl:flex xl:flex-wrap text-lg">
 									<TagPill v-for="t in post.tags" :key="t.name" :tag="t.name" class="my-2 mr-4" />
 								</div>
 								<!-- Actions buttons (Desktop) -->
@@ -408,13 +408,13 @@
 										:repost="repost"
 										:post="post"
 										:cid="postCID"
-										class="fill-primary mr-3"
+										class="fill-primary mr-4"
 										:hasRepost="hasReposted"
 										:repostCount="repostCount"
 										@toggleRepost="toggleQuoteRepost"
 									/>
 									<!-- Share popup -->
-									<Share :post="post" :cid="postCID" class="fill-primary" />
+									<Share :post="post" :cid="postCID" class="fill-primary" style="margin-top: 2px" />
 									<button class="focus:outline-none ml-4" @click="toggleStatsCard"><StatsIcon /></button>
 								</div>
 							</div>
@@ -450,6 +450,9 @@
 							/>
 							<button class="focus:outline-none ml-4" @click="toggleStatsCard"><StatsIcon /></button>
 						</div>
+					</div>
+					<div v-else :class="quote ? `bg-lightBorder rounded-lg p-4 text-center text-gray5 text-sm` : ``">
+						This post has been removed by the author
 					</div>
 				</div>
 			</div>
@@ -577,6 +580,10 @@ export default Vue.extend({
 		repostCount: {
 			type: Number,
 			default: 0,
+		},
+		isDeleted: {
+			type: Boolean,
+			default: false,
 		},
 		displayRepost: {
 			type: Boolean,
@@ -777,6 +784,9 @@ export default Vue.extend({
 			this.showPopup = true
 		},
 		handleSendRepost() {
+			if (this.quoteContent === ``) {
+				return
+			}
 			const c = this.$refs.repostText as HTMLInputElement
 			this.sendRepost(this.$store.state.session.id, this.postCID, c.value, `quote`)
 			this.showComments = false

@@ -107,7 +107,7 @@
 				</article>
 
 				<!-- Tags -->
-				<article class="mt-5">
+				<article class="mt-5 text-lg">
 					<TagCard v-for="t in post.tags" :key="t.name" class="mr-2 mb-2" :tag="t.name" />
 				</article>
 				<!-- IPFS CID -->
@@ -167,6 +167,7 @@
 				:repostCount="repostCount"
 				:bookmarksCount="bookmarksCount"
 				:displayRepost="true"
+				:isDeleted="p.deleted"
 				@closePopup="closePopup"
 			/>
 		</div>

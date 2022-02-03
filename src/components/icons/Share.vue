@@ -5,38 +5,34 @@
 			xmlns="http://www.w3.org/2000/svg"
 			width="22"
 			height="22"
-			viewBox="0 0 24 24"
-			fill="none"
+			viewBox="0 0 564 564"
+			fill="currentColor"
 			stroke="currentColor"
-			stroke-width="2"
+			stroke-width="8"
 			stroke-linecap="round"
 			stroke-linejoin="round"
 			class="feather feather-share-2"
 		>
-			<circle cx="18" cy="5" r="3"></circle>
-			<circle cx="6" cy="12" r="3"></circle>
-			<circle cx="18" cy="19" r="3"></circle>
-			<line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
-			<line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+			<path
+				d="M440,256H424a8,8,0,0,0-8,8V464a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V112A16,16,0,0,1,48,96H248a8,8,0,0,0,8-8V72a8,8,0,0,0-8-8H48A48,48,0,0,0,0,112V464a48,48,0,0,0,48,48H400a48,48,0,0,0,48-48V264A8,8,0,0,0,440,256ZM500,0,364,.34a12,12,0,0,0-12,12v10a12,12,0,0,0,12,12L454,34l.7.71L131.51,357.86a12,12,0,0,0,0,17l5.66,5.66a12,12,0,0,0,17,0L477.29,57.34l.71.7-.34,90a12,12,0,0,0,12,12h10a12,12,0,0,0,12-12L512,12A12,12,0,0,0,500,0Z"
+			/>
 		</svg>
 		<svg
 			v-else
 			xmlns="http://www.w3.org/2000/svg"
 			width="22"
 			height="22"
-			viewBox="0 0 24 24"
+			viewBox="0 0 564 564"
 			fill="#1E566C"
 			stroke="#1E566C"
-			stroke-width="2"
+			stroke-width="8"
 			stroke-linecap="round"
 			stroke-linejoin="round"
 			class="feather feather-share-2"
 		>
-			<circle cx="18" cy="5" r="3"></circle>
-			<circle cx="6" cy="12" r="3"></circle>
-			<circle cx="18" cy="19" r="3"></circle>
-			<line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
-			<line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+			<path
+				d="M440,256H424a8,8,0,0,0-8,8V464a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V112A16,16,0,0,1,48,96H248a8,8,0,0,0,8-8V72a8,8,0,0,0-8-8H48A48,48,0,0,0,0,112V464a48,48,0,0,0,48,48H400a48,48,0,0,0,48-48V264A8,8,0,0,0,440,256ZM500,0,364,.34a12,12,0,0,0-12,12v10a12,12,0,0,0,12,12L454,34l.7.71L131.51,357.86a12,12,0,0,0,0,17l5.66,5.66a12,12,0,0,0,17,0L477.29,57.34l.71.7-.34,90a12,12,0,0,0,12,12h10a12,12,0,0,0,12-12L512,12A12,12,0,0,0,500,0Z"
+			/>
 		</svg>
 	</span>
 </template>

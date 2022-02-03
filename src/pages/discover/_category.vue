@@ -72,6 +72,7 @@
 					:hideRepostIcon="algorithm === `NEW` || algorithm === `TOP`"
 					:bookmarksCount="p.bookmarksCount"
 					:repostCount="p.repostCount"
+					:isDeleted="p.deleted"
 				/>
 			</article>
 			<p v-if="noMorePosts" class="text-gray5 py-5 text-center text-sm">No more posts</p>

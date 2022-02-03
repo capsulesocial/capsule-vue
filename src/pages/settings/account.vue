@@ -56,7 +56,9 @@
 				seed a vibrant community that will grow over time. As an already registered user, you can invite one member your
 				social circle to participate to the Blogchain beta by sharing the following invite code:
 			</p>
-			<p class="text-negative mt-4 text-sm">You have {{ inviteCodesRemaining }} invites remaining</p>
+			<p class="mt-4 text-sm" :class="inviteCodesRemaining > 0 ? `text-primary` : `text-negative`">
+				You have {{ inviteCodesRemaining }} invites remaining
+			</p>
 			<div class="mt-3 flex flex-col items-start xl:items-center xl:flex-row">
 				<h3 class="mr-4 font-semibold">Invite code</h3>
 				<div class="relative mr-0 xl:mr-4 flex my-4 xl:my-0 w-full items-center xl:w-2/5">
