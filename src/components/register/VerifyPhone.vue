@@ -161,31 +161,25 @@ export default Vue.extend({
 			}
 		},
 		async validateOTP() {
-			if (this.otp.length !== 6) {
-				this.$toastError(`OTP should have 6 digits`)
-				return
-			}
-			if (!this.accountId) {
-				return
-			}
 			try {
+				if (this.otp.length !== 6) {
+					this.$toastError(`OTP should have 6 digits`)
+					return
+				}
+				if (!this.accountId) {
+					return
+				}
 				await requestSponsor(this.phoneNumber, this.otp, this.accountId)
-			} catch (err) {
+				const { balance } = await waitForFunds(this.accountId)
+				this.$emit(`updateFunds`, balance)
+			} catch (err: any) {
 				if (axios.isAxiosError(err) && err.response) {
 					this.otp = ``
 					this.$toastError(err.response.data.error)
 					return
 				}
+				this.$toastError(err.message)
 				throw err
-			}
-			const { error, balance } = await waitForFunds(this.accountId)
-			if (error) {
-				// TODO: Let the user repeat the process.
-				this.$toastError(error)
-				return
-			}
-			if (balance) {
-				this.$emit(`updateFunds`, balance)
 			}
 		},
 		hasEnoughFunds(): boolean {
