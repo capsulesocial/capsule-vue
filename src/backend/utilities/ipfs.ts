@@ -8,6 +8,11 @@ export interface IPFSInterface {
 	getNodes: () => Promise<number>
 }
 
+const bootstraps = [
+	`/dns4/test-node.capsule.social/tcp/5434/wss/p2p/12D3KooWQzYjzbw7nghPMVP5z2ax29iDj2YsQ5GZDfnC4finSxnb`,
+	`/dns4/alpha-b.capsule.social/tcp/5434/wss/p2p/12D3KooWNfes6oZpNpvEM9W3tQ9dMbAgUboZAmnJ22wCWuQqaA2s`,
+]
+
 const ipfsConfig: Options = {
 	init: { algorithm: `Ed25519` },
 	preload: {
@@ -15,10 +20,7 @@ const ipfsConfig: Options = {
 		addresses: [`/dns4/test-node.capsule.social/https`, `/dns4/alpha-b.capsule.social/https`],
 	},
 	config: {
-		Bootstrap: [
-			`/dns4/test-node.capsule.social/tcp/5434/wss/p2p/12D3KooWQzYjzbw7nghPMVP5z2ax29iDj2YsQ5GZDfnC4finSxnb`,
-			`/dns4/alpha-b.capsule.social/tcp/5434/wss/p2p/12D3KooWNfes6oZpNpvEM9W3tQ9dMbAgUboZAmnJ22wCWuQqaA2s`,
-		],
+		Bootstrap: bootstraps,
 	},
 }
 
@@ -27,13 +29,12 @@ async function createIPFSInterface(): Promise<IPFSInterface> {
 
 	function maintainConnection() {
 		setTimeout(async () => {
-			const peers = await node.swarm.peers()
-			for (const p of peers) {
-				await node.swarm.disconnect(p.addr)
-				await node.swarm.connect(p.addr)
+			for (const a of bootstraps) {
+				await node.swarm.disconnect(a)
+				await node.swarm.connect(a)
 			}
 			maintainConnection()
-		}, 120000)
+		}, 10000)
 	}
 
 	maintainConnection()
