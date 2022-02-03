@@ -107,11 +107,9 @@ export default Vue.extend({
 			} catch (error: any) {
 				if (axios.isAxiosError(error) && error.response) {
 					if (error.response.status === 429) {
-						this.$toastWarning(`Too many requests`)
-						return
+						throw new Error(`Too many requests`)
 					}
-					this.$toastError(error.response.data.error)
-					return
+					throw new Error(error.response.data.error)
 				}
 				throw error
 			}
