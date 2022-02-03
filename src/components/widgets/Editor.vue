@@ -230,7 +230,7 @@ export default Vue.extend({
 		},
 		async uploadImage(image: any, blobImage: Blob, filename: string): Promise<void> {
 			const cid = await addPhotoToIPFS(image)
-			await preUploadPhoto(cid, blobImage, filename)
+			await preUploadPhoto(cid, blobImage, filename, this.$store.state.session.id)
 			this.$store.commit(`draft/updateFeaturedPhotoCID`, cid)
 			this.downloadImage(cid)
 		},

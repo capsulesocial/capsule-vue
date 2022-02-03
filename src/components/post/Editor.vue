@@ -310,13 +310,13 @@ export default Vue.extend({
 						if (!this.postImages.has(cid)) {
 							this.postImages.add(cid)
 							this.$store.commit(`draft/updatePostImages`, Array.from(this.postImages))
-							await preUploadPhoto(cid, compressedImage, image.name)
+							await preUploadPhoto(cid, compressedImage, image.name, this.$store.state.session.id)
 						}
 						if (!this.qeditor) {
 							return
 						}
 						const range = this.qeditor.getSelection(true)
-						await this.qeditor.insertEmbed(range.index, `image`, { alt: cid.toString(), url: i.target.result }, `user`)
+						this.qeditor.insertEmbed(range.index, `image`, { alt: cid.toString(), url: i.target.result }, `user`)
 						this.qeditor.setSelection(range.index + 1, 0)
 					}
 				}
