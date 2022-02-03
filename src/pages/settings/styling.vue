@@ -1,7 +1,7 @@
 <template>
 	<main>
 		<!-- Mobile back button -->
-		<nuxt-link to="/settings" class="mb-4 block flex items-center xl:hidden">
+		<nuxt-link to="/settings" class="mb-4 flex items-center xl:hidden">
 			<span class="bg-gray1 mr-2 rounded-full p-1"><ChevronLeft /></span>
 			<h6 class="font-semibold">All Settings</h6>
 		</nuxt-link>

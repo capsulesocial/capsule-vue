@@ -105,7 +105,12 @@
 					<span class="pr-2 font-semibold">{{ getCommentCount(`total`) }} comments</span>
 					<button class="focus:outline-none ml-2" @click="toggleStats = true"><StatsIcon /></button>
 				</div>
-				<CommentFilter v-show="!showEmotions" :filter="filter" class="modal-animation" @clicked="setFilter" />
+				<CommentFilter
+					v-show="!showEmotions && comments.length > 0"
+					:filter="filter"
+					class="modal-animation"
+					@clicked="setFilter"
+				/>
 			</div>
 			<!-- Top overlay with selector -->
 			<div v-show="showEmotions" class="relative flex w-full flex-row-reverse">

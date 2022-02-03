@@ -58,9 +58,6 @@
 					<BinIcon class="p-1" />
 					<span class="text-negative ml-1 self-center text-sm">Delete this draft</span>
 				</button>
-				<button v-else class="focus:outline-none text-gray5 mt-2 flex cursor-not-allowed" disabled>
-					<span class="text-gray5 ml-1 self-center text-sm">Default draft</span>
-				</button>
 			</div>
 		</div>
 	</div>

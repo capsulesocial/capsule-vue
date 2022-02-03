@@ -72,6 +72,7 @@
 						:hideRepostIcon="algorithm === `NEW` || algorithm === `TOP`"
 						:bookmarksCount="p.bookmarksCount"
 						:repostCount="p.repostCount"
+						:isDeleted="p.deleted"
 						@updateBookmarks="updateBookmarks"
 					/>
 				</article>

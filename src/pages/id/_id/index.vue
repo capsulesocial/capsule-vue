@@ -24,6 +24,7 @@
 				:repostCount="p.repostCount"
 				:toggleFriend="toggleFriend"
 				:userIsFollowed="userIsFollowed"
+				:isDeleted="p.deleted"
 			/>
 		</article>
 		<article v-show="isLoading" class="modal-animation flex justify-center">

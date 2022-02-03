@@ -29,6 +29,7 @@
 				:hideRepostIcon="true"
 				:bookmarksCount="p.bookmarksCount"
 				:repostCount="p.repostCount"
+				:isDeleted="p.deleted"
 			/>
 		</article>
 		<!-- Not loaded yet -->
