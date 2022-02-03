@@ -9,7 +9,7 @@ export async function requestOTP(phoneNumber: string) {
 	return response.data.data
 }
 
-export async function getFundTransferStatus(accountId: string) {
+export async function getFundTransferStatus(accountId: string): Promise<`PROCESSING` | `SENT` | `FAILED`> {
 	const response = await axios.get(`${capsuleServer}/status?accountId=${accountId}`)
 	return response.data.data
 }
@@ -20,7 +20,7 @@ export function hasSufficientFunds(currentFunds: string) {
 
 export function waitForFunds(accountId: string) {
 	let secWaited = 0
-	return new Promise<{ balance?: string; error?: string }>((resolve) => {
+	return new Promise<{ balance: string }>((resolve, reject) => {
 		const waiter = async () => {
 			const { balance } = await checkAccountStatus(accountId)
 			if (hasSufficientFunds(balance)) {
@@ -28,10 +28,10 @@ export function waitForFunds(accountId: string) {
 				return
 			}
 			if (secWaited > 30) {
-				const status: `PROCESSING` | `SENT` | `FAILED` = await getFundTransferStatus(accountId)
+				const status = await getFundTransferStatus(accountId)
 				switch (status) {
 					case `FAILED`:
-						resolve({ error: `Failed to transfer funds` })
+						reject(new Error(`Failed to transfer funds`))
 						return
 					case `SENT`:
 						secWaited = 0
@@ -40,12 +40,12 @@ export function waitForFunds(accountId: string) {
 						secWaited = 0
 						break
 					default:
-						resolve({ error: `Unknown status: ${status}` })
+						reject(new Error(`Unknown status: ${status}`))
 						return
 				}
 			}
 			secWaited = secWaited + 1
-			setInterval(waiter, 1000)
+			setTimeout(waiter, 1000)
 		}
 
 		waiter()
