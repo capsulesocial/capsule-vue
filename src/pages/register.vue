@@ -137,8 +137,8 @@ export default Vue.extend({
 			],
 		}
 	},
-	errorCaptured(err) {
-		this.$toastError(err)
+	errorCaptured(err: Error) {
+		this.$toastError(err.message)
 	},
 	async created() {
 		await Promise.all([this.postWalletLogin()])

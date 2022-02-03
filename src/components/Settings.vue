@@ -175,8 +175,8 @@ export default Vue.extend({
 		// 	this.$store.commit(`settings/changeDarkMode`, this.$store.state.settings.darkMode)
 		// }
 	},
-	errorCaptured(err) {
-		this.$toastError(`Error: ` + err)
+	errorCaptured(err: Error) {
+		this.$toastError(`Error: ` + err.message)
 	},
 	methods: {
 		handleImageClick(): void {
