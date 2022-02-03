@@ -1,5 +1,5 @@
 <template>
-	<article v-if="mutuals.size !== 0" class="mb-5 w-full rounded-lg bg-white p-4 shadow-lg">
+	<article v-if="mutuals.size !== 0" class="mb-5 w-full rounded-lg bg-white p-4 pt-3 shadow-lg">
 		<h6 class="text-primary mb-2 font-semibold">Mutual Followers</h6>
 		<div>
 			<!-- Profile photos -->

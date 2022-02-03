@@ -1,6 +1,6 @@
 <template>
 	<article
-		class="from-lightBGStart to-lightBGStop border-lightBorder mb-5 w-full rounded-lg border bg-gradient-to-r p-4 shadow-lg"
+		class="from-lightBGStart to-lightBGStop border-lightBorder mb-5 w-full rounded-lg border bg-gradient-to-r p-4 pt-3 shadow-lg"
 		style="backdrop-filter: blur(10px)"
 	>
 		<h6 class="text-primary mb-2 font-semibold">About</h6>

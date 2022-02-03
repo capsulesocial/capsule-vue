@@ -43,7 +43,7 @@
 								:email="visitProfile.email"
 								:website="visitProfile.website"
 							/>
-							<SubscribtionsWidget @toggleNotificationsPopup="toggleNotificationsPopup" />
+							<EmailNotificationWidget :profile="visitProfile" @toggleNotificationsPopup="toggleNotificationsPopup" />
 							<MutualFollowersWidget
 								v-if="this.$route.params.id !== this.$store.state.session.id"
 								:mutuals="mutuals"
@@ -103,7 +103,7 @@ import Vue from 'vue'
 import ProfileWidget from '@/components/widgets/Profile.vue'
 import FollowersWidget from '@/components/widgets/Followers.vue'
 import MutualFollowersWidget from '@/components/widgets/MutualFollowers.vue'
-import SubscribtionsWidget from '@/components/widgets/Subscriptions.vue'
+import EmailNotificationWidget from '@/components/widgets/EmailNotifications.vue'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
@@ -140,7 +140,7 @@ export default Vue.extend({
 		MutualFollowersWidget,
 		BrandedButton,
 		UnauthPopup,
-		SubscribtionsWidget,
+		EmailNotificationWidget,
 		ConfigureNotificationsPopup,
 	},
 	data(): IData {

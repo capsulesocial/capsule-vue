@@ -1,9 +1,9 @@
 <template>
 	<div
-		class="bg-primary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-start justify-center bg-opacity-50"
+		class="bg-primary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50"
 	>
 		<div
-			class="popupCard from-lightBGStart to-lightBGStop card-animation mt-12 overflow-y-auto rounded-lg bg-gradient-to-r p-6 pt-4 shadow-lg backdrop-blur-lg backdrop-filter"
+			class="popupCard from-lightBGStart to-lightBGStop card-animation overflow-y-auto rounded-lg bg-gradient-to-r p-6 pt-4 shadow-lg backdrop-blur-lg backdrop-filter"
 			style="max-height: 90%; width: 650px; backdrop-filter: blur(10px)"
 		>
 			<!-- Header and close icon -->
@@ -13,36 +13,47 @@
 			</div>
 			<!-- Self-view view -->
 			<div v-if="$store.state.session.id === $route.params.id">
-				<p class="text-gray7">
+				<p class="text-gray7 mb-4">
 					Display highlighted tags on your profile for readers to enable email notifications to receive your posts. You
 					can display up to three different tags:
 				</p>
-				<div class="grid grid-cols-5 mb-3">
+				<div class="flex flex-row justify-between mb-3 mt-8">
 					<!-- Add tag input -->
-					<label for="tagInput" class="font-semibold col-span-1 mt-4">Tags</label>
-					<div class="col-span-4 bg-gray1 rounded-lg px-4 py-2 my-4">
-						<input
-							id="tagInput"
-							:ref="tagInput"
-							type="text"
-							placeholder="Add more specific topics to be notified on..."
-							class="w-full text-gray7 bg-gray1 focus:outline-none"
-						/>
+					<label for="tagInput" class="font-semibold col-span-1 mr-20 mt-2">Topics</label>
+					<div class="flex flex-col w-full">
+						<div class="bg-gray1 rounded-lg px-4 py-2">
+							<input
+								id="tagInput"
+								:ref="tagInput"
+								type="text"
+								placeholder="Add three topics to your profile..."
+								class="w-full text-gray7 bg-gray1 focus:outline-none"
+							/>
+						</div>
+						<div class="flex flex-row flex-wrap mt-2">
+							<button
+								class="focus:outline-none bg-gray1 z-10 mr-4 mt-2 flex flex-row items-center rounded-lg px-3 py-1"
+							>
+								<span class="text-gray5 text-lg"><p class="text-sm">Elon Musk</p></span
+								><CloseIcon class="text-gray5 p-1 pr-0" />
+							</button>
+							<button
+								class="focus:outline-none bg-gray1 z-10 mr-4 mt-2 flex flex-row items-center rounded-lg px-3 py-1"
+							>
+								<span class="text-gray5 text-lg"><p class="text-sm">Internet</p></span
+								><CloseIcon class="text-gray5 p-1 pr-0" />
+							</button>
+							<button
+								class="focus:outline-none bg-gray1 z-10 mr-4 mt-2 flex flex-row items-center rounded-lg px-3 py-1"
+							>
+								<span class="text-gray5 text-lg"><p class="text-sm">Web3</p></span
+								><CloseIcon class="text-gray5 p-1 pr-0" />
+							</button>
+						</div>
 					</div>
-					<div class="col-span-1"></div>
-					<div class="flex flex-row flex-wrap col-span-4">
-						<button class="bg-gray2 rounded-lg flex items-center text-gray7 px-4 py-2 focus:outline-none mr-6">
-							placeholder1
-							<CloseIcon class="p-1" />
-						</button>
-						<button class="bg-gray2 rounded-lg flex items-center text-gray7 px-4 py-2 focus:outline-none">
-							placeholder1
-							<CloseIcon class="p-1" />
-						</button>
-					</div>
-					<div class="col-span-5 flex justify-end mt-4">
-						<BrandedButton :text="`Save changes`" />
-					</div>
+				</div>
+				<div class="flex justify-end mt-8">
+					<BrandedButton :text="`Save changes`" />
 				</div>
 			</div>
 			<!-- Public view -->
@@ -50,49 +61,57 @@
 				<!-- Avatar and description -->
 				<div class="flex mb-6">
 					<Avatar :avatar="avatar" :authorID="profile.id" :noClick="true" :size="`w-12 h-12`" />
-					<p class="text-gray7 ml-4">
-						Subscribe to {{ profile.name }}'s email notifications and manage existing subscriptions here
+					<p class="text-gray7 ml-4 w-10/12">
+						Subscribe to {{ profile.name }}'s email notifications and manage them here
 					</p>
 				</div>
 				<!-- Topics -->
-				<div class="grid grid-cols-5 mb-3">
-					<h6 class="col-span-1 font-semibold text-lg">Topics</h6>
-					<div class="col-span-4 flex justify-between items-center">
-						<p>Receive email notifications for all new posts</p>
-						<label class="switch">
-							<input type="checkbox" />
-							<span class="slider round"></span>
-						</label>
-					</div>
-				</div>
-				<!-- Show list of available tags to subscribe to -->
-				<div class="grid grid-cols-5 mb-2">
-					<span class="col-span-1"></span>
-					<p class="col-span-4">Receive notifications based on tag:</p>
-				</div>
-				<div class="grid grid-cols-5 mb-6">
-					<span class="col-span-1"></span>
-					<div class="flex flex-row flex-wrap col-span-4">
-						<TagCard :tag="`placeholder1`" :noClick="true" class="mr-2 mb-2" />
-						<TagCard :tag="`placeholder2`" :noClick="true" class="mr-2 mb-2" />
-						<TagCard :tag="`placeholder3`" :noClick="true" class="mr-2 mb-2" />
-					</div>
-				</div>
-				<!-- Select email -->
-				<div class="grid grid-cols-5 mb-6">
-					<h6 class="col-span-1 font-semibold text-lg">Destination</h6>
-					<div class="col-span-4 flex flex-col">
-						<!-- For each active email -->
-						<div v-if="$store.state.session.email" class="flex flex-row items-center">
-							<input type="radio" checked />
-							<p class="ml-2">{{ $store.state.session.email }}</p>
+				<div class="flex flex-row justify-between mb-3 mt-8">
+					<!-- Add tag input -->
+					<label for="tagInput" class="font-semibold mr-20 mt-1">Topics</label>
+					<div class="flex flex-col w-full">
+						<div class="flex justify-between items-center">
+							<p>Receive email notifications for all new posts</p>
+							<label class="switch">
+								<input type="checkbox" />
+								<span class="slider round"></span>
+							</label>
+						</div>
+						<p class="mt-6 mb-3">Or receive notifications based on topics:</p>
+						<div class="flex flex-row flex-wrap text-lg">
+							<TagCard :tag="`placeholder1`" :noClick="true" class="mr-2" />
+							<TagCard :tag="`placeholder2`" :noClick="true" class="mr-2" />
+							<TagCard :tag="`placeholder3`" :noClick="true" class="mr-2" />
 						</div>
 					</div>
 				</div>
-				<!-- Submit or manage subscriptions -->
-				<div class="flex justify-end items-center">
-					<nuxt-link to="/settings/notifications" class="text-sm text-primary mr-4 flex flex-row items-center"
-						><PlusIcon class="p-1 mr-1" />Manage all my notifications</nuxt-link
+				<div class="flex flex-row justify-between mb-3 mt-14">
+					<!-- Add tag input -->
+					<label for="tagInput" class="font-semibold mr-9">Destination</label>
+					<div class="flex flex-col w-full">
+						<div class="col-span-4 flex flex-col">
+							<!-- For each active email -->
+							<div v-if="$store.state.session.email" class="flex flex-row items-center">
+								<label class="checkboxcontainer">
+									<input type="checkbox" checked="checked" />
+									<span class="checkmark"></span>
+								</label>
+								<p class="ml-2">{{ $store.state.session.email }}</p>
+							</div>
+							<button
+								class="flex items-center text-primary text-sm focus:outline-none mt-3"
+								@click="toggleAddEmailPopup"
+							>
+								<PlusIcon class="p-1 mr-1" />
+								Add an email address
+							</button>
+						</div>
+					</div>
+				</div>
+				<!-- Submit or manage email notifications -->
+				<div class="flex justify-end items-center mt-10">
+					<nuxt-link to="/settings/notifications" class="text-sm text-primary mr-6 flex flex-row items-center"
+						>Manage all my notifications</nuxt-link
 					>
 					<BrandedButton :text="`Save changes`" />
 				</div>
@@ -154,8 +173,8 @@ export default Vue.extend({
 .switch {
 	position: relative;
 	display: inline-block;
-	width: 60px;
-	height: 34px;
+	width: 50px;
+	height: 29px;
 }
 
 /* Hide default HTML checkbox */
@@ -181,10 +200,10 @@ export default Vue.extend({
 .slider:before {
 	position: absolute;
 	content: '';
-	height: 26px;
-	width: 26px;
-	left: 4px;
-	bottom: 4px;
+	height: 23px;
+	width: 23px;
+	left: 3px;
+	bottom: 3px;
 	background-color: white;
 	-webkit-transition: 0.4s;
 	transition: 0.4s;
@@ -199,9 +218,9 @@ input:focus + .slider {
 }
 
 input:checked + .slider:before {
-	-webkit-transform: translateX(26px);
-	-ms-transform: translateX(26px);
-	transform: translateX(26px);
+	-webkit-transform: translateX(21px);
+	-ms-transform: translateX(21px);
+	transform: translateX(21px);
 }
 
 /* Rounded sliders */
@@ -211,5 +230,77 @@ input:checked + .slider:before {
 
 .slider.round:before {
 	border-radius: 50%;
+}
+
+/* The container */
+.checkboxcontainer {
+	display: block;
+	position: relative;
+	padding-left: 30px;
+	height: 80%;
+	cursor: pointer;
+	font-size: 22px;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.checkboxcontainer input {
+	position: absolute;
+	opacity: 0;
+	cursor: pointer;
+	height: 0;
+	width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 20px;
+	width: 20px;
+	background-color: #dddddd;
+	border-radius: 5px;
+	-webkit-transition: 0.4s;
+	transition: 0.4s;
+}
+
+/* On mouse-over, add a grey background color */
+.checkboxcontainer:hover input ~ .checkmark {
+	background-color: #bbbbbb;
+}
+
+/* When the checkbox is checked, add a blue background */
+.checkboxcontainer input:checked ~ .checkmark {
+	background-color: #2e556a;
+	border-radius: 5px;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+	content: '';
+	position: absolute;
+	display: none;
+}
+
+/* Show the checkmark when checked */
+.checkboxcontainer input:checked ~ .checkmark:after {
+	display: block;
+}
+
+/* Style the checkmark/indicator */
+.checkboxcontainer .checkmark:after {
+	left: 9px;
+	top: -1px;
+	width: 7px;
+	height: 17px;
+	border: solid white;
+	border-width: 0 2px 2px 0;
+	-webkit-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	transform: rotate(45deg);
 }
 </style>
