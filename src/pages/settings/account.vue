@@ -53,8 +53,8 @@
 			<p class="text-gray5">
 				Blogchain is a place for writers to do great work and for readers to discover it. For now, during our beta
 				release, we are offering access to Blogchain on an invitation-only basis. We believe this is the best way to
-				seed a vibrant community that will grow over time. As an already registered user, you can invite one member your
-				social circle to participate to the Blogchain beta by sharing the following invite code:
+				seed a vibrant community that will grow over time. As an already registered user, you can invite one member from
+				your social circle to participate to the Blogchain beta by sharing the following invite code:
 			</p>
 			<p class="mt-4 text-sm" :class="inviteCodesRemaining > 0 ? `text-primary` : `text-negative`">
 				You have {{ inviteCodesRemaining }} invites remaining

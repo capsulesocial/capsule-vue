@@ -100,9 +100,9 @@
 							to add new payment features soon that will allow writers to get paid for the content they create, minus a
 							small transaction fee. <br /><br />
 
-							What we will <b>not</b> do, however, is sell ads or users’ information to third parties. We want to
+							What we will <b>not</b> do, however, is sell ads or user information to third parties. We want to
 							implement a business model for ourselves and our creators that is truly a win-win proposition, contrary to
-							exploitation that has become par for the course on other social networks.
+							the exploitation that has become par for the course on other social networks.
 						</div>
 					</div>
 				</article>
