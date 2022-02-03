@@ -1,15 +1,14 @@
 <template>
 	<main
-		v-show="!isLoading"
 		style="backdrop-filter: blur(10px)"
 		class="from-lightBGStart to-lightBGStop h-screen w-full flex-col justify-between overflow-y-scroll bg-gradient-to-r xl:w-3/5"
 	>
 		<CapsuleIcon class="pt-6 pl-10" />
-		<div v-show="isLoading" class="modal-animation flex w-full justify-center xl:w-3/4">
-			<div class="loader m-5 rounded-lg"></div>
-		</div>
-		<section v-show="!isLoading" class="flex items-center justify-center" style="height: 86%">
-			<div class="-mt-5 flex w-full flex-col items-center px-14">
+		<section class="flex items-center justify-center" style="height: 86%">
+			<div v-show="isLoading" class="modal-animation flex w-full justify-center w-full xl:w-1/2 z-20">
+				<div class="loader m-5 rounded-lg"></div>
+			</div>
+			<div v-show="!isLoading" class="-mt-5 flex w-full flex-col items-center px-14">
 				<!-- Step 0: Code redeem -->
 				<InviteCode
 					v-if="!hasInviteCode && !(userInfo || nearWallet)"
@@ -28,19 +27,31 @@
 					@updateUsername="updateUsername"
 				/>
 				<!-- Step 2: Sign up -->
-				<VerifyPhone
+				<div
 					v-show="!downloadKeyStep && (userInfo || nearWallet) && username === null"
-					:accountId="accountId"
-					:funds="funds"
-					:checkFunds="checkFunds"
-					:verify="verify"
-					:walletVerify="walletVerify"
-					:userInfo="userInfo"
-					class="w-full xl:w-1/2"
-					@updateFunds="updateFunds"
-					@setID="setID"
-				/>
-				<!-- Step 3: Download key -->
+					class="flex w-full flex items-center justify-center"
+				>
+					<VerifyPhone
+						v-if="!hasEnoughFunds()"
+						:accountId="accountId"
+						class="w-full xl:w-1/2"
+						@updateFunds="updateFunds"
+					/>
+					<!-- Step 3: Choose ID -->
+					<SelectID
+						v-else
+						:funds="funds"
+						:checkFunds="checkFunds"
+						:userInfo="userInfo"
+						:verify="verify"
+						:accountId="accountId"
+						:nearWallet="nearWallet"
+						class="w-full xl:w-1/2"
+						@setID="setID"
+						@setDownloadKeyStep="setDownloadKeyStep"
+					/>
+				</div>
+				<!-- Step 4: Download key -->
 				<DownloadKey v-if="downloadKeyStep" :aid="id" :accountId="accountId" class="w-full xl:w-1/2" />
 			</div>
 		</section>
@@ -60,6 +71,7 @@ import InviteCode from '@/components/register/InviteCode.vue'
 import DownloadKey from '@/components/register/DownloadKey.vue'
 import RegisterMethods from '@/components/register/RegisterMethods.vue'
 import VerifyPhone from '@/components/register/VerifyPhone.vue'
+import SelectID from '@/components/register/SelectID.vue'
 
 import CapsuleIcon from '@/components/icons/CapsuleNew.vue'
 // @ts-ignore
@@ -67,7 +79,7 @@ import ogImage from '@/assets/images/util/ogImage.png'
 
 import { MutationType, createSessionFromProfile, namespace as sessionStoreNamespace } from '~/store/session'
 
-import { login, register, registerNearWallet } from '@/backend/auth'
+import { login, register } from '@/backend/auth'
 import {
 	checkAccountStatus,
 	getUsernameNEAR,
@@ -77,6 +89,7 @@ import {
 	walletLogout,
 } from '@/backend/near'
 import { verifyTokenAndOnboard } from '@/backend/invite'
+import { hasSufficientFunds } from '@/backend/funder'
 
 interface IData {
 	id: string
@@ -98,6 +111,7 @@ export default Vue.extend({
 		DownloadKey,
 		RegisterMethods,
 		VerifyPhone,
+		SelectID,
 	},
 	layout: `unauth`,
 	data(): IData {
@@ -123,6 +137,9 @@ export default Vue.extend({
 			],
 		}
 	},
+	errorCaptured(err) {
+		this.$toastError(err)
+	},
 	async created() {
 		await Promise.all([this.postWalletLogin()])
 		this.nearWallet = this.isSignedInToWallet()
@@ -146,6 +163,9 @@ export default Vue.extend({
 			changeBio: MutationType.CHANGE_BIO,
 			changeLocation: MutationType.CHANGE_LOCATION,
 		}),
+		setDownloadKeyStep(): void {
+			this.downloadKeyStep = true
+		},
 		updateUserInfo(userInfo: TorusLoginResponse): void {
 			this.userInfo = userInfo
 		},
@@ -175,13 +195,15 @@ export default Vue.extend({
 			const status = await checkAccountStatus(accountId)
 			this.funds = status.balance
 		},
+		hasEnoughFunds(): boolean {
+			return hasSufficientFunds(this.funds)
+		},
 		async postWalletLogin() {
 			const walletConnection = getWalletConnection()
 			this.accountId = walletConnection.getAccountId()
 			if (!this.accountId) {
 				return false
 			}
-
 			const [username] = await Promise.all([getUsernameNEAR(this.accountId), this.checkFunds(), this.onboardAccount()])
 			this.username = username
 			if (this.username) {
@@ -211,19 +233,6 @@ export default Vue.extend({
 			}
 			return registerResult
 		},
-		async registerWallet() {
-			if (!this.accountId) {
-				this.$toastError(`Unexpected condition`)
-				return null
-			}
-			const registerResult = await registerNearWallet(this.id, this.accountId)
-			if (`error` in registerResult) {
-				this.$toastError(registerResult.error)
-				return null
-			}
-			this.$store.commit(`setWelcome`, true)
-			return registerResult
-		},
 		async verify() {
 			try {
 				if (!this.userInfo || !this.accountId) {
@@ -248,34 +257,7 @@ export default Vue.extend({
 				this.changeLocation(account.location)
 				this.$router.push(`/home`)
 			} catch (err: any) {
-				this.$toastError(err.message)
-			}
-		},
-		async walletVerify() {
-			try {
-				if (!this.nearWallet || !this.accountId) {
-					throw new Error(`Unexpected condition!`)
-				}
-
-				// Register
-				const res = await this.registerWallet()
-				if (!res) {
-					// Next line ensures multiple attempts to pick a username
-					return
-				}
-				const { profile, cid } = res
-
-				const account = createSessionFromProfile(cid, profile)
-				this.changeCID(cid)
-				this.changeID(account.id)
-				this.changeName(account.name)
-				this.changeEmail(account.email)
-				this.changeAvatar(account.avatar)
-				this.changeBio(account.bio)
-				this.changeLocation(account.location)
-				this.downloadKeyStep = true
-			} catch (err: any) {
-				this.$toastError(err.message)
+				throw new Error(err.message)
 			}
 		},
 		async onboardAccount() {
@@ -300,3 +282,23 @@ export default Vue.extend({
 	},
 })
 </script>
+
+<style>
+.loader {
+	border: 3px solid #eeeeee; /* Light grey */
+	border-top: 3px solid #2e556a; /* Dark teal */
+	border-radius: 50%;
+	width: 40px;
+	height: 40px;
+	animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+</style>

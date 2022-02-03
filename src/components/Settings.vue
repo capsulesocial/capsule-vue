@@ -92,21 +92,6 @@
 				class="placeholder-gray5 bg-gray1 focus:outline-none flex-grow rounded-lg px-2 py-1 text-black"
 			/>
 		</div>
-		<!-- Preferred Node -->
-		<!-- <div class="flex flex-row mb-2">
-			<label for="nodeURL" class="w-32">OrbitDB URL</label>
-			<input
-				id="nodeURL"
-				v-model="nodeURL"
-				type="text"
-				:placeholder="$store.state.nodeURL"
-				class="text-black placeholder-black px-2 py-1 bg-gray1 rounded-lg flex-grow"
-			/>
-		</div> -->
-		<!-- Socials -->
-		<!-- <div class="flex flex-row mb-2">
-			<label class="w-32">Socials</label>
-		</div> -->
 
 		<!-- Submit button -->
 		<div v-if="$store.state.session.id === $route.params.id" class="flex justify-end">
@@ -132,7 +117,6 @@ import { addPhotoToIPFS, getPhotoFromIPFS, preUploadPhoto } from '@/backend/phot
 
 interface IData {
 	newName: string
-	nodeURL: string
 	profilePic: null | string | ArrayBuffer
 	newEmail: string
 	location: string
@@ -155,7 +139,6 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			newName: ``,
-			nodeURL: ``,
 			profilePic: null,
 			newEmail: ``,
 			location: ``,
@@ -192,6 +175,9 @@ export default Vue.extend({
 		// 	this.$store.commit(`settings/changeDarkMode`, this.$store.state.settings.darkMode)
 		// }
 	},
+	errorCaptured(err) {
+		this.$toastError(`Error: ` + err)
+	},
 	methods: {
 		handleImageClick(): void {
 			const b = this.$refs.uploadedPic as HTMLElement
@@ -208,12 +194,11 @@ export default Vue.extend({
 		}),
 		hasChanged() {
 			return (
-				this.newName !== `` ||
-				this.newEmail !== `` ||
-				this.location !== `` ||
-				this.website !== `` ||
-				this.bio !== `` ||
-				this.nodeURL !== ``
+				(this.newName !== `` && this.newName !== this.$store.state.session.name) ||
+				(this.newEmail !== `` && this.newEmail !== this.$store.state.session.email) ||
+				(this.location !== `` && this.location !== this.$store.state.session.location) ||
+				(this.website !== `` && this.website !== this.$store.state.session.website) ||
+				(this.bio !== `` && this.bio !== this.$store.state.session.bio)
 			)
 		},
 		async handleImage(e: HTMLInputEvent) {
@@ -270,28 +255,30 @@ export default Vue.extend({
 				this.$toastWarning(`nothing to update`)
 				return
 			}
-			// Run quality rules before saving
-			if (this.newName !== ``) {
+			// Update name
+			if (this.newName !== `` && this.newName !== this.$store.state.session.name) {
 				if (this.newName.length < 2 || this.newName.length > 32) {
 					this.$toastError(`Invalid name length`)
 					return
 				}
 				this.changeName(this.newName.trim())
 			}
+			// Update bio
 			if (this.bio !== this.$store.state.session.bio && this.checkBio() > 0) {
 				this.changeBio(this.bio.trim())
 			}
-
+			// Update email
 			const qualityEmail = this.$qualityEmail(this.newEmail)
 			if (this.newEmail.length > 0 && this.$isError(qualityEmail)) {
 				this.$toastError(qualityEmail.error)
 				return
 			}
 			this.changeEmail(this.newEmail.trim())
-
+			// Update location
 			if (this.location !== this.$store.state.session.location) {
 				this.changeLocation(this.location.trim())
 			}
+			// Update website
 			if (this.website !== this.$store.state.session.website && this.website && this.website !== ``) {
 				if (
 					/^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([-.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/.test(
@@ -304,21 +291,15 @@ export default Vue.extend({
 					return
 				}
 			}
-			if (this.nodeURL && this.nodeURL !== this.$store.state.session.nodeURL) {
-				if (!/((http|https?):\/\/)?(www\.)?[a-z0-9\-.]{3,}\.[a-z]{3}$/.test(this.nodeURL)) {
+			try {
+				const profileUpdated = await this.updateProfile()
+				if (profileUpdated) {
+					this.$emit(`close`)
 					// Use HTML DOM styles: https://www.w3schools.com/jsref/dom_obj_style.asp
-					this.$toastError(`Invalid URL`)
-					return
+					this.$toastSuccess(`Your profile has been successfully updated`)
 				}
-
-				this.$store.commit(`changeNodeURL`, this.nodeURL)
-			}
-			const profileUpdated = await this.updateProfile()
-			if (profileUpdated) {
-				this.$emit(`close`)
-				// Use HTML DOM styles: https://www.w3schools.com/jsref/dom_obj_style.asp
-				this.$toastSuccess(`Your profile has been successfully updated`)
-				// this.$router.go(0)
+			} catch (err) {
+				throw new Error(`${err}`)
 			}
 		},
 	},
