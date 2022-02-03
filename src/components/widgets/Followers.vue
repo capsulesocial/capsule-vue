@@ -1,9 +1,9 @@
 <template>
 	<article
-		class="from-lightBGStart to-lightBGStop border-lightBorder mb-5 w-full rounded-lg border bg-gradient-to-r p-4 shadow-lg"
+		class="from-lightBGStart to-lightBGStop border-lightBorder mb-5 w-full rounded-lg border bg-gradient-to-r p-4 pt-3 shadow-lg"
 		style="backdrop-filter: blur(10px)"
 	>
-		<h6 class="text-primary mb-2 font-semibold">Recent Followers</h6>
+		<h6 class="text-primary mb-4 font-semibold">Recent Followers</h6>
 		<article v-if="profiles.length == 0">
 			<p class="text-gray5 mb-5 mt-3 text-sm">
 				<span> It seems no one is following you yet </span>
