@@ -115,20 +115,18 @@
 			<!-- Top overlay with selector -->
 			<div v-show="showEmotions" class="relative flex w-full flex-row-reverse">
 				<div
-					class="z-10 mr-1 flex flex-row justify-between rounded-tr-lg bg-white p-5"
-					:style="$route.name === `post-post` ? `width: 490px` : `width: 406px`"
+					class="z-10 mr-1 hidden xl:flex flex-row justify-between rounded-tr-lg bg-white p-5 xl:w-3/5"
 					style="margin-bottom: -112px; margin-top: 1px; pointer-events: none"
 				>
 					<h6 class="text-primary self-center text-center text-2xl font-semibold">How do you feel?</h6>
 				</div>
-				<div class="absolute z-10 mt-10 mr-8 flex items-center">
+				<div class="absolute z-20 mt-8 xl:mt-10 mr-8 flex items-center">
 					<button class="bg-gray1 focus:outline-none rounded-full p-1" @click="showEmotions = false">
 						<CloseIcon />
 					</button>
 				</div>
 				<div
-					class="z-10 flex flex-row justify-between rounded-tl-lg bg-white p-5"
-					:style="$route.name === `post-post` ? `width: 350px` : `width: 306px`"
+					class="z-10 flex flex-row justify-between rounded-tl-lg bg-white p-5 w-full xl:w-2/5 mr-1 xl:mr-0"
 					style="
 						margin-bottom: -112px;
 						background: linear-gradient(#ffffff, rgba(255, 255, 255, 0));
@@ -159,7 +157,7 @@
 					:class="showEmotions ? `` : `border p-2 bg-` + selectedEmotionColor"
 				>
 					<div
-						class="flex w-full items-center justify-center overflow-hidden rounded-xl"
+						class="flex w-full items-center justify-center overflow-hidden rounded-xl relative"
 						:style="showEmotions ? `height: 20rem` : `height: 10rem`"
 					>
 						<div v-if="this.$store.state.session.id !== ``" class="flex w-full flex-row">
@@ -170,35 +168,43 @@
 										<img
 											:src="activeEmotion.image"
 											:alt="activeEmotion.label"
-											class="object-contain"
-											style="width: 126px; height: 126px; transform: rotateY(180deg)"
+											class="object-contain w-24 h-24 xl:w-32 xl:h-32"
+											style="transform: rotateY(180deg)"
 										/>
 									</span>
 									<span v-else
 										><FlipIcon
-											class="transition duration-500 ease-in-out opacity-50 hover:opacity-100"
-											style="width: 140px; height: 140px"
+											class="transition duration-500 ease-in-out opacity-50 hover:opacity-100 w-24 h-24 xl:w-32 xl:h-32"
 									/></span>
 								</button>
 								<textarea
 									v-if="comments.length > 0"
 									v-model="comment"
-									class="focus:outline-none mr-6 h-40 w-full resize-none overflow-y-auto py-4 pl-2 pr-16 leading-normal"
+									class="focus:outline-none mr-6 h-40 w-full resize-none overflow-y-auto py-4 pl-2 pr-10 xl:pr-16 leading-normal"
 									name="body"
 									placeholder="What's your response?"
 								/>
 								<textarea
 									v-else
 									v-model="comment"
-									class="focus:outline-none mr-6 h-40 w-full resize-none overflow-y-auto py-4 pl-2 pr-16 leading-normal"
+									class="focus:outline-none mr-6 h-40 w-full resize-none overflow-y-auto py-4 pl-2 pr-10 xl:pr-16 leading-normal"
 									name="body"
 									placeholder="Be the first one commenting this post..."
 								/>
 								<div class="relative">
 									<span class="absolute bottom-0 right-0 flex flex-col">
+										<button
+											class="bg-primary focus:outline-none block rounded-lg xl:hidden"
+											style="margin-right: 15.2px; margin-bottom: 15px"
+											:class="comment !== '' && activeEmotion.label !== '' ? '' : 'opacity-50'"
+											@click="sendComment"
+										>
+											<SendIcon class="m-2 mb-3 ml-3 h-5 w-5 text-white transform rotate-45" />
+										</button>
 										<BrandedButton
 											style="margin-right: 15.2px; margin-bottom: 15px"
 											text="Post"
+											class="hidden xl:block"
 											:action="sendComment"
 											:thin="true"
 											:class="comment !== '' && activeEmotion.label !== '' ? '' : 'opacity-50'"
@@ -210,12 +216,12 @@
 							<div
 								v-show="showEmotions"
 								ref="scrollContainer"
-								class="modal-animation w-full overflow-y-scroll bg-white px-6"
+								class="modal-animation w-full overflow-y-scroll bg-white px-4 xl:px-6 flex justify-center"
 								style="height: 320px; scroll-snap-type: y mandatory; scroll-snap-stop: always"
 							>
 								<!-- Middle selector area -->
 								<div
-									class="absolute rounded-lg p-2"
+									class="absolute rounded-lg p-2 h-32 xl:h-24 mt-24 xl:mt-28"
 									:class="
 										selectedEmotionColor === `positive` ||
 										selectedEmotionColor === `neutral` ||
@@ -223,15 +229,14 @@
 											? `bg-opacity-25 bg-` + selectedEmotionColor
 											: `bg-gray1`
 									"
-									style="height: 96px; margin-top: 112px"
-									:style="$route.name === `post-post` ? `width: 716px` : `width: 646px`"
+									style="width: 92%"
 								></div>
 								<!-- Faces grid -->
-								<div class="relative" style="padding-bottom: 120px; padding-top: 120px">
+								<div class="relative w-full" style="padding-bottom: 120px; padding-top: 120px">
 									<div
 										v-for="row in faceGroupings"
 										:key="row[0].label + row[1].label + row[2].label"
-										class="relative flex w-full flex-row px-2"
+										class="relative flex w-full flex-row mb-2 xl:px-2 justify-between"
 										style="scroll-snap-align: center"
 									>
 										<button
@@ -242,12 +247,20 @@
 											style="transition: all 0.3s ease-in-out"
 											@click="setEmotion(face)"
 										>
-											<img :src="face.image" :alt="face.label" class="h-20 w-20" />
+											<img :src="face.image" :alt="face.label" class="h-20 w-20" style="transform: rotateY(180deg)" />
+											<p
+												class="capitalize xl:hidden mt-1"
+												:class="
+													selectedEmotion.label === face.label ? `font-bold text-` + selectedEmotionColor : `text-gray7`
+												"
+											>
+												{{ face.label }}
+											</p>
 										</button>
 										<div
 											v-for="face in row"
 											:key="face.label + face.label"
-											class="face-tag flex flex-grow items-center justify-center"
+											class="face-tag hidden xl:flex flex-grow items-center justify-center"
 										>
 											<button
 												class="focus:outline-none outline-none flex flex-grow items-center justify-center"
@@ -277,18 +290,17 @@
 			<!-- Bottom overlay with selector -->
 			<div v-show="showEmotions" class="relative flex w-full flex-row-reverse">
 				<div
-					class="z-10 mr-1 flex flex-row-reverse items-end rounded-br-xl bg-white p-5"
+					class="z-10 mr-1 hidden xl:flex flex-row-reverse items-end rounded-br-xl bg-white p-5 xl:w-3/5"
 					style="height: 111px; margin-top: -112px; margin-bottom: 1px; pointer-events: none"
-					:style="$route.name === `post-post` ? `width: 490px` : `width: 406px;  margin-right: 53px;`"
 				></div>
 				<button
-					class="bg-primary focus:outline-none absolute bottom-0 right-0 z-10 mb-7 mr-7 rounded-lg px-6 py-2 text-white"
+					class="bg-primary focus:outline-none absolute bottom-0 right-0 z-20 mb-7 mr-7 rounded-lg px-6 py-2 text-white"
 					@click="confirmEmotion"
 				>
 					Select
 				</button>
 				<div
-					class="z-10 flex flex-row-reverse items-end rounded-bl-lg bg-white p-5"
+					class="z-10 flex flex-row-reverse items-end rounded-bl-lg bg-white p-5 w-full mr-1 xl:mr-0 xl:w-2/5"
 					style="
 						height: 111px;
 						margin-top: -112px;
@@ -297,7 +309,6 @@
 						margin-bottom: 1px;
 						margin-left: 1px;
 					"
-					:style="$route.name === `post-post` ? `width: 350px` : `width: 306px`"
 				></div>
 			</div>
 			<Comment
@@ -321,6 +332,7 @@ import BrandedButton from '@/components/BrandedButton.vue'
 import Comment from '@/components/post/Comment.vue'
 import CommentFilter from '@/components/post/CommentFilter.vue'
 import FlipIcon from '@/components/icons/Flip.vue'
+import SendIcon from '@/components/icons/Send.vue'
 import CloseIcon from '@/components/icons/X.vue'
 import StatsIcon from '@/components/icons/Stats.vue'
 import ChevronLeft from '@/components/icons/ChevronLeft.vue'
@@ -366,6 +378,7 @@ export default Vue.extend({
 		StatsIcon,
 		ChevronLeft,
 		ChevronRight,
+		SendIcon,
 	},
 	props: {
 		postCID: {
