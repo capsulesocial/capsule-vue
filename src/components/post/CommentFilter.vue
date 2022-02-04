@@ -2,7 +2,7 @@
 	<div class="relative flex flex-grow items-center">
 		<!-- Comment filter -->
 		<div class="flex w-full flex-row items-center justify-end">
-			<h6 class="hidden xl:block">Sort by:</h6>
+			<h6 class="hidden xl:block">Filter by:</h6>
 			<button
 				class="toggle focus:outline-none ml-4 flex w-32 items-center justify-between rounded-lg border px-4 text-sm shadow-lg"
 				@click.stop="showFilter = !showFilter"
@@ -13,7 +13,7 @@
 				<ChevronDown v-else />
 			</button>
 			<button v-show="filter !== ``" @click="$emit(`clicked`, ``)">
-				<span class="ml-2 text-sm">Clear</span>
+				<span class="ml-2 text-sm text-primary">Clear</span>
 			</button>
 		</div>
 		<!-- comment filter dropdown -->
@@ -57,7 +57,7 @@
 					class="tooltip focus:outline-none border-lightBorder relative inline-block h-24 w-24 transform rounded-xl border transition duration-500 ease-in-out hover:scale-105"
 				>
 					<img
-						:src="reactionList[r].leftImage"
+						:src="reactionList[r].image"
 						:alt="reactionList[r].label"
 						class="h-24 w-24 flex-shrink-0"
 						@click="updateFilter(reactionList[r].label)"

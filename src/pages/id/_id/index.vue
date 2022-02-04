@@ -27,6 +27,9 @@
 				:isDeleted="p.deleted"
 			/>
 		</article>
+		<p v-if="noMorePosts" class="text-gray5 py-5 text-center text-sm" style="backdrop-filter: blur(10px)">
+			No more posts
+		</p>
 		<article v-show="isLoading" class="modal-animation flex justify-center">
 			<div class="loader m-10"></div>
 		</article>
@@ -46,6 +49,7 @@ interface IData {
 	currentOffset: number
 	limit: number
 	algorithm: Algorithm
+	noMorePosts: boolean
 }
 
 export default Vue.extend({
@@ -74,6 +78,7 @@ export default Vue.extend({
 			currentOffset: 0,
 			limit: 10,
 			algorithm: `NEW`,
+			noMorePosts: false,
 		}
 	},
 	async created() {
@@ -99,6 +104,9 @@ export default Vue.extend({
 				container.removeEventListener(`scroll`, this.handleScroll)
 			}
 			this.currentOffset += this.limit
+			if (posts.length === 0 && this.currentOffset > 10) {
+				this.noMorePosts = true
+			}
 			this.isLoading = false
 			return this.posts.concat(posts)
 		},

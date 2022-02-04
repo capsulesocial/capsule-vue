@@ -177,7 +177,14 @@
 						:class="quoteContent !== `` ? '' : 'opacity-50'"
 						style="transition: all 0.4s"
 					>
-						<BrandedButton :action="handleSendRepost" :text="`Post`" />
+						<button
+							class="bg-primary focus:outline-none block rounded-lg xl:hidden"
+							style="margin-right: 15.2px; margin-bottom: 15px"
+							@click="handleSendRepost"
+						>
+							<SendIcon class="m-2 mb-3 ml-3 h-5 w-5 text-white transform rotate-45" />
+						</button>
+						<BrandedButton :action="handleSendRepost" :text="`Quote`" class="hidden xl:block" />
 					</div>
 				</div>
 				<PostActions
@@ -439,6 +446,15 @@
 								<CommentIcon :isActive="showComments" />
 								<span v-if="comments" class="ml-1">{{ comments.length }}</span>
 							</button>
+							<Repost
+								:repost="repost"
+								:post="post"
+								:cid="postCID"
+								class="fill-primary mr-4"
+								:hasRepost="hasReposted"
+								:repostCount="repostCount"
+								@toggleRepost="toggleQuoteRepost"
+							/>
 							<Share
 								:repost="repost"
 								:post="post"
@@ -472,6 +488,7 @@ import Repost from '@/components/post/Repost.vue'
 import TagPill from '@/components/Tag.vue'
 import More from '@/components/icons/More.vue'
 import XIcon from '@/components/icons/X.vue'
+import SendIcon from '@/components/icons/Send.vue'
 import FriendButton from '@/components/FriendButton.vue'
 import RepostIcon from '@/components/icons/Repost.vue'
 import StatsIcon from '@/components/icons/Stats.vue'
@@ -535,6 +552,7 @@ export default Vue.extend({
 		FriendButton,
 		RepostIcon,
 		BrandedButton,
+		SendIcon,
 	},
 	props: {
 		repost: {

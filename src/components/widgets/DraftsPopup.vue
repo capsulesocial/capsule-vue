@@ -10,7 +10,19 @@
 					<h2 class="text-primary text-3xl font-semibold">Drafts</h2>
 					<button class="focus:outline-none bg-gray1 rounded-full p-1" @click="$emit(`close`)"><CloseIcon /></button>
 				</div>
-				<div class="flex w-full flex-col-reverse items-center">
+				<div
+					v-if="
+						$store.state.draft.drafts.length === 1 &&
+						$store.state.draft.drafts[0].title === `` &&
+						$store.state.draft.drafts[0].subtitle === `` &&
+						$store.state.draft.drafts[0].content === ``
+					"
+					class="flex w-full flex-col items-center mt-12"
+				>
+					<p class="text-gray5 mb-5 text-sm">It seems you don't have any drafts yet, you can start a new one here:</p>
+					<SecondaryButton :text="`Write a post`" :action="handleWriteNewDraft" />
+				</div>
+				<div v-else class="flex w-full flex-col-reverse items-center">
 					<div
 						v-for="d in $store.state.draft.drafts"
 						:key="$store.state.draft.drafts.indexOf(d)"
@@ -33,12 +45,13 @@
 <script lang="ts">
 import Vue from 'vue'
 import DraftPreview from '@/components/DraftPreview.vue'
+import SecondaryButton from '@/components/SecondaryButton.vue'
 import CloseIcon from '@/components/icons/X.vue'
 
 interface IData {}
 
 export default Vue.extend({
-	components: { DraftPreview, CloseIcon },
+	components: { DraftPreview, CloseIcon, SecondaryButton },
 	data(): IData {
 		return {}
 	},
@@ -56,6 +69,9 @@ export default Vue.extend({
 			if (e.target.parentNode.classList[0] === `popup`) {
 				this.$emit(`close`)
 			}
+		},
+		handleWriteNewDraft() {
+			this.$router.push(`/post`)
 		},
 	},
 })

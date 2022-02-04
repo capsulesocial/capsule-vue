@@ -501,7 +501,7 @@ textarea#subtitle {
 	box-sizing: border-box;
 }
 .hidemetaButton {
-	transform: translateX(6.4rem);
+	transform: translateX(5.15rem);
 	padding: 0.7rem;
 }
 .content {

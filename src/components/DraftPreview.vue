@@ -1,20 +1,15 @@
 <template>
-	<div class="my-4 flex flex-row items-center justify-between">
+	<div
+		v-if="draft.title !== `` || draft.subtitle !== `` || draft.content !== ``"
+		class="my-4 flex flex-row items-center justify-between"
+	>
 		<!-- Title -->
 		<div class="flex flex-grow flex-col">
 			<h6
-				v-if="numberOfDrafts > 1"
 				class="truncate text-base font-semibold"
 				:style="$route.name === `home` ? `max-width: 259px` : `max-width: 408px`"
 			>
 				{{ draft.title === `` ? `New Post` : draft.title }}
-			</h6>
-			<h6
-				v-else
-				class="truncate text-base font-semibold"
-				:style="$route.name === `home` ? `max-width: 259px` : `max-width: 408px`"
-			>
-				{{ draft.title === `` ? `Default draft` : draft.title }}
 			</h6>
 			<p v-if="draft.timestamp !== 0" class="text-gray5 text-sm">Last saved {{ $formatDate(draft.timestamp) }}</p>
 			<p v-else class="text-gray5 text-sm">No save</p>
@@ -50,11 +45,7 @@
 					<span class="text-primary ml-1 self-center text-sm">Edit this draft</span>
 				</button>
 				<!-- Delete -->
-				<button
-					v-if="numberOfDrafts > 1"
-					class="focus:outline-none text-negative mt-2 flex"
-					@click="deleteDraft(draft)"
-				>
+				<button class="focus:outline-none text-negative mt-2 flex" @click="deleteDraft(draft)">
 					<BinIcon class="p-1" />
 					<span class="text-negative ml-1 self-center text-sm">Delete this draft</span>
 				</button>

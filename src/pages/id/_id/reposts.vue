@@ -28,6 +28,9 @@
 				:isDeleted="p.deleted"
 			/>
 		</article>
+		<p v-if="noMorePosts" class="text-gray5 py-5 text-center text-sm" style="backdrop-filter: blur(10px)">
+			No more posts
+		</p>
 		<article v-show="isLoading" class="flex justify-center">
 			<div class="loader m-10"></div>
 		</article>
@@ -50,6 +53,7 @@ interface IData {
 	limit: number
 	following: Set<string>
 	algorithm: Algorithm
+	noMorePosts: boolean
 }
 
 export default Vue.extend({
@@ -70,6 +74,7 @@ export default Vue.extend({
 			limit: 10,
 			following: new Set(),
 			algorithm: `NEW`,
+			noMorePosts: false,
 		}
 	},
 	async created() {
@@ -92,13 +97,9 @@ export default Vue.extend({
 					{ authorID: this.$route.params.id },
 					{ sort: this.algorithm, offset: this.currentOffset, limit: this.limit },
 				)
-				// Remove deleted reposts
-				// res.forEach((post: IRepostResponse | any) => {
-				// 	if (post.deleted) {
-				// 		res.splice(res.indexOf(post), 1)
-				// 	}
-				// })
+				// When no more posts
 				if (res.length < this.limit) {
+					this.noMorePosts = true
 					const container = this.$parent.$refs.scrollContainer as HTMLElement
 					container.removeEventListener(`scroll`, this.handleScroll)
 				}
