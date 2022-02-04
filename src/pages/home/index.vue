@@ -166,7 +166,7 @@ export default Vue.extend({
 			}
 			const posts = await getPosts({}, id, payload)
 			this.currentOffset += this.limit
-			if (posts.length === 0) {
+			if (posts.length === 0 && this.currentOffset > 10) {
 				this.noMorePosts = true
 			}
 			this.isLoading = false

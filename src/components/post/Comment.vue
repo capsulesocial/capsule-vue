@@ -44,7 +44,7 @@
 							<p class="break-words py-1 font-sans text-lg leading-relaxed">
 								{{ content }}
 							</p>
-							<div class="mt-8 flex h-full flex-row">
+							<div class="mt-8 flex h-full flex-row items-center">
 								<button
 									class="text-primary focus:outline-none text-left font-sans text-sm"
 									@click="isReplying = !isReplying"

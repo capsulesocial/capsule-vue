@@ -109,7 +109,7 @@ export default Vue.extend({
 				}
 				this.reposts = this.reposts.concat(res)
 				this.currentOffset += this.limit
-				if (this.reposts.length === 0) {
+				if (this.reposts.length === 0 && this.currentOffset > 10) {
 					this.noMorePosts = true
 				}
 				this.isLoading = false

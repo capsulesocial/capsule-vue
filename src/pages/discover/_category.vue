@@ -172,7 +172,7 @@ export default Vue.extend({
 				offset: this.currentOffset,
 			})
 			this.currentOffset += this.limit
-			if (posts.length === 0) {
+			if (posts.length === 0 && this.currentOffset > 10) {
 				this.noMorePosts = true
 			}
 			this.isLoading = false
