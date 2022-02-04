@@ -142,7 +142,6 @@ export default Vue.extend({
 				this.repostOffset -= 1
 				this.$toastSuccess(`This repost has been successfully removed from your profile`)
 			}
-			this.$emit(`repostAction`)
 		},
 		toggleDropdown() {
 			this.showReposts = !this.showReposts

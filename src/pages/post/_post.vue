@@ -52,13 +52,7 @@
 							class="pr-2"
 							@clicked="getBookmarkStatus"
 						/>
-						<ShareButton
-							:post="post"
-							:cid="$route.params.post"
-							:hasRepost="hasReposted"
-							:repostCount="repostCount"
-							@toggleRepost="handleRepost"
-						/>
+						<ShareButton :post="post" :cid="$route.params.post" :hasRepost="hasReposted" :repostCount="repostCount" />
 					</div>
 				</article>
 				<article>
@@ -137,14 +131,15 @@
 					<div class="flex flex-row justify-between">
 						<div class="flex items-center">
 							<BookmarkButton :postID="$route.params.post" :hasBookmark="isBookmarked" @clicked="getBookmarkStatus" />
-							<ShareButton
+							<RepostButton
 								:post="post"
 								:cid="$route.params.post"
-								class="z-20"
 								:hasRepost="hasReposted"
 								:repostCount="repostCount"
+								class="mx-4"
 								@toggleRepost="handleRepost"
 							/>
+							<ShareButton :post="post" :cid="$route.params.post" @toggleRepost="handleRepost" />
 						</div>
 					</div>
 					<PostActions :postCID="$route.params.post" :bookmarksCount="bookmarksCount" :repostsCount="repostCount" />
@@ -167,7 +162,7 @@
 				:repostCount="repostCount"
 				:bookmarksCount="bookmarksCount"
 				:displayRepost="true"
-				:isDeleted="p.deleted"
+				:isDeleted="post.deleted"
 				@closePopup="closePopup"
 			/>
 		</div>
@@ -182,6 +177,7 @@ import PostActions from '@/components/post/Actions.vue'
 import AuthorCard from '@/components/AuthorCard.vue'
 import TagCard from '@/components/Tag.vue'
 import BookmarkButton from '@/components/post/BookmarkButton.vue'
+import RepostButton from '@/components/post/Repost.vue'
 import ShareButton from '@/components/post/Share.vue'
 import Avatar from '@/components/Avatar.vue'
 import XIcon from '@/components/icons/X.vue'
@@ -234,6 +230,7 @@ export default Vue.extend({
 		XIcon,
 		FriendButton,
 		PostCard,
+		RepostButton,
 	},
 	layout: `reader`,
 	// mixins: [markdown],
