@@ -84,6 +84,8 @@
 import Vue from 'vue'
 import DOMPurify from 'dompurify'
 import Turndown from 'turndown'
+// @ts-ignore
+import { strikethrough } from 'turndown-plugin-gfm'
 import Quill from 'quill'
 // @ts-ignore
 import QuillMarkdown from 'quilljs-markdown'
@@ -136,6 +138,7 @@ const options = {
 const turndownService = new Turndown()
 turndownService.addRule(`codeblock`, preRule)
 turndownService.addRule(`ipfsimage`, ipfsImageRule)
+turndownService.use(strikethrough)
 
 export default Vue.extend({
 	components: {
