@@ -1,7 +1,7 @@
 <template>
 	<div class="relative flex items-end">
 		<button
-			class="focus:outline-none hover:text-primary toggle flex items-end"
+			class="focus:outline-none hover:text-primary toggleShare flex items-end"
 			:class="showSocialShares ? 'text-primary' : ''"
 			@click.stop="toggleDropdown"
 		>
@@ -86,7 +86,7 @@ export default Vue.extend({
 				if (
 					e.target.parentNode === null ||
 					e.target.parentNode.classList === undefined ||
-					!e.target.parentNode.classList.contains(`toggle`)
+					!e.target.parentNode.classList.contains(`toggleShare`)
 				) {
 					this.showSocialShares = false
 				}

@@ -1,7 +1,7 @@
 <template>
 	<div class="relative flex items-end">
 		<button
-			class="focus:outline-none hover:text-primary toggle flex items-end"
+			class="focus:outline-none hover:text-primary toggleRepost flex items-end"
 			:class="showReposts ? 'text-primary' : ''"
 			@click.stop="toggleDropdown"
 		>
@@ -17,7 +17,7 @@
 					? 'bg-lightBG text-lightPrimaryText border-lightBorder'
 					: 'bg-darkBG text-darkPrimaryText border-darkBorder'
 			"
-			class="border-lightBorder modal-animation dropdownRepostOpen absolute z-10 flex w-40 flex-col rounded-lg border p-2 shadow-lg"
+			class="border-lightBorder modal-animation dropdownRepostOpen absolute z-20 flex w-40 flex-col rounded-lg border p-2 shadow-lg"
 			style="left: 50px"
 		>
 			<!-- Simple Repost -->
@@ -108,7 +108,7 @@ export default Vue.extend({
 				if (
 					e.target.parentNode === null ||
 					e.target.parentNode.classList === undefined ||
-					!e.target.parentNode.classList.contains(`toggle`)
+					!e.target.parentNode.classList.contains(`toggleRepost`)
 				) {
 					this.showReposts = false
 				}
