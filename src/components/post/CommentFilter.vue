@@ -2,7 +2,7 @@
 	<div class="relative flex flex-grow items-center">
 		<!-- Comment filter -->
 		<div class="flex w-full flex-row items-center justify-end">
-			<h6 class="hidden xl:block">Sort by:</h6>
+			<h6 class="hidden xl:block">Filter by:</h6>
 			<button
 				class="toggle focus:outline-none ml-4 flex w-32 items-center justify-between rounded-lg border px-4 text-sm shadow-lg"
 				@click.stop="showFilter = !showFilter"

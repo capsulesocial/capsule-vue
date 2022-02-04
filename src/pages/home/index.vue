@@ -33,7 +33,7 @@
 			<div
 				v-if="posts"
 				ref="container"
-				class="xl:w-748 min-h-180 h-180 xl:min-h-200 xl:h-200 modal-animation fixed w-full overflow-y-auto"
+				class="xl:w-748 min-h-180 h-180 xl:min-h-220 xl:h-220 modal-animation fixed w-full overflow-y-auto"
 			>
 				<div
 					v-if="!isLoading && algorithm === `FOLLOWING` && following.size === 0 && posts.length === 0"
@@ -76,6 +76,9 @@
 						@updateBookmarks="updateBookmarks"
 					/>
 				</article>
+				<p v-if="noMorePosts" class="text-gray5 py-5 text-center text-sm" style="backdrop-filter: blur(10px)">
+					No more posts
+				</p>
 			</div>
 			<!-- Not loaded yet -->
 			<article v-show="isLoading" class="modal-animation flex h-screen w-full justify-center pt-12">
@@ -100,6 +103,7 @@ interface IData {
 	algorithm: Algorithm
 	currentOffset: number
 	limit: number
+	noMorePosts: boolean
 }
 
 export default Vue.extend({
@@ -124,6 +128,7 @@ export default Vue.extend({
 			isLoading: true,
 			currentOffset: 0,
 			limit: 10,
+			noMorePosts: false,
 		}
 	},
 	head() {
@@ -161,6 +166,9 @@ export default Vue.extend({
 			}
 			const posts = await getPosts({}, id, payload)
 			this.currentOffset += this.limit
+			if (posts.length === 0) {
+				this.noMorePosts = true
+			}
 			this.isLoading = false
 			// Remove deleted reposts
 			if (alg === `FOLLOWING`) {

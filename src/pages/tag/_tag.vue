@@ -14,7 +14,7 @@
 		<div ref="container" class="xl:w-750 min-h-130 h-130 xl:min-h-150 xl:h-150 fixed w-full overflow-y-auto">
 			<article v-if="posts.length == 0" class="mt-36 grid justify-items-center overflow-y-hidden px-6 xl:px-0">
 				<p class="text-gray5 align-end mb-5 flex items-end text-sm" style="max-width: 366px">
-					It seems that there is no posts containing that topic yet
+					It seems there are no posts under this topic yet
 				</p>
 				<SecondaryButton :text="`Back home`" :action="toggleHomeFeed" />
 				<img :src="require(`@/assets/images/brand/Bookmarks.webp`)" class="top-0 mt-64 xl:-mt-2" />
@@ -35,6 +35,9 @@
 					:isDeleted="p.deleted"
 				/>
 			</article>
+			<p v-if="noMorePosts" class="text-gray5 py-5 text-center text-sm" style="backdrop-filter: blur(10px)">
+				No more posts
+			</p>
 		</div>
 		<!-- Not loaded yet -->
 		<article v-show="isLoading" class="flex w-full justify-center">
@@ -58,6 +61,7 @@ interface IData {
 	currentOffset: number
 	limit: number
 	algorithm: Algorithm
+	noMorePosts: boolean
 }
 
 export default Vue.extend({
@@ -76,6 +80,7 @@ export default Vue.extend({
 			currentOffset: 0,
 			limit: 10,
 			algorithm: `NEW`,
+			noMorePosts: false,
 		}
 	},
 	head() {
@@ -118,6 +123,7 @@ export default Vue.extend({
 			})
 			this.currentOffset += this.limit
 			if (posts.length === 0) {
+				this.noMorePosts = true
 				const container = this.$refs.container as HTMLElement
 				container.removeEventListener(`scroll`, this.handleScroll)
 			}

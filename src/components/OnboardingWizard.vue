@@ -164,17 +164,17 @@ export default Vue.extend({
 		getText(): string {
 			switch (this.step) {
 				case 0:
-					return `As your daily entry point to Blogchain, this screen is important. Make it truly your own by picking whichever options you prefer for displaying content, editing tools, widgets, and more.`
+					return `Make it truly your own by selecting your preferences for displaying content, editing tools, updating widgets, and customizing everything as you wish!`
 				case 1:
-					return `On this page, we make it easy for you to find posts by writers who suit your interests well. Browse categories, featured tags, or trending topics to get started.`
+					return `Here you can easily browse posts that suit your interests. Scroll through  various categories, featured tags, or trending topics to get started.`
 				case 2:
-					return `Sometimes a post or headline catches your attention, but there’s no time to read it now. That’s why Blogchain makes it easy to highlight such content for later and then share with friends if you want.`
+					return `Sometimes a post or headline catches your attention, but you’re short of time. No worries. Blogchain makes it easy to save and share content for later.`
 				case 3:
-					return `Have an idea you’d like to share with the world? Blogchain’s simple editing tool will make it easy for you to craft and publish your post in a intuitive writing experience.`
+					return `Have an idea you’d like to share with the world? Blogchain’s simple editing tool makes it easy to craft and publish your post through an intuitive writing experience.`
 				case 4:
-					return `Agree or disagree with something you’ve read on Blogchain? Use our comment features to talk about it with other readers. You can even include one of our custom reaction illustrations to make your point.`
+					return `Agree or disagree with something you’ve read on Blogchain? Use our comment features to discuss with other readers. You can even include a custom reaction illustration to make your point.`
 				case 5:
-					return `You will be able to change your profile and add more informations later on your profile page.`
+					return `You’ll be able to update your profile or add more information later!`
 				default:
 					return `out of scope`
 			}

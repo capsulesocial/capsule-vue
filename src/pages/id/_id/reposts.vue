@@ -28,6 +28,9 @@
 				:isDeleted="p.deleted"
 			/>
 		</article>
+		<p v-if="noMorePosts" class="text-gray5 py-5 text-center text-sm" style="backdrop-filter: blur(10px)">
+			No more posts
+		</p>
 		<article v-show="isLoading" class="flex justify-center">
 			<div class="loader m-10"></div>
 		</article>
@@ -50,6 +53,7 @@ interface IData {
 	limit: number
 	following: Set<string>
 	algorithm: Algorithm
+	noMorePosts: boolean
 }
 
 export default Vue.extend({
@@ -70,6 +74,7 @@ export default Vue.extend({
 			limit: 10,
 			following: new Set(),
 			algorithm: `NEW`,
+			noMorePosts: false,
 		}
 	},
 	async created() {
@@ -104,6 +109,9 @@ export default Vue.extend({
 				}
 				this.reposts = this.reposts.concat(res)
 				this.currentOffset += this.limit
+				if (this.reposts.length === 0) {
+					this.noMorePosts = true
+				}
 				this.isLoading = false
 			} catch (error) {
 				// TODO: handle error

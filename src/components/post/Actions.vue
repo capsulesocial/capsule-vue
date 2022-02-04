@@ -106,7 +106,7 @@
 					<button class="focus:outline-none ml-2" @click="toggleStats = true"><StatsIcon /></button>
 				</div>
 				<CommentFilter
-					v-show="!showEmotions && comments.length > 0"
+					v-show="!showEmotions && (comments.length > 0 || this.filter !== ``)"
 					:filter="filter"
 					class="modal-animation"
 					@clicked="setFilter"
@@ -181,10 +181,18 @@
 									/></span>
 								</button>
 								<textarea
+									v-if="comments.length > 0"
 									v-model="comment"
 									class="focus:outline-none mr-6 h-40 w-full resize-none overflow-y-auto py-4 pl-2 pr-16 leading-normal"
 									name="body"
 									placeholder="What's your response?"
+								/>
+								<textarea
+									v-else
+									v-model="comment"
+									class="focus:outline-none mr-6 h-40 w-full resize-none overflow-y-auto py-4 pl-2 pr-16 leading-normal"
+									name="body"
+									placeholder="Be the first one commenting this post..."
 								/>
 								<div class="relative">
 									<span class="absolute bottom-0 right-0 flex flex-col">

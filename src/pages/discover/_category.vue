@@ -46,7 +46,7 @@
 			:style="
 				!scrollDown
 					? `min-height: calc(100vh - ` + `310px` + `); height: calc(100vh - ` + `310px` + `)`
-					: `min-height: calc(100vh - ` + `160px` + `); height: calc(100vh - ` + `160px` + `)`
+					: `min-height: calc(100vh - ` + `152px` + `); height: calc(100vh - ` + `152px` + `)`
 			"
 		>
 			<article
@@ -54,7 +54,7 @@
 				class="mt-12 grid justify-items-center overflow-y-hidden px-6 xl:px-0"
 			>
 				<p class="text-gray5 align-end mb-5 flex items-end text-sm" style="max-width: 366px">
-					It seems that there is no posts of that category yet
+					It seems there are no posts under this category yet
 				</p>
 				<SecondaryButton :text="`All categories`" :action="toggleCategories" />
 				<img :src="require(`@/assets/images/brand/Bookmarks.webp`)" class="top-0 mt-64 xl:-mt-2" />
@@ -75,7 +75,9 @@
 					:isDeleted="p.deleted"
 				/>
 			</article>
-			<p v-if="noMorePosts" class="text-gray5 py-5 text-center text-sm">No more posts</p>
+			<p v-if="noMorePosts" class="text-gray5 py-5 text-center text-sm" style="backdrop-filter: blur(10px)">
+				No more posts
+			</p>
 		</div>
 		<!-- Not loaded yet -->
 		<article v-show="isLoading" class="modal-animation flex w-full justify-center mt-20">

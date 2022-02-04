@@ -41,15 +41,15 @@
 					</div>
 					<div :class="isOpen2 ? `` : `is-closed`" class="message-body w-full xl:w-10/12">
 						<div class="message-content text-gray5 py-2 text-sm">
-							It’s an important tool to implement our broader idea of decentralization, enhancing writers’ freedom of
-							speech and overall independence. <br /><br />
-							We use the NEAR protocol to manage the flow of user activity on the platform, with users’ content stored
-							to OrbitDB. The latter is a decentralized database that ensures immutability the replication of data
-							across multiple nodes. Thus the content is more resistant to censorship. <br /><br />
-							This is a fundamental change from existing social networks’ use of company-controlled servers that
-							ultimately give those companies say in who gets to post what, and when. <br /><br />
-							In the future, we also plan to add blockchain-based features to enable payments to creators for their work
-							and transparent, community-based governance of the Blogchain platform.
+							Blockchain is an important tool used to implement our broader idea of decentralization, which ultimately
+							enhances the independence and freedom of speech for writers. <br /><br />
+							We use the NEAR protocol to manage the flow of user activity on the platform. User content is stored to
+							OrbitDB, which is a decentralized database that ensures immutability across multiple nodes. This ensures a
+							greater resistance against censorship often found on centralized platforms. Such social network platforms
+							use company controlled servers that ultimately give them sole authority on who gets to post what and when.
+							<br /><br />
+							In the future, we also plan to implement blockchain-based features that enable payments to creators for
+							their work, as well as community-based governance of the Blogchain platform.
 						</div>
 					</div>
 				</article>
