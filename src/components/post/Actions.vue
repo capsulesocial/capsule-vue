@@ -85,7 +85,7 @@
 						<div v-for="f in faceStats.slice(page * 6, page * 6 + 6)" :key="f.face.label" class="flex w-24 flex-col">
 							<div class="flex flex-col rounded-lg border p-1" :class="`border-` + getStyle(f.face.label)">
 								<span class="self-center text-xs">{{ f.face.label }}</span>
-								<img :src="f.face.leftImage" :alt="f.face.label" class="h-16 w-16 self-center" />
+								<img :src="f.face.image" :alt="f.face.label" class="h-16 w-16 self-center" />
 							</div>
 							<span class="mt-1 self-center text-sm font-semibold"
 								>{{ ((f.count / getCommentCount(`total`)) * 100).toFixed(1) }}%</span
@@ -168,10 +168,10 @@
 								<button class="focus:outline-none h-auto flex-shrink-0" @click="toggleShowEmotions">
 									<span v-if="activeEmotion.label !== ``">
 										<img
-											:src="activeEmotion.rightImage"
+											:src="activeEmotion.image"
 											:alt="activeEmotion.label"
 											class="object-contain"
-											style="width: 126px; height: 126px"
+											style="width: 126px; height: 126px; transform: rotateY(180deg)"
 										/>
 									</span>
 									<span v-else
@@ -242,7 +242,7 @@
 											style="transition: all 0.3s ease-in-out"
 											@click="setEmotion(face)"
 										>
-											<img :src="face.leftImage" :alt="face.label" class="h-20 w-20" />
+											<img :src="face.image" :alt="face.label" class="h-20 w-20" />
 										</button>
 										<div
 											v-for="face in row"
@@ -332,15 +332,15 @@ import { createComment, sendComment, ICommentData, getCommentsOfPost } from '@/b
 import { getPhotoFromIPFS } from '@/backend/photos'
 
 interface FaceStat {
-	face: { label: string; leftImage: any; rightImage: any }
+	face: { label: string; image: any }
 	count: number
 }
 
 interface IData {
 	faceGroupings: object[]
 	feelingList: Record<string, any>
-	activeEmotion: { label: string; leftImage: any; rightImage: any }
-	selectedEmotion: { label: string; leftImage: any; rightImage: any }
+	activeEmotion: { label: string; image: any }
+	selectedEmotion: { label: string; image: any }
 	comments: ICommentData[]
 	avatar: string
 	comment: string
@@ -394,8 +394,8 @@ export default Vue.extend({
 			faceGroupings,
 			feelingList: feelings,
 			avatar: ``,
-			activeEmotion: { label: ``, leftImage: null, rightImage: null },
-			selectedEmotion: { label: ``, leftImage: null, rightImage: null },
+			activeEmotion: { label: ``, image: null },
+			selectedEmotion: { label: ``, image: null },
 			comment: ``,
 			comments: [],
 			emotion: ``,
@@ -435,7 +435,7 @@ export default Vue.extend({
 			this.filter = reaction
 			this.filterComments()
 		},
-		setEmotion(r: { label: string; leftImage: any; rightImage: any }) {
+		setEmotion(r: { label: string; image: any }) {
 			this.selectedEmotion = r
 			if (feelings.positive.has(r.label)) {
 				this.selectedEmotionColor = `positive`
@@ -473,8 +473,8 @@ export default Vue.extend({
 			// Apply filter to comments, in case new comment was added in filtered category
 			this.comment = ``
 			this.filterComments()
-			this.selectedEmotion = { label: ``, leftImage: null, rightImage: null }
-			this.activeEmotion = { label: ``, leftImage: null, rightImage: null }
+			this.selectedEmotion = { label: ``, image: null }
+			this.activeEmotion = { label: ``, image: null }
 			this.emotion = ``
 			this.filter = ``
 			this.selectedEmotionColor = `neutralLightest`

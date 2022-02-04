@@ -57,13 +57,13 @@
 							</div>
 						</div>
 						<div class="flex flex-shrink-0 items-center justify-center overflow-hidden xl:hidden">
-							<img :src="emotion.leftImage" class="-mb-1 mt-2 h-24 w-24 bg-transparent" />
+							<img :src="emotion.image" class="-mb-1 mt-2 h-24 w-24 bg-transparent" />
 						</div>
 					</div>
 				</div>
 				<!-- Desktop reaction face -->
 				<div class="hidden flex-shrink-0 items-center justify-center overflow-hidden xl:flex">
-					<img :src="emotion.leftImage" class="-mb-1 mt-2 h-32 w-32 bg-transparent" />
+					<img :src="emotion.image" class="-mb-1 mt-2 h-32 w-32 bg-transparent" />
 				</div>
 			</div>
 		</div>
@@ -135,7 +135,7 @@ interface IData {
 	replies: ICommentData[]
 	avatar: string
 	name: string
-	emotion: { label: string; leftImage: any; rightImage: any }
+	emotion: { label: string; image: any }
 	emotionType: string
 	content: string
 }
