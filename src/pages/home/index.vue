@@ -166,9 +166,6 @@ export default Vue.extend({
 			}
 			const posts = await getPosts({}, id, payload)
 			this.currentOffset += this.limit
-			if (posts.length === 0 && this.currentOffset > 10) {
-				this.noMorePosts = true
-			}
 			this.isLoading = false
 			// Remove deleted reposts
 			if (alg === `FOLLOWING`) {
@@ -198,6 +195,7 @@ export default Vue.extend({
 			}
 			const container = this.$refs.container as HTMLElement
 			container.addEventListener(`scroll`, this.handleScroll)
+			this.noMorePosts = false
 			this.posts = []
 			this.currentOffset = 0
 			this.isLoading = true
@@ -208,9 +206,11 @@ export default Vue.extend({
 		async loadPosts() {
 			const res = await this.fetchPosts(this.algorithm)
 			this.posts = this.posts.concat(res)
+			// When no more posts
 			if (res.length === 0) {
 				const container = this.$refs.container as HTMLElement
 				container.removeEventListener(`scroll`, this.handleScroll)
+				this.noMorePosts = true
 			}
 		},
 		handleScroll(e: Event) {

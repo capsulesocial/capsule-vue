@@ -97,21 +97,14 @@ export default Vue.extend({
 					{ authorID: this.$route.params.id },
 					{ sort: this.algorithm, offset: this.currentOffset, limit: this.limit },
 				)
-				// Remove deleted reposts
-				// res.forEach((post: IRepostResponse | any) => {
-				// 	if (post.deleted) {
-				// 		res.splice(res.indexOf(post), 1)
-				// 	}
-				// })
+				// When no more posts
 				if (res.length < this.limit) {
+					this.noMorePosts = true
 					const container = this.$parent.$refs.scrollContainer as HTMLElement
 					container.removeEventListener(`scroll`, this.handleScroll)
 				}
 				this.reposts = this.reposts.concat(res)
 				this.currentOffset += this.limit
-				if (this.reposts.length === 0 && this.currentOffset > 10) {
-					this.noMorePosts = true
-				}
 				this.isLoading = false
 			} catch (error) {
 				// TODO: handle error

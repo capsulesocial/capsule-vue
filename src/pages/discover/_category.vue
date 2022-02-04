@@ -156,12 +156,6 @@ export default Vue.extend({
 			container.addEventListener(`scroll`, this.handleScrollHeader)
 		}
 	},
-	destroyed() {
-		const container = document.getElementById(`column`)
-		if (container) {
-			container.removeEventListener(`scroll`, this.handleScrollHeader)
-		}
-	},
 	methods: {
 		async fetchPosts(): Promise<(IRepostResponse | IPostResponse)[]> {
 			this.isLoading = true
@@ -172,10 +166,15 @@ export default Vue.extend({
 				offset: this.currentOffset,
 			})
 			this.currentOffset += this.limit
-			if (posts.length === 0 && this.currentOffset > 10) {
-				this.noMorePosts = true
-			}
 			this.isLoading = false
+			// No more posts
+			if (posts.length < this.limit) {
+				this.noMorePosts = true
+				const container = document.getElementById(`column`)
+				if (container) {
+					container.removeEventListener(`scroll`, this.handleScrollHeader)
+				}
+			}
 			return this.posts.concat(posts)
 		},
 		async toggleFriend(authorID: string) {
