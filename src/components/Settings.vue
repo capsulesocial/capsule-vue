@@ -236,7 +236,7 @@ export default Vue.extend({
 		},
 		async uploadImage(image: string | ArrayBuffer, blobImage: Blob, filename: string) {
 			const avatarCID = await addPhotoToIPFS(image)
-			await preUploadPhoto(avatarCID, blobImage, filename)
+			await preUploadPhoto(avatarCID, blobImage, filename, this.$store.state.session.id)
 			this.profilePic = image
 			this.changeAvatar(avatarCID)
 			await this.updateProfile()
