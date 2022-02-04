@@ -5,7 +5,7 @@
 	>
 		<CapsuleIcon class="pt-6 pl-10" />
 		<section class="flex items-center justify-center" style="height: 86%">
-			<div v-show="isLoading" class="modal-animation flex w-full justify-center w-full xl:w-1/2 z-20">
+			<div v-show="isLoading" class="modal-animation flex w-full justify-center xl:w-1/2 z-20">
 				<div class="loader m-5 rounded-lg"></div>
 			</div>
 			<div v-show="!isLoading" class="-mt-5 flex w-full flex-col items-center px-14">
@@ -29,7 +29,7 @@
 				<!-- Step 2: Sign up -->
 				<div
 					v-show="!downloadKeyStep && (userInfo || nearWallet) && username === null"
-					class="flex w-full flex items-center justify-center"
+					class="flex w-full items-center justify-center"
 				>
 					<VerifyPhone
 						v-if="!hasEnoughFunds()"
