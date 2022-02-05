@@ -59,7 +59,7 @@
 			v-show="showDrafts"
 			class="popup bg-primary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50"
 		>
-			<DraftsPopup @close="showDraftsPopup" />
+			<DraftsPopup @close="showDraftsPopup" @updateEditor="updateEditor" />
 		</div>
 		<div
 			v-if="showConfirm"
@@ -133,6 +133,12 @@ export default Vue.extend({
 	methods: {
 		toggleConfirmPost() {
 			this.showConfirm = true
+		},
+		updateEditor() {
+			// @ts-ignore
+			this.$refs.editor.updateContent()
+			// @ts-ignore
+			this.$refs.editor.setupEditor()
 		},
 		async handlePost() {
 			// @ts-ignore

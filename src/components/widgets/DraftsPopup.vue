@@ -34,6 +34,7 @@
 							:displayDeleteButton="true"
 							:numberOfDrafts="$store.state.draft.drafts.length"
 							class="flex-grow"
+							@updateEditor="updateEditor"
 						/>
 					</div>
 				</div>
@@ -70,8 +71,8 @@ export default Vue.extend({
 				this.$emit(`close`)
 			}
 		},
-		handleWriteNewDraft() {
-			this.$router.push(`/post`)
+		updateEditor(): void {
+			this.$emit(`updateEditor`)
 		},
 	},
 })
