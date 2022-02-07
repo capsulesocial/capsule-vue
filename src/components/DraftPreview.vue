@@ -121,7 +121,7 @@ export default Vue.extend({
 		setActiveDraft() {
 			if (this.$route.name === `post`) {
 				this.$store.commit(`draft/setActiveDraft`, this.index)
-				this.$emit(`updateEditor`)
+				this.$emit(`closeDraftsPopup`)
 				return
 			}
 			// Prevent overwriting of selected draft

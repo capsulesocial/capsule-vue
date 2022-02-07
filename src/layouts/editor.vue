@@ -36,10 +36,10 @@
 							style="backdrop-filter: blur(10px)"
 						>
 							Resume writing?
-							<button v-if="!buttonHidden" class="text-primary focus:outline-none ml-2" @click="showDraftsPopup">
+							<button v-if="!buttonHidden" class="text-primary focus:outline-none ml-2" @click="openDraftsPopup">
 								Show drafts
 							</button>
-							<button v-else class="text-primary focus:outline-none ml-2" @click="showDraftsPopup">
+							<button v-else class="text-primary focus:outline-none ml-2" @click="openDraftsPopup">
 								<PencilIcon class="fill-current p-1" />
 							</button>
 						</div>
@@ -56,10 +56,10 @@
 			</div>
 		</div>
 		<div
-			v-show="showDrafts"
+			v-if="showDrafts"
 			class="popup bg-primary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50"
 		>
-			<DraftsPopup @close="showDraftsPopup" @updateEditor="updateEditor" />
+			<DraftsPopup @close="closeDraftsPopup" />
 		</div>
 		<div
 			v-if="showConfirm"
@@ -134,12 +134,6 @@ export default Vue.extend({
 		toggleConfirmPost() {
 			this.showConfirm = true
 		},
-		updateEditor() {
-			// @ts-ignore
-			this.$refs.editor.updateContent()
-			// @ts-ignore
-			this.$refs.editor.setupEditor()
-		},
 		async handlePost() {
 			// @ts-ignore
 			await this.$refs.editor.post()
@@ -160,15 +154,17 @@ export default Vue.extend({
 				this.buttonHidden = false
 			}
 		},
-		showDraftsPopup(): void {
-			if (!this.showDrafts) {
-				// @ts-ignore
-				this.$refs.editor.updateContent()
-			} else {
+		closeDraftsPopup(): void {
+			this.showDrafts = false
+			setTimeout(() => {
 				// @ts-ignore
 				this.$refs.editor.setupEditor()
-			}
-			this.showDrafts = !this.showDrafts
+			})
+		},
+		openDraftsPopup(): void {
+			// @ts-ignore
+			this.$refs.editor.updateContent()
+			this.showDrafts = true
 		},
 		showConfirmPopup(): void {
 			this.showConfirm = !this.showConfirm
