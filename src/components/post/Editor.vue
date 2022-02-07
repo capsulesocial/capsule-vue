@@ -231,6 +231,9 @@ export default Vue.extend({
 			)
 			const editor = new Quill(`#editor`, options)
 			this.qeditor = editor
+			this.qeditor.root.addEventListener(`drop`, (ev: DragEvent) => {
+				this.contentDropped(ev)
+			})
 			this.qeditor.focus()
 			// Set link placeholder
 			const qe: HTMLElement | null = document.querySelector(`.ql-tooltip-editor input`)
@@ -251,6 +254,16 @@ export default Vue.extend({
 		},
 		actionsUpload() {
 			document.getElementById(`getFile`)?.click()
+		},
+		async contentDropped(e: DragEvent) {
+			e.stopPropagation()
+			e.preventDefault()
+			if (!e.dataTransfer) {
+				return
+			}
+
+			const files = e.dataTransfer.files
+			await this.uploadFunction({ event: {}, fileList: files })
 		},
 		calculateAddPos(index: number) {
 			if (!this.qeditor) {
@@ -296,12 +309,19 @@ export default Vue.extend({
 				this.$store.commit(`draft/updateContent`, input)
 			}
 		},
-		async uploadFunction(e: { target: HTMLInputElement }) {
-			const target = e.target
-			if (e.target.files?.length !== 1) {
+		async uploadFunction(params: { event: { target?: HTMLInputElement }; fileList: FileList }) {
+			const { event, fileList } = params
+			const target = event.target
+
+			if (target && target.files?.length !== 1) {
 				return
 			}
-			const image: File = (target.files as FileList)[0]
+
+			if (fileList && fileList.length !== 1) {
+				return
+			}
+
+			const image: File = target?.files ? target.files[0] : fileList[0]
 			if (!image) {
 				return
 			}
