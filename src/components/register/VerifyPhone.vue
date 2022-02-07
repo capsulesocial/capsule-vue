@@ -41,7 +41,7 @@
 </template>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue'
+import Vue from 'vue'
 import intlTelInput from 'intl-tel-input'
 import axios from 'axios'
 
@@ -63,7 +63,7 @@ export default Vue.extend({
 	},
 	props: {
 		accountId: {
-			type: String as PropType<string>,
+			type: String,
 			required: true,
 		},
 	},

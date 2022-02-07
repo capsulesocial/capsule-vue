@@ -29,14 +29,14 @@
 			</div>
 			<button
 				class="bg-gray2 dark:bg-gray7 focus:outline-none mb-4 flex w-full items-center justify-center rounded-lg py-3"
-				@click="() => walletLoginComponent()"
+				@click="walletLoginComponent"
 			>
 				<NearIcon style="width: 22px; height: 22px" />
 				<h6 class="text-gray7 dark:text-gray2 ml-4 text-sm font-semibold">Signup with NEAR</h6>
 			</button>
 			<button
 				class="bg-gray2 dark:bg-gray7 focus:outline-none mb-4 flex w-full items-center justify-center rounded-lg py-3"
-				@click="() => implicitAccountCreate()"
+				@click="implicitAccountCreate"
 			>
 				<h6 class="text-gray7 dark:text-gray2 ml-4 text-sm font-semibold">Create implicit account</h6>
 			</button>
@@ -58,7 +58,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import type { PropType } from 'vue'
-import axios from 'axios'
 
 import DirectWebSdk, { TorusLoginResponse } from '@toruslabs/customauth'
 
@@ -87,11 +86,11 @@ export default Vue.extend({
 	},
 	props: {
 		checkFunds: {
-			type: Function as PropType<() => void>,
+			type: Function as PropType<() => Promise<void>>,
 			required: true,
 		},
 		verify: {
-			type: Function as PropType<() => void>,
+			type: Function as PropType<() => Promise<void>>,
 			required: true,
 		},
 	},
@@ -132,27 +131,15 @@ export default Vue.extend({
 				await this.checkFunds()
 				this.isLoading = false
 			} catch (e) {
-				this.$toastError(`oops, ` + e)
 				this.isLoading = false
+				throw e
 			}
 		},
 		async onboardAccount(accountId: string) {
 			if (!accountId) {
-				this.$toastError(`AccountId missing`)
-				return
+				throw new Error(`AccountId missing`)
 			}
-			try {
-				await verifyTokenAndOnboard(accountId)
-			} catch (error: any) {
-				if (axios.isAxiosError(error) && error.response) {
-					if (error.response.status === 429) {
-						this.$toastWarning(`Too many requests`)
-						return
-					}
-					throw new Error(error.response.data.error)
-				}
-				throw error
-			}
+			await verifyTokenAndOnboard(accountId)
 		},
 		async walletLoginComponent() {
 			await walletLogin()
@@ -167,8 +154,8 @@ export default Vue.extend({
 			])
 			this.$emit(`updateUsername`, username)
 			if (username) {
-				this.$toastError(`You cannot login with implicit account, please import your Capsule private key`)
 				removeNearPrivateKey(accountId)
+				throw new Error(`You cannot login with implicit account, please import your Capsule private key`)
 			}
 			this.$emit(`setNearWallet`)
 		},

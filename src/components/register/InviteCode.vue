@@ -74,12 +74,12 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import axios from 'axios'
 
 import CapsuleLogo from '@/components/icons/CapsuleLogo.vue'
 import DiscordLogo from '@/components/icons/Discord.vue'
 
 import { verifyCodeAndGetToken } from '@/backend/invite'
+import { ValidationError } from '@/errors'
 
 interface IData {
 	inputCode: string
@@ -98,21 +98,10 @@ export default Vue.extend({
 	methods: {
 		async verifyCode() {
 			if (this.inputCode.length !== 8) {
-				this.$toastError(`Invite codes should be of length 8`)
-				return
+				throw new ValidationError(`Invite codes should be of length 8`)
 			}
-			try {
-				await verifyCodeAndGetToken(this.inputCode)
-				this.$emit(`validInviteCode`)
-			} catch (error: any) {
-				if (axios.isAxiosError(error) && error.response) {
-					if (error.response.status === 429) {
-						throw new Error(`Too many requests`)
-					}
-					throw new Error(error.response.data.error)
-				}
-				throw error
-			}
+			await verifyCodeAndGetToken(this.inputCode)
+			this.$emit(`validInviteCode`)
 		},
 	},
 })

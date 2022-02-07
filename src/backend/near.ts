@@ -191,7 +191,7 @@ export async function generateAndSetKey() {
 	return accountId
 }
 
-export async function removeNearPrivateKey(nearAccountId?: string) {
+export async function removeNearPrivateKey(nearAccountId?: string | null) {
 	let accountId: string | null = null
 
 	if (nearAccountId) {

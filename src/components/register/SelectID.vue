@@ -25,9 +25,11 @@
 import Vue, { PropType } from 'vue'
 import { mapMutations } from 'vuex'
 
+import { TorusLoginResponse } from '@toruslabs/customauth'
 import BrandedButton from '@/components/BrandedButton.vue'
 import { registerNearWallet } from '@/backend/auth'
 import { MutationType, createSessionFromProfile, namespace as sessionStoreNamespace } from '~/store/session'
+import { ValidationError } from '@/errors'
 
 interface IData {
 	id: string
@@ -40,27 +42,27 @@ export default Vue.extend({
 	},
 	props: {
 		funds: {
-			type: String as PropType<string>,
+			type: String,
 			required: true,
 		},
 		checkFunds: {
-			type: Function as PropType<() => void>,
+			type: Function as PropType<() => Promise<void>>,
 			required: true,
 		},
 		userInfo: {
-			type: Object as PropType<Object>,
+			type: Object as PropType<null | TorusLoginResponse>,
 			default: null,
 		},
 		verify: {
-			type: Function as PropType<() => void>,
+			type: Function as PropType<() => Promise<void>>,
 			required: true,
 		},
 		accountId: {
-			type: String as PropType<string>,
+			type: String,
 			required: true,
 		},
 		nearWallet: {
-			type: Boolean as PropType<boolean>,
+			type: Boolean,
 			required: true,
 		},
 	},
@@ -86,38 +88,33 @@ export default Vue.extend({
 			}
 			const registerResult = await registerNearWallet(this.id, this.accountId)
 			if (`error` in registerResult) {
-				this.$toastError(registerResult.error)
 				this.isLoading = false
-				return null
+				throw new ValidationError(registerResult.error)
 			}
 			this.$store.commit(`setWelcome`, true)
 			return registerResult
 		},
 		async walletVerify() {
-			try {
-				if (!this.nearWallet || !this.accountId) {
-					throw new Error(`Unexpected condition!`)
-				}
-				// Register
-				const res = await this.registerWallet()
-				if (!res) {
-					// Next line ensures multiple attempts to pick a username
-					return
-				}
-				const { profile, cid } = res
-
-				const account = createSessionFromProfile(cid, profile)
-				this.changeCID(cid)
-				this.changeID(account.id)
-				this.changeName(account.name)
-				this.changeEmail(account.email)
-				this.changeAvatar(account.avatar)
-				this.changeBio(account.bio)
-				this.changeLocation(account.location)
-				this.$emit(`setDownloadKeyStep`)
-			} catch (err: any) {
-				throw new Error(err.message)
+			if (!this.nearWallet || !this.accountId) {
+				throw new Error(`Unexpected condition!`)
 			}
+			// Register
+			const res = await this.registerWallet()
+			if (!res) {
+				// Next line ensures multiple attempts to pick a username
+				return
+			}
+			const { profile, cid } = res
+
+			const account = createSessionFromProfile(cid, profile)
+			this.changeCID(cid)
+			this.changeID(account.id)
+			this.changeName(account.name)
+			this.changeEmail(account.email)
+			this.changeAvatar(account.avatar)
+			this.changeBio(account.bio)
+			this.changeLocation(account.location)
+			this.$emit(`setDownloadKeyStep`)
 		},
 		handleRegisterID() {
 			this.isLoading = true
@@ -125,8 +122,7 @@ export default Vue.extend({
 			const idCheck = this.$qualityID(this.id)
 			if (this.$isError(idCheck)) {
 				this.isLoading = false
-				this.$toastError(idCheck.error)
-				return
+				throw new ValidationError(idCheck.error)
 			}
 			this.$emit(`setID`, this.id)
 			if (this.userInfo) {

@@ -59,7 +59,7 @@
 				<DownloadKey v-if="downloadKeyStep" :aid="id" :accountId="accountId" class="w-full xl:w-1/2" />
 			</div>
 		</section>
-		<p class="text-gray5 dark:text-gray3 px-4 pl-10 text-sm">© {{ currentYear }} Capsule Social, Inc.</p>
+		<p class="text-gray5 dark:text-gray3 px-4 pl-10 text-sm">© {{ new Date().getFullYear().toString() }} Capsule Social, Inc.</p>
 		<div
 			v-if="showInfos"
 			class="popup bg-primary dark:bg-secondary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
@@ -72,7 +72,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapMutations } from 'vuex'
-// eslint-disable-next-line import/named
 import { TorusLoginResponse } from '@toruslabs/customauth'
 import 'intl-tel-input/build/css/intlTelInput.css'
 import axios from 'axios'
@@ -101,6 +100,7 @@ import {
 } from '@/backend/near'
 import { verifyTokenAndOnboard } from '@/backend/invite'
 import { hasSufficientFunds } from '@/backend/funder'
+import { ValidationError } from '@/errors'
 
 interface IData {
 	id: string
@@ -111,7 +111,6 @@ interface IData {
 	funds: string
 	nearWallet: boolean
 	downloadKeyStep: boolean
-	currentYear: string
 	isLoading: boolean
 	showInfos: boolean
 	dark: boolean
@@ -138,7 +137,6 @@ export default Vue.extend({
 			funds: `0`,
 			nearWallet: false,
 			downloadKeyStep: false,
-			currentYear: ``,
 			isLoading: true,
 			showInfos: false,
 			dark: false,
@@ -154,7 +152,23 @@ export default Vue.extend({
 		}
 	},
 	errorCaptured(err: Error) {
+		if (axios.isAxiosError(err) && err.response) {
+			if (err.response.status === 429) {
+				this.$toastWarning(`Too many requests`)
+				return false
+			}
+			this.$toastError(err.response.data.error)
+			return false
+		}
+		if (err instanceof ValidationError) {
+			this.$toastError(err.message)
+			return false
+		}
+
 		this.$toastError(err.message)
+		removeNearPrivateKey(this.accountId)
+		walletLogout()
+		return false
 	},
 	async created() {
 		await Promise.all([this.postWalletLogin()])
@@ -166,6 +180,7 @@ export default Vue.extend({
 		if (this.$store.state.session.id !== `` && accountId) {
 			this.$router.push(`/home`)
 		}
+<<<<<<< HEAD
 		const theDate = new Date()
 		this.currentYear = theDate.getFullYear().toString()
 		if (document.documentElement.classList.contains(`dark`)) {
@@ -173,6 +188,8 @@ export default Vue.extend({
 		} else {
 			this.dark = false
 		}
+=======
+>>>>>>> ee326df (wip: initial error handling on register.vue)
 	},
 	methods: {
 		...mapMutations(sessionStoreNamespace, {
@@ -228,9 +245,7 @@ export default Vue.extend({
 			const [username] = await Promise.all([getUsernameNEAR(this.accountId), this.checkFunds(), this.onboardAccount()])
 			this.username = username
 			if (this.username) {
-				this.$toastError(`You cannot login with wallet, please import your private key`)
-				removeNearPrivateKey(this.accountId)
-				walletLogout()
+				throw new Error(`You cannot login with wallet, please import your private key`)
 			}
 			return true
 		},
@@ -243,62 +258,40 @@ export default Vue.extend({
 			}
 			const idCheck = this.$qualityID(this.id)
 			if (this.$isError(idCheck)) {
-				this.$toastError(idCheck.error)
-				return null
+				throw new ValidationError(idCheck.error)
 			}
 			this.id = this.id.toLowerCase()
 			const registerResult = await register(this.id, privateKey)
 			if (`error` in registerResult) {
-				this.$toastError(registerResult.error)
-				return null
+				throw new ValidationError(registerResult.error)
 			}
 			return registerResult
 		},
 		async verify() {
-			try {
-				if (!this.userInfo || !this.accountId) {
-					throw new Error(`Unexpected condition!`)
-				}
-				// Login
-				const res = await this.loginOrRegister(this.userInfo.privateKey)
-				if (!res) {
-					// Next line ensures multiple attempts to pick a username
-					return
-				}
-				const { profile, cid } = res
-
-				const account = createSessionFromProfile(cid, profile)
-				this.$store.commit(`setWelcome`, true)
-				this.changeCID(cid)
-				this.changeID(account.id)
-				this.changeName(account.name)
-				this.changeEmail(account.email)
-				this.changeAvatar(account.avatar)
-				this.changeBio(account.bio)
-				this.changeLocation(account.location)
-				this.$router.push(`/home`)
-			} catch (err: any) {
-				throw new Error(err.message)
+			if (!this.userInfo || !this.accountId) {
+				throw new Error(`Unexpected condition!`)
 			}
+			// Login
+			const res = await this.loginOrRegister(this.userInfo.privateKey)
+
+			const { profile, cid } = res
+
+			const account = createSessionFromProfile(cid, profile)
+			this.$store.commit(`setWelcome`, true)
+			this.changeCID(cid)
+			this.changeID(account.id)
+			this.changeName(account.name)
+			this.changeEmail(account.email)
+			this.changeAvatar(account.avatar)
+			this.changeBio(account.bio)
+			this.changeLocation(account.location)
+			this.$router.push(`/home`)
 		},
 		async onboardAccount() {
 			if (!this.accountId) {
-				this.$toastError(`AccountId missing`)
-				return
+				throw new Error(`AccountId missing`)
 			}
-			try {
-				await verifyTokenAndOnboard(this.accountId)
-			} catch (error: any) {
-				if (axios.isAxiosError(error) && error.response) {
-					if (error.response.status === 429) {
-						this.$toastWarning(`Too many requests`)
-						return
-					}
-					this.$toastError(error.response.data.error)
-					return
-				}
-				throw error
-			}
+			await verifyTokenAndOnboard(this.accountId)
 		},
 	},
 })
