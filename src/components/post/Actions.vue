@@ -31,7 +31,7 @@
 			<!-- Comments Activity -->
 			<div class="flex h-48 justify-between border-b">
 				<!-- Graph breakdown -->
-				<div class="ml-5 hidden h-full flex-row self-end xl:flex">
+				<div class="ml-5 pt-4 hidden h-full flex-row self-end xl:flex">
 					<!-- Positive -->
 					<span
 						class="bg-positive w-6 self-end rounded-t-full"
@@ -99,7 +99,7 @@
 			</div>
 		</article>
 		<!-- Post a Comment -->
-		<article v-show="!toggleStats" id="section" class="xl:pb-5">
+		<article v-show="!toggleStats" id="section">
 			<div class="flex w-full justify-between py-5">
 				<div class="flex flex-row items-center">
 					<span class="pr-2 font-semibold">{{ getCommentCount(`total`) }} comments</span>
@@ -320,6 +320,9 @@
 				:cid="c._id"
 				:timestamp="c.timestamp"
 			/>
+			<div v-if="comments.length === 0 && filter !== ``" class="text-gray5 pt-5 text-sm text-center">
+				No comments under this filter
+			</div>
 		</article>
 	</section>
 </template>

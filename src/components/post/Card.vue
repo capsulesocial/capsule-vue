@@ -10,7 +10,7 @@
 				style="backdrop-filter: blur(10px)"
 			>
 				<div
-					class="from-lightBGStart to-lightBGStop sticky top-0 z-20 border-b bg-gradient-to-r px-4 py-4 xl:px-6 xl:py-5"
+					class="from-lightBGStart to-lightBGStop sticky top-0 z-40 border-b bg-gradient-to-r px-4 py-4 xl:px-6 xl:py-5"
 					style="backdrop-filter: blur(10px)"
 				>
 					<!-- Show Quote Repost input -->
@@ -34,7 +34,7 @@
 						<!-- Simple repost -->
 						<div
 							v-if="repostedBy !== `` && !hideRepostIcon && quote === null"
-							class="text-gray5 -mt-2 mb-4 flex w-full items-center pt-2 xl:mb-2"
+							class="text-gray5 -mt-2 mb-4 flex w-full items-center pt-2 xl:mb-3"
 						>
 							<RepostIcon class="hidden xl:block" style="width: 15px; height: 15px" :shrink="true" />
 							<p class="text-gray5 hidden pl-2 text-sm xl:block">
@@ -140,7 +140,7 @@
 						<!-- Content -->
 						<div class="mt-4 hidden flex-col justify-between xl:flex xl:flex-row">
 							<!-- Left side: Title, subtitle / preview, tags -->
-							<div class="mr-4">
+							<div class="mr-4 w-full">
 								<nuxt-link :to="'/post/' + postCID">
 									<div class="flex max-w-full flex-col overflow-hidden pr-4">
 										<h3 class="break-words pb-2 text-lg font-semibold">
@@ -282,7 +282,7 @@
 						<!-- Simple repost -->
 						<div
 							v-if="repostedBy !== `` && !hideRepostIcon && quote === null"
-							class="text-gray5 -mt-2 mb-2 flex w-full items-center pt-2"
+							class="text-gray5 -mt-2 mb-3 flex w-full items-center pt-2"
 						>
 							<RepostIcon :shrink="true" />
 							<p class="text-gray5 pl-2 text-sm">
@@ -377,7 +377,7 @@
 						<!-- Content -->
 						<div class="mt-4 flex flex-col justify-between xl:flex-row">
 							<!-- Left side: Title, subtitle / preview, tags -->
-							<div class="mr-4 flex flex-col justify-between">
+							<div class="mr-4 flex w-full flex-col justify-between">
 								<nuxt-link :to="'/post/' + postCID">
 									<div class="flex max-w-full flex-col overflow-hidden pr-4">
 										<h3 class="break-words pb-2 text-lg font-semibold">

@@ -690,7 +690,9 @@
 	overflow: visible;
 }
 .ql-bubble .ql-editor img {
-	max-width: 100%;
+	max-width: 95%;
+	margin: auto;
+	border-radius: 0.5rem;
 }
 .ql-bubble .ql-picker {
 	color: #ccc;

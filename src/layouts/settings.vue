@@ -45,13 +45,13 @@
 								>
 									Confidentiality and Security
 								</nuxt-link> -->
-								<nuxt-link
+								<!-- <nuxt-link
 									:class="$route.name === `settings-network` ? `bg-lightInput font-semibold` : ``"
 									class="text-gray5 focus:outline-none mb-4 w-full rounded-lg py-2 px-4 text-left"
 									to="/settings/network"
 								>
 									Nodes and Network
-								</nuxt-link>
+								</nuxt-link> -->
 								<nuxt-link
 									to="/settings/styling"
 									:class="$route.name === `settings-styling` ? `bg-lightInput font-semibold` : ``"

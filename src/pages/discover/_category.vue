@@ -153,7 +153,7 @@ export default Vue.extend({
 	mounted() {
 		const container = document.getElementById(`column`)
 		if (container) {
-			container.addEventListener(`scroll`, this.handleScrollHeader)
+			container.addEventListener(`scroll`, this.handleScrollHeader, true)
 		}
 	},
 	methods: {
@@ -169,7 +169,9 @@ export default Vue.extend({
 			this.isLoading = false
 			// No more posts
 			if (posts.length < this.limit) {
-				this.noMorePosts = true
+				if (posts.length > 0) {
+					this.noMorePosts = true
+				}
 				const container = document.getElementById(`column`)
 				if (container) {
 					container.removeEventListener(`scroll`, this.handleScrollHeader)
@@ -220,7 +222,7 @@ export default Vue.extend({
 			}
 			this.padding = header?.clientHeight
 			const currentScroll = body.scrollTop
-			if (body.scrollTop <= 0) {
+			if (body.scrollTop <= 0 && this.scrollDown === false) {
 				header.classList.remove(scrollUp)
 				buttontitle.classList.remove(opacity0)
 				buttonbg.classList.remove(opacity0)
