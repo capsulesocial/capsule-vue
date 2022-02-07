@@ -45,13 +45,7 @@
 				</article>
 
 				<!-- WYSIWYG -->
-				<input
-					v-show="false"
-					id="getFile"
-					accept="image/png, image/jpeg"
-					type="file"
-					@change="uploadFunction($event)"
-				/>
+				<input v-show="false" id="getFile" accept="image/png, image/jpeg" type="file" @change="handleImage($event)" />
 				<div class="relative">
 					<div
 						id="editor"
@@ -232,7 +226,7 @@ export default Vue.extend({
 			const editor = new Quill(`#editor`, options)
 			this.qeditor = editor
 			this.qeditor.root.addEventListener(`drop`, (ev: DragEvent) => {
-				this.contentDropped(ev)
+				this.handleImage(ev)
 			})
 			this.qeditor.focus()
 			// Set link placeholder
@@ -255,15 +249,30 @@ export default Vue.extend({
 		actionsUpload() {
 			document.getElementById(`getFile`)?.click()
 		},
-		async contentDropped(e: DragEvent) {
+		handleImage(e: Event | DragEvent) {
 			e.stopPropagation()
 			e.preventDefault()
-			if (!e.dataTransfer) {
-				return
+
+			if (e instanceof Event) {
+				const { files } = e.target as any
+				if (files && files.length === 1) {
+					this.uploadPhoto(files[0])
+				}
 			}
 
-			const files = e.dataTransfer.files
-			await this.uploadFunction({ event: {}, fileList: files })
+			if (e instanceof DragEvent && e.dataTransfer) {
+				const { files } = e.dataTransfer
+				if (files.length !== 1) {
+					this.$toastError(`Can not drop more than 1 image at a time`)
+					return
+				}
+				const file = files[0]
+				const fileType = /^image\/(jpeg|jpg|png)$/
+				if (!fileType.test(file.type)) {
+					return
+				}
+				this.uploadPhoto(file)
+			}
 		},
 		calculateAddPos(index: number) {
 			if (!this.qeditor) {
@@ -309,23 +318,7 @@ export default Vue.extend({
 				this.$store.commit(`draft/updateContent`, input)
 			}
 		},
-		async uploadFunction(params: { event: { target?: HTMLInputElement }; fileList: FileList }) {
-			const { event, fileList } = params
-			const target = event.target
-
-			if (target && target.files?.length !== 1) {
-				return
-			}
-
-			if (fileList && fileList.length !== 1) {
-				return
-			}
-
-			const image: File = target?.files ? target.files[0] : fileList[0]
-			if (!image) {
-				return
-			}
-
+		async uploadPhoto(image: File) {
 			try {
 				const compressedImage = await imageCompression(image, {
 					maxSizeMB: 5,
