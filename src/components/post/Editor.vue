@@ -226,7 +226,7 @@ export default Vue.extend({
 			const editor = new Quill(`#editor`, options)
 			this.qeditor = editor
 			this.qeditor.root.addEventListener(`drop`, (ev: DragEvent) => {
-				this.handleImage(ev)
+				this.handleDroppedImage(ev)
 			})
 			this.qeditor.focus()
 			// Set link placeholder
@@ -249,30 +249,36 @@ export default Vue.extend({
 		actionsUpload() {
 			document.getElementById(`getFile`)?.click()
 		},
-		handleImage(e: Event | DragEvent) {
+		handleDroppedImage(e: DragEvent) {
+			e.stopPropagation()
+			e.preventDefault()
+			if (!e.dataTransfer) {
+				return
+			}
+			const { files } = e.dataTransfer
+			if (files.length !== 1) {
+				this.$toastError(`Can not drop more than 1 image at a time`)
+				return
+			}
+			const file = files[0]
+			const fileType = /^image\/(jpeg|jpg|png)$/
+			if (!fileType.test(file.type)) {
+				return
+			}
+			this.uploadPhoto(file)
+		},
+		handleImage(e: Event) {
 			e.stopPropagation()
 			e.preventDefault()
 
-			if (e instanceof Event) {
-				const { files } = e.target as any
-				if (files && files.length === 1) {
-					this.uploadPhoto(files[0])
-				}
+			const { files } = e.target as any
+			if (!files) {
+				return
 			}
-
-			if (e instanceof DragEvent && e.dataTransfer) {
-				const { files } = e.dataTransfer
-				if (files.length !== 1) {
-					this.$toastError(`Can not drop more than 1 image at a time`)
-					return
-				}
-				const file = files[0]
-				const fileType = /^image\/(jpeg|jpg|png)$/
-				if (!fileType.test(file.type)) {
-					return
-				}
-				this.uploadPhoto(file)
+			if (files.length !== 1) {
+				return
 			}
+			this.uploadPhoto(files[0])
 		},
 		calculateAddPos(index: number) {
 			if (!this.qeditor) {
