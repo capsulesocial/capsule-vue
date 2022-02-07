@@ -252,7 +252,7 @@ export default Vue.extend({
 			if (line[1] === 0 && line[0].domNode.innerHTML === `<br>`) {
 				this.toggleAddContent = true
 				if (index === 0) {
-					this.addContentPosTop = pos.top + 40
+					this.addContentPosTop = pos.top + 50
 					this.addContentPosLeft = pos.left
 				} else {
 					this.addContentPosTop = pos.top

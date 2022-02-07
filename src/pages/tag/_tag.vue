@@ -12,7 +12,10 @@
 		</div>
 		<!-- Posts loaded -->
 		<div ref="container" class="xl:w-750 min-h-130 h-130 xl:min-h-150 xl:h-150 fixed w-full overflow-y-auto">
-			<article v-if="posts.length == 0" class="mt-36 grid justify-items-center overflow-y-hidden px-6 xl:px-0">
+			<article
+				v-if="posts.length == 0 && !isLoading"
+				class="mt-36 grid justify-items-center overflow-y-hidden px-6 xl:px-0"
+			>
 				<p class="text-gray5 align-end mb-5 flex items-end text-sm" style="max-width: 366px">
 					It seems there are no posts under this topic yet
 				</p>
@@ -40,7 +43,7 @@
 			</p>
 		</div>
 		<!-- Not loaded yet -->
-		<article v-show="isLoading" class="flex w-full justify-center">
+		<article v-show="isLoading" class="flex w-full justify-center mt-12">
 			<div class="loader modal-animation m-6"></div>
 		</article>
 	</section>
@@ -126,7 +129,7 @@ export default Vue.extend({
 				const container = this.$refs.container as HTMLElement
 				container.removeEventListener(`scroll`, this.handleScroll)
 			}
-			if (posts.length === 0 && this.currentOffset > 10) {
+			if (posts.length < this.limit && posts.length > 0) {
 				this.noMorePosts = true
 			}
 			this.isLoading = false
