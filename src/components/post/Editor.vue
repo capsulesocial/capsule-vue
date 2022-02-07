@@ -188,58 +188,67 @@ export default Vue.extend({
 		}
 	},
 	mounted() {
-		Quill.register(ImageBlot, true)
-		Quill.register(
-			`modules/counter`,
-			(quill: Quill) => {
-				const metaButton = document.getElementById(`metaButton`)
-				quill.on(`text-change`, () => {
-					this.$emit(`isWriting`, true)
-					if (metaButton) {
-						metaButton.classList.add(`hidemetaButton`)
-					}
-					this.isCollapsed = true
-					const text = quill.getText()
-					const n = text.split(/\s+/).length
-					this.updateWordCount(n)
-				})
-				quill.on(`selection-change`, (range) => {
-					if (!range) {
-						this.$emit(`isWriting`, false)
-						if (metaButton) {
-							metaButton.classList.remove(`hidemetaButton`)
-						}
-						this.isCollapsed = false
-					}
-				})
-				quill.on(`editor-change`, (eventName: string, ...args: any) => {
-					if (eventName === `selection-change`) {
-						if (!args[0]) {
-							this.toggleAddContent = false
-							return
-						}
-						this.calculateAddPos(args[0].index)
-					}
-				})
-			},
-			true,
-		)
-		const editor = new Quill(`#editor`, options)
-		this.qeditor = editor
-		this.qeditor.focus()
-		this.editor = new QuillMarkdown(editor, {})
-		const titleInput = this.$refs.title as HTMLInputElement
-		const subtitleInput = this.$refs.subtitle as HTMLInputElement
-
-		const { title, subtitle } = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex]
-		titleInput.value = title
-		subtitleInput.value = subtitle
-		this.handleTitle(true)
-		this.updateTitle(false)
-		this.handleSubtitle(true)
-		this.updateSubtitle(false)
+		this.setupEditor()
 	},
 	methods: {
+		// Quilljs Editor init
+		setupEditor(): void {
+			Quill.register(ImageBlot, true)
+			Quill.register(
+				`modules/counter`,
+				(quill: Quill) => {
+					const metaButton = document.getElementById(`metaButton`)
+					quill.on(`text-change`, () => {
+						this.$emit(`isWriting`, true)
+						if (metaButton) {
+							metaButton.classList.add(`hidemetaButton`)
+						}
+						this.isCollapsed = true
+						const text = quill.getText()
+						const n = text.split(/\s+/).length
+						this.updateWordCount(n)
+					})
+					quill.on(`selection-change`, (range) => {
+						if (!range) {
+							this.$emit(`isWriting`, false)
+							if (metaButton) {
+								metaButton.classList.remove(`hidemetaButton`)
+							}
+							this.isCollapsed = false
+						}
+					})
+					quill.on(`editor-change`, (eventName: string, ...args: any) => {
+						if (eventName === `selection-change`) {
+							if (!args[0]) {
+								this.toggleAddContent = false
+								return
+							}
+							this.calculateAddPos(args[0].index)
+						}
+					})
+				},
+				true,
+			)
+			const editor = new Quill(`#editor`, options)
+			this.qeditor = editor
+			this.qeditor.focus()
+			// Set link placeholder
+			const qe: HTMLElement | null = document.querySelector(`.ql-tooltip-editor input`)
+			if (qe) {
+				qe.setAttribute(`data-link`, `https://capsule.social`)
+			}
+			this.editor = new QuillMarkdown(editor, {})
+			const titleInput = this.$refs.title as HTMLInputElement
+			const subtitleInput = this.$refs.subtitle as HTMLInputElement
+
+			const { title, subtitle } = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex]
+			titleInput.value = title
+			subtitleInput.value = subtitle
+			this.handleTitle(true)
+			this.updateTitle(false)
+			this.handleSubtitle(true)
+			this.updateSubtitle(false)
+		},
 		actionsUpload() {
 			document.getElementById(`getFile`)?.click()
 		},

@@ -120,8 +120,8 @@ export default Vue.extend({
 	methods: {
 		setActiveDraft() {
 			if (this.$route.name === `post`) {
-				location.reload()
 				this.$store.commit(`draft/setActiveDraft`, this.index)
+				this.$emit(`closeDraftsPopup`)
 				return
 			}
 			// Prevent overwriting of selected draft

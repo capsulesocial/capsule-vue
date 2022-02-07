@@ -34,6 +34,7 @@
 							:displayDeleteButton="true"
 							:numberOfDrafts="$store.state.draft.drafts.length"
 							class="flex-grow"
+							@closeDraftsPopup="closeDraftsPopup"
 						/>
 					</div>
 				</div>
@@ -67,11 +68,11 @@ export default Vue.extend({
 				return
 			}
 			if (e.target.parentNode.classList[0] === `popup`) {
-				this.$emit(`close`)
+				this.closeDraftsPopup()
 			}
 		},
-		handleWriteNewDraft() {
-			this.$router.push(`/post`)
+		closeDraftsPopup(): void {
+			this.$emit(`close`)
 		},
 	},
 })
