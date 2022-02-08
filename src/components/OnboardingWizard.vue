@@ -166,7 +166,7 @@ export default Vue.extend({
 				case 0:
 					return `Make it truly your own by selecting your preferences for displaying content, editing tools, updating widgets, and customizing everything as you wish!`
 				case 1:
-					return `Here you can easily browse posts that suit your interests. Scroll through  various categories, featured tags, or trending topics to get started.`
+					return `Here you can easily browse posts that suit your interests. Scroll through  various categories, trending tags, or trending topics to get started.`
 				case 2:
 					return `Sometimes a post or headline catches your attention, but you’re short of time. No worries. Blogchain makes it easy to save and share content for later.`
 				case 3:

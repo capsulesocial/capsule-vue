@@ -226,7 +226,6 @@ export default Vue.extend({
 		}),
 		disconnect(): void {
 			this.endSession()
-			window.localStorage.removeItem(`accountId`)
 			const keystore = new keyStores.BrowserLocalStorageKeyStore()
 			keystore.clear()
 			this.$store.commit(`draft/clearDrafts`)

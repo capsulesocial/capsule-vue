@@ -56,7 +56,7 @@ export default Vue.extend({
 	},
 	methods: {
 		redirectWebsite(): void {
-			if (this.website.substr(0, 7) !== `http://` || this.website.substr(0, 8) !== `https://`) {
+			if (this.website.substr(0, 7) !== `http://` && this.website.substr(0, 8) !== `https://`) {
 				window.open(`https://` + this.website, `_blank`)
 				return
 			}

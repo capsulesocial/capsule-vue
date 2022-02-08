@@ -3,9 +3,9 @@
 		<svg
 			v-if="!isActive"
 			xmlns="http://www.w3.org/2000/svg"
-			width="22"
-			height="22"
-			:style="shrink ? `width: 15px; height: 15px` : ``"
+			width="20"
+			height="20"
+			:style="shrink ? `width: 15px; height: 15px` : `margin-top: 2px`"
 			viewBox="0 0 24 24"
 			fill="none"
 			stroke="currentColor"
@@ -21,9 +21,9 @@
 		<svg
 			v-else
 			xmlns="http://www.w3.org/2000/svg"
-			width="22"
-			height="22"
-			:style="shrink ? `width: 15px; height: 15px` : ``"
+			width="20"
+			height="20"
+			:style="shrink ? `width: 15px; height: 15px` : `margin-top: 2px`"
 			viewBox="0 0 24 24"
 			fill="none"
 			stroke="#1E566C"
