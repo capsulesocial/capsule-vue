@@ -226,6 +226,9 @@ export default Vue.extend({
 			this.qeditor.root.addEventListener(`drop`, (ev: DragEvent) => {
 				this.handleDroppedImage(ev)
 			})
+			this.qeditor.root.addEventListener(`paste`, (ev: ClipboardEvent) => {
+				this.handlePastedContent(ev)
+			})
 			this.qeditor.focus()
 			// Set link placeholder
 			const qe: HTMLElement | null = document.querySelector(`.ql-tooltip-editor input`)
@@ -264,6 +267,57 @@ export default Vue.extend({
 				return
 			}
 			this.uploadPhoto(file)
+		},
+		async handlePastedContent(e: ClipboardEvent) {
+			e.stopPropagation()
+			e.preventDefault()
+
+			if (!this.qeditor) {
+				return
+			}
+			if (!e.clipboardData) {
+				return
+			}
+			const clipboard = e.clipboardData
+			let content = clipboard.getData(`text/html`)
+			const imgTagRegex = /<img [^>]*>/g
+			const imgSrcRegex = /src="([^\s|"]*)"/
+			const contentImgs = Array.from(content.matchAll(imgTagRegex))
+			if (contentImgs.length === 0) {
+				this.qeditor.clipboard.dangerouslyPasteHTML(content)
+				return
+			}
+			for (const img of contentImgs) {
+				const imgSrc = imgSrcRegex.exec(img[0])
+				if (!imgSrc) {
+					continue
+				}
+				const src = imgSrc[1]
+				const response = await fetch(src)
+				const blob = await response.blob()
+				const file = new File([blob], `image${Date.now()}.jpg`, { type: blob.type })
+				const compressedImage = await imageCompression(file, {
+					maxSizeMB: 5,
+					maxWidthOrHeight: 1920,
+					useWebWorker: true,
+					initialQuality: 0.9,
+				})
+				const reader = new FileReader()
+				reader.readAsDataURL(compressedImage)
+				// eslint-disable-next-line no-loop-func
+				reader.onload = async (ev) => {
+					if (ev.target !== null && this.qeditor) {
+						const cid = await addPhotoToIPFS(ev.target.result as any)
+						await preUploadPhoto(cid, compressedImage, file.name, this.$store.state.session.id)
+						content = content.replace(img[0], `<img alt="${cid}" src="${src}">`)
+						this.postImages.add(cid)
+						const range = this.qeditor.getSelection(true)
+						this.qeditor.clipboard.dangerouslyPasteHTML(content, `user`)
+						this.qeditor.setSelection(range.index + 1, 0)
+					}
+					return null
+				}
+			}
 		},
 		handleImage(e: Event) {
 			e.stopPropagation()
