@@ -18,7 +18,7 @@
 			</div>
 			<div v-if="website !== `` && location !== ``" class="mb-2"></div>
 			<div v-if="website !== ``" class="text-secondary flex flex-row items-center">
-				<LinkIcon class="text-primary mr-3 h-4 w-4" /><a :href="website" target="_blank">{{ website }}</a>
+				<LinkIcon class="text-primary mr-3 h-4 w-4" /><button @click="redirectWebsite">{{ website }}</button>
 			</div>
 			<div v-if="email !== `` && (location !== `` || website !== ``)" class="mb-2"></div>
 			<div v-if="email !== ``" class="flex flex-row items-center">
@@ -52,6 +52,15 @@ export default Vue.extend({
 		website: {
 			type: String,
 			default: ``,
+		},
+	},
+	methods: {
+		redirectWebsite(): void {
+			if (this.website.substr(0, 7) !== `http://` || this.website.substr(0, 8) !== `https://`) {
+				window.open(`https://` + this.website, `_blank`)
+				return
+			}
+			window.open(this.website, `_blank`)
 		},
 	},
 })
