@@ -369,6 +369,8 @@ export const categories = [
 	`philosophy`,
 	`news`,
 	`sports`,
+	`short-stories`,
+	`others`,
 ]
 
 export const backgrounds = [

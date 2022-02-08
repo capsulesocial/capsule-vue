@@ -347,7 +347,7 @@ export default Vue.extend({
 							return
 						}
 						const range = this.qeditor.getSelection(true)
-						this.qeditor.insertEmbed(
+						await this.qeditor.insertEmbed(
 							range.index,
 							`image`,
 							{ alt: cid.toString(), url: i.target.result, ipfsimage: `true` },
