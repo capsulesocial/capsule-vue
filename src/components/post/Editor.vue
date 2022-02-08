@@ -51,7 +51,7 @@
 						id="editor"
 						ref="editor"
 						class="editable focus:outline-none content max-w-none p-2"
-						v-html="$store.state.draft.drafts[$store.state.draft.activeIndex].content"
+						v-html="sanitize($store.state.draft.drafts[$store.state.draft.activeIndex].content)"
 					></div>
 					<AddContent
 						v-show="toggleAddContent"
@@ -383,17 +383,19 @@ export default Vue.extend({
 			this.wordCount = n - 1
 			this.$emit(`update`, this.wordCount)
 		},
+		sanitize(html: string): string {
+			return DOMPurify.sanitize(html, {
+				USE_PROFILES: { html: true, svg: true },
+				ALLOWED_TAGS: [`pre`],
+			})
+		},
 		getInputHTML(): string {
 			const input = document.getElementsByClassName(`ql-editor`)[0]
 			if (!input) {
 				return ``
 			}
 			// Sanitize HTML
-			const clean = DOMPurify.sanitize(input.innerHTML, {
-				USE_PROFILES: { html: true, svg: true },
-				ALLOWED_TAGS: [`pre`],
-			})
-			return clean
+			return this.sanitize(input.innerHTML)
 		},
 		async post(): Promise<void> {
 			const title = this.$refs.title as HTMLInputElement
