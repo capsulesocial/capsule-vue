@@ -1,0 +1,4 @@
+FROM nginx:1.15
+
+COPY .docker_files/nginx.prod.conf /etc/nginx/conf.d/default.conf
+COPY .app                          /var/www/capsule-vue
