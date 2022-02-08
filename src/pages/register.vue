@@ -171,7 +171,7 @@ export default Vue.extend({
 		return false
 	},
 	async created() {
-		await Promise.all([this.postWalletLogin()])
+		await this.postWalletLogin()
 		this.nearWallet = this.isSignedInToWallet()
 		this.isLoading = false
 	},
@@ -245,7 +245,10 @@ export default Vue.extend({
 			const [username] = await Promise.all([getUsernameNEAR(this.accountId), this.checkFunds(), this.onboardAccount()])
 			this.username = username
 			if (this.username) {
-				throw new Error(`You cannot login with wallet, please import your private key`)
+				this.$toastError(`You cannot login with wallet, please import your private key`)
+				removeNearPrivateKey(this.accountId)
+				walletLogout()
+				return false
 			}
 			return true
 		},
@@ -258,12 +261,14 @@ export default Vue.extend({
 			}
 			const idCheck = this.$qualityID(this.id)
 			if (this.$isError(idCheck)) {
-				throw new ValidationError(idCheck.error)
+				this.$toastError(idCheck.error)
+				return false
 			}
 			this.id = this.id.toLowerCase()
 			const registerResult = await register(this.id, privateKey)
 			if (`error` in registerResult) {
-				throw new ValidationError(registerResult.error)
+				this.$toastError(registerResult.error)
+				return false
 			}
 			return registerResult
 		},
@@ -273,6 +278,9 @@ export default Vue.extend({
 			}
 			// Login
 			const res = await this.loginOrRegister(this.userInfo.privateKey)
+			if (!res) {
+				return
+			}
 
 			const { profile, cid } = res
 
