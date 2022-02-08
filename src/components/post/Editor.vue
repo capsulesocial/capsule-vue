@@ -286,6 +286,8 @@ export default Vue.extend({
 			if (contentImgs.length === 0) {
 				const range = this.qeditor.getSelection(true)
 				this.qeditor.clipboard.dangerouslyPasteHTML(range.index, content, `user`)
+				const contentLength = this.getInputHTML().length
+				setTimeout(() => this.qeditor?.setSelection(contentLength, 1, `user`), 0)
 				return
 			}
 			for (const img of contentImgs) {
@@ -314,7 +316,8 @@ export default Vue.extend({
 						this.postImages.add(cid)
 						const range = this.qeditor.getSelection(true)
 						this.qeditor.clipboard.dangerouslyPasteHTML(range.index, content, `user`)
-						this.qeditor.setSelection(range.index + 1, 0)
+						const contentLength = this.getInputHTML().length
+						setTimeout(() => this.qeditor?.setSelection(contentLength, 1, `user`), 0)
 					}
 					return null
 				}
