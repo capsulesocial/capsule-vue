@@ -284,7 +284,8 @@ export default Vue.extend({
 			const imgSrcRegex = /src="([^\s|"]*)"/
 			const contentImgs = Array.from(content.matchAll(imgTagRegex))
 			if (contentImgs.length === 0) {
-				this.qeditor.clipboard.dangerouslyPasteHTML(content)
+				const range = this.qeditor.getSelection(true)
+				this.qeditor.clipboard.dangerouslyPasteHTML(range.index, content, `user`)
 				return
 			}
 			for (const img of contentImgs) {
@@ -312,7 +313,7 @@ export default Vue.extend({
 						content = content.replace(img[0], `<img alt="${cid}" src="${src}">`)
 						this.postImages.add(cid)
 						const range = this.qeditor.getSelection(true)
-						this.qeditor.clipboard.dangerouslyPasteHTML(content, `user`)
+						this.qeditor.clipboard.dangerouslyPasteHTML(range.index, content, `user`)
 						this.qeditor.setSelection(range.index + 1, 0)
 					}
 					return null
