@@ -20,10 +20,11 @@ export class ImageBlot extends BlockEmbed {
 	static blotName = `image`
 	static tagName = `img`
 
-	static create(value: { alt: string; url: string }) {
+	static create(value: { alt: string; url: string; ipfsimage: string }) {
 		const node = super.create()
 		node.setAttribute(`alt`, value.alt)
 		node.setAttribute(`src`, value.url)
+		node.setAttribute(`data-ipfsimage`, value.ipfsimage === `true` ? `true` : `false`)
 		return node
 	}
 
@@ -31,6 +32,7 @@ export class ImageBlot extends BlockEmbed {
 		return {
 			alt: node.getAttribute(`alt`),
 			url: node.getAttribute(`src`),
+			ipfsimage: node.getAttribute(`data-ipfsimage`),
 		}
 	}
 }
@@ -49,9 +51,12 @@ export const ipfsImageRule: TurndownService.Rule = {
 	filter: [`img`],
 	replacement: (_, node) => {
 		if (`getAttribute` in node) {
-			return `<ipfsimage alt="${node.getAttribute(`alt`)}" class="ipfs_img" cid="${node.getAttribute(
-				`alt`,
-			)}"></ipfsimage>`
+			if (node.getAttribute(`data-ipfsimage`) === `true`) {
+				return `<ipfsimage alt="${node.getAttribute(`alt`)}" class="ipfs_img" cid="${node.getAttribute(
+					`alt`,
+				)}"></ipfsimage>`
+			}
+			return node.outerHTML
 		}
 
 		throw new Error(`getAttributes does not exist on node`)

@@ -45,13 +45,7 @@
 				</article>
 
 				<!-- WYSIWYG -->
-				<input
-					v-show="false"
-					id="getFile"
-					accept="image/png, image/jpeg"
-					type="file"
-					@change="uploadFunction($event)"
-				/>
+				<input v-show="false" id="getFile" accept="image/png, image/jpeg" type="file" @change="handleImage($event)" />
 				<div class="relative">
 					<div
 						id="editor"
@@ -231,6 +225,9 @@ export default Vue.extend({
 			)
 			const editor = new Quill(`#editor`, options)
 			this.qeditor = editor
+			this.qeditor.root.addEventListener(`drop`, (ev: DragEvent) => {
+				this.handleDroppedImage(ev)
+			})
 			this.qeditor.focus()
 			// Set link placeholder
 			const qe: HTMLElement | null = document.querySelector(`.ql-tooltip-editor input`)
@@ -251,6 +248,37 @@ export default Vue.extend({
 		},
 		actionsUpload() {
 			document.getElementById(`getFile`)?.click()
+		},
+		handleDroppedImage(e: DragEvent) {
+			e.stopPropagation()
+			e.preventDefault()
+			if (!e.dataTransfer) {
+				return
+			}
+			const { files } = e.dataTransfer
+			if (files.length !== 1) {
+				this.$toastError(`Can not drop more than 1 image at a time`)
+				return
+			}
+			const file = files[0]
+			const fileType = /^image\/(jpeg|jpg|png)$/
+			if (!fileType.test(file.type)) {
+				return
+			}
+			this.uploadPhoto(file)
+		},
+		handleImage(e: Event) {
+			e.stopPropagation()
+			e.preventDefault()
+
+			const { files } = e.target as any
+			if (!files) {
+				return
+			}
+			if (files.length !== 1) {
+				return
+			}
+			this.uploadPhoto(files[0])
 		},
 		calculateAddPos(index: number) {
 			if (!this.qeditor) {
@@ -296,16 +324,7 @@ export default Vue.extend({
 				this.$store.commit(`draft/updateContent`, input)
 			}
 		},
-		async uploadFunction(e: { target: HTMLInputElement }) {
-			const target = e.target
-			if (e.target.files?.length !== 1) {
-				return
-			}
-			const image: File = (target.files as FileList)[0]
-			if (!image) {
-				return
-			}
-
+		async uploadPhoto(image: File) {
 			try {
 				const compressedImage = await imageCompression(image, {
 					maxSizeMB: 5,
@@ -328,7 +347,12 @@ export default Vue.extend({
 							return
 						}
 						const range = this.qeditor.getSelection(true)
-						this.qeditor.insertEmbed(range.index, `image`, { alt: cid.toString(), url: i.target.result }, `user`)
+						this.qeditor.insertEmbed(
+							range.index,
+							`image`,
+							{ alt: cid.toString(), url: i.target.result, ipfsimage: `true` },
+							`user`,
+						)
 						this.qeditor.setSelection(range.index + 1, 0)
 					}
 				}
