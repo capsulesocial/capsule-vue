@@ -1,6 +1,6 @@
 <template>
-	<button class="focus:outline-none hover:text-primary" @click="handleBookmark()">
-		<BookmarkIcon :isActive="hasBookmark" class="fill-none" />
+	<button class="focus:outline-none text-gray5 hover:text-primary" @click="handleBookmark()">
+		<BookmarkIcon :isActive="hasBookmark" />
 	</button>
 </template>
 

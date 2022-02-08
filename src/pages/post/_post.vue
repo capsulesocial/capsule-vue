@@ -52,7 +52,13 @@
 							class="pr-2"
 							@clicked="getBookmarkStatus"
 						/>
-						<ShareButton :post="post" :cid="$route.params.post" :hasRepost="hasReposted" :repostCount="repostCount" />
+						<ShareButton
+							:post="post"
+							:cid="$route.params.post"
+							:hasRepost="hasReposted"
+							:repostCount="repostCount"
+							style="margin-bottom: 2px"
+						/>
 					</div>
 				</article>
 				<article>
@@ -136,7 +142,7 @@
 								:cid="$route.params.post"
 								:hasRepost="hasReposted"
 								:repostCount="repostCount"
-								class="mx-4"
+								class="ml-2 mr-3"
 								@toggleRepost="handleRepost"
 							/>
 							<ShareButton :post="post" :cid="$route.params.post" @toggleRepost="handleRepost" />
