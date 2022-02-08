@@ -81,6 +81,18 @@ export default Vue.extend({
 			noMorePosts: false,
 		}
 	},
+	watch: {
+		async $route(n, o) {
+			if (n.params.id !== o.params.id) {
+				this.currentOffset = 0
+				this.noMorePosts = false
+				this.posts = []
+				this.posts = await this.fetchPosts()
+				const container = this.$parent.$refs.scrollContainer as HTMLElement
+				container.addEventListener(`scroll`, this.handleScroll)
+			}
+		},
+	},
 	async created() {
 		this.posts = await this.fetchPosts()
 	},
