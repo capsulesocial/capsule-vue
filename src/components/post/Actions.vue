@@ -277,6 +277,8 @@
 											<div class="bg-gray5 separator h-1 w-1 rounded-full"></div>
 										</div>
 									</div>
+									<!-- Extra row for spacing -->
+									<div class="w-full" style="height: 120px"></div>
 								</div>
 							</div>
 						</div>
