@@ -279,7 +279,7 @@ export default Vue.extend({
 				return
 			}
 			const clipboard = e.clipboardData
-			let content = clipboard.getData(`text/html`)
+			let content = this.sanitize(clipboard.getData(`text/html`))
 			const imgTagRegex = /<img [^>]*>/g
 			const imgSrcRegex = /src="([^\s|"]*)"/
 			const contentImgs = Array.from(content.matchAll(imgTagRegex))
