@@ -34,7 +34,7 @@
 						v-for="x of backgrounds"
 						:key="x.label"
 						class="focus:outline-none mb-4 flex flex-shrink-0 flex-col items-center"
-						@click="setBackgroundImage(x.image)"
+						@click="setBackgroundImage(x.id)"
 					>
 						<img
 							v-if="$store.state.backgroundImage === x.image"
@@ -58,10 +58,13 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapMutations } from 'vuex'
 import XIcon from '@/components/icons/X.vue'
 import ChevronLeft from '@/components/icons/ChevronLeft.vue'
 
 import { backgrounds } from '@/config'
+import { MutationType, getProfileFromSession, namespace as sessionStoreNamespace } from '~/store/session'
+import { setProfile } from '@/backend/profile'
 
 interface IData {
 	backgroundImage: null | string | ArrayBuffer
@@ -91,6 +94,10 @@ export default Vue.extend({
 		window.addEventListener(`click`, this.handleDropdown, false)
 	},
 	methods: {
+		...mapMutations(sessionStoreNamespace, {
+			changeBackground: MutationType.CHANGE_BACKGROUND,
+			changeCID: MutationType.CHANGE_CID,
+		}),
 		toggleSelector() {
 			this.$emit(`togglePopup`)
 			this.showPopup = !this.showPopup
@@ -109,8 +116,25 @@ export default Vue.extend({
 				this.toggleSelector()
 			}
 		},
-		setBackgroundImage(img: string | ArrayBuffer): void {
-			this.$store.commit(`changeBackgroundImage`, img)
+		setBackgroundImage(imgLabel: string | ArrayBuffer): void {
+			console.log(imgLabel)
+			this.changeBackground(imgLabel)
+			try {
+				this.updateProfile().then((res) => {
+					if (res) {
+						this.$toastSuccess(`Background changed!`)
+					}
+				})
+			} catch {
+				throw new Error(`Failed at updateProfile (src/pages/settings/styling.vue)`)
+			}
+			// this.$store.commit(`changeBackgroundImage`, imgLabel)
+		},
+		async updateProfile() {
+			const backendProfile = getProfileFromSession(this.$store.state.session)
+			const cid = await setProfile(backendProfile)
+			this.changeCID(cid)
+			return true
 		},
 		confirmBackgroundImage(): void {
 			if (this.$store.state.backgroundImage) {

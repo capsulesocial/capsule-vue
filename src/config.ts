@@ -375,66 +375,82 @@ export const categories = [
 
 export const backgrounds = [
 	{
+		id: `default`,
 		image: require(`@/assets/images/backgrounds/mainBG.webp`),
 		label: `Default`,
 	},
 	{
+		id: `blogginLife`,
 		image: require(`@/assets/images/backgrounds/blogn_life.webp`),
 		label: `Bloggin' life`,
 	},
 	{
+		id: `blogginLifeGreen`,
 		image: require(`@/assets/images/backgrounds/blogn_life_neon-green.webp`),
 		label: `Bloggin' life (neon green)`,
 	},
 	{
+		id: `blueStroke`,
 		image: require(`@/assets/images/backgrounds/blue_stroke.webp`),
 		label: `Blue stroke`,
 	},
 	{
+		id: `blueStrokeJelly`,
 		image: require(`@/assets/images/backgrounds/blue_stroke-jelly.webp`),
 		label: `Blue stroke w/ Jelly`,
 	},
 	{
+		id: `buoy`,
 		image: require(`@/assets/images/backgrounds/buoy.webp`),
 		label: `Buoy`,
 	},
 	{
+		id: `greenStroke`,
 		image: require(`@/assets/images/backgrounds/green_stroke.webp`),
 		label: `Green stroke`,
 	},
 	{
+		id: `jelly`,
 		image: require(`@/assets/images/backgrounds/jelly.webp`),
 		label: `Jelly`,
 	},
 	{
+		id: `neonPinkStroke`,
 		image: require(`@/assets/images/backgrounds/neon_pink_stroke.webp`),
 		label: `Neon pink stroke`,
 	},
 	{
+		id: `neonStroke`,
 		image: require(`@/assets/images/backgrounds/neon_stroke.webp`),
 		label: `Neon stroke`,
 	},
 	{
+		id: `pinkStroke`,
 		image: require(`@/assets/images/backgrounds/pink_stroke.webp`),
 		label: `Pink stroke`,
 	},
 	{
+		id: `sharkman`,
 		image: require(`@/assets/images/backgrounds/sharkman.webp`),
 		label: `Sharkman`,
 	},
 	{
+		id: `sharkmanPink`,
 		image: require(`@/assets/images/backgrounds/sharkman_pink.webp`),
 		label: `Sharkman (pink)`,
 	},
 	{
+		id: `textureText01`,
 		image: require(`@/assets/images/backgrounds/texture-text01.webp`),
 		label: `Texture text 01`,
 	},
 	{
+		id: `urban01`,
 		image: require(`@/assets/images/backgrounds/urbanstuff.webp`),
 		label: `Urban 01`,
 	},
 	{
+		id: `urban02`,
 		image: require(`@/assets/images/backgrounds/urbanstuff001.webp`),
 		label: `Urban 02`,
 	},

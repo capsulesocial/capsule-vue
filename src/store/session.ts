@@ -13,6 +13,7 @@ export interface Session {
 	location: Profile[`location`]
 	avatar: Profile[`avatar`]
 	socials: Profile[`socials`]
+	background: Profile[`background`]
 	cid: string
 }
 
@@ -31,6 +32,7 @@ export const MutationType = {
 	CHANGE_BIO: `updateBio`,
 	CHANGE_LOCATION: `updateLocation`,
 	CHANGE_WEBSITE: `updateWebsite`,
+	CHANGE_BACKGROUND: `updateBackground`,
 	LOGOUT: `logout`,
 }
 
@@ -49,6 +51,9 @@ export const mutations: MutationTree<Session> = {
 	},
 	[MutationType.CHANGE_WEBSITE]: (state, newWebsite: string) => {
 		state.website = newWebsite
+	},
+	[MutationType.CHANGE_BACKGROUND]: (state, newBackground: string) => {
+		state.background = newBackground
 	},
 	[MutationType.CHANGE_AVATAR]: (state, newAvatar: string) => {
 		state.avatar = newAvatar
@@ -82,6 +87,7 @@ export function createDefaultSession(id: string): Session {
 		socials: [],
 		avatar: ``,
 		website: ``,
+		background: ``,
 	}
 }
 
@@ -95,6 +101,7 @@ export function getProfileFromSession(s: Session): Profile {
 		avatar: s.avatar,
 		socials: s.socials,
 		website: s.website,
+		background: s.background,
 	}
 }
 
@@ -109,5 +116,6 @@ export function createSessionFromProfile(cid: string, p: Profile): Session {
 		avatar: p.avatar,
 		socials: [],
 		website: p.website,
+		background: p.background,
 	}
 }
