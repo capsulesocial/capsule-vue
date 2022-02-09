@@ -88,6 +88,7 @@ import AddContent from '@/components/post/EditorActions.vue'
 import { ImageBlot, preRule, ipfsImageRule, createPostImagesArray } from '@/pages/post/editorExtensions'
 import { createRegularPost, sendRegularPost } from '@/backend/post'
 import { addPhotoToIPFS, preUploadPhoto } from '@/backend/photos'
+import { getBlobExtension } from '@/backend/utilities/helpers'
 
 interface IData {
 	title: string
@@ -106,6 +107,11 @@ interface IData {
 	toggleAddContent: boolean
 	addContentPosTop: number
 	addContentPosLeft: number
+}
+
+interface IImageData {
+	cid: string
+	url: string | ArrayBuffer
 }
 
 const toolbarOptions = [
@@ -131,11 +137,6 @@ const turndownService = new Turndown()
 turndownService.addRule(`codeblock`, preRule)
 turndownService.addRule(`ipfsimage`, ipfsImageRule)
 turndownService.use(strikethrough)
-
-type ImageData = { cid: string; url: string | ArrayBuffer }
-function isImageData(data: any): data is ImageData {
-	return typeof data === `object`
-}
 
 export default Vue.extend({
 	components: {
@@ -255,18 +256,6 @@ export default Vue.extend({
 		actionsUpload() {
 			document.getElementById(`getFile`)?.click()
 		},
-		blobExtension(blob: Blob): string | null {
-			switch (blob.type) {
-				case `image/png`:
-					return `.png`
-				case `image/jpeg`:
-					return `.jpeg`
-				case `image/jpg`:
-					return `.jpg`
-				default:
-					return null
-			}
-		},
 		async updatePostImages(cid: string, compressedImage: Blob, imageName: string) {
 			// If we have already added this image in the past, we don't need to reupload it to the server
 			if (this.postImages.has(cid)) {
@@ -276,12 +265,12 @@ export default Vue.extend({
 			this.$store.commit(`draft/updatePostImages`, Array.from(this.postImages))
 			await preUploadPhoto(cid, compressedImage, imageName, this.$store.state.session.id)
 		},
-		insertContent(content: string | ImageData) {
+		insertContent(content: string | IImageData) {
 			if (!this.qeditor) {
 				return
 			}
 			const range = this.qeditor.getSelection(true)
-			if (!isImageData(content)) {
+			if (typeof content === `string`) {
 				this.qeditor.clipboard.dangerouslyPasteHTML(range.index, content, `user`)
 			} else {
 				const { cid, url } = content
@@ -332,10 +321,6 @@ export default Vue.extend({
 			const imgTagRegex = /<img [^>]*>/g
 			const imgSrcRegex = /src="([^\s|"]*)"/
 			const contentImgs = Array.from(content.matchAll(imgTagRegex))
-			if (contentImgs.length === 0) {
-				this.insertContent(content)
-				return
-			}
 			for (const img of contentImgs) {
 				const imgSrc = imgSrcRegex.exec(img[0])
 				if (!imgSrc) {
@@ -344,7 +329,7 @@ export default Vue.extend({
 				const src = imgSrc[1]
 				const response = await fetch(src)
 				const blob = await response.blob()
-				const blobExtension = this.blobExtension(blob)
+				const blobExtension = getBlobExtension(blob)
 				if (!blobExtension) {
 					this.$toastError(`Invalid image type`)
 				}
@@ -354,7 +339,7 @@ export default Vue.extend({
 			}
 			this.insertContent(content)
 		},
-		handleImage(e: Event) {
+		async handleImage(e: Event) {
 			e.stopPropagation()
 			e.preventDefault()
 
@@ -365,7 +350,8 @@ export default Vue.extend({
 			if (files.length !== 1) {
 				return
 			}
-			this.uploadPhoto(files[0])
+			const { cid, url } = await this.uploadPhoto(files[0])
+			this.insertContent({ cid, url })
 		},
 		calculateAddPos(index: number) {
 			if (!this.qeditor) {
@@ -422,7 +408,6 @@ export default Vue.extend({
 								const cid = await addPhotoToIPFS(i.target.result)
 								await this.updatePostImages(cid, compressedImage, image.name)
 								resolve({ cid, url: i.target.result })
-								// this.insertContent({ cid, url: i.target.result })
 							}
 						}
 					})
