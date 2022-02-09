@@ -88,6 +88,7 @@ import AddContent from '@/components/post/EditorActions.vue'
 import { ImageBlot, preRule, ipfsImageRule, createPostImagesArray } from '@/pages/post/editorExtensions'
 import { createRegularPost, sendRegularPost } from '@/backend/post'
 import { addPhotoToIPFS, preUploadPhoto } from '@/backend/photos'
+import { getBlobExtension } from '@/backend/utilities/helpers'
 
 interface IData {
 	title: string
@@ -255,18 +256,6 @@ export default Vue.extend({
 		actionsUpload() {
 			document.getElementById(`getFile`)?.click()
 		},
-		blobExtension(blob: Blob): string | null {
-			switch (blob.type) {
-				case `image/png`:
-					return `.png`
-				case `image/jpeg`:
-					return `.jpeg`
-				case `image/jpg`:
-					return `.jpg`
-				default:
-					return null
-			}
-		},
 		async updatePostImages(cid: string, compressedImage: Blob, imageName: string) {
 			// If we have already added this image in the past, we don't need to reupload it to the server
 			if (this.postImages.has(cid)) {
@@ -343,9 +332,10 @@ export default Vue.extend({
 				const src = imgSrc[1]
 				const response = await fetch(src)
 				const blob = await response.blob()
-				const blobExtension = this.blobExtension(blob)
+				const blobExtension = getBlobExtension(blob)
 				if (!blobExtension) {
 					this.$toastError(`Invalid image type`)
+					return
 				}
 				const file = new File([blob], `image${Date.now()}${blobExtension}`, { type: blob.type })
 				const compressedImage = await this.getCompressedImage(file)
@@ -359,7 +349,6 @@ export default Vue.extend({
 						content = content.replace(img[0], `<img alt="${cid}" src="${src}">`)
 						this.insertContent(content)
 					}
-					return null
 				}
 			}
 		},
