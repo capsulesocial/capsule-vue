@@ -101,21 +101,21 @@ jobs:
       - name: extract app.tar.gz
         run: tar -xzf app.tar.gz
 
-      # - name: Set DEPLOY_BRANCH in env
-      #   run: echo "DEPLOY_BRANCH=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
       - name: Set DEPLOY_BRANCH in env
         run: echo "DEPLOY_BRANCH=main" >> $GITHUB_ENV
+      # - name: Set DEPLOY_BRANCH in env
+      #   run: echo "DEPLOY_BRANCH=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
       - name: Set COMMIT_SHORT_SHA in env
         run: echo "COMMIT_SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
-      - name: Build and push capsule-orbit image
+      - name: Build and push capsule-vue image
         uses: docker/build-push-action@v2
         with:
           context: .
           file: ./Dockerfile.prod
           push: true
           tags: |
-            ghcr.io/capsulesocial/capsule-orbit:${{ env.DEPLOY_BRANCH }}-latest
-            ghcr.io/capsulesocial/capsule-orbit:${{ env.DEPLOY_BRANCH }}-${{ env.COMMIT_SHORT_SHA }}
+            ghcr.io/capsulesocial/capsule-vue:${{ env.DEPLOY_BRANCH }}-latest
+            ghcr.io/capsulesocial/capsule-vue:${{ env.DEPLOY_BRANCH }}-${{ env.COMMIT_SHORT_SHA }}
 
   deploy:
     needs: release
