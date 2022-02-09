@@ -65,16 +65,12 @@ jobs:
         run: yarn build:web
 
       # cache the files required for runtime so we can move them into the docker container later
-      - name: create runtime_files directory
-        run: mkdir ./runtime_files
-      - name: move files to runtime_files
-        run: mv package.json nuxt.config.ts .nuxt runtime_files
-      - name: compress runtime files
-        run: tar -czf runtime_files.tar.gz runtime_files
+      - name: compress .app
+        run: tar -czf app.tar.gz .app
       - uses: actions/upload-artifact@v2
         with:
-          name: runtime_files.tar.gz
-          path: runtime_files.tar.gz
+          name: app.tar.gz
+          path: app.tar.gz
 
   release:
     needs: [lint, build]
@@ -98,14 +94,12 @@ jobs:
       - name: extract node_modules
         run: tar -xzf node_modules.tar.gz
 
-      # pull down the runtime_files.tar.gz added in the build job
+      # pull down the app.tar.gz added in the build job
       - uses: actions/download-artifact@v2
         with:
-          name: runtime_files.tar.gz
-      - name: extract runtime files
-        run: tar -xzf runtime_files.tar.gz
-      - name: move runtime files to current directory
-        run: mv runtime_files/* .
+          name: app.tar.gz
+      - name: extract app.tar.gz
+        run: tar -xzf app.tar.gz
 
       # - name: Set DEPLOY_BRANCH in env
       #   run: echo "DEPLOY_BRANCH=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
