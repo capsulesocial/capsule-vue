@@ -101,6 +101,19 @@ jobs:
       - name: extract app.tar.gz
         run: tar -xzf app.tar.gz
 
+      - name: Set up .env
+        run: |
+          cat <<EOF >.env
+            CONTRACT_NAME="dev-1635323648697-81373157539648"
+            DOMAIN="https://alpha-b.capsule.social"
+            CAPSULE_SERVER="https://alpha-b.capsule.social/server"
+            ORBIT_URL="https://alpha-b.capsule.social/orbit"
+            TORUS_GOOGLE_VERIFIER="capsule-social-google-chris"
+            TORUS_GOOGLE_CLIENTID="653379121360-j8t9ua763vfvd86d1qjguonhrgqvkigo.apps.googleusercontent.com"
+            TORUS_DISCORD_VERIFIER="capsule-social-test-v2-discord"
+            TORUS_DISCORD_CLIENTID="906210984396468275"
+          EOF
+
       - name: Set DEPLOY_BRANCH in env
         run: echo "DEPLOY_BRANCH=main" >> $GITHUB_ENV
       # - name: Set DEPLOY_BRANCH in env
