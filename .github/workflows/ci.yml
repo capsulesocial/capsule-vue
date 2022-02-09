@@ -64,14 +64,6 @@ jobs:
       - name: build
         run: yarn build:web
 
-      # cache the files required for runtime so we can move them into the docker container later
-      - name: compress .app
-        run: tar -czf app.tar.gz .app
-      - uses: actions/upload-artifact@v2
-        with:
-          name: app.tar.gz
-          path: app.tar.gz
-
   release:
     needs: [lint, build]
     runs-on: ubuntu-latest
@@ -93,13 +85,6 @@ jobs:
           name: node_modules.tar.gz
       - name: extract node_modules
         run: tar -xzf node_modules.tar.gz
-
-      # pull down the app.tar.gz added in the build job
-      - uses: actions/download-artifact@v2
-        with:
-          name: app.tar.gz
-      - name: extract app.tar.gz
-        run: tar -xzf app.tar.gz
 
       - name: Set up .env
         run: |
