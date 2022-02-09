@@ -109,6 +109,11 @@ interface IData {
 	addContentPosLeft: number
 }
 
+interface IImageData {
+	cid: string
+	url: string | ArrayBuffer
+}
+
 const toolbarOptions = [
 	[`bold`, `italic`, `underline`, `strike`],
 	[`blockquote`, `code-block`, `link`],
@@ -260,7 +265,7 @@ export default Vue.extend({
 			this.$store.commit(`draft/updatePostImages`, Array.from(this.postImages))
 			await preUploadPhoto(cid, compressedImage, imageName, this.$store.state.session.id)
 		},
-		insertContent(content: string | { cid: string; url: string | ArrayBuffer }) {
+		insertContent(content: string | IImageData) {
 			if (!this.qeditor) {
 				return
 			}
@@ -315,10 +320,6 @@ export default Vue.extend({
 			const imgTagRegex = /<img [^>]*>/g
 			const imgSrcRegex = /src="([^\s|"]*)"/
 			const contentImgs = Array.from(content.matchAll(imgTagRegex))
-			if (contentImgs.length === 0) {
-				this.insertContent(content)
-				return
-			}
 			for (const img of contentImgs) {
 				const imgSrc = imgSrcRegex.exec(img[0])
 				if (!imgSrc) {
@@ -342,10 +343,10 @@ export default Vue.extend({
 						const cid = await addPhotoToIPFS(ev.target.result as any)
 						await this.updatePostImages(cid, compressedImage, file.name)
 						content = content.replace(img[0], `<img alt="${cid}" src="${src}">`)
-						this.insertContent(content)
 					}
 				}
 			}
+			this.insertContent(content)
 		},
 		handleImage(e: Event) {
 			e.stopPropagation()
