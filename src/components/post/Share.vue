@@ -11,29 +11,16 @@
 		</button>
 		<div
 			v-show="showSocialShares"
-			:class="
-				$store.state.settings.darkMode
-					? 'bg-lightBG text-lightPrimaryText border-lightBorder'
-					: 'bg-darkBG text-darkPrimaryText border-darkBorder'
-			"
-			class="border-lightBorder modal-animation dropdownShareOpen absolute z-10 flex w-40 flex-col rounded-lg border p-2 shadow-lg"
+			class="bg-lightBG text-lightPrimaryText border-lightBorder modal-animation dropdownShareOpen absolute z-10 flex w-40 flex-col rounded-lg border p-2 shadow-lg"
 			style="left: 40px"
 		>
 			<!-- Twitter -->
-			<button
-				:class="$store.state.settings.darkMode ? 'hover:text-lightActive' : 'hover:text-darkActive'"
-				class="focus:outline-none text-gray5 flex"
-				@click="handleShare('TWITTER')"
-			>
+			<button class="focus:outline-none text-gray5 flex hover:text-lightActive" @click="handleShare('TWITTER')">
 				<TwitterIcon class="mr-2 p-1" />
 				<span class="self-center text-left text-xs">Share on Twitter</span>
 			</button>
 			<!-- Copy URL Link -->
-			<button
-				:class="$store.state.settings.darkMode ? 'hover:text-lightActive' : 'hover:text-darkActive'"
-				class="focus:outline-none text-gray5 flex"
-				@click="handleShare('URL')"
-			>
+			<button class="focus:outline-none text-gray5 flex hover:text-lightActive" @click="handleShare('URL')">
 				<LinkIcon class="mr-2 p-1" />
 				<span class="self-center text-xs">Copy Link</span>
 			</button>

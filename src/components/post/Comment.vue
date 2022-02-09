@@ -91,21 +91,13 @@
 				<!-- Reply Input box -->
 				<div
 					v-if="$store.state.session.id !== ``"
-					:class="
-						$store.state.settings.darkMode
-							? 'bg-lightBG text-lightPrimaryText border-lightBorder'
-							: 'bg-darkBG text-darkPrimaryText border-darkBorder'
-					"
-					class="my-1 ml-5 flex w-full rounded-xl border-2 p-1"
+					class="my-1 ml-5 flex w-full rounded-xl border-2 p-1 bg-lightBG text-lightPrimaryText border-lightBorder"
 				>
 					<textarea
 						v-model="reply"
 						type="text"
 						placeholder="Reply.."
-						:class="
-							$store.state.settings.darkMode ? 'bg-lightBG text-lightPrimaryText' : 'bg-darkBG text-darkPrimaryText'
-						"
-						class="resize-vertical focus:outline-none w-4/5 overflow-y-auto py-1 px-2 text-sm leading-normal"
+						class="resize-vertical focus:outline-none w-4/5 overflow-y-auto py-1 px-2 text-sm leading-normal bg-lightBG text-lightPrimaryText"
 						style="resize: none"
 					>
 					</textarea>

@@ -51,12 +51,7 @@
 					@input="bio = $event.target.value"
 					@keyup="checkBio()"
 				></textarea>
-				<p
-					class="text-right text-xs"
-					:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-				>
-					{{ checkBio() }} Characters Remaining
-				</p>
+				<p class="text-right text-xs text-lightSecondaryText">{{ checkBio() }} Characters Remaining</p>
 			</div>
 		</div>
 		<!-- Location -->

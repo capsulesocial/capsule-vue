@@ -12,18 +12,12 @@
 		</button>
 		<div
 			v-show="showReposts"
-			:class="
-				$store.state.settings.darkMode
-					? 'bg-lightBG text-lightPrimaryText border-lightBorder'
-					: 'bg-darkBG text-darkPrimaryText border-darkBorder'
-			"
-			class="border-lightBorder modal-animation dropdownRepostOpen absolute z-20 flex w-40 flex-col rounded-lg border p-2 shadow-lg"
+			class="bg-lightBG text-lightPrimaryText border-lightBorder modal-animation dropdownRepostOpen absolute z-20 flex w-40 flex-col rounded-lg border p-2 shadow-lg"
 			style="left: 50px"
 		>
 			<!-- Simple Repost -->
 			<button
-				:class="$store.state.settings.darkMode ? 'hover:text-lightActive' : 'hover:text-darkActive'"
-				class="focus:outline-none text-gray5 flex mr-4 items-center"
+				class="hover:text-lightActive focus:outline-none text-gray5 flex mr-4 items-center"
 				@click="handleRepost()"
 			>
 				<RepostIcon :isActive="isReposted" :shrink="true" class="mr-2 p-1" />
@@ -32,8 +26,7 @@
 			</button>
 			<!-- Quote Repost -->
 			<button
-				:class="$store.state.settings.darkMode ? 'hover:text-lightActive' : 'hover:text-darkActive'"
-				class="focus:outline-none text-gray5 flex mr-4 items-center"
+				class="hover:text-lightActive focus:outline-none text-gray5 flex mr-4 items-center"
 				@click="$emit(`toggleRepost`)"
 			>
 				<QuoteIcon class="mr-2 p-1" />

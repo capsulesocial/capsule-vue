@@ -4,30 +4,14 @@
 			<Avatar :avatar="avatar" :authorID="authorID" size="w-10 h-10" />
 		</div>
 		<div class="ml-2 flex-1 leading-relaxed">
-			<strong
-				:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-				class="bold mr-1 font-bold"
-			>
+			<strong class="bold mr-1 font-bold text-lightPrimaryText">
 				{{ name }}
 			</strong>
-			<nuxt-link
-				:to="`/id/` + authorID"
-				:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-				class="mr-2 text-sm"
-			>
-				@{{ authorID }}
-			</nuxt-link>
-			<span
-				v-if="timestamp"
-				class="text-xs"
-				:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-			>
+			<nuxt-link :to="`/id/` + authorID" class="mr-2 text-sm text-lightSecondaryText"> @{{ authorID }} </nuxt-link>
+			<span v-if="timestamp" class="text-xs text-lightSecondaryText">
 				{{ $formatDate(timestamp) }}
 			</span>
-			<p
-				:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-				class="py-1 text-sm"
-			>
+			<p class="py-1 text-sm text-lightPrimaryText">
 				{{ content }}
 			</p>
 		</div>

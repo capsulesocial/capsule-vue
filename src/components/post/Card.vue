@@ -388,8 +388,7 @@
 										</h6>
 										<h6
 											v-if="(post.subtitle || post.excerpt) && !featuredPhoto"
-											:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-											class="max-w-mobileCard xl:max-w-700 break-words"
+											class="max-w-mobileCard xl:max-w-700 break-words text-lightSecondaryText"
 										>
 											{{ post.subtitle ? post.subtitle : postExcerpt() }}
 										</h6>

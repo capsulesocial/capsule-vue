@@ -296,8 +296,8 @@ export default Vue.extend({
 
 <style>
 .loader {
-	border: 3px solid #eeeeee; /* Light grey */
-	border-top: 3px solid #2e556a; /* Dark teal */
+	border: 3px solid #eeeeee;
+	border-top: 3px solid #2e556a;
 	border-radius: 50%;
 	width: 40px;
 	height: 40px;

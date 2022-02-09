@@ -32,12 +32,7 @@
 			</button>
 			<div
 				v-show="showDelete"
-				:class="
-					$store.state.settings.darkMode
-						? 'bg-lightBG text-lightPrimaryText border-lightBorder'
-						: 'bg-darkBG text-darkPrimaryText border-darkBorder'
-				"
-				class="border-lightBorder modal-animation dropdownDraftOpen absolute z-10 flex w-40 flex-col rounded-lg border p-2 shadow-lg"
+				class="bg-lightBG text-lightPrimaryText border-lightBorder modal-animation dropdownDraftOpen absolute z-10 flex w-40 flex-col rounded-lg border p-2 shadow-lg"
 				style="top: 35px; right: -5px"
 			>
 				<button class="focus:outline-none text-primary flex" @click="setActiveDraft(draft)">

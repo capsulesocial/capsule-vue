@@ -1,8 +1,5 @@
 <template>
-	<div
-		class="w-full"
-		:class="$store.state.settings.darkMode ? 'text-lightPrimaryText bg-lightBG' : 'text-darkPrimaryText bg-darkBG'"
-	>
+	<div class="w-full text-lightPrimaryText bg-lightBG">
 		<section class="flex h-screen flex-row pt-12">
 			<article class="flex flex-shrink-0 flex-row p-4" style="width: 240px">
 				<div class="-mr-4 flex h-full w-full flex-col py-4 pl-4 pr-4">
@@ -11,25 +8,13 @@
 						<span class="flex flex-row items-center">
 							<h3 class="text-xl font-semibold">Messages</h3>
 							<h6
-								:class="
-									$store.state.settings.darkMode
-										? 'text-lightOnSecondaryText bg-lightSecondary'
-										: 'text-darkOnSecondaryText bg-darkSecondary'
-								"
-								class="ml-2 flex h-6 w-6 items-center justify-center rounded-full text-sm shadow-lg"
+								class="text-lightOnSecondaryText bg-lightSecondary ml-2 flex h-6 w-6 items-center justify-center rounded-full text-sm shadow-lg"
 							>
 								5
 							</h6>
 						</span>
 						<div class="ml-auto">
-							<button
-								:class="
-									$store.state.settings.darkMode
-										? 'text-lightOnPrimaryText bg-lightPrimary'
-										: 'text-darkOnPrimaryText bg-darkPrimary'
-								"
-								class="flex items-center justify-center rounded-full p-2"
-							>
+							<button class="text-lightOnPrimaryText bg-lightPrimary flex items-center justify-center rounded-full p-2">
 								<MailIcon />
 							</button>
 						</div>
@@ -38,12 +23,7 @@
 						<div class="-mx-4 flex w-64 flex-col">
 							<!-- Name & Contact card / button (active) -->
 							<div
-								:class="
-									$store.state.settings.darkMode
-										? 'text-lightPrimaryText bg-lightPrimary bg-opacity-25'
-										: 'text-darkPrimaryText bg-darkPrimary bg-opacity-75'
-								"
-								class="relative my-2 flex flex-row items-center rounded-lg py-4 pl-2"
+								class="text-lightPrimaryText bg-lightPrimary bg-opacity-25 relative my-2 flex flex-row items-center rounded-lg py-4 pl-2"
 							>
 								<div class="absolute right-0 top-0 mr-4 mt-4 text-xs">5 min</div>
 								<img :src="friendAvatar" class="m-2 h-10 w-10 flex-shrink-0 rounded-lg" />
@@ -56,12 +36,7 @@
 							</div>
 							<!-- Contact Button (Inactive) -->
 							<div
-								:class="
-									$store.state.settings.darkMode
-										? 'text-lightOnSurfaceText bg-lightSurface'
-										: 'text-darkOnSurfaceVariantText bg-darkSurface'
-								"
-								class="relative my-2 flex flex-row items-center rounded-lg py-4 pl-2 shadow-lg"
+								class="text-lightOnSurfaceText bg-lightSurface relative my-2 flex flex-row items-center rounded-lg py-4 pl-2 shadow-lg"
 							>
 								<div class="absolute right-0 top-0 mr-4 mt-4 text-xs">1 day ago</div>
 								<img :src="friendAvatar" class="m-2 h-10 w-10 flex-shrink-0 rounded-lg" />
@@ -91,14 +66,7 @@
 						<!-- Response message -->
 						<div class="flex items-end p-4">
 							<img :src="friendAvatar" class="m-2 h-10 w-10 flex-shrink-0 rounded-lg" />
-							<div
-								:class="
-									$store.state.settings.darkMode
-										? 'bg-lightSecondary bg-opacity-25 shadow-lg'
-										: 'bg-darkSecondary bg-opacity-75'
-								"
-								class="my-2 ml-2 mr-12 rounded-lg px-2 pt-4"
-							>
+							<div class="bg-lightSecondary bg-opacity-25 shadow-lg my-2 ml-2 mr-12 rounded-lg px-2 pt-4">
 								<p>Hey! Welcome to your messages inbox. Full functionality coming soon</p>
 								<h6 class="p-4 text-right text-xs">10:00 AM</h6>
 							</div>
@@ -107,14 +75,7 @@
 						<!-- Sent message -->
 						<div class="flex flex-row-reverse items-end">
 							<img :src="avatar" class="m-2 h-10 w-10 flex-shrink-0 rounded-lg" />
-							<div
-								:class="
-									$store.state.settings.darkMode
-										? 'bg-lightSurfaceVariant bg-opacity-25'
-										: 'text-darkOnSurfaceVariantText bg-darkSurface'
-								"
-								class="my-2 mr-2 ml-12 rounded-lg px-2 pt-4"
-							>
+							<div class="bg-lightSurfaceVariant bg-opacity-25 my-2 mr-2 ml-12 rounded-lg px-2 pt-4">
 								<p>Looking forward to it!</p>
 								<h6 class="p-4 text-right text-xs">10:03 AM</h6>
 							</div>
@@ -124,12 +85,7 @@
 				<!-- Start of comment bar -->
 				<div class="flex flex-row items-center">
 					<div
-						:class="
-							$store.state.settings.darkMode
-								? 'text-lightPrimaryText bg-lightBG border-lightBorder'
-								: 'text-darkPrimaryText bg-darkBG border-darkBorder'
-						"
-						class="flex h-10 w-full flex-row items-center rounded-xl border px-2"
+						class="text-lightPrimaryText bg-lightBG border-lightBorder flex h-10 w-full flex-row items-center rounded-xl border px-2"
 					>
 						<button class="ml-1 flex h-10 w-10 items-center justify-center">
 							<AttachmentIcon />
@@ -137,12 +93,7 @@
 						<div class="w-full">
 							<input
 								type="text"
-								:class="
-									$store.state.settings.darkMode
-										? 'text-lightPrimaryText placeholder-lightSecondaryText bg-lightBG border-lightBorder'
-										: 'text-darkPrimaryText placeholder-darkSecondaryText bg-darkBG border-darkBorder'
-								"
-								class="focus:outline-none flex h-10 w-full items-center border-t border-b text-sm"
+								class="text-lightPrimaryText placeholder-lightSecondaryText bg-lightBG border-lightBorder focus:outline-none flex h-10 w-full items-center border-t border-b text-sm"
 								placeholder="Type your message...."
 							/>
 						</div>

@@ -1,15 +1,8 @@
 <template>
 	<article>
 		<!-- Unverified -->
-		<div
-			v-if="!isActive"
-			:class="$store.state.settings.darkMode ? 'text-gray7' : 'text-darkPrimaryText'"
-			class="flex justify-between"
-		>
-			<div
-				class="flex flex-row items-center text-xl"
-				:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-			>
+		<div v-if="!isActive" class="flex justify-between text-gray7">
+			<div class="flex flex-row items-center text-xl text-lightSecondaryText">
 				<TwitterIcon v-if="platform === 'twitter'" class="text-gray7 mr-4" />
 				<GitHubIcon v-if="platform === 'github'" class="text-gray7 mr-4" />
 				<ExternalURLIcon v-if="platform === 'website'" class="text-gray7 mr-4" />
@@ -20,7 +13,7 @@
 
 		<div v-else class="flex h-12 w-full items-center justify-between">
 			<div v-if="!isVerified">
-				<label for="handle" :class="$store.state.settings.darkMode ? 'text-gray7' : 'text-darkSecondaryText'">
+				<label for="handle" class="text-gray7">
 					<span v-if="platform !== 'website'">handle: @</span><span v-else>URL:</span>
 				</label>
 				<input
@@ -28,12 +21,7 @@
 					v-model="handle"
 					type="text"
 					placeholder="handle"
-					:class="
-						$store.state.settings.darkMode
-							? 'bg-lightBG text-lightPrimaryText border-lightBorder'
-							: 'bg-darkBG text-darkPrimaryText border-darkBorder'
-					"
-					class="focus:outline-none border-b"
+					class="focus:outline-none border-b bg-lightBG text-lightPrimaryText border-lightBorder"
 				/>
 			</div>
 			<div v-else>
@@ -41,12 +29,7 @@
 			</div>
 			<button
 				v-if="!isVerified"
-				:class="
-					$store.state.settings.darkMode
-						? 'bg-lightButtonBG text-lightButtonText hover:bg-lightActive'
-						: 'bg-darkButtonBG text-darkButtonText hover:bg-darkActive'
-				"
-				class="focus:outline-none flex rounded-lg py-2 px-4 font-bold shadow-lg"
+				class="focus:outline-none flex rounded-lg py-2 px-4 font-bold shadow-lg bg-lightButtonBG text-lightButtonText hover:bg-lightActive"
 				@click="verifySocial()"
 			>
 				<span class="mr-2">Verify</span>

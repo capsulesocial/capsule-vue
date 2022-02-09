@@ -11,20 +11,11 @@
 		</button>
 		<div
 			v-show="showSocialShares"
-			:class="
-				$store.state.settings.darkMode
-					? 'bg-lightBG text-lightPrimaryText border-lightBorder'
-					: 'bg-darkBG text-darkPrimaryText border-darkBorder'
-			"
-			class="border-lightBorder modal-animation dropdownActionsOpen absolute z-10 flex flex-col rounded-lg border p-3 shadow-lg"
+			class="bg-lightBG text-lightPrimaryText border-lightBorder modal-animation dropdownActionsOpen absolute z-10 flex flex-col rounded-lg border p-3 shadow-lg"
 			style="left: 50px; top: -12px"
 		>
 			<!-- Add Image -->
-			<button
-				:class="$store.state.settings.darkMode ? 'hover:text-lightPrimaryText' : 'hover:text-darkActive'"
-				class="focus:outline-none text-gray5 flex"
-				@click="$emit(`image`)"
-			>
+			<button class="focus:outline-none text-gray5 flex hover:text-lightPrimaryText" @click="$emit(`image`)">
 				<ImageIcon class="h-5 w-5 fill-current" />
 			</button>
 		</div>

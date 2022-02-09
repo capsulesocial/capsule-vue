@@ -62,17 +62,10 @@
 					</div>
 				</article>
 				<article>
-					<h1
-						:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-						class="text-h1 mb-3 break-words font-serif font-semibold"
-					>
+					<h1 class="text-lightPrimaryText text-h1 mb-3 break-words font-serif font-semibold">
 						{{ post.title }}
 					</h1>
-					<h2
-						v-if="post.subtitle"
-						:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-						class="text-h2 mb-3 break-words font-serif font-medium"
-					>
+					<h2 v-if="post.subtitle" class="text-lightSecondaryText text-h2 mb-3 break-words font-serif font-medium">
 						{{ post.subtitle }}
 					</h2>
 				</article>
@@ -92,16 +85,9 @@
 						{{ post.featuredPhotoCaption }}
 					</p>
 				</article>
-
-				<!-- <hr v-if="this.$store.state.settings.darkMode" class="style-two my-5" />
-				<hr v-else class="style-one my-5" /> -->
-
 				<!-- Content -->
 				<article class="mt-5">
-					<div
-						:class="$store.state.settings.darkMode ? 'text-lightPrimaryText' : 'text-darkPrimaryText'"
-						class="editable content max-w-none break-words"
-					>
+					<div class="text-lightPrimaryText editable content max-w-none break-words">
 						<component :is="readerViewElement" v-if="readerViewElement"></component>
 					</div>
 				</article>
