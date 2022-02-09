@@ -1,23 +1,23 @@
 <template>
 	<div class="relative flex items-end">
 		<button
-			class="focus:outline-none hover:text-primary toggleRepost flex items-end"
-			:class="showReposts ? 'text-primary' : ''"
+			class="focus:outline-none hover:text-primary dark:hover:text-secondary toggleRepost flex items-end"
+			:class="showReposts ? 'text-primary dark:text-secondary' : ''"
 			@click.stop="toggleDropdown"
 		>
-			<div class="text-gray5 hover:text-primary hover:fill-primary flex">
+			<div class="text-gray5 dark:text-gray3 hover:text-primary hover:fill-primary flex">
 				<RepostIcon :isActive="isReposted" />
 				<span class="ml-1">{{ repostCount + repostOffset }}</span>
 			</div>
 		</button>
 		<div
 			v-show="showReposts"
-			class="bg-lightBG text-lightPrimaryText border-lightBorder modal-animation dropdownRepostOpen absolute z-20 flex w-40 flex-col rounded-lg border p-2 shadow-lg"
+			class="bg-lightBG dark:bg-darkBG text-lightPrimaryText dark:text-darkPrimaryText border-lightBorder modal-animation dropdownRepostOpen absolute z-20 flex w-40 flex-col rounded-lg border p-2 shadow-lg"
 			style="left: 50px"
 		>
 			<!-- Simple Repost -->
 			<button
-				class="hover:text-lightActive focus:outline-none text-gray5 flex mr-4 items-center"
+				class="hover:text-primary dark:hover:text-secondary focus:outline-none text-gray5 dark:text-gray3 flex mr-4 items-center"
 				@click="handleRepost()"
 			>
 				<RepostIcon :isActive="isReposted" :shrink="true" class="mr-2 p-1" />
@@ -26,7 +26,7 @@
 			</button>
 			<!-- Quote Repost -->
 			<button
-				class="hover:text-lightActive focus:outline-none text-gray5 flex mr-4 items-center"
+				class="hover:text-primary dark:hover:text-secondary focus:outline-none text-gray5 dark:text-gray3 flex mr-4 items-center"
 				@click="$emit(`toggleRepost`)"
 			>
 				<QuoteIcon class="mr-2 p-1" />

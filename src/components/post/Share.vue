@@ -1,26 +1,32 @@
 <template>
 	<div class="relative flex items-end">
 		<button
-			class="focus:outline-none hover:text-primary toggleShare flex items-end"
-			:class="showSocialShares ? 'text-primary' : ''"
+			class="focus:outline-none hover:text-primary dark:hover:text-secondary toggleShare flex items-end"
+			:class="showSocialShares ? 'text-primary dark:text-secondary' : ''"
 			@click.stop="toggleDropdown"
 		>
-			<div class="text-gray5 hover:text-primary hover:fill-primary flex">
+			<div class="text-gray5 dark:text-gray3 hover:text-primary dark:hover:text-secondary hover:fill-primary flex">
 				<ShareIcon :isActive="showSocialShares" />
 			</div>
 		</button>
 		<div
 			v-show="showSocialShares"
-			class="bg-lightBG text-lightPrimaryText border-lightBorder modal-animation dropdownShareOpen absolute z-10 flex w-40 flex-col rounded-lg border p-2 shadow-lg"
+			class="bg-lightBG dark:bg-darkBG text-lightPrimaryText dark:text-darkPrimaryText border-lightBorder modal-animation dropdownShareOpen absolute z-10 flex w-40 flex-col rounded-lg border p-2 shadow-lg"
 			style="left: 40px"
 		>
 			<!-- Twitter -->
-			<button class="focus:outline-none text-gray5 flex hover:text-lightActive" @click="handleShare('TWITTER')">
+			<button
+				class="focus:outline-none text-gray5 dark:text-gray3 flex hover:text-primary dark:hover:text-secondary"
+				@click="handleShare('TWITTER')"
+			>
 				<TwitterIcon class="mr-2 p-1" />
 				<span class="self-center text-left text-xs">Share on Twitter</span>
 			</button>
 			<!-- Copy URL Link -->
-			<button class="focus:outline-none text-gray5 flex hover:text-lightActive" @click="handleShare('URL')">
+			<button
+				class="focus:outline-none text-gray5 dark:text-gray3 flex hover:text-primary dark:hover:text-secondary"
+				@click="handleShare('URL')"
+			>
 				<LinkIcon class="mr-2 p-1" />
 				<span class="self-center text-xs">Copy Link</span>
 			</button>

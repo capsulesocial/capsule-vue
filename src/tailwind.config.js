@@ -46,10 +46,10 @@ module.exports = {
         connectOrange: '#F0B785',
         selectedBlue: '#0020ff',
         neutralLightest: '#F6F6F6',
-
         positive: `#1F7DAD`,
         neutral: `#F0B785`,
         negative: `#EE1F63`,
+
         lightBG: '#FFFFFF',
         lightBGStop: 'rgba(256, 256, 256, 0.95)',
         lightBGStart: 'rgba(256, 256, 256, 0.90)',
@@ -74,6 +74,8 @@ module.exports = {
         lightOnErrorText: '#FFFFFF',
 
         darkBG: '#121212',
+        darkBGStop: 'rgba(46, 46, 46, 0.95)',
+        darkBGStart: 'rgba(46, 46, 46, 0.90)',
         darkPrimary: '#407C83',
         darkPrimaryVariant: '#324B4E',
         darkSecondary: '#424242',

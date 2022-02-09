@@ -5,14 +5,14 @@ import type { RootState } from './index'
 export const namespace = `settings`
 
 export interface SettingState {
-	darkMode: boolean
+	darkMode: string
 	recentlyPosted: boolean
 	recentlyInSettings: boolean
 	showUnauthPopup: boolean
 }
 
 export const state = (): SettingState => ({
-	darkMode: true,
+	darkMode: `OS`,
 	recentlyPosted: false,
 	recentlyInSettings: false,
 	showUnauthPopup: false,
@@ -28,7 +28,7 @@ export const MutationType = {
 }
 
 export const mutations: MutationTree<SettingState> = {
-	[MutationType.CHANGE_DARK_MODE]: (state, newMode: boolean) => {
+	[MutationType.CHANGE_DARK_MODE]: (state, newMode: string) => {
 		state.darkMode = newMode
 	},
 	[MutationType.SET_RECENTLY_POSTED]: (state, recentlyPosted: boolean) => {
@@ -48,10 +48,6 @@ export const actionType = {
 
 export const actions: ActionTree<SettingState, RootState> = {
 	nuxtServerInit({ commit }, _context: Context) {
-		commit(MutationType.CHANGE_DARK_MODE, true)
-	},
-
-	[actionType.TOGGLE_DARK_MODE]({ commit, state }) {
-		commit(MutationType.CHANGE_DARK_MODE, !state.darkMode)
+		commit(MutationType.CHANGE_DARK_MODE, `OS`)
 	},
 }

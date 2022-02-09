@@ -1,7 +1,7 @@
 <template>
 	<article class="w-full">
 		<div class="flex flex-row items-center justify-between p-6 pt-4 pb-2">
-			<h3 class="text-primary text-base font-semibold">Trending tags</h3>
+			<h3 class="text-primary dark:text-secondary text-base font-semibold">Trending tags</h3>
 			<!-- <div class="flex flex-row justify-end">
 				<h3 v-if="$route.name === `discover`" class="self-center text-sm text-gray5">Top of</h3>
 				<div v-if="$route.name === `discover`" class="relative inline">
@@ -33,7 +33,7 @@
 		</div>
 		<div class="px-6 pb-4">
 			<article v-if="tags.length == 0">
-				<p class="text-gray5 mb-4 mt-3 text-sm">
+				<p class="text-gray5 dark:text-gray3 mb-4 mt-3 text-sm">
 					<span> It seems no trending tags are available at the moment </span>
 				</p>
 			</article>

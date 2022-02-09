@@ -1,9 +1,9 @@
 <template>
 	<button
-		class="focus:outline-none bg-gray1 z-10 transform rounded-lg px-3 pb-1 transition duration-500 ease-in-out"
+		class="focus:outline-none bg-gray1 dark:bg-gray7 z-10 transform rounded-lg px-3 pb-1 transition duration-500 ease-in-out"
 		@click="$router.push('/tag/' + tag)"
 	>
-		<span class="text-gray5 text-sm"> {{ tag }} </span>
+		<span class="text-gray5 dark:text-gray1 text-sm"> {{ tag }} </span>
 	</button>
 </template>
 
@@ -16,22 +16,6 @@ export default Vue.extend({
 		tag: {
 			type: String,
 			default: ``,
-		},
-		theme: {
-			type: String,
-			default: `colors`,
-		},
-	},
-	data() {
-		return {
-			colors: [`text-primary`, `text-secondary`, `text-teal`, `text-ocean`, `text-fourth`, `text-fifth`],
-		}
-	},
-	methods: {
-		getRandomColor() {
-			let i = (Math.random() * 5) % 5
-			i = Math.round(i)
-			return i
 		},
 	},
 })

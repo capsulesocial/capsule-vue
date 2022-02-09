@@ -476,4 +476,8 @@ export const backgrounds: IBackground[] = [
 		image: require(`@/assets/images/backgrounds/urbanstuff001.webp`),
 		label: `Urban 02`,
 	},
+	{
+		image: require(`@/assets/images/backgrounds/testBGDark.webp`),
+		label: `Dark`,
+	},
 ]

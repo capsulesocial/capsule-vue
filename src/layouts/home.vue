@@ -21,7 +21,9 @@
 						style="height: 62px; width: 1220px"
 					>
 						<!-- Title -->
-						<h1 v-if="profile" class="text-primary text-3xl font-semibold xl:text-4xl">Hello, {{ profile.name }}</h1>
+						<h1 v-if="profile" class="text-primary dark:text-secondary text-3xl font-semibold xl:text-4xl">
+							Hello, {{ profile.name }}
+						</h1>
 						<h1 v-else class="text-primary text-3xl font-semibold xl:text-4xl">Hello!</h1>
 						<Nodes />
 					</div>
@@ -36,11 +38,11 @@
 								height: calc(100vh - 150px);
 								backdrop-filter: blur(10px);
 							"
-							class="from-lightBGStart to-lightBGStop modal-animation fixed overflow-y-auto overflow-x-hidden rounded-lg bg-gradient-to-r p-6 shadow-lg"
+							class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop modal-animation fixed overflow-y-auto overflow-x-hidden rounded-lg bg-gradient-to-r p-6 shadow-lg"
 						/>
 						<nuxt-child
 							v-else
-							class="xl:w-750 min-h-120 h-120 from-lightBGStart to-lightBGStop modal-animation fixed box-border w-full overflow-y-auto rounded-lg bg-gradient-to-r shadow-lg xl:mr-5"
+							class="xl:w-750 min-h-120 h-120 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop modal-animation fixed box-border w-full overflow-y-auto rounded-lg bg-gradient-to-r shadow-lg xl:mr-5"
 							:class="showWidgets ? `` : `z-10`"
 							:toggleFriend="toggleFriend"
 							:following="following"
@@ -130,6 +132,22 @@ export default Vue.extend({
 		// Check if logged in user
 		if (this.$store.state.session.id === ``) {
 			return
+		}
+		// Set color mode
+		if (this.$store.state.settings.darkMode === `dark`) {
+			document.documentElement.classList.add(`dark`)
+		} else if (this.$store.state.settings.darkMode === `light`) {
+			document.documentElement.classList.remove(`dark`)
+		} else {
+			if (window.matchMedia(`(prefers-color-scheme: dark)`).matches) {
+				document.documentElement.classList.add(`dark`)
+			}
+			window
+				.matchMedia(`(prefers-color-scheme: dark)`)
+				.addEventListener(`change`, (e) => e.matches && document.documentElement.classList.add(`dark`))
+			window
+				.matchMedia(`(prefers-color-scheme: light)`)
+				.addEventListener(`change`, (e) => e.matches && document.documentElement.classList.remove(`dark`))
 		}
 		// get logged in profile
 		const { profile } = await getProfile(this.$store.state.session.id)

@@ -251,9 +251,9 @@ export default Vue.extend({
 			let res: string = ``
 			// Check if current tab
 			if (this.$route.name === tab) {
-				res += `font-bold text-primary border-primary border-b`
+				res += `font-bold text-primary dark:text-secondary border-primary dark:border-secondary border-b`
 			} else {
-				res += `font-regular text-gray5`
+				res += `font-regular text-gray5 dark:text-gray3`
 			}
 			return res
 		},

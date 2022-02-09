@@ -13,6 +13,7 @@
 				<p class="ml-4">Change</p>
 			</button>
 		</div>
+		<ThemeSelector />
 		<!-- Popup background selector -->
 		<div
 			v-if="showPopup"
@@ -61,6 +62,7 @@ import Vue from 'vue'
 import { mapMutations } from 'vuex'
 import XIcon from '@/components/icons/X.vue'
 import ChevronLeft from '@/components/icons/ChevronLeft.vue'
+import ThemeSelector from '@/components/ColorMode.vue'
 
 import { backgrounds } from '@/config'
 import { MutationType, getProfileFromSession, namespace as sessionStoreNamespace } from '~/store/session'
@@ -75,7 +77,7 @@ interface IData {
 }
 
 export default Vue.extend({
-	components: { XIcon, ChevronLeft },
+	components: { XIcon, ChevronLeft, ThemeSelector },
 	layout: `settings`,
 	data(): IData {
 		return {

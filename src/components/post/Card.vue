@@ -202,7 +202,7 @@
 		<div v-if="this.$route.name !== `post-post`">
 			<div class="card">
 				<div
-					class="sticky top-0 border-b py-4 px-5 xl:py-5 xl:px-6 transition ease-in-out hover:bg-gray1 hover:bg-opacity-25"
+					class="sticky top-0 border-b dark:border-darkBG dark:border-opacity-25 py-4 px-5 xl:py-5 xl:px-6 transition ease-in-out hover:bg-gray1 dark:hover:bg-darkBG hover:bg-opacity-25 dark:hover:bg-opacity-25"
 					style="backdrop-filter: blur(10px)"
 					:class="showProfileCard || showQuoteCard ? `z-20` : `z-10`"
 				>
@@ -282,10 +282,10 @@
 						<!-- Simple repost -->
 						<div
 							v-if="repostedBy !== `` && !hideRepostIcon && quote === null"
-							class="text-gray5 -mt-2 mb-3 flex w-full items-center pt-2"
+							class="text-gray5 dark:text-gray3 -mt-2 mb-3 flex w-full items-center pt-2"
 						>
 							<RepostIcon :shrink="true" />
-							<p class="text-gray5 pl-2 text-sm">
+							<p class="text-gray5 dark:text-gray3 pl-2 text-sm">
 								<nuxt-link v-if="repostedBy != ``" :to="`/id/` + repostedBy">{{ repostedBy }} </nuxt-link>
 								<nuxt-link v-else :to="`/id/` + repostedBy">{{ repostedBy }}</nuxt-link>
 								reposted
@@ -304,18 +304,21 @@
 										<nuxt-link :to="'/id/' + post.authorID" class="mr-4 flex">
 											<span
 												v-if="authorName != ``"
-												class="text-base font-medium transition ease-in-out hover:underline"
+												class="text-base dark:text-darkPrimaryText font-medium transition ease-in-out hover:underline"
 											>
 												{{ authorName }}
 											</span>
-											<span v-else class="text-gray5 text-base font-medium transition ease-in-out hover:underline">
+											<span
+												v-else
+												class="text-gray5 dark:gray-3 text-base font-medium transition ease-in-out hover:underline"
+											>
 												{{ post.authorID }}
 											</span>
-											<span class="text-primary ml-2"> @{{ post.authorID }} </span>
+											<span class="text-primary dark:text-secondary ml-2"> @{{ post.authorID }} </span>
 										</nuxt-link>
 									</div>
 									<!-- Timestamp -->
-									<span class="text-xs">
+									<span class="text-xs dark:text-gray3">
 										{{ $formatDate(post.timestamp) }}
 									</span>
 								</div>
@@ -380,15 +383,18 @@
 							<div class="mr-4 flex w-full flex-col justify-between">
 								<nuxt-link :to="'/post/' + postCID">
 									<div class="flex max-w-full flex-col overflow-hidden pr-4">
-										<h3 class="break-words pb-2 text-lg font-semibold">
+										<h3 class="break-words pb-2 text-lg font-semibold dark:text-darkPrimaryText">
 											{{ post.title }}
 										</h3>
-										<h6 v-if="(post.subtitle || post.excerpt) && featuredPhoto" class="max-w-420 break-words">
+										<h6
+											v-if="(post.subtitle || post.excerpt) && featuredPhoto"
+											class="max-w-420 break-words dark:text-darkSecondaryText"
+										>
 											{{ post.subtitle ? post.subtitle : postExcerpt() }}
 										</h6>
 										<h6
 											v-if="(post.subtitle || post.excerpt) && !featuredPhoto"
-											class="max-w-mobileCard xl:max-w-700 break-words text-lightSecondaryText"
+											class="max-w-mobileCard xl:max-w-700 break-words text-lightSecondaryText dark:text-darkSecondaryText"
 										>
 											{{ post.subtitle ? post.subtitle : postExcerpt() }}
 										</h6>
@@ -399,11 +405,11 @@
 									<TagPill v-for="t in post.tags" :key="t.name" :tag="t.name" class="my-2 mr-4" />
 								</div>
 								<!-- Actions buttons (Desktop) -->
-								<div class="text-gray5 mt-1 hidden xl:flex xl:items-center">
+								<div class="text-gray5 dark:text-gray3 mt-1 hidden xl:flex xl:items-center">
 									<!-- Comment -->
 									<button
-										class="focus:outline-none text-gray5 hover:text-primary mr-4 hover:fill-primary flex items-center"
-										:class="showComments ? `text-primary` : ``"
+										class="focus:outline-none text-gray5 dark:text-gray3 hover:text-primary dark:hover:text-secondary mr-4 hover:fill-primary flex items-center"
+										:class="showComments ? `text-primary dark:text-secondary` : ``"
 										@click="toggleComments"
 									>
 										<CommentIcon :isActive="showComments" />
@@ -414,13 +420,13 @@
 										:repost="repost"
 										:post="post"
 										:cid="postCID"
-										class="fill-primary mr-4"
+										class="mr-4"
 										:hasRepost="hasReposted"
 										:repostCount="repostCount"
 										@toggleRepost="toggleQuoteRepost"
 									/>
 									<!-- Share popup -->
-									<Share :post="post" :cid="postCID" class="fill-primary" style="margin-top: 2px" />
+									<Share :post="post" :cid="postCID" style="margin-top: 2px" />
 									<button class="focus:outline-none ml-4" @click="toggleStatsCard"><StatsIcon /></button>
 								</div>
 							</div>
