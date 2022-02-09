@@ -133,11 +133,6 @@ turndownService.addRule(`codeblock`, preRule)
 turndownService.addRule(`ipfsimage`, ipfsImageRule)
 turndownService.use(strikethrough)
 
-type ImageData = { cid: string; url: string | ArrayBuffer }
-function isImageData(data: any): data is ImageData {
-	return typeof data === `object`
-}
-
 export default Vue.extend({
 	components: {
 		XIcon,
@@ -265,12 +260,12 @@ export default Vue.extend({
 			this.$store.commit(`draft/updatePostImages`, Array.from(this.postImages))
 			await preUploadPhoto(cid, compressedImage, imageName, this.$store.state.session.id)
 		},
-		insertContent(content: string | ImageData) {
+		insertContent(content: string | { cid: string; url: string | ArrayBuffer }) {
 			if (!this.qeditor) {
 				return
 			}
 			const range = this.qeditor.getSelection(true)
-			if (!isImageData(content)) {
+			if (typeof content === `string`) {
 				this.qeditor.clipboard.dangerouslyPasteHTML(range.index, content, `user`)
 			} else {
 				const { cid, url } = content
