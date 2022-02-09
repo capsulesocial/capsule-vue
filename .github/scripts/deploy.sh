@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 set -ex
 
@@ -6,11 +6,6 @@ set -ex
 [[ -z "$COMMIT_SHORT_SHA" ]] && { echo "error: COMMIT_SHORT_SHA environment variable not set" >&2 ; exit 1 ; }
 [[ -z "$GITHUB_USER" ]] && { echo "error: GITHUB_USER environment variable not set" >&2 ; exit 1 ; }
 [[ -z "$GITHUB_TOKEN" ]] && { echo "error: GITHUB_TOKEN environment variable not set" >&2 ; exit 1 ; }
-
-time sudo apt-get update --yes
-time sudo apt-get install --yes software-properties-common
-time sudo add-apt-repository --yes --update ppa:ansible/ansible
-time sudo apt-get install --yes ansible
 
 (
     set +x # make sure we don't leak secrets here
