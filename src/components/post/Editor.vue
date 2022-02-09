@@ -132,6 +132,11 @@ turndownService.addRule(`codeblock`, preRule)
 turndownService.addRule(`ipfsimage`, ipfsImageRule)
 turndownService.use(strikethrough)
 
+type ImageData = { cid: string; url: string | ArrayBuffer }
+function isImageData(data: any): data is ImageData {
+	return typeof data === `object`
+}
+
 export default Vue.extend({
 	components: {
 		XIcon,
@@ -250,6 +255,49 @@ export default Vue.extend({
 		actionsUpload() {
 			document.getElementById(`getFile`)?.click()
 		},
+		blobExtension(blob: Blob): string | null {
+			switch (blob.type) {
+				case `image/png`:
+					return `.png`
+				case `image/jpeg`:
+					return `.jpeg`
+				case `image/jpg`:
+					return `.jpg`
+				default:
+					return null
+			}
+		},
+		async updatePostImages(cid: string, compressedImage: Blob, imageName: string) {
+			// If we have already added this image in the past, we don't need to reupload it to the server
+			if (this.postImages.has(cid)) {
+				return
+			}
+			this.postImages.add(cid)
+			this.$store.commit(`draft/updatePostImages`, Array.from(this.postImages))
+			await preUploadPhoto(cid, compressedImage, imageName, this.$store.state.session.id)
+		},
+		insertContent(content: string | ImageData) {
+			if (!this.qeditor) {
+				return
+			}
+			const range = this.qeditor.getSelection(true)
+			if (!isImageData(content)) {
+				this.qeditor.clipboard.dangerouslyPasteHTML(range.index, content, `user`)
+			} else {
+				const { cid, url } = content
+				this.qeditor.insertEmbed(range.index, `image`, { alt: cid.toString(), url }, `user`)
+			}
+			const contentLength = this.qeditor.getContents().length()
+			setTimeout(() => this.qeditor?.setSelection(contentLength, 0, `user`), 0)
+		},
+		getCompressedImage(file: File) {
+			return imageCompression(file, {
+				maxSizeMB: 5,
+				maxWidthOrHeight: 1920,
+				useWebWorker: true,
+				initialQuality: 0.9,
+			})
+		},
 		handleDroppedImage(e: DragEvent) {
 			e.stopPropagation()
 			e.preventDefault()
@@ -284,10 +332,7 @@ export default Vue.extend({
 			const imgSrcRegex = /src="([^\s|"]*)"/
 			const contentImgs = Array.from(content.matchAll(imgTagRegex))
 			if (contentImgs.length === 0) {
-				const range = this.qeditor.getSelection(true)
-				this.qeditor.clipboard.dangerouslyPasteHTML(range.index, content, `user`)
-				const contentLength = this.getInputHTML().length
-				setTimeout(() => this.qeditor?.setSelection(contentLength, 1, `user`), 0)
+				this.insertContent(content)
 				return
 			}
 			for (const img of contentImgs) {
@@ -298,26 +343,21 @@ export default Vue.extend({
 				const src = imgSrc[1]
 				const response = await fetch(src)
 				const blob = await response.blob()
-				const file = new File([blob], `image${Date.now()}.jpg`, { type: blob.type })
-				const compressedImage = await imageCompression(file, {
-					maxSizeMB: 5,
-					maxWidthOrHeight: 1920,
-					useWebWorker: true,
-					initialQuality: 0.9,
-				})
+				const blobExtension = this.blobExtension(blob)
+				if (!blobExtension) {
+					this.$toastError(`Invalid image type`)
+				}
+				const file = new File([blob], `image${Date.now()}${blobExtension}`, { type: blob.type })
+				const compressedImage = await this.getCompressedImage(file)
 				const reader = new FileReader()
 				reader.readAsDataURL(compressedImage)
 				// eslint-disable-next-line no-loop-func
 				reader.onload = async (ev) => {
-					if (ev.target !== null && this.qeditor) {
+					if (ev.target !== null) {
 						const cid = await addPhotoToIPFS(ev.target.result as any)
-						await preUploadPhoto(cid, compressedImage, file.name, this.$store.state.session.id)
+						await this.updatePostImages(cid, compressedImage, file.name)
 						content = content.replace(img[0], `<img alt="${cid}" src="${src}">`)
-						this.postImages.add(cid)
-						const range = this.qeditor.getSelection(true)
-						this.qeditor.clipboard.dangerouslyPasteHTML(range.index, content, `user`)
-						const contentLength = this.getInputHTML().length
-						setTimeout(() => this.qeditor?.setSelection(contentLength, 1, `user`), 0)
+						this.insertContent(content)
 					}
 					return null
 				}
@@ -382,34 +422,14 @@ export default Vue.extend({
 		},
 		async uploadPhoto(image: File) {
 			try {
-				const compressedImage = await imageCompression(image, {
-					maxSizeMB: 5,
-					maxWidthOrHeight: 1920,
-					useWebWorker: true,
-					initialQuality: 0.9,
-				})
+				const compressedImage = await this.getCompressedImage(image)
 				const reader = new FileReader()
 				reader.readAsDataURL(compressedImage)
 				reader.onload = async (i) => {
-					if (i.target !== null) {
-						const cid = await addPhotoToIPFS(i.target.result as any)
-						// If we have already added this image in the past, we don't need to reupload it to the server
-						if (!this.postImages.has(cid)) {
-							this.postImages.add(cid)
-							this.$store.commit(`draft/updatePostImages`, Array.from(this.postImages))
-							await preUploadPhoto(cid, compressedImage, image.name, this.$store.state.session.id)
-						}
-						if (!this.qeditor) {
-							return
-						}
-						const range = this.qeditor.getSelection(true)
-						await this.qeditor.insertEmbed(
-							range.index,
-							`image`,
-							{ alt: cid.toString(), url: i.target.result, ipfsimage: `true` },
-							`user`,
-						)
-						this.qeditor.setSelection(range.index + 1, 0)
+					if (i.target !== null && i.target.result !== null) {
+						const cid = await addPhotoToIPFS(i.target.result)
+						await this.updatePostImages(cid, compressedImage, image.name)
+						this.insertContent({ cid, url: i.target.result })
 					}
 				}
 			} catch (err) {
