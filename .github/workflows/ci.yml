@@ -75,7 +75,7 @@ jobs:
   release:
     needs: [lint, build]
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/ci/deploy'
+    if: github.ref == 'refs/heads/main'
     steps:
 
       - uses: actions/checkout@v1
@@ -115,9 +115,7 @@ jobs:
           EOF
 
       - name: Set DEPLOY_BRANCH in env
-        run: echo "DEPLOY_BRANCH=main" >> $GITHUB_ENV
-      # - name: Set DEPLOY_BRANCH in env
-      #   run: echo "DEPLOY_BRANCH=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
+        run: echo "DEPLOY_BRANCH=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
       - name: Set COMMIT_SHORT_SHA in env
         run: echo "COMMIT_SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
       - name: Build and push capsule-vue image
@@ -135,15 +133,13 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: lexauw/ansible-alpine:latest
-    if: github.ref == 'refs/heads/ci/deploy'
+    if: github.ref == 'refs/heads/main'
     steps:
 
       - uses: actions/checkout@v1
 
       - name: Set DEPLOY_BRANCH in env
-        run: echo "DEPLOY_BRANCH=main" >> $GITHUB_ENV
-      # - name: Set DEPLOY_BRANCH in env
-      #   run: echo "DEPLOY_BRANCH=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
+        run: echo "DEPLOY_BRANCH=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
       - name: Set COMMIT_SHORT_SHA in env
         run: echo "COMMIT_SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
 
