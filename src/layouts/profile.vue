@@ -4,7 +4,7 @@
 		:style="{
 			background:
 				`linear-gradient(180deg, rgba(46, 85, 106, 0.02) 0%, rgba(46, 85, 106, 0) 50%), url(` +
-				$store.state.backgroundImage +
+				this.bgImage.image +
 				`)`,
 			backgroundSize: `contain`,
 		}"
@@ -101,6 +101,7 @@ import Footer from '@/components/Footer.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 import UnauthPopup from '@/components/UnauthPopup.vue'
 
+import { IBackground, backgrounds } from '@/config'
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
@@ -119,6 +120,7 @@ interface IData {
 	mutuals: Set<string>
 	mutualProfiles: Array<Profile>
 	componentKey: number
+	bgImage: IBackground
 }
 
 export default Vue.extend({
@@ -145,6 +147,7 @@ export default Vue.extend({
 			mutuals: new Set(),
 			mutualProfiles: [],
 			componentKey: 0,
+			bgImage: backgrounds[0],
 		}
 	},
 	watch: {
@@ -196,6 +199,7 @@ export default Vue.extend({
 				return
 			}
 			this.visitProfile = visitProfile || createDefaultProfile(this.$route.params.id)
+			// this.bgImage = this.$getBGImage(this.visitProfile?.background, `local`)
 			this.visitAvatar = null
 			if (this.visitProfile.avatar !== ``) {
 				getPhotoFromIPFS(this.visitProfile.avatar).then((p) => {
@@ -229,6 +233,7 @@ export default Vue.extend({
 		async getMyProfile(update: boolean = false) {
 			const { profile } = await getProfile(this.$store.state.session.id, update)
 			this.myProfile = profile || createDefaultProfile(this.$store.state.session.id)
+			this.bgImage = this.$getBGImage(this.myProfile?.background, `local`)
 			if (this.myProfile.avatar.length > 1) {
 				getPhotoFromIPFS(this.myProfile.avatar).then((p) => {
 					this.myAvatar = p

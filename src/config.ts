@@ -373,68 +373,106 @@ export const categories = [
 	`others`,
 ]
 
-export const backgrounds = [
+export interface IBackground {
+	id: string
+	type: string
+	image: any
+	label: string
+}
+export const backgrounds: IBackground[] = [
 	{
+		id: `default`,
+		type: `local`,
 		image: require(`@/assets/images/backgrounds/mainBG.webp`),
 		label: `Default`,
 	},
 	{
+		id: `blogginLife`,
+		type: `local`,
 		image: require(`@/assets/images/backgrounds/blogn_life.webp`),
 		label: `Bloggin' life`,
 	},
 	{
+		id: `blogginLifeGreen`,
+		type: `local`,
 		image: require(`@/assets/images/backgrounds/blogn_life_neon-green.webp`),
 		label: `Bloggin' life (neon green)`,
 	},
 	{
+		id: `blueStroke`,
+		type: `local`,
 		image: require(`@/assets/images/backgrounds/blue_stroke.webp`),
 		label: `Blue stroke`,
 	},
 	{
+		id: `blueStrokeJelly`,
+		type: `local`,
 		image: require(`@/assets/images/backgrounds/blue_stroke-jelly.webp`),
 		label: `Blue stroke w/ Jelly`,
 	},
 	{
+		id: `buoy`,
+		type: `local`,
 		image: require(`@/assets/images/backgrounds/buoy.webp`),
 		label: `Buoy`,
 	},
 	{
+		id: `greenStroke`,
+		type: `local`,
 		image: require(`@/assets/images/backgrounds/green_stroke.webp`),
 		label: `Green stroke`,
 	},
 	{
+		id: `jelly`,
+		type: `local`,
 		image: require(`@/assets/images/backgrounds/jelly.webp`),
 		label: `Jelly`,
 	},
 	{
+		id: `neonPinkStroke`,
+		type: `local`,
 		image: require(`@/assets/images/backgrounds/neon_pink_stroke.webp`),
 		label: `Neon pink stroke`,
 	},
 	{
+		id: `neonStroke`,
+		type: `local`,
 		image: require(`@/assets/images/backgrounds/neon_stroke.webp`),
 		label: `Neon stroke`,
 	},
 	{
+		id: `pinkStroke`,
+		type: `local`,
 		image: require(`@/assets/images/backgrounds/pink_stroke.webp`),
 		label: `Pink stroke`,
 	},
 	{
+		id: `sharkman`,
+		type: `local`,
 		image: require(`@/assets/images/backgrounds/sharkman.webp`),
 		label: `Sharkman`,
 	},
 	{
+		id: `sharkmanPink`,
+		type: `local`,
 		image: require(`@/assets/images/backgrounds/sharkman_pink.webp`),
 		label: `Sharkman (pink)`,
 	},
 	{
+		id: `textureText01`,
+		type: `local`,
 		image: require(`@/assets/images/backgrounds/texture-text01.webp`),
 		label: `Texture text 01`,
 	},
 	{
+		id: `urban01`,
+		type: `local`,
 		image: require(`@/assets/images/backgrounds/urbanstuff.webp`),
 		label: `Urban 01`,
 	},
 	{
+		id: `urban02`,
+		type: `local`,
 		image: require(`@/assets/images/backgrounds/urbanstuff001.webp`),
 		label: `Urban 02`,
 	},

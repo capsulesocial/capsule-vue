@@ -4,7 +4,7 @@
 		:style="{
 			background:
 				`linear-gradient(180deg, rgba(46, 85, 106, 0.02) 0%, rgba(46, 85, 106, 0) 50%), url(` +
-				$store.state.backgroundImage +
+				this.bgImage.image +
 				`)`,
 			backgroundSize: `contain`,
 		}"
@@ -27,6 +27,11 @@
 import Vue from 'vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 import Header from '@/components/Header.vue'
+import { IBackground, backgrounds } from '@/config'
+
+interface IData {
+	bgImage: IBackground
+}
 
 export default Vue.extend({
 	components: {
@@ -39,6 +44,11 @@ export default Vue.extend({
 			type: Object,
 			default: null,
 		},
+	},
+	data(): IData {
+		return {
+			bgImage: backgrounds[0],
+		}
 	},
 	created() {
 		if (this.$store.state.session.id === ``) {

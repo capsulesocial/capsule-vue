@@ -4,7 +4,7 @@
 		:style="{
 			background:
 				`linear-gradient(180deg, rgba(46, 85, 106, 0.02) 0%, rgba(46, 85, 106, 0) 50%), url(` +
-				$store.state.backgroundImage +
+				this.bgImage.image +
 				`)`,
 			backgroundSize: `contain`,
 		}"
@@ -42,6 +42,7 @@ import Vue from 'vue'
 import Header from '@/components/Header.vue'
 import UnauthPopup from '@/components/UnauthPopup.vue'
 
+import { IBackground, backgrounds } from '@/config'
 import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
 
@@ -55,6 +56,7 @@ interface IData {
 	avatar: string | ArrayBuffer | null
 	displayPhoto: boolean
 	featuredPhoto: FeaturedPhoto
+	bgImage: IBackground
 }
 
 export default Vue.extend({
@@ -71,6 +73,7 @@ export default Vue.extend({
 				photo: null,
 				caption: null,
 			},
+			bgImage: backgrounds[0],
 		}
 	},
 	async created() {
@@ -81,6 +84,7 @@ export default Vue.extend({
 		// get logged in profile
 		const { profile } = await getProfile(this.$store.state.session.id)
 		this.profile = profile
+		this.bgImage = this.$getBGImage(this.profile?.background, `local`)
 		// Get avatar
 		if (this.profile && this.profile.avatar.length > 1) {
 			getPhotoFromIPFS(this.profile.avatar).then((p) => {

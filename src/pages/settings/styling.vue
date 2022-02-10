@@ -34,7 +34,7 @@
 						v-for="x of backgrounds"
 						:key="x.label"
 						class="focus:outline-none mb-4 flex flex-shrink-0 flex-col items-center"
-						@click="setBackgroundImage(x.image)"
+						@click="setBackgroundImage(x.id)"
 					>
 						<img
 							v-if="$store.state.backgroundImage === x.image"
@@ -58,16 +58,20 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapMutations } from 'vuex'
 import XIcon from '@/components/icons/X.vue'
 import ChevronLeft from '@/components/icons/ChevronLeft.vue'
 
 import { backgrounds } from '@/config'
+import { MutationType, getProfileFromSession, namespace as sessionStoreNamespace } from '~/store/session'
+import { setProfile } from '@/backend/profile'
 
 interface IData {
 	backgroundImage: null | string | ArrayBuffer
 	showPopup: boolean
 	backgrounds: any
 	currentbg: null | string
+	selectedBG: string
 }
 
 export default Vue.extend({
@@ -79,6 +83,7 @@ export default Vue.extend({
 			showPopup: false,
 			backgrounds,
 			currentbg: null,
+			selectedBG: `default`,
 		}
 	},
 	head() {
@@ -91,6 +96,10 @@ export default Vue.extend({
 		window.addEventListener(`click`, this.handleDropdown, false)
 	},
 	methods: {
+		...mapMutations(sessionStoreNamespace, {
+			changeBackground: MutationType.CHANGE_BACKGROUND,
+			changeCID: MutationType.CHANGE_CID,
+		}),
 		toggleSelector() {
 			this.$emit(`togglePopup`)
 			this.showPopup = !this.showPopup
@@ -109,17 +118,23 @@ export default Vue.extend({
 				this.toggleSelector()
 			}
 		},
-		setBackgroundImage(img: string | ArrayBuffer): void {
-			this.$store.commit(`changeBackgroundImage`, img)
+		setBackgroundImage(id: string): void {
+			this.selectedBG = id
+			this.$emit(`changeLocalBGImage`, this.selectedBG)
 		},
-		confirmBackgroundImage(): void {
-			if (this.$store.state.backgroundImage) {
+		async confirmBackgroundImage() {
+			try {
+				// Update local profile store before saving new profile
+				this.changeBackground(this.selectedBG)
+				const backendProfile = getProfileFromSession(this.$store.state.session)
+				const cid = await setProfile(backendProfile)
+				this.changeCID(cid)
+				this.$toastSuccess(`Background changed!`)
 				this.toggleSelector()
-				if (this.currentbg !== this.$store.state.backgroundImage) {
-					this.$toastSuccess(`Your background has been updated`)
-				}
-			} else {
-				this.$toastError(`Unable to save your new background`)
+				// location.reload()
+				this.$emit(`initProfile`)
+			} catch {
+				throw new Error(`Failed at updateProfile (src/pages/settings/styling.vue)`)
 			}
 		},
 	},

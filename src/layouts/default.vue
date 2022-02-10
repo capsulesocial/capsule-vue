@@ -4,7 +4,7 @@
 		:style="{
 			background:
 				`linear-gradient(180deg, rgba(46, 85, 106, 0.02) 0%, rgba(46, 85, 106, 0) 50%), url(` +
-				$store.state.backgroundImage +
+				this.bgImage.image +
 				`)`,
 			backgroundSize: `contain`,
 		}"
@@ -54,6 +54,7 @@ import BrandedButton from '@/components/BrandedButton.vue'
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
 import { getFollowersAndFollowing } from '@/backend/following'
+import { IBackground, backgrounds } from '@/config'
 
 interface IData {
 	myProfile: Profile
@@ -61,6 +62,7 @@ interface IData {
 	myFollowing: Set<string>
 	followers: Set<string>
 	following: Set<string>
+	bgImage: IBackground
 }
 
 export default Vue.extend({
@@ -75,6 +77,7 @@ export default Vue.extend({
 			myFollowing: new Set(),
 			followers: new Set(),
 			following: new Set(),
+			bgImage: backgrounds[0],
 		}
 	},
 	async created() {
@@ -89,6 +92,7 @@ export default Vue.extend({
 				this.myAvatar = p
 			})
 		}
+		this.bgImage = this.$getBGImage(this.myProfile?.background, `local`)
 		const myConnections = await getFollowersAndFollowing(this.$store.state.session.id)
 		this.myFollowing = myConnections.following
 	},

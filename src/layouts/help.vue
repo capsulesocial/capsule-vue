@@ -4,7 +4,7 @@
 		:style="{
 			background:
 				`linear-gradient(180deg, rgba(46, 85, 106, 0.02) 0%, rgba(46, 85, 106, 0) 50%), url(` +
-				$store.state.backgroundImage +
+				this.bgImage.image +
 				`)`,
 			backgroundSize: `contain`,
 		}"
@@ -50,6 +50,7 @@ import SupportWidget from '@/components/widgets/Support.vue'
 import ResourcesWidget from '@/components/widgets/Resources.vue'
 import OnboardingWizard from '@/components/OnboardingWizard.vue'
 
+import { IBackground, backgrounds } from '@/config'
 import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
@@ -62,6 +63,7 @@ interface IData {
 	followers: Set<string>
 	userIsFollowed: boolean
 	displayOnboarding: boolean
+	bgImage: IBackground
 }
 
 export default Vue.extend({
@@ -81,6 +83,7 @@ export default Vue.extend({
 			followers: new Set(),
 			userIsFollowed: false,
 			displayOnboarding: false,
+			bgImage: backgrounds[0],
 		}
 	},
 	async created() {
@@ -91,6 +94,7 @@ export default Vue.extend({
 		// get logged in profile
 		const { profile } = await getProfile(this.$store.state.session.id)
 		this.profile = profile
+		this.bgImage = this.$getBGImage(this.profile?.background, `local`)
 		// Get avatar
 		if (this.profile && this.profile.avatar.length > 1) {
 			getPhotoFromIPFS(this.profile.avatar).then((p) => {
