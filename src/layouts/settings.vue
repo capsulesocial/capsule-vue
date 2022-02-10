@@ -3,9 +3,7 @@
 		class="bg-img m-0 h-screen p-0"
 		:style="{
 			background:
-				`linear-gradient(180deg, rgba(46, 85, 106, 0.02) 0%, rgba(46, 85, 106, 0) 50%), url(` +
-				$store.state.backgroundImage +
-				`)`,
+				`linear-gradient(180deg, rgba(46, 85, 106, 0.02) 0%, rgba(46, 85, 106, 0) 50%), url(` + bgImage.image + `)`,
 			backgroundSize: `contain`,
 		}"
 	>
@@ -23,6 +21,8 @@
 							:style="showPopup ? `` : `backdrop-filter: blur(10px);`"
 							class="xl:w-750 min-h-70 h-70 from-lightBGStart to-lightBGStop border-lightBorder fixed z-10 mr-5 w-full overflow-y-auto rounded-t-lg bg-gradient-to-r p-6 pt-4 shadow-lg"
 							@togglePopup="togglePopup"
+							@changeLocalBGImage="changeLocalBGImage"
+							@initProfile="initProfile"
 						/>
 						<!-- Settings tabs -->
 						<aside class="fixed hidden xl:block" style="margin-left: 770px; width: 450px">
@@ -75,12 +75,14 @@ import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
+import { IBackground, backgrounds } from '@/config'
 
 interface IData {
 	profile: Profile | null
 	avatar: string | ArrayBuffer | null
 	tab: string
 	showPopup: boolean
+	bgImage: IBackground
 }
 
 export default Vue.extend({
@@ -94,6 +96,7 @@ export default Vue.extend({
 			avatar: null,
 			tab: `account`,
 			showPopup: false,
+			bgImage: backgrounds[0],
 		}
 	},
 	async created() {
@@ -101,17 +104,25 @@ export default Vue.extend({
 		if (this.$store.state.session.id === ``) {
 			this.$router.push(`/`)
 		}
-		// get logged in profile
-		const { profile } = await getProfile(this.$store.state.session.id)
-		this.profile = profile
-		// Get avatar
-		if (this.profile && this.profile.avatar.length > 1) {
-			getPhotoFromIPFS(this.profile.avatar).then((p) => {
-				this.avatar = p
-			})
-		}
+		await this.initProfile()
 	},
 	methods: {
+		async initProfile() {
+			// get logged in profile
+			const { profile } = await getProfile(this.$store.state.session.id, true)
+			this.profile = profile
+			this.bgImage = this.$getBGImage(this.profile?.background, `local`)
+			// Get avatar
+			if (this.profile && this.profile.avatar.length > 1) {
+				getPhotoFromIPFS(this.profile.avatar).then((p) => {
+					this.avatar = p
+				})
+			}
+		},
+		// This method is used to change the local bg on the styling tab before changing
+		changeLocalBGImage(id: string): void {
+			this.bgImage = this.$getBGImage(id, `local`)
+		},
 		changeTab(t: string): void {
 			this.tab = t
 		},

@@ -4,7 +4,7 @@
 		:style="{
 			background:
 				`linear-gradient(180deg, rgba(46, 85, 106, 0.02) 0%, rgba(46, 85, 106, 0) 50%), url(` +
-				$store.state.backgroundImage +
+				this.bgImage.image +
 				`)`,
 			backgroundSize: `contain`,
 		}"
@@ -88,7 +88,7 @@ import UnauthPopup from '@/components/UnauthPopup.vue'
 import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
 import { IPostResponse } from '@/backend/post'
-import { categories } from '@/config'
+import { categories, IBackground, backgrounds } from '@/config'
 import { getBookmarksOfUser } from '@/backend/bookmarks'
 
 interface IData {
@@ -98,6 +98,7 @@ interface IData {
 	categoryList: string[]
 	active: string
 	isLoading: boolean
+	bgImage: IBackground
 }
 
 export default Vue.extend({
@@ -115,16 +116,19 @@ export default Vue.extend({
 			categoryList: categories,
 			active: ``,
 			isLoading: true,
+			bgImage: backgrounds[0],
 		}
 	},
 	async created() {
 		// Check if logged in user
 		if (this.$store.state.session.id === ``) {
+			this.isLoading = false
 			return
 		}
 		// get logged in profile
 		const { profile } = await getProfile(this.$store.state.session.id)
 		this.profile = profile
+		this.bgImage = this.$getBGImage(this.profile?.background, `local`)
 		// Get avatar
 		if (this.profile && this.profile.avatar.length > 1) {
 			getPhotoFromIPFS(this.profile.avatar).then((p) => {

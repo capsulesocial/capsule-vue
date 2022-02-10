@@ -71,6 +71,7 @@ interface IData {
 	showPopup: boolean
 	backgrounds: any
 	currentbg: null | string
+	selectedBG: string
 }
 
 export default Vue.extend({
@@ -82,6 +83,7 @@ export default Vue.extend({
 			showPopup: false,
 			backgrounds,
 			currentbg: null,
+			selectedBG: `default`,
 		}
 	},
 	head() {
@@ -116,34 +118,23 @@ export default Vue.extend({
 				this.toggleSelector()
 			}
 		},
-		setBackgroundImage(imgLabel: string | ArrayBuffer): void {
-			console.log(imgLabel)
-			this.changeBackground(imgLabel)
+		setBackgroundImage(id: string): void {
+			this.selectedBG = id
+			this.$emit(`changeLocalBGImage`, this.selectedBG)
+		},
+		async confirmBackgroundImage() {
 			try {
-				this.updateProfile().then((res) => {
-					if (res) {
-						this.$toastSuccess(`Background changed!`)
-					}
-				})
+				// Update local profile store before saving new profile
+				this.changeBackground(this.selectedBG)
+				const backendProfile = getProfileFromSession(this.$store.state.session)
+				const cid = await setProfile(backendProfile)
+				this.changeCID(cid)
+				this.$toastSuccess(`Background changed!`)
+				this.toggleSelector()
+				// location.reload()
+				this.$emit(`initProfile`)
 			} catch {
 				throw new Error(`Failed at updateProfile (src/pages/settings/styling.vue)`)
-			}
-			// this.$store.commit(`changeBackgroundImage`, imgLabel)
-		},
-		async updateProfile() {
-			const backendProfile = getProfileFromSession(this.$store.state.session)
-			const cid = await setProfile(backendProfile)
-			this.changeCID(cid)
-			return true
-		},
-		confirmBackgroundImage(): void {
-			if (this.$store.state.backgroundImage) {
-				this.toggleSelector()
-				if (this.currentbg !== this.$store.state.backgroundImage) {
-					this.$toastSuccess(`Your background has been updated`)
-				}
-			} else {
-				this.$toastError(`Unable to save your new background`)
 			}
 		},
 	},

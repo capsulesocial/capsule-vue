@@ -373,7 +373,13 @@ export const categories = [
 	`others`,
 ]
 
-export const backgrounds = [
+export interface IBackground {
+	id: string
+	type: string
+	image: any
+	label: string
+}
+export const backgrounds: IBackground[] = [
 	{
 		id: `default`,
 		type: `local`,

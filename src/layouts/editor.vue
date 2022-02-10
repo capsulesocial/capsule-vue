@@ -4,7 +4,7 @@
 		:style="{
 			background:
 				`linear-gradient(180deg, rgba(46, 85, 106, 0.02) 0%, rgba(46, 85, 106, 0) 50%), url(` +
-				$store.state.backgroundImage +
+				this.bgImage.image +
 				`)`,
 			backgroundSize: `contain`,
 		}"
@@ -81,6 +81,7 @@ import DraftsPopup from '@/components/widgets/DraftsPopup.vue'
 import ConfirmPopup from '@/components/widgets/ConfirmPopup.vue'
 import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
+import { IBackground, backgrounds } from '@/config'
 
 interface IData {
 	profile: Profile | null
@@ -89,6 +90,7 @@ interface IData {
 	showDrafts: boolean
 	showConfirm: boolean
 	buttonHidden: boolean
+	bgImage: IBackground
 }
 
 export default Vue.extend({
@@ -109,6 +111,7 @@ export default Vue.extend({
 			showDrafts: false,
 			showConfirm: false,
 			buttonHidden: false,
+			bgImage: backgrounds[0],
 		}
 	},
 	async created() {
@@ -125,6 +128,7 @@ export default Vue.extend({
 				this.avatar = p
 			})
 		}
+		this.bgImage = this.$getBGImage(this.profile?.background, `local`)
 		// Check if the active draft exists
 		if (this.$store.state.draft.drafts[this.$store.state.draft.activeIndex] === undefined) {
 			this.$store.commit(`draft/setActiveDraft`, 0)
