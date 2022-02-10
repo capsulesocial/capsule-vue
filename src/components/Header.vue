@@ -29,33 +29,33 @@
 				<!-- Dropdown: Profile, settings, disconnect -->
 				<div
 					v-show="showDropdown"
-					class="dropdownOpen from-lightBGStart to-lightBGStop border-lightBorder modal-animation absolute mt-16 flex flex-col rounded-lg border bg-gradient-to-r p-4 shadow-lg backdrop-blur-lg backdrop-filter"
+					class="dropdownOpen from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation absolute mt-16 flex flex-col rounded-lg border bg-gradient-to-r p-4 shadow-lg backdrop-blur-lg backdrop-filter"
 				>
 					<!-- Unauthenticated: Log in -->
 					<nuxt-link
 						v-if="$store.state.session.id === ``"
 						to="/login"
-						class="text-gray5 mx-2 mb-4 flex w-24 flex-row items-center text-left"
+						class="text-gray5 dark:text-gray3 mx-2 mb-4 flex w-24 flex-row items-center text-left"
 						>Log In</nuxt-link
 					>
 					<!-- Unauthenticated: Register -->
 					<nuxt-link
 						v-if="$store.state.session.id === ``"
 						to="/register"
-						class="text-gray5 mx-2 flex w-24 flex-row items-center text-left"
+						class="text-gray5 dark:text-gray3 mx-2 flex w-24 flex-row items-center text-left"
 						>Register</nuxt-link
 					>
 					<!-- Authenticated -->
 					<nuxt-link
 						v-if="$store.state.session.id !== ``"
 						:to="`/id/` + $store.state.session.id"
-						class="text-gray5 mb-4 flex w-full flex-row items-center text-left"
+						class="text-gray5 dark:text-gray3 mb-4 flex w-full flex-row items-center text-left"
 						><ProfileIcon class="mr-2 h-5 w-5 flex-shrink-0" />Profile</nuxt-link
 					>
 					<nuxt-link
 						v-if="$store.state.session.id !== ``"
 						to="/settings/account"
-						class="text-gray5 mb-4 flex w-full flex-row items-center text-left"
+						class="text-gray5 dark:text-gray3 mb-4 flex w-full flex-row items-center text-left"
 					>
 						<SettingsIcon class="mr-2 h-5 w-5 flex-shrink-0" />Settings</nuxt-link
 					>
@@ -78,7 +78,7 @@
 				</button>
 				<div
 					v-show="showMobileMenu"
-					class="dropdownMainOpen from-lightBGStart to-lightBGStop border-lightBorder modal-animation absolute mt-2 ml-0 flex flex-col rounded-lg border bg-gradient-to-r p-4 shadow-lg backdrop-blur-lg backdrop-filter"
+					class="dropdownMainOpen from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation absolute mt-2 ml-0 flex flex-col rounded-lg border bg-gradient-to-r p-4 shadow-lg backdrop-blur-lg backdrop-filter"
 				>
 					<nuxt-link
 						to="/home"
@@ -107,7 +107,7 @@
 			<nuxt-link to="/home">
 				<div class="flex items-center">
 					<CapsuleIcon />
-					<h1 class="text-primary font-sans text-xl font-bold">Blogchain</h1>
+					<h1 class="text-primary dark:text-secondary font-sans text-xl font-bold">Blogchain</h1>
 				</div>
 			</nuxt-link>
 			<div class="relative mt-2">
@@ -122,33 +122,33 @@
 				<!-- Dropdown: Profile, settings, disconnect -->
 				<div
 					v-show="showDropdown"
-					class="dropdownOpen from-lightBGStart to-lightBGStop border-lightBorder modal-animation absolute mt-2 flex flex-col rounded-lg border bg-gradient-to-r p-4 shadow-lg backdrop-blur-lg backdrop-filter"
+					class="dropdownOpen from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation absolute mt-2 flex flex-col rounded-lg border bg-gradient-to-r p-4 shadow-lg backdrop-blur-lg backdrop-filter"
 				>
 					<!-- Unauthenticated: Log in -->
 					<nuxt-link
 						v-if="$store.state.session.id === ``"
 						to="/login"
-						class="text-gray5 mx-2 mb-4 flex w-24 flex-row items-center text-left"
+						class="text-gray5 dark:text-gray3 mx-2 mb-4 flex w-24 flex-row items-center text-left"
 						>Log In</nuxt-link
 					>
 					<!-- Unauthenticated: Register -->
 					<nuxt-link
 						v-if="$store.state.session.id === ``"
 						to="/register"
-						class="text-gray5 mx-2 flex w-24 flex-row items-center text-left"
+						class="text-gray5 dark:text-gray3 mx-2 flex w-24 flex-row items-center text-left"
 						>Register</nuxt-link
 					>
 					<!-- Authenticated -->
 					<nuxt-link
 						v-if="$store.state.session.id !== ``"
 						:to="`/id/` + $store.state.session.id"
-						class="text-gray5 mb-4 flex w-full flex-row items-center text-left"
+						class="text-gray5 dark:text-gray3 mb-4 flex w-full flex-row items-center text-left"
 						><ProfileIcon class="mr-2 h-5 w-5 flex-shrink-0" />Profile</nuxt-link
 					>
 					<nuxt-link
 						v-if="$store.state.session.id !== ``"
 						to="/settings/account"
-						class="text-gray5 mb-4 flex w-full flex-row items-center text-left"
+						class="text-gray5 dark:text-gray3 mb-4 flex w-full flex-row items-center text-left"
 					>
 						<SettingsIcon class="mr-2 h-5 w-5 flex-shrink-0" />Settings</nuxt-link
 					>

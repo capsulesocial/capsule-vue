@@ -51,6 +51,7 @@ module.exports = {
         negative: `#EE1F63`,
 
         lightBG: '#FFFFFF',
+        lightMainBG: 'rgba(252, 252, 252, 1)',
         lightBGStop: 'rgba(256, 256, 256, 0.95)',
         lightBGStart: 'rgba(256, 256, 256, 0.90)',
         lightBorder: 'rgba(46, 85, 106, 0.05)',

@@ -1,12 +1,8 @@
 <template>
 	<main
-		class="bg-img m-0 h-screen p-0"
+		class="bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightMainBG dark:bg-darkBG"
 		:style="{
-			background:
-				`linear-gradient(180deg, rgba(46, 85, 106, 0.02) 0%, rgba(46, 85, 106, 0) 50%), url(` +
-				this.bgImage.image +
-				`)`,
-			backgroundSize: `contain`,
+			backgroundImage: `url(` + this.bgImage.image + `)`,
 		}"
 	>
 		<!-- Wrapper -->
@@ -84,6 +80,9 @@ export default Vue.extend({
 		if (this.$store.state.session.id === ``) {
 			return
 		}
+		// Set color mode
+		this.$setColorMode(this.$store.state.settings.darkMode)
+		// get logged  in profile
 		const [{ profile: myProfile }] = await Promise.all([getProfile(this.$store.state.session.id)])
 		// get my profile and avatar
 		this.myProfile = myProfile || createDefaultProfile(this.$store.state.session.id)

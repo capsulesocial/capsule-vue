@@ -6,7 +6,7 @@
 			<h6 class="font-semibold">All Settings</h6>
 		</nuxt-link>
 		<h2 class="text-primary dark:text-secondary mb-4 text-sm font-semibold">Display</h2>
-		<div class="mb-6 flex w-4/5 items-center justify-between">
+		<div class="mb-8 flex w-4/5 items-center justify-between">
 			<h3 class="w-56 font-semibold dark:text-darkPrimaryText">App Background</h3>
 			<button
 				class="text-primary dark:text-secondary focus:outline-none flex flex-row items-center"
@@ -19,19 +19,28 @@
 							.replace(`.webp`, '')
 					}}
 				</p>
-				<img :src="$store.state.backgroundImage" class="h-20 w-32 rounded-lg border border-lightBorder" />
+				<img
+					:src="$store.state.backgroundImage"
+					class="h-20 w-32 rounded-lg bg-lightBG dark:bg-darkBG border border-lightBorder"
+				/>
 			</button>
 		</div>
-		<div class="mb-6 flex w-4/5 items-center justify-between">
+		<div class="mb-8 flex w-4/5 items-center justify-between">
 			<h3 class="w-56 font-semibold dark:text-darkPrimaryText">App Color Theme</h3>
 			<button
 				class="text-primary dark:text-secondary focus:outline-none flex flex-row items-center"
 				@click="toggleColorSelector"
 			>
 				<p class="mr-4">{{ $store.state.settings.darkMode }}</p>
-				<div class="h-8 w-8 shadow-lg rounded-3xl border border-lightBorder bg-lightBG dark:bg-darkBG"></div>
-				<div class="h-8 w-8 -ml-2 shadow-lg rounded-3xl border border-lightBorder bg-primary dark:bg-secondary"></div>
-				<div class="h-8 w-8 -ml-2 shadow-lg rounded-3xl border border-lightBorder bg-secondary dark:bg-gray3"></div>
+				<div
+					class="h-8 w-8 shadow-lg rounded-3xl border border-primary dark:border-secondary bg-lightBG dark:bg-darkBG"
+				></div>
+				<div
+					class="h-8 w-8 -ml-2 shadow-lg rounded-3xl border border-primary dark:border-secondary bg-primary dark:bg-secondary"
+				></div>
+				<div
+					class="h-8 w-8 -ml-2 shadow-lg rounded-3xl border border-primary dark:border-secondary bg-secondary dark:bg-gray3"
+				></div>
 			</button>
 		</div>
 		<!-- Popup background selector -->

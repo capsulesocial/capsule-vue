@@ -2,11 +2,7 @@
 	<main
 		class="bg-img m-0 h-screen p-0"
 		:style="{
-			background:
-				`linear-gradient(180deg, rgba(46, 85, 106, 0.02) 0%, rgba(46, 85, 106, 0) 50%), url(` +
-				this.bgImage.image +
-				`)`,
-			backgroundSize: `contain`,
+			backgroundImage: `url(` + this.bgImage.image + `)`,
 		}"
 	>
 		<!-- Wrapper -->
@@ -91,6 +87,8 @@ export default Vue.extend({
 		if (this.$store.state.session.id === ``) {
 			return
 		}
+		// Set color mode
+		this.$setColorMode(this.$store.state.settings.darkMode)
 		// get logged in profile
 		const { profile } = await getProfile(this.$store.state.session.id)
 		this.profile = profile
