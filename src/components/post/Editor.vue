@@ -89,6 +89,8 @@ import { createRegularPost, sendRegularPost } from '@/backend/post'
 import { preUploadPhoto, uploadPhoto } from '@/backend/photos'
 import { getBlobExtension } from '@/backend/utilities/helpers'
 
+const Delta = Quill.import(`delta`)
+
 interface IData {
 	title: string
 	subtitle: string
@@ -313,6 +315,15 @@ export default Vue.extend({
 			const imgTagRegex = /<img [^>]*>/g
 			const imgSrcRegex = /src="([^\s|"]*)"/
 			const contentImgs = Array.from(content.matchAll(imgTagRegex))
+			const range = this.qeditor.getSelection(true)
+
+			if (this.qeditor.getLength() !== range.index + 1 && contentImgs.length === 0) {
+				const text = this.sanitize(clipboard.getData(`text/plain`))
+				const delta = new Delta().compose(new Delta().retain(range.index + range.length).insert(text))
+				this.qeditor.updateContents(delta)
+				setTimeout(() => this.qeditor?.setSelection(range.index + text.length, 0, `user`), 0)
+				return
+			}
 			for (const img of contentImgs) {
 				const imgSrc = imgSrcRegex.exec(img[0])
 				if (!imgSrc) {
