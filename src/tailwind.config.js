@@ -89,6 +89,7 @@ module.exports = {
         darkOnSurfaceVariantText: '#C2C2C2',
         darkBorder: '#EEEEEE',
         darkDialog: '#454545',
+        darkInput: 'rgba(256, 256, 256, 0.05)',
         darkButtonBG: '#1F7DAD',
         darkButtonText: '#FFFFFF',
         darkActive: '#367589',

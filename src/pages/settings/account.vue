@@ -6,29 +6,29 @@
 			<h6 class="font-semibold">All Settings</h6>
 		</nuxt-link>
 		<!-- Account Security -->
-		<h2 class="text-primary mb-4 text-sm font-semibold">Account Security</h2>
+		<h2 class="text-primary dark:text-secondary mb-4 text-sm font-semibold">Account Security</h2>
 		<!-- ID -->
 		<div class="mb-4 flex w-full flex-row items-center">
-			<label for="id" class="w-32 font-semibold">Identifier</label>
+			<label for="id" class="w-32 font-semibold dark:text-darkPrimaryText">Identifier</label>
 			<input
 				id="id"
 				type="text"
 				:placeholder="$store.state.session.id"
-				class="bg-gray1 text-gray5 placeholder-gray5 flex-grow rounded-lg px-2 py-1"
+				class="bg-gray1 dark:bg-gray7 text-gray5 dark:text-gray3 placeholder-gray5 dark:placeholder-gray3 flex-grow rounded-lg px-2 py-1"
 				disabled
 			/>
 		</div>
 		<!-- Export Private Key -->
 		<div class="mb-4 flex w-full flex-row items-center">
-			<label for="export" class="w-32 font-semibold">Capsule Private Key</label>
-			<button id="export" class="text-primary focus:outline-none" @click="downloadPrivateKey">
+			<label for="export" class="w-32 font-semibold dark:text-darkPrimaryText">Capsule Private Key</label>
+			<button id="export" class="text-primary dark:text-secondary focus:outline-none" @click="downloadPrivateKey">
 				Export Capsule Private Key
 			</button>
 		</div>
 		<!-- Account Profile -->
-		<h2 class="text-primary py-4 text-sm font-semibold">Account Profile</h2>
+		<h2 class="text-primary dark:text-secondary py-4 text-sm font-semibold">Account Profile</h2>
 		<div class="mb-4 flex w-full flex-row items-center justify-between xl:justify-start">
-			<label for="editProfile" class="w-32 font-semibold">Public Profile</label>
+			<label for="editProfile" class="w-32 font-semibold dark:text-darkPrimaryText">Public Profile</label>
 			<button class="bg-secondary focus:outline-none block rounded-lg xl:hidden" @click="redirectProfile">
 				<PencilIcon class="m-2 h-5 w-5 text-white" />
 			</button>
@@ -45,22 +45,24 @@
 			<button class="text-negative focus:outline-none">Deactivate my Capsule Account</button>
 		</div> -->
 		<!-- Account Invites -->
-		<h2 class="text-primary mb-4 pt-4 text-sm font-semibold">Account Invites</h2>
+		<h2 class="text-primary dark:text-secondary mb-4 pt-4 text-sm font-semibold">Account Invites</h2>
 		<div
-			class="from-lightBGStart to-lightBGStop border-lightBorder relative mt-4 overflow-hidden rounded-lg bg-gradient-to-r p-5 shadow-lg"
+			class="from-lightBGStart to-lightBGStop dark:from-darkBG dark:to-darkBG border-lightBorder relative mt-4 overflow-hidden rounded-lg bg-gradient-to-r p-5 shadow-lg"
 		>
-			<label for="id" class="mb-2 block pb-1 text-sm font-semibold">Generate an invite code</label>
-			<p class="text-gray5">
+			<label for="id" class="mb-2 block pb-1 text-sm font-semibold dark:text-darkPrimaryText"
+				>Generate an invite code</label
+			>
+			<p class="text-gray5 dark:text-gray3">
 				Blogchain is a place for writers to do great work and for readers to discover it. For now, during our beta
 				release, we are offering access to Blogchain on an invitation-only basis. We believe this is the best way to
 				seed a vibrant community that will grow over time. As an already registered user, you can invite one member from
 				your social circle to participate to the Blogchain beta by sharing the following invite code:
 			</p>
-			<p class="mt-4 text-sm" :class="inviteCodesRemaining > 0 ? `text-primary` : `text-negative`">
+			<p class="mt-4 text-sm" :class="inviteCodesRemaining > 0 ? `text-positive` : `text-negative`">
 				You have {{ inviteCodesRemaining }} invites remaining
 			</p>
 			<div class="mt-3 flex flex-col items-start xl:items-center xl:flex-row">
-				<h3 class="mr-4 font-semibold">Invite code</h3>
+				<h3 class="mr-4 font-semibold dark:text-darkPrimaryText">Invite code</h3>
 				<div class="relative mr-0 xl:mr-4 flex my-4 xl:my-0 w-full items-center xl:w-2/5">
 					<input
 						id="id"
@@ -68,22 +70,25 @@
 						v-model="generatedInviteCode"
 						type="text"
 						placeholder="Eg. a5bX2cYY"
-						class="focus:outline-none focus:border-primary text-primary bg-gray2 border-primary w-full rounded-lg border border-dashed px-4 py-2 font-sans text-sm"
+						class="focus:outline-none focus:border-primary text-primary dark:text-secondary bg-gray1 dark:bg-gray7 border-primary dark:border-secondary w-full rounded-lg border border-dashed px-4 py-2 font-sans text-sm"
 						style="height: 3rem"
 						@focus="$event.target.select()"
 					/>
-					<button class="text-primary focus:outline-none absolute right-0 mr-4 text-xs" @click="copyURL">
+					<button
+						class="text-primary dark:text-secondary focus:outline-none absolute right-0 mr-4 text-xs"
+						@click="copyURL"
+					>
 						<CopyIcon class="h-5 w-5 fill-current" />
 					</button>
 				</div>
 				<button
 					v-if="inviteCodesRemaining >= 1"
-					class="text-primary focus:outline-none text-sm text-right"
+					class="text-primary dark:text-secondary focus:outline-none text-sm text-right"
 					@click="generateNewInviteCode"
 				>
 					Generate a new code
 				</button>
-				<button v-else class="text-gray5 focus:outline-none text-sm" style="cursor: not-allowed">
+				<button v-else class="text-gray5 dark:text-gray3 focus:outline-none text-sm" style="cursor: not-allowed">
 					Generate a new code
 				</button>
 			</div>

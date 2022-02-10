@@ -19,7 +19,7 @@
 						<nuxt-child
 							:tab="tab"
 							:style="showPopup ? `` : `backdrop-filter: blur(10px);`"
-							class="xl:w-750 min-h-70 h-70 from-lightBGStart to-lightBGStop border-lightBorder fixed z-10 mr-5 w-full overflow-y-auto rounded-t-lg bg-gradient-to-r p-6 pt-4 shadow-lg"
+							class="xl:w-750 min-h-70 h-70 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder fixed z-10 mr-5 w-full overflow-y-auto rounded-t-lg bg-gradient-to-r p-6 pt-4 shadow-lg"
 							@togglePopup="togglePopup"
 							@changeLocalBGImage="changeLocalBGImage"
 							@initProfile="initProfile"
@@ -27,13 +27,13 @@
 						<!-- Settings tabs -->
 						<aside class="fixed hidden xl:block" style="margin-left: 770px; width: 450px">
 							<div
-								class="from-lightBGStart to-lightBGStop border-lightBorder modal-animation mb-5 flex flex-col overflow-hidden rounded-lg border bg-gradient-to-r py-4 px-6 pb-2 shadow-lg"
+								class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation mb-5 flex flex-col overflow-hidden rounded-lg border bg-gradient-to-r py-4 px-6 pb-2 shadow-lg"
 								style="backdrop-filter: blur(10px)"
 							>
-								<h3 class="text-primary pb-4 text-base font-semibold">Settings</h3>
+								<h3 class="text-primary dark:text-secondary pb-4 text-base font-semibold">Settings</h3>
 								<nuxt-link
-									:class="$route.name === `settings-account` ? `bg-lightInput font-semibold` : ``"
-									class="text-gray5 focus:outline-none mb-4 w-full rounded-lg py-2 px-4 text-left"
+									:class="$route.name === `settings-account` ? `bg-lightInput dark:bg-darkInput font-semibold` : ``"
+									class="text-gray5 dark:text-gray3 focus:outline-none mb-4 w-full rounded-lg py-2 px-4 text-left"
 									to="/settings/account"
 								>
 									Account
@@ -54,8 +54,8 @@
 								</nuxt-link> -->
 								<nuxt-link
 									to="/settings/styling"
-									:class="$route.name === `settings-styling` ? `bg-lightInput font-semibold` : ``"
-									class="text-gray5 focus:outline-none mb-4 w-full rounded-lg py-2 px-4 text-left"
+									:class="$route.name === `settings-styling` ? `bg-lightInput dark:bg-darkInput font-semibold` : ``"
+									class="text-gray5 dark:text-gray3 focus:outline-none mb-4 w-full rounded-lg py-2 px-4 text-left"
 								>
 									Appearance and Styling
 								</nuxt-link>
@@ -105,6 +105,8 @@ export default Vue.extend({
 			this.$router.push(`/`)
 		}
 		await this.initProfile()
+		// Set color mode
+		this.$setColorMode(this.$store.state.settings.darkMode)
 	},
 	methods: {
 		async initProfile() {

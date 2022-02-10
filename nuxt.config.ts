@@ -39,6 +39,7 @@ const config: NuxtConfig = {
 		{ src: '@/plugins/backend.ts' },
 		{ src: '@/plugins/toast.ts' },
 		{ src: '@/plugins/background.ts' },
+		{ src: '@/plugins/colormode.ts' },
 	],
 
 	// Auto import components: https://go.nuxtjs.dev/config-components

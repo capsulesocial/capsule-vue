@@ -481,3 +481,18 @@ export const backgrounds: IBackground[] = [
 		label: `Dark`,
 	},
 ]
+
+export const colors = [
+	{
+		image: require(`@/assets/images/colors/light.webp`),
+		label: `Light`,
+	},
+	{
+		image: require(`@/assets/images/colors/dark.webp`),
+		label: `Dark`,
+	},
+	{
+		image: require(`@/assets/images/colors/OS.webp`),
+		label: `OS`,
+	},
+]

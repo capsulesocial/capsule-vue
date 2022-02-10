@@ -134,21 +134,7 @@ export default Vue.extend({
 			return
 		}
 		// Set color mode
-		if (this.$store.state.settings.darkMode === `dark`) {
-			document.documentElement.classList.add(`dark`)
-		} else if (this.$store.state.settings.darkMode === `light`) {
-			document.documentElement.classList.remove(`dark`)
-		} else {
-			if (window.matchMedia(`(prefers-color-scheme: dark)`).matches) {
-				document.documentElement.classList.add(`dark`)
-			}
-			window
-				.matchMedia(`(prefers-color-scheme: dark)`)
-				.addEventListener(`change`, (e) => e.matches && document.documentElement.classList.add(`dark`))
-			window
-				.matchMedia(`(prefers-color-scheme: light)`)
-				.addEventListener(`change`, (e) => e.matches && document.documentElement.classList.remove(`dark`))
-		}
+		this.$setColorMode(this.$store.state.settings.darkMode)
 		// get logged in profile
 		const { profile } = await getProfile(this.$store.state.session.id)
 		this.profile = profile
