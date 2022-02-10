@@ -86,8 +86,8 @@ import PencilIcon from '@/components/icons/Pencil.vue'
 import AddContent from '@/components/post/EditorActions.vue'
 import { ImageBlot, preRule, ipfsImageRule, createPostImagesArray } from '@/pages/post/editorExtensions'
 import { createRegularPost, sendRegularPost } from '@/backend/post'
-import { addPhotoToIPFS, preUploadPhoto } from '@/backend/photos'
-import { getBlobExtension, getCompressedImage } from '@/backend/utilities/helpers'
+import { preUploadPhoto, uploadPhoto } from '@/backend/photos'
+import { getBlobExtension } from '@/backend/utilities/helpers'
 
 interface IData {
 	title: string
@@ -294,8 +294,9 @@ export default Vue.extend({
 			if (!fileType.test(file.type)) {
 				return
 			}
-			const res = await this.uploadPhoto(file)
-			this.insertContent(res)
+			const { cid, url, image, imageName } = await uploadPhoto(file)
+			await this.updatePostImages(cid, image, imageName)
+			this.insertContent({ cid, url })
 		},
 		async handlePastedContent(e: ClipboardEvent) {
 			e.stopPropagation()
@@ -326,8 +327,9 @@ export default Vue.extend({
 					continue
 				}
 				const file = new File([blob], `image${Date.now()}${blobExtension}`, { type: blob.type })
-				const res = await this.uploadPhoto(file)
-				content = content.replace(img[0], `<img alt="${res.cid}" src="${res.url}">`)
+				const { cid, url, image, imageName } = await uploadPhoto(file)
+				await this.updatePostImages(cid, image, imageName)
+				content = content.replace(img[0], `<img alt="${cid}" src="${url}">`)
 			}
 			this.insertContent(content)
 		},
@@ -342,8 +344,9 @@ export default Vue.extend({
 			if (files.length !== 1) {
 				return
 			}
-			const res = await this.uploadPhoto(files[0])
-			this.insertContent(res)
+			const { cid, url, image, imageName } = await uploadPhoto(files[0])
+			await this.updatePostImages(cid, image, imageName)
+			this.insertContent({ cid, url })
 		},
 		calculateAddPos(index: number) {
 			if (!this.qeditor) {
@@ -388,26 +391,6 @@ export default Vue.extend({
 			if (input !== ``) {
 				this.$store.commit(`draft/updateContent`, input)
 			}
-		},
-		uploadPhoto(image: File) {
-			return new Promise<{ cid: string; url: string | ArrayBuffer }>((resolve, reject) => {
-				try {
-					getCompressedImage(image).then((compressedImage) => {
-						const reader = new FileReader()
-						reader.readAsDataURL(compressedImage)
-						reader.onload = async (i) => {
-							if (i.target !== null && i.target.result !== null) {
-								const cid = await addPhotoToIPFS(i.target.result)
-								await this.updatePostImages(cid, compressedImage, image.name)
-								resolve({ cid, url: i.target.result })
-							}
-						}
-					})
-				} catch (err) {
-					this.$toastError(`error`)
-					reject(err)
-				}
-			})
 		},
 		async saveContent(): Promise<void> {
 			this.isX = true
