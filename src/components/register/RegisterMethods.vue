@@ -57,7 +57,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import type { PropType } from 'vue'
 
 import DirectWebSdk, { TorusLoginResponse } from '@toruslabs/customauth'
 
@@ -77,6 +76,20 @@ interface IData {
 	dark: boolean
 }
 
+interface IWalletStatus {
+	type: `torus` | `near`
+	accountId: string
+}
+
+interface ITorusWallet extends IWalletStatus {
+	type: `torus`
+	userInfo: TorusLoginResponse
+}
+
+interface INearWallet extends IWalletStatus {
+	type: `near`
+}
+
 export default Vue.extend({
 	components: {
 		DiscordIcon,
@@ -84,16 +97,7 @@ export default Vue.extend({
 		NearIcon,
 		InfoIcon,
 	},
-	props: {
-		checkFunds: {
-			type: Function as PropType<() => Promise<void>>,
-			required: true,
-		},
-		verify: {
-			type: Function as PropType<() => Promise<void>>,
-			required: true,
-		},
-	},
+	props: {},
 	data(): IData {
 		return {
 			torus: new DirectWebSdk({
@@ -116,48 +120,40 @@ export default Vue.extend({
 		async torusLogin(type: TorusVerifiers) {
 			this.isLoading = true
 			try {
-				const userInfo: TorusLoginResponse = await this.torus.triggerLogin(torusVerifiers[type])
-				this.$emit(`updateUserInfo`, userInfo)
-				const accountId: string = getAccountIdFromPrivateKey(userInfo.privateKey)
-				this.$emit(`updateAccountId`, accountId)
-				const [username] = await Promise.all([getUsernameNEAR(accountId), this.onboardAccount(accountId)])
-				this.$emit(`updateUsername`, username)
-				if (username) {
-					// If a username is found then proceed to login...
-					this.verify()
-					return
+				const info: TorusLoginResponse = await this.torus.triggerLogin(torusVerifiers[type])
+				const accountId = getAccountIdFromPrivateKey(info.privateKey)
+				const userInfo: ITorusWallet = {
+					type: `torus`,
+					accountId,
+					userInfo: info,
 				}
+				this.$emit(`updateUserInfo`, userInfo)
 				// If no username is found then register...
-				await this.checkFunds()
 				this.isLoading = false
+				this.$emit(`stepForward`)
 			} catch (e) {
 				this.isLoading = false
 				throw e
 			}
-		},
-		async onboardAccount(accountId: string) {
-			if (!accountId) {
-				throw new Error(`AccountId missing`)
-			}
-			await verifyTokenAndOnboard(accountId)
 		},
 		async walletLoginComponent() {
 			await walletLogin()
 		},
 		async implicitAccountCreate() {
 			const accountId: string = await generateAndSetKey()
-			this.$emit(`updateAccountId`, accountId)
-			const [username] = await Promise.all([
-				getUsernameNEAR(accountId),
-				this.checkFunds(),
-				this.onboardAccount(accountId),
-			])
+			const userInfo: INearWallet = {
+				type: `near`,
+				accountId,
+			}
+			this.$emit(`updateUserInfo`, userInfo)
+			const [username] = await Promise.all([getUsernameNEAR(accountId), verifyTokenAndOnboard(accountId)])
 			this.$emit(`updateUsername`, username)
 			if (username) {
 				removeNearPrivateKey(accountId)
 				throw new Error(`You cannot login with implicit account, please import your Capsule private key`)
 			}
 			this.$emit(`setNearWallet`)
+			this.$emit(`stepForward`)
 		},
 	},
 })
