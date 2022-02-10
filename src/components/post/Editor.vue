@@ -81,14 +81,13 @@ import { strikethrough } from 'turndown-plugin-gfm'
 import Quill from 'quill'
 // @ts-ignore
 import QuillMarkdown from 'quilljs-markdown'
-import imageCompression from 'browser-image-compression'
 import XIcon from '@/components/icons/X.vue'
 import PencilIcon from '@/components/icons/Pencil.vue'
 import AddContent from '@/components/post/EditorActions.vue'
 import { ImageBlot, preRule, ipfsImageRule, createPostImagesArray } from '@/pages/post/editorExtensions'
 import { createRegularPost, sendRegularPost } from '@/backend/post'
 import { addPhotoToIPFS, preUploadPhoto } from '@/backend/photos'
-import { getBlobExtension } from '@/backend/utilities/helpers'
+import { getBlobExtension, getCompressedImage } from '@/backend/utilities/helpers'
 
 interface IData {
 	title: string
@@ -279,14 +278,6 @@ export default Vue.extend({
 			const contentLength = this.qeditor.getContents().length()
 			setTimeout(() => this.qeditor?.setSelection(contentLength, 0, `user`), 0)
 		},
-		getCompressedImage(file: File) {
-			return imageCompression(file, {
-				maxSizeMB: 5,
-				maxWidthOrHeight: 1920,
-				useWebWorker: true,
-				initialQuality: 0.9,
-			})
-		},
 		async handleDroppedImage(e: DragEvent) {
 			e.stopPropagation()
 			e.preventDefault()
@@ -332,6 +323,7 @@ export default Vue.extend({
 				const blobExtension = getBlobExtension(blob)
 				if (!blobExtension) {
 					this.$toastError(`Invalid image type`)
+					continue
 				}
 				const file = new File([blob], `image${Date.now()}${blobExtension}`, { type: blob.type })
 				const res = await this.uploadPhoto(file)
@@ -350,8 +342,8 @@ export default Vue.extend({
 			if (files.length !== 1) {
 				return
 			}
-			const { cid, url } = await this.uploadPhoto(files[0])
-			this.insertContent({ cid, url })
+			const res = await this.uploadPhoto(files[0])
+			this.insertContent(res)
 		},
 		calculateAddPos(index: number) {
 			if (!this.qeditor) {
@@ -400,7 +392,7 @@ export default Vue.extend({
 		uploadPhoto(image: File) {
 			return new Promise<{ cid: string; url: string | ArrayBuffer }>((resolve, reject) => {
 				try {
-					this.getCompressedImage(image).then((compressedImage) => {
+					getCompressedImage(image).then((compressedImage) => {
 						const reader = new FileReader()
 						reader.readAsDataURL(compressedImage)
 						reader.onload = async (i) => {

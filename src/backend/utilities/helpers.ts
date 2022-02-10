@@ -1,3 +1,5 @@
+import imageCompression from 'browser-image-compression'
+
 export function uint8ArrayToHexString(uint8Array: Uint8Array): string {
 	return Buffer.from(uint8Array).toString(`hex`)
 }
@@ -33,4 +35,13 @@ export function getBlobExtension(blob: Blob): string | null {
 		default:
 			return null
 	}
+}
+
+export function getCompressedImage(file: File) {
+	return imageCompression(file, {
+		maxSizeMB: 5,
+		maxWidthOrHeight: 1920,
+		useWebWorker: true,
+		initialQuality: 0.9,
+	})
 }
