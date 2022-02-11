@@ -1,7 +1,7 @@
 <template>
 	<section class="w-full">
 		<article v-if="posts.length == 0 && !isLoading" class="mt-32 grid justify-items-center px-10 xl:px-0">
-			<p class="text-gray5 mb-5 text-sm">
+			<p class="text-gray5 dark:text-gray3 mb-5 text-sm">
 				<span v-if="$route.params.id === $store.state.session.id">
 					It seems you haven't written any posts yet, it's never too late to start:
 				</span>
@@ -27,7 +27,11 @@
 				:isDeleted="p.deleted"
 			/>
 		</article>
-		<p v-if="noMorePosts" class="text-gray5 py-5 text-center text-sm" style="backdrop-filter: blur(10px)">
+		<p
+			v-if="noMorePosts"
+			class="text-gray5 dark:text-gray3 py-5 text-center text-sm"
+			style="backdrop-filter: blur(10px)"
+		>
 			No more posts
 		</p>
 		<article v-show="isLoading" class="modal-animation flex justify-center">

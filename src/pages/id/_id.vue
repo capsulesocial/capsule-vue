@@ -15,8 +15,8 @@
 						class="focus:outline-none flex flex-row items-center"
 						@click="$router.go(-1)"
 					>
-						<span class="bg-gray1 rounded-full p-1"><BackButton :reduceSize="true" /></span>
-						<h6 class="ml-2 font-sans font-semibold">Back</h6>
+						<span class="bg-gray1 dark:bg-gray5 rounded-full p-1"><BackButton :reduceSize="true" /></span>
+						<h6 class="ml-2 font-sans font-semibold dark:text-darkPrimaryText">Back</h6>
 					</button>
 					<div
 						id="small"
@@ -31,8 +31,10 @@
 								:noClick="true"
 								class="rounded-base flex-shrink-0"
 							/>
-							<h6 v-if="visitProfile.name != ``" class="ml-2 font-sans font-semibold">{{ visitProfile.name }}</h6>
-							<h6 v-else class="text-gray5 ml-2 font-sans font-semibold">{{ visitProfile.id }}</h6>
+							<h6 v-if="visitProfile.name != ``" class="ml-2 font-sans font-semibold dark:text-darkPrimaryText">
+								{{ visitProfile.name }}
+							</h6>
+							<h6 v-else class="text-gray5 dark:text-gray3 ml-2 font-sans font-semibold">{{ visitProfile.id }}</h6>
 						</div>
 						<div class="flex items-center">
 							<SecondaryButton
@@ -66,34 +68,34 @@
 						<div class="ml-5 flex flex-grow flex-col">
 							<!-- Name Username, Follow button -->
 							<div class="flex flex-col">
-								<h3 v-if="visitProfile.name != ``" class="pr-4 text-2xl font-semibold">
+								<h3 v-if="visitProfile.name != ``" class="pr-4 text-2xl font-semibold dark:text-darkPrimaryText">
 									{{ visitProfile.name }}
 								</h3>
-								<h3 v-else class="text-gray5 pr-4 text-2xl font-semibold">{{ visitProfile.id }}</h3>
-								<h5 class="text-primary text-lg">@{{ visitProfile.id }}</h5>
+								<h3 v-else class="text-gray5 dark:text-gray3 pr-4 text-2xl font-semibold">{{ visitProfile.id }}</h3>
+								<h5 class="text-primary dark:text-secondary text-lg">@{{ visitProfile.id }}</h5>
 							</div>
 							<!-- Tabs: posts, following, followers -->
-							<div class="text-gray5 -mr-12 flex flex-row pt-2 text-sm">
-								<div v-if="totalPostsCount === 1" class="text-sm">
-									<span class="text-primary font-bold">{{ totalPostsCount }}</span>
+							<div class="text-gray6 -mr-12 flex flex-row pt-2 text-sm">
+								<div v-if="totalPostsCount === 1" class="text-sm text-gray5 dark:text-gray3">
+									<span class="text-primary dark:text-secondary font-bold">{{ totalPostsCount }}</span>
 									Post
 								</div>
-								<div v-else class="text-sm">
-									<span class="text-primary font-bold">{{ totalPostsCount }}</span>
+								<div v-else class="text-sm text-gray5 dark:text-gray3">
+									<span class="text-primary dark:text-secondary font-bold">{{ totalPostsCount }}</span>
 									Posts
 								</div>
 								<button
 									class="pl-5 text-sm text-gray5 hover:text-primary hover:font-bold"
 									@click="$emit(`openFollowers`)"
 								>
-									<span class="text-primary font-bold">{{ followers.size }}</span>
+									<span class="text-primary dark:text-secondary font-bold">{{ followers.size }}</span>
 									Followers
 								</button>
 								<button
 									class="pl-5 text-sm text-gray5 hover:text-primary hover:font-bold"
 									@click="$emit(`openFollowing`)"
 								>
-									<span class="text-primary font-bold">{{ following.size }}</span>
+									<span class="text-primary dark:text-secondary font-bold">{{ following.size }}</span>
 									Following
 								</button>
 							</div>
@@ -121,14 +123,14 @@
 					</div>
 				</div>
 				<!-- Bio -->
-				<div v-if="visitProfile.bio" id="bio" class="header-profile px-1 pt-4">
+				<div v-if="visitProfile.bio" id="bio" class="header-profile px-1 pt-4 dark:text-darkPrimaryText">
 					<p>
 						{{ visitProfile.bio }}
 					</p>
 				</div>
 				<div v-else id="bio" class="header-profile"></div>
 				<!-- Tabs -->
-				<div id="tabs" class="text-gray5 header-profile flex w-full justify-between pt-6 xl:px-6">
+				<div id="tabs" class="text-gray5 dark:text-gray3 header-profile flex w-full justify-between pt-6 xl:px-6">
 					<nuxt-link :to="'/id/' + $route.params.id" class="pb-1" :class="getStyles('id-id')">
 						<span class="px-4">Posts</span>
 					</nuxt-link>
@@ -333,15 +335,15 @@ export default Vue.extend({
 		getStyles(tab: string): string {
 			let res = ``
 			if (this.$route.name === tab) {
-				res += ` text-primary font-bold`
+				res += ` text-primary dark:text-secondary font-bold`
 				if (this.$route.name !== `id-id-followers` && this.$route.name !== `id-id-following`) {
-					res += ` border-b`
+					res += ` border-b dark:border-secondary`
 				}
 			} else {
 				if (this.$route.name !== `id-followers` && this.$route.name !== `id-following`) {
 					res += ` text-grey1`
 				}
-				res += ` text-gray5`
+				res += ` text-gray5 dark:text-gray3`
 			}
 			return res
 		},

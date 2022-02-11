@@ -1,7 +1,7 @@
 <template>
 	<section class="px-5 xl:px-6">
 		<article v-if="comments.length == 0 && !isLoading" class="mt-32 grid justify-items-center px-10 xl:px-0">
-			<p class="text-gray5 mb-5 text-sm">
+			<p class="text-gray5 dark:text-gray3 mb-5 text-sm">
 				<span v-if="$route.params.id === $store.state.session.id">
 					It seems you haven't written any comments yet, you can comment on any post:
 				</span>
@@ -17,7 +17,7 @@
 			<div class="pb-5">
 				<Comment :authorID="profile.id" :cid="comment._id" :timestamp="comment.timestamp" />
 				<p class="mt-1 text-right">
-					<nuxt-link :to="`/post/` + comment.parentCID" class="text-gray5 text-xs">View Post</nuxt-link>
+					<nuxt-link :to="`/post/` + comment.parentCID" class="text-gray5 dark:text-gray3 text-xs">View Post</nuxt-link>
 				</p>
 			</div>
 		</article>

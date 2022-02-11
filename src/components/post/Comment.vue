@@ -25,34 +25,45 @@
 					<div class="flex flex-wrap">
 						<nuxt-link :to="`/id/` + authorID" class="mr-4 mb-2 flex items-center xl:mb-0">
 							<Avatar :avatar="avatar" :authorID="authorID" size="w-8 h-8" class="mr-2 flex-shrink-0 xl:hidden" />
-							<span v-if="name != ``" class="font-medium">
+							<span v-if="name != ``" class="font-medium dark:text-darkPrimaryText">
 								{{ name }}
 							</span>
-							<span v-else class="text-gray5 font-medium">{{ authorID }}</span>
-							<span class="text-primary ml-2 text-sm xl:text-base"> @{{ authorID }} </span>
-							<span v-if="authorID === postAuthor" class="bg-primary ml-2 rounded-2xl bg-opacity-25 py-1 px-2 text-xs">
+							<span v-else class="text-gray5 dark:text-gray3 font-medium">{{ authorID }}</span>
+							<span class="text-primary dark:text-secondary ml-2 text-sm xl:text-base"> @{{ authorID }} </span>
+							<span
+								v-if="authorID === postAuthor"
+								class="bg-primary dark:bg-secondary ml-2 rounded-2xl bg-opacity-25 py-1 px-2 text-xs"
+							>
 								Author
 							</span>
 						</nuxt-link>
-						<span v-if="timestamp" class="self-center text-xs">
+						<span v-if="timestamp" class="self-center text-xs dark:text-gray3">
 							{{ $formatDate(timestamp) }}
 						</span>
 					</div>
 					<!-- Content -->
 					<div class="flex">
 						<div class="flex w-full flex-grow flex-col overflow-hidden">
-							<p class="break-words py-1 font-sans text-lg leading-relaxed">
+							<p class="break-words py-1 font-sans text-lg leading-relaxed dark:text-darkPrimaryText">
 								{{ content }}
 							</p>
 							<div class="mt-8 flex h-full flex-row items-center">
 								<button
-									class="text-primary focus:outline-none text-left font-sans text-sm"
+									class="text-primary dark:text-secondary focus:outline-none text-left font-sans text-sm"
 									@click="isReplying = !isReplying"
 								>
 									Reply
 								</button>
 								<p
-									class="text-gray5 focus:outline-none text-left font-sans text-sm ml-4 cursor-pointer"
+									v-if="replies.length === 1"
+									class="text-gray5 dark:text-gray3 focus:outline-none text-left font-sans text-sm ml-4 cursor-pointer"
+									@click="isReplying = !isReplying"
+								>
+									{{ replies.length }} Reply
+								</p>
+								<p
+									v-else
+									class="text-gray5 dark:text-gray3 focus:outline-none text-left font-sans text-sm ml-4 cursor-pointer"
 									@click="isReplying = !isReplying"
 								>
 									{{ replies.length }} Replies

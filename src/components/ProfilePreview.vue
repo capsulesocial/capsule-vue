@@ -3,11 +3,11 @@
 		<Avatar :authorID="profile.id" :avatar="avatar" size="w-12 h-12" />
 		<div class="h-12 flex-grow px-4">
 			<nuxt-link :to="`/id/` + profile.id" class="flex flex-col">
-				<span v-if="profile.name != ``" class="text-base font-medium">
+				<span v-if="profile.name != ``" class="text-base font-medium dark:text-darkPrimaryText">
 					{{ profile.name }}
 				</span>
-				<span v-else class="text-gray5 text-base font-medium"> {{ profile.id }} </span>
-				<span class="text-primary text-sm">@{{ profile.id }}</span>
+				<span v-else class="text-gray5 dark:text-gray3 text-base font-medium"> {{ profile.id }} </span>
+				<span class="text-primary dark:text-secondary text-sm">@{{ profile.id }}</span>
 			</nuxt-link>
 		</div>
 		<FriendButton

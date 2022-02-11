@@ -16,7 +16,7 @@
 					<section v-if="visitProfile" class="flex flex-row">
 						<nuxt-child
 							:key="componentKey"
-							class="xl:w-750 min-h-61 h-61 from-lightBGStart to-lightBGStop border-lightBorder modal-animation fixed z-10 mr-5 overflow-y-auto rounded-lg border bg-gradient-to-r shadow-lg"
+							class="xl:w-750 min-h-61 h-61 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation fixed z-10 mr-5 overflow-y-auto rounded-lg border bg-gradient-to-r shadow-lg"
 							:visitProfile="visitProfile"
 							:visitAvatar="visitAvatar"
 							:followers="followers"
@@ -57,12 +57,12 @@
 				<div
 					v-else
 					style="bottom: -10px; backdrop-filter: blur(10px)"
-					class="xl:w-1220 xl:min-h-80 from-lightBGStart to-lightBGStop border-lightBorder fixed z-10 mr-5 overflow-y-auto rounded-lg border bg-gradient-to-r shadow-lg xl:h-80"
+					class="xl:w-1220 xl:min-h-80 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder fixed z-10 mr-5 overflow-y-auto rounded-lg border bg-gradient-to-r shadow-lg xl:h-80"
 				>
 					<div class="items-ceter flex w-full flex-col p-5">
 						<h1 class="text-negative mt-16 text-center font-sans text-6xl font-bold">404</h1>
-						<h2 class="text-center text-2xl font-semibold">This page was not found</h2>
-						<p class="text-gray7 mb-5 mt-2 self-center text-center" style="width: 360px">
+						<h2 class="text-center text-2xl font-semibold text-darkPrimaryText">This page was not found</h2>
+						<p class="text-gray5 dark:text-gray3 mb-5 mt-2 self-center text-center" style="width: 360px">
 							It seems that this page doesn't exist, we suggest you to go back home
 						</p>
 						<div class="flex justify-center">
