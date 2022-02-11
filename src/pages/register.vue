@@ -18,22 +18,18 @@
 				<RegisterMethods
 					v-else-if="step === `registerMethods`"
 					class="w-full xl:w-1/2"
-					@setNearWallet="setNearWallet"
 					@updateUserInfo="updateUserInfo"
-					@updateAccountId="updateAccountId"
-					@updateUsername="updateUsername"
 					@infos="showInfos = true"
 					@stepForward="stepForward"
 				/>
 				<SignUp
 					v-else-if="step === `signUp`"
-					:username="username"
 					:userInfo="userInfo"
-					:funds="funds"
 					@setID="setID"
 					@stepForward="stepForward"
 					@setDownloadKeyStep="setDownloadKeyStep"
 					@updateUserInfo="updateUserInfo"
+					@setIsLoading="setIsLoading"
 				/>
 				<!-- Step 4: Download key -->
 				<DownloadKey v-else-if="step === `downloadKey`" :aid="id" :accountId="accountId" class="w-full xl:w-1/2" />
@@ -72,7 +68,6 @@ import ogImage from '@/assets/images/util/ogImage.png'
 import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
 
 import { getWalletConnection, removeNearPrivateKey, signedInToWallet, walletLogout } from '@/backend/near'
-import { hasSufficientFunds } from '@/backend/funder'
 import { ValidationError } from '@/errors'
 
 interface IWalletStatus {
@@ -94,9 +89,6 @@ interface IData {
 	userInfo: null | ITorusWallet | INearWallet
 	username?: null | string
 	accountId: null | string
-	hasInviteCode: boolean
-	funds: string
-	nearWallet: boolean
 	downloadKeyStep: boolean
 	isLoading: boolean
 	showInfos: boolean
@@ -118,11 +110,8 @@ export default Vue.extend({
 		return {
 			id: ``,
 			accountId: null,
-			hasInviteCode: false,
 			userInfo: null,
 			username: undefined,
-			funds: `0`,
-			nearWallet: false,
 			downloadKeyStep: false,
 			isLoading: true,
 			showInfos: false,
@@ -162,8 +151,8 @@ export default Vue.extend({
 		return false
 	},
 	created() {
-		this.nearWallet = this.isSignedInToWallet()
-		if (this.nearWallet) {
+		const nearWallet = this.isSignedInToWallet()
+		if (nearWallet) {
 			const walletConnection = getWalletConnection()
 			const accountId: string = walletConnection.getAccountId()
 			if (!accountId) {
@@ -223,23 +212,11 @@ export default Vue.extend({
 		updateUserInfo(userInfo: ITorusWallet | INearWallet | null): void {
 			this.userInfo = userInfo
 		},
-		updateAccountId(accountId: string): void {
-			this.accountId = accountId
-		},
-		updateUsername(username: string): void {
-			this.username = username
-		},
 		setID(id: string): void {
 			this.id = id
 		},
-		validInviteCode() {
-			this.hasInviteCode = true
-		},
-		setNearWallet() {
-			this.nearWallet = true
-		},
-		hasEnoughFunds(): boolean {
-			return hasSufficientFunds(this.funds)
+		setIsLoading(isLoading: boolean): void {
+			this.isLoading = isLoading
 		},
 		isSignedInToWallet() {
 			return signedInToWallet()

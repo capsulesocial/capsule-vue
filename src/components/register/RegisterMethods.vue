@@ -67,7 +67,7 @@ import InfoIcon from '@/components/icons/Info.vue'
 
 import { torusVerifiers, TorusVerifiers } from '@/backend/utilities/config'
 import { getAccountIdFromPrivateKey } from '@/backend/auth'
-import { getUsernameNEAR, walletLogin, generateAndSetKey, removeNearPrivateKey } from '@/backend/near'
+import { walletLogin, generateAndSetKey } from '@/backend/near'
 import { verifyTokenAndOnboard } from '@/backend/invite'
 
 interface IData {
@@ -140,19 +140,13 @@ export default Vue.extend({
 			await walletLogin()
 		},
 		async implicitAccountCreate() {
-			const accountId: string = await generateAndSetKey()
+			const accountId = await generateAndSetKey()
+			await verifyTokenAndOnboard(accountId)
 			const userInfo: INearWallet = {
 				type: `near`,
 				accountId,
 			}
 			this.$emit(`updateUserInfo`, userInfo)
-			const [username] = await Promise.all([getUsernameNEAR(accountId), verifyTokenAndOnboard(accountId)])
-			this.$emit(`updateUsername`, username)
-			if (username) {
-				removeNearPrivateKey(accountId)
-				throw new Error(`You cannot login with implicit account, please import your Capsule private key`)
-			}
-			this.$emit(`setNearWallet`)
 			this.$emit(`stepForward`)
 		},
 	},

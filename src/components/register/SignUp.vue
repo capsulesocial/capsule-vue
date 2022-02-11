@@ -42,6 +42,7 @@ interface IData {
 	funds: string
 	username: null | string
 	id: string
+	isLoading: boolean
 }
 
 interface IWalletStatus {
@@ -74,14 +75,17 @@ export default Vue.extend({
 			funds: `0`,
 			username: null,
 			id: ``,
+			isLoading: true,
 		}
 	},
 	async created() {
+		this.$emit(`setIsLoading`, true)
 		const username = await getUsernameNEAR(this.userInfo.accountId)
 		if (!username) {
 			await verifyTokenAndOnboard(this.userInfo.accountId)
 			await this.checkFunds()
 			await this.postWalletLogin()
+			this.$emit(`setIsLoading`, false)
 			return
 		}
 
@@ -93,14 +97,14 @@ export default Vue.extend({
 			return
 		}
 		if (this.userInfo.type === `near`) {
-			this.$toastError(`You cannot login with wallet, please log in by importing your private key`)
 			removeNearPrivateKey(this.userInfo.accountId)
 			walletLogout()
 			this.$emit(`updateUserInfo`, null)
 			this.$emit(`stepForward`)
+			this.$emit(`setIsLoading`, false)
+			this.$toastError(`You cannot login with wallet, please log in by importing your private key`)
 		}
 	},
-
 	methods: {
 		...mapMutations(sessionStoreNamespace, {
 			changeCID: MutationType.CHANGE_CID,
