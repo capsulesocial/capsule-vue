@@ -1,6 +1,6 @@
 <template>
 	<main
-		class="bg-img m-0 h-screen p-0"
+		class="bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightMainBG dark:bg-darkBG"
 		:style="{
 			backgroundImage: `url(` + this.bgImage.image + `)`,
 		}"

@@ -52,8 +52,8 @@
 					class="relative h-full overflow-y-hidden"
 				>
 					<div class="flex flex-col justify-center p-12">
-						<h2 class="text-center text-2xl font-semibold">Welcome 🚀</h2>
-						<p class="text-gray7 mb-5 mt-2 self-center text-center xl:mx-14">
+						<h2 class="text-center text-2xl font-semibold dark:text-darkPrimaryText">Welcome 🚀</h2>
+						<p class="text-gray5 dark:text-gray3 mb-5 mt-2 self-center text-center xl:mx-14">
 							It seems that you don't follow anyone yet. You can go to the Top feed to follow top rated content creator
 							and start your Capsule experience
 						</p>
@@ -88,7 +88,11 @@
 						@updateBookmarks="updateBookmarks"
 					/>
 				</article>
-				<p v-if="noMorePosts" class="text-gray5 py-5 text-center text-sm" style="backdrop-filter: blur(10px)">
+				<p
+					v-if="noMorePosts"
+					class="text-gray5 dark:text-gray3 py-5 text-center text-sm"
+					style="backdrop-filter: blur(10px)"
+				>
 					No more posts
 				</p>
 			</div>

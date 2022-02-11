@@ -8,7 +8,7 @@
 			<button class="bg-gray1 focus:outline-none m-3 flex-shrink-0 rounded-full" @click="$router.go(-1)">
 				<BackIcon />
 			</button>
-			<h2 class="text-primary text-2xl font-semibold">{{ $route.params.tag }}</h2>
+			<h2 class="text-primary dark:text-secondary text-2xl font-semibold">{{ $route.params.tag }}</h2>
 		</div>
 		<!-- Posts loaded -->
 		<div ref="container" class="xl:w-750 min-h-130 h-130 xl:min-h-150 xl:h-150 fixed w-full overflow-y-auto">
@@ -38,7 +38,11 @@
 					:isDeleted="p.deleted"
 				/>
 			</article>
-			<p v-if="noMorePosts" class="text-gray5 py-5 text-center text-sm" style="backdrop-filter: blur(10px)">
+			<p
+				v-if="noMorePosts"
+				class="text-gray5 dark:text-gray3 py-5 text-center text-sm"
+				style="backdrop-filter: blur(10px)"
+			>
 				No more posts
 			</p>
 		</div>

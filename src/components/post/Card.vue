@@ -486,7 +486,14 @@
 							<button class="focus:outline-none ml-4" @click="toggleStatsCard"><StatsIcon /></button>
 						</div>
 					</div>
-					<div v-else :class="quote ? `bg-lightBorder rounded-lg p-4 text-center text-gray5 text-sm` : ``">
+					<div
+						v-else
+						:class="
+							quote
+								? `bg-lightBorder dark:bg-darkInput rounded-lg p-4 text-center text-gray5 dark:text-gray3 text-sm`
+								: ``
+						"
+					>
 						This post has been removed by the author
 					</div>
 				</div>

@@ -3,7 +3,7 @@
 		<!-- Header -->
 		<div
 			id="header"
-			class="bg-primary border-lightBorder animatefast flex h-56 w-full flex-row items-center rounded-lg shadow-lg"
+			class="bg-primary dark:bg-secondary border-lightBorder animatefast flex h-56 w-full flex-row items-center rounded-lg shadow-lg"
 			:style="{
 				background: `linear-gradient(180deg, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.8) 100%), url(${require(`@/assets/images/category/` +
 					$route.params.category +
@@ -20,7 +20,7 @@
 					<p id="buttontitle" class="animatefast pl-3 pr-4 font-semibold">All categories</p>
 					<h2
 						id="hiddentitle"
-						class="text-primary animatelong absolute ml-8 -mt-1 px-2 text-xl font-semibold capitalize opacity-0"
+						class="text-primary dark:text-secondary animatelong absolute ml-8 -mt-1 px-2 text-xl font-semibold capitalize opacity-0"
 					>
 						{{ $route.params.category }}
 					</h2>
@@ -53,7 +53,7 @@
 				v-if="posts.length == 0 && !isLoading"
 				class="mt-12 grid justify-items-center overflow-y-hidden px-6 xl:px-0"
 			>
-				<p class="text-gray5 align-end mb-5 flex items-end text-sm" style="max-width: 366px">
+				<p class="text-gray5 dark:text-gray3 align-end mb-5 flex items-end text-sm" style="max-width: 366px">
 					It seems there are no posts under this category yet
 				</p>
 				<SecondaryButton :text="`All categories`" :action="toggleCategories" />
@@ -75,7 +75,11 @@
 					:isDeleted="p.deleted"
 				/>
 			</article>
-			<p v-if="noMorePosts" class="text-gray5 py-5 text-center text-sm" style="backdrop-filter: blur(10px)">
+			<p
+				v-if="noMorePosts"
+				class="text-gray5 dark:text-gray3 py-5 text-center text-sm"
+				style="backdrop-filter: blur(10px)"
+			>
 				No more posts
 			</p>
 		</div>

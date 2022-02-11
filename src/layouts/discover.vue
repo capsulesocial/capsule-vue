@@ -18,7 +18,10 @@
 						style="width: 1220px; height: 62px"
 					>
 						<!-- Title -->
-						<h1 v-if="$route.name === `discover`" class="text-primary text-3xl font-semibold xl:text-4xl">
+						<h1
+							v-if="$route.name === `discover`"
+							class="text-primary dark:text-secondary text-3xl font-semibold xl:text-4xl"
+						>
 							Browse Capsule
 						</h1>
 						<!-- Peered nodes -->
@@ -28,7 +31,7 @@
 					<section class="modal-animation mt-16 flex flex-row xl:mt-20">
 						<nuxt-child
 							:class="$route.name === `discover` ? `` : `-mt-16 xl:-mt-20`"
-							class="xl:w-750 min-h-61 h-61 xl:min-h-80 from-lightBGStart to-lightBGStop fixed z-10 mr-5 box-content w-full overflow-y-auto rounded-lg bg-gradient-to-r shadow-lg xl:h-80"
+							class="xl:w-750 min-h-61 h-61 xl:min-h-80 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop fixed z-10 mr-5 box-content w-full overflow-y-auto rounded-lg bg-gradient-to-r shadow-lg xl:h-80"
 							:toggleFriend="toggleFriend"
 							:following="following"
 						/>
@@ -44,7 +47,7 @@
 							style="margin-left: 755px; width: 485px"
 						>
 							<TagsWidget
-								class="from-lightBGStart to-lightBGStop border-lightBorder mb-5 overflow-hidden rounded-lg border bg-gradient-to-r shadow-lg"
+								class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder mb-5 overflow-hidden rounded-lg border bg-gradient-to-r shadow-lg"
 								style="backdrop-filter: blur(10px)"
 							/>
 							<Footer />

@@ -18,14 +18,14 @@
 						style="width: 1220px; height: 62px"
 					>
 						<!-- Title -->
-						<h1 class="text-primary text-3xl font-semibold xl:text-4xl">Bookmarks list</h1>
+						<h1 class="text-primary dark:text-secondary text-3xl font-semibold xl:text-4xl">Bookmarks list</h1>
 						<!-- Peered nodes -->
 						<Nodes />
 					</div>
 					<!-- Content -->
 					<section class="mt-16 flex flex-row xl:mt-20">
 						<nuxt-child
-							class="xl:w-750 min-h-120 h-120 xl:min-h-150 xl:h-150 from-lightBGStart to-lightBGStop border-lightBorder modal-animation fixed z-10 mr-5 w-full overflow-y-hidden rounded-lg border bg-gradient-to-r shadow-lg"
+							class="xl:w-750 min-h-120 h-120 xl:min-h-150 xl:h-150 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation fixed z-10 mr-5 w-full overflow-y-hidden rounded-lg border bg-gradient-to-r shadow-lg"
 							:posts="posts"
 							:isLoading="isLoading"
 						/>
@@ -41,11 +41,16 @@
 							"
 						>
 							<article
-								class="from-lightBGStart to-lightBGStop border-lightBorder mb-5 h-full w-full overflow-y-scroll rounded-lg border bg-gradient-to-r px-6 py-4 shadow-lg"
+								class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder mb-5 h-full w-full overflow-y-scroll rounded-lg border bg-gradient-to-r px-6 py-4 shadow-lg"
 							>
 								<div class="flex flex-row items-center justify-between pb-4">
-									<h6 class="text-primary text-base font-semibold">Filter by Category</h6>
-									<button class="focus:outline-none text-primary pr-1 text-sm" @click="setFilter(``)">Clear</button>
+									<h6 class="text-primary dark:text-secondary text-base font-semibold">Filter by Category</h6>
+									<button
+										class="focus:outline-none text-primary dark:text-secondary pr-1 text-sm"
+										@click="setFilter(``)"
+									>
+										Clear
+									</button>
 								</div>
 								<button
 									v-for="c in categoryList"
@@ -58,7 +63,9 @@
 									<span
 										class="ml-2 border-b"
 										:class="
-											active === c ? 'border-primary text-primary' : ' text-lightPrimaryVariant border-transparent'
+											active === c
+												? 'border-primary text-primary dark:border-secondary dark:text-secondary'
+												: ' text-primary dark:text-secondary border-transparent'
 										"
 									>
 										{{ c }}</span
