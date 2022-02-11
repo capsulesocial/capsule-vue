@@ -16,8 +16,6 @@
 			:accountId="userInfo.accountId"
 			:nearWallet="userInfo.type === `near`"
 			class="w-full xl:w-1/2"
-			@setID="setID"
-			@setDownloadKeyStep="setDownloadKeyStep"
 		/>
 	</div>
 </template>
@@ -27,8 +25,6 @@ import Vue from 'vue'
 import type { PropType } from 'vue'
 import { mapMutations } from 'vuex'
 
-import { TorusLoginResponse } from '@toruslabs/customauth'
-
 import VerifyPhone from './VerifyPhone.vue'
 import SelectID from './SelectID.vue'
 import { hasSufficientFunds } from '@/backend/funder'
@@ -36,27 +32,14 @@ import { checkAccountStatus, getUsernameNEAR, removeNearPrivateKey, walletLogout
 import { verifyTokenAndOnboard } from '@/backend/invite'
 
 import { MutationType, createSessionFromProfile, namespace as sessionStoreNamespace } from '~/store/session'
-import { login, register } from '@/backend/auth'
+import { setNearUserFromPrivateKey, login, register, IAuthResult } from '@/backend/auth'
+import { INearWallet, ITorusWallet } from '@/backend/utilities/helpers'
+import { ValidationError } from '@/errors'
 
 interface IData {
 	funds: string
 	username: null | string
-	id: string
 	isLoading: boolean
-}
-
-interface IWalletStatus {
-	type: `torus` | `near`
-	accountId: string
-}
-
-interface ITorusWallet extends IWalletStatus {
-	type: `torus`
-	userInfo: TorusLoginResponse
-}
-
-interface INearWallet extends IWalletStatus {
-	type: `near`
 }
 
 export default Vue.extend({
@@ -74,7 +57,6 @@ export default Vue.extend({
 		return {
 			funds: `0`,
 			username: null,
-			id: ``,
 			isLoading: true,
 		}
 	},
@@ -84,7 +66,6 @@ export default Vue.extend({
 		if (!username) {
 			await verifyTokenAndOnboard(this.userInfo.accountId)
 			await this.checkFunds()
-			await this.postWalletLogin()
 			this.$emit(`setIsLoading`, false)
 			return
 		}
@@ -92,7 +73,7 @@ export default Vue.extend({
 		// Username exists, so if we are with Torus we can just login
 		if (this.userInfo.type === `torus`) {
 			this.username = username
-			await this.verify()
+			await this.verify(this.username)
 			window.localStorage.removeItem(`inviteToken`)
 			return
 		}
@@ -129,53 +110,38 @@ export default Vue.extend({
 		updateFunds(balance: string) {
 			this.funds = balance
 		},
-		async postWalletLogin() {
-			const [username] = await Promise.all([
-				getUsernameNEAR(this.userInfo.accountId),
-				this.checkFunds(),
-				verifyTokenAndOnboard(this.userInfo.accountId),
-			])
-			this.username = username
-			if (this.username) {
-				// If a username is found then proceed to login...
-				this.verify()
-				return true
-			}
-			if (this.username) {
-				this.$toastError(`You cannot login with wallet, please import your private key`)
-				removeNearPrivateKey(this.userInfo.accountId)
-				walletLogout()
-				return false
-			}
-			return true
-		},
-		async loginOrRegister(privateKey: string) {
-			if (this.username) {
-				return login(this.username, privateKey)
-			}
-			const idCheck = this.$qualityID(this.id)
-			if (this.$isError(idCheck)) {
-				this.$toastError(idCheck.error)
-				return false
-			}
-			this.id = this.id.toLowerCase()
-			const registerResult = await register(this.id, privateKey)
-			if (`error` in registerResult) {
-				this.$toastError(registerResult.error)
-				return false
-			}
-			return registerResult
-		},
-		async verify() {
-			if (!this.userInfo || this.userInfo.type !== `torus`) {
+		async verify(id: string) {
+			if (!this.userInfo) {
 				throw new Error(`Unexpected condition!`)
 			}
-			// Login
-			const res = await this.loginOrRegister(this.userInfo.userInfo.privateKey)
-			if (!res) {
-				return
+			let res: false | IAuthResult = false
+			if (this.username) {
+				// Login
+				if (this.userInfo.type === `torus`) {
+					res = await login(this.username, this.userInfo.userInfo.privateKey)
+				}
+
+				throw new ValidationError(`Can't use wallet for login, please upload your private key`)
+			} else {
+				// Register
+				const lowerID = id.toLowerCase()
+				const idCheck = this.$qualityID(lowerID)
+				if (this.$isError(idCheck)) {
+					throw new ValidationError(idCheck.error)
+				}
+				this.$emit(`setID`, lowerID)
+				if (this.userInfo.type === `torus`) {
+					await setNearUserFromPrivateKey(this.userInfo.userInfo.privateKey)
+				}
+				const registerResult = await register(lowerID, this.userInfo.accountId)
+				if (`error` in registerResult) {
+					this.$toastError(registerResult.error)
+					return
+				}
+				res = registerResult
 			}
 
+			// Login
 			const { profile, cid } = res
 
 			const account = createSessionFromProfile(cid, profile)
@@ -188,9 +154,6 @@ export default Vue.extend({
 			this.changeBio(account.bio)
 			this.changeLocation(account.location)
 			this.$router.push(`/home`)
-		},
-		setID(id: string): void {
-			this.username = id
 		},
 	},
 })

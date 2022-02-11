@@ -20,31 +20,19 @@ export function getAccountIdFromPrivateKey(privateKey: string) {
 	return accountId
 }
 
-async function authUser(privateKey: string) {
+// This is only needed with Torus and implicit login
+export async function setNearUserFromPrivateKey(privateKey: string) {
 	const accountId = getAccountIdFromPrivateKey(privateKey)
 	const { sk } = getED25519Key(privateKey)
 
 	await setNearPrivateKey(sk, accountId)
-	// Reinitialise Smart Contract API
-	initContract(accountId)
-	window.localStorage.setItem(`accountId`, accountId)
+
+	return accountId
 }
 
 // POST newly created account to IPFS
-export async function register(id: string, privateKey: string): Promise<IAuthResult | { error: string }> {
-	await authUser(privateKey)
-
-	const profile = createDefaultProfile(id)
-	const [cid, userSetStatus] = await Promise.all([addProfileToIPFS(profile), setUserInfoNEAR(id)])
-
-	if (userSetStatus.error) {
-		return { error: userSetStatus.error }
-	}
-
-	return { profile, cid }
-}
-
-export async function registerNearWallet(id: string, accountId: string): Promise<IAuthResult | { error: string }> {
+export async function register(id: string, accountId: string): Promise<IAuthResult | { error: string }> {
+	// Reinitialise Smart Contract API
 	initContract(accountId)
 	window.localStorage.setItem(`accountId`, accountId)
 
@@ -59,7 +47,7 @@ export async function registerNearWallet(id: string, accountId: string): Promise
 }
 
 export async function login(id: string, privateKey: string): Promise<IAuthResult> {
-	await authUser(privateKey)
+	await setNearUserFromPrivateKey(privateKey)
 
 	let profile = createDefaultProfile(id)
 	const fetchedProfile = await getProfile(id)

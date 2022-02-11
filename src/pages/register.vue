@@ -50,7 +50,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapMutations } from 'vuex'
-import { TorusLoginResponse } from '@toruslabs/customauth'
 import 'intl-tel-input/build/css/intlTelInput.css'
 import axios from 'axios'
 
@@ -69,20 +68,7 @@ import { MutationType, namespace as sessionStoreNamespace } from '~/store/sessio
 
 import { getWalletConnection, removeNearPrivateKey, signedInToWallet, walletLogout } from '@/backend/near'
 import { ValidationError } from '@/errors'
-
-interface IWalletStatus {
-	type: `torus` | `near`
-	accountId: string
-}
-
-interface ITorusWallet extends IWalletStatus {
-	type: `torus`
-	userInfo: TorusLoginResponse
-}
-
-interface INearWallet extends IWalletStatus {
-	type: `near`
-}
+import { getInviteToken, INearWallet, ITorusWallet } from '@/backend/utilities/helpers'
 
 interface IData {
 	id: string
@@ -151,7 +137,7 @@ export default Vue.extend({
 		return false
 	},
 	created() {
-		const nearWallet = this.isSignedInToWallet()
+		const nearWallet = signedInToWallet()
 		if (nearWallet) {
 			const walletConnection = getWalletConnection()
 			const accountId: string = walletConnection.getAccountId()
@@ -188,7 +174,7 @@ export default Vue.extend({
 			changeLocation: MutationType.CHANGE_LOCATION,
 		}),
 		stepForward() {
-			const inviteToken = window.localStorage.getItem(`inviteToken`)
+			const inviteToken = getInviteToken()
 			if (inviteToken && !this.userInfo) {
 				this.step = `registerMethods`
 				return
@@ -217,9 +203,6 @@ export default Vue.extend({
 		},
 		setIsLoading(isLoading: boolean): void {
 			this.isLoading = isLoading
-		},
-		isSignedInToWallet() {
-			return signedInToWallet()
 		},
 	},
 })
