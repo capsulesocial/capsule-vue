@@ -33,7 +33,7 @@ import { verifyTokenAndOnboard } from '@/backend/invite'
 
 import { MutationType, createSessionFromProfile, namespace as sessionStoreNamespace } from '~/store/session'
 import { setNearUserFromPrivateKey, login, register, IAuthResult } from '@/backend/auth'
-import { INearWallet, ITorusWallet } from '@/backend/utilities/helpers'
+import { IWalletStatus } from '@/backend/utilities/helpers'
 import { ValidationError } from '@/errors'
 
 interface IData {
@@ -49,7 +49,7 @@ export default Vue.extend({
 	},
 	props: {
 		userInfo: {
-			type: Object as PropType<INearWallet | ITorusWallet>,
+			type: Object as PropType<IWalletStatus>,
 			required: true,
 		},
 	},
@@ -131,7 +131,7 @@ export default Vue.extend({
 				}
 				this.$emit(`setID`, lowerID)
 				if (this.userInfo.type === `torus`) {
-					await setNearUserFromPrivateKey(this.userInfo.userInfo.privateKey)
+					await setNearUserFromPrivateKey(this.userInfo.privateKey)
 				}
 				const registerResult = await register(lowerID, this.userInfo.accountId)
 				if (`error` in registerResult) {
@@ -139,6 +139,9 @@ export default Vue.extend({
 					return
 				}
 				res = registerResult
+				if (this.userInfo.type === `near`) {
+					this.$emit(`setDownloadKeyStep`)
+				}
 			}
 
 			// Login

@@ -26,10 +26,9 @@ import Vue, { PropType } from 'vue'
 import { mapMutations } from 'vuex'
 
 import BrandedButton from '@/components/BrandedButton.vue'
-import { register } from '@/backend/auth'
-import { MutationType, createSessionFromProfile, namespace as sessionStoreNamespace } from '~/store/session'
+import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
 import { ValidationError } from '@/errors'
-import { INearWallet, ITorusWallet } from '@/backend/utilities/helpers'
+import { IWalletStatus } from '@/backend/utilities/helpers'
 
 interface IData {
 	id: string
@@ -50,7 +49,7 @@ export default Vue.extend({
 			required: true,
 		},
 		userInfo: {
-			type: Object as PropType<INearWallet | ITorusWallet>,
+			type: Object as PropType<IWalletStatus>,
 			required: true,
 		},
 		verify: {
@@ -74,28 +73,6 @@ export default Vue.extend({
 			changeBio: MutationType.CHANGE_BIO,
 			changeLocation: MutationType.CHANGE_LOCATION,
 		}),
-		async walletVerify() {
-			const registerResult = await register(this.id, this.userInfo.accountId)
-			if (!registerResult) {
-				return
-			}
-			if (`error` in registerResult) {
-				this.isLoading = false
-				throw new ValidationError(registerResult.error)
-			}
-			const { profile, cid } = registerResult
-
-			const account = createSessionFromProfile(cid, profile)
-			this.changeCID(cid)
-			this.changeID(account.id)
-			this.changeName(account.name)
-			this.changeEmail(account.email)
-			this.changeAvatar(account.avatar)
-			this.changeBio(account.bio)
-			this.changeLocation(account.location)
-			this.$store.commit(`setWelcome`, true)
-			this.$emit(`setDownloadKeyStep`)
-		},
 		handleRegisterID() {
 			this.isLoading = true
 			this.id = this.id.toLowerCase()

@@ -1,5 +1,4 @@
 import imageCompression from 'browser-image-compression'
-import { TorusLoginResponse } from '@toruslabs/customauth'
 
 export interface ISignedIPFSObject<T> {
 	data: T
@@ -63,6 +62,8 @@ export function getCompressedImage(file: File) {
 		useWebWorker: true,
 		initialQuality: 0.9,
 	})
+}
+
 function parseJwt(token: string) {
 	const base64Url = token.split(`.`)[1]
 	const base64 = base64Url.replace(/-/g, `+`).replace(/_/g, `/`)
@@ -103,16 +104,8 @@ export function getInviteToken(): string | null {
 	}
 }
 
-interface IWalletStatus {
+export interface IWalletStatus {
 	type: `torus` | `near`
 	accountId: string
 	privateKey: string
-}
-export interface ITorusWallet extends IWalletStatus {
-	type: `torus`
-	userInfo: TorusLoginResponse
-}
-
-export interface INearWallet extends IWalletStatus {
-	type: `near`
 }

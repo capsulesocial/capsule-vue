@@ -74,11 +74,11 @@ import {
 	walletLogout,
 } from '@/backend/near'
 import { ValidationError } from '@/errors'
-import { getInviteToken, INearWallet, ITorusWallet } from '@/backend/utilities/helpers'
+import { getInviteToken, IWalletStatus } from '@/backend/utilities/helpers'
 
 interface IData {
 	id: string
-	userInfo: null | ITorusWallet | INearWallet
+	userInfo: null | IWalletStatus
 	username?: null | string
 	accountId: null | string
 	downloadKeyStep: boolean
@@ -127,6 +127,14 @@ export default Vue.extend({
 		if (axios.isAxiosError(err) && err.response) {
 			if (err.response.status === 429) {
 				this.$toastWarning(`Too many requests`)
+				return false
+			}
+			if (err.response.status === 400) {
+				removeNearPrivateKey(this.accountId)
+				walletLogout()
+				window.localStorage.removeItem(`inviteToken`)
+				this.isLoading = false
+				this.stepForward()
 				return false
 			}
 			this.$toastError(err.response.data.error)
@@ -206,7 +214,7 @@ export default Vue.extend({
 		setDownloadKeyStep(): void {
 			this.downloadKeyStep = true
 		},
-		updateUserInfo(userInfo: ITorusWallet | INearWallet | null): void {
+		updateUserInfo(userInfo: IWalletStatus | null): void {
 			this.userInfo = userInfo
 		},
 		setID(id: string): void {

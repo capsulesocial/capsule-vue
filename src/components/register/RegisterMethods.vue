@@ -58,7 +58,7 @@
 <script lang="ts">
 import Vue from 'vue'
 
-import DirectWebSdk, { TorusLoginResponse } from '@toruslabs/customauth'
+import DirectWebSdk from '@toruslabs/customauth'
 
 import GoogleIcon from '@/components/icons/brands/Google.vue'
 import NearIcon from '@/components/icons/brands/Near.vue'
@@ -68,7 +68,7 @@ import InfoIcon from '@/components/icons/Info.vue'
 import { torusVerifiers, TorusVerifiers } from '@/backend/utilities/config'
 import { getAccountIdFromPrivateKey } from '@/backend/auth'
 import { walletLogin, generateAndSetKey } from '@/backend/near'
-import { INearWallet, ITorusWallet } from '@/backend/utilities/helpers'
+import { IWalletStatus } from '@/backend/utilities/helpers'
 
 interface IData {
 	torus: DirectWebSdk
@@ -106,12 +106,11 @@ export default Vue.extend({
 		async torusLogin(type: TorusVerifiers) {
 			this.isLoading = true
 			try {
-				const info: TorusLoginResponse = await this.torus.triggerLogin(torusVerifiers[type])
+				const info = await this.torus.triggerLogin(torusVerifiers[type])
 				const accountId = getAccountIdFromPrivateKey(info.privateKey)
-				const userInfo: ITorusWallet = {
+				const userInfo: IWalletStatus = {
 					type: `torus`,
 					accountId,
-					userInfo: info,
 					privateKey: info.privateKey,
 				}
 				this.$emit(`updateUserInfo`, userInfo)
@@ -129,7 +128,7 @@ export default Vue.extend({
 		implicitAccountCreate() {
 			this.isLoading = true
 			const { accountId, privateKey } = generateAndSetKey()
-			const userInfo: INearWallet = {
+			const userInfo: IWalletStatus = {
 				type: `near`,
 				accountId,
 				privateKey,
