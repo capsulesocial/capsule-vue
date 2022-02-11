@@ -25,8 +25,7 @@
 						placeholder="Title"
 						class="text-4xl focus:outline-none w-11/12 break-words -mt-2 mb-2 bg-transparent font-serif"
 						wrap="soft"
-						@beforeinput="handleTitle"
-						@input="updateTitle"
+						@input="handleTitle"
 					/>
 				</article>
 
@@ -39,8 +38,7 @@
 						placeholder="Subtitle"
 						class="text-h2 text-gray5 focus:outline-none mt-2 w-full break-words bg-transparent font-serif"
 						wrap="soft"
-						@beforeinput="handleSubtitle"
-						@input="updateSubtitle"
+						@input="handleSubtitle"
 					/>
 				</article>
 
@@ -471,6 +469,7 @@ export default Vue.extend({
 			}
 			titleInput.style.height = `60px`
 			titleInput.style.height = `${titleInput.scrollHeight}px`
+			this.updateTitle()
 		},
 		handleSubtitle(e: any) {
 			if (!e) {
@@ -483,6 +482,7 @@ export default Vue.extend({
 			}
 			subtitleInput.style.height = `40px`
 			subtitleInput.style.height = `${subtitleInput.scrollHeight}px`
+			this.updateSubtitle()
 		},
 		updateTitle(updateStore: boolean = true) {
 			const titleInput = this.$refs.title as HTMLTextAreaElement
