@@ -6,7 +6,7 @@
 				<article class="flex flex-col px-2">
 					<button
 						v-if="isSaving === `false` && this.$route.name !== 'home'"
-						class="bg-gray1 focus:outline-none absolute right-0 top-0 m-8 rounded-full p-1"
+						class="bg-gray1 dark:bg-gray5 focus:outline-none absolute right-0 top-0 m-8 rounded-full p-1"
 						@click="saveContent"
 					>
 						<XIcon />
@@ -23,7 +23,7 @@
 						id="title"
 						ref="title"
 						placeholder="Title"
-						class="text-4xl focus:outline-none w-11/12 break-words -mt-2 mb-2 bg-transparent font-serif"
+						class="text-4xl dark:text-darkPrimaryText focus:outline-none w-11/12 break-words -mt-2 mb-2 bg-transparent font-serif placeholder-gray5 dark:placeholder-gray1"
 						wrap="soft"
 						@input="handleTitle"
 					/>
@@ -36,7 +36,7 @@
 						id="subtitle"
 						ref="subtitle"
 						placeholder="Subtitle"
-						class="text-h2 text-gray5 focus:outline-none mt-2 w-full break-words bg-transparent font-serif"
+						class="text-h2 text-gray5 dark:text-gray2 placeholder-gray5 dark:placeholder-gray2 focus:outline-none mt-2 w-full break-words bg-transparent font-serif"
 						wrap="soft"
 						@input="handleSubtitle"
 					/>
@@ -48,7 +48,7 @@
 					<div
 						id="editor"
 						ref="editor"
-						class="editable focus:outline-none content max-w-none p-2"
+						class="editable focus:outline-none content max-w-none p-2 dark:placeholder-gray2 dark:text-darkPrimaryText"
 						v-html="sanitize($store.state.draft.drafts[$store.state.draft.activeIndex].content)"
 					></div>
 					<AddContent

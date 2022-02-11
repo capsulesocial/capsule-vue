@@ -2,12 +2,12 @@
 	<div class="">
 		<!-- Featured image -->
 		<article
-			class="from-lightBGStart to-lightBGStop border-lightBorder mb-5 rounded-lg border bg-gradient-to-r px-6 py-4 shadow-lg"
+			class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder mb-5 rounded-lg border bg-gradient-to-r px-6 py-4 shadow-lg"
 			style="backdrop-filter: blur(10px)"
 		>
-			<h6 class="text-primary font-semibold">Featured Image</h6>
+			<h6 class="text-primary dark:text-secondary font-semibold">Featured Image</h6>
 			<button
-				class="border-gray5 transition duration-500 ease-in-out hover:border-primary focus:outline-none mt-3 mb-2 flex h-40 w-full items-center justify-center overflow-hidden rounded-lg border border-dashed"
+				class="border-gray5 dark:border-gray3 transition duration-500 ease-in-out hover:border-primary dark:hover:border-secondary focus:outline-none mt-3 mb-2 flex h-40 w-full items-center justify-center overflow-hidden rounded-lg border border-dashed"
 				@click="handleUploadImageClick"
 			>
 				<input
@@ -21,8 +21,8 @@
 				/>
 				<!-- No Photo Uploaded -->
 				<div v-if="featuredPhoto === null" class="flex flex-col justify-center">
-					<UploadIcon class="self-center text-gray5" />
-					<p class="text-primary mt-2 text-left text-sm font-light">Upload an Image</p>
+					<UploadIcon class="self-center text-gray5 dark:text-gray3" />
+					<p class="text-primary dark:text-secondary mt-2 text-left text-sm font-light">Upload an Image</p>
 				</div>
 				<div v-else class="h-full w-full">
 					<img :src="featuredPhoto" class="h-40 w-full object-cover" />
@@ -30,28 +30,33 @@
 			</button>
 			<!-- Photo Uploaded -->
 			<div v-if="featuredPhoto !== null" class="w-full">
-				<button class="text-primary focus:outline-none text-sm" @click="handleUploadImageClick">Change Image</button>
+				<button class="text-primary dark:text-secondary focus:outline-none text-sm" @click="handleUploadImageClick">
+					Change Image
+				</button>
 				<button class="text-lightError focus:outline-none ml-4 text-sm" @click="removeImage()">Remove Image</button>
 			</div>
-			<div class="bg-gray1 my-1 mt-3 w-full rounded-lg p-2" :class="featuredPhoto ? `` : `hidden`">
+			<div
+				class="bg-gray1 dark:bg-gray7 text-gray5 dark:text-gray3 placeholder-gray5 dark:placeholder-gray3 my-1 mt-3 w-full rounded-lg p-2"
+				:class="featuredPhoto ? `` : `hidden`"
+			>
 				<label for="caption" class="hidden" value="Enter hashtags"></label>
 				<input
 					v-model="caption"
 					type="text"
 					placeholder="Image caption"
-					class="focus:outline-none bg-gray1 placeholder-gray5 w-full"
+					class="focus:outline-none bg-gray1 dark:bg-gray7 text-gray5 dark:text-gray3 placeholder-gray5 dark:placeholder-gray3 w-full"
 					@change="saveCaption"
 				/>
 			</div>
 		</article>
 		<!-- Category -->
 		<article
-			class="from-lightBGStart to-lightBGStop border-lightBorder mb-5 rounded-lg border bg-gradient-to-r px-6 py-4 shadow-lg"
+			class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder mb-5 rounded-lg border bg-gradient-to-r px-6 py-4 shadow-lg"
 			style="backdrop-filter: blur(10px)"
 		>
-			<h6 class="text-primary font-semibold">Category</h6>
+			<h6 class="text-primary dark:text-secondary font-semibold">Category</h6>
 			<button
-				class="bg-gray1 focus:outline-none my-1 mt-3 w-full rounded-lg p-2"
+				class="bg-gray1 dark:bg-gray7 text-gray5 dark:text-gray3 placeholder-gray5 dark:placeholder-gray3 focus:outline-none my-1 mt-3 w-full rounded-lg p-2"
 				@click="showCategoryDropdown = !showCategoryDropdown"
 			>
 				<div class="flex items-center justify-between">
@@ -64,11 +69,11 @@
 							"
 							class="hotzone mr-2 h-10 w-10"
 						/>
-						<span class="text-primary text-base">{{
+						<span class="text-primary dark:text-gray3 text-base">{{
 							$store.state.draft.drafts[$store.state.draft.activeIndex].category
 						}}</span>
 					</div>
-					<div v-else class="text-gray5">Select a Category</div>
+					<div v-else class="text-gray5 dark:text-gray3">Select a Category</div>
 					<ChevronUp v-if="showCategoryDropdown" />
 					<ChevronDown v-else />
 				</div>
@@ -83,7 +88,11 @@
 					<img :src="require(`@/assets/images/category/` + c + `/icon.webp`)" class="hotzone mr-1 ml-2 h-6 w-6" />
 					<span
 						class="ml-2 border-b"
-						:class="category === c ? 'border-primary text-primary' : ' text-lightPrimaryVariant border-transparent'"
+						:class="
+							category === c
+								? 'border-primary text-primary dark:border-secondary dark:text-secondary'
+								: ' text-primary dark:text-secondary border-transparent'
+						"
 					>
 						{{ c }}</span
 					>
@@ -92,17 +101,19 @@
 		</article>
 		<!-- Tags -->
 		<article
-			class="from-lightBGStart to-lightBGStop border-lightBorder mb-5 rounded-lg border bg-gradient-to-r px-6 py-4 pb-6 shadow-lg"
+			class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder mb-5 rounded-lg border bg-gradient-to-r px-6 py-4 pb-6 shadow-lg"
 			style="backdrop-filter: blur(10px)"
 		>
-			<h6 class="text-primary mb-3 font-semibold">Tags</h6>
-			<div class="bg-gray1 my-1 w-full rounded-lg p-2">
+			<h6 class="text-primary dark:text-secondary mb-3 font-semibold">Tags</h6>
+			<div
+				class="bg-gray1 dark:bg-gray7 text-gray5 dark:text-gray3 placeholder-gray5 dark:placeholder-gray3 my-1 w-full rounded-lg p-2"
+			>
 				<label for="tag" class="hidden" value="Enter hashtags"></label>
 				<input
 					v-model="tag"
 					type="text"
 					placeholder="Add a tag..."
-					class="focus:outline-none bg-gray1 placeholder-gray5 w-full"
+					class="focus:outline-none bg-gray1 dark:bg-gray7 text-gray5 dark:text-gray3 placeholder-gray5 dark:placeholder-gray3 w-full"
 					@keyup.enter="addTag"
 				/>
 			</div>
@@ -110,27 +121,27 @@
 				<button
 					v-for="t in $store.state.draft.drafts[$store.state.draft.activeIndex].tags"
 					:key="t.name"
-					class="focus:outline-none bg-gray1 z-10 mr-4 mt-2 flex flex-row items-center rounded-lg px-3 py-1"
+					class="focus:outline-none bg-gray1 dark:bg-gray7 z-10 mr-4 mt-2 flex flex-row items-center rounded-lg px-3 py-1"
 					@click="removeTag(t)"
 				>
-					<span class="text-gray5 text-sm font-semibold">{{ t.name }}</span
-					><XIcon class="text-gray5 p-1 pr-0" />
+					<span class="text-gray5 dark:text-gray1 text-sm font-semibold">{{ t.name }}</span
+					><XIcon class="text-gray5 dark:text-gray1 p-1 pr-0" />
 				</button>
 			</div>
 		</article>
 		<article
-			class="from-lightBGStart to-lightBGStop border-lightBorder mb-5 rounded-lg border bg-gradient-to-r p-6 shadow-lg"
+			class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder mb-5 rounded-lg border bg-gradient-to-r p-6 shadow-lg"
 			style="backdrop-filter: blur(10px)"
 		>
 			<div class="flex flex-row items-center justify-between">
 				<div>
-					<h5 v-show="wordCount > 1" class="text-gray5 text-sm">
-						<span class="text-primary">{{ wordCount }}</span> words
+					<h5 v-show="wordCount > 1" class="text-gray5 dark:text-gray3 text-sm">
+						<span class="text-primary dark:text-secondary">{{ wordCount }}</span> words
 					</h5>
-					<h5 class="text-gray5 text-sm">Auto-save on close.</h5>
+					<h5 class="text-gray5 dark:text-gray3 text-sm">Auto-save on close.</h5>
 				</div>
 				<button
-					class="focus:outline-none bg-lightButtonBG text-lightButtonText transform rounded-lg px-12 py-2 font-bold shadow-lg transition duration-500 ease-in-out hover:scale-105"
+					class="focus:outline-none bg-primary dark:bg-secondary text-lightButtonText transform rounded-lg px-12 py-2 font-bold shadow-lg transition duration-500 ease-in-out hover:scale-105"
 					@click="confirmPost"
 				>
 					Publish
