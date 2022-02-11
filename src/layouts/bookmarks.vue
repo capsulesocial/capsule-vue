@@ -65,7 +65,7 @@
 										:class="
 											active === c
 												? 'border-primary text-primary dark:border-secondary dark:text-secondary'
-												: ' text-primary dark:text-secondary border-transparent'
+												: ' text-primary dark:text-gray3 border-transparent'
 										"
 									>
 										{{ c }}</span

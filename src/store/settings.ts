@@ -12,7 +12,7 @@ export interface SettingState {
 }
 
 export const state = (): SettingState => ({
-	darkMode: `OS`,
+	darkMode: `Light`,
 	recentlyPosted: false,
 	recentlyInSettings: false,
 	showUnauthPopup: false,

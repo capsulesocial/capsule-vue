@@ -1,9 +1,9 @@
 <template>
 	<article
-		class="from-lightBGStart to-lightBGStop border-lightBorder modal-animation mb-5 w-full rounded-lg border bg-gradient-to-r p-4 shadow-lg"
+		class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation mb-5 w-full rounded-lg border bg-gradient-to-r p-4 shadow-lg"
 	>
-		<h6 class="text-primary mb-6 font-semibold">Contact Support</h6>
-		<p class="text-gray5 mb-6 px-6 text-center text-sm">
+		<h6 class="text-primary dark:text-secondary mb-6 font-semibold">Contact Support</h6>
+		<p class="text-gray5 dark:text-gray3 mb-6 px-6 text-center text-sm">
 			Do you need any help with your Capsule experience ? If you face any technical difficulties, you can contact the
 			team on Discord, or directly send us an email:
 		</p>
@@ -11,7 +11,7 @@
 			<a href="https://discord.gg/sZWjf3E6bY" target="_blank">
 				<button
 					style="padding: 0.8rem 1.7rem; background-color: #7289da"
-					class="focus:outline-none flex transform items-center justify-between rounded-lg font-bold transition duration-500 ease-in-out hover:shadow-lg"
+					class="focus:outline-none flex transform items-center justify-between rounded-lg font-bold transition duration-500 ease-in-out hover:shadow-xl"
 				>
 					<DiscordIcon class="icon text-lightOnPrimaryText h-6 w-6 fill-current" />
 					<span class="text-lightOnPrimaryText ml-2 font-sans" style="font-size: 0.95rem"> Join Discord </span>
@@ -20,7 +20,7 @@
 			<a href="mailto:support@capsule.social" target="_blank">
 				<button
 					style="padding: 0.8rem 1.7rem"
-					class="focus:outline-none border-lightBorder flex transform items-center justify-between rounded-lg font-bold shadow-lg transition duration-500 ease-in-out hover:shadow-lg"
+					class="focus:outline-none bg-lightBG border-lightBorder flex transform items-center justify-between rounded-lg font-bold shadow-lg transition duration-500 ease-in-out hover:shadow-xl"
 				>
 					<MailIcon class="icon h-5 w-5 fill-current" />
 					<span class="text-lightPrimaryText ml-2 font-sans" style="font-size: 0.95rem"> Send Email </span>

@@ -16,7 +16,7 @@
 					<section class="relative flex flex-row">
 						<nuxt-child
 							style="backdrop-filter: blur(10px); min-height: calc(100vh - 60px); height: calc(100vh - 60px)"
-							class="xl:w-750 from-lightBGStart to-lightBGStop border-lightBorder modal-animation fixed mr-5 box-border w-full overflow-y-auto rounded-lg border bg-gradient-to-r shadow-lg"
+							class="xl:w-750 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation fixed mr-5 box-border w-full overflow-y-auto rounded-lg border bg-gradient-to-r shadow-lg"
 							:class="showWidgets ? `` : `z-10`"
 						/>
 						<!-- Widgets -->
