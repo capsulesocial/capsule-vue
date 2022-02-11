@@ -68,26 +68,12 @@ import InfoIcon from '@/components/icons/Info.vue'
 import { torusVerifiers, TorusVerifiers } from '@/backend/utilities/config'
 import { getAccountIdFromPrivateKey } from '@/backend/auth'
 import { walletLogin, generateAndSetKey } from '@/backend/near'
-import { verifyTokenAndOnboard } from '@/backend/invite'
+import { INearWallet, ITorusWallet } from '@/backend/utilities/helpers'
 
 interface IData {
 	torus: DirectWebSdk
 	isLoading: boolean
 	dark: boolean
-}
-
-interface IWalletStatus {
-	type: `torus` | `near`
-	accountId: string
-}
-
-interface ITorusWallet extends IWalletStatus {
-	type: `torus`
-	userInfo: TorusLoginResponse
-}
-
-interface INearWallet extends IWalletStatus {
-	type: `near`
 }
 
 export default Vue.extend({
@@ -126,6 +112,7 @@ export default Vue.extend({
 					type: `torus`,
 					accountId,
 					userInfo: info,
+					privateKey: info.privateKey,
 				}
 				this.$emit(`updateUserInfo`, userInfo)
 				// If no username is found then register...
@@ -139,15 +126,17 @@ export default Vue.extend({
 		async walletLoginComponent() {
 			await walletLogin()
 		},
-		async implicitAccountCreate() {
-			const accountId = await generateAndSetKey()
-			await verifyTokenAndOnboard(accountId)
+		implicitAccountCreate() {
+			this.isLoading = true
+			const { accountId, privateKey } = generateAndSetKey()
 			const userInfo: INearWallet = {
 				type: `near`,
 				accountId,
+				privateKey,
 			}
 			this.$emit(`updateUserInfo`, userInfo)
 			this.$emit(`stepForward`)
+			this.isLoading = false
 		},
 	},
 })

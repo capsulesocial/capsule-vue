@@ -182,13 +182,15 @@ export async function setNearPrivateKey(privateKey: Uint8Array, accountId: strin
 	return true
 }
 
-export async function generateAndSetKey() {
+export function generateAndSetKey() {
 	const keyRandom = KeyPairEd25519.fromRandom()
 	const accountId = uint8ArrayToHexString(keyRandom.publicKey.data)
 
 	const sk = new Uint8Array(baseDecode(keyRandom.secretKey))
-	await setNearPrivateKey(sk, accountId)
-	return accountId
+	const encodedPrivateKey = baseEncode(sk)
+	const keypair = new KeyPairEd25519(encodedPrivateKey)
+	// await setNearPrivateKey(sk, accountId)
+	return { accountId, privateKey: keypair.secretKey }
 }
 
 export async function removeNearPrivateKey(nearAccountId?: string | null) {

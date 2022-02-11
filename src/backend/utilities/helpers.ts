@@ -103,11 +103,11 @@ export function getInviteToken(): string | null {
 	}
 }
 
-export interface IWalletStatus {
+interface IWalletStatus {
 	type: `torus` | `near`
 	accountId: string
+	privateKey: string
 }
-
 export interface ITorusWallet extends IWalletStatus {
 	type: `torus`
 	userInfo: TorusLoginResponse

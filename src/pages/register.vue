@@ -66,7 +66,13 @@ import ogImage from '@/assets/images/util/ogImage.png'
 
 import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
 
-import { getWalletConnection, removeNearPrivateKey, signedInToWallet, walletLogout } from '@/backend/near'
+import {
+	getNearPrivateKey,
+	getWalletConnection,
+	removeNearPrivateKey,
+	signedInToWallet,
+	walletLogout,
+} from '@/backend/near'
 import { ValidationError } from '@/errors'
 import { getInviteToken, INearWallet, ITorusWallet } from '@/backend/utilities/helpers'
 
@@ -136,7 +142,7 @@ export default Vue.extend({
 		walletLogout()
 		return false
 	},
-	created() {
+	async created() {
 		const nearWallet = signedInToWallet()
 		if (nearWallet) {
 			const walletConnection = getWalletConnection()
@@ -144,9 +150,14 @@ export default Vue.extend({
 			if (!accountId) {
 				throw new Error(`Wallet without accountId!`)
 			}
+			const privateKey = await getNearPrivateKey(accountId)
+			if (!privateKey) {
+				throw new Error(`Wallet without private key!`)
+			}
 			this.userInfo = {
 				type: `near`,
 				accountId,
+				privateKey,
 			}
 		}
 		this.isLoading = false

@@ -118,10 +118,10 @@ export default Vue.extend({
 			if (this.username) {
 				// Login
 				if (this.userInfo.type === `torus`) {
-					res = await login(this.username, this.userInfo.userInfo.privateKey)
+					res = await login(this.username, this.userInfo.privateKey)
+				} else {
+					throw new ValidationError(`Can't use wallet for login, please upload your private key`)
 				}
-
-				throw new ValidationError(`Can't use wallet for login, please upload your private key`)
 			} else {
 				// Register
 				const lowerID = id.toLowerCase()
