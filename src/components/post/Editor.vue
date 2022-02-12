@@ -78,7 +78,7 @@ import DOMPurify from 'dompurify'
 import Turndown from 'turndown'
 // @ts-ignore
 import { strikethrough } from 'turndown-plugin-gfm'
-import Quill from 'quill'
+import Quill, { RangeStatic } from 'quill'
 // @ts-ignore
 import QuillMarkdown from 'quilljs-markdown'
 import XIcon from '@/components/icons/X.vue'
@@ -280,50 +280,41 @@ export default Vue.extend({
 			const contentLength = this.qeditor.getContents().length()
 			setTimeout(() => this.qeditor?.setSelection(contentLength, 0, `user`), 0)
 		},
+		getContentImages(content: string) {
+			const imgTagRegex = /<img [^>]*>/g
+			const contentImgs = Array.from(content.matchAll(imgTagRegex))
+			return contentImgs
+		},
 		async handleDroppedImage(e: DragEvent) {
 			e.stopPropagation()
 			e.preventDefault()
 			if (!e.dataTransfer) {
 				return
 			}
+			const draggedContent = e.dataTransfer.getData(`text/html`)
 			const { files } = e.dataTransfer
-			if (files.length !== 1) {
-				this.$toastError(`Can not drop more than 1 image at a time`)
+			const file = files[0]
+			if (!file) {
+				await this.handleHtml(draggedContent)
 				return
 			}
-			const file = files[0]
 			const fileType = /^image\/(jpeg|jpg|png)$/
 			if (!fileType.test(file.type)) {
+				this.$toastError(`image of type ${file.type} is invalid`)
 				return
 			}
 			const { cid, url, image, imageName } = await uploadPhoto(file)
 			await this.updatePostImages(cid, image, imageName)
 			this.insertContent({ cid, url })
 		},
-		async handlePastedContent(e: ClipboardEvent) {
-			e.stopPropagation()
-			e.preventDefault()
-
-			if (!this.qeditor) {
-				return
-			}
-			if (!e.clipboardData) {
-				return
-			}
-			const clipboard = e.clipboardData
-			let content = this.sanitize(clipboard.getData(`text/html`))
-			const imgTagRegex = /<img [^>]*>/g
+		handleCutPaste(range: RangeStatic, pastedText: string) {
+			const delta = new Delta().compose(new Delta().retain(range.index + range.length).insert(pastedText))
+			this.qeditor?.updateContents(delta)
+			setTimeout(() => this.qeditor?.setSelection(range.index + pastedText.length, 0, `user`), 0)
+		},
+		async handleHtml(pastedContent: string) {
+			const contentImgs = this.getContentImages(pastedContent)
 			const imgSrcRegex = /src="([^\s|"]*)"/
-			const contentImgs = Array.from(content.matchAll(imgTagRegex))
-			const range = this.qeditor.getSelection(true)
-
-			if (this.qeditor.getLength() !== range.index + 1 && contentImgs.length === 0) {
-				const text = this.sanitize(clipboard.getData(`text/plain`))
-				const delta = new Delta().compose(new Delta().retain(range.index + range.length).insert(text))
-				this.qeditor.updateContents(delta)
-				setTimeout(() => this.qeditor?.setSelection(range.index + text.length, 0, `user`), 0)
-				return
-			}
 			for (const img of contentImgs) {
 				const imgSrc = imgSrcRegex.exec(img[0])
 				if (!imgSrc) {
@@ -340,9 +331,46 @@ export default Vue.extend({
 				const file = new File([blob], `image${Date.now()}${blobExtension}`, { type: blob.type })
 				const { cid, url, image, imageName } = await uploadPhoto(file)
 				await this.updatePostImages(cid, image, imageName)
-				content = content.replace(img[0], `<img alt="${cid}" src="${url}">`)
+				pastedContent = pastedContent.replace(img[0], `<img alt="${cid}" src="${url}">`)
 			}
-			this.insertContent(content)
+			this.insertContent(pastedContent)
+		},
+		async handlePastedContent(e: ClipboardEvent) {
+			e.stopPropagation()
+			e.preventDefault()
+
+			if (!this.qeditor) {
+				return
+			}
+			if (!e.clipboardData) {
+				return
+			}
+			const clipboard = e.clipboardData
+			const items = Array.from(clipboard.items)
+			const pastedContent = this.sanitize(clipboard.getData(`text/html`))
+			const pastedText = this.sanitize(clipboard.getData(`text/plain`))
+			const pastedFile = items[0].getAsFile()
+			const contentImgs = this.getContentImages(pastedContent)
+			const range = this.qeditor.getSelection(true)
+
+			// handle cut and paste
+			if (this.qeditor.getLength() !== range.index + 1 && contentImgs.length === 0) {
+				this.handleCutPaste(range, pastedText)
+				return
+			}
+
+			// handle pasted content
+			if (pastedContent) {
+				await this.handleHtml(pastedContent)
+				return
+			}
+
+			// handle pasted file
+			if (pastedFile) {
+				const { cid, url, image, imageName } = await uploadPhoto(pastedFile)
+				await this.updatePostImages(cid, image, imageName)
+				this.insertContent({ cid, url })
+			}
 		},
 		async handleImage(e: Event) {
 			e.stopPropagation()
