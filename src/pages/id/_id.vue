@@ -20,7 +20,7 @@
 					</button>
 					<div
 						id="small"
-						class="header-profile flex w-full flex-row items-center justify-between opacity0"
+						class="header-profile flex w-full flex-row items-center justify-between z-40 opacity0"
 						:class="$route.params.id === $store.state.session.id ? `` : `ml-6`"
 					>
 						<div class="flex flex-row items-center">
@@ -147,7 +147,11 @@
 				id="scrollContainer"
 				ref="scrollContainer"
 				class="xl:w-748 fixed w-full overflow-y-auto"
-				:style="`min-height: calc(100vh - ` + padding + ` - 90px); height: calc(100vh - ` + padding + ` - 90px)`"
+				:style="
+					!scrollingDown
+						? `min-height: calc(100vh - ` + `290px` + `); height: calc(100vh - ` + `290px` + `)`
+						: `min-height: calc(100vh - ` + `150px` + `); height: calc(100vh - ` + `150px` + `)`
+				"
 			>
 				<nuxt-child
 					:profile="visitProfile"
@@ -293,6 +297,7 @@ export default Vue.extend({
 	mounted() {
 		const topContainer = this.$refs.topContainer as HTMLElement
 		this.padding = topContainer.clientHeight + `px`
+		this.scrollingDown = false
 		const container = document.getElementById(`scrollContainer`)
 		if (container) {
 			container.addEventListener(`scroll`, this.handleScrollHeader)
@@ -389,7 +394,7 @@ export default Vue.extend({
 				return
 			}
 			const currentScroll = body.scrollTop
-			if (body.scrollTop <= 0) {
+			if (body.scrollTop <= 0 && !this.scrollingDown) {
 				console.log(`top`)
 				header.classList.remove(scrollUp)
 				buttons.classList.remove(opacity0)
