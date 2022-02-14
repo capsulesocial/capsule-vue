@@ -12,13 +12,13 @@
 				class="text-primary dark:text-secondary focus:outline-none flex flex-row items-center"
 				@click="toggleBGSelector"
 			>
-				<p class="mr-4">
+				<!-- <p class="mr-4">
 					{{
 						$store.state.backgroundImage
 							.substring($store.state.backgroundImage.lastIndexOf('/') + 1)
 							.replace(`.webp`, '')
 					}}
-				</p>
+				</p> -->
 				<img
 					:src="$store.state.backgroundImage"
 					class="h-20 w-32 rounded-lg bg-lightBG dark:bg-darkBG border border-lightBorder"

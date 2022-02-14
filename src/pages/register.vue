@@ -1,7 +1,7 @@
 <template>
 	<main
 		style="backdrop-filter: blur(10px)"
-		class="from-lightBGStart to-lightBGStop h-screen w-full flex-col justify-between overflow-y-scroll bg-gradient-to-r xl:w-3/5"
+		class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop h-screen w-full flex-col justify-between overflow-y-scroll bg-gradient-to-r xl:w-3/5"
 	>
 		<CapsuleIcon class="pt-6 pl-10" />
 		<section class="flex items-center justify-center max-h-90" style="height: 86%">
@@ -56,10 +56,10 @@
 				<DownloadKey v-if="downloadKeyStep" :aid="id" :accountId="accountId" class="w-full xl:w-1/2" />
 			</div>
 		</section>
-		<p class="text-gray5 px-4 pl-10 text-sm">© {{ currentYear }} Capsule Social, Inc.</p>
+		<p class="text-gray5 dark:text-gray3 px-4 pl-10 text-sm">© {{ currentYear }} Capsule Social, Inc.</p>
 		<div
 			v-if="showInfos"
-			class="popup bg-primary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50"
+			class="popup bg-primary dark:bg-secondary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
 		>
 			<InfosPopup @close="showInfos = false" />
 		</div>

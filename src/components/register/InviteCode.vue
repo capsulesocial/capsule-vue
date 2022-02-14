@@ -1,8 +1,8 @@
 <template>
 	<!-- Step 0: Code redeem -->
 	<article>
-		<h1 class="text-primary mb-5 font-semibold xl:mb-10" style="font-size: 2.6rem">Welcome</h1>
-		<p class="text-gray7 mt-5 text-center text-sm xl:mt-10 xl:text-base">
+		<h1 class="text-primary dark:text-secondary mb-5 font-semibold xl:mb-10" style="font-size: 2.6rem">Welcome</h1>
+		<p class="text-gray7 dark:text-gray3 mt-5 text-center text-sm xl:mt-10 xl:text-base">
 			Blogchain is a place for writers to do great work and for readers to discover it. For now, during our beta
 			release, we are offering access to Blogchain on an invitation-only basis. We believe this is the best way to seed
 			a vibrant community that will grow over time.
@@ -33,16 +33,16 @@
 				/>
 			</div>
 		</div>
-		<p class="text-gray7 mt-6 text-center text-sm">
+		<p class="text-gray7 dark:text-gray3 mt-6 text-center text-sm">
 			Already have an account?
-			<nuxt-link to="/login" class="text-primary text-center font-bold">Log in</nuxt-link>
+			<nuxt-link to="/login" class="text-primary dark:text-secondary text-center font-bold">Log in</nuxt-link>
 		</p>
-		<p class="text-gray7 mt-10 text-center text-sm">
+		<p class="text-gray7 dark:text-gray3 mt-10 text-center text-sm">
 			Don’t have an invite yet? Request one
 			<a
 				href="https://forms.zohopublic.com/peter96/form/BlogchainInviteRequests/formperma/7xCuELT6HdgR08w13-Nt8WFx9SmsnZh1YFL9mcP_oCc"
 				target="_blank"
-				class="text-primary font-semibold"
+				class="text-primary dark:text-secondary font-semibold"
 				>here.</a
 			>
 			You can also join our community on Discord, or follow our company blog to receive future updates.
