@@ -9,12 +9,20 @@
 				style="backdrop-filter: blur(10px)"
 			>
 				<!-- Back button -->
-				<div v-if="$route.params.id !== $store.state.session.id" class="flex flex-row items-center pb-4">
-					<button class="focus:outline-none flex flex-row items-center" @click="$router.go(-1)">
+				<div class="flex flex-row items-center pb-4">
+					<button
+						v-if="$route.params.id !== $store.state.session.id"
+						class="focus:outline-none flex flex-row items-center"
+						@click="$router.go(-1)"
+					>
 						<span class="bg-gray1 rounded-full p-1"><BackButton :reduceSize="true" /></span>
 						<h6 class="ml-2 font-sans font-semibold">Back</h6>
 					</button>
-					<div id="small" class="header-profile ml-6 flex w-full flex-row items-center justify-between opacity-0">
+					<div
+						id="small"
+						class="header-profile flex w-full flex-row items-center justify-between opacity0"
+						:class="$route.params.id === $store.state.session.id ? `` : `ml-6`"
+					>
 						<div class="flex flex-row items-center">
 							<Avatar
 								:avatar="visitAvatar"
@@ -43,7 +51,11 @@
 				</div>
 				<!-- Name, socials, follow, bio -->
 				<div class="flex flex-row justify-between">
-					<div id="infos" class="header-profile flex items-center">
+					<div
+						id="infos"
+						class="header-profile flex items-center"
+						:class="$route.params.id === $store.state.session.id ? `-mt-12` : ``"
+					>
 						<Avatar
 							:avatar="visitAvatar"
 							:authorID="$route.params.id"
@@ -90,7 +102,11 @@
 						</div>
 					</div>
 					<!-- Profile buttons -->
-					<div id="buttons" class="header-profile h-fit flex items-center xl:h-auto">
+					<div
+						id="buttons"
+						class="header-profile h-fit flex items-center xl:h-auto"
+						:class="$route.params.id === $store.state.session.id ? `-mt-12` : ``"
+					>
 						<!-- Edit profile button -->
 						<span v-if="$store.state.session.id === $route.params.id">
 							<button class="bg-secondary focus:outline-none block rounded-lg xl:hidden" @click="toggleSettings">
@@ -345,28 +361,36 @@ export default Vue.extend({
 			const opacity1 = `opacity1`
 			const opacity0 = `opacity0`
 			if (!body) {
+				console.log(`noBody`)
 				return
 			}
 			if (!buttons) {
+				console.log(`noButtons`)
 				return
 			}
 			if (!infos) {
+				console.log(`noInfos`)
 				return
 			}
 			if (!header) {
+				console.log(`noHeader`)
 				return
 			}
 			if (!tabs) {
+				console.log(`noTabs`)
 				return
 			}
 			if (!bio) {
+				console.log(`noBio`)
 				return
 			}
 			if (!small) {
+				console.log(`noSmall`)
 				return
 			}
 			const currentScroll = body.scrollTop
 			if (body.scrollTop <= 0) {
+				console.log(`top`)
 				header.classList.remove(scrollUp)
 				buttons.classList.remove(opacity0)
 				infos.classList.remove(opacity0)
@@ -377,6 +401,7 @@ export default Vue.extend({
 			}
 			if (currentScroll > this.lastScroll && !header.classList.contains(scrollDown)) {
 				// down
+				console.log(`down`)
 				this.scrollingDown = true
 				header.classList.remove(scrollUp)
 				header.classList.add(scrollDown)
@@ -390,8 +415,13 @@ export default Vue.extend({
 				bio.classList.remove(opacity1)
 				small.classList.add(opacity1)
 				small.classList.remove(opacity0)
-			} else if (currentScroll < this.lastScroll && header.classList.contains(scrollDown)) {
+			} else if (
+				currentScroll < this.lastScroll &&
+				header.classList.contains(scrollDown) &&
+				body.scrollTop + body.clientHeight !== body.scrollHeight
+			) {
 				// up
+				console.log(`up`)
 				this.scrollingDown = false
 				header.classList.remove(scrollDown)
 				header.classList.add(scrollUp)
@@ -407,6 +437,13 @@ export default Vue.extend({
 				small.classList.add(opacity0)
 			}
 			this.lastScroll = currentScroll
+			// Reached bottom, fetch more posts
+			if (body.scrollTop + body.clientHeight === body.scrollHeight) {
+				console.log(`bottom`)
+				// header.classList.add(scrollDown)
+				// small.classList.remove(opacity0)
+				// small.classList.add(opacity1)
+			}
 		},
 		async fetchProfile() {
 			if (this.$route.params.id === null) {

@@ -148,7 +148,7 @@ export default Vue.extend({
 			])
 			this.$emit(`updateUsername`, username)
 			if (username) {
-				this.$toastError(`You cannot login with implicit account, please import your private key`)
+				this.$toastError(`You cannot login with implicit account, please import your Capsule private key`)
 				removeNearPrivateKey(accountId)
 			}
 			this.$emit(`setNearWallet`)

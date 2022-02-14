@@ -51,7 +51,10 @@
 								>
 									Reply
 								</button>
-								<p class="text-gray5 focus:outline-none text-left font-sans text-sm ml-4">
+								<p
+									class="text-gray5 focus:outline-none text-left font-sans text-sm ml-4 cursor-pointer"
+									@click="isReplying = !isReplying"
+								>
 									{{ replies.length }} Replies
 								</p>
 							</div>

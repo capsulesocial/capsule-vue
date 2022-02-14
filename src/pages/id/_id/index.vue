@@ -116,7 +116,7 @@ export default Vue.extend({
 				container.removeEventListener(`scroll`, this.handleScroll)
 			}
 			this.currentOffset += this.limit
-			if (posts.length === 0 && this.currentOffset > 10) {
+			if (posts.length > 0 && this.currentOffset >= 10) {
 				this.noMorePosts = true
 			}
 			this.isLoading = false
