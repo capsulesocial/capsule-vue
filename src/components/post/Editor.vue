@@ -78,16 +78,18 @@ import DOMPurify from 'dompurify'
 import Turndown from 'turndown'
 // @ts-ignore
 import { strikethrough } from 'turndown-plugin-gfm'
-import Quill from 'quill'
+import Quill, { RangeStatic } from 'quill'
 // @ts-ignore
 import QuillMarkdown from 'quilljs-markdown'
-import imageCompression from 'browser-image-compression'
 import XIcon from '@/components/icons/X.vue'
 import PencilIcon from '@/components/icons/Pencil.vue'
 import AddContent from '@/components/post/EditorActions.vue'
 import { ImageBlot, preRule, ipfsImageRule, createPostImagesArray } from '@/pages/post/editorExtensions'
 import { createRegularPost, sendRegularPost } from '@/backend/post'
-import { addPhotoToIPFS, preUploadPhoto } from '@/backend/photos'
+import { preUploadPhoto, uploadPhoto } from '@/backend/photos'
+import { isValidFileType } from '@/backend/utilities/helpers'
+
+const Delta = Quill.import(`delta`)
 
 interface IData {
 	title: string
@@ -106,6 +108,11 @@ interface IData {
 	toggleAddContent: boolean
 	addContentPosTop: number
 	addContentPosLeft: number
+}
+
+interface IImageData {
+	cid: string
+	url: string | ArrayBuffer
 }
 
 const toolbarOptions = [
@@ -226,6 +233,9 @@ export default Vue.extend({
 			this.qeditor.root.addEventListener(`drop`, (ev: DragEvent) => {
 				this.handleDroppedImage(ev)
 			})
+			this.qeditor.root.addEventListener(`paste`, (ev: ClipboardEvent) => {
+				this.handlePastedContent(ev)
+			})
 			this.qeditor.focus()
 			// Set link placeholder
 			const qe: HTMLElement | null = document.querySelector(`.ql-tooltip-editor input`)
@@ -247,25 +257,155 @@ export default Vue.extend({
 		actionsUpload() {
 			document.getElementById(`getFile`)?.click()
 		},
-		handleDroppedImage(e: DragEvent) {
+		async updatePostImages(cid: string, compressedImage: Blob, imageName: string) {
+			// If we have already added this image in the past, we don't need to reupload it to the server
+			if (this.postImages.has(cid)) {
+				return
+			}
+			this.postImages.add(cid)
+			this.$store.commit(`draft/updatePostImages`, Array.from(this.postImages))
+			await preUploadPhoto(cid, compressedImage, imageName, this.$store.state.session.id)
+		},
+		insertContent(content: string | IImageData) {
+			try {
+				if (!this.qeditor) {
+					return
+				}
+				const range = this.qeditor.getSelection(true)
+				if (typeof content === `string`) {
+					this.qeditor.clipboard.dangerouslyPasteHTML(range.index, content, `user`)
+				} else {
+					const { cid, url } = content
+					this.qeditor.insertEmbed(range.index, `image`, { alt: cid.toString(), url }, `user`)
+				}
+				const contentLength = this.qeditor.getContents().length()
+				setTimeout(() => this.qeditor?.setSelection(contentLength, 0, `user`), 0)
+			} catch (error: any) {
+				this.$toastError(error.message)
+			}
+		},
+		async handleDroppedImage(e: DragEvent) {
 			e.stopPropagation()
 			e.preventDefault()
 			if (!e.dataTransfer) {
 				return
 			}
+			const droppedHtml = e.dataTransfer.getData(`text/html`)
+			const droppedText = e.dataTransfer.getData(`text/plain`)
 			const { files } = e.dataTransfer
-			if (files.length !== 1) {
-				this.$toastError(`Can not drop more than 1 image at a time`)
-				return
-			}
 			const file = files[0]
-			const fileType = /^image\/(jpeg|jpg|png)$/
-			if (!fileType.test(file.type)) {
+
+			// handle dropped file
+			if (file) {
+				if (!isValidFileType(file.type)) {
+					this.$toastError(`image of type ${file.type} is invalid`)
+					return
+				}
+				const { cid, url, image, imageName } = await uploadPhoto(file)
+				await this.updatePostImages(cid, image, imageName)
+				this.insertContent({ cid, url })
 				return
 			}
-			this.uploadPhoto(file)
+
+			if (!file && droppedHtml) {
+				const content = await this.handleHtml(droppedHtml)
+				this.insertContent(content)
+				return
+			}
+
+			if (!file && !droppedHtml) {
+				const f = await this.$urlToFile(droppedText)
+				if (this.$isError(f)) {
+					this.$toastError(f.error)
+					return
+				}
+				const { cid, url, image, imageName } = await uploadPhoto(f.file)
+				await this.updatePostImages(cid, image, imageName)
+				this.insertContent({ cid, url })
+			}
 		},
-		handleImage(e: Event) {
+		handleCutPaste(range: RangeStatic, pastedText: string) {
+			const delta = new Delta().compose(new Delta().retain(range.index + range.length).insert(pastedText))
+			this.qeditor?.updateContents(delta)
+			setTimeout(() => this.qeditor?.setSelection(range.index + pastedText.length, 0, `user`), 0)
+		},
+		async handleHtml(pastedContent: string) {
+			const contentImgs = this.$getContentImages(pastedContent)
+			const imgSrcRegex = /src="([^\s|"]*)"/
+			for (const img of contentImgs) {
+				const imgSrc = imgSrcRegex.exec(img[0])
+				if (!imgSrc) {
+					continue
+				}
+				const src = imgSrc[1]
+				const f = await this.$urlToFile(src)
+				if (this.$isError(f)) {
+					this.$toastError(f.error)
+					continue
+				}
+				const { cid, url, image, imageName } = await uploadPhoto(f.file)
+				await this.updatePostImages(cid, image, imageName)
+				pastedContent = pastedContent.replace(img[0], `<img alt="${cid}" src="${url}">`)
+			}
+			return pastedContent
+		},
+		async handlePastedContent(e: ClipboardEvent) {
+			e.stopPropagation()
+			e.preventDefault()
+
+			if (!this.qeditor) {
+				this.$toastError(`Something went wrong while pasting the content`)
+				return
+			}
+			if (!e.clipboardData) {
+				return
+			}
+			const clipboard = e.clipboardData
+			const items = Array.from(clipboard.items)
+			const pastedContent = this.sanitize(clipboard.getData(`text/html`))
+			const pastedText = this.sanitize(clipboard.getData(`text/plain`))
+			const pastedFile = items[0].getAsFile()
+			const contentImgs = this.$getContentImages(pastedContent)
+			const range = this.qeditor.getSelection(true)
+
+			// handle cut and paste
+			if (this.qeditor.getLength() !== range.index + 1 && contentImgs.length === 0) {
+				this.handleCutPaste(range, pastedText)
+				return
+			}
+
+			// handle pasted content
+			if (pastedContent) {
+				const content = await this.handleHtml(pastedContent)
+				this.insertContent(content)
+				return
+			}
+
+			// handle pasted file
+			if (pastedFile) {
+				if (!isValidFileType(pastedFile.type)) {
+					this.$toastError(`image of type ${pastedFile.type} is invalid`)
+					return
+				}
+				const { cid, url, image, imageName } = await uploadPhoto(pastedFile)
+				await this.updatePostImages(cid, image, imageName)
+				this.insertContent({ cid, url })
+				return
+			}
+
+			// handle if text only
+			if (!pastedFile && (!pastedContent || pastedContent === ``)) {
+				const f = await this.$urlToFile(pastedText)
+				if (this.$isError(f)) {
+					this.$toastError(f.error)
+					return
+				}
+				const { cid, url, image, imageName } = await uploadPhoto(f.file)
+				await this.updatePostImages(cid, image, imageName)
+				this.insertContent({ cid, url })
+			}
+		},
+		async handleImage(e: Event) {
 			e.stopPropagation()
 			e.preventDefault()
 
@@ -276,7 +416,9 @@ export default Vue.extend({
 			if (files.length !== 1) {
 				return
 			}
-			this.uploadPhoto(files[0])
+			const { cid, url, image, imageName } = await uploadPhoto(files[0])
+			await this.updatePostImages(cid, image, imageName)
+			this.insertContent({ cid, url })
 		},
 		calculateAddPos(index: number) {
 			if (!this.qeditor) {
@@ -320,42 +462,6 @@ export default Vue.extend({
 			const input = this.getInputHTML()
 			if (input !== ``) {
 				this.$store.commit(`draft/updateContent`, input)
-			}
-		},
-		async uploadPhoto(image: File) {
-			try {
-				const compressedImage = await imageCompression(image, {
-					maxSizeMB: 5,
-					maxWidthOrHeight: 1920,
-					useWebWorker: true,
-					initialQuality: 0.9,
-				})
-				const reader = new FileReader()
-				reader.readAsDataURL(compressedImage)
-				reader.onload = async (i) => {
-					if (i.target !== null) {
-						const cid = await addPhotoToIPFS(i.target.result as any)
-						// If we have already added this image in the past, we don't need to reupload it to the server
-						if (!this.postImages.has(cid)) {
-							this.postImages.add(cid)
-							this.$store.commit(`draft/updatePostImages`, Array.from(this.postImages))
-							await preUploadPhoto(cid, compressedImage, image.name, this.$store.state.session.id)
-						}
-						if (!this.qeditor) {
-							return
-						}
-						const range = this.qeditor.getSelection(true)
-						await this.qeditor.insertEmbed(
-							range.index,
-							`image`,
-							{ alt: cid.toString(), url: i.target.result, ipfsimage: `true` },
-							`user`,
-						)
-						this.qeditor.setSelection(range.index + 1, 0)
-					}
-				}
-			} catch (err) {
-				this.$toastError(`error`)
 			}
 		},
 		async saveContent(): Promise<void> {
