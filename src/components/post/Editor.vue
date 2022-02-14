@@ -231,9 +231,11 @@ export default Vue.extend({
 			const editor = new Quill(`#editor`, options)
 			this.qeditor = editor
 			this.qeditor.root.addEventListener(`drop`, (ev: DragEvent) => {
+				console.log(`dropped`)
 				this.handleDroppedImage(ev)
 			})
 			this.qeditor.root.addEventListener(`paste`, (ev: ClipboardEvent) => {
+				console.log(`pasted`)
 				this.handlePastedContent(ev)
 			})
 			this.qeditor.focus()
@@ -267,23 +269,44 @@ export default Vue.extend({
 			await preUploadPhoto(cid, compressedImage, imageName, this.$store.state.session.id)
 		},
 		insertContent(content: string | IImageData) {
-			if (!this.qeditor) {
-				return
+			try {
+				if (!this.qeditor) {
+					return
+				}
+				const range = this.qeditor.getSelection(true)
+				if (typeof content === `string`) {
+					this.qeditor.clipboard.dangerouslyPasteHTML(range.index, content, `user`)
+				} else {
+					const { cid, url } = content
+					this.qeditor.insertEmbed(range.index, `image`, { alt: cid.toString(), url }, `user`)
+				}
+				const contentLength = this.qeditor.getContents().length()
+				setTimeout(() => this.qeditor?.setSelection(contentLength, 0, `user`), 0)
+			} catch (error: any) {
+				this.$toastError(error.message)
 			}
-			const range = this.qeditor.getSelection(true)
-			if (typeof content === `string`) {
-				this.qeditor.clipboard.dangerouslyPasteHTML(range.index, content, `user`)
-			} else {
-				const { cid, url } = content
-				this.qeditor.insertEmbed(range.index, `image`, { alt: cid.toString(), url }, `user`)
-			}
-			const contentLength = this.qeditor.getContents().length()
-			setTimeout(() => this.qeditor?.setSelection(contentLength, 0, `user`), 0)
 		},
 		getContentImages(content: string) {
 			const imgTagRegex = /<img [^>]*>/g
 			const contentImgs = Array.from(content.matchAll(imgTagRegex))
 			return contentImgs
+		},
+		async urlToFile(url: string): Promise<{ file: File } | { error: string }> {
+			try {
+				const response = await fetch(url, { mode: `cors` })
+				if (!response.ok) {
+					return { error: `Could not fetch image` }
+				}
+				const blob = await response.blob()
+				const blobExtension = getBlobExtension(blob)
+				if (!blobExtension) {
+					return { error: `Invalid image type` }
+				}
+				const file = new File([blob], `image${Date.now()}${blobExtension}`, { type: blob.type })
+				return { file }
+			} catch (error: any) {
+				return { error: error.message }
+			}
 		},
 		async handleDroppedImage(e: DragEvent) {
 			e.stopPropagation()
@@ -291,21 +314,42 @@ export default Vue.extend({
 			if (!e.dataTransfer) {
 				return
 			}
-			const draggedContent = e.dataTransfer.getData(`text/html`)
+			const droppedHtml = e.dataTransfer.getData(`text/html`)
+			const droppedText = e.dataTransfer.getData(`text/plain`)
 			const { files } = e.dataTransfer
 			const file = files[0]
-			if (!file) {
-				await this.handleHtml(draggedContent)
+
+			// handle dropped file
+			if (file) {
+				const fileType = /^image\/(jpeg|jpg|png)$/
+				if (!fileType.test(file.type)) {
+					this.$toastError(`image of type ${file.type} is invalid`)
+					return
+				}
+				const { cid, url, image, imageName } = await uploadPhoto(file)
+				await this.updatePostImages(cid, image, imageName)
+				this.insertContent({ cid, url })
+				console.log(`dropped file: ${file}`)
 				return
 			}
-			const fileType = /^image\/(jpeg|jpg|png)$/
-			if (!fileType.test(file.type)) {
-				this.$toastError(`image of type ${file.type} is invalid`)
+
+			if (!file && droppedHtml) {
+				await this.handleHtml(droppedHtml)
+				console.log(`dropped html: ${droppedHtml}`)
 				return
 			}
-			const { cid, url, image, imageName } = await uploadPhoto(file)
-			await this.updatePostImages(cid, image, imageName)
-			this.insertContent({ cid, url })
+
+			if (!file && !droppedHtml) {
+				const f = await this.urlToFile(droppedText)
+				if (this.$isError(f)) {
+					this.$toastError(f.error)
+					return
+				}
+				const { cid, url, image, imageName } = await uploadPhoto(f.file)
+				await this.updatePostImages(cid, image, imageName)
+				this.insertContent({ cid, url })
+				console.log(`droppedText: ${droppedText}`)
+			}
 		},
 		handleCutPaste(range: RangeStatic, pastedText: string) {
 			const delta = new Delta().compose(new Delta().retain(range.index + range.length).insert(pastedText))
@@ -321,15 +365,12 @@ export default Vue.extend({
 					continue
 				}
 				const src = imgSrc[1]
-				const response = await fetch(src)
-				const blob = await response.blob()
-				const blobExtension = getBlobExtension(blob)
-				if (!blobExtension) {
-					this.$toastError(`Invalid image type`)
+				const file = await this.urlToFile(src)
+				if (this.$isError(file)) {
+					this.$toastError(file.error)
 					continue
 				}
-				const file = new File([blob], `image${Date.now()}${blobExtension}`, { type: blob.type })
-				const { cid, url, image, imageName } = await uploadPhoto(file)
+				const { cid, url, image, imageName } = await uploadPhoto(file.file)
 				await this.updatePostImages(cid, image, imageName)
 				pastedContent = pastedContent.replace(img[0], `<img alt="${cid}" src="${url}">`)
 			}
@@ -362,6 +403,7 @@ export default Vue.extend({
 			// handle pasted content
 			if (pastedContent) {
 				await this.handleHtml(pastedContent)
+				console.log(`pasted content: ${pastedContent}`)
 				return
 			}
 
@@ -370,6 +412,21 @@ export default Vue.extend({
 				const { cid, url, image, imageName } = await uploadPhoto(pastedFile)
 				await this.updatePostImages(cid, image, imageName)
 				this.insertContent({ cid, url })
+				console.log(`pasted file: ${pastedFile}`)
+				return
+			}
+
+			// handle if text only
+			if (!pastedFile && (!pastedContent || pastedContent === ``)) {
+				const file = await this.urlToFile(pastedText)
+				if (this.$isError(file)) {
+					this.$toastError(file.error)
+					return
+				}
+				const { cid, url, image, imageName } = await uploadPhoto(f.file)
+				await this.updatePostImages(cid, image, imageName)
+				this.insertContent({ cid, url })
+				console.log(`pasted text: ${pastedText}`)
 			}
 		},
 		async handleImage(e: Event) {
