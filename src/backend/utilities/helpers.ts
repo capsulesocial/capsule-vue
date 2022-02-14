@@ -37,6 +37,14 @@ export function getBlobExtension(blob: Blob): string | null {
 	}
 }
 
+export function isValidFileType(fileType: string) {
+	const validFileTypes = [`image/png`, `image/jpeg`, `image/jpg`]
+	if (!validFileTypes.includes(fileType)) {
+		return false
+	}
+	return true
+}
+
 export function getCompressedImage(file: File) {
 	return imageCompression(file, {
 		maxSizeMB: 5,

@@ -87,7 +87,7 @@ import AddContent from '@/components/post/EditorActions.vue'
 import { ImageBlot, preRule, ipfsImageRule, createPostImagesArray } from '@/pages/post/editorExtensions'
 import { createRegularPost, sendRegularPost } from '@/backend/post'
 import { preUploadPhoto, uploadPhoto } from '@/backend/photos'
-import { getBlobExtension } from '@/backend/utilities/helpers'
+import { isValidFileType } from '@/backend/utilities/helpers'
 
 const Delta = Quill.import(`delta`)
 
@@ -231,11 +231,9 @@ export default Vue.extend({
 			const editor = new Quill(`#editor`, options)
 			this.qeditor = editor
 			this.qeditor.root.addEventListener(`drop`, (ev: DragEvent) => {
-				console.log(`dropped`)
 				this.handleDroppedImage(ev)
 			})
 			this.qeditor.root.addEventListener(`paste`, (ev: ClipboardEvent) => {
-				console.log(`pasted`)
 				this.handlePastedContent(ev)
 			})
 			this.qeditor.focus()
@@ -286,28 +284,6 @@ export default Vue.extend({
 				this.$toastError(error.message)
 			}
 		},
-		getContentImages(content: string) {
-			const imgTagRegex = /<img [^>]*>/g
-			const contentImgs = Array.from(content.matchAll(imgTagRegex))
-			return contentImgs
-		},
-		async urlToFile(url: string): Promise<{ file: File } | { error: string }> {
-			try {
-				const response = await fetch(url, { mode: `cors` })
-				if (!response.ok) {
-					return { error: `Could not fetch image` }
-				}
-				const blob = await response.blob()
-				const blobExtension = getBlobExtension(blob)
-				if (!blobExtension) {
-					return { error: `Invalid image type` }
-				}
-				const file = new File([blob], `image${Date.now()}${blobExtension}`, { type: blob.type })
-				return { file }
-			} catch (error: any) {
-				return { error: error.message }
-			}
-		},
 		async handleDroppedImage(e: DragEvent) {
 			e.stopPropagation()
 			e.preventDefault()
@@ -321,26 +297,24 @@ export default Vue.extend({
 
 			// handle dropped file
 			if (file) {
-				const fileType = /^image\/(jpeg|jpg|png)$/
-				if (!fileType.test(file.type)) {
+				if (!isValidFileType(file.type)) {
 					this.$toastError(`image of type ${file.type} is invalid`)
 					return
 				}
 				const { cid, url, image, imageName } = await uploadPhoto(file)
 				await this.updatePostImages(cid, image, imageName)
 				this.insertContent({ cid, url })
-				console.log(`dropped file: ${file}`)
 				return
 			}
 
 			if (!file && droppedHtml) {
-				await this.handleHtml(droppedHtml)
-				console.log(`dropped html: ${droppedHtml}`)
+				const content = await this.handleHtml(droppedHtml)
+				this.insertContent(content)
 				return
 			}
 
 			if (!file && !droppedHtml) {
-				const f = await this.urlToFile(droppedText)
+				const f = await this.$urlToFile(droppedText)
 				if (this.$isError(f)) {
 					this.$toastError(f.error)
 					return
@@ -348,7 +322,6 @@ export default Vue.extend({
 				const { cid, url, image, imageName } = await uploadPhoto(f.file)
 				await this.updatePostImages(cid, image, imageName)
 				this.insertContent({ cid, url })
-				console.log(`droppedText: ${droppedText}`)
 			}
 		},
 		handleCutPaste(range: RangeStatic, pastedText: string) {
@@ -357,7 +330,7 @@ export default Vue.extend({
 			setTimeout(() => this.qeditor?.setSelection(range.index + pastedText.length, 0, `user`), 0)
 		},
 		async handleHtml(pastedContent: string) {
-			const contentImgs = this.getContentImages(pastedContent)
+			const contentImgs = this.$getContentImages(pastedContent)
 			const imgSrcRegex = /src="([^\s|"]*)"/
 			for (const img of contentImgs) {
 				const imgSrc = imgSrcRegex.exec(img[0])
@@ -365,22 +338,23 @@ export default Vue.extend({
 					continue
 				}
 				const src = imgSrc[1]
-				const file = await this.urlToFile(src)
-				if (this.$isError(file)) {
-					this.$toastError(file.error)
+				const f = await this.$urlToFile(src)
+				if (this.$isError(f)) {
+					this.$toastError(f.error)
 					continue
 				}
-				const { cid, url, image, imageName } = await uploadPhoto(file.file)
+				const { cid, url, image, imageName } = await uploadPhoto(f.file)
 				await this.updatePostImages(cid, image, imageName)
 				pastedContent = pastedContent.replace(img[0], `<img alt="${cid}" src="${url}">`)
 			}
-			this.insertContent(pastedContent)
+			return pastedContent
 		},
 		async handlePastedContent(e: ClipboardEvent) {
 			e.stopPropagation()
 			e.preventDefault()
 
 			if (!this.qeditor) {
+				this.$toastError(`Something went wrong while pasting the content`)
 				return
 			}
 			if (!e.clipboardData) {
@@ -391,7 +365,7 @@ export default Vue.extend({
 			const pastedContent = this.sanitize(clipboard.getData(`text/html`))
 			const pastedText = this.sanitize(clipboard.getData(`text/plain`))
 			const pastedFile = items[0].getAsFile()
-			const contentImgs = this.getContentImages(pastedContent)
+			const contentImgs = this.$getContentImages(pastedContent)
 			const range = this.qeditor.getSelection(true)
 
 			// handle cut and paste
@@ -402,31 +376,33 @@ export default Vue.extend({
 
 			// handle pasted content
 			if (pastedContent) {
-				await this.handleHtml(pastedContent)
-				console.log(`pasted content: ${pastedContent}`)
+				const content = await this.handleHtml(pastedContent)
+				this.insertContent(content)
 				return
 			}
 
 			// handle pasted file
 			if (pastedFile) {
+				if (!isValidFileType(pastedFile.type)) {
+					this.$toastError(`image of type ${pastedFile.type} is invalid`)
+					return
+				}
 				const { cid, url, image, imageName } = await uploadPhoto(pastedFile)
 				await this.updatePostImages(cid, image, imageName)
 				this.insertContent({ cid, url })
-				console.log(`pasted file: ${pastedFile}`)
 				return
 			}
 
 			// handle if text only
 			if (!pastedFile && (!pastedContent || pastedContent === ``)) {
-				const file = await this.urlToFile(pastedText)
-				if (this.$isError(file)) {
-					this.$toastError(file.error)
+				const f = await this.$urlToFile(pastedText)
+				if (this.$isError(f)) {
+					this.$toastError(f.error)
 					return
 				}
 				const { cid, url, image, imageName } = await uploadPhoto(f.file)
 				await this.updatePostImages(cid, image, imageName)
 				this.insertContent({ cid, url })
-				console.log(`pasted text: ${pastedText}`)
 			}
 		},
 		async handleImage(e: Event) {
