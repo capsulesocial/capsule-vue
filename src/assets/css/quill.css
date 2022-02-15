@@ -969,7 +969,7 @@
 }
 .ql-container.ql-bubble:not(.ql-disabled) a {
 	position: relative;
-	white-space: nowrap;
+	white-space: break-spaces;
 }
 .ql-container.ql-bubble:not(.ql-disabled) a::before {
 	top: -5px;
