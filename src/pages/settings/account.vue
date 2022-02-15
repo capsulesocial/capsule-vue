@@ -20,9 +20,9 @@
 		</div>
 		<!-- Export Private Key -->
 		<div class="mb-4 flex w-full flex-row items-center">
-			<label for="export" class="w-32 font-semibold">Private Key</label>
+			<label for="export" class="w-32 font-semibold">Capsule Private Key</label>
 			<button id="export" class="text-primary focus:outline-none" @click="downloadPrivateKey">
-				Export Private Key
+				Export Capsule Private Key
 			</button>
 		</div>
 		<!-- Account Profile -->
@@ -153,7 +153,7 @@ export default Vue.extend({
 			link.download = `capsule-priv-key-${this.$store.state.session.id}`
 			link.click()
 			URL.revokeObjectURL(link.href)
-			this.$toastSuccess(`Downloaded private key`)
+			this.$toastSuccess(`Downloaded Capsule private key`)
 		},
 		async updateProfile() {
 			const backendProfile = getProfileFromSession(this.$store.state.session)

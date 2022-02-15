@@ -9,12 +9,20 @@
 				style="backdrop-filter: blur(10px)"
 			>
 				<!-- Back button -->
-				<div v-if="$route.params.id !== $store.state.session.id" class="flex flex-row items-center pb-4">
-					<button class="focus:outline-none flex flex-row items-center" @click="$router.go(-1)">
+				<div class="flex flex-row items-center pb-4">
+					<button
+						v-if="$route.params.id !== $store.state.session.id"
+						class="focus:outline-none flex flex-row items-center"
+						@click="$router.go(-1)"
+					>
 						<span class="bg-gray1 rounded-full p-1"><BackButton :reduceSize="true" /></span>
 						<h6 class="ml-2 font-sans font-semibold">Back</h6>
 					</button>
-					<div id="small" class="header-profile ml-6 flex w-full flex-row items-center justify-between opacity-0">
+					<div
+						id="small"
+						class="header-profile flex w-full flex-row items-center justify-between z-40 opacity0"
+						:class="$route.params.id === $store.state.session.id ? `` : `ml-6`"
+					>
 						<div class="flex flex-row items-center">
 							<Avatar
 								:avatar="visitAvatar"
@@ -43,7 +51,11 @@
 				</div>
 				<!-- Name, socials, follow, bio -->
 				<div class="flex flex-row justify-between">
-					<div id="infos" class="header-profile flex items-center">
+					<div
+						id="infos"
+						class="header-profile flex items-center"
+						:class="$route.params.id === $store.state.session.id ? `-mt-12` : ``"
+					>
 						<Avatar
 							:avatar="visitAvatar"
 							:authorID="$route.params.id"
@@ -61,7 +73,7 @@
 								<h5 class="text-primary text-lg">@{{ visitProfile.id }}</h5>
 							</div>
 							<!-- Tabs: posts, following, followers -->
-							<div class="text-gray6 -mr-12 flex flex-row pt-2 text-sm">
+							<div class="text-gray5 -mr-12 flex flex-row pt-2 text-sm">
 								<div v-if="totalPostsCount === 1" class="text-sm">
 									<span class="text-primary font-bold">{{ totalPostsCount }}</span>
 									Post
@@ -70,27 +82,29 @@
 									<span class="text-primary font-bold">{{ totalPostsCount }}</span>
 									Posts
 								</div>
-								<nuxt-link
-									:to="'/id/' + $route.params.id + '/followers'"
-									:class="getStyles(`id-id-followers`)"
-									class="pl-5 text-sm"
+								<button
+									class="pl-5 text-sm text-gray5 hover:text-primary hover:font-bold"
+									@click="$emit(`openFollowers`)"
 								>
 									<span class="text-primary font-bold">{{ followers.size }}</span>
 									Followers
-								</nuxt-link>
-								<nuxt-link
-									:to="'/id/' + $route.params.id + '/following'"
-									:class="getStyles(`id-id-following`)"
-									class="pl-5 text-sm"
+								</button>
+								<button
+									class="pl-5 text-sm text-gray5 hover:text-primary hover:font-bold"
+									@click="$emit(`openFollowing`)"
 								>
 									<span class="text-primary font-bold">{{ following.size }}</span>
 									Following
-								</nuxt-link>
+								</button>
 							</div>
 						</div>
 					</div>
 					<!-- Profile buttons -->
-					<div id="buttons" class="header-profile h-fit flex items-center xl:h-auto">
+					<div
+						id="buttons"
+						class="header-profile h-fit flex items-center xl:h-auto"
+						:class="$route.params.id === $store.state.session.id ? `-mt-12` : ``"
+					>
 						<!-- Edit profile button -->
 						<span v-if="$store.state.session.id === $route.params.id">
 							<button class="bg-secondary focus:outline-none block rounded-lg xl:hidden" @click="toggleSettings">
@@ -131,7 +145,11 @@
 				id="scrollContainer"
 				ref="scrollContainer"
 				class="xl:w-748 fixed w-full overflow-y-auto"
-				:style="`min-height: calc(100vh - ` + padding + ` - 90px); height: calc(100vh - ` + padding + ` - 90px)`"
+				:style="
+					!scrollingDown
+						? `min-height: calc(100vh - ` + `290px` + `); height: calc(100vh - ` + `290px` + `)`
+						: `min-height: calc(100vh - ` + `150px` + `); height: calc(100vh - ` + `150px` + `)`
+				"
 			>
 				<nuxt-child
 					:profile="visitProfile"
@@ -277,6 +295,7 @@ export default Vue.extend({
 	mounted() {
 		const topContainer = this.$refs.topContainer as HTMLElement
 		this.padding = topContainer.clientHeight + `px`
+		this.scrollingDown = false
 		const container = document.getElementById(`scrollContainer`)
 		if (container) {
 			container.addEventListener(`scroll`, this.handleScrollHeader)
@@ -366,7 +385,7 @@ export default Vue.extend({
 				return
 			}
 			const currentScroll = body.scrollTop
-			if (body.scrollTop <= 0) {
+			if (body.scrollTop <= 0 && !this.scrollingDown) {
 				header.classList.remove(scrollUp)
 				buttons.classList.remove(opacity0)
 				infos.classList.remove(opacity0)
@@ -390,7 +409,11 @@ export default Vue.extend({
 				bio.classList.remove(opacity1)
 				small.classList.add(opacity1)
 				small.classList.remove(opacity0)
-			} else if (currentScroll < this.lastScroll && header.classList.contains(scrollDown)) {
+			} else if (
+				currentScroll < this.lastScroll &&
+				header.classList.contains(scrollDown) &&
+				body.scrollTop + body.clientHeight !== body.scrollHeight
+			) {
 				// up
 				this.scrollingDown = false
 				header.classList.remove(scrollDown)
@@ -407,6 +430,12 @@ export default Vue.extend({
 				small.classList.add(opacity0)
 			}
 			this.lastScroll = currentScroll
+			// Reached bottom
+			if (body.scrollTop + body.clientHeight === body.scrollHeight) {
+				// header.classList.add(scrollDown)
+				// small.classList.remove(opacity0)
+				// small.classList.add(opacity1)
+			}
 		},
 		async fetchProfile() {
 			if (this.$route.params.id === null) {

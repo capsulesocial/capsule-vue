@@ -1,13 +1,13 @@
 <template>
 	<article>
 		<p class="text-gray7 text-center">
-			Here is your private key file. Download this file in a safe spot. You will need it to access your account. To
-			download your private keys again, visit the Settings page
+			Here is your Capsule private key file. Download this file in a safe spot. You will need it to access your account.
+			To download your Capsule private keys again, visit the Settings page
 		</p>
 		<div class="bg-gray1 my-10 flex items-center justify-between rounded-lg p-4">
 			<div class="flex flex-row items-center">
 				<FileDownloadIcon />
-				<h6 class="text-gray pl-4 text-lg font-semibold">Private Key</h6>
+				<h6 class="text-gray pl-4 text-lg font-semibold">Capsule Private Key</h6>
 			</div>
 			<BrandedButton :text="`Download`" :action="downloadPrivateKey" />
 		</div>
@@ -60,7 +60,7 @@ export default Vue.extend({
 			link.download = `capsule-priv-key-${this.aid}`
 			link.click()
 			URL.revokeObjectURL(link.href)
-			this.$toastSuccess(`Downloaded private key`)
+			this.$toastSuccess(`Downloaded Capsule private key`)
 			this.hasDownloadedKey = true
 		},
 	},

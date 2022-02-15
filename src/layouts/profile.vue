@@ -31,6 +31,8 @@
 							:mutuals="mutuals"
 							:mutualProfiles="mutualProfiles"
 							:updateProfileMethod="getMyProfile"
+							@openFollowers="showFollowers = true"
+							@openFollowing="showFollowing = true"
 						/>
 						<!-- Widgets -->
 						<aside
@@ -87,6 +89,23 @@
 				</div>
 			</div>
 		</div>
+		<div
+			v-if="showFollowers"
+			class="popup bg-primary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50"
+		>
+			<FollowersPopup
+				:profile="visitProfile"
+				:followers="followers"
+				:updateFollowers="updateFollowers"
+				@close="showFollowers = false"
+			/>
+		</div>
+		<div
+			v-if="showFollowing"
+			class="popup bg-primary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50"
+		>
+			<FollowingPopup :profile="visitProfile" :updateFollowers="updateFollowers" @close="showFollowing = false" />
+		</div>
 		<UnauthPopup />
 	</main>
 </template>
@@ -98,6 +117,8 @@ import FollowersWidget from '@/components/widgets/Followers.vue'
 import MutualFollowersWidget from '@/components/widgets/MutualFollowers.vue'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
+import FollowersPopup from '@/components/FollowersPopup.vue'
+import FollowingPopup from '@/components/FollowingPopup.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 import UnauthPopup from '@/components/UnauthPopup.vue'
 
@@ -121,6 +142,8 @@ interface IData {
 	mutualProfiles: Array<Profile>
 	componentKey: number
 	bgImage: IBackground
+	showFollowers: boolean
+	showFollowing: boolean
 }
 
 export default Vue.extend({
@@ -132,6 +155,8 @@ export default Vue.extend({
 		MutualFollowersWidget,
 		BrandedButton,
 		UnauthPopup,
+		FollowersPopup,
+		FollowingPopup,
 	},
 	data(): IData {
 		return {
@@ -148,12 +173,15 @@ export default Vue.extend({
 			mutualProfiles: [],
 			componentKey: 0,
 			bgImage: backgrounds[0],
+			showFollowers: false,
+			showFollowing: false,
 		}
 	},
 	watch: {
 		$route(n, o) {
 			if (n.params.id !== o.params.id) {
 				this.getVisitingProfile()
+				this.componentKey += 1
 			}
 		},
 		'$store.state.session.name'() {

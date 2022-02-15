@@ -17,7 +17,7 @@
 				<!-- Body -->
 				<div>
 					<!-- Content -->
-					<section class="relative flex flex-row overflow-x-hidden">
+					<section class="relative flex flex-row">
 						<PostEditor
 							ref="editor"
 							style="
@@ -35,11 +35,11 @@
 							class="animatedraftButton from-lightBGStart to-lightBGStop border-lightBorder test-xs text-gray5 modal-animation card-animation-delay1 absolute bottom-0 z-10 m-4 flex rounded-lg bg-gradient-to-r px-5 py-3 shadow-lg"
 							style="backdrop-filter: blur(10px)"
 						>
-							Resume writing?
-							<button v-if="!buttonHidden" class="text-primary focus:outline-none ml-2" @click="openDraftsPopup">
+							<p v-if="!buttonHidden" class="mr-2">Resume writing?</p>
+							<button v-if="!buttonHidden" class="text-primary focus:outline-none" @click="openDraftsPopup">
 								Show drafts
 							</button>
-							<button v-else class="text-primary focus:outline-none ml-2" @click="openDraftsPopup">
+							<button v-else class="text-primary focus:outline-none" @click="openDraftsPopup">
 								<PencilIcon class="fill-current p-1" />
 							</button>
 						</div>
@@ -182,7 +182,7 @@ export default Vue.extend({
 	transition: all 0.4s;
 }
 .hidedraftButton {
-	transform: translateX(-9.5rem);
+	transform: translateX(-2rem);
 	padding: 0.7rem;
 }
 /* Hide scrollbar for Chrome, Safari and Opera */
