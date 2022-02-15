@@ -66,7 +66,21 @@
 				</div>
 				<!-- Desktop reaction face -->
 				<div class="hidden flex-shrink-0 items-center justify-center overflow-hidden xl:flex">
-					<img :src="emotion.image" class="-mb-1 mt-2 h-32 w-32 bg-transparent" />
+					<img
+						:src="emotion.image"
+						class="-mb-1 mt-2 h-32 w-32 bg-transparent"
+						@mouseover="showLabel = true"
+						@mouseleave="showLabel = false"
+					/>
+					<div
+						v-show="showLabel"
+						class="border-lightBorder modal-animation-delay absolute z-40 flex flex-col rounded-lg border bg-white p-2 shadow-lg"
+						style="bottom: -25px"
+					>
+						<p class="text-sm text-gray5">
+							{{ emotion.label }}
+						</p>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -141,6 +155,7 @@ interface IData {
 	emotion: { label: string; image: any }
 	emotionType: string
 	content: string
+	showLabel: boolean
 }
 
 export default Vue.extend({
@@ -169,6 +184,7 @@ export default Vue.extend({
 			emotion: faces.default,
 			emotionType: ``,
 			content: ``,
+			showLabel: false,
 		}
 	},
 	async created() {
