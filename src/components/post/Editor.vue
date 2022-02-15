@@ -341,6 +341,7 @@ export default Vue.extend({
 				const f = await this.$urlToFile(src)
 				if (this.$isError(f)) {
 					this.$toastError(f.error)
+					pastedContent = pastedContent.replace(img[0], ``)
 					continue
 				}
 				const { cid, url, image, imageName } = await uploadPhoto(f.file)
