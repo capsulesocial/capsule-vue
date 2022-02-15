@@ -4,7 +4,7 @@
 		class="from-lightBGStart to-lightBGStop h-screen w-full flex-col justify-between overflow-y-scroll bg-gradient-to-r xl:w-3/5"
 	>
 		<CapsuleIcon class="pt-6 pl-10" />
-		<section class="flex items-center justify-center" style="height: 86%">
+		<section class="flex items-center justify-center max-h-90" style="height: 86%">
 			<div v-show="isLoading" class="modal-animation flex w-full justify-center xl:w-1/2 z-20">
 				<div class="loader m-5 rounded-lg"></div>
 			</div>
@@ -25,6 +25,7 @@
 					@updateUserInfo="updateUserInfo"
 					@updateAccountId="updateAccountId"
 					@updateUsername="updateUsername"
+					@infos="showInfos = true"
 				/>
 				<!-- Step 2: Sign up -->
 				<div
@@ -56,6 +57,12 @@
 			</div>
 		</section>
 		<p class="text-gray5 px-4 pl-10 text-sm">© {{ currentYear }} Capsule Social, Inc.</p>
+		<div
+			v-if="showInfos"
+			class="popup bg-primary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50"
+		>
+			<InfosPopup @close="showInfos = false" />
+		</div>
 	</main>
 </template>
 
@@ -72,6 +79,7 @@ import DownloadKey from '@/components/register/DownloadKey.vue'
 import RegisterMethods from '@/components/register/RegisterMethods.vue'
 import VerifyPhone from '@/components/register/VerifyPhone.vue'
 import SelectID from '@/components/register/SelectID.vue'
+import InfosPopup from '@/components/register/InfosPopup.vue'
 
 import CapsuleIcon from '@/components/icons/CapsuleNew.vue'
 // @ts-ignore
@@ -102,6 +110,7 @@ interface IData {
 	downloadKeyStep: boolean
 	currentYear: string
 	isLoading: boolean
+	showInfos: boolean
 }
 
 export default Vue.extend({
@@ -112,6 +121,7 @@ export default Vue.extend({
 		RegisterMethods,
 		VerifyPhone,
 		SelectID,
+		InfosPopup,
 	},
 	layout: `unauth`,
 	data(): IData {
@@ -126,6 +136,7 @@ export default Vue.extend({
 			downloadKeyStep: false,
 			currentYear: ``,
 			isLoading: true,
+			showInfos: false,
 		}
 	},
 	head() {

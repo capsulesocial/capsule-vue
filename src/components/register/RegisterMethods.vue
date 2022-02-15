@@ -1,10 +1,10 @@
 <template>
 	<article>
-		<div v-show="isLoading" class="modal-animation flex w-full justify-center w-full xl:w-1/2 z-20">
+		<div v-show="isLoading" class="modal-animation flex w-full justify-center xl:w-1/2 z-20">
 			<div class="loader m-5 rounded-lg"></div>
 		</div>
 		<div v-show="!isLoading">
-			<h1 class="text-primary mb-10 font-semibold" style="font-size: 2.6rem">Sign up</h1>
+			<h1 class="text-primary font-semibold mb-10" style="font-size: 2.6rem">Sign up</h1>
 			<button
 				class="bg-gray2 focus:outline-none mb-4 flex w-full items-center justify-center rounded-lg py-2"
 				@click="() => torusLogin('discord')"
@@ -37,6 +37,13 @@
 			>
 				<h6 class="text-gray7 ml-4 text-sm font-semibold">Create implicit account</h6>
 			</button>
+			<button
+				class="w-full flex flex-row items-center justify-center text-center mt-10 text-gray5 hover:text-primary text-sm"
+				@click="$emit(`infos`)"
+			>
+				<InfoIcon class="mr-3 h-4 w-4" />
+				<p>What Signup method should I choose?</p>
+			</button>
 			<p class="text-gray7 mt-10 text-center">
 				Already have an account?
 				<nuxt-link to="/login" class="text-primary text-center font-bold">Log in</nuxt-link>
@@ -55,6 +62,7 @@ import DirectWebSdk, { TorusLoginResponse } from '@toruslabs/customauth'
 import GoogleIcon from '@/components/icons/brands/Google.vue'
 import NearIcon from '@/components/icons/brands/Near.vue'
 import DiscordIcon from '@/components/icons/Discord.vue'
+import InfoIcon from '@/components/icons/Info.vue'
 
 import { torusVerifiers, TorusVerifiers } from '@/backend/utilities/config'
 import { getAccountIdFromPrivateKey } from '@/backend/auth'
@@ -71,6 +79,7 @@ export default Vue.extend({
 		DiscordIcon,
 		GoogleIcon,
 		NearIcon,
+		InfoIcon,
 	},
 	props: {
 		checkFunds: {
