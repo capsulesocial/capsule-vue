@@ -73,7 +73,7 @@
 								<h5 class="text-primary text-lg">@{{ visitProfile.id }}</h5>
 							</div>
 							<!-- Tabs: posts, following, followers -->
-							<div class="text-gray6 -mr-12 flex flex-row pt-2 text-sm">
+							<div class="text-gray5 -mr-12 flex flex-row pt-2 text-sm">
 								<div v-if="totalPostsCount === 1" class="text-sm">
 									<span class="text-primary font-bold">{{ totalPostsCount }}</span>
 									Post
@@ -82,22 +82,20 @@
 									<span class="text-primary font-bold">{{ totalPostsCount }}</span>
 									Posts
 								</div>
-								<nuxt-link
-									:to="'/id/' + $route.params.id + '/followers'"
-									:class="getStyles(`id-id-followers`)"
-									class="pl-5 text-sm"
+								<button
+									class="pl-5 text-sm text-gray5 hover:text-primary hover:font-bold"
+									@click="$emit(`openFollowers`)"
 								>
 									<span class="text-primary font-bold">{{ followers.size }}</span>
 									Followers
-								</nuxt-link>
-								<nuxt-link
-									:to="'/id/' + $route.params.id + '/following'"
-									:class="getStyles(`id-id-following`)"
-									class="pl-5 text-sm"
+								</button>
+								<button
+									class="pl-5 text-sm text-gray5 hover:text-primary hover:font-bold"
+									@click="$emit(`openFollowing`)"
 								>
 									<span class="text-primary font-bold">{{ following.size }}</span>
 									Following
-								</nuxt-link>
+								</button>
 							</div>
 						</div>
 					</div>

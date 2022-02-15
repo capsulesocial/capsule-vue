@@ -3,7 +3,7 @@
 		<!-- Container -->
 		<section>
 			<div
-				style="width: 600px; min-height: calc(100vh - 260px); height: calc(100vh - 260px); backdrop-filter: blur(5px)"
+				style="width: 600px; backdrop-filter: blur(10px)"
 				class="from-lightBGStart to-lightBGStop card-animation z-10 mr-5 overflow-y-auto rounded-lg bg-gradient-to-r p-6 pt-4 shadow-lg"
 			>
 				<div class="sticky flex items-center justify-between">
