@@ -301,9 +301,13 @@ export default Vue.extend({
 					this.$toastError(`image of type ${file.type} is invalid`)
 					return
 				}
-				const { cid, url, image, imageName } = await uploadPhoto(file)
-				await this.updatePostImages(cid, image, imageName)
-				this.insertContent({ cid, url })
+				try {
+					const { cid, url, image, imageName } = await uploadPhoto(file)
+					await this.updatePostImages(cid, image, imageName)
+					this.insertContent({ cid, url })
+				} catch (error: any) {
+					this.$toastError(error.message)
+				}
 				return
 			}
 
@@ -319,9 +323,13 @@ export default Vue.extend({
 					this.$toastError(f.error)
 					return
 				}
-				const { cid, url, image, imageName } = await uploadPhoto(f.file)
-				await this.updatePostImages(cid, image, imageName)
-				this.insertContent({ cid, url })
+				try {
+					const { cid, url, image, imageName } = await uploadPhoto(f.file)
+					await this.updatePostImages(cid, image, imageName)
+					this.insertContent({ cid, url })
+				} catch (error: any) {
+					this.$toastError(error.message)
+				}
 			}
 		},
 		handleCutPaste(range: RangeStatic, pastedText: string) {
@@ -344,9 +352,13 @@ export default Vue.extend({
 					pastedContent = pastedContent.replace(img[0], ``)
 					continue
 				}
-				const { cid, url, image, imageName } = await uploadPhoto(f.file)
-				await this.updatePostImages(cid, image, imageName)
-				pastedContent = pastedContent.replace(img[0], `<img alt="${cid}" src="${url}">`)
+				try {
+					const { cid, url, image, imageName } = await uploadPhoto(f.file)
+					await this.updatePostImages(cid, image, imageName)
+					pastedContent = pastedContent.replace(img[0], `<img alt="${cid}" src="${url}">`)
+				} catch (error: any) {
+					this.$toastError(error.message)
+				}
 			}
 			return pastedContent
 		},
@@ -388,9 +400,13 @@ export default Vue.extend({
 					this.$toastError(`image of type ${pastedFile.type} is invalid`)
 					return
 				}
-				const { cid, url, image, imageName } = await uploadPhoto(pastedFile)
-				await this.updatePostImages(cid, image, imageName)
-				this.insertContent({ cid, url })
+				try {
+					const { cid, url, image, imageName } = await uploadPhoto(pastedFile)
+					await this.updatePostImages(cid, image, imageName)
+					this.insertContent({ cid, url })
+				} catch (error: any) {
+					this.$toastError(error.message)
+				}
 				return
 			}
 
@@ -401,9 +417,13 @@ export default Vue.extend({
 					this.$toastError(f.error)
 					return
 				}
-				const { cid, url, image, imageName } = await uploadPhoto(f.file)
-				await this.updatePostImages(cid, image, imageName)
-				this.insertContent({ cid, url })
+				try {
+					const { cid, url, image, imageName } = await uploadPhoto(f.file)
+					await this.updatePostImages(cid, image, imageName)
+					this.insertContent({ cid, url })
+				} catch (error: any) {
+					this.$toastError(error.message)
+				}
 			}
 		},
 		async handleImage(e: Event) {
@@ -417,9 +437,13 @@ export default Vue.extend({
 			if (files.length !== 1) {
 				return
 			}
-			const { cid, url, image, imageName } = await uploadPhoto(files[0])
-			await this.updatePostImages(cid, image, imageName)
-			this.insertContent({ cid, url })
+			try {
+				const { cid, url, image, imageName } = await uploadPhoto(files[0])
+				await this.updatePostImages(cid, image, imageName)
+				this.insertContent({ cid, url })
+			} catch (error: any) {
+				this.$toastError(error.message)
+			}
 		},
 		calculateAddPos(index: number) {
 			if (!this.qeditor) {
