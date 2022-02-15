@@ -10,7 +10,7 @@ export interface IPFSInterface {
 
 const bootstraps = [
 	`/dns4/test-node.capsule.social/tcp/5434/wss/p2p/12D3KooWQzYjzbw7nghPMVP5z2ax29iDj2YsQ5GZDfnC4finSxnb`,
-	// `/dns4/alpha-b.capsule.social/tcp/5434/wss/p2p/12D3KooWNihgeFYpgjepgcrgNu1KZYHt6378VZqV869G5fZkddzm`,
+	`/dns4/alpha-c.capsule.social/tcp/5434/wss/p2p/12D3KooWFfE5aQTtKiY5MMjaosvmdFz2MyMtbBbvvz9C857cjHZ2`,
 ]
 
 const ipfsConfig: Options = {
