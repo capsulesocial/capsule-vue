@@ -92,6 +92,21 @@ export default Vue.extend({
 			meta: [{ hid: `tags`, name: `tags`, content: `View posts with tag: ${this.$route.params.tag}` }],
 		}
 	},
+	watch: {
+		$route(n, o) {
+			if (n.params.tag !== o.params.tag) {
+				const container = this.$refs.container as HTMLElement
+				container.addEventListener(`scroll`, this.handleScroll)
+				this.currentOffset = 0
+				this.noMorePosts = false
+				this.isLoading = true
+				this.posts = []
+				this.fetchPosts().then((posts) => {
+					this.posts = posts
+				})
+			}
+		},
+	},
 	async created() {
 		// Fetch posts with tag (unauthenticated)
 		this.posts = await this.fetchPosts()

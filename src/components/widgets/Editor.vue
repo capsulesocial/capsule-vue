@@ -201,7 +201,6 @@ export default Vue.extend({
 		},
 		addTag(): void {
 			const { tags } = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex]
-
 			const tagsCheck = this.$qualityTags(this.tag, tags)
 			if (this.$isError(tagsCheck)) {
 				this.$toastError(tagsCheck.error)

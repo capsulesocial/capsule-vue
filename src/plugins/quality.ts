@@ -110,6 +110,11 @@ const qualityTags: TagsCheck = (tag, tags?: Array<any>) => {
 	if (tag.replace(/\s/, ``).trim() !== tag) {
 		return { error: `Tag with spaces is not allowed` }
 	}
+	// Check for numbers, letters, underscores, dashes
+	const validexp = /^[\w-]+$/
+	if (!validexp.test(tag)) {
+		return { error: `Invalid character in tag` }
+	}
 	if (tags) {
 		if (tags.length > 2) {
 			return { error: `Maximum 3 tags are allowed` }
