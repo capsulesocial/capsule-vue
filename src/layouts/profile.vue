@@ -154,6 +154,7 @@ export default Vue.extend({
 		$route(n, o) {
 			if (n.params.id !== o.params.id) {
 				this.getVisitingProfile()
+				this.componentKey += 1
 			}
 		},
 		'$store.state.session.name'() {

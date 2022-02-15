@@ -366,36 +366,28 @@ export default Vue.extend({
 			const opacity1 = `opacity1`
 			const opacity0 = `opacity0`
 			if (!body) {
-				console.log(`noBody`)
 				return
 			}
 			if (!buttons) {
-				console.log(`noButtons`)
 				return
 			}
 			if (!infos) {
-				console.log(`noInfos`)
 				return
 			}
 			if (!header) {
-				console.log(`noHeader`)
 				return
 			}
 			if (!tabs) {
-				console.log(`noTabs`)
 				return
 			}
 			if (!bio) {
-				console.log(`noBio`)
 				return
 			}
 			if (!small) {
-				console.log(`noSmall`)
 				return
 			}
 			const currentScroll = body.scrollTop
 			if (body.scrollTop <= 0 && !this.scrollingDown) {
-				console.log(`top`)
 				header.classList.remove(scrollUp)
 				buttons.classList.remove(opacity0)
 				infos.classList.remove(opacity0)
@@ -406,7 +398,6 @@ export default Vue.extend({
 			}
 			if (currentScroll > this.lastScroll && !header.classList.contains(scrollDown)) {
 				// down
-				console.log(`down`)
 				this.scrollingDown = true
 				header.classList.remove(scrollUp)
 				header.classList.add(scrollDown)
@@ -426,7 +417,6 @@ export default Vue.extend({
 				body.scrollTop + body.clientHeight !== body.scrollHeight
 			) {
 				// up
-				console.log(`up`)
 				this.scrollingDown = false
 				header.classList.remove(scrollDown)
 				header.classList.add(scrollUp)
@@ -442,9 +432,8 @@ export default Vue.extend({
 				small.classList.add(opacity0)
 			}
 			this.lastScroll = currentScroll
-			// Reached bottom, fetch more posts
+			// Reached bottom
 			if (body.scrollTop + body.clientHeight === body.scrollHeight) {
-				console.log(`bottom`)
 				// header.classList.add(scrollDown)
 				// small.classList.remove(opacity0)
 				// small.classList.add(opacity1)
