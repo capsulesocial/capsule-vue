@@ -2,9 +2,9 @@
 	<div class="relative flex flex-grow items-center">
 		<!-- Comment filter -->
 		<div class="flex w-full flex-row items-center justify-end">
-			<h6 class="hidden xl:block">Filter by:</h6>
+			<h6 class="hidden xl:block dark:text-gray3">Filter by:</h6>
 			<button
-				class="toggle focus:outline-none ml-4 flex w-32 items-center justify-between rounded-lg border px-4 text-sm shadow-lg"
+				class="toggle focus:outline-none ml-4 flex w-32 items-center justify-between rounded-lg border px-4 text-sm shadow-lg dark:text-gray3"
 				@click.stop="showFilter = !showFilter"
 			>
 				<span v-if="filter === ``" class="toggle font-bold">All</span>
@@ -13,17 +13,17 @@
 				<ChevronDown v-else />
 			</button>
 			<button v-show="filter !== ``" @click="$emit(`clicked`, ``)">
-				<span class="ml-2 text-sm text-primary">Clear</span>
+				<span class="ml-2 text-sm text-primary dark:text-secondary">Clear</span>
 			</button>
 		</div>
 		<!-- comment filter dropdown -->
 		<div
 			v-show="showFilter"
-			class="hotzone border-lightBorder modal-animation absolute top-0 z-20 w-full rounded-lg border bg-white p-4 shadow-lg"
+			class="hotzone border-lightBorder modal-animation absolute top-0 z-20 w-full rounded-lg border bg-lightBG dark:bg-darkBG p-4 shadow-lg"
 			style="margin-top: 28px"
 		>
 			<!-- Select charge of reaction button -->
-			<div class="hotzone mb-6 flex flex-col justify-start xl:flex-row">
+			<div class="hotzone mb-6 flex flex-col justify-start xl:flex-row dark:text-gray3">
 				<button
 					class="hotzone focus:outline-none mr-4 border-b-2"
 					:class="feeling === `positive` ? `border-positive` : `border-transparent`"

@@ -91,15 +91,21 @@
 									/>
 								</div>
 								<nuxt-link :to="'/id/' + post.authorID" class="mr-4 flex flex-col">
-									<span v-if="authorName != ``" class="text-base font-bold transition ease-in-out hover:underline">
+									<span
+										v-if="authorName != ``"
+										class="text-base font-bold transition ease-in-out hover:underline dark:text-darkPrimaryText"
+									>
 										{{ authorName }}
 									</span>
-									<span v-else class="text-gray5 text-base font-bold transition ease-in-out hover:underline">
+									<span
+										v-else
+										class="text-gray5 dark:text-gray3 text-base font-bold transition ease-in-out hover:underline"
+									>
 										{{ post.authorID }}
 									</span>
-									<span class="text-primary"> @{{ post.authorID }} </span>
+									<span class="text-primary dark:text-secondary"> @{{ post.authorID }} </span>
 								</nuxt-link>
-								<span v-if="authorBio !== ``" class="mt-2"> {{ authorBio }} </span>
+								<span v-if="authorBio !== ``" class="mt-2 dark:text-darkPrimaryText"> {{ authorBio }} </span>
 							</div>
 							<div
 								class="relative flex w-full items-center justify-center xl:w-1/5 xl:justify-end"
@@ -258,15 +264,21 @@
 									/>
 								</div>
 								<nuxt-link :to="'/id/' + quote.authorID" class="mr-4 flex flex-col">
-									<span v-if="quote.name != ``" class="text-base font-bold transition ease-in-out hover:underline">
+									<span
+										v-if="quote.name != ``"
+										class="text-base font-bold transition ease-in-out hover:underline dark:text-darkPrimaryText"
+									>
 										{{ quote.name }}
 									</span>
-									<span v-else class="text-gray5 text-base font-bold transition ease-in-out hover:underline">
+									<span
+										v-else
+										class="text-gray5 dark:text-gray3 text-base font-bold transition ease-in-out hover:underline"
+									>
 										{{ quote.authorID }}
 									</span>
-									<span class="text-primary"> @{{ quote.authorID }} </span>
+									<span class="text-primary dark:text-secondary"> @{{ quote.authorID }} </span>
 								</nuxt-link>
-								<span v-if="quote.bio !== ``" class="mt-2"> {{ quote.bio }} </span>
+								<span v-if="quote.bio !== ``" class="mt-2 dark:text-darkPrimaryText"> {{ quote.bio }} </span>
 							</div>
 							<!-- Delete quote repost button -->
 							<div v-if="quote.authorID === $store.state.session.id" class="relative">
@@ -354,15 +366,21 @@
 									/>
 								</div>
 								<nuxt-link :to="'/id/' + post.authorID" class="mr-4 flex flex-col">
-									<span v-if="authorName != ``" class="text-base font-bold transition ease-in-out hover:underline">
+									<span
+										v-if="authorName != ``"
+										class="text-base font-bold transition ease-in-out hover:underline dark:text-darkPrimaryText"
+									>
 										{{ authorName }}
 									</span>
-									<span v-else class="text-gray5 text-base font-bold transition ease-in-out hover:underline">
+									<span
+										v-else
+										class="text-gray5 dark:text-gray3 text-base font-bold transition ease-in-out hover:underline"
+									>
 										{{ post.authorID }}
 									</span>
-									<span class="text-primary"> @{{ post.authorID }} </span>
+									<span class="text-primary dark:text-secondary"> @{{ post.authorID }} </span>
 								</nuxt-link>
-								<span v-if="authorBio !== ``" class="mt-2"> {{ authorBio }} </span>
+								<span v-if="authorBio !== ``" class="mt-2 dark:text-darkPrimaryText"> {{ authorBio }} </span>
 							</div>
 							<div class="relative flex items-center" :class="repostedBy !== `` ? `-mt-4` : ``">
 								<!-- Bookmarks button -->
