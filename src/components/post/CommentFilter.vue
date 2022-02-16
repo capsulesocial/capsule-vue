@@ -4,7 +4,7 @@
 		<div class="flex w-full flex-row items-center justify-end">
 			<h6 class="hidden xl:block dark:text-gray3">Filter by:</h6>
 			<button
-				class="toggle focus:outline-none ml-4 flex w-32 items-center justify-between rounded-lg border px-4 text-sm shadow-lg dark:text-gray3"
+				class="toggle focus:outline-none ml-4 flex w-32 items-center justify-between rounded-lg border dark:border-gray3 px-4 text-sm shadow-lg dark:text-gray3"
 				@click.stop="showFilter = !showFilter"
 			>
 				<span v-if="filter === ``" class="toggle font-bold">All</span>

@@ -16,8 +16,8 @@
 		>
 			<!-- Left side: title and author name -->
 			<div class="flex flex-grow flex-col">
-				<h5 class="font-semibold">{{ p.title }}</h5>
-				<h6 class="text-gray5">By {{ p.authorID }}</h6>
+				<h5 class="font-semibold dark:text-darkSecondaryText">{{ p.title }}</h5>
+				<h6 class="text-gray5 dark:text-gray3">By {{ p.authorID }}</h6>
 			</div>
 			<!-- Right side: featured photo -->
 			<div class="w-24">

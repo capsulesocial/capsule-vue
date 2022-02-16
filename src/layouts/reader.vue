@@ -8,11 +8,19 @@
 		<!-- Featured photo popup -->
 		<div
 			v-if="displayPhoto"
-			class="bg-primary fixed z-40 h-screen w-full overflow-auto bg-opacity-75 pt-24"
+			class="bg-primary dark:bg-secondary fixed z-40 h-screen w-full overflow-auto bg-opacity-50 dark:bg-opacity-50 pt-24"
 			@click="displayPhoto = false"
 		>
 			<img :src="featuredPhoto.photo" class="modal-content rounded-lg" />
-			<p v-if="featuredPhoto.caption" id="caption">{{ featuredPhoto.caption }}</p>
+			<div class="flex justify-center mt-5">
+				<p
+					v-if="featuredPhoto.caption"
+					id="caption"
+					class="text-lightPrimaryText dark:text-darkPrimaryText py-2 px-3 text-center bg-lightBG dark:bg-darkBG rounded-lg shadow-lg"
+				>
+					{{ featuredPhoto.caption }}
+				</p>
+			</div>
 		</div>
 		<!-- Wrapper -->
 		<div class="flex w-full justify-center">
@@ -23,7 +31,7 @@
 				<!-- Content -->
 				<section class="flex flex-row">
 					<nuxt-child
-						class="xl:w-1220 xl:min-h-80 border-lightBorder from-lightBGStart to-lightBGStop fixed mr-5 h-full w-full overflow-y-auto rounded-lg border bg-gradient-to-r p-5 pt-0 shadow-lg xl:h-80 xl:p-6 xl:pt-0"
+						class="xl:w-1220 xl:min-h-80 border-lightBorder from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop fixed mr-5 h-full w-full overflow-y-auto rounded-lg border bg-gradient-to-r p-5 pt-0 shadow-lg xl:h-80 xl:p-6 xl:pt-0"
 						@showPhoto="showPhoto"
 					/>
 				</section>
@@ -107,17 +115,6 @@ export default Vue.extend({
 	max-width: 100%;
 	height: auto;
 	max-height: 88%;
-}
-
-/* Caption of Modal Image */
-#caption {
-	margin: auto;
-	display: block;
-	width: 80%;
-	text-align: center;
-	color: #ccc;
-	padding: 10px 0;
-	height: 150px;
 }
 
 /* Add Animation */

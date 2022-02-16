@@ -1,29 +1,30 @@
 <template>
 	<article>
-		<h1 class="text-primary text-4xl font-bold">Sign up</h1>
+		<h1 class="text-primary dark:text-secondary text-4xl font-bold">Sign up</h1>
 		<!-- Enter phone number -->
 		<div v-if="!otpSent">
-			<p class="text-gray7 my-10 text-center">
+			<p class="text-gray7 dark:text-gray3 my-10 text-center">
 				Verify you’re a human with your phone number so that Capsule can fund your wallet. This is the last step needed
 				to create your Capsule account.
 			</p>
-			<label for="phoneNumber" class="text-gray5 block pb-1 text-sm font-semibold">Phone Number</label>
+			<label for="phoneNumber" class="text-gray5 dark:text-gray3 block pb-1 text-sm font-semibold">Phone Number</label>
 			<input
 				id="phoneNumber"
 				v-model="phoneNumber"
 				type="tel"
-				class="focus:outline-none focus:border-primary text-primary bg-gray2 mt-1 mb-5 w-full rounded-lg px-3 py-2 font-sans text-sm"
+				class="focus:outline-none focus:border-primary dark:focus:border-secondary text-primary dark:text-darkPrimaryText bg-gray2 dark:bg-gray7 mt-1 mb-5 w-full rounded-lg px-3 py-2 font-sans text-sm"
 			/>
-			<div class="flex w-full justify-end">
+			<div class="flex w-full justify-end mt-4">
 				<BrandedButton :text="`Send Code`" :action="sendOTP" />
 			</div>
-			<p class="text-gray7 mt-10 text-center text-sm">
-				Already have a funded wallet? <button class="text-primary font-bold">Connect to NEAR</button>
+			<p class="text-gray7 dark:text-gray2 mt-10 text-center text-sm">
+				Already have a funded wallet?
+				<button class="text-primary dark:text-secondary font-bold">Connect to NEAR</button>
 			</p>
 		</div>
 		<!-- Enter SMS code to complete verify -->
 		<div v-else>
-			<label for="otp" class="text-gray5 block pb-1 text-sm font-semibold"
+			<label for="otp" class="text-gray5 dark:text-gray3 block pb-1 text-sm font-semibold"
 				>Enter the one-time verification code sent to your phone number.</label
 			>
 			<input
@@ -31,10 +32,10 @@
 				v-model="otp"
 				type="text"
 				placeholder=""
-				class="focus:outline-none focus:border-primary text-primary bg-gray2 mt-1 mb-5 w-full rounded-lg px-3 py-2 font-sans text-sm"
+				class="focus:outline-none focus:border-primary dark:focus:border-secondary text-primary dark:text-darkPrimaryText bg-gray2 dark:bg-gray7 mt-1 mb-5 w-full rounded-lg px-3 py-2 font-sans text-sm"
 			/>
 			<BrandedButton v-show="!isLoading" :text="`Verify`" class="w-full" :action="validateOTP" />
-			<h6 v-show="isLoading" class="text-primary text-center">Verifying...</h6>
+			<h6 v-show="isLoading" class="text-primary dark:text-secondary text-center">Verifying...</h6>
 		</div>
 	</article>
 </template>
@@ -131,3 +132,8 @@ export default Vue.extend({
 	},
 })
 </script>
+<style>
+.iti {
+	width: 100%;
+}
+</style>

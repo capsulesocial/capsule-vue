@@ -1,21 +1,21 @@
 <template>
 	<article>
-		<h1 class="text-primary text-4xl font-bold">Sign up</h1>
-		<label for="id" class="text-gray5 block pb-1 text-sm font-semibold">Pick your Capsule name</label>
+		<h1 class="text-primary dark:text-secondary text-4xl font-bold">Sign up</h1>
+		<label for="id" class="text-gray5 dark:text-gray3 block pb-1 text-sm font-semibold">Pick your Capsule name</label>
 		<input
 			id="id"
 			v-model="id"
 			type="text"
 			placeholder=""
-			class="focus:outline-none focus:border-primary text-primary bg-gray2 mt-1 mb-5 w-full rounded-lg px-3 py-2 font-sans text-sm"
+			class="focus:outline-none focus:border-primary dark:focus:border-secondary text-primary dark:text-darkPrimaryText bg-gray2 dark:bg-gray7 mt-1 mb-5 w-full rounded-lg px-3 py-2 font-sans text-sm"
 		/>
 		<BrandedButton v-show="!isLoading" :text="`Sign Up`" :action="handleRegisterID" class="w-full" />
-		<h6 v-show="isLoading" class="text-primary text-center">Checking ID...</h6>
+		<h6 v-show="isLoading" class="text-primary dark:text-secondary text-center">Checking ID...</h6>
 		<div>
-			<p class="justify-between p-5 font-sans text-sm text-gray-600">
+			<p class="justify-between p-5 font-sans text-sm text-gray7 dark:text-gray3">
 				Ensure that the NEAR account with ID: "{{ accountId }}" has sufficient funds before signing up.
 			</p>
-			<p class="justify-between p-5 font-sans text-sm text-gray-600">Available funds: {{ funds }} yN</p>
+			<p class="justify-between p-5 font-sans text-sm text-gray7 dark:text-gray3">Available funds: {{ funds }} yN</p>
 			<BrandedButton :text="`Re-check funds`" class="w-full" :action="checkFunds" />
 		</div>
 	</article>

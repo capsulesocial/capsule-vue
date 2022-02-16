@@ -61,11 +61,13 @@
 				<div
 					v-if="this.$store.state.widgets.primary === `editor` && this.$route.name === `home`"
 					id="metaButton"
-					class="from-lightBGStart to-lightBGStop border-lightBorder text-xs text-gray5 modal-animation card-animation-delay1 animatedraftButton absolute bottom-0 right-0 z-10 m-4 mb-8 flex rounded-lg bg-gradient-to-r px-5 py-3 shadow-lg"
+					class="from-lightBGStart to-lightBGStop dark:from-darkBG dark:to-darkBG border-lightBorder text-gray5 dark:text-gray3 modal-animation card-animation-delay1 animatedraftButton absolute bottom-0 right-0 z-10 m-4 mb-8 flex rounded-lg bg-gradient-to-r px-5 py-3 shadow-lg"
 				>
 					<p v-if="!isCollapsed">Time to publish?</p>
 					<PencilIcon v-else class="fill-current p-1" @close="$router.push(`/post`)" />
-					<button class="text-primary focus:outline-none ml-2" @click="$router.push(`/post`)">Add meta</button>
+					<button class="text-primary dark:text-secondary focus:outline-none ml-2" @click="$router.push(`/post`)">
+						Add meta
+					</button>
 				</div>
 			</section>
 		</div>
@@ -670,7 +672,7 @@ textarea#subtitle {
 	box-sizing: border-box;
 }
 .hidemetaButton {
-	transform: translateX(5.15rem);
+	transform: translateX(6.25rem);
 	padding: 0.7rem;
 }
 .content {

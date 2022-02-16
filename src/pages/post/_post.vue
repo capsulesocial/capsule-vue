@@ -9,7 +9,7 @@
 			<!-- Magic header that disappears on scroll down -->
 			<header
 				id="header"
-				class="page-header xl:w-760 xl:max-w-760 from-lightBGStart to-lightBGStop sticky top-0 z-10 flex w-full items-center rounded-b-lg bg-gradient-to-r py-2 xl:px-4"
+				class="page-header xl:w-760 xl:max-w-760 from-lightBGStart to-lightBGStop dark:from-darkBG dark:to-darkBG sticky top-0 z-10 flex w-full items-center rounded-b-lg bg-gradient-to-r py-2 xl:px-4"
 				style="backdrop-filter: blur(10px)"
 			>
 				<div class="trigger-menu-wrapper flex w-full justify-center py-2 ease-in-out">
@@ -18,13 +18,16 @@
 						<div class="flex items-center">
 							<Avatar :avatar="authorAvatar" :authorID="post.authorID" size="w-10 h-10" class="mr-4 flex-shrink-0" />
 							<div class="pr-8">
-								<nuxt-link v-if="author.name != ``" :to="`/id/` + post.authorID" class="font-semibold">{{
-									author.name
-								}}</nuxt-link>
-								<nuxt-link v-else :to="`/id/` + post.authorID" class="text-gray5 font-semibold">{{
+								<nuxt-link
+									v-if="author.name != ``"
+									:to="`/id/` + post.authorID"
+									class="font-semibold dark:text-darkPrimaryText"
+									>{{ author.name }}</nuxt-link
+								>
+								<nuxt-link v-else :to="`/id/` + post.authorID" class="text-gray5 dark:text-gray3 font-semibold">{{
 									post.authorID
 								}}</nuxt-link>
-								<h6 class="text-gray6 font-sans text-sm">{{ $formatDate(post.timestamp) }}</h6>
+								<h6 class="text-gray6 dark:text-gray3 font-sans text-sm">{{ $formatDate(post.timestamp) }}</h6>
 							</div>
 							<FriendButton
 								v-if="post.authorID !== $store.state.session.id"
@@ -34,7 +37,7 @@
 							/>
 						</div>
 						<span class="flex items-center">
-							<button class="bg-lightSecondary focus:outline-none rounded-full p-1" @click="handleClose">
+							<button class="bg-gray1 dark:bg-gray5 focus:outline-none rounded-full p-1" @click="handleClose">
 								<XIcon />
 							</button>
 						</span>
@@ -44,7 +47,9 @@
 			<section v-if="post !== null" class="mb-5 pb-16 pt-2 md:pb-5">
 				<!-- Category and elipses -->
 				<article class="my-5 flex w-full justify-between">
-					<nuxt-link :to="`/discover/` + post.category" class="text-primary capitalize">{{ post.category }}</nuxt-link>
+					<nuxt-link :to="`/discover/` + post.category" class="text-primary dark:text-secondary capitalize">{{
+						post.category
+					}}</nuxt-link>
 					<div class="flex">
 						<BookmarkButton
 							:postID="$route.params.post"
@@ -62,10 +67,13 @@
 					</div>
 				</article>
 				<article>
-					<h1 class="text-lightPrimaryText text-h1 mb-3 break-words font-serif font-semibold">
+					<h1 class="text-lightPrimaryText dark:text-darkPrimaryText text-h1 mb-3 break-words font-serif font-semibold">
 						{{ post.title }}
 					</h1>
-					<h2 v-if="post.subtitle" class="text-lightSecondaryText text-h2 mb-3 break-words font-serif font-medium">
+					<h2
+						v-if="post.subtitle"
+						class="text-lightSecondaryText dark:text-gray3 text-h2 mb-3 break-words font-serif font-medium"
+					>
 						{{ post.subtitle }}
 					</h2>
 				</article>
@@ -87,7 +95,7 @@
 				</article>
 				<!-- Content -->
 				<article class="mt-5">
-					<div class="text-lightPrimaryText editable content max-w-none break-words">
+					<div class="text-lightPrimaryText dark:text-darkSecondaryText editable content max-w-none break-words">
 						<component :is="readerViewElement" v-if="readerViewElement"></component>
 					</div>
 				</article>
@@ -101,7 +109,7 @@
 					<a
 						:href="`https://ipfs.io/api/v0/dag/get?arg=` + $route.params.post"
 						target="_blank"
-						class="bg-gray1 text-gray5 flex flex-row justify-between rounded-lg px-3 py-1"
+						class="bg-gray1 dark:bg-gray7 text-gray5 dark:text-gray1 flex flex-row justify-between rounded-lg px-3 py-1"
 					>
 						<span>IPFS address </span>
 						<span class="hidden break-words xl:block">{{ $route.params.post }}</span>
