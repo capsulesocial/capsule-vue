@@ -279,7 +279,10 @@ export default Vue.extend({
 					this.qeditor.insertEmbed(range.index, `image`, { alt: cid.toString(), url }, `user`)
 				}
 				const contentLength = this.qeditor.getContents().length()
-				setTimeout(() => this.qeditor?.setSelection(contentLength, 0, `user`), 0)
+				setTimeout(() => {
+					this.qeditor?.setSelection(contentLength, 0, `user`)
+					this.calculateAddPos(contentLength)
+				}, 0)
 			} catch (error: any) {
 				this.$toastError(error.message)
 			}
