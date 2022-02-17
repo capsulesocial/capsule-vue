@@ -148,7 +148,10 @@
 			<section v-else>Post not found</section>
 		</div>
 		<article v-show="isLoading" class="modal-animation fixed mt-20 flex w-full justify-center">
-			<div class="loader m-5"></div>
+			<div
+				class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
+				:style="dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
+			></div>
 		</article>
 		<!-- Show Post preview card on quote repost -->
 		<div v-if="showQuoteRepost">
@@ -215,6 +218,7 @@ interface IData {
 	bookmarksCount: number
 	popImage: boolean
 	readerViewElement: any | null
+	dark: boolean
 }
 
 export default Vue.extend({
@@ -255,6 +259,7 @@ export default Vue.extend({
 			bookmarksCount: -1,
 			popImage: false,
 			readerViewElement: null,
+			dark: false,
 		}
 	},
 	head() {
@@ -337,6 +342,11 @@ export default Vue.extend({
 		}
 		if (this.$store.state.settings.recentlyPosted) {
 			this.$toastSuccess(`This post has been successfully published`)
+		}
+		if (document.documentElement.classList.contains(`dark`)) {
+			this.dark = true
+		} else {
+			this.dark = false
 		}
 	},
 	beforeDestroy() {

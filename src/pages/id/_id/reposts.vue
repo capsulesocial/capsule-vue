@@ -36,7 +36,10 @@
 			No more posts
 		</p>
 		<article v-show="isLoading" class="flex justify-center">
-			<div class="loader m-10"></div>
+			<div
+				class="loader m-10 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
+				:style="dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
+			></div>
 		</article>
 	</section>
 </template>
@@ -58,6 +61,7 @@ interface IData {
 	following: Set<string>
 	algorithm: Algorithm
 	noMorePosts: boolean
+	dark: boolean
 }
 
 export default Vue.extend({
@@ -79,6 +83,7 @@ export default Vue.extend({
 			following: new Set(),
 			algorithm: `NEW`,
 			noMorePosts: false,
+			dark: false,
 		}
 	},
 	async created() {
@@ -88,6 +93,11 @@ export default Vue.extend({
 		}
 		const followersAndFollowing = await getFollowersAndFollowing(this.$store.state.session.id)
 		this.following = followersAndFollowing.following
+		if (document.documentElement.classList.contains(`dark`)) {
+			this.dark = true
+		} else {
+			this.dark = false
+		}
 	},
 	mounted() {
 		const container = this.$parent.$refs.scrollContainer as HTMLElement

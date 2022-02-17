@@ -6,13 +6,15 @@
 		<!-- Title -->
 		<div class="flex flex-grow flex-col">
 			<h6
-				class="truncate text-base font-semibold"
+				class="truncate text-base font-semibold dark:text-darkPrimaryText"
 				:style="$route.name === `home` ? `max-width: 259px` : `max-width: 408px`"
 			>
 				{{ draft.title === `` ? `New Post` : draft.title }}
 			</h6>
-			<p v-if="draft.timestamp !== 0" class="text-gray5 text-sm">Last saved {{ $formatDate(draft.timestamp) }}</p>
-			<p v-else class="text-gray5 text-sm">No save</p>
+			<p v-if="draft.timestamp !== 0" class="text-gray5 dark:text-gray3 text-sm">
+				Last saved {{ $formatDate(draft.timestamp) }}
+			</p>
+			<p v-else class="text-gray5 dark:text-gray3 text-sm">No save</p>
 		</div>
 		<!-- Featured image -->
 		<div class="mx-4 flex flex-shrink-0 items-center">
@@ -22,22 +24,25 @@
 				alt="$store.state.draft.title"
 				class="h-16 w-20 rounded-lg"
 			/>
-			<span v-else class="bg-gray1 text-gray5 flex h-16 w-20 items-center justify-center rounded-lg">
+			<span
+				v-else
+				class="bg-gray1 dark:bg-gray7 text-gray5 dark:text-gray2 flex h-16 w-20 items-center justify-center rounded-lg"
+			>
 				<ImageIcon class="h-5 w-5 fill-current" />
 			</span>
 		</div>
 		<div class="icon relative flex items-center">
-			<button class="focus:outline-none text-gray5 ml-2" @click.stop="toggleDropdownDelete">
+			<button class="focus:outline-none text-gray5 dark:text-gray3 ml-2" @click.stop="toggleDropdownDelete">
 				<MoreIcon />
 			</button>
 			<div
 				v-show="showDelete"
-				class="bg-lightBG text-lightPrimaryText border-lightBorder modal-animation dropdownDraftOpen absolute z-10 flex w-40 flex-col rounded-lg border p-2 shadow-lg"
+				class="bg-lightBG dark:bg-darkBG dark:text-darkPrimaryText text-lightPrimaryText border-lightBorder modal-animation dropdownDraftOpen absolute z-10 flex w-40 flex-col rounded-lg border p-2 shadow-lg"
 				style="top: 35px; right: -5px"
 			>
-				<button class="focus:outline-none text-primary flex" @click="setActiveDraft(draft)">
+				<button class="focus:outline-none text-primary dark:text-secondary flex" @click="setActiveDraft(draft)">
 					<PencilIcon class="fill-current p-1" />
-					<span class="text-primary ml-1 self-center text-sm">Edit this draft</span>
+					<span class="text-primary dark:text-secondary ml-1 self-center text-sm">Edit this draft</span>
 				</button>
 				<!-- Delete -->
 				<button class="focus:outline-none text-negative mt-2 flex" @click="deleteDraft(draft)">

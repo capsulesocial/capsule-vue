@@ -48,7 +48,10 @@
 		</div>
 		<!-- Not loaded yet -->
 		<article v-show="isLoading" class="flex w-full justify-center mt-12">
-			<div class="loader modal-animation m-6"></div>
+			<div
+				class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
+				:style="dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
+			></div>
 		</article>
 	</section>
 </template>
@@ -69,6 +72,7 @@ interface IData {
 	limit: number
 	algorithm: Algorithm
 	noMorePosts: boolean
+	dark: boolean
 }
 
 export default Vue.extend({
@@ -88,6 +92,7 @@ export default Vue.extend({
 			limit: 10,
 			algorithm: `NEW`,
 			noMorePosts: false,
+			dark: false,
 		}
 	},
 	head() {
@@ -117,6 +122,11 @@ export default Vue.extend({
 		getFollowersAndFollowing(this.$store.state.session.id).then(({ following }) => {
 			this.following = following
 		})
+		if (document.documentElement.classList.contains(`dark`)) {
+			this.dark = true
+		} else {
+			this.dark = false
+		}
 	},
 	mounted() {
 		const container = this.$refs.container as HTMLElement

@@ -49,7 +49,10 @@
 					</div>
 				</article>
 				<article v-show="isLoading" class="modal-animation flex w-full justify-center xl:w-3/4">
-					<div class="loader m-5 rounded-lg"></div>
+					<div
+						class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
+						:style="dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
+					></div>
 				</article>
 			</div>
 		</section>
@@ -88,6 +91,7 @@ interface IData {
 	accountIdInput: string
 	privateKey: string
 	currentYear: string
+	dark: boolean
 }
 
 export default Vue.extend({
@@ -113,6 +117,7 @@ export default Vue.extend({
 			accountIdInput: ``,
 			privateKey: ``,
 			currentYear: ``,
+			dark: false,
 		}
 	},
 	head() {
@@ -134,6 +139,11 @@ export default Vue.extend({
 		}
 		const theDate = new Date()
 		this.currentYear = theDate.getFullYear().toString()
+		if (document.documentElement.classList.contains(`dark`)) {
+			this.dark = true
+		} else {
+			this.dark = false
+		}
 	},
 	methods: {
 		...mapMutations(sessionStoreNamespace, {

@@ -12,9 +12,12 @@
 						<XIcon />
 					</button>
 					<article v-else-if="isSaving === `true`" class="modal-animation absolute right-0 top-0 p-8">
-						<div class="loader"></div>
+						<div
+							class="loader border-2 border-gray1 dark:border-gray7 h-6 w-6 rounded-3xl"
+							:style="dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
+						></div>
 					</article>
-					<p v-else class="text-positive modal-animation absolute right-0 top-0 p-8 pt-10">
+					<p v-else class="text-positive modal-animation absolute right-0 top-0 p-8">
 						<span v-if="this.$route.name !== 'home'">Saved!</span>
 					</p>
 					<p class="text-lightError text-xs">{{ titleError }}</p>
@@ -110,6 +113,7 @@ interface IData {
 	toggleAddContent: boolean
 	addContentPosTop: number
 	addContentPosLeft: number
+	dark: boolean
 }
 
 interface IImageData {
@@ -172,6 +176,7 @@ export default Vue.extend({
 			toggleAddContent: false,
 			addContentPosTop: 0,
 			addContentPosLeft: 0,
+			dark: false,
 		}
 	},
 	beforeDestroy() {
@@ -190,6 +195,11 @@ export default Vue.extend({
 	},
 	mounted() {
 		this.setupEditor()
+		if (document.documentElement.classList.contains(`dark`)) {
+			this.dark = true
+		} else {
+			this.dark = false
+		}
 	},
 	methods: {
 		// Quilljs Editor init

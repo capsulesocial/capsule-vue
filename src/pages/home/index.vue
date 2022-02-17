@@ -98,7 +98,10 @@
 			</div>
 			<!-- Not loaded yet -->
 			<article v-show="isLoading" class="modal-animation flex h-screen w-full justify-center pt-12">
-				<div class="loader m-5"></div>
+				<div
+					class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
+					:style="dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
+				></div>
 			</article>
 		</section>
 	</div>
@@ -120,6 +123,7 @@ interface IData {
 	currentOffset: number
 	limit: number
 	noMorePosts: boolean
+	dark: boolean
 }
 
 export default Vue.extend({
@@ -145,6 +149,7 @@ export default Vue.extend({
 			currentOffset: 0,
 			limit: 10,
 			noMorePosts: false,
+			dark: false,
 		}
 	},
 	head() {
@@ -163,6 +168,11 @@ export default Vue.extend({
 	async created() {
 		// Unauthenticated view
 		this.posts = await this.fetchPosts(this.algorithm)
+		if (document.documentElement.classList.contains(`dark`)) {
+			this.dark = true
+		} else {
+			this.dark = false
+		}
 	},
 	mounted() {
 		const container = this.$refs.container as HTMLElement
@@ -250,23 +260,3 @@ export default Vue.extend({
 	},
 })
 </script>
-
-<style>
-.loader {
-	border: 3px solid #eeeeee;
-	border-top: 3px solid #2e556a;
-	border-radius: 50%;
-	width: 40px;
-	height: 40px;
-	animation: spin 2s linear infinite;
-}
-
-@keyframes spin {
-	0% {
-		transform: rotate(0deg);
-	}
-	100% {
-		transform: rotate(360deg);
-	}
-}
-</style>

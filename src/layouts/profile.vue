@@ -51,7 +51,10 @@
 						</aside>
 					</section>
 					<section v-else class="modal-animation flex w-full justify-center">
-						<div class="loader m-5 rounded-lg p-10"></div>
+						<div
+							class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
+							:style="dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
+						></div>
 					</section>
 				</div>
 				<div
@@ -140,6 +143,7 @@ interface IData {
 	bgImage: IBackground
 	showFollowers: boolean
 	showFollowing: boolean
+	dark: boolean
 }
 
 export default Vue.extend({
@@ -171,6 +175,7 @@ export default Vue.extend({
 			bgImage: backgrounds[0],
 			showFollowers: false,
 			showFollowing: false,
+			dark: false,
 		}
 	},
 	watch: {
@@ -212,6 +217,11 @@ export default Vue.extend({
 		this.getVisitingProfile()
 		// Set color mode
 		this.$setColorMode(this.$store.state.settings.darkMode)
+		if (document.documentElement.classList.contains(`dark`)) {
+			this.dark = true
+		} else {
+			this.dark = false
+		}
 	},
 	methods: {
 		async getVisitingProfile() {

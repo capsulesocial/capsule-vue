@@ -35,7 +35,10 @@
 			No more posts
 		</p>
 		<article v-show="isLoading" class="modal-animation flex justify-center">
-			<div class="loader m-10"></div>
+			<div
+				class="loader m-10 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
+				:style="dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
+			></div>
 		</article>
 	</section>
 </template>
@@ -54,6 +57,7 @@ interface IData {
 	limit: number
 	algorithm: Algorithm
 	noMorePosts: boolean
+	dark: boolean
 }
 
 export default Vue.extend({
@@ -83,6 +87,7 @@ export default Vue.extend({
 			limit: 10,
 			algorithm: `NEW`,
 			noMorePosts: false,
+			dark: false,
 		}
 	},
 	watch: {
@@ -99,6 +104,11 @@ export default Vue.extend({
 	},
 	async created() {
 		this.posts = await this.fetchPosts()
+		if (document.documentElement.classList.contains(`dark`)) {
+			this.dark = true
+		} else {
+			this.dark = false
+		}
 	},
 	mounted() {
 		const container = this.$parent.$refs.scrollContainer as HTMLElement

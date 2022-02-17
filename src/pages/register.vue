@@ -6,7 +6,10 @@
 		<CapsuleIcon class="pt-6 pl-10" />
 		<section class="flex items-center justify-center max-h-90" style="height: 86%">
 			<div v-show="isLoading" class="modal-animation flex w-full justify-center xl:w-1/2 z-20">
-				<div class="loader m-5 rounded-lg"></div>
+				<div
+					class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
+					:style="dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
+				></div>
 			</div>
 			<div v-show="!isLoading" class="-mt-5 flex w-full flex-col items-center px-14">
 				<!-- Step 0: Code redeem -->
@@ -111,6 +114,7 @@ interface IData {
 	currentYear: string
 	isLoading: boolean
 	showInfos: boolean
+	dark: boolean
 }
 
 export default Vue.extend({
@@ -137,6 +141,7 @@ export default Vue.extend({
 			currentYear: ``,
 			isLoading: true,
 			showInfos: false,
+			dark: false,
 		}
 	},
 	head() {
@@ -163,6 +168,11 @@ export default Vue.extend({
 		}
 		const theDate = new Date()
 		this.currentYear = theDate.getFullYear().toString()
+		if (document.documentElement.classList.contains(`dark`)) {
+			this.dark = true
+		} else {
+			this.dark = false
+		}
 	},
 	methods: {
 		...mapMutations(sessionStoreNamespace, {
@@ -293,23 +303,3 @@ export default Vue.extend({
 	},
 })
 </script>
-
-<style>
-.loader {
-	border: 3px solid #eeeeee;
-	border-top: 3px solid #2e556a;
-	border-radius: 50%;
-	width: 40px;
-	height: 40px;
-	animation: spin 2s linear infinite;
-}
-
-@keyframes spin {
-	0% {
-		transform: rotate(0deg);
-	}
-	100% {
-		transform: rotate(360deg);
-	}
-}
-</style>
