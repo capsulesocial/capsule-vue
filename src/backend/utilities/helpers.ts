@@ -32,13 +32,17 @@ export function getBlobExtension(blob: Blob): string | null {
 			return `.jpeg`
 		case `image/jpg`:
 			return `.jpg`
+		case `image/avif`:
+			return `.avif`
+		case `image/webp`:
+			return `.webp`
 		default:
 			return null
 	}
 }
 
 export function isValidFileType(fileType: string) {
-	const validFileTypes = [`image/png`, `image/jpeg`, `image/jpg`]
+	const validFileTypes = [`image/png`, `image/jpeg`, `image/jpg`, `image/avif`, `image/webp`]
 	if (!validFileTypes.includes(fileType)) {
 		return false
 	}
