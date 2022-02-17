@@ -67,7 +67,7 @@ jobs:
   release:
     needs: [lint, build]
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' && false
     steps:
 
       - uses: actions/checkout@v1
@@ -118,7 +118,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: lexauw/ansible-alpine:latest
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' && false
     steps:
 
       - uses: actions/checkout@v1
