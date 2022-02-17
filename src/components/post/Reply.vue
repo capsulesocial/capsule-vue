@@ -1,17 +1,24 @@
 <template>
 	<div class="flex">
-		<div class="flex-shrink-0">
+		<div class="flex-shrink-0 mr-2">
 			<Avatar :avatar="avatar" :authorID="authorID" size="w-10 h-10" />
 		</div>
 		<div class="ml-2 flex-1 leading-relaxed">
-			<strong class="bold mr-1 font-bold text-lightPrimaryText">
-				{{ name }}
-			</strong>
-			<nuxt-link :to="`/id/` + authorID" class="mr-2 text-sm text-lightSecondaryText"> @{{ authorID }} </nuxt-link>
-			<span v-if="timestamp" class="text-xs text-lightSecondaryText">
-				{{ $formatDate(timestamp) }}
-			</span>
-			<p class="py-1 text-sm text-lightPrimaryText">
+			<div class="flex flex-row items-center">
+				<strong v-if="name !== ``" class="bold mr-2 font-bold text-lightPrimaryText dark:text-darkPrimaryText">
+					{{ name }}
+				</strong>
+				<strong v-else class="bold mr-2 font-bold text-gray5 dark:text-gray3">
+					{{ authorID }}
+				</strong>
+				<nuxt-link :to="`/id/` + authorID" class="mr-4 text-sm text-primary dark:text-secondary">
+					@{{ authorID }}
+				</nuxt-link>
+				<span v-if="timestamp" class="text-xs text-gray5 dark:text-gray3">
+					{{ $formatDate(timestamp) }}
+				</span>
+			</div>
+			<p class="py-1 text-sm text-lightPrimaryText dark:text-darkSecondaryText">
 				{{ content }}
 			</p>
 		</div>

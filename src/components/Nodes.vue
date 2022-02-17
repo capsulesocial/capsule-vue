@@ -2,7 +2,7 @@
 	<!-- Peered nodes -->
 	<div class="bg-gray1 dark:bg-gray7 hidden items-center rounded-lg px-3 xl:flex">
 		<span class="text-gray5 dark:text-gray1 mr-1 text-sm">{{ nodes }} peered nodes</span>
-		<CapsuleIcon :shrink="true" />
+		<CapsuleIcon :shrink="true" class="text-primary dark:text-gray1" />
 		<span class="ml-1 flex h-3 w-3">
 			<span
 				class="absolute inline-flex h-3 w-3 animate-ping rounded-full opacity-75"

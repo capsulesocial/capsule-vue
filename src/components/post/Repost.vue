@@ -12,7 +12,8 @@
 		</button>
 		<div
 			v-show="showReposts"
-			class="bg-lightBG dark:bg-darkBG text-lightPrimaryText dark:text-darkPrimaryText border-lightBorder modal-animation dropdownRepostOpen absolute z-20 flex w-40 flex-col rounded-lg border p-2 shadow-lg"
+			class="bg-lightBG dark:bg-darkBG text-lightPrimaryText dark:text-darkPrimaryText border-lightBorder modal-animation absolute z-20 flex w-40 flex-col rounded-lg border p-2 shadow-lg"
+			:class="dark ? `dropdownRepostOpenDark` : `dropdownRepostOpen`"
 			style="left: 50px"
 		>
 			<!-- Simple Repost -->
@@ -50,6 +51,7 @@ interface IData {
 	showReposts: boolean
 	isReposted: boolean
 	repostOffset: number
+	dark: boolean
 }
 
 export default Vue.extend({
@@ -84,6 +86,7 @@ export default Vue.extend({
 			showReposts: false,
 			isReposted: false,
 			repostOffset: 0,
+			dark: false,
 		}
 	},
 	created() {
@@ -108,6 +111,11 @@ export default Vue.extend({
 			},
 			false,
 		)
+		if (document.documentElement.classList.contains(`dark`)) {
+			this.dark = true
+		} else {
+			this.dark = false
+		}
 	},
 	methods: {
 		sendRepost,
@@ -147,11 +155,23 @@ export default Vue.extend({
 	content: '';
 	position: absolute;
 	top: 2.6rem;
-	left: -0.5rem;
+	left: -0.4rem;
 	transform: rotate(45deg);
 	width: 1rem;
 	height: 1rem;
 	background-color: #fff;
+	border-radius: 2px;
+}
+
+.dropdownRepostOpenDark::before {
+	content: '';
+	position: absolute;
+	top: 2.6rem;
+	left: -0.4rem;
+	transform: rotate(45deg);
+	width: 1rem;
+	height: 1rem;
+	background-color: #121212;
 	border-radius: 2px;
 }
 </style>

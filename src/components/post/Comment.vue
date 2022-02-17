@@ -32,7 +32,7 @@
 							<span class="text-primary dark:text-secondary ml-2 text-sm xl:text-base"> @{{ authorID }} </span>
 							<span
 								v-if="authorID === postAuthor"
-								class="bg-primary dark:bg-secondary ml-2 rounded-2xl bg-opacity-25 py-1 px-2 text-xs"
+								class="bg-primary dark:bg-secondary dark:text-darkPrimaryText ml-2 rounded-2xl bg-opacity-25 py-1 px-2 text-xs"
 							>
 								Author
 							</span>
@@ -98,24 +98,24 @@
 		<!-- Reply button -->
 		<div class="ml-3 pl-1 xl:ml-20">
 			<!-- Active reply state -->
-			<div v-if="isReplying" class="modal-animation mr-5 mt-4 border-l pl-2">
+			<div v-if="isReplying" class="modal-animation mr-5 mt-4 border-l border-gray5 pl-2">
 				<!-- Reply Input box -->
 				<div
 					v-if="$store.state.session.id !== ``"
-					class="my-1 ml-5 flex w-full rounded-xl border-2 p-1 bg-lightBG text-lightPrimaryText border-lightBorder"
+					class="ml-5 flex w-full rounded-xl border-2 p-1 bg-lightBG dark:bg-darkBG text-lightPrimaryText dark:text-darkPrimaryText border-lightBorder"
 				>
 					<textarea
 						v-model="reply"
 						type="text"
 						placeholder="Reply.."
-						class="resize-vertical focus:outline-none w-4/5 overflow-y-auto py-1 px-2 text-sm leading-normal bg-lightBG text-lightPrimaryText"
+						class="resize-vertical focus:outline-none w-4/5 overflow-y-auto py-1 px-2 text-sm leading-normal bg-lightBG dark:bg-darkBG text-lightPrimaryText dark:text-darkPrimaryText"
 						style="resize: none"
 					>
 					</textarea>
 					<span class="relative w-1/5 flex justify-end items-end">
 						<button
 							v-if="reply !== ''"
-							class="text-primary focus:outline-none text-left font-sans text-sm p-4"
+							class="text-primary dark:text-secondary focus:outline-none text-left font-sans text-sm p-4"
 							@click="sendReply"
 						>
 							Post reply
@@ -123,14 +123,14 @@
 					</span>
 				</div>
 				<!-- List replies -->
-				<div class="pl-5 pt-1">
+				<div v-if="filterReplies().length > 0" class="pl-5 mt-2">
 					<Reply
 						v-for="r in filterReplies()"
 						:key="r._id"
 						:authorID="r.authorID"
 						:cid="r._id"
 						:timestamp="r.timestamp"
-						class="pt-1 pb-2"
+						class="pt-1 mt-2"
 					/>
 				</div>
 			</div>
