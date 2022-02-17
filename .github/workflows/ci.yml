@@ -1,5 +1,8 @@
 name: Node CI
-on: [push]
+on:
+  push:
+  release:
+    types: [published]
 env:
   GITHUB_USER: dgrisham
   GITHUB_TOKEN: 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
@@ -67,7 +70,7 @@ jobs:
   release:
     needs: [lint, build]
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || (github.event_name == 'release' && github.event.action == 'published')
     steps:
 
       - uses: actions/checkout@v1
@@ -100,9 +103,31 @@ jobs:
           EOF
 
       - name: Set DEPLOY_BRANCH in env
-        run: echo "DEPLOY_BRANCH=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
+        run: |
+          branch=''
+          if [[ "${{ github.event_name }}" == 'push' && "$GITHUB_REF" == 'refs/heads/main' ]]; then
+              branch='main'
+          elif [[ "${{ github.event_name }}" == 'release' && "${{ github.event.action }}" == 'published' ]]; then
+              # NOTE: 'DEPLOY_BRANCH' is a bad name for this. But Ansible needs a common
+              # reference for all releases so that it knows which config to use (and tags
+              # aren't tied to a specific branch)
+              branch='release'
+          fi
+          [[ -z "$branch" ]] && { echo "Failed to set deploy branch" >&2 ; exit 1 ; }
+          echo "DEPLOY_BRANCH=$branch" >> $GITHUB_ENV
+
       - name: Set COMMIT_SHORT_SHA in env
-        run: echo "COMMIT_SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+        run: |
+          commit_identifier=''
+          if [[ "${{ github.event_name }}" == 'push' && "$GITHUB_REF" == 'refs/heads/main' ]]; then
+              commit_identifier=$(git rev-parse --short HEAD)
+          elif [[ "${{ github.event_name }}" == 'release' && "${{ github.event.action }}" == 'published' ]]; then
+              # for releases, this is the version number followed by the short sha -- e.g. v0.11.0-alpha-a1b2c3d4
+              commit_identifier="$(echo ${GITHUB_REF#refs/tags/})-$(git rev-parse --short HEAD)"
+          fi
+          [[ -z "$commit_identifier" ]] && { echo "Failed to set commit identifier" >&2 ; exit 1 ; }
+          echo "COMMIT_SHORT_SHA=$commit_identifier" >> $GITHUB_ENV
+
       - name: Build and push capsule-vue image
         uses: docker/build-push-action@v2
         with:
@@ -118,15 +143,36 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: lexauw/ansible-alpine:latest
-    if: github.ref == 'refs/heads/main'
+    if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || (github.event_name == 'release' && github.event.action == 'published')
     steps:
 
       - uses: actions/checkout@v1
 
       - name: Set DEPLOY_BRANCH in env
-        run: echo "DEPLOY_BRANCH=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
+        run: |
+          branch=''
+          if [[ "${{ github.event_name }}" == 'push' && "$GITHUB_REF" == 'refs/heads/main' ]]; then
+              branch='main'
+          elif [[ "${{ github.event_name }}" == 'release' && "${{ github.event.action }}" == 'published' ]]; then
+              # NOTE: 'DEPLOY_BRANCH' is a bad name for this. But Ansible needs a common
+              # reference for all releases so that it knows which config to use (and tags
+              # aren't tied to a specific branch)
+              branch='release'
+          fi
+          [[ -z "$branch" ]] && { echo "Failed to set deploy branch" >&2 ; exit 1 ; }
+          echo "DEPLOY_BRANCH=$branch" >> $GITHUB_ENV
+
       - name: Set COMMIT_SHORT_SHA in env
-        run: echo "COMMIT_SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+        run: |
+          commit_identifier=''
+          if [[ "${{ github.event_name }}" == 'push' && "$GITHUB_REF" == 'refs/heads/main' ]]; then
+              commit_identifier=$(git rev-parse --short HEAD)
+          elif [[ "${{ github.event_name }}" == 'release' && "${{ github.event.action }}" == 'published' ]]; then
+              # for releases, this is the version number followed by the short sha -- e.g. v0.11.0-alpha-a1b2c3d4
+              commit_identifier="$(echo ${GITHUB_REF#refs/tags/})-$(git rev-parse --short HEAD)"
+          fi
+          [[ -z "$commit_identifier" ]] && { echo "Failed to set commit identifier" >&2 ; exit 1 ; }
+          echo "COMMIT_SHORT_SHA=$commit_identifier" >> $GITHUB_ENV
 
       - name: Deploy updated images
         run: ./.github/scripts/deploy.sh
