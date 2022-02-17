@@ -479,6 +479,7 @@ export default Vue.extend({
 				this.$toastError(`Please select a reaction`)
 				return
 			}
+			this.comment = this.comment.trim()
 			const commentQualityCheck = this.$qualityComment(this.comment)
 			if (this.$isError(commentQualityCheck)) {
 				this.$toastError(commentQualityCheck.error)
