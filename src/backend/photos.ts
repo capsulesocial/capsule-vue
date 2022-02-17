@@ -36,16 +36,20 @@ export function addPhotoToIPFS(content: string | ArrayBuffer) {
 export function uploadPhoto(image: File) {
 	return new Promise<IUploadPhotoResult>((resolve, reject) => {
 		try {
-			getCompressedImage(image).then((compressedImage) => {
-				const reader = new FileReader()
-				reader.readAsDataURL(compressedImage)
-				reader.onload = async (i) => {
-					if (i.target !== null && i.target.result !== null) {
-						const cid = await addPhotoToIPFS(i.target.result)
-						resolve({ cid, url: i.target.result, image: compressedImage, imageName: image.name })
+			getCompressedImage(image)
+				.then((compressedImage) => {
+					const reader = new FileReader()
+					reader.readAsDataURL(compressedImage)
+					reader.onload = async (i) => {
+						if (i.target !== null && i.target.result !== null) {
+							const cid = await addPhotoToIPFS(i.target.result)
+							resolve({ cid, url: i.target.result, image: compressedImage, imageName: image.name })
+						}
 					}
-				}
-			})
+				})
+				.catch((err) => {
+					reject(err)
+				})
 		} catch (err) {
 			reject(err)
 		}
