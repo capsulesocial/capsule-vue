@@ -11,7 +11,8 @@
 		</button>
 		<div
 			v-show="showSocialShares"
-			class="bg-lightBG dark:bg-darkBG text-lightPrimaryText dark:text-darkPrimaryText border-lightBorder modal-animation dropdownShareOpen absolute z-10 flex w-40 flex-col rounded-lg border p-2 shadow-lg"
+			class="bg-lightBG dark:bg-darkBG text-lightPrimaryText dark:text-darkPrimaryText border-lightBorder modal-animation absolute z-10 flex w-40 flex-col rounded-lg border p-2 shadow-lg"
+			:class="dark ? `dropdownShareOpenDark` : `dropdownShareOpen`"
 			style="left: 40px"
 		>
 			<!-- Twitter -->
@@ -46,6 +47,7 @@ import { Post } from '@/backend/post'
 
 interface IData {
 	showSocialShares: boolean
+	dark: boolean
 }
 
 export default Vue.extend({
@@ -67,6 +69,7 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			showSocialShares: false,
+			dark: false,
 		}
 	},
 	created() {
@@ -86,6 +89,11 @@ export default Vue.extend({
 			},
 			false,
 		)
+		if (document.documentElement.classList.contains(`dark`)) {
+			this.dark = true
+		} else {
+			this.dark = false
+		}
 	},
 	methods: {
 		handleShare(type: string) {
@@ -130,6 +138,17 @@ export default Vue.extend({
 	width: 1rem;
 	height: 1rem;
 	background-color: #fff;
+	border-radius: 2px;
+}
+.dropdownShareOpenDark::before {
+	content: '';
+	position: absolute;
+	top: 2.6rem;
+	left: -0.5rem;
+	transform: rotate(45deg);
+	width: 1rem;
+	height: 1rem;
+	background-color: #121212;
 	border-radius: 2px;
 }
 </style>

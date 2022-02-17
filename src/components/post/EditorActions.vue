@@ -11,14 +11,11 @@
 		</button>
 		<div
 			v-show="showSocialShares"
-			class="bg-lightBG dark:bg-darkBG text-lightPrimaryText dark:text-darkPrimaryText border-lightBorder modal-animation dropdownActionsOpen absolute z-10 flex flex-col rounded-lg border p-3 shadow-lg"
+			class="bg-lightBG text-lightPrimaryText border-lightBorder modal-animation dropdownActionsOpen absolute z-10 flex flex-col rounded-lg border p-3 shadow-lg"
 			style="left: 50px; top: -12px"
 		>
 			<!-- Add Image -->
-			<button
-				class="focus:outline-none text-gray5 dark:text-gray3 flex hover:text-lightPrimaryText dark:hover:text-darkPrimaryText"
-				@click="$emit(`image`)"
-			>
+			<button class="focus:outline-none text-gray5 flex hover:text-lightPrimaryText" @click="$emit(`image`)">
 				<ImageIcon class="h-5 w-5 fill-current" />
 			</button>
 		</div>

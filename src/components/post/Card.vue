@@ -134,7 +134,8 @@
 								</button>
 								<div
 									v-show="showDelete"
-									class="dropdownDeleteOpen border-lightBorder modal-animation absolute z-10 flex w-36 flex-col rounded-lg border bg-lightBG dark:bg-darkBG p-1 shadow-lg"
+									class="border-lightBorder modal-animation absolute z-10 flex w-36 flex-col rounded-lg border bg-lightBG dark:bg-darkBG p-1 shadow-lg"
+									:class="dark ? `dropdownDeleteOpenDark` : `dropdownDeleteOpen`"
 									:style="
 										quote && quote.authorID === $store.state.session.id
 											? `top: 55px; right: 40px`
@@ -290,7 +291,8 @@
 								</button>
 								<div
 									v-show="showQuoteDelete"
-									class="dropdownDeleteOpen border-lightBorder modal-animation absolute z-10 flex w-48 flex-col rounded-lg border bg-lightBG dark:bg-darkBG p-1 shadow-lg"
+									class="border-lightBorder modal-animation absolute z-10 flex w-48 flex-col rounded-lg border bg-lightBG dark:bg-darkBG p-1 shadow-lg"
+									:class="dark ? `dropdownDeleteOpenDark` : `dropdownDeleteOpen`"
 									style="top: 35px; right: -10px"
 								>
 									<!-- Delete -->
@@ -395,6 +397,7 @@
 								<div
 									v-show="showDelete"
 									class="dropdownDeleteOpen border-lightBorder modal-animation absolute z-10 flex w-36 flex-col rounded-lg border bg-lightBG dark:bg-darkBG p-1 shadow-lg"
+									:class="dark ? `dropdownDeleteOpenDark` : `dropdownDeleteOpen`"
 									:style="
 										quote && quote.authorID === $store.state.session.id
 											? `top: 55px; right: -10px`
@@ -577,6 +580,7 @@ interface IData {
 		name: string
 	} | null
 	postCID: string
+	dark: boolean
 }
 
 export default Vue.extend({
@@ -681,6 +685,7 @@ export default Vue.extend({
 			quote: null,
 			postCID: ``,
 			quoteContent: ``,
+			dark: false,
 		}
 	},
 	async created() {
@@ -758,6 +763,12 @@ export default Vue.extend({
 			},
 			false,
 		)
+		// check dark mode
+		if (document.documentElement.classList.contains(`dark`)) {
+			this.dark = true
+		} else {
+			this.dark = false
+		}
 	},
 	destroyed() {
 		window.removeEventListener(`click`, this.handleClose)
@@ -932,6 +943,17 @@ export default Vue.extend({
 	width: 1rem;
 	height: 1rem;
 	background-color: #fff;
+	border-radius: 2px;
+}
+.dropdownDeleteOpenDark::before {
+	content: '';
+	position: absolute;
+	top: -0.5rem;
+	right: 0.8rem;
+	transform: rotate(45deg);
+	width: 1rem;
+	height: 1rem;
+	background-color: #121212;
 	border-radius: 2px;
 }
 </style>

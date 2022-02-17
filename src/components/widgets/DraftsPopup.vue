@@ -4,11 +4,13 @@
 		<section>
 			<div
 				style="width: 600px; backdrop-filter: blur(10px)"
-				class="from-lightBGStart to-lightBGStop card-animation z-10 mr-5 overflow-y-auto rounded-lg bg-gradient-to-r p-6 pt-4 shadow-lg"
+				class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation z-10 mr-5 overflow-y-auto rounded-lg bg-gradient-to-r p-6 pt-4 shadow-lg"
 			>
 				<div class="sticky flex items-center justify-between">
-					<h2 class="text-primary text-3xl font-semibold">Drafts</h2>
-					<button class="focus:outline-none bg-gray1 rounded-full p-1" @click="$emit(`close`)"><CloseIcon /></button>
+					<h2 class="text-primary dark:text-secondary text-3xl font-semibold">Drafts</h2>
+					<button class="focus:outline-none bg-gray1 dark:bg-gray5 rounded-full p-1" @click="$emit(`close`)">
+						<CloseIcon />
+					</button>
 				</div>
 				<div
 					v-if="
@@ -19,7 +21,9 @@
 					"
 					class="flex w-full flex-col items-center mt-12"
 				>
-					<p class="text-gray5 mb-5 text-sm">It seems you don't have any drafts yet, you can start a new one here:</p>
+					<p class="text-gray5 dark:text-gray3 mb-5 text-sm">
+						It seems you don't have any drafts yet, you can start a new one here:
+					</p>
 					<SecondaryButton :text="`Write a post`" :action="handleWriteNewDraft" />
 				</div>
 				<div v-else class="flex w-full flex-col-reverse items-center">

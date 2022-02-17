@@ -29,7 +29,8 @@
 				<!-- Dropdown: Profile, settings, disconnect -->
 				<div
 					v-show="showDropdown"
-					class="dropdownOpen from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation absolute mt-16 flex flex-col rounded-lg border bg-gradient-to-r p-4 shadow-lg backdrop-blur-lg backdrop-filter"
+					class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation absolute mt-16 flex flex-col rounded-lg border bg-gradient-to-r p-4 shadow-lg backdrop-blur-lg backdrop-filter"
+					:class="dark ? `dropdownOpenDark` : `dropdownOpen`"
 				>
 					<!-- Unauthenticated: Log in -->
 					<nuxt-link
@@ -74,11 +75,12 @@
 			<!-- Mobile menu dropdown -->
 			<div class="relative">
 				<button class="mobileDropdown" @click="showMobileMenu = !showMobileMenu">
-					<MobileNav class="mobileDropdown" />
+					<MobileNav class="mobileDropdown text-primary dark:text-secondary" />
 				</button>
 				<div
 					v-show="showMobileMenu"
-					class="dropdownMainOpen from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation absolute mt-2 ml-0 flex flex-col rounded-lg border bg-gradient-to-r p-4 shadow-lg backdrop-blur-lg backdrop-filter"
+					class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation absolute mt-2 ml-0 flex flex-col rounded-lg border bg-gradient-to-r p-4 shadow-lg backdrop-blur-lg backdrop-filter"
+					:class="dark ? `dropdownMainOpenDark` : `dropdownMainOpen`"
 				>
 					<nuxt-link
 						to="/home"
@@ -106,7 +108,7 @@
 			<!-- Middle branding -->
 			<nuxt-link to="/home">
 				<div class="flex items-center">
-					<CapsuleIcon />
+					<CapsuleIcon class="text-primary dark:text-secondary mr-2" />
 					<h1 class="text-primary dark:text-secondary font-sans text-xl font-bold">Blogchain</h1>
 				</div>
 			</nuxt-link>
@@ -122,7 +124,8 @@
 				<!-- Dropdown: Profile, settings, disconnect -->
 				<div
 					v-show="showDropdown"
-					class="dropdownOpen from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation absolute mt-2 flex flex-col rounded-lg border bg-gradient-to-r p-4 shadow-lg backdrop-blur-lg backdrop-filter"
+					class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation absolute mt-2 flex flex-col rounded-lg border bg-gradient-to-r p-4 shadow-lg backdrop-blur-lg backdrop-filter"
+					:class="dark ? `dropdownOpenDark` : `dropdownOpen`"
 				>
 					<!-- Unauthenticated: Log in -->
 					<nuxt-link
@@ -186,6 +189,7 @@ import { MutationType, namespace as sessionStoreNamespace } from '~/store/sessio
 interface IData {
 	showDropdown: boolean
 	showMobileMenu: boolean
+	dark: boolean
 }
 
 export default Vue.extend({
@@ -211,11 +215,17 @@ export default Vue.extend({
 		return {
 			showDropdown: false,
 			showMobileMenu: false,
+			dark: false,
 		}
 	},
 	created() {
 		// Set filter dropdown event handler
 		window.addEventListener(`click`, this.handleDropdown, false)
+		if (document.documentElement.classList.contains(`dark`)) {
+			this.dark = true
+		} else {
+			this.dark = false
+		}
 	},
 	destroyed() {
 		window.removeEventListener(`click`, this.handleDropdown)
@@ -282,6 +292,10 @@ export default Vue.extend({
 	margin-left: -6rem;
 	backdrop-filter: blur(10px);
 }
+.dropdownOpenDark {
+	margin-left: -6rem;
+	backdrop-filter: blur(10px);
+}
 .dropdownOpen::before {
 	content: '';
 	position: absolute;
@@ -291,6 +305,17 @@ export default Vue.extend({
 	width: 1rem;
 	height: 1rem;
 	background-color: #fff;
+	border-radius: 2px;
+}
+.dropdownOpenDark::before {
+	content: '';
+	position: absolute;
+	top: -0.5rem;
+	right: 0.95rem;
+	transform: rotate(45deg);
+	width: 1rem;
+	height: 1rem;
+	background-color: rgba(46, 46, 46, 0.95);
 	border-radius: 2px;
 }
 .dropdownMainOpen {
@@ -307,6 +332,17 @@ export default Vue.extend({
 	width: 1rem;
 	height: 1rem;
 	background-color: #fff;
+	border-radius: 2px;
+}
+.dropdownMainOpenDark::before {
+	content: '';
+	position: absolute;
+	top: -0.5rem;
+	left: 0.95rem;
+	transform: rotate(45deg);
+	width: 1rem;
+	height: 1rem;
+	background-color: rgba(46, 46, 46, 0.95);
 	border-radius: 2px;
 }
 </style>
