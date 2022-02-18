@@ -5,17 +5,22 @@
 			<div
 				v-if="profile !== null"
 				style="width: 600px; backdrop-filter: blur(10px)"
-				class="from-lightBGStart to-lightBGStop card-animation max-h-90 z-10 mr-5 overflow-y-auto rounded-lg bg-gradient-to-r px-6 pt-4 pb-2 shadow-lg"
+				class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation max-h-90 z-10 mr-5 overflow-y-auto rounded-lg bg-gradient-to-r px-6 pt-4 pb-2 shadow-lg"
 			>
 				<div class="sticky flex items-center justify-between mb-6">
-					<h2 v-if="$route.params.id === $store.state.session.id" class="text-primary text-3xl font-semibold">
+					<h2
+						v-if="$route.params.id === $store.state.session.id"
+						class="text-primary dark:text-secondary text-3xl font-semibold"
+					>
 						Followed by you
 					</h2>
-					<h2 v-else class="text-primary text-3xl font-semibold">Followed by {{ profile.name }}</h2>
-					<button class="focus:outline-none bg-gray1 rounded-full p-1" @click="$emit(`close`)"><CloseIcon /></button>
+					<h2 v-else class="text-primary dark:text-secondary text-3xl font-semibold">Followed by {{ profile.name }}</h2>
+					<button class="focus:outline-none bg-gray1 dark:bg-gray5 rounded-full p-1" @click="$emit(`close`)">
+						<CloseIcon />
+					</button>
 				</div>
 				<article v-if="profiles.length == 0" class="mt-32 grid justify-items-center px-10 xl:px-0">
-					<p class="text-gray5 mb-5 text-center text-sm">
+					<p class="text-gray5 dark:text-gray3 mb-5 text-center text-sm">
 						<span v-if="$route.params.id === $store.state.session.id">
 							It seems you're not following anyone yet!<br />
 							you can start follow content creators all around Blogchain:

@@ -4,16 +4,18 @@
 		<section>
 			<div
 				style="width: 600px; backdrop-filter: blur(5px)"
-				class="from-lightBGStart to-lightBGStop card-animation z-10 mr-5 overflow-y-auto rounded-lg bg-gradient-to-r px-6 pt-4 pb-2 shadow-lg"
+				class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation z-10 mr-5 overflow-y-auto rounded-lg bg-gradient-to-r px-6 pt-4 pb-2 shadow-lg"
 			>
 				<div class="sticky flex items-center justify-between">
-					<h2 class="text-primary text-2xl font-semibold">Sign Up Methods</h2>
-					<button class="focus:outline-none bg-gray1 rounded-full p-1" @click="$emit(`close`)"><CloseIcon /></button>
+					<h2 class="text-primary dark:text-secondary text-2xl font-semibold">Sign Up Methods</h2>
+					<button class="focus:outline-none bg-gray1 dark:bg-gray5 rounded-full p-1" @click="$emit(`close`)">
+						<CloseIcon />
+					</button>
 				</div>
 				<div class="text-sm">
 					<div class="flex flex-col my-4">
-						<h4 class="text-lg font-semibold">Sign up with Google</h4>
-						<p class="my-2 text-gray5">
+						<h4 class="text-lg font-semibold dark:text-darkPrimaryText">Sign up with Google</h4>
+						<p class="my-2 text-gray5 dark:text-gray3">
 							Signing up on Capsule requires writing data on the blockchain through transactions on a smart contract
 							with small amounts of NEAR token. You’ll need to provide your phone number to verify your human identity
 							and enable Capsule to sponsor you with NEAR tokens. Capsule will not store or track any information from
@@ -22,8 +24,8 @@
 						</p>
 					</div>
 					<div class="flex flex-col my-4">
-						<h4 class="text-lg font-semibold">Sign up with Discord</h4>
-						<p class="my-2 text-gray5">
+						<h4 class="text-lg font-semibold dark:text-darkPrimaryText">Sign up with Discord</h4>
+						<p class="my-2 text-gray5 dark:text-gray3">
 							Signing up on Capsule requires writing data on the blockchain through transactions on a smart contract
 							with small amounts of NEAR token. You’ll need to provide your phone number for verifying your human
 							identity and enable Capsule to sponsor you with NEAR tokens. Capsule will not store or track information
@@ -32,8 +34,8 @@
 						</p>
 					</div>
 					<div class="flex flex-col my-4">
-						<h4 class="text-lg font-semibold">Sign up with NEAR</h4>
-						<p class="my-2 text-gray5">
+						<h4 class="text-lg font-semibold dark:text-darkPrimaryText">Sign up with NEAR</h4>
+						<p class="my-2 text-gray5 dark:text-gray3">
 							Create an account using your NEAR wallet. In case of insufficient funds, you will be sponsored with NEAR
 							tokens for running the transaction on the smart contract and registering your account on the blockchain.
 							By signing up with NEAR, you need to download your Capsule private key and use it to log in under “Import
@@ -42,8 +44,8 @@
 						</p>
 					</div>
 					<div class="flex flex-col my-4">
-						<h4 class="text-lg font-semibold">Sign up with Implicit Account</h4>
-						<p class="my-2 text-gray5">
+						<h4 class="text-lg font-semibold dark:text-darkPrimaryText">Sign up with Implicit Account</h4>
+						<p class="my-2 text-gray5 dark:text-gray3">
 							Create an account where you self manage your account keys. You’ll need to provide your phone number to
 							verify your human identity and enable Capsule to sponsor you with NEAR tokens. These NEAR tokens are used
 							for performing transactions on a smart contract and registering your account on the blockchain. By signing

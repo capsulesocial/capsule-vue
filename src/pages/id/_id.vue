@@ -85,14 +85,14 @@
 									Posts
 								</div>
 								<button
-									class="pl-5 text-sm text-gray5 hover:text-primary hover:font-bold"
+									class="pl-5 text-sm text-gray5 dark:text-gray3 hover:text-primary dark:hover:text-secondary hover:font-bold"
 									@click="$emit(`openFollowers`)"
 								>
 									<span class="text-primary dark:text-secondary font-bold">{{ followers.size }}</span>
 									Followers
 								</button>
 								<button
-									class="pl-5 text-sm text-gray5 hover:text-primary hover:font-bold"
+									class="pl-5 text-sm text-gray5 dark:text-gray3 hover:text-primary dark:hover:text-secondary hover:font-bold"
 									@click="$emit(`openFollowing`)"
 								>
 									<span class="text-primary dark:text-secondary font-bold">{{ following.size }}</span>
@@ -167,10 +167,10 @@
 		<!-- Settings popup -->
 		<div
 			v-if="showSettings"
-			class="bg-primary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50"
+			class="bg-primary dark:bg-secondary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
 		>
 			<SettingsPopup
-				class="xl:w-589 from-lightBGStart to-lightBGStop card-animation w-full rounded-lg bg-gradient-to-r shadow-lg backdrop-blur-lg backdrop-filter"
+				class="xl:w-589 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation w-full rounded-lg bg-gradient-to-r shadow-lg backdrop-blur-lg backdrop-filter"
 				style="backdrop-filter: blur(10px)"
 				:updateProfileMethod="updateProfileMethod"
 				@close="toggleSettings"

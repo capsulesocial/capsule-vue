@@ -90,7 +90,7 @@
 		</div>
 		<div
 			v-if="showFollowers"
-			class="popup bg-primary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50"
+			class="popup bg-primary dark:bg-secondary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
 		>
 			<FollowersPopup
 				:profile="visitProfile"
@@ -101,7 +101,7 @@
 		</div>
 		<div
 			v-if="showFollowing"
-			class="popup bg-primary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50"
+			class="popup bg-primary dark:bg-secondary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
 		>
 			<FollowingPopup :profile="visitProfile" :updateFollowers="updateFollowers" @close="showFollowing = false" />
 		</div>
