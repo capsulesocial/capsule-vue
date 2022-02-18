@@ -77,7 +77,8 @@ export default Vue.extend({
 		}
 		if (this.userInfo.type === `near`) {
 			// If the key exists we can login him
-			if (window.localStorage.getItem(`near-api-js:${this.userInfo.accountId}:testnet`)) {
+			const pk = window.localStorage.getItem(`near-api-js:${this.userInfo.accountId}:testnet`)
+			if (pk) {
 				this.username = username
 				await this.verify(this.username)
 				window.localStorage.removeItem(`inviteToken`)
