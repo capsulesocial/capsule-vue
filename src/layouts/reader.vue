@@ -1,9 +1,15 @@
 <template>
 	<main
 		class="bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightMainBG dark:bg-darkBG"
-		:style="{
-			backgroundImage: `url(` + this.bgImage.image + `)`,
-		}"
+		:style="
+			dark
+				? {
+						backgroundImage: `url(` + bgImage.dark + `)`,
+				  }
+				: {
+						backgroundImage: `url(` + bgImage.light + `)`,
+				  }
+		"
 	>
 		<!-- Featured photo popup -->
 		<div
@@ -61,6 +67,7 @@ interface IData {
 	displayPhoto: boolean
 	featuredPhoto: FeaturedPhoto
 	bgImage: IBackground
+	dark: boolean
 }
 
 export default Vue.extend({
@@ -78,6 +85,7 @@ export default Vue.extend({
 				caption: null,
 			},
 			bgImage: backgrounds[0],
+			dark: false,
 		}
 	},
 	async created() {
@@ -87,6 +95,11 @@ export default Vue.extend({
 		}
 		// Set color mode
 		this.$setColorMode(this.$store.state.settings.darkMode)
+		if (document.documentElement.classList.contains(`dark`)) {
+			this.dark = true
+		} else {
+			this.dark = false
+		}
 		// get logged in profile
 		const { profile } = await getProfile(this.$store.state.session.id)
 		this.profile = profile

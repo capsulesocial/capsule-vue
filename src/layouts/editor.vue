@@ -1,9 +1,15 @@
 <template>
 	<main
 		class="bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightMainBG dark:bg-darkBG"
-		:style="{
-			backgroundIamge: ` url(` + this.bgImage.image + `)`,
-		}"
+		:style="
+			dark
+				? {
+						backgroundImage: `url(` + bgImage.dark + `)`,
+				  }
+				: {
+						backgroundImage: `url(` + bgImage.light + `)`,
+				  }
+		"
 	>
 		<!-- Wrapper -->
 		<div class="flex w-full justify-center">
@@ -91,6 +97,7 @@ interface IData {
 	showConfirm: boolean
 	buttonHidden: boolean
 	bgImage: IBackground
+	dark: boolean
 }
 
 export default Vue.extend({
@@ -112,6 +119,7 @@ export default Vue.extend({
 			showConfirm: false,
 			buttonHidden: false,
 			bgImage: backgrounds[0],
+			dark: false,
 		}
 	},
 	async created() {
@@ -134,6 +142,11 @@ export default Vue.extend({
 		// Check if the active draft exists
 		if (this.$store.state.draft.drafts[this.$store.state.draft.activeIndex] === undefined) {
 			this.$store.commit(`draft/setActiveDraft`, 0)
+		}
+		if (document.documentElement.classList.contains(`dark`)) {
+			this.dark = true
+		} else {
+			this.dark = false
 		}
 	},
 	methods: {

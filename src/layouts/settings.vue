@@ -1,9 +1,15 @@
 <template>
 	<main
 		class="bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightMainBG dark:bg-darkBG"
-		:style="{
-			backgroundImage: `url(` + bgImage.image + `)`,
-		}"
+		:style="
+			dark
+				? {
+						backgroundImage: `url(` + bgImage.dark + `)`,
+				  }
+				: {
+						backgroundImage: `url(` + bgImage.light + `)`,
+				  }
+		"
 	>
 		<!-- Wrapper -->
 		<div class="flex w-full justify-center">
@@ -81,6 +87,7 @@ interface IData {
 	tab: string
 	showPopup: boolean
 	bgImage: IBackground
+	dark: boolean
 }
 
 export default Vue.extend({
@@ -95,6 +102,7 @@ export default Vue.extend({
 			tab: `account`,
 			showPopup: false,
 			bgImage: backgrounds[0],
+			dark: false,
 		}
 	},
 	async created() {
@@ -105,6 +113,11 @@ export default Vue.extend({
 		await this.initProfile()
 		// Set color mode
 		this.$setColorMode(this.$store.state.settings.darkMode)
+		if (document.documentElement.classList.contains(`dark`)) {
+			this.dark = true
+		} else {
+			this.dark = false
+		}
 	},
 	methods: {
 		async initProfile() {

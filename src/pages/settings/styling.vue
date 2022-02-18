@@ -12,15 +12,11 @@
 				class="text-primary dark:text-secondary focus:outline-none flex flex-row items-center"
 				@click="toggleBGSelector"
 			>
-				<!-- <p class="mr-4">
-					{{
-						$store.state.backgroundImage
-							.substring($store.state.backgroundImage.lastIndexOf('/') + 1)
-							.replace(`.webp`, '')
-					}}
-				</p> -->
+				<p class="mr-4">
+					{{ this.profilebgImage.label }}
+				</p>
 				<img
-					:src="$store.state.backgroundImage"
+					:src="dark ? profilebgImage.dark : profilebgImage.light"
 					class="h-20 w-32 rounded-lg bg-lightBG dark:bg-darkBG border border-lightBorder"
 				/>
 			</button>
@@ -66,14 +62,18 @@
 						v-for="x of backgrounds"
 						:key="x.label"
 						class="focus:outline-none mb-4 flex flex-shrink-0 flex-col items-center"
-						@click="setBackgroundImage(x.id)"
+						@click="setBackgroundImage(x)"
 					>
 						<img
-							v-if="$store.state.backgroundImage === x.image"
-							:src="x.image"
-							class="border-primary dark:border-secondary h-44 w-64 rounded-lg border shadow-lg bg-lightBG"
+							v-if="selectedBG === x"
+							:src="dark ? x.dark : x.light"
+							class="border-primary dark:border-secondary h-44 w-64 rounded-lg border shadow-lg bg-lightBG dark:bg-darkBG"
 						/>
-						<img v-else :src="x.image" class="border-lightBorder h-44 w-64 rounded-lg border shadow-lg bg-lightBG" />
+						<img
+							v-else
+							:src="dark ? x.dark : x.light"
+							class="border-lightBorder h-44 w-64 rounded-lg border shadow-lg bg-lightBG dark:bg-darkBG"
+						/>
 						<span class="text-primary dark:text-secondary mt-1 text-center">{{ x.label }}</span>
 					</button>
 				</div>
@@ -143,18 +143,21 @@ import XIcon from '@/components/icons/X.vue'
 import ChevronLeft from '@/components/icons/ChevronLeft.vue'
 
 import { MutationType, getProfileFromSession, namespace as sessionStoreNamespace } from '~/store/session'
-import { setProfile } from '@/backend/profile'
-import { backgrounds, colors } from '@/config'
+import { setProfile, getProfile, Profile } from '@/backend/profile'
+import { IBackground, backgrounds, colors } from '@/config'
 
 interface IData {
+	profile: Profile | null
 	backgroundImage: null | string | ArrayBuffer
 	showPopupBG: boolean
 	showPopupColor: boolean
 	backgrounds: any
 	colors: any
 	currentbg: null | string
-	selectedBG: string
+	selectedBG: IBackground
 	currentcolor: null | string
+	profilebgImage: IBackground
+	dark: boolean
 }
 
 export default Vue.extend({
@@ -162,14 +165,17 @@ export default Vue.extend({
 	layout: `settings`,
 	data(): IData {
 		return {
+			profile: null,
 			backgroundImage: null,
 			showPopupBG: false,
 			showPopupColor: false,
 			backgrounds,
 			colors,
 			currentbg: null,
-			selectedBG: `default`,
+			selectedBG: backgrounds[0],
 			currentcolor: null,
+			profilebgImage: backgrounds[0],
+			dark: false,
 		}
 	},
 	head() {
@@ -178,8 +184,16 @@ export default Vue.extend({
 			meta: [{ hid: `settings-styling`, name: `settings-styling`, content: `Style settings on Capsule Social` }],
 		}
 	},
-	created() {
+	async created() {
+		if (document.documentElement.classList.contains(`dark`)) {
+			this.dark = true
+		} else {
+			this.dark = false
+		}
 		window.addEventListener(`click`, this.handleDropdown, false)
+		const { profile } = await getProfile(this.$store.state.session.id)
+		this.profile = profile
+		this.profilebgImage = this.$getBGImage(this.profile?.background, `local`)
 	},
 	methods: {
 		...mapMutations(sessionStoreNamespace, {
@@ -192,6 +206,7 @@ export default Vue.extend({
 			if (this.showPopupBG === true) {
 				this.currentbg = this.$store.state.backgroundImage
 			}
+			this.selectedBG = this.profilebgImage
 		},
 		toggleColorSelector() {
 			this.$emit(`togglePopup`)
@@ -211,14 +226,15 @@ export default Vue.extend({
 				this.toggleBGSelector()
 			}
 		},
-		setBackgroundImage(id: string): void {
-			this.selectedBG = id
-			this.$emit(`changeLocalBGImage`, this.selectedBG)
+		setBackgroundImage(image: IBackground): void {
+			this.selectedBG = image
+			this.$emit(`changeLocalBGImage`, this.selectedBG.id)
 		},
 		async confirmBackgroundImage() {
+			this.profilebgImage = this.selectedBG
 			try {
 				// Update local profile store before saving new profile
-				this.changeBackground(this.selectedBG)
+				this.changeBackground(this.selectedBG.id)
 				const backendProfile = getProfileFromSession(this.$store.state.session)
 				const cid = await setProfile(backendProfile)
 				this.changeCID(cid)

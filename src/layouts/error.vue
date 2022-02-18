@@ -1,9 +1,15 @@
 <template>
 	<main
 		class="bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightMainBG dark:bg-darkBG"
-		:style="{
-			backgroundImage: `url(` + this.bgImage.image + `)`,
-		}"
+		:style="
+			dark
+				? {
+						backgroundImage: `url(` + bgImage.dark + `)`,
+				  }
+				: {
+						backgroundImage: `url(` + bgImage.light + `)`,
+				  }
+		"
 	>
 		<div class="flex w-full justify-center">
 			<div class="flex flex-col" style="width: 1220px">
@@ -27,6 +33,7 @@ import { IBackground, backgrounds } from '@/config'
 
 interface IData {
 	bgImage: IBackground
+	dark: boolean
 }
 
 export default Vue.extend({
@@ -44,6 +51,7 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			bgImage: backgrounds[0],
+			dark: false,
 		}
 	},
 	created() {
@@ -52,6 +60,11 @@ export default Vue.extend({
 		}
 		// Set color mode
 		this.$setColorMode(this.$store.state.settings.darkMode)
+		if (document.documentElement.classList.contains(`dark`)) {
+			this.dark = true
+		} else {
+			this.dark = false
+		}
 	},
 	methods: {
 		goBack() {

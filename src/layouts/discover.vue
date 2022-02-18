@@ -1,9 +1,15 @@
 <template>
 	<main
 		class="bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightMainBG dark:bg-darkBG"
-		:style="{
-			backgroundImage: `url(` + this.bgImage.image + `)`,
-		}"
+		:style="
+			dark
+				? {
+						backgroundImage: `url(` + bgImage.dark + `)`,
+				  }
+				: {
+						backgroundImage: `url(` + bgImage.light + `)`,
+				  }
+		"
 	>
 		<!-- Wrapper -->
 		<div class="flex w-full justify-center">
@@ -78,6 +84,7 @@ interface IData {
 	avatar: string | ArrayBuffer | null
 	following: Set<string>
 	bgImage: IBackground
+	dark: boolean
 }
 
 export default Vue.extend({
@@ -94,6 +101,7 @@ export default Vue.extend({
 			avatar: null,
 			following: new Set(),
 			bgImage: backgrounds[0],
+			dark: false,
 		}
 	},
 	async created() {
@@ -117,6 +125,11 @@ export default Vue.extend({
 		getFollowersAndFollowing(this.$store.state.session.id).then(({ following }) => {
 			this.following = following
 		})
+		if (document.documentElement.classList.contains(`dark`)) {
+			this.dark = true
+		} else {
+			this.dark = false
+		}
 	},
 	methods: {
 		async toggleFriend(authorID: string) {

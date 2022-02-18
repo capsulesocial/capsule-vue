@@ -438,104 +438,107 @@ export const categories = [
 export interface IBackground {
 	id: string
 	type: string
-	image: any
+	light: any
+	dark: any
 	label: string
 }
 export const backgrounds: IBackground[] = [
 	{
 		id: `default`,
 		type: `local`,
-		image: require(`@/assets/images/backgrounds/mainBG.webp`),
+		light: require(`@/assets/images/backgrounds/light/mainBG.webp`),
+		dark: require(`@/assets/images/backgrounds/dark/mainBG.webp`),
 		label: `Default`,
 	},
 	{
 		id: `blogginLife`,
 		type: `local`,
-		image: require(`@/assets/images/backgrounds/blogn_life.webp`),
+		light: require(`@/assets/images/backgrounds/light/blogn_life.webp`),
+		dark: require(`@/assets/images/backgrounds/light/blogn_life.webp`),
 		label: `Bloggin' life`,
-	},
-	{
-		id: `blogginLifeGreen`,
-		type: `local`,
-		image: require(`@/assets/images/backgrounds/blogn_life_neon-green.webp`),
-		label: `Bloggin' life (neon green)`,
 	},
 	{
 		id: `blueStroke`,
 		type: `local`,
-		image: require(`@/assets/images/backgrounds/blue_stroke.webp`),
+		light: require(`@/assets/images/backgrounds/light/blue_stroke.webp`),
+		dark: require(`@/assets/images/backgrounds/light/blue_stroke.webp`),
 		label: `Blue stroke`,
 	},
 	{
-		id: `blueStrokeJelly`,
+		id: `brainGuy`,
 		type: `local`,
-		image: require(`@/assets/images/backgrounds/blue_stroke-jelly.webp`),
-		label: `Blue stroke w/ Jelly`,
+		light: require(`@/assets/images/backgrounds/light/brain_guy.webp`),
+		dark: require(`@/assets/images/backgrounds/dark/brain_guy.webp`),
+		label: `Brain guy`,
 	},
 	{
 		id: `buoy`,
 		type: `local`,
-		image: require(`@/assets/images/backgrounds/buoy.webp`),
+		light: require(`@/assets/images/backgrounds/light/buoy.webp`),
+		dark: require(`@/assets/images/backgrounds/dark/buoy.webp`),
 		label: `Buoy`,
 	},
 	{
 		id: `greenStroke`,
 		type: `local`,
-		image: require(`@/assets/images/backgrounds/green_stroke.webp`),
+		light: require(`@/assets/images/backgrounds/light/green_stroke.webp`),
+		dark: require(`@/assets/images/backgrounds/light/green_stroke.webp`),
 		label: `Green stroke`,
 	},
 	{
 		id: `jelly`,
 		type: `local`,
-		image: require(`@/assets/images/backgrounds/jelly.webp`),
+		light: require(`@/assets/images/backgrounds/light/jelly.webp`),
+		dark: require(`@/assets/images/backgrounds/dark/jelly.webp`),
 		label: `Jelly`,
 	},
 	{
 		id: `neonPinkStroke`,
 		type: `local`,
-		image: require(`@/assets/images/backgrounds/neon_pink_stroke.webp`),
+		light: require(`@/assets/images/backgrounds/light/neon_pink_stroke.webp`),
+		dark: require(`@/assets/images/backgrounds/dark/neon_pink_stroke.webp`),
 		label: `Neon pink stroke`,
 	},
 	{
 		id: `neonStroke`,
 		type: `local`,
-		image: require(`@/assets/images/backgrounds/neon_stroke.webp`),
+		light: require(`@/assets/images/backgrounds/light/neon_stroke.webp`),
+		dark: require(`@/assets/images/backgrounds/dark/neon_stroke.webp`),
 		label: `Neon stroke`,
 	},
 	{
 		id: `pinkStroke`,
 		type: `local`,
-		image: require(`@/assets/images/backgrounds/pink_stroke.webp`),
+		light: require(`@/assets/images/backgrounds/light/pink_stroke.webp`),
+		dark: require(`@/assets/images/backgrounds/light/pink_stroke.webp`),
 		label: `Pink stroke`,
 	},
 	{
 		id: `sharkman`,
 		type: `local`,
-		image: require(`@/assets/images/backgrounds/sharkman.webp`),
+		light: require(`@/assets/images/backgrounds/light/sharkman.webp`),
+		dark: require(`@/assets/images/backgrounds/dark/sharkman.webp`),
 		label: `Sharkman`,
-	},
-	{
-		id: `sharkmanPink`,
-		type: `local`,
-		image: require(`@/assets/images/backgrounds/sharkman_pink.webp`),
-		label: `Sharkman (pink)`,
 	},
 	{
 		id: `textureText01`,
 		type: `local`,
-		image: require(`@/assets/images/backgrounds/texture-text01.webp`),
+		light: require(`@/assets/images/backgrounds/light/texture-text01.webp`),
+		dark: require(`@/assets/images/backgrounds/dark/texture-text01.webp`),
 		label: `Texture text 01`,
 	},
 	{
 		id: `urban01`,
 		type: `local`,
-		image: require(`@/assets/images/backgrounds/urbanstuff.webp`),
+		light: require(`@/assets/images/backgrounds/light/urbanstuff.webp`),
+		dark: require(`@/assets/images/backgrounds/dark/urbanstuff.webp`),
 		label: `Urban 01`,
 	},
 	{
 		id: `urban02`,
 		type: `local`,
-		image: require(`@/assets/images/backgrounds/urbanstuff001.webp`),
+		light: require(`@/assets/images/backgrounds/light/urbanstuff001.webp`),
+		dark: require(`@/assets/images/backgrounds/light/urbanstuff001.webp`),
 		label: `Urban 02`,
 	},
 ]
