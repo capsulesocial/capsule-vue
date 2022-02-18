@@ -40,11 +40,13 @@
 </template>
 
 <script lang="ts">
+import Vue from 'vue'
+
 interface IData {
 	dark: boolean
 }
 
-export default {
+export default Vue.extend({
 	props: {
 		isActive: {
 			type: Boolean,
@@ -67,5 +69,5 @@ export default {
 			this.dark = false
 		}
 	},
-}
+})
 </script>
