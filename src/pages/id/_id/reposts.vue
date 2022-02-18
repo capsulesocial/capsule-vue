@@ -30,7 +30,7 @@
 		</article>
 		<p
 			v-if="noMorePosts && reposts.length !== 0"
-			class="text-gray5 py-5 text-center text-sm"
+			class="text-gray5 dark:text-gray3 py-5 text-center text-sm"
 			style="backdrop-filter: blur(10px)"
 		>
 			No more posts

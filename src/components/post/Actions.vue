@@ -594,27 +594,6 @@ export default Vue.extend({
 </script>
 
 <style>
-/* Custom scrollbar */
-.faces::-webkit-scrollbar {
-	width: 5px;
-	border-radius: 50px;
-}
-/* Track */
-.faces::-webkit-scrollbar-track {
-	border-radius: 0.75rem;
-	background: #eeeeee;
-}
-/* Handle */
-.faces::-webkit-scrollbar-thumb {
-	background: #1e566c;
-	border-radius: 0.75rem;
-}
-
-/* Handle on hover */
-.faces::-webkit-scrollbar-thumb:hover {
-	background: #1e566c;
-}
-
 .face-tag:last-child .separator {
 	display: none;
 }
