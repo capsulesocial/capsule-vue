@@ -112,6 +112,7 @@
 			<FollowingPopup :profile="visitProfile" :updateFollowers="updateFollowers" @close="showFollowing = false" />
 		</div>
 		<UnauthPopup />
+		<portal-target name="card-popup"></portal-target>
 	</main>
 </template>
 
