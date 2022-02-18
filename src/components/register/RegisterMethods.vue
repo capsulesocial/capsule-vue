@@ -69,6 +69,7 @@ import { torusVerifiers, TorusVerifiers } from '@/backend/utilities/config'
 import { getAccountIdFromPrivateKey } from '@/backend/auth'
 import { walletLogin, generateAndSetKey } from '@/backend/near'
 import { IWalletStatus } from '@/backend/utilities/helpers'
+import { verifyTokenAndOnboard } from '@/backend/invite'
 
 interface IData {
 	torus: DirectWebSdk
@@ -113,6 +114,7 @@ export default Vue.extend({
 					accountId,
 					privateKey: info.privateKey,
 				}
+				await verifyTokenAndOnboard(userInfo.accountId)
 				this.$emit(`updateUserInfo`, userInfo)
 				// If no username is found then register...
 				this.isLoading = false
@@ -125,7 +127,7 @@ export default Vue.extend({
 		async walletLoginComponent() {
 			await walletLogin()
 		},
-		implicitAccountCreate() {
+		async implicitAccountCreate() {
 			this.isLoading = true
 			const { accountId, privateKey } = generateAndSetKey()
 			const userInfo: IWalletStatus = {
@@ -133,6 +135,7 @@ export default Vue.extend({
 				accountId,
 				privateKey,
 			}
+			await verifyTokenAndOnboard(userInfo.accountId)
 			this.$emit(`updateUserInfo`, userInfo)
 			this.$emit(`stepForward`)
 			this.isLoading = false

@@ -29,7 +29,6 @@ import VerifyPhone from './VerifyPhone.vue'
 import SelectID from './SelectID.vue'
 import { hasSufficientFunds } from '@/backend/funder'
 import { checkAccountStatus, getUsernameNEAR, removeNearPrivateKey, walletLogout } from '@/backend/near'
-import { verifyTokenAndOnboard } from '@/backend/invite'
 
 import { MutationType, createSessionFromProfile, namespace as sessionStoreNamespace } from '~/store/session'
 import { setNearUserFromPrivateKey, login, register, IAuthResult } from '@/backend/auth'
@@ -64,7 +63,6 @@ export default Vue.extend({
 		this.$emit(`setIsLoading`, true)
 		const username = await getUsernameNEAR(this.userInfo.accountId)
 		if (!username) {
-			await verifyTokenAndOnboard(this.userInfo.accountId)
 			await this.checkFunds()
 			this.$emit(`setIsLoading`, false)
 			return
@@ -78,6 +76,13 @@ export default Vue.extend({
 			return
 		}
 		if (this.userInfo.type === `near`) {
+			// If the key exists we can login him
+			if (window.localStorage.getItem(`near-api-js:${this.userInfo.accountId}:testnet`)) {
+				this.username = username
+				await this.verify(this.username)
+				window.localStorage.removeItem(`inviteToken`)
+				return
+			}
 			removeNearPrivateKey(this.userInfo.accountId)
 			walletLogout()
 			this.$emit(`updateUserInfo`, null)
@@ -158,7 +163,9 @@ export default Vue.extend({
 			this.changeLocation(account.location)
 
 			window.localStorage.setItem(`accountId`, this.userInfo.accountId)
-			this.$router.push(`/home`)
+			if (this.userInfo.type !== `near`) {
+				this.$router.push(`/home`)
+			}
 		},
 	},
 })

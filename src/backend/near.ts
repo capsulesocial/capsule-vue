@@ -189,7 +189,7 @@ export function generateAndSetKey() {
 	const sk = new Uint8Array(baseDecode(keyRandom.secretKey))
 	const encodedPrivateKey = baseEncode(sk)
 	const keypair = new KeyPairEd25519(encodedPrivateKey)
-	// await setNearPrivateKey(sk, accountId)
+	setNearPrivateKey(sk, accountId)
 	return { accountId, privateKey: keypair.secretKey }
 }
 

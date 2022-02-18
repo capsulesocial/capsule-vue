@@ -147,6 +147,7 @@ export default Vue.extend({
 
 		this.$toastError(err.message)
 		removeNearPrivateKey(this.accountId)
+		window.localStorage.clear()
 		walletLogout()
 		return false
 	},
@@ -166,6 +167,21 @@ export default Vue.extend({
 				type: `near`,
 				accountId,
 				privateKey,
+			}
+		}
+		for (let i = 0; i < localStorage.length; i++) {
+			const key = localStorage.key(i)
+			if (key && key.startsWith(`near-api-js:keystore`)) {
+				const privateKey = localStorage.getItem(key)
+				const accountId = key.split(`:`)[2]
+				if (privateKey && accountId) {
+					this.userInfo = {
+						type: `near`,
+						accountId,
+						privateKey,
+					}
+				}
+				break
 			}
 		}
 		this.isLoading = false
@@ -204,6 +220,7 @@ export default Vue.extend({
 				return
 			}
 
+			console.log(this.downloadKeyStep)
 			if (this.downloadKeyStep) {
 				this.step = `downloadKey`
 				return
