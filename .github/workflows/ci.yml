@@ -70,7 +70,10 @@ jobs:
   release:
     needs: [lint, build]
     runs-on: ubuntu-latest
-    if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || (github.event_name == 'release' && github.event.action == 'published')
+    if: |
+      (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+      (github.event_name == 'push' && github.ref == 'refs/heads/dev')  ||
+      (github.event_name == 'release' && github.event.action == 'published')
     steps:
 
       - uses: actions/checkout@v1
@@ -105,8 +108,8 @@ jobs:
       - name: Set DEPLOY_BRANCH in env
         run: |
           branch=''
-          if [[ "${{ github.event_name }}" == 'push' && "$GITHUB_REF" == 'refs/heads/main' ]]; then
-              branch='main'
+          if [[ "${{ github.event_name }}" == 'push' ]]; then
+              branch=$(echo ${GITHUB_REF#refs/heads/})
           elif [[ "${{ github.event_name }}" == 'release' && "${{ github.event.action }}" == 'published' ]]; then
               # NOTE: 'DEPLOY_BRANCH' is a bad name for this. But Ansible needs a common
               # reference for all releases so that it knows which config to use (and tags
@@ -119,7 +122,7 @@ jobs:
       - name: Set COMMIT_SHORT_SHA in env
         run: |
           commit_identifier=''
-          if [[ "${{ github.event_name }}" == 'push' && "$GITHUB_REF" == 'refs/heads/main' ]]; then
+          if [[ "${{ github.event_name }}" == 'push' ]]; then
               commit_identifier=$(git rev-parse --short HEAD)
           elif [[ "${{ github.event_name }}" == 'release' && "${{ github.event.action }}" == 'published' ]]; then
               # for releases, this is the version number followed by the short sha -- e.g. v0.11.0-alpha-a1b2c3d4
@@ -143,7 +146,10 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: lexauw/ansible-alpine:latest
-    if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || (github.event_name == 'release' && github.event.action == 'published')
+    if: |
+      (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+      (github.event_name == 'push' && github.ref == 'refs/heads/dev')  ||
+      (github.event_name == 'release' && github.event.action == 'published')
     steps:
 
       - uses: actions/checkout@v1
@@ -151,8 +157,8 @@ jobs:
       - name: Set DEPLOY_BRANCH in env
         run: |
           branch=''
-          if [[ "${{ github.event_name }}" == 'push' && "$GITHUB_REF" == 'refs/heads/main' ]]; then
-              branch='main'
+          if [[ "${{ github.event_name }}" == 'push' ]]; then
+              branch=$(echo ${GITHUB_REF#refs/heads/})
           elif [[ "${{ github.event_name }}" == 'release' && "${{ github.event.action }}" == 'published' ]]; then
               # NOTE: 'DEPLOY_BRANCH' is a bad name for this. But Ansible needs a common
               # reference for all releases so that it knows which config to use (and tags
@@ -165,7 +171,7 @@ jobs:
       - name: Set COMMIT_SHORT_SHA in env
         run: |
           commit_identifier=''
-          if [[ "${{ github.event_name }}" == 'push' && "$GITHUB_REF" == 'refs/heads/main' ]]; then
+          if [[ "${{ github.event_name }}" == 'push' ]]; then
               commit_identifier=$(git rev-parse --short HEAD)
           elif [[ "${{ github.event_name }}" == 'release' && "${{ github.event.action }}" == 'published' ]]; then
               # for releases, this is the version number followed by the short sha -- e.g. v0.11.0-alpha-a1b2c3d4
