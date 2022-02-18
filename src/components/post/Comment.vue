@@ -71,24 +71,24 @@
 							</div>
 						</div>
 						<div class="flex flex-shrink-0 items-center justify-center overflow-hidden xl:hidden">
-							<img :src="emotion.image" class="-mb-1 mt-2 h-24 w-24 bg-transparent" />
+							<img :src="dark ? emotion.dark : emotion.light" class="-mb-1 mt-2 h-24 w-24 bg-transparent" />
 						</div>
 					</div>
 				</div>
 				<!-- Desktop reaction face -->
 				<div class="hidden flex-shrink-0 items-center justify-center overflow-hidden xl:flex">
 					<img
-						:src="emotion.image"
+						:src="dark ? emotion.dark : emotion.light"
 						class="-mb-1 mt-2 h-32 w-32 bg-transparent"
 						@mouseover="showLabel = true"
 						@mouseleave="showLabel = false"
 					/>
 					<div
 						v-show="showLabel"
-						class="border-lightBorder modal-animation-delay absolute z-40 flex flex-col rounded-lg border bg-white p-2 shadow-lg"
+						class="border-lightBorder modal-animation-delay absolute z-40 flex flex-col rounded-lg border bg-lightBG dark:bg-darkBG p-2 shadow-lg"
 						style="bottom: -25px"
 					>
-						<p class="text-sm text-gray5">
+						<p class="text-sm text-gray5 dark:text-gray3">
 							{{ emotion.label }}
 						</p>
 					</div>
@@ -155,10 +155,11 @@ interface IData {
 	replies: ICommentData[]
 	avatar: string
 	name: string
-	emotion: { label: string; image: any }
+	emotion: { label: string; light: any; dark: any }
 	emotionType: string
 	content: string
 	showLabel: boolean
+	dark: boolean
 }
 
 export default Vue.extend({
@@ -188,6 +189,7 @@ export default Vue.extend({
 			emotionType: ``,
 			content: ``,
 			showLabel: false,
+			dark: false,
 		}
 	},
 	async created() {
@@ -223,6 +225,11 @@ export default Vue.extend({
 			})
 		}
 		this.replies = await getCommentsOfPost(this.cid)
+		if (document.documentElement.classList.contains(`dark`)) {
+			this.dark = true
+		} else {
+			this.dark = false
+		}
 	},
 	methods: {
 		getStyle(prefix: string) {

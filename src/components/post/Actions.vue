@@ -89,7 +89,7 @@
 						<div v-for="f in faceStats.slice(page * 6, page * 6 + 6)" :key="f.face.label" class="flex w-24 flex-col">
 							<div class="flex flex-col rounded-lg border p-1" :class="`border-` + getStyle(f.face.label)">
 								<span class="self-center text-xs dark:text-darkPrimaryText">{{ f.face.label }}</span>
-								<img :src="f.face.image" :alt="f.face.label" class="h-16 w-16 self-center" />
+								<img :src="dark ? f.face.dark : f.face.light" :alt="f.face.label" class="h-16 w-16 self-center" />
 							</div>
 							<span class="mt-1 self-center text-sm font-semibold dark:text-darkPrimaryText"
 								>{{ ((f.count / getCommentCount(`total`)) * 100).toFixed(1) }}%</span
@@ -175,7 +175,7 @@
 								<button class="focus:outline-none h-auto flex-shrink-0" @click="toggleShowEmotions">
 									<span v-if="activeEmotion.label !== ``">
 										<img
-											:src="activeEmotion.image"
+											:src="dark ? activeEmotion.dark : activeEmotion.light"
 											:alt="activeEmotion.label"
 											class="object-contain w-24 h-24 xl:w-32 xl:h-32"
 											style="transform: rotateY(180deg)"
@@ -256,7 +256,12 @@
 											style="transition: all 0.3s ease-in-out"
 											@click="setEmotion(face)"
 										>
-											<img :src="face.image" :alt="face.label" class="h-20 w-20" style="transform: rotateY(180deg)" />
+											<img
+												:src="dark ? face.dark : face.light"
+												:alt="face.label"
+												class="h-20 w-20"
+												style="transform: rotateY(180deg)"
+											/>
 											<p
 												class="capitalize xl:hidden mt-1"
 												:class="
@@ -358,15 +363,15 @@ import { createComment, sendComment, ICommentData, getCommentsOfPost } from '@/b
 import { getPhotoFromIPFS } from '@/backend/photos'
 
 interface FaceStat {
-	face: { label: string; image: any }
+	face: { label: string; light: any; dark: any }
 	count: number
 }
 
 interface IData {
 	faceGroupings: object[]
 	feelingList: Record<string, any>
-	activeEmotion: { label: string; image: any }
-	selectedEmotion: { label: string; image: any }
+	activeEmotion: { label: string; light: any; dark: any }
+	selectedEmotion: { label: string; light: any; dark: any }
 	comments: ICommentData[]
 	avatar: string
 	comment: string
@@ -378,6 +383,7 @@ interface IData {
 	faceStats: FaceStat[]
 	page: number
 	selectedEmotionColor: `positive` | `neutral` | `negative` | `neutralLightest`
+	dark: boolean
 }
 
 export default Vue.extend({
@@ -421,8 +427,8 @@ export default Vue.extend({
 			faceGroupings,
 			feelingList: feelings,
 			avatar: ``,
-			activeEmotion: { label: ``, image: null },
-			selectedEmotion: { label: ``, image: null },
+			activeEmotion: { label: ``, light: null, dark: null },
+			selectedEmotion: { label: ``, light: null, dark: null },
 			comment: ``,
 			comments: [],
 			emotion: ``,
@@ -433,6 +439,7 @@ export default Vue.extend({
 			faceStats: [],
 			page: 0,
 			selectedEmotionColor: `neutralLightest`,
+			dark: false,
 		}
 	},
 	async created() {
@@ -444,6 +451,11 @@ export default Vue.extend({
 			getPhotoFromIPFS(this.$store.state.session.avatar).then((a) => {
 				this.avatar = a
 			})
+		}
+		if (document.documentElement.classList.contains(`dark`)) {
+			this.dark = true
+		} else {
+			this.dark = false
 		}
 	},
 	methods: {
@@ -462,7 +474,7 @@ export default Vue.extend({
 			this.filter = reaction
 			this.filterComments()
 		},
-		setEmotion(r: { label: string; image: any }) {
+		setEmotion(r: { label: string; light: any; dark: any }) {
 			this.selectedEmotion = r
 			if (feelings.positive.has(r.label)) {
 				this.selectedEmotionColor = `positive`
@@ -501,8 +513,8 @@ export default Vue.extend({
 			// Apply filter to comments, in case new comment was added in filtered category
 			this.comment = ``
 			this.filterComments()
-			this.selectedEmotion = { label: ``, image: null }
-			this.activeEmotion = { label: ``, image: null }
+			this.selectedEmotion = { label: ``, light: null, dark: null }
+			this.activeEmotion = { label: ``, light: null, dark: null }
 			this.emotion = ``
 			this.filter = ``
 			this.selectedEmotionColor = `neutralLightest`
