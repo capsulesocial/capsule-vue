@@ -1,219 +1,221 @@
 <template>
 	<article v-if="!postDeleted" class="object-contain" :class="showProfileCard ? `z-20` : `z-10`">
 		<!-- popup post -->
-		<div
-			v-if="showPopup"
-			class="bg-primary dark:bg-secondary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
-		>
+		<portal to="card-popup">
 			<div
-				class="card xl:w-750 max-h-90 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation m-2 mt-10 w-full overflow-y-auto overflow-x-hidden rounded-lg bg-gradient-to-r shadow-lg xl:m-0"
-				style="backdrop-filter: blur(10px)"
+				v-if="showPopup"
+				class="bg-primary dark:bg-secondary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
 			>
 				<div
-					class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop sticky top-0 z-40 bg-gradient-to-r px-4 py-4 xl:px-6 xl:py-5"
+					class="card xl:w-750 max-h-90 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation m-2 mt-10 w-full overflow-y-auto overflow-x-hidden rounded-lg bg-gradient-to-r shadow-lg xl:m-0"
 					style="backdrop-filter: blur(10px)"
 				>
-					<!-- Show Quote Repost input -->
-					<div v-if="showRepostEditor" class="flex flex-row pb-4">
-						<Avatar :authorID="$store.state.session.id" :avatar="myAvatar" class="flex-shrink-0" />
-						<textarea
-							ref="repostText"
-							v-model="quoteContent"
-							class="focus:outline-none ml-4 mt-2 w-full resize-none bg-transparent placeholder-gray5 dark:placeholder-gray3 dark:text-darkPrimaryText"
-							placeholder="What's your response?"
-						></textarea>
-						<button
-							class="bg-gray1 dark:bg-gray5 focus:outline-none absolute right-0 top-0 m-6 rounded-full p-1"
-							@click="handleCloseButton"
-						>
-							<XIcon />
-						</button>
-					</div>
-					<!-- Wrapper for rounded outline on quote repost -->
-					<div :class="showRepostEditor || quote ? `xl:bg-lightBorder xl:dark:bg-darkInput rounded-lg xl:p-4` : ``">
-						<!-- Simple repost -->
-						<div
-							v-if="repostedBy !== `` && !hideRepostIcon && quote === null"
-							class="text-gray5 dark:text-gray3 -mt-2 mb-4 flex w-full items-center pt-2 xl:mb-3"
-						>
-							<RepostIcon class="hidden xl:block" style="width: 15px; height: 15px" :shrink="true" />
-							<p class="text-gray5 dark:text-gray3 hidden pl-2 text-sm xl:block">
-								<nuxt-link v-if="repostedBy != ``" :to="`/id/` + repostedBy">{{ repostedBy }} </nuxt-link>
-								<nuxt-link v-else :to="`/id/` + repostedBy">{{ repostedBy }}</nuxt-link>
-								reposted
-							</p>
+					<div
+						class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop sticky top-0 z-40 bg-gradient-to-r px-4 py-4 xl:px-6 xl:py-5"
+						style="backdrop-filter: blur(10px)"
+					>
+						<!-- Show Quote Repost input -->
+						<div v-if="showRepostEditor" class="flex flex-row pb-4">
+							<Avatar :authorID="$store.state.session.id" :avatar="myAvatar" class="flex-shrink-0" />
+							<textarea
+								ref="repostText"
+								v-model="quoteContent"
+								class="focus:outline-none ml-4 mt-2 w-full resize-none bg-transparent placeholder-gray5 dark:placeholder-gray3 dark:text-darkPrimaryText"
+								placeholder="What's your response?"
+							></textarea>
+							<button
+								class="bg-gray1 dark:bg-gray5 focus:outline-none absolute right-0 top-0 m-6 rounded-full p-1"
+								@click="handleCloseButton"
+							>
+								<XIcon />
+							</button>
 						</div>
-						<!-- Top: avatar, name, id, close -->
-						<div class="flex w-full justify-between">
-							<div class="flex flex-row" @mouseover="triggerPopupCardTrue" @mouseleave="triggerPopupCardFalse">
-								<Avatar
-									:avatar="avatar"
-									:authorID="post.authorID"
-									size="w-12 h-12"
-									class="hidden xl:block transition ease-in-out hover:opacity-75"
-								/>
-								<div class="ml-4 hidden flex-grow flex-col xl:flex">
-									<nuxt-link :to="'/id/' + post.authorID" class="mr-4 flex">
+						<!-- Wrapper for rounded outline on quote repost -->
+						<div :class="showRepostEditor || quote ? `xl:bg-lightBorder xl:dark:bg-darkInput rounded-lg xl:p-4` : ``">
+							<!-- Simple repost -->
+							<div
+								v-if="repostedBy !== `` && !hideRepostIcon && quote === null"
+								class="text-gray5 dark:text-gray3 -mt-2 mb-4 flex w-full items-center pt-2 xl:mb-3"
+							>
+								<RepostIcon class="hidden xl:block" style="width: 15px; height: 15px" :shrink="true" />
+								<p class="text-gray5 dark:text-gray3 hidden pl-2 text-sm xl:block">
+									<nuxt-link v-if="repostedBy != ``" :to="`/id/` + repostedBy">{{ repostedBy }} </nuxt-link>
+									<nuxt-link v-else :to="`/id/` + repostedBy">{{ repostedBy }}</nuxt-link>
+									reposted
+								</p>
+							</div>
+							<!-- Top: avatar, name, id, close -->
+							<div class="flex w-full justify-between">
+								<div class="flex flex-row" @mouseover="triggerPopupCardTrue" @mouseleave="triggerPopupCardFalse">
+									<Avatar
+										:avatar="avatar"
+										:authorID="post.authorID"
+										size="w-12 h-12"
+										class="hidden xl:block transition ease-in-out hover:opacity-75"
+									/>
+									<div class="ml-4 hidden flex-grow flex-col xl:flex">
+										<nuxt-link :to="'/id/' + post.authorID" class="mr-4 flex">
+											<span
+												v-if="authorName != ``"
+												class="text-base dark:text-darkPrimaryText font-medium transition ease-in-out hover:underline"
+											>
+												{{ authorName }}
+											</span>
+											<span
+												v-else
+												class="text-gray5 dark:text-gray3 text-base font-medium transition ease-in-out hover:underline"
+											>
+												{{ post.authorID }}
+											</span>
+											<span class="text-primary dark:text-secondary ml-2"> @{{ post.authorID }} </span>
+										</nuxt-link>
+										<!-- Timestamp -->
+										<span class="text-xs dark:text-gray3">
+											{{ $formatDate(post.timestamp) }}
+										</span>
+									</div>
+								</div>
+								<div
+									v-show="showPopupCard && !showRepostEditor"
+									class="border-lightBorder modal-animation-delay absolute z-40 flex w-72 flex-col rounded-lg border bg-lightBG dark:bg-darkBG p-4 shadow-lg"
+									:style="repostedBy ? (quote ? `top: 100px` : `top: 110px`) : `top: 80px`"
+									@mouseover="triggerPopupCardTrue"
+									@mouseleave="showPopupCard = false"
+								>
+									<div class="w-full flex flex-row justify-between items-center mb-4">
+										<Avatar :avatar="avatar" :authorID="post.authorID" size="w-16 h-16" />
+										<FriendButton
+											v-if="post.authorID !== $store.state.session.id && $route.name !== `id`"
+											:small="true"
+											:userIsFollowed="usersFollowing.has(post.authorID)"
+											:toggleFriend="() => toggleFriend(post.authorID)"
+										/>
+									</div>
+									<nuxt-link :to="'/id/' + post.authorID" class="mr-4 flex flex-col">
 										<span
 											v-if="authorName != ``"
-											class="text-base dark:text-darkPrimaryText font-medium transition ease-in-out hover:underline"
+											class="text-base font-bold transition ease-in-out hover:underline dark:text-darkPrimaryText"
 										>
 											{{ authorName }}
 										</span>
 										<span
 											v-else
-											class="text-gray5 dark:text-gray3 text-base font-medium transition ease-in-out hover:underline"
+											class="text-gray5 dark:text-gray3 text-base font-bold transition ease-in-out hover:underline"
 										>
 											{{ post.authorID }}
 										</span>
-										<span class="text-primary dark:text-secondary ml-2"> @{{ post.authorID }} </span>
+										<span class="text-primary dark:text-secondary"> @{{ post.authorID }} </span>
 									</nuxt-link>
-									<!-- Timestamp -->
-									<span class="text-xs dark:text-gray3">
-										{{ $formatDate(post.timestamp) }}
-									</span>
+									<span v-if="authorBio !== ``" class="mt-2 dark:text-darkPrimaryText"> {{ authorBio }} </span>
 								</div>
-							</div>
-							<div
-								v-show="showPopupCard && !showRepostEditor"
-								class="border-lightBorder modal-animation-delay absolute z-40 flex w-72 flex-col rounded-lg border bg-lightBG dark:bg-darkBG p-4 shadow-lg"
-								:style="repostedBy ? (quote ? `top: 100px` : `top: 110px`) : `top: 80px`"
-								@mouseover="triggerPopupCardTrue"
-								@mouseleave="showPopupCard = false"
-							>
-								<div class="w-full flex flex-row justify-between items-center mb-4">
-									<Avatar :avatar="avatar" :authorID="post.authorID" size="w-16 h-16" />
-									<FriendButton
-										v-if="post.authorID !== $store.state.session.id && $route.name !== `id`"
-										:small="true"
-										:userIsFollowed="usersFollowing.has(post.authorID)"
-										:toggleFriend="() => toggleFriend(post.authorID)"
-									/>
-								</div>
-								<nuxt-link :to="'/id/' + post.authorID" class="mr-4 flex flex-col">
-									<span
-										v-if="authorName != ``"
-										class="text-base font-bold transition ease-in-out hover:underline dark:text-darkPrimaryText"
-									>
-										{{ authorName }}
-									</span>
-									<span
-										v-else
-										class="text-gray5 dark:text-gray3 text-base font-bold transition ease-in-out hover:underline"
-									>
-										{{ post.authorID }}
-									</span>
-									<span class="text-primary dark:text-secondary"> @{{ post.authorID }} </span>
-								</nuxt-link>
-								<span v-if="authorBio !== ``" class="mt-2 dark:text-darkPrimaryText"> {{ authorBio }} </span>
-							</div>
-							<div
-								class="relative flex w-full items-center justify-center xl:w-1/5 xl:justify-end"
-								:class="repostedBy !== `` ? `-mt-4` : ``"
-							>
-								<!-- Bookmarks button -->
-								<BookmarkButton
-									:postID="postCID"
-									:hasBookmark="isBookmarked"
-									class="hidden xl:block"
-									@clicked="getBookmarkStatus"
-								/>
-								<button
-									v-if="post.authorID === $store.state.session.id"
-									class="focus:outline-none text-gray5 dark:text-gray3 ml-2 hidden xl:block"
-									@click.stop="toggleDropdownDelete"
-								>
-									<More />
-								</button>
-								<button
-									v-show="!showRepostEditor"
-									class="bg-gray1 dark:bg-gray5 focus:outline-none right-0 top-0 ml-0 rounded-full p-1 xl:ml-4"
-									@click="handleCloseButton"
-								>
-									<XIcon />
-								</button>
 								<div
-									v-show="showDelete"
-									class="border-lightBorder modal-animation absolute z-10 flex w-36 flex-col rounded-lg border bg-lightBG dark:bg-darkBG p-1 shadow-lg"
-									:class="dark ? `dropdownDeleteOpenDark` : `dropdownDeleteOpen`"
-									:style="
-										quote && quote.authorID === $store.state.session.id
-											? `top: 55px; right: 40px`
-											: `top: 45px; right: 40px`
-									"
+									class="relative flex w-full items-center justify-center xl:w-1/5 xl:justify-end"
+									:class="repostedBy !== `` ? `-mt-4` : ``"
 								>
-									<!-- Delete -->
-									<button class="focus:outline-none text-negative flex" @click="deletePost">
-										<BinIcon class="p-1" />
-										<span class="text-negative self-center text-xs">Remove from feed</span>
+									<!-- Bookmarks button -->
+									<BookmarkButton
+										:postID="postCID"
+										:hasBookmark="isBookmarked"
+										class="hidden xl:block"
+										@clicked="getBookmarkStatus"
+									/>
+									<button
+										v-if="post.authorID === $store.state.session.id"
+										class="focus:outline-none text-gray5 dark:text-gray3 ml-2 hidden xl:block"
+										@click.stop="toggleDropdownDelete"
+									>
+										<More />
 									</button>
-								</div>
-							</div>
-						</div>
-						<!-- Content -->
-						<div class="mt-4 hidden flex-col justify-between xl:flex xl:flex-row">
-							<!-- Left side: Title, subtitle / preview, tags -->
-							<div class="mr-4 w-full">
-								<nuxt-link :to="'/post/' + postCID">
-									<div class="flex max-w-full flex-col overflow-hidden pr-4">
-										<h3 class="break-words pb-2 text-lg font-semibold dark:text-darkPrimaryText">
-											{{ post.title }}
-										</h3>
-										<h6
-											v-if="(post.subtitle || post.excerpt) && featuredPhoto"
-											class="max-w-420 break-words dark:text-darkSecondaryText"
-										>
-											{{ post.subtitle ? post.subtitle : postExcerpt() }}
-										</h6>
-										<h6
-											v-if="(post.subtitle || post.excerpt) && !featuredPhoto"
-											class="max-w-mobileCard xl:max-w-700 break-words text-lightSecondaryText dark:text-darkSecondaryText"
-										>
-											{{ post.subtitle ? post.subtitle : postExcerpt() }}
-										</h6>
+									<button
+										v-show="!showRepostEditor"
+										class="bg-gray1 dark:bg-gray5 focus:outline-none right-0 top-0 ml-0 rounded-full p-1 xl:ml-4"
+										@click="handleCloseButton"
+									>
+										<XIcon />
+									</button>
+									<div
+										v-show="showDelete"
+										class="border-lightBorder modal-animation absolute z-10 flex w-36 flex-col rounded-lg border bg-lightBG dark:bg-darkBG p-1 shadow-lg"
+										:class="dark ? `dropdownDeleteOpenDark` : `dropdownDeleteOpen`"
+										:style="
+											quote && quote.authorID === $store.state.session.id
+												? `top: 55px; right: 40px`
+												: `top: 45px; right: 40px`
+										"
+									>
+										<!-- Delete -->
+										<button class="focus:outline-none text-negative flex" @click="deletePost">
+											<BinIcon class="p-1" />
+											<span class="text-negative self-center text-xs">Remove from feed</span>
+										</button>
 									</div>
-								</nuxt-link>
-								<!-- Display tags (Desktop) -->
-								<div class="my-2 hidden overflow-x-auto xl:flex xl:flex-wrap text-lg">
-									<TagPill v-for="t in post.tags" :key="t.name" :tag="t.name" class="my-2 mr-4" />
 								</div>
 							</div>
-							<!-- Right side: Image -->
-							<div v-if="featuredPhoto !== ``" class="mt-2 w-full flex-shrink-0 xl:mt-0 xl:w-56">
-								<nuxt-link :to="'/post/' + postCID">
-									<img :src="featuredPhoto" class="h-48 w-full flex-shrink-0 rounded-lg object-cover xl:h-32" />
-								</nuxt-link>
+							<!-- Content -->
+							<div class="mt-4 hidden flex-col justify-between xl:flex xl:flex-row">
+								<!-- Left side: Title, subtitle / preview, tags -->
+								<div class="mr-4 w-full">
+									<nuxt-link :to="'/post/' + postCID">
+										<div class="flex max-w-full flex-col overflow-hidden pr-4">
+											<h3 class="break-words pb-2 text-lg font-semibold dark:text-darkPrimaryText">
+												{{ post.title }}
+											</h3>
+											<h6
+												v-if="(post.subtitle || post.excerpt) && featuredPhoto"
+												class="max-w-420 break-words dark:text-darkSecondaryText"
+											>
+												{{ post.subtitle ? post.subtitle : postExcerpt() }}
+											</h6>
+											<h6
+												v-if="(post.subtitle || post.excerpt) && !featuredPhoto"
+												class="max-w-mobileCard xl:max-w-700 break-words text-lightSecondaryText dark:text-darkSecondaryText"
+											>
+												{{ post.subtitle ? post.subtitle : postExcerpt() }}
+											</h6>
+										</div>
+									</nuxt-link>
+									<!-- Display tags (Desktop) -->
+									<div class="my-2 hidden overflow-x-auto xl:flex xl:flex-wrap text-lg">
+										<TagPill v-for="t in post.tags" :key="t.name" :tag="t.name" class="my-2 mr-4" />
+									</div>
+								</div>
+								<!-- Right side: Image -->
+								<div v-if="featuredPhoto !== ``" class="mt-2 w-full flex-shrink-0 xl:mt-0 xl:w-56">
+									<nuxt-link :to="'/post/' + postCID">
+										<img :src="featuredPhoto" class="h-48 w-full flex-shrink-0 rounded-lg object-cover xl:h-32" />
+									</nuxt-link>
+								</div>
 							</div>
 						</div>
-					</div>
-					<!-- Repost POST button -->
-					<div
-						v-if="showRepostEditor"
-						class="flex flex-row-reverse pt-4"
-						:class="quoteContent !== `` ? '' : 'opacity-50'"
-						style="transition: all 0.4s"
-					>
-						<button
-							class="bg-primary dark:bg-secondary focus:outline-none block rounded-lg xl:hidden"
-							style="margin-right: 15.2px; margin-bottom: 15px"
-							@click="handleSendRepost"
+						<!-- Repost POST button -->
+						<div
+							v-if="showRepostEditor"
+							class="flex flex-row-reverse pt-4"
+							:class="quoteContent !== `` ? '' : 'opacity-50'"
+							style="transition: all 0.4s"
 						>
-							<SendIcon class="m-2 mb-3 ml-3 h-5 w-5 text-darkPrimaryText transform rotate-45" />
-						</button>
-						<BrandedButton :action="handleSendRepost" :text="`Quote`" class="hidden xl:block" />
+							<button
+								class="bg-primary dark:bg-secondary focus:outline-none block rounded-lg xl:hidden"
+								style="margin-right: 15.2px; margin-bottom: 15px"
+								@click="handleSendRepost"
+							>
+								<SendIcon class="m-2 mb-3 ml-3 h-5 w-5 text-darkPrimaryText transform rotate-45" />
+							</button>
+							<BrandedButton :action="handleSendRepost" :text="`Quote`" class="hidden xl:block" />
+						</div>
 					</div>
+					<PostActions
+						v-if="showComments || showStats"
+						:postCID="postCID"
+						:postAuthor="post.authorID"
+						:bookmarksCount="bookmarksCount"
+						:repostsCount="repostCount"
+						:openStats="showStats"
+						class="px-4 pb-4 xl:px-6 xl:pb-6"
+					/>
 				</div>
-				<PostActions
-					v-if="showComments || showStats"
-					:postCID="postCID"
-					:postAuthor="post.authorID"
-					:bookmarksCount="bookmarksCount"
-					:repostsCount="repostCount"
-					:openStats="showStats"
-					class="px-4 pb-4 xl:px-6 xl:pb-6"
-				/>
 			</div>
-		</div>
+		</portal>
 		<!-- Feed view -->
 		<div v-if="this.$route.name !== `post-post`">
 			<div class="card">

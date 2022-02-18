@@ -74,6 +74,7 @@
 		<!-- Onboarding Wizard -->
 		<OnboardingWizard v-if="$store.state.recentlyJoined" />
 		<UnauthPopup />
+		<portal-target name="card-popup"></portal-target>
 	</main>
 </template>
 
