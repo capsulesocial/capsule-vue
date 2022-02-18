@@ -57,7 +57,7 @@ const config: NuxtConfig = {
 	},
 
 	// Modules: https://go.nuxtjs.dev/config-modules
-	modules: [['@nuxtjs/dotenv', { path: './' }]],
+	modules: [['@nuxtjs/dotenv', { path: './' }], `portal-vue/nuxt`],
 
 	// Build Configuration: https://go.nuxtjs.dev/config-build
 	build: {

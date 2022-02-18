@@ -44,6 +44,7 @@
 			</div>
 		</div>
 		<UnauthPopup />
+		<portal-target name="card-popup"></portal-target>
 	</main>
 </template>
 
