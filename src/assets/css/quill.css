@@ -381,6 +381,16 @@
 .ql-editor .ql-align-right {
 	text-align: right;
 }
+.dark .ql-editor.ql-blank::before {
+	color: rgba(255, 255, 255, 0.6);
+	content: attr(data-placeholder);
+	/* left: 15px; */
+	pointer-events: none;
+	position: absolute;
+	top: 25px;
+	font-size: 1.2rem;
+	/* right: 15px; */
+}
 .ql-editor.ql-blank::before {
 	color: rgba(0, 0, 0, 0.6);
 	content: attr(data-placeholder);
