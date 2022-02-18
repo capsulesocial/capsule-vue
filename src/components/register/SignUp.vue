@@ -1,22 +1,26 @@
 <template>
 	<div class="flex w-full items-center justify-center">
-		<VerifyPhone
-			v-if="!hasEnoughFunds()"
-			:accountId="userInfo.accountId"
-			class="w-full xl:w-1/2"
-			@updateFunds="updateFunds"
-		/>
-		<!-- Step 3: Choose ID -->
-		<SelectID
-			v-else
-			:funds="funds"
-			:checkFunds="checkFunds"
-			:userInfo="userInfo"
-			:verify="verify"
-			:accountId="userInfo.accountId"
-			:nearWallet="userInfo.type === `near`"
-			class="w-full xl:w-1/2"
-		/>
+		<article v-if="!downloadKey">
+			<VerifyPhone
+				v-if="!hasEnoughFunds()"
+				:accountId="userInfo.accountId"
+				class="w-full xl:w-1/2"
+				@updateFunds="updateFunds"
+			/>
+			<!-- Step 3: Choose ID -->
+			<SelectID
+				v-else
+				:funds="funds"
+				:checkFunds="checkFunds"
+				:userInfo="userInfo"
+				:verify="verify"
+				:accountId="userInfo.accountId"
+				:nearWallet="userInfo.type === `near`"
+				class="w-full xl:w-1/2"
+			/>
+		</article>
+		<!-- Step 4: Download key -->
+		<DownloadKey v-if="downloadKey" :aid="username" :accountId="userInfo.accountId" class="w-full xl:w-1/2" />
 	</div>
 </template>
 
@@ -27,6 +31,8 @@ import { mapMutations } from 'vuex'
 
 import VerifyPhone from './VerifyPhone.vue'
 import SelectID from './SelectID.vue'
+import DownloadKey from './DownloadKey.vue'
+
 import { hasSufficientFunds } from '@/backend/funder'
 import { checkAccountStatus, getUsernameNEAR, removeNearPrivateKey, walletLogout } from '@/backend/near'
 
@@ -39,11 +45,13 @@ interface IData {
 	funds: string
 	username: null | string
 	isLoading: boolean
+	downloadKey: boolean
 }
 
 export default Vue.extend({
 	components: {
 		VerifyPhone,
+		DownloadKey,
 		SelectID,
 	},
 	props: {
@@ -57,6 +65,7 @@ export default Vue.extend({
 			funds: `0`,
 			username: null,
 			isLoading: true,
+			downloadKey: false,
 		}
 	},
 	async created() {
@@ -135,7 +144,6 @@ export default Vue.extend({
 				if (this.$isError(idCheck)) {
 					throw new ValidationError(idCheck.error)
 				}
-				this.$emit(`setID`, lowerID)
 				if (this.userInfo.type === `torus`) {
 					await setNearUserFromPrivateKey(this.userInfo.privateKey)
 				}
@@ -145,9 +153,6 @@ export default Vue.extend({
 					return
 				}
 				res = registerResult
-				if (this.userInfo.type === `near`) {
-					this.$emit(`setDownloadKeyStep`)
-				}
 			}
 
 			// Login
@@ -163,9 +168,12 @@ export default Vue.extend({
 			this.changeBio(account.bio)
 			this.changeLocation(account.location)
 
+			this.username = account.id
 			window.localStorage.setItem(`accountId`, this.userInfo.accountId)
 			if (this.userInfo.type !== `near`) {
 				this.$router.push(`/home`)
+			} else {
+				this.downloadKey = true
 			}
 		},
 	},

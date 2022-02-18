@@ -25,14 +25,10 @@
 				<SignUp
 					v-else-if="step === `signUp`"
 					:userInfo="userInfo"
-					@setID="setID"
 					@stepForward="stepForward"
-					@setDownloadKeyStep="setDownloadKeyStep"
 					@updateUserInfo="updateUserInfo"
 					@setIsLoading="setIsLoading"
 				/>
-				<!-- Step 4: Download key -->
-				<DownloadKey v-else-if="step === `downloadKey`" :aid="id" :accountId="accountId" class="w-full xl:w-1/2" />
 			</div>
 		</section>
 		<p class="text-gray5 dark:text-gray3 px-4 pl-10 text-sm">
@@ -54,7 +50,6 @@ import 'intl-tel-input/build/css/intlTelInput.css'
 import axios from 'axios'
 
 import InviteCode from '@/components/register/InviteCode.vue'
-import DownloadKey from '@/components/register/DownloadKey.vue'
 import RegisterMethods from '@/components/register/RegisterMethods.vue'
 
 import InfosPopup from '@/components/register/InfosPopup.vue'
@@ -79,7 +74,6 @@ import { getInviteToken, IWalletStatus } from '@/backend/utilities/helpers'
 interface IData {
 	id: string
 	userInfo: null | IWalletStatus
-	username?: null | string
 	accountId: null | string
 	downloadKeyStep: boolean
 	isLoading: boolean
@@ -92,7 +86,6 @@ export default Vue.extend({
 	components: {
 		CapsuleIcon,
 		InviteCode,
-		DownloadKey,
 		RegisterMethods,
 		InfosPopup,
 		SignUp,
@@ -103,7 +96,6 @@ export default Vue.extend({
 			id: ``,
 			accountId: null,
 			userInfo: null,
-			username: undefined,
 			downloadKeyStep: false,
 			isLoading: true,
 			showInfos: false,
@@ -151,39 +143,7 @@ export default Vue.extend({
 		walletLogout()
 		return false
 	},
-	async created() {
-		const nearWallet = signedInToWallet()
-		if (nearWallet) {
-			const walletConnection = getWalletConnection()
-			const accountId: string = walletConnection.getAccountId()
-			if (!accountId) {
-				throw new Error(`Wallet without accountId!`)
-			}
-			const privateKey = await getNearPrivateKey(accountId)
-			if (!privateKey) {
-				throw new Error(`Wallet without private key!`)
-			}
-			this.userInfo = {
-				type: `near`,
-				accountId,
-				privateKey,
-			}
-		}
-		for (let i = 0; i < localStorage.length; i++) {
-			const key = localStorage.key(i)
-			if (key && key.startsWith(`near-api-js:keystore`)) {
-				const privateKey = localStorage.getItem(key)
-				const accountId = key.split(`:`)[2]
-				if (privateKey && accountId) {
-					this.userInfo = {
-						type: `near`,
-						accountId,
-						privateKey,
-					}
-				}
-				break
-			}
-		}
+	created() {
 		this.isLoading = false
 		this.stepForward()
 	},
@@ -208,34 +168,60 @@ export default Vue.extend({
 			changeBio: MutationType.CHANGE_BIO,
 			changeLocation: MutationType.CHANGE_LOCATION,
 		}),
-		stepForward() {
+		async stepForward() {
+			this.isLoading = true
 			const inviteToken = getInviteToken()
+			const nearWallet = signedInToWallet()
+
+			// Check if we already have any sign-in info set up
+			if (nearWallet) {
+				const walletConnection = getWalletConnection()
+				const accountId: string = walletConnection.getAccountId()
+				if (!accountId) {
+					throw new Error(`Wallet without accountId!`)
+				}
+				const privateKey = await getNearPrivateKey(accountId)
+				if (!privateKey) {
+					throw new Error(`Wallet without private key!`)
+				}
+				this.userInfo = {
+					type: `near`,
+					accountId,
+					privateKey,
+				}
+			} else {
+				for (let i = 0; i < localStorage.length; i++) {
+					const key = localStorage.key(i)
+					if (key && key.startsWith(`near-api-js:keystore`)) {
+						const privateKey = localStorage.getItem(key)
+						const accountId = key.split(`:`)[2]
+						if (privateKey && accountId) {
+							this.userInfo = {
+								type: `near`,
+								accountId,
+								privateKey,
+							}
+						}
+						break
+					}
+				}
+			}
+
+			this.isLoading = false
 			if (inviteToken && !this.userInfo) {
 				this.step = `registerMethods`
 				return
 			}
 
-			if (!this.downloadKeyStep && this.userInfo) {
+			if (this.userInfo) {
 				this.step = `signUp`
-				return
-			}
-
-			console.log(this.downloadKeyStep)
-			if (this.downloadKeyStep) {
-				this.step = `downloadKey`
 				return
 			}
 
 			this.step = `inviteCode`
 		},
-		setDownloadKeyStep(): void {
-			this.downloadKeyStep = true
-		},
 		updateUserInfo(userInfo: IWalletStatus | null): void {
 			this.userInfo = userInfo
-		},
-		setID(id: string): void {
-			this.id = id
 		},
 		setIsLoading(isLoading: boolean): void {
 			this.isLoading = isLoading
