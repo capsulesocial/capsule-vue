@@ -34,7 +34,6 @@ export async function setNearUserFromPrivateKey(privateKey: string) {
 export async function register(id: string, accountId: string): Promise<IAuthResult | { error: string }> {
 	// Reinitialise Smart Contract API
 	initContract(accountId)
-	window.localStorage.setItem(`accountId`, accountId)
 
 	const profile = createDefaultProfile(id)
 	const [cid, userSetStatus] = await Promise.all([addProfileToIPFS(profile), setUserInfoNEAR(id)])
@@ -63,7 +62,6 @@ export async function loginNearAccount(id: string, privateKey: string, accountId
 	const [fetchedProfile] = await Promise.all([getProfile(id), setNearPrivateKey(baseDecode(privateKey), accountId)])
 
 	initContract(accountId)
-	window.localStorage.setItem(`accountId`, accountId)
 
 	const profile = fetchedProfile.profile || createDefaultProfile(id)
 	const cid = await addProfileToIPFS(profile)

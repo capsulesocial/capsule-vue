@@ -156,6 +156,8 @@ export default Vue.extend({
 			this.changeAvatar(account.avatar)
 			this.changeBio(account.bio)
 			this.changeLocation(account.location)
+
+			window.localStorage.setItem(`accountId`, this.userInfo.accountId)
 			this.$router.push(`/home`)
 		},
 	},
