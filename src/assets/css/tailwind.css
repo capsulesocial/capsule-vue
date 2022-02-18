@@ -109,7 +109,7 @@
 	}
 
 	/* Dark Handle */
-	.dark div::-webkit-scrollbar-thumb {
+	.dark ::-webkit-scrollbar-thumb {
 		background: #7097ac;
 	}
 	/* Hide aside scrollbar for Chrome, Safari and Opera */
