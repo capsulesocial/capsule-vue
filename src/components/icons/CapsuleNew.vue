@@ -5,7 +5,7 @@
 			width="36"
 			height="36"
 			viewBox="0 0 612 612"
-			fill="#2E556A"
+			fill="currentColor"
 			:style="shrink ? `transform: scale(0.7)` : `transform: scale(1)`"
 		>
 			<path

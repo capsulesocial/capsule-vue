@@ -1,13 +1,15 @@
 <template>
 	<main
-		class="bg-img m-0 h-screen p-0"
-		:style="{
-			background:
-				`linear-gradient(180deg, rgba(46, 85, 106, 0.02) 0%, rgba(46, 85, 106, 0) 50%), url(` +
-				this.bgImage.image +
-				`)`,
-			backgroundSize: `contain`,
-		}"
+		class="bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightMainBG dark:bg-darkBG"
+		:style="
+			dark
+				? {
+						backgroundImage: `url(` + bgImage.dark + `)`,
+				  }
+				: {
+						backgroundImage: `url(` + bgImage.light + `)`,
+				  }
+		"
 	>
 		<!-- Wrapper -->
 		<div class="flex w-full justify-center">
@@ -26,20 +28,24 @@
 								height: calc(100vh - 88px);
 								backdrop-filter: blur(10px);
 							"
-							class="from-lightBGStart to-lightBGStop border-lightBorder modal-animation fixed z-10 mr-5 overflow-y-auto rounded-t-lg border bg-gradient-to-r p-8 shadow-lg"
+							class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation fixed z-10 mr-5 overflow-y-auto rounded-t-lg border bg-gradient-to-r p-8 shadow-lg"
 							@update="updateWordCount"
 							@isWriting="hideDraftButton"
 						/>
 						<div
 							id="draftButton"
-							class="animatedraftButton from-lightBGStart to-lightBGStop border-lightBorder test-xs text-gray5 modal-animation card-animation-delay1 absolute bottom-0 z-10 m-4 flex rounded-lg bg-gradient-to-r px-5 py-3 shadow-lg"
+							class="animatedraftButton from-lightBGStart to-lightBGStop dark:from-darkBG dark:to-darkBG border-lightBorder test-xs text-gray5 dark:text-gray3 modal-animation card-animation-delay1 absolute bottom-0 z-10 m-4 flex rounded-lg bg-gradient-to-r px-5 py-3 shadow-lg"
 							style="backdrop-filter: blur(10px)"
 						>
 							<p v-if="!buttonHidden" class="mr-2">Resume writing?</p>
-							<button v-if="!buttonHidden" class="text-primary focus:outline-none" @click="openDraftsPopup">
+							<button
+								v-if="!buttonHidden"
+								class="text-primary dark:text-secondary focus:outline-none ml-2"
+								@click="openDraftsPopup"
+							>
 								Show drafts
 							</button>
-							<button v-else class="text-primary focus:outline-none" @click="openDraftsPopup">
+							<button v-else class="text-primary dark:text-secondary focus:outline-none ml-2" @click="openDraftsPopup">
 								<PencilIcon class="fill-current p-1" />
 							</button>
 						</div>
@@ -57,13 +63,13 @@
 		</div>
 		<div
 			v-if="showDrafts"
-			class="popup bg-primary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50"
+			class="popup bg-primary dark:bg-secondary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
 		>
 			<DraftsPopup @close="closeDraftsPopup" />
 		</div>
 		<div
 			v-if="showConfirm"
-			class="popup bg-primary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50"
+			class="popup bg-primary dark:bg-secondary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
 		>
 			<ConfirmPopup @close="showConfirmPopup" @post="handlePost" />
 		</div>
@@ -91,6 +97,7 @@ interface IData {
 	showConfirm: boolean
 	buttonHidden: boolean
 	bgImage: IBackground
+	dark: boolean
 }
 
 export default Vue.extend({
@@ -112,6 +119,7 @@ export default Vue.extend({
 			showConfirm: false,
 			buttonHidden: false,
 			bgImage: backgrounds[0],
+			dark: false,
 		}
 	},
 	async created() {
@@ -119,6 +127,8 @@ export default Vue.extend({
 		if (this.$store.state.session.id === ``) {
 			this.$router.push(`/home`)
 		}
+		// Set color mode
+		this.$setColorMode(this.$store.state.settings.darkMode)
 		// get logged in profile
 		const { profile } = await getProfile(this.$store.state.session.id)
 		this.profile = profile
@@ -132,6 +142,11 @@ export default Vue.extend({
 		// Check if the active draft exists
 		if (this.$store.state.draft.drafts[this.$store.state.draft.activeIndex] === undefined) {
 			this.$store.commit(`draft/setActiveDraft`, 0)
+		}
+		if (document.documentElement.classList.contains(`dark`)) {
+			this.dark = true
+		} else {
+			this.dark = false
 		}
 	},
 	methods: {
@@ -184,15 +199,5 @@ export default Vue.extend({
 .hidedraftButton {
 	transform: translateX(-2rem);
 	padding: 0.7rem;
-}
-/* Hide scrollbar for Chrome, Safari and Opera */
-aside::-webkit-scrollbar {
-	display: none;
-}
-
-/* Hide scrollbar for IE, Edge and Firefox */
-aside {
-	-ms-overflow-style: none; /* IE and Edge */
-	scrollbar-width: none; /* Firefox */
 }
 </style>

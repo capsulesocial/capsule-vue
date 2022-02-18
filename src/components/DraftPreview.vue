@@ -6,13 +6,15 @@
 		<!-- Title -->
 		<div class="flex flex-grow flex-col">
 			<h6
-				class="truncate text-base font-semibold"
+				class="truncate text-base font-semibold dark:text-darkPrimaryText"
 				:style="$route.name === `home` ? `max-width: 259px` : `max-width: 408px`"
 			>
 				{{ draft.title === `` ? `New Post` : draft.title }}
 			</h6>
-			<p v-if="draft.timestamp !== 0" class="text-gray5 text-sm">Last saved {{ $formatDate(draft.timestamp) }}</p>
-			<p v-else class="text-gray5 text-sm">No save</p>
+			<p v-if="draft.timestamp !== 0" class="text-gray5 dark:text-gray3 text-sm">
+				Last saved {{ $formatDate(draft.timestamp) }}
+			</p>
+			<p v-else class="text-gray5 dark:text-gray3 text-sm">No save</p>
 		</div>
 		<!-- Featured image -->
 		<div class="mx-4 flex flex-shrink-0 items-center">
@@ -22,27 +24,26 @@
 				alt="$store.state.draft.title"
 				class="h-16 w-20 rounded-lg"
 			/>
-			<span v-else class="bg-gray1 text-gray5 flex h-16 w-20 items-center justify-center rounded-lg">
+			<span
+				v-else
+				class="bg-gray1 dark:bg-gray7 text-gray5 dark:text-gray2 flex h-16 w-20 items-center justify-center rounded-lg"
+			>
 				<ImageIcon class="h-5 w-5 fill-current" />
 			</span>
 		</div>
 		<div class="icon relative flex items-center">
-			<button class="focus:outline-none text-gray5 ml-2" @click.stop="toggleDropdownDelete">
+			<button class="focus:outline-none text-gray5 dark:text-gray3 ml-2" @click.stop="toggleDropdownDelete">
 				<MoreIcon />
 			</button>
 			<div
 				v-show="showDelete"
-				:class="
-					$store.state.settings.darkMode
-						? 'bg-lightBG text-lightPrimaryText border-lightBorder'
-						: 'bg-darkBG text-darkPrimaryText border-darkBorder'
-				"
-				class="border-lightBorder modal-animation dropdownDraftOpen absolute z-10 flex w-40 flex-col rounded-lg border p-2 shadow-lg"
+				class="bg-lightBG dark:bg-darkBG dark:text-darkPrimaryText text-lightPrimaryText border-lightBorder modal-animation absolute z-10 flex w-40 flex-col rounded-lg border p-2 shadow-lg"
+				:class="dark ? `dropdownDraftOpenDark` : `dropdownDraftOpen`"
 				style="top: 35px; right: -5px"
 			>
-				<button class="focus:outline-none text-primary flex" @click="setActiveDraft(draft)">
+				<button class="focus:outline-none text-primary dark:text-secondary flex" @click="setActiveDraft(draft)">
 					<PencilIcon class="fill-current p-1" />
-					<span class="text-primary ml-1 self-center text-sm">Edit this draft</span>
+					<span class="text-primary dark:text-secondary ml-1 self-center text-sm">Edit this draft</span>
 				</button>
 				<!-- Delete -->
 				<button class="focus:outline-none text-negative mt-2 flex" @click="deleteDraft(draft)">
@@ -72,6 +73,7 @@ interface IData {
 	featuredPhoto: any
 	showDelete: boolean
 	delayActiveDraft: boolean
+	dark: boolean
 }
 
 export default Vue.extend({
@@ -104,6 +106,7 @@ export default Vue.extend({
 			featuredPhoto: null,
 			showDelete: false,
 			delayActiveDraft: false,
+			dark: false,
 		}
 	},
 	async created() {
@@ -111,6 +114,11 @@ export default Vue.extend({
 			this.featuredPhoto = await getPhotoFromIPFS(this.draft.featuredPhotoCID)
 		}
 		window.addEventListener(`click`, this.handleDropdown, false)
+		if (document.documentElement.classList.contains(`dark`)) {
+			this.dark = true
+		} else {
+			this.dark = false
+		}
 	},
 	destroyed() {
 		if (this.delayActiveDraft) {
@@ -161,6 +169,17 @@ export default Vue.extend({
 	width: 1rem;
 	height: 1rem;
 	background-color: #fff;
+	border-radius: 2px;
+}
+.dropdownDraftOpenDark::before {
+	content: '';
+	position: absolute;
+	top: -0.5rem;
+	right: 0.5rem;
+	transform: rotate(45deg);
+	width: 1rem;
+	height: 1rem;
+	background-color: #121212;
 	border-radius: 2px;
 }
 </style>

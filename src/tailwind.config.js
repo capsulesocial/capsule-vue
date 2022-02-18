@@ -46,11 +46,12 @@ module.exports = {
         connectOrange: '#F0B785',
         selectedBlue: '#0020ff',
         neutralLightest: '#F6F6F6',
-
         positive: `#1F7DAD`,
         neutral: `#F0B785`,
         negative: `#EE1F63`,
+
         lightBG: '#FFFFFF',
+        lightMainBG: 'rgba(252, 252, 252, 1)',
         lightBGStop: 'rgba(256, 256, 256, 0.95)',
         lightBGStart: 'rgba(256, 256, 256, 0.90)',
         lightBorder: 'rgba(46, 85, 106, 0.05)',
@@ -74,6 +75,8 @@ module.exports = {
         lightOnErrorText: '#FFFFFF',
 
         darkBG: '#121212',
+        darkBGStop: 'rgba(46, 46, 46, 0.95)',
+        darkBGStart: 'rgba(46, 46, 46, 0.90)',
         darkPrimary: '#407C83',
         darkPrimaryVariant: '#324B4E',
         darkSecondary: '#424242',
@@ -87,6 +90,7 @@ module.exports = {
         darkOnSurfaceVariantText: '#C2C2C2',
         darkBorder: '#EEEEEE',
         darkDialog: '#454545',
+        darkInput: 'rgba(256, 256, 256, 0.05)',
         darkButtonBG: '#1F7DAD',
         darkButtonText: '#FFFFFF',
         darkActive: '#367589',

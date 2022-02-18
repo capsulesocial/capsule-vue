@@ -1,13 +1,15 @@
 <template>
 	<main
-		class="bg-img m-0 h-screen p-0"
-		:style="{
-			background:
-				`linear-gradient(180deg, rgba(46, 85, 106, 0.02) 0%, rgba(46, 85, 106, 0) 50%), url(` +
-				this.bgImage.image +
-				`)`,
-			backgroundSize: `contain`,
-		}"
+		class="bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightMainBG dark:bg-darkBG"
+		:style="
+			dark
+				? {
+						backgroundImage: `url(` + bgImage.dark + `)`,
+				  }
+				: {
+						backgroundImage: `url(` + bgImage.light + `)`,
+				  }
+		"
 	>
 		<div class="flex w-full justify-center">
 			<div class="flex flex-col" style="width: 1220px">
@@ -31,6 +33,7 @@ import { IBackground, backgrounds } from '@/config'
 
 interface IData {
 	bgImage: IBackground
+	dark: boolean
 }
 
 export default Vue.extend({
@@ -48,11 +51,19 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			bgImage: backgrounds[0],
+			dark: false,
 		}
 	},
 	created() {
 		if (this.$store.state.session.id === ``) {
 			this.$router.push(`/`)
+		}
+		// Set color mode
+		this.$setColorMode(this.$store.state.settings.darkMode)
+		if (document.documentElement.classList.contains(`dark`)) {
+			this.dark = true
+		} else {
+			this.dark = false
 		}
 	},
 	methods: {

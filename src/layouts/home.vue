@@ -1,12 +1,15 @@
 <template>
 	<main
-		class="bg-img m-0 h-screen overflow-y-hidden p-0"
-		:style="{
-			background:
-				`linear-gradient(180deg, rgba(46, 85, 106, 0.02) 0%, rgba(46, 85, 106, 0) 50%), url(` +
-				this.bgImage.image +
-				`)`,
-		}"
+		class="bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightMainBG dark:bg-darkBG"
+		:style="
+			dark
+				? {
+						backgroundImage: `url(` + bgImage.dark + `)`,
+				  }
+				: {
+						backgroundImage: `url(` + bgImage.light + `)`,
+				  }
+		"
 	>
 		<!-- Wrapper -->
 		<div class="flex w-full justify-center">
@@ -21,7 +24,9 @@
 						style="height: 62px; width: 1220px"
 					>
 						<!-- Title -->
-						<h1 v-if="profile" class="text-primary text-3xl font-semibold xl:text-4xl">Hello, {{ profile.name }}</h1>
+						<h1 v-if="profile" class="text-primary dark:text-secondary text-3xl font-semibold xl:text-4xl">
+							Hello, {{ profile.name }}
+						</h1>
 						<h1 v-else class="text-primary text-3xl font-semibold xl:text-4xl">Hello!</h1>
 						<Nodes />
 					</div>
@@ -36,11 +41,11 @@
 								height: calc(100vh - 150px);
 								backdrop-filter: blur(10px);
 							"
-							class="from-lightBGStart to-lightBGStop modal-animation fixed overflow-y-auto overflow-x-hidden rounded-lg bg-gradient-to-r p-6 shadow-lg"
+							class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop modal-animation fixed overflow-y-auto overflow-x-hidden rounded-lg bg-gradient-to-r p-6 shadow-lg"
 						/>
 						<nuxt-child
 							v-else
-							class="xl:w-750 min-h-120 h-120 from-lightBGStart to-lightBGStop modal-animation fixed box-border w-full overflow-y-auto rounded-lg bg-gradient-to-r shadow-lg xl:mr-5"
+							class="xl:w-750 min-h-120 h-120 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop modal-animation fixed box-border w-full overflow-y-auto rounded-lg bg-gradient-to-r shadow-lg xl:mr-5"
 							:class="showWidgets ? `` : `z-10`"
 							:toggleFriend="toggleFriend"
 							:following="following"
@@ -103,6 +108,7 @@ interface IData {
 	followers: Set<string>
 	userIsFollowed: boolean
 	bgImage: IBackground
+	dark: boolean
 }
 
 export default Vue.extend({
@@ -124,12 +130,20 @@ export default Vue.extend({
 			followers: new Set(),
 			userIsFollowed: false,
 			bgImage: backgrounds[0],
+			dark: false,
 		}
 	},
 	async created() {
 		// Check if logged in user
 		if (this.$store.state.session.id === ``) {
 			return
+		}
+		// Set color mode
+		this.$setColorMode(this.$store.state.settings.darkMode)
+		if (document.documentElement.classList.contains(`dark`)) {
+			this.dark = true
+		} else {
+			this.dark = false
 		}
 		// get logged in profile
 		const { profile } = await getProfile(this.$store.state.session.id)

@@ -85,7 +85,7 @@
 	/* .medium-editor-toolbar {
     @apply bg-white border rounded-xl shadow-xl
   } */
-	/* width */
+  	/* width */
 	::-webkit-scrollbar {
 		padding-top: 5px;
 		margin-top: 5px;
@@ -107,6 +107,22 @@
 	::-webkit-scrollbar-thumb:hover {
 		background: #7097ac;
 	}
+
+	/* Dark Handle */
+	.dark ::-webkit-scrollbar-thumb {
+		background: #7097ac;
+	}
+	/* Hide aside scrollbar for Chrome, Safari and Opera */
+	aside::-webkit-scrollbar {
+		display: none;
+	}
+
+	/* Hide aside scrollbar for IE, Edge and Firefox */
+	aside {
+		-ms-overflow-style: none; /* IE and Edge */
+		scrollbar-width: none; /* Firefox */
+	}
+
 	h1 {
 		@apply font-serif;
 	}
@@ -267,6 +283,20 @@
 	}
 	to {
 		transform: translate(0px, 0px);
+	}
+}
+
+/* Loader */
+.loader {
+	animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
 	}
 }
 

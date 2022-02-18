@@ -1,13 +1,15 @@
 <template>
 	<main
-		class="bg-img m-0 h-screen p-0"
-		:style="{
-			background:
-				`linear-gradient(180deg, rgba(46, 85, 106, 0.02) 0%, rgba(46, 85, 106, 0) 50%), url(` +
-				this.bgImage.image +
-				`)`,
-			backgroundSize: `contain`,
-		}"
+		class="bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightMainBG dark:bg-darkBG"
+		:style="
+			dark
+				? {
+						backgroundImage: `url(` + bgImage.dark + `)`,
+				  }
+				: {
+						backgroundImage: `url(` + bgImage.light + `)`,
+				  }
+		"
 	>
 		<!-- Wrapper -->
 		<div class="flex w-full justify-center">
@@ -22,7 +24,10 @@
 						style="width: 1220px; height: 62px"
 					>
 						<!-- Title -->
-						<h1 v-if="$route.name === `discover`" class="text-primary text-3xl font-semibold xl:text-4xl">
+						<h1
+							v-if="$route.name === `discover`"
+							class="text-primary dark:text-secondary text-3xl font-semibold xl:text-4xl"
+						>
 							Browse Capsule
 						</h1>
 						<!-- Peered nodes -->
@@ -32,7 +37,7 @@
 					<section class="modal-animation mt-16 flex flex-row xl:mt-20">
 						<nuxt-child
 							:class="$route.name === `discover` ? `` : `-mt-16 xl:-mt-20`"
-							class="xl:w-750 min-h-61 h-61 xl:min-h-80 from-lightBGStart to-lightBGStop fixed z-10 mr-5 box-content w-full overflow-y-auto rounded-lg bg-gradient-to-r shadow-lg xl:h-80"
+							class="xl:w-750 min-h-61 h-61 xl:min-h-80 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop fixed z-10 mr-5 box-content w-full overflow-y-auto rounded-lg bg-gradient-to-r shadow-lg xl:h-80"
 							:toggleFriend="toggleFriend"
 							:following="following"
 						/>
@@ -48,7 +53,7 @@
 							style="margin-left: 755px; width: 485px"
 						>
 							<TagsWidget
-								class="from-lightBGStart to-lightBGStop border-lightBorder mb-5 overflow-hidden rounded-lg border bg-gradient-to-r shadow-lg"
+								class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder mb-5 overflow-hidden rounded-lg border bg-gradient-to-r shadow-lg"
 								style="backdrop-filter: blur(10px)"
 							/>
 							<Footer />
@@ -79,6 +84,7 @@ interface IData {
 	avatar: string | ArrayBuffer | null
 	following: Set<string>
 	bgImage: IBackground
+	dark: boolean
 }
 
 export default Vue.extend({
@@ -95,6 +101,7 @@ export default Vue.extend({
 			avatar: null,
 			following: new Set(),
 			bgImage: backgrounds[0],
+			dark: false,
 		}
 	},
 	async created() {
@@ -102,6 +109,8 @@ export default Vue.extend({
 		if (this.$store.state.session.id === ``) {
 			return
 		}
+		// Set color mode
+		this.$setColorMode(this.$store.state.settings.darkMode)
 		// get logged in profile
 		const { profile } = await getProfile(this.$store.state.session.id)
 		this.profile = profile
@@ -116,6 +125,11 @@ export default Vue.extend({
 		getFollowersAndFollowing(this.$store.state.session.id).then(({ following }) => {
 			this.following = following
 		})
+		if (document.documentElement.classList.contains(`dark`)) {
+			this.dark = true
+		} else {
+			this.dark = false
+		}
 	},
 	methods: {
 		async toggleFriend(authorID: string) {

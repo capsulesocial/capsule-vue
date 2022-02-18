@@ -1,20 +1,19 @@
 <template>
 	<div class="text-3xl">
-		<button v-if="$store.state.settings.darkMode" class="focus:outline-none" @click="toggleDarkMode">🌝</button>
-		<button v-else class="focus:outline-none" @click="toggleDarkMode">🌞</button>
+		<button class="focus:outline-none" @click="changeDarkMode(`light`)">light</button>
+		<button class="focus:outline-none" @click="changeDarkMode(`dark`)">dark</button>
+		<button class="focus:outline-none" @click="changeDarkMode(`OS`)">OS</button>
 	</div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapActions } from 'vuex'
-import { actionType, namespace as settingStoreNamespace } from '~/store/settings'
 
 export default Vue.extend({
 	methods: {
-		...mapActions(settingStoreNamespace, {
-			toggleDarkMode: actionType.TOGGLE_DARK_MODE,
-		}),
+		changeDarkMode(type: string): void {
+			this.$store.commit(`settings/changeDarkMode`, type)
+		},
 	},
 })
 </script>

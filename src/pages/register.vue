@@ -1,12 +1,15 @@
 <template>
 	<main
 		style="backdrop-filter: blur(10px)"
-		class="from-lightBGStart to-lightBGStop h-screen w-full flex-col justify-between overflow-y-scroll bg-gradient-to-r xl:w-3/5"
+		class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop h-screen w-full flex-col justify-between overflow-y-scroll bg-gradient-to-r xl:w-3/5"
 	>
 		<CapsuleIcon class="pt-6 pl-10" />
 		<section class="flex items-center justify-center max-h-90" style="height: 86%">
 			<div v-show="isLoading" class="modal-animation flex w-full justify-center xl:w-1/2 z-20">
-				<div class="loader m-5 rounded-lg"></div>
+				<div
+					class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
+					:style="dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
+				></div>
 			</div>
 			<div v-show="!isLoading" class="-mt-5 flex w-full flex-col items-center px-14">
 				<!-- Step 0: Code redeem -->
@@ -56,10 +59,10 @@
 				<DownloadKey v-if="downloadKeyStep" :aid="id" :accountId="accountId" class="w-full xl:w-1/2" />
 			</div>
 		</section>
-		<p class="text-gray5 px-4 pl-10 text-sm">© {{ currentYear }} Capsule Social, Inc.</p>
+		<p class="text-gray5 dark:text-gray3 px-4 pl-10 text-sm">© {{ currentYear }} Capsule Social, Inc.</p>
 		<div
 			v-if="showInfos"
-			class="popup bg-primary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50"
+			class="popup bg-primary dark:bg-secondary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
 		>
 			<InfosPopup @close="showInfos = false" />
 		</div>
@@ -111,6 +114,7 @@ interface IData {
 	currentYear: string
 	isLoading: boolean
 	showInfos: boolean
+	dark: boolean
 }
 
 export default Vue.extend({
@@ -137,6 +141,7 @@ export default Vue.extend({
 			currentYear: ``,
 			isLoading: true,
 			showInfos: false,
+			dark: false,
 		}
 	},
 	head() {
@@ -163,6 +168,11 @@ export default Vue.extend({
 		}
 		const theDate = new Date()
 		this.currentYear = theDate.getFullYear().toString()
+		if (document.documentElement.classList.contains(`dark`)) {
+			this.dark = true
+		} else {
+			this.dark = false
+		}
 	},
 	methods: {
 		...mapMutations(sessionStoreNamespace, {
@@ -293,23 +303,3 @@ export default Vue.extend({
 	},
 })
 </script>
-
-<style>
-.loader {
-	border: 3px solid #eeeeee; /* Light grey */
-	border-top: 3px solid #2e556a; /* Dark teal */
-	border-radius: 50%;
-	width: 40px;
-	height: 40px;
-	animation: spin 2s linear infinite;
-}
-
-@keyframes spin {
-	0% {
-		transform: rotate(0deg);
-	}
-	100% {
-		transform: rotate(360deg);
-	}
-}
-</style>

@@ -1,5 +1,5 @@
 <template>
-	<footer class="text-gray5 text-sm">
+	<footer class="text-gray5 dark:text-gray3 text-sm">
 		<div class="mb-5 mt-1 flex">
 			<nuxt-link to="/help" class="pr-6">Help</nuxt-link>
 			<a href="https://www.capsule.social/writers" target="_blank" class="pr-6">Writers</a>

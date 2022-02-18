@@ -4,10 +4,10 @@
 			v-if="posts.length == 0 && !isLoading"
 			class="mt-12 grid justify-items-center overflow-y-hidden px-6 xl:px-0"
 		>
-			<p class="text-gray5 align-end mb-1 flex items-end text-sm" style="max-width: 366px">
+			<p class="text-gray5 dark:text-gray3 align-end mb-1 flex items-end text-sm" style="max-width: 366px">
 				It seems you don't have any bookmarked posts yet,
 			</p>
-			<p class="text-gray5 align-end mb-5 flex items-end text-sm" style="max-width: 366px">
+			<p class="text-gray5 dark:text-gray3 align-end mb-5 flex items-end text-sm" style="max-width: 366px">
 				you can bookmark any post by clicking the<span>
 					<BookmarkIcon class="h-5 w-5 fill-current" />
 				</span>
@@ -32,12 +32,19 @@
 				:isDeleted="p.deleted"
 			/>
 		</article>
-		<p v-if="posts.length > 0" class="text-gray5 py-5 text-center text-sm" style="backdrop-filter: blur(10px)">
+		<p
+			v-if="posts.length > 0"
+			class="text-gray5 dark:text-gray3 py-5 text-center text-sm"
+			style="backdrop-filter: blur(10px)"
+		>
 			No more posts
 		</p>
 		<!-- Not loaded yet -->
 		<article v-if="isLoading" class="flex w-full justify-center">
-			<div class="loader modal-animation m-6"></div>
+			<div
+				class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
+				:style="dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
+			></div>
 		</article>
 	</div>
 </template>
@@ -47,6 +54,10 @@ import Vue from 'vue'
 import { IPostResponse } from '@/backend/post'
 import SecondaryButton from '@/components/SecondaryButton.vue'
 import BookmarkIcon from '@/components/icons/Bookmark.vue'
+
+interface IData {
+	dark: boolean
+}
 
 export default Vue.extend({
 	components: {
@@ -70,6 +81,18 @@ export default Vue.extend({
 			type: Boolean,
 			required: false,
 		},
+	},
+	data(): IData {
+		return {
+			dark: false,
+		}
+	},
+	created() {
+		if (document.documentElement.classList.contains(`dark`)) {
+			this.dark = true
+		} else {
+			this.dark = false
+		}
 	},
 	methods: {
 		toggleHomeFeed() {

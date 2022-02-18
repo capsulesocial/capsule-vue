@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<h2
-			class="text-primary px-5 pt-3 pb-3 text-lg font-semibold xl:px-6 xl:pt-4 xl:text-xl"
+			class="text-primary dark:text-secondary px-5 pt-3 pb-3 text-lg font-semibold xl:px-6 xl:pt-4 xl:text-xl"
 			style="backdrop-filter: blur(10px)"
 		>
 			My bookmarks

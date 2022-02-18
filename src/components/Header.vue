@@ -7,7 +7,7 @@
 		<nav class="xl:min-w-1220 flex-no-wrap hidden flex-row items-center justify-between py-5 xl:flex">
 			<!-- Left side: Links + write post button -->
 			<div class="flex flex-row items-center" style="font-size: 0.95rem">
-				<nuxt-link to="/home" class="mr-5">
+				<nuxt-link to="/home" class="mr-5 text-primary dark:text-secondary">
 					<CapsuleIcon />
 				</nuxt-link>
 				<nuxt-link to="/home" class="mx-4" :class="getStyles(`home`)"> Home </nuxt-link>
@@ -29,33 +29,34 @@
 				<!-- Dropdown: Profile, settings, disconnect -->
 				<div
 					v-show="showDropdown"
-					class="dropdownOpen from-lightBGStart to-lightBGStop border-lightBorder modal-animation absolute mt-16 flex flex-col rounded-lg border bg-gradient-to-r p-4 shadow-lg backdrop-blur-lg backdrop-filter"
+					class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation absolute mt-16 flex flex-col rounded-lg border bg-gradient-to-r p-4 shadow-lg backdrop-blur-lg backdrop-filter"
+					:class="dark ? `dropdownOpenDark` : `dropdownOpen`"
 				>
 					<!-- Unauthenticated: Log in -->
 					<nuxt-link
 						v-if="$store.state.session.id === ``"
 						to="/login"
-						class="text-gray5 mx-2 mb-4 flex w-24 flex-row items-center text-left"
+						class="text-gray5 dark:text-gray3 mx-2 mb-4 flex w-24 flex-row items-center text-left"
 						>Log In</nuxt-link
 					>
 					<!-- Unauthenticated: Register -->
 					<nuxt-link
 						v-if="$store.state.session.id === ``"
 						to="/register"
-						class="text-gray5 mx-2 flex w-24 flex-row items-center text-left"
+						class="text-gray5 dark:text-gray3 mx-2 flex w-24 flex-row items-center text-left"
 						>Register</nuxt-link
 					>
 					<!-- Authenticated -->
 					<nuxt-link
 						v-if="$store.state.session.id !== ``"
 						:to="`/id/` + $store.state.session.id"
-						class="text-gray5 mb-4 flex w-full flex-row items-center text-left"
+						class="text-gray5 dark:text-gray3 mb-4 flex w-full flex-row items-center text-left"
 						><ProfileIcon class="mr-2 h-5 w-5 flex-shrink-0" />Profile</nuxt-link
 					>
 					<nuxt-link
 						v-if="$store.state.session.id !== ``"
 						to="/settings/account"
-						class="text-gray5 mb-4 flex w-full flex-row items-center text-left"
+						class="text-gray5 dark:text-gray3 mb-4 flex w-full flex-row items-center text-left"
 					>
 						<SettingsIcon class="mr-2 h-5 w-5 flex-shrink-0" />Settings</nuxt-link
 					>
@@ -74,11 +75,12 @@
 			<!-- Mobile menu dropdown -->
 			<div class="relative">
 				<button class="mobileDropdown" @click="showMobileMenu = !showMobileMenu">
-					<MobileNav class="mobileDropdown" />
+					<MobileNav class="mobileDropdown text-primary dark:text-secondary" />
 				</button>
 				<div
 					v-show="showMobileMenu"
-					class="dropdownMainOpen from-lightBGStart to-lightBGStop border-lightBorder modal-animation absolute mt-2 ml-0 flex flex-col rounded-lg border bg-gradient-to-r p-4 shadow-lg backdrop-blur-lg backdrop-filter"
+					class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation absolute mt-2 ml-0 flex flex-col rounded-lg border bg-gradient-to-r p-4 shadow-lg backdrop-blur-lg backdrop-filter"
+					:class="dark ? `dropdownMainOpenDark` : `dropdownMainOpen`"
 				>
 					<nuxt-link
 						to="/home"
@@ -106,8 +108,8 @@
 			<!-- Middle branding -->
 			<nuxt-link to="/home">
 				<div class="flex items-center">
-					<CapsuleIcon />
-					<h1 class="text-primary font-sans text-xl font-bold">Blogchain</h1>
+					<CapsuleIcon class="text-primary dark:text-secondary mr-2" />
+					<h1 class="text-primary dark:text-secondary font-sans text-xl font-bold">Blogchain</h1>
 				</div>
 			</nuxt-link>
 			<div class="relative mt-2">
@@ -122,33 +124,34 @@
 				<!-- Dropdown: Profile, settings, disconnect -->
 				<div
 					v-show="showDropdown"
-					class="dropdownOpen from-lightBGStart to-lightBGStop border-lightBorder modal-animation absolute mt-2 flex flex-col rounded-lg border bg-gradient-to-r p-4 shadow-lg backdrop-blur-lg backdrop-filter"
+					class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation absolute mt-2 flex flex-col rounded-lg border bg-gradient-to-r p-4 shadow-lg backdrop-blur-lg backdrop-filter"
+					:class="dark ? `dropdownOpenDark` : `dropdownOpen`"
 				>
 					<!-- Unauthenticated: Log in -->
 					<nuxt-link
 						v-if="$store.state.session.id === ``"
 						to="/login"
-						class="text-gray5 mx-2 mb-4 flex w-24 flex-row items-center text-left"
+						class="text-gray5 dark:text-gray3 mx-2 mb-4 flex w-24 flex-row items-center text-left"
 						>Log In</nuxt-link
 					>
 					<!-- Unauthenticated: Register -->
 					<nuxt-link
 						v-if="$store.state.session.id === ``"
 						to="/register"
-						class="text-gray5 mx-2 flex w-24 flex-row items-center text-left"
+						class="text-gray5 dark:text-gray3 mx-2 flex w-24 flex-row items-center text-left"
 						>Register</nuxt-link
 					>
 					<!-- Authenticated -->
 					<nuxt-link
 						v-if="$store.state.session.id !== ``"
 						:to="`/id/` + $store.state.session.id"
-						class="text-gray5 mb-4 flex w-full flex-row items-center text-left"
+						class="text-gray5 dark:text-gray3 mb-4 flex w-full flex-row items-center text-left"
 						><ProfileIcon class="mr-2 h-5 w-5 flex-shrink-0" />Profile</nuxt-link
 					>
 					<nuxt-link
 						v-if="$store.state.session.id !== ``"
 						to="/settings/account"
-						class="text-gray5 mb-4 flex w-full flex-row items-center text-left"
+						class="text-gray5 dark:text-gray3 mb-4 flex w-full flex-row items-center text-left"
 					>
 						<SettingsIcon class="mr-2 h-5 w-5 flex-shrink-0" />Settings</nuxt-link
 					>
@@ -186,6 +189,7 @@ import { MutationType, namespace as sessionStoreNamespace } from '~/store/sessio
 interface IData {
 	showDropdown: boolean
 	showMobileMenu: boolean
+	dark: boolean
 }
 
 export default Vue.extend({
@@ -211,11 +215,17 @@ export default Vue.extend({
 		return {
 			showDropdown: false,
 			showMobileMenu: false,
+			dark: false,
 		}
 	},
 	created() {
 		// Set filter dropdown event handler
 		window.addEventListener(`click`, this.handleDropdown, false)
+		if (document.documentElement.classList.contains(`dark`)) {
+			this.dark = true
+		} else {
+			this.dark = false
+		}
 	},
 	destroyed() {
 		window.removeEventListener(`click`, this.handleDropdown)
@@ -251,9 +261,9 @@ export default Vue.extend({
 			let res: string = ``
 			// Check if current tab
 			if (this.$route.name === tab) {
-				res += `font-bold text-primary border-primary border-b`
+				res += `font-bold text-primary dark:text-secondary border-primary dark:border-secondary border-b`
 			} else {
-				res += `font-regular text-gray5`
+				res += `font-regular text-gray5 dark:text-gray3`
 			}
 			return res
 		},
@@ -282,6 +292,10 @@ export default Vue.extend({
 	margin-left: -6rem;
 	backdrop-filter: blur(10px);
 }
+.dropdownOpenDark {
+	margin-left: -6rem;
+	backdrop-filter: blur(10px);
+}
 .dropdownOpen::before {
 	content: '';
 	position: absolute;
@@ -291,6 +305,17 @@ export default Vue.extend({
 	width: 1rem;
 	height: 1rem;
 	background-color: #fff;
+	border-radius: 2px;
+}
+.dropdownOpenDark::before {
+	content: '';
+	position: absolute;
+	top: -0.5rem;
+	right: 0.95rem;
+	transform: rotate(45deg);
+	width: 1rem;
+	height: 1rem;
+	background-color: rgba(46, 46, 46, 0.95);
 	border-radius: 2px;
 }
 .dropdownMainOpen {
@@ -307,6 +332,17 @@ export default Vue.extend({
 	width: 1rem;
 	height: 1rem;
 	background-color: #fff;
+	border-radius: 2px;
+}
+.dropdownMainOpenDark::before {
+	content: '';
+	position: absolute;
+	top: -0.5rem;
+	left: 0.95rem;
+	transform: rotate(45deg);
+	width: 1rem;
+	height: 1rem;
+	background-color: rgba(46, 46, 46, 0.95);
 	border-radius: 2px;
 }
 </style>

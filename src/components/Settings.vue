@@ -1,9 +1,11 @@
 <template>
 	<div class="popup w-full p-5">
 		<!-- Header and Close button -->
-		<header v-if="$store.state.session.id === $route.params.id" class="mb-2 flex flex-row justify-between">
-			<h2 class="text-xl font-bold">Edit your profile</h2>
-			<button class="bg-gray1 focus:outline-none rounded-full p-1" @click="$emit(`close`)"><CloseIcon /></button>
+		<header v-if="$store.state.session.id === $route.params.id" class="mb-6 flex flex-row justify-between items-center">
+			<h2 class="text-primary dark:text-secondary text-3xl font-semibold">Edit your profile</h2>
+			<button class="bg-gray1 dark:bg-gray5 focus:outline-none rounded-full p-1" @click="$emit(`close`)">
+				<CloseIcon />
+			</button>
 		</header>
 		<!-- Change avatar -->
 		<div class="mb-5 flex w-full justify-center">
@@ -29,67 +31,62 @@
 		</div>
 		<!-- Name -->
 		<div class="mb-4 flex flex-col xl:flex-row">
-			<label for="newName" class="mb-2 w-32 font-semibold xl:mb-0">Name</label>
+			<label for="newName" class="mb-2 w-32 font-semibold xl:mb-0 dark:text-darkPrimaryText">Name</label>
 			<input
 				id="newName"
 				v-model="newName"
 				type="text"
 				:placeholder="`Enter display name`"
-				class="placeholder-gray5 bg-gray1 focus:outline-none flex-grow rounded-lg px-2 py-1 text-black"
+				class="bg-gray1 dark:bg-gray7 dark:text-darkPrimaryText placeholder-gray5 dark:placeholder-gray3 focus:outline-none flex-grow rounded-lg px-2 py-1 text-black"
 			/>
 		</div>
 		<!-- Bio -->
 		<div class="mb-6 flex flex-col xl:flex-row">
-			<label for="bio" class="mb-2 w-32 font-semibold xl:mb-0"> Bio: </label>
+			<label for="bio" class="mb-2 w-32 font-semibold xl:mb-0 dark:text-darkPrimaryText"> Bio: </label>
 			<div class="flex-grow">
 				<textarea
 					id="bio"
 					:maxlength="maxCharBio"
 					:value="bio"
 					:placeholder="`Your Capsule Bio`"
-					class="placeholder-gray5 bg-gray1 focus:outline-none w-full rounded-lg px-2 py-1 text-black"
+					class="bg-gray1 dark:bg-gray7 dark:text-darkPrimaryText placeholder-gray5 dark:placeholder-gray3 focus:outline-none w-full rounded-lg px-2 py-1 text-black"
 					@input="bio = $event.target.value"
 					@keyup="checkBio()"
 				></textarea>
-				<p
-					class="text-right text-xs"
-					:class="$store.state.settings.darkMode ? 'text-lightSecondaryText' : 'text-darkSecondaryText'"
-				>
-					{{ checkBio() }} Characters Remaining
-				</p>
+				<p class="text-right text-xs text-gray5 dark:text-gray3">{{ checkBio() }} Characters Remaining</p>
 			</div>
 		</div>
 		<!-- Location -->
 		<div v-if="$store.state.session.id === $route.params.id" class="mb-4 flex flex-col xl:flex-row">
-			<label for="location" class="mb-2 w-32 font-semibold xl:mb-0">Location</label>
+			<label for="location" class="mb-2 w-32 font-semibold xl:mb-0 dark:text-darkPrimaryText">Location</label>
 			<input
 				id="location"
 				v-model="location"
 				type="text"
 				:placeholder="`Display your location`"
-				class="placeholder-gray5 bg-gray1 focus:outline-none flex-grow rounded-lg px-2 py-1 text-black"
+				class="bg-gray1 dark:bg-gray7 dark:text-darkPrimaryText placeholder-gray5 dark:placeholder-gray3 focus:outline-none flex-grow rounded-lg px-2 py-1 text-black"
 			/>
 		</div>
 		<!-- Website -->
 		<div v-if="$store.state.session.id === $route.params.id" class="mb-4 flex flex-col xl:flex-row">
-			<label for="website" class="mb-2 w-32 font-semibold xl:mb-0">Website</label>
+			<label for="website" class="mb-2 w-32 font-semibold xl:mb-0 dark:text-darkPrimaryText">Website</label>
 			<input
 				id="website"
 				v-model="website"
 				type="text"
 				:placeholder="`Display a website`"
-				class="placeholder-gray5 bg-gray1 focus:outline-none flex-grow rounded-lg px-2 py-1 text-black"
+				class="bg-gray1 dark:bg-gray7 dark:text-darkPrimaryText placeholder-gray5 dark:placeholder-gray3 focus:outline-none flex-grow rounded-lg px-2 py-1 text-black"
 			/>
 		</div>
 		<!-- Email -->
 		<div v-if="$store.state.session.id === $route.params.id" class="mb-4 flex flex-col xl:flex-row">
-			<label for="newEmail" class="mb-2 w-32 font-semibold xl:mb-0">Email</label>
+			<label for="newEmail" class="mb-2 w-32 font-semibold xl:mb-0 dark:text-darkPrimaryText">Email</label>
 			<input
 				id="newEmail"
 				v-model="newEmail"
 				type="email"
 				:placeholder="`Display a contact email`"
-				class="placeholder-gray5 bg-gray1 focus:outline-none flex-grow rounded-lg px-2 py-1 text-black"
+				class="bg-gray1 dark:bg-gray7 dark:text-darkPrimaryText placeholder-gray5 dark:placeholder-gray3 focus:outline-none flex-grow rounded-lg px-2 py-1 text-black"
 			/>
 		</div>
 

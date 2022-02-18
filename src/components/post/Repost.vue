@@ -1,29 +1,24 @@
 <template>
 	<div class="relative flex items-end">
 		<button
-			class="focus:outline-none hover:text-primary toggleRepost flex items-end"
-			:class="showReposts ? 'text-primary' : ''"
+			class="focus:outline-none hover:text-primary dark:hover:text-secondary toggleRepost flex items-end"
+			:class="showReposts ? 'text-primary dark:text-secondary' : ''"
 			@click.stop="toggleDropdown"
 		>
-			<div class="text-gray5 hover:text-primary hover:fill-primary flex">
+			<div class="text-gray5 dark:text-gray3 hover:text-primary dark:hover:text-secondary hover:fill-primary flex">
 				<RepostIcon :isActive="isReposted" />
 				<span class="ml-1">{{ repostCount + repostOffset }}</span>
 			</div>
 		</button>
 		<div
 			v-show="showReposts"
-			:class="
-				$store.state.settings.darkMode
-					? 'bg-lightBG text-lightPrimaryText border-lightBorder'
-					: 'bg-darkBG text-darkPrimaryText border-darkBorder'
-			"
-			class="border-lightBorder modal-animation dropdownRepostOpen absolute z-20 flex w-40 flex-col rounded-lg border p-2 shadow-lg"
+			class="bg-lightBG dark:bg-darkBG text-lightPrimaryText dark:text-darkPrimaryText border-lightBorder modal-animation absolute z-20 flex w-40 flex-col rounded-lg border p-2 shadow-lg"
+			:class="dark ? `dropdownRepostOpenDark` : `dropdownRepostOpen`"
 			style="left: 50px"
 		>
 			<!-- Simple Repost -->
 			<button
-				:class="$store.state.settings.darkMode ? 'hover:text-lightActive' : 'hover:text-darkActive'"
-				class="focus:outline-none text-gray5 flex mr-4 items-center"
+				class="hover:text-primary dark:hover:text-secondary focus:outline-none text-gray5 dark:text-gray3 flex mr-4 items-center"
 				@click="handleRepost()"
 			>
 				<RepostIcon :isActive="isReposted" :shrink="true" class="mr-2 p-1" />
@@ -32,8 +27,7 @@
 			</button>
 			<!-- Quote Repost -->
 			<button
-				:class="$store.state.settings.darkMode ? 'hover:text-lightActive' : 'hover:text-darkActive'"
-				class="focus:outline-none text-gray5 flex mr-4 items-center"
+				class="hover:text-primary dark:hover:text-secondary focus:outline-none text-gray5 dark:text-gray3 flex mr-4 items-center"
 				@click="$emit(`toggleRepost`)"
 			>
 				<QuoteIcon class="mr-2 p-1" />
@@ -57,6 +51,7 @@ interface IData {
 	showReposts: boolean
 	isReposted: boolean
 	repostOffset: number
+	dark: boolean
 }
 
 export default Vue.extend({
@@ -91,6 +86,7 @@ export default Vue.extend({
 			showReposts: false,
 			isReposted: false,
 			repostOffset: 0,
+			dark: false,
 		}
 	},
 	created() {
@@ -115,6 +111,11 @@ export default Vue.extend({
 			},
 			false,
 		)
+		if (document.documentElement.classList.contains(`dark`)) {
+			this.dark = true
+		} else {
+			this.dark = false
+		}
 	},
 	methods: {
 		sendRepost,
@@ -154,11 +155,23 @@ export default Vue.extend({
 	content: '';
 	position: absolute;
 	top: 2.6rem;
-	left: -0.5rem;
+	left: -0.4rem;
 	transform: rotate(45deg);
 	width: 1rem;
 	height: 1rem;
 	background-color: #fff;
+	border-radius: 2px;
+}
+
+.dropdownRepostOpenDark::before {
+	content: '';
+	position: absolute;
+	top: 2.6rem;
+	left: -0.4rem;
+	transform: rotate(45deg);
+	width: 1rem;
+	height: 1rem;
+	background-color: #121212;
 	border-radius: 2px;
 }
 </style>

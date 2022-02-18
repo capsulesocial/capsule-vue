@@ -6,15 +6,18 @@
 				<article class="flex flex-col px-2">
 					<button
 						v-if="isSaving === `false` && this.$route.name !== 'home'"
-						class="bg-gray1 focus:outline-none absolute right-0 top-0 m-8 rounded-full p-1"
+						class="bg-gray1 dark:bg-gray5 focus:outline-none absolute right-0 top-0 m-8 rounded-full p-1"
 						@click="saveContent"
 					>
 						<XIcon />
 					</button>
 					<article v-else-if="isSaving === `true`" class="modal-animation absolute right-0 top-0 p-8">
-						<div class="loader"></div>
+						<div
+							class="loader border-2 border-gray1 dark:border-gray7 h-6 w-6 rounded-3xl"
+							:style="dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
+						></div>
 					</article>
-					<p v-else class="text-positive modal-animation absolute right-0 top-0 p-8 pt-10">
+					<p v-else class="text-positive modal-animation absolute right-0 top-0 p-8">
 						<span v-if="this.$route.name !== 'home'">Saved!</span>
 					</p>
 					<p class="text-lightError text-xs">{{ titleError }}</p>
@@ -23,7 +26,7 @@
 						id="title"
 						ref="title"
 						placeholder="Title"
-						class="text-4xl focus:outline-none w-11/12 break-words -mt-2 mb-2 bg-transparent font-serif"
+						class="text-4xl dark:text-darkPrimaryText focus:outline-none w-11/12 break-words -mt-2 mb-2 bg-transparent font-serif placeholder-gray5 dark:placeholder-gray1"
 						wrap="soft"
 						@input="handleTitle"
 					/>
@@ -36,7 +39,7 @@
 						id="subtitle"
 						ref="subtitle"
 						placeholder="Subtitle"
-						class="text-h2 text-gray5 focus:outline-none mt-2 w-full break-words bg-transparent font-serif"
+						class="text-h2 text-gray5 dark:text-gray2 placeholder-gray5 dark:placeholder-gray2 focus:outline-none mt-2 w-full break-words bg-transparent font-serif"
 						wrap="soft"
 						@input="handleSubtitle"
 					/>
@@ -48,7 +51,7 @@
 					<div
 						id="editor"
 						ref="editor"
-						class="editable focus:outline-none content max-w-none p-2"
+						class="editable focus:outline-none content max-w-none p-2 dark:placeholder-gray2 dark:text-darkPrimaryText"
 						v-html="sanitize($store.state.draft.drafts[$store.state.draft.activeIndex].content)"
 					></div>
 					<AddContent
@@ -61,11 +64,13 @@
 				<div
 					v-if="this.$store.state.widgets.primary === `editor` && this.$route.name === `home`"
 					id="metaButton"
-					class="from-lightBGStart to-lightBGStop border-lightBorder text-xs text-gray5 modal-animation card-animation-delay1 animatedraftButton absolute bottom-0 right-0 z-10 m-4 mb-8 flex rounded-lg bg-gradient-to-r px-5 py-3 shadow-lg"
+					class="from-lightBGStart to-lightBGStop dark:from-darkBG dark:to-darkBG border-lightBorder text-gray5 dark:text-gray3 modal-animation card-animation-delay1 animatedraftButton absolute bottom-0 right-0 z-10 m-4 mb-8 flex rounded-lg bg-gradient-to-r px-5 py-3 shadow-lg"
 				>
 					<p v-if="!isCollapsed">Time to publish?</p>
 					<PencilIcon v-else class="fill-current p-1" @close="$router.push(`/post`)" />
-					<button class="text-primary focus:outline-none ml-2" @click="$router.push(`/post`)">Add meta</button>
+					<button class="text-primary dark:text-secondary focus:outline-none ml-2" @click="$router.push(`/post`)">
+						Add meta
+					</button>
 				</div>
 			</section>
 		</div>
@@ -108,6 +113,7 @@ interface IData {
 	toggleAddContent: boolean
 	addContentPosTop: number
 	addContentPosLeft: number
+	dark: boolean
 }
 
 interface IImageData {
@@ -170,6 +176,7 @@ export default Vue.extend({
 			toggleAddContent: false,
 			addContentPosTop: 0,
 			addContentPosLeft: 0,
+			dark: false,
 		}
 	},
 	beforeDestroy() {
@@ -188,6 +195,11 @@ export default Vue.extend({
 	},
 	mounted() {
 		this.setupEditor()
+		if (document.documentElement.classList.contains(`dark`)) {
+			this.dark = true
+		} else {
+			this.dark = false
+		}
 	},
 	methods: {
 		// Quilljs Editor init
@@ -670,7 +682,7 @@ textarea#subtitle {
 	box-sizing: border-box;
 }
 .hidemetaButton {
-	transform: translateX(5.15rem);
+	transform: translateX(6.25rem);
 	padding: 0.7rem;
 }
 .content {

@@ -3,7 +3,7 @@
 		<!-- Configure my Capsule overlay -->
 		<div
 			v-if="configureWidgets"
-			class="popup bg-primary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50"
+			class="popup bg-primary dark:bg-secondary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
 		>
 			<ConfigureWidgets @close="toggleConfigure" @save="saveDraft" />
 		</div>
@@ -18,40 +18,39 @@
 			v-if="$store.state.widgets.secondary2 === `followers` && followers.size > 0"
 			:followers="followers"
 			:updateFollowers="updateFollowers"
-			class="from-lightBGStart to-lightBGStop border-lightBorder mb-5 overflow-hidden rounded-lg border bg-gradient-to-r shadow-lg backdrop-blur-lg backdrop-filter"
+			class="from-lightBGStart to-lightBGStop border-lightBorder dark:from-darkBGStart dark:to-darkBGStop mb-5 overflow-hidden rounded-lg border bg-gradient-to-r shadow-lg backdrop-blur-lg backdrop-filter"
 			style="backdrop-filter: blur(10px)"
 		/>
 		<TagsWidget
 			v-if="$store.state.widgets.secondary2 === `tags`"
-			class="from-lightBGStart to-lightBGStop border-lightBorder mb-5 overflow-hidden rounded-lg border bg-gradient-to-r shadow-lg backdrop-blur-lg backdrop-filter"
+			class="from-lightBGStart to-lightBGStop border-lightBorder dark:from-darkBGStart dark:to-darkBGStop mb-5 overflow-hidden rounded-lg border bg-gradient-to-r shadow-lg backdrop-blur-lg backdrop-filter"
 			style="backdrop-filter: blur(10px)"
 		/>
 		<DraftsWidget
 			v-if="$store.state.widgets.secondary === `drafts`"
-			class="from-lightBGStart to-lightBGStop border-lightBorder mb-5 rounded-lg border bg-gradient-to-r shadow-lg backdrop-blur-lg backdrop-filter"
+			class="from-lightBGStart to-lightBGStop border-lightBorder dark:from-darkBGStart dark:to-darkBGStop mb-5 rounded-lg border bg-gradient-to-r shadow-lg backdrop-blur-lg backdrop-filter"
 			style="backdrop-filter: blur(10px)"
 			@handleDraftPopup="handleDraftPopup"
 		/>
 		<BookmarksWidgets
 			v-if="$store.state.widgets.secondary === `bookmarks`"
-			class="from-lightBGStart to-lightBGStop border-lightBorder mb-5 rounded-lg border bg-gradient-to-r shadow-lg backdrop-blur-lg backdrop-filter"
+			class="from-lightBGStart to-lightBGStop border-lightBorder dark:from-darkBGStart dark:to-darkBGStop mb-5 rounded-lg border bg-gradient-to-r shadow-lg backdrop-blur-lg backdrop-filter"
 			style="backdrop-filter: blur(10px)"
 		/>
 		<!-- Configure my Capsule -->
 		<button
-			class="from-lightBGStart to-lightBGStop border-lightBorder focus:outline-none mb-5 w-full rounded-lg border bg-gradient-to-r shadow-lg backdrop-blur-lg backdrop-filter"
+			class="bg-lightBG dark:bg-darkBGStart from-lightBGStart to-lightBGStop border-lightBorder dark:from-darkBGStart dark:to-darkBGStop focus:outline-none mb-5 w-full rounded-lg border bg-gradient-to-r shadow-lg"
 			style="
 				height: 80px;
 				background-repeat: no-repeat;
 				background-position: -6em center;
 				background-size: cover;
-				background-color: rgba(256, 256, 256, 0.9);
 				backdrop-filter: blur(10px);
 			"
 			:style="{ backgroundImage: `url(${require(`@/assets/images/brand/configure-my-capsule.webp`)})` }"
 			@click="toggleConfigure"
 		>
-			<p class="text-primary text-right text-sm">
+			<p class="text-primary dark:text-secondary text-right text-sm">
 				<span class="p-6" style="background: opacity 0.9em">Configure my Capsule</span>
 			</p>
 		</button>

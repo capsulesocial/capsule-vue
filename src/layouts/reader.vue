@@ -1,22 +1,32 @@
 <template>
 	<main
-		class="bg-img m-0 h-screen p-0"
-		:style="{
-			background:
-				`linear-gradient(180deg, rgba(46, 85, 106, 0.02) 0%, rgba(46, 85, 106, 0) 50%), url(` +
-				this.bgImage.image +
-				`)`,
-			backgroundSize: `contain`,
-		}"
+		class="bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightMainBG dark:bg-darkBG"
+		:style="
+			dark
+				? {
+						backgroundImage: `url(` + bgImage.dark + `)`,
+				  }
+				: {
+						backgroundImage: `url(` + bgImage.light + `)`,
+				  }
+		"
 	>
 		<!-- Featured photo popup -->
 		<div
 			v-if="displayPhoto"
-			class="bg-primary fixed z-40 h-screen w-full overflow-auto bg-opacity-75 pt-24"
+			class="bg-primary dark:bg-secondary fixed z-40 h-screen w-full overflow-auto bg-opacity-50 dark:bg-opacity-50 pt-24"
 			@click="displayPhoto = false"
 		>
 			<img :src="featuredPhoto.photo" class="modal-content rounded-lg" />
-			<p v-if="featuredPhoto.caption" id="caption">{{ featuredPhoto.caption }}</p>
+			<div class="flex justify-center mt-5">
+				<p
+					v-if="featuredPhoto.caption"
+					id="caption"
+					class="text-lightPrimaryText dark:text-darkPrimaryText py-2 px-3 text-center bg-lightBG dark:bg-darkBG rounded-lg shadow-lg"
+				>
+					{{ featuredPhoto.caption }}
+				</p>
+			</div>
 		</div>
 		<!-- Wrapper -->
 		<div class="flex w-full justify-center">
@@ -27,7 +37,7 @@
 				<!-- Content -->
 				<section class="flex flex-row">
 					<nuxt-child
-						class="xl:w-1220 xl:min-h-80 border-lightBorder from-lightBGStart to-lightBGStop fixed mr-5 h-full w-full overflow-y-auto rounded-lg border bg-gradient-to-r p-5 pt-0 shadow-lg xl:h-80 xl:p-6 xl:pt-0"
+						class="xl:w-1220 xl:min-h-80 border-lightBorder from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop fixed mr-5 h-full w-full overflow-y-auto rounded-lg border bg-gradient-to-r p-5 pt-0 shadow-lg xl:h-80 xl:p-6 xl:pt-0"
 						@showPhoto="showPhoto"
 					/>
 				</section>
@@ -57,6 +67,7 @@ interface IData {
 	displayPhoto: boolean
 	featuredPhoto: FeaturedPhoto
 	bgImage: IBackground
+	dark: boolean
 }
 
 export default Vue.extend({
@@ -74,12 +85,20 @@ export default Vue.extend({
 				caption: null,
 			},
 			bgImage: backgrounds[0],
+			dark: false,
 		}
 	},
 	async created() {
 		// Check if logged in user
 		if (this.$store.state.session.id === ``) {
 			return
+		}
+		// Set color mode
+		this.$setColorMode(this.$store.state.settings.darkMode)
+		if (document.documentElement.classList.contains(`dark`)) {
+			this.dark = true
+		} else {
+			this.dark = false
 		}
 		// get logged in profile
 		const { profile } = await getProfile(this.$store.state.session.id)
@@ -109,17 +128,6 @@ export default Vue.extend({
 	max-width: 100%;
 	height: auto;
 	max-height: 88%;
-}
-
-/* Caption of Modal Image */
-#caption {
-	margin: auto;
-	display: block;
-	width: 80%;
-	text-align: center;
-	color: #ccc;
-	padding: 10px 0;
-	height: 150px;
 }
 
 /* Add Animation */

@@ -1,13 +1,15 @@
 <template>
 	<main
-		class="bg-img m-0 h-screen p-0"
-		:style="{
-			background:
-				`linear-gradient(180deg, rgba(46, 85, 106, 0.02) 0%, rgba(46, 85, 106, 0) 50%), url(` +
-				this.bgImage.image +
-				`)`,
-			backgroundSize: `contain`,
-		}"
+		class="bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightMainBG dark:bg-darkBG"
+		:style="
+			dark
+				? {
+						backgroundImage: `url(` + bgImage.dark + `)`,
+				  }
+				: {
+						backgroundImage: `url(` + bgImage.light + `)`,
+				  }
+		"
 	>
 		<!-- Wrapper -->
 		<div class="flex w-full justify-center">
@@ -20,7 +22,7 @@
 					<section class="relative flex flex-row">
 						<nuxt-child
 							style="backdrop-filter: blur(10px); min-height: calc(100vh - 60px); height: calc(100vh - 60px)"
-							class="xl:w-750 from-lightBGStart to-lightBGStop border-lightBorder modal-animation fixed mr-5 box-border w-full overflow-y-auto rounded-lg border bg-gradient-to-r shadow-lg"
+							class="xl:w-750 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation fixed mr-5 box-border w-full overflow-y-auto rounded-lg border bg-gradient-to-r shadow-lg"
 							:class="showWidgets ? `` : `z-10`"
 						/>
 						<!-- Widgets -->
@@ -64,6 +66,7 @@ interface IData {
 	userIsFollowed: boolean
 	displayOnboarding: boolean
 	bgImage: IBackground
+	dark: boolean
 }
 
 export default Vue.extend({
@@ -84,12 +87,20 @@ export default Vue.extend({
 			userIsFollowed: false,
 			displayOnboarding: false,
 			bgImage: backgrounds[0],
+			dark: false,
 		}
 	},
 	async created() {
 		// unauth
 		if (this.$store.state.session.id === ``) {
 			return
+		}
+		// Set color mode
+		this.$setColorMode(this.$store.state.settings.darkMode)
+		if (document.documentElement.classList.contains(`dark`)) {
+			this.dark = true
+		} else {
+			this.dark = false
 		}
 		// get logged in profile
 		const { profile } = await getProfile(this.$store.state.session.id)

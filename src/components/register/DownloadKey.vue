@@ -1,17 +1,19 @@
 <template>
 	<article>
-		<p class="text-gray7 text-center">
+		<p class="text-gray7 dark:text-gray3 text-center">
 			Here is your Capsule private key file. Download this file in a safe spot. You will need it to access your account.
 			To download your Capsule private keys again, visit the Settings page
 		</p>
-		<div class="bg-gray1 my-10 flex items-center justify-between rounded-lg p-4">
+		<div class="bg-gray2 dark:bg-gray7 my-10 flex items-center justify-between rounded-lg p-4">
 			<div class="flex flex-row items-center">
 				<FileDownloadIcon />
-				<h6 class="text-gray pl-4 text-lg font-semibold">Capsule Private Key</h6>
+				<h6 class="text-gray pl-4 text-lg font-semibold dark:text-darkPrimaryText">Capsule Private Key</h6>
 			</div>
 			<BrandedButton :text="`Download`" :action="downloadPrivateKey" />
 		</div>
-		<nuxt-link v-if="hasDownloadedKey" to="/home" class="text-primary text-center">Continue to Homepage</nuxt-link>
+		<nuxt-link v-if="hasDownloadedKey" to="/home" class="text-primary dark:text-secondary text-center"
+			>Continue to Homepage</nuxt-link
+		>
 	</article>
 </template>
 

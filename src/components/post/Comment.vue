@@ -25,34 +25,45 @@
 					<div class="flex flex-wrap">
 						<nuxt-link :to="`/id/` + authorID" class="mr-4 mb-2 flex items-center xl:mb-0">
 							<Avatar :avatar="avatar" :authorID="authorID" size="w-8 h-8" class="mr-2 flex-shrink-0 xl:hidden" />
-							<span v-if="name != ``" class="font-medium">
+							<span v-if="name != ``" class="font-medium dark:text-darkPrimaryText">
 								{{ name }}
 							</span>
-							<span v-else class="text-gray5 font-medium">{{ authorID }}</span>
-							<span class="text-primary ml-2 text-sm xl:text-base"> @{{ authorID }} </span>
-							<span v-if="authorID === postAuthor" class="bg-primary ml-2 rounded-2xl bg-opacity-25 py-1 px-2 text-xs">
+							<span v-else class="text-gray5 dark:text-gray3 font-medium">{{ authorID }}</span>
+							<span class="text-primary dark:text-secondary ml-2 text-sm xl:text-base"> @{{ authorID }} </span>
+							<span
+								v-if="authorID === postAuthor"
+								class="bg-primary dark:bg-secondary dark:text-darkPrimaryText ml-2 rounded-2xl bg-opacity-25 py-1 px-2 text-xs"
+							>
 								Author
 							</span>
 						</nuxt-link>
-						<span v-if="timestamp" class="self-center text-xs">
+						<span v-if="timestamp" class="self-center text-xs dark:text-gray3">
 							{{ $formatDate(timestamp) }}
 						</span>
 					</div>
 					<!-- Content -->
 					<div class="flex">
 						<div class="flex w-full flex-grow flex-col overflow-hidden">
-							<p class="break-words py-1 font-sans text-lg leading-relaxed">
+							<p class="break-words py-1 font-sans text-lg leading-relaxed dark:text-darkPrimaryText">
 								{{ content }}
 							</p>
 							<div class="mt-8 flex h-full flex-row items-center">
 								<button
-									class="text-primary focus:outline-none text-left font-sans text-sm"
+									class="text-primary dark:text-secondary focus:outline-none text-left font-sans text-sm"
 									@click="isReplying = !isReplying"
 								>
 									Reply
 								</button>
 								<p
-									class="text-gray5 focus:outline-none text-left font-sans text-sm ml-4 cursor-pointer"
+									v-if="replies.length === 1"
+									class="text-gray5 dark:text-gray3 focus:outline-none text-left font-sans text-sm ml-4 cursor-pointer"
+									@click="isReplying = !isReplying"
+								>
+									{{ replies.length }} Reply
+								</p>
+								<p
+									v-else
+									class="text-gray5 dark:text-gray3 focus:outline-none text-left font-sans text-sm ml-4 cursor-pointer"
 									@click="isReplying = !isReplying"
 								>
 									{{ replies.length }} Replies
@@ -60,24 +71,24 @@
 							</div>
 						</div>
 						<div class="flex flex-shrink-0 items-center justify-center overflow-hidden xl:hidden">
-							<img :src="emotion.image" class="-mb-1 mt-2 h-24 w-24 bg-transparent" />
+							<img :src="dark ? emotion.dark : emotion.light" class="-mb-1 mt-2 h-24 w-24 bg-transparent" />
 						</div>
 					</div>
 				</div>
 				<!-- Desktop reaction face -->
 				<div class="hidden flex-shrink-0 items-center justify-center overflow-hidden xl:flex">
 					<img
-						:src="emotion.image"
+						:src="dark ? emotion.dark : emotion.light"
 						class="-mb-1 mt-2 h-32 w-32 bg-transparent"
 						@mouseover="showLabel = true"
 						@mouseleave="showLabel = false"
 					/>
 					<div
 						v-show="showLabel"
-						class="border-lightBorder modal-animation-delay absolute z-40 flex flex-col rounded-lg border bg-white p-2 shadow-lg"
+						class="border-lightBorder modal-animation-delay absolute z-40 flex flex-col rounded-lg border bg-lightBG dark:bg-darkBG p-2 shadow-lg"
 						style="bottom: -25px"
 					>
-						<p class="text-sm text-gray5">
+						<p class="text-sm text-gray5 dark:text-gray3">
 							{{ emotion.label }}
 						</p>
 					</div>
@@ -87,32 +98,24 @@
 		<!-- Reply button -->
 		<div class="ml-3 pl-1 xl:ml-20">
 			<!-- Active reply state -->
-			<div v-if="isReplying" class="modal-animation mr-5 mt-4 border-l pl-2">
+			<div v-if="isReplying" class="modal-animation mr-5 mt-4 border-l border-gray5 pl-2">
 				<!-- Reply Input box -->
 				<div
 					v-if="$store.state.session.id !== ``"
-					:class="
-						$store.state.settings.darkMode
-							? 'bg-lightBG text-lightPrimaryText border-lightBorder'
-							: 'bg-darkBG text-darkPrimaryText border-darkBorder'
-					"
-					class="my-1 ml-5 flex w-full rounded-xl border-2 p-1"
+					class="ml-5 flex w-full rounded-xl border-2 p-1 bg-lightBG dark:bg-darkBG text-lightPrimaryText dark:text-darkPrimaryText border-lightBorder"
 				>
 					<textarea
 						v-model="reply"
 						type="text"
 						placeholder="Reply.."
-						:class="
-							$store.state.settings.darkMode ? 'bg-lightBG text-lightPrimaryText' : 'bg-darkBG text-darkPrimaryText'
-						"
-						class="resize-vertical focus:outline-none w-4/5 overflow-y-auto py-1 px-2 text-sm leading-normal"
+						class="resize-vertical focus:outline-none w-4/5 overflow-y-auto py-1 px-2 text-sm leading-normal bg-lightBG dark:bg-darkBG text-lightPrimaryText dark:text-darkPrimaryText"
 						style="resize: none"
 					>
 					</textarea>
 					<span class="relative w-1/5 flex justify-end items-end">
 						<button
 							v-if="reply !== ''"
-							class="text-primary focus:outline-none text-left font-sans text-sm p-4"
+							class="text-primary dark:text-secondary focus:outline-none text-left font-sans text-sm p-4"
 							@click="sendReply"
 						>
 							Post reply
@@ -120,14 +123,14 @@
 					</span>
 				</div>
 				<!-- List replies -->
-				<div class="pl-5 pt-1">
+				<div v-if="filterReplies().length > 0" class="pl-5 mt-2">
 					<Reply
 						v-for="r in filterReplies()"
 						:key="r._id"
 						:authorID="r.authorID"
 						:cid="r._id"
 						:timestamp="r.timestamp"
-						class="pt-1 pb-2"
+						class="pt-1 mt-2"
 					/>
 				</div>
 			</div>
@@ -152,10 +155,11 @@ interface IData {
 	replies: ICommentData[]
 	avatar: string
 	name: string
-	emotion: { label: string; image: any }
+	emotion: { label: string; light: any; dark: any }
 	emotionType: string
 	content: string
 	showLabel: boolean
+	dark: boolean
 }
 
 export default Vue.extend({
@@ -185,6 +189,7 @@ export default Vue.extend({
 			emotionType: ``,
 			content: ``,
 			showLabel: false,
+			dark: false,
 		}
 	},
 	async created() {
@@ -220,6 +225,11 @@ export default Vue.extend({
 			})
 		}
 		this.replies = await getCommentsOfPost(this.cid)
+		if (document.documentElement.classList.contains(`dark`)) {
+			this.dark = true
+		} else {
+			this.dark = false
+		}
 	},
 	methods: {
 		getStyle(prefix: string) {

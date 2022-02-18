@@ -1,13 +1,15 @@
 <template>
 	<main
-		class="bg-img m-0 h-screen p-0"
-		:style="{
-			background:
-				`linear-gradient(180deg, rgba(46, 85, 106, 0.02) 0%, rgba(46, 85, 106, 0) 50%), url(` +
-				this.bgImage.image +
-				`)`,
-			backgroundSize: `contain`,
-		}"
+		class="bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightMainBG dark:bg-darkBG"
+		:style="
+			dark
+				? {
+						backgroundImage: `url(` + bgImage.dark + `)`,
+				  }
+				: {
+						backgroundImage: `url(` + bgImage.light + `)`,
+				  }
+		"
 	>
 		<!-- Wrapper -->
 		<div class="flex w-full justify-center">
@@ -20,7 +22,7 @@
 					<section v-if="visitProfile" class="flex flex-row">
 						<nuxt-child
 							:key="componentKey"
-							class="xl:w-750 min-h-61 h-61 from-lightBGStart to-lightBGStop border-lightBorder modal-animation fixed z-10 mr-5 overflow-y-auto rounded-lg border bg-gradient-to-r shadow-lg"
+							class="xl:w-750 min-h-61 h-61 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation fixed z-10 mr-5 overflow-y-auto rounded-lg border bg-gradient-to-r shadow-lg"
 							:visitProfile="visitProfile"
 							:visitAvatar="visitAvatar"
 							:followers="followers"
@@ -55,18 +57,21 @@
 						</aside>
 					</section>
 					<section v-else class="modal-animation flex w-full justify-center">
-						<div class="loader m-5 rounded-lg p-10"></div>
+						<div
+							class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
+							:style="dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
+						></div>
 					</section>
 				</div>
 				<div
 					v-else
 					style="bottom: -10px; backdrop-filter: blur(10px)"
-					class="xl:w-1220 xl:min-h-80 from-lightBGStart to-lightBGStop border-lightBorder fixed z-10 mr-5 overflow-y-auto rounded-lg border bg-gradient-to-r shadow-lg xl:h-80"
+					class="xl:w-1220 xl:min-h-80 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder fixed z-10 mr-5 overflow-y-auto rounded-lg border bg-gradient-to-r shadow-lg xl:h-80"
 				>
 					<div class="items-ceter flex w-full flex-col p-5">
 						<h1 class="text-negative mt-16 text-center font-sans text-6xl font-bold">404</h1>
-						<h2 class="text-center text-2xl font-semibold">This page was not found</h2>
-						<p class="text-gray7 mb-5 mt-2 self-center text-center" style="width: 360px">
+						<h2 class="text-center text-2xl font-semibold text-darkPrimaryText">This page was not found</h2>
+						<p class="text-gray5 dark:text-gray3 mb-5 mt-2 self-center text-center" style="width: 360px">
 							It seems that this page doesn't exist, we suggest you to go back home
 						</p>
 						<div class="flex justify-center">
@@ -91,7 +96,7 @@
 		</div>
 		<div
 			v-if="showFollowers"
-			class="popup bg-primary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50"
+			class="popup bg-primary dark:bg-secondary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
 		>
 			<FollowersPopup
 				:profile="visitProfile"
@@ -102,7 +107,7 @@
 		</div>
 		<div
 			v-if="showFollowing"
-			class="popup bg-primary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50"
+			class="popup bg-primary dark:bg-secondary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
 		>
 			<FollowingPopup :profile="visitProfile" :updateFollowers="updateFollowers" @close="showFollowing = false" />
 		</div>
@@ -144,6 +149,7 @@ interface IData {
 	bgImage: IBackground
 	showFollowers: boolean
 	showFollowing: boolean
+	dark: boolean
 }
 
 export default Vue.extend({
@@ -175,6 +181,7 @@ export default Vue.extend({
 			bgImage: backgrounds[0],
 			showFollowers: false,
 			showFollowing: false,
+			dark: false,
 		}
 	},
 	watch: {
@@ -214,6 +221,13 @@ export default Vue.extend({
 	created() {
 		// Fetch visiting profile
 		this.getVisitingProfile()
+		// Set color mode
+		this.$setColorMode(this.$store.state.settings.darkMode)
+		if (document.documentElement.classList.contains(`dark`)) {
+			this.dark = true
+		} else {
+			this.dark = false
+		}
 	},
 	methods: {
 		async getVisitingProfile() {

@@ -8,7 +8,7 @@
 			<button class="bg-gray1 focus:outline-none m-3 flex-shrink-0 rounded-full" @click="$router.go(-1)">
 				<BackIcon />
 			</button>
-			<h2 class="text-primary text-2xl font-semibold">{{ $route.params.tag }}</h2>
+			<h2 class="text-primary dark:text-secondary text-2xl font-semibold">{{ $route.params.tag }}</h2>
 		</div>
 		<!-- Posts loaded -->
 		<div ref="container" class="xl:w-750 min-h-130 h-130 xl:min-h-150 xl:h-150 fixed w-full overflow-y-auto">
@@ -38,13 +38,20 @@
 					:isDeleted="p.deleted"
 				/>
 			</article>
-			<p v-if="noMorePosts" class="text-gray5 py-5 text-center text-sm" style="backdrop-filter: blur(10px)">
+			<p
+				v-if="noMorePosts"
+				class="text-gray5 dark:text-gray3 py-5 text-center text-sm"
+				style="backdrop-filter: blur(10px)"
+			>
 				No more posts
 			</p>
 		</div>
 		<!-- Not loaded yet -->
 		<article v-show="isLoading" class="flex w-full justify-center mt-12">
-			<div class="loader modal-animation m-6"></div>
+			<div
+				class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
+				:style="dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
+			></div>
 		</article>
 	</section>
 </template>
@@ -65,6 +72,7 @@ interface IData {
 	limit: number
 	algorithm: Algorithm
 	noMorePosts: boolean
+	dark: boolean
 }
 
 export default Vue.extend({
@@ -84,6 +92,7 @@ export default Vue.extend({
 			limit: 10,
 			algorithm: `NEW`,
 			noMorePosts: false,
+			dark: false,
 		}
 	},
 	head() {
@@ -113,6 +122,11 @@ export default Vue.extend({
 		getFollowersAndFollowing(this.$store.state.session.id).then(({ following }) => {
 			this.following = following
 		})
+		if (document.documentElement.classList.contains(`dark`)) {
+			this.dark = true
+		} else {
+			this.dark = false
+		}
 	},
 	mounted() {
 		const container = this.$refs.container as HTMLElement

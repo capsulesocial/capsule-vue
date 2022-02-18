@@ -4,7 +4,11 @@
 			<nav class="z-20 flex w-full flex-row px-5 pt-3 text-base xl:px-6 xl:pt-4" style="backdrop-filter: blur(10px)">
 				<div class="flex items-center">
 					<button
-						:class="algorithm === `FOLLOWING` ? ` text-primary border-primary border-b-2 font-semibold` : `text-gray5`"
+						:class="
+							algorithm === `FOLLOWING`
+								? ` text-primary dark:text-secondary border-primary dark:border-secondary border-b-2 font-semibold`
+								: `text-gray5 dark:text-gray3`
+						"
 						class="focus:outline-none h-full w-full pb-3"
 						@click="sortFeed('FOLLOWING')"
 					>
@@ -13,7 +17,11 @@
 				</div>
 				<div class="flex items-center px-12">
 					<button
-						:class="algorithm === `NEW` ? `text-primary border-primary border-b-2 font-semibold` : `text-gray5`"
+						:class="
+							algorithm === `NEW`
+								? ` text-primary dark:text-secondary border-primary dark:border-secondary border-b-2 font-semibold`
+								: `text-gray5 dark:text-gray3`
+						"
 						class="focus:outline-none h-full w-full pb-3"
 						@click="sortFeed('NEW')"
 					>
@@ -22,7 +30,11 @@
 				</div>
 				<div class="flex items-center">
 					<button
-						:class="algorithm === `TOP` ? ` text-primary border-primary border-b-2 font-semibold` : `text-gray5`"
+						:class="
+							algorithm === `TOP`
+								? ` text-primary dark:text-secondary border-primary dark:border-secondary border-b-2 font-semibold`
+								: `text-gray5 dark:text-gray3`
+						"
 						class="focus:outline-none h-full w-full pb-3"
 						@click="sortFeed('TOP')"
 					>
@@ -40,8 +52,8 @@
 					class="relative h-full overflow-y-hidden"
 				>
 					<div class="flex flex-col justify-center p-12">
-						<h2 class="text-center text-2xl font-semibold">Welcome 🚀</h2>
-						<p class="text-gray7 mb-5 mt-2 self-center text-center xl:mx-14">
+						<h2 class="text-center text-2xl font-semibold dark:text-darkPrimaryText">Welcome 🚀</h2>
+						<p class="text-gray5 dark:text-gray3 mb-5 mt-2 self-center text-center xl:mx-14">
 							It seems that you don't follow anyone yet. You can go to the Top feed to follow top rated content creator
 							and start your Capsule experience
 						</p>
@@ -76,13 +88,20 @@
 						@updateBookmarks="updateBookmarks"
 					/>
 				</article>
-				<p v-if="noMorePosts" class="text-gray5 py-5 text-center text-sm" style="backdrop-filter: blur(10px)">
+				<p
+					v-if="noMorePosts"
+					class="text-gray5 dark:text-gray3 py-5 text-center text-sm"
+					style="backdrop-filter: blur(10px)"
+				>
 					No more posts
 				</p>
 			</div>
 			<!-- Not loaded yet -->
 			<article v-show="isLoading" class="modal-animation flex h-screen w-full justify-center pt-12">
-				<div class="loader m-5"></div>
+				<div
+					class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
+					:style="dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
+				></div>
 			</article>
 		</section>
 	</div>
@@ -104,6 +123,7 @@ interface IData {
 	currentOffset: number
 	limit: number
 	noMorePosts: boolean
+	dark: boolean
 }
 
 export default Vue.extend({
@@ -129,6 +149,7 @@ export default Vue.extend({
 			currentOffset: 0,
 			limit: 10,
 			noMorePosts: false,
+			dark: false,
 		}
 	},
 	head() {
@@ -147,6 +168,11 @@ export default Vue.extend({
 	async created() {
 		// Unauthenticated view
 		this.posts = await this.fetchPosts(this.algorithm)
+		if (document.documentElement.classList.contains(`dark`)) {
+			this.dark = true
+		} else {
+			this.dark = false
+		}
 	},
 	mounted() {
 		const container = this.$refs.container as HTMLElement
@@ -234,23 +260,3 @@ export default Vue.extend({
 	},
 })
 </script>
-
-<style>
-.loader {
-	border: 3px solid #eeeeee; /* Light grey */
-	border-top: 3px solid #2e556a; /* Dark teal */
-	border-radius: 50%;
-	width: 40px;
-	height: 40px;
-	animation: spin 2s linear infinite;
-}
-
-@keyframes spin {
-	0% {
-		transform: rotate(0deg);
-	}
-	100% {
-		transform: rotate(360deg);
-	}
-}
-</style>

@@ -1,59 +1,62 @@
 <template>
 	<main
 		style="backdrop-filter: blur(10px)"
-		class="from-lightBGStart to-lightBGStop h-screen w-full flex-col justify-between overflow-y-scroll bg-gradient-to-r xl:w-3/5"
+		class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop h-screen w-full flex-col justify-between overflow-y-scroll bg-gradient-to-r xl:w-3/5"
 	>
 		<CapsuleIcon class="pt-6 pl-10" />
 		<section class="flex items-center justify-center" style="height: 86%">
 			<div class="-mt-5 flex w-full flex-col items-center p-14">
 				<!-- Step 1: Choose Login / register -->
 				<article v-show="!userInfo && !isLoading" class="w-full xl:w-1/2">
-					<h1 class="text-primary mb-10 font-semibold" style="font-size: 2.6rem">Log in</h1>
+					<h1 class="text-primary dark:text-secondary mb-10 font-semibold" style="font-size: 2.6rem">Log in</h1>
 					<button
-						class="bg-gray2 focus:outline-none mb-4 flex w-full items-center justify-center rounded-lg py-2"
+						class="bg-gray2 dark:bg-gray7 focus:outline-none mb-4 flex w-full items-center justify-center rounded-lg py-2"
 						@click="() => torusLogin('discord')"
 					>
 						<DiscordIcon style="width: 28px; height: 28px" />
-						<h6 class="text-gray7 ml-4 text-sm font-semibold">Log in with Discord</h6>
+						<h6 class="text-gray7 dark:text-gray2 ml-4 text-sm font-semibold">Log in with Discord</h6>
 					</button>
 					<button
-						class="bg-gray2 focus:outline-none flex w-full items-center justify-center rounded-lg py-2"
+						class="bg-gray2 dark:bg-gray7 focus:outline-none flex w-full items-center justify-center rounded-lg py-2"
 						@click="() => torusLogin('google')"
 					>
 						<GoogleIcon style="width: 28px; height: 28px" />
-						<h6 class="text-gray7 ml-4 text-sm font-semibold">Log in with Google</h6>
+						<h6 class="text-gray7 dark:text-gray2 ml-4 text-sm font-semibold">Log in with Google</h6>
 					</button>
 					<div class="my-6 flex w-full items-center justify-center">
-						<span class="border-gray5 flex-grow rounded-lg border" style="height: 1px"></span>
-						<p class="text-gray5 px-4 text-xs">OR</p>
-						<span class="border-gray5 flex-grow rounded-lg border" style="height: 1px"></span>
+						<span class="border-gray5 dark:border-gray3 flex-grow rounded-lg border" style="height: 1px"></span>
+						<p class="text-gray5 dark:text-gray3 px-4 text-xs">OR</p>
+						<span class="border-gray5 dark:border-gray3 flex-grow rounded-lg border" style="height: 1px"></span>
 					</div>
 					<button
-						class="bg-gray2 focus:outline-none mb-4 flex w-full items-center justify-center rounded-lg py-3"
+						class="bg-gray2 dark:bg-gray7 focus:outline-none mb-4 flex w-full items-center justify-center rounded-lg py-3"
 						@click="handleKeyClick"
 					>
 						<FileIcon />
-						<span class="text-gray7 ml-4 text-sm font-semibold"> Import Capsule private key </span>
+						<span class="text-gray7 dark:text-gray2 ml-4 text-sm font-semibold"> Import Capsule private key </span>
 						<input id="key" ref="key" type="file" name="key" accept=".json" class="hidden" @change="handleKey" />
 					</button>
-					<p class="text-gray7 mt-10 text-center text-sm xl:text-base">
+					<p class="text-gray7 dark:text-gray3 mt-10 text-center text-sm xl:text-base">
 						Don't have an account yet?
-						<nuxt-link to="/register" class="text-primary text-center font-bold">Sign up</nuxt-link>
+						<nuxt-link to="/register" class="text-primary dark:text-secondary text-center font-bold">Sign up</nuxt-link>
 					</p>
 				</article>
 				<!-- Step 2: Sign up -->
 				<article v-show="!isLoading" class="w-full xl:w-1/2">
 					<div v-show="userInfo && username === null">
-						<h1 class="text-primary text-4xl font-bold">Signup</h1>
+						<h1 class="text-primary dark:text-secondary text-4xl font-bold">Signup</h1>
 						Looks like you don't have an account. Sign up
 					</div>
 				</article>
 				<article v-show="isLoading" class="modal-animation flex w-full justify-center xl:w-3/4">
-					<div class="loader m-5 rounded-lg"></div>
+					<div
+						class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
+						:style="dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
+					></div>
 				</article>
 			</div>
 		</section>
-		<p class="text-gray5 px-4 pl-10 text-sm">© {{ currentYear }} Capsule Social, Inc.</p>
+		<p class="text-gray5 dark:text-gray3 px-4 pl-10 text-sm">© {{ currentYear }} Capsule Social, Inc.</p>
 	</main>
 </template>
 
@@ -88,6 +91,7 @@ interface IData {
 	accountIdInput: string
 	privateKey: string
 	currentYear: string
+	dark: boolean
 }
 
 export default Vue.extend({
@@ -113,6 +117,7 @@ export default Vue.extend({
 			accountIdInput: ``,
 			privateKey: ``,
 			currentYear: ``,
+			dark: false,
 		}
 	},
 	head() {
@@ -134,6 +139,11 @@ export default Vue.extend({
 		}
 		const theDate = new Date()
 		this.currentYear = theDate.getFullYear().toString()
+		if (document.documentElement.classList.contains(`dark`)) {
+			this.dark = true
+		} else {
+			this.dark = false
+		}
 	},
 	methods: {
 		...mapMutations(sessionStoreNamespace, {

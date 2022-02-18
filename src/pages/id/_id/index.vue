@@ -1,7 +1,7 @@
 <template>
 	<section class="w-full">
 		<article v-if="posts.length == 0 && !isLoading" class="mt-32 grid justify-items-center px-10 xl:px-0">
-			<p class="text-gray5 mb-5 text-sm">
+			<p class="text-gray5 dark:text-gray3 mb-5 text-sm">
 				<span v-if="$route.params.id === $store.state.session.id">
 					It seems you haven't written any posts yet, it's never too late to start:
 				</span>
@@ -27,11 +27,18 @@
 				:isDeleted="p.deleted"
 			/>
 		</article>
-		<p v-if="noMorePosts" class="text-gray5 py-5 text-center text-sm" style="backdrop-filter: blur(10px)">
+		<p
+			v-if="noMorePosts"
+			class="text-gray5 dark:text-gray3 py-5 text-center text-sm"
+			style="backdrop-filter: blur(10px)"
+		>
 			No more posts
 		</p>
 		<article v-show="isLoading" class="modal-animation flex justify-center">
-			<div class="loader m-10"></div>
+			<div
+				class="loader m-10 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
+				:style="dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
+			></div>
 		</article>
 	</section>
 </template>
@@ -50,6 +57,7 @@ interface IData {
 	limit: number
 	algorithm: Algorithm
 	noMorePosts: boolean
+	dark: boolean
 }
 
 export default Vue.extend({
@@ -79,6 +87,7 @@ export default Vue.extend({
 			limit: 10,
 			algorithm: `NEW`,
 			noMorePosts: false,
+			dark: false,
 		}
 	},
 	watch: {
@@ -95,6 +104,11 @@ export default Vue.extend({
 	},
 	async created() {
 		this.posts = await this.fetchPosts()
+		if (document.documentElement.classList.contains(`dark`)) {
+			this.dark = true
+		} else {
+			this.dark = false
+		}
 	},
 	mounted() {
 		const container = this.$parent.$refs.scrollContainer as HTMLElement

@@ -1,7 +1,7 @@
 <template>
 	<section class="px-0">
 		<article v-if="reposts.length === 0 && !isLoading" class="mt-32 grid justify-items-center px-10 xl:px-0">
-			<p class="text-gray5 mb-5 text-sm">
+			<p class="text-gray5 dark:text-gray3 mb-5 text-sm">
 				<span v-if="$route.params.id === $store.state.session.id"
 					>It seems you haven't reposted any content yet, you can repost any post:</span
 				>
@@ -30,13 +30,16 @@
 		</article>
 		<p
 			v-if="noMorePosts && reposts.length !== 0"
-			class="text-gray5 py-5 text-center text-sm"
+			class="text-gray5 dark:text-gray3 py-5 text-center text-sm"
 			style="backdrop-filter: blur(10px)"
 		>
 			No more posts
 		</p>
 		<article v-show="isLoading" class="flex justify-center">
-			<div class="loader m-10"></div>
+			<div
+				class="loader m-10 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
+				:style="dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
+			></div>
 		</article>
 	</section>
 </template>
@@ -58,6 +61,7 @@ interface IData {
 	following: Set<string>
 	algorithm: Algorithm
 	noMorePosts: boolean
+	dark: boolean
 }
 
 export default Vue.extend({
@@ -79,6 +83,7 @@ export default Vue.extend({
 			following: new Set(),
 			algorithm: `NEW`,
 			noMorePosts: false,
+			dark: false,
 		}
 	},
 	async created() {
@@ -88,6 +93,11 @@ export default Vue.extend({
 		}
 		const followersAndFollowing = await getFollowersAndFollowing(this.$store.state.session.id)
 		this.following = followersAndFollowing.following
+		if (document.documentElement.classList.contains(`dark`)) {
+			this.dark = true
+		} else {
+			this.dark = false
+		}
 	},
 	mounted() {
 		const container = this.$parent.$refs.scrollContainer as HTMLElement
