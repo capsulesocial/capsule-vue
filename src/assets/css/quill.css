@@ -982,30 +982,31 @@
 	white-space: break-spaces;
 }
 .ql-container.ql-bubble:not(.ql-disabled) a::before {
+	background: linear-gradient(90deg, rgba(256, 256, 256, 0.95) 0%, rgba(256, 256, 256, 0.90) 100%);
+	border-radius: 10px;
+	box-shadow: 0 10px 15px -3px rgb(0 0 0 / 10%), 0 4px 6px -4px rgb(0 0 0 / 10%);
+	backdrop-filter: blur(10px);
+	border-width: 1px;
+    border-color: rgba(46, 85, 106, 0.05);
 	top: -5px;
-	font-size: 10px;
-	color: #000;
+	font-size: 12px;
+	color: #000000;
 	content: attr(href);
 	font-weight: normal;
 	overflow: hidden;
+	padding: 0px 10px;
 	text-decoration: none;
-	z-index: 1;
+	z-index: 50;
 }
 .ql-container.ql-bubble:not(.ql-disabled) a::after {
-	border-top: 6px solid #444;
-	border-left: 6px solid transparent;
-	border-right: 6px solid transparent;
-	top: 0;
-	content: ' ';
-	height: 0;
-	width: 0;
+	display: none
 }
 .ql-container.ql-bubble:not(.ql-disabled) a::before,
 .ql-container.ql-bubble:not(.ql-disabled) a::after {
 	left: 0;
 	margin-left: 50%;
 	position: absolute;
-	transform: translate(-50%, -100%);
+	transform: translate(-50%, -66%);
 	transition: visibility 0s ease 200ms;
 	visibility: hidden;
 }

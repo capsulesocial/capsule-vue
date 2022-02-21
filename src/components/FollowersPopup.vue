@@ -5,11 +5,11 @@
 			<div
 				v-if="profile !== null"
 				style="width: 600px; backdrop-filter: blur(10px)"
-				class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation max-h-90 z-10 mr-5 overflow-y-auto rounded-lg bg-gradient-to-r px-6 pt-4 pb-2 shadow-lg"
+				class="min-h-40 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation max-h-90 z-10 mr-5 overflow-y-auto rounded-lg bg-gradient-to-r px-6 pt-4 pb-2 shadow-lg"
 			>
 				<div class="sticky flex items-center justify-between mb-6">
 					<h2
-						v-if="$route.params.id === $store.state.session.id"
+						v-if="$route.params.id === $store.state.session.id || $route.name === `home`"
 						class="text-primary dark:text-secondary text-3xl font-semibold"
 					>
 						Your followers
@@ -19,14 +19,15 @@
 						<CloseIcon />
 					</button>
 				</div>
-				<article v-if="profiles.length == 0" class="mt-32 grid justify-items-center px-10 xl:px-0">
+				<article v-if="profiles.length == 0" class="mt-24 grid justify-items-center px-10 xl:px-0">
 					<p class="text-gray5 dark:text-gray3 mb-5 text-center text-sm">
-						<span v-if="$route.params.id === $store.state.session.id">
+						<span v-if="$route.params.id === $store.state.session.id || $route.name === `home`">
 							It seems you don't have any followers yet!<br />
 						</span>
+						<span v-else> It seems that {{ profile.name }} doesn't have any followers yet!<br /> </span>
 					</p>
 					<SecondaryButton
-						v-if="$store.state.session.id === $route.params.id"
+						v-if="$store.state.session.id === $route.params.id || $route.name === `home`"
 						:text="`Discover new content`"
 						:action="toggleDiscover"
 					/>

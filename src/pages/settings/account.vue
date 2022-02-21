@@ -1,26 +1,26 @@
 <template>
 	<main>
 		<!-- Mobile back button -->
-		<nuxt-link to="/settings" class="mb-4 flex items-center xl:hidden">
-			<span class="bg-gray1 mr-2 rounded-full p-1"><ChevronLeft /></span>
-			<h6 class="font-semibold">All Settings</h6>
+		<nuxt-link to="/settings" class="mb-6 flex items-center xl:hidden">
+			<span class="bg-gray1 dark:bg-gray5 mr-4 rounded-full p-1"><ChevronLeft /></span>
+			<h6 class="font-semibold dark:text-darkPrimaryText">All Settings</h6>
 		</nuxt-link>
 		<!-- Account Security -->
 		<h2 class="text-primary dark:text-secondary mb-4 text-sm font-semibold">Account Security</h2>
 		<!-- ID -->
 		<div class="mb-4 flex w-full flex-row items-center">
-			<label for="id" class="w-32 font-semibold dark:text-darkPrimaryText">Identifier</label>
+			<label for="id" class="w-48 font-semibold dark:text-darkPrimaryText">Identifier</label>
 			<input
 				id="id"
 				type="text"
 				:placeholder="$store.state.session.id"
-				class="bg-gray1 dark:bg-gray7 text-gray5 dark:text-gray3 placeholder-gray5 dark:placeholder-gray3 flex-grow rounded-lg px-2 py-1"
+				class="cursor-not-allowed bg-gray1 dark:bg-gray7 text-gray5 dark:text-gray3 placeholder-gray5 dark:placeholder-gray3 flex-grow rounded-lg px-2 py-1"
 				disabled
 			/>
 		</div>
 		<!-- Export Private Key -->
 		<div class="mb-4 flex w-full flex-row items-center">
-			<label for="export" class="w-32 font-semibold dark:text-darkPrimaryText">Capsule Private Key</label>
+			<label for="export" class="w-48 font-semibold dark:text-darkPrimaryText">Capsule Private Key</label>
 			<button id="export" class="text-primary dark:text-secondary focus:outline-none" @click="downloadPrivateKey">
 				Export Capsule Private Key
 			</button>
@@ -28,7 +28,7 @@
 		<!-- Account Profile -->
 		<h2 class="text-primary dark:text-secondary py-4 text-sm font-semibold">Account Profile</h2>
 		<div class="mb-4 flex w-full flex-row items-center justify-between xl:justify-start">
-			<label for="editProfile" class="w-32 font-semibold dark:text-darkPrimaryText">Public Profile</label>
+			<label for="editProfile" class="w-48 font-semibold dark:text-darkPrimaryText">Public Profile</label>
 			<button class="bg-secondary focus:outline-none block rounded-lg xl:hidden" @click="redirectProfile">
 				<PencilIcon class="m-2 h-5 w-5 text-white" />
 			</button>
@@ -88,7 +88,7 @@
 				>
 					Generate a new code
 				</button>
-				<button v-else class="text-gray5 dark:text-gray3 focus:outline-none text-sm" style="cursor: not-allowed">
+				<button v-else class="cursor-not-allowed text-gray5 dark:text-gray3 focus:outline-none text-sm">
 					Generate a new code
 				</button>
 			</div>

@@ -33,9 +33,12 @@
 				</div>
 			</div>
 			<!-- Comments Activity -->
-			<div class="flex h-48 justify-between border-b">
+			<div class="flex h-44 justify-between">
 				<!-- Graph breakdown -->
-				<div class="ml-5 pt-4 hidden h-full flex-row self-end xl:flex">
+				<div
+					v-if="getCommentCount(`positive`) + getCommentCount(`neutral`) + getCommentCount(`negative`) !== 0"
+					class="ml-5 pt-4 hidden h-full flex-row self-end xl:flex"
+				>
 					<!-- Positive -->
 					<span
 						class="bg-positive w-6 self-end rounded-t-full"
@@ -51,6 +54,12 @@
 						class="bg-negative w-6 self-end rounded-t-full"
 						:style="`height: ` + (getCommentCount(`negative`) / getCommentCount(`total`)) * 100 + `%`"
 					></span>
+				</div>
+				<div
+					v-else
+					class="ml-5 pt-4 hidden h-full flex-row self-end items-center xl:flex text-sm text-gray5 dark:text-gray3"
+				>
+					no comments
 				</div>
 				<!-- Text stats -->
 				<div class="flex w-3/5 flex-col pt-5 dark:text-darkPrimaryText">
@@ -79,12 +88,19 @@
 					</div>
 				</div>
 			</div>
+			<div v-if="getCommentCount(`total`) !== 0" class="border-b w-full"></div>
 			<!-- Comment Emotions -->
-			<div v-if="getCommentCount(`total`) !== 0" class="border-b pt-5 pb-2">
+			<div v-if="getCommentCount(`total`) !== 0" class="pt-5">
 				<h6 class="w-full pb-4 text-center text-sm font-semibold dark:text-darkPrimaryText">Comment Emotions</h6>
 				<!-- Row of faces -->
-				<div class="flex">
-					<button v-show="page > 0" class="focus:outline-none" @click="page = page - 1"><ChevronLeft /></button>
+				<div class="flex items-center">
+					<button
+						v-show="page > 0"
+						class="bg-gray1 dark:bg-gray5 focus:outline-none rounded-full"
+						@click="page = page - 1"
+					>
+						<ChevronLeft />
+					</button>
 					<div class="grid w-full grid-cols-3 xl:grid-cols-6">
 						<div v-for="f in faceStats.slice(page * 6, page * 6 + 6)" :key="f.face.label" class="flex w-24 flex-col">
 							<div class="flex flex-col rounded-lg border p-1" :class="`border-` + getStyle(f.face.label)">
@@ -96,7 +112,11 @@
 							>
 						</div>
 					</div>
-					<button v-show="6 * page + 6 < faceStats.length" class="focus:outline-none" @click="page = page + 1">
+					<button
+						v-show="6 * page + 6 < faceStats.length"
+						class="bg-gray1 dark:bg-gray5 focus:outline-none rounded-full"
+						@click="page = page + 1"
+					>
 						<ChevronRight />
 					</button>
 				</div>
@@ -106,7 +126,12 @@
 		<article v-show="!toggleStats" id="section">
 			<div class="flex w-full justify-between py-5">
 				<div class="flex flex-row items-center">
-					<span class="pr-2 font-semibold dark:text-darkPrimaryText">{{ getCommentCount(`total`) }} comments</span>
+					<span v-if="getCommentCount(`total`) === 1" class="pr-2 font-semibold dark:text-darkPrimaryText"
+						>{{ getCommentCount(`total`) }} comment</span
+					>
+					<span v-else class="pr-2 font-semibold dark:text-darkPrimaryText"
+						>{{ getCommentCount(`total`) }} comments</span
+					>
 					<button class="focus:outline-none ml-2" @click="toggleStats = true"><StatsIcon /></button>
 				</div>
 				<CommentFilter
@@ -181,9 +206,16 @@
 											style="transform: rotateY(180deg)"
 										/>
 									</span>
-									<span v-else
-										><FlipIcon
+									<span v-else>
+										<img
+											:src="
+												dark
+													? require(`@/assets/images/reactions/dark/confident.webp`)
+													: require(`@/assets/images/reactions/light/confident.webp`)
+											"
+											:alt="`select an emotion`"
 											class="transition duration-500 ease-in-out opacity-50 hover:opacity-100 w-24 h-24 xl:w-32 xl:h-32"
+											style="transform: rotateY(180deg)"
 									/></span>
 								</button>
 								<textarea
@@ -350,7 +382,6 @@ import _ from 'lodash'
 import BrandedButton from '@/components/BrandedButton.vue'
 import Comment from '@/components/post/Comment.vue'
 import CommentFilter from '@/components/post/CommentFilter.vue'
-import FlipIcon from '@/components/icons/Flip.vue'
 import SendIcon from '@/components/icons/Send.vue'
 import CloseIcon from '@/components/icons/X.vue'
 import StatsIcon from '@/components/icons/Stats.vue'
@@ -393,7 +424,6 @@ export default Vue.extend({
 		Comment,
 		Avatar,
 		CommentFilter,
-		FlipIcon,
 		CloseIcon,
 		StatsIcon,
 		ChevronLeft,

@@ -69,7 +69,7 @@
 							"
 							class="hotzone mr-2 h-10 w-10"
 						/>
-						<span class="text-primary dark:text-gray3 text-base">{{
+						<span class="text-primary dark:text-gray2 text-base">{{
 							$store.state.draft.drafts[$store.state.draft.activeIndex].category
 						}}</span>
 					</div>

@@ -1,17 +1,17 @@
 <template>
 	<main>
 		<div
-			class="from-lightBGStart to-lightBGStop border-lightBorder modal-animation flex flex-col overflow-hidden rounded-lg border bg-gradient-to-r py-4 px-6 pb-2 shadow-lg"
+			class="from-lightBGStart to-lightBGStop dark:from-darkBG dark:to-darkBG border-lightBorder modal-animation flex flex-col overflow-hidden rounded-lg border bg-gradient-to-r py-4 px-6 pb-2 shadow-lg"
 			style="backdrop-filter: blur(10px)"
 		>
-			<h3 class="text-primary pb-4 text-base font-semibold">Settings</h3>
+			<h3 class="text-primary dark:text-secondary pb-4 text-base font-semibold">Settings</h3>
 			<nuxt-link
 				:class="$route.name === `settings-account` ? `bg-lightInput font-semibold` : ``"
-				class="text-gray5 focus:outline-none mb-4 flex w-full items-center justify-between rounded-lg py-2 px-4 text-left"
+				class="text-gray5 dark:text-gray3 focus:outline-none mb-2 flex w-full items-center justify-between rounded-lg py-2 px-4 text-left"
 				to="/settings/account"
 			>
 				<h6>Account</h6>
-				<span class="bg-gray1 rounded-full p-1"><ChevronRight /></span>
+				<span class="bg-gray1 dark:bg-gray5 rounded-full p-1"><ChevronRight /></span>
 			</nuxt-link>
 			<!-- <nuxt-link
 				:class="$route.name === `settings-security` ? `bg-lightInput font-semibold` : ``"
@@ -31,10 +31,10 @@
 			<nuxt-link
 				to="/settings/styling"
 				:class="$route.name === `settings-styling` ? `bg-lightInput font-semibold` : ``"
-				class="text-gray5 focus:outline-none mb-4 flex w-full items-center justify-between rounded-lg py-2 px-4 text-left"
+				class="text-gray5 dark:text-gray3 focus:outline-none mb-2 flex w-full items-center justify-between rounded-lg py-2 px-4 text-left"
 			>
 				<h6>Appearance and Styling</h6>
-				<span class="bg-gray1 rounded-full p-1"><ChevronRight /></span>
+				<span class="bg-gray1 dark:bg-gray5 rounded-full p-1"><ChevronRight /></span>
 			</nuxt-link>
 		</div>
 	</main>

@@ -12,15 +12,7 @@
 		<div v-for="p in profiles" :key="p.id">
 			<ProfilePreview :profile="p" :updateFollowers="updateFollowers" class="pb-4" />
 		</div>
-		<nuxt-link
-			:to="
-				this.$route.name === `home`
-					? `/id/` + this.$store.state.session.id + `/followers`
-					: `/id/` + this.$route.params.id + `/followers`
-			"
-			class="text-primary dark:text-secondary text-sm"
-			>Show more</nuxt-link
-		>
+		<button class="text-primary dark:text-secondary text-sm" @click="$emit(`openFollowers`)">Show more</button>
 	</article>
 </template>
 

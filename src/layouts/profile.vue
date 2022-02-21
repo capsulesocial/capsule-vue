@@ -51,8 +51,14 @@
 								v-if="this.$route.params.id !== this.$store.state.session.id"
 								:mutuals="mutuals"
 								:mutualProfiles="mutualProfiles"
+								@openMutuals="showMutuals = true"
 							/>
-							<FollowersWidget v-if="followers.size > 0" :followers="followers" :updateFollowers="updateFollowers" />
+							<FollowersWidget
+								v-if="followers.size > 0"
+								:followers="followers"
+								:updateFollowers="updateFollowers"
+								@openFollowers="showFollowers = true"
+							/>
 							<Footer />
 						</aside>
 					</section>
@@ -111,6 +117,17 @@
 		>
 			<FollowingPopup :profile="visitProfile" :updateFollowers="updateFollowers" @close="showFollowing = false" />
 		</div>
+		<div
+			v-if="showMutuals"
+			class="popup bg-primary dark:bg-secondary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
+		>
+			<MutualFollowersPopup
+				:profile="visitProfile"
+				:updateFollowers="updateFollowers"
+				:mutualProfiles="mutualProfiles"
+				@close="showMutuals = false"
+			/>
+		</div>
 		<UnauthPopup />
 		<portal-target name="card-popup"></portal-target>
 	</main>
@@ -150,6 +167,7 @@ interface IData {
 	bgImage: IBackground
 	showFollowers: boolean
 	showFollowing: boolean
+	showMutuals: boolean
 	dark: boolean
 }
 
@@ -182,6 +200,7 @@ export default Vue.extend({
 			bgImage: backgrounds[0],
 			showFollowers: false,
 			showFollowing: false,
+			showMutuals: false,
 			dark: false,
 		}
 	},
@@ -190,6 +209,9 @@ export default Vue.extend({
 			if (n.params.id !== o.params.id) {
 				this.getVisitingProfile()
 				this.componentKey += 1
+				this.showFollowers = false
+				this.showFollowing = false
+				this.showMutuals = false
 			}
 		},
 		'$store.state.session.name'() {

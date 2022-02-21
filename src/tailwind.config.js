@@ -137,6 +137,7 @@ module.exports = {
         fit: `fit-content`
       },
       minHeight: {
+        40: `40vh`,
         61: `calc(100vh - 61px)`,
         70: `calc(100vh - 70px)`,
         80: `calc(100vh - 80px)`,

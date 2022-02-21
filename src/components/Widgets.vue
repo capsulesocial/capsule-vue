@@ -20,6 +20,7 @@
 			:updateFollowers="updateFollowers"
 			class="from-lightBGStart to-lightBGStop border-lightBorder dark:from-darkBGStart dark:to-darkBGStop mb-5 overflow-hidden rounded-lg border bg-gradient-to-r shadow-lg backdrop-blur-lg backdrop-filter"
 			style="backdrop-filter: blur(10px)"
+			@openFollowers="$emit(`openFollowers`)"
 		/>
 		<TagsWidget
 			v-if="$store.state.widgets.secondary2 === `tags`"

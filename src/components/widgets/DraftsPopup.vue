@@ -4,7 +4,7 @@
 		<section>
 			<div
 				style="width: 600px; backdrop-filter: blur(10px)"
-				class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation z-10 mr-5 overflow-y-auto rounded-lg bg-gradient-to-r p-6 pt-4 shadow-lg"
+				class="min-h-40 max-h-90 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation z-10 mr-5 overflow-y-auto rounded-lg bg-gradient-to-r p-6 pt-4 shadow-lg"
 			>
 				<div class="sticky flex items-center justify-between">
 					<h2 class="text-primary dark:text-secondary text-3xl font-semibold">Drafts</h2>
@@ -19,7 +19,7 @@
 						$store.state.draft.drafts[0].subtitle === `` &&
 						$store.state.draft.drafts[0].content === ``
 					"
-					class="flex w-full flex-col items-center mt-12"
+					class="flex w-full flex-col items-center mt-24"
 				>
 					<p class="text-gray5 dark:text-gray3 mb-5 text-sm">
 						It seems you don't have any drafts yet, you can start a new one here:
@@ -77,6 +77,9 @@ export default Vue.extend({
 		},
 		closeDraftsPopup(): void {
 			this.$emit(`close`)
+		},
+		handleWriteNewDraft() {
+			this.$router.push(`/post`)
 		},
 	},
 })

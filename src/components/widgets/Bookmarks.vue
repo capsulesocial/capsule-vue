@@ -4,7 +4,7 @@
 		<article v-if="this.$store.state.recentBookmarks.length == 0">
 			<p class="text-gray5 dark:text-gray3 mb-4 px-6 text-sm">
 				<span>
-					You didn't bookmarked any posts yet. Click the bookmark icon on a post to add it to your bookmark list
+					You haven't bookmarked any posts yet. Click the bookmark icon on a post to add it to your bookmark list
 				</span>
 			</p>
 		</article>

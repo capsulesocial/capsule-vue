@@ -1,9 +1,9 @@
 <template>
 	<main>
 		<!-- Mobile back button -->
-		<nuxt-link to="/settings" class="mb-4 flex items-center xl:hidden">
-			<span class="bg-gray1 mr-2 rounded-full p-1"><ChevronLeft /></span>
-			<h6 class="font-semibold">All Settings</h6>
+		<nuxt-link to="/settings" class="mb-6 flex items-center xl:hidden">
+			<span class="bg-gray1 dark:bg-gray5 mr-4 rounded-full p-1"><ChevronLeft /></span>
+			<h6 class="font-semibold dark:text-darkPrimaryText">All Settings</h6>
 		</nuxt-link>
 		<h2 class="text-primary dark:text-secondary mb-4 text-sm font-semibold">Display</h2>
 		<div class="mb-8 flex w-4/5 items-center justify-between">
