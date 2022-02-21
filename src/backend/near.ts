@@ -106,7 +106,7 @@ export function initContract(accountId: string) {
 
 	// Initializing contract API
 	_contract = new Contract(new Account(_near.connection, accountId), nearConfig.contractName, {
-		viewMethods: [`getUserInfo`],
+		viewMethods: [`getUserInfo`, `validateUsername`],
 		changeMethods: [`setUserInfo`],
 	})
 }
@@ -255,5 +255,26 @@ export async function setUserInfoNEAR(username: string) {
 			return { success: false, error: `Username can only contain lowercase alphanumeric characters or underscores` }
 		default:
 			throw new Error(`Unknown status encountered while updating info on NEAR`)
+	}
+}
+
+export async function validateUsernameNEAR(username: string) {
+	const contract = getContract() as any
+	const status = (await contract.validateUsername({ username })) as 1 | 2 | 3 | 4 | 7 | 8
+	switch (status) {
+		case 1:
+			return { success: true }
+		case 2:
+			return { success: false, error: `Username should contain at least 3 characters` }
+		case 3:
+			return { success: false, error: `Username already exists!` }
+		case 4:
+			return { success: false, error: `Username should not contain more than 18 characters!` }
+		case 7:
+			return { success: false, error: `Username should not contain blocklisted keywords` }
+		case 8:
+			return { success: false, error: `Username can only contain lowercase alphanumeric characters or underscores` }
+		default:
+			throw new Error(`Unknown status encountered while validating username on NEAR`)
 	}
 }
