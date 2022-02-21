@@ -23,9 +23,7 @@
 				</p>
 			</div>
 		</div>
-		<nuxt-link :to="`/id/` + $route.params.id + `/mutuals`" class="text-primary dark:text-secondary text-sm"
-			>Show more</nuxt-link
-		>
+		<button class="text-primary dark:text-secondary text-sm" @click="$emit(`openMutuals`)">Show more</button>
 	</article>
 </template>
 
