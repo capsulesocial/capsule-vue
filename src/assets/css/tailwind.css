@@ -145,7 +145,7 @@
 		@apply text-h6 font-serif font-semibold mt-1;
 	}
 	.editable a {
-		@apply text-primary underline;
+		@apply text-secondary underline;
 		text-underline-offset: 3.52px;
 	}
 	.editable p {
