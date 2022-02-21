@@ -1,5 +1,5 @@
 <template>
-	<div class="relative flex flex-grow items-center">
+	<div class="relative flex flex-grow items-center flex-row-reverse">
 		<!-- Comment filter -->
 		<div class="flex w-full flex-row items-center justify-end">
 			<h6 class="hidden xl:block dark:text-gray3">Filter by:</h6>
@@ -19,11 +19,11 @@
 		<!-- comment filter dropdown -->
 		<div
 			v-show="showFilter"
-			class="hotzone border-lightBorder modal-animation absolute top-0 z-20 w-full rounded-lg border bg-lightBG dark:bg-darkBG p-4 shadow-lg"
+			class="hotzone border-lightBorder modal-animation absolute -ml-132 xl:ml-0 w-327 xl:w-full top-0 z-20 rounded-lg border bg-lightBG dark:bg-darkBG p-4 shadow-lg"
 			style="margin-top: 28px"
 		>
 			<!-- Select charge of reaction button -->
-			<div class="hotzone mb-6 flex flex-col justify-start xl:flex-row dark:text-gray3">
+			<div class="hotzone mb-6 flex justify-start flex-row dark:text-gray3">
 				<button
 					class="hotzone focus:outline-none mr-4 border-b-2"
 					:class="feeling === `positive` ? `border-positive` : `border-transparent`"
@@ -48,7 +48,7 @@
 			</div>
 			<!-- Show faces -->
 			<div
-				class="faces grid grid-cols-1 gap-x-1 gap-y-4 overflow-y-auto overflow-x-hidden xl:grid-cols-5"
+				class="faces grid grid-cols-3 gap-x-1 gap-y-4 overflow-y-auto overflow-x-hidden xl:grid-cols-5"
 				style="height: 225px; padding-right: 5px"
 			>
 				<button
