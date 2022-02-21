@@ -286,7 +286,7 @@
 											class="focus:outline-none outline-none rounded-lg border-2 border-transparent"
 											:class="selectedEmotion.label === face.label ? `border-2 border-` + selectedEmotionColor : ``"
 											style="transition: all 0.3s ease-in-out"
-											@click="setEmotion(face)"
+											@click="setEmotion($event, face)"
 										>
 											<img
 												:src="dark ? face.dark : face.light"
@@ -316,7 +316,7 @@
 														: `text-gray7 dark:text-gray3`
 												"
 												style="transition: all 0.3s ease-in-out"
-												@click="setEmotion(face)"
+												@click="setEmotion($event, face)"
 											>
 												<p class="capitalize">
 													{{ face.label }}
@@ -346,7 +346,7 @@
 			<div v-show="showEmotions" class="relative flex w-full flex-row-reverse">
 				<div
 					class="z-10 mr-1 hidden xl:flex flex-row-reverse items-end rounded-br-xl bg-lightBG dark:bg-darkBG p-5 xl:w-3/5"
-					style="height: 111px; margin-top: -112px; margin-bottom: 1px; pointer-events: none"
+					style="height: 111px; margin-top: -112px; margin-left: 10px; margin-bottom: 1px; pointer-events: none"
 				></div>
 				<button
 					class="bg-primary dark:bg-secondary focus:outline-none absolute bottom-0 right-0 z-20 mb-7 mr-7 rounded-lg px-6 py-2 text-white"
@@ -355,7 +355,7 @@
 					Select
 				</button>
 				<div
-					class="z-10 bg-gradient-to-t from-lightBG dark:from-darkBG to-transparent flex flex-row-reverse items-end rounded-bl-lg p-5 w-full mr-1 xl:mr-0 xl:w-2/5"
+					class="z-10 bg-gradient-to-t from-lightBG dark:from-darkBG to-transparent flex flex-row-reverse items-end rounded-bl-lg p-5 w-full mr-1 xl:mr-0 xl:w-80"
 					style="height: 111px; margin-top: -112px; pointer-events: none; margin-bottom: 1px; margin-left: 1px"
 				></div>
 			</div>
@@ -504,7 +504,9 @@ export default Vue.extend({
 			this.filter = reaction
 			this.filterComments()
 		},
-		setEmotion(r: { label: string; light: any; dark: any }) {
+		setEmotion(e: PointerEvent, r: { label: string; light: any; dark: any }) {
+			// @ts-ignore
+			e.target.scrollIntoView({ behavior: `smooth`, block: `center` })
 			this.selectedEmotion = r
 			if (feelings.positive.has(r.label)) {
 				this.selectedEmotionColor = `positive`
