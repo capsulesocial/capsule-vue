@@ -206,9 +206,16 @@
 											style="transform: rotateY(180deg)"
 										/>
 									</span>
-									<span v-else
-										><FlipIcon
+									<span v-else>
+										<img
+											:src="
+												dark
+													? require(`@/assets/images/reactions/dark/confident.webp`)
+													: require(`@/assets/images/reactions/light/confident.webp`)
+											"
+											:alt="`select an emotion`"
 											class="transition duration-500 ease-in-out opacity-50 hover:opacity-100 w-24 h-24 xl:w-32 xl:h-32"
+											style="transform: rotateY(180deg)"
 									/></span>
 								</button>
 								<textarea
@@ -375,7 +382,6 @@ import _ from 'lodash'
 import BrandedButton from '@/components/BrandedButton.vue'
 import Comment from '@/components/post/Comment.vue'
 import CommentFilter from '@/components/post/CommentFilter.vue'
-import FlipIcon from '@/components/icons/Flip.vue'
 import SendIcon from '@/components/icons/Send.vue'
 import CloseIcon from '@/components/icons/X.vue'
 import StatsIcon from '@/components/icons/Stats.vue'
@@ -418,7 +424,6 @@ export default Vue.extend({
 		Comment,
 		Avatar,
 		CommentFilter,
-		FlipIcon,
 		CloseIcon,
 		StatsIcon,
 		ChevronLeft,
