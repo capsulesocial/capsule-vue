@@ -9,6 +9,9 @@ module.exports = {
       serif: ['NotoSerif', 'serif'],
     },
     extend: {
+      spacing: {
+        132: `132px`
+      },
       typography: {
         DEFAULT: {
           css: {
@@ -101,6 +104,7 @@ module.exports = {
         lg: '1px 2px 20px rgba(0, 0, 0, 0.07)',
       },
       width: {
+        327: `327px`,
         589: `589px`,
         748: `748px`,
         750: `750px`,
