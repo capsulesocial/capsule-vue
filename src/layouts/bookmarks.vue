@@ -65,7 +65,14 @@
 									:to="`/bookmarks/` + c"
 									@click="setFilter(c)"
 								>
-									<img :src="require(`@/assets/images/category/` + c + `/icon.webp`)" class="hotzone mr-1 h-8 w-8" />
+									<img
+										:src="
+											dark
+												? require(`@/assets/images/category/` + c + `/dark/icon.webp`)
+												: require(`@/assets/images/category/` + c + `/light/icon.webp`)
+										"
+										class="hotzone mr-1 h-8 w-8"
+									/>
 									<span
 										class="ml-2 border-b"
 										:class="
