@@ -104,9 +104,17 @@ export default Vue.extend({
 		}
 	},
 	errorCaptured(err: Error) {
-		if (axios.isAxiosError(err) && err.response) {
+		if (err instanceof ValidationError) {
+			this.$toastError(err.message)
+			return false
+		}
+		if (axios.isAxiosError(err)) {
+			if (!err.response) {
+				this.$toastWarning(`Network error, please try again`)
+				return false
+			}
 			if (err.response.status === 429) {
-				this.$toastWarning(`Too many requests`)
+				this.$toastWarning(`Too many requests, please try again`)
 				return false
 			}
 			if (err.response.status === 400) {
@@ -120,10 +128,6 @@ export default Vue.extend({
 				return false
 			}
 			this.$toastError(err.response.data.error)
-			return false
-		}
-		if (err instanceof ValidationError) {
-			this.$toastError(err.message)
 			return false
 		}
 
