@@ -100,34 +100,26 @@
 				</div>
 			</div>
 		</div>
-		<div
+		<FollowersPopup
 			v-if="showFollowers"
-			class="popup bg-primary dark:bg-secondary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
-		>
-			<FollowersPopup
-				:profile="visitProfile"
-				:followers="followers"
-				:updateFollowers="updateFollowers"
-				@close="showFollowers = false"
-			/>
-		</div>
-		<div
+			:profile="visitProfile"
+			:followers="followers"
+			:updateFollowers="updateFollowers"
+			@close="showFollowers = false"
+		/>
+		<FollowingPopup
 			v-if="showFollowing"
-			class="popup bg-primary dark:bg-secondary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
-		>
-			<FollowingPopup :profile="visitProfile" :updateFollowers="updateFollowers" @close="showFollowing = false" />
-		</div>
-		<div
+			:profile="visitProfile"
+			:updateFollowers="updateFollowers"
+			@close="showFollowing = false"
+		/>
+		<MutualFollowersPopup
 			v-if="showMutuals"
-			class="popup bg-primary dark:bg-secondary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
-		>
-			<MutualFollowersPopup
-				:profile="visitProfile"
-				:updateFollowers="updateFollowers"
-				:mutualProfiles="mutualProfiles"
-				@close="showMutuals = false"
-			/>
-		</div>
+			:profile="visitProfile"
+			:updateFollowers="updateFollowers"
+			:mutualProfiles="mutualProfiles"
+			@close="showMutuals = false"
+		/>
 		<UnauthPopup />
 		<portal-target name="card-popup"></portal-target>
 	</main>

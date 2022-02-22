@@ -1,11 +1,13 @@
 <template>
-	<div class="popup flex w-full justify-center">
+	<div class="popup">
 		<!-- Container -->
-		<section>
+		<section
+			class="popup bg-primary dark:bg-secondary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
+		>
 			<div
 				v-if="profile !== null"
-				style="width: 600px; backdrop-filter: blur(10px)"
-				class="min-h-40 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation max-h-90 z-10 mr-5 overflow-y-auto rounded-lg bg-gradient-to-r px-6 pt-4 pb-2 shadow-lg"
+				style="backdrop-filter: blur(10px)"
+				class="min-h-40 w-full xl:w-600 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation max-h-90 z-10 overflow-y-auto rounded-lg bg-gradient-to-r px-6 pt-4 pb-2 shadow-lg"
 			>
 				<div class="sticky flex items-center justify-between mb-6">
 					<h2
