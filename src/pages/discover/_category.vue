@@ -57,7 +57,7 @@
 					It seems there are no posts under this category yet
 				</p>
 				<SecondaryButton :text="`All categories`" :action="toggleCategories" />
-				<img :src="require(`@/assets/images/brand/Bookmarks.webp`)" class="top-0 mt-64 xl:-mt-2" />
+				<img :src="require(`@/assets/images/brand/post.webp`)" class="top-0 mt-64 xl:-mt-2" />
 			</article>
 			<article v-for="p in posts" :key="generateKey(p)">
 				<PostCard
