@@ -61,20 +61,14 @@ import ogImage from '@/assets/images/util/ogImage.png'
 
 import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
 
-import {
-	getNearPrivateKey,
-	getWalletConnection,
-	removeNearPrivateKey,
-	signedInToWallet,
-	walletLogout,
-} from '@/backend/near'
+import { removeNearPrivateKey, walletLogout } from '@/backend/near'
 import { ValidationError } from '@/errors'
-import { getInviteToken, IWalletStatus } from '@/backend/utilities/helpers'
+import { getInviteToken } from '@/backend/utilities/helpers'
+import { getUserInfo, IWalletStatus } from '@/backend/auth'
 
 interface IData {
 	id: string
 	userInfo: null | IWalletStatus
-	accountId: null | string
 	isLoading: boolean
 	showInfos: boolean
 	dark: boolean
@@ -93,7 +87,6 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			id: ``,
-			accountId: null,
 			userInfo: null,
 			isLoading: true,
 			showInfos: false,
@@ -117,7 +110,9 @@ export default Vue.extend({
 				return false
 			}
 			if (err.response.status === 400) {
-				removeNearPrivateKey(this.accountId)
+				if (this.userInfo) {
+					removeNearPrivateKey(this.userInfo.accountId)
+				}
 				walletLogout()
 				window.localStorage.removeItem(`inviteToken`)
 				this.isLoading = false
@@ -133,13 +128,15 @@ export default Vue.extend({
 		}
 
 		this.$toastError(err.message)
-		removeNearPrivateKey(this.accountId)
+		if (this.userInfo) {
+			removeNearPrivateKey(this.userInfo.accountId)
+		}
 		window.localStorage.clear()
 		walletLogout()
 		return false
 	},
-	created() {
-		this.stepForward()
+	async created() {
+		await this.stepForward()
 	},
 	mounted() {
 		const accountId = window.localStorage.getItem(`accountId`)
@@ -165,41 +162,9 @@ export default Vue.extend({
 		async stepForward() {
 			this.isLoading = true
 			const inviteToken = getInviteToken()
-			const nearWallet = signedInToWallet()
+			this.userInfo = await getUserInfo()
 
 			// Check if we already have any sign-in info set up
-			if (nearWallet) {
-				const walletConnection = getWalletConnection()
-				const accountId: string = walletConnection.getAccountId()
-				if (!accountId) {
-					throw new Error(`Wallet without accountId!`)
-				}
-				const privateKey = await getNearPrivateKey(accountId)
-				if (!privateKey) {
-					throw new Error(`Wallet without private key!`)
-				}
-				this.userInfo = {
-					type: `near`,
-					accountId,
-					privateKey,
-				}
-			} else {
-				for (let i = 0; i < localStorage.length; i++) {
-					const key = localStorage.key(i)
-					if (key && key.startsWith(`near-api-js:keystore`)) {
-						const privateKey = localStorage.getItem(key)
-						const accountId = key.split(`:`)[2]
-						if (privateKey && accountId) {
-							this.userInfo = {
-								type: `near`,
-								accountId,
-								privateKey,
-							}
-						}
-						break
-					}
-				}
-			}
 
 			this.isLoading = false
 			if (inviteToken && !this.userInfo) {

@@ -28,7 +28,7 @@ import { mapMutations } from 'vuex'
 import BrandedButton from '@/components/BrandedButton.vue'
 import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
 import { ValidationError } from '@/errors'
-import { IWalletStatus } from '@/backend/utilities/helpers'
+import { IWalletStatus } from '@/backend/auth'
 
 interface IData {
 	id: string

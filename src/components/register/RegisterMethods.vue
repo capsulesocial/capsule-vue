@@ -66,9 +66,8 @@ import DiscordIcon from '@/components/icons/Discord.vue'
 import InfoIcon from '@/components/icons/Info.vue'
 
 import { torusVerifiers, TorusVerifiers } from '@/backend/utilities/config'
-import { getAccountIdFromPrivateKey } from '@/backend/auth'
+import { getAccountIdFromPrivateKey, IWalletStatus } from '@/backend/auth'
 import { walletLogin, generateAndSetKey } from '@/backend/near'
-import { IWalletStatus } from '@/backend/utilities/helpers'
 
 interface IData {
 	torus: DirectWebSdk

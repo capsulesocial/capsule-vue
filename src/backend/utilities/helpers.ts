@@ -103,9 +103,3 @@ export function getInviteToken(): string | null {
 		return null
 	}
 }
-
-export interface IWalletStatus {
-	type: `torus` | `near`
-	accountId: string
-	privateKey: string
-}
