@@ -1,5 +1,5 @@
 <template>
-	<div class="object-contain">
+	<div v-show="!commentDeleted" class="object-contain">
 		<!-- Component that displays a posted comment -->
 		<div class="mt-2 flex w-full">
 			<!-- Desktop avatar -->
@@ -94,10 +94,7 @@
 					</div>
 				</div>
 				<!-- Remove post -->
-				<button
-					v-if="this.$store.state.session.id === authorID || this.$store.state.session.id === postAuthor"
-					@click="removeComment"
-				>
+				<button v-if="this.$store.state.session.id === authorID" @click="removeComment">
 					<BinIcon />
 				</button>
 			</div>
@@ -277,9 +274,13 @@ export default Vue.extend({
 			return this.replies.slice().sort((p0, p1) => p1.timestamp - p0.timestamp)
 		},
 		async removeComment() {
-			await sendPostDeletion(`HIDE`, this.cid, this.$store.state.session.id)
-			this.commentDeleted = true
-			this.$toastSuccess(`This comment has been successfully removed`)
+			try {
+				await sendPostDeletion(`HIDE`, this.cid, this.$store.state.session.id)
+				this.commentDeleted = true
+				this.$toastSuccess(`This comment has been successfully removed`)
+			} catch (err) {
+				this.$toastWarning(`An error occured`)
+			}
 		},
 	},
 })
