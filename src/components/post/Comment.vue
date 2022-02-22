@@ -277,6 +277,7 @@ export default Vue.extend({
 			try {
 				await sendPostDeletion(`HIDE`, this.cid, this.$store.state.session.id)
 				this.commentDeleted = true
+				this.$emit(`updateComments`)
 				this.$toastSuccess(`This comment has been successfully removed`)
 			} catch (err) {
 				this.$toastWarning(`An error occured`)

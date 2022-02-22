@@ -367,6 +367,7 @@
 				:postAuthor="postAuthor"
 				:cid="c._id"
 				:timestamp="c.timestamp"
+				@updateComments="initComments()"
 			/>
 			<div v-if="comments.length === 0 && filter !== ``" class="text-gray5 dark:text-gray3 pt-5 text-sm text-center">
 				No comments under this filter
@@ -473,15 +474,7 @@ export default Vue.extend({
 		}
 	},
 	async created() {
-		this.comments = await getCommentsOfPost(this.postCID)
-		this.comments = this.comments.reverse()
-		// get comment stats
-		this.updateFaceStats()
-		if (this.$store.state.session.avatar !== ``) {
-			getPhotoFromIPFS(this.$store.state.session.avatar).then((a) => {
-				this.avatar = a
-			})
-		}
+		await this.initComments()
 		if (document.documentElement.classList.contains(`dark`)) {
 			this.dark = true
 		} else {
@@ -489,6 +482,17 @@ export default Vue.extend({
 		}
 	},
 	methods: {
+		async initComments() {
+			this.comments = await getCommentsOfPost(this.postCID)
+			this.comments = this.comments.reverse()
+			// get comment stats
+			this.updateFaceStats()
+			if (this.$store.state.session.avatar !== ``) {
+				getPhotoFromIPFS(this.$store.state.session.avatar).then((a) => {
+					this.avatar = a
+				})
+			}
+		},
 		async toggleShowEmotions() {
 			this.showEmotions = !this.showEmotions
 			if (this.comments.length === 0) {
