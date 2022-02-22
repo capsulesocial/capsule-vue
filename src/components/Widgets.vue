@@ -67,7 +67,7 @@ import DraftsWidget from '@/components/widgets/Drafts.vue'
 import ConfigureWidgets from '@/components/widgets/Configure.vue'
 import BookmarksWidgets from '@/components/widgets/Bookmarks.vue'
 import FollowersWidget from '@/components/widgets/Followers.vue'
-import DraftsPopup from '@/components/widgets/DraftsPopup.vue'
+import DraftsPopup from '@/components/popups/DraftsPopup.vue'
 
 interface IData {
 	configureWidgets: boolean

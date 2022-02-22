@@ -50,7 +50,7 @@ import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 import SupportWidget from '@/components/widgets/Support.vue'
 import ResourcesWidget from '@/components/widgets/Resources.vue'
-import OnboardingWizard from '@/components/OnboardingWizard.vue'
+import OnboardingWizard from '@/components/popups/OnboardingWizard.vue'
 
 import { IBackground, backgrounds } from '@/config'
 import { getProfile, Profile } from '@/backend/profile'
