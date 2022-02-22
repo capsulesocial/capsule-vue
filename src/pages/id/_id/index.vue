@@ -1,6 +1,6 @@
 <template>
 	<section class="w-full">
-		<article v-if="posts.length == 0 && !isLoading" class="mt-32 grid justify-items-center px-10 xl:px-0">
+		<article v-if="posts.length == 0 && !isLoading" class="mt-24 grid justify-items-center px-10 xl:px-0">
 			<p class="text-gray5 dark:text-gray3 mb-5 text-sm">
 				<span v-if="$route.params.id === $store.state.session.id">
 					It seems you haven't written any posts yet, it's never too late to start:
@@ -12,6 +12,7 @@
 				:text="`Write a post`"
 				:action="togglePostEditor"
 			/>
+			<img :src="require(`@/assets/images/brand/post.webp`)" class="top-0 mt-52 xl:-mt-2" />
 		</article>
 		<article v-for="p in posts" :key="p.post._id">
 			<PostCard

@@ -63,9 +63,13 @@
 					<div v-if="category" class="flex flex-row items-center">
 						<img
 							:src="
-								require(`@/assets/images/category/` +
-									$store.state.draft.drafts[$store.state.draft.activeIndex].category +
-									`/icon.webp`)
+								dark
+									? require(`@/assets/images/category/` +
+											$store.state.draft.drafts[$store.state.draft.activeIndex].category +
+											`/dark/icon.webp`)
+									: require(`@/assets/images/category/` +
+											$store.state.draft.drafts[$store.state.draft.activeIndex].category +
+											`/light/icon.webp`)
 							"
 							class="hotzone mr-2 h-10 w-10"
 						/>
@@ -85,7 +89,14 @@
 					class="focus:outline-none modal-animation flex h-10 w-full items-center px-2 capitalize"
 					@click="changeCategory(c)"
 				>
-					<img :src="require(`@/assets/images/category/` + c + `/icon.webp`)" class="hotzone mr-1 ml-2 h-6 w-6" />
+					<img
+						:src="
+							dark
+								? require(`@/assets/images/category/` + c + `/dark/icon.webp`)
+								: require(`@/assets/images/category/` + c + `/light/icon.webp`)
+						"
+						class="hotzone mr-1 ml-2 h-6 w-6"
+					/>
 					<span
 						class="ml-2 border-b"
 						:class="
@@ -170,6 +181,7 @@ interface IData {
 	tag: string
 	caption: string
 	showCategoryDropdown: boolean
+	dark: boolean
 }
 
 export default Vue.extend({
@@ -194,12 +206,18 @@ export default Vue.extend({
 			tag: ``,
 			caption: this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].featuredPhotoCaption,
 			showCategoryDropdown: false,
+			dark: false,
 		}
 	},
 	mounted() {
 		const { featuredPhotoCID } = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex]
 		if (featuredPhotoCID !== null) {
 			this.featuredPhoto = this.downloadImage(featuredPhotoCID)
+		}
+		if (document.documentElement.classList.contains(`dark`)) {
+			this.dark = true
+		} else {
+			this.dark = false
 		}
 	},
 	methods: {

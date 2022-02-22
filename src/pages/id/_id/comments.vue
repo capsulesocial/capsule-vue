@@ -1,6 +1,6 @@
 <template>
 	<section class="px-5 xl:px-6">
-		<article v-if="comments.length == 0 && !isLoading" class="mt-32 grid justify-items-center px-10 xl:px-0">
+		<article v-if="comments.length == 0 && !isLoading" class="mt-24 grid justify-items-center px-10 xl:px-0">
 			<p class="text-gray5 dark:text-gray3 mb-5 text-sm">
 				<span v-if="$route.params.id === $store.state.session.id">
 					It seems you haven't written any comments yet, you can comment on any post:
@@ -12,6 +12,7 @@
 				:text="`Comment a post`"
 				:action="toggleHomeFeed"
 			/>
+			<img :src="require(`@/assets/images/brand/post.webp`)" class="top-0 mt-52 xl:-mt-2" />
 		</article>
 		<article v-for="comment in comments" :key="comment._id">
 			<div class="pb-5">

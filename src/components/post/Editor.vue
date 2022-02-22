@@ -47,11 +47,11 @@
 
 				<!-- WYSIWYG -->
 				<input v-show="false" id="getFile" accept="image/png, image/jpeg" type="file" @change="handleImage($event)" />
-				<div class="relative">
+				<div class="relative flex justify-center">
 					<div
 						id="editor"
 						ref="editor"
-						class="editable focus:outline-none content max-w-none p-2 dark:placeholder-gray2 dark:text-darkPrimaryText"
+						class="editable focus:outline-none content max-w-none p-2 dark:placeholder-gray2 dark:text-darkPrimaryText w-full"
 						v-html="sanitize($store.state.draft.drafts[$store.state.draft.activeIndex].content)"
 					></div>
 					<AddContent
@@ -60,6 +60,13 @@
 						:style="`top:` + this.addContentPosTop + `px;` + `left:` + this.addContentPosLeft + `px`"
 						@image="actionsUpload"
 					/>
+					<div
+						v-if="waitingImage"
+						class="absolute w-11/12 h-52 bg-gray7 rounded-lg animate-pulse flex justify-center items-center"
+						:style="`top:` + this.addContentPosTop + `px`"
+					>
+						<p class="text-sm text-gray5 dark:text-gray3">uploading image</p>
+					</div>
 				</div>
 				<div
 					v-if="this.$store.state.widgets.primary === `editor` && this.$route.name === `home`"
@@ -114,6 +121,7 @@ interface IData {
 	addContentPosTop: number
 	addContentPosLeft: number
 	dark: boolean
+	waitingImage: boolean
 }
 
 interface IImageData {
@@ -177,6 +185,7 @@ export default Vue.extend({
 			addContentPosTop: 0,
 			addContentPosLeft: 0,
 			dark: false,
+			waitingImage: false,
 		}
 	},
 	beforeDestroy() {
@@ -243,6 +252,8 @@ export default Vue.extend({
 			const editor = new Quill(`#editor`, options)
 			this.qeditor = editor
 			this.qeditor.root.addEventListener(`drop`, (ev: DragEvent) => {
+				this.waitingImage = true
+				this.toggleAddContent = false
 				this.handleDroppedImage(ev)
 			})
 			this.qeditor.root.addEventListener(`paste`, (ev: ClipboardEvent) => {
@@ -285,9 +296,13 @@ export default Vue.extend({
 				}
 				const range = this.qeditor.getSelection(true)
 				if (typeof content === `string`) {
+					this.waitingImage = false
+					this.toggleAddContent = true
 					this.qeditor.clipboard.dangerouslyPasteHTML(range.index, content, `user`)
 				} else {
 					const { cid, url } = content
+					this.waitingImage = false
+					this.toggleAddContent = true
 					this.qeditor.insertEmbed(range.index, `image`, { alt: cid.toString(), url }, `user`)
 				}
 				const contentLength = this.qeditor.getContents().length()
@@ -356,6 +371,8 @@ export default Vue.extend({
 			const contentImgs = this.$getContentImages(pastedContent)
 			const imgSrcRegex = /src="([^\s|"]*)"/
 			for (const img of contentImgs) {
+				this.waitingImage = true
+				this.toggleAddContent = false
 				const imgSrc = imgSrcRegex.exec(img[0])
 				if (!imgSrc) {
 					continue

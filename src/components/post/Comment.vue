@@ -71,7 +71,12 @@
 							</div>
 						</div>
 						<div class="flex flex-shrink-0 items-center justify-center overflow-hidden xl:hidden">
-							<img :src="dark ? emotion.dark : emotion.light" class="-mb-1 mt-2 h-24 w-24 bg-transparent" />
+							<img
+								:src="dark ? emotion.dark : emotion.light"
+								class="-mb-1 mt-2 h-24 w-24 bg-transparent"
+								:class="emotion.label === `default` ? `animate-pulse` : ``"
+								:style="emotion.label === `default` ? `filter: blur(5px)` : ``"
+							/>
 						</div>
 					</div>
 				</div>
@@ -80,6 +85,8 @@
 					<img
 						:src="dark ? emotion.dark : emotion.light"
 						class="-mb-1 mt-2 h-32 w-32 bg-transparent"
+						:class="emotion.label === `default` ? `animate-pulse` : ``"
+						:style="emotion.label === `default` ? `filter: blur(5px)` : ``"
 						@mouseover="showLabel = true"
 						@mouseleave="showLabel = false"
 					/>

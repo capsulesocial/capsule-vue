@@ -40,12 +40,12 @@
 							<p v-if="!buttonHidden" class="mr-2">Resume writing?</p>
 							<button
 								v-if="!buttonHidden"
-								class="text-primary dark:text-secondary focus:outline-none ml-2"
+								class="text-primary dark:text-secondary focus:outline-none"
 								@click="openDraftsPopup"
 							>
 								Show drafts
 							</button>
-							<button v-else class="text-primary dark:text-secondary focus:outline-none ml-2" @click="openDraftsPopup">
+							<button v-else class="text-primary dark:text-secondary focus:outline-none" @click="openDraftsPopup">
 								<PencilIcon class="fill-current p-1" />
 							</button>
 						</div>
