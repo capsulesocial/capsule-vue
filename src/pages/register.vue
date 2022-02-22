@@ -99,11 +99,8 @@ export default Vue.extend({
 			downloadKeyStep: false,
 			isLoading: true,
 			showInfos: false,
-<<<<<<< HEAD
 			dark: false,
-=======
 			step: `inviteCode`,
->>>>>>> f544413 (wip: 50% of functionality)
 		}
 	},
 	head() {
