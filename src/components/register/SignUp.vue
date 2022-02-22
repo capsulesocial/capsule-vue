@@ -40,6 +40,7 @@ import { MutationType, createSessionFromProfile, namespace as sessionStoreNamesp
 import { setNearUserFromPrivateKey, login, register, IAuthResult } from '@/backend/auth'
 import { IWalletStatus } from '@/backend/utilities/helpers'
 import { ValidationError } from '@/errors'
+import { verifyTokenAndOnboard } from '@/backend/invite'
 
 interface IData {
 	funds: string
@@ -72,6 +73,7 @@ export default Vue.extend({
 		this.$emit(`setIsLoading`, true)
 		const username = await getUsernameNEAR(this.userInfo.accountId)
 		if (!username) {
+			await verifyTokenAndOnboard(this.userInfo.accountId)
 			await this.checkFunds()
 			this.$emit(`setIsLoading`, false)
 			return

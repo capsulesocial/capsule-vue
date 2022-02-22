@@ -75,7 +75,6 @@ interface IData {
 	id: string
 	userInfo: null | IWalletStatus
 	accountId: null | string
-	downloadKeyStep: boolean
 	isLoading: boolean
 	showInfos: boolean
 	dark: boolean
@@ -96,7 +95,6 @@ export default Vue.extend({
 			id: ``,
 			accountId: null,
 			userInfo: null,
-			downloadKeyStep: false,
 			isLoading: true,
 			showInfos: false,
 			dark: false,
@@ -141,7 +139,6 @@ export default Vue.extend({
 		return false
 	},
 	created() {
-		this.isLoading = false
 		this.stepForward()
 	},
 	mounted() {
