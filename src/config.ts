@@ -1,8 +1,8 @@
 export const faces = {
 	default: {
 		label: `default`,
-		light: require(`@/assets/images/reactions/default.webp`),
-		dark: require(`@/assets/images/reactions/default.webp`),
+		light: require(`@/assets/images/reactions/light/confident.webp`),
+		dark: require(`@/assets/images/reactions/dark/confident.webp`),
 	},
 	admiration: {
 		label: `admiration`,
