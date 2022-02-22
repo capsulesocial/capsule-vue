@@ -22,9 +22,11 @@
 						/>
 					</div>
 					<div :class="isOpen1 ? `` : `is-closed`" class="message-body w-full xl:w-10/12">
-						<div class="message-content text-gray5 dark:text-gray3 py-2 text-sm">
+						<p class="message-content text-gray5 dark:text-gray3 py-2 text-sm">
 							Our platform is proudly a Web3 ecosystem, built upon the core principle of decentralization. We strongly
-							believe this is the best way to empower writers both creatively and economically. <br /><br />
+							believe this is the best way to empower writers both creatively and economically.
+						</p>
+						<p class="message-content text-gray5 dark:text-gray3 pb-2 text-sm">
 							By contrast, existing Web2 systems like Facebook and Twitter essentially act as centralized middlemen who
 							insinuate themselves between creators and their audience as a way to extract
 							<a
@@ -34,7 +36,7 @@
 								>rent-seeking</a
 							>
 							profits.
-						</div>
+						</p>
 					</div>
 				</article>
 				<article class="message mb-4 w-full xl:w-10/12">
@@ -52,17 +54,20 @@
 						/>
 					</div>
 					<div :class="isOpen2 ? `` : `is-closed`" class="message-body w-full xl:w-10/12">
-						<div class="message-content text-gray5 dark:text-gray3 py-2 text-sm">
+						<p class="message-content text-gray5 dark:text-gray3 py-2 text-sm">
 							Blockchain is an important tool used to implement our broader idea of decentralization, which ultimately
-							enhances the independence and freedom of speech for writers. <br /><br />
+							enhances the independence and freedom of speech for writers.
+						</p>
+						<p class="message-content text-gray5 dark:text-gray3 pb-2 text-sm">
 							We use the NEAR protocol to manage the flow of user activity on the platform. User content is stored to
 							OrbitDB, which is a decentralized database that ensures immutability across multiple nodes. This ensures a
 							greater resistance against censorship often found on centralized platforms. Such social network platforms
 							use company controlled servers that ultimately give them sole authority on who gets to post what and when.
-							<br /><br />
+						</p>
+						<p class="message-content text-gray5 dark:text-gray3 pb-2 text-sm">
 							In the future, we also plan to implement blockchain-based features that enable payments to creators for
 							their work, as well as community-based governance of the Blogchain platform.
-						</div>
+						</p>
 					</div>
 				</article>
 				<article class="message mb-4 w-full xl:w-10/12">
@@ -80,14 +85,17 @@
 						/>
 					</div>
 					<div :class="isOpen3 ? `` : `is-closed`" class="message-body w-full xl:w-10/12">
-						<div class="message-content text-gray5 dark:text-gray3 py-2 text-sm">
-							Technically, yes. But if you don’t have one, we make setup really easy for newbies: <br />
+						<p class="message-content text-gray5 dark:text-gray3 py-2 text-sm">
+							Technically, yes. But if you don’t have one, we make setup really easy for newbies:
+						</p>
+						<p class="message-content text-gray5 dark:text-gray3 pb-2 text-sm">
 							Simply sign in with your existing Google or Discord identity, and the software will automatically create a
 							wallet for you on the NEAR network, which Blogchain uses to handle on-chain transactions. That’s it.
-							<br /><br />
+						</p>
+						<p class="message-content text-gray5 dark:text-gray3 pb-2 text-sm">
 							Of course, if you <b>do</b> already have a NEAR-compatible wallet, no need to set up a new one. Just use
-							your your existing wallet to sign in.
-						</div>
+							your your existing wallet to sign up.
+						</p>
 					</div>
 				</article>
 				<article class="message mb-4 w-full xl:w-10/12">
@@ -105,10 +113,10 @@
 						/>
 					</div>
 					<div :class="isOpen4 ? `` : `is-closed`" class="message-body w-full xl:w-10/12">
-						<div class="message-content text-gray5 dark:text-gray3 py-2 text-sm">
+						<p class="message-content text-gray5 dark:text-gray3 py-2 text-sm">
 							Yes. We want this to always be the case, so our social network can be used by a wide variety of writers in
 							different fields to share their ideas.
-						</div>
+						</p>
 					</div>
 				</article>
 				<article class="message mb-4 w-full xl:w-10/12">
@@ -126,16 +134,17 @@
 						/>
 					</div>
 					<div :class="isOpen5 ? `` : `is-closed`" class="message-body w-full xl:w-10/12">
-						<div class="message-content text-gray5 dark:text-gray3 py-2 text-sm">
+						<p class="message-content text-gray5 dark:text-gray3 py-2 text-sm">
 							Blogchain is created and operated by
 							<a href="http://capsule.social" target="_blank" class="text-secondary">Capsule Social</a>. We are working
 							to add new payment features soon that will allow writers to get paid for the content they create, minus a
-							small transaction fee. <br /><br />
-
+							small transaction fee.
+						</p>
+						<p class="message-content text-gray5 dark:text-gray3 pb-2 text-sm">
 							What we will <b>not</b> do, however, is sell ads or user information to third parties. We want to
 							implement a business model for ourselves and our creators that is truly a win-win proposition, contrary to
 							the exploitation that has become par for the course on other social networks.
-						</div>
+						</p>
 					</div>
 				</article>
 				<article class="message mb-4 w-full xl:w-10/12">

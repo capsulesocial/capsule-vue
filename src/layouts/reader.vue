@@ -51,7 +51,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import Header from '@/components/Header.vue'
-import UnauthPopup from '@/components/UnauthPopup.vue'
+import UnauthPopup from '@/components/popups/UnauthPopup.vue'
 
 import { IBackground, backgrounds } from '@/config'
 import { getProfile, Profile } from '@/backend/profile'
