@@ -74,6 +74,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import axios from 'axios'
 
 import CapsuleLogo from '@/components/icons/CapsuleLogo.vue'
 import DiscordLogo from '@/components/icons/Discord.vue'
@@ -97,11 +98,22 @@ export default Vue.extend({
 	},
 	methods: {
 		async verifyCode() {
-			if (this.inputCode.length !== 8) {
-				throw new ValidationError(`Invite codes should be of length 8`)
+			try {
+				if (this.inputCode.length !== 8) {
+					throw new ValidationError(`Invite codes should be of length 8`)
+				}
+				await verifyCodeAndGetToken(this.inputCode)
+				this.$emit(`validInviteCode`)
+			} catch (err) {
+				if (axios.isAxiosError(err) && err.response) {
+					if (err.response.status === 400 && err.response.data.error === `Invite code not found`) {
+						this.$toastWarning(`Invite code not found`)
+						return
+					}
+				}
+
+				throw err
 			}
-			await verifyCodeAndGetToken(this.inputCode)
-			this.$emit(`validInviteCode`)
 		},
 	},
 })

@@ -105,16 +105,16 @@ export default Vue.extend({
 	},
 	errorCaptured(err: Error) {
 		if (err instanceof ValidationError) {
-			this.$toastError(err.message)
+			this.$toastWarning(err.message)
 			return false
 		}
 		if (axios.isAxiosError(err)) {
 			if (!err.response) {
-				this.$toastWarning(`Network error, please try again`)
+				this.$toastError(`Network error, please try again`)
 				return false
 			}
 			if (err.response.status === 429) {
-				this.$toastWarning(`Too many requests, please try again`)
+				this.$toastError(`Too many requests, please try again`)
 				return false
 			}
 			if (err.response.status === 400) {
