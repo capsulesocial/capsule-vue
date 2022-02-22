@@ -242,6 +242,7 @@ export default Vue.extend({
 				this.isLoading = true
 
 				const { profile, cid } = await loginNearAccount(this.username, this.privateKey, this.accountIdInput)
+				window.localStorage.setItem(`accountId`, this.accountIdInput)
 				const account = createSessionFromProfile(cid, profile)
 				this.changeCID(cid)
 				this.changeID(account.id)
