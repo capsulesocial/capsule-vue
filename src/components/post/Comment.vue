@@ -1,5 +1,5 @@
 <template>
-	<div class="object-contain">
+	<div v-show="!commentDeleted" class="object-contain">
 		<!-- Component that displays a posted comment -->
 		<div class="mt-2 flex w-full">
 			<!-- Desktop avatar -->
@@ -93,6 +93,10 @@
 						</p>
 					</div>
 				</div>
+				<!-- Remove post -->
+				<button v-if="this.$store.state.session.id === authorID" @click="removeComment">
+					<BinIcon />
+				</button>
 			</div>
 		</div>
 		<!-- Reply button -->
@@ -143,11 +147,14 @@ import Vue from 'vue'
 import type { PropType } from 'vue'
 import Avatar from '@/components/Avatar.vue'
 import Reply from '@/components/post/Reply.vue'
+import BinIcon from '@/components/icons/Bin.vue'
+
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 import { feelings, faces } from '@/config'
 import { createComment, getComment, getCommentsOfPost, ICommentData, sendComment } from '@/backend/comment'
 import { getPhotoFromIPFS } from '@/backend/photos'
 import { getProfileFromSession } from '@/store/session'
+import { sendPostDeletion } from '@/backend/postDeletion'
 
 interface IData {
 	isReplying: boolean
@@ -160,6 +167,7 @@ interface IData {
 	content: string
 	showLabel: boolean
 	dark: boolean
+	commentDeleted: boolean
 }
 
 export default Vue.extend({
@@ -167,6 +175,7 @@ export default Vue.extend({
 	components: {
 		Reply,
 		Avatar,
+		BinIcon,
 	},
 	props: {
 		authorID: { type: String, required: true },
@@ -190,6 +199,7 @@ export default Vue.extend({
 			content: ``,
 			showLabel: false,
 			dark: false,
+			commentDeleted: false,
 		}
 	},
 	async created() {
@@ -262,6 +272,16 @@ export default Vue.extend({
 		},
 		filterReplies(): ICommentData[] {
 			return this.replies.slice().sort((p0, p1) => p1.timestamp - p0.timestamp)
+		},
+		async removeComment() {
+			try {
+				await sendPostDeletion(`HIDE`, this.cid, this.$store.state.session.id)
+				this.commentDeleted = true
+				this.$emit(`updateComments`)
+				this.$toastSuccess(`This comment has been successfully removed`)
+			} catch (err) {
+				this.$toastWarning(`An error occured`)
+			}
 		},
 	},
 })
