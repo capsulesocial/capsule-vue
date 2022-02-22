@@ -213,6 +213,7 @@ export default Vue.extend({
 
 				// Login
 				const { profile, cid } = await login(this.username, this.userInfo.privateKey)
+				window.localStorage.setItem(`accountId`, this.accountId)
 				const account = createSessionFromProfile(cid, profile)
 				this.changeCID(cid)
 				this.changeID(account.id)
