@@ -230,7 +230,7 @@
 									v-model="comment"
 									class="focus:outline-none placeholder-gray5 dark:placeholder-gray3 dark:text-darkPrimaryText mr-6 h-40 w-full resize-none overflow-y-auto py-4 pl-2 pr-10 xl:pr-16 leading-normal bg-transparent"
 									name="body"
-									placeholder="Be the first one commenting this post..."
+									placeholder="Be the first one to comment on this post..."
 								/>
 								<div class="relative">
 									<span class="absolute bottom-0 right-0 flex flex-col">
