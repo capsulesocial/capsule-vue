@@ -235,7 +235,7 @@ enum SetUserInfoStatus {
 
 export async function setUserInfoNEAR(username: string) {
 	const contract = getContract() as any
-	const status = (await contract.setUserInfo({ username })) as SetUserInfoStatus
+	const status = (await contract.setUserInfo({ args: { username } })) as SetUserInfoStatus
 	switch (status) {
 		case SetUserInfoStatus.Success:
 			return { success: true }
