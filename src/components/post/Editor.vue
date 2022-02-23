@@ -446,7 +446,7 @@ export default Vue.extend({
 			if (!pastedFile && (!pastedContent || pastedContent === ``)) {
 				const f = await this.$urlToFile(pastedText)
 				if (this.$isError(f)) {
-					this.$toastError(f.error)
+					this.insertContent(pastedText)
 					return
 				}
 				try {
