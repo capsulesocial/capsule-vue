@@ -101,11 +101,33 @@
 					</div>
 				</div>
 				<!-- Remove post -->
-				<button v-if="this.$store.state.session.id === authorID" @click="removeComment">
+				<!-- <button v-if="this.$store.state.session.id === authorID" @click="removeComment">
 					<BinIcon />
+				</button> -->
+				<button
+					v-if="this.$store.state.session.id === authorID"
+					class="focus:outline-none flex-col justify-start text-gray5 dark:text-gray3 pt-1 pr-2 hidden xl:flex"
+					@click.stop="toggleDropdownDelete"
+				>
+					<More />
 				</button>
+				<div
+					v-show="showDelete"
+					class="border-lightBorder modal-animation absolute z-10 flex w-44 flex-col items-center rounded-lg border bg-lightBG dark:bg-darkBG p-1 shadow-lg"
+					:class="dark ? `dropdownDeleteOpenDark` : `dropdownDeleteOpen`"
+					style="top: 37px; right: -2px"
+				>
+					<!-- Delete -->
+					<button class="focus:outline-none text-negative flex" @click="removeComment">
+						<BinIcon class="p-1" />
+						<span class="text-negative self-center text-xs ml-1 mr-1">Remove this comment</span>
+					</button>
+				</div>
 			</div>
 		</div>
+		<p v-if="$route.name === `id-id-comments`" class="mt-1 text-right">
+			<nuxt-link :to="`/post/` + parentCID" class="text-gray5 dark:text-gray3 text-xs">View Post</nuxt-link>
+		</p>
 		<!-- Reply button -->
 		<div class="ml-3 pl-1 xl:ml-20">
 			<!-- Active reply state -->
@@ -154,6 +176,7 @@ import Vue from 'vue'
 import type { PropType } from 'vue'
 import Avatar from '@/components/Avatar.vue'
 import Reply from '@/components/post/Reply.vue'
+import More from '@/components/icons/More.vue'
 import BinIcon from '@/components/icons/Bin.vue'
 
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
@@ -175,6 +198,7 @@ interface IData {
 	showLabel: boolean
 	dark: boolean
 	commentDeleted: boolean
+	showDelete: boolean
 }
 
 export default Vue.extend({
@@ -182,6 +206,7 @@ export default Vue.extend({
 	components: {
 		Reply,
 		Avatar,
+		More,
 		BinIcon,
 	},
 	props: {
@@ -192,6 +217,7 @@ export default Vue.extend({
 		},
 		cid: { type: String, required: true },
 		timestamp: { type: Number, required: true },
+		parentCID: { type: Number, required: true },
 		profile: { type: Object as PropType<Profile>, default: null },
 	},
 	data(): IData {
@@ -207,6 +233,7 @@ export default Vue.extend({
 			showLabel: false,
 			dark: false,
 			commentDeleted: false,
+			showDelete: false,
 		}
 	},
 	async created() {
@@ -289,6 +316,9 @@ export default Vue.extend({
 			} catch (err) {
 				this.$toastWarning(`An error occured`)
 			}
+		},
+		toggleDropdownDelete() {
+			this.showDelete = !this.showDelete
 		},
 	},
 })
