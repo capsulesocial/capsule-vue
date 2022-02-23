@@ -34,12 +34,19 @@ import SelectID from './SelectID.vue'
 import DownloadKey from './DownloadKey.vue'
 
 import { hasSufficientFunds } from '@/backend/funder'
-import { checkAccountStatus, getUsernameNEAR, removeNearPrivateKey, walletLogout } from '@/backend/near'
+import {
+	checkAccountStatus,
+	getIsAccountIdOnboarded,
+	getUsernameNEAR,
+	removeNearPrivateKey,
+	walletLogout,
+} from '@/backend/near'
 
 import { MutationType, createSessionFromProfile, namespace as sessionStoreNamespace } from '~/store/session'
 import { setNearUserFromPrivateKey, login, register, IAuthResult, IWalletStatus } from '@/backend/auth'
 import { ValidationError } from '@/errors'
 import { verifyTokenAndOnboard } from '@/backend/invite'
+import { getInviteToken } from '@/backend/utilities/helpers'
 
 interface IData {
 	funds: string
@@ -72,7 +79,18 @@ export default Vue.extend({
 		this.$emit(`setIsLoading`, true)
 		const username = await getUsernameNEAR(this.userInfo.accountId)
 		if (!username) {
-			await verifyTokenAndOnboard(this.userInfo.accountId)
+			const inviteToken = getInviteToken()
+			if (!inviteToken) {
+				const isAccountOnboarded = await getIsAccountIdOnboarded(this.userInfo.accountId)
+				if (!isAccountOnboarded) {
+					this.$emit(`updateUserInfo`, null)
+					this.$emit(`setIsLoading`, false)
+					this.$emit(`stepForward`)
+					return
+				}
+			} else {
+				await verifyTokenAndOnboard(this.userInfo.accountId)
+			}
 			await this.checkFunds()
 			this.$emit(`setIsLoading`, false)
 			return

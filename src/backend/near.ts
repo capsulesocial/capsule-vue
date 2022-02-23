@@ -58,6 +58,25 @@ export async function getUsernameNEAR(accountId: string): Promise<string | null>
 	throw new Error(`Error in contract`)
 }
 
+export async function getIsAccountIdOnboarded(accountId: string): Promise<boolean> {
+	const rawResult = await provider.query({
+		request_type: `call_function`,
+		account_id: nearConfig.contractName,
+		method_name: `isAccountOnboarded`,
+		args_base64: Buffer.from(JSON.stringify({ accountId })).toString(`base64`),
+		finality: `optimistic`,
+	})
+
+	if (`result` in rawResult) {
+		// format result
+		// res = [accountId, base58_encode_public_key]
+		const res = JSON.parse(Buffer.from((rawResult as any).result).toString())
+		return res
+	}
+
+	throw new Error(`Error in contract`)
+}
+
 export async function initNear() {
 	_near = await connect({ deps: { keyStore: new keyStores.BrowserLocalStorageKeyStore() }, headers: {}, ...nearConfig })
 }

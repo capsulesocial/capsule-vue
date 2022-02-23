@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { capsuleServer, sigValidity } from './utilities/config'
-import { uint8ArrayToHexString } from './utilities/helpers'
+import { getInviteToken, uint8ArrayToHexString } from './utilities/helpers'
 import { signContent } from './utilities/keys'
 
 export async function verifyCodeAndGetToken(inviteCode: string) {
@@ -10,7 +10,7 @@ export async function verifyCodeAndGetToken(inviteCode: string) {
 }
 
 export async function verifyTokenAndOnboard(accountId: string) {
-	const token = getToken()
+	const token = getInviteToken()
 	if (!token) {
 		throw new Error(`Invite token not found`)
 	}
@@ -40,10 +40,6 @@ export async function getInvitesRemaining(inviter: string): Promise<number> {
 
 function setToken(token: string) {
 	window.localStorage.setItem(`inviteToken`, token)
-}
-
-function getToken() {
-	return window.localStorage.getItem(`inviteToken`)
 }
 
 function removeToken() {

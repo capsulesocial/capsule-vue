@@ -108,6 +108,10 @@ export async function getUserInfo(): Promise<IWalletStatus | null> {
 		if (key && key.startsWith(`near-api-js:keystore`)) {
 			const privateKey = localStorage.getItem(key)
 			const accountId = key.split(`:`)[2]
+			if (accountId === `pending_keyed25519`) {
+				localStorage.removeItem(key)
+				return null
+			}
 			if (privateKey && accountId) {
 				return {
 					type: `near`,

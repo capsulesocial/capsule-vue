@@ -93,8 +93,7 @@ export function getInviteToken(): string | null {
 	try {
 		const parsedToken: IInviteTokenData = parseJwt(inviteToken)
 		if (parsedToken.exp < Date.now() / 1000) {
-			window.localStorage.removeItem(`inviteToken`)
-			return null
+			throw new Error(`Token has expired!`)
 		}
 
 		return inviteToken
