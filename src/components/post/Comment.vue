@@ -105,7 +105,7 @@
 					<BinIcon />
 				</button> -->
 				<button
-					v-if="this.$store.state.session.id === authorID"
+					v-if="this.$store.state.session.id === authorID || this.$store.state.session.id === postAuthor"
 					class="focus:outline-none flex-col justify-start text-gray5 dark:text-gray3 pt-1 pr-2 hidden xl:flex"
 					@click.stop="toggleDropdownDelete"
 				>
