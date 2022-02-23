@@ -104,7 +104,8 @@ import { IBackground, backgrounds } from '@/config'
 import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
-import { IPostResponse, getPosts } from '@/backend/post'
+import { IPostResponse } from '@/backend/post'
+import { getBookmarksOfUser } from '@/backend/bookmarks'
 
 interface PostPreview {
 	title: string
@@ -180,7 +181,7 @@ export default Vue.extend({
 	},
 	methods: {
 		async fetchBookmarks() {
-			let bookmarks = await getPosts({ bookmarkedBy: this.$store.state.session.id }, this.$store.state.session.id, {})
+			let bookmarks = await getBookmarksOfUser(this.$store.state.session.id)
 			bookmarks = bookmarks.reverse().slice(0, 2)
 			const bookmarkPreviews = bookmarks.map(async (p: IPostResponse) => {
 				const post: PostPreview = {
