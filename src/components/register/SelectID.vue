@@ -73,15 +73,19 @@ export default Vue.extend({
 			changeBio: MutationType.CHANGE_BIO,
 			changeLocation: MutationType.CHANGE_LOCATION,
 		}),
-		handleRegisterID() {
-			this.isLoading = true
-			this.id = this.id.toLowerCase()
-			const idCheck = this.$qualityID(this.id)
-			if (this.$isError(idCheck)) {
+		async handleRegisterID() {
+			try {
+				this.isLoading = true
+				this.id = this.id.toLowerCase()
+				const idCheck = this.$qualityID(this.id)
+				if (this.$isError(idCheck)) {
+					this.isLoading = false
+					throw new ValidationError(idCheck.error)
+				}
+				await this.verify(this.id)
+			} finally {
 				this.isLoading = false
-				throw new ValidationError(idCheck.error)
 			}
-			this.verify(this.id)
 		},
 	},
 })

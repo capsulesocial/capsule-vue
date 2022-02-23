@@ -150,8 +150,7 @@ export default Vue.extend({
 				}
 				const registerResult = await register(lowerID, this.userInfo.accountId)
 				if (`error` in registerResult) {
-					this.$toastError(registerResult.error)
-					return
+					throw new ValidationError(registerResult.error)
 				}
 				res = registerResult
 			}
