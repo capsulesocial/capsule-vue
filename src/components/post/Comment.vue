@@ -266,6 +266,7 @@ export default Vue.extend({
 			return res
 		},
 		async sendReply() {
+			this.reply = this.reply.trim()
 			const replyQualityCheck = this.$qualityComment(this.reply)
 			if (this.$isError(replyQualityCheck)) {
 				this.$toastError(replyQualityCheck.error)
