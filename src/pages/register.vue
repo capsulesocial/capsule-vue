@@ -166,7 +166,10 @@ export default Vue.extend({
 		async stepForward() {
 			this.isLoading = true
 			const inviteToken = getInviteToken()
-			this.userInfo = await getUserInfo()
+
+			if (!this.userInfo) {
+				this.userInfo = await getUserInfo()
+			}
 
 			// Check if we already have any sign-in info set up
 
