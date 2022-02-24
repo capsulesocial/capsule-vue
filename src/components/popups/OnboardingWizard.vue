@@ -18,27 +18,27 @@
 				<img
 					v-show="step === 0"
 					:src="require(`@/assets/images/onboarding/slide1.gif`)"
-					class="mb-10 w-5/6 rounded-lg shadow-lg"
+					class="mb-10 w-4/6 rounded-lg shadow-lg"
 				/>
 				<img
 					v-show="step === 1"
 					:src="require(`@/assets/images/onboarding/slide2.gif`)"
-					class="mb-10 w-5/6 rounded-lg shadow-lg"
+					class="mb-10 w-4/6 rounded-lg shadow-lg"
 				/>
 				<img
 					v-show="step === 2"
 					:src="require(`@/assets/images/onboarding/slide3.gif`)"
-					class="mb-10 w-5/6 rounded-lg shadow-lg"
+					class="mb-10 w-4/6 rounded-lg shadow-lg"
 				/>
 				<img
 					v-show="step === 3"
 					:src="require(`@/assets/images/onboarding/slide4.gif`)"
-					class="mb-10 w-5/6 rounded-lg shadow-lg"
+					class="mb-10 w-4/6 rounded-lg shadow-lg"
 				/>
 				<img
 					v-show="step === 4"
 					:src="require(`@/assets/images/onboarding/slide5.gif`)"
-					class="mb-10 w-5/6 rounded-lg shadow-lg"
+					class="mb-10 w-4/6 rounded-lg shadow-lg"
 				/>
 				<h6 class="mb-5 text-xl font-bold dark:text-darkPrimaryText">{{ getTitle() }}</h6>
 				<EditProfile v-show="step === 5" ref="settings" :updateProfileMethod="getMyProfile" class="mb-4" />

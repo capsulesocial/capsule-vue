@@ -191,6 +191,9 @@ export default Vue.extend({
 			}
 		},
 		copyURL(): void {
+			if (this.generatedInviteCode === ``) {
+				return
+			}
 			const code = this.$refs.code as HTMLElement
 			code.focus()
 			document.execCommand(`copy`)

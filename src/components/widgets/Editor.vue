@@ -73,7 +73,7 @@
 							"
 							class="hotzone mr-2 h-10 w-10"
 						/>
-						<span class="text-primary dark:text-gray2 text-base">{{
+						<span class="text-primary dark:text-gray1 text-base">{{
 							$store.state.draft.drafts[$store.state.draft.activeIndex].category
 						}}</span>
 					</div>
@@ -124,7 +124,7 @@
 					v-model="tag"
 					type="text"
 					placeholder="Add a tag..."
-					class="focus:outline-none bg-gray1 dark:bg-gray7 text-gray5 dark:text-gray3 placeholder-gray5 dark:placeholder-gray3 w-full"
+					class="focus:outline-none bg-gray1 dark:bg-gray7 text-gray5 dark:text-gray1 placeholder-gray5 dark:placeholder-gray3 w-full"
 					@keyup.enter="addTag"
 				/>
 			</div>

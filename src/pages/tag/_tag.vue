@@ -14,13 +14,13 @@
 		<div ref="container" class="xl:w-750 min-h-130 h-130 xl:min-h-150 xl:h-150 fixed w-full overflow-y-auto">
 			<article
 				v-if="posts.length == 0 && !isLoading"
-				class="mt-36 grid justify-items-center overflow-y-hidden px-6 xl:px-0"
+				class="mt-10 grid justify-items-center overflow-y-hidden px-6 xl:px-0"
 			>
 				<p class="text-gray5 align-end mb-5 flex items-end text-sm" style="max-width: 366px">
 					It seems there are no posts under this topic yet
 				</p>
 				<SecondaryButton :text="`Back home`" :action="toggleHomeFeed" />
-				<img :src="require(`@/assets/images/brand/Bookmarks.webp`)" class="top-0 mt-64 xl:-mt-2" />
+				<img :src="require(`@/assets/images/brand/tag.webp`)" class="top-0 mt-64 xl:-mt-2" />
 			</article>
 			<article v-for="p in posts" :key="p.post._id">
 				<PostCard

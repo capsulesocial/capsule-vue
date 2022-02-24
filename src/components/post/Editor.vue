@@ -62,7 +62,7 @@
 					/>
 					<div
 						v-if="waitingImage"
-						class="absolute w-11/12 h-52 bg-gray7 rounded-lg animate-pulse flex justify-center items-center"
+						class="absolute w-11/12 h-52 bg-gray3 dark:bg-gray7 rounded-lg animate-pulse flex justify-center items-center"
 						:style="`top:` + this.addContentPosTop + `px`"
 					>
 						<p class="text-sm text-gray5 dark:text-gray3">uploading image</p>
