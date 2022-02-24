@@ -111,14 +111,9 @@ export function createEncryptedPost(
 }
 
 export async function sendRegularPost(data: IRegularPost): Promise<string> {
-	const signature = await signContent(data)
-	if (!signature) {
-		throw new Error(`Post signing failed`)
-	}
+	const { sig, publicKey } = await signContent(data)
 
-	const sig = uint8ArrayToHexString(signature)
-
-	const ipfsData = { data, sig, public_key: `test` }
+	const ipfsData = { data, sig: uint8ArrayToHexString(sig), public_key: publicKey }
 
 	const cid = await ipfs().sendJSONData(ipfsData)
 	await axios.post(`${nodeUrl()}/content`, {
@@ -146,7 +141,7 @@ export async function sendEncryptedPost(data: IEncryptedPost): Promise<string> {
 }
 
 export async function getRegularPost(cid: string): Promise<IRegularPost> {
-	const post: { data: IRegularPost } = await ipfs().getJSONData(cid)
+	const post: { data: IRegularPost; sig: string; public_key: string } = await ipfs().getJSONData(cid)
 	if (!isRegularPost(post.data)) {
 		throw new Error(`Post is encrypted`)
 	}
@@ -178,15 +173,11 @@ export function isRegularPost(post: Post): post is IRegularPost {
 
 async function getEncryptionKeys(username: string, cid: string) {
 	const exp = Date.now() + sigValidity
-	const signature = await signContent({ username, cid, exp })
-	if (!signature) {
-		throw new Error(`Content signing failed`)
-	}
-	const sig = uint8ArrayToHexString(signature)
+	const { sig } = await signContent({ username, cid, exp })
 
 	try {
 		const res = await axios.get<{ key: string; counter: string }>(
-			`${capsuleServer}/content/${cid}?username=${username}&sig=${sig}&exp=${exp}`,
+			`${capsuleServer}/content/${cid}?username=${username}&sig=${uint8ArrayToHexString(sig)}&exp=${exp}`,
 		)
 		return res.data
 	} catch (err) {

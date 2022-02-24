@@ -13,16 +13,13 @@ export async function sendRepost(authorID: string, postCID: string, content: str
 		content,
 	}
 
-	const signature = await signContent(data)
-	if (!signature) {
-		throw new Error(`Post signing failed`)
-	}
+	const { sig } = await signContent(data)
 
 	const cid = await ipfs().sendJSONData(data)
 	await axios.post(`${nodeUrl()}/repost`, {
 		cid,
 		data,
-		sig: uint8ArrayToHexString(signature),
+		sig: uint8ArrayToHexString(sig),
 		type,
 	})
 

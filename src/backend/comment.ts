@@ -43,17 +43,13 @@ export async function sendComment(c: INewCommentData, type: `comment` | `reply`)
 		authorID: c.authorID,
 	}
 
-	const signature = await signContent(comment)
-
-	if (!signature) {
-		throw new Error(`Comment signing failed`)
-	}
+	const { sig } = await signContent(comment)
 
 	const cid = await ipfs().sendJSONData(comment)
 	await axios.post(`${nodeUrl()}/content/${comment.parentCID}/comments`, {
 		cid,
 		data: comment,
-		sig: uint8ArrayToHexString(signature),
+		sig: uint8ArrayToHexString(sig),
 		type,
 	})
 	return cid

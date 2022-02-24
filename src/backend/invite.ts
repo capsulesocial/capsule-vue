@@ -25,12 +25,11 @@ export async function verifyTokenAndOnboard(accountId: string) {
 
 export async function generateInviteCode(inviter: string): Promise<{ inviteCode: string; invitesRemaining: number }> {
 	const exp = Date.now() + sigValidity
-	const signature = await signContent({ inviter, exp })
-	if (!signature) {
-		throw new Error(`Object signing failed`)
-	}
-	const sig = uint8ArrayToHexString(signature)
-	const response = await axios.get(`${capsuleServer}/invite`, { params: { exp, sig, inviter } })
+	const { sig } = await signContent({ inviter, exp })
+
+	const response = await axios.get(`${capsuleServer}/invite`, {
+		params: { exp, sig: uint8ArrayToHexString(sig), inviter },
+	})
 	return response.data.data
 }
 

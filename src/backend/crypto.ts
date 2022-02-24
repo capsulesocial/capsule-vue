@@ -33,16 +33,13 @@ export async function encryptAndSignData(data: IEncryptedPost) {
 	const encryptedData = await _encryptData(byteData, counter, key)
 	const encryptedPost: IEncryptedPost = { ...data, content: uint8ArrayToHexString(encryptedData) }
 
-	const signature = await signContent(encryptedPost)
-	if (!signature) {
-		throw new Error(`Data signing failed!`)
-	}
+	const { sig } = await signContent(encryptedPost)
 
 	return {
 		data: encryptedPost,
 		key: uint8ArrayToHexString(key),
 		counter: uint8ArrayToHexString(counter),
-		sig: uint8ArrayToHexString(signature),
+		sig: uint8ArrayToHexString(sig),
 	}
 }
 
