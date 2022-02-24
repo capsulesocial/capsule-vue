@@ -120,6 +120,7 @@ interface IData {
 	website: string
 	bio: string
 	maxCharBio: number
+	newAvatarCID: string
 }
 
 export default Vue.extend({
@@ -142,6 +143,7 @@ export default Vue.extend({
 			website: ``,
 			bio: ``,
 			maxCharBio: 256,
+			newAvatarCID: ``,
 		}
 	},
 
@@ -191,6 +193,7 @@ export default Vue.extend({
 		}),
 		hasChanged() {
 			return (
+				(this.newAvatarCID !== `` && this.newAvatarCID !== this.$store.state.session.avatar) ||
 				(this.newName !== `` && this.newName !== this.$store.state.session.name) ||
 				(this.newEmail !== `` && this.newEmail !== this.$store.state.session.email) ||
 				(this.location !== `` && this.location !== this.$store.state.session.location) ||
@@ -200,6 +203,7 @@ export default Vue.extend({
 		},
 		async handleImage(e: HTMLInputEvent) {
 			if (!e.target.files) {
+				this.$toastError(`No image selected`)
 				return
 			}
 			const image = e.target.files[0]
@@ -232,13 +236,14 @@ export default Vue.extend({
 			return true
 		},
 		async uploadImage(image: string | ArrayBuffer, blobImage: Blob, filename: string) {
-			const avatarCID = await addPhotoToIPFS(image)
-			await preUploadPhoto(avatarCID, blobImage, filename, this.$store.state.session.id)
-			this.profilePic = image
-			this.changeAvatar(avatarCID)
-			await this.updateProfile()
-			getProfile(this.$store.state.session.id, true) // Update cached profile
-			this.updateSettings()
+			try {
+				const avatarCID = await addPhotoToIPFS(image)
+				await preUploadPhoto(avatarCID, blobImage, filename, this.$store.state.session.id)
+				this.profilePic = image
+				this.newAvatarCID = avatarCID
+			} catch (err) {
+				this.$toastError(`Unsuccessful avatar upload!`)
+			}
 		},
 		async downloadImage(cid: string) {
 			this.profilePic = await addPhotoToIPFS(cid)
@@ -287,6 +292,11 @@ export default Vue.extend({
 					this.$toastError(`Invalid URL`)
 					return
 				}
+			}
+			// Update Avatar
+			if (this.newAvatarCID !== ``) {
+				this.changeAvatar(this.newAvatarCID)
+				getProfile(this.$store.state.session.id, true) // Update cached profile
 			}
 			try {
 				const profileUpdated = await this.updateProfile()

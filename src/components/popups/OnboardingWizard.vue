@@ -109,7 +109,7 @@ import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
 import CloseIcon from '@/components/icons/X.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
-import EditProfile from '@/components/Settings.vue'
+import EditProfile from '@/components/popups/Settings.vue'
 
 interface IData {
 	step: number
