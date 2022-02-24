@@ -50,7 +50,6 @@
 							:toggleFriend="toggleFriend"
 							:following="following"
 							:followers="followers"
-							:userIsFollowed="userIsFollowed"
 							@updateBookmarks="fetchBookmarks"
 						/>
 						<!-- Widgets -->
@@ -120,7 +119,6 @@ interface IData {
 	showWidgets: boolean
 	following: Set<string>
 	followers: Set<string>
-	userIsFollowed: boolean
 	bgImage: IBackground
 	dark: boolean
 	showFollowers: boolean
@@ -143,13 +141,12 @@ export default Vue.extend({
 			showWidgets: false,
 			following: new Set(),
 			followers: new Set(),
-			userIsFollowed: false,
 			bgImage: backgrounds[0],
 			dark: false,
 			showFollowers: false,
 		}
 	},
-	async created() {
+	created() {
 		// Check if logged in user
 		if (this.$store.state.session.id === ``) {
 			return
@@ -161,6 +158,8 @@ export default Vue.extend({
 		} else {
 			this.dark = false
 		}
+	},
+	async mounted() {
 		// get logged in profile
 		const { profile } = await getProfile(this.$store.state.session.id)
 		this.profile = profile
@@ -172,14 +171,16 @@ export default Vue.extend({
 			})
 		}
 		// Get followers and following
-		const { followers, following } = await getFollowersAndFollowing(this.$store.state.session.id)
-		this.following = following
-		this.followers = followers
-		this.userIsFollowed = followers.has(this.$store.state.session.id)
+		this.fetchConnections()
 		// Get recent bookmarks
 		this.fetchBookmarks()
 	},
 	methods: {
+		async fetchConnections() {
+			const { followers, following } = await getFollowersAndFollowing(this.$store.state.session.id, true)
+			this.following = following
+			this.followers = followers
+		},
 		async fetchBookmarks() {
 			let bookmarks = await getBookmarksOfUser(this.$store.state.session.id)
 			bookmarks = bookmarks.reverse().slice(0, 2)
@@ -204,9 +205,20 @@ export default Vue.extend({
 				return
 			}
 			if (authorID !== this.$store.state.session.id) {
-				await followChange(this.following.has(authorID) ? `UNFOLLOW` : `FOLLOW`, this.$store.state.session.id, authorID)
-				const data = await getFollowersAndFollowing(this.$store.state.session.id, true)
-				this.following = data.following
+				try {
+					await followChange(
+						this.following.has(authorID) ? `UNFOLLOW` : `FOLLOW`,
+						this.$store.state.session.id,
+						authorID,
+					)
+					const data = await getFollowersAndFollowing(this.$store.state.session.id, true)
+					this.following = data.following
+					this.fetchConnections()
+					this.updateFollowers()
+					this.$toastSuccess(this.following.has(authorID) ? `Followed ${authorID}` : `Unfollowed ${authorID}`)
+				} catch (err) {
+					this.$toastError(`An error has occurred`)
+				}
 			}
 		},
 		async updateFollowers() {

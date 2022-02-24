@@ -123,7 +123,7 @@ export default Vue.extend({
 			})
 		}
 		// Get followers and following
-		getFollowersAndFollowing(this.$store.state.session.id).then(({ following }) => {
+		getFollowersAndFollowing(this.$store.state.session.id, true).then(({ following }) => {
 			this.following = following
 		})
 		if (document.documentElement.classList.contains(`dark`)) {
@@ -134,10 +134,24 @@ export default Vue.extend({
 	},
 	methods: {
 		async toggleFriend(authorID: string) {
-			if (authorID !== this.$store.state.session.id) {
-				await followChange(this.following.has(authorID) ? `UNFOLLOW` : `FOLLOW`, this.$store.state.session.id, authorID)
-				const data = await getFollowersAndFollowing(this.$store.state.session.id, true)
-				this.following = data.following
+			// Unauth
+			if (this.$store.state.session.id === ``) {
+				this.$store.commit(`settings/toggleUnauthPopup`)
+				return
+			}
+			try {
+				if (authorID !== this.$store.state.session.id) {
+					await followChange(
+						this.following.has(authorID) ? `UNFOLLOW` : `FOLLOW`,
+						this.$store.state.session.id,
+						authorID,
+					)
+					this.$toastSuccess(this.following.has(authorID) ? `Unfollowed ${authorID}` : `Followed ${authorID}`)
+					const data = await getFollowersAndFollowing(this.$store.state.session.id, true)
+					this.following = data.following
+				}
+			} catch (err) {
+				this.$toastError(`An error has occurred`)
 			}
 		},
 	},

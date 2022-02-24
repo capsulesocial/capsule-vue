@@ -55,15 +55,11 @@ import OnboardingWizard from '@/components/popups/OnboardingWizard.vue'
 import { IBackground, backgrounds } from '@/config'
 import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/photos'
-import { followChange, getFollowersAndFollowing } from '@/backend/following'
 
 interface IData {
 	profile: Profile | null
 	avatar: string | ArrayBuffer | null
 	showWidgets: boolean
-	following: Set<string>
-	followers: Set<string>
-	userIsFollowed: boolean
 	displayOnboarding: boolean
 	bgImage: IBackground
 	dark: boolean
@@ -82,9 +78,6 @@ export default Vue.extend({
 			profile: null,
 			avatar: null,
 			showWidgets: false,
-			following: new Set(),
-			followers: new Set(),
-			userIsFollowed: false,
 			displayOnboarding: false,
 			bgImage: backgrounds[0],
 			dark: false,
@@ -112,38 +105,10 @@ export default Vue.extend({
 				this.avatar = p
 			})
 		}
-		// Get followers and following
-		const { followers, following } = await getFollowersAndFollowing(this.$store.state.session.id)
-		this.following = following
-		this.followers = followers
-		this.userIsFollowed = followers.has(this.$store.state.session.id)
 	},
 	methods: {
-		async toggleFriend(authorID: string) {
-			// Unauth
-			if (this.$store.state.session.id === ``) {
-				this.$store.commit(`settings/toggleUnauthPopup`)
-				return
-			}
-			if (authorID !== this.$store.state.session.id) {
-				await followChange(this.following.has(authorID) ? `UNFOLLOW` : `FOLLOW`, this.$store.state.session.id, authorID)
-				const data = await getFollowersAndFollowing(this.$store.state.session.id, true)
-				this.following = data.following
-			}
-		},
-		async updateFollowers() {
-			const { followers, following } = await getFollowersAndFollowing(this.$store.state.session.id, true)
-			this.followers = followers
-			this.following = following
-		},
 		toggleZIndex() {
 			this.showWidgets = !this.showWidgets
-		},
-		saveDraftState(): void {
-			if (this.$refs.editor) {
-				// @ts-ignore
-				this.$refs.editor.saveContent()
-			}
 		},
 		openOnboarding() {
 			this.displayOnboarding = !this.displayOnboarding
