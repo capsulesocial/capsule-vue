@@ -16,10 +16,12 @@
 		</article>
 		<article v-for="comment in comments" :key="comment._id">
 			<div class="pb-5">
-				<Comment :authorID="profile.id" :cid="comment._id" :timestamp="comment.timestamp" />
-				<p class="mt-1 text-right">
-					<nuxt-link :to="`/post/` + comment.parentCID" class="text-gray5 dark:text-gray3 text-xs">View Post</nuxt-link>
-				</p>
+				<Comment
+					:authorID="profile.id"
+					:cid="comment._id"
+					:timestamp="comment.timestamp"
+					:parentCID="comment.parentCID"
+				/>
 			</div>
 		</article>
 		<article v-show="isLoading" class="modal-animation flex justify-center">
