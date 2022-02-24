@@ -236,8 +236,6 @@ export default Vue.extend({
 		},
 	},
 	created() {
-		// Fetch visiting profile
-		this.getVisitingProfile()
 		// Set color mode
 		this.$setColorMode(this.$store.state.settings.darkMode)
 		if (document.documentElement.classList.contains(`dark`)) {
@@ -246,10 +244,14 @@ export default Vue.extend({
 			this.dark = false
 		}
 	},
+	mounted() {
+		// Fetch visiting profile
+		this.getVisitingProfile()
+	},
 	methods: {
 		async getVisitingProfile() {
 			const [{ profile: visitProfile }, profileExists] = await Promise.all([
-				getProfile(this.$route.params.id),
+				getProfile(this.$route.params.id, true),
 				this.checkAccountExists(),
 			])
 			if (!profileExists) {
@@ -265,6 +267,7 @@ export default Vue.extend({
 					this.visitAvatar = p
 				})
 			}
+			this.updateFollowers()
 			const { followers, following } = await getFollowersAndFollowing(this.$route.params.id)
 			this.followers = followers
 			this.following = following
@@ -306,12 +309,19 @@ export default Vue.extend({
 				return
 			}
 			if (this.$route.params.id !== this.$store.state.session.id) {
-				await followChange(
-					this.userIsFollowed ? `UNFOLLOW` : `FOLLOW`,
-					this.$store.state.session.id,
-					this.$route.params.id,
-				)
-				this.updateFollowers()
+				try {
+					await followChange(
+						this.userIsFollowed ? `UNFOLLOW` : `FOLLOW`,
+						this.$store.state.session.id,
+						this.$route.params.id,
+					)
+					this.$toastSuccess(
+						this.userIsFollowed ? `Unfollowed ${this.$route.params.id}` : `Followed ${this.$route.params.id}`,
+					)
+					this.updateFollowers()
+				} catch (err) {
+					this.$toastError(`An error has occurred`)
+				}
 			}
 		},
 		async updateFollowers() {

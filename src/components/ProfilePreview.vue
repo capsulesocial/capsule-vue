@@ -72,12 +72,17 @@ export default Vue.extend({
 				this.$store.commit(`settings/toggleUnauthPopup`)
 				return
 			}
-			if (this.profile.id !== this.$store.state.session.id) {
-				await followChange(this.isFollowing ? `UNFOLLOW` : `FOLLOW`, this.$store.state.session.id, this.profile.id)
-				this.isFollowing = !this.isFollowing
-				if (this.updateFollowers) {
-					this.updateFollowers()
+			try {
+				if (this.profile.id !== this.$store.state.session.id) {
+					await followChange(this.isFollowing ? `UNFOLLOW` : `FOLLOW`, this.$store.state.session.id, this.profile.id)
+					this.isFollowing = !this.isFollowing
+					this.$toastSuccess(this.isFollowing ? `Followed ${this.profile.id}` : `Unfollowed ${this.profile.id}`)
+					if (this.updateFollowers) {
+						this.updateFollowers()
+					}
 				}
+			} catch (err) {
+				this.$toastError(`An error has occurred`)
 			}
 		},
 	},

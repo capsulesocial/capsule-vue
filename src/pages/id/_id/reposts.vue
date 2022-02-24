@@ -92,19 +92,22 @@ export default Vue.extend({
 		if (this.$store.state.session.id === ``) {
 			return
 		}
-		const followersAndFollowing = await getFollowersAndFollowing(this.$store.state.session.id)
-		this.following = followersAndFollowing.following
 		if (document.documentElement.classList.contains(`dark`)) {
 			this.dark = true
 		} else {
 			this.dark = false
 		}
+		this.updateFollowers()
 	},
 	mounted() {
 		const container = this.$parent.$refs.scrollContainer as HTMLElement
 		container.addEventListener(`scroll`, this.handleScroll)
 	},
 	methods: {
+		async updateFollowers() {
+			const followersAndFollowing = await getFollowersAndFollowing(this.$store.state.session.id, true)
+			this.following = followersAndFollowing.following
+		},
 		async loadReposts() {
 			this.isLoading = true
 			try {
@@ -142,10 +145,18 @@ export default Vue.extend({
 				this.$store.commit(`settings/toggleUnauthPopup`)
 				return
 			}
-			if (authorID !== this.$store.state.session.id) {
-				await followChange(this.following.has(authorID) ? `UNFOLLOW` : `FOLLOW`, this.$store.state.session.id, authorID)
-				const data = await getFollowersAndFollowing(this.$store.state.session.id, true)
-				this.following = data.following
+			try {
+				if (authorID !== this.$store.state.session.id) {
+					await followChange(
+						this.following.has(authorID) ? `UNFOLLOW` : `FOLLOW`,
+						this.$store.state.session.id,
+						authorID,
+					)
+					this.$toastSuccess(this.following.has(authorID) ? `Unfollowed ${authorID}` : `Followed ${authorID}`)
+					this.updateFollowers()
+				}
+			} catch (err) {
+				this.$toastError(`An error has occurred`)
 			}
 		},
 		toggleHomeFeed() {

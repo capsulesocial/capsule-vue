@@ -370,13 +370,20 @@ export default Vue.extend({
 				return
 			}
 			if (this.post) {
-				await followChange(
-					this.userIsFollowed ? `UNFOLLOW` : `FOLLOW`,
-					this.$store.state.session.id,
-					this.post.authorID,
-				)
-				const { following } = await getFollowersAndFollowing(this.$store.state.session.id, true)
-				this.userIsFollowed = following.has(this.post.authorID)
+				try {
+					await followChange(
+						this.userIsFollowed ? `UNFOLLOW` : `FOLLOW`,
+						this.$store.state.session.id,
+						this.post.authorID,
+					)
+					this.$toastSuccess(
+						this.userIsFollowed ? `Unfollowed ${this.post.authorID}` : `Followed ${this.post.authorID}`,
+					)
+					const { following } = await getFollowersAndFollowing(this.$store.state.session.id, true)
+					this.userIsFollowed = following.has(this.post.authorID)
+				} catch (err) {
+					this.$toastError(`An error has occurred`)
+				}
 			}
 		},
 		openWindow(url: string) {

@@ -57,17 +57,15 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { PropType } from 'vue'
 import PostCard from '@/components/post/Card.vue'
 import BackIcon from '@/components/icons/ChevronLeft.vue'
 import { getPosts, Algorithm, IPostResponse } from '@/backend/post'
-import { followChange, getFollowersAndFollowing } from '@/backend/following'
 
 interface IData {
 	posts: IPostResponse[]
 	tag: string
 	isLoading: boolean
-	following: Set<string>
 	currentOffset: number
 	limit: number
 	algorithm: Algorithm
@@ -82,12 +80,21 @@ export default Vue.extend({
 		BackIcon,
 	},
 	layout: `discover`,
+	props: {
+		toggleFriend: {
+			type: Function as PropType<() => void>,
+			required: true,
+		},
+		following: {
+			type: Set as PropType<Set<string>>,
+			default: () => new Set(),
+		},
+	},
 	data(): IData {
 		return {
 			posts: [],
 			tag: this.$route.params.tag,
 			isLoading: true,
-			following: new Set(),
 			currentOffset: 0,
 			limit: 10,
 			algorithm: `NEW`,
@@ -119,9 +126,6 @@ export default Vue.extend({
 	async created() {
 		// Fetch posts with tag (unauthenticated)
 		this.posts = await this.fetchPosts()
-		getFollowersAndFollowing(this.$store.state.session.id).then(({ following }) => {
-			this.following = following
-		})
 		if (document.documentElement.classList.contains(`dark`)) {
 			this.dark = true
 		} else {
@@ -133,19 +137,7 @@ export default Vue.extend({
 		container.addEventListener(`scroll`, this.handleScroll)
 	},
 	methods: {
-		async toggleFriend(authorID: string) {
-			// Unauth
-			if (this.$store.state.session.id === ``) {
-				this.$store.commit(`settings/toggleUnauthPopup`)
-				return
-			}
-			if (authorID !== this.$store.state.session.id) {
-				await followChange(this.following.has(authorID) ? `UNFOLLOW` : `FOLLOW`, this.$store.state.session.id, authorID)
-				const data = await getFollowersAndFollowing(this.$store.state.session.id, true)
-				this.following = data.following
-			}
-		},
-		async fetchPosts() {
+		async fetchPosts(): Promise<any> {
 			this.isLoading = true
 			const id = this.$store.state.session.id === `` ? `x` : this.$store.state.session.id
 			const posts = await getPosts({ tag: this.$route.params.tag }, id, {

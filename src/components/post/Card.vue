@@ -87,7 +87,9 @@
 										<FriendButton
 											v-if="post.authorID !== $store.state.session.id && $route.name !== `id`"
 											:small="true"
-											:userIsFollowed="usersFollowing.has(post.authorID)"
+											:userIsFollowed="
+												this.$route.name === `id-id` ? userIsFollowed : usersFollowing.has(post.authorID)
+											"
 											:toggleFriend="() => toggleFriend(post.authorID)"
 										/>
 									</div>
@@ -262,7 +264,7 @@
 									<FriendButton
 										v-if="quote.authorID !== $store.state.session.id && $route.name !== `id`"
 										:small="true"
-										:userIsFollowed="usersFollowing.has(quote.authorID)"
+										:userIsFollowed="this.$route.name === `id-id` ? userIsFollowed : usersFollowing.has(quote.authorID)"
 										:toggleFriend="() => toggleFriend(quote.authorID)"
 									/>
 								</div>
@@ -365,7 +367,7 @@
 									<FriendButton
 										v-if="post.authorID !== $store.state.session.id && $route.name !== `id`"
 										:small="true"
-										:userIsFollowed="usersFollowing.has(post.authorID)"
+										:userIsFollowed="this.$route.name === `id-id` ? userIsFollowed : usersFollowing.has(post.authorID)"
 										:toggleFriend="() => toggleFriend(post.authorID)"
 									/>
 								</div>
