@@ -30,8 +30,9 @@ export function createComment(authorID: string, content: string, emotion: string
 	}
 }
 
-export function getComment(cid: string): Promise<INewCommentData> {
-	return ipfs().getJSONData(cid)
+export async function getComment(cid: string): Promise<INewCommentData> {
+	const data = await ipfs().getJSONData<{ data: INewCommentData; sig: string; public_key: string }>(cid)
+	return data.data
 }
 
 export async function sendComment(c: INewCommentData, type: `comment` | `reply`) {
@@ -43,13 +44,18 @@ export async function sendComment(c: INewCommentData, type: `comment` | `reply`)
 		authorID: c.authorID,
 	}
 
-	const { sig } = await signContent(comment)
+	const { sig, publicKey } = await signContent(comment)
 
-	const cid = await ipfs().sendJSONData(comment)
+	const data = {
+		data: comment,
+		public_key: publicKey,
+		sig: uint8ArrayToHexString(sig),
+	}
+
+	const cid = await ipfs().sendJSONData(data)
 	await axios.post(`${nodeUrl()}/content/${comment.parentCID}/comments`, {
 		cid,
-		data: comment,
-		sig: uint8ArrayToHexString(sig),
+		data,
 		type,
 	})
 	return cid
