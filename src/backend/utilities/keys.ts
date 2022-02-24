@@ -26,7 +26,6 @@ async function getNearPrivateKey() {
 
 export async function signContent<T>(content: T) {
 	const { sk, pk } = await getNearPrivateKey()
-	console.log(pk)
 	const keypair = sign.keyPair.fromSecretKey(sk)
 	if (!keypair) {
 		throw new Error(`Post signing failed`)
