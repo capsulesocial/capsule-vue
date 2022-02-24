@@ -16,7 +16,10 @@
 					>
 						Your followers
 					</h2>
-					<h2 v-else class="text-primary dark:text-secondary text-3xl font-semibold">{{ profile.name }}'s followers</h2>
+					<h2 v-else-if="profile.name !== ``" class="text-primary dark:text-secondary text-3xl font-semibold">
+						{{ profile.name }}'s followers
+					</h2>
+					<h2 v-else class="text-primary dark:text-secondary text-3xl font-semibold">{{ profile.id }}'s followers</h2>
 					<button class="focus:outline-none bg-gray1 dark:bg-gray5 rounded-full p-1" @click="$emit(`close`)">
 						<CloseIcon />
 					</button>
@@ -24,9 +27,12 @@
 				<article v-if="profiles.length == 0" class="mt-24 grid justify-items-center px-10 xl:px-0">
 					<p class="text-gray5 dark:text-gray3 mb-5 text-center text-sm">
 						<span v-if="$route.params.id === $store.state.session.id || $route.name === `home`">
-							It seems you don't have any followers yet!<br />
+							It seems you don't have any followers yet!
 						</span>
-						<span v-else> It seems that {{ profile.name }} doesn't have any followers yet!<br /> </span>
+						<span v-else-if="profile.name !== ``">
+							It seems that {{ profile.name }} doesn't have any followers yet!
+						</span>
+						<span v-else> It seems that {{ profile.id }} doesn't have any followers yet! </span>
 					</p>
 					<SecondaryButton
 						v-if="$store.state.session.id === $route.params.id || $route.name === `home`"

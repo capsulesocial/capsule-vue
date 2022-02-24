@@ -14,9 +14,12 @@
 						v-if="$route.params.id === $store.state.session.id"
 						class="text-primary dark:text-secondary text-3xl font-semibold"
 					>
-						Followed by you
+						You are following
 					</h2>
-					<h2 v-else class="text-primary dark:text-secondary text-3xl font-semibold">Followed by {{ profile.name }}</h2>
+					<h2 v-else-if="profile.name !== ``" class="text-primary dark:text-secondary text-3xl font-semibold">
+						{{ profile.name }} is following
+					</h2>
+					<h2 v-else class="text-primary dark:text-secondary text-3xl font-semibold">{{ profile.id }} is following</h2>
 					<button class="focus:outline-none bg-gray1 dark:bg-gray5 rounded-full p-1" @click="$emit(`close`)">
 						<CloseIcon />
 					</button>
@@ -27,7 +30,8 @@
 							It seems you're not following anyone yet!<br />
 							you can start follow content creators all around Blogchain:
 						</span>
-						<span v-else> It seems that {{ profile.name }} is not following anyone yet!</span>
+						<span v-else-if="profile.name !== ``"> It seems that {{ profile.name }} is not following anyone yet!</span>
+						<span v-else> It seems that {{ profile.id }} is not following anyone yet!</span>
 					</p>
 					<SecondaryButton
 						v-if="$store.state.session.id === $route.params.id"

@@ -97,6 +97,7 @@ import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 import PostEditor from '@/components/post/Editor.vue'
 import OnboardingWizard from '@/components/popups/OnboardingWizard.vue'
+import FollowersPopup from '@/components/popups/FollowersPopup.vue'
 import UnauthPopup from '@/components/popups/UnauthPopup.vue'
 
 import { IBackground, backgrounds } from '@/config'
@@ -133,6 +134,7 @@ export default Vue.extend({
 		Nodes,
 		OnboardingWizard,
 		UnauthPopup,
+		FollowersPopup,
 	},
 	data(): IData {
 		return {

@@ -51,7 +51,7 @@
 		>
 			<article
 				v-if="posts.length == 0 && !isLoading"
-				class="mt-12 grid justify-items-center overflow-y-hidden px-6 xl:px-0"
+				class="mt-10 grid justify-items-center overflow-y-hidden px-6 xl:px-0"
 			>
 				<p class="text-gray5 dark:text-gray3 align-end mb-5 flex items-end text-sm" style="max-width: 366px">
 					It seems there are no posts under this category yet
