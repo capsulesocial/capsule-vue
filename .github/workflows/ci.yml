@@ -94,27 +94,39 @@ jobs:
 
       - name: Set up .env
         run: |
-          cat <<EOF >.env
-            CONTRACT_NAME="dev-1635323648697-81373157539648"
-            DOMAIN="https://alpha-c.capsule.social"
-            CAPSULE_SERVER="https://alpha-c.capsule.social/server"
-            ORBIT_URL="https://alpha-c.capsule.social/orbit"
-            TORUS_GOOGLE_VERIFIER="capsule-social-google-chris"
-            TORUS_GOOGLE_CLIENTID="653379121360-j8t9ua763vfvd86d1qjguonhrgqvkigo.apps.googleusercontent.com"
-            TORUS_DISCORD_VERIFIER="capsule-social-test-v2-discord"
-            TORUS_DISCORD_CLIENTID="906210984396468275"
-          EOF
 
       - name: Set DEPLOY_BRANCH in env
         run: |
           branch=''
           if [[ "${{ github.event_name }}" == 'push' ]]; then
               branch=$(echo ${GITHUB_REF#refs/heads/})
+
+              cat <<EOF >.env
+                CONTRACT_NAME="dev-1635323648697-81373157539648"
+                DOMAIN="https://alpha-c.capsule.social"
+                CAPSULE_SERVER="https://alpha-c.capsule.social/server"
+                ORBIT_URL="https://alpha-c.capsule.social/orbit"
+                TORUS_GOOGLE_VERIFIER="capsule-social-google-chris"
+                TORUS_GOOGLE_CLIENTID="653379121360-j8t9ua763vfvd86d1qjguonhrgqvkigo.apps.googleusercontent.com"
+                TORUS_DISCORD_VERIFIER="capsule-social-test-v2-discord"
+                TORUS_DISCORD_CLIENTID="906210984396468275"
+          EOF
           elif [[ "${{ github.event_name }}" == 'release' && "${{ github.event.action }}" == 'published' ]]; then
               # NOTE: 'DEPLOY_BRANCH' is a bad name for this. But Ansible needs a common
               # reference for all releases so that it knows which config to use (and tags
               # aren't tied to a specific branch)
               branch='release'
+
+              cat <<EOF >.env
+                CONTRACT_NAME="dev-1635323648697-81373157539648"
+                DOMAIN="https://blogchain.app"
+                CAPSULE_SERVER="https://blogchain.app/server"
+                ORBIT_URL="https://node1.blogchain.app"
+                TORUS_GOOGLE_VERIFIER="capsule-social-google-chris"
+                TORUS_GOOGLE_CLIENTID="653379121360-j8t9ua763vfvd86d1qjguonhrgqvkigo.apps.googleusercontent.com"
+                TORUS_DISCORD_VERIFIER="capsule-social-test-v2-discord"
+                TORUS_DISCORD_CLIENTID="906210984396468275"
+          EOF
           fi
           [[ -z "$branch" ]] && { echo "Failed to set deploy branch" >&2 ; exit 1 ; }
           echo "DEPLOY_BRANCH=$branch" >> $GITHUB_ENV
