@@ -17,7 +17,7 @@ const ipfsConfig: Options = {
 	init: { algorithm: `Ed25519` },
 	preload: {
 		enabled: true,
-		addresses: [`/dns4/test-node.capsule.social/https`, `/dns4/alpha-b.capsule.social/https`],
+		addresses: [`/dns4/test-node.capsule.social/https`],
 	},
 	config: {
 		Bootstrap: bootstraps,
