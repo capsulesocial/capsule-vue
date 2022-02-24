@@ -13,13 +13,14 @@ export async function sendRepost(authorID: string, postCID: string, content: str
 		content,
 	}
 
-	const { sig } = await signContent(data)
+	const { sig, publicKey } = await signContent(data)
 
-	const cid = await ipfs().sendJSONData(data)
+	const ipfsData = { data, sig: uint8ArrayToHexString(sig), public_key: publicKey }
+
+	const cid = await ipfs().sendJSONData(ipfsData)
 	await axios.post(`${nodeUrl()}/repost`, {
 		cid,
-		data,
-		sig: uint8ArrayToHexString(sig),
+		data: ipfsData,
 		type,
 	})
 
