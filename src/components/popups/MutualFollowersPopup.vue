@@ -10,8 +10,11 @@
 				class="min-h-40 w-full xl:w-600 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation max-h-90 overflow-y-auto rounded-lg bg-gradient-to-r px-6 pt-4 pb-2 shadow-lg"
 			>
 				<div class="sticky flex items-center justify-between mb-6">
-					<h2 class="text-primary dark:text-secondary text-3xl font-semibold">
+					<h2 v-if="profile.name !== ``" class="text-primary dark:text-secondary text-3xl font-semibold">
 						Mutual Followers with {{ profile.name }}
+					</h2>
+					<h2 v-else class="text-primary dark:text-secondary text-3xl font-semibold">
+						Mutual Followers with {{ profile.id }}
 					</h2>
 					<button class="focus:outline-none bg-gray1 dark:bg-gray5 rounded-full p-1" @click="$emit(`close`)">
 						<CloseIcon />
@@ -19,7 +22,10 @@
 				</div>
 				<article v-if="mutualProfiles.length == 0" class="mt-24 grid justify-items-center px-10 xl:px-0">
 					<p class="text-gray5 dark:text-gray3 mb-5 text-center text-sm">
-						<span> It seems you don't have any mutual followers with {{ profile.name }}<br /> </span>
+						<span v-if="profile.name !== ``">
+							It seems you don't have any mutual followers with {{ profile.name }}
+						</span>
+						<span v-else> It seems you don't have any mutual followers with {{ profile.id }} </span>
 					</p>
 					<SecondaryButton :text="`Follow more people`" :action="toggleDiscover" />
 				</article>
