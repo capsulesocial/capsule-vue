@@ -5,7 +5,7 @@ import { sign } from 'tweetnacl'
 
 import { Post } from '../post'
 import { getNearConfig } from './config'
-import { stableOrderObj } from './helpers'
+import { stableOrderObj, uint8ArrayToHexString } from './helpers'
 
 const nearConfig = getNearConfig()
 
@@ -21,23 +21,19 @@ async function getNearPrivateKey() {
 	const privateKey = keypair.secretKey
 	const privateKeyBytes = new Uint8Array(baseDecode(privateKey))
 
-	return privateKeyBytes
-}
-
-async function getSignKeyPair() {
-	const secretKey = await getNearPrivateKey()
-	return sign.keyPair.fromSecretKey(secretKey)
+	return { sk: privateKeyBytes, pk: uint8ArrayToHexString(keypair.publicKey.data) }
 }
 
 export async function signContent<T>(content: T) {
-	const keypair = await getSignKeyPair()
+	const { sk, pk } = await getNearPrivateKey()
+	const keypair = sign.keyPair.fromSecretKey(sk)
 	if (!keypair) {
-		return null
+		throw new Error(`Post signing failed`)
 	}
 
 	const ec = new TextEncoder()
 	const message = ec.encode(JSON.stringify(stableOrderObj(content)))
-	return sign.detached(message, keypair.secretKey)
+	return { sig: sign.detached(message, keypair.secretKey), publicKey: pk }
 }
 
 export function verifyContent(content: Post, signature: Uint8Array, publicKey: Uint8Array) {
@@ -47,7 +43,8 @@ export function verifyContent(content: Post, signature: Uint8Array, publicKey: U
 }
 
 export async function getSigningKey() {
-	const keypair = await getSignKeyPair()
+	const { sk } = await getNearPrivateKey()
+	const keypair = sign.keyPair.fromSecretKey(sk)
 	if (!keypair) {
 		return null
 	}

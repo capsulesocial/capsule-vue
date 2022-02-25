@@ -18,13 +18,10 @@ export async function subscriptionChange(action: `SUBSCRIBE` | `UNSUBSCRIBE`, se
 		exp: Date.now() + sigValidity,
 	}
 
-	const signature = await signContent(data)
-	if (!signature) {
-		throw new Error(`Subscription event signing failed`)
-	}
+	const { sig } = await signContent(data)
 
 	await axios.post(`${capsuleServer}/subscription/subscribe`, {
 		event: data,
-		sig: uint8ArrayToHexString(signature),
+		sig: uint8ArrayToHexString(sig),
 	})
 }

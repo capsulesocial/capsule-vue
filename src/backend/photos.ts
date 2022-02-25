@@ -14,17 +14,14 @@ interface IUploadPhotoResult {
 
 export async function preUploadPhoto(cid: string, photo: Blob, filename: string, authorID: string) {
 	const exp = (Date.now() + sigValidity).toString()
-	const signature = await signContent({ cid, exp, authorID })
-	if (!signature) {
-		throw new Error(`Post signing failed`)
-	}
+	const { sig } = await signContent({ cid, exp, authorID })
 
 	const formData = new FormData()
 	formData.append(`photo`, photo, filename)
 	formData.append(`cid`, cid)
 	formData.append(`exp`, exp)
 	formData.append(`authorID`, authorID)
-	formData.append(`sig`, uint8ArrayToHexString(signature))
+	formData.append(`sig`, uint8ArrayToHexString(sig))
 
 	return axios.post(`${nodeUrl()}/photos/upload`, formData)
 }

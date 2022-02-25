@@ -11,14 +11,10 @@ export async function sendPostDeletion(action: `HIDE`, postCID: string, authorID
 		authorID,
 	}
 
-	const signature = await signContent(event)
-
-	if (!signature) {
-		throw new Error(`Post deletion signing failed`)
-	}
+	const { sig } = await signContent(event)
 
 	await axios.post(`${nodeUrl()}/posts`, {
 		event,
-		sig: uint8ArrayToHexString(signature),
+		sig: uint8ArrayToHexString(sig),
 	})
 }

@@ -38,10 +38,7 @@ export function loadProfileFromIPFS(cid: string) {
 export const getProfile = cache(_getProfile)
 
 export async function setProfile(p: Profile) {
-	const [cid, sig] = await Promise.all([addProfileToIPFS(p), signContent(p)])
-	if (!sig) {
-		throw new Error(`Profile signing failed`)
-	}
+	const [cid, { sig }] = await Promise.all([addProfileToIPFS(p), signContent(p)])
 
 	const res = await sendProfileServer(cid, p, sig)
 	if (!res.success) {

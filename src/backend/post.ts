@@ -2,7 +2,7 @@ import axios from 'axios'
 
 import { signContent } from './utilities/keys'
 import ipfs from './utilities/ipfs'
-import { isError, uint8ArrayToHexString } from './utilities/helpers'
+import { isError, ISignedIPFSObject, uint8ArrayToHexString } from './utilities/helpers'
 import { nodeUrl, capsuleServer, sigValidity } from './utilities/config'
 import { IRepost } from './reposts'
 import { ICommentData } from './comment'
@@ -111,22 +111,21 @@ export function createEncryptedPost(
 }
 
 export async function sendRegularPost(data: IRegularPost): Promise<string> {
-	const signature = await signContent(data)
-	if (!signature) {
-		throw new Error(`Post signing failed`)
-	}
+	const { sig, publicKey } = await signContent(data)
 
-	const cid = await ipfs().sendJSONData(data)
+	const ipfsData: ISignedIPFSObject<IRegularPost> = { data, sig: uint8ArrayToHexString(sig), public_key: publicKey }
+
+	const cid = await ipfs().sendJSONData(ipfsData)
 	await axios.post(`${nodeUrl()}/content`, {
 		cid,
-		data,
-		sig: uint8ArrayToHexString(signature),
+		data: ipfsData,
 		type: `post`,
 	})
 
 	return cid
 }
 
+// TODO: This needs fixing
 export async function sendEncryptedPost(data: IEncryptedPost): Promise<string> {
 	const { data: post, key, counter, sig } = await encryptAndSignData(data)
 
@@ -143,13 +142,14 @@ export async function sendEncryptedPost(data: IEncryptedPost): Promise<string> {
 }
 
 export async function getRegularPost(cid: string): Promise<IRegularPost> {
-	const post: Post = await ipfs().getJSONData(cid)
-	if (!isRegularPost(post)) {
+	const post = await ipfs().getJSONData<ISignedIPFSObject<IRegularPost>>(cid)
+	if (!isRegularPost(post.data)) {
 		throw new Error(`Post is encrypted`)
 	}
-	return post
+	return post.data
 }
 
+// TODO: Fix this
 export async function getEncryptedPost(cid: string, username: string): Promise<IEncryptedPost | { error: string }> {
 	const post: Post = await ipfs().getJSONData(cid)
 	if (!isEncryptedPost(post)) {
@@ -175,15 +175,11 @@ export function isRegularPost(post: Post): post is IRegularPost {
 
 async function getEncryptionKeys(username: string, cid: string) {
 	const exp = Date.now() + sigValidity
-	const signature = await signContent({ username, cid, exp })
-	if (!signature) {
-		throw new Error(`Content signing failed`)
-	}
-	const sig = uint8ArrayToHexString(signature)
+	const { sig } = await signContent({ username, cid, exp })
 
 	try {
 		const res = await axios.get<{ key: string; counter: string }>(
-			`${capsuleServer}/content/${cid}?username=${username}&sig=${sig}&exp=${exp}`,
+			`${capsuleServer}/content/${cid}?username=${username}&sig=${uint8ArrayToHexString(sig)}&exp=${exp}`,
 		)
 		return res.data
 	} catch (err) {

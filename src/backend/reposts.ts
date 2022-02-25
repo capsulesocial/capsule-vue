@@ -2,32 +2,8 @@ import axios from 'axios'
 import { signContent } from './utilities/keys'
 import { Algorithm, IRepostResponse } from './post'
 import { nodeUrl } from './utilities/config'
-import { uint8ArrayToHexString } from './utilities/helpers'
+import { ISignedIPFSObject, uint8ArrayToHexString } from './utilities/helpers'
 import ipfs from './utilities/ipfs'
-
-export async function sendRepost(authorID: string, postCID: string, content: string, type: string): Promise<string> {
-	const data = {
-		authorID,
-		timestamp: Date.now(),
-		postCID,
-		content,
-	}
-
-	const signature = await signContent(data)
-	if (!signature) {
-		throw new Error(`Post signing failed`)
-	}
-
-	const cid = await ipfs().sendJSONData(data)
-	await axios.post(`${nodeUrl()}/repost`, {
-		cid,
-		data,
-		sig: uint8ArrayToHexString(signature),
-		type,
-	})
-
-	return cid
-}
 
 export interface IRepost {
 	authorID: string
@@ -36,6 +12,32 @@ export interface IRepost {
 	timestamp: number
 	type: `simple` | `quote`
 	_id: string
+}
+
+export async function sendRepost(authorID: string, postCID: string, content: string, type: string): Promise<string> {
+	const data: Omit<IRepost, `_id` | `sig` | `type`> & { content: string } = {
+		authorID,
+		timestamp: Date.now(),
+		postCID,
+		content,
+	}
+
+	const { sig, publicKey } = await signContent(data)
+
+	const ipfsData: ISignedIPFSObject<Omit<IRepost, `_id` | `sig` | `type`> & { content: string }> = {
+		data,
+		sig: uint8ArrayToHexString(sig),
+		public_key: publicKey,
+	}
+
+	const cid = await ipfs().sendJSONData(ipfsData)
+	await axios.post(`${nodeUrl()}/repost`, {
+		cid,
+		data: ipfsData,
+		type,
+	})
+
+	return cid
 }
 
 export interface IGetRepostsOptions {

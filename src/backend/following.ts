@@ -19,15 +19,11 @@ export async function followChange(action: `FOLLOW` | `UNFOLLOW`, self: string, 
 		timestamp: Date.now(),
 	}
 
-	const signature = await signContent(data)
-
-	if (!signature) {
-		throw new Error(`Comment signing failed`)
-	}
+	const { sig } = await signContent(data)
 
 	await axios.post(`${nodeUrl()}/follow`, {
 		event: data,
-		sig: uint8ArrayToHexString(signature),
+		sig: uint8ArrayToHexString(sig),
 	})
 }
 

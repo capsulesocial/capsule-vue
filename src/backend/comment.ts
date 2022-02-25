@@ -2,7 +2,7 @@ import axios from 'axios'
 import { nodeUrl } from './utilities/config'
 import ipfs from './utilities/ipfs'
 import { signContent } from './utilities/keys'
-import { uint8ArrayToHexString } from './utilities/helpers'
+import { ISignedIPFSObject, uint8ArrayToHexString } from './utilities/helpers'
 
 export interface INewCommentData {
 	content: string
@@ -30,8 +30,9 @@ export function createComment(authorID: string, content: string, emotion: string
 	}
 }
 
-export function getComment(cid: string): Promise<INewCommentData> {
-	return ipfs().getJSONData(cid)
+export async function getComment(cid: string): Promise<INewCommentData> {
+	const data = await ipfs().getJSONData<ISignedIPFSObject<INewCommentData>>(cid)
+	return data.data
 }
 
 export async function sendComment(c: INewCommentData, type: `comment` | `reply`) {
@@ -43,17 +44,18 @@ export async function sendComment(c: INewCommentData, type: `comment` | `reply`)
 		authorID: c.authorID,
 	}
 
-	const signature = await signContent(comment)
+	const { sig, publicKey } = await signContent(comment)
 
-	if (!signature) {
-		throw new Error(`Comment signing failed`)
+	const data: ISignedIPFSObject<INewCommentData> = {
+		data: comment,
+		public_key: publicKey,
+		sig: uint8ArrayToHexString(sig),
 	}
 
-	const cid = await ipfs().sendJSONData(comment)
+	const cid = await ipfs().sendJSONData(data)
 	await axios.post(`${nodeUrl()}/content/${comment.parentCID}/comments`, {
 		cid,
-		data: comment,
-		sig: uint8ArrayToHexString(signature),
+		data,
 		type,
 	})
 	return cid
