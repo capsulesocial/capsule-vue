@@ -122,6 +122,7 @@ export default Vue.extend({
 					removeNearPrivateKey(this.userInfo.accountId)
 				}
 				walletLogout()
+				this.$toastError(err.response.data.error)
 				window.localStorage.removeItem(`inviteToken`)
 				this.isLoading = false
 				this.stepForward()

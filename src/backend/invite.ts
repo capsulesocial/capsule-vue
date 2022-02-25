@@ -10,17 +10,20 @@ export async function verifyCodeAndGetToken(inviteCode: string) {
 }
 
 export async function verifyTokenAndOnboard(accountId: string) {
-	const token = getInviteToken()
-	if (!token) {
-		throw new Error(`Invite token not found`)
+	try {
+		const token = getInviteToken()
+		if (!token) {
+			throw new Error(`Invite token not found`)
+		}
+		const response = await axios.post(
+			`${capsuleServer}/invite/verify/token`,
+			{ accountId },
+			{ headers: { Authorization: `Bearer ${token}` } },
+		)
+		return response.data.data as string
+	} finally {
+		removeToken()
 	}
-	const response = await axios.post(
-		`${capsuleServer}/invite/verify/token`,
-		{ accountId },
-		{ headers: { Authorization: `Bearer ${token}` } },
-	)
-	removeToken()
-	return response.data.data as string
 }
 
 export async function generateInviteCode(inviter: string): Promise<{ inviteCode: string; invitesRemaining: number }> {
