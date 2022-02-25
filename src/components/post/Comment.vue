@@ -15,15 +15,15 @@
 			</div>
 			<!-- Dashed bubble -->
 			<div
-				class="flex w-full justify-between rounded-lg border border-dashed"
+				class="flex flex-row w-full overflow-x-auto justify-between rounded-lg border border-dashed"
 				:style="getStyle(`border-`)"
 				style="backdrop-filter: blur(10px)"
 			>
 				<!-- Text -->
 				<div class="flex w-full flex-grow flex-col px-3 py-1 pt-3">
 					<!-- Top row: name, id, timestamp -->
-					<div class="flex flex-wrap">
-						<nuxt-link :to="`/id/` + authorID" class="mr-4 mb-2 flex items-center xl:mb-0">
+					<div class="flex items-center flex-wrap mb-2">
+						<nuxt-link :to="`/id/` + authorID" class="mr-4 flex items-center xl:mb-0">
 							<Avatar :avatar="avatar" :authorID="authorID" size="w-8 h-8" class="mr-2 flex-shrink-0 xl:hidden" />
 							<span v-if="name != ``" class="font-medium dark:text-darkPrimaryText">
 								{{ name }}
@@ -43,61 +43,58 @@
 					</div>
 					<!-- Content -->
 					<div class="flex">
-						<div class="flex w-full flex-grow flex-col overflow-hidden">
-							<p class="break-words py-1 font-sans text-lg leading-relaxed dark:text-darkPrimaryText">
-								{{ content }}
-							</p>
-							<div class="mt-8 flex h-full flex-row items-center">
-								<button
-									class="text-primary dark:text-secondary focus:outline-none text-left font-sans text-sm"
-									@click="isReplying = !isReplying"
-								>
-									Reply
-								</button>
-								<p
-									v-if="replies.length === 1"
-									class="text-gray5 dark:text-gray3 focus:outline-none text-left font-sans text-sm ml-4 cursor-pointer"
-									@click="isReplying = !isReplying"
-								>
-									{{ replies.length }} Reply
+						<div class="flex flex-grow flex-col overflow-hidden">
+							<div class="w-full">
+								<!-- Reaction face image -->
+								<div class="flex inline float-right flex-shrink-0 items-center justify-center overflow-hidden">
+									<img
+										:src="dark ? emotion.dark : emotion.light"
+										class="-mb-1 mt-2 h-32 w-32 bg-transparent"
+										:class="emotion.label === `default` ? `animate-pulse` : ``"
+										:style="emotion.label === `default` ? `filter: blur(5px)` : ``"
+										@mouseover="showLabel = true"
+										@mouseleave="showLabel = false"
+									/>
+									<div
+										v-show="showLabel"
+										class="border-lightBorder modal-animation-delay absolute z-40 flex flex-col rounded-lg border bg-lightBG dark:bg-darkBG p-2 shadow-lg"
+										style="bottom: -25px"
+									>
+										<p class="text-sm text-gray5 dark:text-gray3">
+											{{ emotion.label }}
+										</p>
+									</div>
+								</div>
+								<!-- Text comment -->
+								<p class="break-words py-1 mb-6 font-sans text-lg leading-relaxed dark:text-darkPrimaryText">
+									{{ content }}
 								</p>
-								<p
-									v-else
-									class="text-gray5 dark:text-gray3 focus:outline-none text-left font-sans text-sm ml-4 cursor-pointer"
-									@click="isReplying = !isReplying"
-								>
-									{{ replies.length }} Replies
-								</p>
+
+								<!-- Reply button -->
+								<div class="flex flex-row items-center absolute bottom-0 pb-2">
+									<button
+										class="text-primary dark:text-secondary focus:outline-none text-left font-sans text-sm"
+										@click="isReplying = !isReplying"
+									>
+										Reply
+									</button>
+									<p
+										v-if="replies.length === 1"
+										class="text-gray5 dark:text-gray3 focus:outline-none text-left font-sans text-sm ml-4 cursor-pointer"
+										@click="isReplying = !isReplying"
+									>
+										{{ replies.length }} Reply
+									</p>
+									<p
+										v-else
+										class="text-gray5 dark:text-gray3 focus:outline-none text-left font-sans text-sm ml-4 cursor-pointer"
+										@click="isReplying = !isReplying"
+									>
+										{{ replies.length }} Replies
+									</p>
+								</div>
 							</div>
 						</div>
-						<div class="flex flex-shrink-0 items-center justify-center overflow-hidden xl:hidden">
-							<img
-								:src="dark ? emotion.dark : emotion.light"
-								class="-mb-1 mt-2 h-24 w-24 bg-transparent"
-								:class="emotion.label === `default` ? `animate-pulse` : ``"
-								:style="emotion.label === `default` ? `filter: blur(5px)` : ``"
-							/>
-						</div>
-					</div>
-				</div>
-				<!-- Desktop reaction face -->
-				<div class="hidden flex-shrink-0 items-center justify-center overflow-hidden xl:flex">
-					<img
-						:src="dark ? emotion.dark : emotion.light"
-						class="-mb-1 mt-2 h-32 w-32 bg-transparent"
-						:class="emotion.label === `default` ? `animate-pulse` : ``"
-						:style="emotion.label === `default` ? `filter: blur(5px)` : ``"
-						@mouseover="showLabel = true"
-						@mouseleave="showLabel = false"
-					/>
-					<div
-						v-show="showLabel"
-						class="border-lightBorder modal-animation-delay absolute z-40 flex flex-col rounded-lg border bg-lightBG dark:bg-darkBG p-2 shadow-lg"
-						style="bottom: -25px"
-					>
-						<p class="text-sm text-gray5 dark:text-gray3">
-							{{ emotion.label }}
-						</p>
 					</div>
 				</div>
 				<!-- Remove post -->
@@ -106,7 +103,7 @@
 				</button> -->
 				<button
 					v-if="this.$store.state.session.id === authorID || this.$store.state.session.id === postAuthor"
-					class="focus:outline-none flex-col justify-start text-gray5 dark:text-gray3 pt-1 pr-2 hidden xl:flex"
+					class="focus:outline-none absolute top-0 right-0 flex-col justify-start text-gray5 dark:text-gray3 pt-4 pr-2"
 					@click.stop="toggleDropdownDelete"
 				>
 					<More />
