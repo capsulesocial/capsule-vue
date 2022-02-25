@@ -270,12 +270,12 @@ export default Vue.extend({
 	},
 	head() {
 		return {
-			title: `${this.visitProfile.name} (${this.$route.params.id}) on Capsule Social`,
+			title: `${this.visitProfile.name} (${this.$route.params.id}) on Blogchain`,
 			meta: [
 				{
 					hid: `profile`,
 					name: `profile`,
-					content: `${this.visitProfile.name} (${this.$route.params.id}) on Capsule Social`,
+					content: `${this.visitProfile.name} (${this.$route.params.id}) on Blogchain`,
 				},
 				{ hid: `og:image`, property: `og:image`, content: `${document.location.origin}` + ogImage },
 			],

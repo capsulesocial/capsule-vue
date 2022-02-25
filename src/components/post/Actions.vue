@@ -533,7 +533,7 @@ export default Vue.extend({
 		},
 		async sendComment() {
 			if (this.activeEmotion.label === ``) {
-				this.$toastError(`Please select a reaction`)
+				this.$toastError(`You must select a reaction before posting`)
 				return
 			}
 			this.comment = this.comment.trim()

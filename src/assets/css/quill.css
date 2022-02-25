@@ -32,6 +32,7 @@
 	text-align: left;
 	white-space: pre-wrap;
 	word-wrap: break-word;
+	overflow: visible;
 }
 .ql-editor > * {
 	cursor: text;
@@ -983,7 +984,7 @@
 }
 .ql-container.ql-bubble:not(.ql-disabled) a::before {
 	background: linear-gradient(90deg, rgba(256, 256, 256, 0.95) 0%, rgba(256, 256, 256, 0.90) 100%);
-	border-radius: 10px;
+	border-radius: 5px;
 	box-shadow: 0 10px 15px -3px rgb(0 0 0 / 10%), 0 4px 6px -4px rgb(0 0 0 / 10%);
 	backdrop-filter: blur(10px);
 	border-width: 1px;
@@ -999,14 +1000,20 @@
 	z-index: 50;
 }
 .ql-container.ql-bubble:not(.ql-disabled) a::after {
-	display: none
+	border-top: 6px solid #fff;
+	border-left: 6px solid transparent;
+	border-right: 6px solid transparent;
+	top: 0;
+	content: ' ';
+	height: 0;
+	width: 0;
 }
 .ql-container.ql-bubble:not(.ql-disabled) a::before,
 .ql-container.ql-bubble:not(.ql-disabled) a::after {
 	left: 0;
 	margin-left: 50%;
 	position: absolute;
-	transform: translate(-50%, -66%);
+	transform: translate(-50%, -100%);
 	transition: visibility 0s ease 200ms;
 	visibility: hidden;
 }

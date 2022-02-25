@@ -12,9 +12,9 @@ export default Vue.extend({
 	layout: `editor`,
 	head() {
 		return {
-			title: `Write a post - Capsule Social`,
+			title: `Write a post - Blogchain`,
 			meta: [
-				{ hid: `editor`, name: `editor`, content: `Write a post on Capsule Social` },
+				{ hid: `editor`, name: `editor`, content: `Write a post on Blogchain` },
 				{ hid: `og:image`, property: `og:image`, content: `${document.location.origin}` + ogImage },
 			],
 		}

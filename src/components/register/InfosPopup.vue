@@ -16,20 +16,20 @@
 					<div class="flex flex-col my-4">
 						<h4 class="text-lg font-semibold dark:text-darkPrimaryText">Sign up with Google</h4>
 						<p class="my-2 text-gray5 dark:text-gray3">
-							Signing up on Capsule requires writing data on the blockchain through transactions on a smart contract
+							Signing up on Blogchain requires writing data on the blockchain through transactions on a smart contract
 							with small amounts of NEAR token. You’ll need to provide your phone number to verify your human identity
 							and enable Capsule to sponsor you with NEAR tokens. Capsule will not store or track any information from
-							your phone number or Google account. To log in, use your Google account or import your Capsule private key
-							under “Import private key”.
+							your phone number or Google account. To log in, use your Google account or import your Blogchain private
+							key under “Import private key”.
 						</p>
 					</div>
 					<div class="flex flex-col my-4">
 						<h4 class="text-lg font-semibold dark:text-darkPrimaryText">Sign up with Discord</h4>
 						<p class="my-2 text-gray5 dark:text-gray3">
-							Signing up on Capsule requires writing data on the blockchain through transactions on a smart contract
+							Signing up on Blogchain requires writing data on the blockchain through transactions on a smart contract
 							with small amounts of NEAR token. You’ll need to provide your phone number for verifying your human
 							identity and enable Capsule to sponsor you with NEAR tokens. Capsule will not store or track information
-							on your accounts. To log in, use your Discord account or import your Capsule private key under “Import
+							on your accounts. To log in, use your Discord account or import your Blogchain private key under “Import
 							private key”.
 						</p>
 					</div>
@@ -38,9 +38,9 @@
 						<p class="my-2 text-gray5 dark:text-gray3">
 							Create an account using your NEAR wallet. In case of insufficient funds, you will be sponsored with NEAR
 							tokens for running the transaction on the smart contract and registering your account on the blockchain.
-							By signing up with NEAR, you need to download your Capsule private key and use it to log in under “Import
-							private key”. Your phone number verification is not needed for account sign up with NEAR if you have the
-							necessary funds to complete the registration.
+							By signing up with NEAR, you need to download your Blogchain private key and use it to log in under
+							“Import private key”. Your phone number verification is not needed for account sign up with NEAR if you
+							have the necessary funds to complete the registration.
 						</p>
 					</div>
 					<div class="flex flex-col my-4">
@@ -49,7 +49,7 @@
 							Create an account where you self manage your account keys. You’ll need to provide your phone number to
 							verify your human identity and enable Capsule to sponsor you with NEAR tokens. These NEAR tokens are used
 							for performing transactions on a smart contract and registering your account on the blockchain. By signing
-							up with this method, you’ll need to download your Capsule private key and use it to log in under “Import
+							up with this method, you’ll need to download your Blogchain private key and use it to log in under “Import
 							private key”.
 						</p>
 					</div>

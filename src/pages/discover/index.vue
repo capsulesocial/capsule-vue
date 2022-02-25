@@ -51,12 +51,12 @@ export default Vue.extend({
 	},
 	head() {
 		return {
-			title: `Discover posts on Capsule Social`,
+			title: `Discover posts on Blogchain`,
 			meta: [
 				{
 					hid: `discover`,
 					name: `discover`,
-					content: `Discover new posts on Capsule Social`,
+					content: `Discover new posts on Blogchain`,
 				},
 				{ hid: `og:image`, property: `og:image`, content: `${document.location.origin}` + ogImage },
 			],

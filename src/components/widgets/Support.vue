@@ -4,7 +4,7 @@
 	>
 		<h6 class="text-primary dark:text-secondary mb-6 font-semibold">Contact Support</h6>
 		<p class="text-gray5 dark:text-gray3 mb-6 px-6 text-center text-sm">
-			Do you need any help with your Capsule experience ? If you face any technical difficulties, you can contact the
+			Do you need any help with your Blogchain experience ? If you face any technical difficulties, you can contact the
 			team on Discord, or directly send us an email:
 		</p>
 		<div class="mb-12 flex items-center justify-between px-6">

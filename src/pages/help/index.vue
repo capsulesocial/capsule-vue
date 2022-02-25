@@ -231,12 +231,12 @@ export default Vue.extend({
 	},
 	head() {
 		return {
-			title: `Help - Capsule Social`,
+			title: `Help - Blogchain`,
 			meta: [
 				{
 					hid: `help`,
 					name: `help`,
-					content: `Help - Capsule Social`,
+					content: `Help - Blogchain`,
 				},
 			],
 		}
