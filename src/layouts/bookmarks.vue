@@ -139,17 +139,17 @@ export default Vue.extend({
 		}
 	},
 	async created() {
-		// Check if logged in user
-		if (this.$store.state.session.id === ``) {
-			this.isLoading = false
-			return
-		}
 		// Set color mode
 		this.$setColorMode(this.$store.state.settings.darkMode)
 		if (document.documentElement.classList.contains(`dark`)) {
 			this.dark = true
 		} else {
 			this.dark = false
+		}
+		// Check if logged in user
+		if (this.$store.state.session.id === ``) {
+			this.isLoading = false
+			return
 		}
 		// get logged in profile
 		const { profile } = await getProfile(this.$store.state.session.id)

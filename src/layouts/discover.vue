@@ -106,12 +106,17 @@ export default Vue.extend({
 		}
 	},
 	async created() {
+		// Set color mode
+		this.$setColorMode(this.$store.state.settings.darkMode)
+		if (document.documentElement.classList.contains(`dark`)) {
+			this.dark = true
+		} else {
+			this.dark = false
+		}
 		// Check if logged in user
 		if (this.$store.state.session.id === ``) {
 			return
 		}
-		// Set color mode
-		this.$setColorMode(this.$store.state.settings.darkMode)
 		// get logged in profile
 		const { profile } = await getProfile(this.$store.state.session.id)
 		this.profile = profile
@@ -126,11 +131,6 @@ export default Vue.extend({
 		getFollowersAndFollowing(this.$store.state.session.id, true).then(({ following }) => {
 			this.following = following
 		})
-		if (document.documentElement.classList.contains(`dark`)) {
-			this.dark = true
-		} else {
-			this.dark = false
-		}
 	},
 	methods: {
 		async toggleFriend(authorID: string) {
