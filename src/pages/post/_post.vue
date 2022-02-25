@@ -142,7 +142,12 @@
 							<ShareButton :post="post" :cid="$route.params.post" @toggleRepost="handleRepost" />
 						</div>
 					</div>
-					<PostActions :postCID="$route.params.post" :bookmarksCount="bookmarksCount" :repostsCount="repostCount" />
+					<PostActions
+						:postCID="$route.params.post"
+						:bookmarksCount="bookmarksCount"
+						:repostsCount="repostCount"
+						:postAuthor="author.id"
+					/>
 				</article>
 			</section>
 			<section v-else>Post not found</section>

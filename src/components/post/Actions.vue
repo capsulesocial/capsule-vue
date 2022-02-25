@@ -438,7 +438,7 @@ export default Vue.extend({
 		},
 		postAuthor: {
 			type: String,
-			default: ``,
+			required: true,
 		},
 		bookmarksCount: {
 			type: Number,
