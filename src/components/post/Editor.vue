@@ -100,6 +100,7 @@ import { ImageBlot, preRule, ipfsImageRule, createPostImagesArray } from '@/page
 import { createRegularPost, sendRegularPost } from '@/backend/post'
 import { preUploadPhoto, uploadPhoto } from '@/backend/photos'
 import { isValidFileType } from '@/backend/utilities/helpers'
+import textLimits from '@/backend/utilities/text_limits'
 
 const Delta = Quill.import(`delta`)
 
@@ -254,9 +255,11 @@ export default Vue.extend({
 			this.qeditor.root.addEventListener(`drop`, (ev: DragEvent) => {
 				this.waitingImage = true
 				this.toggleAddContent = false
+				this.refreshPostImages()
 				this.handleDroppedImage(ev)
 			})
 			this.qeditor.root.addEventListener(`paste`, (ev: ClipboardEvent) => {
+				this.refreshPostImages()
 				this.handlePastedContent(ev)
 			})
 			this.qeditor.focus()
@@ -280,18 +283,37 @@ export default Vue.extend({
 		actionsUpload() {
 			document.getElementById(`getFile`)?.click()
 		},
-		async updatePostImages(cid: string, compressedImage: Blob, imageName: string) {
+		refreshPostImages() {
+			const clean = turndownService.turndown(this.getInputHTML())
+			const refreshedPostImages = createPostImagesArray(clean, this.postImages)
+			this.postImages = new Set(refreshedPostImages)
+		},
+		async updatePostImages(
+			cid: string,
+			compressedImage: Blob,
+			imageName: string,
+		): Promise<{ error: string } | { success: boolean }> {
 			// If we have already added this image in the past, we don't need to reupload it to the server
 			if (this.postImages.has(cid)) {
-				return
+				return { success: true }
+			}
+			if (this.postImages.size === textLimits.post_images.max) {
+				return { error: `Cannot add more than ${textLimits.post_images.max} images in a post` }
 			}
 			this.postImages.add(cid)
 			this.$store.commit(`draft/updatePostImages`, Array.from(this.postImages))
 			await preUploadPhoto(cid, compressedImage, imageName, this.$store.state.session.id)
+			return { success: true }
 		},
-		insertContent(content: string | IImageData) {
+		insertContent(content: string | IImageData | null) {
 			try {
-				if (!this.qeditor) {
+				if (!this.qeditor || !content) {
+					this.waitingImage = false
+					this.toggleAddContent = true
+					this.refreshPostImages()
+					setTimeout(() => {
+						this.calculateAddPos(contentLength)
+					}, 0)
 					return
 				}
 				const range = this.qeditor.getSelection(true)
@@ -305,6 +327,7 @@ export default Vue.extend({
 					this.toggleAddContent = true
 					this.qeditor.insertEmbed(range.index, `image`, { alt: cid.toString(), url }, `user`)
 				}
+				this.refreshPostImages()
 				const contentLength = this.qeditor.getContents().length()
 				setTimeout(() => {
 					this.qeditor?.setSelection(contentLength, 0, `user`)
@@ -333,7 +356,12 @@ export default Vue.extend({
 				}
 				try {
 					const { cid, url, image, imageName } = await uploadPhoto(file)
-					await this.updatePostImages(cid, image, imageName)
+					const updatedPostImages = await this.updatePostImages(cid, image, imageName)
+					if (this.$isError(updatedPostImages)) {
+						this.$toastError(updatedPostImages.error)
+						this.waitingImage = false
+						return
+					}
 					this.insertContent({ cid, url })
 				} catch (error: any) {
 					this.$toastError(error.message)
@@ -355,7 +383,12 @@ export default Vue.extend({
 				}
 				try {
 					const { cid, url, image, imageName } = await uploadPhoto(f.file)
-					await this.updatePostImages(cid, image, imageName)
+					const updatedPostImages = await this.updatePostImages(cid, image, imageName)
+					if (this.$isError(updatedPostImages)) {
+						this.$toastError(updatedPostImages.error)
+						this.waitingImage = false
+						return
+					}
 					this.insertContent({ cid, url })
 				} catch (error: any) {
 					this.$toastError(error.message)
@@ -370,6 +403,10 @@ export default Vue.extend({
 		async handleHtml(pastedContent: string) {
 			const contentImgs = this.$getContentImages(pastedContent)
 			const imgSrcRegex = /src="([^\s|"]*)"/
+			if (contentImgs.length > textLimits.post_images.max) {
+				this.$toastError(`Can not add more than ${textLimits.post_images.max} images in a post`)
+				return null
+			}
 			for (const img of contentImgs) {
 				this.waitingImage = true
 				this.toggleAddContent = false
@@ -386,7 +423,11 @@ export default Vue.extend({
 				}
 				try {
 					const { cid, url, image, imageName } = await uploadPhoto(f.file)
-					await this.updatePostImages(cid, image, imageName)
+					const updatedPostImages = await this.updatePostImages(cid, image, imageName)
+					if (this.$isError(updatedPostImages)) {
+						this.$toastError(updatedPostImages.error)
+						return null
+					}
 					pastedContent = pastedContent.replace(img[0], `<img alt="${cid}" src="${url}">`)
 				} catch (error: any) {
 					this.$toastError(error.message)
@@ -434,7 +475,11 @@ export default Vue.extend({
 				}
 				try {
 					const { cid, url, image, imageName } = await uploadPhoto(pastedFile)
-					await this.updatePostImages(cid, image, imageName)
+					const updatedPostImages = await this.updatePostImages(cid, image, imageName)
+					if (this.$isError(updatedPostImages)) {
+						this.$toastError(updatedPostImages.error)
+						return
+					}
 					this.insertContent({ cid, url })
 				} catch (error: any) {
 					this.$toastError(error.message)
@@ -451,7 +496,11 @@ export default Vue.extend({
 				}
 				try {
 					const { cid, url, image, imageName } = await uploadPhoto(f.file)
-					await this.updatePostImages(cid, image, imageName)
+					const updatedPostImages = await this.updatePostImages(cid, image, imageName)
+					if (this.$isError(updatedPostImages)) {
+						this.$toastError(updatedPostImages.error)
+						return
+					}
 					this.insertContent({ cid, url })
 				} catch (error: any) {
 					this.$toastError(error.message)
@@ -461,6 +510,7 @@ export default Vue.extend({
 		async handleImage(e: Event) {
 			e.stopPropagation()
 			e.preventDefault()
+			this.refreshPostImages()
 
 			const { files } = e.target as any
 			if (!files) {
@@ -471,7 +521,11 @@ export default Vue.extend({
 			}
 			try {
 				const { cid, url, image, imageName } = await uploadPhoto(files[0])
-				await this.updatePostImages(cid, image, imageName)
+				const updatedPostImages = await this.updatePostImages(cid, image, imageName)
+				if (this.$isError(updatedPostImages)) {
+					this.$toastError(updatedPostImages.error)
+					return
+				}
 				this.insertContent({ cid, url })
 			} catch (error: any) {
 				this.$toastError(error.message)
