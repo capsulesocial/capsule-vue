@@ -2,11 +2,20 @@ import axios from 'axios'
 import { signContent } from './utilities/keys'
 import { Algorithm, IRepostResponse } from './post'
 import { nodeUrl } from './utilities/config'
-import { uint8ArrayToHexString } from './utilities/helpers'
+import { ISignedIPFSObject, uint8ArrayToHexString } from './utilities/helpers'
 import ipfs from './utilities/ipfs'
 
+export interface IRepost {
+	authorID: string
+	postCID: string
+	sig: string
+	timestamp: number
+	type: `simple` | `quote`
+	_id: string
+}
+
 export async function sendRepost(authorID: string, postCID: string, content: string, type: string): Promise<string> {
-	const data = {
+	const data: Omit<IRepost, `_id` | `sig` | `type`> & { content: string } = {
 		authorID,
 		timestamp: Date.now(),
 		postCID,
@@ -15,7 +24,11 @@ export async function sendRepost(authorID: string, postCID: string, content: str
 
 	const { sig, publicKey } = await signContent(data)
 
-	const ipfsData = { data, sig: uint8ArrayToHexString(sig), public_key: publicKey }
+	const ipfsData: ISignedIPFSObject<Omit<IRepost, `_id` | `sig` | `type`> & { content: string }> = {
+		data,
+		sig: uint8ArrayToHexString(sig),
+		public_key: publicKey,
+	}
 
 	const cid = await ipfs().sendJSONData(ipfsData)
 	await axios.post(`${nodeUrl()}/repost`, {
@@ -25,15 +38,6 @@ export async function sendRepost(authorID: string, postCID: string, content: str
 	})
 
 	return cid
-}
-
-export interface IRepost {
-	authorID: string
-	postCID: string
-	sig: string
-	timestamp: number
-	type: `simple` | `quote`
-	_id: string
 }
 
 export interface IGetRepostsOptions {

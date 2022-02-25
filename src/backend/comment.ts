@@ -2,7 +2,7 @@ import axios from 'axios'
 import { nodeUrl } from './utilities/config'
 import ipfs from './utilities/ipfs'
 import { signContent } from './utilities/keys'
-import { uint8ArrayToHexString } from './utilities/helpers'
+import { ISignedIPFSObject, uint8ArrayToHexString } from './utilities/helpers'
 
 export interface INewCommentData {
 	content: string
@@ -31,7 +31,7 @@ export function createComment(authorID: string, content: string, emotion: string
 }
 
 export async function getComment(cid: string): Promise<INewCommentData> {
-	const data = await ipfs().getJSONData<{ data: INewCommentData; sig: string; public_key: string }>(cid)
+	const data = await ipfs().getJSONData<ISignedIPFSObject<INewCommentData>>(cid)
 	return data.data
 }
 
@@ -46,7 +46,7 @@ export async function sendComment(c: INewCommentData, type: `comment` | `reply`)
 
 	const { sig, publicKey } = await signContent(comment)
 
-	const data = {
+	const data: ISignedIPFSObject<INewCommentData> = {
 		data: comment,
 		public_key: publicKey,
 		sig: uint8ArrayToHexString(sig),

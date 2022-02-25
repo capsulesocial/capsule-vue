@@ -2,7 +2,7 @@ import axios from 'axios'
 
 import { signContent } from './utilities/keys'
 import ipfs from './utilities/ipfs'
-import { isError, uint8ArrayToHexString } from './utilities/helpers'
+import { isError, ISignedIPFSObject, uint8ArrayToHexString } from './utilities/helpers'
 import { nodeUrl, capsuleServer, sigValidity } from './utilities/config'
 import { IRepost } from './reposts'
 import { ICommentData } from './comment'
@@ -113,7 +113,7 @@ export function createEncryptedPost(
 export async function sendRegularPost(data: IRegularPost): Promise<string> {
 	const { sig, publicKey } = await signContent(data)
 
-	const ipfsData = { data, sig: uint8ArrayToHexString(sig), public_key: publicKey }
+	const ipfsData: ISignedIPFSObject<IRegularPost> = { data, sig: uint8ArrayToHexString(sig), public_key: publicKey }
 
 	const cid = await ipfs().sendJSONData(ipfsData)
 	await axios.post(`${nodeUrl()}/content`, {
@@ -125,6 +125,7 @@ export async function sendRegularPost(data: IRegularPost): Promise<string> {
 	return cid
 }
 
+// TODO: This needs fixing
 export async function sendEncryptedPost(data: IEncryptedPost): Promise<string> {
 	const { data: post, key, counter, sig } = await encryptAndSignData(data)
 
@@ -141,13 +142,14 @@ export async function sendEncryptedPost(data: IEncryptedPost): Promise<string> {
 }
 
 export async function getRegularPost(cid: string): Promise<IRegularPost> {
-	const post: { data: IRegularPost; sig: string; public_key: string } = await ipfs().getJSONData(cid)
+	const post = await ipfs().getJSONData<ISignedIPFSObject<IRegularPost>>(cid)
 	if (!isRegularPost(post.data)) {
 		throw new Error(`Post is encrypted`)
 	}
 	return post.data
 }
 
+// TODO: Fix this
 export async function getEncryptedPost(cid: string, username: string): Promise<IEncryptedPost | { error: string }> {
 	const post: Post = await ipfs().getJSONData(cid)
 	if (!isEncryptedPost(post)) {

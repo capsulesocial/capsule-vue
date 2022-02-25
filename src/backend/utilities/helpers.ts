@@ -1,5 +1,11 @@
 import imageCompression from 'browser-image-compression'
 
+export interface ISignedIPFSObject<T> {
+	data: T
+	sig: string
+	public_key: string
+}
+
 export function uint8ArrayToHexString(uint8Array: Uint8Array): string {
 	return Buffer.from(uint8Array).toString(`hex`)
 }
