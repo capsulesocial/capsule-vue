@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { capsuleServer, sigValidity } from './utilities/config'
-import { uint8ArrayToHexString } from './utilities/helpers'
+import { getInviteToken, uint8ArrayToHexString } from './utilities/helpers'
 import { signContent } from './utilities/keys'
 
 export async function verifyCodeAndGetToken(inviteCode: string) {
@@ -10,17 +10,20 @@ export async function verifyCodeAndGetToken(inviteCode: string) {
 }
 
 export async function verifyTokenAndOnboard(accountId: string) {
-	const token = getToken()
-	if (!token) {
-		throw new Error(`Invite token not found`)
+	try {
+		const token = getInviteToken()
+		if (!token) {
+			throw new Error(`Invite token not found`)
+		}
+		const response = await axios.post(
+			`${capsuleServer}/invite/verify/token`,
+			{ accountId },
+			{ headers: { Authorization: `Bearer ${token}` } },
+		)
+		return response.data.data as string
+	} finally {
+		removeToken()
 	}
-	const response = await axios.post(
-		`${capsuleServer}/invite/verify/token`,
-		{ accountId },
-		{ headers: { Authorization: `Bearer ${token}` } },
-	)
-	removeToken()
-	return response.data.data as string
 }
 
 export async function generateInviteCode(inviter: string): Promise<{ inviteCode: string; invitesRemaining: number }> {
@@ -40,10 +43,6 @@ export async function getInvitesRemaining(inviter: string): Promise<number> {
 
 function setToken(token: string) {
 	window.localStorage.setItem(`inviteToken`, token)
-}
-
-function getToken() {
-	return window.localStorage.getItem(`inviteToken`)
 }
 
 function removeToken() {

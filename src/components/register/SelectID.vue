@@ -13,7 +13,7 @@
 		<h6 v-show="isLoading" class="text-primary dark:text-secondary text-center">Checking ID...</h6>
 		<div>
 			<p class="justify-between p-5 font-sans text-sm text-gray7 dark:text-gray3">
-				Ensure that the NEAR account with ID: "{{ accountId }}" has sufficient funds before signing up.
+				Ensure that the NEAR account with ID: "{{ userInfo.accountId }}" has sufficient funds before signing up.
 			</p>
 			<p class="justify-between p-5 font-sans text-sm text-gray7 dark:text-gray3">Available funds: {{ funds }} yN</p>
 			<BrandedButton :text="`Re-check funds`" class="w-full" :action="checkFunds" />
@@ -26,8 +26,9 @@ import Vue, { PropType } from 'vue'
 import { mapMutations } from 'vuex'
 
 import BrandedButton from '@/components/BrandedButton.vue'
-import { registerNearWallet } from '@/backend/auth'
-import { MutationType, createSessionFromProfile, namespace as sessionStoreNamespace } from '~/store/session'
+import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
+import { ValidationError } from '@/errors'
+import { IWalletStatus } from '@/backend/auth'
 
 interface IData {
 	id: string
@@ -40,27 +41,19 @@ export default Vue.extend({
 	},
 	props: {
 		funds: {
-			type: String as PropType<string>,
+			type: String,
 			required: true,
 		},
 		checkFunds: {
-			type: Function as PropType<() => void>,
+			type: Function as PropType<() => Promise<void>>,
 			required: true,
 		},
 		userInfo: {
-			type: Object as PropType<Object>,
-			default: null,
+			type: Object as PropType<IWalletStatus>,
+			required: true,
 		},
 		verify: {
-			type: Function as PropType<() => void>,
-			required: true,
-		},
-		accountId: {
-			type: String as PropType<string>,
-			required: true,
-		},
-		nearWallet: {
-			type: Boolean as PropType<boolean>,
+			type: Function as PropType<(id: string) => Promise<void>>,
 			required: true,
 		},
 	},
@@ -80,60 +73,19 @@ export default Vue.extend({
 			changeBio: MutationType.CHANGE_BIO,
 			changeLocation: MutationType.CHANGE_LOCATION,
 		}),
-		async registerWallet() {
-			if (!this.accountId) {
-				throw new Error(`Unexpected condition`)
-			}
-			const registerResult = await registerNearWallet(this.id, this.accountId)
-			if (`error` in registerResult) {
-				this.$toastError(registerResult.error)
-				this.isLoading = false
-				return null
-			}
-			this.$store.commit(`setWelcome`, true)
-			return registerResult
-		},
-		async walletVerify() {
+		async handleRegisterID() {
 			try {
-				if (!this.nearWallet || !this.accountId) {
-					throw new Error(`Unexpected condition!`)
+				this.isLoading = true
+				this.id = this.id.toLowerCase()
+				const idCheck = this.$qualityID(this.id)
+				if (this.$isError(idCheck)) {
+					this.isLoading = false
+					throw new ValidationError(idCheck.error)
 				}
-				// Register
-				const res = await this.registerWallet()
-				if (!res) {
-					// Next line ensures multiple attempts to pick a username
-					return
-				}
-				const { profile, cid } = res
-
-				const account = createSessionFromProfile(cid, profile)
-				this.changeCID(cid)
-				this.changeID(account.id)
-				this.changeName(account.name)
-				this.changeEmail(account.email)
-				this.changeAvatar(account.avatar)
-				this.changeBio(account.bio)
-				this.changeLocation(account.location)
-				this.$emit(`setDownloadKeyStep`)
-			} catch (err: any) {
-				throw new Error(err.message)
-			}
-		},
-		handleRegisterID() {
-			this.isLoading = true
-			this.id = this.id.toLowerCase()
-			const idCheck = this.$qualityID(this.id)
-			if (this.$isError(idCheck)) {
+				await this.verify(this.id)
+			} finally {
 				this.isLoading = false
-				this.$toastError(idCheck.error)
-				return
 			}
-			this.$emit(`setID`, this.id)
-			if (this.userInfo) {
-				this.verify()
-				return
-			}
-			this.walletVerify()
 		},
 	},
 })
