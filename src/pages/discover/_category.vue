@@ -147,12 +147,12 @@ export default Vue.extend({
 	},
 	head() {
 		return {
-			title: `${this.$route.params.category} category on Capsule Social`,
+			title: `${this.$route.params.category} category on Blogchain`,
 			meta: [
 				{
 					hid: `${this.$route.params.category}`,
 					name: `${this.$route.params.category}`,
-					content: `${this.$route.params.category} category on Capsule Social`,
+					content: `${this.$route.params.category} category on Blogchain`,
 				},
 				{ hid: `og:image`, property: `og:image`, content: `${document.location.origin}` + ogImage },
 			],

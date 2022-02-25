@@ -55,7 +55,7 @@
 						<h2 class="text-center text-2xl font-semibold dark:text-darkPrimaryText">Welcome 🚀</h2>
 						<p class="text-gray5 dark:text-gray3 mb-5 mt-2 self-center text-center xl:mx-14">
 							It seems that you don't follow anyone yet. You can go to the Top feed to follow top rated content creator
-							and start your Capsule experience
+							and start your Blogchain experience
 						</p>
 						<div class="flex justify-center">
 							<BrandedButton
@@ -154,12 +154,12 @@ export default Vue.extend({
 	},
 	head() {
 		return {
-			title: `Home - Capsule Social`,
+			title: `Home - Blogchain`,
 			meta: [
 				{
 					hid: `home`,
 					name: `home`,
-					content: `Home - Capsule Social`,
+					content: `Home - Blogchain`,
 				},
 				{ hid: `og:image`, property: `og:image`, content: `${document.location.origin}` + ogImage },
 			],

@@ -104,7 +104,7 @@ export default Vue.extend({
 	},
 	head() {
 		return {
-			title: `${this.$route.params.tag} posts on Capsule Social`,
+			title: `${this.$route.params.tag} posts on Blogchain`,
 			meta: [{ hid: `tags`, name: `tags`, content: `View posts with tag: ${this.$route.params.tag}` }],
 		}
 	},

@@ -270,13 +270,13 @@ export default Vue.extend({
 	head() {
 		return {
 			// @ts-ignore
-			title: `${this.post?.title} by ${this.post?.authorID} on Capsule Social`,
+			title: `${this.post?.title} by ${this.post?.authorID} on Blogchain`,
 			meta: [
 				{
 					hid: `post - ${this.$route.params.post}`,
 					name: `Post`,
 					// @ts-ignore
-					content: `${this.post?.title} by ${this.post?.authorID} on Capsule Social`,
+					content: `${this.post?.title} by ${this.post?.authorID} on Blogchain`,
 				},
 				{ hid: `og:image`, property: `og:image`, content: `${document.location.origin}` + ogImage },
 			],

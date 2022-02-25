@@ -146,9 +146,9 @@ export default Vue.extend({
 	},
 	head() {
 		return {
-			title: `Create an account on Capsule Social`,
+			title: `Create an account on Blogchain`,
 			meta: [
-				{ hid: `register`, name: `register`, content: `Create a Capsule Social account` },
+				{ hid: `register`, name: `register`, content: `Create a Blogchain account` },
 				{ hid: `og:image`, property: `og:image`, content: `${document.location.origin}` + ogImage },
 			],
 		}
@@ -228,7 +228,7 @@ export default Vue.extend({
 			const [username] = await Promise.all([getUsernameNEAR(this.accountId), this.checkFunds(), this.onboardAccount()])
 			this.username = username
 			if (this.username) {
-				this.$toastError(`You cannot login with wallet, please import your Capsule private key`)
+				this.$toastError(`You cannot login with wallet, please import your Blogchain private key`)
 				removeNearPrivateKey(this.accountId)
 				walletLogout()
 			}

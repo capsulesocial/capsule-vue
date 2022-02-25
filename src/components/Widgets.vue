@@ -1,6 +1,6 @@
 <template>
 	<div class="popup">
-		<!-- Configure my Capsule overlay -->
+		<!-- Configure my Blogchain overlay -->
 		<div
 			v-if="configureWidgets"
 			class="popup bg-primary dark:bg-secondary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
@@ -38,7 +38,7 @@
 			class="from-lightBGStart to-lightBGStop border-lightBorder dark:from-darkBGStart dark:to-darkBGStop mb-5 rounded-lg border bg-gradient-to-r shadow-lg backdrop-blur-lg backdrop-filter"
 			style="backdrop-filter: blur(10px)"
 		/>
-		<!-- Configure my Capsule -->
+		<!-- Configure my Blogchain -->
 		<button
 			class="bg-lightBG dark:bg-darkBGStart from-lightBGStart to-lightBGStop border-lightBorder dark:from-darkBGStart dark:to-darkBGStop focus:outline-none mb-5 w-full rounded-lg border bg-gradient-to-r shadow-lg"
 			style="
@@ -52,7 +52,7 @@
 			@click="toggleConfigure"
 		>
 			<p class="text-primary dark:text-secondary text-right text-sm">
-				<span class="p-6" style="background: opacity 0.9em">Configure my Capsule</span>
+				<span class="p-6" style="background: opacity 0.9em">Configure my Blogchain</span>
 			</p>
 		</button>
 	</div>

@@ -51,7 +51,7 @@
 			>
 				<!-- Header and close icon -->
 				<div class="flex items-center justify-between p-6 pb-2">
-					<h4 class="text-primary dark:text-secondary mb-4 text-xl font-semibold">Change your Capsule background</h4>
+					<h4 class="text-primary dark:text-secondary mb-4 text-xl font-semibold">Change your Blogchain background</h4>
 					<button class="bg-gray1 dark:bg-gray5 focus:outline-none rounded-full p-1" @click="toggleBGSelector">
 						<XIcon />
 					</button>
@@ -100,7 +100,7 @@
 			>
 				<!-- Header and close icon -->
 				<div class="flex items-center justify-between p-6 pb-2">
-					<h4 class="text-primary dark:text-secondary mb-4 text-xl font-semibold">Change your Capsule color theme</h4>
+					<h4 class="text-primary dark:text-secondary mb-4 text-xl font-semibold">Change your Blogchain color theme</h4>
 					<button class="bg-gray1 dark:bg-gray5 focus:outline-none rounded-full p-1" @click="toggleColorSelector">
 						<XIcon />
 					</button>
@@ -180,8 +180,8 @@ export default Vue.extend({
 	},
 	head() {
 		return {
-			title: `Style settings - Capsule Social`,
-			meta: [{ hid: `settings-styling`, name: `settings-styling`, content: `Style settings on Capsule Social` }],
+			title: `Style settings - Blogchain`,
+			meta: [{ hid: `settings-styling`, name: `settings-styling`, content: `Style settings on Blogchain` }],
 		}
 	},
 	async created() {

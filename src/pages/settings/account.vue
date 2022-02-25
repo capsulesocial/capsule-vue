@@ -20,9 +20,9 @@
 		</div>
 		<!-- Export Private Key -->
 		<div class="mb-4 flex w-full flex-row items-center">
-			<label for="export" class="w-48 font-semibold dark:text-darkPrimaryText">Capsule Private Key</label>
+			<label for="export" class="w-48 font-semibold dark:text-darkPrimaryText">Blogchain Private Key</label>
 			<button id="export" class="text-primary dark:text-secondary focus:outline-none" @click="downloadPrivateKey">
-				Export Capsule Private Key
+				Export Blogchain Private Key
 			</button>
 		</div>
 		<!-- Account Profile -->
@@ -37,12 +37,12 @@
 		<!-- Account Data -->
 		<!-- <h2 class="text-primary font-semibold pt-4 mb-4 text-sm">Account Data</h2>
 		<div class="flex mb-4">
-			<h3 class="w-56 font-semibold">Your Capsule data</h3>
-			<button class="text-primary focus:outline-none">Request a download of your Capsule data</button>
+			<h3 class="w-56 font-semibold">Your Blogchain data</h3>
+			<button class="text-primary focus:outline-none">Request a download of your Blogchain data</button>
 		</div>
 		<div class="flex mb-4">
 			<h3 class="w-56 font-semibold">Deactivate My Account</h3>
-			<button class="text-negative focus:outline-none">Deactivate my Capsule Account</button>
+			<button class="text-negative focus:outline-none">Deactivate my Blogchain Account</button>
 		</div> -->
 		<!-- Account Invites -->
 		<h2 class="text-primary dark:text-secondary mb-4 pt-4 text-sm font-semibold">Account Invites</h2>
@@ -130,8 +130,8 @@ export default Vue.extend({
 	},
 	head() {
 		return {
-			title: `Account Settings - Capsule Social`,
-			meta: [{ hid: `settings-account`, name: `settings-account`, content: `Account settings on Capsule Social` }],
+			title: `Account Settings - Blogchain`,
+			meta: [{ hid: `settings-account`, name: `settings-account`, content: `Account settings on Blogchain` }],
 		}
 	},
 	created() {
@@ -158,7 +158,7 @@ export default Vue.extend({
 			link.download = `capsule-priv-key-${this.$store.state.session.id}`
 			link.click()
 			URL.revokeObjectURL(link.href)
-			this.$toastSuccess(`Downloaded Capsule private key`)
+			this.$toastSuccess(`Downloaded Blogchain private key`)
 		},
 		async updateProfile() {
 			const backendProfile = getProfileFromSession(this.$store.state.session)

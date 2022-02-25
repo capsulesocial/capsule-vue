@@ -40,7 +40,7 @@ export default Vue.extend({
 	},
 	head() {
 		return {
-			title: `Bookmarks - Capsule Social`,
+			title: `Bookmarks - Blogchain`,
 			meta: [{ hid: `bookmarks`, name: `bookmarks`, content: `View your bookmarked posts` }],
 		}
 	},

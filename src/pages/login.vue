@@ -33,7 +33,7 @@
 						@click="handleKeyClick"
 					>
 						<FileIcon />
-						<span class="text-gray7 dark:text-gray2 ml-4 text-sm font-semibold"> Import Capsule private key </span>
+						<span class="text-gray7 dark:text-gray2 ml-4 text-sm font-semibold"> Import Blogcahin private key </span>
 						<input id="key" ref="key" type="file" name="key" accept=".json" class="hidden" @change="handleKey" />
 					</button>
 					<p class="text-gray7 dark:text-gray3 mt-10 text-center text-sm xl:text-base">
@@ -122,9 +122,9 @@ export default Vue.extend({
 	},
 	head() {
 		return {
-			title: `Login - Capsule Social`,
+			title: `Login - Blogchain`,
 			meta: [
-				{ hid: `login`, name: `login`, content: `Log into Capsule Social` },
+				{ hid: `login`, name: `login`, content: `Log into Blogchain` },
 				{ hid: `og:image`, property: `og:image`, content: `${document.location.origin}` + ogImage },
 			],
 		}

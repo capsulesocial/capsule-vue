@@ -48,7 +48,7 @@
 					id="bio"
 					:maxlength="maxCharBio"
 					:value="bio"
-					:placeholder="`Your Capsule Bio`"
+					:placeholder="`Your Blogchain Bio`"
 					class="bg-gray1 dark:bg-gray7 dark:text-darkPrimaryText placeholder-gray5 dark:placeholder-gray3 focus:outline-none w-full rounded-lg px-2 py-1 text-black"
 					@input="bio = $event.target.value"
 					@keyup="checkBio()"

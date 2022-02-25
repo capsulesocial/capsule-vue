@@ -51,8 +51,8 @@ export default Vue.extend({
 	layout: `settings`,
 	head() {
 		return {
-			title: `Settings - Capsule Social`,
-			meta: [{ hid: `settings`, name: `settings`, content: `Settings on Capsule Social` }],
+			title: `Settings - Blogchain`,
+			meta: [{ hid: `settings`, name: `settings`, content: `Settings on Blogchain` }],
 		}
 	},
 })
