@@ -122,11 +122,14 @@ export default Vue.extend({
 					removeNearPrivateKey(this.userInfo.accountId)
 				}
 				walletLogout()
-				this.$toastError(err.response.data.error)
 				window.localStorage.removeItem(`inviteToken`)
+				if (err.response.data.error === `Cannot reuse token`) {
+					window.localStorage.clear()
+					this.userInfo = null
+					this.step = `inviteCode`
+				}
 				this.isLoading = false
 				this.stepForward()
-				return false
 			}
 			this.$toastError(err.response.data.error)
 			return false
