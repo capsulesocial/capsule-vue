@@ -27,6 +27,7 @@
 								min-height: calc(100vh - 88px);
 								height: calc(100vh - 88px);
 								backdrop-filter: blur(10px);
+								overflow-y: visible;
 							"
 							class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation fixed z-10 mr-5 overflow-y-auto rounded-t-lg border bg-gradient-to-r p-8 shadow-lg"
 							@update="updateWordCount"
