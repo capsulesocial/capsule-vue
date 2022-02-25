@@ -85,7 +85,7 @@
 	/* .medium-editor-toolbar {
     @apply bg-white border rounded-xl shadow-xl
   } */
-  	/* width */
+	/* width */
 	::-webkit-scrollbar {
 		padding-top: 5px;
 		margin-top: 5px;
@@ -126,7 +126,7 @@
 	h1 {
 		@apply font-serif;
 	}
-	.editable .ql-bubble .ql-editor h1 {
+	.editable h1 {
 		@apply text-h1 font-serif font-semibold mt-6 mb-3;
 	}
 	.editable h2 {
@@ -245,9 +245,15 @@
 }
 
 @keyframes fadedelay1 {
-	0% { opacity: 0 }
-	75% { opacity: 0 }
-	100% { opacity: 1 }
+	0% {
+		opacity: 0;
+	}
+	75% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
 }
 
 @keyframes enter {
