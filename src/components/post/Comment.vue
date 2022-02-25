@@ -22,8 +22,8 @@
 				<!-- Text -->
 				<div class="flex w-full flex-grow flex-col px-3 py-1 pt-3">
 					<!-- Top row: name, id, timestamp -->
-					<div class="flex items-center flex-wrap mb-2">
-						<nuxt-link :to="`/id/` + authorID" class="mr-4 flex items-center xl:mb-0">
+					<div class="flex items-center flex-wrap">
+						<nuxt-link :to="`/id/` + authorID" class="mr-4 flex items-center xl:mb-0 mb-2">
 							<Avatar :avatar="avatar" :authorID="authorID" size="w-8 h-8" class="mr-2 flex-shrink-0 xl:hidden" />
 							<span v-if="name != ``" class="font-medium dark:text-darkPrimaryText">
 								{{ name }}
@@ -37,7 +37,7 @@
 								Author
 							</span>
 						</nuxt-link>
-						<span v-if="timestamp" class="self-center text-xs dark:text-gray3">
+						<span v-if="timestamp" class="self-center text-xs dark:text-gray3 mb-2 xl:mt-2">
 							{{ $formatDate(timestamp) }}
 						</span>
 					</div>
@@ -57,8 +57,7 @@
 									/>
 									<div
 										v-show="showLabel"
-										class="border-lightBorder modal-animation-delay absolute z-40 flex flex-col rounded-lg border bg-lightBG dark:bg-darkBG p-2 shadow-lg"
-										style="bottom: -25px"
+										class="border-lightBorder modal-animation-delay absolute top-0 mt-3 mr-3 z-40 flex flex-col rounded-lg border bg-lightBG dark:bg-darkBG p-2 shadow-lg"
 									>
 										<p class="text-sm text-gray5 dark:text-gray3">
 											{{ emotion.label }}
@@ -112,7 +111,7 @@
 					v-show="showDelete"
 					class="border-lightBorder modal-animation absolute z-10 flex w-44 flex-col items-center rounded-lg border bg-lightBG dark:bg-darkBG p-1 shadow-lg"
 					:class="dark ? `dropdownDeleteOpenDark` : `dropdownDeleteOpen`"
-					style="top: 37px; right: -2px"
+					style="top: 40px; right: 0px"
 				>
 					<!-- Delete -->
 					<button class="focus:outline-none text-negative flex" @click="removeComment">
@@ -271,6 +270,12 @@ export default Vue.extend({
 		} else {
 			this.dark = false
 		}
+		// Close more dropdown
+		window.addEventListener(`click`, () => {
+			if (this.showDelete) {
+				this.showDelete = false
+			}
+		})
 	},
 	methods: {
 		getStyle(prefix: string) {
