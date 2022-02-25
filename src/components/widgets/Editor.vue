@@ -44,7 +44,7 @@
 					v-model="caption"
 					type="text"
 					placeholder="Image caption"
-					class="focus:outline-none bg-gray1 dark:bg-gray7 text-gray5 dark:text-gray3 placeholder-gray5 dark:placeholder-gray3 w-full"
+					class="focus:outline-none bg-gray1 dark:bg-gray7 text-gray5 dark:text-gray1 placeholder-gray5 dark:placeholder-gray3 w-full"
 					@change="saveCaption"
 				/>
 			</div>
