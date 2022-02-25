@@ -15,6 +15,10 @@ const textLimits = {
 		min: 1,
 		max: 100,
 	},
+	post_images: {
+		min: 0,
+		max: 10,
+	},
 	username: {
 		min: 3,
 		max: 18,
