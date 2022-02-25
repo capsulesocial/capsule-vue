@@ -983,7 +983,7 @@
 }
 .ql-container.ql-bubble:not(.ql-disabled) a::before {
 	background: linear-gradient(90deg, rgba(256, 256, 256, 0.95) 0%, rgba(256, 256, 256, 0.90) 100%);
-	border-radius: 10px;
+	border-radius: 5px;
 	box-shadow: 0 10px 15px -3px rgb(0 0 0 / 10%), 0 4px 6px -4px rgb(0 0 0 / 10%);
 	backdrop-filter: blur(10px);
 	border-width: 1px;
