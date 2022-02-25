@@ -228,7 +228,7 @@ export default Vue.extend({
 			const [username] = await Promise.all([getUsernameNEAR(this.accountId), this.checkFunds(), this.onboardAccount()])
 			this.username = username
 			if (this.username) {
-				this.$toastError(`You cannot login with wallet, please import your private key`)
+				this.$toastError(`You cannot login with wallet, please import your Capsule private key`)
 				removeNearPrivateKey(this.accountId)
 				walletLogout()
 			}

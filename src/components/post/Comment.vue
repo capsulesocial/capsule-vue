@@ -20,7 +20,7 @@
 				style="backdrop-filter: blur(10px)"
 			>
 				<!-- Text -->
-				<div class="flex w-full flex-grow flex-col px-3 py-1 pt-3">
+				<div class="flex w-full flex-grow flex-col px-3 py-1 pt-2">
 					<!-- Top row: name, id, timestamp -->
 					<div class="flex items-center flex-wrap">
 						<nuxt-link :to="`/id/` + authorID" class="mr-4 flex items-center xl:mb-0 mb-2">
@@ -46,7 +46,7 @@
 						<div class="flex flex-grow flex-col overflow-hidden">
 							<div class="w-full">
 								<!-- Reaction face image -->
-								<div class="flex inline float-right flex-shrink-0 items-center justify-center overflow-hidden">
+								<div class="flex float-right flex-shrink-0 items-center justify-center overflow-hidden">
 									<img
 										:src="dark ? emotion.dark : emotion.light"
 										class="-mb-1 mt-2 h-32 w-32 bg-transparent"
@@ -57,7 +57,7 @@
 									/>
 									<div
 										v-show="showLabel"
-										class="border-lightBorder modal-animation-delay absolute top-0 mt-3 mr-3 z-40 flex flex-col rounded-lg border bg-lightBG dark:bg-darkBG p-2 shadow-lg"
+										class="border-lightBorder modal-animation-delay absolute top-0 mt-2 z-40 flex flex-col rounded-lg border bg-lightBG dark:bg-darkBG p-2 shadow-lg"
 									>
 										<p class="text-sm text-gray5 dark:text-gray3">
 											{{ emotion.label }}
@@ -65,7 +65,7 @@
 									</div>
 								</div>
 								<!-- Text comment -->
-								<p class="break-words py-1 mb-6 font-sans text-lg leading-relaxed dark:text-darkPrimaryText">
+								<p class="break-words w-4/5 py-1 mb-6 font-sans text-lg leading-relaxed dark:text-darkPrimaryText">
 									{{ content }}
 								</p>
 
@@ -102,7 +102,7 @@
 				</button> -->
 				<button
 					v-if="this.$store.state.session.id === authorID || this.$store.state.session.id === postAuthor"
-					class="focus:outline-none absolute top-0 right-0 flex-col justify-start text-gray5 dark:text-gray3 pt-4 pr-2"
+					class="focus:outline-none absolute top-0 right-0 flex-col justify-start text-gray5 dark:text-gray3 pt-2 pr-3"
 					@click.stop="toggleDropdownDelete"
 				>
 					<More />
