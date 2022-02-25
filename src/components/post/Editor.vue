@@ -655,6 +655,10 @@ export default Vue.extend({
 			}
 			this.hasPosted = true
 			const postImages = createPostImagesArray(clean, this.postImages)
+			if (postImages.length > textLimits.post_images.max) {
+				this.$toastError(`Cannot add more than ${textLimits.post_images.max} images in a post`)
+				return
+			}
 			const p = createRegularPost(
 				this.title,
 				this.subtitle === `` ? null : this.subtitle,
