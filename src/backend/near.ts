@@ -58,6 +58,25 @@ export async function getUsernameNEAR(accountId: string): Promise<string | null>
 	throw new Error(`Error in contract`)
 }
 
+export async function getIsAccountIdOnboarded(accountId: string): Promise<boolean> {
+	const rawResult = await provider.query({
+		request_type: `call_function`,
+		account_id: nearConfig.contractName,
+		method_name: `isAccountOnboarded`,
+		args_base64: Buffer.from(JSON.stringify({ accountId })).toString(`base64`),
+		finality: `optimistic`,
+	})
+
+	if (`result` in rawResult) {
+		// format result
+		// res = [accountId, base58_encode_public_key]
+		const res = JSON.parse(Buffer.from((rawResult as any).result).toString())
+		return res
+	}
+
+	throw new Error(`Error in contract`)
+}
+
 export async function initNear() {
 	_near = await connect({ deps: { keyStore: new keyStores.BrowserLocalStorageKeyStore() }, headers: {}, ...nearConfig })
 }
@@ -182,16 +201,18 @@ export async function setNearPrivateKey(privateKey: Uint8Array, accountId: strin
 	return true
 }
 
-export async function generateAndSetKey() {
+export function generateAndSetKey() {
 	const keyRandom = KeyPairEd25519.fromRandom()
 	const accountId = uint8ArrayToHexString(keyRandom.publicKey.data)
 
 	const sk = new Uint8Array(baseDecode(keyRandom.secretKey))
-	await setNearPrivateKey(sk, accountId)
-	return accountId
+	const encodedPrivateKey = baseEncode(sk)
+	const keypair = new KeyPairEd25519(encodedPrivateKey)
+	setNearPrivateKey(sk, accountId)
+	return { accountId, privateKey: keypair.secretKey }
 }
 
-export async function removeNearPrivateKey(nearAccountId?: string) {
+export async function removeNearPrivateKey(nearAccountId?: string | null) {
 	let accountId: string | null = null
 
 	if (nearAccountId) {

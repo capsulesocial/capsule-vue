@@ -63,3 +63,42 @@ export function getCompressedImage(file: File) {
 		initialQuality: 0.9,
 	})
 }
+
+function parseJwt(token: string) {
+	const base64Url = token.split(`.`)[1]
+	const base64 = base64Url.replace(/-/g, `+`).replace(/_/g, `/`)
+	const jsonPayload = decodeURIComponent(
+		Buffer.from(base64, `base64`)
+			.toString()
+			.split(``)
+			.map((c) => `%` + (`00` + c.charCodeAt(0).toString(16)).slice(-2))
+			.join(``),
+	)
+
+	return JSON.parse(jsonPayload)
+}
+
+export interface IInviteTokenData {
+	code: string
+	iat: number
+	exp: number
+}
+
+export function getInviteToken(): string | null {
+	const inviteToken = window.localStorage.getItem(`inviteToken`)
+	if (!inviteToken) {
+		return null
+	}
+
+	try {
+		const parsedToken: IInviteTokenData = parseJwt(inviteToken)
+		if (parsedToken.exp < Date.now() / 1000) {
+			throw new Error(`Token has expired!`)
+		}
+
+		return inviteToken
+	} catch {
+		window.localStorage.removeItem(`inviteToken`)
+		return null
+	}
+}

@@ -19,7 +19,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import type { PropType } from 'vue'
 
 import FileDownloadIcon from '@/components/icons/FileDownload.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
@@ -37,11 +36,11 @@ export default Vue.extend({
 	},
 	props: {
 		accountId: {
-			type: String as PropType<string>,
+			type: String,
 			required: true,
 		},
 		aid: {
-			type: String as PropType<string>,
+			type: String,
 			required: true,
 		},
 	},

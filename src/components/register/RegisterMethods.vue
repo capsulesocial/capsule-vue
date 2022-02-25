@@ -29,14 +29,14 @@
 			</div>
 			<button
 				class="bg-gray2 dark:bg-gray7 focus:outline-none mb-4 flex w-full items-center justify-center rounded-lg py-3"
-				@click="() => walletLoginComponent()"
+				@click="walletLoginComponent"
 			>
 				<NearIcon style="width: 22px; height: 22px" />
 				<h6 class="text-gray7 dark:text-gray2 ml-4 text-sm font-semibold">Signup with NEAR</h6>
 			</button>
 			<button
 				class="bg-gray2 dark:bg-gray7 focus:outline-none mb-4 flex w-full items-center justify-center rounded-lg py-3"
-				@click="() => implicitAccountCreate()"
+				@click="implicitAccountCreate"
 			>
 				<h6 class="text-gray7 dark:text-gray2 ml-4 text-sm font-semibold">Create implicit account</h6>
 			</button>
@@ -57,10 +57,8 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import type { PropType } from 'vue'
-import axios from 'axios'
 
-import DirectWebSdk, { TorusLoginResponse } from '@toruslabs/customauth'
+import DirectWebSdk from '@toruslabs/customauth'
 
 import GoogleIcon from '@/components/icons/brands/Google.vue'
 import NearIcon from '@/components/icons/brands/Near.vue'
@@ -68,9 +66,8 @@ import DiscordIcon from '@/components/icons/Discord.vue'
 import InfoIcon from '@/components/icons/Info.vue'
 
 import { torusVerifiers, TorusVerifiers } from '@/backend/utilities/config'
-import { getAccountIdFromPrivateKey } from '@/backend/auth'
-import { getUsernameNEAR, walletLogin, generateAndSetKey, removeNearPrivateKey } from '@/backend/near'
-import { verifyTokenAndOnboard } from '@/backend/invite'
+import { getAccountIdFromPrivateKey, IWalletStatus } from '@/backend/auth'
+import { walletLogin, generateAndSetKey } from '@/backend/near'
 
 interface IData {
 	torus: DirectWebSdk
@@ -85,16 +82,7 @@ export default Vue.extend({
 		NearIcon,
 		InfoIcon,
 	},
-	props: {
-		checkFunds: {
-			type: Function as PropType<() => void>,
-			required: true,
-		},
-		verify: {
-			type: Function as PropType<() => void>,
-			required: true,
-		},
-	},
+	props: {},
 	data(): IData {
 		return {
 			torus: new DirectWebSdk({
@@ -117,60 +105,36 @@ export default Vue.extend({
 		async torusLogin(type: TorusVerifiers) {
 			this.isLoading = true
 			try {
-				const userInfo: TorusLoginResponse = await this.torus.triggerLogin(torusVerifiers[type])
-				this.$emit(`updateUserInfo`, userInfo)
-				const accountId: string = getAccountIdFromPrivateKey(userInfo.privateKey)
-				this.$emit(`updateAccountId`, accountId)
-				const [username] = await Promise.all([getUsernameNEAR(accountId), this.onboardAccount(accountId)])
-				this.$emit(`updateUsername`, username)
-				if (username) {
-					// If a username is found then proceed to login...
-					this.verify()
-					return
+				const info = await this.torus.triggerLogin(torusVerifiers[type])
+				const accountId = getAccountIdFromPrivateKey(info.privateKey)
+				const userInfo: IWalletStatus = {
+					type: `torus`,
+					accountId,
+					privateKey: info.privateKey,
 				}
+				this.$emit(`updateUserInfo`, userInfo)
+				this.$emit(`stepForward`)
 				// If no username is found then register...
-				await this.checkFunds()
 				this.isLoading = false
 			} catch (e) {
-				this.$toastError(`oops, ` + e)
 				this.isLoading = false
-			}
-		},
-		async onboardAccount(accountId: string) {
-			if (!accountId) {
-				this.$toastError(`AccountId missing`)
-				return
-			}
-			try {
-				await verifyTokenAndOnboard(accountId)
-			} catch (error: any) {
-				if (axios.isAxiosError(error) && error.response) {
-					if (error.response.status === 429) {
-						this.$toastWarning(`Too many requests`)
-						return
-					}
-					throw new Error(error.response.data.error)
-				}
-				throw error
+				throw e
 			}
 		},
 		async walletLoginComponent() {
 			await walletLogin()
 		},
-		async implicitAccountCreate() {
-			const accountId: string = await generateAndSetKey()
-			this.$emit(`updateAccountId`, accountId)
-			const [username] = await Promise.all([
-				getUsernameNEAR(accountId),
-				this.checkFunds(),
-				this.onboardAccount(accountId),
-			])
-			this.$emit(`updateUsername`, username)
-			if (username) {
-				this.$toastError(`You cannot login with implicit account, please import your Capsule private key`)
-				removeNearPrivateKey(accountId)
+		implicitAccountCreate() {
+			this.isLoading = true
+			const { accountId, privateKey } = generateAndSetKey()
+			const userInfo: IWalletStatus = {
+				type: `near`,
+				accountId,
+				privateKey,
 			}
-			this.$emit(`setNearWallet`)
+			this.$emit(`updateUserInfo`, userInfo)
+			this.$emit(`stepForward`)
+			this.isLoading = false
 		},
 	},
 })
