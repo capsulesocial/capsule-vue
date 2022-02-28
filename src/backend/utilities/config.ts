@@ -3,8 +3,7 @@ import { SubVerifierDetails } from '@toruslabs/customauth'
 import { ILocalNetNearConfig, INearConfig } from '../near'
 
 const defaultBootstraps = [
-	`/dns4/test-node.capsule.social/tcp/5434/wss/p2p/12D3KooWQzYjzbw7nghPMVP5z2ax29iDj2YsQ5GZDfnC4finSxnb`,
-	`/dns4/alpha-c.capsule.social/tcp/5434/wss/p2p/12D3KooWFfE5aQTtKiY5MMjaosvmdFz2MyMtbBbvvz9C857cjHZ2`,
+	`/dns4/alpha.capsule.social/tcp/5434/wss/p2p/12D3KooWF5TY7Wisj3nZzfoE2uKTxUpBAooUSUU8yucsJnkBxbpo`,
 ]
 
 export const capsuleOrbit = process.env.ORBIT_URL || `https://test-node.capsule.social/orbit`
