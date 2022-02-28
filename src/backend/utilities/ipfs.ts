@@ -1,4 +1,5 @@
 import { create, Options, CID } from 'ipfs-core'
+import { bootstrapNodes } from './config'
 
 export interface IPFSInterface {
 	sendData: (content: string | ArrayBuffer) => Promise<string>
@@ -8,11 +9,6 @@ export interface IPFSInterface {
 	getNodes: () => Promise<number>
 }
 
-const bootstraps = [
-	`/dns4/test-node.capsule.social/tcp/5434/wss/p2p/12D3KooWQzYjzbw7nghPMVP5z2ax29iDj2YsQ5GZDfnC4finSxnb`,
-	`/dns4/alpha-c.capsule.social/tcp/5434/wss/p2p/12D3KooWFfE5aQTtKiY5MMjaosvmdFz2MyMtbBbvvz9C857cjHZ2`,
-]
-
 const ipfsConfig: Options = {
 	init: { algorithm: `Ed25519` },
 	preload: {
@@ -20,7 +16,7 @@ const ipfsConfig: Options = {
 		addresses: [`/dns4/test-node.capsule.social/https`],
 	},
 	config: {
-		Bootstrap: bootstraps,
+		Bootstrap: bootstrapNodes,
 	},
 }
 
@@ -29,7 +25,7 @@ async function createIPFSInterface(): Promise<IPFSInterface> {
 
 	function maintainConnection() {
 		setTimeout(async () => {
-			for (const a of bootstraps) {
+			for (const a of bootstrapNodes) {
 				await node.swarm.disconnect(a)
 				await node.swarm.connect(a)
 			}
