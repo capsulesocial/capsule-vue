@@ -126,7 +126,7 @@ jobs:
               branch='release'
 
               cat <<EOF >.env
-                CONTRACT_NAME="dev-1635323648697-81373157539648"
+                CONTRACT_NAME="capsule-beta.testnet"
                 DOMAIN="https://blogchain.app"
                 CAPSULE_SERVER="https://blogchain.app/server"
                 ORBIT_URL="https://node1.blogchain.app"
