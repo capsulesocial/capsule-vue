@@ -19,17 +19,17 @@
 				<!-- Body -->
 				<div>
 					<!-- Content -->
-					<section class="relative flex flex-row">
+					<section class="flex flex-row">
 						<PostEditor
 							ref="editor"
 							style="
 								width: 750px;
 								min-height: calc(100vh - 88px);
 								height: calc(100vh - 88px);
-								backdrop-filter: blur(10px);
-								overflow-y: visible;
+								overflow-y: auto;
+								overflow-x: hidden;
 							"
-							class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation fixed z-10 mr-5 overflow-y-auto rounded-t-lg border bg-gradient-to-r p-8 shadow-lg"
+							class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation fixed z-10 mr-5 rounded-t-lg border bg-gradient-to-r p-8 shadow-lg"
 							@update="updateWordCount"
 							@isWriting="hideDraftButton"
 						/>
