@@ -2,6 +2,11 @@
 import { SubVerifierDetails } from '@toruslabs/customauth'
 import { ILocalNetNearConfig, INearConfig } from '../near'
 
+const defaultBootstraps = [
+	`/dns4/test-node.capsule.social/tcp/5434/wss/p2p/12D3KooWQzYjzbw7nghPMVP5z2ax29iDj2YsQ5GZDfnC4finSxnb`,
+	`/dns4/alpha-c.capsule.social/tcp/5434/wss/p2p/12D3KooWFfE5aQTtKiY5MMjaosvmdFz2MyMtbBbvvz9C857cjHZ2`,
+]
+
 export const capsuleOrbit = process.env.ORBIT_URL || `https://test-node.capsule.social/orbit`
 export const capsuleServer = process.env.CAPSULE_SERVER || `https://test-node.capsule.social/server`
 export const domain = process.env.DOMAIN || `http://localhost:3000`
@@ -9,6 +14,7 @@ export const contractName = process.env.CONTRACT_NAME || `capsule-vue`
 export const sufficientFunds = process.env.SUFFICIENT_ACCOUNT_FUNDS || `8180000000000000000000`
 // Time-sensitive signatures are valid for 5 minutes
 export const sigValidity = 5 * 60000
+export const bootstrapNodes = process.env.BOOTSTRAP_NODES ? JSON.parse(process.env.BOOTSTRAP_NODES) : defaultBootstraps
 
 const nearNetwork = process.env.NEAR_NETWORK || `testnet`
 
