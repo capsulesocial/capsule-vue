@@ -4,8 +4,8 @@
 		<!-- Enter phone number -->
 		<div v-if="!otpSent">
 			<p class="text-gray7 dark:text-gray3 my-10 text-center">
-				Verify you’re a human with your phone number so that Blogchain can fund your wallet. This is the last step needed
-				to create your Blogchain account.
+				Verify you’re a human with your phone number so that Blogchain can fund your wallet. This is the last step
+				needed to create your Blogchain account.
 			</p>
 			<label for="phoneNumber" class="text-gray5 dark:text-gray3 block pb-1 text-sm font-semibold">Phone Number</label>
 			<input

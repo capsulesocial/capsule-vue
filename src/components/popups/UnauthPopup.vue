@@ -18,7 +18,8 @@
 				<img :src="require(`@/assets/images/brand/protect-content.webp`)" class="mb-5 w-10/12" />
 				<h6 class="mb-5 text-xl font-bold dark:text-darkPrimaryText">You need an account to do that</h6>
 				<p class="text-gray5 dark:text-gray3 mb-10 px-10">
-					Create a Blogchain account to publish posts, follow your favorite content creators and personalise your Blogchain
+					Create a Blogchain account to publish posts, follow your favorite content creators and personalise your
+					Blogchain
 				</p>
 				<!-- Next button -->
 				<div class="mb-2">

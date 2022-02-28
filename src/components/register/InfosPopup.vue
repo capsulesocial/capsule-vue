@@ -18,9 +18,9 @@
 						<p class="my-2 text-gray5 dark:text-gray3">
 							Signing up on Blogchain requires writing data on the blockchain through transactions on a smart contract
 							with small amounts of NEAR token. You’ll need to provide your phone number to verify your human identity
-							and enable Capsule Social to sponsor you with NEAR tokens. Blogchain and Capsule Social will not store or track any information from
-							your phone number or Google account. To log in, use your Google account or import your Blogchain private
-							key under “Import private key”.
+							and enable Capsule Social to sponsor you with NEAR tokens. Blogchain and Capsule Social will not store or
+							track any information from your phone number or Google account. To log in, use your Google account or
+							import your Blogchain private key under “Import private key”.
 						</p>
 					</div>
 					<div class="flex flex-col my-4">
@@ -47,10 +47,10 @@
 						<h4 class="text-lg font-semibold dark:text-darkPrimaryText">Sign up with Implicit Account</h4>
 						<p class="my-2 text-gray5 dark:text-gray3">
 							Create an account where you self manage your account keys. You’ll need to provide your phone number to
-							verify your human identity and enable Blogchain to sponsor you with NEAR tokens. These NEAR tokens are used
-							for performing transactions on a smart contract and registering your account on the blockchain. By signing
-							up with this method, you’ll need to download your Blogchain private key and use it to log in under “Import
-							private key”.
+							verify your human identity and enable Blogchain to sponsor you with NEAR tokens. These NEAR tokens are
+							used for performing transactions on a smart contract and registering your account on the blockchain. By
+							signing up with this method, you’ll need to download your Blogchain private key and use it to log in under
+							“Import private key”.
 						</p>
 					</div>
 				</div>
