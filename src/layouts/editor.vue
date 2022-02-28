@@ -79,6 +79,9 @@
 
 <script lang="ts">
 import Vue from 'vue'
+// @ts-ignore
+import ogImage from '@/assets/images/util/ogImage.png'
+
 import EditorWidgets from '@/components/widgets/Editor.vue'
 import PostEditor from '@/components/post/Editor.vue'
 import Header from '@/components/Header.vue'
@@ -121,6 +124,15 @@ export default Vue.extend({
 			buttonHidden: false,
 			bgImage: backgrounds[0],
 			dark: false,
+		}
+	},
+	head() {
+		return {
+			title: `Write a post - Blogchain`,
+			meta: [
+				{ hid: `editor`, name: `editor`, content: `Write a post on Blogchain` },
+				{ hid: `og:image`, property: `og:image`, content: `${document.location.origin}` + ogImage },
+			],
 		}
 	},
 	async created() {
