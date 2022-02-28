@@ -29,9 +29,10 @@
 						<aside
 							class="modal-animation fixed -mt-4 hidden overflow-y-auto p-4 xl:block"
 							:class="showWidgets ? `z-10` : ``"
-							style="margin-left: 755px; width: 485px; min-height: calc(100vh - 150px); height: calc(100vh - 150px)"
+							style="margin-left: 755px; width: 485px; min-height: calc(100vh - 70px); height: calc(100vh - 70px)"
 						>
 							<SupportWidget />
+							<ReportWidget />
 							<ResourcesWidget v-if="this.$store.state.session.id !== ``" @overlay="openOnboarding" />
 							<Footer />
 						</aside>
@@ -49,6 +50,7 @@ import Vue from 'vue'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 import SupportWidget from '@/components/widgets/Support.vue'
+import ReportWidget from '@/components/widgets/Report.vue'
 import ResourcesWidget from '@/components/widgets/Resources.vue'
 import OnboardingWizard from '@/components/popups/OnboardingWizard.vue'
 
@@ -71,6 +73,7 @@ export default Vue.extend({
 		Footer,
 		SupportWidget,
 		ResourcesWidget,
+		ReportWidget,
 		OnboardingWizard,
 	},
 	data(): IData {
