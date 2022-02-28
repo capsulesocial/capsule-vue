@@ -48,7 +48,7 @@ module.exports = {
 		"require-await": "error",
 		"strict": ["error", "global"],
 		"init-declarations": "error",
-		"array-bracket-newline": "error",
+		"array-bracket-newline": 0,
 		"array-bracket-spacing": "error",
 		"block-spacing": "error",
 		"camelcase": "error",
