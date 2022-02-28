@@ -1,5 +1,7 @@
 <template>
-	<div class="popup flex w-full justify-center">
+	<div
+		class="popup bg-primary dark:bg-secondary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
+	>
 		<!-- Container -->
 		<section>
 			<div
@@ -90,7 +92,7 @@ export default Vue.extend({
 			if (!e.target || e.target.parentNode === null || e.target.parentNode.classList === undefined) {
 				return
 			}
-			if (e.target.parentNode.classList[0] === `popup`) {
+			if (e.target.classList[0] === `popup`) {
 				this.$emit(`close`)
 			}
 		},

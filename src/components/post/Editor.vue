@@ -141,6 +141,7 @@ const options = {
 	readOnly: false,
 	theme: `bubble`,
 	bounds: `#editor`,
+	scrollingContainer: `#editor`,
 	modules: {
 		counter: true,
 		toolbar: {

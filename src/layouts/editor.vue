@@ -28,6 +28,7 @@
 								height: calc(100vh - 88px);
 								overflow-y: auto;
 								overflow-x: hidden;
+								backdrop-filter: blur(10px);
 							"
 							class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation fixed z-10 mr-5 rounded-t-lg border bg-gradient-to-r p-8 shadow-lg"
 							@update="updateWordCount"
@@ -35,7 +36,7 @@
 						/>
 						<div
 							id="draftButton"
-							class="animatedraftButton from-lightBGStart to-lightBGStop dark:from-darkBG dark:to-darkBG border-lightBorder test-xs text-gray5 dark:text-gray3 modal-animation card-animation-delay1 absolute bottom-0 z-10 m-4 flex rounded-lg bg-gradient-to-r px-5 py-3 shadow-lg"
+							class="animatedraftButton from-lightBGStart to-lightBGStop dark:from-darkBG dark:to-darkBG border-lightBorder text-xs text-gray5 dark:text-gray3 modal-animation card-animation-delay1 absolute bottom-0 z-10 m-4 flex rounded-lg bg-gradient-to-r px-5 py-3 shadow-lg"
 							style="backdrop-filter: blur(10px)"
 						>
 							<p v-if="!buttonHidden" class="mr-2">Resume writing?</p>
@@ -62,18 +63,8 @@
 				</div>
 			</div>
 		</div>
-		<div
-			v-if="showDrafts"
-			class="popup bg-primary dark:bg-secondary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
-		>
-			<DraftsPopup @close="closeDraftsPopup" />
-		</div>
-		<div
-			v-if="showConfirm"
-			class="popup bg-primary dark:bg-secondary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
-		>
-			<ConfirmPopup @close="showConfirmPopup" @post="handlePost" />
-		</div>
+		<DraftsPopup v-if="showDrafts" @close="closeDraftsPopup" />
+		<ConfirmPopup v-if="showConfirm" @close="showConfirmPopup" @post="handlePost" />
 	</main>
 </template>
 
