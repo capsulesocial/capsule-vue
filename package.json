@@ -1,6 +1,6 @@
 {
 	"name": "capsule-vue",
-	"productName": "Capsule Client",
+	"productName": "Blogchain Client",
 	"version": "1.0.0",
 	"description": "Electron application using Nuxt.js to serve the Capsule Social Application",
 	"author": {

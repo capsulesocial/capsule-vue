@@ -28,7 +28,7 @@
 							v-if="$route.name === `discover`"
 							class="text-primary dark:text-secondary text-3xl font-semibold xl:text-4xl"
 						>
-							Browse Capsule
+							Browse Blogchain
 						</h1>
 						<!-- Peered nodes -->
 						<Nodes />

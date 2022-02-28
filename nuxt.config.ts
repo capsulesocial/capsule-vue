@@ -10,19 +10,14 @@ const config: NuxtConfig = {
 	ssr: false,
 	telemetry: false,
 	head: {
-		title: 'Capsule Social',
+		title: 'Blogchain',
 		htmlAttrs: {
 			lang: 'en',
 		},
 		meta: [
 			{ charset: 'utf-8' },
 			{ name: 'viewport', content: 'width=device-width, initial-scale=1' },
-			{ hid: 'capsule', name: 'Capsule Social', content: 'Decentralized discourse' },
-			// {
-			// 	hid: `og:title`,
-			// 	name: `og:title`,
-			// 	content: `Capsule Social - Decentralized discourse`,
-			// },
+			{ hid: 'capsule', name: 'Blogchain', content: 'Decentralized discourse' },
 		],
 		link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
 		script: [],
