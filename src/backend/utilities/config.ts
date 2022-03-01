@@ -3,6 +3,8 @@ import { SubVerifierDetails } from '@toruslabs/customauth'
 import { ILocalNetNearConfig, INearConfig } from '../near'
 
 const defaultBootstraps = [
+	`/dns4/blogchain.app/tcp/5434/wss/p2p/12D3KooWFwekcRfsn8xkU4k7jeJfphTHurVAXdu5hR3sJwRkSTZH`,
+	`/dns4/node1.blogchain.app/tcp/5434/wss/p2p/12D3KooW9qeCwGnG7ncn1YFh7Kth7oH93TCmMuAzdafV8WwGTMkX`,
 	`/dns4/alpha.capsule.social/tcp/5434/wss/p2p/12D3KooWF5TY7Wisj3nZzfoE2uKTxUpBAooUSUU8yucsJnkBxbpo`,
 ]
 
