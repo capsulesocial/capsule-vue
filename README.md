@@ -16,24 +16,20 @@ Capsule-Vue is the Front-End powering Capsule Social's platform interface.
 
 ```bash
 CONTRACT_NAME=dev-1635323648697-81373157539648
-CAPSULE_SERVER=https://alpha.capsule.social/server
 DOMAIN=http://localhost:3000
 
-# URL of capsule-orbit node running on our server
 # ORBIT_URL=https://test-node.capsule.social/orbit
-# URL of local capsule-orbit node
-# ORBIT_URL=http://localhost:3100
-
-NEAR_NETWORK=testnet
-
-# Torus Environment
+# ORBIT_URL=http://localhost:3001
+# CAPSULE_SERVER=http://localhost:3500
+CAPSULE_SERVER=https://alpha.capsule.social/server
+ORBIT_URL=https://alpha.capsule.social/orbit
 
 # Google
-TORUS_GOOGLE_VERIFIER="capsule-social-test-google"
+TORUS_GOOGLE_VERIFIER="capsule-social-google-tester"
 TORUS_GOOGLE_CLIENTID="653379121360-j8t9ua763vfvd86d1qjguonhrgqvkigo.apps.googleusercontent.com"
 
 # Discord
-TORUS_DISCORD_VERIFIER="capsule-social-test-discord"
+TORUS_DISCORD_VERIFIER="capsule-social-test-v2-discord"
 TORUS_DISCORD_CLIENTID="906210984396468275"
 
 ```
