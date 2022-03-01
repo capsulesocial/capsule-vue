@@ -278,6 +278,23 @@ export default Vue.extend({
 					// @ts-ignore
 					content: `${this.post?.title} by ${this.post?.authorID} on Blogchain`,
 				},
+				{
+					hid: `og:title`,
+					property: `og:title`,
+					// @ts-ignore
+					content: `${this.post?.title}`,
+				},
+				{
+					hid: `og:description`,
+					property: `og:description`,
+					// @ts-ignore
+					content: `${this.post?.subtitle}`,
+				},
+				{
+					hid: `og:type`,
+					property: `og:type`,
+					content: `article`,
+				},
 				{ hid: `og:image`, property: `og:image`, content: `${document.location.origin}` + ogImage },
 			],
 		}
