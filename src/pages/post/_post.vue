@@ -85,11 +85,16 @@
 				>
 					<div
 						v-if="post.featuredPhotoCaption"
-						class="absolute h-16 w-full rounded-b-lg"
+						class="absolute w-full rounded-b-lg"
+						:class="this.captionHeight > 52 ? `h-32` : this.captionHeight > 32 ? `h-24` : `h-16`"
 						style="background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.8) 100%)"
 					></div>
 					<img :src="featuredPhoto" class="w-full rounded-lg object-cover shadow-lg" />
-					<p v-if="post.featuredPhotoCaption" class="text-lightOnPrimaryText absolute px-4 pb-3 text-sm">
+					<p
+						v-if="post.featuredPhotoCaption"
+						id="photoCaption"
+						class="text-lightOnPrimaryText absolute px-4 pb-3 text-sm"
+					>
 						{{ post.featuredPhotoCaption }}
 					</p>
 				</article>
@@ -225,6 +230,7 @@ interface IData {
 	popImage: boolean
 	readerViewElement: any | null
 	dark: boolean
+	captionHeight: number | undefined
 }
 
 export default Vue.extend({
@@ -266,6 +272,7 @@ export default Vue.extend({
 			popImage: false,
 			readerViewElement: null,
 			dark: false,
+			captionHeight: 0,
 		}
 	},
 	head() {
@@ -357,6 +364,9 @@ export default Vue.extend({
 		// Get reposts
 		const repostData = await getReposts({ authorID: this.$store.state.session.id }, {})
 		this.myReposts = new Set(repostData.map((p) => p.repost.postCID))
+		// Get caption height
+		const caption = document.getElementById(`photoCaption`)
+		this.captionHeight = caption?.offsetHeight
 	},
 	mounted() {
 		const container = document.getElementById(`post`)
