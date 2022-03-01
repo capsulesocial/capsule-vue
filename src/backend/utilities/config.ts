@@ -16,6 +16,7 @@ export const sufficientFunds = process.env.SUFFICIENT_ACCOUNT_FUNDS || `81800000
 // Time-sensitive signatures are valid for 5 minutes
 export const sigValidity = 5 * 60000
 export const bootstrapNodes = process.env.BOOTSTRAP_NODES ? JSON.parse(process.env.BOOTSTRAP_NODES) : defaultBootstraps
+export const torusNetwork = process.env.TORUS_NETWORK || `testnet`
 
 const nearNetwork = process.env.NEAR_NETWORK || `testnet`
 

@@ -134,6 +134,7 @@ jobs:
                 TORUS_GOOGLE_CLIENTID="367906518235-1gh9efo0518u43fnaj3qfgob64fv1o8p.apps.googleusercontent.com"
                 TORUS_DISCORD_VERIFIER="blogchain-app-discord-production"
                 TORUS_DISCORD_CLIENTID="947888768269033512"
+                TORUS_NETWORK=mainnet
           EOF
           fi
           [[ -z "$branch" ]] && { echo "Failed to set deploy branch" >&2 ; exit 1 ; }
