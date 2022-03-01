@@ -283,9 +283,7 @@ export default Vue.extend({
 			// Update website
 			if (this.website !== this.$store.state.session.website && this.website && this.website !== ``) {
 				if (
-					/^((http:\/\/)|(https:\/\/))?(((\w|-){1,63})\.)?((\w|-){1,253})\.([a-z]{2,63})(\/.*)?$/.test(
-						this.website,
-					)
+					/^((http:\/\/)|(https:\/\/))?(((\w|-){1,63})\.)?((\w|-){1,253})\.([a-z]{2,63})(\/.*)?$/.test(this.website)
 				) {
 					this.changeWebsite(this.website)
 				} else {
