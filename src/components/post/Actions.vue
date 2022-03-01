@@ -363,6 +363,7 @@
 				v-for="c in comments"
 				:key="c._id"
 				class="py-2"
+				:parentCID="postCID"
 				:authorID="c.authorID"
 				:postAuthor="postAuthor"
 				:cid="c._id"

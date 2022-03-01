@@ -213,7 +213,7 @@ export default Vue.extend({
 		},
 		cid: { type: String, required: true },
 		timestamp: { type: Number, required: true },
-		parentCID: { type: Number, required: true },
+		parentCID: { type: String, required: true },
 		profile: { type: Object as PropType<Profile>, default: null },
 	},
 	data(): IData {
