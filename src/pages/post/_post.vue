@@ -86,7 +86,7 @@
 					<div
 						v-if="post.featuredPhotoCaption"
 						class="absolute w-full rounded-b-lg"
-						:class="this.captionHeight > 32 ? `h-24` : `h-16`"
+						:class="this.captionHeight > 52 ? `h-32` : this.captionHeight > 32 ? `h-24` : `h-16`"
 						style="background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.8) 100%)"
 					></div>
 					<img :src="featuredPhoto" class="w-full rounded-lg object-cover shadow-lg" />
