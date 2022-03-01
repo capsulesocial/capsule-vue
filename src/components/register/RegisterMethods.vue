@@ -68,6 +68,7 @@ import InfoIcon from '@/components/icons/Info.vue'
 import { domain, torusNetwork, torusVerifiers, TorusVerifiers } from '@/backend/utilities/config'
 import { getAccountIdFromPrivateKey, IWalletStatus } from '@/backend/auth'
 import { walletLogin, generateAndSetKey } from '@/backend/near'
+import { revokeDiscordKey } from '@/backend/discordRevoke'
 
 interface IData {
 	torus: DirectWebSdk
@@ -106,6 +107,9 @@ export default Vue.extend({
 			this.isLoading = true
 			try {
 				const info = await this.torus.triggerLogin(torusVerifiers[type])
+				if (info.userInfo.typeOfLogin === `discord`) {
+					await revokeDiscordKey(info.userInfo.accessToken)
+				}
 				const accountId = getAccountIdFromPrivateKey(info.privateKey)
 				const userInfo: IWalletStatus = {
 					type: `torus`,
