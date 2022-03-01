@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/named
-import { SubVerifierDetails } from '@toruslabs/customauth'
+import { SubVerifierDetails, TORUS_NETWORK_TYPE } from '@toruslabs/customauth'
 import { ILocalNetNearConfig, INearConfig } from '../near'
 
 const defaultBootstraps = [
@@ -16,7 +16,12 @@ export const sufficientFunds = process.env.SUFFICIENT_ACCOUNT_FUNDS || `81800000
 // Time-sensitive signatures are valid for 5 minutes
 export const sigValidity = 5 * 60000
 export const bootstrapNodes = process.env.BOOTSTRAP_NODES ? JSON.parse(process.env.BOOTSTRAP_NODES) : defaultBootstraps
-export const torusNetwork = process.env.TORUS_NETWORK || `testnet`
+
+const parsedTorusNetwork = process.env.TORUS_NETWORK
+if (parsedTorusNetwork && parsedTorusNetwork !== `mainnet` && parsedTorusNetwork !== `testnet`) {
+	throw new Error(`Unexpected Torus Network!`)
+}
+export const torusNetwork: TORUS_NETWORK_TYPE = (parsedTorusNetwork as `mainnet` | `testnet` | undefined) || `testnet`
 
 const nearNetwork = process.env.NEAR_NETWORK || `testnet`
 

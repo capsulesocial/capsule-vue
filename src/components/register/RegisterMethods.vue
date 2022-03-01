@@ -65,7 +65,7 @@ import NearIcon from '@/components/icons/brands/Near.vue'
 import DiscordIcon from '@/components/icons/Discord.vue'
 import InfoIcon from '@/components/icons/Info.vue'
 
-import { torusVerifiers, TorusVerifiers } from '@/backend/utilities/config'
+import { domain, torusNetwork, torusVerifiers, TorusVerifiers } from '@/backend/utilities/config'
 import { getAccountIdFromPrivateKey, IWalletStatus } from '@/backend/auth'
 import { walletLogin, generateAndSetKey } from '@/backend/near'
 
@@ -86,8 +86,8 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			torus: new DirectWebSdk({
-				baseUrl: `${process.env.DOMAIN}/oauth`,
-				network: `testnet`, // details for test net
+				baseUrl: `${domain}/oauth`,
+				network: torusNetwork, // details for test net
 			}),
 			isLoading: false,
 			dark: false,
