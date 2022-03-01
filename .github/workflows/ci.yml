@@ -130,10 +130,10 @@ jobs:
                 DOMAIN="https://blogchain.app"
                 CAPSULE_SERVER="https://blogchain.app/server"
                 ORBIT_URL="https://node1.blogchain.app"
-                TORUS_GOOGLE_VERIFIER="capsule-social-google-chris"
-                TORUS_GOOGLE_CLIENTID="653379121360-j8t9ua763vfvd86d1qjguonhrgqvkigo.apps.googleusercontent.com"
-                TORUS_DISCORD_VERIFIER="capsule-social-test-v2-discord"
-                TORUS_DISCORD_CLIENTID="906210984396468275"
+                TORUS_GOOGLE_VERIFIER="blogchain-app-production"
+                TORUS_GOOGLE_CLIENTID="367906518235-1gh9efo0518u43fnaj3qfgob64fv1o8p.apps.googleusercontent.com"
+                TORUS_DISCORD_VERIFIER="blogchain-app-discord-production"
+                TORUS_DISCORD_CLIENTID="947888768269033512"
           EOF
           fi
           [[ -z "$branch" ]] && { echo "Failed to set deploy branch" >&2 ; exit 1 ; }
