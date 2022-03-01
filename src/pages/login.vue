@@ -75,7 +75,7 @@ import { MutationType, createSessionFromProfile, namespace as sessionStoreNamesp
 
 import { getAccountIdFromPrivateKey, login, loginNearAccount } from '@/backend/auth'
 import { getUsernameNEAR } from '@/backend/near'
-import { torusVerifiers, TorusVerifiers } from '@/backend/utilities/config'
+import { torusNetwork, torusVerifiers, TorusVerifiers } from '@/backend/utilities/config'
 import { HTMLInputEvent } from '@/interfaces/HTMLInputEvent'
 // @ts-ignore
 import ogImage from '@/assets/images/util/ogImage.png'
@@ -108,7 +108,7 @@ export default Vue.extend({
 			phoneNumber: ``,
 			torus: new DirectWebSdk({
 				baseUrl: `${process.env.DOMAIN}/oauth`,
-				network: `testnet`, // details for test net
+				network: torusNetwork, // details for test net
 			}),
 			accountId: null,
 			userInfo: null,
