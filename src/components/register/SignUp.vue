@@ -1,6 +1,6 @@
 <template>
-	<div class="flex w-full items-center justify-center">
-		<article v-if="!downloadKey">
+	<div class="flex flex-row w-full items-center justify-center">
+		<article v-if="!downloadKey" class="flex flex-row w-full items-center justify-center">
 			<VerifyPhone
 				v-if="!hasEnoughFunds()"
 				:accountId="userInfo.accountId"
