@@ -1,7 +1,9 @@
 <template>
 	<article>
 		<h1 class="text-primary dark:text-secondary text-4xl font-bold">Sign up</h1>
-		<label for="id" class="text-gray5 dark:text-gray3 block pb-1 text-sm font-semibold">Pick your Blogchain name</label>
+		<label for="id" class="text-gray5 dark:text-gray3 block pb-1 text-sm font-semibold"
+			>Pick your Blogchain username</label
+		>
 		<input
 			id="id"
 			v-model="id"
