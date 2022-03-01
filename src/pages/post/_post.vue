@@ -364,6 +364,9 @@ export default Vue.extend({
 		// Get reposts
 		const repostData = await getReposts({ authorID: this.$store.state.session.id }, {})
 		this.myReposts = new Set(repostData.map((p) => p.repost.postCID))
+		// Get caption height
+		const caption = document.getElementById(`photoCaption`)
+		this.captionHeight = caption?.offsetHeight
 	},
 	mounted() {
 		const container = document.getElementById(`post`)
@@ -378,9 +381,6 @@ export default Vue.extend({
 		} else {
 			this.dark = false
 		}
-		// Get caption height
-		const caption = document.getElementById(`photoCaption`)
-		this.captionHeight = caption?.offsetHeight
 	},
 	beforeDestroy() {
 		if (this.$store.state.settings.recentlyPosted) {
