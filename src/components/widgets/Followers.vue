@@ -58,14 +58,14 @@ export default Vue.extend({
 	},
 	methods: {
 		handleProfiles(fList: Set<string>) {
-			this.profiles = []
 			const followers = Array.from(fList)
 			const list = followers.slice(0, 3)
+			this.profiles = []
 			list.forEach(this.getFollowers)
 		},
 		async getFollowers(p: string) {
 			const { profile } = await getProfile(p)
-			if (profile) {
+			if (profile && !this.profiles.some((e) => e.id === profile.id)) {
 				this.profiles.push(profile)
 			}
 		},
