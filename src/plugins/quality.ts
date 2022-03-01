@@ -16,6 +16,7 @@ declare module 'vue/types/vue' {
 		$qualityURL: StringInputCheck
 		$qualityTitle: TitleCheck
 		$qualitySubtitle: TitleCheck
+		$qualityFeaturedPhotoCaption: StringInputCheck
 		$qualityTags: TagsCheck
 		$qualityComment: StringInputCheck
 		$qualityContent: StringInputCheck
@@ -100,6 +101,16 @@ const qualitySubtitle: TitleCheck = (subtitle, subtitleError) => {
 	return { success: true }
 }
 
+const qualityFeaturedPhotoCaption: StringInputCheck = (featuredPhotoCaption) => {
+	if (featuredPhotoCaption.length !== 0 && featuredPhotoCaption.length < textLimits.featuredPhotoCaption.min) {
+		return { error: `Featured photo caption cannot be less than ${textLimits.featuredPhotoCaption.min} characters` }
+	}
+	if (featuredPhotoCaption.length !== 0 && featuredPhotoCaption.length > textLimits.featuredPhotoCaption.max) {
+		return { error: `Featured photo caption cannot be more than ${textLimits.featuredPhotoCaption.max} characters` }
+	}
+	return { success: true }
+}
+
 const qualityTags: TagsCheck = (tag, tags?: Array<any>) => {
 	if (tag.trim().length < textLimits.post_tag.min) {
 		return { error: `Tag length cannot be less than ${textLimits.post_tag.min} characters` }
@@ -152,6 +163,7 @@ const qualityPlugin: Plugin = (_context, inject) => {
 	inject(`qualityURL`, qualityURL)
 	inject(`qualityTitle`, qualityTitle)
 	inject(`qualitySubtitle`, qualitySubtitle)
+	inject(`qualityFeaturedPhotoCaption`, qualityFeaturedPhotoCaption)
 	inject(`qualityTags`, qualityTags)
 	inject(`qualityContent`, qualityContent)
 	inject(`qualityComment`, qualityComment)

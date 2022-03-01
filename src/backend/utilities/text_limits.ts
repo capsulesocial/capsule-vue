@@ -40,7 +40,7 @@ const textLimits = {
 		max: 200,
 	},
 	featuredPhotoCaption: {
-		min: 1,
+		min: 5,
 		max: 180,
 	},
 }

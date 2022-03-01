@@ -632,6 +632,14 @@ export default Vue.extend({
 				this.$toastError(subtitleCheck.error)
 				return
 			}
+
+			// Check for quality featuredPhotoCaption
+			const featuredPhotoCaptionCheck = this.$qualityFeaturedPhotoCaption(featuredPhotoCaption)
+			if (this.$isError(featuredPhotoCaptionCheck)) {
+				this.$toastError(featuredPhotoCaptionCheck.error)
+				return
+			}
+
 			if (category === ``) {
 				this.$toastError(`Missing category`)
 				return
