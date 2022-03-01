@@ -100,10 +100,7 @@ jobs:
       - name: extract node_modules
         run: tar -xzf node_modules.tar.gz
 
-      - name: Set up .env
-        run: |
-
-      - name: Set DEPLOY_BRANCH in env
+      - name: Set DEPLOY_BRANCH in Github environment
         run: |
           branch=''
           if [[ "${{ github.event_name }}" == 'push' ]]; then
@@ -140,7 +137,7 @@ jobs:
           [[ -z "$branch" ]] && { echo "Failed to set deploy branch" >&2 ; exit 1 ; }
           echo "DEPLOY_BRANCH=$branch" >> $GITHUB_ENV
 
-      - name: Set COMMIT_SHORT_SHA in env
+      - name: Set COMMIT_SHORT_SHA in Github environment
         run: |
           commit_identifier=''
           if [[ "${{ github.event_name }}" == 'push' ]]; then
