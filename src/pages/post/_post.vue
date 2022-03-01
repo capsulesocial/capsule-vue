@@ -111,8 +111,8 @@
 						target="_blank"
 						class="bg-gray1 dark:bg-gray7 text-gray5 dark:text-gray1 flex flex-row justify-between rounded-lg px-3 py-1"
 					>
-						<span>IPFS address </span>
-						<span class="hidden break-words xl:block">{{ $route.params.post }}</span>
+						<span class="mr-4" style="flex-shrink: 0">IPFS address </span>
+						<span class="overflow-hidden" style="text-overflow: ellipsis">{{ $route.params.post }}</span>
 						<span class="block"><LinkIcon class="py-1" /></span>
 					</a>
 				</div>
