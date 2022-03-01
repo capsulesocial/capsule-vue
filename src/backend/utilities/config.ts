@@ -4,6 +4,9 @@ import { ILocalNetNearConfig, INearConfig } from '../near'
 
 const defaultBootstraps = [
 	`/dns4/node1.blogchain.app/tcp/5434/wss/p2p/12D3KooW9qeCwGnG7ncn1YFh7Kth7oH93TCmMuAzdafV8WwGTMkX`,
+	`/dns4/node2.blogchain.app/tcp/5434/wss/p2p/12D3KooWBidnLf4iRGgZpeFVCqQjNzAsSx2opZPbG8o9tpCf2rG5`,
+	`/dns4/node3.blogchain.app/tcp/5434/wss/p2p/12D3KooWLtqhi2h8Mnb7NxfEWuAkVEkTi9FVLQPDV1PZ3ioQooW2`,
+	`/dns4/node4.blogchain.app/tcp/5434/wss/p2p/12D3KooWRzXVsB3cf57W9KzDD97EFVcQZFP8Cb4XBbmwK3SK3tME`,
 	`/dns4/alpha.capsule.social/tcp/5434/wss/p2p/12D3KooWF5TY7Wisj3nZzfoE2uKTxUpBAooUSUU8yucsJnkBxbpo`,
 ]
 
