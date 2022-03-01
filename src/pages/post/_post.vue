@@ -202,6 +202,7 @@ import { isPostBookmarkedByUser } from '@/backend/bookmarks'
 import { ICommentData } from '@/backend/comment'
 // @ts-ignore
 import ogImage from '@/assets/images/util/ogImage.png'
+import { domain } from '@/backend/utilities/config'
 
 interface IData {
 	post: Post | null
@@ -295,7 +296,7 @@ export default Vue.extend({
 					property: `og:type`,
 					content: `article`,
 				},
-				{ hid: `og:image`, property: `og:image`, content: `${document.location.origin}` + ogImage },
+				{ hid: `og:image`, property: `og:image`, content: `${domain}` + ogImage },
 			],
 		}
 	},
