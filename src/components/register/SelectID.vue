@@ -1,7 +1,9 @@
 <template>
 	<article>
 		<h1 class="text-primary dark:text-secondary text-4xl font-bold">Sign up</h1>
-		<label for="id" class="text-gray5 dark:text-gray3 block pb-1 text-sm font-semibold">Pick your Blogchain name</label>
+		<label for="id" class="text-gray5 dark:text-gray3 block pb-1 text-sm font-semibold"
+			>Pick your Blogchain username</label
+		>
 		<input
 			id="id"
 			v-model="id"
@@ -11,7 +13,7 @@
 		/>
 		<BrandedButton v-show="!isLoading" :text="`Sign Up`" :action="handleRegisterID" class="w-full" />
 		<h6 v-show="isLoading" class="text-primary dark:text-secondary text-center">Checking ID...</h6>
-		<div>
+		<div v-show="!hasEnoughFunds()">
 			<p class="justify-between p-5 font-sans text-sm text-gray7 dark:text-gray3">
 				Ensure that the NEAR account with ID: "{{ userInfo.accountId }}" has sufficient funds before signing up.
 			</p>
@@ -29,6 +31,7 @@ import BrandedButton from '@/components/BrandedButton.vue'
 import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
 import { ValidationError } from '@/errors'
 import { IWalletStatus } from '@/backend/auth'
+import { hasSufficientFunds } from '@/backend/funder'
 
 interface IData {
 	id: string
@@ -86,6 +89,9 @@ export default Vue.extend({
 			} finally {
 				this.isLoading = false
 			}
+		},
+		hasEnoughFunds(): boolean {
+			return hasSufficientFunds(this.funds)
 		},
 	},
 })
