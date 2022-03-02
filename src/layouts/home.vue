@@ -1,5 +1,6 @@
 <template>
 	<main
+		ref="main"
 		class="bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightMainBG dark:bg-darkBG"
 		:style="
 			dark
@@ -91,6 +92,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { disableBodyScroll } from 'body-scroll-lock'
 import Nodes from '@/components/Nodes.vue'
 import Widgets from '@/components/Widgets.vue'
 import Header from '@/components/Header.vue'
@@ -158,6 +160,9 @@ export default Vue.extend({
 		}
 	},
 	async mounted() {
+		// Lock background
+		const mainOverlay = this.$refs.main as HTMLElement
+		disableBodyScroll(mainOverlay)
 		// Check if logged in user
 		if (this.$store.state.session.id === ``) {
 			return
