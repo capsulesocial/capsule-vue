@@ -215,7 +215,7 @@ export const faces = {
 		dark: require(`@/assets/images/reactions/dark/offended.webp`),
 	},
 	on_it: {
-		label: `on it`,
+		label: `on_it`,
 		light: require(`@/assets/images/reactions/light/on_it.webp`),
 		dark: require(`@/assets/images/reactions/dark/on_it.webp`),
 	},
