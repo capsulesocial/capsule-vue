@@ -294,7 +294,7 @@ export async function validateUsernameNEAR(username: string) {
 		case 7:
 			return { success: false, error: `Username should not contain blocklisted keywords` }
 		case 8:
-			return { success: false, error: `Username can only contain lowercase alphanumeric characters or underscores` }
+			return { success: false, error: `Username can only contain lowercase letters, numbers, or underscores` }
 		default:
 			throw new Error(`Unknown status encountered while validating username on NEAR`)
 	}

@@ -32,6 +32,7 @@ import { MutationType, namespace as sessionStoreNamespace } from '~/store/sessio
 import { ValidationError } from '@/errors'
 import { IWalletStatus } from '@/backend/auth'
 import { hasSufficientFunds } from '@/backend/funder'
+import { validateUsernameNEAR } from '@/backend/near'
 
 interface IData {
 	id: string
@@ -80,10 +81,10 @@ export default Vue.extend({
 			try {
 				this.isLoading = true
 				this.id = this.id.toLowerCase()
-				const idCheck = this.$qualityID(this.id)
-				if (this.$isError(idCheck)) {
+				const idValidity = await validateUsernameNEAR(this.id)
+				if (idValidity.error) {
 					this.isLoading = false
-					throw new ValidationError(idCheck.error)
+					throw new ValidationError(idValidity.error)
 				}
 				await this.verify(this.id)
 			} finally {
