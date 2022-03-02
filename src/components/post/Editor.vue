@@ -634,10 +634,12 @@ export default Vue.extend({
 			}
 
 			// Check for quality featuredPhotoCaption
-			const featuredPhotoCaptionCheck = this.$qualityFeaturedPhotoCaption(featuredPhotoCaption)
-			if (this.$isError(featuredPhotoCaptionCheck)) {
-				this.$toastError(featuredPhotoCaptionCheck.error)
-				return
+			if (featuredPhotoCaption) {
+				const featuredPhotoCaptionCheck = this.$qualityFeaturedPhotoCaption(featuredPhotoCaption)
+				if (this.$isError(featuredPhotoCaptionCheck)) {
+					this.$toastError(featuredPhotoCaptionCheck.error)
+					return
+				}
 			}
 
 			if (category === ``) {
