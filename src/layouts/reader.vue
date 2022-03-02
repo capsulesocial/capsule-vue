@@ -1,5 +1,6 @@
 <template>
 	<main
+		ref="main"
 		class="bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightMainBG dark:bg-darkBG"
 		:style="
 			dark
@@ -50,6 +51,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { disableBodyScroll } from 'body-scroll-lock'
 import Header from '@/components/Header.vue'
 import UnauthPopup from '@/components/popups/UnauthPopup.vue'
 
@@ -111,6 +113,11 @@ export default Vue.extend({
 				this.avatar = p
 			})
 		}
+	},
+	mounted() {
+		// Lock background
+		const mainOverlay = this.$refs.main as HTMLElement
+		disableBodyScroll(mainOverlay)
 	},
 	methods: {
 		showPhoto(d: FeaturedPhoto): void {

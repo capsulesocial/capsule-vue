@@ -1,5 +1,6 @@
 <template>
 	<main
+		ref="main"
 		class="bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightMainBG dark:bg-darkBG"
 		:style="
 			dark
@@ -27,6 +28,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { disableBodyScroll } from 'body-scroll-lock'
 import BrandedButton from '@/components/BrandedButton.vue'
 import Header from '@/components/Header.vue'
 import { IBackground, backgrounds } from '@/config'
@@ -65,6 +67,11 @@ export default Vue.extend({
 		} else {
 			this.dark = false
 		}
+	},
+	mounted() {
+		// Lock background
+		const mainOverlay = this.$refs.main as HTMLElement
+		disableBodyScroll(mainOverlay)
 	},
 	methods: {
 		goBack() {
