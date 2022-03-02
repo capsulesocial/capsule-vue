@@ -104,7 +104,7 @@
 					<div class="grid w-full grid-cols-3 xl:grid-cols-6">
 						<div v-for="f in faceStats.slice(page * 6, page * 6 + 6)" :key="f.face.label" class="flex w-24 flex-col">
 							<div class="flex flex-col rounded-lg border p-1" :class="`border-` + getStyle(f.face.label)">
-								<span class="self-center text-xs dark:text-darkPrimaryText">{{ f.face.label }}</span>
+								<span class="self-center text-xs dark:text-darkPrimaryText">{{ f.face.label.replace(/_/g, ' ') }}</span>
 								<img :src="dark ? f.face.dark : f.face.light" :alt="f.face.label" class="h-16 w-16 self-center mt-1" />
 							</div>
 							<span class="mt-1 self-center text-sm font-semibold dark:text-darkPrimaryText"
@@ -300,7 +300,7 @@
 													selectedEmotion.label === face.label ? `font-bold text-` + selectedEmotionColor : `text-gray7`
 												"
 											>
-												{{ face.label }}
+												{{ face.label.replace(/_/g, ' ') }}
 											</p>
 										</button>
 										<div
@@ -319,7 +319,7 @@
 												@click="setEmotion($event, face)"
 											>
 												<p class="capitalize">
-													{{ face.label }}
+													{{ face.label.replace(/_/g, ' ') }}
 												</p>
 											</button>
 											<div class="bg-gray5 dark:bg-darkBG separator h-1 w-1 rounded-full"></div>

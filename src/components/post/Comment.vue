@@ -60,7 +60,7 @@
 										class="border-lightBorder modal-animation-delay absolute top-0 mt-2 z-40 flex flex-col rounded-lg border bg-lightBG dark:bg-darkBG p-2 shadow-lg"
 									>
 										<p class="text-sm text-gray5 dark:text-gray3">
-											{{ emotion.label }}
+											{{ emotion.label.replace(/_/g, ' ') }}
 										</p>
 									</div>
 								</div>
