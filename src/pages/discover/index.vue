@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="xl:w-750 min-h-120 h-120 xl:min-h-160 xl:h-160 border-lightBorder w-full border"
+		class="xl:w-750 min-h-61 h-61 xl:min-h-160 xl:h-160 border-lightBorder w-full border"
 		style="backdrop-filter: blur(10px)"
 	>
 		<div class="px-5 pb-2 pt-3 xl:px-6 xl:pt-4">
@@ -8,7 +8,7 @@
 			<p class="text-gray5 dark:text-gray3">Read more of what you love by browsing top categories:</p>
 		</div>
 		<article
-			class="xl:w-750 min-h-230 h-230 xl:min-h-240 xl:h-240 fixed box-border grid w-full grid-cols-1 gap-4 overflow-y-auto px-6 pb-8 pt-4 xl:grid-cols-2"
+			class="xl:w-750 min-h-170 h-170 xl:min-h-240 xl:h-240 fixed box-border grid w-full grid-cols-1 gap-4 overflow-y-auto px-6 pb-8 pt-4 xl:grid-cols-2"
 		>
 			<CategoryCard
 				v-for="c in categoryList"

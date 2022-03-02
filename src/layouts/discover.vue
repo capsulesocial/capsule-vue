@@ -20,7 +20,7 @@
 				<div>
 					<!-- Title and peered nodes -->
 					<div
-						class="modal-animation fixed flex w-full items-center justify-between px-3 xl:px-0"
+						class="modal-animation fixed hidden xl:flex w-full items-center justify-between px-3 xl:px-0"
 						style="width: 1220px; height: 62px"
 					>
 						<!-- Title -->
@@ -34,9 +34,9 @@
 						<Nodes />
 					</div>
 					<!-- Content -->
-					<section class="modal-animation mt-16 flex flex-row xl:mt-20">
+					<section class="modal-animation flex flex-row xl:mt-20">
 						<nuxt-child
-							:class="$route.name === `discover` ? `` : `-mt-16 xl:-mt-20`"
+							:class="$route.name === `discover` ? `` : `xl:-mt-20`"
 							class="xl:w-750 min-h-61 h-61 xl:min-h-80 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop fixed z-10 mr-5 box-content w-full overflow-y-auto rounded-lg bg-gradient-to-r shadow-lg xl:h-80"
 							:toggleFriend="toggleFriend"
 							:following="following"
