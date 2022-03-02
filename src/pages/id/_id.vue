@@ -124,9 +124,7 @@
 				</div>
 				<!-- Bio -->
 				<div v-if="visitProfile.bio" id="bio" class="header-profile px-1 pt-4 dark:text-darkPrimaryText">
-					<p>
-						{{ visitProfile.bio }}
-					</p>
+					<p v-for="(line, lineNumber) of visitProfile.bio.split('\n')" :key="lineNumber">{{ line }}<br /></p>
 				</div>
 				<div v-else id="bio" class="header-profile"></div>
 				<!-- Tabs -->
