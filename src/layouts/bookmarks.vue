@@ -20,7 +20,7 @@
 				<div>
 					<!-- Title and peered nodes -->
 					<div
-						class="modal-animation fixed flex w-full items-center justify-between px-3 xl:px-0"
+						class="modal-animation fixed hidden xl:flex w-full items-center justify-between px-3 xl:px-0"
 						style="width: 1220px; height: 62px"
 					>
 						<!-- Title -->
@@ -29,9 +29,9 @@
 						<Nodes />
 					</div>
 					<!-- Content -->
-					<section class="mt-16 flex flex-row xl:mt-20">
+					<section class="flex flex-row xl:mt-20">
 						<nuxt-child
-							class="xl:w-750 min-h-120 h-120 xl:min-h-150 xl:h-150 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation fixed z-10 mr-5 w-full overflow-y-hidden rounded-lg border bg-gradient-to-r shadow-lg"
+							class="xl:w-750 min-h-61 h-61 xl:min-h-150 xl:h-150 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation fixed z-10 mr-5 w-full overflow-y-hidden rounded-lg border bg-gradient-to-r shadow-lg"
 							:posts="posts"
 							:isLoading="isLoading"
 						/>

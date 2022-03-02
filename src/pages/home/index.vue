@@ -45,7 +45,7 @@
 			<div
 				v-if="posts"
 				ref="container"
-				class="xl:w-748 min-h-180 h-180 xl:min-h-220 xl:h-220 modal-animation fixed w-full overflow-y-auto"
+				class="xl:w-748 min-h-120 h-120 xl:min-h-220 xl:h-220 modal-animation fixed w-full overflow-y-auto"
 			>
 				<div
 					v-if="!isLoading && algorithm === `FOLLOWING` && following.size === 0 && posts.length === 0"

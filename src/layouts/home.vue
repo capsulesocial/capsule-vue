@@ -20,7 +20,7 @@
 				<div>
 					<!-- Title and peered nodes -->
 					<div
-						class="modal-animation fixed flex w-full items-center justify-between px-3 xl:px-0"
+						class="modal-animation fixed hidden xl:flex w-full items-center justify-between px-3 xl:px-0"
 						style="height: 62px; width: 1220px"
 					>
 						<!-- Title -->
@@ -31,7 +31,7 @@
 						<Nodes />
 					</div>
 					<!-- Content -->
-					<section class="relative mt-16 flex flex-row xl:mt-20">
+					<section class="relative flex flex-row xl:mt-20">
 						<PostEditor
 							v-if="$store.state.widgets.primary === `editor` && $route.name === `home`"
 							ref="editor"
@@ -45,7 +45,7 @@
 						/>
 						<nuxt-child
 							v-else
-							class="xl:w-750 min-h-120 h-120 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop modal-animation fixed box-border w-full overflow-y-auto rounded-lg bg-gradient-to-r shadow-lg xl:mr-5"
+							class="xl:w-750 min-h-61 h-61 xl:min-h-120 xl:h-120 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop modal-animation fixed box-border w-full overflow-y-auto rounded-lg bg-gradient-to-r shadow-lg xl:mr-5"
 							:class="showWidgets ? `` : `z-10`"
 							:toggleFriend="toggleFriend"
 							:following="following"
