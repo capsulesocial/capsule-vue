@@ -30,14 +30,14 @@
 		</div>
 		<!-- Wrapper -->
 		<div class="flex w-full justify-center">
-			<div class="xl:w-1220 flex w-full flex-col">
+			<div class="flex w-full lg:w-11/12 xl:w-10/12 flex-col">
 				<!-- Header -->
 				<Header :avatar="avatar" />
 				<!-- Body -->
 				<!-- Content -->
 				<section class="flex flex-row">
 					<nuxt-child
-						class="xl:w-1220 xl:min-h-80 border-lightBorder from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop fixed mr-5 h-full w-full overflow-y-auto rounded-lg border bg-gradient-to-r p-5 pt-0 shadow-lg xl:h-80 xl:p-6 xl:pt-0"
+						class="min-h-61 h-61 lg:min-h-70 lg:h-70 border-lightBorder from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop w-full overflow-y-auto rounded-lg border bg-gradient-to-r p-5 pt-0 shadow-lg xl:h-80 xl:p-6 xl:pt-0"
 						@showPhoto="showPhoto"
 					/>
 				</section>
