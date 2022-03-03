@@ -474,8 +474,8 @@ export default Vue.extend({
 			dark: false,
 		}
 	},
-	async created() {
-		await this.initComments()
+	created() {
+		this.initComments()
 		if (document.documentElement.classList.contains(`dark`)) {
 			this.dark = true
 		} else {
@@ -485,7 +485,6 @@ export default Vue.extend({
 	methods: {
 		async initComments() {
 			this.comments = await getCommentsOfPost(this.postCID)
-			this.comments = this.comments.reverse()
 			// get comment stats
 			this.updateFaceStats()
 			if (this.$store.state.session.avatar !== ``) {
@@ -560,21 +559,20 @@ export default Vue.extend({
 		},
 		async filterComments() {
 			// Fetch comments
-			let cList: ICommentData[] = []
 			if (this.filter === ``) {
-				cList = await getCommentsOfPost(this.postCID)
-			} else if (this.filter === `positive` || this.filter === `neutral` || this.filter === `negative`) {
-				// Get a list of comments with multiple emotions under the same category
-				cList = await getCommentsOfPost(this.postCID, undefined, this.filter)
-			} else {
-				// Get a list of comments with a specific emotion
-				cList = await getCommentsOfPost(
-					this.postCID,
-					this.filter.charAt(0).toLowerCase() + this.filter.replace(/\s/g, ``).substring(1),
-				)
+				this.comments = await getCommentsOfPost(this.postCID)
+				return
 			}
-
-			this.comments = cList.reverse()
+			if (this.filter === `positive` || this.filter === `neutral` || this.filter === `negative`) {
+				// Get a list of comments with multiple emotions under the same category
+				this.comments = await getCommentsOfPost(this.postCID, undefined, this.filter)
+				return
+			}
+			// Get a list of comments with a specific emotion
+			this.comments = await getCommentsOfPost(
+				this.postCID,
+				this.filter.charAt(0).toLowerCase() + this.filter.replace(/\s/g, ``).substring(1),
+			)
 		},
 		getCommentCount(type: `total` | `positive` | `neutral` | `negative`): number {
 			if (type === `total`) {
