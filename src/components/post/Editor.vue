@@ -151,6 +151,7 @@ const options = {
 }
 
 const turndownService = new Turndown()
+turndownService.keep([`u`])
 turndownService.addRule(`codeblock`, preRule)
 turndownService.addRule(`ipfsimage`, ipfsImageRule)
 turndownService.use(strikethrough)
