@@ -29,16 +29,16 @@
 					<Nodes />
 				</div>
 				<!-- Content -->
-				<section class="modal-animation flex flex-row lg:mt-5">
+				<section class="modal-animation flex flex-row lg:mt-2 xl:mt-5">
 					<nuxt-child
-						:class="$route.name === `discover` ? `` : `lg:-mt-4`"
+						:class="$route.name === `discover` ? `` : `lg:-mt-2 xl:-mt-4`"
 						class="lg:w-7.5 min-h-61 h-61 xl:min-h-80 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop z-10 box-content w-full overflow-y-hidden rounded-lg bg-gradient-to-r shadow-lg xl:h-80"
 						:toggleFriend="toggleFriend"
 						:following="following"
 					/>
 					<!-- Widgets -->
 					<aside
-						:class="$route.name === `discover` ? `` : `-mt-8`"
+						:class="$route.name === `discover` ? `` : `lg:-mt-6 xl:-mt-8`"
 						class="w-5/12 -mr-5 -mt-4 hidden overflow-y-auto p-4 lg:block"
 						:style="
 							$route.name === `discover`
