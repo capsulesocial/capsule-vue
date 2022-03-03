@@ -56,7 +56,7 @@ import type { PropType } from 'vue'
 import ProfilePreview from '@/components/ProfilePreview.vue'
 import SecondaryButton from '@/components/SecondaryButton.vue'
 import CloseIcon from '@/components/icons/X.vue'
-import { getProfile, Profile } from '@/backend/profile'
+import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 
 interface IData {
 	isLoading: boolean
@@ -107,7 +107,11 @@ export default Vue.extend({
 			this.$emit(`close`)
 		},
 		async getFollowers(p: string) {
-			const { profile } = await getProfile(p)
+			let profile = createDefaultProfile(p)
+			const fetchedProfile = await getProfile(p)
+			if (fetchedProfile.profile) {
+				profile = fetchedProfile.profile
+			}
 			if (profile) {
 				this.profiles.push(profile)
 			}
