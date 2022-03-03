@@ -417,6 +417,7 @@ interface IData {
 	page: number
 	selectedEmotionColor: `positive` | `neutral` | `negative` | `neutralLightest`
 	dark: boolean
+	sendingComment: boolean
 }
 
 export default Vue.extend({
@@ -472,6 +473,7 @@ export default Vue.extend({
 			page: 0,
 			selectedEmotionColor: `neutralLightest`,
 			dark: false,
+			sendingComment: false,
 		}
 	},
 	created() {
@@ -542,9 +544,14 @@ export default Vue.extend({
 				this.$toastError(commentQualityCheck.error)
 				return
 			}
+			// prevent duplicates
+			if (this.sendingComment) {
+				return
+			}
+			this.sendingComment = true
+			// Send comment (c)
 			const c = createComment(this.$store.state.session.id, this.comment, this.activeEmotion.label, this.postCID)
 			const _id = await sendComment(c, `comment`)
-			// Send comment (c)
 			this.comments.push({ _id, ...c })
 			// Apply filter to comments, in case new comment was added in filtered category
 			this.comment = ``
@@ -556,6 +563,7 @@ export default Vue.extend({
 			this.selectedEmotionColor = `neutralLightest`
 			this.filterComments()
 			this.updateFaceStats()
+			this.sendingComment = false
 		},
 		async filterComments() {
 			// Fetch comments
