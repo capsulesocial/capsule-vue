@@ -474,8 +474,8 @@ export default Vue.extend({
 			dark: false,
 		}
 	},
-	async created() {
-		await this.initComments()
+	created() {
+		this.initComments()
 		if (document.documentElement.classList.contains(`dark`)) {
 			this.dark = true
 		} else {
