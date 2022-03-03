@@ -559,21 +559,20 @@ export default Vue.extend({
 		},
 		async filterComments() {
 			// Fetch comments
-			let cList: ICommentData[] = []
 			if (this.filter === ``) {
-				cList = await getCommentsOfPost(this.postCID)
-			} else if (this.filter === `positive` || this.filter === `neutral` || this.filter === `negative`) {
-				// Get a list of comments with multiple emotions under the same category
-				cList = await getCommentsOfPost(this.postCID, undefined, this.filter)
-			} else {
-				// Get a list of comments with a specific emotion
-				cList = await getCommentsOfPost(
-					this.postCID,
-					this.filter.charAt(0).toLowerCase() + this.filter.replace(/\s/g, ``).substring(1),
-				)
+				this.comments = await getCommentsOfPost(this.postCID)
+				return
 			}
-
-			this.comments = cList
+			if (this.filter === `positive` || this.filter === `neutral` || this.filter === `negative`) {
+				// Get a list of comments with multiple emotions under the same category
+				this.comments = await getCommentsOfPost(this.postCID, undefined, this.filter)
+				return
+			}
+			// Get a list of comments with a specific emotion
+			this.comments = await getCommentsOfPost(
+				this.postCID,
+				this.filter.charAt(0).toLowerCase() + this.filter.replace(/\s/g, ``).substring(1),
+			)
 		},
 		getCommentCount(type: `total` | `positive` | `neutral` | `negative`): number {
 			if (type === `total`) {
