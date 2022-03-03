@@ -20,7 +20,7 @@
 import Vue from 'vue'
 import type { PropType } from 'vue'
 import ProfilePreview from '@/components/ProfilePreview.vue'
-import { Profile, getProfile } from '@/backend/profile'
+import { Profile, getProfile, createDefaultProfile } from '@/backend/profile'
 
 interface IData {
 	profiles: Array<Profile>
@@ -64,7 +64,11 @@ export default Vue.extend({
 			list.forEach(this.getFollowers)
 		},
 		async getFollowers(p: string) {
-			const { profile } = await getProfile(p)
+			let profile = createDefaultProfile(p)
+			const fetchedProfile = await getProfile(p)
+			if (fetchedProfile.profile) {
+				profile = fetchedProfile.profile
+			}
 			if (profile && !this.profiles.some((e) => e.id === profile.id)) {
 				this.profiles.push(profile)
 			}
