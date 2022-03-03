@@ -35,6 +35,7 @@
 							:updateProfileMethod="getMyProfile"
 							@openFollowers="showFollowers = true"
 							@openFollowing="showFollowing = true"
+							@showAvatar="showAvatar = true"
 						/>
 						<!-- Widgets -->
 						<aside
@@ -120,6 +121,7 @@
 			:mutualProfiles="mutualProfiles"
 			@close="showMutuals = false"
 		/>
+		<ImagePopup v-if="showAvatar" :image="visitAvatar" @close="showAvatar = false" />
 		<UnauthPopup />
 		<portal-target name="card-popup"></portal-target>
 	</main>
@@ -135,6 +137,7 @@ import Footer from '@/components/Footer.vue'
 import FollowersPopup from '@/components/popups/FollowersPopup.vue'
 import FollowingPopup from '@/components/popups/FollowingPopup.vue'
 import MutualFollowersPopup from '@/components/popups/MutualFollowersPopup.vue'
+import ImagePopup from '@/components/popups/Image.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 import UnauthPopup from '@/components/popups/UnauthPopup.vue'
 
@@ -162,6 +165,7 @@ interface IData {
 	showFollowing: boolean
 	showMutuals: boolean
 	dark: boolean
+	showAvatar: boolean
 }
 
 export default Vue.extend({
@@ -176,6 +180,7 @@ export default Vue.extend({
 		FollowersPopup,
 		FollowingPopup,
 		MutualFollowersPopup,
+		ImagePopup,
 	},
 	data(): IData {
 		return {
@@ -196,6 +201,7 @@ export default Vue.extend({
 			showFollowing: false,
 			showMutuals: false,
 			dark: false,
+			showAvatar: false,
 		}
 	},
 	watch: {

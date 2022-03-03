@@ -24,13 +24,15 @@
 						:class="$route.params.id === $store.state.session.id ? `` : `ml-6`"
 					>
 						<div class="flex flex-row items-center">
-							<Avatar
-								:avatar="visitAvatar"
-								:authorID="$route.params.id"
-								:size="`w-8 h-8`"
-								:noClick="true"
-								class="rounded-base flex-shrink-0"
-							/>
+							<button class="focus:outline-none" @click="showAvatar">
+								<Avatar
+									:avatar="visitAvatar"
+									:authorID="$route.params.id"
+									:size="`w-8 h-8`"
+									:noClick="true"
+									class="rounded-base flex-shrink-0"
+								/>
+							</button>
 							<h6 v-if="visitProfile.name != ``" class="ml-2 font-sans font-semibold dark:text-darkPrimaryText">
 								{{ visitProfile.name }}
 							</h6>
@@ -58,13 +60,15 @@
 						class="header-profile flex items-center"
 						:class="$route.params.id === $store.state.session.id ? `-mt-12` : ``"
 					>
-						<Avatar
-							:avatar="visitAvatar"
-							:authorID="$route.params.id"
-							:size="`w-20 h-20`"
-							:noClick="true"
-							class="flex-shrink-0 rounded-lg"
-						/>
+						<button class="focus:outline-none" @click="showAvatar">
+							<Avatar
+								:avatar="visitAvatar"
+								:authorID="$route.params.id"
+								:size="`w-20 h-20`"
+								:noClick="true"
+								class="flex-shrink-0 rounded-lg"
+							/>
+						</button>
 						<div class="ml-5 flex flex-grow flex-col">
 							<!-- Name Username, Follow button -->
 							<div class="flex flex-col">
@@ -317,6 +321,11 @@ export default Vue.extend({
 		}
 	},
 	methods: {
+		showAvatar() {
+			if (this.visitAvatar) {
+				this.$emit(`showAvatar`)
+			}
+		},
 		handleClose(e: any): void {
 			if (!e.target || e.target.firstChild === null || e.target.firstChild.classList === undefined) {
 				return
