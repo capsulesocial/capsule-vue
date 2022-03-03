@@ -3,11 +3,11 @@
 		class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation mb-5 w-full rounded-lg border bg-gradient-to-r p-4 shadow-lg"
 	>
 		<h6 class="text-primary dark:text-secondary mb-6 font-semibold">Contact Support</h6>
-		<p class="text-gray5 dark:text-gray3 mb-6 px-6 text-center text-sm">
+		<p class="text-gray5 dark:text-gray3 mb-6 xl:px-6 text-center text-sm">
 			Do you need any help with your Blogchain experience ? If you face any technical difficulties, you can contact the
 			team on Discord, or directly send us an email:
 		</p>
-		<div class="mb-12 flex items-center justify-between px-6">
+		<div class="mb-12 flex items-center justify-between xl:px-6">
 			<a href="https://discord.gg/sZWjf3E6bY" target="_blank">
 				<button
 					style="padding: 0.8rem 1.7rem; background-color: #7289da"
