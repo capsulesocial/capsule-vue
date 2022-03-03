@@ -485,7 +485,7 @@ export default Vue.extend({
 	methods: {
 		async initComments() {
 			this.comments = await getCommentsOfPost(this.postCID)
-			this.comments = this.comments.reverse()
+			// this.comments = this.comments.reverse()
 			// get comment stats
 			this.updateFaceStats()
 			if (this.$store.state.session.avatar !== ``) {
@@ -574,7 +574,7 @@ export default Vue.extend({
 				)
 			}
 
-			this.comments = cList.reverse()
+			this.comments = cList
 		},
 		getCommentCount(type: `total` | `positive` | `neutral` | `negative`): number {
 			if (type === `total`) {
