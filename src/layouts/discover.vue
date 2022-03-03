@@ -32,7 +32,7 @@
 				<section class="modal-animation flex flex-row lg:mt-2 xl:mt-5">
 					<nuxt-child
 						:class="$route.name === `discover` ? `` : `lg:-mt-2 xl:-mt-4`"
-						class="lg:w-7.5 min-h-61 h-61 xl:min-h-80 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop z-10 box-content w-full overflow-y-hidden rounded-lg bg-gradient-to-r shadow-lg xl:h-80"
+						class="lg:w-7.5 min-h-61 h-61 xl:min-h-80 xl:h-80 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop z-10 box-content w-full overflow-y-hidden rounded-lg bg-gradient-to-r shadow-lg"
 						:toggleFriend="toggleFriend"
 						:following="following"
 					/>
