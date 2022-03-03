@@ -150,7 +150,7 @@
 				v-if="loadedContent()"
 				id="scrollContainer"
 				ref="scrollContainer"
-				class="xl:w-748 fixed w-full overflow-y-auto"
+				class="w-full overflow-y-auto"
 				:style="
 					!scrollingDown
 						? `min-height: calc(100vh - ` + `290px` + `); height: calc(100vh - ` + `290px` + `)`

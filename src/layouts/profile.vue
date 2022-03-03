@@ -13,7 +13,7 @@
 	>
 		<!-- Wrapper -->
 		<div class="flex w-full justify-center">
-			<div class="xl:w-1220 flex w-full flex-col">
+			<div class="flex flex-col w-full lg:w-11/12 xl:w-10/12">
 				<!-- Header -->
 				<Header :avatar="myAvatar" />
 				<!-- Body -->
@@ -22,7 +22,7 @@
 					<section v-if="visitProfile" class="flex flex-row">
 						<nuxt-child
 							:key="componentKey"
-							class="xl:w-750 min-h-61 h-61 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation fixed z-10 mr-5 overflow-y-auto rounded-lg border bg-gradient-to-r shadow-lg"
+							class="lg:w-7.5 min-h-61 h-61 xl:min-h-80 xl:h-80 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation z-10 overflow-y-hidden rounded-lg border bg-gradient-to-r shadow-lg"
 							:visitProfile="visitProfile"
 							:visitAvatar="visitAvatar"
 							:followers="followers"
@@ -39,8 +39,8 @@
 						/>
 						<!-- Widgets -->
 						<aside
-							class="modal-animation fixed -mt-4 overflow-y-auto p-4"
-							style="margin-left: 755px; width: 485px; min-height: calc(100vh - 70px); height: calc(100vh - 70px)"
+							class="modal-animation w-5/12 -mr-5 -mt-4 overflow-y-auto p-4"
+							style="min-height: calc(100vh - 70px); height: calc(100vh - 70px)"
 						>
 							<ProfileWidget
 								:key="componentKey"
