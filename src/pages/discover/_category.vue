@@ -42,7 +42,7 @@
 		<!-- Posts loaded -->
 		<div
 			id="column"
-			class="xl:w-750 fixed w-full overflow-y-auto"
+			class="w-full overflow-y-auto"
 			:style="
 				!scrollDown
 					? `min-height: calc(100vh - ` + `310px` + `); height: calc(100vh - ` + `310px` + `)`

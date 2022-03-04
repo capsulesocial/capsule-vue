@@ -1,13 +1,13 @@
 <template>
 	<main>
 		<!-- Mobile back button -->
-		<nuxt-link to="/settings" class="mb-6 flex items-center xl:hidden">
+		<nuxt-link to="/settings" class="mb-6 flex items-center lg:hidden">
 			<span class="bg-gray1 dark:bg-gray5 mr-4 rounded-full p-1"><ChevronLeft /></span>
 			<h6 class="font-semibold dark:text-darkPrimaryText">All Settings</h6>
 		</nuxt-link>
 		<h2 class="text-primary dark:text-secondary mb-4 text-sm font-semibold">Display</h2>
-		<div class="mb-8 flex w-4/5 items-center justify-between">
-			<h3 class="w-56 font-semibold dark:text-darkPrimaryText">App Background</h3>
+		<div class="mb-8 flex w-full xl:w-4/5 items-center justify-between">
+			<h3 class="w-36 xl:w-56 font-semibold dark:text-darkPrimaryText">App Background</h3>
 			<button
 				class="text-primary dark:text-secondary focus:outline-none flex flex-row items-center"
 				@click="toggleBGSelector"
@@ -21,7 +21,7 @@
 				/>
 			</button>
 		</div>
-		<div class="mb-8 flex w-4/5 items-center justify-between">
+		<div class="mb-8 flex w-full xl:w-4/5 items-center justify-between">
 			<h3 class="w-56 font-semibold dark:text-darkPrimaryText">App Color Theme</h3>
 			<button
 				class="text-primary dark:text-secondary focus:outline-none flex flex-row items-center"
@@ -57,7 +57,7 @@
 					</button>
 				</div>
 				<!-- Background grid -->
-				<div class="grid grid-cols-2 gap-1 overflow-y-scroll p-6 pt-4" style="height: 500px">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-1 overflow-y-scroll p-6 pt-4" style="height: 500px">
 					<button
 						v-for="x of backgrounds"
 						:key="x.label"
@@ -99,14 +99,14 @@
 				class="popup from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder card-animation rounded-lg bg-gradient-to-r shadow-lg"
 			>
 				<!-- Header and close icon -->
-				<div class="flex items-center justify-between p-6 pb-2">
-					<h4 class="text-primary dark:text-secondary mb-4 text-xl font-semibold">Change your Blogchain color theme</h4>
+				<div class="flex items-center justify-between p-6 pb-2 mb-4">
+					<h4 class="text-primary dark:text-secondary text-xl font-semibold">Change your Blogchain color theme</h4>
 					<button class="bg-gray1 dark:bg-gray5 focus:outline-none rounded-full p-1" @click="toggleColorSelector">
 						<XIcon />
 					</button>
 				</div>
 				<!-- Background grid -->
-				<div class="flex flex-row justify-between p-6 pt-4">
+				<div class="flex flex-col lg:flex-row justify-between p-6 pt-4">
 					<button
 						v-for="x of colors"
 						:key="x.label"

@@ -24,13 +24,15 @@
 						:class="$route.params.id === $store.state.session.id ? `` : `ml-6`"
 					>
 						<div class="flex flex-row items-center">
-							<Avatar
-								:avatar="visitAvatar"
-								:authorID="$route.params.id"
-								:size="`w-8 h-8`"
-								:noClick="true"
-								class="rounded-base flex-shrink-0"
-							/>
+							<button class="focus:outline-none" @click="showAvatar">
+								<Avatar
+									:avatar="visitAvatar"
+									:authorID="$route.params.id"
+									:size="`w-8 h-8`"
+									:noClick="true"
+									class="rounded-base flex-shrink-0"
+								/>
+							</button>
 							<h6 v-if="visitProfile.name != ``" class="ml-2 font-sans font-semibold dark:text-darkPrimaryText">
 								{{ visitProfile.name }}
 							</h6>
@@ -58,13 +60,15 @@
 						class="header-profile flex items-center"
 						:class="$route.params.id === $store.state.session.id ? `-mt-12` : ``"
 					>
-						<Avatar
-							:avatar="visitAvatar"
-							:authorID="$route.params.id"
-							:size="`w-20 h-20`"
-							:noClick="true"
-							class="flex-shrink-0 rounded-lg"
-						/>
+						<button class="focus:outline-none" @click="showAvatar">
+							<Avatar
+								:avatar="visitAvatar"
+								:authorID="$route.params.id"
+								:size="`w-20 h-20`"
+								:noClick="true"
+								class="flex-shrink-0 rounded-lg"
+							/>
+						</button>
 						<div class="ml-5 flex flex-grow flex-col">
 							<!-- Name Username, Follow button -->
 							<div class="flex flex-col">
@@ -153,7 +157,7 @@
 				v-if="loadedContent()"
 				id="scrollContainer"
 				ref="scrollContainer"
-				class="xl:w-748 fixed w-full overflow-y-auto"
+				class="w-full overflow-y-auto"
 				:style="
 					!scrollingDown
 						? `min-height: calc(100vh - ` + `290px` + `); height: calc(100vh - ` + `290px` + `)`
@@ -177,7 +181,7 @@
 			class="bg-primary dark:bg-secondary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
 		>
 			<SettingsPopup
-				class="xl:w-589 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation w-full rounded-lg bg-gradient-to-r shadow-lg backdrop-blur-lg backdrop-filter"
+				class="lg:w-589 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation w-full rounded-lg bg-gradient-to-r shadow-lg backdrop-blur-lg backdrop-filter"
 				style="backdrop-filter: blur(10px)"
 				:updateProfileMethod="updateProfileMethod"
 				@close="toggleSettings"
@@ -345,6 +349,9 @@ export default Vue.extend({
 				if (bioContainer.clientHeight > 72) {
 					this.longBio = true
 				}
+		showAvatar() {
+			if (this.visitAvatar) {
+				this.$emit(`showAvatar`)
 			}
 		},
 		handleClose(e: any): void {

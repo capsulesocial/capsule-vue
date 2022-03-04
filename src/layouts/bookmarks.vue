@@ -13,82 +13,71 @@
 	>
 		<!-- Wrapper -->
 		<div class="flex w-full justify-center">
-			<div class="flex flex-col" style="width: 1220px">
+			<div class="flex w-full lg:w-11/12 xl:w-10/12 flex-col">
 				<!-- Header -->
 				<Header :avatar="avatar" />
 				<!-- Body -->
-				<div>
-					<!-- Title and peered nodes -->
-					<div
-						class="modal-animation fixed flex w-full items-center justify-between px-3 xl:px-0"
-						style="width: 1220px; height: 62px"
-					>
-						<!-- Title -->
-						<h1 class="text-primary dark:text-secondary text-3xl font-semibold xl:text-4xl">Bookmarks list</h1>
-						<!-- Peered nodes -->
-						<Nodes />
-					</div>
-					<!-- Content -->
-					<section class="mt-16 flex flex-row xl:mt-20">
-						<nuxt-child
-							class="xl:w-750 min-h-120 h-120 xl:min-h-150 xl:h-150 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation fixed z-10 mr-5 w-full overflow-y-hidden rounded-lg border bg-gradient-to-r shadow-lg"
-							:posts="posts"
-							:isLoading="isLoading"
-						/>
-						<!-- Widgets -->
-						<aside
-							class="modal-animation fixed hidden xl:block"
-							style="
-								margin-left: 770px;
-								width: 450px;
-								min-height: calc(80vh - 160px);
-								height: calc(80vh - 160px);
-								backdrop-filter: blur(10px);
-							"
-						>
-							<article
-								class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder mb-5 h-full w-full overflow-y-scroll rounded-lg border bg-gradient-to-r px-6 py-4 shadow-lg"
-							>
-								<div class="flex flex-row items-center justify-between pb-4">
-									<h6 class="text-primary dark:text-secondary text-base font-semibold">Filter by Category</h6>
-									<button
-										class="focus:outline-none text-primary dark:text-secondary pr-1 text-sm"
-										@click="setFilter(``)"
-									>
-										Clear
-									</button>
-								</div>
-								<button
-									v-for="c in categoryList"
-									:key="c"
-									class="focus:outline-none flex w-full items-center pb-2 capitalize"
-									:to="`/bookmarks/` + c"
-									@click="setFilter(c)"
-								>
-									<img
-										:src="
-											dark
-												? require(`@/assets/images/category/` + c + `/dark/icon.webp`)
-												: require(`@/assets/images/category/` + c + `/light/icon.webp`)
-										"
-										class="hotzone mr-1 h-8 w-8"
-									/>
-									<span
-										class="ml-2 border-b"
-										:class="
-											active === c
-												? 'border-primary text-primary dark:border-secondary dark:text-secondary'
-												: ' text-primary dark:text-gray3 border-transparent'
-										"
-									>
-										{{ c }}</span
-									>
-								</button>
-							</article>
-							<Footer />
-						</aside>
-					</section>
+				<!-- Title and peered nodes -->
+				<div
+					class="modal-animation hidden lg:flex w-full items-center justify-between px-3 lg:px-0"
+					style="height: 62px"
+				>
+					<!-- Title -->
+					<h1 class="text-primary dark:text-secondary text-3xl font-semibold xl:text-4xl">Bookmarks list</h1>
+					<!-- Peered nodes -->
+					<Nodes />
 				</div>
+				<!-- Content -->
+				<section class="flex flex-row lg:mt-2 xl:mt-5">
+					<nuxt-child
+						class="lg:w-7.5 min-h-61 h-61 xl:min-h-150 xl:h-150 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation z-10 w-full overflow-y-hidden rounded-lg border bg-gradient-to-r shadow-lg"
+						:posts="posts"
+						:isLoading="isLoading"
+					/>
+					<!-- Widgets -->
+					<aside
+						class="w-5/12 -mr-5 -mt-4 p-4 modal-animation hidden lg:block"
+						style="min-height: calc(80vh - 160px); height: calc(80vh - 160px); backdrop-filter: blur(10px)"
+					>
+						<article
+							class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder mb-5 h-full w-full overflow-y-scroll rounded-lg border bg-gradient-to-r px-6 py-4 shadow-lg"
+						>
+							<div class="flex flex-row items-center justify-between pb-4">
+								<h6 class="text-primary dark:text-secondary text-base font-semibold">Filter by Category</h6>
+								<button class="focus:outline-none text-primary dark:text-secondary pr-1 text-sm" @click="setFilter(``)">
+									Clear
+								</button>
+							</div>
+							<button
+								v-for="c in categoryList"
+								:key="c"
+								class="focus:outline-none flex w-full items-center pb-2 capitalize"
+								:to="`/bookmarks/` + c"
+								@click="setFilter(c)"
+							>
+								<img
+									:src="
+										dark
+											? require(`@/assets/images/category/` + c + `/dark/icon.webp`)
+											: require(`@/assets/images/category/` + c + `/light/icon.webp`)
+									"
+									class="hotzone mr-1 h-8 w-8"
+								/>
+								<span
+									class="ml-2 border-b"
+									:class="
+										active === c
+											? 'border-primary text-primary dark:border-secondary dark:text-secondary'
+											: ' text-primary dark:text-gray3 border-transparent'
+									"
+								>
+									{{ c }}</span
+								>
+							</button>
+						</article>
+						<Footer />
+					</aside>
+				</section>
 			</div>
 		</div>
 		<UnauthPopup />

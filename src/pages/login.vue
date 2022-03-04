@@ -1,13 +1,13 @@
 <template>
 	<main
 		style="backdrop-filter: blur(10px)"
-		class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop h-screen w-full flex-col justify-between overflow-y-scroll bg-gradient-to-r xl:w-3/5"
+		class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop h-screen w-full flex-col justify-between overflow-y-scroll bg-gradient-to-r lg:w-3/5"
 	>
 		<CapsuleIcon class="pt-6 pl-10" />
 		<section class="flex items-center justify-center" style="height: 86%">
 			<div class="-mt-5 flex w-full flex-col items-center p-14">
 				<!-- Step 1: Choose Login / register -->
-				<article v-show="!userInfo && !isLoading" class="w-full xl:w-1/2">
+				<article v-show="!userInfo && !isLoading" class="w-full lg:w-3/4 xl:w-1/2">
 					<h1 class="text-primary dark:text-secondary mb-10 font-semibold" style="font-size: 2.6rem">Log in</h1>
 					<button
 						class="bg-gray2 dark:bg-gray7 focus:outline-none mb-4 flex w-full items-center justify-center rounded-lg py-2"
@@ -42,13 +42,13 @@
 					</p>
 				</article>
 				<!-- Step 2: Sign up -->
-				<article v-show="!isLoading" class="w-full xl:w-1/2">
+				<article v-show="!isLoading" class="w-full lg:w-3/4 xl:w-1/2">
 					<div v-show="userInfo && username === null">
 						<h1 class="text-primary dark:text-secondary text-4xl font-bold">Signup</h1>
 						Looks like you don't have an account. Sign up
 					</div>
 				</article>
-				<article v-show="isLoading" class="modal-animation flex w-full justify-center xl:w-3/4">
+				<article v-show="isLoading" class="modal-animation flex w-full justify-center lg:w-3/4">
 					<div
 						class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
 						:style="dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"

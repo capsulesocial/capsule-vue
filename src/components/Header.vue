@@ -1,10 +1,10 @@
 <template>
 	<header
-		class="sticky top-0 w-full bg-gradient-to-r px-3 xl:px-0"
+		class="sticky top-0 w-full bg-gradient-to-r px-3 lg:px-0"
 		:class="showMobileMenu || showDropdown ? `z-20` : ``"
 	>
 		<!-- Desktop header -->
-		<nav class="xl:min-w-1220 flex-no-wrap hidden flex-row items-center justify-between py-5 xl:flex">
+		<nav class="w-full flex-no-wrap hidden flex-row items-center justify-between py-5 lg:flex">
 			<!-- Left side: Links + write post button -->
 			<div class="flex flex-row items-center" style="font-size: 0.95rem">
 				<nuxt-link to="/home" class="mr-5 text-primary dark:text-secondary">
@@ -71,7 +71,7 @@
 			</div>
 		</nav>
 		<!-- Mobile header -->
-		<nav class="flex w-full items-center justify-between p-2 xl:hidden">
+		<nav class="flex w-full items-center justify-between p-2 lg:hidden">
 			<!-- Mobile menu dropdown -->
 			<div class="relative">
 				<button class="mobileDropdown" @click="showMobileMenu = !showMobileMenu">

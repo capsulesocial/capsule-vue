@@ -13,7 +13,7 @@
 	>
 		<!-- Wrapper -->
 		<div class="flex w-full justify-center">
-			<div class="xl:w-1220 flex w-full flex-col">
+			<div class="flex w-full lg:w-11/12 xl:w-10/12 flex-col">
 				<!-- Header -->
 				<Header :avatar="avatar" />
 				<!-- Body -->
@@ -23,13 +23,13 @@
 						<nuxt-child
 							:tab="tab"
 							:style="showPopup ? `` : `backdrop-filter: blur(10px);`"
-							class="xl:w-750 min-h-70 h-70 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder fixed z-10 mr-5 w-full overflow-y-auto rounded-t-lg bg-gradient-to-r p-6 pt-4 shadow-lg"
+							class="lg:w-7.5 min-h-70 h-70 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder z-10 w-full overflow-y-auto rounded-t-lg bg-gradient-to-r p-6 pt-4 shadow-lg"
 							@togglePopup="togglePopup"
 							@changeLocalBGImage="changeLocalBGImage"
 							@initProfile="initProfile"
 						/>
 						<!-- Settings tabs -->
-						<aside class="fixed hidden xl:block" style="margin-left: 770px; width: 450px">
+						<aside class="w-5/12 -mr-5 -mt-4 p-4 hidden lg:block overflow-y-auto">
 							<div
 								class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation mb-5 flex flex-col overflow-hidden rounded-lg border bg-gradient-to-r py-4 px-6 pb-2 shadow-lg"
 								style="backdrop-filter: blur(10px)"

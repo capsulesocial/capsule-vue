@@ -7,11 +7,11 @@
 				class="bg-primary dark:bg-secondary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
 			>
 				<div
-					class="card xl:w-750 max-h-90 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation m-2 mt-10 w-full overflow-y-auto overflow-x-hidden rounded-lg bg-gradient-to-r shadow-lg xl:m-0"
+					class="card lg:w-750 max-h-90 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation m-2 mt-10 w-full overflow-y-auto overflow-x-hidden rounded-lg bg-gradient-to-r shadow-lg lg:m-0"
 					style="backdrop-filter: blur(10px)"
 				>
 					<div
-						class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop sticky top-0 z-40 bg-gradient-to-r px-4 py-4 xl:px-6 xl:py-5"
+						class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop sticky top-0 z-40 bg-gradient-to-r px-4 py-4 lg:px-6 lg:py-5"
 						style="backdrop-filter: blur(10px)"
 					>
 						<!-- Show Quote Repost input -->
@@ -31,14 +31,14 @@
 							</button>
 						</div>
 						<!-- Wrapper for rounded outline on quote repost -->
-						<div :class="showRepostEditor || quote ? `xl:bg-lightBorder xl:dark:bg-darkInput rounded-lg xl:p-4` : ``">
+						<div :class="showRepostEditor || quote ? `lg:bg-lightBorder lg:dark:bg-darkInput rounded-lg lg:p-4` : ``">
 							<!-- Simple repost -->
 							<div
 								v-if="repostedBy !== `` && !hideRepostIcon && quote === null"
-								class="text-gray5 dark:text-gray3 -mt-2 mb-4 flex w-full items-center pt-2 xl:mb-3"
+								class="text-gray5 dark:text-gray3 -mt-2 mb-4 flex w-full items-center pt-2 lg:mb-3"
 							>
-								<RepostIcon class="hidden xl:block" style="width: 15px; height: 15px" :shrink="true" />
-								<p class="text-gray5 dark:text-gray3 hidden pl-2 text-sm xl:block">
+								<RepostIcon class="hidden lg:block" style="width: 15px; height: 15px" :shrink="true" />
+								<p class="text-gray5 dark:text-gray3 hidden pl-2 text-sm lg:block">
 									<nuxt-link v-if="repostedBy != ``" :to="`/id/` + repostedBy">{{ repostedBy }} </nuxt-link>
 									<nuxt-link v-else :to="`/id/` + repostedBy">{{ repostedBy }}</nuxt-link>
 									reposted
@@ -51,9 +51,9 @@
 										:avatar="avatar"
 										:authorID="post.authorID"
 										size="w-12 h-12"
-										class="hidden xl:block transition ease-in-out hover:opacity-75"
+										class="hidden lg:block transition ease-in-out hover:opacity-75"
 									/>
-									<div class="ml-4 hidden flex-grow flex-col xl:flex">
+									<div class="ml-4 hidden flex-grow flex-col lg:flex">
 										<nuxt-link :to="'/id/' + post.authorID" class="mr-4 flex">
 											<span
 												v-if="authorName != ``"
@@ -111,26 +111,26 @@
 									<span v-if="authorBio !== ``" class="mt-2 dark:text-darkPrimaryText"> {{ authorBio }} </span>
 								</div>
 								<div
-									class="relative flex w-full items-center justify-center xl:w-1/5 xl:justify-end"
+									class="relative flex w-full items-center justify-center lg:w-1/5 lg:justify-end"
 									:class="repostedBy !== `` ? `-mt-4` : ``"
 								>
 									<!-- Bookmarks button -->
 									<BookmarkButton
 										:postID="postCID"
 										:hasBookmark="isBookmarked"
-										class="hidden xl:block"
+										class="hidden lg:block"
 										@clicked="getBookmarkStatus"
 									/>
 									<button
 										v-if="post.authorID === $store.state.session.id"
-										class="focus:outline-none text-gray5 dark:text-gray3 ml-2 hidden xl:block"
+										class="focus:outline-none text-gray5 dark:text-gray3 ml-2 hidden lg:block"
 										@click.stop="toggleDropdownDelete"
 									>
 										<More />
 									</button>
 									<button
 										v-show="!showRepostEditor"
-										class="bg-gray1 dark:bg-gray5 focus:outline-none right-0 top-0 ml-0 rounded-full p-1 xl:ml-4"
+										class="bg-gray1 dark:bg-gray5 focus:outline-none right-0 top-0 ml-0 rounded-full p-1 lg:ml-4"
 										@click="handleCloseButton"
 									>
 										<XIcon />
@@ -154,7 +154,7 @@
 								</div>
 							</div>
 							<!-- Content -->
-							<div class="mt-4 hidden flex-col justify-between xl:flex xl:flex-row">
+							<div class="mt-4 hidden flex-col justify-between lg:flex lg:flex-row">
 								<!-- Left side: Title, subtitle / preview, tags -->
 								<div class="mr-4 w-full">
 									<nuxt-link :to="'/post/' + postCID">
@@ -170,21 +170,21 @@
 											</h6>
 											<h6
 												v-if="(post.subtitle || post.excerpt) && !featuredPhoto"
-												class="max-w-mobileCard xl:max-w-700 break-words text-lightSecondaryText dark:text-darkSecondaryText"
+												class="max-w-mobileCard lg:max-w-700 break-words text-lightSecondaryText dark:text-darkSecondaryText"
 											>
 												{{ post.subtitle ? post.subtitle : postExcerpt() }}
 											</h6>
 										</div>
 									</nuxt-link>
 									<!-- Display tags (Desktop) -->
-									<div class="my-2 hidden overflow-x-auto xl:flex xl:flex-wrap text-lg">
+									<div class="my-2 hidden overflow-x-auto lg:flex lg:flex-wrap text-lg">
 										<TagPill v-for="t in post.tags" :key="t.name" :tag="t.name" class="my-2 mr-4" />
 									</div>
 								</div>
 								<!-- Right side: Image -->
-								<div v-if="featuredPhoto !== ``" class="mt-2 w-full flex-shrink-0 xl:mt-0 xl:w-56">
+								<div v-if="featuredPhoto !== ``" class="mt-2 w-full flex-shrink-0 lg:mt-0 lg:w-56">
 									<nuxt-link :to="'/post/' + postCID">
-										<img :src="featuredPhoto" class="h-48 w-full flex-shrink-0 rounded-lg object-cover xl:h-32" />
+										<img :src="featuredPhoto" class="h-48 w-full flex-shrink-0 rounded-lg object-cover lg:h-32" />
 									</nuxt-link>
 								</div>
 							</div>
@@ -197,13 +197,13 @@
 							style="transition: all 0.4s"
 						>
 							<button
-								class="bg-primary dark:bg-secondary focus:outline-none block rounded-lg xl:hidden"
+								class="bg-primary dark:bg-secondary focus:outline-none block rounded-lg lg:hidden"
 								style="margin-right: 15.2px; margin-bottom: 15px"
 								@click="handleSendRepost"
 							>
 								<SendIcon class="m-2 mb-3 ml-3 h-5 w-5 text-darkPrimaryText transform rotate-45" />
 							</button>
-							<BrandedButton :action="handleSendRepost" :text="`Quote`" class="hidden xl:block" />
+							<BrandedButton :action="handleSendRepost" :text="`Quote`" class="hidden lg:block" />
 						</div>
 					</div>
 					<PostActions

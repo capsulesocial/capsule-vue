@@ -1,110 +1,111 @@
 <template>
-	<div class="border-lightBorder border">
-		<section>
-			<nav class="z-20 flex w-full flex-row px-5 pt-3 text-base xl:px-6 xl:pt-4" style="backdrop-filter: blur(10px)">
-				<div class="flex items-center">
-					<button
-						:class="
-							algorithm === `FOLLOWING`
-								? ` text-primary dark:text-secondary border-primary dark:border-secondary border-b-2 font-semibold`
-								: `text-gray5 dark:text-gray3`
-						"
-						class="focus:outline-none h-full w-full pb-3"
-						@click="sortFeed('FOLLOWING')"
-					>
-						Following
-					</button>
-				</div>
-				<div class="flex items-center px-12">
-					<button
-						:class="
-							algorithm === `NEW`
-								? ` text-primary dark:text-secondary border-primary dark:border-secondary border-b-2 font-semibold`
-								: `text-gray5 dark:text-gray3`
-						"
-						class="focus:outline-none h-full w-full pb-3"
-						@click="sortFeed('NEW')"
-					>
-						New
-					</button>
-				</div>
-				<div class="flex items-center">
-					<button
-						:class="
-							algorithm === `TOP`
-								? ` text-primary dark:text-secondary border-primary dark:border-secondary border-b-2 font-semibold`
-								: `text-gray5 dark:text-gray3`
-						"
-						class="focus:outline-none h-full w-full pb-3"
-						@click="sortFeed('TOP')"
-					>
-						Top
-					</button>
-				</div>
-			</nav>
-			<div
-				v-if="posts"
-				ref="container"
-				class="xl:w-748 min-h-180 h-180 xl:min-h-220 xl:h-220 modal-animation fixed w-full overflow-y-auto"
-			>
-				<div
-					v-if="!isLoading && algorithm === `FOLLOWING` && following.size === 0 && posts.length === 0"
-					class="relative h-full overflow-y-hidden"
+	<section>
+		<nav
+			class="z-20 flex w-full flex-row px-5 pt-3 text-base xl:px-6 xl:pt-4 rounded-lg"
+			style="backdrop-filter: blur(10px)"
+		>
+			<div class="flex items-center">
+				<button
+					:class="
+						algorithm === `FOLLOWING`
+							? ` text-primary dark:text-secondary border-primary dark:border-secondary border-b-2 font-semibold`
+							: `text-gray5 dark:text-gray3`
+					"
+					class="focus:outline-none h-full w-full pb-3"
+					@click="sortFeed('FOLLOWING')"
 				>
-					<div class="flex flex-col justify-center p-12">
-						<h2 class="text-center text-2xl font-semibold dark:text-darkPrimaryText">Welcome 🚀</h2>
-						<p class="text-gray5 dark:text-gray3 mb-5 mt-2 self-center text-center xl:mx-14">
-							It seems that you don't follow anyone yet. You can go to the Top feed to follow top rated content creator
-							and start your Blogchain experience
-						</p>
-						<div class="flex justify-center">
-							<BrandedButton
-								:action="
-									() => {
-										this.sortFeed('TOP')
-									}
-								"
-								:text="`Top posts`"
-							/>
-						</div>
-					</div>
-					<img :src="require(`@/assets/images/brand/follow-window.webp`)" class="top-0 mt-24 xl:mt-0" />
-				</div>
-				<!-- content -->
-				<article v-for="p in posts" :key="generateKey(p)">
-					<PostCard
-						:repost="p.repost"
-						:post="p.post"
-						:cid="p.post._id"
-						:comments="p.comments"
-						:toggleFriend="toggleFriend"
-						:usersFollowing="following"
-						:repostedBy="p.repost ? p.repost.authorID : undefined"
-						:bookmarked="p.bookmarked"
-						:hideRepostIcon="algorithm === `NEW` || algorithm === `TOP`"
-						:bookmarksCount="p.bookmarksCount"
-						:repostCount="p.repostCount"
-						:isDeleted="p.deleted"
-						@updateBookmarks="updateBookmarks"
-					/>
-				</article>
-				<p
-					v-if="noMorePosts"
-					class="text-gray5 dark:text-gray3 py-5 text-center text-sm"
-					style="backdrop-filter: blur(10px)"
-				>
-					No more posts
-				</p>
+					Following
+				</button>
 			</div>
-			<!-- Not loaded yet -->
-			<article v-show="isLoading" class="modal-animation flex h-screen w-full justify-center pt-12">
-				<div
-					class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
-					:style="dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
-				></div>
+			<div class="flex items-center px-12">
+				<button
+					:class="
+						algorithm === `NEW`
+							? ` text-primary dark:text-secondary border-primary dark:border-secondary border-b-2 font-semibold`
+							: `text-gray5 dark:text-gray3`
+					"
+					class="focus:outline-none h-full w-full pb-3"
+					@click="sortFeed('NEW')"
+				>
+					New
+				</button>
+			</div>
+			<div class="flex items-center">
+				<button
+					:class="
+						algorithm === `TOP`
+							? ` text-primary dark:text-secondary border-primary dark:border-secondary border-b-2 font-semibold`
+							: `text-gray5 dark:text-gray3`
+					"
+					class="focus:outline-none h-full w-full pb-3"
+					@click="sortFeed('TOP')"
+				>
+					Top
+				</button>
+			</div>
+		</nav>
+		<div
+			v-if="posts"
+			ref="container"
+			class="min-h-120 h-120 xl:min-h-220 xl:h-220 modal-animation w-full overflow-y-auto"
+		>
+			<div
+				v-if="!isLoading && algorithm === `FOLLOWING` && following.size === 0 && posts.length === 0"
+				class="relative h-full overflow-y-hidden"
+			>
+				<div class="flex flex-col justify-center p-12">
+					<h2 class="text-center text-2xl font-semibold dark:text-darkPrimaryText">Welcome 🚀</h2>
+					<p class="text-gray5 dark:text-gray3 mb-5 mt-2 self-center text-center xl:mx-14">
+						It seems that you don't follow anyone yet. You can go to the Top feed to follow top rated content creator
+						and start your Blogchain experience
+					</p>
+					<div class="flex justify-center">
+						<BrandedButton
+							:action="
+								() => {
+									this.sortFeed('TOP')
+								}
+							"
+							:text="`Top posts`"
+						/>
+					</div>
+				</div>
+				<img :src="require(`@/assets/images/brand/follow-window.webp`)" class="top-0 mt-24 xl:mt-0" />
+			</div>
+			<!-- content -->
+			<article v-for="p in posts" :key="generateKey(p)">
+				<PostCard
+					:repost="p.repost"
+					:post="p.post"
+					:cid="p.post._id"
+					:comments="p.comments"
+					:toggleFriend="toggleFriend"
+					:usersFollowing="following"
+					:repostedBy="p.repost ? p.repost.authorID : undefined"
+					:bookmarked="p.bookmarked"
+					:hideRepostIcon="algorithm === `NEW` || algorithm === `TOP`"
+					:bookmarksCount="p.bookmarksCount"
+					:repostCount="p.repostCount"
+					:isDeleted="p.deleted"
+					@updateBookmarks="updateBookmarks"
+				/>
 			</article>
-		</section>
-	</div>
+			<p
+				v-if="noMorePosts"
+				class="text-gray5 dark:text-gray3 py-5 text-center text-sm"
+				style="backdrop-filter: blur(10px)"
+			>
+				No more posts
+			</p>
+		</div>
+		<!-- Not loaded yet -->
+		<article v-show="isLoading" class="modal-animation flex h-screen w-full justify-center pt-12">
+			<div
+				class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
+				:style="dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
+			></div>
+		</article>
+	</section>
 </template>
 
 <script lang="ts">

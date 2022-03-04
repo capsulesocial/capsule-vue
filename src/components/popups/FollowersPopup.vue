@@ -7,7 +7,7 @@
 			<div
 				v-if="profile !== null"
 				style="backdrop-filter: blur(10px)"
-				class="min-h-40 w-full xl:w-600 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation max-h-90 z-10 overflow-y-auto rounded-lg bg-gradient-to-r px-6 pt-4 pb-2 shadow-lg"
+				class="min-h-40 w-full lg:w-600 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation max-h-90 z-10 overflow-y-auto rounded-lg bg-gradient-to-r px-6 pt-4 pb-2 shadow-lg"
 			>
 				<div class="sticky flex items-center justify-between mb-6">
 					<h2
@@ -56,7 +56,7 @@ import type { PropType } from 'vue'
 import ProfilePreview from '@/components/ProfilePreview.vue'
 import SecondaryButton from '@/components/SecondaryButton.vue'
 import CloseIcon from '@/components/icons/X.vue'
-import { getProfile, Profile } from '@/backend/profile'
+import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 
 interface IData {
 	isLoading: boolean
@@ -107,7 +107,11 @@ export default Vue.extend({
 			this.$emit(`close`)
 		},
 		async getFollowers(p: string) {
-			const { profile } = await getProfile(p)
+			let profile = createDefaultProfile(p)
+			const fetchedProfile = await getProfile(p)
+			if (fetchedProfile.profile) {
+				profile = fetchedProfile.profile
+			}
 			if (profile) {
 				this.profiles.push(profile)
 			}
