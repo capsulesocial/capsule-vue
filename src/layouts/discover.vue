@@ -69,6 +69,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import axios from 'axios'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 import UnauthPopup from '@/components/popups/UnauthPopup.vue'
@@ -150,12 +151,24 @@ export default Vue.extend({
 					const data = await getFollowersAndFollowing(this.$store.state.session.id, true)
 					this.following = data.following
 				}
-			} catch (err: any) {
-				if (err.response) {
+			} catch (err: unknown) {
+				if (axios.isAxiosError(err)) {
+					if (!err.response) {
+						this.$toastError(`Network error, please try again`)
+						return
+					}
+					if (err.response.status === 429) {
+						this.$toastError(`Too many requests, please try again`)
+						return
+					}
 					this.$toastError(err.response.data.error)
 					return
 				}
-				this.$toastError(err.message)
+				if (err instanceof Error) {
+					this.$toastError(err.message)
+					return
+				}
+				throw err
 			}
 		},
 	},

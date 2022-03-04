@@ -91,6 +91,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import axios from 'axios'
 import Nodes from '@/components/Nodes.vue'
 import Widgets from '@/components/Widgets.vue'
 import Header from '@/components/Header.vue'
@@ -218,12 +219,24 @@ export default Vue.extend({
 					this.fetchConnections()
 					this.updateFollowers()
 					this.$toastSuccess(this.following.has(authorID) ? `Followed ${authorID}` : `Unfollowed ${authorID}`)
-				} catch (err: any) {
-					if (err.response) {
+				} catch (err: unknown) {
+					if (axios.isAxiosError(err)) {
+						if (!err.response) {
+							this.$toastError(`Network error, please try again`)
+							return
+						}
+						if (err.response.status === 429) {
+							this.$toastError(`Too many requests, please try again`)
+							return
+						}
 						this.$toastError(err.response.data.error)
 						return
 					}
-					this.$toastError(err.message)
+					if (err instanceof Error) {
+						this.$toastError(err.message)
+						return
+					}
+					throw err
 				}
 			}
 		},

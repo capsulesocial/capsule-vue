@@ -165,6 +165,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import imageCompression from 'browser-image-compression'
+import axios from 'axios'
 import XIcon from '@/components/icons/X.vue'
 import UploadIcon from '@/components/icons/Upload.vue'
 import ChevronUp from '@/components/icons/ChevronUp.vue'
@@ -292,12 +293,24 @@ export default Vue.extend({
 						this.uploadImage(i.target.result, compressedImage, image.name)
 					}
 				}
-			} catch (err: any) {
-				if (err.response) {
+			} catch (err: unknown) {
+				if (axios.isAxiosError(err)) {
+					if (!err.response) {
+						this.$toastError(`Network error, please try again`)
+						return
+					}
+					if (err.response.status === 429) {
+						this.$toastError(`Too many requests, please try again`)
+						return
+					}
 					this.$toastError(err.response.data.error)
 					return
 				}
-				this.$toastError(err.message)
+				if (err instanceof Error) {
+					this.$toastError(err.message)
+					return
+				}
+				throw err
 			}
 		},
 		handleCategoryDropdown(e: any): void {

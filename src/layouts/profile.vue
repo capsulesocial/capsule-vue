@@ -129,6 +129,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import axios from 'axios'
 import ProfileWidget from '@/components/widgets/Profile.vue'
 import FollowersWidget from '@/components/widgets/Followers.vue'
 import MutualFollowersWidget from '@/components/widgets/MutualFollowers.vue'
@@ -325,12 +326,24 @@ export default Vue.extend({
 						this.userIsFollowed ? `Unfollowed ${this.$route.params.id}` : `Followed ${this.$route.params.id}`,
 					)
 					this.updateFollowers()
-				} catch (err: any) {
-					if (err.response) {
+				} catch (err: unknown) {
+					if (axios.isAxiosError(err)) {
+						if (!err.response) {
+							this.$toastError(`Network error, please try again`)
+							return
+						}
+						if (err.response.status === 429) {
+							this.$toastError(`Too many requests, please try again`)
+							return
+						}
 						this.$toastError(err.response.data.error)
 						return
 					}
-					this.$toastError(err.message)
+					if (err instanceof Error) {
+						this.$toastError(err.message)
+						return
+					}
+					throw err
 				}
 			}
 		},
