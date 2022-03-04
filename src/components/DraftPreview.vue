@@ -17,7 +17,7 @@
 			<p v-else class="text-gray5 dark:text-gray3 text-sm">No save</p>
 		</div>
 		<!-- Featured image -->
-		<div class="mx-4 flex flex-shrink-0 items-center">
+		<div class="mx-4 flex-shrink-0 items-center" :class="inWidget ? `hidden xl:flex` : `flex`">
 			<img
 				v-if="featuredPhoto !== null"
 				:src="featuredPhoto"
@@ -99,6 +99,10 @@ export default Vue.extend({
 		numberOfDrafts: {
 			type: Number,
 			default: 0,
+		},
+		inWidget: {
+			type: Boolean,
+			default: false,
 		},
 	},
 	data(): IData {

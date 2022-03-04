@@ -6,7 +6,7 @@
 		>
 			My bookmarks
 		</h2>
-		<div class="xl:w-750 min-h-120 h-120 xl:min-h-220 xl:h-220 fixed w-full overflow-y-auto">
+		<div class="min-h-120 h-120 lg:min-h-220 lg:h-220 w-full overflow-y-auto">
 			<nuxt-child :posts="posts" :followingList="following" :toggleFriend="toggleFriend" :isLoading="isLoading" />
 		</div>
 	</div>

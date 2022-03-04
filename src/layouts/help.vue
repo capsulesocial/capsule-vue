@@ -13,7 +13,7 @@
 	>
 		<!-- Wrapper -->
 		<div class="flex w-full justify-center">
-			<div class="flex flex-col" style="width: 1220px">
+			<div class="flex w-full lg:w-11/12 xl:w-10/12 flex-col">
 				<!-- Header -->
 				<Header :avatar="avatar" />
 				<!-- Body -->
@@ -22,14 +22,14 @@
 					<section class="relative flex flex-row">
 						<nuxt-child
 							style="backdrop-filter: blur(10px); min-height: calc(100vh - 60px); height: calc(100vh - 60px)"
-							class="xl:w-750 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation fixed mr-5 box-border w-full overflow-y-auto rounded-lg border bg-gradient-to-r shadow-lg"
+							class="lg:w-7.5 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation box-border w-full overflow-y-auto rounded-lg border bg-gradient-to-r shadow-lg"
 							:class="showWidgets ? `` : `z-10`"
 						/>
 						<!-- Widgets -->
 						<aside
-							class="modal-animation fixed -mt-4 hidden overflow-y-auto p-4 xl:block"
+							class="w-5/12 -mr-5 modal-animation -mt-4 hidden overflow-y-auto p-4 lg:block"
 							:class="showWidgets ? `z-10` : ``"
-							style="margin-left: 755px; width: 485px; min-height: calc(100vh - 70px); height: calc(100vh - 70px)"
+							style="min-height: calc(100vh - 70px); height: calc(100vh - 70px)"
 						>
 							<SupportWidget />
 							<ReportWidget />

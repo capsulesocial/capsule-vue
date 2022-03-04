@@ -24,6 +24,7 @@
 				:draft="d"
 				:index="$store.state.draft.drafts.indexOf(d)"
 				:numberOfDrafts="draftSubset.length"
+				:inWidget="true"
 			/>
 			<p class="text-primary dark:text-secondary">
 				<button class="focus:outline-none text-sm" @click="handleDraftPopup">Show all</button>

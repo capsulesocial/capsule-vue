@@ -1,7 +1,7 @@
 <template>
 	<main>
 		<!-- Mobile back button -->
-		<nuxt-link to="/settings" class="mb-6 flex items-center xl:hidden">
+		<nuxt-link to="/settings" class="mb-6 flex items-center lg:hidden">
 			<span class="bg-gray1 dark:bg-gray5 mr-4 rounded-full p-1"><ChevronLeft /></span>
 			<h6 class="font-semibold dark:text-darkPrimaryText">All Settings</h6>
 		</nuxt-link>
@@ -57,7 +57,7 @@
 					</button>
 				</div>
 				<!-- Background grid -->
-				<div class="grid grid-cols-1 xl:grid-cols-2 gap-1 overflow-y-scroll p-6 pt-4" style="height: 500px">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-1 overflow-y-scroll p-6 pt-4" style="height: 500px">
 					<button
 						v-for="x of backgrounds"
 						:key="x.label"
@@ -106,7 +106,7 @@
 					</button>
 				</div>
 				<!-- Background grid -->
-				<div class="flex flex-col xl:flex-row justify-between p-6 pt-4">
+				<div class="flex flex-col lg:flex-row justify-between p-6 pt-4">
 					<button
 						v-for="x of colors"
 						:key="x.label"

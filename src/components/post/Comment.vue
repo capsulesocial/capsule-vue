@@ -3,7 +3,7 @@
 		<!-- Component that displays a posted comment -->
 		<div class="mt-2 flex w-full">
 			<!-- Desktop avatar -->
-			<div class="mr-4 hidden items-start justify-between xl:flex">
+			<div class="mr-4 hidden items-start justify-between lg:flex">
 				<span class="flex-shrink-0 rounded-lg px-1 pt-1" :style="getStyle(`bg-`)">
 					<Avatar
 						:avatar="avatar"
@@ -23,13 +23,13 @@
 				<div class="flex w-full flex-grow flex-col px-3 py-1 pt-2">
 					<!-- Top row: name, id, timestamp -->
 					<div class="flex items-center flex-wrap">
-						<nuxt-link :to="`/id/` + authorID" class="mr-4 flex items-center xl:mb-0 mb-2">
-							<Avatar :avatar="avatar" :authorID="authorID" size="w-8 h-8" class="mr-2 flex-shrink-0 xl:hidden" />
+						<nuxt-link :to="`/id/` + authorID" class="mr-4 flex items-center lg:mb-0 mb-2">
+							<Avatar :avatar="avatar" :authorID="authorID" size="w-8 h-8" class="mr-2 flex-shrink-0 lg:hidden" />
 							<span v-if="name != ``" class="font-medium dark:text-darkPrimaryText">
 								{{ name }}
 							</span>
 							<span v-else class="text-gray5 dark:text-gray3 font-medium">{{ authorID }}</span>
-							<span class="text-primary dark:text-secondary ml-2 text-sm xl:text-base"> @{{ authorID }} </span>
+							<span class="text-primary dark:text-secondary ml-2 text-sm lg:text-base"> @{{ authorID }} </span>
 							<span
 								v-if="authorID === postAuthor"
 								class="bg-primary dark:bg-secondary dark:text-darkPrimaryText ml-2 rounded-2xl bg-opacity-25 py-1 px-2 text-xs"
@@ -37,7 +37,7 @@
 								Author
 							</span>
 						</nuxt-link>
-						<span v-if="timestamp" class="self-center text-xs dark:text-gray3 mb-2 xl:mt-2">
+						<span v-if="timestamp" class="self-center text-xs dark:text-gray3 mb-2 lg:mt-2">
 							{{ $formatDate(timestamp) }}
 						</span>
 					</div>
@@ -125,7 +125,7 @@
 			<nuxt-link :to="`/post/` + parentCID" class="text-gray5 dark:text-gray3 text-xs">View Post</nuxt-link>
 		</p>
 		<!-- Reply button -->
-		<div class="ml-3 pl-1 xl:ml-20">
+		<div class="ml-3 pl-1 lg:ml-20">
 			<!-- Active reply state -->
 			<div v-if="isReplying" class="modal-animation mr-5 mt-4 border-l border-gray5 pl-2">
 				<!-- Reply Input box -->

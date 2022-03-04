@@ -1,11 +1,11 @@
 <template>
 	<main
 		style="backdrop-filter: blur(10px)"
-		class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop h-screen w-full flex-col justify-between overflow-y-scroll bg-gradient-to-r xl:w-3/5"
+		class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop h-screen w-full flex-col justify-between overflow-y-scroll bg-gradient-to-r lg:w-3/5"
 	>
 		<CapsuleIcon class="pt-6 pl-10" />
 		<section class="flex items-center justify-center max-h-90" style="height: 86%">
-			<div v-show="isLoading" class="modal-animation flex w-full justify-center xl:w-1/2 z-20">
+			<div v-show="isLoading" class="modal-animation flex w-full justify-center lg:w-3/4 xl:w-1/2 z-20">
 				<div
 					class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
 					:style="dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
@@ -13,11 +13,11 @@
 			</div>
 			<div v-show="!isLoading" class="-mt-5 flex w-full flex-col items-center px-14">
 				<!-- Step 0: Code redeem -->
-				<InviteCode v-if="step === `inviteCode`" class="w-full xl:w-1/2" @validInviteCode="stepForward" />
+				<InviteCode v-if="step === `inviteCode`" class="w-full lg:w-3/4 xl:w-1/2" @validInviteCode="stepForward" />
 				<!-- Step 1: Choose Login / register -->
 				<RegisterMethods
 					v-else-if="step === `registerMethods`"
-					class="w-full xl:w-1/2"
+					class="w-full lg:w-3/4 xl:w-1/2"
 					@updateUserInfo="updateUserInfo"
 					@infos="showInfos = true"
 					@stepForward="stepForward"

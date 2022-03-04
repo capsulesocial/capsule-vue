@@ -13,7 +13,7 @@
 	>
 		<!-- Wrapper -->
 		<div class="flex w-full justify-center">
-			<div class="flex flex-col" style="width: 1220px">
+			<div class="flex w-full lg:w-11/12 xl:w-10/12 flex-col">
 				<!-- Header -->
 				<Header :avatar="avatar" />
 				<!-- Body -->
@@ -22,15 +22,8 @@
 					<section class="flex flex-row">
 						<PostEditor
 							ref="editor"
-							style="
-								width: 750px;
-								min-height: calc(100vh - 88px);
-								height: calc(100vh - 88px);
-								overflow-y: auto;
-								overflow-x: hidden;
-								backdrop-filter: blur(10px);
-							"
-							class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation fixed z-10 mr-5 rounded-t-lg border bg-gradient-to-r p-8 shadow-lg"
+							style="overflow-y: auto; overflow-x: hidden; backdrop-filter: blur(10px)"
+							class="lg:w-7.5 min-h-61 h-61 xl:min-h-80 xl:h-80 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation fixed z-10 rounded-t-lg border bg-gradient-to-r p-8 shadow-lg"
 							@update="updateWordCount"
 							@isWriting="hideDraftButton"
 						/>
@@ -53,8 +46,8 @@
 						</div>
 						<!-- Widgets -->
 						<aside
-							class="modal-animation fixed -mt-4 overflow-y-auto p-4"
-							style="margin-left: 755px; width: 485px; min-height: calc(100vh - 70px); height: calc(100vh - 70px)"
+							class="modal-animation w-5/12 -mr-5 -mt-4 overflow-y-auto p-4"
+							style="min-height: calc(100vh - 70px); height: calc(100vh - 70px)"
 						>
 							<EditorWidgets :wordCount="wordCount" @confirm="toggleConfirmPost" />
 							<Footer />

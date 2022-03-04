@@ -13,62 +13,55 @@
 	>
 		<!-- Wrapper -->
 		<div class="flex w-full justify-center">
-			<div class="xl:w-1220 flex w-full flex-col">
+			<div class="flex w-full lg:w-11/12 xl:w-10/12 flex-col">
 				<!-- Header -->
 				<Header :avatar="avatar" />
 				<!-- Body -->
-				<div>
-					<!-- Title and peered nodes -->
-					<div
-						class="modal-animation fixed hidden xl:flex w-full items-center justify-between px-3 xl:px-0"
-						style="height: 62px; width: 1220px"
-					>
-						<!-- Title -->
-						<h1 v-if="profile" class="text-primary dark:text-secondary text-3xl font-semibold xl:text-4xl">
-							Hello, {{ profile.name }}
-						</h1>
-						<h1 v-else class="text-primary dark:text-secondary text-3xl font-semibold xl:text-4xl">Hello!</h1>
-						<Nodes />
-					</div>
-					<!-- Content -->
-					<section class="relative flex flex-row xl:mt-20">
-						<PostEditor
-							v-if="$store.state.widgets.primary === `editor` && $route.name === `home`"
-							ref="editor"
-							style="
-								width: 750px;
-								min-height: calc(100vh - 150px);
-								height: calc(100vh - 150px);
-								backdrop-filter: blur(10px);
-							"
-							class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop modal-animation fixed overflow-y-auto overflow-x-hidden rounded-lg bg-gradient-to-r p-6 shadow-lg"
-						/>
-						<nuxt-child
-							v-else
-							class="xl:w-750 min-h-61 h-61 xl:min-h-120 xl:h-120 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop modal-animation fixed box-border w-full overflow-y-auto rounded-lg bg-gradient-to-r shadow-lg xl:mr-5"
-							:class="showWidgets ? `` : `z-10`"
-							:toggleFriend="toggleFriend"
-							:following="following"
-							:followers="followers"
-							@updateBookmarks="fetchBookmarks"
-						/>
-						<!-- Widgets -->
-						<aside
-							class="modal-animation fixed -mt-4 hidden overflow-y-auto p-4 xl:block"
-							:class="showWidgets ? `z-10` : ``"
-							style="margin-left: 755px; width: 485px; min-height: calc(100vh - 150px); height: calc(100vh - 150px)"
-						>
-							<Widgets
-								:followers="followers"
-								:updateFollowers="updateFollowers"
-								@overlay="toggleZIndex"
-								@saveDraft="saveDraftState"
-								@openFollowers="showFollowers = true"
-							/>
-							<Footer />
-						</aside>
-					</section>
+				<!-- Title and peered nodes -->
+				<div
+					class="modal-animation hidden lg:flex w-full items-center justify-between px-3 lg:px-0"
+					style="height: 62px"
+				>
+					<!-- Title -->
+					<h1 v-if="profile" class="text-primary dark:text-secondary text-3xl font-semibold xl:text-4xl">
+						Hello, {{ profile.name }}
+					</h1>
+					<h1 v-else class="text-primary dark:text-secondary text-3xl font-semibold xl:text-4xl">Hello!</h1>
+					<Nodes />
 				</div>
+				<!-- Content -->
+				<section class="relative flex flex-row lg:mt-2 xl:mt-5">
+					<PostEditor
+						v-if="$store.state.widgets.primary === `editor` && $route.name === `home`"
+						ref="editor"
+						style="min-height: calc(100vh - 150px); height: calc(100vh - 150px); backdrop-filter: blur(10px)"
+						class="lg:w-7.5 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop modal-animation overflow-y-auto overflow-x-hidden rounded-lg bg-gradient-to-r p-6 shadow-lg"
+					/>
+					<nuxt-child
+						v-else
+						class="lg:w-7.5 min-h-61 h-61 xl:min-h-120 xl:h-120 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder border modal-animation box-border w-full overflow-y-auto rounded-lg bg-gradient-to-r shadow-lg"
+						:class="showWidgets ? `` : `z-10`"
+						:toggleFriend="toggleFriend"
+						:following="following"
+						:followers="followers"
+						@updateBookmarks="fetchBookmarks"
+					/>
+					<!-- Widgets -->
+					<aside
+						class="w-5/12 -mr-5 modal-animation -mt-4 hidden overflow-y-auto p-4 lg:block"
+						:class="showWidgets ? `z-10` : ``"
+						style="min-height: calc(100vh - 150px); height: calc(100vh - 150px)"
+					>
+						<Widgets
+							:followers="followers"
+							:updateFollowers="updateFollowers"
+							@overlay="toggleZIndex"
+							@saveDraft="saveDraftState"
+							@openFollowers="showFollowers = true"
+						/>
+						<Footer />
+					</aside>
+				</section>
 			</div>
 		</div>
 		<div

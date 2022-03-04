@@ -30,8 +30,8 @@
 			/>
 		</div>
 		<!-- Name -->
-		<div class="mb-4 flex flex-col xl:flex-row">
-			<label for="newName" class="mb-2 w-32 font-semibold xl:mb-0 dark:text-darkPrimaryText">Name</label>
+		<div class="mb-4 flex flex-col lg:flex-row">
+			<label for="newName" class="mb-2 w-32 font-semibold lg:mb-0 dark:text-darkPrimaryText">Name</label>
 			<input
 				id="newName"
 				v-model="newName"
@@ -41,8 +41,8 @@
 			/>
 		</div>
 		<!-- Bio -->
-		<div class="mb-6 flex flex-col xl:flex-row">
-			<label for="bio" class="mb-2 w-32 font-semibold xl:mb-0 dark:text-darkPrimaryText"> Bio: </label>
+		<div class="mb-6 flex flex-col lg:flex-row">
+			<label for="bio" class="mb-2 w-32 font-semibold lg:mb-0 dark:text-darkPrimaryText"> Bio: </label>
 			<div class="flex-grow">
 				<textarea
 					id="bio"
@@ -57,8 +57,8 @@
 			</div>
 		</div>
 		<!-- Location -->
-		<div v-if="$store.state.session.id === $route.params.id" class="mb-4 flex flex-col xl:flex-row">
-			<label for="location" class="mb-2 w-32 font-semibold xl:mb-0 dark:text-darkPrimaryText">Location</label>
+		<div v-if="$store.state.session.id === $route.params.id" class="mb-4 flex flex-col lg:flex-row">
+			<label for="location" class="mb-2 w-32 font-semibold lg:mb-0 dark:text-darkPrimaryText">Location</label>
 			<input
 				id="location"
 				v-model="location"
@@ -68,8 +68,8 @@
 			/>
 		</div>
 		<!-- Website -->
-		<div v-if="$store.state.session.id === $route.params.id" class="mb-4 flex flex-col xl:flex-row">
-			<label for="website" class="mb-2 w-32 font-semibold xl:mb-0 dark:text-darkPrimaryText">Website</label>
+		<div v-if="$store.state.session.id === $route.params.id" class="mb-4 flex flex-col lg:flex-row">
+			<label for="website" class="mb-2 w-32 font-semibold lg:mb-0 dark:text-darkPrimaryText">Website</label>
 			<input
 				id="website"
 				v-model="website"
@@ -79,8 +79,8 @@
 			/>
 		</div>
 		<!-- Email -->
-		<div v-if="$store.state.session.id === $route.params.id" class="mb-4 flex flex-col xl:flex-row">
-			<label for="newEmail" class="mb-2 w-32 font-semibold xl:mb-0 dark:text-darkPrimaryText">Email</label>
+		<div v-if="$store.state.session.id === $route.params.id" class="mb-4 flex flex-col lg:flex-row">
+			<label for="newEmail" class="mb-2 w-32 font-semibold lg:mb-0 dark:text-darkPrimaryText">Email</label>
 			<input
 				id="newEmail"
 				v-model="newEmail"

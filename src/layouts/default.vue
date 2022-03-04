@@ -13,20 +13,14 @@
 	>
 		<!-- Wrapper -->
 		<div class="flex w-full justify-center">
-			<div class="flex flex-col" style="width: 1220px">
+			<div class="flex w-full lg:w-11/12 xl:w-10/12 flex-col">
 				<!-- Header -->
 				<Header :avatar="myAvatar" />
 				<div
-					style="
-						width: 1220px;
-						min-height: calc(100vh - 80px);
-						height: calc(100vh - 80px);
-						bottom: -10px;
-						backdrop-filter: blur(10px);
-					"
-					class="from-lightBGStart to-lightBGStop fixed z-10 mr-5 overflow-y-auto rounded-lg bg-gradient-to-r shadow-lg backdrop-blur-lg backdrop-filter"
+					style="min-height: calc(100vh - 70px); height: calc(100vh - 70px); backdrop-filter: blur(10px)"
+					class="from-lightBGStart to-lightBGStop z-10 overflow-y-auto rounded-lg bg-gradient-to-r shadow-lg"
 				>
-					<div class="items-ceter flex w-full flex-col p-5">
+					<div class="items-center flex w-full flex-col p-5">
 						<h1 class="text-negative mt-16 text-center font-sans text-6xl font-bold">500</h1>
 						<h2 class="text-center text-2xl font-semibold">Something went wrong</h2>
 						<p class="text-gray7 mb-5 mt-2 self-center text-center" style="width: 360px">

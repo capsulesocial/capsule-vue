@@ -14,7 +14,7 @@
 			<!-- Global Activity -->
 			<div class="flex h-32 justify-between border-b pt-5">
 				<!-- Stats image -->
-				<img :src="require(`@/assets/images/brand/stats.webp`)" class="hidden h-full flex-shrink-0 pl-5 xl:block" />
+				<img :src="require(`@/assets/images/brand/stats.webp`)" class="hidden h-full flex-shrink-0 pl-5 lg:block" />
 				<!-- Text stats -->
 				<div class="flex w-3/5 flex-col dark:text-darkPrimaryText">
 					<h6 class="pb-4 text-sm font-semibold">Global Post Activity</h6>
@@ -37,7 +37,7 @@
 				<!-- Graph breakdown -->
 				<div
 					v-if="getCommentCount(`positive`) + getCommentCount(`neutral`) + getCommentCount(`negative`) !== 0"
-					class="ml-5 pt-4 hidden h-full flex-row self-end xl:flex"
+					class="ml-5 pt-4 hidden h-full flex-row self-end lg:flex"
 				>
 					<!-- Positive -->
 					<span
@@ -57,7 +57,7 @@
 				</div>
 				<div
 					v-else
-					class="ml-5 pt-4 hidden h-full flex-row self-end items-center xl:flex text-sm text-gray5 dark:text-gray3"
+					class="ml-5 pt-4 hidden h-full flex-row self-end items-center lg:flex text-sm text-gray5 dark:text-gray3"
 				>
 					no comments
 				</div>
@@ -101,7 +101,7 @@
 					>
 						<ChevronLeft />
 					</button>
-					<div class="grid w-full grid-cols-3 xl:grid-cols-6">
+					<div class="grid w-full grid-cols-3 lg:grid-cols-6">
 						<div v-for="f in faceStats.slice(page * 6, page * 6 + 6)" :key="f.face.label" class="flex w-24 flex-col">
 							<div class="flex flex-col rounded-lg border p-1" :class="`border-` + getStyle(f.face.label)">
 								<span class="self-center text-xs dark:text-darkPrimaryText">{{ f.face.label.replace(/_/g, ' ') }}</span>
@@ -144,28 +144,28 @@
 			<!-- Top overlay with selector -->
 			<div v-show="showEmotions" class="relative flex w-full flex-row-reverse">
 				<div
-					class="z-10 mr-1 hidden xl:flex flex-row justify-between rounded-tr-lg bg-lightBG dark:bg-darkBG p-5 xl:w-3/5"
+					class="z-10 mr-1 hidden lg:flex flex-row justify-between rounded-tr-lg bg-lightBG dark:bg-darkBG p-5 lg:w-3/5"
 					style="margin-bottom: -112px; margin-top: 1px; pointer-events: none"
 				>
 					<h6 class="text-primary dark:text-secondary self-center text-center text-2xl font-semibold">
 						How do you feel?
 					</h6>
 				</div>
-				<div class="absolute z-20 mt-8 xl:mt-10 mr-8 flex items-center">
+				<div class="absolute z-20 mt-8 lg:mt-10 mr-8 flex items-center">
 					<button class="bg-gray1 dark:bg-gray5 focus:outline-none rounded-full p-1" @click="showEmotions = false">
 						<CloseIcon />
 					</button>
 				</div>
 				<div
-					class="z-10 flex flex-row justify-between rounded-tl-lg bg-gradient-to-b from-lightBG dark:from-darkBG to-transparent p-5 w-full xl:w-2/5 mr-1 xl:mr-0"
+					class="z-10 flex flex-row justify-between rounded-tl-lg bg-gradient-to-b from-lightBG dark:from-darkBG to-transparent p-5 w-full lg:w-2/5 mr-1 lg:mr-0"
 					style="margin-bottom: -112px; pointer-events: none; margin-top: 1px; margin-left: 1px"
 				></div>
 			</div>
-			<div class="flex flex-col items-start xl:flex-row">
+			<div class="flex flex-col items-start lg:flex-row">
 				<!-- Comment box Container -->
 				<div
 					v-show="!showEmotions"
-					class="mr-4 hidden items-start justify-between xl:flex"
+					class="mr-4 hidden items-start justify-between lg:flex"
 					style="width: 60px; height: 60px"
 				>
 					<Avatar
@@ -202,7 +202,7 @@
 										<img
 											:src="dark ? activeEmotion.dark : activeEmotion.light"
 											:alt="activeEmotion.label"
-											class="object-contain w-24 h-24 xl:w-32 xl:h-32"
+											class="object-contain w-24 h-24 lg:w-32 lg:h-32"
 											style="transform: rotateY(180deg)"
 										/>
 									</span>
@@ -214,28 +214,28 @@
 													: require(`@/assets/images/reactions/light/confident.webp`)
 											"
 											:alt="`select an emotion`"
-											class="transition duration-500 ease-in-out opacity-50 hover:opacity-100 w-24 h-24 xl:w-32 xl:h-32"
+											class="transition duration-500 ease-in-out opacity-50 hover:opacity-100 w-24 h-24 lg:w-32 lg:h-32"
 											style="transform: rotateY(180deg)"
 									/></span>
 								</button>
 								<textarea
 									v-if="comments.length > 0"
 									v-model="comment"
-									class="focus:outline-none placeholder-gray5 dark:placeholder-gray3 dark:text-darkPrimaryText mr-6 h-40 w-full resize-none overflow-y-auto py-4 pl-2 pr-10 xl:pr-16 leading-normal bg-transparent"
+									class="focus:outline-none placeholder-gray5 dark:placeholder-gray3 dark:text-darkPrimaryText mr-6 h-40 w-full resize-none overflow-y-auto py-4 pl-2 pr-10 lg:pr-16 leading-normal bg-transparent"
 									name="body"
 									placeholder="What's your response?"
 								/>
 								<textarea
 									v-else
 									v-model="comment"
-									class="focus:outline-none placeholder-gray5 dark:placeholder-gray3 dark:text-darkPrimaryText mr-6 h-40 w-full resize-none overflow-y-auto py-4 pl-2 pr-10 xl:pr-16 leading-normal bg-transparent"
+									class="focus:outline-none placeholder-gray5 dark:placeholder-gray3 dark:text-darkPrimaryText mr-6 h-40 w-full resize-none overflow-y-auto py-4 pl-2 pr-10 lg:pr-16 leading-normal bg-transparent"
 									name="body"
 									placeholder="Be the first one to comment on this post..."
 								/>
 								<div class="relative">
 									<span class="absolute bottom-0 right-0 flex flex-col">
 										<button
-											class="bg-primary dark:bg-secondary focus:outline-none block rounded-lg xl:hidden"
+											class="bg-primary dark:bg-secondary focus:outline-none block rounded-lg lg:hidden"
 											style="margin-right: 15.2px; margin-bottom: 15px"
 											:class="comment !== '' && activeEmotion.label !== '' ? '' : 'opacity-50'"
 											@click="sendComment"
@@ -245,7 +245,7 @@
 										<BrandedButton
 											style="margin-right: 15.2px; margin-bottom: 15px"
 											text="Post"
-											class="hidden xl:block"
+											class="hidden lg:block"
 											:action="sendComment"
 											:thin="true"
 											:class="comment !== '' && activeEmotion.label !== '' ? '' : 'opacity-50'"
@@ -257,12 +257,12 @@
 							<div
 								v-show="showEmotions"
 								ref="scrollContainer"
-								class="modal-animation w-full overflow-y-scroll bg-lightBG dark:bg-darkBG px-4 xl:px-6 flex justify-center"
+								class="modal-animation w-full overflow-y-scroll bg-lightBG dark:bg-darkBG px-4 lg:px-6 flex justify-center"
 								style="height: 320px; scroll-snap-type: y mandatory; scroll-snap-stop: always"
 							>
 								<!-- Middle selector area -->
 								<div
-									class="absolute rounded-lg p-2 h-32 xl:h-24 mt-24 xl:mt-28"
+									class="absolute rounded-lg p-2 h-32 lg:h-24 mt-24 lg:mt-28"
 									:class="
 										selectedEmotionColor === `positive` ||
 										selectedEmotionColor === `neutral` ||
@@ -277,7 +277,7 @@
 									<div
 										v-for="row in faceGroupings"
 										:key="row[0].label + row[1].label + row[2].label"
-										class="relative flex w-full flex-row mb-2 xl:px-2 justify-between"
+										class="relative flex w-full flex-row mb-2 lg:px-2 justify-between"
 										style="scroll-snap-align: center"
 									>
 										<button
@@ -295,7 +295,7 @@
 												style="transform: rotateY(180deg)"
 											/>
 											<p
-												class="capitalize xl:hidden mt-1"
+												class="capitalize lg:hidden mt-1"
 												:class="
 													selectedEmotion.label === face.label ? `font-bold text-` + selectedEmotionColor : `text-gray7`
 												"
@@ -306,7 +306,7 @@
 										<div
 											v-for="face in row"
 											:key="face.label + face.label"
-											class="face-tag hidden xl:flex flex-grow items-center justify-center"
+											class="face-tag hidden lg:flex flex-grow items-center justify-center"
 										>
 											<button
 												class="focus:outline-none outline-none flex flex-grow items-center justify-center"
@@ -345,7 +345,7 @@
 			<!-- Bottom overlay with selector -->
 			<div v-show="showEmotions" class="relative flex w-full flex-row-reverse">
 				<div
-					class="z-10 mr-1 hidden xl:flex flex-row-reverse items-end rounded-br-xl bg-lightBG dark:bg-darkBG p-5 xl:w-3/5"
+					class="z-10 mr-1 hidden lg:flex flex-row-reverse items-end rounded-br-xl bg-lightBG dark:bg-darkBG p-5 lg:w-3/5"
 					style="height: 111px; margin-top: -112px; margin-left: 10px; margin-bottom: 1px; pointer-events: none"
 				></div>
 				<button
@@ -355,7 +355,7 @@
 					Select
 				</button>
 				<div
-					class="z-10 bg-gradient-to-t from-lightBG dark:from-darkBG to-transparent flex flex-row-reverse items-end rounded-bl-lg p-5 w-full mr-1 xl:mr-0 xl:w-80"
+					class="z-10 bg-gradient-to-t from-lightBG dark:from-darkBG to-transparent flex flex-row-reverse items-end rounded-bl-lg p-5 w-full mr-1 lg:mr-0 lg:w-80"
 					style="height: 111px; margin-top: -112px; pointer-events: none; margin-bottom: 1px; margin-left: 1px"
 				></div>
 			</div>

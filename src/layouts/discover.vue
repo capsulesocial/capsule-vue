@@ -13,53 +13,46 @@
 	>
 		<!-- Wrapper -->
 		<div class="flex w-full justify-center">
-			<div class="flex flex-col" style="width: 1220px">
+			<div class="flex flex-col w-full lg:w-11/12 xl:w-10/12">
 				<!-- Header -->
 				<Header :avatar="avatar" />
 				<!-- Body -->
-				<div>
-					<!-- Title and peered nodes -->
-					<div
-						class="modal-animation fixed hidden xl:flex w-full items-center justify-between px-3 xl:px-0"
-						style="width: 1220px; height: 62px"
-					>
-						<!-- Title -->
-						<h1
-							v-if="$route.name === `discover`"
-							class="text-primary dark:text-secondary text-3xl font-semibold xl:text-4xl"
-						>
-							Browse Blogchain
-						</h1>
-						<!-- Peered nodes -->
-						<Nodes />
-					</div>
-					<!-- Content -->
-					<section class="modal-animation flex flex-row xl:mt-20">
-						<nuxt-child
-							:class="$route.name === `discover` ? `` : `xl:-mt-20`"
-							class="xl:w-750 min-h-61 h-61 xl:min-h-80 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop fixed z-10 mr-5 box-content w-full overflow-y-auto rounded-lg bg-gradient-to-r shadow-lg xl:h-80"
-							:toggleFriend="toggleFriend"
-							:following="following"
-						/>
-						<!-- Widgets -->
-						<aside
-							:class="$route.name === `discover` ? `` : `-mt-24`"
-							class="fixed -mt-4 hidden overflow-y-auto p-4 xl:block"
-							:style="
-								$route.name === `discover`
-									? `min-height: calc(100vh - 150px); height: calc(100vh - 80px)`
-									: `min-height: calc(100vh - 150px); height: calc(100vh - 80px)`
-							"
-							style="margin-left: 755px; width: 485px"
-						>
-							<TagsWidget
-								class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder mb-5 overflow-hidden rounded-lg border bg-gradient-to-r shadow-lg"
-								style="backdrop-filter: blur(10px)"
-							/>
-							<Footer />
-						</aside>
-					</section>
+				<!-- Title and peered nodes -->
+				<div
+					v-if="$route.name === `discover`"
+					class="modal-animation hidden lg:flex w-full items-center justify-between px-3 lg:px-0"
+					style="height: 62px"
+				>
+					<!-- Title -->
+					<h1 class="text-primary dark:text-secondary text-3xl font-semibold xl:text-4xl">Browse Blogchain</h1>
+					<!-- Peered nodes -->
+					<Nodes />
 				</div>
+				<!-- Content -->
+				<section class="modal-animation flex flex-row lg:mt-2 xl:mt-5">
+					<nuxt-child
+						:class="$route.name === `discover` ? `` : `lg:-mt-2 xl:-mt-4`"
+						class="lg:w-7.5 min-h-61 h-61 xl:min-h-80 xl:h-80 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop z-10 box-content w-full overflow-y-hidden rounded-lg bg-gradient-to-r shadow-lg"
+						:toggleFriend="toggleFriend"
+						:following="following"
+					/>
+					<!-- Widgets -->
+					<aside
+						:class="$route.name === `discover` ? `` : `lg:-mt-6 xl:-mt-8`"
+						class="w-5/12 -mr-5 -mt-4 hidden overflow-y-auto p-4 lg:block"
+						:style="
+							$route.name === `discover`
+								? `min-height: calc(100vh - 150px); height: calc(100vh - 80px)`
+								: `min-height: calc(100vh - 150px); height: calc(100vh - 80px)`
+						"
+					>
+						<TagsWidget
+							class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder mb-5 overflow-hidden rounded-lg border bg-gradient-to-r shadow-lg"
+							style="backdrop-filter: blur(10px)"
+						/>
+						<Footer />
+					</aside>
+				</section>
 			</div>
 		</div>
 		<UnauthPopup />
