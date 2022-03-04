@@ -128,11 +128,11 @@
 					id="bio"
 					ref="bio"
 					class="header-profile px-1 pt-4 dark:text-darkPrimaryText"
-					:class="expandBio ? `` : `max-h-24 overflow-hidden`"
+					:style="expandBio ? `` : `max-height: 5.5rem; overflow: hidden`"
 				>
 					<p v-for="(line, lineNumber) of visitProfile.bio.split('\n')" :key="lineNumber">{{ line }}<br /></p>
 				</div>
-				<button v-show="longBio" class="focus:outline-none text-sm italic text-primary" @click="expandBio = !expandBio">
+				<button v-show="longBio" class="focus:outline-none text-xs text-primary px-1" @click="expandBio = !expandBio">
 					Read <span v-if="!expandBio">more </span><span v-else>less</span>
 				</button>
 				<div v-show="!visitProfile.bio" id="bio" class="header-profile"></div>
