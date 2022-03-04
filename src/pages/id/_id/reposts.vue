@@ -155,8 +155,12 @@ export default Vue.extend({
 					this.$toastSuccess(this.following.has(authorID) ? `Unfollowed ${authorID}` : `Followed ${authorID}`)
 					this.updateFollowers()
 				}
-			} catch (err) {
-				this.$toastError(`An error has occurred`)
+			} catch (err: any) {
+				if (err.response) {
+					this.$toastError(err.response.data.error)
+					return
+				}
+				this.$toastError(err.message)
 			}
 		},
 		toggleHomeFeed() {

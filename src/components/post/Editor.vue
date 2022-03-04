@@ -365,8 +365,12 @@ export default Vue.extend({
 						return
 					}
 					this.insertContent({ cid, url })
-				} catch (error: any) {
-					this.$toastError(error.message)
+				} catch (err: any) {
+					if (err.response) {
+						this.$toastError(err.response.data.error)
+						return
+					}
+					this.$toastError(err.message)
 				}
 				return
 			}
@@ -392,8 +396,12 @@ export default Vue.extend({
 						return
 					}
 					this.insertContent({ cid, url })
-				} catch (error: any) {
-					this.$toastError(error.message)
+				} catch (err: any) {
+					if (err.response) {
+						this.$toastError(err.response.data.error)
+					} else {
+						this.$toastError(err.message)
+					}
 				}
 			}
 		},
@@ -431,8 +439,12 @@ export default Vue.extend({
 						return null
 					}
 					pastedContent = pastedContent.replace(img[0], `<img alt="${cid}" src="${url}">`)
-				} catch (error: any) {
-					this.$toastError(error.message)
+				} catch (err: any) {
+					if (err.response) {
+						this.$toastError(err.response.data.error)
+					} else {
+						this.$toastError(err.message)
+					}
 				}
 			}
 			return pastedContent
@@ -483,8 +495,12 @@ export default Vue.extend({
 						return
 					}
 					this.insertContent({ cid, url })
-				} catch (error: any) {
-					this.$toastError(error.message)
+				} catch (err: any) {
+					if (err.response) {
+						this.$toastError(err.response.data.error)
+					} else {
+						this.$toastError(err.message)
+					}
 				}
 				return
 			}
@@ -504,8 +520,12 @@ export default Vue.extend({
 						return
 					}
 					this.insertContent({ cid, url })
-				} catch (error: any) {
-					this.$toastError(error.message)
+				} catch (err: any) {
+					if (err.response) {
+						this.$toastError(err.response.data.error)
+					} else {
+						this.$toastError(err.message)
+					}
 				}
 			}
 		},
@@ -529,8 +549,12 @@ export default Vue.extend({
 					return
 				}
 				this.insertContent({ cid, url })
-			} catch (error: any) {
-				this.$toastError(error.message)
+			} catch (err: any) {
+				if (err.response) {
+					this.$toastError(err.response.data.error)
+				} else {
+					this.$toastError(err.message)
+				}
 			}
 		},
 		calculateAddPos(index: number) {

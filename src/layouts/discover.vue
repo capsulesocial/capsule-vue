@@ -150,8 +150,12 @@ export default Vue.extend({
 					const data = await getFollowersAndFollowing(this.$store.state.session.id, true)
 					this.following = data.following
 				}
-			} catch (err) {
-				this.$toastError(`An error has occurred`)
+			} catch (err: any) {
+				if (err.response) {
+					this.$toastError(err.response.data.error)
+					return
+				}
+				this.$toastError(err.message)
 			}
 		},
 	},

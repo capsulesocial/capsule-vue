@@ -227,6 +227,10 @@ export default Vue.extend({
 				this.changeLocation(account.location)
 				this.$router.push(`/home`)
 			} catch (err: any) {
+				if (err.response) {
+					this.$toastError(err.response.data.error)
+					return
+				}
 				this.$toastError(err.message)
 			}
 		},

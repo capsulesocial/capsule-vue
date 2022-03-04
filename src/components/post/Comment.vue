@@ -316,8 +316,12 @@ export default Vue.extend({
 				this.commentDeleted = true
 				this.$emit(`updateComments`)
 				this.$toastSuccess(`This comment has been successfully removed`)
-			} catch (err) {
-				this.$toastWarning(`An error occured`)
+			} catch (err: any) {
+				if (err.response) {
+					this.$toastWarning(err.response.data.error)
+					return
+				}
+				this.$toastWarning(err.message)
 			}
 		},
 		toggleDropdownDelete() {

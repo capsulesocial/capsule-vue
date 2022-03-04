@@ -325,8 +325,12 @@ export default Vue.extend({
 						this.userIsFollowed ? `Unfollowed ${this.$route.params.id}` : `Followed ${this.$route.params.id}`,
 					)
 					this.updateFollowers()
-				} catch (err) {
-					this.$toastError(`An error has occurred`)
+				} catch (err: any) {
+					if (err.response) {
+						this.$toastError(err.response.data.error)
+						return
+					}
+					this.$toastError(err.message)
 				}
 			}
 		},

@@ -84,8 +84,12 @@ export default Vue.extend({
 					window.removeEventListener(`scroll`, this.handleScroll)
 				}
 				this.comments = this.comments.concat(res)
-			} catch (err) {
-				this.$toastError(`err`)
+			} catch (err: any) {
+				if (err.response) {
+					this.$toastError(err.response.data.error)
+				} else {
+					this.$toastError(err.message)
+				}
 			} finally {
 				this.isLoading = false
 			}

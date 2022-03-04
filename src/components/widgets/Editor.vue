@@ -292,8 +292,12 @@ export default Vue.extend({
 						this.uploadImage(i.target.result, compressedImage, image.name)
 					}
 				}
-			} catch (err) {
-				this.$toastError(`error`)
+			} catch (err: any) {
+				if (err.response) {
+					this.$toastError(err.response.data.error)
+					return
+				}
+				this.$toastError(err.message)
 			}
 		},
 		handleCategoryDropdown(e: any): void {
