@@ -62,15 +62,7 @@
 				<div class="flex items-center justify-between">
 					<div v-if="category" class="flex flex-row items-center">
 						<img
-							:src="
-								dark
-									? require(`@/assets/images/category/` +
-											$store.state.draft.drafts[$store.state.draft.activeIndex].category +
-											`/dark/icon.webp`)
-									: require(`@/assets/images/category/` +
-											$store.state.draft.drafts[$store.state.draft.activeIndex].category +
-											`/light/icon.webp`)
-							"
+							:src="getCategoryIcon($store.state.draft.drafts[$store.state.draft.activeIndex].category)"
 							class="hotzone mr-2 h-10 w-10"
 						/>
 						<span class="text-primary dark:text-gray1 text-base">{{
@@ -89,14 +81,7 @@
 					class="focus:outline-none modal-animation flex h-10 w-full items-center px-2 capitalize"
 					@click="changeCategory(c)"
 				>
-					<img
-						:src="
-							dark
-								? require(`@/assets/images/category/` + c + `/dark/icon.webp`)
-								: require(`@/assets/images/category/` + c + `/light/icon.webp`)
-						"
-						class="hotzone mr-1 ml-2 h-6 w-6"
-					/>
+					<img :src="getCategoryIcon(c)" class="hotzone mr-1 ml-2 h-6 w-6" />
 					<span
 						class="ml-2 border-b"
 						:class="
@@ -303,6 +288,10 @@ export default Vue.extend({
 			if (!e.target.parentNode.classList.contains(`toggle`)) {
 				this.showCategoryDropdown = false
 			}
+		},
+		getCategoryIcon(category: string) {
+			const c = category || this.category
+			return c ? require(`@/assets/images/category/${c}/${this.dark ? `dark` : `light`}/icon.webp`) : ``
 		},
 	},
 })
