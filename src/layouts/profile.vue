@@ -39,7 +39,7 @@
 						/>
 						<!-- Widgets -->
 						<aside
-							class="modal-animation w-5/12 -mr-5 -mt-4 overflow-y-auto p-4"
+							class="hidden lg:block modal-animation w-5/12 -mr-5 -mt-4 overflow-y-auto p-4"
 							style="min-height: calc(100vh - 70px); height: calc(100vh - 70px)"
 						>
 							<ProfileWidget
