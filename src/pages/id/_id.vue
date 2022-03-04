@@ -127,12 +127,19 @@
 					</div>
 				</div>
 				<!-- Bio -->
-				<div v-if="visitProfile.bio" id="bio" class="header-profile px-1 pt-4 dark:text-darkPrimaryText">
-					<p>
-						{{ visitProfile.bio }}
-					</p>
+				<div
+					v-show="visitProfile.bio"
+					id="bio"
+					ref="bio"
+					class="header-profile px-1 pt-4 dark:text-darkPrimaryText"
+					:style="expandBio ? `` : `max-height: 5.5rem; overflow: hidden`"
+				>
+					<p v-for="(line, lineNumber) of visitProfile.bio.split('\n')" :key="lineNumber">{{ line }}<br /></p>
 				</div>
-				<div v-else id="bio" class="header-profile"></div>
+				<button v-show="longBio" class="focus:outline-none text-xs text-primary px-1" @click="expandBio = !expandBio">
+					Read <span v-if="!expandBio">more </span><span v-else>less</span>
+				</button>
+				<div v-show="!visitProfile.bio" id="bio" class="header-profile"></div>
 				<!-- Tabs -->
 				<div id="tabs" class="text-gray5 dark:text-gray3 header-profile flex w-full justify-between pt-6 xl:px-6">
 					<nuxt-link :to="'/id/' + $route.params.id" class="pb-1" :class="getStyles('id-id')">
@@ -202,6 +209,8 @@ interface IData {
 	showSettings: boolean
 	lastScroll: number
 	scrollingDown: boolean
+	longBio: boolean
+	expandBio: boolean
 }
 
 export default Vue.extend({
@@ -270,6 +279,8 @@ export default Vue.extend({
 			showSettings: false,
 			lastScroll: 0,
 			scrollingDown: false,
+			longBio: false,
+			expandBio: false,
 		}
 	},
 	head() {
@@ -291,7 +302,13 @@ export default Vue.extend({
 				// Updates post count
 				window.addEventListener(`click`, this.handleClose, false)
 				this.fetchProfile()
+				// this.initHeader()
 			}
+		},
+		visitProfile() {
+			this.$nextTick(() => {
+				this.initHeader()
+			})
 		},
 	},
 	created() {
@@ -299,16 +316,12 @@ export default Vue.extend({
 		this.fetchProfile()
 	},
 	mounted() {
-		const topContainer = this.$refs.topContainer as HTMLElement
-		this.padding = topContainer.clientHeight + `px`
-		this.scrollingDown = false
-		const container = document.getElementById(`scrollContainer`)
-		if (container) {
-			container.addEventListener(`scroll`, this.handleScrollHeader)
-		}
 		if (this.$store.state.settings.recentlyInSettings) {
 			this.showSettings = true
 		}
+		this.$nextTick(() => {
+			this.initHeader()
+		})
 	},
 	destroyed() {
 		window.removeEventListener(`click`, this.handleClose)
@@ -321,6 +334,23 @@ export default Vue.extend({
 		}
 	},
 	methods: {
+		initHeader() {
+			// Set scroll padding
+			const topContainer = this.$refs.topContainer as HTMLElement
+			this.padding = topContainer.clientHeight + `px`
+			this.scrollingDown = false
+			const container = document.getElementById(`scrollContainer`)
+			if (container) {
+				container.addEventListener(`scroll`, this.handleScrollHeader)
+			}
+			// handle long bios
+			const bioContainer = this.$refs.bio as HTMLElement
+			if (bioContainer) {
+				if (bioContainer.clientHeight > 72) {
+					this.longBio = true
+				}
+			}
+		},
 		showAvatar() {
 			if (this.visitAvatar) {
 				this.$emit(`showAvatar`)
