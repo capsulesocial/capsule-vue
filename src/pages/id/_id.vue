@@ -349,6 +349,8 @@ export default Vue.extend({
 				if (bioContainer.clientHeight > 72) {
 					this.longBio = true
 				}
+			}
+		},
 		showAvatar() {
 			if (this.visitAvatar) {
 				this.$emit(`showAvatar`)
