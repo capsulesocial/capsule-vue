@@ -57,7 +57,7 @@
 					</button>
 				</div>
 				<!-- Background grid -->
-				<div class="grid grid-cols-1 xl:grid-cols-2 gap-1 overflow-y-scroll p-6 pt-4" style="height: 500px">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-1 overflow-y-scroll p-6 pt-4" style="height: 500px">
 					<button
 						v-for="x of backgrounds"
 						:key="x.label"
@@ -106,7 +106,7 @@
 					</button>
 				</div>
 				<!-- Background grid -->
-				<div class="flex flex-col xl:flex-row justify-between p-6 pt-4">
+				<div class="flex flex-col lg:flex-row justify-between p-6 pt-4">
 					<button
 						v-for="x of colors"
 						:key="x.label"

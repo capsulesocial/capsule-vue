@@ -39,6 +39,7 @@
 							:index="$store.state.draft.drafts.indexOf(d)"
 							:displayDeleteButton="true"
 							:numberOfDrafts="$store.state.draft.drafts.length"
+							:inWidget="false"
 							class="flex-grow"
 							@closeDraftsPopup="closeDraftsPopup"
 						/>

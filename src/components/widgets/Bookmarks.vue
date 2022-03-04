@@ -20,7 +20,7 @@
 				<h6 class="text-gray5 dark:text-gray3">By {{ p.authorID }}</h6>
 			</div>
 			<!-- Right side: featured photo -->
-			<div class="w-24">
+			<div class="w-24 hidden xl:block">
 				<img v-if="p.featuredPhoto" :src="p.featuredPhoto" class="h-16 w-full flex-shrink-0 rounded-lg object-cover" />
 			</div>
 		</nuxt-link>

@@ -11,7 +11,7 @@
 			<h2 class="text-primary dark:text-secondary text-2xl font-semibold">{{ $route.params.tag }}</h2>
 		</div>
 		<!-- Posts loaded -->
-		<div ref="container" class="xl:w-750 min-h-130 h-130 xl:min-h-150 xl:h-150 fixed w-full overflow-y-auto">
+		<div ref="container" class="min-h-130 h-130 xl:min-h-150 xl:h-150 w-full overflow-y-auto">
 			<article
 				v-if="posts.length == 0 && !isLoading"
 				class="mt-10 grid justify-items-center overflow-y-hidden px-6 xl:px-0"

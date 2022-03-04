@@ -72,8 +72,8 @@
 				</div>
 				<div
 					v-else
-					style="bottom: -10px; backdrop-filter: blur(10px)"
-					class="xl:w-1220 xl:min-h-80 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder fixed z-10 mr-5 overflow-y-auto rounded-lg border bg-gradient-to-r shadow-lg xl:h-80"
+					style="min-height: calc(100vh - 70px); height: calc(100vh - 70px); backdrop-filter: blur(10px)"
+					class="xl:min-h-80 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder z-10 overflow-y-auto rounded-lg border bg-gradient-to-r shadow-lg xl:h-80"
 				>
 					<div class="items-ceter flex w-full flex-col p-5">
 						<h1 class="text-negative mt-16 text-center font-sans text-6xl font-bold">404</h1>

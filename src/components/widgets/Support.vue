@@ -2,8 +2,8 @@
 	<article
 		class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation mb-5 w-full rounded-lg border bg-gradient-to-r p-4 shadow-lg"
 	>
-		<h6 class="text-primary dark:text-secondary mb-6 font-semibold">Contact Support</h6>
-		<p class="text-gray5 dark:text-gray3 mb-6 xl:px-6 text-center text-sm">
+		<h6 class="text-primary dark:text-secondary mb-4 font-semibold">Contact Support</h6>
+		<p class="text-gray5 dark:text-gray3 mb-6 text-sm">
 			Do you need any help with your Blogchain experience ? If you face any technical difficulties, you can contact the
 			team on Discord, or directly send us an email:
 		</p>
