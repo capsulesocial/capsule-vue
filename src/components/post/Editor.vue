@@ -373,7 +373,7 @@ export default Vue.extend({
 							return
 						}
 						if (err.response.status === 429) {
-							this.$toastError(`Too many requests, please try again`)
+							this.$toastError(`Too many requests, please try again in a minute`)
 							return
 						}
 						this.$toastError(err.response.data.error)
@@ -415,7 +415,7 @@ export default Vue.extend({
 							return
 						}
 						if (err.response.status === 429) {
-							this.$toastError(`Too many requests, please try again`)
+							this.$toastError(`Too many requests, please try again in a minute`)
 							return
 						}
 						this.$toastError(err.response.data.error)
@@ -470,7 +470,7 @@ export default Vue.extend({
 							return null
 						}
 						if (err.response.status === 429) {
-							this.$toastError(`Too many requests, please try again`)
+							this.$toastError(`Too many requests, please try again in a minute`)
 							return null
 						}
 						this.$toastError(err.response.data.error)
@@ -536,7 +536,7 @@ export default Vue.extend({
 							return
 						}
 						if (err.response.status === 429) {
-							this.$toastError(`Too many requests, please try again`)
+							this.$toastError(`Too many requests, please try again in a minute`)
 							return
 						}
 						this.$toastError(err.response.data.error)
@@ -572,7 +572,7 @@ export default Vue.extend({
 							return
 						}
 						if (err.response.status === 429) {
-							this.$toastError(`Too many requests, please try again`)
+							this.$toastError(`Too many requests, please try again in a minute`)
 							return
 						}
 						this.$toastError(err.response.data.error)
@@ -613,7 +613,7 @@ export default Vue.extend({
 						return
 					}
 					if (err.response.status === 429) {
-						this.$toastError(`Too many requests, please try again`)
+						this.$toastError(`Too many requests, please try again in a minute`)
 						return
 					}
 					this.$toastError(err.response.data.error)
