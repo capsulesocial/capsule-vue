@@ -552,9 +552,9 @@ export default Vue.extend({
 			} catch (err: any) {
 				if (err.response) {
 					this.$toastError(err.response.data.error)
-				} else {
-					this.$toastError(err.message)
+					return
 				}
+				this.$toastError(err.message)
 			}
 		},
 		calculateAddPos(index: number) {
