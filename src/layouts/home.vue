@@ -1,6 +1,6 @@
 <template>
 	<main
-		class="bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightMainBG dark:bg-darkBG"
+		class="bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightMainBG dark:bg-darkBG overscroll-none"
 		:style="
 			dark
 				? {
@@ -30,7 +30,7 @@
 					<Nodes />
 				</div>
 				<!-- Content -->
-				<section class="relative flex flex-row lg:mt-2 xl:mt-5">
+				<section class="relative flex flex-row lg:mt-2 xl:mt-5 overscroll-none">
 					<PostEditor
 						v-if="$store.state.widgets.primary === `editor` && $route.name === `home`"
 						ref="editor"
@@ -64,17 +64,13 @@
 				</section>
 			</div>
 		</div>
-		<div
+		<FollowersPopup
 			v-if="showFollowers"
-			class="popup bg-primary dark:bg-secondary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
-		>
-			<FollowersPopup
-				:profile="profile"
-				:followers="followers"
-				:updateFollowers="updateFollowers"
-				@close="showFollowers = false"
-			/>
-		</div>
+			:profile="profile"
+			:followers="followers"
+			:updateFollowers="updateFollowers"
+			@close="showFollowers = false"
+		/>
 		<!-- Onboarding Wizard -->
 		<OnboardingWizard v-if="$store.state.recentlyJoined" />
 		<UnauthPopup />

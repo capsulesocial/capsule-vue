@@ -425,6 +425,12 @@ export default Vue.extend({
 			if (!small) {
 				return
 			}
+
+			// Reached bottom, prevent mobile glitching
+			if (body.scrollTop + body.clientHeight + 60 >= body.scrollHeight) {
+				return
+			}
+
 			const currentScroll = body.scrollTop
 			if (body.scrollTop <= 0 && !this.scrollingDown) {
 				header.classList.remove(scrollUp)
@@ -471,12 +477,6 @@ export default Vue.extend({
 				small.classList.add(opacity0)
 			}
 			this.lastScroll = currentScroll
-			// Reached bottom
-			if (body.scrollTop + body.clientHeight === body.scrollHeight) {
-				// header.classList.add(scrollDown)
-				// small.classList.remove(opacity0)
-				// small.classList.add(opacity1)
-			}
 		},
 		async fetchProfile() {
 			if (this.$route.params.id === null) {
