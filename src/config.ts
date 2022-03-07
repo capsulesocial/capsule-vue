@@ -358,6 +358,9 @@ export const feelings = {
 		`proud`,
 		`admiration`,
 		`awe`,
+		`determined`,
+		`defiant`,
+		`on_it`,
 	]),
 	negative: new Set([
 		`distracted`,
