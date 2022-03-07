@@ -168,6 +168,7 @@ interface IData {
 	caption: string
 	showCategoryDropdown: boolean
 	dark: boolean
+	featuredPhotoTarget: null | HTMLInputElement
 }
 
 export default Vue.extend({
@@ -193,6 +194,7 @@ export default Vue.extend({
 			caption: this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].featuredPhotoCaption,
 			showCategoryDropdown: false,
 			dark: false,
+			featuredPhotoTarget: null,
 		}
 	},
 	mounted() {
@@ -238,6 +240,9 @@ export default Vue.extend({
 		},
 		removeImage(): void {
 			this.featuredPhoto = null
+			if (this.featuredPhotoTarget) {
+				this.featuredPhotoTarget.value = ``
+			}
 			this.caption = ``
 			this.$store.commit(`draft/updateFeaturedPhotoCaption`, null)
 			this.$store.commit(`draft/updateFeaturedPhotoCID`, null)
@@ -260,6 +265,7 @@ export default Vue.extend({
 		},
 		async handleImage(e: Event): Promise<void> {
 			const target = e.target as HTMLInputElement
+			this.featuredPhotoTarget = target
 			const image: File = (target.files as FileList)[0]
 			if (!image) {
 				return
