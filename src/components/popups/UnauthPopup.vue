@@ -52,9 +52,6 @@ export default Vue.extend({
 	created() {
 		window.addEventListener(`click`, this.handleClose, false)
 	},
-	destroyed() {
-		window.removeEventListener(`click`, this.handleClose)
-	},
 	methods: {
 		handleClose(e: any): void {
 			if (!e.target || e.target.firstChild === null || e.target.firstChild.classList === undefined) {

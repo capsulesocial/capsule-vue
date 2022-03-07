@@ -1,9 +1,9 @@
 <template>
-	<div class="popup">
+	<div
+		class="bg-primary dark:bg-secondary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
+	>
 		<!-- Container -->
-		<section
-			class="popup bg-primary dark:bg-secondary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
-		>
+		<section class="popup">
 			<div
 				v-if="profile !== null"
 				style="backdrop-filter: blur(10px)"
@@ -85,21 +85,16 @@ export default Vue.extend({
 			profiles: [],
 		}
 	},
-	created() {
-		window.addEventListener(`click`, this.handleCloseClick, false)
-	},
 	mounted() {
 		this.followers.forEach(this.getFollowers)
-	},
-	destroyed() {
-		window.removeEventListener(`click`, this.handleCloseClick)
+		window.addEventListener(`click`, this.handleCloseClick, false)
 	},
 	methods: {
 		handleCloseClick(e: any): void {
 			if (!e.target || e.target.parentNode === null || e.target.parentNode.classList === undefined) {
 				return
 			}
-			if (e.target.parentNode.classList[0] === `popup`) {
+			if (e.target.firstChild.classList[0] === `popup`) {
 				this.closeDraftsPopup()
 			}
 		},

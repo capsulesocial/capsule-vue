@@ -229,6 +229,17 @@ export default Vue.extend({
 			}
 			this.padding = header?.clientHeight
 			const currentScroll = body.scrollTop
+			// Reached bottom, fetch more posts
+			if (body.scrollTop + body.clientHeight === body.scrollHeight && !this.noMorePosts) {
+				if (this.isLoading) {
+					return
+				}
+				this.posts = await this.fetchPosts()
+			}
+			// Reached bottom, prevent mobile glitching
+			if (body.scrollTop + body.clientHeight + 60 >= body.scrollHeight) {
+				return
+			}
 			if (body.scrollTop <= 0 && this.scrollDown === false) {
 				header.classList.remove(scrollUp)
 				buttontitle.classList.remove(opacity0)
@@ -268,13 +279,6 @@ export default Vue.extend({
 				hiddentitle.classList.add(opacity0)
 			}
 			this.lastScroll = currentScroll
-			// Reached bottom, fetch more posts
-			if (body.scrollTop + body.clientHeight === body.scrollHeight && !this.noMorePosts) {
-				if (this.isLoading) {
-					return
-				}
-				this.posts = await this.fetchPosts()
-			}
 		},
 		generateKey(p: IPostResponse | IRepostResponse) {
 			let key: string = p.post._id
