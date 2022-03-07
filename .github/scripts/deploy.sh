@@ -15,4 +15,4 @@ set -ex
 )
 
 cd capsule-deployer/ansible
-ansible-playbook -u ansible --private-key ssh-key -i hosts.ini playbooks/capsule-vue.deploy.application.yml --diff
+ansible-playbook -u ansible --private-key ssh-key -i hosts.ini playbooks/capsule-vue.deploy.capsule-central.yml --diff
