@@ -170,6 +170,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import type { PropType } from 'vue'
+import axios from 'axios'
 import Avatar from '@/components/Avatar.vue'
 import Reply from '@/components/post/Reply.vue'
 import More from '@/components/icons/More.vue'
@@ -316,8 +317,24 @@ export default Vue.extend({
 				this.commentDeleted = true
 				this.$emit(`updateComments`)
 				this.$toastSuccess(`This comment has been successfully removed`)
-			} catch (err) {
-				this.$toastWarning(`An error occured`)
+			} catch (err: unknown) {
+				if (axios.isAxiosError(err)) {
+					if (!err.response) {
+						this.$toastError(`Network error, please try again`)
+						return
+					}
+					if (err.response.status === 429) {
+						this.$toastError(`Too many requests, please try again in a minute`)
+						return
+					}
+					this.$toastError(err.response.data.error)
+					return
+				}
+				if (err instanceof Error) {
+					this.$toastError(err.message)
+					return
+				}
+				throw err
 			}
 		},
 		toggleDropdownDelete() {

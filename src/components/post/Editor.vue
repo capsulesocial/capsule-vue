@@ -93,6 +93,7 @@ import { strikethrough } from 'turndown-plugin-gfm'
 import Quill, { RangeStatic } from 'quill'
 // @ts-ignore
 import QuillMarkdown from 'quilljs-markdown'
+import axios from 'axios'
 import XIcon from '@/components/icons/X.vue'
 import PencilIcon from '@/components/icons/Pencil.vue'
 import AddContent from '@/components/post/EditorActions.vue'
@@ -365,10 +366,25 @@ export default Vue.extend({
 						return
 					}
 					this.insertContent({ cid, url })
-				} catch (error: any) {
-					this.$toastError(error.message)
+				} catch (err: unknown) {
+					if (axios.isAxiosError(err)) {
+						if (!err.response) {
+							this.$toastError(`Network error, please try again`)
+							return
+						}
+						if (err.response.status === 429) {
+							this.$toastError(`Too many requests, please try again in a minute`)
+							return
+						}
+						this.$toastError(err.response.data.error)
+						return
+					}
+					if (err instanceof Error) {
+						this.$toastError(err.message)
+						return
+					}
+					throw err
 				}
-				return
 			}
 
 			if (!file && droppedHtml) {
@@ -392,8 +408,24 @@ export default Vue.extend({
 						return
 					}
 					this.insertContent({ cid, url })
-				} catch (error: any) {
-					this.$toastError(error.message)
+				} catch (err: unknown) {
+					if (axios.isAxiosError(err)) {
+						if (!err.response) {
+							this.$toastError(`Network error, please try again`)
+							return
+						}
+						if (err.response.status === 429) {
+							this.$toastError(`Too many requests, please try again in a minute`)
+							return
+						}
+						this.$toastError(err.response.data.error)
+						return
+					}
+					if (err instanceof Error) {
+						this.$toastError(err.message)
+						return
+					}
+					throw err
 				}
 			}
 		},
@@ -431,8 +463,22 @@ export default Vue.extend({
 						return null
 					}
 					pastedContent = pastedContent.replace(img[0], `<img alt="${cid}" src="${url}">`)
-				} catch (error: any) {
-					this.$toastError(error.message)
+				} catch (err: unknown) {
+					if (axios.isAxiosError(err)) {
+						if (!err.response) {
+							this.$toastError(`Network error, please try again`)
+							return null
+						}
+						if (err.response.status === 429) {
+							this.$toastError(`Too many requests, please try again in a minute`)
+							return null
+						}
+						this.$toastError(err.response.data.error)
+					}
+					if (err instanceof Error) {
+						this.$toastError(err.message)
+					}
+					return null
 				}
 			}
 			return pastedContent
@@ -483,10 +529,25 @@ export default Vue.extend({
 						return
 					}
 					this.insertContent({ cid, url })
-				} catch (error: any) {
-					this.$toastError(error.message)
+				} catch (err: unknown) {
+					if (axios.isAxiosError(err)) {
+						if (!err.response) {
+							this.$toastError(`Network error, please try again`)
+							return
+						}
+						if (err.response.status === 429) {
+							this.$toastError(`Too many requests, please try again in a minute`)
+							return
+						}
+						this.$toastError(err.response.data.error)
+						return
+					}
+					if (err instanceof Error) {
+						this.$toastError(err.message)
+						return
+					}
+					throw err
 				}
-				return
 			}
 
 			// handle if text only
@@ -504,8 +565,24 @@ export default Vue.extend({
 						return
 					}
 					this.insertContent({ cid, url })
-				} catch (error: any) {
-					this.$toastError(error.message)
+				} catch (err: unknown) {
+					if (axios.isAxiosError(err)) {
+						if (!err.response) {
+							this.$toastError(`Network error, please try again`)
+							return
+						}
+						if (err.response.status === 429) {
+							this.$toastError(`Too many requests, please try again in a minute`)
+							return
+						}
+						this.$toastError(err.response.data.error)
+						return
+					}
+					if (err instanceof Error) {
+						this.$toastError(err.message)
+						return
+					}
+					throw err
 				}
 			}
 		},
@@ -529,8 +606,24 @@ export default Vue.extend({
 					return
 				}
 				this.insertContent({ cid, url })
-			} catch (error: any) {
-				this.$toastError(error.message)
+			} catch (err: unknown) {
+				if (axios.isAxiosError(err)) {
+					if (!err.response) {
+						this.$toastError(`Network error, please try again`)
+						return
+					}
+					if (err.response.status === 429) {
+						this.$toastError(`Too many requests, please try again in a minute`)
+						return
+					}
+					this.$toastError(err.response.data.error)
+					return
+				}
+				if (err instanceof Error) {
+					this.$toastError(err.message)
+					return
+				}
+				throw err
 			}
 		},
 		calculateAddPos(index: number) {

@@ -114,7 +114,7 @@ export default Vue.extend({
 				return false
 			}
 			if (err.response.status === 429) {
-				this.$toastError(`Too many requests, please try again`)
+				this.$toastError(`Too many requests, please try again in a minute`)
 				return false
 			}
 			if (err.response.status === 400) {

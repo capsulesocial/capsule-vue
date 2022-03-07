@@ -33,6 +33,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import type { PropType } from 'vue'
+import axios from 'axios'
 import { Profile } from '@/backend/profile'
 import Comment from '@/components/post/Comment.vue'
 
@@ -84,10 +85,25 @@ export default Vue.extend({
 					window.removeEventListener(`scroll`, this.handleScroll)
 				}
 				this.comments = this.comments.concat(res)
-			} catch (err) {
-				this.$toastError(`err`)
-			} finally {
+			} catch (err: unknown) {
 				this.isLoading = false
+				if (axios.isAxiosError(err)) {
+					if (!err.response) {
+						this.$toastError(`Network error, please try again`)
+						return
+					}
+					if (err.response.status === 429) {
+						this.$toastError(`Too many requests, please try again in a minute`)
+						return
+					}
+					this.$toastError(err.response.data.error)
+					return
+				}
+				if (err instanceof Error) {
+					this.$toastError(err.message)
+					return
+				}
+				throw err
 			}
 		},
 		async handleScroll() {
