@@ -5,8 +5,11 @@
 			:class="showSocialShares ? 'text-primary dark:text-secondary' : ''"
 			@click.stop="toggleDropdown"
 		>
-			<div class="text-gray5 dark:text-gray3 hover:text-primary dark:hover:text-secondary hover:fill-primary flex">
+			<div
+				class="text-gray5 dark:text-gray3 hover:text-primary dark:hover:text-secondary hover:fill-primary flex items-center"
+			>
 				<ShareIcon :isActive="showSocialShares" />
+				<p class="ml-1 text-sm">Share</p>
 			</div>
 		</button>
 		<div

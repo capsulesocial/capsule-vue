@@ -221,6 +221,14 @@
 					/>
 				</div>
 			</div>
+			<SharePopup
+				v-if="showShare"
+				:image="featuredPhoto"
+				:title="post.title"
+				:subtitle="post.subtitle"
+				:excerpt="post.excerpt"
+				@close="showShare = false"
+			/>
 		</portal>
 		<!-- Feed view -->
 		<div v-if="this.$route.name !== `post-post`">
@@ -462,7 +470,7 @@
 										@click="toggleComments"
 									>
 										<CommentIcon :isActive="showComments" />
-										<span v-if="comments" class="ml-1">{{ comments.length }}</span>
+										<span v-if="comments" class="ml-1 text-sm">{{ comments.length }}</span>
 									</button>
 									<!-- Repost popup -->
 									<Repost
@@ -475,8 +483,17 @@
 										@toggleRepost="toggleQuoteRepost"
 									/>
 									<!-- Share popup -->
-									<Share :post="post" :cid="postCID" style="margin-top: 2px" />
-									<button class="focus:outline-none ml-4" @click="toggleStatsCard"><StatsIcon /></button>
+									<button
+										class="focus:outline-none text-gray5 dark:text-gray3 hover:text-primary dark:hover:text-secondary mr-4 hover:fill-primary flex items-center"
+										:class="showShare ? `text-primary dark:text-secondary` : ``"
+										style="margin-top: 2px"
+										@click="showShare = !showShare"
+									>
+										<ShareIcon :isActive="showShare" />
+										<p class="ml-1 text-sm">Share</p>
+									</button>
+									<!-- <Share :post="post" :cid="postCID" style="margin-top: 2px" /> -->
+									<button class="focus:outline-none" @click="toggleStatsCard"><StatsIcon /></button>
 								</div>
 							</div>
 							<!-- Right side: Image -->
@@ -545,6 +562,7 @@ import Avatar from '@/components/Avatar.vue'
 import BookmarkButton from '@/components/post/BookmarkButton.vue'
 import Share from '@/components/post/Share.vue'
 import CommentIcon from '@/components/icons/Comment.vue'
+import ShareIcon from '@/components/icons/Share.vue'
 import Repost from '@/components/post/Repost.vue'
 import TagPill from '@/components/Tag.vue'
 import More from '@/components/icons/More.vue'
@@ -555,6 +573,7 @@ import RepostIcon from '@/components/icons/Repost.vue'
 import StatsIcon from '@/components/icons/Stats.vue'
 import BinIcon from '@/components/icons/Bin.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
+import SharePopup from '@/components/popups/SharePopup.vue'
 
 import { RetrievedPost, getRegularPost } from '@/backend/post'
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
@@ -585,6 +604,7 @@ interface IData {
 	hasEntered: boolean
 	showRepostEditor: boolean
 	showPopup: boolean
+	showShare: boolean
 	quoteContent: string
 	quote: {
 		authorID: string
@@ -605,6 +625,7 @@ export default Vue.extend({
 		BookmarkButton,
 		Share,
 		CommentIcon,
+		ShareIcon,
 		TagPill,
 		More,
 		XIcon,
@@ -615,6 +636,7 @@ export default Vue.extend({
 		RepostIcon,
 		BrandedButton,
 		SendIcon,
+		SharePopup,
 	},
 	props: {
 		repost: {
@@ -696,6 +718,7 @@ export default Vue.extend({
 			hasEntered: false,
 			showRepostEditor: false,
 			showPopup: false,
+			showShare: false,
 			quote: null,
 			postCID: ``,
 			quoteContent: ``,
@@ -810,6 +833,7 @@ export default Vue.extend({
 			return this.$store.state.session.id === this.repostedBy || this.$store.getters.checkReposts(this.postCID)
 		},
 		postExcerpt(): string {
+			console.log(`in postcard`, this.post.excerpt)
 			const excerpt = this.post.excerpt.slice(0, 177).trim()
 			if (excerpt.endsWith(`...`)) {
 				return excerpt
@@ -831,6 +855,7 @@ export default Vue.extend({
 				this.showStats = false
 				this.showRepostEditor = false
 				this.showPopup = false
+				this.showShare = false
 				this.$emit(`closePopup`)
 			}
 		},
