@@ -13,7 +13,7 @@
 	>
 		<!-- Wrapper -->
 		<div class="flex w-full justify-center">
-			<div class="flex w-full lg:w-11/12 xl:w-10/12 flex-col">
+			<div class="flex w-full lg:w-11/12 xl:w-10/12 max-w-1220 flex-col">
 				<!-- Header -->
 				<Header :avatar="avatar" />
 				<!-- Body -->
