@@ -149,13 +149,13 @@
 		text-underline-offset: 3.52px;
 	}
 	.editable p {
-		@apply text-p font-normal leading-relaxed my-3;
+		@apply text-p font-normal leading-normal my-5;
 	}
 	.editable ul {
-		@apply text-p font-normal leading-relaxed my-3 pl-6 list-disc;
+		@apply text-p font-normal leading-relaxed my-3 pl-6 list-disc list-inside;
 	}
 	.editable ol {
-		@apply text-p font-normal leading-relaxed my-3 pl-6 list-decimal;
+		@apply text-p font-normal leading-relaxed my-3 pl-6 list-decimal list-inside;
 	}
 	.editable code {
 		font-size: 85%;

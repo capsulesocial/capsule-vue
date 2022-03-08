@@ -55,8 +55,8 @@
 .ql-editor ol,
 .ql-editor ul {
 	padding-left: 1.5rem;
-	font-size: 17.6px;
-	line-height: 28.6px;
+	font-size: 1rem;
+	line-height: 1.625rem;
 	margin-top: 0.75rem;
 	margin-bottom: 0.75rem;
 }
@@ -103,7 +103,7 @@
 }
 .ql-editor ol li:not(.ql-direction-rtl),
 .ql-editor ul li:not(.ql-direction-rtl) {
-	padding-left: 1.5em;
+	padding-left: 1.5rem;
 }
 .ql-editor ol li.ql-direction-rtl,
 .ql-editor ul li.ql-direction-rtl {
