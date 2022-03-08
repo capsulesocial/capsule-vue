@@ -1,7 +1,12 @@
 <template>
 	<!-- Step 0: Code redeem -->
 	<article>
-		<h1 class="text-primary dark:text-secondary mb-5 font-semibold xl:mb-10" style="font-size: 2.6rem">Welcome</h1>
+		<h1
+			class="text-primary text-center lg:text-left dark:text-secondary mb-5 font-semibold xl:mb-10"
+			style="font-size: 2.6rem"
+		>
+			Welcome
+		</h1>
 		<p class="text-gray7 dark:text-gray3 mt-5 text-center text-sm xl:mt-10 xl:text-base">
 			Blogchain is a place for writers to do great work and for readers to discover it. For now, during our beta
 			release, we are offering access to Blogchain on an invitation-only basis. We believe this is the best way to seed

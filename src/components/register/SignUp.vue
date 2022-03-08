@@ -4,7 +4,7 @@
 			<VerifyPhone
 				v-if="!hasEnoughFunds()"
 				:accountId="userInfo.accountId"
-				class="w-full xl:w-1/2"
+				class="w-full h-full xl:w-1/2"
 				@updateFunds="updateFunds"
 			/>
 			<!-- Step 3: Choose ID -->
@@ -16,7 +16,7 @@
 				:verify="verify"
 				:accountId="userInfo.accountId"
 				:nearWallet="userInfo.type === `near`"
-				class="w-full xl:w-1/2"
+				class="w-full h-full xl:w-1/2"
 			/>
 		</article>
 		<!-- Step 4: Download key -->
