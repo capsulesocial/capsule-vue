@@ -3,7 +3,7 @@
 		style="backdrop-filter: blur(10px)"
 		class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop h-screen w-full flex-col justify-between overflow-y-scroll bg-gradient-to-r lg:w-3/5"
 	>
-		<CapsuleIcon class="pt-6 pl-10" />
+		<CapsuleIcon class="pt-6 pl-10 text-primary dark:text-secondary" />
 		<section class="flex items-center justify-center" style="height: 86%">
 			<div class="-mt-5 flex w-full flex-col items-center p-14">
 				<!-- Step 1: Choose Login / register -->
