@@ -136,7 +136,11 @@
 				>
 					<p v-for="(line, lineNumber) of visitProfile.bio.split('\n')" :key="lineNumber">{{ line }}<br /></p>
 				</div>
-				<button v-show="longBio" class="focus:outline-none text-xs text-primary px-1" @click="expandBio = !expandBio">
+				<button
+					v-show="longBio && !scrollingDown"
+					class="focus:outline-none text-xs text-primary px-1"
+					@click="expandBio = !expandBio"
+				>
 					Read <span v-if="!expandBio">more </span><span v-else>less</span>
 				</button>
 				<div v-show="!visitProfile.bio" id="bio" class="header-profile"></div>
@@ -324,11 +328,6 @@ export default Vue.extend({
 		})
 	},
 	destroyed() {
-		window.removeEventListener(`click`, this.handleClose)
-		const container = document.getElementById(`scrollContainer`)
-		if (container) {
-			container.removeEventListener(`scroll`, this.handleScrollHeader)
-		}
 		if (this.$store.state.settings.recentlyInSettings) {
 			this.$store.commit(`settings/setRecentlyInSettings`, false)
 		}
@@ -391,7 +390,7 @@ export default Vue.extend({
 				window.open(url, `_blank`)
 			}
 		},
-		handleScrollHeader() {
+		openHeader(open: boolean) {
 			const body = document.getElementById(`scrollContainer`)
 			const header = document.getElementById(`header`)
 			const buttons = document.getElementById(`buttons`)
@@ -404,45 +403,11 @@ export default Vue.extend({
 			const scrollDown = `headercollapsed`
 			const opacity1 = `opacity1`
 			const opacity0 = `opacity0`
-			if (!body) {
+			if (!body || !buttons || !infos || !header || !tabs || !bio || !small) {
 				return
 			}
-			if (!buttons) {
-				return
-			}
-			if (!infos) {
-				return
-			}
-			if (!header) {
-				return
-			}
-			if (!tabs) {
-				return
-			}
-			if (!bio) {
-				return
-			}
-			if (!small) {
-				return
-			}
-
-			// Reached bottom, prevent mobile glitching
-			if (body.scrollTop + body.clientHeight + 60 >= body.scrollHeight) {
-				return
-			}
-
-			const currentScroll = body.scrollTop
-			if (body.scrollTop <= 0 && !this.scrollingDown) {
-				header.classList.remove(scrollUp)
-				buttons.classList.remove(opacity0)
-				infos.classList.remove(opacity0)
-				tabs.classList.remove(opacity0)
-				bio.classList.remove(opacity0)
-				small.classList.remove(opacity1)
-				return
-			}
-			if (currentScroll > this.lastScroll && !header.classList.contains(scrollDown)) {
-				// down
+			// Close header
+			if (!open) {
 				this.scrollingDown = true
 				header.classList.remove(scrollUp)
 				header.classList.add(scrollDown)
@@ -456,25 +421,58 @@ export default Vue.extend({
 				bio.classList.remove(opacity1)
 				small.classList.add(opacity1)
 				small.classList.remove(opacity0)
+				return
+			}
+			// open
+			this.scrollingDown = false
+			header.classList.remove(scrollDown)
+			header.classList.add(scrollUp)
+			buttons.classList.remove(opacity0)
+			buttons.classList.add(opacity1)
+			infos.classList.remove(opacity0)
+			infos.classList.add(opacity1)
+			tabs.classList.remove(opacity0)
+			tabs.classList.add(opacity1)
+			bio.classList.remove(opacity0)
+			bio.classList.add(opacity1)
+			small.classList.remove(opacity1)
+			small.classList.add(opacity0)
+		},
+		handleScrollHeader() {
+			const body = document.getElementById(`scrollContainer`)
+			const header = document.getElementById(`header`)
+			const buttons = document.getElementById(`buttons`)
+			const infos = document.getElementById(`infos`)
+			const tabs = document.getElementById(`tabs`)
+			const bio = document.getElementById(`bio`)
+			const small = document.getElementById(`small`)
+			this.padding = header?.clientHeight + `px`
+			const scrollDown = `headercollapsed`
+			if (!body || !buttons || !infos || !header || !tabs || !bio || !small) {
+				return
+			}
+
+			// Reached bottom, prevent mobile glitching
+			if (body.scrollTop + body.clientHeight + 60 >= body.scrollHeight) {
+				return
+			}
+
+			const currentScroll = body.scrollTop
+			// Reached top
+			if (body.scrollTop <= 0 && !this.scrollingDown) {
+				this.openHeader(true)
+				return
+			}
+			if (currentScroll > this.lastScroll && !header.classList.contains(scrollDown)) {
+				// down
+				this.openHeader(false)
 			} else if (
 				currentScroll < this.lastScroll &&
 				header.classList.contains(scrollDown) &&
 				body.scrollTop + body.clientHeight !== body.scrollHeight
 			) {
 				// up
-				this.scrollingDown = false
-				header.classList.remove(scrollDown)
-				header.classList.add(scrollUp)
-				buttons.classList.remove(opacity0)
-				buttons.classList.add(opacity1)
-				infos.classList.remove(opacity0)
-				infos.classList.add(opacity1)
-				tabs.classList.remove(opacity0)
-				tabs.classList.add(opacity1)
-				bio.classList.remove(opacity0)
-				bio.classList.add(opacity1)
-				small.classList.remove(opacity1)
-				small.classList.add(opacity0)
+				this.openHeader(true)
 			}
 			this.lastScroll = currentScroll
 		},

@@ -15,7 +15,7 @@
 			</div>
 			<!-- Dashed bubble -->
 			<div
-				class="flex flex-row w-full overflow-x-auto justify-between rounded-lg border border-dashed"
+				class="relative flex flex-row w-full overflow-x-auto justify-between rounded-lg border border-dashed"
 				:style="getStyle(`border-`)"
 				style="backdrop-filter: blur(10px)"
 			>
