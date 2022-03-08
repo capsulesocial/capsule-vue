@@ -13,7 +13,7 @@
 					<button
 						v-if="$route.params.id !== $store.state.session.id"
 						class="focus:outline-none flex flex-row items-center"
-						@click="$router.go(-1)"
+						@click="handleBack"
 					>
 						<span class="bg-gray1 dark:bg-gray5 rounded-full p-1"><BackButton :reduceSize="true" /></span>
 						<h6 class="ml-2 font-sans font-semibold dark:text-darkPrimaryText">Back</h6>
@@ -219,6 +219,7 @@ interface IData {
 	longBio: boolean
 	expandBio: boolean
 	bottomPadding: boolean
+	fromExternalSite: boolean
 }
 
 export default Vue.extend({
@@ -230,6 +231,15 @@ export default Vue.extend({
 		SettingsPopup,
 		BackButton,
 		PencilIcon,
+	},
+	beforeRouteEnter(to, from, next) {
+		next((vm) => {
+			if (to && from.name === null) {
+				// @ts-ignore
+				vm.fromExternalSite = true
+			}
+		})
+		return true
 	},
 	layout: `profile`,
 	props: {
@@ -290,6 +300,7 @@ export default Vue.extend({
 			longBio: false,
 			expandBio: false,
 			bottomPadding: false,
+			fromExternalSite: false,
 		}
 	},
 	head() {
@@ -492,6 +503,13 @@ export default Vue.extend({
 			}
 			const { totalPostsCount } = await getProfile(this.$route.params.id, true)
 			this.totalPostsCount = totalPostsCount
+		},
+		handleBack() {
+			if (this.fromExternalSite) {
+				this.$router.push({ name: `home` })
+				return
+			}
+			this.$router.go(-1)
 		},
 	},
 })

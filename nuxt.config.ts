@@ -22,7 +22,11 @@ const config: NuxtConfig = {
 		link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
 		script: [],
 	},
-
+	loadingIndicator: {
+		name: 'chasing-dots',
+		color: '#2E556A',
+		background: 'white',
+	},
 	// Global CSS: https://go.nuxtjs.dev/config-css
 	css: ['@/assets/css/quill.css', '@/assets/css/hljs-monokai-sublime.css'],
 
