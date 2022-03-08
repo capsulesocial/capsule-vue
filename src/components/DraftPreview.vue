@@ -17,16 +17,16 @@
 			<p v-else class="text-gray5 dark:text-gray3 text-sm">No save</p>
 		</div>
 		<!-- Featured image -->
-		<div class="mx-4 flex-shrink-0 items-center" :class="inWidget ? `hidden xl:flex` : `flex`">
+		<div class="mx-4 w-24 flex-shrink-0 items-center" :class="inWidget ? `hidden xl:flex` : `flex`">
 			<img
 				v-if="featuredPhoto !== null"
 				:src="featuredPhoto"
 				alt="$store.state.draft.title"
-				class="h-16 w-20 rounded-lg"
+				class="h-16 w-full flex-shrink-0 rounded-lg object-cover"
 			/>
 			<span
 				v-else
-				class="bg-gray1 dark:bg-gray7 text-gray5 dark:text-gray2 flex h-16 w-20 items-center justify-center rounded-lg"
+				class="bg-gray1 dark:bg-gray7 text-gray5 dark:text-gray2 flex h-16 w-24 items-center justify-center rounded-lg"
 			>
 				<ImageIcon class="h-5 w-5 fill-current" />
 			</span>
