@@ -5,7 +5,7 @@
 			class="border-lightBorder bg-primary flex flex-row items-center rounded-lg bg-opacity-25 p-2 shadow-lg"
 			style="backdrop-filter: blur(10px)"
 		>
-			<button class="bg-gray1 focus:outline-none m-3 flex-shrink-0 rounded-full" @click="$router.go(-1)">
+			<button class="bg-gray1 focus:outline-none m-3 flex-shrink-0 rounded-full" @click="handleBack">
 				<BackIcon />
 			</button>
 			<h2 class="text-primary dark:text-secondary text-2xl font-semibold">{{ $route.params.tag }}</h2>
@@ -71,6 +71,7 @@ interface IData {
 	algorithm: Algorithm
 	noMorePosts: boolean
 	dark: boolean
+	fromExternalSite: boolean
 }
 
 export default Vue.extend({
@@ -78,6 +79,15 @@ export default Vue.extend({
 	components: {
 		PostCard,
 		BackIcon,
+	},
+	beforeRouteEnter(to, from, next) {
+		next((vm) => {
+			if (to && from.name === null) {
+				// @ts-ignore
+				vm.fromExternalSite = true
+			}
+		})
+		return true
 	},
 	layout: `discover`,
 	props: {
@@ -100,6 +110,7 @@ export default Vue.extend({
 			algorithm: `NEW`,
 			noMorePosts: false,
 			dark: false,
+			fromExternalSite: false,
 		}
 	},
 	head() {
@@ -167,6 +178,13 @@ export default Vue.extend({
 		},
 		toggleHomeFeed() {
 			this.$router.push(`/home`)
+		},
+		handleBack() {
+			if (this.fromExternalSite) {
+				this.$router.push({ name: `home` })
+				return
+			}
+			this.$router.go(-1)
 		},
 	},
 })

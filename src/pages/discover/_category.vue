@@ -13,7 +13,7 @@
 			}"
 		>
 			<div class="flex h-full flex-col justify-between px-4 py-5 xl:px-6">
-				<button class="focus:outline-none relative flex" @click="$router.go(-1)">
+				<button class="focus:outline-none relative flex" @click="handleBack">
 					<div class="bg-gray1 z-10 flex-shrink-0 rounded-full">
 						<BackIcon />
 					</div>
@@ -113,12 +113,22 @@ interface IData {
 	scrollDown: boolean
 	noMorePosts: boolean
 	dark: boolean
+	fromExternalSite: boolean
 }
 
 export default Vue.extend({
 	components: {
 		PostCard,
 		BackIcon,
+	},
+	beforeRouteEnter(to, from, next) {
+		next((vm) => {
+			if (to && from.name === null) {
+				// @ts-ignore
+				vm.fromExternalSite = true
+			}
+		})
+		return true
 	},
 	layout: `discover`,
 	props: {
@@ -143,6 +153,7 @@ export default Vue.extend({
 			scrollDown: false,
 			noMorePosts: false,
 			dark: false,
+			fromExternalSite: false,
 		}
 	},
 	head() {
@@ -291,6 +302,13 @@ export default Vue.extend({
 		},
 		toggleCategories() {
 			this.$router.push(`/discover`)
+		},
+		handleBack() {
+			if (this.fromExternalSite) {
+				this.$router.push({ name: `home` })
+				return
+			}
+			this.$router.go(-1)
 		},
 	},
 })
