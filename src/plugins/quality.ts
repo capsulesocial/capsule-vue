@@ -61,11 +61,10 @@ const qualityEmail: StringInputCheck = (input) => {
 	return { success: true }
 }
 
-const qualityURL: StringInputCheck = (url) => {
-	// URL starting with http://, https://, or www.
-	const regex = /^((https?:\/\/(www\.)?|www\.)[a-zA-Z0-9][\w+\d+&@\-#/%?=~_|!:,.;+]*)$/gi
+export const URLRegex = /^((http:\/\/)|(https:\/\/))?(((\w|-){1,63})\.)?((\w|-){1,253})\.([a-z]{2,63})(\/.*)?$/
 
-	if (!regex.test(url)) {
+const qualityURL: StringInputCheck = (url) => {
+	if (!URLRegex.test(url)) {
 		return { error: `Invalid URL` }
 	}
 

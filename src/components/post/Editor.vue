@@ -313,12 +313,9 @@ export default Vue.extend({
 				if (!this.qeditor || !content) {
 					this.waitingImage = false
 					this.toggleAddContent = true
-					this.refreshPostImages()
-					setTimeout(() => {
-						this.calculateAddPos(contentLength)
-					}, 0)
 					return
 				}
+				this.refreshPostImages()
 				const range = this.qeditor.getSelection(true)
 				if (typeof content === `string`) {
 					this.waitingImage = false
@@ -498,7 +495,7 @@ export default Vue.extend({
 			const items = Array.from(clipboard.items)
 			const pastedContent = this.sanitize(clipboard.getData(`text/html`))
 			const pastedText = this.sanitize(clipboard.getData(`text/plain`))
-			const pastedFile = items[0].getAsFile()
+			const pastedFile = items.length > 0 ? items[0].getAsFile() : null
 			const contentImgs = this.$getContentImages(pastedContent)
 			const range = this.qeditor.getSelection(true)
 
@@ -552,38 +549,7 @@ export default Vue.extend({
 
 			// handle if text only
 			if (!pastedFile && (!pastedContent || pastedContent === ``)) {
-				const f = await this.$urlToFile(pastedText)
-				if (this.$isError(f)) {
-					this.insertContent(pastedText)
-					return
-				}
-				try {
-					const { cid, url, image, imageName } = await uploadPhoto(f.file)
-					const updatedPostImages = await this.updatePostImages(cid, image, imageName)
-					if (this.$isError(updatedPostImages)) {
-						this.$toastError(updatedPostImages.error)
-						return
-					}
-					this.insertContent({ cid, url })
-				} catch (err: unknown) {
-					if (axios.isAxiosError(err)) {
-						if (!err.response) {
-							this.$toastError(`Network error, please try again`)
-							return
-						}
-						if (err.response.status === 429) {
-							this.$toastError(`Too many requests, please try again in a minute`)
-							return
-						}
-						this.$toastError(err.response.data.error)
-						return
-					}
-					if (err instanceof Error) {
-						this.$toastError(err.message)
-						return
-					}
-					throw err
-				}
+				this.insertContent(pastedText)
 			}
 		},
 		async handleImage(e: Event) {

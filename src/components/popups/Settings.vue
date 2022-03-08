@@ -111,6 +111,7 @@ import PencilIcon from '@/components/icons/Pencil.vue'
 import { MutationType, getProfileFromSession, namespace as sessionStoreNamespace } from '~/store/session'
 import { getProfile, setProfile } from '@/backend/profile'
 import { addPhotoToIPFS, getPhotoFromIPFS, preUploadPhoto } from '@/backend/photos'
+import { URLRegex } from '@/plugins/quality'
 
 interface IData {
 	newName: string
@@ -282,9 +283,7 @@ export default Vue.extend({
 			}
 			// Update website
 			if (this.website !== this.$store.state.session.website && this.website && this.website !== ``) {
-				if (
-					/^((http:\/\/)|(https:\/\/))?(((\w|-){1,63})\.)?((\w|-){1,253})\.([a-z]{2,63})(\/.*)?$/.test(this.website)
-				) {
+				if (URLRegex.test(this.website)) {
 					this.changeWebsite(this.website)
 				} else {
 					this.$toastError(`Invalid URL`)
