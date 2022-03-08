@@ -33,10 +33,12 @@
 									class="rounded-base flex-shrink-0"
 								/>
 							</button>
-							<h6 v-if="visitProfile.name != ``" class="ml-2 font-sans font-semibold dark:text-darkPrimaryText">
-								{{ visitProfile.name }}
-							</h6>
-							<h6 v-else class="text-gray5 dark:text-gray3 ml-2 font-sans font-semibold">{{ visitProfile.id }}</h6>
+							<button class="focus:outline-none" @click="openHeader(true)">
+								<h6 v-if="visitProfile.name != ``" class="ml-2 font-sans font-semibold dark:text-darkPrimaryText">
+									{{ visitProfile.name }}
+								</h6>
+								<h6 v-else class="text-gray5 dark:text-gray3 ml-2 font-sans font-semibold">{{ visitProfile.id }}</h6>
+							</button>
 						</div>
 						<div class="flex items-center">
 							<SecondaryButton
@@ -176,6 +178,7 @@
 					:mutualProfiles="mutualProfiles"
 					:toggleFriend="toggleFriend"
 					:userIsFollowed="userIsFollowed"
+					:class="bottomPadding ? `pb-5` : ``"
 				/>
 			</div>
 		</div>
@@ -215,6 +218,7 @@ interface IData {
 	scrollingDown: boolean
 	longBio: boolean
 	expandBio: boolean
+	bottomPadding: boolean
 }
 
 export default Vue.extend({
@@ -285,6 +289,7 @@ export default Vue.extend({
 			scrollingDown: false,
 			longBio: false,
 			expandBio: false,
+			bottomPadding: false,
 		}
 	},
 	head() {
@@ -453,7 +458,12 @@ export default Vue.extend({
 			}
 
 			// Reached bottom, prevent mobile glitching
-			if (body.scrollTop + body.clientHeight + 60 >= body.scrollHeight) {
+			if (body.scrollTop + body.clientHeight + 1 >= body.scrollHeight) {
+				if (body.scrollHeight === body.clientHeight && body.scrollTop === 0) {
+					this.openHeader(true)
+					this.bottomPadding = true
+				}
+				this.bottomPadding = false
 				return
 			}
 
