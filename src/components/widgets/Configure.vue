@@ -4,7 +4,7 @@
 			<XIcon />
 		</button>
 		<!-- Container -->
-		<section class="flex w-full lg:w-11/12 xl:w-10/12 flex-row">
+		<section class="flex w-full lg:w-11/12 xl:w-10/12 flex-row max-w-1220">
 			<!-- Primary widget -->
 			<article
 				style="min-height: calc(100vh - 140px); height: calc(100vh - 140px); backdrop-filter: blur(5px)"

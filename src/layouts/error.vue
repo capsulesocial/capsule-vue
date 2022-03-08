@@ -12,7 +12,7 @@
 		"
 	>
 		<div class="flex w-full justify-center">
-			<div class="flex w-full lg:w-11/12 xl:w-10/12 flex-col">
+			<div class="flex w-full lg:w-11/12 xl:w-10/12 max-w-1220 flex-col">
 				<!-- Header -->
 				<Header :avatar="myAvatar" />
 				<h1 class="text-center text-4xl font-bold text-red-500">{{ error['statusCode'] }}: {{ error['message'] }}</h1>

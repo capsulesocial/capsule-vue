@@ -122,6 +122,7 @@ module.exports = {
         420: `420px`,
         700: `700px`,
         760: `760px`,
+        1220: `1220px`,
         mobileCard: `calc(100vw - 50px)`
       },
       height: {
