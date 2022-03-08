@@ -41,7 +41,12 @@
 					class="mb-10 w-4/6 rounded-lg shadow-lg"
 				/>
 				<h6 class="mb-5 text-xl font-bold dark:text-darkPrimaryText">{{ getTitle() }}</h6>
-				<EditProfile v-show="step === 5" ref="settings" :updateProfileMethod="getMyProfile" class="mb-4" />
+				<EditProfile
+					v-if="this.$route.name != `help` && step === 5"
+					ref="settings"
+					:updateProfileMethod="getMyProfile"
+					class="mb-4"
+				/>
 				<p class="text-gray5 dark:text-gray3 mb-10 px-10">
 					{{ getText() }}
 				</p>
@@ -72,13 +77,14 @@
 						@click="setStep(4)"
 					></button>
 					<button
+						v-if="this.$route.name != `help`"
 						:class="step > 4 ? `bg-primary dark:bg-secondary` : `bg-gray3`"
 						class="focus:outline-none mx-1 rounded-full p-1"
 						@click="setStep(5)"
 					></button>
 				</div>
 				<!-- Next button -->
-				<div v-if="step === 5" class="mb-2">
+				<div v-if="(this.$route.name === `help` && step === 4) || step === 5" class="mb-2">
 					<BrandedButton
 						:action="
 							() => {
@@ -142,9 +148,11 @@ export default Vue.extend({
 	methods: {
 		setStep(i: number | null) {
 			i === null ? (this.step = this.step + 1) : (this.step = i)
-			if (this.step >= 6) {
-				// @ts-ignore
-				this.$refs.settings.updateSettings()
+			if ((this.$route.name === `help` && this.step >= 5) || this.step >= 6) {
+				if (this.$route.name !== `help`) {
+					// @ts-ignore
+					this.$refs.settings.updateSettings()
+				}
 				this.closeWizard()
 			}
 		},
