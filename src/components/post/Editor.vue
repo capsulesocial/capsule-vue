@@ -1,5 +1,5 @@
 <template>
-	<div class="relative">
+	<div ref="scrollContainer" class="relative">
 		<div class="flex">
 			<section class="w-full">
 				<!-- Title, subtitle -->
@@ -502,6 +502,7 @@ export default Vue.extend({
 			// handle cut and paste
 			if (this.qeditor.getLength() !== range.index + 1 && contentImgs.length === 0) {
 				this.handleCutPaste(range, pastedText)
+				this.scrollToBottom(e)
 				return
 			}
 
@@ -509,6 +510,7 @@ export default Vue.extend({
 			if (pastedContent) {
 				const content = await this.handleHtml(pastedContent)
 				this.insertContent(content)
+				this.scrollToBottom(e)
 				return
 			}
 
@@ -546,10 +548,22 @@ export default Vue.extend({
 					throw err
 				}
 			}
-
 			// handle if text only
 			if (!pastedFile && (!pastedContent || pastedContent === ``)) {
 				this.insertContent(pastedText)
+			}
+			this.scrollToBottom(e)
+		},
+		scrollToBottom(e: ClipboardEvent) {
+			const scrollContainer = this.$refs.scrollContainer as HTMLElement
+			if (e && e.target) {
+				// @ts-ignore
+				if (e.target.outerHTML === `<br>`) {
+					scrollContainer.scrollTop = this.addContentPosTop
+					return
+				}
+				// @ts-ignore
+				e.target.scrollIntoView()
 			}
 		},
 		async handleImage(e: Event) {
