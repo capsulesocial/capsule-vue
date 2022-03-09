@@ -3,14 +3,22 @@ import { initIPFS } from '@/backend/utilities/ipfs'
 import { initContract, initNear, initWalletConnection } from '@/backend/near'
 
 const backend: Plugin = async (_context) => {
-	await initIPFS()
-	await initNear()
-	initWalletConnection()
-	const accountId = window.localStorage.getItem(`accountId`)
-	if (accountId) {
-		initContract(accountId)
-	} else {
-		initContract(``)
+	try {
+		await Promise.all([initIPFS(), initNear()])
+		initWalletConnection()
+		const accountId = window.localStorage.getItem(`accountId`)
+		if (accountId) {
+			initContract(accountId)
+		} else {
+			initContract(``)
+		}
+		throw new Error(`test`)
+	} catch (err: unknown) {
+		if (err instanceof Error) {
+			_context.$toastError(err.message)
+		}
+
+		throw err
 	}
 }
 
