@@ -2,7 +2,7 @@ import { Plugin } from '@nuxt/types'
 import { initIPFS } from '@/backend/utilities/ipfs'
 import { initContract, initNear, initWalletConnection } from '@/backend/near'
 
-const backend: Plugin = async (_context) => {
+const backend: Plugin = async (context) => {
 	try {
 		await Promise.all([initIPFS(), initNear()])
 		initWalletConnection()
@@ -14,7 +14,7 @@ const backend: Plugin = async (_context) => {
 		}
 	} catch (err: unknown) {
 		if (err instanceof Error) {
-			_context.$toastError(err.message)
+			context.$toastError(err.message)
 		}
 
 		throw err
