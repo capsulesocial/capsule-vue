@@ -25,7 +25,7 @@ jobs:
       - name: 'running http-server'
         run: './node_modules/.bin/http-server -p 8099 &'
       - name: 'run test'
-        run: 'yarn browserstack.js'
+        run: 'node browserstack.js'
       - name: 'BrowserStackLocal Stop'
         uses: 'browserstack/github-actions/setup-local@master'
         with:
