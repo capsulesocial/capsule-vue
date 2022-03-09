@@ -36,12 +36,20 @@ export default Vue.extend({
 			}
 			if (!this.hasBookmark) {
 				// add bookmark
-				await sendBookmarkEvent(`ADD`, this.$store.state.session.id, this.postID)
-				this.$toastSuccess(`You have added this post to your bookmarks`)
+				try {
+					await sendBookmarkEvent(`ADD`, this.$store.state.session.id, this.postID)
+					this.$toastSuccess(`You have added this post to your bookmarks`)
+				} catch (err: any) {
+					this.$toastError(err.message)
+				}
 			} else {
 				// Remove bookmark
-				await sendBookmarkEvent(`REMOVE`, this.$store.state.session.id, this.postID)
-				this.$toastSuccess(`You have removed this post from your bookmarks`)
+				try {
+					await sendBookmarkEvent(`REMOVE`, this.$store.state.session.id, this.postID)
+					this.$toastSuccess(`You have removed this post from your bookmarks`)
+				} catch (err: any) {
+					this.$toastError(err.message)
+				}
 			}
 			this.$emit(`clicked`)
 		},
