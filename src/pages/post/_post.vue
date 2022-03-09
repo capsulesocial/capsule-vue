@@ -288,7 +288,7 @@ export default Vue.extend({
 	head() {
 		return {
 			// @ts-ignore
-			title: `${this.post?.title} by ${this.post?.authorID} on Blogchain`,
+			title: this.post ? `${this.post.title} by ${this.post.authorID} on Blogchain` : `Loading...`,
 			meta: [
 				{
 					hid: `post - ${this.$route.params.post}`,
