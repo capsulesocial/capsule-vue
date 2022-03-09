@@ -132,7 +132,9 @@ export default Vue.extend({
 		}
 	},
 	async created() {
+		this.isLoading = true
 		await this.torus.init()
+		this.isLoading = false
 	},
 	mounted() {
 		const accountId = window.localStorage.getItem(`accountId`)
