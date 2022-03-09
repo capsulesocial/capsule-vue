@@ -259,7 +259,7 @@ export default Vue.extend({
 				this.waitingImage = true
 				this.toggleAddContent = false
 				this.refreshPostImages()
-				this.handleDroppedImage(ev)
+				this.handleDroppedContent(ev)
 			})
 			this.qeditor.root.addEventListener(`paste`, (ev: ClipboardEvent) => {
 				this.refreshPostImages()
@@ -337,7 +337,7 @@ export default Vue.extend({
 				this.$toastError(error.message)
 			}
 		},
-		async handleDroppedImage(e: DragEvent) {
+		async handleDroppedContent(e: DragEvent) {
 			e.stopPropagation()
 			e.preventDefault()
 			if (!e.dataTransfer) {
@@ -350,38 +350,8 @@ export default Vue.extend({
 
 			// handle dropped file
 			if (file) {
-				if (!isValidFileType(file.type)) {
-					this.$toastError(`image of type ${file.type} is invalid`)
-					return
-				}
-				try {
-					const { cid, url, image, imageName } = await uploadPhoto(file)
-					const updatedPostImages = await this.updatePostImages(cid, image, imageName)
-					if (this.$isError(updatedPostImages)) {
-						this.$toastError(updatedPostImages.error)
-						this.waitingImage = false
-						return
-					}
-					this.insertContent({ cid, url })
-				} catch (err: unknown) {
-					if (axios.isAxiosError(err)) {
-						if (!err.response) {
-							this.$toastError(`Network error, please try again`)
-							return
-						}
-						if (err.response.status === 429) {
-							this.$toastError(`Too many requests, please try again in a minute`)
-							return
-						}
-						this.$toastError(err.response.data.error)
-						return
-					}
-					if (err instanceof Error) {
-						this.$toastError(err.message)
-						return
-					}
-					throw err
-				}
+				await this.handleFile(file)
+				return
 			}
 
 			if (!file && droppedHtml) {
@@ -480,6 +450,40 @@ export default Vue.extend({
 			}
 			return pastedContent
 		},
+		async handleFile(file: File) {
+			if (!isValidFileType(file.type)) {
+				this.$toastError(`image of type ${file.type} is invalid`)
+				return
+			}
+			try {
+				const { cid, url, image, imageName } = await uploadPhoto(file)
+				const updatedPostImages = await this.updatePostImages(cid, image, imageName)
+				if (this.$isError(updatedPostImages)) {
+					this.$toastError(updatedPostImages.error)
+					this.waitingImage = false
+					return
+				}
+				this.insertContent({ cid, url })
+			} catch (err: unknown) {
+				if (axios.isAxiosError(err)) {
+					if (!err.response) {
+						this.$toastError(`Network error, please try again`)
+						return
+					}
+					if (err.response.status === 429) {
+						this.$toastError(`Too many requests, please try again in a minute`)
+						return
+					}
+					this.$toastError(err.response.data.error)
+					return
+				}
+				if (err instanceof Error) {
+					this.$toastError(err.message)
+					return
+				}
+				throw err
+			}
+		},
 		async handlePastedContent(e: ClipboardEvent) {
 			e.stopPropagation()
 			e.preventDefault()
@@ -516,37 +520,8 @@ export default Vue.extend({
 
 			// handle pasted file
 			if (pastedFile) {
-				if (!isValidFileType(pastedFile.type)) {
-					this.$toastError(`image of type ${pastedFile.type} is invalid`)
-					return
-				}
-				try {
-					const { cid, url, image, imageName } = await uploadPhoto(pastedFile)
-					const updatedPostImages = await this.updatePostImages(cid, image, imageName)
-					if (this.$isError(updatedPostImages)) {
-						this.$toastError(updatedPostImages.error)
-						return
-					}
-					this.insertContent({ cid, url })
-				} catch (err: unknown) {
-					if (axios.isAxiosError(err)) {
-						if (!err.response) {
-							this.$toastError(`Network error, please try again`)
-							return
-						}
-						if (err.response.status === 429) {
-							this.$toastError(`Too many requests, please try again in a minute`)
-							return
-						}
-						this.$toastError(err.response.data.error)
-						return
-					}
-					if (err instanceof Error) {
-						this.$toastError(err.message)
-						return
-					}
-					throw err
-				}
+				await this.handleFile(pastedFile)
+				return
 			}
 			// handle if text only
 			if (!pastedFile && (!pastedContent || pastedContent === ``)) {
