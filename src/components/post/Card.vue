@@ -833,7 +833,6 @@ export default Vue.extend({
 			return this.$store.state.session.id === this.repostedBy || this.$store.getters.checkReposts(this.postCID)
 		},
 		postExcerpt(): string {
-			console.log(`in postcard`, this.post.excerpt)
 			const excerpt = this.post.excerpt.slice(0, 177).trim()
 			if (excerpt.endsWith(`...`)) {
 				return excerpt
