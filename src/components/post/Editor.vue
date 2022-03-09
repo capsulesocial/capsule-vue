@@ -343,8 +343,8 @@ export default Vue.extend({
 			if (!e.dataTransfer) {
 				return
 			}
-			const droppedHtml = e.dataTransfer.getData(`text/html`)
-			const droppedText = e.dataTransfer.getData(`text/plain`)
+			const droppedHtml = this.sanitize(e.dataTransfer.getData(`text/html`))
+			const droppedText = this.sanitize(e.dataTransfer.getData(`text/plain`))
 			const { files } = e.dataTransfer
 			const file = files[0]
 
