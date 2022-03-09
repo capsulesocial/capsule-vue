@@ -14,7 +14,13 @@
 						<CloseIcon />
 					</button>
 				</div>
-				<div class="flex w-full flex-col items-start mt-4">
+				<div v-show="isLoading" class="modal-animation flex w-full justify-center z-20 mt-24">
+					<div
+						class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
+						:style="dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
+					></div>
+				</div>
+				<div v-show="!isLoading" class="flex w-full flex-col items-start mt-4">
 					<!-- post preview -->
 					<div class="bg-lightInput p-4 rounded-lg w-full flex flex-row items-center">
 						<img v-if="image != ``" :src="image" class="h-48 w-48 flex-shrink-0 rounded-lg object-cover xl:h-32 mr-4" />
@@ -65,7 +71,7 @@
 						<div class="relative flex w-full items-center">
 							<input
 								id="id"
-								ref="code"
+								ref="DirectLink"
 								v-model="generatedDirectLink"
 								type="text"
 								placeholder="https://blogchain.app/p/..."
@@ -74,7 +80,48 @@
 							/>
 							<button
 								class="text-primary dark:text-secondary flex items-center focus:outline-none absolute right-0 mr-3 text-xs"
-								@click="copyURL"
+								@click="copyDirectLink"
+							>
+								<CopyIcon class="h-4 w-4 fill-current mr-1" />
+								<p>Copy</p>
+							</button>
+						</div>
+					</div>
+					<!-- Expand Link -->
+					<div class="message-header relative flex items-center justify-between mt-5 w-full" @click="toggleAccordion1">
+						<div class="w-1/3 bg-gray3 dark:bg-gray2 rounded-lg" style="height: 1px"></div>
+						<div
+							:class="isOpen1 ? `plus0 hidden` : `plus1`"
+							class="w-1/3 text-center icon flex flex-row items-center justify-center"
+						>
+							<p class="text-sm text-gray5 dark:text-gray3 mr-2">More</p>
+							<ChevronDown class="text-gray5 dark:text-gray3" style="margin-top: 1px" />
+						</div>
+						<div
+							:class="!isOpen1 ? `minus0 hidden` : `minus1`"
+							class="w-1/3 text-center icon flex flex-row items-center justify-center"
+						>
+							<p class="text-sm text-gray5 dark:text-gray3 mr-2">Less</p>
+							<ChevronUp class="text-gray5 dark:text-gray3" style="margin-top: 1px" />
+						</div>
+						<div class="w-1/3 bg-gray3 dark:bg-gray2 rounded-lg" style="height: 1px"></div>
+					</div>
+					<div :class="isOpen1 ? `mt-5` : `is-closed`" class="flex flex-col w-full message-body">
+						<label for="newName" class="mb-1 font-semibold dark:text-darkPrimaryText">Blogchain Link</label>
+						<p class="text-gray5 mb-2">IPFS decentralized permanent link</p>
+						<div class="relative flex w-full items-center">
+							<input
+								id="id"
+								ref="BlogchainLink"
+								v-model="generatedBlogchainLink"
+								type="text"
+								placeholder="https://blogchain.app/p/..."
+								class="bg-gray1 dark:bg-gray7 dark:text-darkPrimaryText placeholder-gray5 dark:placeholder-gray3 flex-grow rounded-lg px-2 py-1 focus:outline-none"
+								@focus="$event.target.select()"
+							/>
+							<button
+								class="text-primary dark:text-secondary flex items-center focus:outline-none absolute right-0 mr-3 text-xs"
+								@click="copyBlogchainLink"
 							>
 								<CopyIcon class="h-4 w-4 fill-current mr-1" />
 								<p>Copy</p>
@@ -96,13 +143,28 @@ import RedditIcon from '@/components/icons/brands/solid/Reddit.vue'
 import LinkedinIcon from '@/components/icons/brands/solid/Linkedin.vue'
 import MailIcon from '@/components/icons/brands/solid/Mail.vue'
 import CopyIcon from '@/components/icons/Copy.vue'
+import ChevronDown from '@/components/icons/ChevronDown.vue'
+import ChevronUp from '@/components/icons/ChevronUp.vue'
 
 interface IData {
 	generatedDirectLink: string
+	generatedBlogchainLink: string
+	isOpen1: boolean
+	isLoading: boolean
 }
 
 export default Vue.extend({
-	components: { CloseIcon, TwitterIcon, FacebookIcon, RedditIcon, LinkedinIcon, MailIcon, CopyIcon },
+	components: {
+		CloseIcon,
+		TwitterIcon,
+		FacebookIcon,
+		RedditIcon,
+		LinkedinIcon,
+		MailIcon,
+		CopyIcon,
+		ChevronDown,
+		ChevronUp,
+	},
 	props: {
 		image: {
 			type: String,
@@ -124,12 +186,14 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			generatedDirectLink: ``,
+			generatedBlogchainLink: ``,
+			isOpen1: false,
+			isLoading: true,
 		}
 	},
 	created() {
 		window.addEventListener(`click`, this.handleCloseClick, false)
-		this.generatedDirectLink = `https://blogchain.app/p/a-day-in-the-life-of-jack/adu4fe2oh5fs7f`
-		this.generatedDirectLink = this.generatedDirectLink.slice(0, 50).trim() + `...`
+		this.generateShareableLink()
 	},
 	destroyed() {
 		window.removeEventListener(`click`, this.handleCloseClick)
@@ -162,14 +226,37 @@ export default Vue.extend({
 			}
 			return excerpt + `...`
 		},
-		copyURL(): void {
+		copyDirectLink(): void {
 			if (this.generatedDirectLink === ``) {
 				return
 			}
-			const code = this.$refs.code as HTMLElement
+			const code = this.$refs.DirectLink as HTMLElement
 			code.focus()
 			document.execCommand(`copy`)
 			this.$toastSuccess(`Link copied to clipboard!`)
+		},
+		copyBlogchainLink(): void {
+			if (this.generatedBlogchainLink === ``) {
+				return
+			}
+			const code = this.$refs.BlogchainLink as HTMLElement
+			code.focus()
+			document.execCommand(`copy`)
+			this.$toastSuccess(`Link copied to clipboard!`)
+		},
+		toggleAccordion1() {
+			this.isOpen1 = !this.isOpen1
+		},
+		async generateShareableLink() {
+			this.generatedDirectLink = `https://blogchain.app/p/a-day-in-the-life-of-jack/adu4fe2oh5fs7f`
+			this.generatedDirectLink = this.generatedDirectLink.slice(0, 50).trim() + `...`
+			this.generatedBlogchainLink = `https://blogchain.app/post/adu4fe2oh5fs7faoehfiohahfiaehfhaohfihahefihafo`
+			this.generatedBlogchainLink = this.generatedBlogchainLink.slice(0, 50).trim() + `...`
+			await this.sleep(500)
+			this.isLoading = false
+		},
+		sleep(ms: any) {
+			return new Promise((resolve) => setTimeout(resolve, ms))
 		},
 	},
 })
