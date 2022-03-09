@@ -35,10 +35,10 @@ const config: NuxtConfig = {
 		{ src: '@/plugins/persistedstate.ts' },
 		{ src: '@/plugins/quality.ts' },
 		{ src: '@/plugins/helpers.ts' },
-		{ src: '@/plugins/backend.ts' },
 		{ src: '@/plugins/toast.ts' },
 		{ src: '@/plugins/background.ts' },
 		{ src: '@/plugins/colormode.ts' },
+		{ src: '@/plugins/backend.ts' },
 	],
 
 	// Auto import components: https://go.nuxtjs.dev/config-components

@@ -16,6 +16,16 @@ declare module 'vue/types/vue' {
 	}
 }
 
+// eslint-disable-next-line quotes
+declare module '@nuxt/types' {
+	interface Context {
+		$toastSuccess: Success
+		$toastWarning: Warning
+		$toastError: Error
+		$toastMessage: Message
+	}
+}
+
 // Use HTML DOM styles: https://www.w3schools.com/jsref/dom_obj_style.asp
 
 const toastSuccess: Success = (text: string): void => {
