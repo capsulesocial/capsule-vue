@@ -361,39 +361,7 @@ export default Vue.extend({
 			}
 
 			if (!file && !droppedHtml) {
-				const f = await this.$urlToFile(droppedText)
-				if (this.$isError(f)) {
-					this.$toastError(f.error)
-					return
-				}
-				try {
-					const { cid, url, image, imageName } = await uploadPhoto(f.file)
-					const updatedPostImages = await this.updatePostImages(cid, image, imageName)
-					if (this.$isError(updatedPostImages)) {
-						this.$toastError(updatedPostImages.error)
-						this.waitingImage = false
-						return
-					}
-					this.insertContent({ cid, url })
-				} catch (err: unknown) {
-					if (axios.isAxiosError(err)) {
-						if (!err.response) {
-							this.$toastError(`Network error, please try again`)
-							return
-						}
-						if (err.response.status === 429) {
-							this.$toastError(`Too many requests, please try again in a minute`)
-							return
-						}
-						this.$toastError(err.response.data.error)
-						return
-					}
-					if (err instanceof Error) {
-						this.$toastError(err.message)
-						return
-					}
-					throw err
-				}
+				this.insertContent(droppedText)
 			}
 		},
 		handleCutPaste(range: RangeStatic, pastedText: string) {
