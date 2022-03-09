@@ -477,7 +477,7 @@
 										:repost="repost"
 										:post="post"
 										:cid="postCID"
-										class="mr-4"
+										class="mr-4 items-center"
 										:hasRepost="hasReposted"
 										:repostCount="repostCount"
 										@toggleRepost="toggleQuoteRepost"
@@ -492,7 +492,6 @@
 										<ShareIcon :isActive="showShare" />
 										<p class="ml-1 text-sm">Share</p>
 									</button>
-									<!-- <Share :post="post" :cid="postCID" style="margin-top: 2px" /> -->
 									<button class="focus:outline-none" @click="toggleStatsCard"><StatsIcon /></button>
 								</div>
 							</div>
@@ -510,32 +509,33 @@
 						<!-- Comment and share (Mobile) -->
 						<div class="text-gray5 dark:text-gray3 mt-1 flex lg:hidden">
 							<button
-								class="focus:outline-none text-gray5 dark:text-gray3 hover:text-primary dark:hover:text-secondary hover:fill-primary mr-4 flex items-end"
+								class="focus:outline-none text-gray5 dark:text-gray3 hover:text-primary dark:hover:text-secondary mr-4 hover:fill-primary flex items-center"
 								:class="showComments ? `text-primary dark:text-secondary` : ``"
 								@click="toggleComments"
 							>
 								<CommentIcon :isActive="showComments" />
-								<span v-if="comments" class="ml-1">{{ comments.length }}</span>
+								<span v-if="comments" class="ml-1 text-sm">{{ comments.length }}</span>
 							</button>
 							<Repost
 								:repost="repost"
 								:post="post"
 								:cid="postCID"
-								class="fill-primary mr-4"
+								class="fill-primary mr-4 items-center"
 								:hasRepost="hasReposted"
 								:repostCount="repostCount"
 								@toggleRepost="toggleQuoteRepost"
 							/>
-							<Share
-								:repost="repost"
-								:post="post"
-								:cid="postCID"
-								class="fill-primary"
-								:hasRepost="hasReposted"
-								:repostCount="repostCount"
-								@toggleRepost="toggleQuoteRepost"
-							/>
-							<button class="focus:outline-none ml-4" @click="toggleStatsCard"><StatsIcon /></button>
+							<!-- Share popup -->
+							<button
+								class="focus:outline-none text-gray5 dark:text-gray3 hover:text-primary dark:hover:text-secondary mr-4 hover:fill-primary flex items-center"
+								:class="showShare ? `text-primary dark:text-secondary` : ``"
+								style="margin-top: 2px"
+								@click="showShare = !showShare"
+							>
+								<ShareIcon :isActive="showShare" />
+								<p class="ml-1 text-sm">Share</p>
+							</button>
+							<button class="focus:outline-none" @click="toggleStatsCard"><StatsIcon /></button>
 						</div>
 					</div>
 					<div
@@ -560,7 +560,6 @@ import type { PropType } from 'vue'
 import PostActions from '@/components/post/Actions.vue'
 import Avatar from '@/components/Avatar.vue'
 import BookmarkButton from '@/components/post/BookmarkButton.vue'
-import Share from '@/components/post/Share.vue'
 import CommentIcon from '@/components/icons/Comment.vue'
 import ShareIcon from '@/components/icons/Share.vue'
 import Repost from '@/components/post/Repost.vue'
@@ -623,7 +622,6 @@ export default Vue.extend({
 		PostActions,
 		Avatar,
 		BookmarkButton,
-		Share,
 		CommentIcon,
 		ShareIcon,
 		TagPill,
