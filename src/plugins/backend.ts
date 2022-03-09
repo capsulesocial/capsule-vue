@@ -6,12 +6,14 @@ const backend: Plugin = async (context) => {
 	try {
 		await Promise.all([initIPFS(), initNear()])
 		initWalletConnection()
+
 		const accountId = window.localStorage.getItem(`accountId`)
 		if (accountId) {
 			initContract(accountId)
-		} else {
-			initContract(``)
+			return
 		}
+
+		initContract(``)
 	} catch (err: unknown) {
 		if (err instanceof Error) {
 			context.$toastError(err.message)
