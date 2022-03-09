@@ -513,41 +513,15 @@ export default Vue.extend({
 			e.stopPropagation()
 			e.preventDefault()
 			this.refreshPostImages()
+			const target = e.target as any
 
-			const { files } = e.target as any
-			if (!files) {
+			const { files } = target
+			if (!files || files.length !== 1) {
 				return
 			}
-			if (files.length !== 1) {
-				return
-			}
-			try {
-				const { cid, url, image, imageName } = await uploadPhoto(files[0])
-				const updatedPostImages = await this.updatePostImages(cid, image, imageName)
-				if (this.$isError(updatedPostImages)) {
-					this.$toastError(updatedPostImages.error)
-					return
-				}
-				this.insertContent({ cid, url })
-			} catch (err: unknown) {
-				if (axios.isAxiosError(err)) {
-					if (!err.response) {
-						this.$toastError(`Network error, please try again`)
-						return
-					}
-					if (err.response.status === 429) {
-						this.$toastError(`Too many requests, please try again in a minute`)
-						return
-					}
-					this.$toastError(err.response.data.error)
-					return
-				}
-				if (err instanceof Error) {
-					this.$toastError(err.message)
-					return
-				}
-				throw err
-			}
+
+			await this.handleFile(files[0])
+			target.value = ``
 		},
 		calculateAddPos(index: number) {
 			if (!this.qeditor) {
