@@ -12,7 +12,6 @@ const backend: Plugin = async (_context) => {
 		} else {
 			initContract(``)
 		}
-		throw new Error(`test`)
 	} catch (err: unknown) {
 		if (err instanceof Error) {
 			_context.$toastError(err.message)
