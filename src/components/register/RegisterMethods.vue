@@ -95,12 +95,14 @@ export default Vue.extend({
 		}
 	},
 	async created() {
-		await Promise.all([this.torus.init()])
+		this.isLoading = true
+		await this.torus.init()
 		if (document.documentElement.classList.contains(`dark`)) {
 			this.dark = true
 		} else {
 			this.dark = false
 		}
+		this.isLoading = false
 	},
 	methods: {
 		async torusLogin(type: TorusVerifiers) {
