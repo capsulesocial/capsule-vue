@@ -482,7 +482,7 @@
 										:repostCount="repostCount"
 										@toggleRepost="toggleQuoteRepost"
 									/>
-									<!-- Share popup -->
+									<!-- Share popup button -->
 									<button
 										class="focus:outline-none text-gray5 dark:text-gray3 hover:text-primary dark:hover:text-secondary mr-4 hover:fill-primary flex items-center"
 										:class="showShare ? `text-primary dark:text-secondary` : ``"
@@ -525,7 +525,7 @@
 								:repostCount="repostCount"
 								@toggleRepost="toggleQuoteRepost"
 							/>
-							<!-- Share popup -->
+							<!-- Share popup button -->
 							<button
 								class="focus:outline-none text-gray5 dark:text-gray3 hover:text-primary dark:hover:text-secondary mr-4 hover:fill-primary flex items-center"
 								:class="showShare ? `text-primary dark:text-secondary` : ``"

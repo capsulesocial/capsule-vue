@@ -2,7 +2,7 @@
 	<div
 		id="post"
 		class="modal-animation card-animation flex w-full justify-center"
-		:style="showQuoteRepost ? `background-color: #fff` : `backdrop-filter: blur(10px)`"
+		:style="showQuoteRepost || showShare ? `background-color: #fff` : `backdrop-filter: blur(10px)`"
 	>
 		<!-- Inner post area -->
 		<div v-if="post && author" class="lg:w-760 lg:max-w-760 h-fit w-full">
@@ -57,13 +57,15 @@
 							class="pr-2"
 							@clicked="getBookmarkStatus"
 						/>
-						<ShareButton
-							:post="post"
-							:cid="$route.params.post"
-							:hasRepost="hasReposted"
-							:repostCount="repostCount"
-							style="margin-bottom: 2px"
-						/>
+						<!-- Share popup button -->
+						<button
+							class="focus:outline-none text-gray5 dark:text-gray3 hover:text-primary dark:hover:text-secondary hover:fill-primary flex items-center"
+							:class="showShare ? `text-primary dark:text-secondary` : ``"
+							style="margin-top: 2px"
+							@click="showShare = !showShare"
+						>
+							<ShareIcon :isActive="showShare" />
+						</button>
 					</div>
 				</article>
 				<article>
@@ -153,7 +155,16 @@
 								class="ml-2 mr-3"
 								@toggleRepost="handleRepost"
 							/>
-							<ShareButton :post="post" :cid="$route.params.post" @toggleRepost="handleRepost" />
+							<!-- Share popup button -->
+							<button
+								class="focus:outline-none text-gray5 dark:text-gray3 hover:text-primary dark:hover:text-secondary mr-4 hover:fill-primary flex items-center"
+								:class="showShare ? `text-primary dark:text-secondary` : ``"
+								style="margin-top: 2px"
+								@click="showShare = !showShare"
+							>
+								<ShareIcon :isActive="showShare" />
+								<p class="ml-1 text-sm">Share</p>
+							</button>
 						</div>
 					</div>
 					<PostActions
@@ -188,6 +199,14 @@
 				@closePopup="closePopup"
 			/>
 		</div>
+		<SharePopup
+			v-if="showShare"
+			:image="featuredPhoto"
+			:title="post.title"
+			:subtitle="post.subtitle"
+			:excerpt="post.excerpt"
+			@close="showShare = false"
+		/>
 	</div>
 </template>
 
@@ -201,12 +220,13 @@ import AuthorCard from '@/components/AuthorCard.vue'
 import TagCard from '@/components/Tag.vue'
 import BookmarkButton from '@/components/post/BookmarkButton.vue'
 import RepostButton from '@/components/post/Repost.vue'
-import ShareButton from '@/components/post/Share.vue'
+import ShareIcon from '@/components/icons/Share.vue'
 import Avatar from '@/components/Avatar.vue'
 import XIcon from '@/components/icons/X.vue'
 import LinkIcon from '@/components/icons/Link.vue'
 import FriendButton from '@/components/FriendButton.vue'
 import PostCard from '@/components/post/Card.vue'
+import SharePopup from '@/components/popups/SharePopup.vue'
 
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 import { getRegularPost, getOnePost, Post } from '@/backend/post'
@@ -241,6 +261,7 @@ interface IData {
 	readerViewElement: any | null
 	dark: boolean
 	captionHeight: number | undefined
+	showShare: boolean
 }
 
 export default Vue.extend({
@@ -250,13 +271,14 @@ export default Vue.extend({
 		AuthorCard,
 		TagCard,
 		BookmarkButton,
-		ShareButton,
+		ShareIcon,
 		Avatar,
 		LinkIcon,
 		XIcon,
 		FriendButton,
 		PostCard,
 		RepostButton,
+		SharePopup,
 	},
 	layout: `reader`,
 	// mixins: [markdown],
@@ -283,6 +305,7 @@ export default Vue.extend({
 			readerViewElement: null,
 			dark: false,
 			captionHeight: 0,
+			showShare: false,
 		}
 	},
 	head() {
