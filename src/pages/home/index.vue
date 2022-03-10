@@ -1,7 +1,7 @@
 <template>
 	<section>
 		<nav
-			class="z-20 flex w-full flex-row px-5 pt-3 text-base xl:px-6 xl:pt-4 rounded-lg"
+			class="z-20 flex w-full flex-row px-5 pt-3 text-base xl:px-6 xl:pt-4 rounded-t-lg"
 			style="backdrop-filter: blur(10px)"
 		>
 			<div class="flex items-center">
