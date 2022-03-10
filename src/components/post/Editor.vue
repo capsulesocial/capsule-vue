@@ -217,18 +217,16 @@ export default Vue.extend({
 	methods: {
 		// Quilljs Editor init
 		setupEditor(): void {
+			// Handle link validation
 			const Link = Quill.import(`formats/link`)
 			const builtInFunc = Link.sanitize
-			Link.sanitize = function customSanitizeLinkInput(linkValueInput: any) {
+			Link.sanitize = function customSanitizeLinkInput(linkValueInput: string) {
 				let val = linkValueInput
-
-				// do nothing, since this implies user's already using a custom protocol
-				// eslint-disable-next-line no-empty
 				if (/^\w+:/.test(val)) {
+					// do nothing, since this implies user's already using a custom protocol
 				} else if (!/^https?:/.test(val)) {
 					val = `https://` + val
 				}
-
 				return builtInFunc.call(this, val) // retain the built-in logic
 			}
 
