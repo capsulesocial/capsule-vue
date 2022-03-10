@@ -76,14 +76,13 @@ export function transformPostToTemplate(body: string, postImages?: Array<string>
 	return body
 }
 
-export function createPostImagesArray(content: string, uploadedImages: Set<string>) {
-	const usedImages: string[] = []
+export function createPostImagesSet(content: string, uploadedImages: Set<string>) {
+	const usedImages: Set<string> = new Set()
 	uploadedImages.forEach((cid) => {
 		if (!content.match(imgRegexp(cid))) {
 			return
 		}
-
-		usedImages.push(cid)
+		usedImages.add(cid)
 	})
 
 	return usedImages

@@ -97,7 +97,7 @@ import axios from 'axios'
 import XIcon from '@/components/icons/X.vue'
 import PencilIcon from '@/components/icons/Pencil.vue'
 import AddContent from '@/components/post/EditorActions.vue'
-import { ImageBlot, preRule, ipfsImageRule, createPostImagesArray } from '@/pages/post/editorExtensions'
+import { ImageBlot, preRule, ipfsImageRule, createPostImagesSet } from '@/pages/post/editorExtensions'
 import { createRegularPost, sendRegularPost } from '@/backend/post'
 import { preUploadPhoto, uploadPhoto } from '@/backend/photos'
 import { isValidFileType } from '@/backend/utilities/helpers'
@@ -260,10 +260,12 @@ export default Vue.extend({
 				this.toggleAddContent = false
 				this.refreshPostImages()
 				this.handleDroppedContent(ev)
+				this.refreshPostImages()
 			})
 			this.qeditor.root.addEventListener(`paste`, (ev: ClipboardEvent) => {
 				this.refreshPostImages()
 				this.handlePastedContent(ev)
+				this.refreshPostImages()
 			})
 			this.qeditor.focus()
 			// Set link placeholder
@@ -288,8 +290,7 @@ export default Vue.extend({
 		},
 		refreshPostImages() {
 			const clean = turndownService.turndown(this.getInputHTML())
-			const refreshedPostImages = createPostImagesArray(clean, this.postImages)
-			this.postImages = new Set(refreshedPostImages)
+			this.postImages = createPostImagesSet(clean, this.postImages)
 		},
 		async updatePostImages(
 			cid: string,
@@ -315,7 +316,6 @@ export default Vue.extend({
 					this.toggleAddContent = true
 					return
 				}
-				this.refreshPostImages()
 				const range = this.qeditor.getSelection(true)
 				if (typeof content === `string`) {
 					this.waitingImage = false
@@ -327,7 +327,6 @@ export default Vue.extend({
 					this.toggleAddContent = true
 					this.qeditor.insertEmbed(range.index, `image`, { alt: cid.toString(), url }, `user`)
 				}
-				this.refreshPostImages()
 				const contentLength = this.qeditor.getContents().length()
 				setTimeout(() => {
 					this.qeditor?.setSelection(contentLength, 0, `user`)
@@ -423,6 +422,7 @@ export default Vue.extend({
 				this.$toastError(`image of type ${file.type} is invalid`)
 				return
 			}
+			this.refreshPostImages()
 			try {
 				const { cid, url, image, imageName } = await uploadPhoto(file)
 				const updatedPostImages = await this.updatePostImages(cid, image, imageName)
@@ -451,6 +451,7 @@ export default Vue.extend({
 				}
 				throw err
 			}
+			this.refreshPostImages()
 		},
 		async handlePastedContent(e: ClipboardEvent) {
 			e.stopPropagation()
@@ -512,7 +513,6 @@ export default Vue.extend({
 		async handleImage(e: Event) {
 			e.stopPropagation()
 			e.preventDefault()
-			this.refreshPostImages()
 			const target = e.target as any
 
 			const { files } = target
@@ -656,7 +656,7 @@ export default Vue.extend({
 				return
 			}
 			this.hasPosted = true
-			const postImages = createPostImagesArray(clean, this.postImages)
+			const postImages = Array.from(createPostImagesSet(clean, this.postImages))
 			if (postImages.length > textLimits.post_images.max) {
 				this.$toastError(`Cannot add more than ${textLimits.post_images.max} images in a post`)
 				return
