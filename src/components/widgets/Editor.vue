@@ -264,9 +264,17 @@ export default Vue.extend({
 			}
 		},
 		async handleImage(e: Event): Promise<void> {
-			const target = e.target as HTMLInputElement
+			const eventTarget = e.target
+			if (!eventTarget) {
+				return
+			}
+
+			const target = eventTarget as HTMLInputElement
 			this.featuredPhotoTarget = target
-			const image: File = (target.files as FileList)[0]
+			if (!target.files || target.files.length < 1) {
+				return
+			}
+			const image = target.files[0]
 			if (!image) {
 				return
 			}
