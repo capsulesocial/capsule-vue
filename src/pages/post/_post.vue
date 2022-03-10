@@ -5,11 +5,11 @@
 		:style="showQuoteRepost ? `background-color: #fff` : `backdrop-filter: blur(10px)`"
 	>
 		<!-- Inner post area -->
-		<div v-if="post && author" class="xl:w-760 xl:max-w-760 h-fit w-full">
+		<div v-if="post && author" class="lg:w-760 lg:max-w-760 h-fit w-full">
 			<!-- Magic header that disappears on scroll down -->
 			<header
 				id="header"
-				class="page-header xl:w-760 xl:max-w-760 from-lightBGStart to-lightBGStop dark:from-darkBG dark:to-darkBG sticky top-0 z-10 flex w-full items-center rounded-b-lg bg-gradient-to-r py-2 xl:px-4"
+				class="page-header xl:w-760 xl:max-w-760 from-lightBGStart to-lightBGStop dark:from-darkBG dark:to-darkBG sticky top-0 z-10 flex w-full items-center rounded-b-lg bg-gradient-to-r py-2 px-5"
 				style="backdrop-filter: blur(10px)"
 			>
 				<div class="trigger-menu-wrapper flex w-full justify-center py-2 ease-in-out">
@@ -44,7 +44,7 @@
 					</div>
 				</div>
 			</header>
-			<section v-if="post !== null" class="mb-5 pb-16 pt-2 md:pb-5">
+			<section v-if="post !== null" class="mb-5 p-5 lg:p-0 pb-16 pt-2 md:pb-5">
 				<!-- Category and elipses -->
 				<article class="my-5 flex w-full justify-between">
 					<nuxt-link :to="`/discover/` + post.category" class="text-primary dark:text-secondary capitalize">{{
