@@ -217,6 +217,21 @@ export default Vue.extend({
 	methods: {
 		// Quilljs Editor init
 		setupEditor(): void {
+			const Link = Quill.import(`formats/link`)
+			const builtInFunc = Link.sanitize
+			Link.sanitize = function customSanitizeLinkInput(linkValueInput: any) {
+				let val = linkValueInput
+
+				// do nothing, since this implies user's already using a custom protocol
+				// eslint-disable-next-line no-empty
+				if (/^\w+:/.test(val)) {
+				} else if (!/^https?:/.test(val)) {
+					val = `https://` + val
+				}
+
+				return builtInFunc.call(this, val) // retain the built-in logic
+			}
+
 			Quill.register(ImageBlot, true)
 			Quill.register(
 				`modules/counter`,
