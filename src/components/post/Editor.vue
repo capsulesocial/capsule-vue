@@ -513,7 +513,7 @@ export default Vue.extend({
 		async handleImage(e: Event) {
 			e.stopPropagation()
 			e.preventDefault()
-			const target = e.target as any
+			const target = e.target as HTMLInputElement
 
 			const { files } = target
 			if (!files || files.length !== 1) {
