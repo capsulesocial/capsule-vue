@@ -178,7 +178,7 @@
 					:mutualProfiles="mutualProfiles"
 					:toggleFriend="toggleFriend"
 					:userIsFollowed="userIsFollowed"
-					:class="bottomPadding ? `pb-5` : ``"
+					:class="bottomPadding ? `pb-64 mb-64` : ``"
 				/>
 			</div>
 		</div>
@@ -467,18 +467,19 @@ export default Vue.extend({
 			if (!body || !buttons || !infos || !header || !tabs || !bio || !small) {
 				return
 			}
+			const currentScroll = body.scrollTop
 
 			// Reached bottom, prevent mobile glitching
-			if (body.scrollTop + body.clientHeight + 1 >= body.scrollHeight) {
-				if (body.scrollHeight === body.clientHeight && body.scrollTop === 0) {
+			if (currentScroll + body.clientHeight + 1 >= body.scrollHeight) {
+				if (body.scrollHeight === body.clientHeight && currentScroll === 0) {
 					this.openHeader(true)
 					this.bottomPadding = true
+					return
 				}
 				this.bottomPadding = false
 				return
 			}
 
-			const currentScroll = body.scrollTop
 			// Reached top
 			if (body.scrollTop <= 0 && !this.scrollingDown) {
 				this.openHeader(true)
