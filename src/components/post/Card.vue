@@ -46,29 +46,33 @@
 							</div>
 							<!-- Top: avatar, name, id, close -->
 							<div class="flex w-full justify-between">
-								<div class="flex flex-row" @mouseover="triggerPopupCardTrue" @mouseleave="triggerPopupCardFalse">
-									<Avatar
-										:avatar="avatar"
-										:authorID="post.authorID"
-										size="w-12 h-12"
-										class="hidden lg:block transition ease-in-out hover:opacity-75"
-									/>
+								<div class="flex flex-row">
+									<div @mouseover="triggerPopupCardTrue" @mouseleave="triggerPopupCardFalse">
+										<Avatar
+											:avatar="avatar"
+											:authorID="post.authorID"
+											size="w-12 h-12"
+											class="hidden lg:block transition ease-in-out hover:opacity-75"
+										/>
+									</div>
 									<div class="ml-4 hidden flex-grow flex-col lg:flex">
-										<nuxt-link :to="'/id/' + post.authorID" class="mr-4 flex">
-											<span
-												v-if="authorName != ``"
-												class="text-base dark:text-darkPrimaryText font-medium transition ease-in-out hover:underline"
-											>
-												{{ authorName }}
-											</span>
-											<span
-												v-else
-												class="text-gray5 dark:text-gray3 text-base font-medium transition ease-in-out hover:underline"
-											>
-												{{ post.authorID }}
-											</span>
-											<span class="text-primary dark:text-secondary ml-2"> @{{ post.authorID }} </span>
-										</nuxt-link>
+										<div @mouseover="triggerPopupCardTrue" @mouseleave="triggerPopupCardFalse">
+											<nuxt-link :to="'/id/' + post.authorID" class="mr-4 flex">
+												<span
+													v-if="authorName != ``"
+													class="text-base dark:text-darkPrimaryText font-medium transition ease-in-out hover:underline"
+												>
+													{{ authorName }}
+												</span>
+												<span
+													v-else
+													class="text-gray5 dark:text-gray3 text-base font-medium transition ease-in-out hover:underline"
+												>
+													{{ post.authorID }}
+												</span>
+												<span class="text-primary dark:text-secondary ml-2"> @{{ post.authorID }} </span>
+											</nuxt-link>
+										</div>
 										<!-- Timestamp -->
 										<span class="text-xs dark:text-gray3">
 											{{ $formatDate(post.timestamp) }}
@@ -229,26 +233,30 @@
 					<!-- Quote repost -->
 					<div v-if="quote">
 						<div class="flex w-full justify-between">
-							<div class="flex flex-row" @mouseover="triggerQuoteCardTrue" @mouseleave="triggerQuoteCardFalse">
-								<Avatar
-									:avatar="quote.avatar"
-									:authorID="quote.authorID"
-									size="w-12 h-12 transition ease-in-out hover:opacity-75"
-								/>
+							<div class="flex flex-row">
+								<div @mouseover="triggerQuoteCardTrue" @mouseleave="triggerQuoteCardFalse">
+									<Avatar
+										:avatar="quote.avatar"
+										:authorID="quote.authorID"
+										size="w-12 h-12 transition ease-in-out hover:opacity-75"
+									/>
+								</div>
 								<div class="ml-4 flex flex-grow flex-col">
-									<nuxt-link :to="`/id/` + quote.authorID" class="mr-4 flex">
-										<span
-											v-if="this.quote.name != ``"
-											class="text-base font-medium transition ease-in-out hover:underline dark:text-darkPrimaryText"
-											>{{ this.quote.name }}</span
-										>
-										<span
-											v-else
-											class="text-gray5 dark:text-gray3 text-base font-medium transition ease-in-out hover:underline"
-											>{{ this.quote.authorID }}</span
-										>
-										<span class="text-primary dark:text-secondary ml-2">@{{ this.quote.authorID }}</span>
-									</nuxt-link>
+									<div @mouseover="triggerQuoteCardTrue" @mouseleave="triggerQuoteCardFalse">
+										<nuxt-link :to="`/id/` + quote.authorID" class="mr-4 flex">
+											<span
+												v-if="this.quote.name != ``"
+												class="text-base font-medium transition ease-in-out hover:underline dark:text-darkPrimaryText"
+												>{{ this.quote.name }}</span
+											>
+											<span
+												v-else
+												class="text-gray5 dark:text-gray3 text-base font-medium transition ease-in-out hover:underline"
+												>{{ this.quote.authorID }}</span
+											>
+											<span class="text-primary dark:text-secondary ml-2">@{{ this.quote.authorID }}</span>
+										</nuxt-link>
+									</div>
 									<span class="text-xs dark:text-gray3">{{ $formatDate(this.quote.timestamp) }}</span>
 								</div>
 							</div>
@@ -325,14 +333,16 @@
 						</div>
 						<!-- Top: avatar, name, id, close -->
 						<div class="flex w-full justify-between">
-							<div class="flex flex-row" @mouseover="triggerProfileCardTrue" @mouseleave="triggerProfileCardFalse">
-								<Avatar
-									:avatar="avatar"
-									:authorID="post.authorID"
-									size="w-12 h-12 transition ease-in-out hover:opacity-75"
-								/>
+							<div class="flex flex-row">
+								<div @mouseover="triggerProfileCardTrue" @mouseleave="triggerProfileCardFalse">
+									<Avatar
+										:avatar="avatar"
+										:authorID="post.authorID"
+										size="w-12 h-12 transition ease-in-out hover:opacity-75"
+									/>
+								</div>
 								<div class="ml-4 flex flex-grow flex-col">
-									<div class="flex">
+									<div class="flex" @mouseover="triggerProfileCardTrue" @mouseleave="triggerProfileCardFalse">
 										<nuxt-link :to="'/id/' + post.authorID" class="mr-4 flex">
 											<span
 												v-if="authorName != ``"
