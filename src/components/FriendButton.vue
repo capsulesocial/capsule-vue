@@ -8,7 +8,7 @@
 			>
 				<span class="following">Following</span>
 
-				<span class="unfollow">Unfollow</span>
+				<span class="unfollow" style="padding-right: 0.15rem; padding-left: 0.15rem">Unfollow</span>
 			</div>
 			<!-- Mobile -->
 			<div
