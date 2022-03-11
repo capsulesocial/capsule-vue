@@ -26,6 +26,7 @@
 							class="lg:w-7.5 min-h-70 h-70 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder z-10 w-full overflow-y-auto rounded-t-lg bg-gradient-to-r p-6 pt-4 shadow-lg"
 							@togglePopup="togglePopup"
 							@changeLocalBGImage="changeLocalBGImage"
+							@changeColorMode="updateColorMode"
 							@initProfile="initProfile"
 						/>
 						<!-- Settings tabs -->
@@ -135,6 +136,9 @@ export default Vue.extend({
 		// This method is used to change the local bg on the styling tab before changing
 		changeLocalBGImage(id: string): void {
 			this.bgImage = this.$getBGImage(id, `local`)
+		},
+		updateColorMode(dark: boolean): void {
+			this.dark = dark
 		},
 		changeTab(t: string): void {
 			this.tab = t
