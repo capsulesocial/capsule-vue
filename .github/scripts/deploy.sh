@@ -2,10 +2,11 @@
 
 set -ex
 
-[[ -z "$DEPLOY_BRANCH" ]] && { echo "error: DEPLOY_BRANCH environment variable not set" >&2 ; exit 1 ; }
+[[ -z "$DEPLOY_PATH"      ]] && { echo "error: DEPLOY_PATH environment variable not set"      >&2 ; exit 1 ; }
+[[ -z "$COMMIT_TAG"       ]] && { echo "error: COMMIT_TAG environment variable not set"       >&2 ; exit 1 ; }
 [[ -z "$COMMIT_SHORT_SHA" ]] && { echo "error: COMMIT_SHORT_SHA environment variable not set" >&2 ; exit 1 ; }
-[[ -z "$GITHUB_USER" ]] && { echo "error: GITHUB_USER environment variable not set" >&2 ; exit 1 ; }
-[[ -z "$GITHUB_TOKEN" ]] && { echo "error: GITHUB_TOKEN environment variable not set" >&2 ; exit 1 ; }
+[[ -z "$GITHUB_USER"      ]] && { echo "error: GITHUB_USER environment variable not set"      >&2 ; exit 1 ; }
+[[ -z "$GITHUB_TOKEN"     ]] && { echo "error: GITHUB_TOKEN environment variable not set"     >&2 ; exit 1 ; }
 
 (
     set +x # make sure we don't leak secrets here
