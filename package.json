@@ -40,9 +40,9 @@
 		]
 	},
 	"scripts": {
-		"web": "nuxt -m=client",
+		"web": "nuxt",
 		"start": "nuxt start",
-		"build:web": "nuxt build -m=client",
+		"build:web": "nuxt build",
 		"lint": "yarn eslint -c .eslintrc.js --ext .ts,.js,.vue ./src",
 		"lint-fix": "yarn eslint -c .eslintrc.js --fix --ext .ts,.js,.vue ./src",
 		"postinstall": "husky install"
