@@ -63,16 +63,15 @@
 					<span class="text-lightOnPrimaryText ml-1 font-sans text-sm xl:text-base"> Discord </span>
 				</button>
 			</a>
-			<a href="https://blog.capsule.social/" target="_blank">
-				<button
-					style="padding: 0.9rem 1.7rem"
-					class="focus:outline-none border-lightBorder text-lightPrimaryText bg-lightBG flex transform items-center justify-between rounded-lg font-bold shadow-lg transition duration-500 ease-in-out hover:shadow-lg"
-				>
-					<CapsuleLogo class="icon text-lightPrimaryText mr-3 h-5 w-5 fill-current" />
-					<span class="text-lightPrimaryText hidden font-sans text-sm xl:block xl:text-base"> Latest </span>
-					<span class="text-lightPrimaryText ml-1 font-sans text-sm xl:text-base"> news </span>
-				</button>
-			</a>
+			<nuxt-link
+				to="/id/capsule"
+				style="padding: 0.9rem 1.7rem"
+				class="focus:outline-none border-lightBorder text-lightPrimaryText bg-lightBG flex transform items-center justify-between rounded-lg font-bold shadow-lg transition duration-500 ease-in-out hover:shadow-lg"
+			>
+				<CapsuleLogo class="icon text-lightPrimaryText mr-3 h-5 w-5 fill-current" />
+				<span class="text-lightPrimaryText hidden font-sans text-sm xl:block xl:text-base"> Latest </span>
+				<span class="text-lightPrimaryText ml-1 font-sans text-sm xl:text-base"> news </span>
+			</nuxt-link>
 		</div>
 	</article>
 </template>
