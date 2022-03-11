@@ -205,6 +205,7 @@
 			:title="post.title"
 			:subtitle="post.subtitle"
 			:excerpt="post.excerpt"
+			:cid="$route.params.post"
 			@close="showShare = false"
 		/>
 	</div>

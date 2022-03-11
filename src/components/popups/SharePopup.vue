@@ -84,7 +84,7 @@
 							ref="DirectLink"
 							v-model="generatedDirectLink"
 							type="text"
-							placeholder="https://blogchain.app/p/..."
+							readonly="true"
 							class="bg-gray1 dark:bg-gray7 dark:text-darkPrimaryText placeholder-gray5 dark:placeholder-gray3 flex-grow rounded-lg px-2 py-1 focus:outline-none"
 							@focus="$event.target.select()"
 						/>
@@ -125,7 +125,7 @@
 							ref="BlogchainLink"
 							v-model="generatedBlogchainLink"
 							type="text"
-							placeholder="https://blogchain.app/p/..."
+							readonly="true"
 							class="bg-gray1 dark:bg-gray7 dark:text-darkPrimaryText placeholder-gray5 dark:placeholder-gray3 flex-grow rounded-lg px-2 py-1 focus:outline-none"
 							@focus="$event.target.select()"
 						/>
@@ -154,6 +154,8 @@ import MailIcon from '@/components/icons/brands/solid/Mail.vue'
 import CopyIcon from '@/components/icons/Copy.vue'
 import ChevronDown from '@/components/icons/ChevronDown.vue'
 import ChevronUp from '@/components/icons/ChevronUp.vue'
+
+import { createShareableLink } from '@/backend/shareable_links'
 
 interface IData {
 	generatedDirectLink: string
@@ -189,6 +191,10 @@ export default Vue.extend({
 			required: true,
 		},
 		excerpt: {
+			type: String,
+			required: true,
+		},
+		cid: {
 			type: String,
 			required: true,
 		},
@@ -265,11 +271,8 @@ export default Vue.extend({
 			this.isOpen1 = !this.isOpen1
 		},
 		async generateShareableLink() {
-			this.generatedDirectLink = `https://blogchain.app/p/a-day-in-the-life-of-jack/adu4fe2oh5fs7f`
-			this.generatedDirectLink = this.generatedDirectLink.slice(0, 40).trim() + `...`
-			this.generatedBlogchainLink = `https://blogchain.app/p/adu4fe2oh5fs7faoehfiohahfiaehfhaohfihahefihafo`
-			this.generatedBlogchainLink = this.generatedBlogchainLink.slice(0, 40).trim() + `...`
-			await this.sleep(500)
+			this.generatedDirectLink = await createShareableLink(this.cid)
+			this.generatedBlogchainLink = `https://blogchain.app/post/${this.cid}`
 			this.isLoading = false
 		},
 		sleep(ms: any) {
