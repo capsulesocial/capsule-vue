@@ -97,7 +97,7 @@ import axios from 'axios'
 import XIcon from '@/components/icons/X.vue'
 import PencilIcon from '@/components/icons/Pencil.vue'
 import AddContent from '@/components/post/EditorActions.vue'
-import { ImageBlot, preRule, ipfsImageRule, createPostImagesArray } from '@/pages/post/editorExtensions'
+import { ImageBlot, preRule, ipfsImageRule, createPostImagesSet } from '@/pages/post/editorExtensions'
 import { createRegularPost, sendRegularPost } from '@/backend/post'
 import { preUploadPhoto, uploadPhoto } from '@/backend/photos'
 import { isValidFileType } from '@/backend/utilities/helpers'
@@ -272,11 +272,13 @@ export default Vue.extend({
 				this.waitingImage = true
 				this.toggleAddContent = false
 				this.refreshPostImages()
-				this.handleDroppedImage(ev)
+				this.handleDroppedContent(ev)
+				this.refreshPostImages()
 			})
 			this.qeditor.root.addEventListener(`paste`, (ev: ClipboardEvent) => {
 				this.refreshPostImages()
 				this.handlePastedContent(ev)
+				this.refreshPostImages()
 			})
 			this.qeditor.focus()
 			// Set link placeholder
@@ -301,8 +303,7 @@ export default Vue.extend({
 		},
 		refreshPostImages() {
 			const clean = turndownService.turndown(this.getInputHTML())
-			const refreshedPostImages = createPostImagesArray(clean, this.postImages)
-			this.postImages = new Set(refreshedPostImages)
+			this.postImages = createPostImagesSet(clean, this.postImages)
 		},
 		async updatePostImages(
 			cid: string,
@@ -328,7 +329,6 @@ export default Vue.extend({
 					this.toggleAddContent = true
 					return
 				}
-				this.refreshPostImages()
 				const range = this.qeditor.getSelection(true)
 				if (typeof content === `string`) {
 					this.waitingImage = false
@@ -340,7 +340,6 @@ export default Vue.extend({
 					this.toggleAddContent = true
 					this.qeditor.insertEmbed(range.index, `image`, { alt: cid.toString(), url }, `user`)
 				}
-				this.refreshPostImages()
 				const contentLength = this.qeditor.getContents().length()
 				setTimeout(() => {
 					this.qeditor?.setSelection(contentLength, 0, `user`)
@@ -350,51 +349,21 @@ export default Vue.extend({
 				this.$toastError(error.message)
 			}
 		},
-		async handleDroppedImage(e: DragEvent) {
+		async handleDroppedContent(e: DragEvent) {
 			e.stopPropagation()
 			e.preventDefault()
 			if (!e.dataTransfer) {
 				return
 			}
-			const droppedHtml = e.dataTransfer.getData(`text/html`)
-			const droppedText = e.dataTransfer.getData(`text/plain`)
+			const droppedHtml = this.sanitize(e.dataTransfer.getData(`text/html`))
+			const droppedText = this.sanitize(e.dataTransfer.getData(`text/plain`))
 			const { files } = e.dataTransfer
 			const file = files[0]
 
 			// handle dropped file
 			if (file) {
-				if (!isValidFileType(file.type)) {
-					this.$toastError(`image of type ${file.type} is invalid`)
-					return
-				}
-				try {
-					const { cid, url, image, imageName } = await uploadPhoto(file)
-					const updatedPostImages = await this.updatePostImages(cid, image, imageName)
-					if (this.$isError(updatedPostImages)) {
-						this.$toastError(updatedPostImages.error)
-						this.waitingImage = false
-						return
-					}
-					this.insertContent({ cid, url })
-				} catch (err: unknown) {
-					if (axios.isAxiosError(err)) {
-						if (!err.response) {
-							this.$toastError(`Network error, please try again`)
-							return
-						}
-						if (err.response.status === 429) {
-							this.$toastError(`Too many requests, please try again in a minute`)
-							return
-						}
-						this.$toastError(err.response.data.error)
-						return
-					}
-					if (err instanceof Error) {
-						this.$toastError(err.message)
-						return
-					}
-					throw err
-				}
+				await this.handleFile(file)
+				return
 			}
 
 			if (!file && droppedHtml) {
@@ -404,39 +373,7 @@ export default Vue.extend({
 			}
 
 			if (!file && !droppedHtml) {
-				const f = await this.$urlToFile(droppedText)
-				if (this.$isError(f)) {
-					this.$toastError(f.error)
-					return
-				}
-				try {
-					const { cid, url, image, imageName } = await uploadPhoto(f.file)
-					const updatedPostImages = await this.updatePostImages(cid, image, imageName)
-					if (this.$isError(updatedPostImages)) {
-						this.$toastError(updatedPostImages.error)
-						this.waitingImage = false
-						return
-					}
-					this.insertContent({ cid, url })
-				} catch (err: unknown) {
-					if (axios.isAxiosError(err)) {
-						if (!err.response) {
-							this.$toastError(`Network error, please try again`)
-							return
-						}
-						if (err.response.status === 429) {
-							this.$toastError(`Too many requests, please try again in a minute`)
-							return
-						}
-						this.$toastError(err.response.data.error)
-						return
-					}
-					if (err instanceof Error) {
-						this.$toastError(err.message)
-						return
-					}
-					throw err
-				}
+				this.insertContent(droppedText)
 			}
 		},
 		handleCutPaste(range: RangeStatic, pastedText: string) {
@@ -493,6 +430,42 @@ export default Vue.extend({
 			}
 			return pastedContent
 		},
+		async handleFile(file: File) {
+			if (!isValidFileType(file.type)) {
+				this.$toastError(`image of type ${file.type} is invalid`)
+				return
+			}
+			this.refreshPostImages()
+			try {
+				const { cid, url, image, imageName } = await uploadPhoto(file)
+				const updatedPostImages = await this.updatePostImages(cid, image, imageName)
+				if (this.$isError(updatedPostImages)) {
+					this.$toastError(updatedPostImages.error)
+					this.waitingImage = false
+					return
+				}
+				this.insertContent({ cid, url })
+			} catch (err: unknown) {
+				if (axios.isAxiosError(err)) {
+					if (!err.response) {
+						this.$toastError(`Network error, please try again`)
+						return
+					}
+					if (err.response.status === 429) {
+						this.$toastError(`Too many requests, please try again in a minute`)
+						return
+					}
+					this.$toastError(err.response.data.error)
+					return
+				}
+				if (err instanceof Error) {
+					this.$toastError(err.message)
+					return
+				}
+				throw err
+			}
+			this.refreshPostImages()
+		},
 		async handlePastedContent(e: ClipboardEvent) {
 			e.stopPropagation()
 			e.preventDefault()
@@ -529,37 +502,8 @@ export default Vue.extend({
 
 			// handle pasted file
 			if (pastedFile) {
-				if (!isValidFileType(pastedFile.type)) {
-					this.$toastError(`image of type ${pastedFile.type} is invalid`)
-					return
-				}
-				try {
-					const { cid, url, image, imageName } = await uploadPhoto(pastedFile)
-					const updatedPostImages = await this.updatePostImages(cid, image, imageName)
-					if (this.$isError(updatedPostImages)) {
-						this.$toastError(updatedPostImages.error)
-						return
-					}
-					this.insertContent({ cid, url })
-				} catch (err: unknown) {
-					if (axios.isAxiosError(err)) {
-						if (!err.response) {
-							this.$toastError(`Network error, please try again`)
-							return
-						}
-						if (err.response.status === 429) {
-							this.$toastError(`Too many requests, please try again in a minute`)
-							return
-						}
-						this.$toastError(err.response.data.error)
-						return
-					}
-					if (err instanceof Error) {
-						this.$toastError(err.message)
-						return
-					}
-					throw err
-				}
+				await this.handleFile(pastedFile)
+				return
 			}
 			// handle if text only
 			if (!pastedFile && (!pastedContent || pastedContent === ``)) {
@@ -582,42 +526,20 @@ export default Vue.extend({
 		async handleImage(e: Event) {
 			e.stopPropagation()
 			e.preventDefault()
-			this.refreshPostImages()
+			const eventTarget = e.target
+			if (!eventTarget) {
+				return
+			}
 
-			const { files } = e.target as any
-			if (!files) {
+			const target = eventTarget as HTMLInputElement
+
+			const { files } = target
+			if (!files || files.length !== 1) {
 				return
 			}
-			if (files.length !== 1) {
-				return
-			}
-			try {
-				const { cid, url, image, imageName } = await uploadPhoto(files[0])
-				const updatedPostImages = await this.updatePostImages(cid, image, imageName)
-				if (this.$isError(updatedPostImages)) {
-					this.$toastError(updatedPostImages.error)
-					return
-				}
-				this.insertContent({ cid, url })
-			} catch (err: unknown) {
-				if (axios.isAxiosError(err)) {
-					if (!err.response) {
-						this.$toastError(`Network error, please try again`)
-						return
-					}
-					if (err.response.status === 429) {
-						this.$toastError(`Too many requests, please try again in a minute`)
-						return
-					}
-					this.$toastError(err.response.data.error)
-					return
-				}
-				if (err instanceof Error) {
-					this.$toastError(err.message)
-					return
-				}
-				throw err
-			}
+
+			await this.handleFile(files[0])
+			target.value = ``
 		},
 		calculateAddPos(index: number) {
 			if (!this.qeditor) {
@@ -752,7 +674,7 @@ export default Vue.extend({
 				return
 			}
 			this.hasPosted = true
-			const postImages = createPostImagesArray(clean, this.postImages)
+			const postImages = Array.from(createPostImagesSet(clean, this.postImages))
 			if (postImages.length > textLimits.post_images.max) {
 				this.$toastError(`Cannot add more than ${textLimits.post_images.max} images in a post`)
 				return
