@@ -227,6 +227,7 @@
 				:title="post.title"
 				:subtitle="post.subtitle"
 				:excerpt="post.excerpt"
+				:authorID="post.authorID"
 				:cid="postCID"
 				@close="showShare = false"
 			/>

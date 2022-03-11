@@ -51,26 +51,31 @@
 					<div class="flex flex-row flex-wrap">
 						<button
 							class="bg-lightInput dark:bg-darkInput text-secondary p-5 rounded-lg flex flex-row items-center mr-4 mb-2"
+							@click="twitterShare"
 						>
 							<TwitterIcon />
 						</button>
 						<button
 							class="bg-lightInput dark:bg-darkInput text-secondary p-5 rounded-lg flex flex-row items-center mr-4 mb-2"
+							@click="facebookShare"
 						>
 							<FacebookIcon />
 						</button>
 						<button
 							class="bg-lightInput dark:bg-darkInput text-secondary p-5 rounded-lg flex flex-row items-center mr-4 mb-2"
+							@click="redditShare"
 						>
 							<RedditIcon />
 						</button>
 						<button
 							class="bg-lightInput dark:bg-darkInput text-secondary p-5 rounded-lg flex flex-row items-center mr-4 mb-2"
+							@click="linkedinShare"
 						>
 							<LinkedinIcon />
 						</button>
 						<button
 							class="bg-lightInput dark:bg-darkInput text-secondary p-5 rounded-lg flex flex-row items-center mr-4 mb-2"
+							@click="mailShare"
 						>
 							<MailIcon />
 						</button>
@@ -190,6 +195,10 @@ export default Vue.extend({
 			type: String,
 			required: true,
 		},
+		authorID: {
+			type: String,
+			required: true,
+		},
 		excerpt: {
 			type: String,
 			required: true,
@@ -275,8 +284,26 @@ export default Vue.extend({
 			this.generatedBlogchainLink = `https://blogchain.app/post/${this.cid}`
 			this.isLoading = false
 		},
-		sleep(ms: any) {
-			return new Promise((resolve) => setTimeout(resolve, ms))
+		twitterShare() {
+			window.open(
+				`https://twitter.com/share?url=${encodeURIComponent(this.generatedDirectLink)}&hashtags=blogchain&text=${
+					this.title
+				} by ${this.authorID}`,
+			)
+		},
+		linkedinShare() {
+			window.open(
+				`https://www.linkedin.com/shareArticle?url=${this.generatedDirectLink}&title=${this.title}&summary=${this.subtitle}&source=blogchain.app`,
+			)
+		},
+		facebookShare() {
+			window.open(`https://www.facebook.com/sharer/sharer.php?u=${this.generatedDirectLink}`)
+		},
+		redditShare() {
+			window.open(`https://reddit.com/submit?url=${this.generatedDirectLink}&title=${this.title}`)
+		},
+		mailShare() {
+			window.open(`mailto:?subject=${this.title}&body=${this.subtitle}%0D%0A%0D%0A${this.generatedDirectLink}`)
 		},
 	},
 })
