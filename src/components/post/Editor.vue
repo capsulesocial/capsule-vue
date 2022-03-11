@@ -97,7 +97,13 @@ import axios from 'axios'
 import XIcon from '@/components/icons/X.vue'
 import PencilIcon from '@/components/icons/Pencil.vue'
 import AddContent from '@/components/post/EditorActions.vue'
-import { ImageBlot, preRule, ipfsImageRule, createPostImagesSet } from '@/pages/post/editorExtensions'
+import {
+	ImageBlot,
+	preRule,
+	ipfsImageRule,
+	createPostImagesSet,
+	counterModuleFactory,
+} from '@/pages/post/editorExtensions'
 import { createRegularPost, sendRegularPost } from '@/backend/post'
 import { preUploadPhoto, uploadPhoto } from '@/backend/photos'
 import { isValidFileType } from '@/backend/utilities/helpers'
@@ -230,40 +236,45 @@ export default Vue.extend({
 				return builtInFunc.call(this, val) // retain the built-in logic
 			}
 
+			const metaButton = document.getElementById(`metaButton`)
+			const onTextChange = () => {
+				if (!this.qeditor) {
+					throw new Error(`Editor is not initialised!`)
+				}
+				this.$emit(`isWriting`, true)
+				if (metaButton) {
+					metaButton.classList.add(`hidemetaButton`)
+				}
+				this.isCollapsed = true
+				const text = this.qeditor.getText()
+				const n = text.split(/\s+/).length
+				this.updateWordCount(n)
+			}
+
+			const onSelectionChange = (range: RangeStatic) => {
+				if (!range) {
+					this.$emit(`isWriting`, false)
+					if (metaButton) {
+						metaButton.classList.remove(`hidemetaButton`)
+					}
+					this.isCollapsed = false
+				}
+			}
+
+			const onEditorChange = (eventName: string, ...args: any[]) => {
+				if (eventName === `selection-change`) {
+					if (!args[0]) {
+						this.toggleAddContent = false
+						return
+					}
+					this.calculateAddPos(args[0].index)
+				}
+			}
+
 			Quill.register(ImageBlot, true)
 			Quill.register(
 				`modules/counter`,
-				(quill: Quill) => {
-					const metaButton = document.getElementById(`metaButton`)
-					quill.on(`text-change`, () => {
-						this.$emit(`isWriting`, true)
-						if (metaButton) {
-							metaButton.classList.add(`hidemetaButton`)
-						}
-						this.isCollapsed = true
-						const text = quill.getText()
-						const n = text.split(/\s+/).length
-						this.updateWordCount(n)
-					})
-					quill.on(`selection-change`, (range) => {
-						if (!range) {
-							this.$emit(`isWriting`, false)
-							if (metaButton) {
-								metaButton.classList.remove(`hidemetaButton`)
-							}
-							this.isCollapsed = false
-						}
-					})
-					quill.on(`editor-change`, (eventName: string, ...args: any) => {
-						if (eventName === `selection-change`) {
-							if (!args[0]) {
-								this.toggleAddContent = false
-								return
-							}
-							this.calculateAddPos(args[0].index)
-						}
-					})
-				},
+				counterModuleFactory(onTextChange.bind(this), onSelectionChange.bind(this), onEditorChange.bind(this)),
 				true,
 			)
 			const editor = new Quill(`#editor`, options)
