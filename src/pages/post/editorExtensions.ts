@@ -1,4 +1,4 @@
-import Quill from 'quill'
+import Quill, { RangeStatic } from 'quill'
 import TurndownService from 'turndown'
 import hljs from 'highlight.js/lib/common'
 import { marked } from 'marked'
@@ -13,6 +13,19 @@ export const markedRenderer: marked.RendererObject = {
 }
 
 // Quill
+export function counterModuleFactory(
+	onTextChange: () => void,
+	onSelectionChange: (range: RangeStatic) => void,
+	onEditorChange: (eventName: string, ...args: any[]) => void,
+) {
+	return class CounterModule {
+		constructor(quill: Quill) {
+			quill.on(`text-change`, onTextChange)
+			quill.on(`selection-change`, onSelectionChange)
+			quill.on(`editor-change`, onEditorChange)
+		}
+	}
+}
 
 const BlockEmbed = Quill.import(`blots/block/embed`)
 
