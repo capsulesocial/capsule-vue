@@ -21,11 +21,13 @@
 			</div>
 			<div v-show="!isLoading" class="flex w-full flex-col items-start mt-4">
 				<!-- post preview -->
-				<div class="bg-lightInput dark:bg-darkInput p-4 rounded-lg w-full flex flex-col lg:flex-row items-center">
+				<div
+					class="bg-lightInput dark:bg-darkInput p-4 rounded-lg w-full flex flex-col lg:flex-row items-start lg:items-center"
+				>
 					<img
 						v-if="image != ``"
 						:src="image"
-						class="h-48 w-full lg:w-48 flex-shrink-0 rounded-lg object-cover xl:h-32 mb-4 lg:mb-0 lg:mr-4"
+						class="h-48 w-full lg:w-48 flex-shrink-0 rounded-lg object-cover lg:h-32 mb-4 lg:mb-0 lg:mr-4"
 					/>
 					<div class="flex max-w-full flex-col overflow-hidden">
 						<p class="text-gray5 dark:text-gray3 text-sm mb-2">blogchain.app</p>
@@ -78,14 +80,13 @@
 				<div class="flex flex-col mt-3 w-full">
 					<label for="newName" class="mb-1 font-semibold dark:text-darkPrimaryText">Direct Link</label>
 					<p class="text-gray5 dark:text-gray3 mb-2">Social media friendly link that you can share on any platform</p>
-					<div class="relative flex w-full items-center">
+					<div class="relative flex w-full h-8 rounded-lg bg-gray1 dark:bg-gray7 items-center">
 						<input
 							id="id"
 							ref="DirectLink"
 							v-model="generatedDirectLink"
-							type="text"
-							readonly="true"
-							class="bg-gray1 dark:bg-gray7 dark:text-darkPrimaryText placeholder-gray5 dark:placeholder-gray3 flex-grow rounded-lg px-2 py-1 focus:outline-none"
+							class="absolute w-4/5 ml-2 overflow-hidden dark:text-darkPrimaryText bg-transparent focus:outline-none"
+							style="text-overflow: ellipsis"
 							@focus="$event.target.select()"
 						/>
 						<button
@@ -119,14 +120,13 @@
 				<div :class="isOpen1 ? `mt-5` : `is-closed`" class="flex flex-col w-full message-body">
 					<label for="newName" class="mb-1 font-semibold dark:text-darkPrimaryText">Blogchain Link</label>
 					<p class="text-gray5 dark:text-gray3 mb-2">IPFS decentralized permanent link</p>
-					<div class="relative flex w-full items-center">
+					<div class="relative flex w-full h-8 rounded-lg bg-gray1 dark:bg-gray7 items-center">
 						<input
 							id="id"
 							ref="BlogchainLink"
 							v-model="generatedBlogchainLink"
-							type="text"
-							readonly="true"
-							class="bg-gray1 dark:bg-gray7 dark:text-darkPrimaryText placeholder-gray5 dark:placeholder-gray3 flex-grow rounded-lg px-2 py-1 focus:outline-none"
+							class="absolute w-4/5 ml-2 overflow-hidden dark:text-darkPrimaryText bg-transparent focus:outline-none"
+							style="text-overflow: ellipsis"
 							@focus="$event.target.select()"
 						/>
 						<button
