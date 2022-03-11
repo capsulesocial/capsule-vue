@@ -105,7 +105,7 @@
 						<XIcon />
 					</button>
 				</div>
-				<!-- Background grid -->
+				<!-- color mode grid -->
 				<div class="flex flex-col lg:flex-row justify-between p-6 pt-4">
 					<button
 						v-for="x of colors"
@@ -247,6 +247,18 @@ export default Vue.extend({
 			}
 		},
 		setColorMode(type: string): void {
+			if (type === `Dark`) {
+				this.dark = true
+			} else if (type === `Light`) {
+				this.dark = false
+			} else if (type === `OS`) {
+				if (window.matchMedia(`(prefers-color-scheme: dark)`).matches) {
+					this.dark = true
+				} else if (window.matchMedia(`(prefers-color-scheme: light)`).matches) {
+					this.dark = false
+				}
+			}
+			this.$emit(`changeColorMode`, this.dark)
 			this.$store.commit(`settings/changeDarkMode`, type)
 			this.$setColorMode(this.$store.state.settings.darkMode)
 		},
