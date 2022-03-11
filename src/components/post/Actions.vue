@@ -380,7 +380,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import type { PropType } from 'vue'
-import _ from 'lodash'
+import sortBy from 'lodash/sortBy'
 import BrandedButton from '@/components/BrandedButton.vue'
 import Comment from '@/components/post/Comment.vue'
 import CommentFilter from '@/components/post/CommentFilter.vue'
@@ -617,7 +617,7 @@ export default Vue.extend({
 
 				stats[f.label] = { face: f, count: 1 }
 			}
-			this.faceStats = _.sortBy(Object.values(stats), `count`).reverse()
+			this.faceStats = sortBy(Object.values(stats), `count`).reverse()
 		},
 		getStyle(emotionType: string): string {
 			if (feelings.positive.has(emotionType)) {
