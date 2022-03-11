@@ -140,7 +140,7 @@
 				</div>
 				<button
 					v-show="longBio && !scrollingDown"
-					class="focus:outline-none text-xs text-primary px-1"
+					class="focus:outline-none text-xs text-primary dark:text-secondary px-1"
 					@click="expandBio = !expandBio"
 				>
 					Read <span v-if="!expandBio">more </span><span v-else>less</span>
