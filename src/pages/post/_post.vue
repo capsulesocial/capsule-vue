@@ -27,7 +27,16 @@
 								<nuxt-link v-else :to="`/id/` + post.authorID" class="text-gray5 dark:text-gray3 font-semibold">{{
 									post.authorID
 								}}</nuxt-link>
-								<h6 class="text-gray6 dark:text-gray3 font-sans text-sm">{{ $formatDate(post.timestamp) }}</h6>
+								<!-- Timestamp and reading time -->
+								<div class="flex flex-row items-center">
+									<span class="text-sm text-gray5 dark:text-gray3">
+										{{ $formatDate(post.timestamp) }}
+									</span>
+									<div v-if="readingTime > 0" class="h-1 w-1 rounded bg-gray5 dark:bg-gray3 mx-2"></div>
+									<span v-if="readingTime > 0" class="text-sm text-gray5 dark:text-gray3">
+										{{ readingTime }} min read
+									</span>
+								</div>
 							</div>
 							<FriendButton
 								v-if="post.authorID !== $store.state.session.id"
@@ -263,6 +272,7 @@ interface IData {
 	dark: boolean
 	captionHeight: number | undefined
 	showShare: boolean
+	readingTime: number
 }
 
 export default Vue.extend({
@@ -307,6 +317,7 @@ export default Vue.extend({
 			dark: false,
 			captionHeight: 0,
 			showShare: false,
+			readingTime: 0,
 		}
 	},
 	head() {
@@ -401,6 +412,8 @@ export default Vue.extend({
 		// Get caption height
 		const caption = document.getElementById(`photoCaption`)
 		this.captionHeight = caption?.offsetHeight
+		// Get erading time
+		this.calculateReadingTime()
 	},
 	mounted() {
 		const container = document.getElementById(`post`)
@@ -527,6 +540,24 @@ export default Vue.extend({
 				photo: this.featuredPhoto,
 				caption: this.post?.featuredPhotoCaption,
 			})
+		},
+		calculateReadingTime() {
+			if (!this.post) {
+				this.readingTime = 0
+				return
+			}
+			// const wordcount = this.post.wordcount
+			const wordcount = 1135
+			if (wordcount <= 0) {
+				this.readingTime = 0
+				return
+			}
+			const textReadingTime = wordcount / 275
+			let photoReadingTime = 0
+			if (this.post.postImages?.length) {
+				photoReadingTime = (this.post.postImages?.length * ((12 * 100) / 60)) / 100
+			}
+			this.readingTime = Math.round(((textReadingTime + photoReadingTime) * 60) / 100)
 		},
 	},
 })

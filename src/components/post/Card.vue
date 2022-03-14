@@ -814,7 +814,7 @@ export default Vue.extend({
 			},
 			false,
 		)
-		this.getReadingTime()
+		this.calculateReadingTime()
 	},
 	destroyed() {
 		window.removeEventListener(`click`, this.handleClose)
@@ -977,7 +977,11 @@ export default Vue.extend({
 			this.hasEntered = true
 			this.showPopupCard = true
 		},
-		getReadingTime() {
+		calculateReadingTime() {
+			if (!this.post) {
+				this.readingTime = 0
+				return
+			}
 			// const wordcount = this.post.wordcount
 			const wordcount = 1135
 			if (wordcount <= 0) {
