@@ -333,7 +333,7 @@ export default Vue.extend({
 			await preUploadPhoto(cid, compressedImage, imageName, this.$store.state.session.id)
 			return { success: true }
 		},
-		insertContent(content: string | IImageData | null) {
+		insertContent(content: string | IImageData | null, plainText = false) {
 			try {
 				if (!this.qeditor || !content) {
 					this.waitingImage = false
@@ -344,7 +344,11 @@ export default Vue.extend({
 				if (typeof content === `string`) {
 					this.waitingImage = false
 					this.toggleAddContent = true
-					this.qeditor.clipboard.dangerouslyPasteHTML(range.index, content, `user`)
+					if (plainText) {
+						this.qeditor.insertText(range.index, content, `user`)
+					} else {
+						this.qeditor.clipboard.dangerouslyPasteHTML(range.index, content, `user`)
+					}
 				} else {
 					const { cid, url } = content
 					this.waitingImage = false
@@ -384,7 +388,7 @@ export default Vue.extend({
 			}
 
 			if (!file && !droppedHtml) {
-				this.insertContent(droppedText)
+				this.insertContent(droppedText, true)
 			}
 		},
 		handleCutPaste(range: RangeStatic, pastedText: string) {
@@ -518,7 +522,7 @@ export default Vue.extend({
 			}
 			// handle if text only
 			if (!pastedFile && (!pastedContent || pastedContent === ``)) {
-				this.insertContent(pastedText)
+				this.insertContent(pastedText, true)
 			}
 			this.scrollToBottom(e)
 		},
