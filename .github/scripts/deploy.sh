@@ -2,7 +2,8 @@
 
 set -ex
 
-[[ -z "$DEPLOY_PATH"      ]] && { echo "error: DEPLOY_PATH environment variable not set"      >&2 ; exit 1 ; }
+[[ -z "$DEPLOY_TARGET"    ]] && { echo "error: DEPLOY_TARGET environment variable not set"      >&2 ; exit 1 ; }
+[[ -z "$DEPLOY_ENV"       ]] && { echo "error: DEPLOY_ENV environment variable not set"      >&2 ; exit 1 ; }
 [[ -z "$COMMIT_TAG"       ]] && { echo "error: COMMIT_TAG environment variable not set"       >&2 ; exit 1 ; }
 [[ -z "$COMMIT_SHORT_SHA" ]] && { echo "error: COMMIT_SHORT_SHA environment variable not set" >&2 ; exit 1 ; }
 [[ -z "$GITHUB_USER"      ]] && { echo "error: GITHUB_USER environment variable not set"      >&2 ; exit 1 ; }
