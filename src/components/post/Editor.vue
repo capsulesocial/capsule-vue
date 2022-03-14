@@ -213,12 +213,12 @@ export default Vue.extend({
 		}
 	},
 	mounted() {
-		this.setupEditor()
 		if (document.documentElement.classList.contains(`dark`)) {
 			this.dark = true
 		} else {
 			this.dark = false
 		}
+		this.setupEditor()
 	},
 	methods: {
 		// Quilljs Editor init
@@ -237,20 +237,18 @@ export default Vue.extend({
 			}
 
 			const metaButton = document.getElementById(`metaButton`)
+			// Handle updates to body
 			const onTextChange = () => {
-				if (!this.qeditor) {
-					throw new Error(`Editor is not initialised!`)
-				}
 				this.$emit(`isWriting`, true)
 				if (metaButton) {
 					metaButton.classList.add(`hidemetaButton`)
 				}
 				this.isCollapsed = true
-				const text = this.qeditor.getText()
+				const text = this.getInputHTML().replace(/(<([^>]+)>)/gi, ` `)
 				const n = text.split(/\s+/).length
 				this.updateWordCount(n)
 			}
-
+			// Handles draft overlay
 			const onSelectionChange = (range: RangeStatic) => {
 				if (!range) {
 					this.$emit(`isWriting`, false)
@@ -260,7 +258,7 @@ export default Vue.extend({
 					this.isCollapsed = false
 				}
 			}
-
+			// Handles add content button
 			const onEditorChange = (eventName: string, ...args: any[]) => {
 				if (eventName === `selection-change`) {
 					if (!args[0]) {
@@ -620,7 +618,7 @@ export default Vue.extend({
 			}
 		},
 		updateWordCount(n: number) {
-			this.wordCount = n - 1
+			this.wordCount = n - 2
 			this.$emit(`update`, this.wordCount)
 		},
 		sanitize(html: string): string {
