@@ -62,10 +62,10 @@
 					/>
 					<div
 						v-if="waitingImage"
-						class="absolute w-11/12 h-52 bg-gray3 dark:bg-gray7 rounded-lg animate-pulse flex justify-center items-center"
+						class="absolute w-11/12 h-44 bg-lightInput dark:bg-gray7 rounded-lg animate-pulse flex justify-center items-center"
 						:style="`top:` + this.addContentPosTop + `px`"
 					>
-						<p class="text-sm text-gray5 dark:text-gray3">uploading image</p>
+						<p class="text-sm text-gray5 dark:text-gray3">uploading image...</p>
 					</div>
 				</div>
 				<div
@@ -287,6 +287,8 @@ export default Vue.extend({
 				this.refreshPostImages()
 			})
 			this.qeditor.root.addEventListener(`paste`, (ev: ClipboardEvent) => {
+				this.waitingImage = true
+				this.toggleAddContent = false
 				this.refreshPostImages()
 				this.handlePastedContent(ev)
 				this.refreshPostImages()
@@ -448,6 +450,8 @@ export default Vue.extend({
 			}
 			this.refreshPostImages()
 			try {
+				this.waitingImage = true
+				this.toggleAddContent = false
 				const { cid, url, image, imageName } = await uploadPhoto(file)
 				const updatedPostImages = await this.updatePostImages(cid, image, imageName)
 				if (this.$isError(updatedPostImages)) {
@@ -558,8 +562,7 @@ export default Vue.extend({
 			}
 			const line = this.qeditor.getLine(index)
 			const pos = this.qeditor.getBounds(index)
-			if (line[1] === 0 && line[0].domNode.innerHTML === `<br>`) {
-				this.toggleAddContent = true
+			if (line[1] === 0 && line[0].domNode.innerHTML === `<br>` && !this.waitingImage) {
 				if (index === 0) {
 					this.addContentPosTop = pos.top + 50
 					this.addContentPosLeft = pos.left
@@ -567,6 +570,7 @@ export default Vue.extend({
 					this.addContentPosTop = pos.top
 					this.addContentPosLeft = pos.left + 20
 				}
+				this.toggleAddContent = true
 			} else {
 				this.toggleAddContent = false
 			}
