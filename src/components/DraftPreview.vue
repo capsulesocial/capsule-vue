@@ -131,6 +131,7 @@ export default Vue.extend({
 	},
 	methods: {
 		setActiveDraft() {
+			// drafts popup on editor
 			if (this.$route.name === `post`) {
 				this.$store.commit(`draft/setActiveDraft`, this.index)
 				this.$emit(`closeDraftsPopup`)
