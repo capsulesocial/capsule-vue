@@ -4,10 +4,10 @@
 		class="my-4 flex flex-row items-center justify-between"
 	>
 		<!-- Title -->
-		<div class="flex flex-grow flex-col">
+		<div class="flex flex-grow flex-col overflow-hidden">
 			<h6
 				class="truncate text-base font-semibold dark:text-darkPrimaryText"
-				:style="$route.name === `home` ? `max-width: 259px` : `max-width: 408px`"
+				:style="$route.name === `home` && inWidget ? `max-width: 259px` : `max-width: 390px`"
 			>
 				{{ draft.title === `` ? `New Post` : draft.title }}
 			</h6>
