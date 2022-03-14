@@ -384,7 +384,7 @@ export default Vue.extend({
 			container.addEventListener(`scroll`, this.handleScroll)
 		}
 		if (this.$store.state.settings.recentlyPosted) {
-			this.$toastSuccess(`This post has been successfully published`)
+			this.$toastSuccess(`Your post has been successfully published on Blogchain`)
 		}
 		if (document.documentElement.classList.contains(`dark`)) {
 			this.dark = true
