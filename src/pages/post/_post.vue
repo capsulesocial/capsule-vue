@@ -17,7 +17,7 @@
 						<!-- Left side: name, avatar, date -->
 						<div class="flex items-center">
 							<Avatar :avatar="authorAvatar" :authorID="post.authorID" size="w-10 h-10" class="mr-4 flex-shrink-0" />
-							<div class="pr-8">
+							<div class="pr-8 flex flex-col">
 								<nuxt-link
 									v-if="author.name != ``"
 									:to="`/id/` + post.authorID"
@@ -27,23 +27,26 @@
 								<nuxt-link v-else :to="`/id/` + post.authorID" class="text-gray5 dark:text-gray3 font-semibold">{{
 									post.authorID
 								}}</nuxt-link>
-								<!-- Timestamp and reading time -->
-								<div class="flex flex-row items-center">
-									<span class="text-sm text-gray5 dark:text-gray3">
-										{{ $formatDate(post.timestamp) }}
-									</span>
-									<div v-if="readingTime > 0" class="h-1 w-1 rounded bg-gray5 dark:bg-gray3 mx-2"></div>
-									<span v-if="readingTime > 0" class="text-sm text-gray5 dark:text-gray3">
-										{{ readingTime }} min read
-									</span>
-								</div>
+								<nuxt-link :to="`/id/` + post.authorID" class="text-primary dark:text-secondary text-xs">
+									@{{ post.authorID }}</nuxt-link
+								>
 							</div>
 							<FriendButton
 								v-if="post.authorID !== $store.state.session.id"
 								:toggleFriend="toggleFriend"
 								:userIsFollowed="userIsFollowed"
-								class="hidden xl:block"
+								class="hidden lg:block"
 							/>
+							<!-- Timestamp and reading time -->
+							<div class="flex flex-row items-center lg:ml-8">
+								<span class="text-sm text-gray5 dark:text-gray3">
+									{{ $formatDate(post.timestamp) }}
+								</span>
+								<div v-if="readingTime > 0" class="h-1 w-1 rounded bg-gray5 dark:bg-gray3 mx-2"></div>
+								<span v-if="readingTime > 0" class="text-sm text-gray5 dark:text-gray3">
+									{{ readingTime }} min read
+								</span>
+							</div>
 						</div>
 						<span class="flex items-center">
 							<button class="bg-gray1 dark:bg-gray5 focus:outline-none rounded-full p-1" @click="handleClose">
