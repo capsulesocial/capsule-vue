@@ -5,9 +5,11 @@
 			:class="showReposts ? 'text-primary dark:text-secondary' : ''"
 			@click.stop="toggleDropdown"
 		>
-			<div class="text-gray5 dark:text-gray3 hover:text-primary dark:hover:text-secondary hover:fill-primary flex">
+			<div
+				class="text-gray5 dark:text-gray3 hover:text-primary dark:hover:text-secondary hover:fill-primary flex items-center"
+			>
 				<RepostIcon :isActive="isReposted" />
-				<span class="ml-1">{{ repostCount + repostOffset }}</span>
+				<span class="ml-1 text-sm">{{ repostCount + repostOffset }}</span>
 			</div>
 		</button>
 		<div
