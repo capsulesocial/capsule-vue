@@ -61,12 +61,13 @@ jobs:
       - name: install git
         run: apk add --no-cache git
 
-      - name: Set DEPLOY_PATH in github env
+      - name: Set DEPLOY_ENV + DEPLOY_TARGET in github env
         run: |
           tag="$(echo ${GITHUB_REF#refs/tags/})"
 
           if [[ "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+-beta$ ]]; then # production
-              deploy_path='release'
+              deploy_env='release'
+              deploy_target='beta'
 
               cat <<EOF >.env
                 CONTRACT_NAME="capsule-beta.testnet"
@@ -79,8 +80,9 @@ jobs:
                 TORUS_DISCORD_CLIENTID="947888768269033512"
                 TORUS_NETWORK=mainnet
           EOF
-          elif [[ "$tag" == *-development ]]; then # development
-              deploy_path='main'
+          elif [[ "$tag" =~ ^*-alpha$ ]]; then # development
+              deploy_env='development'
+              deploy_target='alpha'
 
               cat <<EOF >.env
                 CONTRACT_NAME="dev-1635323648697-81373157539648"
@@ -96,7 +98,8 @@ jobs:
               echo "Unsupported tag '$tag', skipping release and deploy jobs" >&2
               exit 1
           fi
-          echo "DEPLOY_PATH=$deploy_path" >> $GITHUB_ENV
+          echo "DEPLOY_ENV=$deploy_env"       >> $GITHUB_ENV
+          echo "DEPLOY_TARGET=$deploy_target" >> $GITHUB_ENV
 
       - name: Set COMMIT_TAG in Github environment
         run: echo "COMMIT_TAG=$(echo ${GITHUB_REF#refs/tags/})" >> $GITHUB_ENV
@@ -116,12 +119,12 @@ jobs:
       - name: Compress capsule-vue static site
         run: |
           [[ -d .app ]] || { echo "Missing .app, exiting" >&2 ; exit 1 ; }
-          build_name="capsule_vue-$DEPLOY_PATH-$COMMIT_TAG-$COMMIT_SHORT_SHA"
+          build_name="capsule_vue-$DEPLOY_ENV-$COMMIT_TAG-$COMMIT_SHORT_SHA"
           mv .app $build_name
           tar -czvf "${build_name}.tar.gz" "$build_name"
           echo "BUILD_NAME=$build_name" >> $GITHUB_ENV
         env:
-          DEPLOY_PATH:      ${{ env.DEPLOY_PATH }}
+          DEPLOY_ENV:       ${{ env.DEPLOY_ENV }}
           COMMIT_TAG:       ${{ env.COMMIT_TAG }}
           COMMIT_SHORT_SHA: ${{ env.COMMIT_SHORT_SHA }}
 
@@ -145,18 +148,21 @@ jobs:
       - name: install bash
         run: apk add --no-cache bash
 
-      - name: Set DEPLOY_PATH in github env
+      - name: Set DEPLOY_ENV + DEPLOY_TARGET in github env
         run: |
           tag="$(echo ${GITHUB_REF#refs/tags/})"
           if [[ "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+-beta$ ]]; then # production
-              deploy_path='release'
-          elif [[ "$tag" == *-development ]]; then # development
-              deploy_path='main'
+              deploy_env='release'
+              deploy_target='beta'
+          elif [[ "$tag" =~ ^*-alpha$ ]]; then # development
+              deploy_env='development'
+              deploy_target='alpha'
           else
               echo "Unsupported tag '$tag', skipping release and deploy jobs" >&2
               exit 1
           fi
-          echo "DEPLOY_PATH=$deploy_path" >> $GITHUB_ENV
+          echo "DEPLOY_ENV=$deploy_env"       >> $GITHUB_ENV
+          echo "DEPLOY_TARGET=$deploy_target" >> $GITHUB_ENV
         shell: bash
 
       - name: Set COMMIT_TAG in Github environment
@@ -168,7 +174,8 @@ jobs:
       - name: Deploy updated images
         run: ./.github/scripts/deploy.sh
         env:
-          DEPLOY_PATH:         ${{ env.DEPLOY_PATH }}
+          DEPLOY_TARGET:       ${{ env.DEPLOY_TARGET }}
+          DEPLOY_ENV:          ${{ env.DEPLOY_ENV }}
           COMMIT_TAG:          ${{ env.COMMIT_TAG }}
           COMMIT_SHORT_SHA:    ${{ env.COMMIT_SHORT_SHA }}
           GITHUB_USER:         ${{ env.GITHUB_USER }}
