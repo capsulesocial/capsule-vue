@@ -194,16 +194,6 @@ export default Vue.extend({
 			const posts = await getPosts({}, id, payload)
 			this.currentOffset += this.limit
 			this.isLoading = false
-			// End of unauth functions
-			if (id === `x`) {
-				return posts
-			}
-			// Only get reposts if logged in
-			posts.forEach((post) => {
-				if (post.reposted) {
-					this.$store.commit(`addRepost`, { postID: post.post._id, repostID: post.reposted })
-				}
-			})
 			return posts
 		},
 		async sortFeed(a: Algorithm) {
