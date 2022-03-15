@@ -52,6 +52,7 @@ import { sendPostDeletion } from '@/backend/postDeletion'
 interface IData {
 	showReposts: boolean
 	isReposted: boolean
+	repostCid: string | null
 	repostOffset: number
 	dark: boolean
 }
@@ -87,6 +88,7 @@ export default Vue.extend({
 		return {
 			showReposts: false,
 			isReposted: false,
+			repostCid: this.$store.state.session.id === this.repost?.authorID ? this.repost._id : null,
 			repostOffset: 0,
 			dark: false,
 		}
@@ -130,13 +132,16 @@ export default Vue.extend({
 			}
 			// Post has NOT been reposted
 			if (!this.isReposted) {
-				await sendRepost(this.$store.state.session.id, this.cid, ``, `simple`)
+				this.repostCid = await sendRepost(this.$store.state.session.id, this.cid, ``, `simple`)
 				this.$toastSuccess(`You have successfully reposted this post`)
 				this.isReposted = true
 				this.repostOffset += 1
 			} else {
+				if (!this.repostCid) {
+					throw new Error(`Unexpected state`)
+				}
 				// Undo repost
-				await sendPostDeletion(`HIDE`, this.cid, this.$store.state.session.id)
+				await sendPostDeletion(`HIDE`, this.repostCid, this.$store.state.session.id)
 				this.isReposted = false
 				this.repostOffset -= 1
 				this.$toastSuccess(`This repost has been successfully removed from your profile`)
