@@ -111,7 +111,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import type { PropType } from 'vue'
-// @ts-ignore
 import ogImage from '@/assets/images/util/ogImage.png'
 import PostCard from '@/components/post/Card.vue'
 import { getPosts, Algorithm, IRepostResponse, IPostResponse } from '@/backend/post'

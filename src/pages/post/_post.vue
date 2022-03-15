@@ -237,7 +237,6 @@ import { followChange, getFollowersAndFollowing } from '@/backend/following'
 import { getReposts } from '@/backend/reposts'
 import { isPostBookmarkedByUser } from '@/backend/bookmarks'
 import { ICommentData } from '@/backend/comment'
-// @ts-ignore
 import ogImage from '@/assets/images/util/ogImage.png'
 import { domain } from '@/backend/utilities/config'
 
@@ -504,7 +503,6 @@ export default Vue.extend({
 			this.lastScroll = currentScroll
 		},
 		handleClose() {
-			// @ts-ignore
 			if (this.$router.history._startLocation === this.$route.path) {
 				// IF they started on this page:
 				this.$router.push(`/home`)

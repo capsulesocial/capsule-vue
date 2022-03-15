@@ -35,7 +35,6 @@ const toastSuccess: Success = (text: string): void => {
 		gravity: `bottom`, // `top` or `bottom`
 		position: `left`,
 		avatar: require(`~/assets/images/util/success.png`),
-		// @ts-ignore
 		style: {
 			background: `#E9F2F7`,
 			border: `1px solid`,
@@ -67,7 +66,6 @@ const toastWarning: Warning = (text: string): void => {
 		gravity: `bottom`, // `top` or `bottom`
 		position: `left`,
 		avatar: require(`~/assets/images/util/warning.png`),
-		// @ts-ignore
 		style: {
 			background: `#FEF8F3`,
 			border: `1px solid`,
@@ -98,7 +96,6 @@ const toastError: Error = (text: string): void => {
 		gravity: `bottom`, // `top` or `bottom`
 		position: `left`,
 		avatar: require(`~/assets/images/util/error.png`),
-		// @ts-ignore
 		style: {
 			background: `#FDE9EF`,
 			border: `1px solid`,
@@ -130,7 +127,6 @@ const toastMessage: Message = (text: string): void => {
 		position: `left`,
 		stopOnFocus: true, // Prevents dismissing of toast on hover
 		avatar: require(`~/assets/images/util/message.png`),
-		// @ts-ignore
 		style: {
 			background: `#E8E8E8`,
 			border: `1px solid`,

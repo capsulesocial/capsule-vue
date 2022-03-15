@@ -10,3 +10,15 @@ declare module 'quilljs-markdown' {
 		constructor(editor: Quill, options: any)
 	}
 }
+
+declare module '*.png' {
+	// eslint-disable-next-line init-declarations
+	const value: string
+	export default value
+}
+
+declare module 'turndown-plugin-gfm' {
+	// eslint-disable-next-line init-declarations
+	const strikethrough: any
+	export { strikethrough }
+}

@@ -99,7 +99,6 @@ import PostCard from '@/components/post/Card.vue'
 import BackIcon from '@/components/icons/ChevronLeft.vue'
 import { getPosts, Algorithm, IPostResponse, IRepostResponse } from '@/backend/post'
 
-// @ts-ignore
 import ogImage from '@/assets/images/util/ogImage.png'
 
 interface IData {
@@ -293,9 +292,7 @@ export default Vue.extend({
 		},
 		generateKey(p: IPostResponse | IRepostResponse) {
 			let key: string = p.post._id
-			// @ts-ignore
-			if (p.repost) {
-				// @ts-ignore
+			if (`repost` in p) {
 				key += p.repost._id
 			}
 			return key

@@ -1,8 +1,11 @@
+import { Plugin } from '@nuxt/types'
 import VuexPersistence from 'vuex-persist'
 
-// @ts-ignore
-export default ({ store }) => {
+const storePlugin: Plugin = ({ store }) => {
 	new VuexPersistence({
 		/* your options */
+		key: `capsule-store`,
 	}).plugin(store)
 }
+
+export default storePlugin

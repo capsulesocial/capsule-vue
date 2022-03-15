@@ -258,8 +258,7 @@ export default Vue.extend({
 		},
 		handleUploadImageClick(): void {
 			if (this.$refs.featuredPhoto) {
-				// @ts-ignore
-				const element: HTMLInputElement = this.$refs.featuredPhoto
+				const element = this.$refs.featuredPhoto as HTMLInputElement
 				element.click()
 			}
 		},

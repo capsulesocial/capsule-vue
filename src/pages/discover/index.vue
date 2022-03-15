@@ -23,7 +23,6 @@ import CategoryCard from '@/components/CategoryCard.vue'
 
 import { categories } from '@/config'
 import { getTags } from '@/backend/post'
-// @ts-ignore
 import ogImage from '@/assets/images/util/ogImage.png'
 
 interface IData {
