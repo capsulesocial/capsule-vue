@@ -156,10 +156,12 @@
 					<Reply
 						v-for="r in filterReplies()"
 						:key="r._id"
+						:commenterID="authorID"
 						:authorID="r.authorID"
 						:cid="r._id"
 						:timestamp="r.timestamp"
 						class="pt-1 mt-2"
+						@updateReplies="fetchReplies"
 					/>
 				</div>
 			</div>
@@ -265,7 +267,8 @@ export default Vue.extend({
 				this.avatar = a
 			})
 		}
-		this.replies = await getCommentsOfPost(this.cid)
+		// Fetch replies
+		await this.fetchReplies()
 		if (document.documentElement.classList.contains(`dark`)) {
 			this.dark = true
 		} else {
@@ -339,6 +342,9 @@ export default Vue.extend({
 		},
 		toggleDropdownDelete() {
 			this.showDelete = !this.showDelete
+		},
+		async fetchReplies() {
+			this.replies = await getCommentsOfPost(this.cid)
 		},
 	},
 })
