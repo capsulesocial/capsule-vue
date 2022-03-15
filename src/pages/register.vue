@@ -60,7 +60,6 @@ import InfosPopup from '@/components/register/InfosPopup.vue'
 import SignUp from '@/components/register/SignUp.vue'
 
 import CapsuleIcon from '@/components/icons/CapsuleNew.vue'
-// @ts-ignore
 import ogImage from '@/assets/images/util/ogImage.png'
 
 import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'

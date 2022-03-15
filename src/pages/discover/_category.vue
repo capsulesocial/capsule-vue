@@ -99,7 +99,6 @@ import PostCard from '@/components/post/Card.vue'
 import BackIcon from '@/components/icons/ChevronLeft.vue'
 import { getPosts, Algorithm, IPostResponse, IRepostResponse } from '@/backend/post'
 
-// @ts-ignore
 import ogImage from '@/assets/images/util/ogImage.png'
 
 interface IData {

@@ -207,7 +207,6 @@ import SettingsPopup from '@/components/popups/Settings.vue'
 import BackButton from '@/components/icons/ChevronLeft.vue'
 import PencilIcon from '@/components/icons/Pencil.vue'
 import { getProfile, Profile } from '@/backend/profile'
-// @ts-ignore
 import ogImage from '@/assets/images/util/ogImage.png'
 
 interface IData {

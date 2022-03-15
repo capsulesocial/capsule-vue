@@ -79,7 +79,6 @@ import { getUsernameNEAR } from '@/backend/near'
 import { torusNetwork, torusVerifiers, TorusVerifiers } from '@/backend/utilities/config'
 import { revokeDiscordKey } from '@/backend/discordRevoke'
 import { HTMLInputEvent } from '@/interfaces/HTMLInputEvent'
-// @ts-ignore
 import ogImage from '@/assets/images/util/ogImage.png'
 
 interface IData {

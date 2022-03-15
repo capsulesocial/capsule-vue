@@ -88,10 +88,8 @@
 import Vue from 'vue'
 import DOMPurify from 'dompurify'
 import Turndown from 'turndown'
-// @ts-ignore
 import { strikethrough } from 'turndown-plugin-gfm'
 import Quill, { RangeStatic } from 'quill'
-// @ts-ignore
 import QuillMarkdown from 'quilljs-markdown'
 import axios from 'axios'
 import XIcon from '@/components/icons/X.vue'
