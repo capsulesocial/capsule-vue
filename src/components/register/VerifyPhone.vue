@@ -2,7 +2,7 @@
 	<article>
 		<h1 class="text-primary dark:text-secondary text-4xl font-bold">Sign up</h1>
 		<!-- Enter phone number -->
-		<div v-if="!otpSent">
+		<div>
 			<p class="text-gray7 dark:text-gray3 my-10 text-center">
 				Verify you’re a human with your phone number so that Blogchain can fund your wallet. This is the last step
 				needed to create your Blogchain account.
@@ -15,15 +15,11 @@
 				class="focus:outline-none focus:border-primary dark:focus:border-secondary text-primary dark:text-darkPrimaryText bg-gray2 dark:bg-gray7 mt-1 mb-5 w-full rounded-lg px-3 py-2 font-sans text-sm"
 			/>
 			<div class="flex w-full justify-end mt-4">
-				<BrandedButton :text="`Send Code`" :action="sendOTP" />
+				<BrandedButton :text="otpSent ? `Re-send code` : `Send Code`" :action="sendOTP" />
 			</div>
-			<p class="text-gray7 dark:text-gray2 mt-10 text-center text-sm">
-				Already have a funded wallet?
-				<button class="text-primary dark:text-secondary font-bold">Connect to NEAR</button>
-			</p>
 		</div>
 		<!-- Enter SMS code to complete verify -->
-		<div v-else>
+		<div v-show="otpSent" class="mt-10">
 			<label for="otp" class="text-gray5 dark:text-gray3 block pb-1 text-sm font-semibold"
 				>Enter the one-time verification code sent to your phone number.</label
 			>
@@ -37,6 +33,10 @@
 			<BrandedButton v-show="!isLoading" :text="`Verify`" class="w-full" :action="validateOTP" />
 			<h6 v-show="isLoading" class="text-primary dark:text-secondary text-center">Verifying...</h6>
 		</div>
+		<p class="text-gray7 dark:text-gray2 mt-10 text-center text-sm">
+			Already have a funded wallet?
+			<button class="text-primary dark:text-secondary font-bold">Connect to NEAR</button>
+		</p>
 	</article>
 </template>
 
@@ -95,12 +95,6 @@ export default Vue.extend({
 			}
 			await requestOTP(this.phoneNumber)
 			this.otpSent = true
-			const itiElements = document.getElementsByClassName(`iti`)
-			while (itiElements.length > 0) {
-				if (itiElements[0]) {
-					itiElements[0].parentNode?.removeChild(itiElements[0])
-				}
-			}
 		},
 		async validateOTP() {
 			this.isLoading = true
