@@ -20,8 +20,13 @@
 			</span>
 		</div>
 		<!-- Info hover -->
-		<div v-show="showInfo" class="absolute z-10 border rounded-bl-lg rounded-br-lg bg-gray1 dark:bg-gray7 p-2 text-sm">
-			Number of decentralised nodes your browser is currently connected to
+		<div
+			v-show="showInfo"
+			class="absolute z-10 border-lightBorder modal-animation rounded-lg border bg-lightBG dark:bg-gray7 p-2 shadow-lg text-gray5 dark:text-gray1 self-center text-xs"
+			:class="dark ? `NodesInfoOpenDark` : `NodesInfoOpen`"
+			style="top: -14px; right: 205px; width: 140%"
+		>
+			Number of decentralised nodes in the Blogchain network your browser is currently connected to.
 		</div>
 	</div>
 </template>
@@ -34,6 +39,7 @@ import ipfs from '@/backend/utilities/ipfs'
 export interface IData {
 	nodes: number
 	showInfo: boolean
+	dark: boolean
 }
 
 export default Vue.extend({
@@ -44,9 +50,15 @@ export default Vue.extend({
 		return {
 			nodes: 0,
 			showInfo: false,
+			dark: false,
 		}
 	},
 	created() {
+		if (document.documentElement.classList.contains(`dark`)) {
+			this.dark = true
+		} else {
+			this.dark = false
+		}
 		this.update()
 		this.updateLoop()
 	},
@@ -64,3 +76,29 @@ export default Vue.extend({
 	},
 })
 </script>
+<style>
+.NodesInfoOpen::before {
+	content: '';
+	position: absolute;
+	top: 1.5rem;
+	right: -0.5rem;
+	transform: rotate(45deg);
+	width: 1rem;
+	height: 1rem;
+	background-color: #fff;
+	border-radius: 2px;
+	z-index: 1;
+}
+.NodesInfoOpenDark::before {
+	content: '';
+	position: absolute;
+	top: 1.5rem;
+	right: -0.5rem;
+	transform: rotate(45deg);
+	width: 1rem;
+	height: 1rem;
+	background-color: #686868;
+	border-radius: 2px;
+	z-index: 1;
+}
+</style>
