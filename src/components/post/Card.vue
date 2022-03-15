@@ -747,7 +747,7 @@ export default Vue.extend({
 				}
 			}
 		}
-		this.isReposted = this.$store.getters.checkReposts(this.postCID)
+		this.isReposted = this.$store.state.session.id === this.repostedBy
 		// Unauth
 		if (this.$store.state.session.id === ``) {
 			this.isReposted = false
@@ -830,7 +830,7 @@ export default Vue.extend({
 			this.$emit(`updateBookmarks`)
 		},
 		hasReposted(): boolean {
-			return this.$store.state.session.id === this.repostedBy || this.$store.getters.checkReposts(this.postCID)
+			return this.$store.state.session.id === this.repostedBy
 		},
 		postExcerpt(): string {
 			const excerpt = this.post.excerpt.slice(0, 177).trim()

@@ -92,7 +92,7 @@ export default Vue.extend({
 		}
 	},
 	created() {
-		this.isReposted = this.$store.getters.checkReposts(this.cid)
+		this.isReposted = this.$store.state.session.id === this.repost?.authorID
 		// Unauth
 		if (this.$store.state.session.id === ``) {
 			this.isReposted = false
@@ -130,17 +130,13 @@ export default Vue.extend({
 			}
 			// Post has NOT been reposted
 			if (!this.isReposted) {
-				const repostCID = await sendRepost(this.$store.state.session.id, this.cid, ``, `simple`)
-				this.$store.commit(`addRepost`, { postID: this.cid, repostID: repostCID })
+				await sendRepost(this.$store.state.session.id, this.cid, ``, `simple`)
 				this.$toastSuccess(`You have successfully reposted this post`)
 				this.isReposted = true
 				this.repostOffset += 1
 			} else {
 				// Undo repost
-				// What do I call to undo a simple repost???
-				const repostID = this.$store.state.reposts[this.cid]
-				await sendPostDeletion(`HIDE`, repostID, this.$store.state.session.id)
-				this.$store.commit(`removeRepost`, this.cid)
+				await sendPostDeletion(`HIDE`, this.cid, this.$store.state.session.id)
 				this.isReposted = false
 				this.repostOffset -= 1
 				this.$toastSuccess(`This repost has been successfully removed from your profile`)
