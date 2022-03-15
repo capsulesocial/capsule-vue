@@ -24,9 +24,9 @@
 			v-show="showInfo"
 			class="absolute z-10 border-lightBorder modal-animation rounded-lg border bg-lightBG dark:bg-gray7 p-2 shadow-lg text-gray5 dark:text-gray1 self-center text-xs"
 			:class="dark ? `NodesInfoOpenDark` : `NodesInfoOpen`"
-			style="top: -14px; right: 205px; width: 140%"
+			style="top: -5px; right: 205px; width: 140%"
 		>
-			Number of decentralised nodes in the Blogchain network your browser is currently connected to.
+			Number of hosts on Blogchain's public network currently in use to serve content
 		</div>
 	</div>
 </template>
@@ -80,7 +80,7 @@ export default Vue.extend({
 .NodesInfoOpen::before {
 	content: '';
 	position: absolute;
-	top: 1.5rem;
+	top: 1rem;
 	right: -0.5rem;
 	transform: rotate(45deg);
 	width: 1rem;
@@ -92,7 +92,7 @@ export default Vue.extend({
 .NodesInfoOpenDark::before {
 	content: '';
 	position: absolute;
-	top: 1.5rem;
+	top: 1rem;
 	right: -0.5rem;
 	transform: rotate(45deg);
 	width: 1rem;
