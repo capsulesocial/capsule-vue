@@ -1,8 +1,8 @@
 import VuexPersistence from 'vuex-persist'
 
-// @ts-ignore
-export default ({ store }) => {
+export default ({ store }: any) => {
 	new VuexPersistence({
 		/* your options */
+		key: `capsule-store`,
 	}).plugin(store)
 }
