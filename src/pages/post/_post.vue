@@ -504,7 +504,6 @@ export default Vue.extend({
 			this.lastScroll = currentScroll
 		},
 		handleClose() {
-			// @ts-ignore
 			if (this.$router.history._startLocation === this.$route.path) {
 				// IF they started on this page:
 				this.$router.push(`/home`)

@@ -151,7 +151,6 @@ export default Vue.extend({
 			this.showConfirm = true
 		},
 		async handlePost() {
-			// @ts-ignore
 			await this.$refs.editor.post()
 		},
 		updateWordCount(num: number) {
@@ -173,12 +172,10 @@ export default Vue.extend({
 		closeDraftsPopup(): void {
 			this.showDrafts = false
 			setTimeout(() => {
-				// @ts-ignore
 				this.$refs.editor.setupEditor()
 			})
 		},
 		openDraftsPopup(): void {
-			// @ts-ignore
 			this.$refs.editor.updateContent()
 			this.showDrafts = true
 		},
