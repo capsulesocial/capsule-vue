@@ -1,5 +1,5 @@
 <template>
-	<div class="flex">
+	<div v-if="!replyDeleted" class="flex relative">
 		<div class="flex-shrink-0 mr-2">
 			<Avatar :avatar="avatar" :authorID="authorID" size="w-10 h-10" />
 		</div>
@@ -17,6 +17,26 @@
 				<span v-if="timestamp" class="text-xs text-gray5 dark:text-gray3">
 					{{ $formatDate(timestamp) }}
 				</span>
+				<!-- Three dots dropdown -->
+				<button
+					v-if="this.$store.state.session.id === authorID || this.$store.state.session.id === commenterID"
+					class="focus:outline-none absolute top-0 right-0 flex-col justify-start text-gray5 dark:text-gray3 pt-2 pr-3"
+					@click.stop="toggleDropdownDelete"
+				>
+					<MoreIcon />
+				</button>
+				<div
+					v-show="showDelete"
+					class="border-lightBorder modal-animation absolute z-10 flex w-44 flex-col items-center rounded-lg border bg-lightBG dark:bg-darkBG p-1 shadow-lg"
+					:class="dark ? `dropdownDeleteOpenDark` : `dropdownDeleteOpen`"
+					style="top: 40px; right: 0px"
+				>
+					<!-- Delete -->
+					<button class="focus:outline-none text-negative flex" @click="removeReply">
+						<BinIcon class="p-1" />
+						<span class="text-negative self-center text-xs ml-1 mr-1">Remove this reply</span>
+					</button>
+				</div>
 			</div>
 			<p class="py-1 text-sm text-lightPrimaryText dark:text-darkSecondaryText">
 				{{ content }}
@@ -28,23 +48,33 @@
 <script lang="ts">
 import Vue from 'vue'
 import type { PropType } from 'vue'
+import axios from 'axios'
 import Avatar from '@/components/Avatar.vue'
+import MoreIcon from '@/components/icons/More.vue'
+import BinIcon from '@/components/icons/Bin.vue'
 import { getPhotoFromIPFS } from '@/backend/photos'
 import { getComment } from '@/backend/comment'
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 import { getProfileFromSession } from '@/store/session'
+import { sendPostDeletion } from '@/backend/postDeletion'
 
 interface IData {
 	avatar?: string
 	content: string
 	name: string
+	replyDeleted: boolean
+	showDelete: boolean
+	dark: boolean
 }
 
 export default Vue.extend({
 	components: {
 		Avatar,
+		MoreIcon,
+		BinIcon,
 	},
 	props: {
+		commenterID: { type: String, required: true },
 		authorID: { type: String, required: true },
 		cid: { type: String, required: true },
 		timestamp: { type: Number, required: true },
@@ -55,6 +85,9 @@ export default Vue.extend({
 			avatar: ``,
 			content: ``,
 			name: ``,
+			replyDeleted: false,
+			showDelete: false,
+			dark: false,
 		}
 	},
 	async created() {
@@ -82,10 +115,46 @@ export default Vue.extend({
 				this.avatar = a
 			})
 		}
+		// check for dark mode
+		if (document.documentElement.classList.contains(`dark`)) {
+			this.dark = true
+		} else {
+			this.dark = false
+		}
+		// Close more dropdown
+		window.addEventListener(`click`, () => {
+			if (this.showDelete) {
+				this.showDelete = false
+			}
+		})
 	},
 	methods: {
-		getFullName(id: string) {
-			return id
+		async removeReply() {
+			try {
+				await sendPostDeletion(`HIDE`, this.cid, this.$store.state.session.id)
+				this.replyDeleted = true
+				this.$toastSuccess(`This reply has been successfully removed`)
+				this.$emit(`updateReplies`)
+			} catch (err: unknown) {
+				if (axios.isAxiosError(err)) {
+					if (!err.response) {
+						this.$toastError(`Network error, please try again`)
+						return
+					}
+					if (err.response.status === 429) {
+						this.$toastError(`Too many requests, please try again in a minute`)
+						return
+					}
+					if (err instanceof Error) {
+						this.$toastError(err.message)
+						return
+					}
+					throw err
+				}
+			}
+		},
+		toggleDropdownDelete() {
+			this.showDelete = !this.showDelete
 		},
 	},
 })
