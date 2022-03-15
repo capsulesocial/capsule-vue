@@ -4,7 +4,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-// @ts-ignore
 import ogImage from '@/assets/images/util/ogImage.png'
 
 export default Vue.extend({
