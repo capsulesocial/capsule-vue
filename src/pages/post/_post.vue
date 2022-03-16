@@ -17,7 +17,7 @@
 						<!-- Left side: name, avatar, date -->
 						<div class="flex items-center">
 							<Avatar :avatar="authorAvatar" :authorID="post.authorID" size="w-10 h-10" class="mr-4 flex-shrink-0" />
-							<div class="pr-8">
+							<div class="pr-8 flex flex-col">
 								<nuxt-link
 									v-if="author.name != ``"
 									:to="`/id/` + post.authorID"
@@ -27,14 +27,24 @@
 								<nuxt-link v-else :to="`/id/` + post.authorID" class="text-gray5 dark:text-gray3 font-semibold">{{
 									post.authorID
 								}}</nuxt-link>
-								<h6 class="text-gray6 dark:text-gray3 font-sans text-sm">{{ $formatDate(post.timestamp) }}</h6>
+								<nuxt-link :to="`/id/` + post.authorID" class="text-primary dark:text-secondary text-xs">
+									@{{ post.authorID }}</nuxt-link
+								>
 							</div>
 							<FriendButton
 								v-if="post.authorID !== $store.state.session.id"
 								:toggleFriend="toggleFriend"
 								:userIsFollowed="userIsFollowed"
-								class="hidden xl:block"
+								class="hidden lg:block"
 							/>
+							<!-- Timestamp and reading time -->
+							<div class="flex flex-row items-center lg:ml-8">
+								<span class="text-sm text-gray5 dark:text-gray3">
+									{{ $formatDate(post.timestamp) }}
+								</span>
+								<div v-if="readingTime" class="h-1 w-1 rounded bg-gray5 dark:bg-gray3 mx-2"></div>
+								<span v-if="readingTime" class="text-sm text-gray5 dark:text-gray3"> {{ readingTime }} min read </span>
+							</div>
 						</div>
 						<span class="flex items-center">
 							<button class="bg-gray1 dark:bg-gray5 focus:outline-none rounded-full p-1" @click="handleClose">
@@ -263,6 +273,7 @@ interface IData {
 	dark: boolean
 	captionHeight: number | undefined
 	showShare: boolean
+	readingTime: number | null
 }
 
 export default Vue.extend({
@@ -307,6 +318,7 @@ export default Vue.extend({
 			dark: false,
 			captionHeight: 0,
 			showShare: false,
+			readingTime: null,
 		}
 	},
 	head() {
@@ -401,6 +413,8 @@ export default Vue.extend({
 		// Get caption height
 		const caption = document.getElementById(`photoCaption`)
 		this.captionHeight = caption?.offsetHeight
+		// Get erading time
+		this.calculateReadingTime()
 	},
 	mounted() {
 		const container = document.getElementById(`post`)
@@ -527,6 +541,22 @@ export default Vue.extend({
 				photo: this.featuredPhoto,
 				caption: this.post?.featuredPhotoCaption,
 			})
+		},
+		calculateReadingTime() {
+			if (!this.post) {
+				throw new Error(`Post can't be null`)
+			}
+			const wordcount = this.post.content.split(/\s+/).length - 1
+			if (wordcount <= 0) {
+				throw new Error(`Word count can't be equal or less than zero`)
+			}
+			const textReadingTime = wordcount / 275
+			let photoReadingTime = 0
+			if (this.post.postImages) {
+				photoReadingTime = (this.post.postImages.length * ((12 * 100) / 60)) / 100
+			}
+			const readingTime = Math.round(((textReadingTime + photoReadingTime) * 60) / 100)
+			this.readingTime = readingTime < 1 ? 1 : readingTime
 		},
 	},
 })

@@ -369,10 +369,16 @@
 											<span class="text-primary dark:text-secondary ml-2"> @{{ post.authorID }} </span>
 										</nuxt-link>
 									</div>
-									<!-- Timestamp -->
-									<span class="text-xs dark:text-gray3">
-										{{ $formatDate(post.timestamp) }}
-									</span>
+									<!-- Timestamp and reading time -->
+									<div class="flex flex-row mt-1 items-center">
+										<span class="text-xs text-gray5 dark:text-gray3">
+											{{ $formatDate(post.timestamp) }}
+										</span>
+										<div v-if="readingTime" class="h-1 w-1 rounded bg-gray5 dark:bg-gray3 mx-2"></div>
+										<span v-if="readingTime" class="text-xs text-gray5 dark:text-gray3">
+											{{ readingTime }} min read
+										</span>
+									</div>
 								</div>
 							</div>
 							<div
@@ -615,6 +621,7 @@ interface IData {
 		name: string
 	} | null
 	postCID: string
+	readingTime: number | null
 	dark: boolean
 }
 
@@ -722,10 +729,17 @@ export default Vue.extend({
 			quote: null,
 			postCID: ``,
 			quoteContent: ``,
+			readingTime: null,
 			dark: false,
 		}
 	},
 	async created() {
+		// check dark mode
+		if (document.documentElement.classList.contains(`dark`)) {
+			this.dark = true
+		} else {
+			this.dark = false
+		}
 		// Get post CID if on full post page
 		if (this.post._id === undefined) {
 			this.postCID = this.$route.params.post
@@ -800,12 +814,7 @@ export default Vue.extend({
 			},
 			false,
 		)
-		// check dark mode
-		if (document.documentElement.classList.contains(`dark`)) {
-			this.dark = true
-		} else {
-			this.dark = false
-		}
+		this.calculateReadingTime()
 	},
 	destroyed() {
 		window.removeEventListener(`click`, this.handleClose)
@@ -967,6 +976,19 @@ export default Vue.extend({
 		triggerPopupCardTrue() {
 			this.hasEntered = true
 			this.showPopupCard = true
+		},
+		calculateReadingTime() {
+			const wordcount = this.post.wordCount
+			if (!wordcount) {
+				return
+			}
+			const textReadingTime = wordcount / 275
+			let photoReadingTime = 0
+			if (this.post.postImages) {
+				photoReadingTime = (this.post.postImages.length * ((12 * 100) / 60)) / 100
+			}
+			const readingTime = Math.round(((textReadingTime + photoReadingTime) * 60) / 100)
+			this.readingTime = readingTime < 1 ? 1 : readingTime
 		},
 	},
 })
