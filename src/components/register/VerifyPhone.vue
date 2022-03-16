@@ -101,7 +101,9 @@ export default Vue.extend({
 			}
 			await requestOTP(this.phoneNumber)
 			this.otpSent = true
-			this.$toastSuccess(`We sent a code on your phone`)
+			this.$toastSuccess(
+				`If you haven't used this phone number before on Blogchain, you'll receive a code on your phone`,
+			)
 		},
 		async validateOTP() {
 			this.isLoading = true
