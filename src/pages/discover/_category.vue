@@ -22,7 +22,7 @@
 						id="hiddentitle"
 						class="text-primary dark:text-secondary animatelong absolute ml-8 -mt-1 px-2 text-xl font-semibold capitalize opacity-0"
 					>
-						{{ $route.params.category }}
+						{{ $route.params.category.replace(`-`, ` `) }}
 					</h2>
 					<div
 						id="buttonbg"
@@ -35,7 +35,7 @@
 					class="text-lightOnPrimaryText animatefast font-semibold capitalize"
 					style="font-size: 1.875rem; line-height: 38px"
 				>
-					{{ $route.params.category }}
+					{{ $route.params.category.replace(`-`, ` `) }}
 				</h2>
 			</div>
 		</div>

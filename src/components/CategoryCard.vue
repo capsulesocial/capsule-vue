@@ -13,7 +13,7 @@
 			<!-- <img v-if="bgImage !== ``" :src="bgImage" :alt="text" class="absolute left-0 top-0 object-contain w-full" /> -->
 			<div class="flex flex-col p-4 font-sans">
 				<h4 class="z-20 text-2xl font-extrabold capitalize text-white">
-					{{ text }}
+					{{ text.replace(`-`, ` `) }}
 				</h4>
 			</div>
 		</nuxt-link>
@@ -24,7 +24,7 @@
 				<div class="flex w-full items-center px-4">
 					<span>
 						<h4 class="text-lg capitalize">
-							{{ text }}
+							{{ text.replace(`-`, ` `) }}
 						</h4>
 						<h5 class="text-gray5 text-sm">0 members</h5>
 					</span>
