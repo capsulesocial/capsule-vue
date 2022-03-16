@@ -273,7 +273,7 @@ interface IData {
 	dark: boolean
 	captionHeight: number | undefined
 	showShare: boolean
-	readingTime: number | undefined
+	readingTime: number | null
 }
 
 export default Vue.extend({
@@ -318,7 +318,7 @@ export default Vue.extend({
 			dark: false,
 			captionHeight: 0,
 			showShare: false,
-			readingTime: undefined,
+			readingTime: null,
 		}
 	},
 	head() {
@@ -544,17 +544,16 @@ export default Vue.extend({
 		},
 		calculateReadingTime() {
 			if (!this.post) {
-				return
+				throw new Error(`Post can't be null`)
 			}
 			const wordcount = this.post.content.split(/\s+/).length - 1
 			if (wordcount <= 0) {
-				this.readingTime = 0
-				return
+				throw new Error(`Word count can't be equal or less than zero`)
 			}
 			const textReadingTime = wordcount / 275
 			let photoReadingTime = 0
-			if (this.post.postImages?.length) {
-				photoReadingTime = (this.post.postImages?.length * ((12 * 100) / 60)) / 100
+			if (this.post.postImages) {
+				photoReadingTime = (this.post.postImages.length * ((12 * 100) / 60)) / 100
 			}
 			const readingTime = Math.round(((textReadingTime + photoReadingTime) * 60) / 100)
 			this.readingTime = readingTime < 1 ? 1 : readingTime

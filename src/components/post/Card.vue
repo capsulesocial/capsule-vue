@@ -621,7 +621,7 @@ interface IData {
 		name: string
 	} | null
 	postCID: string
-	readingTime: number | undefined
+	readingTime: number | null
 	dark: boolean
 }
 
@@ -729,7 +729,7 @@ export default Vue.extend({
 			quote: null,
 			postCID: ``,
 			quoteContent: ``,
-			readingTime: undefined,
+			readingTime: null,
 			dark: false,
 		}
 	},
@@ -978,18 +978,14 @@ export default Vue.extend({
 			this.showPopupCard = true
 		},
 		calculateReadingTime() {
-			if (!this.post) {
-				return
-			}
-
 			const wordcount = this.post.wordCount
 			if (!wordcount) {
 				return
 			}
 			const textReadingTime = wordcount / 275
 			let photoReadingTime = 0
-			if (this.post.postImages?.length) {
-				photoReadingTime = (this.post.postImages?.length * ((12 * 100) / 60)) / 100
+			if (this.post.postImages) {
+				photoReadingTime = (this.post.postImages.length * ((12 * 100) / 60)) / 100
 			}
 			const readingTime = Math.round(((textReadingTime + photoReadingTime) * 60) / 100)
 			this.readingTime = readingTime < 1 ? 1 : readingTime
