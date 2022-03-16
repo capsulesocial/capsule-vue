@@ -13,15 +13,11 @@
 			</div>
 			<div v-show="!isLoading" class="flex w-full h-full flex-col justify-center items-center px-14">
 				<!-- Step 0: Code redeem -->
-				<InviteCode
-					v-if="step === `inviteCode`"
-					class="w-full h-full lg:w-3/4 xl:w-1/2"
-					@validInviteCode="stepForward"
-				/>
+				<InviteCode v-if="step === `inviteCode`" class="w-full lg:w-3/4 xl:w-1/2" @validInviteCode="stepForward" />
 				<!-- Step 1: Choose Login / register -->
 				<RegisterMethods
 					v-else-if="step === `registerMethods`"
-					class="w-full h-full lg:w-3/4 xl:w-1/2"
+					class="w-full lg:w-3/4 xl:w-1/2"
 					@updateUserInfo="updateUserInfo"
 					@infos="showInfos = true"
 					@stepForward="stepForward"

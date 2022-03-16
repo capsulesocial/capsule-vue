@@ -2,7 +2,7 @@
 	<article>
 		<h1 class="text-primary dark:text-secondary text-4xl font-bold">Sign up</h1>
 		<!-- Enter phone number -->
-		<div>
+		<div v-show="!otpSent">
 			<p class="text-gray7 dark:text-gray3 my-10 text-center">
 				Verify you’re a human with your phone number so that Blogchain can fund your wallet. This is the last step
 				needed to create your Blogchain account.
@@ -33,9 +33,15 @@
 			<BrandedButton v-show="!isLoading" :text="`Verify`" class="w-full" :action="validateOTP" />
 			<h6 v-show="isLoading" class="text-primary dark:text-secondary text-center">Verifying...</h6>
 		</div>
-		<p class="text-gray7 dark:text-gray2 mt-10 text-center text-sm">
+		<!-- <p v-show="!otpSent" class="text-gray7 dark:text-gray2 mt-10 text-center text-sm">
 			Already have a funded wallet?
 			<button class="text-primary dark:text-secondary font-bold">Connect to NEAR</button>
+		</p> -->
+		<p v-show="otpSent" class="text-gray7 dark:text-gray2 mt-10 text-center text-sm">
+			Didn't receive any code?
+			<button class="text-primary dark:text-secondary font-bold" @click="otpSent = false">
+				Check your phone number and send a new one
+			</button>
 		</p>
 	</article>
 </template>
@@ -95,6 +101,7 @@ export default Vue.extend({
 			}
 			await requestOTP(this.phoneNumber)
 			this.otpSent = true
+			this.$toastSuccess(`We sent a code on your phone`)
 		},
 		async validateOTP() {
 			this.isLoading = true
