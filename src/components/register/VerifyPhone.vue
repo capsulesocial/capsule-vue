@@ -40,7 +40,7 @@
 		<p v-show="otpSent" class="text-gray7 dark:text-gray2 mt-10 text-center text-sm">
 			Didn't receive any code?
 			<button class="text-primary dark:text-secondary font-bold" @click="otpSent = false">
-				Check your phone number and send a new one
+				Check your phone number and request a new one
 			</button>
 		</p>
 	</article>
