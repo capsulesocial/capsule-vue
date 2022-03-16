@@ -33,7 +33,7 @@ export interface IEncryptedPost extends Post {
 	encrypted: true
 }
 
-export type RetrievedPost = Omit<Post, `content`> & { _id: string; excerpt: string }
+export type RetrievedPost = Omit<Post, `content`> & { _id: string; excerpt: string; wordCount: number }
 
 export interface IGenericPostResponse {
 	post: RetrievedPost

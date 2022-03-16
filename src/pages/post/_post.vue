@@ -546,11 +546,9 @@ export default Vue.extend({
 		},
 		calculateReadingTime() {
 			if (!this.post) {
-				this.readingTime = 0
 				return
 			}
-			// const wordcount = this.post.wordcount
-			const wordcount = 1135
+			const wordcount = this.post.content.split(/\s+/).length - 1
 			if (wordcount <= 0) {
 				this.readingTime = 0
 				return
