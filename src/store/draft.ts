@@ -4,7 +4,7 @@ import { Tag, Post } from '@/backend/post'
 
 export const namespace = `draft`
 
-type DraftPost = Omit<Post, `authorID` | `wordCount`>
+type DraftPost = Omit<Post, `authorID`>
 
 interface DraftState {
 	drafts: Array<DraftPost>
