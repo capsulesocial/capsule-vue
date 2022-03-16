@@ -38,7 +38,7 @@
 			<button class="text-primary dark:text-secondary font-bold">Connect to NEAR</button>
 		</p> -->
 		<p v-show="otpSent" class="text-gray7 dark:text-gray2 mt-10 text-center text-sm">
-			Didn't receive any code?
+			Didn't receive a code?
 			<button class="text-primary dark:text-secondary font-bold" @click="otpSent = false">
 				Check your phone number and request a new one
 			</button>
