@@ -374,8 +374,8 @@
 										<span class="text-xs text-gray5 dark:text-gray3">
 											{{ $formatDate(post.timestamp) }}
 										</span>
-										<div v-if="readingTime > 0" class="h-1 w-1 rounded bg-gray5 dark:bg-gray3 mx-2"></div>
-										<span v-if="readingTime > 0" class="text-xs text-gray5 dark:text-gray3">
+										<div v-if="readingTime" class="h-1 w-1 rounded bg-gray5 dark:bg-gray3 mx-2"></div>
+										<span v-if="readingTime" class="text-xs text-gray5 dark:text-gray3">
 											{{ readingTime }} min read
 										</span>
 									</div>
@@ -621,7 +621,7 @@ interface IData {
 		name: string
 	} | null
 	postCID: string
-	readingTime: number
+	readingTime: number | undefined
 	dark: boolean
 }
 
@@ -729,7 +729,7 @@ export default Vue.extend({
 			quote: null,
 			postCID: ``,
 			quoteContent: ``,
-			readingTime: 0,
+			readingTime: undefined,
 			dark: false,
 		}
 	},
@@ -979,13 +979,11 @@ export default Vue.extend({
 		},
 		calculateReadingTime() {
 			if (!this.post) {
-				this.readingTime = 0
 				return
 			}
 
 			const wordcount = this.post.wordCount
-			if (wordcount <= 0) {
-				this.readingTime = 0
+			if (!wordcount) {
 				return
 			}
 			const textReadingTime = wordcount / 275
@@ -993,7 +991,8 @@ export default Vue.extend({
 			if (this.post.postImages?.length) {
 				photoReadingTime = (this.post.postImages?.length * ((12 * 100) / 60)) / 100
 			}
-			this.readingTime = Math.round(((textReadingTime + photoReadingTime) * 60) / 100)
+			const readingTime = Math.round(((textReadingTime + photoReadingTime) * 60) / 100)
+			this.readingTime = readingTime < 1 ? 1 : readingTime
 		},
 	},
 })
