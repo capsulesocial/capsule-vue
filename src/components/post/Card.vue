@@ -470,7 +470,7 @@
 									<TagPill v-for="t in post.tags" :key="t.name" :tag="t.name" class="my-2 mr-4" />
 								</div>
 								<!-- Actions buttons (Desktop) -->
-								<div class="text-gray5 dark:text-gray3 mt-1 hidden lg:flex lg:items-center">
+								<div class="text-gray5 dark:text-gray3 mt-1 hidden xl:flex xl:items-center">
 									<!-- Comment -->
 									<button
 										class="focus:outline-none text-gray5 dark:text-gray3 hover:text-primary dark:hover:text-secondary mr-4 hover:fill-primary flex items-center"
@@ -515,7 +515,7 @@
 							<TagPill v-for="t in post.tags" :key="t.name" :tag="t.name" class="my-2 mr-4" />
 						</div>
 						<!-- Comment and share (Mobile) -->
-						<div class="text-gray5 dark:text-gray3 mt-1 flex lg:hidden">
+						<div class="text-gray5 dark:text-gray3 mt-1 flex xl:hidden">
 							<button
 								class="focus:outline-none text-gray5 dark:text-gray3 hover:text-primary dark:hover:text-secondary mr-4 hover:fill-primary flex items-center"
 								:class="showComments ? `text-primary dark:text-secondary` : ``"
