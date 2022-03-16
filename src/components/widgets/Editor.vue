@@ -65,8 +65,8 @@
 							:src="getCategoryIcon($store.state.draft.drafts[$store.state.draft.activeIndex].category)"
 							class="hotzone mr-2 h-10 w-10"
 						/>
-						<span class="text-primary dark:text-gray1 text-base">{{
-							$store.state.draft.drafts[$store.state.draft.activeIndex].category
+						<span class="text-primary dark:text-gray1 text-base capitalize">{{
+							$store.state.draft.drafts[$store.state.draft.activeIndex].category.replace(`-`, ` `)
 						}}</span>
 					</div>
 					<div v-else class="text-gray5 dark:text-gray3">Select a Category</div>
@@ -90,7 +90,7 @@
 								: ' text-primary dark:text-secondary border-transparent'
 						"
 					>
-						{{ c }}</span
+						{{ c.replace(`-`, ` `) }}</span
 					>
 				</button>
 			</div>

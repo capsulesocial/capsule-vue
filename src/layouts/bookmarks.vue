@@ -71,7 +71,7 @@
 											: ' text-primary dark:text-gray3 border-transparent'
 									"
 								>
-									{{ c }}</span
+									{{ c.replace(`-`, ` `) }}</span
 								>
 							</button>
 						</article>

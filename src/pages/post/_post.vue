@@ -58,7 +58,7 @@
 				<!-- Category and elipses -->
 				<article class="my-5 flex w-full justify-between">
 					<nuxt-link :to="`/discover/` + post.category" class="text-primary dark:text-secondary capitalize">{{
-						post.category
+						post.category.replace(`-`, ` `)
 					}}</nuxt-link>
 					<div class="flex">
 						<BookmarkButton
