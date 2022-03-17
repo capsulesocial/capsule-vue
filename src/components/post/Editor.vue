@@ -278,16 +278,12 @@ export default Vue.extend({
 			this.qeditor.root.addEventListener(`drop`, (ev: DragEvent) => {
 				this.waitingImage = true
 				this.toggleAddContent = false
-				this.refreshPostImages()
 				this.handleDroppedContent(ev)
-				this.refreshPostImages()
 			})
 			this.qeditor.root.addEventListener(`paste`, (ev: ClipboardEvent) => {
 				this.waitingImage = true
 				this.toggleAddContent = false
-				this.refreshPostImages()
 				this.handlePastedContent(ev)
-				this.refreshPostImages()
 			})
 			this.qeditor.focus()
 			// Set link placeholder
@@ -380,8 +376,10 @@ export default Vue.extend({
 			}
 
 			if (!file && droppedHtml) {
+				this.refreshPostImages()
 				const content = await this.handleHtml(droppedHtml)
 				this.insertContent(content)
+				this.refreshPostImages()
 				return
 			}
 
@@ -501,16 +499,18 @@ export default Vue.extend({
 			const range = this.qeditor.getSelection(true)
 
 			// handle cut and paste
-			if (this.qeditor.getLength() !== range.index + 1 && contentImgs.length === 0) {
+			if (this.qeditor.getLength() !== range.index + 1 && contentImgs.length === 0 && !pastedFile) {
 				this.handleCutPaste(range, pastedText)
 				this.scrollToBottom(e)
 				return
 			}
 
 			// handle pasted content
-			if (pastedContent) {
+			if (pastedContent || pastedContent !== ``) {
+				this.refreshPostImages()
 				const content = await this.handleHtml(pastedContent)
 				this.insertContent(content)
+				this.refreshPostImages()
 				this.scrollToBottom(e)
 				return
 			}
@@ -688,7 +688,6 @@ export default Vue.extend({
 			if (this.hasPosted) {
 				return
 			}
-			this.hasPosted = true
 			const postImages = Array.from(createPostImagesSet(clean, this.postImages))
 			if (postImages.length > textLimits.post_images.max) {
 				this.$toastError(`Cannot add more than ${textLimits.post_images.max} images in a post`)
@@ -706,6 +705,7 @@ export default Vue.extend({
 				postImages,
 			)
 			const cid = await sendRegularPost(p)
+			this.hasPosted = true
 			this.title = ``
 			this.subtitle = ``
 			this.input = ``
