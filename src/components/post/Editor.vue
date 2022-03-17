@@ -233,7 +233,6 @@ export default Vue.extend({
 				}
 				return builtInFunc.call(this, val) // retain the built-in logic
 			}
-
 			const metaButton = document.getElementById(`metaButton`)
 			// Handle updates to body
 			const onTextChange = () => {
@@ -276,13 +275,9 @@ export default Vue.extend({
 			const editor = new Quill(`#editor`, options)
 			this.qeditor = editor
 			this.qeditor.root.addEventListener(`drop`, (ev: DragEvent) => {
-				this.waitingImage = true
-				this.toggleAddContent = false
 				this.handleDroppedContent(ev)
 			})
 			this.qeditor.root.addEventListener(`paste`, (ev: ClipboardEvent) => {
-				this.waitingImage = true
-				this.toggleAddContent = false
 				this.handlePastedContent(ev)
 			})
 			this.qeditor.focus()
@@ -330,14 +325,10 @@ export default Vue.extend({
 		insertContent(content: string | IImageData | null, plainText = false) {
 			try {
 				if (!this.qeditor || !content) {
-					this.waitingImage = false
-					this.toggleAddContent = true
 					return
 				}
 				const range = this.qeditor.getSelection(true)
 				if (typeof content === `string`) {
-					this.waitingImage = false
-					this.toggleAddContent = true
 					if (plainText) {
 						this.qeditor.insertText(range.index, content, `user`)
 					} else {
@@ -345,8 +336,6 @@ export default Vue.extend({
 					}
 				} else {
 					const { cid, url } = content
-					this.waitingImage = false
-					this.toggleAddContent = true
 					this.qeditor.insertEmbed(range.index, `image`, { alt: cid.toString(), url }, `user`)
 				}
 				const contentLength = this.qeditor.getContents().length()
@@ -375,7 +364,7 @@ export default Vue.extend({
 				return
 			}
 
-			if (!file && droppedHtml) {
+			if (!file && (droppedHtml || droppedHtml !== ``)) {
 				this.refreshPostImages()
 				const content = await this.handleHtml(droppedHtml)
 				this.insertContent(content)
@@ -422,6 +411,7 @@ export default Vue.extend({
 					}
 					pastedContent = pastedContent.replace(img[0], `<img alt="${cid}" src="${url}">`)
 				} catch (err: unknown) {
+					this.waitingImage = false
 					if (axios.isAxiosError(err)) {
 						if (!err.response) {
 							this.$toastError(`Network error, please try again`)
@@ -439,6 +429,7 @@ export default Vue.extend({
 					return null
 				}
 			}
+			this.waitingImage = false
 			return pastedContent
 		},
 		async handleFile(file: File) {
@@ -458,7 +449,11 @@ export default Vue.extend({
 					return
 				}
 				this.insertContent({ cid, url })
+				this.waitingImage = false
+				this.refreshPostImages()
 			} catch (err: unknown) {
+				this.waitingImage = false
+				this.refreshPostImages()
 				if (axios.isAxiosError(err)) {
 					if (!err.response) {
 						this.$toastError(`Network error, please try again`)
@@ -477,7 +472,6 @@ export default Vue.extend({
 				}
 				throw err
 			}
-			this.refreshPostImages()
 		},
 		async handlePastedContent(e: ClipboardEvent) {
 			e.stopPropagation()
