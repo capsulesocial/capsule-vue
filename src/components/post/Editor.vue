@@ -233,7 +233,6 @@ export default Vue.extend({
 				}
 				return builtInFunc.call(this, val) // retain the built-in logic
 			}
-
 			const metaButton = document.getElementById(`metaButton`)
 			// Handle updates to body
 			const onTextChange = () => {
