@@ -249,6 +249,7 @@ import { isPostBookmarkedByUser } from '@/backend/bookmarks'
 import { ICommentData } from '@/backend/comment'
 import ogImage from '@/assets/images/util/ogImage.png'
 import { domain } from '@/backend/utilities/config'
+import { createShareableLink } from '@/backend/shareable_links'
 
 interface IData {
 	post: Post | null
@@ -415,6 +416,11 @@ export default Vue.extend({
 		this.captionHeight = caption?.offsetHeight
 		// Get erading time
 		this.calculateReadingTime()
+		// Change URL to social-friendly link
+		const friendlyURL = await createShareableLink(this.$route.params.post)
+		if (window.location.href.substring(0, 16) === friendlyURL.substring(0, 16)) {
+			history.replaceState(null, ``, friendlyURL)
+		}
 	},
 	mounted() {
 		const container = document.getElementById(`post`)
