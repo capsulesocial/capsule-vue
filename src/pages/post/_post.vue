@@ -417,11 +417,14 @@ export default Vue.extend({
 		// Get erading time
 		this.calculateReadingTime()
 		// Change URL to social-friendly link
-		createShareableLink(this.$route.params.post).then((friendlyUrl) => {
-			if (window.location.href.substring(0, 16) === friendlyUrl.substring(0, 16)) {
+		createShareableLink(this.$route.params.post)
+			.then((friendlyUrl) => {
 				history.replaceState(null, ``, friendlyUrl)
-			}
-		})
+			})
+			.catch((err) => {
+				// eslint-disable-next-line no-console
+				console.log(`Cannot replace state to shareable link: ${err.message}`)
+			})
 	},
 	mounted() {
 		const container = document.getElementById(`post`)
