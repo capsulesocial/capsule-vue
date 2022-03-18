@@ -20,60 +20,36 @@ const config: NuxtConfig = {
 			{ hid: 'capsule', name: 'Blogchain', content: 'Decentralized discourse' },
 			// hid is used as unique identifier. Do not use `vmid` for it as it will not work
 			{
-				property: 'og:site_name',
-				content:
-					'Decentralized discourse',
+			  property: 'og:site_name',content:'Decentralized discourse',
 			},
 			{ hid: 'og:type', property: 'og:type', content: 'website' },
 			{
-				hid: 'og:url',
-				property: 'og:url',
-				content: 'https://blogchain.app',
+			  hid: 'og:url',property: 'og:url',content: 'https://blogchain.app',
 			},
 			{
-				hid: 'og:title',
-				property: 'og:title',
-				content:
-					'Blogchain',
+			  hid: 'og:title',property: 'og:title',content:'Blogchain',
 			},
 			{
-				hid: 'og:description',
-				property: 'og:description',
-				content:
-					'Decentralized discourse',
+			  hid: 'og:description',property: 'og:description',content:'Decentralized discourse',
 			},
 			{
-				hid: 'og:image',
-				property: 'og:image',
-				content:
-					'@/assets/images/brand/discover.webp',
+			  hid: 'og:image',property: 'og:image',content:'/discover.webp',
 			},
 			{ property: 'og:image:width', content: '740' },
 			{ property: 'og:image:height', content: '300' },
 			{ name: 'twitter:site', content: '@capsuleSoc' },
 			{ name: 'twitter:card', content: 'summary_large_image' },
 			{
-				hid: 'twitter:url',
-				name: 'twitter:url',
-				content: 'https://blogchain.app',
+			  hid: 'twitter:url',name: 'twitter:url',content: 'https://blogchain.app',
 			},
 			{
-				hid: 'twitter:title',
-				name: 'twitter:title',
-				content:
-					'Blogchain',
+			  hid: 'twitter:title',name: 'twitter:title',content:'Blogchain',
 			},
 			{
-				hid: 'twitter:description',
-				name: 'twitter:description',
-				content:
-					'Decentralized discourse',
+			  hid: 'twitter:description',name: 'twitter:description',content:'Decentralized discourse',
 			},
 			{
-				hid: 'twitter:image',
-				name: 'twitter:image',
-				content:
-					'@/assets/images/brand/discover.webp',
+			  hid: 'twitter:image',name: 'twitter:image',content:'/discover.webp',
 			}
 		],
 		link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
