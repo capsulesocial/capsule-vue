@@ -393,7 +393,7 @@ import Avatar from '@/components/Avatar.vue'
 
 import { faces, feelings, faceGroupings } from '@/config'
 import { createComment, sendComment, ICommentData, getCommentsOfPost } from '@/backend/comment'
-import { getPhotoFromIPFS } from '@/backend/photos'
+import { getPhotoFromIPFS } from '@/backend/getPhoto'
 
 interface FaceStat {
 	face: { label: string; light: any; dark: any }

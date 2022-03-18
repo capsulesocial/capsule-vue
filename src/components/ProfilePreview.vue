@@ -25,7 +25,7 @@ import type { PropType } from 'vue'
 import axios from 'axios'
 import Avatar from '@/components/Avatar.vue'
 import FriendButton from '@/components/FriendButton.vue'
-import { getPhotoFromIPFS } from '@/backend/photos'
+import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
 
 interface IData {

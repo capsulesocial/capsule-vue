@@ -2,7 +2,7 @@ import Vue from 'vue'
 import DOMPurify from 'dompurify'
 import { marked } from 'marked'
 
-import { transformPostToTemplate, markedRenderer } from './editorExtensions'
+import { transformPostToTemplate, markedRenderer } from './readerExtensions'
 import IpfsImage from '@/components/IpfsImage.vue'
 
 marked.use({ renderer: markedRenderer })

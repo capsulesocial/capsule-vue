@@ -203,7 +203,6 @@ import type { PropType } from 'vue'
 import Avatar from '@/components/Avatar.vue'
 import FriendButton from '@/components/FriendButton.vue'
 import SecondaryButton from '@/components/SecondaryButton.vue'
-import SettingsPopup from '@/components/popups/Settings.vue'
 import BackButton from '@/components/icons/ChevronLeft.vue'
 import PencilIcon from '@/components/icons/Pencil.vue'
 import { getProfile, Profile } from '@/backend/profile'
@@ -227,7 +226,7 @@ export default Vue.extend({
 		Avatar,
 		FriendButton,
 		SecondaryButton,
-		SettingsPopup,
+		SettingsPopup: () => import(`@/components/popups/Settings.vue`),
 		BackButton,
 		PencilIcon,
 	},

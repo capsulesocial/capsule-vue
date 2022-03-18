@@ -1,17 +1,5 @@
 import Quill, { RangeStatic } from 'quill'
 import TurndownService from 'turndown'
-import hljs from 'highlight.js/lib/common'
-import { marked } from 'marked'
-const Module = Quill.import(`core/module`)
-
-// Marked
-
-export const markedRenderer: marked.RendererObject = {
-	code(src: string) {
-		const highlightedCode = hljs.highlightAuto(src).value
-		return `<pre><code class="hljs">${highlightedCode}</code></pre>`
-	},
-}
 
 // Quill
 export function counterModuleFactory(
@@ -19,6 +7,7 @@ export function counterModuleFactory(
 	onSelectionChange: (range: RangeStatic) => void,
 	onEditorChange: (eventName: string, ...args: any[]) => void,
 ) {
+	const Module = Quill.import(`core/module`)
 	return class CounterModule extends Module {
 		constructor(quill: Quill) {
 			super()
@@ -75,21 +64,11 @@ export const ipfsImageRule: TurndownService.Rule = {
 
 // Misc
 
-export const imgRegexp = (cid: string) =>
+const imgRegexp = (cid: string) =>
 	new RegExp(
 		`<ipfsimage ((alt="${cid}")|(cid="${cid}")|(class="ipfs_img"))\\s+((alt="${cid}")|(class="ipfs_img")|(cid="${cid}"))\\s+((alt="${cid}")|(class="ipfs_img")|(cid="${cid}"))></ipfsimage>`,
 		`g`,
 	)
-
-export function transformPostToTemplate(body: string, postImages?: Array<string>) {
-	if (!postImages) {
-		return body
-	}
-	for (const p of postImages) {
-		body = body.replace(imgRegexp(p), `<IpfsImage alt="${p}" class="ipfs_img" :cid="'${p}'" />`)
-	}
-	return body
-}
 
 export function createPostImagesSet(content: string, uploadedImages: Set<string>) {
 	const usedImages: Set<string> = new Set()

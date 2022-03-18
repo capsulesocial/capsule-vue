@@ -101,7 +101,6 @@
 import Vue from 'vue'
 import type { PropType } from 'vue'
 import { mapMutations } from 'vuex'
-import imageCompression from 'browser-image-compression'
 import { HTMLInputEvent } from '@/interfaces/HTMLInputEvent'
 import CloseIcon from '@/components/icons/X.vue'
 import Avatar from '@/components/Avatar.vue'
@@ -109,8 +108,10 @@ import BrandedButton from '@/components/BrandedButton.vue'
 import PencilIcon from '@/components/icons/Pencil.vue'
 import { MutationType, getProfileFromSession, namespace as sessionStoreNamespace } from '~/store/session'
 import { getProfile, setProfile } from '@/backend/profile'
-import { addPhotoToIPFS, getPhotoFromIPFS, preUploadPhoto } from '@/backend/photos'
+import { addPhotoToIPFS, preUploadPhoto } from '@/backend/photos'
 import { URLRegex } from '@/plugins/quality'
+import { getCompressedImage } from '@/backend/utilities/imageCompression'
+import { getPhotoFromIPFS } from '@/backend/getPhoto'
 
 interface IData {
 	newName: string
@@ -208,14 +209,8 @@ export default Vue.extend({
 			}
 			const image = e.target.files[0]
 			if (image) {
-				const options = {
-					maxSizeMB: 5,
-					maxWidthOrHeight: 1024,
-					useWebWorker: true,
-					initialQuality: 0.9,
-				}
 				try {
-					const compressedImage = await imageCompression(image, options)
+					const compressedImage = await getCompressedImage(image)
 					const reader = new FileReader()
 					reader.readAsDataURL(compressedImage)
 					reader.onload = (i: Event) => {

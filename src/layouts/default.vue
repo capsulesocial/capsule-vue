@@ -48,7 +48,7 @@ import Header from '@/components/Header.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
-import { getPhotoFromIPFS } from '@/backend/photos'
+import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import { getFollowersAndFollowing } from '@/backend/following'
 import { IBackground, backgrounds } from '@/config'
 

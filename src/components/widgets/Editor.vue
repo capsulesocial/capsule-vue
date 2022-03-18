@@ -149,16 +149,17 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import imageCompression from 'browser-image-compression'
 import axios from 'axios'
 import XIcon from '@/components/icons/X.vue'
 import UploadIcon from '@/components/icons/Upload.vue'
 import ChevronUp from '@/components/icons/ChevronUp.vue'
 import ChevronDown from '@/components/icons/ChevronDown.vue'
 
-import { addPhotoToIPFS, getPhotoFromIPFS, preUploadPhoto } from '@/backend/photos'
+import { addPhotoToIPFS, preUploadPhoto } from '@/backend/photos'
 import { categories } from '@/config'
 import { Tag } from '@/backend/post'
+import { getCompressedImage } from '@/backend/utilities/imageCompression'
+import { getPhotoFromIPFS } from '@/backend/getPhoto'
 
 interface IData {
 	featuredPhoto: null | any
@@ -278,12 +279,7 @@ export default Vue.extend({
 				return
 			}
 			try {
-				const compressedImage = await imageCompression(image, {
-					maxSizeMB: 5,
-					maxWidthOrHeight: 1920,
-					useWebWorker: true,
-					initialQuality: 0.9,
-				})
+				const compressedImage = await getCompressedImage(image)
 				const reader = new FileReader()
 				reader.readAsDataURL(compressedImage)
 				reader.onload = (i) => {

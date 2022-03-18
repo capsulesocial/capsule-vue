@@ -242,7 +242,7 @@ import SharePopup from '@/components/popups/SharePopup.vue'
 
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 import { getRegularPost, getOnePost, Post } from '@/backend/post'
-import { getPhotoFromIPFS } from '@/backend/photos'
+import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
 import { getReposts } from '@/backend/reposts'
 import { isPostBookmarkedByUser } from '@/backend/bookmarks'

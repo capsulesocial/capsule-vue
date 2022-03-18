@@ -85,14 +85,13 @@ import Nodes from '@/components/Nodes.vue'
 import Widgets from '@/components/Widgets.vue'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
-import PostEditor from '@/components/post/Editor.vue'
 import OnboardingWizard from '@/components/popups/OnboardingWizard.vue'
 import FollowersPopup from '@/components/popups/FollowersPopup.vue'
 import UnauthPopup from '@/components/popups/UnauthPopup.vue'
 
 import { IBackground, backgrounds } from '@/config'
 import { getProfile, Profile } from '@/backend/profile'
-import { getPhotoFromIPFS } from '@/backend/photos'
+import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
 import { IPostResponse } from '@/backend/post'
 import { getBookmarksOfUser } from '@/backend/bookmarks'
@@ -120,7 +119,7 @@ export default Vue.extend({
 		Widgets,
 		Header,
 		Footer,
-		PostEditor,
+		PostEditor: () => import(`@/components/post/Editor.vue`),
 		Nodes,
 		OnboardingWizard,
 		UnauthPopup,
