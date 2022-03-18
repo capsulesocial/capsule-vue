@@ -95,6 +95,7 @@ export default Vue.extend({
 		ConfirmPopup,
 		PencilIcon,
 	},
+	middleware: `auth`,
 	data(): IData {
 		return {
 			profile: null,

@@ -125,6 +125,7 @@ export default Vue.extend({
 		UnauthPopup,
 		FollowersPopup,
 	},
+	middleware: `auth`,
 	data(): IData {
 		return {
 			profile: null,

@@ -76,6 +76,7 @@ export default Vue.extend({
 		Header,
 		UnauthPopup,
 	},
+	middleware: `auth`,
 	data(): IData {
 		return {
 			profile: null,

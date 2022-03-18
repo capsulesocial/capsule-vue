@@ -67,6 +67,7 @@ export default Vue.extend({
 		Header,
 		BrandedButton,
 	},
+	middleware: `auth`,
 	data(): IData {
 		return {
 			myProfile: createDefaultProfile(this.$store.state.session.id),

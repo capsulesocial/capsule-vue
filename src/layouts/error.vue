@@ -41,7 +41,7 @@ export default Vue.extend({
 		BrandedButton,
 		Header,
 	},
-	layout: `error`,
+	middleware: `auth`,
 	props: {
 		error: {
 			type: Object,

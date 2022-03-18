@@ -115,6 +115,7 @@ export default Vue.extend({
 		Footer,
 		UnauthPopup,
 	},
+	middleware: `auth`,
 	data(): IData {
 		return {
 			profile: null,

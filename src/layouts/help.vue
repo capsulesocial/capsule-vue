@@ -76,6 +76,7 @@ export default Vue.extend({
 		ReportWidget,
 		OnboardingWizard,
 	},
+	middleware: `auth`,
 	data(): IData {
 		return {
 			profile: null,

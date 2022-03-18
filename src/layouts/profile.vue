@@ -183,6 +183,7 @@ export default Vue.extend({
 		MutualFollowersPopup,
 		ImagePopup,
 	},
+	middleware: `auth`,
 	data(): IData {
 		return {
 			myProfile: createDefaultProfile(this.$store.state.session.id),
