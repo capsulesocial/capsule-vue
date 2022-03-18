@@ -355,7 +355,7 @@ export default Vue.extend({
 		}
 	},
 	async created() {
-		// Fetch post from IPFS,
+		// Fetch post from IPFS
 		this.post = await getRegularPost(this.$route.params.post)
 		if (!this.post) {
 			this.$toastError(`This post has not been found`)
@@ -384,6 +384,22 @@ export default Vue.extend({
 			}
 		})
 
+		// Get reading time
+		this.calculateReadingTime()
+		// Change URL to social-friendly link
+		createShareableLink(this.$route.params.post)
+			.then((friendlyUrl) => {
+				history.replaceState(null, ``, friendlyUrl)
+			})
+			.catch((err) => {
+				// eslint-disable-next-line no-console
+				console.log(`Cannot replace state to shareable link: ${err.message}`)
+			})
+
+		// Get caption height
+		const caption = document.getElementById(`photoCaption`)
+		this.captionHeight = caption?.offsetHeight
+
 		// unauthenticated
 		if (this.$store.state.session.id === ``) {
 			const postMetadata = await getOnePost(this.$route.params.post, `x`)
@@ -411,16 +427,6 @@ export default Vue.extend({
 		// Get reposts
 		const repostData = await getReposts({ authorID: this.$store.state.session.id }, {})
 		this.myReposts = new Set(repostData.map((p) => p.repost.postCID))
-		// Get caption height
-		const caption = document.getElementById(`photoCaption`)
-		this.captionHeight = caption?.offsetHeight
-		// Get erading time
-		this.calculateReadingTime()
-		// Change URL to social-friendly link
-		const friendlyURL = await createShareableLink(this.$route.params.post)
-		if (window.location.href.substring(0, 16) === friendlyURL.substring(0, 16)) {
-			history.replaceState(null, ``, friendlyURL)
-		}
 	},
 	mounted() {
 		const container = document.getElementById(`post`)
