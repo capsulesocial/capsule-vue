@@ -11,6 +11,7 @@
 import Vue from 'vue'
 
 export default Vue.extend({
+	middleware: `auth`,
 	created() {
 		// Set color mode
 		this.$setColorMode(this.$store.state.settings.darkMode)

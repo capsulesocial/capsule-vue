@@ -96,6 +96,7 @@ export default Vue.extend({
 		Header,
 		Footer,
 	},
+	middleware: `auth`,
 	data(): IData {
 		return {
 			profile: null,

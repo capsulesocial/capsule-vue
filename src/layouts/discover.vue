@@ -90,6 +90,7 @@ export default Vue.extend({
 		Nodes,
 		UnauthPopup,
 	},
+	middleware: `auth`,
 	data(): IData {
 		return {
 			profile: null,
