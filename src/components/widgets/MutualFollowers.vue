@@ -32,7 +32,7 @@ import Vue from 'vue'
 import Avatar from '@/components/Avatar.vue'
 
 import { Profile } from '@/backend/profile'
-import { getPhotoFromIPFS } from '@/backend/photos'
+import { getPhotoFromIPFS } from '@/backend/getPhoto'
 
 interface IData {
 	profiles: Array<Profile>

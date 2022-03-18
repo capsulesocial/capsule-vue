@@ -65,15 +65,13 @@
 import Vue from 'vue'
 import ogImage from '@/assets/images/util/ogImage.png'
 
-import EditorWidgets from '@/components/widgets/Editor.vue'
-import PostEditor from '@/components/post/Editor.vue'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 import PencilIcon from '@/components/icons/Pencil.vue'
 import DraftsPopup from '@/components/popups/DraftsPopup.vue'
 import ConfirmPopup from '@/components/popups/ConfirmPopup.vue'
 import { getProfile, Profile } from '@/backend/profile'
-import { getPhotoFromIPFS } from '@/backend/photos'
+import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import { IBackground, backgrounds } from '@/config'
 
 interface IData {
@@ -89,8 +87,8 @@ interface IData {
 
 export default Vue.extend({
 	components: {
-		EditorWidgets,
-		PostEditor,
+		EditorWidgets: () => import(`@/components/widgets/Editor.vue`),
+		PostEditor: () => import(`@/components/post/Editor.vue`),
 		Header,
 		Footer,
 		DraftsPopup,

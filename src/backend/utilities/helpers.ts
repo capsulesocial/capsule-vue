@@ -1,5 +1,3 @@
-import imageCompression from 'browser-image-compression'
-
 export interface ISignedIPFSObject<T> {
 	data: T
 	sig: string
@@ -53,15 +51,6 @@ export function isValidFileType(fileType: string) {
 		return false
 	}
 	return true
-}
-
-export function getCompressedImage(file: File) {
-	return imageCompression(file, {
-		maxSizeMB: 5,
-		maxWidthOrHeight: 1920,
-		useWebWorker: true,
-		initialQuality: 0.9,
-	})
 }
 
 function parseJwt(token: string) {

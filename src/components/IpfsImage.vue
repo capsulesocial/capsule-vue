@@ -16,7 +16,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { getPhotoFromIPFS } from '@/backend/photos'
+import { getPhotoFromIPFS } from '@/backend/getPhoto'
 
 interface IData {
 	image: null | string

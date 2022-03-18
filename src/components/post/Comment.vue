@@ -181,7 +181,7 @@ import BinIcon from '@/components/icons/Bin.vue'
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 import { feelings, faces } from '@/config'
 import { createComment, getComment, getCommentsOfPost, ICommentData, sendComment } from '@/backend/comment'
-import { getPhotoFromIPFS } from '@/backend/photos'
+import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import { getProfileFromSession } from '@/store/session'
 import { sendPostDeletion } from '@/backend/postDeletion'
 

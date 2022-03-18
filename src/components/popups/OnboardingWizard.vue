@@ -112,10 +112,9 @@
 <script lang="ts">
 import Vue from 'vue'
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
-import { getPhotoFromIPFS } from '@/backend/photos'
+import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import CloseIcon from '@/components/icons/X.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
-import EditProfile from '@/components/popups/Settings.vue'
 
 interface IData {
 	step: number
@@ -130,7 +129,7 @@ export default Vue.extend({
 	components: {
 		CloseIcon,
 		BrandedButton,
-		EditProfile,
+		EditProfile: () => import(`@/components/popups/Settings.vue`),
 	},
 	data(): IData {
 		return {

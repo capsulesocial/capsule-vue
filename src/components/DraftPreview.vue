@@ -64,7 +64,7 @@ import ImageIcon from '@/components/icons/Image.vue'
 import MoreIcon from '@/components/icons/More.vue'
 import BinIcon from '@/components/icons/Bin.vue'
 
-import { getPhotoFromIPFS } from '@/backend/photos'
+import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import { Post } from '@/backend/post'
 
 type DraftPost = Omit<Post, `authorID`>

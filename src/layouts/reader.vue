@@ -55,7 +55,7 @@ import UnauthPopup from '@/components/popups/UnauthPopup.vue'
 
 import { IBackground, backgrounds } from '@/config'
 import { getProfile, Profile } from '@/backend/profile'
-import { getPhotoFromIPFS } from '@/backend/photos'
+import { getPhotoFromIPFS } from '@/backend/getPhoto'
 
 interface FeaturedPhoto {
 	photo: string | null

@@ -144,7 +144,7 @@ import UnauthPopup from '@/components/popups/UnauthPopup.vue'
 
 import { IBackground, backgrounds } from '@/config'
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
-import { getPhotoFromIPFS } from '@/backend/photos'
+import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
 import { getUserInfoNEAR } from '@/backend/near'
 

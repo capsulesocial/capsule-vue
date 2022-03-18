@@ -101,13 +101,11 @@ import {
 	ipfsImageRule,
 	createPostImagesSet,
 	counterModuleFactory,
-} from '@/pages/post/editorExtensions'
+} from '@/pages/post/quillExtensions'
 import { createRegularPost, sendRegularPost } from '@/backend/post'
 import { preUploadPhoto, uploadPhoto } from '@/backend/photos'
 import { isValidFileType } from '@/backend/utilities/helpers'
 import textLimits from '@/backend/utilities/text_limits'
-
-const Delta = Quill.import(`delta`)
 
 interface IData {
 	title: string
@@ -377,6 +375,7 @@ export default Vue.extend({
 			}
 		},
 		handleCutPaste(range: RangeStatic, pastedText: string) {
+			const Delta = Quill.import(`delta`)
 			const delta = new Delta().compose(new Delta().retain(range.index + range.length).insert(pastedText))
 			this.qeditor?.updateContents(delta)
 			setTimeout(() => this.qeditor?.setSelection(range.index + pastedText.length, 0, `user`), 0)

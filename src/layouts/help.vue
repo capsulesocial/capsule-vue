@@ -56,7 +56,7 @@ import OnboardingWizard from '@/components/popups/OnboardingWizard.vue'
 
 import { IBackground, backgrounds } from '@/config'
 import { getProfile, Profile } from '@/backend/profile'
-import { getPhotoFromIPFS } from '@/backend/photos'
+import { getPhotoFromIPFS } from '@/backend/getPhoto'
 
 interface IData {
 	profile: Profile | null

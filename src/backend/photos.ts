@@ -1,9 +1,9 @@
 import axios from 'axios'
-import cache from './utilities/caching'
 import ipfs from './utilities/ipfs'
 import { nodeUrl, sigValidity } from './utilities/config'
 import { signContent } from './utilities/keys'
-import { getCompressedImage, uint8ArrayToHexString } from './utilities/helpers'
+import { uint8ArrayToHexString } from './utilities/helpers'
+import { getCompressedImage } from './utilities/imageCompression'
 
 interface IUploadPhotoResult {
 	cid: string
@@ -52,9 +52,3 @@ export function uploadPhoto(image: File) {
 		}
 	})
 }
-
-function _getPhotoFromIPFS(cid: string) {
-	return ipfs().getData(cid)
-}
-
-export const getPhotoFromIPFS = cache(_getPhotoFromIPFS)
