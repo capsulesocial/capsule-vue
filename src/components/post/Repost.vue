@@ -16,7 +16,7 @@
 			v-show="showReposts"
 			class="bg-lightBG dark:bg-darkBG text-lightPrimaryText dark:text-darkPrimaryText border-lightBorder modal-animation absolute z-20 flex w-40 flex-col rounded-lg border p-2 shadow-lg"
 			:class="dark ? `dropdownRepostOpenDark` : `dropdownRepostOpen`"
-			style="left: 50px"
+			style="left: 50px; bottom: 0px"
 		>
 			<!-- Simple Repost -->
 			<button
