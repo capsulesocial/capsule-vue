@@ -408,17 +408,17 @@ export const feelings = {
 }
 
 export const avatars = [
-	require(`@/assets/images/avatars/beats.jpeg`),
-	require(`@/assets/images/avatars/cassete.jpeg`),
-	require(`@/assets/images/avatars/footballhead.jpeg`),
-	require(`@/assets/images/avatars/hiphopblood.jpeg`),
-	require(`@/assets/images/avatars/hiphopcribs.jpeg`),
-	require(`@/assets/images/avatars/hiphopking.jpeg`),
-	require(`@/assets/images/avatars/meathead.jpeg`),
-	require(`@/assets/images/avatars/blues.jpeg`),
-	require(`@/assets/images/avatars/fastfood.jpeg`),
-	require(`@/assets/images/avatars/streetart.jpeg`),
-	require(`@/assets/images/avatars/strongwomen.jpeg`),
+	require(`@/assets/images/avatars/beats.webp`),
+	require(`@/assets/images/avatars/cassete.webp`),
+	require(`@/assets/images/avatars/footballhead.webp`),
+	require(`@/assets/images/avatars/hiphopblood.webp`),
+	require(`@/assets/images/avatars/hiphopcribs.webp`),
+	require(`@/assets/images/avatars/hiphopking.webp`),
+	require(`@/assets/images/avatars/meathead.webp`),
+	require(`@/assets/images/avatars/blues.webp`),
+	require(`@/assets/images/avatars/fastfood.webp`),
+	require(`@/assets/images/avatars/streetart.webp`),
+	require(`@/assets/images/avatars/strongwomen.webp`),
 ]
 
 export const categories = [
