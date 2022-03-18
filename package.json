@@ -11,6 +11,10 @@
 	"private": true,
 	"main": "main.js",
 	"license": "GNU GENERAL PUBLIC LICENSE",
+	"sideEffects": [
+		"*.css",
+		"*.vue"
+	],
 	"build": {
 		"files": [
 			"**/*",
