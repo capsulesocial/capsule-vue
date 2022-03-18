@@ -5,80 +5,80 @@
 @layer base {
 	@font-face {
 		font-family: 'Noto';
-		src: url(assets/fonts/NotoSans-Thin.ttf);
+		src: url(assets/fonts/NotoSans-Thin.woff2);
 		font-weight: 100;
 	}
 	@font-face {
 		font-family: 'Noto';
-		src: url(assets/fonts/NotoSans-ExtraLight.ttf);
+		src: url(assets/fonts/NotoSans-ExtraLight.woff2);
 		font-weight: 200;
 	}
 	@font-face {
 		font-family: 'Noto';
-		src: url(assets/fonts/NotoSans-Light.ttf);
+		src: url(assets/fonts/NotoSans-Light.woff2);
 		font-weight: 300;
 	}
 	@font-face {
 		font-family: 'Noto';
-		src: url(assets/fonts/NotoSans-Regular.ttf);
+		src: url(assets/fonts/NotoSans-Regular.woff2);
 		font-weight: 400;
 	}
 	@font-face {
 		font-family: 'Noto';
-		src: url(assets/fonts/NotoSans-Italic.ttf);
+		src: url(assets/fonts/NotoSans-Italic.woff2);
 		font-weight: 400;
 		font-style: italic;
 	}
 	@font-face {
 		font-family: 'Noto';
-		src: url(assets/fonts/NotoSans-Medium.ttf);
+		src: url(assets/fonts/NotoSans-Medium.woff2);
 		font-weight: 500;
 	}
 	@font-face {
 		font-family: 'Noto';
-		src: url(assets/fonts/NotoSans-SemiBold.ttf);
+		src: url(assets/fonts/NotoSans-SemiBold.woff2);
 		font-weight: 600;
 	}
 	@font-face {
 		font-family: 'Noto';
-		src: url(assets/fonts/NotoSans-Bold.ttf);
+		src: url(assets/fonts/NotoSans-Bold.woff2);
 		font-weight: 700;
 	}
 	@font-face {
 		font-family: 'Noto';
-		src: url(assets/fonts/NotoSans-BoldItalic.ttf);
+		src: url(assets/fonts/NotoSans-BoldItalic.woff2);
 		font-weight: 700;
 		font-style: italic;
 	}
 	@font-face {
 		font-family: 'Noto';
-		src: url(assets/fonts/NotoSans-ExtraBold.ttf);
+		src: url(assets/fonts/NotoSans-ExtraBold.woff2);
 		font-weight: 800;
 	}
 	@font-face {
 		font-family: 'Noto';
-		src: url(assets/fonts/NotoSans-Black.ttf);
+		src: url(assets/fonts/NotoSans-Black.woff2);
 		font-weight: 900;
 	}
 	@font-face {
 		font-family: 'NotoSerif';
-		src: url(assets/fonts/NotoSerif-Regular.ttf);
+		src: url(assets/fonts/NotoSerif-Regular.woff2);
 		font-weight: 400;
 	}
 	@font-face {
 		font-family: 'NotoSerif';
-		src: url(assets/fonts/NotoSerif-Italic.ttf);
+		src: url(assets/fonts/NotoSerif-Italic.woff2);
 		font-weight: 400;
 		font-style: italic;
 	}
 	@font-face {
 		font-family: 'NotoSerif';
-		src: url(assets/fonts/NotoSerif-Bold.ttf);
+		src: url(assets/fonts/NotoSerif-Bold.woff2);
 		font-weight: 700;
 	}
 	@font-face {
 		font-family: 'NotoSerif';
-		src: url(assets/fonts/NotoSerif-BoldItalic.ttf);
+		src: url(assets/fonts/NotoSerif-BoldItalic.woff2);
 		font-weight: 700;
 		font-style: italic;
 	}
