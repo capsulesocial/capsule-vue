@@ -38,12 +38,14 @@
 								class="hidden lg:block"
 							/>
 							<!-- Timestamp and reading time -->
-							<div class="flex flex-row items-center lg:ml-8">
+							<div class="flex flex-col lg:flex-row items-center lg:ml-8">
 								<span class="text-sm text-gray5 dark:text-gray3">
 									{{ $formatDate(post.timestamp) }}
 								</span>
-								<div v-if="readingTime" class="h-1 w-1 rounded bg-gray5 dark:bg-gray3 mx-2"></div>
-								<span v-if="readingTime" class="text-sm text-gray5 dark:text-gray3"> {{ readingTime }} min read </span>
+								<div v-if="readingTime" class="hidden lg:block h-1 w-1 rounded bg-gray5 dark:bg-gray3 mx-2"></div>
+								<span v-if="readingTime" class="text-xs lg:text-sm text-gray5 dark:text-gray3">
+									{{ readingTime }} min read
+								</span>
 							</div>
 						</div>
 						<span class="flex items-center">
