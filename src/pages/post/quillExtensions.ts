@@ -62,6 +62,16 @@ export const ipfsImageRule: TurndownService.Rule = {
 	},
 }
 
+export const listRule: TurndownService.Rule = {
+	filter: [`li`],
+	replacement: (_, node) => {
+		if (`outerHTML` in node) {
+			return node.outerHTML
+		}
+		throw new Error(`outerHTML does not exist on node`)
+	},
+}
+
 // Misc
 
 const imgRegexp = (cid: string) =>
