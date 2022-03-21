@@ -101,6 +101,7 @@ import {
 	ipfsImageRule,
 	createPostImagesSet,
 	counterModuleFactory,
+	listRule,
 } from '@/pages/post/quillExtensions'
 import { createRegularPost, sendRegularPost } from '@/backend/post'
 import { preUploadPhoto, uploadPhoto } from '@/backend/photos'
@@ -157,6 +158,7 @@ const turndownService = new Turndown()
 turndownService.keep([`u`])
 turndownService.addRule(`codeblock`, preRule)
 turndownService.addRule(`ipfsimage`, ipfsImageRule)
+turndownService.addRule(`listRule`, listRule)
 turndownService.use(strikethrough)
 
 export default Vue.extend({
