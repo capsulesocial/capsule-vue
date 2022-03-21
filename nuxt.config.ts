@@ -35,8 +35,6 @@ const config: NuxtConfig = {
 			{
 			  hid: 'og:image',property: 'og:image',content:'/discover.png',
 			},
-			{ property: 'og:image:width', content: '740' },
-			{ property: 'og:image:height', content: '300' },
 			{ name: 'twitter:site', content: '@capsuleSoc' },
 			{ name: 'twitter:card', content: 'summary_large_image' },
 			{
