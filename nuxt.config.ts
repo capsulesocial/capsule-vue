@@ -103,6 +103,7 @@ const config: NuxtConfig = {
 
 	tailwindcss: {
 		cssPath: '~/assets/css/tailwind.css',
+		configPath: '~/tailwind.config.ts',
 	},
 
 	// Modules: https://go.nuxtjs.dev/config-modules
