@@ -17,10 +17,10 @@ const config: NuxtConfig = {
 		meta: [
 			{ charset: 'utf-8' },
 			{ name: 'viewport', content: 'width=device-width, initial-scale=1' },
-			{ hid: 'capsule', name: 'Blogchain', content: 'Decentralized discourse' },
+			{ hid: 'capsule', name: 'Blogchain', content: 'Decentralized publishing platform for writers' },
 			// hid is used as unique identifier. Do not use `vmid` for it as it will not work
 			{
-			  property: 'og:site_name',content:'Decentralized discourse',
+			  property: 'og:site_name',content:'Decentralized publishing platform for writers',
 			},
 			{ hid: 'og:type', property: 'og:type', content: 'website' },
 			{
@@ -30,10 +30,10 @@ const config: NuxtConfig = {
 			  hid: 'og:title',property: 'og:title',content:'Blogchain',
 			},
 			{
-			  hid: 'og:description',property: 'og:description',content:'Decentralized discourse',
+			  hid: 'og:description',property: 'og:description',content:'Decentralized publishing platform for writers',
 			},
 			{
-			  hid: 'og:image',property: 'og:image',content:'/discover.webp',
+			  hid: 'og:image',property: 'og:image',content:'/discover.png',
 			},
 			{ property: 'og:image:width', content: '740' },
 			{ property: 'og:image:height', content: '300' },
@@ -46,10 +46,10 @@ const config: NuxtConfig = {
 			  hid: 'twitter:title',name: 'twitter:title',content:'Blogchain',
 			},
 			{
-			  hid: 'twitter:description',name: 'twitter:description',content:'Decentralized discourse',
+			  hid: 'twitter:description',name: 'twitter:description',content:'Decentralized publishing platform for writers',
 			},
 			{
-			  hid: 'twitter:image',name: 'twitter:image',content:'/discover.webp',
+			  hid: 'twitter:image',name: 'twitter:image',content:'/discover.png',
 			}
 		],
 		link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
