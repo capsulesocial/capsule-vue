@@ -91,3 +91,5 @@ dist
 main.js
 main.dev.js
 main.dev.js.map
+
+.output

@@ -40,16 +40,16 @@
 		]
 	},
 	"scripts": {
-		"web": "nuxt -m=client",
-		"start": "nuxt start",
-		"build:web": "nuxt build -m=client",
+		"web": "nuxi dev -m=client",
+		"start": "nuxi preview",
+		"build:web": "nuxi generate -m=client",
 		"lint": "yarn eslint -c .eslintrc.js --ext .ts,.js,.vue ./src",
 		"lint-fix": "yarn eslint -c .eslintrc.js --fix --ext .ts,.js,.vue ./src",
 		"postinstall": "husky install"
 	},
 	"dependencies": {
 		"@nuxtjs/dotenv": "^1.4.1",
-		"@tailwindcss/typography": "^0.4.1",
+		"@tailwindcss/typography": "^0.5.2",
 		"@toruslabs/customauth": "^7.0.2",
 		"@toruslabs/openlogin-ed25519": "^1.6.0",
 		"axios": "^0.26.1",
@@ -61,7 +61,7 @@
 		"lodash": "^4.17.21",
 		"marked": "^4.0.12",
 		"near-api-js": "^0.44.2",
-		"nuxt": "^2.15.8",
+		"nuxt-edge": "latest",
 		"portal-vue": "^2.1.7",
 		"quill": "^1.3.7",
 		"quilljs-markdown": "^1.1.10",
@@ -75,10 +75,11 @@
 	"devDependencies": {
 		"@commitlint/cli": "^16.2.3",
 		"@commitlint/config-conventional": "^16.2.1",
+		"@nuxt/bridge": "npm:@nuxt/bridge-edge",
 		"@nuxt/types": "^2.15.8",
 		"@nuxt/typescript-build": "^2.1.0",
 		"@nuxtjs/eslint-config-typescript": "^9.0.0",
-		"@nuxtjs/tailwindcss": "^4.2.1",
+		"@nuxtjs/tailwindcss": "^5.0.2",
 		"@types/dompurify": "^2.3.3",
 		"@types/intl-tel-input": "^17.0.4",
 		"@types/lodash": "^4.14.180",

@@ -22,3 +22,5 @@ declare module 'turndown-plugin-gfm' {
 	const strikethrough: any
 	export { strikethrough }
 }
+
+declare module '@tailwindcss/typography'
