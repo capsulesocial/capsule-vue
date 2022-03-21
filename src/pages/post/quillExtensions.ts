@@ -63,7 +63,7 @@ export const ipfsImageRule: TurndownService.Rule = {
 }
 
 export const listRule: TurndownService.Rule = {
-	filter: [`li`],
+	filter: [`ul`, `ol`, `li`],
 	replacement: (_, node) => {
 		if (`outerHTML` in node) {
 			return node.outerHTML
