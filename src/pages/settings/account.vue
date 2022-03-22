@@ -106,7 +106,7 @@ import { getNearPrivateKey } from '@/backend/near'
 import CopyIcon from '@/components/icons/Copy.vue'
 import ChevronLeft from '@/components/icons/ChevronLeft.vue'
 import PencilIcon from '@/components/icons/Pencil.vue'
-import { generateInviteCode, getInvitesRemaining } from '@/backend/invite'
+import { generateInviteCode, getInvitesRemaining, getUserExistingInvites } from '@/backend/invite'
 
 interface IData {
 	backgroundImage: null | string | ArrayBuffer
@@ -136,6 +136,7 @@ export default Vue.extend({
 	},
 	created() {
 		this.getInviteCodesRemaining()
+		this.getInviteInfo()
 	},
 	methods: {
 		...mapMutations(sessionStoreNamespace, {
@@ -202,6 +203,15 @@ export default Vue.extend({
 		async getInviteCodesRemaining() {
 			const response = await getInvitesRemaining(this.$store.state.session.id)
 			this.inviteCodesRemaining = response
+		},
+		async getInviteInfo() {
+			try {
+				const res = await getUserExistingInvites(this.$store.state.session.id)
+				console.log(res)
+			} catch (err: any) {
+				this.$toastError(err)
+				throw new Error(err)
+			}
 		},
 		redirectProfile() {
 			this.$store.commit(`settings/setRecentlyInSettings`, true)
