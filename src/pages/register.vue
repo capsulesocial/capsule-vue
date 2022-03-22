@@ -31,7 +31,7 @@
 				/>
 			</div>
 		</section>
-		<p class="text-gray5 dark:text-gray3 px-4 pt-2 pb-5 pl-10 text-sm">
+		<p class="text-gray5 dark:text-gray3 px-4 py-5 pl-10 text-sm">
 			© {{ new Date().getFullYear().toString() }} Capsule Social, Inc.
 		</p>
 		<div
