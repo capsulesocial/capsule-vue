@@ -52,6 +52,12 @@
 								:userIsFollowed="userIsFollowed"
 								class="header-profile"
 							/>
+							<!-- Subscription button -->
+							<SubscribeButton
+								:toggleSubscription="toggleSubscription"
+								:userIsSubscribed="false"
+								class="header-profile"
+							/>
 						</div>
 					</div>
 				</div>
@@ -130,6 +136,12 @@
 							v-else
 							:toggleFriend="toggleFriend"
 							:userIsFollowed="userIsFollowed"
+							class="header-profile flex-shrink-0"
+						/>
+						<!-- Subscription button -->
+						<SubscribeButton
+							:toggleSubscription="toggleSubscription"
+							:userIsSubscribed="false"
 							class="header-profile flex-shrink-0"
 						/>
 					</div>
@@ -214,6 +226,7 @@ import Avatar from '@/components/Avatar.vue'
 import FriendButton from '@/components/FriendButton.vue'
 import SecondaryButton from '@/components/SecondaryButton.vue'
 import BackButton from '@/components/icons/ChevronLeft.vue'
+import SubscribeButton from '@/components/SubscribeButton.vue'
 import PencilIcon from '@/components/icons/Pencil.vue'
 import { getProfile, Profile } from '@/backend/profile'
 
@@ -238,6 +251,7 @@ export default Vue.extend({
 		SettingsPopup: () => import(`@/components/popups/Settings.vue`),
 		BackButton,
 		PencilIcon,
+		SubscribeButton,
 	},
 	beforeRouteEnter(to, from, next) {
 		next((vm: any) => {
@@ -266,6 +280,10 @@ export default Vue.extend({
 			required: true,
 		},
 		toggleFriend: {
+			type: Function as PropType<() => void>,
+			required: true,
+		},
+		toggleSubscription: {
 			type: Function as PropType<() => void>,
 			required: true,
 		},

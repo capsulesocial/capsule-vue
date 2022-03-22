@@ -28,6 +28,7 @@
 							:followers="followers"
 							:following="following"
 							:toggleFriend="toggleFriend"
+							:toggleSubscription="toggleSubscription"
 							:updateFollowers="updateFollowers"
 							:userIsFollowed="userIsFollowed"
 							:mutuals="mutuals"
@@ -123,6 +124,12 @@
 		/>
 		<ImagePopup v-if="showAvatar" :image="visitAvatar" @close="showAvatar = false" />
 		<UnauthPopup />
+		<SubscriptionsPopup
+			v-if="showSubscriptions"
+			:author="visitProfile"
+			:authorAvatar="visitAvatar"
+			@close="showSubscriptions = false"
+		/>
 		<portal-target name="card-popup"></portal-target>
 	</main>
 </template>
@@ -137,6 +144,7 @@ import Footer from '@/components/Footer.vue'
 import FollowersPopup from '@/components/popups/FollowersPopup.vue'
 import FollowingPopup from '@/components/popups/FollowingPopup.vue'
 import MutualFollowersPopup from '@/components/popups/MutualFollowersPopup.vue'
+import SubscriptionsPopup from '@/components/popups/SubscriptionsPopup.vue'
 import ImagePopup from '@/components/popups/Image.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 import UnauthPopup from '@/components/popups/UnauthPopup.vue'
@@ -165,6 +173,7 @@ interface IData {
 	showFollowing: boolean
 	showMutuals: boolean
 	showAvatar: boolean
+	showSubscriptions: boolean
 }
 
 export default Vue.extend({
@@ -180,6 +189,7 @@ export default Vue.extend({
 		FollowingPopup,
 		MutualFollowersPopup,
 		ImagePopup,
+		SubscriptionsPopup,
 	},
 	middleware: `auth`,
 	data(): IData {
@@ -201,6 +211,7 @@ export default Vue.extend({
 			showAvatar: false,
 			myAvatar: undefined,
 			visitAvatar: undefined,
+			showSubscriptions: false,
 		}
 	},
 	watch: {
@@ -321,6 +332,18 @@ export default Vue.extend({
 				} catch (err: unknown) {
 					this.$handleError(err)
 				}
+			}
+		},
+		toggleSubscription(authorID: string) {
+			// Unauth
+			if (this.$store.state.session.id === ``) {
+				this.$store.commit(`settings/toggleUnauthPopup`)
+				return
+			}
+			// Prevent self-subscribing
+			if (authorID !== this.$store.state.session.id) {
+				// Send subscription
+				this.showSubscriptions = !this.showSubscriptions
 			}
 		},
 		async updateFollowers() {
