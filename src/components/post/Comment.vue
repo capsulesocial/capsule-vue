@@ -66,7 +66,7 @@
 								</div>
 								<!-- Text comment -->
 								<p class="break-words w-4/5 py-1 mb-6 font-sans text-lg leading-relaxed dark:text-darkPrimaryText">
-									{{ content }}
+									<span style="white-space: pre-line">{{ content }}</span>
 								</p>
 
 								<!-- Reply button -->
