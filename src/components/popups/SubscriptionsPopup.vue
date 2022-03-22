@@ -28,13 +28,49 @@
 						<CloseIcon />
 					</button>
 				</div>
-				<!-- Choose a subscription plan -->
-				<div class="w-full flex flex-col justify-center text-center">
-					<CrownIcon class="fill-neutral stroke-neutral self-center" />
-					<h6 class="font-semibold text-neutral">Choose a subscription plan</h6>
-				</div>
+				<!-- Step 0: Choose a subscription plan -->
+				<article v-show="step === 0">
+					<div class="w-full flex flex-col justify-center text-center px-10">
+						<CrownIcon class="text-neutral stroke-neutral self-center w-12 h-12 mb-2" />
+						<h6 class="font-semibold text-neutral text-xl mb-2">Choose a subscription plan</h6>
+						<p class="text-base text-center text-gray5 mb-4">
+							Choose a subscription plan and a billing method to access subscribers-only content of
+							<span class="font-semibold text-primary">{{ author.name }}</span>
+						</p>
+					</div>
+					<!-- Subscriptions -->
+					<div
+						class="flex flex-row items-center justify-between mx-5 mb-5 p-4 border border-neutral shadow-lg rounded-lg"
+					>
+						<!-- Check mark -->
+						<button class="focus:outline-none" @click="isSelected = true">
+							<CheckCircleIcon :isChecked="isSelected" class="text-neutral w-8 h-8 mx-2" />
+						</button>
+						<div class="flex flex-grow flex-col ml-4 mr-2">
+							<h3 class="text-xl font-semibold">Monthly subscription</h3>
+							<p class="text-gray5">Base monthly subscription to access this author's premium content</p>
+						</div>
+						<div class="font-semibold text-lg">$2<span class="text-gray5">/month</span></div>
+					</div>
+					<div class="flex flex-row-reverse my-4">
+						<SecondaryButton :text="`Next`" :action="nextStep" />
+					</div>
+				</article>
+				<!-- Step 1: Payment -->
+				<article v-show="step === 1">
+					<div class="w-full flex flex-col justify-center text-center px-10">
+						<CrownIcon class="text-neutral stroke-neutral self-center w-12 h-12 mb-2" />
+						<h6 class="font-semibold text-neutral text-xl mb-2">Your order</h6>
+						<p class="text-base text-center text-gray5 mb-2">
+							Tier 1 monthly subscription plan to
+							<span class="font-semibold text-primary">{{ author.name }}</span>
+						</p>
+						<div class="font-semibold text-lg mb-4">$2<span class="text-gray5">/month</span></div>
+					</div>
+					<!-- Payment Methods -->
+					INSERT PAYMENT METHODS
+				</article>
 			</div>
-			<SecondaryButton />
 		</section>
 	</div>
 </template>
@@ -46,14 +82,16 @@ import Avatar from '@/components/Avatar.vue'
 import SecondaryButton from '@/components/SecondaryButton.vue'
 import CloseIcon from '@/components/icons/X.vue'
 import CrownIcon from '@/components/icons/Crown.vue'
+import CheckCircleIcon from '@/components/icons/CheckCircle.vue'
 import { Profile } from '@/backend/profile'
 
 interface IData {
-	isLoading: boolean
+	step: number
+	isSelected: boolean
 }
 
 export default Vue.extend({
-	components: { Avatar, CloseIcon, SecondaryButton, CrownIcon },
+	components: { Avatar, CloseIcon, SecondaryButton, CrownIcon, CheckCircleIcon },
 	props: {
 		isSubscribed: {
 			type: Boolean as PropType<Boolean>,
@@ -70,7 +108,8 @@ export default Vue.extend({
 	},
 	data(): IData {
 		return {
-			isLoading: true,
+			step: 0,
+			isSelected: false,
 		}
 	},
 	created() {
@@ -80,6 +119,9 @@ export default Vue.extend({
 		window.addEventListener(`click`, this.handleCloseClick, false)
 	},
 	methods: {
+		nextStep(): void {
+			this.step += 1
+		},
 		handleCloseClick(e: any): void {
 			if (!e.target || e.target.parentNode === null || e.target.parentNode.classList === undefined) {
 				return
