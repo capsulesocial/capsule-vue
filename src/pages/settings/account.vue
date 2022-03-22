@@ -209,8 +209,7 @@ export default Vue.extend({
 		async getInviteInfo() {
 			try {
 				const res = await getUserExistingInvites(this.$store.state.session.id)
-				console.log(res)
-				this.inviteCodes.push(res)
+				this.inviteCodes = res
 			} catch (err: any) {
 				this.$toastError(err)
 				throw new Error(err)

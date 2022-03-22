@@ -6,7 +6,7 @@ import { signContent } from './utilities/keys'
 export interface ICodesData {
 	code: string
 	exp: number
-	used: boolean
+	used?: true
 }
 
 export async function verifyCodeAndGetToken(inviteCode: string) {
@@ -47,9 +47,7 @@ export async function getInvitesRemaining(inviter: string): Promise<number> {
 	return response.data.data
 }
 
-export async function getUserExistingInvites(
-	inviter: string,
-): Promise<{ inviteCode: string; invitesRemaining: number }> {
+export async function getUserExistingInvites(inviter: string): Promise<ICodesData[]> {
 	const exp = Date.now() + sigValidity
 	const { sig } = await signContent({ inviter, exp, action: `existingInvites` })
 
