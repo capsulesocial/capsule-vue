@@ -15,6 +15,7 @@ export interface Session {
 	socials: Profile[`socials`]
 	background: Profile[`background`]
 	cid: string
+	subscriptionEnabled: boolean
 }
 
 export const namespace = `session`
@@ -88,6 +89,7 @@ export function createDefaultSession(id: string): Session {
 		avatar: ``,
 		website: ``,
 		background: ``,
+		subscriptionEnabled: false,
 	}
 }
 
@@ -117,5 +119,6 @@ export function createSessionFromProfile(cid: string, p: Profile): Session {
 		socials: [],
 		website: p.website,
 		background: p.background,
+		subscriptionEnabled: true,
 	}
 }
