@@ -52,21 +52,20 @@
 			>
 			You can also join our community on Discord, or follow our company blog to receive future updates.
 		</p>
-		<div class="flex items-center justify-between py-6">
-			<a href="https://discord.gg/sZWjf3E6bY" target="_blank">
+		<div class="flex items-center justify-center py-6">
+			<a href="https://discord.gg/sZWjf3E6bY" target="_blank" class="mr-2">
 				<button
 					style="padding: 0.8rem 1.5rem; background-color: #7289da"
 					class="focus:outline-none flex transform items-center justify-between rounded-lg font-bold transition duration-500 ease-in-out hover:shadow-lg"
 				>
 					<DiscordLogo class="icon text-lightOnPrimaryText mr-2 h-6 w-6 fill-current" />
-					<span class="text-lightOnPrimaryText hidden font-sans text-sm xl:block xl:text-base"> Join </span>
 					<span class="text-lightOnPrimaryText ml-1 font-sans text-sm xl:text-base"> Discord </span>
 				</button>
 			</a>
 			<nuxt-link
 				to="/id/capsule"
 				style="padding: 0.9rem 1.7rem"
-				class="focus:outline-none border-lightBorder text-lightPrimaryText bg-lightBG flex transform items-center justify-between rounded-lg font-bold shadow-lg transition duration-500 ease-in-out hover:shadow-lg"
+				class="focus:outline-none border-lightBorder text-lightPrimaryText bg-lightBG flex transform items-center justify-between rounded-lg font-bold shadow-lg transition duration-500 ease-in-out hover:shadow-lg ml-2"
 			>
 				<CapsuleLogo class="icon text-lightPrimaryText mr-3 h-5 w-5 fill-current" />
 				<span class="text-lightPrimaryText hidden font-sans text-sm xl:block xl:text-base"> Latest </span>
