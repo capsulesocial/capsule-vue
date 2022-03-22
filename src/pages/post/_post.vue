@@ -277,6 +277,7 @@ interface IData {
 	captionHeight: number | undefined
 	showShare: boolean
 	readingTime: number | null
+	realURL: string
 }
 
 export default Vue.extend({
@@ -294,6 +295,12 @@ export default Vue.extend({
 		PostCard,
 		RepostButton,
 		SharePopup,
+	},
+	beforeRouteLeave(to, from, next) {
+		if (this.realURL !== `` && to.path !== from.path) {
+			history.replaceState(null, ``, this.realURL)
+		}
+		next()
 	},
 	layout: `reader`,
 	// mixins: [markdown],
@@ -322,6 +329,7 @@ export default Vue.extend({
 			captionHeight: 0,
 			showShare: false,
 			readingTime: null,
+			realURL: ``,
 		}
 	},
 	head() {
@@ -388,7 +396,8 @@ export default Vue.extend({
 
 		// Get reading time
 		this.calculateReadingTime()
-		// Change URL to social-friendly link
+		// Change URL to social-friendly link, preserve real for Vue router
+		this.realURL = this.$route.fullPath
 		createShareableLink(this.$route.params.post)
 			.then((friendlyUrl) => {
 				history.replaceState(null, ``, friendlyUrl)
