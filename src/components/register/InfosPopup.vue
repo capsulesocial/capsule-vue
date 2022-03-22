@@ -1,10 +1,10 @@
 <template>
-	<div class="popup flex w-full justify-center max-h-90">
+	<div class="popup flex w-full justify-center">
 		<!-- Container -->
 		<section>
 			<div
 				style="width: 600px; backdrop-filter: blur(5px)"
-				class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation z-10 mr-5 overflow-y-auto rounded-lg bg-gradient-to-r px-6 pt-4 pb-2 shadow-lg"
+				class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation z-10 mr-5 max-h-90 overflow-y-auto rounded-lg bg-gradient-to-r px-6 pt-4 pb-2 shadow-lg"
 			>
 				<div class="sticky flex items-center justify-between">
 					<h2 class="text-primary dark:text-secondary text-2xl font-semibold">Sign Up Methods</h2>
