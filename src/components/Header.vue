@@ -29,7 +29,7 @@
 				<!-- Dropdown: Profile, settings, disconnect -->
 				<div
 					v-show="showDropdown"
-					class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation absolute mt-16 flex flex-col rounded-lg border bg-gradient-to-r p-4 shadow-lg backdrop-blur-lg backdrop-filter"
+					class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation absolute mt-16 flex flex-col rounded-lg border bg-gradient-to-r p-4 shadow-lg backdrop-blur-lg backdrop-filter right-0"
 					:class="$colorMode.dark ? `dropdownOpenDark` : `dropdownOpen`"
 				>
 					<!-- Unauthenticated: Log in -->
@@ -52,6 +52,13 @@
 						:to="`/id/` + $store.state.session.id"
 						class="text-gray5 dark:text-gray3 mb-4 flex w-full flex-row items-center text-left"
 						><ProfileIcon class="mr-2 h-5 w-5 flex-shrink-0" />Profile</nuxt-link
+					>
+					<nuxt-link
+						v-if="$store.state.session.id !== ``"
+						to="/subscriptions"
+						class="text-gray5 dark:text-gray3 mb-4 flex w-full flex-row items-center text-left"
+					>
+						<Crown2Icon class="mr-2 h-5 w-5 flex-shrink-0" />Subscriptions</nuxt-link
 					>
 					<nuxt-link
 						v-if="$store.state.session.id !== ``"
@@ -150,6 +157,13 @@
 					>
 					<nuxt-link
 						v-if="$store.state.session.id !== ``"
+						to="/subscriptions"
+						class="text-gray5 dark:text-gray3 mb-4 flex w-full flex-row items-center text-left"
+					>
+						<Crown2Icon class="mr-2 h-5 w-5 flex-shrink-0" />Subscriptions</nuxt-link
+					>
+					<nuxt-link
+						v-if="$store.state.session.id !== ``"
 						to="/settings/account"
 						class="text-gray5 dark:text-gray3 mb-4 flex w-full flex-row items-center text-left"
 					>
@@ -185,6 +199,7 @@ import HomeIcon from '@/components/icons/Home.vue'
 import DiscoverIcon from '@/components/icons/Discover.vue'
 import BookmarksIcon from '@/components/icons/Bookmarks.vue'
 import CapsuleBlogchain from '@/components/icons/CapsuleBlogchain.vue'
+import Crown2Icon from '@/components/icons/Crown2.vue'
 
 import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
 
@@ -206,6 +221,7 @@ export default Vue.extend({
 		DiscoverIcon,
 		BookmarksIcon,
 		CapsuleBlogchain,
+		Crown2Icon,
 	},
 	props: {
 		avatar: {
