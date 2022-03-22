@@ -36,7 +36,7 @@
 		</p>
 		<div
 			v-if="showInfos"
-			class="popup bg-primary dark:bg-secondary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
+			class="popup bg-primary dark:bg-secondary modal-animation z-30 absolute top-0 right-0 flex h-full w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
 		>
 			<InfosPopup @close="showInfos = false" />
 		</div>
