@@ -106,12 +106,13 @@ import { getNearPrivateKey } from '@/backend/near'
 import CopyIcon from '@/components/icons/Copy.vue'
 import ChevronLeft from '@/components/icons/ChevronLeft.vue'
 import PencilIcon from '@/components/icons/Pencil.vue'
-import { generateInviteCode, getInvitesRemaining, getUserExistingInvites } from '@/backend/invite'
+import { generateInviteCode, getInvitesRemaining, getUserExistingInvites, ICodesData } from '@/backend/invite'
 
 interface IData {
 	backgroundImage: null | string | ArrayBuffer
 	generatedInviteCode: string
 	inviteCodesRemaining: number
+	inviteCodes: ICodesData[]
 }
 
 export default Vue.extend({
@@ -126,6 +127,7 @@ export default Vue.extend({
 			backgroundImage: null,
 			generatedInviteCode: ``,
 			inviteCodesRemaining: 1,
+			inviteCodes: [],
 		}
 	},
 	head() {
@@ -208,6 +210,7 @@ export default Vue.extend({
 			try {
 				const res = await getUserExistingInvites(this.$store.state.session.id)
 				console.log(res)
+				this.inviteCodes.push(res)
 			} catch (err: any) {
 				this.$toastError(err)
 				throw new Error(err)

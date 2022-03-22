@@ -3,6 +3,12 @@ import { capsuleServer, sigValidity } from './utilities/config'
 import { getInviteToken, uint8ArrayToHexString } from './utilities/helpers'
 import { signContent } from './utilities/keys'
 
+export interface ICodesData {
+	code: string
+	exp: number
+	used: boolean
+}
+
 export async function verifyCodeAndGetToken(inviteCode: string) {
 	const response = await axios.post(`${capsuleServer}/invite/verify`, { code: inviteCode })
 	const token: string = response.data.data
