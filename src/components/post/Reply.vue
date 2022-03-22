@@ -38,8 +38,11 @@
 					</button>
 				</div>
 			</div>
-			<p class="py-1 text-sm text-lightPrimaryText dark:text-darkSecondaryText">
-				{{ content }}
+			<p
+				class="leading-relaxed w-full py-1 text-sm text-lightPrimaryText dark:text-darkSecondaryText"
+				style="word-break: break-word"
+			>
+				<span style="white-space: pre-line">{{ content }}</span>
 			</p>
 		</div>
 	</div>
