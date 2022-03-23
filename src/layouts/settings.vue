@@ -46,7 +46,7 @@
 									to="/settings/account"
 								>
 									<ProfileIcon class="w-4 h-4" />
-									<p class="ml-2">Account</p>
+									<p class="ml-4">Account</p>
 								</nuxt-link>
 								<!-- <nuxt-link
 									:class="$route.name === `settings-security` ? `bg-lightInput font-semibold` : ``"
@@ -72,7 +72,7 @@
 									class="focus:outline-none mb-4 w-full rounded-lg py-2 px-4 text-left flex flex-row items-center"
 								>
 									<BrushlIcon class="w-4 h-4" />
-									<p class="ml-2">Appearance and Styling</p>
+									<p class="ml-4">Appearance and Styling</p>
 								</nuxt-link>
 							</div>
 							<Footer />
