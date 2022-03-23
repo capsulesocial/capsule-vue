@@ -305,11 +305,31 @@ export default Vue.extend({
 				this.$toastError(replyQualityCheck.error)
 				return
 			}
-			const c = createComment(this.$store.state.session.id, this.reply, `no-emotion`, this.cid)
-			const _id = await sendComment(c, `reply`)
-			this.replies.push({ _id, ...c })
-			this.filterReplies()
-			this.reply = ``
+			try {
+				const c = createComment(this.$store.state.session.id, this.reply, `no-emotion`, this.cid)
+				const _id = await sendComment(c, `reply`)
+				this.replies.push({ _id, ...c })
+				this.filterReplies()
+				this.reply = ``
+			} catch (err: unknown) {
+				if (axios.isAxiosError(err)) {
+					if (!err.response) {
+						this.$toastError(`Network error, please try again`)
+						return
+					}
+					if (err.response.status === 429) {
+						this.$toastError(`Too many requests, please try again in a minute`)
+						return
+					}
+					this.$toastError(err.response.data.error)
+					return
+				}
+				if (err instanceof Error) {
+					this.$toastError(err.message)
+					return
+				}
+				throw err
+			}
 		},
 		filterReplies(): ICommentData[] {
 			return this.replies.slice().sort((p0, p1) => p1.timestamp - p0.timestamp)
