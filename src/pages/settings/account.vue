@@ -62,7 +62,6 @@
 				You have {{ inviteCodesRemaining }} invites remaining
 			</p>
 			<div class="mt-3 flex flex-col items-start xl:items-center xl:flex-row">
-				<h3 class="mr-4 font-semibold dark:text-darkPrimaryText">Invite code</h3>
 				<div class="relative mr-0 xl:mr-4 flex my-4 xl:my-0 w-full items-center xl:w-2/5">
 					<input
 						id="id"
@@ -92,6 +91,43 @@
 					Generate a new code
 				</button>
 			</div>
+			<label for="id" class="mb-4 mt-10 block pb-1 text-sm font-semibold dark:text-darkPrimaryText"
+				>Previously generated codes</label
+			>
+			<div class="flex flex-row justify-between text-sm font-semibold text-gray5 dark:text-gray3">
+				<p class="w-1/3">Code</p>
+				<p class="w-1/3">Expiration date</p>
+				<p class="w-1/3">Status</p>
+			</div>
+			<div v-for="code in inviteCodes" :key="code.exp" class="w-full">
+				<div
+					class="flex flex-row justify-between py-4 items-center"
+					:class="inviteCodes.length > 1 ? `border-b border-lightBorder` : `pb-0`"
+				>
+					<p class="w-1/3 text-primary dark:text-secondary">{{ code.code }}</p>
+					<p class="w-1/3 text-gray7 dark:text-gray2">{{ $getFormat(new Date(code.exp)) }}</p>
+					<div class="w-1/3">
+						<p
+							v-if="checkAvailablity(code.exp, code.used) === `used`"
+							class="text-negative px-3 py-1 bg-negative bg-opacity-10 rounded-3xl border border-negative w-min"
+						>
+							Used
+						</p>
+						<p
+							v-else-if="checkAvailablity(code.exp, code.used) === `exp`"
+							class="text-negative px-3 py-1 bg-negative bg-opacity-10 rounded-3xl border border-negative w-min"
+						>
+							Expired
+						</p>
+						<p
+							v-else
+							class="text-positive px-3 py-1 bg-positive bg-opacity-10 rounded-3xl border border-positive w-min"
+						>
+							Valid
+						</p>
+					</div>
+				</div>
+			</div>
 		</div>
 	</main>
 </template>
@@ -106,12 +142,13 @@ import { getNearPrivateKey } from '@/backend/near'
 import CopyIcon from '@/components/icons/Copy.vue'
 import ChevronLeft from '@/components/icons/ChevronLeft.vue'
 import PencilIcon from '@/components/icons/Pencil.vue'
-import { generateInviteCode, getInvitesRemaining } from '@/backend/invite'
+import { generateInviteCode, getInvitesRemaining, getUserExistingInvites, ICodesData } from '@/backend/invite'
 
 interface IData {
 	backgroundImage: null | string | ArrayBuffer
 	generatedInviteCode: string
 	inviteCodesRemaining: number
+	inviteCodes: ICodesData[]
 }
 
 export default Vue.extend({
@@ -126,6 +163,7 @@ export default Vue.extend({
 			backgroundImage: null,
 			generatedInviteCode: ``,
 			inviteCodesRemaining: 1,
+			inviteCodes: [],
 		}
 	},
 	head() {
@@ -136,6 +174,7 @@ export default Vue.extend({
 	},
 	created() {
 		this.getInviteCodesRemaining()
+		this.getInviteInfo()
 	},
 	methods: {
 		...mapMutations(sessionStoreNamespace, {
@@ -202,6 +241,25 @@ export default Vue.extend({
 		async getInviteCodesRemaining() {
 			const response = await getInvitesRemaining(this.$store.state.session.id)
 			this.inviteCodesRemaining = response
+		},
+		async getInviteInfo() {
+			try {
+				const res = await getUserExistingInvites(this.$store.state.session.id)
+				this.inviteCodes = res
+			} catch (err: any) {
+				this.$toastError(err)
+				throw new Error(err)
+			}
+		},
+		checkAvailablity(exp: number, used: boolean) {
+			const now = Date.now()
+			if (used) {
+				return `used`
+			} else if (exp < now) {
+				return `exp`
+			} else {
+				return `valid`
+			}
 		},
 		redirectProfile() {
 			this.$store.commit(`settings/setRecentlyInSettings`, true)
