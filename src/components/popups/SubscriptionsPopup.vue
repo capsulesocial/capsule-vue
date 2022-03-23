@@ -11,7 +11,7 @@
 			>
 				<div class="sticky flex items-center justify-between mb-6">
 					<!-- avatar, name, id -->
-					<div class="flex flex-row">
+					<div v-if="step !== 3" class="flex flex-row">
 						<Avatar
 							class="flex-shrink-0"
 							:authorID="author.id"
@@ -24,6 +24,7 @@
 							<h5 class="text-lg text-secondary">@{{ author.id }}</h5>
 						</div>
 					</div>
+					<div v-else></div>
 					<button class="focus:outline-none bg-gray1 dark:bg-gray5 rounded-full p-1" @click="$emit(`close`)">
 						<CloseIcon />
 					</button>
@@ -52,7 +53,7 @@
 						<div class="font-semibold text-lg">$2<span class="text-gray5">/month</span></div>
 					</button>
 					<div class="flex flex-row-reverse my-4">
-						<SecondaryButton :text="`Next`" :action="nextStep" />
+						<SecondaryButton :text="`Next`" :action="nextStep" :disabled="!isSelected" />
 					</div>
 				</article>
 				<!-- Step 1: Payment -->
@@ -98,6 +99,41 @@
 							<h6 class="text-gray5 ml-2">Credit card</h6>
 						</button>
 					</div>
+				</article>
+				<!-- Step 2: Pay (Stripe) -->
+				<article v-if="step === 2">
+					STRIPE PAYMENT STUFF
+					<SecondaryButton :text="Pay" :action="nextStep" />
+				</article>
+				<!-- Step 4: Confirmation page -->
+				<article v-show="step === 3">
+					<div class="w-full flex flex-col justify-center text-center px-10">
+						<CrownIcon class="text-neutral stroke-neutral self-center w-12 h-12 mb-2" />
+						<h6 class="font-semibold text-neutral text-xl mb-2">Congrats!</h6>
+						<p class="text-base text-center text-gray5 mb-4">You are now subscribed to:</p>
+					</div>
+					<!-- Premium profile preview -->
+					<div class="flex flex-row p-4 border border-neutral rounded-lg mx-10">
+						<Avatar
+							class="flex-shrink-0"
+							:authorID="author.id"
+							:avatar="authorAvatar"
+							:noClick="true"
+							:size="`w-14 h-14`"
+						/>
+						<div class="flex flex-col ml-4 flex-grow">
+							<h4 class="text-xl font-semibold">{{ author.name }}</h4>
+							<h5 class="text-lg text-secondary">@{{ author.id }}</h5>
+						</div>
+						<CrownIcon class="text-neutral stroke-neutral self-center w-10 h-10" />
+					</div>
+					<div class="w-full flex flex-col justify-center items-center text-center px-10 my-5">
+						<p class="text-base text-center text-gray5 mb-4">
+							All of their premium articles are now unlocked for your account
+						</p>
+						<button class="px-4 py-2 rounded-lg bg-neutral focus:outline-none text-white">Start reading</button>
+					</div>
+					ADD IMAGE FROM HENRY HERE
 				</article>
 			</div>
 		</section>
