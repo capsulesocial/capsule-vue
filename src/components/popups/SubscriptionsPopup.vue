@@ -39,19 +39,18 @@
 						</p>
 					</div>
 					<!-- Subscriptions -->
-					<div
+					<button
 						class="flex flex-row items-center justify-between mx-5 mb-5 p-4 border border-neutral shadow-lg rounded-lg"
+						@click="isSelected = true"
 					>
 						<!-- Check mark -->
-						<button class="focus:outline-none" @click="isSelected = true">
-							<CheckCircleIcon :isChecked="isSelected" class="text-neutral w-8 h-8 mx-2" />
-						</button>
+						<CheckCircleIcon :isChecked="isSelected" class="text-neutral w-8 h-8 mx-2" />
 						<div class="flex flex-grow flex-col ml-4 mr-2">
 							<h3 class="text-xl font-semibold">Monthly subscription</h3>
 							<p class="text-gray5">Base monthly subscription to access this author's premium content</p>
 						</div>
 						<div class="font-semibold text-lg">$2<span class="text-gray5">/month</span></div>
-					</div>
+					</button>
 					<div class="flex flex-row-reverse my-4">
 						<SecondaryButton :text="`Next`" :action="nextStep" />
 					</div>
@@ -68,7 +67,37 @@
 						<div class="font-semibold text-lg mb-4">$2<span class="text-gray5">/month</span></div>
 					</div>
 					<!-- Payment Methods -->
-					INSERT PAYMENT METHODS
+					<div class="flex flex-col px-10">
+						<!-- Apple pay -->
+						<button
+							class="w-full my-2 p-4 bg-black items-center rounded-lg flex justify-center"
+							@click="selectPaymentType(`apple_pay`)"
+						>
+							<AppleIcon class="text-white w-6 h-6" />
+							<h6 class="text-white ml-2">Pay</h6>
+						</button>
+						<!-- Google pay -->
+						<button
+							class="w-full my-2 p-4 border border-black items-center rounded-lg flex justify-center"
+							@click="selectPaymentType(`google_pay`)"
+						>
+							<GoogleIcon class="w-6 h-6" />
+							<h6 class="text-gray5 ml-2">Pay</h6>
+						</button>
+						<div class="my-6 flex w-full items-center justify-center">
+							<span class="border-gray5 dark:border-gray3 flex-grow rounded-lg border" style="height: 1px"></span>
+							<p class="text-gray5 dark:text-gray3 px-4 text-xs">OR</p>
+							<span class="border-gray5 dark:border-gray3 flex-grow rounded-lg border" style="height: 1px"></span>
+						</div>
+						<!-- Credit card -->
+						<button
+							class="w-full mt-2 mb-5 p-4 bg-gray1 items-center rounded-lg flex justify-center"
+							@click="selectPaymentType(`credit_cart`)"
+						>
+							<CreditCardIcon class="text-gray5 w-6 h-6" />
+							<h6 class="text-gray5 ml-2">Credit card</h6>
+						</button>
+					</div>
 				</article>
 			</div>
 		</section>
@@ -83,15 +112,28 @@ import SecondaryButton from '@/components/SecondaryButton.vue'
 import CloseIcon from '@/components/icons/X.vue'
 import CrownIcon from '@/components/icons/Crown.vue'
 import CheckCircleIcon from '@/components/icons/CheckCircle.vue'
+import CreditCardIcon from '@/components/icons/CreditCard.vue'
+import AppleIcon from '@/components/icons/brands/Apple.vue'
+import GoogleIcon from '@/components/icons/brands/Google.vue'
 import { Profile } from '@/backend/profile'
 
 interface IData {
 	step: number
 	isSelected: boolean
+	paymentType: string
 }
 
 export default Vue.extend({
-	components: { Avatar, CloseIcon, SecondaryButton, CrownIcon, CheckCircleIcon },
+	components: {
+		Avatar,
+		CloseIcon,
+		SecondaryButton,
+		CrownIcon,
+		CheckCircleIcon,
+		CreditCardIcon,
+		AppleIcon,
+		GoogleIcon,
+	},
 	props: {
 		isSubscribed: {
 			type: Boolean as PropType<Boolean>,
@@ -110,6 +152,7 @@ export default Vue.extend({
 		return {
 			step: 0,
 			isSelected: false,
+			paymentType: ``,
 		}
 	},
 	created() {
@@ -119,11 +162,15 @@ export default Vue.extend({
 		window.addEventListener(`click`, this.handleCloseClick, false)
 	},
 	methods: {
+		selectPaymentType(paymentType: string) {
+			this.paymentType = paymentType
+			this.nextStep()
+		},
 		nextStep(): void {
 			this.step += 1
 		},
 		handleCloseClick(e: any): void {
-			if (!e.target || e.target.parentNode === null || e.target.parentNode.classList === undefined) {
+			if (!e.target || e.target.parentNode === null || e.target.firstChild.classList === undefined) {
 				return
 			}
 			if (e.target.firstChild.classList[0] === `popup`) {
