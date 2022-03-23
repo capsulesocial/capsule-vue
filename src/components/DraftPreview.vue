@@ -2,10 +2,9 @@
 	<div
 		v-if="draft.title !== `` || draft.subtitle !== `` || draft.content !== ``"
 		class="my-4 flex flex-row items-center justify-between cursor-pointer"
-		@click="setActiveDraft(draft)"
 	>
 		<!-- Title -->
-		<div class="flex flex-grow flex-col overflow-hidden">
+		<button class="flex flex-grow flex-col overflow-hidden focus:outline-none" @click="setActiveDraft(draft)">
 			<h6
 				class="truncate text-base font-semibold dark:text-darkPrimaryText"
 				:style="$route.name === `home` && inWidget ? `max-width: 259px` : `max-width: 390px`"
@@ -15,10 +14,14 @@
 			<p v-if="draft.timestamp !== 0" class="text-gray5 dark:text-gray3 text-sm">
 				Last saved {{ $formatDate(draft.timestamp) }}
 			</p>
-			<p v-else class="text-gray5 dark:text-gray3 text-sm">No save</p>
-		</div>
+			<p v-else class="text-gray5 dark:text-gray3 text-sm">Active</p>
+		</button>
 		<!-- Featured image -->
-		<div class="mx-4 w-24 flex-shrink-0 items-center" :class="inWidget ? `hidden xl:flex` : `flex`">
+		<button
+			class="mx-4 w-24 flex-shrink-0 items-center focus:outline-none"
+			:class="inWidget ? `hidden xl:flex` : `flex`"
+			@click="setActiveDraft(draft)"
+		>
 			<img
 				v-if="featuredPhoto !== null"
 				:src="featuredPhoto"
@@ -31,7 +34,7 @@
 			>
 				<ImageIcon class="h-5 w-5 fill-current" />
 			</span>
-		</div>
+		</button>
 		<div class="icon relative flex items-center">
 			<button class="focus:outline-none text-gray5 dark:text-gray3 ml-2" @click.stop="toggleDropdownDelete">
 				<MoreIcon />
