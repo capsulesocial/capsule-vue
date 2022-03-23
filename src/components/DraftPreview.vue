@@ -1,7 +1,8 @@
 <template>
 	<div
 		v-if="draft.title !== `` || draft.subtitle !== `` || draft.content !== ``"
-		class="my-4 flex flex-row items-center justify-between"
+		class="my-4 flex flex-row items-center justify-between cursor-pointer"
+		@click="setActiveDraft(draft)"
 	>
 		<!-- Title -->
 		<div class="flex flex-grow flex-col overflow-hidden">
