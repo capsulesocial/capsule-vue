@@ -43,6 +43,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import type { PropType } from 'vue'
+import axios from 'axios'
 import RepostIcon from '@/components/icons/Repost.vue'
 import QuoteIcon from '@/components/icons/Quote.vue'
 import { Post } from '@/backend/post'
@@ -130,20 +131,59 @@ export default Vue.extend({
 			}
 			// Post has NOT been reposted
 			if (!this.isReposted) {
-				const repostCID = await sendRepost(this.$store.state.session.id, this.cid, ``, `simple`)
-				this.$store.commit(`addRepost`, { postID: this.cid, repostID: repostCID })
-				this.$toastSuccess(`You have successfully reposted this post`)
-				this.isReposted = true
-				this.repostOffset += 1
+				try {
+					const repostCID = await sendRepost(this.$store.state.session.id, this.cid, ``, `simple`)
+					this.$store.commit(`addRepost`, { postID: this.cid, repostID: repostCID })
+					this.$toastSuccess(`You have successfully reposted this post`)
+					this.isReposted = true
+					this.repostOffset += 1
+				} catch (err: unknown) {
+					if (axios.isAxiosError(err)) {
+						if (!err.response) {
+							this.$toastError(`Network error, please try again`)
+							return
+						}
+						if (err.response.status === 429) {
+							this.$toastError(`Too many requests, please try again in a minute`)
+							return
+						}
+						this.$toastError(err.response.data.error)
+						return
+					}
+					if (err instanceof Error) {
+						this.$toastError(err.message)
+						return
+					}
+					throw err
+				}
 			} else {
 				// Undo repost
-				// What do I call to undo a simple repost???
-				const repostID = this.$store.state.reposts[this.cid]
-				await sendPostDeletion(`HIDE`, repostID, this.$store.state.session.id)
-				this.$store.commit(`removeRepost`, this.cid)
-				this.isReposted = false
-				this.repostOffset -= 1
-				this.$toastSuccess(`This repost has been successfully removed from your profile`)
+				try {
+					const repostID = this.$store.state.reposts[this.cid]
+					await sendPostDeletion(`HIDE`, repostID, this.$store.state.session.id)
+					this.$store.commit(`removeRepost`, this.cid)
+					this.isReposted = false
+					this.repostOffset -= 1
+					this.$toastSuccess(`This repost has been successfully removed from your profile`)
+				} catch (err: unknown) {
+					if (axios.isAxiosError(err)) {
+						if (!err.response) {
+							this.$toastError(`Network error, please try again`)
+							return
+						}
+						if (err.response.status === 429) {
+							this.$toastError(`Too many requests, please try again in a minute`)
+							return
+						}
+						this.$toastError(err.response.data.error)
+						return
+					}
+					if (err instanceof Error) {
+						this.$toastError(err.message)
+						return
+					}
+					throw err
+				}
 			}
 		},
 		toggleDropdown() {

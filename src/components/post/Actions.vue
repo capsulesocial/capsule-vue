@@ -381,6 +381,7 @@
 import Vue from 'vue'
 import type { PropType } from 'vue'
 import sortBy from 'lodash/sortBy'
+import axios from 'axios'
 import BrandedButton from '@/components/BrandedButton.vue'
 import Comment from '@/components/post/Comment.vue'
 import CommentFilter from '@/components/post/CommentFilter.vue'
@@ -550,20 +551,40 @@ export default Vue.extend({
 			}
 			this.sendingComment = true
 			// Send comment (c)
-			const c = createComment(this.$store.state.session.id, this.comment, this.activeEmotion.label, this.postCID)
-			const _id = await sendComment(c, `comment`)
-			this.comments.push({ _id, ...c })
-			// Apply filter to comments, in case new comment was added in filtered category
-			this.comment = ``
-			this.filterComments()
-			this.selectedEmotion = { label: ``, light: null, dark: null }
-			this.activeEmotion = { label: ``, light: null, dark: null }
-			this.emotion = ``
-			this.filter = ``
-			this.selectedEmotionColor = `neutralLightest`
-			this.filterComments()
-			this.updateFaceStats()
-			this.sendingComment = false
+			try {
+				const c = createComment(this.$store.state.session.id, this.comment, this.activeEmotion.label, this.postCID)
+				const _id = await sendComment(c, `comment`)
+				this.comments.push({ _id, ...c })
+				// Apply filter to comments, in case new comment was added in filtered category
+				this.comment = ``
+				this.filterComments()
+				this.selectedEmotion = { label: ``, light: null, dark: null }
+				this.activeEmotion = { label: ``, light: null, dark: null }
+				this.emotion = ``
+				this.filter = ``
+				this.selectedEmotionColor = `neutralLightest`
+				this.filterComments()
+				this.updateFaceStats()
+				this.sendingComment = false
+			} catch (err: unknown) {
+				if (axios.isAxiosError(err)) {
+					if (!err.response) {
+						this.$toastError(`Network error, please try again`)
+						return
+					}
+					if (err.response.status === 429) {
+						this.$toastError(`Too many requests, please try again in a minute`)
+						return
+					}
+					this.$toastError(err.response.data.error)
+					return
+				}
+				if (err instanceof Error) {
+					this.$toastError(err.message)
+					return
+				}
+				throw err
+			}
 		},
 		async filterComments() {
 			// Fetch comments

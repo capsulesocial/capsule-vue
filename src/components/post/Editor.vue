@@ -701,14 +701,34 @@ export default Vue.extend({
 				featuredPhotoCaption,
 				postImages,
 			)
-			const cid = await sendRegularPost(p)
-			this.hasPosted = true
-			this.title = ``
-			this.subtitle = ``
-			this.input = ``
-			this.$store.commit(`draft/reset`)
-			this.$store.commit(`settings/setRecentlyPosted`, true)
-			this.$router.push(`/post/` + cid)
+			try {
+				const cid = await sendRegularPost(p)
+				this.hasPosted = true
+				this.title = ``
+				this.subtitle = ``
+				this.input = ``
+				this.$store.commit(`draft/reset`)
+				this.$store.commit(`settings/setRecentlyPosted`, true)
+				this.$router.push(`/post/` + cid)
+			} catch (err: unknown) {
+				if (axios.isAxiosError(err)) {
+					if (!err.response) {
+						this.$toastError(`Network error, please try again`)
+						return
+					}
+					if (err.response.status === 429) {
+						this.$toastError(`Too many requests, please try again in a minute`)
+						return
+					}
+					this.$toastError(err.response.data.error)
+					return
+				}
+				if (err instanceof Error) {
+					this.$toastError(err.message)
+					return
+				}
+				throw err
+			}
 		},
 		handleTitle(e: any) {
 			if (!e) {
