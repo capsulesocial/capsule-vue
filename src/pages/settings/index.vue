@@ -7,10 +7,13 @@
 			<h3 class="text-primary dark:text-secondary pb-4 text-base font-semibold">Settings</h3>
 			<nuxt-link
 				:class="$route.name === `settings-account` ? `bg-lightInput font-semibold` : ``"
-				class="text-gray5 dark:text-gray3 focus:outline-none mb-2 flex w-full items-center justify-between rounded-lg py-2 px-4 text-left"
+				class="text-gray5 dark:text-gray3 focus:outline-none mb-2 flex w-full items-center justify-between rounded-lg py-2 text-left"
 				to="/settings/account"
 			>
-				<h6>Account</h6>
+				<div class="flex flex-row items-center">
+					<ProfileIcon class="w-4 h-4" />
+					<h6 class="ml-4">Account</h6>
+				</div>
 				<span class="bg-gray1 dark:bg-gray5 rounded-full p-1"><ChevronRight /></span>
 			</nuxt-link>
 			<!-- <nuxt-link
@@ -31,9 +34,12 @@
 			<nuxt-link
 				to="/settings/styling"
 				:class="$route.name === `settings-styling` ? `bg-lightInput font-semibold` : ``"
-				class="text-gray5 dark:text-gray3 focus:outline-none mb-2 flex w-full items-center justify-between rounded-lg py-2 px-4 text-left"
+				class="text-gray5 dark:text-gray3 focus:outline-none mb-2 flex w-full items-center justify-between rounded-lg py-2 text-left"
 			>
-				<h6>Appearance and Styling</h6>
+				<div class="flex flex-row items-center">
+					<BrushlIcon class="w-4 h-4" />
+					<h6 class="ml-4">Appearance and Styling</h6>
+				</div>
 				<span class="bg-gray1 dark:bg-gray5 rounded-full p-1"><ChevronRight /></span>
 			</nuxt-link>
 		</div>
@@ -43,10 +49,14 @@
 <script lang="ts">
 import Vue from 'vue'
 import ChevronRight from '@/components/icons/ChevronRight.vue'
+import ProfileIcon from '@/components/icons/Profile.vue'
+import BrushlIcon from '@/components/icons/Brush.vue'
 
 export default Vue.extend({
 	components: {
 		ChevronRight,
+		ProfileIcon,
+		BrushlIcon,
 	},
 	layout: `settings`,
 	head() {
