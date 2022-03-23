@@ -4,13 +4,15 @@
 			<section class="w-full">
 				<!-- Title, subtitle -->
 				<article class="flex flex-col px-2">
-					<button
+					<div
 						v-if="isSaving === `false` && this.$route.name !== 'home'"
-						class="bg-gray1 dark:bg-gray5 focus:outline-none absolute right-0 top-0 m-8 rounded-full p-1"
-						@click="saveContent"
+						class="absolute right-0 top-0 flex flex-row items-center m-8"
 					>
-						<XIcon />
-					</button>
+						<p class="mr-5 cursor-pointer text-primary dark:text-secondary" @click="saveContent">Save</p>
+						<button class="bg-gray1 dark:bg-gray5 focus:outline-none rounded-full p-1" @click="saveContentandClose">
+							<XIcon />
+						</button>
+					</div>
 					<article v-else-if="isSaving === `true`" class="modal-animation absolute right-0 top-0 p-8">
 						<div
 							class="loader border-2 border-gray1 dark:border-gray7 h-6 w-6 rounded-3xl"
@@ -596,6 +598,23 @@ export default Vue.extend({
 			}
 		},
 		async saveContent(): Promise<void> {
+			this.isX = true
+			const titleInput = this.$refs.title as HTMLInputElement
+			const subtitleInput = this.$refs.subtitle as HTMLInputElement
+			const input = this.getInputHTML()
+			if (input.length > 11 || titleInput.value.trim() !== `` || subtitleInput.value.trim() !== ``) {
+				this.isSaving = `true`
+				this.doSave()
+				await this.sleep(600)
+				this.isSaving = `done`
+				await this.sleep(800)
+				this.isSaving = `false`
+			} else {
+				const i: number = this.$store.state.draft.activeIndex
+				this.$store.commit(`draft/deleteDraft`, i)
+			}
+		},
+		async saveContentandClose() {
 			this.isX = true
 			const titleInput = this.$refs.title as HTMLInputElement
 			const subtitleInput = this.$refs.subtitle as HTMLInputElement
