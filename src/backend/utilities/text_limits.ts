@@ -8,12 +8,12 @@ const textLimits = {
 		max: 180,
 	},
 	post_content: {
-		min: 140,
+		min: 400,
 		max: 100000,
 	},
 	post_tag: {
 		min: 1,
-		max: 100,
+		max: 50,
 	},
 	post_images: {
 		min: 0,
