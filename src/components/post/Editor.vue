@@ -4,13 +4,15 @@
 			<section class="w-full">
 				<!-- Title, subtitle -->
 				<article class="flex flex-col px-2">
-					<button
+					<div
 						v-if="isSaving === `false` && this.$route.name !== 'home'"
-						class="bg-gray1 dark:bg-gray5 focus:outline-none absolute right-0 top-0 m-8 rounded-full p-1"
-						@click="saveContent"
+						class="absolute right-0 top-0 flex flex-row items-center m-8"
 					>
-						<XIcon />
-					</button>
+						<p class="mr-5 cursor-pointer text-primary dark:text-secondary" @click="handleSave">Save</p>
+						<button class="bg-gray1 dark:bg-gray5 focus:outline-none rounded-full p-1" @click="saveContent">
+							<XIcon />
+						</button>
+					</div>
 					<article v-else-if="isSaving === `true`" class="modal-animation absolute right-0 top-0 p-8">
 						<div
 							class="loader border-2 border-gray1 dark:border-gray7 h-6 w-6 rounded-3xl"
@@ -763,6 +765,15 @@ export default Vue.extend({
 				return
 			}
 			this.subtitleError = ``
+		},
+		async handleSave() {
+			this.isSaving = `true`
+			this.updateContent()
+			await this.sleep(600)
+			this.isSaving = `done`
+			await this.sleep(800)
+			this.isSaving = `false`
+			this.setupEditor()
 		},
 		sleep(ms: any) {
 			return new Promise((resolve) => setTimeout(resolve, ms))
