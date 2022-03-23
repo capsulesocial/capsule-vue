@@ -105,7 +105,7 @@
 					:class="inviteCodes.length > 1 ? `border-b border-lightBorder` : `pb-0`"
 				>
 					<p class="w-1/3 text-primary dark:text-secondary">{{ code.code }}</p>
-					<p class="w-1/3 text-gray7 dark:text-gray2">{{ $formatDate(code.exp) }}</p>
+					<p class="w-1/3 text-gray7 dark:text-gray2">{{ $getFormat(new Date(code.exp)) }}</p>
 					<div class="w-1/3">
 						<p
 							v-if="checkAvailablity(code.exp, code.used) === `used`"
