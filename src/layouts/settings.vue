@@ -37,11 +37,16 @@
 							>
 								<h3 class="text-primary dark:text-secondary pb-4 text-base font-semibold">Settings</h3>
 								<nuxt-link
-									:class="$route.name === `settings-account` ? `bg-lightInput dark:bg-darkInput font-semibold` : ``"
-									class="text-gray5 dark:text-gray3 focus:outline-none mb-4 w-full rounded-lg py-2 px-4 text-left"
+									:class="
+										$route.name === `settings-account`
+											? `bg-lightInput dark:bg-darkInput font-semibold text-primary dark:text-secondary`
+											: `text-gray5 dark:text-gray3`
+									"
+									class="focus:outline-none mb-4 w-full rounded-lg py-2 px-4 text-left flex flex-row items-center"
 									to="/settings/account"
 								>
-									Account
+									<ProfileIcon class="w-4 h-4" />
+									<p class="ml-2">Account</p>
 								</nuxt-link>
 								<!-- <nuxt-link
 									:class="$route.name === `settings-security` ? `bg-lightInput font-semibold` : ``"
@@ -59,10 +64,15 @@
 								</nuxt-link> -->
 								<nuxt-link
 									to="/settings/styling"
-									:class="$route.name === `settings-styling` ? `bg-lightInput dark:bg-darkInput font-semibold` : ``"
-									class="text-gray5 dark:text-gray3 focus:outline-none mb-4 w-full rounded-lg py-2 px-4 text-left"
+									:class="
+										$route.name === `settings-styling`
+											? `bg-lightInput dark:bg-darkInput font-semibold text-primary dark:text-secondary`
+											: `text-gray5 dark:text-gray3`
+									"
+									class="focus:outline-none mb-4 w-full rounded-lg py-2 px-4 text-left flex flex-row items-center"
 								>
-									Appearance and Styling
+									<BrushlIcon class="w-4 h-4" />
+									<p class="ml-2">Appearance and Styling</p>
 								</nuxt-link>
 							</div>
 							<Footer />
@@ -81,6 +91,8 @@ import Footer from '@/components/Footer.vue'
 import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import { IBackground, backgrounds } from '@/config'
+import ProfileIcon from '@/components/icons/Profile.vue'
+import BrushlIcon from '@/components/icons/Brush.vue'
 
 interface IData {
 	profile: Profile | null
@@ -95,6 +107,8 @@ export default Vue.extend({
 	components: {
 		Header,
 		Footer,
+		ProfileIcon,
+		BrushlIcon,
 	},
 	middleware: `auth`,
 	data(): IData {
