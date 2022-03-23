@@ -252,14 +252,16 @@ export default Vue.extend({
 			}
 		},
 		checkAvailablity(exp: number, used: boolean) {
-			const now = Date.now()
 			if (used) {
 				return `used`
-			} else if (exp < now) {
-				return `exp`
-			} else {
-				return `valid`
 			}
+
+			const now = Date.now()
+			if (exp < now) {
+				return `exp`
+			}
+
+			return `valid`
 		},
 		redirectProfile() {
 			this.$store.commit(`settings/setRecentlyInSettings`, true)
