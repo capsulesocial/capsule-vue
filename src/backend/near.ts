@@ -29,7 +29,7 @@ function getRpcProviderUrl() {
 		case `mainnet`:
 		case `testnet`:
 		case `betanet`:
-			return `https://rpc.${nearConfig.networkId}.near.org`
+			return `https://public-rpc.blockpi.io/http/near-testnet`
 		case `local`:
 			return nearConfig.nodeUrl
 		default:
