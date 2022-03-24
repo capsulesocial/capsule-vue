@@ -26,6 +26,7 @@ async function createIPFSInterface(): Promise<IPFSInterface> {
 	let ipfsInitialised = false
 	const node = await create(ipfsConfig)
 	node.start().then(() => {
+		// eslint-disable-next-line no-console
 		console.log(`initialised!`)
 		ipfsInitialised = true
 		maintainConnection()
@@ -38,6 +39,7 @@ async function createIPFSInterface(): Promise<IPFSInterface> {
 	>()
 
 	function resolveCachedPromises() {
+		// eslint-disable-next-line no-console
 		console.log(promiseCache.size)
 		for (const [, value] of promiseCache) {
 			const { resolver, func, args } = value
