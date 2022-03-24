@@ -284,8 +284,13 @@ export default Vue.extend({
 				reader.readAsDataURL(compressedImage)
 				reader.onload = (i) => {
 					if (i.target !== null) {
-						this.uploadImage(i.target.result, compressedImage, image.name)
+						this.uploadImage(i.target.result, compressedImage, image.name).catch((err) => {
+							throw err
+						})
 					}
+				}
+				reader.onerror = (_ev) => {
+					throw new Error(`Something went wrong while loading the image`)
 				}
 			} catch (err: unknown) {
 				if (axios.isAxiosError(err)) {
