@@ -1,4 +1,5 @@
 import { create, Options, CID } from 'ipfs-core'
+import uniqueId from 'lodash/uniqueId'
 import { bootstrapNodes } from './config'
 
 export interface IPFSInterface {
@@ -10,6 +11,7 @@ export interface IPFSInterface {
 }
 
 const ipfsConfig: Options = {
+	start: false,
 	init: { algorithm: `Ed25519` },
 	preload: {
 		enabled: false,
@@ -21,7 +23,44 @@ const ipfsConfig: Options = {
 }
 
 async function createIPFSInterface(): Promise<IPFSInterface> {
+	let ipfsInitialised = false
 	const node = await create(ipfsConfig)
+	node.start().then(() => {
+		console.log(`initialised!`)
+		ipfsInitialised = true
+		maintainConnection()
+		resolveCachedPromises()
+	})
+
+	const promiseCache = new Map<
+		string,
+		{ func: (...args: any[]) => Promise<any>; args: any[]; resolver: (value: any) => void }
+	>()
+
+	function resolveCachedPromises() {
+		console.log(promiseCache.size)
+		for (const [, value] of promiseCache) {
+			const { resolver, func, args } = value
+			resolver(func(...args))
+		}
+
+		promiseCache.clear()
+	}
+
+	function promiseWrapper<T>(func: (...funcArgs: any[]) => Promise<T>, ...args: any[]) {
+		if (ipfsInitialised) {
+			return func(...args)
+		}
+
+		let resolver: (value: T) => void = () => null
+		const promise = new Promise<T>((resolve) => {
+			resolver = resolve
+		})
+
+		promiseCache.set(uniqueId(func.name), { func, args, resolver })
+
+		return promise
+	}
 
 	function maintainConnection() {
 		setTimeout(async () => {
@@ -32,8 +71,6 @@ async function createIPFSInterface(): Promise<IPFSInterface> {
 			maintainConnection()
 		}, 10000)
 	}
-
-	maintainConnection()
 
 	const getData = async (cid: string) => {
 		const content: Buffer[] = []
@@ -67,11 +104,11 @@ async function createIPFSInterface(): Promise<IPFSInterface> {
 	}
 
 	return {
-		getJSONData,
-		sendJSONData,
-		sendData,
-		getData,
-		getNodes,
+		getJSONData: <T>(cid: string) => promiseWrapper<T>(getJSONData, cid),
+		sendJSONData: <T>(content: T) => promiseWrapper<string>(sendJSONData, content),
+		sendData: (content: string | ArrayBuffer) => promiseWrapper(sendData, content),
+		getData: (cid: string) => promiseWrapper(getData, cid),
+		getNodes: () => promiseWrapper(getNodes),
 	}
 }
 
