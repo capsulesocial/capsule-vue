@@ -66,7 +66,6 @@ import { mapMutations } from 'vuex'
 // eslint-disable-next-line import/named
 import DirectWebSdk, { TorusLoginResponse } from '@toruslabs/customauth'
 
-import axios from 'axios'
 import CapsuleIcon from '@/components/icons/CapsuleNew.vue'
 import DiscordIcon from '@/components/icons/brands/Discord.vue'
 import GoogleIcon from '@/components/icons/brands/Google.vue'
@@ -229,23 +228,8 @@ export default Vue.extend({
 				this.changeLocation(account.location)
 				this.$router.push(`/home`)
 			} catch (err: unknown) {
-				if (axios.isAxiosError(err)) {
-					if (!err.response) {
-						this.$toastError(`Network error, please try again`)
-						return
-					}
-					if (err.response.status === 429) {
-						this.$toastError(`Too many requests, please try again in a minute`)
-						return
-					}
-					this.$toastError(err.response.data.error)
-					return
-				}
-				if (err instanceof Error) {
-					this.$toastError(err.message)
-					return
-				}
-				throw err
+				const e = this.$getError(err)
+				this.$toastError(e)
 			}
 		},
 		async walletLogin(): Promise<void> {
@@ -275,23 +259,8 @@ export default Vue.extend({
 				this.changeLocation(account.location)
 				this.$router.push(`/home`)
 			} catch (err: unknown) {
-				if (axios.isAxiosError(err)) {
-					if (!err.response) {
-						this.$toastError(`Network error, please try again`)
-						return
-					}
-					if (err.response.status === 429) {
-						this.$toastError(`Too many requests, please try again in a minute`)
-						return
-					}
-					this.$toastError(err.response.data.error)
-					return
-				}
-				if (err instanceof Error) {
-					this.$toastError(err.message)
-					return
-				}
-				throw err
+				const e = this.$getError(err)
+				this.$toastError(e)
 			}
 		},
 	},

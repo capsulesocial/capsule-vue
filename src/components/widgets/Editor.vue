@@ -149,7 +149,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import axios from 'axios'
 import XIcon from '@/components/icons/X.vue'
 import UploadIcon from '@/components/icons/Upload.vue'
 import ChevronUp from '@/components/icons/ChevronUp.vue'
@@ -296,23 +295,8 @@ export default Vue.extend({
 					if (i.target !== null) {
 						this.uploadImage(i.target.result, compressedImage, image.name).catch((err) => {
 							target.value = ``
-							if (axios.isAxiosError(err)) {
-								if (!err.response) {
-									this.$toastError(`Network error, please try again`)
-									return
-								}
-								if (err.response.status === 429) {
-									this.$toastError(`Too many requests, please try again in a minute`)
-									return
-								}
-								this.$toastError(err.response.data.error)
-								return
-							}
-							if (err instanceof Error) {
-								this.$toastError(err.message)
-								return
-							}
-							throw err
+							const errStr = this.$getError(err)
+							this.$toastError(errStr)
 						})
 					}
 				}
@@ -322,23 +306,8 @@ export default Vue.extend({
 				}
 			} catch (err: unknown) {
 				target.value = ``
-				if (axios.isAxiosError(err)) {
-					if (!err.response) {
-						this.$toastError(`Network error, please try again`)
-						return
-					}
-					if (err.response.status === 429) {
-						this.$toastError(`Too many requests, please try again in a minute`)
-						return
-					}
-					this.$toastError(err.response.data.error)
-					return
-				}
-				if (err instanceof Error) {
-					this.$toastError(err.message)
-					return
-				}
-				throw err
+				const errStr = this.$getError(err)
+				this.$toastError(errStr)
 			}
 		},
 		handleCategoryDropdown(e: any): void {

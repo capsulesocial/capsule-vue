@@ -62,7 +62,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import axios from 'axios'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 import UnauthPopup from '@/components/popups/UnauthPopup.vue'
@@ -146,23 +145,8 @@ export default Vue.extend({
 					this.following = data.following
 				}
 			} catch (err: unknown) {
-				if (axios.isAxiosError(err)) {
-					if (!err.response) {
-						this.$toastError(`Network error, please try again`)
-						return
-					}
-					if (err.response.status === 429) {
-						this.$toastError(`Too many requests, please try again in a minute`)
-						return
-					}
-					this.$toastError(err.response.data.error)
-					return
-				}
-				if (err instanceof Error) {
-					this.$toastError(err.message)
-					return
-				}
-				throw err
+				const e = this.$getError(err)
+				this.$toastError(e)
 			}
 		},
 	},

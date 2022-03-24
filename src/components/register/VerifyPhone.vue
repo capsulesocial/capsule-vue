@@ -121,14 +121,13 @@ export default Vue.extend({
 				const { balance } = await waitForFunds(this.accountId)
 				this.$emit(`updateFunds`, balance)
 			} catch (err: any) {
+				this.isLoading = false
 				if (axios.isAxiosError(err) && err.response) {
 					this.otp = ``
 					this.$toastError(err.response.data.error)
-					this.isLoading = false
 					return
 				}
 				this.$toastError(err.message)
-				this.isLoading = false
 				throw err
 			}
 		},
