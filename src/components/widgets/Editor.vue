@@ -249,30 +249,10 @@ export default Vue.extend({
 			this.$store.commit(`draft/updateFeaturedPhotoCID`, null)
 		},
 		async uploadImage(image: any, blobImage: Blob, filename: string): Promise<void> {
-			try {
-				const cid = await addPhotoToIPFS(image)
-				await preUploadPhoto(cid, blobImage, filename, this.$store.state.session.id)
-				this.$store.commit(`draft/updateFeaturedPhotoCID`, cid)
-				this.downloadImage(cid)
-			} catch (err) {
-				if (axios.isAxiosError(err)) {
-					if (!err.response) {
-						this.$toastError(`Network error, please try again`)
-						return
-					}
-					if (err.response.status === 429) {
-						this.$toastError(`Too many requests, please try again in a minute`)
-						return
-					}
-					this.$toastError(err.response.data.error)
-					return
-				}
-				if (err instanceof Error) {
-					this.$toastError(err.message)
-					return
-				}
-				throw err
-			}
+			const cid = await addPhotoToIPFS(image)
+			await preUploadPhoto(cid, blobImage, filename, this.$store.state.session.id)
+			this.$store.commit(`draft/updateFeaturedPhotoCID`, cid)
+			this.downloadImage(cid)
 		},
 		async downloadImage(cid: string): Promise<void> {
 			this.featuredPhoto = await getPhotoFromIPFS(cid)
@@ -304,13 +284,34 @@ export default Vue.extend({
 				reader.readAsDataURL(compressedImage)
 				reader.onload = (i) => {
 					if (i.target !== null) {
-						this.uploadImage(i.target.result, compressedImage, image.name)
+						this.uploadImage(i.target.result, compressedImage, image.name).catch((err) => {
+							target.value = ``
+							if (axios.isAxiosError(err)) {
+								if (!err.response) {
+									this.$toastError(`Network error, please try again`)
+									return
+								}
+								if (err.response.status === 429) {
+									this.$toastError(`Too many requests, please try again in a minute`)
+									return
+								}
+								this.$toastError(err.response.data.error)
+								return
+							}
+							if (err instanceof Error) {
+								this.$toastError(err.message)
+								return
+							}
+							throw err
+						})
 					}
 				}
 				reader.onerror = (_ev) => {
+					target.value = ``
 					throw new Error(`Something went wrong while loading the image`)
 				}
 			} catch (err: unknown) {
+				target.value = ``
 				if (axios.isAxiosError(err)) {
 					if (!err.response) {
 						this.$toastError(`Network error, please try again`)
