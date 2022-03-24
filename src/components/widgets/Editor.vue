@@ -186,30 +186,40 @@ export default Vue.extend({
 		},
 	},
 	data(): IData {
-		const { category } = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex]
 		return {
 			featuredPhoto: null,
 			categoryList: categories,
-			category,
+			category: ``,
 			tag: ``,
-			caption: this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].featuredPhotoCaption,
+			caption: ``,
 			showCategoryDropdown: false,
 			dark: false,
 			featuredPhotoTarget: null,
 		}
 	},
+	watch: {
+		'$store.state.draft.activeIndex'() {
+			this.fetchActiveDraft()
+		},
+	},
 	mounted() {
-		const { featuredPhotoCID } = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex]
-		if (featuredPhotoCID !== null) {
-			this.featuredPhoto = this.downloadImage(featuredPhotoCID)
-		}
 		if (document.documentElement.classList.contains(`dark`)) {
 			this.dark = true
 		} else {
 			this.dark = false
 		}
+		this.fetchActiveDraft()
 	},
 	methods: {
+		fetchActiveDraft(): void {
+			this.featuredPhoto = null
+			const { featuredPhotoCID } = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex]
+			if (featuredPhotoCID !== null) {
+				this.featuredPhoto = this.downloadImage(featuredPhotoCID)
+			}
+			this.caption = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].featuredPhotoCaption
+			this.category = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].category
+		},
 		saveCaption(): void {
 			// save caption to draft state
 			this.$store.commit(`draft/updateFeaturedPhotoCaption`, this.caption)
