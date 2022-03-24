@@ -294,10 +294,34 @@ export default Vue.extend({
 				reader.readAsDataURL(compressedImage)
 				reader.onload = (i) => {
 					if (i.target !== null) {
-						this.uploadImage(i.target.result, compressedImage, image.name)
+						this.uploadImage(i.target.result, compressedImage, image.name).catch((err) => {
+							target.value = ``
+							if (axios.isAxiosError(err)) {
+								if (!err.response) {
+									this.$toastError(`Network error, please try again`)
+									return
+								}
+								if (err.response.status === 429) {
+									this.$toastError(`Too many requests, please try again in a minute`)
+									return
+								}
+								this.$toastError(err.response.data.error)
+								return
+							}
+							if (err instanceof Error) {
+								this.$toastError(err.message)
+								return
+							}
+							throw err
+						})
 					}
 				}
+				reader.onerror = (_ev) => {
+					target.value = ``
+					throw new Error(`Something went wrong while loading the image`)
+				}
 			} catch (err: unknown) {
+				target.value = ``
 				if (axios.isAxiosError(err)) {
 					if (!err.response) {
 						this.$toastError(`Network error, please try again`)
