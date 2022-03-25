@@ -12,6 +12,9 @@ export interface IPFSInterface {
 
 const ipfsConfig: Options = {
 	start: false,
+	libp2p: {
+		peerStore: { persistence: false },
+	},
 	init: { algorithm: `Ed25519` },
 	preload: {
 		enabled: false,
