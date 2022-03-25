@@ -1,4 +1,3 @@
-import Vue from 'vue'
 import axios from 'axios'
 import type { Plugin } from '@nuxt/types'
 import { getBlobExtension } from '@/backend/utilities/helpers'
@@ -114,24 +113,23 @@ const urlToFile = async (url: string) => {
 	}
 }
 
-const getError = (error: unknown) => {
-	Vue.prototype.$toastError(`toast error`)
-	if (axios.isAxiosError(error)) {
-		if (!error.response) {
-			return `Network error, please try again`
+const helperPlugin: Plugin = (context, inject) => {
+	const getError = (error: unknown) => {
+		context.$toastError(`toast error`)
+		if (axios.isAxiosError(error)) {
+			if (!error.response) {
+				return `Network error, please try again`
+			}
+			if (error.response.status === 429) {
+				return `Too many requests, please try again in a minute`
+			}
+			return error.response.data.error
 		}
-		if (error.response.status === 429) {
-			return `Too many requests, please try again in a minute`
+		if (error instanceof Error) {
+			return error.message
 		}
-		return error.response.data.error
+		throw error
 	}
-	if (error instanceof Error) {
-		return error.message
-	}
-	throw error
-}
-
-const helperPlugin: Plugin = (_context, inject) => {
 	inject(`getFormat`, getFormat)
 	inject(`formatDate`, formatDate)
 	inject(`isError`, isError)
