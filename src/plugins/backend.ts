@@ -4,7 +4,14 @@ import { initContract, initNear, initWalletConnection } from '@/backend/near'
 
 const backend: Plugin = async (context) => {
 	try {
-		await Promise.all([initIPFS(), initNear()])
+		const [, ipfs] = await Promise.all([initNear(), initIPFS()])
+		ipfs.initResult.catch((err: unknown) => {
+			if (err instanceof Error) {
+				context.$toastError(err.message)
+			}
+
+			throw err
+		})
 		initWalletConnection()
 
 		const accountId = window.localStorage.getItem(`accountId`)

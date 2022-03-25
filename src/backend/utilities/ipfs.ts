@@ -7,6 +7,7 @@ export interface IPFSInterface {
 	getJSONData: <T>(hash: string) => Promise<T>
 	sendJSONData: <T>(content: T) => Promise<string>
 	getNodes: () => Promise<number>
+	initResult: Promise<void>
 }
 
 const ipfsConfig: Options = {
@@ -101,7 +102,7 @@ async function createIPFSInterface(): Promise<IPFSInterface> {
 	}
 	// eslint-disable-next-line no-console
 	console.log(`IPFS is initialising...`)
-	node.start().then(() => {
+	const initResult = node.start().then(() => {
 		ipfsInitialised = true
 		_maintainConnection()
 		_resolveCachedPromises()
@@ -115,6 +116,7 @@ async function createIPFSInterface(): Promise<IPFSInterface> {
 		sendData: (content: string | ArrayBuffer) => _promiseWrapper(sendData, content),
 		getData: (cid: string) => _promiseWrapper(getData, cid),
 		getNodes: () => _promiseWrapper(getNodes),
+		initResult,
 	}
 }
 
