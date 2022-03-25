@@ -18,7 +18,7 @@ export async function isPostBookmarkedByUser(postCID: string, userID: string): P
 	return response.data.data.isBookmarked
 }
 
-type BookmarkSort = `BOOKMARK_ASC` | `BOOKMARK_DESC` | `POST_ASC` | `POST_DESC`
+export type BookmarkSort = `BOOKMARK_ASC` | `BOOKMARK_DESC` | `POST_ASC` | `POST_DESC`
 
 export async function getBookmarksOfUser(
 	userID: string,

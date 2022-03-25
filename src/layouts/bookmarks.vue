@@ -33,6 +33,8 @@
 						class="lg:w-7.5 min-h-61 h-61 xl:min-h-150 xl:h-150 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation z-10 w-full overflow-y-hidden rounded-lg border bg-gradient-to-r shadow-lg"
 						:posts="posts"
 						:isLoading="isLoading"
+						:filter="activeSort"
+						@clicked="setSort"
 					/>
 					<!-- Widgets -->
 					<aside
@@ -66,7 +68,7 @@
 								<span
 									class="ml-2 border-b"
 									:class="
-										active === c
+										activeFilter === c
 											? 'border-primary text-primary dark:border-secondary dark:text-secondary'
 											: ' text-primary dark:text-gray3 border-transparent'
 									"
@@ -95,14 +97,15 @@ import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import { IPostResponse } from '@/backend/post'
 import { categories, IBackground, backgrounds } from '@/config'
-import { getBookmarksOfUser } from '@/backend/bookmarks'
+import { getBookmarksOfUser, BookmarkSort } from '@/backend/bookmarks'
 
 interface IData {
 	profile: Profile | null
 	avatar: string | ArrayBuffer | null
 	posts: IPostResponse[]
 	categoryList: string[]
-	active: string
+	activeFilter: string
+	activeSort: BookmarkSort
 	isLoading: boolean
 	bgImage: IBackground
 	dark: boolean
@@ -122,7 +125,8 @@ export default Vue.extend({
 			avatar: null,
 			posts: [],
 			categoryList: categories,
-			active: ``,
+			activeFilter: ``,
+			activeSort: `BOOKMARK_DESC`,
 			isLoading: true,
 			bgImage: backgrounds[0],
 			dark: false,
@@ -158,16 +162,19 @@ export default Vue.extend({
 			if (this.$store.state.session.id === ``) {
 				return
 			}
-			this.fetchPosts(c)
-			this.active = c
+			this.activeFilter = c
+			this.fetchPosts(this.activeFilter, this.activeSort)
 		},
-		async fetchPosts(category?: string) {
-			try {
-				this.posts = await getBookmarksOfUser(this.$store.state.session.id, category)
-				this.isLoading = false
-			} catch (error) {
-				this.$handleError(error)
+		setSort(o: BookmarkSort) {
+			if (this.$store.state.session.id === ``) {
+				return
 			}
+			this.activeSort = o
+			this.fetchPosts(this.activeFilter, this.activeSort)
+		},
+		async fetchPosts(category?: string, sort?: BookmarkSort) {
+			this.posts = await getBookmarksOfUser(this.$store.state.session.id, category, sort)
+			this.isLoading = false
 		},
 	},
 })
