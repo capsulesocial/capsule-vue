@@ -82,8 +82,8 @@ const config: NuxtConfig = {
 	plugins: [
 		{ src: '@/plugins/vuex-persist.ts', mode: `client` },
 		{ src: '@/plugins/quality.ts' },
-		{ src: '@/plugins/helpers.ts' },
 		{ src: '@/plugins/toast.ts' },
+		{ src: '@/plugins/helpers.ts' },
 		{ src: '@/plugins/background.ts' },
 		{ src: '@/plugins/colormode.ts' },
 		{ src: '@/plugins/backend.ts' },

@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import axios from 'axios'
 import type { Plugin } from '@nuxt/types'
 import { getBlobExtension } from '@/backend/utilities/helpers'
@@ -11,6 +12,7 @@ type getErrorFormat = (error: unknown) => string
 
 // eslint-disable-next-line quotes
 declare module 'vue/types/vue' {
+	// eslint-disable-next-line no-shadow
 	interface Vue {
 		$getFormat: dateString
 		$formatDate: dateFormat
@@ -113,6 +115,7 @@ const urlToFile = async (url: string) => {
 }
 
 const getError = (error: unknown) => {
+	Vue.prototype.$toastError(`toast error`)
 	if (axios.isAxiosError(error)) {
 		if (!error.response) {
 			return `Network error, please try again`
