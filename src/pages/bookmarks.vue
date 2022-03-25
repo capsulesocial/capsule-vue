@@ -1,11 +1,11 @@
 <template>
 	<div>
-		<h2
-			class="text-primary dark:text-secondary px-5 pt-3 pb-3 text-lg font-semibold xl:px-6 xl:pt-4 xl:text-xl"
-			style="backdrop-filter: blur(10px)"
-		>
-			My bookmarks
-		</h2>
+		<div class="flex flex-row items-center justify-between px-5 pt-3 pb-3 xl:px-6 xl:pt-4">
+			<h2 class="text-primary dark:text-secondary text-lg font-semibold xl:text-xl" style="backdrop-filter: blur(10px)">
+				My bookmarks
+			</h2>
+			<BookmarksFilter class="modal-animation" :filter="filter" @clicked="setSort" />
+		</div>
 		<div class="min-h-120 h-120 lg:min-h-220 lg:h-220 w-full overflow-y-auto">
 			<nuxt-child :posts="posts" :followingList="following" :toggleFriend="toggleFriend" :isLoading="isLoading" />
 		</div>
@@ -16,12 +16,17 @@
 import Vue from 'vue'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
 import { IPostResponse } from '@/backend/post'
+import BookmarksFilter from '@/components/BookmarksFilter.vue'
+import { BookmarkSort } from '@/backend/bookmarks'
 
 interface IData {
 	following: Set<string>
 }
 
 export default Vue.extend({
+	components: {
+		BookmarksFilter,
+	},
 	layout: `bookmarks`,
 	props: {
 		posts: {
@@ -31,6 +36,10 @@ export default Vue.extend({
 		isLoading: {
 			type: Boolean,
 			required: false,
+		},
+		filter: {
+			type: String,
+			default: `BOOKMARK_DESC`,
 		},
 	},
 	data(): IData {
@@ -65,6 +74,10 @@ export default Vue.extend({
 				const data = await getFollowersAndFollowing(this.$store.state.session.id, true)
 				this.following = data.following
 			}
+		},
+		setSort(sort: BookmarkSort) {
+			// When a user selects a filter
+			this.$emit(`clicked`, sort)
 		},
 	},
 })

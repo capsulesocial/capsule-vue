@@ -18,8 +18,14 @@ export async function isPostBookmarkedByUser(postCID: string, userID: string): P
 	return response.data.data.isBookmarked
 }
 
-export async function getBookmarksOfUser(userID: string, category?: string): Promise<IPostResponse[]> {
-	const response = await axios.get(`${nodeUrl()}/bookmark/${userID}`)
+export type BookmarkSort = `BOOKMARK_ASC` | `BOOKMARK_DESC` | `POST_ASC` | `POST_DESC`
+
+export async function getBookmarksOfUser(
+	userID: string,
+	category?: string,
+	sort: BookmarkSort = `BOOKMARK_DESC`,
+): Promise<IPostResponse[]> {
+	const response = await axios.get(`${nodeUrl()}/bookmark/${userID}`, { params: { sort } })
 
 	const bookmarks: IPostResponse[] = response.data.data.bookmarks
 

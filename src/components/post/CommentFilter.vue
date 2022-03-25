@@ -2,7 +2,7 @@
 	<div class="relative flex flex-grow items-center flex-row-reverse">
 		<!-- Comment filter -->
 		<div class="flex w-full flex-row items-center justify-end">
-			<h6 class="hidden xl:block dark:text-gray3">Filter by:</h6>
+			<h6 class="hidden xl:block text-gray5 dark:text-gray3">Filter by:</h6>
 			<button
 				class="toggle focus:outline-none ml-4 flex w-32 items-center justify-between rounded-lg border dark:border-gray3 px-4 text-sm shadow-lg dark:text-gray3"
 				@click.stop="showFilter = !showFilter"
