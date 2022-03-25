@@ -58,7 +58,7 @@ export function getNearConfig(): INearConfig | ILocalNetNearConfig {
 		case `testnet`:
 			return {
 				networkId: `testnet`,
-				nodeUrl: `https://public-rpc.blockpi.io/http/near-testnet`,
+				nodeUrl: `https://rpc.testnet.near.org`,
 				contractName,
 				walletUrl: `https://wallet.testnet.near.org`,
 				helperUrl: `https://helper.testnet.near.org`,
