@@ -75,7 +75,7 @@ import FileIcon from '@/components/icons/File.vue'
 import { MutationType, createSessionFromProfile, namespace as sessionStoreNamespace } from '~/store/session'
 
 import { getAccountIdFromPrivateKey, login, loginNearAccount } from '@/backend/auth'
-import { getUsernameNEAR } from '@/backend/near'
+import { getUserInfoNEAR, getUsernameNEAR } from '@/backend/near'
 import { torusNetwork, torusVerifiers, TorusVerifiers } from '@/backend/utilities/config'
 import { revokeDiscordKey } from '@/backend/discordRevoke'
 import { HTMLInputEvent } from '@/interfaces/HTMLInputEvent'
@@ -167,15 +167,24 @@ export default Vue.extend({
 				}
 				this.accountId = getAccountIdFromPrivateKey(this.userInfo.privateKey)
 				this.username = await getUsernameNEAR(this.accountId)
-				if (this.username) {
-					// If a username is found then proceed to login...
-					this.verify()
+
+				if (!this.username) {
+					// If no username is found then register...
+					this.$toastWarning(`looks like you don't have an account`)
+					this.$router.push(`/register`)
 					return
 				}
 
-				// If no username is found then register...
-				this.$toastWarning(`looks like you don't have an account`)
-				this.$router.push(`/register`)
+				const { blocked } = await getUserInfoNEAR(this.username)
+				if (blocked) {
+					// If account is blocked then send to register page...
+					this.$toastError(`Your account has been deactivated or banned`)
+					this.$router.push(`/register`)
+					return
+				}
+				// If a username is found then proceed to login...
+				this.verify()
+				return
 			} catch (e: any) {
 				this.$toastError(`oops, ` + e)
 				this.isLoading = false
@@ -253,6 +262,15 @@ export default Vue.extend({
 			if (!this.username) {
 				this.$toastWarning(`looks like you don't have an account`)
 				this.$router.push(`/register`)
+				return
+			}
+
+			const { blocked } = await getUserInfoNEAR(this.username)
+			if (blocked) {
+				// If account is blocked then send to register page...
+				this.$toastError(`Your account has been deactivated or banned`)
+				this.$router.push(`/register`)
+				return
 			}
 			this.walletVerify()
 		},

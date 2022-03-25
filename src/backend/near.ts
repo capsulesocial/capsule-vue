@@ -227,9 +227,11 @@ export async function removeNearPrivateKey(nearAccountId?: string | null) {
 	await keystore.removeKey(nearConfig.networkId, accountId)
 }
 
-export async function getUserInfoNEAR(username: string) {
+export async function getUserInfoNEAR(
+	username: string,
+): Promise<{ accountId: string; publicKey: Uint8Array; blocked?: true }> {
 	const contract = getContract() as any
-	const userInfo = (await contract.getUserInfo({ username })) as null | [string, string]
+	const userInfo = (await contract.getUserInfo({ username })) as null | Array<string>
 	if (!userInfo) {
 		throw new Error(`Username not found on NEAR!`)
 	}
@@ -238,6 +240,12 @@ export async function getUserInfoNEAR(username: string) {
 	if (publicKey[0] !== 0 || publicKey.length !== 33) {
 		throw new Error(`First element is non-null`)
 	}
+
+	const blockOnNear = userInfo[2]
+	if (blockOnNear) {
+		return { accountId: userInfo[0], publicKey: publicKey.slice(1), blocked: true }
+	}
+
 	return { accountId: userInfo[0], publicKey: publicKey.slice(1) }
 }
 
