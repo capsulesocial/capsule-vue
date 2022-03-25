@@ -177,7 +177,7 @@ export default Vue.extend({
 
 				const { blocked } = await getUserInfoNEAR(this.username)
 				if (blocked) {
-					// If no username is found then register...
+					// If account is blocked then send to register page...
 					this.$toastError(`Your account has been deactivated or banned`)
 					this.$router.push(`/register`)
 					return
@@ -267,7 +267,7 @@ export default Vue.extend({
 
 			const { blocked } = await getUserInfoNEAR(this.username)
 			if (blocked) {
-				// If no username is found then register...
+				// If account is blocked then send to register page...
 				this.$toastError(`Your account has been deactivated or banned`)
 				this.$router.push(`/register`)
 				return
