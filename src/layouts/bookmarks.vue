@@ -162,8 +162,12 @@ export default Vue.extend({
 			this.active = c
 		},
 		async fetchPosts(category?: string) {
-			this.posts = await getBookmarksOfUser(this.$store.state.session.id, category)
-			this.isLoading = false
+			try {
+				this.posts = await getBookmarksOfUser(this.$store.state.session.id, category)
+				this.isLoading = false
+			} catch (error) {
+				this.$handleError(error)
+			}
 		},
 	},
 })

@@ -1,3 +1,4 @@
+import axios from 'axios'
 import type { Plugin } from '@nuxt/types'
 import { getBlobExtension } from '@/backend/utilities/helpers'
 
@@ -6,15 +7,18 @@ type dateFormat = (input: object | Date | number) => string
 type isErrorFormat = (obj: Record<string, unknown>) => obj is { error: string }
 type contentImgs = (content: string) => RegExpMatchArray[]
 type urlToFileFormat = (url: string) => Promise<{ file: File } | { error: string }>
+type handleErrorFormat = (error: unknown) => void
 
 // eslint-disable-next-line quotes
 declare module 'vue/types/vue' {
+	// eslint-disable-next-line no-shadow
 	interface Vue {
 		$getFormat: dateString
 		$formatDate: dateFormat
 		$isError: isErrorFormat
 		$getContentImages: contentImgs
 		$urlToFile: urlToFileFormat
+		$handleError: handleErrorFormat
 	}
 }
 
@@ -109,12 +113,32 @@ const urlToFile = async (url: string) => {
 	}
 }
 
-const helperPlugin: Plugin = (_context, inject) => {
+const helperPlugin: Plugin = (context, inject) => {
+	const handleError = (error: unknown) => {
+		if (axios.isAxiosError(error)) {
+			if (!error.response) {
+				context.$toastError(`Network error, please try again`)
+				return
+			}
+			if (error.response.status === 429) {
+				context.$toastError(`Too many requests, please try again in a minute`)
+				return
+			}
+			context.$toastError(error.response.data.error)
+			return
+		}
+		if (error instanceof Error) {
+			context.$toastError(error.message)
+			return
+		}
+		throw error
+	}
 	inject(`getFormat`, getFormat)
 	inject(`formatDate`, formatDate)
 	inject(`isError`, isError)
 	inject(`getContentImages`, getContentImages)
 	inject(`urlToFile`, urlToFile)
+	inject(`handleError`, handleError)
 }
 
 export default helperPlugin

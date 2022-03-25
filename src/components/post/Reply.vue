@@ -51,7 +51,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import type { PropType } from 'vue'
-import axios from 'axios'
 import Avatar from '@/components/Avatar.vue'
 import MoreIcon from '@/components/icons/More.vue'
 import BinIcon from '@/components/icons/Bin.vue'
@@ -139,21 +138,7 @@ export default Vue.extend({
 				this.$toastSuccess(`This reply has been successfully removed`)
 				this.$emit(`updateReplies`)
 			} catch (err: unknown) {
-				if (axios.isAxiosError(err)) {
-					if (!err.response) {
-						this.$toastError(`Network error, please try again`)
-						return
-					}
-					if (err.response.status === 429) {
-						this.$toastError(`Too many requests, please try again in a minute`)
-						return
-					}
-					if (err instanceof Error) {
-						this.$toastError(err.message)
-						return
-					}
-					throw err
-				}
+				this.$handleError(err)
 			}
 		},
 		toggleDropdownDelete() {

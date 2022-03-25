@@ -93,7 +93,6 @@ import Turndown from 'turndown'
 import { strikethrough } from 'turndown-plugin-gfm'
 import Quill, { RangeStatic } from 'quill'
 import QuillMarkdown from 'quilljs-markdown'
-import axios from 'axios'
 import XIcon from '@/components/icons/X.vue'
 import PencilIcon from '@/components/icons/Pencil.vue'
 import AddContent from '@/components/post/EditorActions.vue'
@@ -415,20 +414,7 @@ export default Vue.extend({
 					pastedContent = pastedContent.replace(img[0], `<img alt="${cid}" src="${url}">`)
 				} catch (err: unknown) {
 					this.waitingImage = false
-					if (axios.isAxiosError(err)) {
-						if (!err.response) {
-							this.$toastError(`Network error, please try again`)
-							return null
-						}
-						if (err.response.status === 429) {
-							this.$toastError(`Too many requests, please try again in a minute`)
-							return null
-						}
-						this.$toastError(err.response.data.error)
-					}
-					if (err instanceof Error) {
-						this.$toastError(err.message)
-					}
+					this.$handleError(err)
 					return null
 				}
 			}
@@ -457,23 +443,7 @@ export default Vue.extend({
 			} catch (err: unknown) {
 				this.waitingImage = false
 				this.refreshPostImages()
-				if (axios.isAxiosError(err)) {
-					if (!err.response) {
-						this.$toastError(`Network error, please try again`)
-						return
-					}
-					if (err.response.status === 429) {
-						this.$toastError(`Too many requests, please try again in a minute`)
-						return
-					}
-					this.$toastError(err.response.data.error)
-					return
-				}
-				if (err instanceof Error) {
-					this.$toastError(err.message)
-					return
-				}
-				throw err
+				this.$handleError(err)
 			}
 		},
 		async handlePastedContent(e: ClipboardEvent) {
@@ -711,23 +681,7 @@ export default Vue.extend({
 				this.$store.commit(`settings/setRecentlyPosted`, true)
 				this.$router.push(`/post/` + cid)
 			} catch (err: unknown) {
-				if (axios.isAxiosError(err)) {
-					if (!err.response) {
-						this.$toastError(`Network error, please try again`)
-						return
-					}
-					if (err.response.status === 429) {
-						this.$toastError(`Too many requests, please try again in a minute`)
-						return
-					}
-					this.$toastError(err.response.data.error)
-					return
-				}
-				if (err instanceof Error) {
-					this.$toastError(err.message)
-					return
-				}
-				throw err
+				this.$handleError(err)
 			}
 		},
 		handleTitle(e: any) {

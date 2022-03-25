@@ -43,7 +43,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import type { PropType } from 'vue'
-import axios from 'axios'
 import RepostIcon from '@/components/icons/Repost.vue'
 import QuoteIcon from '@/components/icons/Quote.vue'
 import { Post } from '@/backend/post'
@@ -138,23 +137,7 @@ export default Vue.extend({
 					this.isReposted = true
 					this.repostOffset += 1
 				} catch (err: unknown) {
-					if (axios.isAxiosError(err)) {
-						if (!err.response) {
-							this.$toastError(`Network error, please try again`)
-							return
-						}
-						if (err.response.status === 429) {
-							this.$toastError(`Too many requests, please try again in a minute`)
-							return
-						}
-						this.$toastError(err.response.data.error)
-						return
-					}
-					if (err instanceof Error) {
-						this.$toastError(err.message)
-						return
-					}
-					throw err
+					this.$handleError(err)
 				}
 			} else {
 				// Undo repost
@@ -166,23 +149,7 @@ export default Vue.extend({
 					this.repostOffset -= 1
 					this.$toastSuccess(`This repost has been successfully removed from your profile`)
 				} catch (err: unknown) {
-					if (axios.isAxiosError(err)) {
-						if (!err.response) {
-							this.$toastError(`Network error, please try again`)
-							return
-						}
-						if (err.response.status === 429) {
-							this.$toastError(`Too many requests, please try again in a minute`)
-							return
-						}
-						this.$toastError(err.response.data.error)
-						return
-					}
-					if (err instanceof Error) {
-						this.$toastError(err.message)
-						return
-					}
-					throw err
+					this.$handleError(err)
 				}
 			}
 		},

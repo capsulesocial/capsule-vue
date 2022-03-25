@@ -565,7 +565,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import type { PropType } from 'vue'
-import axios from 'axios'
 import PostActions from '@/components/post/Actions.vue'
 import Avatar from '@/components/Avatar.vue'
 import BookmarkButton from '@/components/post/BookmarkButton.vue'
@@ -918,23 +917,7 @@ export default Vue.extend({
 				this.$emit(`closePopup`)
 				this.$toastSuccess(`Successfully quoted this post`)
 			} catch (err: unknown) {
-				if (axios.isAxiosError(err)) {
-					if (!err.response) {
-						this.$toastError(`Network error, please try again`)
-						return
-					}
-					if (err.response.status === 429) {
-						this.$toastError(`Too many requests, please try again in a minute`)
-						return
-					}
-					this.$toastError(err.response.data.error)
-					return
-				}
-				if (err instanceof Error) {
-					this.$toastError(err.message)
-					return
-				}
-				throw err
+				this.$handleError(err)
 			}
 		},
 		async getQuoteRepost(postCID: string) {

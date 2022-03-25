@@ -134,7 +134,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import axios from 'axios'
 import { mapMutations } from 'vuex'
 import { MutationType, getProfileFromSession, namespace as sessionStoreNamespace } from '~/store/session'
 import { setProfile } from '@/backend/profile'
@@ -218,15 +217,7 @@ export default Vue.extend({
 				this.generatedInviteCode = inviteCode
 				this.inviteCodesRemaining = invitesRemaining
 			} catch (error: any) {
-				if (axios.isAxiosError(error) && error.response) {
-					if (error.response.status === 429) {
-						this.$toastWarning(`Too many requests`)
-						return
-					}
-					this.$toastError(error.response.data.error)
-					return
-				}
-				throw error
+				this.$handleError(error)
 			}
 		},
 		copyURL(): void {
