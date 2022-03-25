@@ -7,33 +7,68 @@ export interface IPFSInterface {
 	getJSONData: <T>(hash: string) => Promise<T>
 	sendJSONData: <T>(content: T) => Promise<string>
 	getNodes: () => Promise<number>
+	initResult: Promise<void>
 }
 
 const ipfsConfig: Options = {
+	start: false,
 	init: { algorithm: `Ed25519` },
 	preload: {
 		enabled: false,
-		// addresses: [`/dns4/test-node.capsule.social/https`],
 	},
 	config: {
 		Bootstrap: bootstrapNodes,
 	},
 }
 
+/**
+ * An IPFS interface is created, but the node doesn't start right away. Generally we observed that the node starting procedure is slow and blocks the loading of the whole app.
+ * Hence, we made the loading of the node async and we basically keep a cache of all the requests to IPFS while the node is initialising to dispatch them after the fact.
+ */
 async function createIPFSInterface(): Promise<IPFSInterface> {
+	let ipfsInitialised = false
 	const node = await create(ipfsConfig)
 
-	function maintainConnection() {
+	const promiseCache: Array<{
+		func: (...args: any[]) => Promise<any>
+		args: any[]
+		resolver: (value: any) => void
+	}> = []
+
+	function _resolveCachedPromises() {
+		for (const v of promiseCache) {
+			const { resolver, func, args } = v
+			resolver(func(...args))
+		}
+
+		// Clear the array
+		promiseCache.splice(0, promiseCache.length)
+	}
+
+	function _promiseWrapper<T>(func: (...funcArgs: any[]) => Promise<T>, ...args: any[]) {
+		if (ipfsInitialised) {
+			return func(...args)
+		}
+
+		let resolver: (value: T) => void = () => null
+		const promise = new Promise<T>((resolve) => {
+			resolver = resolve
+		})
+
+		promiseCache.push({ func, args, resolver })
+
+		return promise
+	}
+
+	function _maintainConnection() {
 		setTimeout(async () => {
 			for (const a of bootstrapNodes) {
 				await node.swarm.disconnect(a)
 				await node.swarm.connect(a)
 			}
-			maintainConnection()
+			_maintainConnection()
 		}, 10000)
 	}
-
-	maintainConnection()
 
 	const getData = async (cid: string) => {
 		const content: Buffer[] = []
@@ -65,13 +100,23 @@ async function createIPFSInterface(): Promise<IPFSInterface> {
 		const peers = await node.swarm.peers()
 		return peers.length
 	}
+	// eslint-disable-next-line no-console
+	console.log(`IPFS is initialising...`)
+	const initResult = node.start().then(() => {
+		ipfsInitialised = true
+		_maintainConnection()
+		_resolveCachedPromises()
+		// eslint-disable-next-line no-console
+		console.log(`IPFS initialised!`)
+	})
 
 	return {
-		getJSONData,
-		sendJSONData,
-		sendData,
-		getData,
-		getNodes,
+		getJSONData: <T>(cid: string) => _promiseWrapper<T>(getJSONData, cid),
+		sendJSONData: <T>(content: T) => _promiseWrapper<string>(sendJSONData, content),
+		sendData: (content: string | ArrayBuffer) => _promiseWrapper(sendData, content),
+		getData: (cid: string) => _promiseWrapper(getData, cid),
+		getNodes: () => _promiseWrapper(getNodes),
+		initResult,
 	}
 }
 
