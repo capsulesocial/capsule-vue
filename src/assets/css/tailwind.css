@@ -89,7 +89,7 @@
 	::-webkit-scrollbar {
 		padding-top: 5px;
 		margin-top: 5px;
-		width: 3px;
+		width: 10px;
 	}
 
 	/* Track */
@@ -101,11 +101,14 @@
 	::-webkit-scrollbar-thumb {
 		background: #2e556a;
 		border-radius: 50px;
+		border-left: 6px solid transparent;
+		background-clip: content-box;
 	}
 
 	/* Handle on hover */
 	::-webkit-scrollbar-thumb:hover {
 		background: #7097ac;
+		width: 10px
 	}
 
 	/* Dark Handle */
