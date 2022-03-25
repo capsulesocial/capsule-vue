@@ -2,7 +2,7 @@
 	<div class="relative flex flex-grow items-center flex-row-reverse">
 		<!-- bookmarks sort -->
 		<div class="toggle flex w-full flex-row items-center justify-end">
-			<h6 class="hidden xl:block text-gray5 dark:text-gray3">Sort by:</h6>
+			<h6 class="hidden lg:block text-gray5 dark:text-gray3">Sort by:</h6>
 			<button
 				class="toggle focus:outline-none ml-4 flex items-center justify-between rounded-lg border dark:border-gray3 px-4 text-sm shadow-lg dark:text-gray3"
 				@click="showFilter = !showFilter"
@@ -24,7 +24,7 @@
 				<button
 					class="hotzone focus:outline-none mb-4"
 					:class="
-						filter === `BOOKMARK_DESC` ? `text-primary font-semibold` : `border-transparent text-lightPrimaryText`
+						filter === `BOOKMARK_DESC` ? `text-primary dark:text-secondary font-semibold` : `text-gray5 dark:text-gray3`
 					"
 					@click="updateSort(`BOOKMARK_DESC`)"
 				>
@@ -32,7 +32,9 @@
 				</button>
 				<button
 					class="hotzone focus:outline-none"
-					:class="filter === `POST_DESC` ? ` text-primary font-semibold` : `border-transparent text-lightPrimaryText`"
+					:class="
+						filter === `POST_DESC` ? ` text-primary dark:text-secondary font-semibold` : `text-gray5 dark:text-gray3`
+					"
 					@click="updateSort(`POST_DESC`)"
 				>
 					Posts date
