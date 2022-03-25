@@ -566,8 +566,7 @@ export default Vue.extend({
 				this.updateFaceStats()
 				this.sendingComment = false
 			} catch (err: unknown) {
-				const e = this.$getError(err)
-				this.$toastError(e)
+				this.$handleError(err)
 			}
 		},
 		async filterComments() {

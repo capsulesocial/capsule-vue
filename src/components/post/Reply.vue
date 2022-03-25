@@ -138,8 +138,7 @@ export default Vue.extend({
 				this.$toastSuccess(`This reply has been successfully removed`)
 				this.$emit(`updateReplies`)
 			} catch (err: unknown) {
-				const e = this.$getError(err)
-				this.$toastError(e)
+				this.$handleError(err)
 			}
 		},
 		toggleDropdownDelete() {

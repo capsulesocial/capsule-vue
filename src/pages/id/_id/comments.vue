@@ -86,8 +86,7 @@ export default Vue.extend({
 				this.comments = this.comments.concat(res)
 			} catch (err: unknown) {
 				this.isLoading = false
-				const e = this.$getError(err)
-				this.$toastError(e)
+				this.$handleError(err)
 			}
 		},
 		async handleScroll() {

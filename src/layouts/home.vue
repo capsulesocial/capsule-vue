@@ -208,8 +208,7 @@ export default Vue.extend({
 					this.updateFollowers()
 					this.$toastSuccess(this.following.has(authorID) ? `Followed ${authorID}` : `Unfollowed ${authorID}`)
 				} catch (err: unknown) {
-					const e = this.$getError(err)
-					this.$toastError(e)
+					this.$handleError(err)
 				}
 			}
 		},

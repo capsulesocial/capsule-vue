@@ -311,8 +311,7 @@ export default Vue.extend({
 				this.filterReplies()
 				this.reply = ``
 			} catch (err: unknown) {
-				const e = this.$getError(err)
-				this.$toastError(e)
+				this.$handleError(err)
 			}
 		},
 		filterReplies(): ICommentData[] {
@@ -325,8 +324,7 @@ export default Vue.extend({
 				this.$emit(`updateComments`)
 				this.$toastSuccess(`This comment has been successfully removed`)
 			} catch (err: unknown) {
-				const e = this.$getError(err)
-				this.$toastError(e)
+				this.$handleError(err)
 			}
 		},
 		toggleDropdownDelete() {

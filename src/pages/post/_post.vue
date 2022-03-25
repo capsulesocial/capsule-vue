@@ -485,8 +485,7 @@ export default Vue.extend({
 					const { following } = await getFollowersAndFollowing(this.$store.state.session.id, true)
 					this.userIsFollowed = following.has(this.post.authorID)
 				} catch (err: unknown) {
-					const e = this.$getError(err)
-					this.$toastError(e)
+					this.$handleError(err)
 				}
 			}
 		},

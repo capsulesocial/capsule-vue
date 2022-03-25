@@ -295,8 +295,7 @@ export default Vue.extend({
 					if (i.target !== null) {
 						this.uploadImage(i.target.result, compressedImage, image.name).catch((err) => {
 							target.value = ``
-							const errStr = this.$getError(err)
-							this.$toastError(errStr)
+							this.$handleError(err)
 						})
 					}
 				}
@@ -306,8 +305,7 @@ export default Vue.extend({
 				}
 			} catch (err: unknown) {
 				target.value = ``
-				const errStr = this.$getError(err)
-				this.$toastError(errStr)
+				this.$handleError(err)
 			}
 		},
 		handleCategoryDropdown(e: any): void {

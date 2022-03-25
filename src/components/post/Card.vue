@@ -917,8 +917,7 @@ export default Vue.extend({
 				this.$emit(`closePopup`)
 				this.$toastSuccess(`Successfully quoted this post`)
 			} catch (err: unknown) {
-				const e = this.$getError(err)
-				this.$toastError(e)
+				this.$handleError(err)
 			}
 		},
 		async getQuoteRepost(postCID: string) {

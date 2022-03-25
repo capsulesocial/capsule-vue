@@ -327,8 +327,7 @@ export default Vue.extend({
 					)
 					this.updateFollowers()
 				} catch (err: unknown) {
-					const e = this.$getError(err)
-					this.$toastError(e)
+					this.$handleError(err)
 				}
 			}
 		},

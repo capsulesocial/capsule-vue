@@ -414,8 +414,7 @@ export default Vue.extend({
 					pastedContent = pastedContent.replace(img[0], `<img alt="${cid}" src="${url}">`)
 				} catch (err: unknown) {
 					this.waitingImage = false
-					const e = this.$getError(err)
-					this.$toastError(e)
+					this.$handleError(err)
 					return null
 				}
 			}
@@ -444,8 +443,7 @@ export default Vue.extend({
 			} catch (err: unknown) {
 				this.waitingImage = false
 				this.refreshPostImages()
-				const e = this.$getError(err)
-				this.$toastError(e)
+				this.$handleError(err)
 			}
 		},
 		async handlePastedContent(e: ClipboardEvent) {
@@ -683,8 +681,7 @@ export default Vue.extend({
 				this.$store.commit(`settings/setRecentlyPosted`, true)
 				this.$router.push(`/post/` + cid)
 			} catch (err: unknown) {
-				const e = this.$getError(err)
-				this.$toastError(e)
+				this.$handleError(err)
 			}
 		},
 		handleTitle(e: any) {

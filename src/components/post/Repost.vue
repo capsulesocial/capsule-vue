@@ -137,8 +137,7 @@ export default Vue.extend({
 					this.isReposted = true
 					this.repostOffset += 1
 				} catch (err: unknown) {
-					const e = this.$getError(err)
-					this.$toastError(e)
+					this.$handleError(err)
 				}
 			} else {
 				// Undo repost
@@ -150,8 +149,7 @@ export default Vue.extend({
 					this.repostOffset -= 1
 					this.$toastSuccess(`This repost has been successfully removed from your profile`)
 				} catch (err: unknown) {
-					const e = this.$getError(err)
-					this.$toastError(e)
+					this.$handleError(err)
 				}
 			}
 		},

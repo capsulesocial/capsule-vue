@@ -228,8 +228,7 @@ export default Vue.extend({
 				this.changeLocation(account.location)
 				this.$router.push(`/home`)
 			} catch (err: unknown) {
-				const e = this.$getError(err)
-				this.$toastError(e)
+				this.$handleError(err)
 			}
 		},
 		async walletLogin(): Promise<void> {
@@ -259,8 +258,7 @@ export default Vue.extend({
 				this.changeLocation(account.location)
 				this.$router.push(`/home`)
 			} catch (err: unknown) {
-				const e = this.$getError(err)
-				this.$toastError(e)
+				this.$handleError(err)
 			}
 		},
 	},

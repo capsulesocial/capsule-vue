@@ -217,8 +217,7 @@ export default Vue.extend({
 				this.generatedInviteCode = inviteCode
 				this.inviteCodesRemaining = invitesRemaining
 			} catch (error: any) {
-				const e = this.$getError(error)
-				this.$toastError(e)
+				this.$handleError(err)
 			}
 		},
 		copyURL(): void {

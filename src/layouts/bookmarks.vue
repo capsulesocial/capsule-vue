@@ -166,8 +166,7 @@ export default Vue.extend({
 				this.posts = await getBookmarksOfUser(this.$store.state.session.id, category)
 				this.isLoading = false
 			} catch (error) {
-				const e = this.$getError(error)
-				this.$toastError(e)
+				this.$handleError(error)
 			}
 		},
 	},

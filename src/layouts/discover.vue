@@ -145,8 +145,7 @@ export default Vue.extend({
 					this.following = data.following
 				}
 			} catch (err: unknown) {
-				const e = this.$getError(err)
-				this.$toastError(e)
+				this.$handleError(err)
 			}
 		},
 	},
