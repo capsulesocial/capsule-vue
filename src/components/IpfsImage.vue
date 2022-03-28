@@ -56,7 +56,7 @@ export default Vue.extend({
 	display: block;
 	margin-left: auto;
 	margin-right: auto;
-	width: 50%;
+	width: 100%;
 	margin-top: 10px;
 	margin-bottom: 10px;
 }
