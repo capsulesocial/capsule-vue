@@ -316,6 +316,7 @@ export default Vue.extend({
 				return { success: true }
 			}
 			if (this.postImages.size === textLimits.post_images.max) {
+				this.waitingImage = false
 				return { error: `Cannot add more than ${textLimits.post_images.max} images in a post` }
 			}
 			this.postImages.add(cid)
@@ -387,7 +388,8 @@ export default Vue.extend({
 			const contentImgs = this.$getContentImages(pastedContent)
 			const imgSrcRegex = /src="([^\s|"]*)"/
 			if (contentImgs.length > textLimits.post_images.max) {
-				this.$toastError(`Can not add more than ${textLimits.post_images.max} images in a post`)
+				this.waitingImage = false
+				this.$toastError(`Cannot add more than ${textLimits.post_images.max} images in a post`)
 				return null
 			}
 			for (const img of contentImgs) {
