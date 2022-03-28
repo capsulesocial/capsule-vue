@@ -25,7 +25,7 @@
 							<span class="text-sm">Bookmarks</span>
 						</div>
 						<!-- Reposts count -->
-						<div class="flex flex-col">
+						<div class="flex flex-col transition ease-in-out hover:underline cursor-pointer" @click="openReposters">
 							<h2 class="text-2xl font-semibold">{{ repostsCount }}</h2>
 							<span class="text-sm">Reposts</span>
 						</div>
@@ -122,8 +122,21 @@
 				</div>
 			</div>
 		</article>
+		<!-- Show reposters -->
+		<article v-show="toggleReposters">
+			<!-- Back button -->
+			<div class="flex items-center">
+				<button class="bg-gray1 dark:bg-gray5 focus:outline-none rounded-full" @click="closeReposters">
+					<ChevronLeft />
+				</button>
+				<span class="pl-2 text-sm font-semibold dark:text-darkPrimaryText" style="margin-bottom: 2px">All stats</span>
+			</div>
+			<div v-for="p in profiles" :key="p.id">
+				<ProfilePreview :profile="p" :updateFollowers="updateFollowers" class="pt-4" />
+			</div>
+		</article>
 		<!-- Post a Comment -->
-		<article v-show="!toggleStats" id="section">
+		<article v-show="!toggleStats && !toggleReposters" id="section">
 			<div class="flex w-full justify-between py-5">
 				<div class="flex flex-row items-center">
 					<span v-if="getCommentCount(`total`) === 1" class="pr-2 font-semibold dark:text-darkPrimaryText"
@@ -393,6 +406,9 @@ import Avatar from '@/components/Avatar.vue'
 
 import { faces, feelings, faceGroupings } from '@/config'
 import { createComment, sendComment, ICommentData, getCommentsOfPost } from '@/backend/comment'
+import { getReposters, IGetRepostsOptions } from '@/backend/reposts'
+import { createDefaultProfile, getProfile } from '@/backend/profile'
+import { getFollowersAndFollowing } from '@/backend/following'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
 
 interface FaceStat {
@@ -413,6 +429,12 @@ interface IData {
 	filter: string
 	showDropdown: boolean
 	toggleStats: boolean
+	toggleReposters: boolean
+	reposters: Array<string>
+	profiles: any
+	followers: Set<string>
+	following: Set<string>
+	userIsFollowed: boolean
 	faceStats: FaceStat[]
 	page: number
 	selectedEmotionColor: `positive` | `neutral` | `negative` | `neutralLightest`
@@ -469,6 +491,12 @@ export default Vue.extend({
 			filter: ``,
 			showDropdown: false,
 			toggleStats: this.openStats,
+			toggleReposters: false,
+			reposters: [],
+			profiles: [],
+			followers: new Set(),
+			following: new Set(),
+			userIsFollowed: false,
 			faceStats: [],
 			page: 0,
 			selectedEmotionColor: `neutralLightest`,
@@ -631,6 +659,35 @@ export default Vue.extend({
 		},
 		sleep(ms: any) {
 			return new Promise((resolve) => setTimeout(resolve, ms))
+		},
+		openReposters() {
+			this.toggleStats = false
+			this.toggleReposters = true
+		},
+		closeReposters() {
+			this.toggleStats = true
+			this.toggleReposters = false
+		},
+		async initReposters() {
+			const options = { sort: `NEW`, offset: 0, limit: 10 } as IGetRepostsOptions
+			this.reposters = await getReposters(this.postCID, options)
+			this.reposters.forEach(this.getFollowers)
+		},
+		async getFollowers(p: string) {
+			let profile = createDefaultProfile(p)
+			const fetchedProfile = await getProfile(p)
+			if (fetchedProfile.profile) {
+				profile = fetchedProfile.profile
+			}
+			if (profile) {
+				this.profiles.push(profile)
+			}
+		},
+		async updateFollowers() {
+			const { followers, following } = await getFollowersAndFollowing(this.$route.params.id, true)
+			this.followers = followers
+			this.following = following
+			this.userIsFollowed = followers.has(this.$store.state.session.id)
 		},
 	},
 })
