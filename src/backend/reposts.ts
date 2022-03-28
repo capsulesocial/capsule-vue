@@ -69,3 +69,25 @@ export async function getReposts(
 
 	return data.data
 }
+
+export async function getReposters(postCID: string, options: IGetRepostsOptions): Promise<Array<string>> {
+	const { sort, offset = 0, limit = 10, following } = options
+	if (sort === `FOLLOWING` && !following) {
+		throw new Error(`Following not specified`)
+	}
+
+	const { data } = await axios.get(`${nodeUrl()}/repost`, {
+		params: {
+			postCID,
+			sort,
+			...(following && sort === `FOLLOWING` ? { following } : {}),
+			following,
+			offset,
+			limit,
+		},
+	})
+
+	const reposts = data.data as Array<IRepostResponse>
+	const authors = reposts.map((r) => r.repost.authorID)
+	return Array.from(new Set(authors))
+}
