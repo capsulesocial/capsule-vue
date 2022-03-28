@@ -9,7 +9,7 @@
 			</div>
 		</article>
 		<article v-else>
-			<img :src="image" :alt="cid" />
+			<img :src="image" :alt="cid" class="ipfs-image" />
 		</article>
 	</div>
 </template>
@@ -50,3 +50,14 @@ export default Vue.extend({
 	},
 })
 </script>
+
+<style scoped>
+.ipfs-image {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 50%;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+</style>
