@@ -92,6 +92,7 @@ interface IData {
 	privateKey: string
 	currentYear: string
 	dark: boolean
+	keyFileTarget: HTMLInputElement | null
 }
 
 export default Vue.extend({
@@ -118,6 +119,7 @@ export default Vue.extend({
 			privateKey: ``,
 			currentYear: ``,
 			dark: false,
+			keyFileTarget: null,
 		}
 	},
 	head() {
@@ -194,6 +196,7 @@ export default Vue.extend({
 			b.click()
 		},
 		handleKey(e: HTMLInputEvent): void {
+			this.keyFileTarget = e.target
 			if (!e.target.files) {
 				return
 			}
@@ -203,10 +206,17 @@ export default Vue.extend({
 				reader.readAsText(keyFile)
 				reader.onload = (i: Event) => {
 					if (i.target !== null && reader.result !== null) {
-						const key = JSON.parse(reader.result as string)
-						this.accountIdInput = key.accountId
-						this.privateKey = key.privateKey
-						this.walletLogin()
+						try {
+							const key = JSON.parse(reader.result as string)
+							this.accountIdInput = key.accountId
+							this.privateKey = key.privateKey
+							this.walletLogin()
+						} catch (error) {
+							if (this.keyFileTarget) {
+								this.keyFileTarget.value = ``
+							}
+							this.$handleError(error)
+						}
 					}
 				}
 			}
@@ -241,21 +251,28 @@ export default Vue.extend({
 			}
 		},
 		async walletLogin(): Promise<void> {
-			this.username = await getUsernameNEAR(this.accountIdInput)
-			if (!this.username) {
-				this.$toastWarning(`looks like you don't have an account`)
-				this.$router.push(`/register`)
-				return
-			}
+			try {
+				this.username = await getUsernameNEAR(this.accountIdInput)
+				if (!this.username) {
+					this.$toastWarning(`looks like you don't have an account`)
+					this.$router.push(`/register`)
+					return
+				}
 
-			const { blocked } = await getUserInfoNEAR(this.username)
-			if (blocked) {
-				// If account is blocked then send to register page...
-				this.$toastError(`Your account has been deactivated or banned`)
-				this.$router.push(`/register`)
-				return
+				const { blocked } = await getUserInfoNEAR(this.username)
+				if (blocked) {
+					// If account is blocked then send to register page...
+					this.$toastError(`Your account has been deactivated or banned`)
+					this.$router.push(`/register`)
+					return
+				}
+				this.walletVerify()
+			} catch (error) {
+				if (this.keyFileTarget) {
+					this.keyFileTarget.value = ``
+				}
+				this.$handleError(error)
 			}
-			this.walletVerify()
 		},
 		async walletVerify() {
 			try {
@@ -276,6 +293,7 @@ export default Vue.extend({
 				this.changeLocation(account.location)
 				this.$router.push(`/home`)
 			} catch (err: unknown) {
+				this.isLoading = false
 				this.$handleError(err)
 			}
 		},
