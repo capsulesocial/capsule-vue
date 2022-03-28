@@ -84,6 +84,7 @@ export async function getReposters(postCID: string, options: IGetRepostsOptions)
 			following,
 			offset,
 			limit,
+			duplicate: true,
 		},
 	})
 
