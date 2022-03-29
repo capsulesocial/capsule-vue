@@ -6,7 +6,10 @@
 			@mouseenter="showInfo = true"
 			@mouseleave="showInfo = false"
 		>
-			<span v-if="initNodes" class="text-gray5 dark:text-gray1 mr-1 text-sm modal-animation">Connecting peers...</span>
+			<span v-if="initIPFS" class="text-gray5 dark:text-gray1 mr-1 text-sm modal-animation">Initialising IPFS...</span>
+			<span v-else-if="initNodes" class="text-gray5 dark:text-gray1 mr-1 text-sm modal-animation"
+				>Connecting peers...</span
+			>
 			<span v-else class="text-gray5 dark:text-gray1 mr-1 text-sm modal-animation">{{ nodes }} peered nodes</span>
 			<CapsuleIcon v-if="!initNodes" :shrink="true" class="text-primary dark:text-gray1 modal-animation" />
 			<span v-if="initNodes" class="ml-1 flex h-3 w-3 modal-animation">
@@ -44,6 +47,7 @@ import ipfs from '@/backend/utilities/ipfs'
 export interface IData {
 	nodes: number
 	initNodes: boolean
+	initIPFS: boolean
 	showInfo: boolean
 	dark: boolean
 }
@@ -55,14 +59,15 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			nodes: 0,
-			initNodes: false,
+			initNodes: true,
+			initIPFS: true,
 			showInfo: false,
 			dark: false,
 		}
 	},
-	created() {
+	async created() {
 		this.dark = document.documentElement.classList.contains(`dark`)
-		this.update()
+		await this.update()
 		this.updateLoop()
 	},
 	methods: {
@@ -73,8 +78,14 @@ export default Vue.extend({
 			}, 1000)
 		},
 		async update() {
+			const i = ipfs()
+			await i.initResult
+			this.initIPFS = false
 			const nodes = await ipfs().getNodes()
 			this.nodes = nodes
+			if (this.initNodes && nodes !== 0) {
+				this.initNodes = false
+			}
 		},
 	},
 })
