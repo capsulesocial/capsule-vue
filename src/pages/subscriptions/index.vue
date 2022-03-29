@@ -6,8 +6,8 @@
 			<h6 class="font-semibold">Back</h6>
 		</button>
 		<!-- Network Tab -->
-		<h3 class="text-primary dark:text-secondary pb-4 text-base font-semibold">My subscriptions</h3>
-		<p class="text-gray5 mb-6">Manage your active subscriptions to your favorite content creators here:</p>
+		<h2 class="text-primary dark:text-secondary mb-1 text-lg font-semibold xl:text-xl">My subscriptions</h2>
+		<p class="text-gray5 dark:text-gray3">Manage your active subscriptions to your favorite content creators here:</p>
 	</main>
 </template>
 
