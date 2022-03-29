@@ -51,18 +51,22 @@ export default Vue.extend({
 	},
 	methods: {
 		async downloadPrivateKey(): Promise<void> {
-			if (!this.accountId) {
-				throw new Error(`Unexpected condition!`)
+			try {
+				if (!this.accountId) {
+					throw new Error(`Unexpected condition!`)
+				}
+				const privateKey = await getNearPrivateKey(this.accountId)
+				const blob = new Blob([JSON.stringify({ accountId: this.accountId, privateKey })], { type: `application/json` })
+				const link = document.createElement(`a`)
+				link.href = URL.createObjectURL(blob)
+				link.download = `blogchain-priv-key-${this.aid}`
+				link.click()
+				URL.revokeObjectURL(link.href)
+				this.$toastSuccess(`Downloaded Blogchain private key`)
+				this.hasDownloadedKey = true
+			} catch (error) {
+				this.$handleError(error)
 			}
-			const privateKey = await getNearPrivateKey(this.accountId)
-			const blob = new Blob([JSON.stringify({ accountId: this.accountId, privateKey })], { type: `application/json` })
-			const link = document.createElement(`a`)
-			link.href = URL.createObjectURL(blob)
-			link.download = `blogchain-priv-key-${this.aid}`
-			link.click()
-			URL.revokeObjectURL(link.href)
-			this.$toastSuccess(`Downloaded Blogchain private key`)
-			this.hasDownloadedKey = true
 		},
 	},
 })

@@ -184,19 +184,23 @@ export default Vue.extend({
 			changeLocation: MutationType.CHANGE_LOCATION,
 		}),
 		async downloadPrivateKey(): Promise<void> {
-			const accountId = window.localStorage.getItem(`accountId`)
-			if (!accountId) {
-				this.$toastError(`Account not found, are you signed in?`)
-				return
+			try {
+				const accountId = window.localStorage.getItem(`accountId`)
+				if (!accountId) {
+					this.$toastError(`Account not found, are you signed in?`)
+					return
+				}
+				const privateKey = await getNearPrivateKey(accountId)
+				const blob = new Blob([JSON.stringify({ accountId, privateKey })], { type: `application/json` })
+				const link = document.createElement(`a`)
+				link.href = URL.createObjectURL(blob)
+				link.download = `blogchain-priv-key-${this.$store.state.session.id}`
+				link.click()
+				URL.revokeObjectURL(link.href)
+				this.$toastSuccess(`Downloaded Blogchain private key`)
+			} catch (error) {
+				this.$handleError(error)
 			}
-			const privateKey = await getNearPrivateKey(accountId)
-			const blob = new Blob([JSON.stringify({ accountId, privateKey })], { type: `application/json` })
-			const link = document.createElement(`a`)
-			link.href = URL.createObjectURL(blob)
-			link.download = `blogchain-priv-key-${this.$store.state.session.id}`
-			link.click()
-			URL.revokeObjectURL(link.href)
-			this.$toastSuccess(`Downloaded Blogchain private key`)
 		},
 		async updateProfile() {
 			const backendProfile = getProfileFromSession(this.$store.state.session)
