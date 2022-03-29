@@ -65,10 +65,13 @@ export default Vue.extend({
 			dark: false,
 		}
 	},
-	async created() {
+	created() {
 		this.dark = document.documentElement.classList.contains(`dark`)
-		await this.update()
-		this.updateLoop()
+		ipfs().initResult.then(async () => {
+			this.initIPFS = false
+			await this.update()
+			this.updateLoop()
+		})
 	},
 	methods: {
 		updateLoop() {
@@ -78,9 +81,6 @@ export default Vue.extend({
 			}, 1000)
 		},
 		async update() {
-			const i = ipfs()
-			await i.initResult
-			this.initIPFS = false
 			const nodes = await ipfs().getNodes()
 			this.nodes = nodes
 			if (this.initNodes && nodes !== 0) {
