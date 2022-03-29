@@ -122,11 +122,7 @@ export default Vue.extend({
 			this.featuredPhoto = await getPhotoFromIPFS(this.draft.featuredPhotoCID)
 		}
 		window.addEventListener(`click`, this.handleDropdown, false)
-		if (document.documentElement.classList.contains(`dark`)) {
-			this.dark = true
-		} else {
-			this.dark = false
-		}
+		this.dark = document.documentElement.classList.contains(`dark`)
 	},
 	destroyed() {
 		if (this.delayActiveDraft) {

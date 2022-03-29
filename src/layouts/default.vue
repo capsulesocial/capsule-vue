@@ -97,11 +97,7 @@ export default Vue.extend({
 		this.bgImage = this.$getBGImage(this.myProfile?.background, `local`)
 		const myConnections = await getFollowersAndFollowing(this.$store.state.session.id)
 		this.myFollowing = myConnections.following
-		if (document.documentElement.classList.contains(`dark`)) {
-			this.dark = true
-		} else {
-			this.dark = false
-		}
+		this.dark = document.documentElement.classList.contains(`dark`)
 	},
 	methods: {
 		handleReload(): void {

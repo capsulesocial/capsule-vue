@@ -138,11 +138,7 @@ export default Vue.extend({
 		if (this.$store.state.draft.drafts[this.$store.state.draft.activeIndex] === undefined) {
 			this.$store.commit(`draft/setActiveDraft`, 0)
 		}
-		if (document.documentElement.classList.contains(`dark`)) {
-			this.dark = true
-		} else {
-			this.dark = false
-		}
+		this.dark = document.documentElement.classList.contains(`dark`)
 	},
 	methods: {
 		toggleConfirmPost() {

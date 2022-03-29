@@ -90,11 +90,7 @@ export default Vue.extend({
 	async created() {
 		// Set color mode
 		this.$setColorMode(this.$store.state.settings.darkMode)
-		if (document.documentElement.classList.contains(`dark`)) {
-			this.dark = true
-		} else {
-			this.dark = false
-		}
+		this.dark = document.documentElement.classList.contains(`dark`)
 		// unauth
 		if (this.$store.state.session.id === ``) {
 			return

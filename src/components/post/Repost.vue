@@ -113,11 +113,7 @@ export default Vue.extend({
 			},
 			false,
 		)
-		if (document.documentElement.classList.contains(`dark`)) {
-			this.dark = true
-		} else {
-			this.dark = false
-		}
+		this.dark = document.documentElement.classList.contains(`dark`)
 	},
 	methods: {
 		sendRepost,

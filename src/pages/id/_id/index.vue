@@ -105,11 +105,7 @@ export default Vue.extend({
 	},
 	async created() {
 		this.posts = await this.fetchPosts()
-		if (document.documentElement.classList.contains(`dark`)) {
-			this.dark = true
-		} else {
-			this.dark = false
-		}
+		this.dark = document.documentElement.classList.contains(`dark`)
 	},
 	mounted() {
 		const container = this.$parent.$refs.scrollContainer as HTMLElement

@@ -202,11 +202,7 @@ export default Vue.extend({
 		},
 	},
 	mounted() {
-		if (document.documentElement.classList.contains(`dark`)) {
-			this.dark = true
-		} else {
-			this.dark = false
-		}
+		this.dark = document.documentElement.classList.contains(`dark`)
 		this.fetchActiveDraft()
 	},
 	methods: {

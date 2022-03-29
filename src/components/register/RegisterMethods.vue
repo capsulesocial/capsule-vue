@@ -97,11 +97,7 @@ export default Vue.extend({
 	async created() {
 		this.isLoading = true
 		await this.torus.init()
-		if (document.documentElement.classList.contains(`dark`)) {
-			this.dark = true
-		} else {
-			this.dark = false
-		}
+		this.dark = document.documentElement.classList.contains(`dark`)
 		this.isLoading = false
 	},
 	methods: {
