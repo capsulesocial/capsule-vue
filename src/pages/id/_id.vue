@@ -140,9 +140,10 @@
 						/>
 						<!-- Subscription button -->
 						<SubscribeButton
+							v-if="$store.state.session.id !== $route.params.id"
 							:toggleSubscription="toggleSubscription"
 							:userIsSubscribed="false"
-							class="header-profile flex-shrink-0"
+							class="header-profile flex-shrink-0 ml-2"
 						/>
 					</div>
 				</div>
