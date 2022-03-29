@@ -168,11 +168,7 @@ export default Vue.extend({
 	async created() {
 		// Unauthenticated view
 		this.posts = await this.fetchPosts(this.algorithm)
-		if (document.documentElement.classList.contains(`dark`)) {
-			this.dark = true
-		} else {
-			this.dark = false
-		}
+		this.dark = document.documentElement.classList.contains(`dark`)
 	},
 	mounted() {
 		const container = this.$refs.container as HTMLElement

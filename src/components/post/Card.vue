@@ -735,11 +735,7 @@ export default Vue.extend({
 	},
 	async created() {
 		// check dark mode
-		if (document.documentElement.classList.contains(`dark`)) {
-			this.dark = true
-		} else {
-			this.dark = false
-		}
+		this.dark = document.documentElement.classList.contains(`dark`)
 		// Get post CID if on full post page
 		if (this.post._id === undefined) {
 			this.postCID = this.$route.params.post

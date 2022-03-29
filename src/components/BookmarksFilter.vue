@@ -76,11 +76,7 @@ export default Vue.extend({
 	created() {
 		// Set filter dropdown event handler
 		window.addEventListener(`click`, this.handleDropdown, false)
-		if (document.documentElement.classList.contains(`dark`)) {
-			this.dark = true
-		} else {
-			this.dark = false
-		}
+		this.dark = document.documentElement.classList.contains(`dark`)
 	},
 	destroyed() {
 		window.removeEventListener(`click`, this.handleDropdown)

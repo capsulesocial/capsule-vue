@@ -54,11 +54,7 @@ export default Vue.extend({
 		}
 	},
 	created() {
-		if (document.documentElement.classList.contains(`dark`)) {
-			this.dark = true
-		} else {
-			this.dark = false
-		}
+		this.dark = document.documentElement.classList.contains(`dark`)
 		this.update()
 		this.updateLoop()
 	},

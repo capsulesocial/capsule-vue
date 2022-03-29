@@ -78,11 +78,7 @@ export default Vue.extend({
 	},
 	created() {
 		window.addEventListener(`click`, this.handleCloseClick, false)
-		if (document.documentElement.classList.contains(`dark`)) {
-			this.dark = true
-		} else {
-			this.dark = false
-		}
+		this.dark = document.documentElement.classList.contains(`dark`)
 	},
 	destroyed() {
 		window.removeEventListener(`click`, this.handleCloseClick)

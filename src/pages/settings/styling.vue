@@ -185,11 +185,7 @@ export default Vue.extend({
 		}
 	},
 	async created() {
-		if (document.documentElement.classList.contains(`dark`)) {
-			this.dark = true
-		} else {
-			this.dark = false
-		}
+		this.dark = document.documentElement.classList.contains(`dark`)
 		window.addEventListener(`click`, this.handleDropdown, false)
 		const { profile } = await getProfile(this.$store.state.session.id)
 		this.profile = profile

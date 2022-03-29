@@ -446,11 +446,7 @@ export default Vue.extend({
 		if (this.$store.state.settings.recentlyPosted) {
 			this.$toastSuccess(`Your post has been successfully published on Blogchain`)
 		}
-		if (document.documentElement.classList.contains(`dark`)) {
-			this.dark = true
-		} else {
-			this.dark = false
-		}
+		this.dark = document.documentElement.classList.contains(`dark`)
 	},
 	beforeDestroy() {
 		if (this.$store.state.settings.recentlyPosted) {

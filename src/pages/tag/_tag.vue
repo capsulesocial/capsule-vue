@@ -137,11 +137,7 @@ export default Vue.extend({
 	async created() {
 		// Fetch posts with tag (unauthenticated)
 		this.posts = await this.fetchPosts()
-		if (document.documentElement.classList.contains(`dark`)) {
-			this.dark = true
-		} else {
-			this.dark = false
-		}
+		this.dark = document.documentElement.classList.contains(`dark`)
 	},
 	mounted() {
 		const container = this.$refs.container as HTMLElement

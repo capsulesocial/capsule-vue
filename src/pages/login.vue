@@ -143,11 +143,7 @@ export default Vue.extend({
 		}
 		const theDate = new Date()
 		this.currentYear = theDate.getFullYear().toString()
-		if (document.documentElement.classList.contains(`dark`)) {
-			this.dark = true
-		} else {
-			this.dark = false
-		}
+		this.dark = document.documentElement.classList.contains(`dark`)
 	},
 	methods: {
 		...mapMutations(sessionStoreNamespace, {

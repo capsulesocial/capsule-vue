@@ -118,11 +118,7 @@ export default Vue.extend({
 			})
 		}
 		// check for dark mode
-		if (document.documentElement.classList.contains(`dark`)) {
-			this.dark = true
-		} else {
-			this.dark = false
-		}
+		this.dark = document.documentElement.classList.contains(`dark`)
 		// Close more dropdown
 		window.addEventListener(`click`, () => {
 			if (this.showDelete) {

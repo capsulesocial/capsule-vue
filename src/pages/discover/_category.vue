@@ -173,11 +173,7 @@ export default Vue.extend({
 		if (this.$store.state.session.id === ``) {
 			return
 		}
-		if (document.documentElement.classList.contains(`dark`)) {
-			this.dark = true
-		} else {
-			this.dark = false
-		}
+		this.dark = document.documentElement.classList.contains(`dark`)
 	},
 	mounted() {
 		const container = document.getElementById(`column`)
