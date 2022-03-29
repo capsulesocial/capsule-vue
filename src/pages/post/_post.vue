@@ -251,6 +251,7 @@ import { ICommentData } from '@/backend/comment'
 import ogImage from '@/assets/images/util/ogImage.png'
 import { domain } from '@/backend/utilities/config'
 import { createShareableLink } from '@/backend/shareable_links'
+import { calculateReadingTime } from '@/backend/utilities/helpers'
 
 interface IData {
 	post: Post | null
@@ -552,13 +553,7 @@ export default Vue.extend({
 			if (wordcount <= 0) {
 				throw new Error(`Word count can't be equal or less than zero`)
 			}
-			const textReadingTime = wordcount / 275
-			let photoReadingTime = 0
-			if (this.post.postImages) {
-				photoReadingTime = (this.post.postImages.length * ((12 * 100) / 60)) / 100
-			}
-			const readingTime = Math.round(((textReadingTime + photoReadingTime) * 60) / 100)
-			this.readingTime = readingTime < 1 ? 1 : readingTime
+			this.readingTime = calculateReadingTime(wordcount, this.post.postImages?.length)
 		},
 	},
 })
