@@ -56,23 +56,12 @@
 										/>
 									</div>
 									<div class="ml-4 hidden flex-grow flex-col lg:flex">
-										<div @mouseover="triggerPopupCardTrue" @mouseleave="triggerPopupCardFalse">
-											<nuxt-link :to="'/id/' + post.authorID" class="mr-4 flex">
-												<span
-													v-if="authorName != ``"
-													class="text-base dark:text-darkPrimaryText font-medium transition ease-in-out hover:underline"
-												>
-													{{ authorName }}
-												</span>
-												<span
-													v-else
-													class="text-gray5 dark:text-gray3 text-base font-medium transition ease-in-out hover:underline"
-												>
-													{{ post.authorID }}
-												</span>
-												<span class="text-primary dark:text-secondary ml-2"> @{{ post.authorID }} </span>
-											</nuxt-link>
-										</div>
+										<CardProfileHeader
+											:authorID="post.authorID"
+											:authorName="authorName"
+											@mouseover="triggerPopupCardTrue"
+											@mouseleave="triggerPopupCardFalse"
+										/>
 										<!-- Timestamp -->
 										<span class="text-xs dark:text-gray3">
 											{{ $formatDate(post.timestamp) }}
@@ -97,21 +86,7 @@
 											:toggleFriend="() => toggleFriend(post.authorID)"
 										/>
 									</div>
-									<nuxt-link :to="'/id/' + post.authorID" class="mr-4 flex flex-col">
-										<span
-											v-if="authorName != ``"
-											class="text-base font-bold transition ease-in-out hover:underline dark:text-darkPrimaryText"
-										>
-											{{ authorName }}
-										</span>
-										<span
-											v-else
-											class="text-gray5 dark:text-gray3 text-base font-bold transition ease-in-out hover:underline"
-										>
-											{{ post.authorID }}
-										</span>
-										<span class="text-primary dark:text-secondary"> @{{ post.authorID }} </span>
-									</nuxt-link>
+									<CardProfileHeader :authorID="post.authorID" :authorName="authorName" :isHoverCard="true" />
 									<span v-if="authorBio !== ``" class="mt-2 dark:text-darkPrimaryText"> {{ authorBio }} </span>
 								</div>
 								<div
@@ -352,23 +327,12 @@
 									/>
 								</div>
 								<div class="ml-4 flex flex-grow flex-col">
-									<div class="flex" @mouseover="triggerProfileCardTrue" @mouseleave="triggerProfileCardFalse">
-										<nuxt-link :to="'/id/' + post.authorID" class="mr-4 flex">
-											<span
-												v-if="authorName != ``"
-												class="text-base dark:text-darkPrimaryText font-medium transition ease-in-out hover:underline"
-											>
-												{{ authorName }}
-											</span>
-											<span
-												v-else
-												class="text-gray5 dark:text-gray3 text-base font-medium transition ease-in-out hover:underline"
-											>
-												{{ post.authorID }}
-											</span>
-											<span class="text-primary dark:text-secondary ml-2"> @{{ post.authorID }} </span>
-										</nuxt-link>
-									</div>
+									<CardProfileHeader
+										:authorID="post.authorID"
+										:authorName="authorName"
+										@mouseover="triggerProfileCardTrue"
+										@mouseleave="triggerProfileCardFalse"
+									/>
 									<!-- Timestamp and reading time -->
 									<div class="flex flex-row mt-1 items-center">
 										<span class="text-xs text-gray5 dark:text-gray3">
@@ -397,21 +361,7 @@
 										:toggleFriend="() => toggleFriend(post.authorID)"
 									/>
 								</div>
-								<nuxt-link :to="'/id/' + post.authorID" class="mr-4 flex flex-col">
-									<span
-										v-if="authorName != ``"
-										class="text-base font-bold transition ease-in-out hover:underline dark:text-darkPrimaryText"
-									>
-										{{ authorName }}
-									</span>
-									<span
-										v-else
-										class="text-gray5 dark:text-gray3 text-base font-bold transition ease-in-out hover:underline"
-									>
-										{{ post.authorID }}
-									</span>
-									<span class="text-primary dark:text-secondary"> @{{ post.authorID }} </span>
-								</nuxt-link>
+								<CardProfileHeader :authorID="post.authorID" :authorName="authorName" :isHoverCard="true" />
 								<span v-if="authorBio !== ``" class="mt-2 dark:text-darkPrimaryText"> {{ authorBio }} </span>
 							</div>
 							<div class="relative flex items-center" :class="repostedBy !== `` ? `-mt-4` : ``">
@@ -581,6 +531,7 @@ import StatsIcon from '@/components/icons/Stats.vue'
 import BinIcon from '@/components/icons/Bin.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 import SharePopup from '@/components/popups/SharePopup.vue'
+import CardProfileHeader from '@/components/post/card/ProfileHeader.vue'
 
 import { RetrievedPost, getRegularPost } from '@/backend/post'
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
@@ -597,6 +548,12 @@ interface IData {
 	showStats: boolean
 	showDelete: boolean
 	showQuoteDelete: boolean
+	showQuoteCard: boolean
+	showPopupCard: boolean
+	showRepostEditor: boolean
+	showProfileCard: boolean
+	showPopup: boolean
+	showShare: boolean
 	authorName: string
 	authorBio: string
 	avatar: string
@@ -606,13 +563,7 @@ interface IData {
 	isReposted: boolean
 	repostOffset: number
 	postDeleted: boolean
-	showProfileCard: boolean
-	showQuoteCard: boolean
-	showPopupCard: boolean
 	hasEntered: boolean
-	showRepostEditor: boolean
-	showPopup: boolean
-	showShare: boolean
 	quoteContent: string
 	quote: {
 		authorID: string
@@ -645,6 +596,7 @@ export default Vue.extend({
 		BrandedButton,
 		SendIcon,
 		SharePopup,
+		CardProfileHeader,
 	},
 	props: {
 		repost: {
