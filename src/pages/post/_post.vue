@@ -444,14 +444,15 @@ export default Vue.extend({
 		if (container) {
 			container.addEventListener(`scroll`, this.handleScroll)
 		}
+		this.dark = document.documentElement.classList.contains(`dark`)
+		// This is a new post
 		if (this.$store.state.settings.recentlyPosted) {
 			this.$toastSuccess(`Your post has been successfully published on Blogchain`)
-		}
-		this.dark = document.documentElement.classList.contains(`dark`)
-	},
-	beforeDestroy() {
-		if (this.$store.state.settings.recentlyPosted) {
 			this.$store.commit(`settings/setRecentlyPosted`, false)
+			// Trigger share popup
+			setTimeout(() => {
+				this.showShare = true
+			}, 1500)
 		}
 	},
 	methods: {
