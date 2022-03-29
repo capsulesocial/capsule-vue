@@ -91,3 +91,13 @@ export function getInviteToken(): string | null {
 		return null
 	}
 }
+
+export function calculateReadingTime(wordCount?: number, postImagesLength: number = 0) {
+	if (!wordCount) {
+		return null
+	}
+	const textReadingTime = wordCount / 275
+	const photoReadingTime = (postImagesLength * ((12 * 100) / 60)) / 100
+	const readingTime = Math.round(((textReadingTime + photoReadingTime) * 60) / 100)
+	return readingTime < 1 ? 1 : readingTime
+}
