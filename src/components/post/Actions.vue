@@ -74,7 +74,7 @@
 					<!-- Type breakdown Count -->
 					<div class="flex flex-row">
 						<div class="flex flex-col pr-4">
-							<h2 class="text-lightPrimary text-2xl font-semibold">{{ getCommentCount(`positive`) }}</h2>
+							<h2 class="text-positive text-2xl font-semibold">{{ getCommentCount(`positive`) }}</h2>
 							<span class="text-sm">Positive</span>
 						</div>
 						<div class="flex flex-col pr-4">
@@ -123,7 +123,7 @@
 			</div>
 		</article>
 		<!-- Show reposters -->
-		<article v-show="toggleReposters">
+		<article v-show="toggleReposters" class="pt-5">
 			<!-- Back button -->
 			<div class="flex items-center">
 				<button class="bg-gray1 dark:bg-gray5 focus:outline-none rounded-full" @click="closeReposters">
@@ -669,7 +669,7 @@ export default Vue.extend({
 			this.toggleReposters = false
 		},
 		async initReposters() {
-			const options = { sort: `NEW`, offset: 0, limit: 10 } as IGetRepostsOptions
+			const options: IGetRepostsOptions = { sort: `NEW`, offset: 0, limit: 10 }
 			this.reposters = await getReposters(this.postCID, options)
 			this.reposters.forEach(this.getFollowers)
 		},
@@ -679,9 +679,7 @@ export default Vue.extend({
 			if (fetchedProfile.profile) {
 				profile = fetchedProfile.profile
 			}
-			if (profile) {
-				this.profiles.push(profile)
-			}
+			this.profiles.push(profile)
 		},
 		async updateFollowers() {
 			const { followers, following } = await getFollowersAndFollowing(this.$route.params.id, true)
