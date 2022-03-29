@@ -2,20 +2,25 @@
 	<div class="relative">
 		<!-- Peered nodes -->
 		<div
-			class="bg-gray1 dark:bg-gray7 items-center rounded-lg px-3 flex"
+			class="bg-gray1 dark:bg-gray7 items-center rounded-lg px-3 flex h-9"
 			@mouseenter="showInfo = true"
 			@mouseleave="showInfo = false"
 		>
-			<span class="text-gray5 dark:text-gray1 mr-1 text-sm">{{ nodes }} peered nodes</span>
-			<CapsuleIcon :shrink="true" class="text-primary dark:text-gray1" />
-			<span class="ml-1 flex h-3 w-3">
+			<span v-if="initNodes" class="text-gray5 dark:text-gray1 mr-1 text-sm modal-animation">Connecting peers...</span>
+			<span v-else class="text-gray5 dark:text-gray1 mr-1 text-sm modal-animation">{{ nodes }} peered nodes</span>
+			<CapsuleIcon v-if="!initNodes" :shrink="true" class="text-primary dark:text-gray1 modal-animation" />
+			<span v-if="initNodes" class="ml-1 flex h-3 w-3 modal-animation">
+				<span class="absolute inline-flex h-3 w-3 animate-ping rounded-full opacity-75 bg-gray5 dark:bg-gray3"></span>
+				<span class="relative inline-flex h-3 w-3 rounded-full bg-gray5 dark:bg-gray3"></span>
+			</span>
+			<span v-else class="ml-1 flex h-3 w-3 modal-animation">
 				<span
 					class="absolute inline-flex h-3 w-3 animate-ping rounded-full opacity-75"
-					:class="nodes > 5 ? `bg-connectGreen` : `bg-connectOrange`"
+					:class="nodes > 5 ? `bg-positive` : `bg-connectOrange`"
 				></span>
 				<span
 					class="relative inline-flex h-3 w-3 rounded-full"
-					:class="nodes > 5 ? `bg-connectGreen` : `bg-connectOrange`"
+					:class="nodes > 5 ? `bg-positive` : `bg-connectOrange`"
 				></span>
 			</span>
 		</div>
@@ -38,6 +43,7 @@ import ipfs from '@/backend/utilities/ipfs'
 
 export interface IData {
 	nodes: number
+	initNodes: boolean
 	showInfo: boolean
 	dark: boolean
 }
@@ -49,6 +55,7 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			nodes: 0,
+			initNodes: false,
 			showInfo: false,
 			dark: false,
 		}
