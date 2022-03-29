@@ -506,6 +506,7 @@ export default Vue.extend({
 	},
 	created() {
 		this.initComments()
+		this.initReposters()
 		this.dark = document.documentElement.classList.contains(`dark`)
 	},
 	methods: {
