@@ -590,6 +590,7 @@ import { isPostBookmarkedByUser } from '@/backend/bookmarks'
 import { sendPostDeletion } from '@/backend/postDeletion'
 import { IRepost, sendRepost } from '@/backend/reposts'
 import { ICommentData } from '@/backend/comment'
+import { calculateReadingTime } from '@/backend/utilities/helpers'
 
 interface IData {
 	showComments: boolean
@@ -978,17 +979,11 @@ export default Vue.extend({
 			this.showPopupCard = true
 		},
 		calculateReadingTime() {
-			const wordcount = this.post.wordCount
-			if (!wordcount) {
+			const readingTime = calculateReadingTime(this.post.wordCount, this.post.postImages?.length)
+			if (!readingTime) {
 				return
 			}
-			const textReadingTime = wordcount / 275
-			let photoReadingTime = 0
-			if (this.post.postImages) {
-				photoReadingTime = (this.post.postImages.length * ((12 * 100) / 60)) / 100
-			}
-			const readingTime = Math.round(((textReadingTime + photoReadingTime) * 60) / 100)
-			this.readingTime = readingTime < 1 ? 1 : readingTime
+			this.readingTime = readingTime
 		},
 	},
 })
