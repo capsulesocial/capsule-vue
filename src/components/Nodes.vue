@@ -8,7 +8,7 @@
 		>
 			<span v-if="initIPFS" class="text-gray5 dark:text-gray1 mr-1 text-sm modal-animation">Initialising IPFS...</span>
 			<span v-else-if="initNodes" class="text-gray5 dark:text-gray1 mr-1 text-sm modal-animation"
-				>Connecting peers...</span
+				>Connecting to peers...</span
 			>
 			<span v-else class="text-gray5 dark:text-gray1 mr-1 text-sm modal-animation">{{ nodes }} peered nodes</span>
 			<CapsuleIcon v-if="!initNodes" :shrink="true" class="text-primary dark:text-gray1 modal-animation" />
