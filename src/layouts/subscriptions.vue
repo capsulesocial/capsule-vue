@@ -30,7 +30,7 @@
 								class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation mb-5 flex flex-col overflow-hidden rounded-lg border bg-gradient-to-r py-4 px-6 pb-2 shadow-lg"
 								style="backdrop-filter: blur(10px)"
 							>
-								<h3 class="text-primary dark:text-secondary pb-4 text-base font-semibold">Expired subscriptions</h3>
+								<h3 class="text-primary dark:text-secondary text-base font-semibold mb-4">Expired subscriptions</h3>
 							</div>
 							<Footer />
 						</aside>
