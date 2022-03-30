@@ -52,7 +52,6 @@ import { BookmarkSort } from '@/backend/bookmarks'
 
 interface IData {
 	showFilter: boolean
-	dark: boolean
 }
 
 export default Vue.extend({
@@ -70,13 +69,11 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			showFilter: false,
-			dark: false,
 		}
 	},
 	created() {
 		// Set filter dropdown event handler
 		window.addEventListener(`click`, this.handleDropdown, false)
-		this.dark = document.documentElement.classList.contains(`dark`)
 	},
 	destroyed() {
 		window.removeEventListener(`click`, this.handleDropdown)

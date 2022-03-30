@@ -30,7 +30,7 @@
 				<div
 					v-show="showDropdown"
 					class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation absolute mt-16 flex flex-col rounded-lg border bg-gradient-to-r p-4 shadow-lg backdrop-blur-lg backdrop-filter"
-					:class="dark ? `dropdownOpenDark` : `dropdownOpen`"
+					:class="$colorMode.dark ? `dropdownOpenDark` : `dropdownOpen`"
 				>
 					<!-- Unauthenticated: Log in -->
 					<nuxt-link
@@ -80,7 +80,7 @@
 				<div
 					v-show="showMobileMenu"
 					class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation absolute mt-2 ml-0 flex flex-col rounded-lg border bg-gradient-to-r p-4 shadow-lg backdrop-blur-lg backdrop-filter"
-					:class="dark ? `dropdownMainOpenDark` : `dropdownMainOpen`"
+					:class="$colorMode.dark ? `dropdownMainOpenDark` : `dropdownMainOpen`"
 				>
 					<nuxt-link
 						to="/home"
@@ -125,7 +125,7 @@
 				<div
 					v-show="showDropdown"
 					class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation absolute mt-2 flex flex-col rounded-lg border bg-gradient-to-r p-4 shadow-lg backdrop-blur-lg backdrop-filter"
-					:class="dark ? `dropdownOpenDark` : `dropdownOpen`"
+					:class="$colorMode.dark ? `dropdownOpenDark` : `dropdownOpen`"
 				>
 					<!-- Unauthenticated: Log in -->
 					<nuxt-link
@@ -189,7 +189,6 @@ import { MutationType, namespace as sessionStoreNamespace } from '~/store/sessio
 interface IData {
 	showDropdown: boolean
 	showMobileMenu: boolean
-	dark: boolean
 }
 
 export default Vue.extend({
@@ -215,13 +214,11 @@ export default Vue.extend({
 		return {
 			showDropdown: false,
 			showMobileMenu: false,
-			dark: false,
 		}
 	},
 	created() {
 		// Set filter dropdown event handler
 		window.addEventListener(`click`, this.handleDropdown, false)
-		this.dark = document.documentElement.classList.contains(`dark`)
 	},
 	destroyed() {
 		window.removeEventListener(`click`, this.handleDropdown)

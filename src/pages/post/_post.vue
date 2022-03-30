@@ -192,7 +192,7 @@
 		<article v-show="isLoading" class="modal-animation fixed mt-20 flex w-full justify-center">
 			<div
 				class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
-				:style="dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
+				:style="$colorMode.dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
 			></div>
 		</article>
 		<!-- Show Post preview card on quote repost -->
@@ -273,7 +273,6 @@ interface IData {
 	bookmarksCount: number
 	popImage: boolean
 	readerViewElement: any | null
-	dark: boolean
 	captionHeight: number | undefined
 	showShare: boolean
 	readingTime: number | null
@@ -325,7 +324,6 @@ export default Vue.extend({
 			bookmarksCount: 0,
 			popImage: false,
 			readerViewElement: null,
-			dark: false,
 			captionHeight: 0,
 			showShare: false,
 			readingTime: null,
@@ -444,7 +442,6 @@ export default Vue.extend({
 		if (container) {
 			container.addEventListener(`scroll`, this.handleScroll)
 		}
-		this.dark = document.documentElement.classList.contains(`dark`)
 		// This is a new post
 		if (this.$store.state.settings.recentlyPosted) {
 			this.$toastSuccess(`Your post has been successfully published on Blogchain`)

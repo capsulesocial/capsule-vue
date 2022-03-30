@@ -2,7 +2,7 @@
 	<main
 		class="bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightMainBG dark:bg-darkBG"
 		:style="
-			dark
+			$colorMode.dark
 				? {
 						backgroundImage: `url(` + bgImage.dark + `)`,
 				  }
@@ -59,7 +59,6 @@ interface IData {
 	followers: Set<string>
 	following: Set<string>
 	bgImage: IBackground
-	dark: boolean
 }
 
 export default Vue.extend({
@@ -76,7 +75,6 @@ export default Vue.extend({
 			followers: new Set(),
 			following: new Set(),
 			bgImage: backgrounds[0],
-			dark: false,
 		}
 	},
 	async created() {
@@ -97,7 +95,6 @@ export default Vue.extend({
 		this.bgImage = this.$getBGImage(this.myProfile?.background, `local`)
 		const myConnections = await getFollowersAndFollowing(this.$store.state.session.id)
 		this.myFollowing = myConnections.following
-		this.dark = document.documentElement.classList.contains(`dark`)
 	},
 	methods: {
 		handleReload(): void {

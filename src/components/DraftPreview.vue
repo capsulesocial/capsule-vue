@@ -42,7 +42,7 @@
 			<div
 				v-show="showDelete"
 				class="bg-lightBG dark:bg-darkBG dark:text-darkPrimaryText text-lightPrimaryText border-lightBorder modal-animation absolute z-10 flex w-40 flex-col rounded-lg border p-2 shadow-lg"
-				:class="dark ? `dropdownDraftOpenDark` : `dropdownDraftOpen`"
+				:class="$colorMode.dark ? `dropdownDraftOpenDark` : `dropdownDraftOpen`"
 				style="top: 35px; right: -5px"
 			>
 				<button class="focus:outline-none text-primary dark:text-secondary flex" @click="setActiveDraft(draft)">
@@ -77,7 +77,6 @@ interface IData {
 	featuredPhoto: any
 	showDelete: boolean
 	delayActiveDraft: boolean
-	dark: boolean
 }
 
 export default Vue.extend({
@@ -114,7 +113,6 @@ export default Vue.extend({
 			featuredPhoto: null,
 			showDelete: false,
 			delayActiveDraft: false,
-			dark: false,
 		}
 	},
 	async created() {
@@ -122,7 +120,6 @@ export default Vue.extend({
 			this.featuredPhoto = await getPhotoFromIPFS(this.draft.featuredPhotoCID)
 		}
 		window.addEventListener(`click`, this.handleDropdown, false)
-		this.dark = document.documentElement.classList.contains(`dark`)
 	},
 	destroyed() {
 		if (this.delayActiveDraft) {

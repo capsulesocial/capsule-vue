@@ -16,7 +16,7 @@
 			<div v-show="isLoading" class="modal-animation flex w-full justify-center z-20 mt-24">
 				<div
 					class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
-					:style="dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
+					:style="$colorMode.dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
 				></div>
 			</div>
 			<div v-show="!isLoading" class="flex w-full flex-col items-start mt-4">
@@ -167,7 +167,6 @@ interface IData {
 	generatedBlogchainLink: string
 	isOpen1: boolean
 	isLoading: boolean
-	dark: boolean
 }
 
 export default Vue.extend({
@@ -214,14 +213,11 @@ export default Vue.extend({
 			generatedBlogchainLink: ``,
 			isOpen1: false,
 			isLoading: true,
-			dark: false,
 		}
 	},
 	created() {
 		window.addEventListener(`click`, this.handleCloseClick, false)
 		this.generateShareableLink()
-		// check dark mode
-		this.dark = document.documentElement.classList.contains(`dark`)
 	},
 	destroyed() {
 		window.removeEventListener(`click`, this.handleCloseClick)

@@ -2,7 +2,7 @@
 	<main
 		class="bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightMainBG dark:bg-darkBG"
 		:style="
-			dark
+			$colorMode.dark
 				? {
 						backgroundImage: `url(` + bgImage.dark + `)`,
 				  }
@@ -26,7 +26,6 @@
 							class="lg:w-7.5 min-h-70 h-70 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder z-10 w-full overflow-y-auto rounded-t-lg bg-gradient-to-r p-6 pt-4 shadow-lg"
 							@togglePopup="togglePopup"
 							@changeLocalBGImage="changeLocalBGImage"
-							@changeColorMode="updateColorMode"
 							@initProfile="initProfile"
 						/>
 						<!-- Settings tabs -->
@@ -100,7 +99,6 @@ interface IData {
 	tab: string
 	showPopup: boolean
 	bgImage: IBackground
-	dark: boolean
 }
 
 export default Vue.extend({
@@ -118,13 +116,11 @@ export default Vue.extend({
 			tab: `account`,
 			showPopup: false,
 			bgImage: backgrounds[0],
-			dark: false,
 		}
 	},
 	async created() {
 		// Set color mode
 		this.$setColorMode(this.$store.state.settings.darkMode)
-		this.dark = document.documentElement.classList.contains(`dark`)
 		// Check if logged in user
 		if (this.$store.state.session.id === ``) {
 			this.$router.push(`/`)
@@ -147,9 +143,6 @@ export default Vue.extend({
 		// This method is used to change the local bg on the styling tab before changing
 		changeLocalBGImage(id: string): void {
 			this.bgImage = this.$getBGImage(id, `local`)
-		},
-		updateColorMode(dark: boolean): void {
-			this.dark = dark
 		},
 		changeTab(t: string): void {
 			this.tab = t

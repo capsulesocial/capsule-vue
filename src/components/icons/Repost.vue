@@ -26,7 +26,7 @@
 			:style="shrink ? `width: 15px; height: 15px` : `margin-top: 1px`"
 			viewBox="0 0 24 24"
 			fill="none"
-			:stroke="dark ? `#7097AC` : `#2E556A`"
+			:stroke="$colorMode.dark ? `#7097AC` : `#2E556A`"
 			stroke-width="2"
 			stroke-linecap="round"
 			stroke-linejoin="round"
@@ -42,10 +42,6 @@
 <script lang="ts">
 import Vue from 'vue'
 
-interface IData {
-	dark: boolean
-}
-
 export default Vue.extend({
 	props: {
 		isActive: {
@@ -56,14 +52,6 @@ export default Vue.extend({
 			type: Boolean,
 			default: false,
 		},
-	},
-	data(): IData {
-		return {
-			dark: false,
-		}
-	},
-	created() {
-		this.dark = document.documentElement.classList.contains(`dark`)
 	},
 })
 </script>

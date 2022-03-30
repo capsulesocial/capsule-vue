@@ -167,7 +167,6 @@ interface IData {
 	tag: string
 	caption: string
 	showCategoryDropdown: boolean
-	dark: boolean
 	featuredPhotoTarget: null | HTMLInputElement
 }
 
@@ -192,7 +191,6 @@ export default Vue.extend({
 			tag: ``,
 			caption: ``,
 			showCategoryDropdown: false,
-			dark: false,
 			featuredPhotoTarget: null,
 		}
 	},
@@ -202,7 +200,6 @@ export default Vue.extend({
 		},
 	},
 	mounted() {
-		this.dark = document.documentElement.classList.contains(`dark`)
 		this.fetchActiveDraft()
 	},
 	methods: {
@@ -314,7 +311,7 @@ export default Vue.extend({
 		},
 		getCategoryIcon(category: string) {
 			const c = category || this.category
-			return c ? require(`@/assets/images/category/${c}/${this.dark ? `dark` : `light`}/icon.webp`) : ``
+			return c ? require(`@/assets/images/category/${c}/${this.$colorMode.dark ? `dark` : `light`}/icon.webp`) : ``
 		},
 	},
 })
