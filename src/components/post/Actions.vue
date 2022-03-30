@@ -670,7 +670,7 @@ export default Vue.extend({
 			this.toggleReposters = false
 		},
 		async initReposters() {
-			const options: IGetRepostsOptions = { sort: `NEW`, offset: 0, limit: 10 }
+			const options: IGetRepostsOptions = { sort: `NEW`, offset: 0, limit: 1000 }
 			this.reposters = await getReposters(this.postCID, options)
 			this.reposters.forEach(this.getFollowers)
 		},
