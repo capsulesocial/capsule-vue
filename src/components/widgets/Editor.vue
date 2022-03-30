@@ -24,7 +24,7 @@
 					v-if="waitingImage"
 					class="absolute w-11/12 h-44 bg-lightInput dark:bg-gray7 rounded-lg animate-pulse flex justify-center items-center"
 				>
-					<p class="text-sm text-gray5 dark:text-gray3">uploading image...</p>
+					<p class="text-sm text-gray5 dark:text-gray3">Uploading image...</p>
 				</div>
 				<div v-if="featuredPhoto === null && !waitingImage" class="flex flex-col justify-center">
 					<UploadIcon class="self-center text-gray5 dark:text-gray3" />
