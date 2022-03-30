@@ -6,10 +6,10 @@
 			<h6 class="font-semibold dark:text-darkPrimaryText">All Settings</h6>
 		</nuxt-link>
 		<!-- Account Security -->
-		<h2 class="text-primary dark:text-secondary mb-4 text-sm font-semibold">Account Security</h2>
+		<h3 class="text-lightPrimaryText dark:text-darkPrimaryText pb-4 text-base font-semibold">Account Security</h3>
 		<!-- ID -->
 		<div class="mb-4 flex w-full flex-row items-center">
-			<label for="id" class="w-48 font-semibold dark:text-darkPrimaryText">Identifier</label>
+			<label for="id" class="w-48 font-semibold text-gray5 dark:text-gray3 text-sm">Identifier</label>
 			<input
 				id="id"
 				type="text"
@@ -19,16 +19,16 @@
 			/>
 		</div>
 		<!-- Export Private Key -->
-		<div class="mb-4 flex w-full flex-row items-center">
-			<label for="export" class="w-48 font-semibold dark:text-darkPrimaryText">Blogchain Private Key</label>
+		<div class="mb-8 flex w-full flex-row items-center">
+			<label for="export" class="w-48 font-semibold text-gray5 dark:text-gray3 text-sm">Blogchain Private Key</label>
 			<button id="export" class="text-primary dark:text-secondary focus:outline-none" @click="downloadPrivateKey">
 				Export Blogchain Private Key
 			</button>
 		</div>
 		<!-- Account Profile -->
-		<h2 class="text-primary dark:text-secondary py-4 text-sm font-semibold">Account Profile</h2>
-		<div class="mb-4 flex w-full flex-row items-center justify-between xl:justify-start">
-			<label for="editProfile" class="w-48 font-semibold dark:text-darkPrimaryText">Public Profile</label>
+		<h3 class="text-lightPrimaryText dark:text-darkPrimaryText pb-4 text-base font-semibold">Account Profile</h3>
+		<div class="mb-8 flex w-full flex-row items-center justify-between xl:justify-start">
+			<label for="editProfile" class="w-48 font-semibold text-gray5 dark:text-gray3 text-sm">Public Profile</label>
 			<button class="bg-secondary focus:outline-none block rounded-lg xl:hidden" @click="redirectProfile">
 				<PencilIcon class="m-2 h-5 w-5 text-white" />
 			</button>
@@ -45,7 +45,7 @@
 			<button class="text-negative focus:outline-none">Deactivate my Blogchain Account</button>
 		</div> -->
 		<!-- Account Invites -->
-		<h2 class="text-primary dark:text-secondary mb-4 pt-4 text-sm font-semibold">Account Invites</h2>
+		<h3 class="text-lightPrimaryText dark:text-darkPrimaryText pb-4 text-base font-semibold">Account Invites</h3>
 		<div
 			class="from-lightBGStart to-lightBGStop dark:from-darkBG dark:to-darkBG border-lightBorder relative mt-4 overflow-hidden rounded-lg bg-gradient-to-r p-5 shadow-lg"
 		>

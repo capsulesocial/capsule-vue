@@ -164,7 +164,7 @@
 					class="z-10 mr-1 hidden lg:flex flex-row justify-between rounded-tr-lg bg-lightBG dark:bg-darkBG p-5 lg:w-3/5"
 					style="margin-bottom: -112px; margin-top: 1px; pointer-events: none"
 				>
-					<h6 class="text-primary dark:text-secondary self-center text-center text-2xl font-semibold">
+					<h6 class="text-lightPrimaryText dark:text-darkPrimaryText self-center text-center text-2xl font-semibold">
 						How do you feel?
 					</h6>
 				</div>

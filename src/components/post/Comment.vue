@@ -29,10 +29,12 @@
 								{{ name }}
 							</span>
 							<span v-else class="text-gray5 dark:text-gray3 font-medium">{{ authorID }}</span>
-							<span class="text-primary dark:text-secondary ml-2 text-sm lg:text-base"> @{{ authorID }} </span>
+							<span class="text-lightPrimaryText dark:text-darkPrimaryText ml-2 text-sm lg:text-base">
+								@{{ authorID }}
+							</span>
 							<span
 								v-if="authorID === postAuthor"
-								class="bg-primary dark:bg-secondary dark:text-darkPrimaryText ml-2 rounded-2xl bg-opacity-25 py-1 px-2 text-xs"
+								class="bg-darkBG dark:bg-lightBG dark:text-darkPrimaryText ml-2 rounded-2xl bg-opacity-25 py-1 px-2 text-xs"
 							>
 								Author
 							</span>

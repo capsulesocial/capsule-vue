@@ -89,12 +89,8 @@
 				>
 					<img :src="getCategoryIcon(c)" class="hotzone mr-1 ml-2 h-6 w-6" />
 					<span
-						class="ml-2 border-b"
-						:class="
-							category === c
-								? 'border-primary text-primary dark:border-secondary dark:text-secondary'
-								: ' text-primary dark:text-secondary border-transparent'
-						"
+						class="ml-2"
+						:class="category === c ? ' font-semibold text-primary dark:text-secondary' : ' text-gray5 dark:text-gray3'"
 					>
 						{{ c.replace(`-`, ` `) }}</span
 					>

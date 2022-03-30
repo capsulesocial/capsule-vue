@@ -5,9 +5,9 @@
 			<span class="bg-gray1 dark:bg-gray5 mr-4 rounded-full p-1"><ChevronLeft /></span>
 			<h6 class="font-semibold dark:text-darkPrimaryText">All Settings</h6>
 		</nuxt-link>
-		<h2 class="text-primary dark:text-secondary mb-4 text-sm font-semibold">Display</h2>
+		<h3 class="text-lightPrimaryText dark:text-darkPrimaryText pb-4 text-base font-semibold">Display</h3>
 		<div class="mb-8 flex w-full xl:w-4/5 items-center justify-between">
-			<h3 class="w-36 xl:w-56 font-semibold dark:text-darkPrimaryText">App Background</h3>
+			<h3 class="w-36 xl:w-56 font-semibold text-gray5 dark:text-gray3 text-sm">App Background</h3>
 			<button
 				class="text-primary dark:text-secondary focus:outline-none flex flex-row items-center"
 				@click="toggleBGSelector"
@@ -22,27 +22,27 @@
 			</button>
 		</div>
 		<div class="mb-8 flex w-full xl:w-4/5 items-center justify-between">
-			<h3 class="w-56 font-semibold dark:text-darkPrimaryText">App Color Theme</h3>
+			<h3 class="w-56 font-semibold text-gray5 dark:text-gray3 text-sm">App Color Theme</h3>
 			<button
 				class="text-primary dark:text-secondary focus:outline-none flex flex-row items-center"
 				@click="toggleColorSelector"
 			>
 				<p class="mr-4">{{ $store.state.settings.darkMode }}</p>
 				<div
-					class="h-8 w-8 shadow-lg rounded-3xl border border-primary dark:border-secondary bg-lightBG dark:bg-darkBG"
+					class="h-8 w-8 shadow-lg rounded-3xl border border-darkBG dark:border-lightBG bg-lightBG dark:bg-darkBG"
 				></div>
 				<div
-					class="h-8 w-8 -ml-2 shadow-lg rounded-3xl border border-primary dark:border-secondary bg-primary dark:bg-secondary"
+					class="h-8 w-8 -ml-2 shadow-lg rounded-3xl border border-darkBG dark:border-lightBG bg-gray5 dark:bg-gray3"
 				></div>
 				<div
-					class="h-8 w-8 -ml-2 shadow-lg rounded-3xl border border-primary dark:border-secondary bg-secondary dark:bg-gray3"
+					class="h-8 w-8 -ml-2 shadow-lg rounded-3xl border border-darkBG dark:border-lightBG bg-primary dark:bg-secondary"
 				></div>
 			</button>
 		</div>
 		<!-- Popup background selector -->
 		<div
 			v-if="showPopupBG"
-			class="popup bg-primary dark:bg-secondary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center dark:bg-opacity-50 bg-opacity-50"
+			class="popup bg-darkBG dark:bg-gray7 modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center dark:bg-opacity-50 bg-opacity-50"
 		>
 			<!-- Inner space -->
 			<div
@@ -51,7 +51,9 @@
 			>
 				<!-- Header and close icon -->
 				<div class="flex items-center justify-between p-6 pb-2">
-					<h4 class="text-primary dark:text-secondary mb-4 text-xl font-semibold">Change your Blogchain background</h4>
+					<h4 class="text-lightPrimaryText dark:text-darkPrimaryText mb-4 text-xl font-semibold">
+						Change your Blogchain background
+					</h4>
 					<button class="bg-gray1 dark:bg-gray5 focus:outline-none rounded-full p-1" @click="toggleBGSelector">
 						<XIcon />
 					</button>
@@ -74,7 +76,11 @@
 							:src="$colorMode.dark ? x.dark : x.light"
 							class="border-lightBorder h-44 w-64 rounded-lg border shadow-lg bg-lightBG dark:bg-darkBG"
 						/>
-						<span class="text-primary dark:text-secondary mt-1 text-center">{{ x.label }}</span>
+						<span
+							class="mt-1 text-center"
+							:class="selectedBG === x ? `text-primary dark:text-secondary` : `text-gray5 dark:text-gray3`"
+							>{{ x.label }}</span
+						>
 					</button>
 				</div>
 				<!-- Select button -->
@@ -91,7 +97,7 @@
 		<!-- Popup Color selector -->
 		<div
 			v-if="showPopupColor"
-			class="popup bg-primary dark:bg-secondary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
+			class="popup bg-darkBG dark:bg-gray7 modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
 		>
 			<!-- Inner space -->
 			<div
@@ -100,7 +106,9 @@
 			>
 				<!-- Header and close icon -->
 				<div class="flex items-center justify-between p-6 pb-2 mb-4">
-					<h4 class="text-primary dark:text-secondary text-xl font-semibold">Change your Blogchain color theme</h4>
+					<h4 class="text-lightPrimaryText dark:text-darkPrimaryText text-xl font-semibold">
+						Change your Blogchain color theme
+					</h4>
 					<button class="bg-gray1 dark:bg-gray5 focus:outline-none rounded-full p-1" @click="toggleColorSelector">
 						<XIcon />
 					</button>
@@ -119,7 +127,15 @@
 							class="border-primary dark:border-secondary h-32 w-44 rounded-lg border shadow-lg"
 						/>
 						<img v-else :src="x.image" class="border-lightBorder h-32 w-44 rounded-lg border shadow-lg" />
-						<span class="text-primary dark:text-secondary mt-1 text-center">{{ x.label }}</span>
+						<span
+							class="mt-1 text-center"
+							:class="
+								$store.state.settings.darkMode === x.label
+									? `text-primary dark:text-secondary`
+									: `text-gray5 dark:text-gray3`
+							"
+							>{{ x.label }}</span
+						>
 					</button>
 				</div>
 				<!-- Select button -->

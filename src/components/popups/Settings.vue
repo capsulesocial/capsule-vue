@@ -2,7 +2,7 @@
 	<div class="popup w-full p-5">
 		<!-- Header and Close button -->
 		<header v-if="$store.state.session.id === $route.params.id" class="mb-6 flex flex-row justify-between items-center">
-			<h2 class="text-primary dark:text-secondary text-3xl font-semibold">Edit your profile</h2>
+			<h2 class="text-lightPrimaryText dark:text-darkPrimaryText text-3xl font-semibold">Edit your profile</h2>
 			<button class="bg-gray1 dark:bg-gray5 focus:outline-none rounded-full p-1" @click="$emit(`close`)">
 				<CloseIcon />
 			</button>

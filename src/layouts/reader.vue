@@ -14,10 +14,13 @@
 		<!-- Featured photo popup -->
 		<div
 			v-if="displayPhoto"
-			class="bg-primary dark:bg-secondary fixed z-40 h-screen w-full overflow-auto bg-opacity-50 dark:bg-opacity-50 pt-24"
+			class="bg-darkBG dark:bg-lightBG fixed z-40 h-screen w-full overflow-auto bg-opacity-50 dark:bg-opacity-50 pt-16 flex flex-col justify-center items-center"
 			@click="displayPhoto = false"
 		>
-			<img :src="featuredPhoto.photo" class="modal-content rounded-lg" />
+			<button class="bg-gray1 dark:bg-gray5 focus:outline-none mb-5 rounded-full p-1" @click="displayPhoto = false">
+				<XIcon />
+			</button>
+			<img :src="featuredPhoto.photo" class="modal-content rounded-lg w-3/5" />
 			<div class="flex justify-center mt-5">
 				<p
 					v-if="featuredPhoto.caption"
@@ -53,6 +56,7 @@
 import Vue from 'vue'
 import Header from '@/components/Header.vue'
 import UnauthPopup from '@/components/popups/UnauthPopup.vue'
+import XIcon from '@/components/icons/X.vue'
 
 import { IBackground, backgrounds } from '@/config'
 import { getProfile, Profile } from '@/backend/profile'
@@ -75,6 +79,7 @@ export default Vue.extend({
 	components: {
 		Header,
 		UnauthPopup,
+		XIcon,
 	},
 	middleware: `auth`,
 	data(): IData {
@@ -118,9 +123,7 @@ export default Vue.extend({
 
 <style>
 .modal-content {
-	margin: auto;
 	display: block;
-	width: auto;
 	max-width: 100%;
 	height: auto;
 	max-height: 88%;
@@ -135,7 +138,7 @@ export default Vue.extend({
 
 @keyframes zoom {
 	from {
-		transform: scale(0.1);
+		transform: scale(0.7);
 	}
 	to {
 		transform: scale(1);

@@ -2,13 +2,13 @@
 	<section class="border-lightBorder w-full border">
 		<!-- Tag page header -->
 		<div
-			class="border-lightBorder bg-primary flex flex-row items-center rounded-lg bg-opacity-25 p-2 shadow-lg"
+			class="border-lightBorder bg-darkBG flex flex-row items-center rounded-lg bg-opacity-25 p-2 shadow-lg"
 			style="backdrop-filter: blur(10px)"
 		>
 			<button class="bg-gray1 focus:outline-none m-3 flex-shrink-0 rounded-full" @click="handleBack">
 				<BackIcon />
 			</button>
-			<h2 class="text-primary dark:text-secondary text-2xl font-semibold">{{ $route.params.tag }}</h2>
+			<h2 class="text-lightPrimaryText dark:text-darkPrimaryText text-2xl font-semibold">{{ $route.params.tag }}</h2>
 		</div>
 		<!-- Posts loaded -->
 		<div ref="container" class="min-h-130 h-130 xl:min-h-150 xl:h-150 w-full overflow-y-auto">

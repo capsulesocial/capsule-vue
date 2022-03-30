@@ -70,11 +70,11 @@
 									class="hotzone mr-1 h-8 w-8"
 								/>
 								<span
-									class="ml-2 border-b"
+									class="ml-2"
 									:class="
 										activeFilter === c
-											? 'border-primary text-primary dark:border-secondary dark:text-secondary'
-											: ' text-primary dark:text-gray3 border-transparent'
+											? ' font-semibold text-primary dark:text-secondary'
+											: ' text-gray5 dark:text-gray3'
 									"
 								>
 									{{ c.replace(`-`, ` `) }}</span

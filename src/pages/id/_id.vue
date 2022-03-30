@@ -115,7 +115,7 @@
 					>
 						<!-- Edit profile button -->
 						<span v-if="$store.state.session.id === $route.params.id">
-							<button class="bg-secondary focus:outline-none block rounded-lg xl:hidden" @click="toggleSettings">
+							<button class="bg-darkBG focus:outline-none block rounded-lg xl:hidden" @click="toggleSettings">
 								<PencilIcon class="m-2 h-5 w-5 text-white" />
 							</button>
 							<SecondaryButton :text="`Edit Profile`" :action="toggleSettings" class="hidden xl:block" />
@@ -146,7 +146,7 @@
 					Read <span v-if="!expandBio">more </span><span v-else>less</span>
 				</button>
 				<div v-show="!visitProfile.bio" id="bio" class="header-profile"></div>
-				<div id="divider" class="w-full bg-gray1 my-4 rounded" style="height: 1px"></div>
+				<div id="divider" class="w-full bg-lightBorder dark:bg-darkBorder my-4 rounded" style="height: 1px"></div>
 				<!-- Tabs -->
 				<div
 					id="tabs"
@@ -189,7 +189,7 @@
 		<!-- Settings popup -->
 		<div
 			v-if="showSettings"
-			class="bg-primary dark:bg-secondary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
+			class="bg-darkBG dark:bg-gray7 modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
 		>
 			<SettingsPopup
 				class="lg:w-589 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation w-full rounded-lg bg-gradient-to-r shadow-lg backdrop-blur-lg backdrop-filter"
