@@ -226,7 +226,7 @@
 									<span v-else>
 										<img
 											:src="
-												dark
+												$colorMode.dark
 													? require(`@/assets/images/reactions/dark/confident.webp`)
 													: require(`@/assets/images/reactions/light/confident.webp`)
 											"
