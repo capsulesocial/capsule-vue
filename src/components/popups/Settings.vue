@@ -14,7 +14,7 @@
 					<Avatar :authorID="$store.state.session.id" :avatar="profilePic" :noClick="true" :size="`w-24 h-24`" />
 				</span>
 				<span
-					class="bg-lightOnSurfaceText text-lightOnPrimaryText relative inline-flex h-24 w-24 items-center justify-center rounded-lg bg-opacity-25"
+					class="bg-darkOnPrimaryText text-lightOnPrimaryText relative inline-flex h-24 w-24 items-center justify-center rounded-lg bg-opacity-25"
 				>
 					<PencilIcon class="h-5 w-5 fill-current" />
 				</span>

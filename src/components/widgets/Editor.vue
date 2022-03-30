@@ -39,7 +39,7 @@
 				<button class="text-primary dark:text-secondary focus:outline-none text-sm" @click="handleUploadImageClick">
 					Change Image
 				</button>
-				<button class="text-lightError focus:outline-none ml-4 text-sm" @click="removeImage()">Remove Image</button>
+				<button class="text-negative focus:outline-none ml-4 text-sm" @click="removeImage()">Remove Image</button>
 			</div>
 			<div
 				class="bg-gray1 dark:bg-gray7 text-gray5 dark:text-gray3 placeholder-gray5 dark:placeholder-gray3 my-1 mt-3 w-full rounded-lg p-2"

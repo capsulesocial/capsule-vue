@@ -81,7 +81,7 @@
 								<h5 class="text-primary dark:text-secondary text-lg">@{{ visitProfile.id }}</h5>
 							</div>
 							<!-- Tabs: posts, following, followers -->
-							<div class="text-gray6 -mr-12 flex flex-row pt-2 text-sm">
+							<div class="text-gray5 -mr-12 flex flex-row pt-2 text-sm">
 								<div v-if="totalPostsCount === 1" class="text-sm text-gray5 dark:text-gray3">
 									<span class="text-primary dark:text-secondary font-bold">{{ totalPostsCount }}</span>
 									Post

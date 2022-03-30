@@ -76,7 +76,7 @@
 								<h4 class="text-gray5 dark:text-gray3 mb-2">Followers</h4>
 								<div class="my-2 flex h-8 w-32 items-center">
 									<span class="bg-primary dark:bg-secondary h-8 w-8 flex-shrink-0 flex-grow-0 rounded-full"></span>
-									<span class="bg-gray4 dark:bg-gray3 ml-2 h-4 w-full rounded-full"></span>
+									<span class="bg-gray5 dark:bg-gray3 ml-2 h-4 w-full rounded-full"></span>
 								</div>
 								<CheckCircle
 									:isChecked="$store.state.widgets.secondary2 === `followers` ? true : false"

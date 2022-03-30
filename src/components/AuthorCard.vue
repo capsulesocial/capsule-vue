@@ -2,7 +2,7 @@
 	<div class="my-5 border-t border-b py-5 dark:border-gray7">
 		<div class="flex flex-col items-center justify-between lg:flex-row">
 			<div>
-				<h6 class="text-gray6 dark:text-gray3 mb-4 font-sans text-sm">Written By:</h6>
+				<h6 class="text-gray5 dark:text-gray3 mb-4 font-sans text-sm">Written By:</h6>
 				<div class="flex pr-5">
 					<Avatar :avatar="authorAvatar" :authorID="authorID" size="w-16 h-16" class="flex-shrink-0 self-start" />
 					<div class="mx-4">
@@ -10,7 +10,7 @@
 							{{ authorName }}
 						</nuxt-link>
 						<nuxt-link v-else :to="'/id/' + authorID" class="text-gray5 text-2xl"> {{ authorID }} </nuxt-link>
-						<p class="text-gray6 dark:text-darkSecondaryText w-full">
+						<p class="text-gray5 dark:text-darkSecondaryText w-full">
 							{{ authorBio }}
 						</p>
 					</div>

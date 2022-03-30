@@ -22,7 +22,7 @@
 					<p v-else class="text-positive modal-animation absolute right-0 top-0 p-8">
 						<span v-if="this.$route.name !== 'home'">Saved!</span>
 					</p>
-					<p class="text-lightError text-xs">{{ titleError }}</p>
+					<p class="text-negative text-xs">{{ titleError }}</p>
 					<label for="title" class="hidden">Title</label>
 					<textarea
 						id="title"
@@ -35,7 +35,7 @@
 				</article>
 
 				<article class="flex flex-col px-2">
-					<p class="text-lightError text-xs">{{ subtitleError }}</p>
+					<p class="text-negative text-xs">{{ subtitleError }}</p>
 					<label for="subtitle" class="hidden">Subtitle</label>
 					<textarea
 						id="subtitle"

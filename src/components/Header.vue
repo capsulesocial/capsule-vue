@@ -62,7 +62,7 @@
 					>
 					<button
 						v-if="$store.state.session.id !== ``"
-						class="focus:outline-none text-lightError flex w-full flex-row items-center text-left"
+						class="focus:outline-none text-negative flex w-full flex-row items-center text-left"
 						@click="disconnect"
 					>
 						<LogoutIcon class="mr-2 h-5 w-5 flex-shrink-0" />Disconnect
@@ -157,7 +157,7 @@
 					>
 					<button
 						v-if="$store.state.session.id !== ``"
-						class="focus:outline-none text-lightError flex w-full flex-row items-center text-left"
+						class="focus:outline-none text-negative flex w-full flex-row items-center text-left"
 						@click="disconnect"
 					>
 						<LogoutIcon class="mr-2 h-5 w-5 flex-shrink-0" />Disconnect

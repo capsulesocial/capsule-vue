@@ -19,11 +19,11 @@
 			<span v-else class="ml-1 flex h-3 w-3 modal-animation">
 				<span
 					class="absolute inline-flex h-3 w-3 animate-ping rounded-full opacity-75"
-					:class="nodes > 5 ? `bg-positive` : `bg-connectOrange`"
+					:class="nodes > 5 ? `bg-positive` : `bg-neutral`"
 				></span>
 				<span
 					class="relative inline-flex h-3 w-3 rounded-full"
-					:class="nodes > 5 ? `bg-positive` : `bg-connectOrange`"
+					:class="nodes > 5 ? `bg-positive` : `bg-neutral`"
 				></span>
 			</span>
 		</div>
