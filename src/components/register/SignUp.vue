@@ -77,47 +77,51 @@ export default Vue.extend({
 	},
 	async created() {
 		this.$emit(`setIsLoading`, true)
-		const username = await getUsernameNEAR(this.userInfo.accountId)
-		if (!username) {
-			const inviteToken = getInviteToken()
-			if (!inviteToken) {
-				const isAccountOnboarded = await getIsAccountIdOnboarded(this.userInfo.accountId)
-				if (!isAccountOnboarded) {
-					this.$emit(`updateUserInfo`, null)
-					this.$emit(`setIsLoading`, false)
-					this.$emit(`stepForward`)
-					return
+		try {
+			const username = await getUsernameNEAR(this.userInfo.accountId)
+			if (!username) {
+				const inviteToken = getInviteToken()
+				if (!inviteToken) {
+					const isAccountOnboarded = await getIsAccountIdOnboarded(this.userInfo.accountId)
+					if (!isAccountOnboarded) {
+						this.$emit(`updateUserInfo`, null)
+						this.$emit(`setIsLoading`, false)
+						this.$emit(`stepForward`)
+						return
+					}
+				} else {
+					await verifyTokenAndOnboard(this.userInfo.accountId)
 				}
-			} else {
-				await verifyTokenAndOnboard(this.userInfo.accountId)
+				await this.checkFunds()
+				this.$emit(`setIsLoading`, false)
+				return
 			}
-			await this.checkFunds()
-			this.$emit(`setIsLoading`, false)
-			return
-		}
 
-		// Username exists, so if we are with Torus we can just login
-		if (this.userInfo.type === `torus`) {
-			this.username = username
-			await this.verify(this.username)
-			window.localStorage.removeItem(`inviteToken`)
-			return
-		}
-		if (this.userInfo.type === `near`) {
-			// If the key exists we can login him
-			const pk = window.localStorage.getItem(`near-api-js:${this.userInfo.accountId}:testnet`)
-			if (pk) {
+			// Username exists, so if we are with Torus we can just login
+			if (this.userInfo.type === `torus`) {
 				this.username = username
 				await this.verify(this.username)
 				window.localStorage.removeItem(`inviteToken`)
 				return
 			}
-			removeNearPrivateKey(this.userInfo.accountId)
-			walletLogout()
-			this.$emit(`updateUserInfo`, null)
-			this.$emit(`stepForward`)
-			this.$emit(`setIsLoading`, false)
-			this.$toastError(`You cannot login with wallet, please log in by importing your private key`)
+			if (this.userInfo.type === `near`) {
+				// If the key exists we can login him
+				const pk = window.localStorage.getItem(`near-api-js:${this.userInfo.accountId}:testnet`)
+				if (pk) {
+					this.username = username
+					await this.verify(this.username)
+					window.localStorage.removeItem(`inviteToken`)
+					return
+				}
+				await removeNearPrivateKey(this.userInfo.accountId)
+				walletLogout()
+				this.$emit(`updateUserInfo`, null)
+				this.$emit(`stepForward`)
+				this.$emit(`setIsLoading`, false)
+				this.$toastError(`You cannot login with wallet, please log in by importing your private key`)
+			}
+		} catch (error) {
+			this.$handleError(error)
 		}
 	},
 	methods: {

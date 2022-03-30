@@ -87,6 +87,8 @@ export default Vue.extend({
 					throw new ValidationError(idValidity.error)
 				}
 				await this.verify(this.id)
+			} catch (error) {
+				this.$handleError(error)
 			} finally {
 				this.isLoading = false
 			}

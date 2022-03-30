@@ -175,23 +175,6 @@ export async function getNearPrivateKey(nearAccountId?: string) {
 	return keypair.secretKey
 }
 
-export async function getNearPublicKey(accountId?: string) {
-	if (!accountId) {
-		if (!_contract) {
-			throw new Error(`Contract not yet initialised!`)
-		}
-		accountId = _contract.account.accountId
-	}
-	const keystore = new keyStores.BrowserLocalStorageKeyStore()
-	const keypair = (await keystore.getKey(nearConfig.networkId, accountId)) as KeyPairEd25519 | null
-
-	if (!keypair) {
-		return null
-	}
-	const publicKey = keypair.publicKey.data
-	return publicKey
-}
-
 export async function setNearPrivateKey(privateKey: Uint8Array, accountId: string) {
 	const encodedPrivateKey = baseEncode(privateKey)
 	const keypair = new KeyPairEd25519(encodedPrivateKey)
