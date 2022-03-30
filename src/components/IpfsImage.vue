@@ -9,7 +9,10 @@
 			</div>
 		</article>
 		<article v-else>
-			<img :src="image" :alt="cid" class="ipfs-image" />
+			<img :src="image" :alt="cid" class="ipfs-image" @click="openImagePopup = true" />
+			<portal to="postPage">
+				<ImagePopup v-if="openImagePopup" :image="image" @close="openImagePopup = false" />
+			</portal>
 		</article>
 	</div>
 </template>
@@ -17,15 +20,20 @@
 <script lang="ts">
 import Vue from 'vue'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
+import ImagePopup from '@/components/popups/Image.vue'
 
 interface IData {
 	image: null | string
 	loading: boolean
 	imageError: null | string
+	openImagePopup: boolean
 }
 
 export default Vue.extend({
 	name: `IpfsImage`,
+	components: {
+		ImagePopup,
+	},
 	props: {
 		cid: { type: String, required: true },
 	},
@@ -34,6 +42,7 @@ export default Vue.extend({
 			image: null,
 			loading: true,
 			imageError: null,
+			openImagePopup: false,
 		}
 	},
 	created() {
