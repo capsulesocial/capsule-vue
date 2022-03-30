@@ -67,7 +67,7 @@
 						class="absolute w-11/12 h-44 bg-lightInput dark:bg-gray7 rounded-lg animate-pulse flex justify-center items-center"
 						:style="`top:` + this.addContentPosTop + `px`"
 					>
-						<p class="text-sm text-gray5 dark:text-gray3">uploading image...</p>
+						<p class="text-sm text-gray5 dark:text-gray3">Uploading image...</p>
 					</div>
 				</div>
 				<div
