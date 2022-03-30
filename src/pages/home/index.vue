@@ -9,7 +9,7 @@
 					:class="
 						algorithm === `FOLLOWING` ? ` text-primary dark:text-secondary font-semibold` : `text-gray5 dark:text-gray3`
 					"
-					class="focus:outline-none h-full w-full pb-3"
+					class="focus:outline-none h-full w-full pb-4"
 					@click="sortFeed('FOLLOWING')"
 				>
 					Following
@@ -20,7 +20,7 @@
 					:class="
 						algorithm === `NEW` ? ` text-primary dark:text-secondary font-semibold` : `text-gray5 dark:text-gray3`
 					"
-					class="focus:outline-none h-full w-full pb-3"
+					class="focus:outline-none h-full w-full pb-4"
 					@click="sortFeed('NEW')"
 				>
 					New
@@ -31,7 +31,7 @@
 					:class="
 						algorithm === `TOP` ? ` text-primary dark:text-secondary font-semibold` : `text-gray5 dark:text-gray3`
 					"
-					class="focus:outline-none h-full w-full pb-3"
+					class="focus:outline-none h-full w-full pb-4"
 					@click="sortFeed('TOP')"
 				>
 					Top

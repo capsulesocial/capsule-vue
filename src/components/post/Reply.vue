@@ -11,9 +11,7 @@
 				<strong v-else class="bold mr-2 font-bold text-gray5 dark:text-gray3">
 					{{ authorID }}
 				</strong>
-				<nuxt-link :to="`/id/` + authorID" class="mr-4 text-sm text-primary dark:text-secondary">
-					@{{ authorID }}
-				</nuxt-link>
+				<nuxt-link :to="`/id/` + authorID" class="mr-4 text-sm text-gray5 dark:text-gray3"> @{{ authorID }} </nuxt-link>
 				<span v-if="timestamp" class="text-xs text-gray5 dark:text-gray3">
 					{{ $formatDate(timestamp) }}
 				</span>

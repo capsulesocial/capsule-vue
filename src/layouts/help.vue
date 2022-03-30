@@ -87,6 +87,7 @@ export default Vue.extend({
 	async created() {
 		// Set color mode
 		this.$setColorMode(this.$store.state.settings.darkMode)
+		this.$setColor(this.$store.state.settings.color)
 		// unauth
 		if (this.$store.state.session.id === ``) {
 			return

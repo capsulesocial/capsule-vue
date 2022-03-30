@@ -243,6 +243,7 @@ export default Vue.extend({
 	created() {
 		// Set color mode
 		this.$setColorMode(this.$store.state.settings.darkMode)
+		this.$setColor(this.$store.state.settings.color)
 	},
 	mounted() {
 		// Fetch visiting profile

@@ -78,30 +78,34 @@
 									{{ visitProfile.name }}
 								</h3>
 								<h3 v-else class="text-gray5 dark:text-gray3 pr-4 text-2xl font-semibold">{{ visitProfile.id }}</h3>
-								<h5 class="text-primary dark:text-secondary text-lg">@{{ visitProfile.id }}</h5>
+								<h5 class="text-gray5 dark:text-gray3 text-lg">@{{ visitProfile.id }}</h5>
 							</div>
 							<!-- Tabs: posts, following, followers -->
 							<div class="text-gray5 -mr-12 flex flex-row pt-2 text-sm">
 								<div v-if="totalPostsCount === 1" class="text-sm text-gray5 dark:text-gray3">
-									<span class="text-primary dark:text-secondary font-bold">{{ totalPostsCount }}</span>
+									<span class="text-lightPrimaryText dark:text-darkPrimaryText font-bold">{{ totalPostsCount }}</span>
 									Post
 								</div>
 								<div v-else class="text-sm text-gray5 dark:text-gray3">
-									<span class="text-primary dark:text-secondary font-bold">{{ totalPostsCount }}</span>
+									<span class="text-lightPrimaryText dark:text-darkPrimaryText font-bold">{{ totalPostsCount }}</span>
 									Posts
 								</div>
 								<button
 									class="pl-5 text-sm text-gray5 dark:text-gray3 hover:text-primary dark:hover:text-secondary hover:font-bold"
 									@click="$emit(`openFollowers`)"
 								>
-									<span class="text-primary dark:text-secondary font-bold">{{ followers.size }}</span>
+									<span class="text-lightPrimaryText dark:text-darkPrimaryText hover:text-primary font-bold">{{
+										followers.size
+									}}</span>
 									Followers
 								</button>
 								<button
 									class="pl-5 text-sm text-gray5 dark:text-gray3 hover:text-primary dark:hover:text-secondary hover:font-bold"
 									@click="$emit(`openFollowing`)"
 								>
-									<span class="text-primary dark:text-secondary font-bold">{{ following.size }}</span>
+									<span class="text-lightPrimaryText dark:text-darkPrimaryText hover:text-primary font-bold">{{
+										following.size
+									}}</span>
 									Following
 								</button>
 							</div>

@@ -318,3 +318,17 @@
 	background-repeat: no-repeat !important;
 	background-position: center right !important;
 }
+
+/* accent colors */
+.green {
+	--color-text-primary: #7097AC;
+}
+.orange {
+	--color-text-primary: #FF4747;
+}
+.blue {
+	--color-text-primary: #396BF8;
+}
+.pink {
+	--color-text-primary: #EB3D7C;
+}

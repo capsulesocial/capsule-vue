@@ -239,7 +239,7 @@
 												class="text-gray5 dark:text-gray3 text-base font-medium transition ease-in-out hover:underline"
 												>{{ this.quote.authorID }}</span
 											>
-											<span class="text-primary dark:text-secondary ml-2">@{{ this.quote.authorID }}</span>
+											<span class="text-gray5 dark:text-gray3 ml-2">@{{ this.quote.authorID }}</span>
 										</nuxt-link>
 									</div>
 									<span class="text-xs dark:text-gray3">{{ $formatDate(this.quote.timestamp) }}</span>

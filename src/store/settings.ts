@@ -5,14 +5,16 @@ import type { RootState } from './index'
 export const namespace = `settings`
 
 export interface SettingState {
-	darkMode: string
+	mode: string
+	color: string
 	recentlyPosted: boolean
 	recentlyInSettings: boolean
 	showUnauthPopup: boolean
 }
 
 export const state = (): SettingState => ({
-	darkMode: `Light`,
+	mode: `Light`,
+	color: `Orange`,
 	recentlyPosted: false,
 	recentlyInSettings: false,
 	showUnauthPopup: false,
@@ -21,15 +23,19 @@ export const state = (): SettingState => ({
 export const getters: GetterTree<SettingState, RootState> = {}
 
 export const MutationType = {
-	CHANGE_DARK_MODE: `changeDarkMode`,
+	CHANGE_MODE: `changeMode`,
+	CHANGE_COLOR: `changeColor`,
 	SET_RECENTLY_POSTED: `setRecentlyPosted`,
 	SET_RECENTLY_IN_SETTINGS: `setRecentlyInSettings`,
 	TOGGLE_UNAUTH_POPUP: `toggleUnauthPopup`,
 }
 
 export const mutations: MutationTree<SettingState> = {
-	[MutationType.CHANGE_DARK_MODE]: (state, newMode: string) => {
-		state.darkMode = newMode
+	[MutationType.CHANGE_MODE]: (state, newMode: string) => {
+		state.mode = newMode
+	},
+	[MutationType.CHANGE_COLOR]: (state, newColor: string) => {
+		state.color = newColor
 	},
 	[MutationType.SET_RECENTLY_POSTED]: (state, recentlyPosted: boolean) => {
 		state.recentlyPosted = recentlyPosted
@@ -48,6 +54,7 @@ export const actionType = {
 
 export const actions: ActionTree<SettingState, RootState> = {
 	nuxtServerInit({ commit }, _context: Context) {
-		commit(MutationType.CHANGE_DARK_MODE, `OS`)
+		commit(MutationType.CHANGE_MODE, `OS`)
+		commit(MutationType.CHANGE_COLOR, `Orange`)
 	},
 }

@@ -27,8 +27,8 @@ module.exports = {
 				'4xl': `2.6rem`,
 			},
 			colors: {
-				primary: `#2E556A`, // Dark Teal
-				secondary: `#7097AC`, // Moss Teal
+				primary: `var(--color-text-primary)`,
+				secondary: `#7097AC`,
 				gray1: `#EEEEEE`,
 				gray2: `#DDDDDD`,
 				gray3: `#BBBBBB`,
@@ -40,6 +40,7 @@ module.exports = {
 				positive: `#1F7DAD`,
 				neutral: `#F0B785`,
 				negative: `#EE1F63`,
+
 				lightBG: `#FFFFFF`,
 				lightBGStop: `rgba(256, 256, 256, 0.95)`,
 				lightBGStart: `rgba(256, 256, 256, 0.90)`,
@@ -49,6 +50,7 @@ module.exports = {
 				lightOnPrimaryText: `#FFFFFF`,
 				lightInput: `rgba(0, 0, 0, 0.03)`,
 				lightButtonText: `#FFFFFF`,
+
 				darkBG: `#121212`,
 				darkBGStop: `rgba(46, 46, 46, 0.95)`,
 				darkBGStart: `rgba(46, 46, 46, 0.90)`,

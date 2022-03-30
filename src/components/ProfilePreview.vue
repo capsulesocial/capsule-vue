@@ -7,7 +7,7 @@
 					{{ profile.name }}
 				</span>
 				<span v-else class="text-gray5 dark:text-gray3 text-base font-medium"> {{ profile.id }} </span>
-				<span class="text-primary dark:text-secondary text-sm">@{{ profile.id }}</span>
+				<span class="text-gray5 dark:text-gray3 text-sm">@{{ profile.id }}</span>
 			</nuxt-link>
 		</div>
 		<FriendButton

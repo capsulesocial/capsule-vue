@@ -22,12 +22,12 @@
 			</button>
 		</div>
 		<div class="mb-8 flex w-full xl:w-4/5 items-center justify-between">
-			<h3 class="w-56 font-semibold text-gray5 dark:text-gray3 text-sm">App Color Theme</h3>
+			<h3 class="w-56 font-semibold text-gray5 dark:text-gray3 text-sm">App Light Mode</h3>
 			<button
 				class="text-primary dark:text-secondary focus:outline-none flex flex-row items-center"
-				@click="toggleColorSelector"
+				@click="toggleModeSelector"
 			>
-				<p class="mr-4">{{ $store.state.settings.darkMode }}</p>
+				<p class="mr-4">{{ $store.state.settings.mode }}</p>
 				<div
 					class="h-8 w-8 shadow-lg rounded-3xl border border-darkBG dark:border-lightBG bg-lightBG dark:bg-darkBG"
 				></div>
@@ -36,6 +36,18 @@
 				></div>
 				<div
 					class="h-8 w-8 -ml-2 shadow-lg rounded-3xl border border-darkBG dark:border-lightBG bg-primary dark:bg-secondary"
+				></div>
+			</button>
+		</div>
+		<div class="mb-8 flex w-full xl:w-4/5 items-center justify-between">
+			<h3 class="w-56 font-semibold text-gray5 dark:text-gray3 text-sm">App Color Theme</h3>
+			<button
+				class="text-primary dark:text-secondary focus:outline-none flex flex-row items-center"
+				@click="toggleColorSelector"
+			>
+				<p class="mr-4">{{ $store.state.settings.color }}</p>
+				<div
+					class="h-8 w-8 shadow-lg rounded-3xl border border-darkBG dark:border-lightBG bg-primary dark:bg-secondary"
 				></div>
 			</button>
 		</div>
@@ -94,6 +106,61 @@
 				</div>
 			</div>
 		</div>
+		<!-- Popup Mode selector -->
+		<div
+			v-if="showPopupMode"
+			class="popup bg-darkBG dark:bg-gray7 modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
+		>
+			<!-- Inner space -->
+			<div
+				style="width: 650px; backdrop-filter: blur(10px)"
+				class="popup from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder card-animation rounded-lg bg-gradient-to-r shadow-lg"
+			>
+				<!-- Header and close icon -->
+				<div class="flex items-center justify-between p-6 pb-2 mb-4">
+					<h4 class="text-lightPrimaryText dark:text-darkPrimaryText text-xl font-semibold">
+						Change your Blogchain light mode
+					</h4>
+					<button class="bg-gray1 dark:bg-gray5 focus:outline-none rounded-full p-1" @click="toggleModeSelector">
+						<XIcon />
+					</button>
+				</div>
+				<!-- color mode grid -->
+				<div class="flex flex-col lg:flex-row justify-between p-6 pt-4">
+					<button
+						v-for="x of colors"
+						:key="x.label"
+						class="focus:outline-none mb-4 flex flex-shrink-0 flex-col items-center"
+						@click="setColorMode(x.label)"
+					>
+						<img
+							v-if="$store.state.settings.mode === x.label"
+							:src="x.image"
+							class="border-primary dark:border-secondary h-32 w-44 rounded-lg border shadow-lg"
+						/>
+						<img v-else :src="x.image" class="border-lightBorder h-32 w-44 rounded-lg border shadow-lg" />
+						<span
+							class="mt-1 text-center"
+							:class="
+								$store.state.settings.mode === x.label
+									? `text-primary dark:text-secondary`
+									: `text-gray5 dark:text-gray3`
+							"
+							>{{ x.label }}</span
+						>
+					</button>
+				</div>
+				<!-- Select button -->
+				<div class="flex items-center justify-end p-6 pt-5">
+					<button
+						class="bg-primary dark:bg-secondary focus:outline-none rounded-lg px-4 py-2 text-white"
+						@click="confirmColorMode"
+					>
+						Select
+					</button>
+				</div>
+			</div>
+		</div>
 		<!-- Popup Color selector -->
 		<div
 			v-if="showPopupColor"
@@ -113,36 +180,38 @@
 						<XIcon />
 					</button>
 				</div>
-				<!-- color mode grid -->
+				<!-- color grid -->
 				<div class="flex flex-col lg:flex-row justify-between p-6 pt-4">
-					<button
-						v-for="x of colors"
-						:key="x.label"
-						class="focus:outline-none mb-4 flex flex-shrink-0 flex-col items-center"
-						@click="setColorMode(x.label)"
-					>
-						<img
-							v-if="$store.state.settings.darkMode === x.label"
-							:src="x.image"
-							class="border-primary dark:border-secondary h-32 w-44 rounded-lg border shadow-lg"
-						/>
-						<img v-else :src="x.image" class="border-lightBorder h-32 w-44 rounded-lg border shadow-lg" />
-						<span
-							class="mt-1 text-center"
-							:class="
-								$store.state.settings.darkMode === x.label
-									? `text-primary dark:text-secondary`
-									: `text-gray5 dark:text-gray3`
-							"
-							>{{ x.label }}</span
-						>
+					<button class="focus:outline-none mb-4 flex flex-shrink-0 flex-col items-center" @click="setColor(`Green`)">
+						<div
+							class="h-8 w-8 -ml-2 shadow-lg rounded-3xl border border-darkBG dark:border-lightBG"
+							style="background-color: #7097ac"
+						></div>
+					</button>
+					<button class="focus:outline-none mb-4 flex flex-shrink-0 flex-col items-center" @click="setColor(`Orange`)">
+						<div
+							class="h-8 w-8 -ml-2 shadow-lg rounded-3xl border border-darkBG dark:border-lightBG"
+							style="background-color: #ff4747"
+						></div>
+					</button>
+					<button class="focus:outline-none mb-4 flex flex-shrink-0 flex-col items-center" @click="setColor(`Blue`)">
+						<div
+							class="h-8 w-8 -ml-2 shadow-lg rounded-3xl border border-darkBG dark:border-lightBG"
+							style="background-color: #396bf8"
+						></div>
+					</button>
+					<button class="focus:outline-none mb-4 flex flex-shrink-0 flex-col items-center" @click="setColor(`Pink`)">
+						<div
+							class="h-8 w-8 -ml-2 shadow-lg rounded-3xl border border-darkBG dark:border-lightBG"
+							style="background-color: #eb3d7c"
+						></div>
 					</button>
 				</div>
 				<!-- Select button -->
 				<div class="flex items-center justify-end p-6 pt-5">
 					<button
 						class="bg-primary dark:bg-secondary focus:outline-none rounded-lg px-4 py-2 text-white"
-						@click="confirmColorMode"
+						@click="confirmColor"
 					>
 						Select
 					</button>
@@ -166,11 +235,13 @@ interface IData {
 	profile: Profile | null
 	backgroundImage: null | string | ArrayBuffer
 	showPopupBG: boolean
+	showPopupMode: boolean
 	showPopupColor: boolean
 	backgrounds: any
 	colors: any
 	currentbg: null | string
 	selectedBG: IBackground
+	currentmode: null | string
 	currentcolor: null | string
 	profilebgImage: IBackground
 }
@@ -183,11 +254,13 @@ export default Vue.extend({
 			profile: null,
 			backgroundImage: null,
 			showPopupBG: false,
+			showPopupMode: false,
 			showPopupColor: false,
 			backgrounds,
 			colors,
 			currentbg: null,
 			selectedBG: backgrounds[0],
+			currentmode: null,
 			currentcolor: null,
 			profilebgImage: backgrounds[0],
 		}
@@ -217,11 +290,18 @@ export default Vue.extend({
 			}
 			this.selectedBG = this.profilebgImage
 		},
+		toggleModeSelector() {
+			this.$emit(`togglePopup`)
+			this.showPopupMode = !this.showPopupMode
+			if (this.showPopupMode === true) {
+				this.currentmode = this.$store.state.settings.mode
+			}
+		},
 		toggleColorSelector() {
 			this.$emit(`togglePopup`)
 			this.showPopupColor = !this.showPopupColor
 			if (this.showPopupColor === true) {
-				this.currentcolor = this.$store.state.settings.darkMode
+				this.currentcolor = this.$store.state.settings.color
 			}
 		},
 		handleDropdown(e: any): void {
@@ -260,9 +340,24 @@ export default Vue.extend({
 			this.$setColorMode(this.$store.state.settings.darkMode)
 		},
 		confirmColorMode(): void {
-			if (this.$store.state.settings.darkMode) {
+			if (this.$store.state.settings.mode) {
+				this.toggleModeSelector()
+				if (this.currentmode !== this.$store.state.settings.mode) {
+					this.$toastSuccess(`Your light mode has been updated`)
+				}
+			} else {
+				this.$toastError(`Unable to save your light mode`)
+			}
+		},
+		setColor(type: string): void {
+			this.$emit(`changeColor`, type)
+			this.$store.commit(`settings/changeColor`, type)
+			this.$setColor(this.$store.state.settings.color)
+		},
+		confirmColor(): void {
+			if (this.$store.state.settings.color) {
 				this.toggleColorSelector()
-				if (this.currentcolor !== this.$store.state.settings.darkMode) {
+				if (this.currentcolor !== this.$store.state.settings.color) {
 					this.$toastSuccess(`Your color theme has been updated`)
 				}
 			} else {

@@ -101,6 +101,7 @@ export default Vue.extend({
 		}
 		// Set color mode
 		this.$setColorMode(this.$store.state.settings.darkMode)
+		this.$setColor(this.$store.state.settings.color)
 		// get logged in profile
 		const { profile } = await getProfile(this.$store.state.session.id)
 		this.profile = profile

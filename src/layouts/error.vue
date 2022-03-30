@@ -58,6 +58,7 @@ export default Vue.extend({
 		}
 		// Set color mode
 		this.$setColorMode(this.$store.state.settings.darkMode)
+		this.$setColor(this.$store.state.settings.color)
 	},
 	methods: {
 		goBack() {
