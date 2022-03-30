@@ -392,7 +392,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import type { PropType } from 'vue'
 import sortBy from 'lodash/sortBy'
 import BrandedButton from '@/components/BrandedButton.vue'
 import Comment from '@/components/post/Comment.vue'
