@@ -45,6 +45,7 @@
 		</div>
 		<UnauthPopup />
 		<portal-target name="card-popup"></portal-target>
+		<portal-target name="postPage"></portal-target>
 	</main>
 </template>
 

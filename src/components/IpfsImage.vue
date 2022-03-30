@@ -10,7 +10,9 @@
 		</article>
 		<article v-else>
 			<img :src="image" :alt="cid" class="ipfs-image" @click="openImagePopup = true" />
-			<ImagePopup v-if="openImagePopup" :image="image" @close="openImagePopup = false"></ImagePopup>
+			<portal to="postPage">
+				<ImagePopup v-if="openImagePopup" :image="image" @close="openImagePopup = false" />
+			</portal>
 		</article>
 	</div>
 </template>
