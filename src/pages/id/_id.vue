@@ -146,8 +146,12 @@
 					Read <span v-if="!expandBio">more </span><span v-else>less</span>
 				</button>
 				<div v-show="!visitProfile.bio" id="bio" class="header-profile"></div>
+				<div id="divider" class="w-full bg-gray1 my-4 rounded" style="height: 1px"></div>
 				<!-- Tabs -->
-				<div id="tabs" class="text-gray5 dark:text-gray3 header-profile flex w-full justify-between pt-6 xl:px-6">
+				<div
+					id="tabs"
+					class="text-gray5 dark:text-gray3 text-sm header-profile flex w-full justify-between pb-3 xl:px-6"
+				>
 					<nuxt-link :to="'/id/' + $route.params.id" class="pb-1" :class="getStyles('id-id')">
 						<span class="px-4">Posts</span>
 					</nuxt-link>
@@ -387,9 +391,6 @@ export default Vue.extend({
 			let res = ``
 			if (this.$route.name === tab) {
 				res += ` text-primary dark:text-secondary font-bold`
-				if (this.$route.name !== `id-id-followers` && this.$route.name !== `id-id-following`) {
-					res += ` border-b dark:border-secondary`
-				}
 			} else {
 				if (this.$route.name !== `id-followers` && this.$route.name !== `id-following`) {
 					res += ` text-grey1`
@@ -409,6 +410,7 @@ export default Vue.extend({
 			const buttons = document.getElementById(`buttons`)
 			const infos = document.getElementById(`infos`)
 			const tabs = document.getElementById(`tabs`)
+			const divider = document.getElementById(`divider`)
 			const bio = document.getElementById(`bio`)
 			const small = document.getElementById(`small`)
 			this.padding = header?.clientHeight + `px`
@@ -416,7 +418,7 @@ export default Vue.extend({
 			const scrollDown = `headercollapsed`
 			const opacity1 = `opacity1`
 			const opacity0 = `opacity0`
-			if (!body || !buttons || !infos || !header || !tabs || !bio || !small) {
+			if (!body || !buttons || !infos || !header || !tabs || !divider || !bio || !small) {
 				return
 			}
 			// Close header
@@ -430,6 +432,8 @@ export default Vue.extend({
 				infos.classList.add(opacity0)
 				tabs.classList.add(opacity0)
 				tabs.classList.remove(opacity1)
+				divider.classList.add(opacity0)
+				divider.classList.remove(opacity1)
 				bio.classList.add(opacity0)
 				bio.classList.remove(opacity1)
 				small.classList.add(opacity1)
@@ -446,6 +450,8 @@ export default Vue.extend({
 			infos.classList.add(opacity1)
 			tabs.classList.remove(opacity0)
 			tabs.classList.add(opacity1)
+			divider.classList.remove(opacity0)
+			divider.classList.add(opacity1)
 			bio.classList.remove(opacity0)
 			bio.classList.add(opacity1)
 			small.classList.remove(opacity1)

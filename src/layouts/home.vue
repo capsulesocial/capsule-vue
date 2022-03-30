@@ -23,10 +23,12 @@
 					style="height: 62px"
 				>
 					<!-- Title -->
-					<h1 v-if="profile" class="text-primary dark:text-secondary text-3xl font-semibold xl:text-4xl">
+					<h1 v-if="profile" class="text-lightPrimaryText dark:text-darkPrimaryText text-3xl font-semibold xl:text-4xl">
 						Hello, {{ profile.name }}
 					</h1>
-					<h1 v-else class="text-primary dark:text-secondary text-3xl font-semibold xl:text-4xl">Hello!</h1>
+					<h1 v-else class="text-lightPrimaryText dark:text-darkPrimaryText text-3xl font-semibold xl:text-4xl">
+						Hello!
+					</h1>
 					<Nodes />
 				</div>
 				<!-- Content -->

@@ -3,7 +3,7 @@
 		class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder mb-5 w-full rounded-lg border bg-gradient-to-r p-4 shadow-lg"
 		style="backdrop-filter: blur(10px)"
 	>
-		<h6 class="text-primary dark:text-secondary mb-2 font-semibold">Recent Followers</h6>
+		<h6 class="text-lightPrimaryText dark:text-darkPrimaryText mb-4 font-semibold">Recent Followers</h6>
 		<article v-if="profiles.length == 0">
 			<p class="text-gray5 dark:text-gray3 mb-5 mt-3 text-sm">
 				<span> It seems no one is following you yet </span>

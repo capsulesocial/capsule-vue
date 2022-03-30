@@ -1,15 +1,13 @@
 <template>
 	<section>
 		<nav
-			class="z-20 flex w-full flex-row px-5 pt-3 text-base xl:px-6 xl:pt-4 rounded-t-lg"
+			class="z-20 flex w-full flex-row px-5 pt-3 text-sm xl:px-6 xl:pt-4 rounded-t-lg"
 			style="backdrop-filter: blur(10px)"
 		>
 			<div class="flex items-center">
 				<button
 					:class="
-						algorithm === `FOLLOWING`
-							? ` text-primary dark:text-secondary border-primary dark:border-secondary border-b-2 font-semibold`
-							: `text-gray5 dark:text-gray3`
+						algorithm === `FOLLOWING` ? ` text-primary dark:text-secondary font-semibold` : `text-gray5 dark:text-gray3`
 					"
 					class="focus:outline-none h-full w-full pb-3"
 					@click="sortFeed('FOLLOWING')"
@@ -20,9 +18,7 @@
 			<div class="flex items-center px-12">
 				<button
 					:class="
-						algorithm === `NEW`
-							? ` text-primary dark:text-secondary border-primary dark:border-secondary border-b-2 font-semibold`
-							: `text-gray5 dark:text-gray3`
+						algorithm === `NEW` ? ` text-primary dark:text-secondary font-semibold` : `text-gray5 dark:text-gray3`
 					"
 					class="focus:outline-none h-full w-full pb-3"
 					@click="sortFeed('NEW')"
@@ -33,9 +29,7 @@
 			<div class="flex items-center">
 				<button
 					:class="
-						algorithm === `TOP`
-							? ` text-primary dark:text-secondary border-primary dark:border-secondary border-b-2 font-semibold`
-							: `text-gray5 dark:text-gray3`
+						algorithm === `TOP` ? ` text-primary dark:text-secondary font-semibold` : `text-gray5 dark:text-gray3`
 					"
 					class="focus:outline-none h-full w-full pb-3"
 					@click="sortFeed('TOP')"

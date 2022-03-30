@@ -3,7 +3,9 @@
 		<section>
 			<!-- Page title -->
 			<article class="px-4 py-4 xl:px-6 xl:py-5">
-				<h1 class="text-primary dark:text-secondary text-3xl font-semibold xl:text-4xl">Need Some Help?</h1>
+				<h1 class="text-lightPrimaryText dark:text-darkPrimaryText text-3xl font-semibold xl:text-4xl">
+					Need Some Help?
+				</h1>
 			</article>
 			<div class="container px-4 pb-6 xl:px-6">
 				<h3 class="text-primary dark:text-secondary mb-6 mt-4 text-xl font-semibold">Frequently Asked Questions</h3>

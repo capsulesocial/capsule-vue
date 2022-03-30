@@ -10,7 +10,7 @@
 				style="min-height: calc(100vh - 140px); height: calc(100vh - 140px); backdrop-filter: blur(5px)"
 				class="lg:w-7.5 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation z-10 overflow-y-auto rounded-lg bg-gradient-to-r p-6 pt-4 shadow-lg"
 			>
-				<h3 class="text-primary dark:text-secondary mb-4 text-base font-semibold">Primary widget</h3>
+				<h3 class="text-lightPrimaryText dark:text-darkPrimaryText mb-4 text-base font-semibold">Primary widget</h3>
 				<!-- Select a main widget -->
 				<div class="grid lg:grid-cols-2 xl:grid-cols-3 gap-5">
 					<button
@@ -51,7 +51,7 @@
 					class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation-delay1 z-10 mb-5 overflow-y-auto rounded-lg bg-gradient-to-r p-6 pt-4 shadow-lg"
 					style="backdrop-filter: blur(5px)"
 				>
-					<h3 class="text-primary dark:text-secondary mb-4 text-base font-semibold">Side widget</h3>
+					<h3 class="text-lightPrimaryText dark:text-darkPrimaryText mb-4 text-base font-semibold">Side widget</h3>
 					<div class="grid grid-cols-2 gap-5">
 						<button
 							class="bg-gray1 dark:bg-gray7 focus:outline-none border-lightBorder rounded-lg p-4"
@@ -90,7 +90,7 @@
 					class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation-delay2 z-10 mb-5 overflow-y-auto rounded-lg bg-gradient-to-r p-6 pt-4 shadow-lg backdrop-blur-lg backdrop-filter"
 					style="backdrop-filter: blur(5px)"
 				>
-					<h3 class="text-primary dark:text-secondary mb-4 text-base font-semibold">Side widget</h3>
+					<h3 class="text-lightPrimaryText dark:text-darkPrimaryText mb-4 text-base font-semibold">Side widget</h3>
 					<div class="grid grid-cols-2 gap-5">
 						<button
 							class="bg-gray1 dark:bg-gray7 focus:outline-none border-lightBorder rounded-lg p-4"

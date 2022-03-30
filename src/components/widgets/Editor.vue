@@ -5,7 +5,7 @@
 			class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder mb-5 rounded-lg border bg-gradient-to-r px-6 py-4 shadow-lg"
 			style="backdrop-filter: blur(10px)"
 		>
-			<h6 class="text-primary dark:text-secondary font-semibold">Featured Image</h6>
+			<h6 class="text-lightPrimaryText dark:text-darkPrimaryText font-semibold">Featured Image</h6>
 			<button
 				class="border-gray5 dark:border-gray3 transition duration-500 ease-in-out hover:border-primary dark:hover:border-secondary focus:outline-none mt-3 mb-2 flex h-40 w-full items-center justify-center overflow-hidden rounded-lg border border-dashed"
 				@click="handleUploadImageClick"
@@ -60,7 +60,7 @@
 			class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder mb-5 rounded-lg border bg-gradient-to-r px-6 py-4 shadow-lg"
 			style="backdrop-filter: blur(10px)"
 		>
-			<h6 class="text-primary dark:text-secondary font-semibold">Category</h6>
+			<h6 class="text-lightPrimaryText dark:text-darkPrimaryText font-semibold">Category</h6>
 			<button
 				class="bg-gray1 dark:bg-gray7 text-gray5 dark:text-gray3 placeholder-gray5 dark:placeholder-gray3 focus:outline-none my-1 mt-3 w-full rounded-lg p-2"
 				@click="showCategoryDropdown = !showCategoryDropdown"
@@ -106,7 +106,7 @@
 			class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder mb-5 rounded-lg border bg-gradient-to-r px-6 py-4 pb-6 shadow-lg"
 			style="backdrop-filter: blur(10px)"
 		>
-			<h6 class="text-primary dark:text-secondary mb-3 font-semibold">Tags</h6>
+			<h6 class="text-lightPrimaryText dark:text-darkPrimaryText mb-3 font-semibold">Tags</h6>
 			<div
 				class="bg-gray1 dark:bg-gray7 text-gray5 dark:text-gray3 placeholder-gray5 dark:placeholder-gray3 my-1 w-full rounded-lg p-2"
 			>

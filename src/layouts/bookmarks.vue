@@ -23,7 +23,9 @@
 					style="height: 62px"
 				>
 					<!-- Title -->
-					<h1 class="text-primary dark:text-secondary text-3xl font-semibold xl:text-4xl">Bookmarks list</h1>
+					<h1 class="text-lightPrimaryText dark:text-darkPrimaryText text-3xl font-semibold xl:text-4xl">
+						Bookmarks list
+					</h1>
 					<!-- Peered nodes -->
 					<Nodes />
 				</div>
@@ -45,7 +47,9 @@
 							class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder mb-5 h-full w-full overflow-y-scroll rounded-lg border bg-gradient-to-r px-6 py-4 shadow-lg"
 						>
 							<div class="flex flex-row items-center justify-between pb-4">
-								<h6 class="text-primary dark:text-secondary text-base font-semibold">Filter by Category</h6>
+								<h6 class="text-lightPrimaryText dark:text-darkPrimaryText text-base font-semibold">
+									Filter by Category
+								</h6>
 								<button class="focus:outline-none text-primary dark:text-secondary pr-1 text-sm" @click="setFilter(``)">
 									Clear
 								</button>

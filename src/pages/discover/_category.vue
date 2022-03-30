@@ -20,7 +20,7 @@
 					<p id="buttontitle" class="animatefast pl-3 pr-4 font-semibold">All categories</p>
 					<h2
 						id="hiddentitle"
-						class="text-primary dark:text-secondary animatelong absolute ml-8 -mt-1 px-2 text-xl font-semibold capitalize opacity-0"
+						class="text-lightPrimaryText dark:text-darkPrimaryText animatelong absolute ml-8 -mt-1 px-2 text-xl font-semibold capitalize opacity-0"
 					>
 						{{ $route.params.category.replace(`-`, ` `) }}
 					</h2>
@@ -310,7 +310,7 @@ export default Vue.extend({
 	z-index: 50;
 }
 .scrolldown {
-	background: linear-gradient(180deg, rgba(46, 85, 106, 0.25) 0%, rgba(46, 85, 106, 0.25) 100%), none !important;
+	background: linear-gradient(180deg, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.25) 100%), none !important;
 	height: 4rem;
 	backdrop-filter: blur(10px);
 }

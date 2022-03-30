@@ -1,7 +1,7 @@
 <template>
 	<article class="p-6 pt-4 pb-4">
 		<div class="flex flex-row justify-between items-center">
-			<h3 class="text-primary dark:text-secondary font-semibold">Drafts</h3>
+			<h3 class="text-lightPrimaryText dark:text-darkPrimaryText font-semibold">Drafts</h3>
 			<div @mouseenter="showInfo = true" @mouseleave="showInfo = false">
 				<InfoIcon class="w-4 h-4 text-gray5 dark:text-gray3" />
 			</div>

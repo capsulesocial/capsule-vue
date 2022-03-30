@@ -7,7 +7,7 @@
 		<nav class="w-full flex-no-wrap hidden flex-row items-center justify-between py-5 lg:flex">
 			<!-- Left side: Links + write post button -->
 			<div class="flex flex-row items-center" style="font-size: 0.95rem">
-				<nuxt-link to="/home" class="mr-5 text-primary dark:text-secondary">
+				<nuxt-link to="/home" class="mr-5 text-darkBG dark:text-lightBG">
 					<CapsuleIcon />
 				</nuxt-link>
 				<nuxt-link to="/home" class="mx-4" :class="getStyles(`home`)"> Home </nuxt-link>
@@ -254,7 +254,7 @@ export default Vue.extend({
 			let res: string = ``
 			// Check if current tab
 			if (this.$route.name === tab) {
-				res += `font-bold text-primary dark:text-secondary border-primary dark:border-secondary border-b`
+				res += `font-bold text-primary dark:text-secondary`
 			} else {
 				res += `font-regular text-gray5 dark:text-gray3`
 			}

@@ -24,7 +24,9 @@
 					style="height: 62px"
 				>
 					<!-- Title -->
-					<h1 class="text-primary dark:text-secondary text-3xl font-semibold xl:text-4xl">Browse Blogchain</h1>
+					<h1 class="text-lightPrimaryText dark:text-darkPrimaryText text-3xl font-semibold xl:text-4xl">
+						Browse Blogchain
+					</h1>
 					<!-- Peered nodes -->
 					<Nodes />
 				</div>

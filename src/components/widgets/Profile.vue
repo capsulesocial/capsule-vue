@@ -3,7 +3,7 @@
 		class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder mb-5 w-full rounded-lg border bg-gradient-to-r p-4 shadow-lg"
 		style="backdrop-filter: blur(10px)"
 	>
-		<h6 class="text-primary dark:text-secondary mb-2 font-semibold">About</h6>
+		<h6 class="text-lightPrimaryText dark:text-darkPrimaryText mb-2 font-semibold">About</h6>
 		<div v-if="location === `` && email === `` && website === ``">
 			<p class="text-gray5 dark:text-gray3 text-sm">
 				<span v-if="$route.params.id === $store.state.session.id">
