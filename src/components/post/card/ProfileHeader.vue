@@ -19,19 +19,19 @@
 </template>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue'
+import Vue from 'vue'
 export default Vue.extend({
 	props: {
 		authorID: {
-			type: String as PropType<String>,
+			type: String,
 			required: true,
 		},
 		authorName: {
-			type: String as PropType<String>,
+			type: String,
 			required: true,
 		},
 		isHoverCard: {
-			type: Boolean as PropType<Boolean>,
+			type: Boolean,
 			default: false,
 		},
 	},

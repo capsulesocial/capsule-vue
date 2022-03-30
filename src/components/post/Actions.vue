@@ -457,7 +457,7 @@ export default Vue.extend({
 	},
 	props: {
 		postCID: {
-			type: String as PropType<string>,
+			type: String,
 			required: true,
 		},
 		postAuthor: {
