@@ -277,6 +277,7 @@ interface IData {
 	showShare: boolean
 	readingTime: number | null
 	realURL: string
+	hasSetURL: boolean
 }
 
 export default Vue.extend({
@@ -296,7 +297,7 @@ export default Vue.extend({
 		SharePopup,
 	},
 	beforeRouteLeave(to, from, next) {
-		if (this.realURL !== `` && to.path !== from.path) {
+		if (this.realURL !== `` && to.path !== from.path && this.hasSetURL) {
 			history.replaceState(null, ``, this.realURL)
 		}
 		next()
@@ -328,6 +329,7 @@ export default Vue.extend({
 			showShare: false,
 			readingTime: null,
 			realURL: ``,
+			hasSetURL: false,
 		}
 	},
 	head() {
@@ -399,6 +401,7 @@ export default Vue.extend({
 		createShareableLink(this.$route.params.post)
 			.then((friendlyUrl) => {
 				history.replaceState(null, ``, friendlyUrl)
+				this.hasSetURL = true
 			})
 			.catch((err) => {
 				// eslint-disable-next-line no-console
@@ -451,9 +454,6 @@ export default Vue.extend({
 				this.showShare = true
 			}, 1500)
 		}
-	},
-	beforeDestroy() {
-		history.replaceState(null, ``, this.realURL)
 	},
 	methods: {
 		getReposts,
