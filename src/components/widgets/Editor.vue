@@ -20,7 +20,13 @@
 					@change="handleImage"
 				/>
 				<!-- No Photo Uploaded -->
-				<div v-if="featuredPhoto === null" class="flex flex-col justify-center">
+				<div
+					v-if="waitingImage"
+					class="absolute w-11/12 h-44 bg-lightInput dark:bg-gray7 rounded-lg animate-pulse flex justify-center items-center"
+				>
+					<p class="text-sm text-gray5 dark:text-gray3">uploading image...</p>
+				</div>
+				<div v-if="featuredPhoto === null && !waitingImage" class="flex flex-col justify-center">
 					<UploadIcon class="self-center text-gray5 dark:text-gray3" />
 					<p class="text-primary dark:text-secondary mt-2 text-left text-sm font-light">Upload an Image</p>
 				</div>
@@ -169,6 +175,7 @@ interface IData {
 	showCategoryDropdown: boolean
 	dark: boolean
 	featuredPhotoTarget: null | HTMLInputElement
+	waitingImage: boolean
 }
 
 export default Vue.extend({
@@ -194,6 +201,7 @@ export default Vue.extend({
 			showCategoryDropdown: false,
 			dark: false,
 			featuredPhotoTarget: null,
+			waitingImage: false,
 		}
 	},
 	watch: {
@@ -257,7 +265,8 @@ export default Vue.extend({
 			const cid = await addPhotoToIPFS(image)
 			await preUploadPhoto(cid, blobImage, filename, this.$store.state.session.id)
 			this.$store.commit(`draft/updateFeaturedPhotoCID`, cid)
-			this.downloadImage(cid)
+			await this.downloadImage(cid)
+			this.waitingImage = false
 		},
 		async downloadImage(cid: string): Promise<void> {
 			this.featuredPhoto = await getPhotoFromIPFS(cid)
@@ -284,6 +293,7 @@ export default Vue.extend({
 				return
 			}
 			try {
+				this.waitingImage = true
 				const compressedImage = await getCompressedImage(image)
 				const reader = new FileReader()
 				reader.readAsDataURL(compressedImage)
@@ -291,6 +301,7 @@ export default Vue.extend({
 					if (i.target !== null) {
 						this.uploadImage(i.target.result, compressedImage, image.name).catch((err) => {
 							target.value = ``
+							this.waitingImage = false
 							this.$handleError(err)
 						})
 					}
@@ -301,6 +312,7 @@ export default Vue.extend({
 				}
 			} catch (err: unknown) {
 				target.value = ``
+				this.waitingImage = false
 				this.$handleError(err)
 			}
 		},
