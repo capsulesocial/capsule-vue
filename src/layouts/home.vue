@@ -2,7 +2,7 @@
 	<main
 		class="bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightMainBG dark:bg-darkBG overscroll-none"
 		:style="
-			dark
+			$colorMode.dark
 				? {
 						backgroundImage: `url(` + bgImage.dark + `)`,
 				  }
@@ -109,7 +109,6 @@ interface IData {
 	following: Set<string>
 	followers: Set<string>
 	bgImage: IBackground
-	dark: boolean
 	showFollowers: boolean
 }
 
@@ -133,14 +132,12 @@ export default Vue.extend({
 			following: new Set(),
 			followers: new Set(),
 			bgImage: backgrounds[0],
-			dark: false,
 			showFollowers: false,
 		}
 	},
 	created() {
 		// Set color mode
 		this.$setColorMode(this.$store.state.settings.darkMode)
-		this.dark = document.documentElement.classList.contains(`dark`)
 	},
 	async mounted() {
 		// Check if logged in user

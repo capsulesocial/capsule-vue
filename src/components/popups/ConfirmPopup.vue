@@ -31,7 +31,7 @@
 					<div
 						v-show="showInfoBubble"
 						class="border-lightBorder modal-animation absolute z-10 flex flex-col rounded-lg border bg-lightBG dark:bg-darkBG p-2 shadow-lg mx-4"
-						:class="dark ? `dropdownInfoOpenDark` : `dropdownInfoOpen`"
+						:class="$colorMode.dark ? `dropdownInfoOpenDark` : `dropdownInfoOpen`"
 						style="top: 120px; left: 0px"
 					>
 						<!-- Delete -->
@@ -65,7 +65,6 @@ import CloseIcon from '@/components/icons/X.vue'
 
 interface IData {
 	showInfoBubble: boolean
-	dark: boolean
 }
 
 export default Vue.extend({
@@ -73,12 +72,10 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			showInfoBubble: false,
-			dark: false,
 		}
 	},
 	created() {
 		window.addEventListener(`click`, this.handleCloseClick, false)
-		this.dark = document.documentElement.classList.contains(`dark`)
 	},
 	destroyed() {
 		window.removeEventListener(`click`, this.handleCloseClick)

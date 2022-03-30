@@ -87,7 +87,7 @@
 		<article v-show="isLoading" class="modal-animation flex w-full justify-center mt-20">
 			<div
 				class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
-				:style="dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
+				:style="$colorMode.dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
 			></div>
 		</article>
 	</section>
@@ -111,7 +111,6 @@ interface IData {
 	padding: number
 	scrollDown: boolean
 	noMorePosts: boolean
-	dark: boolean
 	fromExternalSite: boolean
 }
 
@@ -151,7 +150,6 @@ export default Vue.extend({
 			padding: 224,
 			scrollDown: false,
 			noMorePosts: false,
-			dark: false,
 			fromExternalSite: false,
 		}
 	},
@@ -170,10 +168,6 @@ export default Vue.extend({
 	},
 	async created() {
 		this.posts = await this.fetchPosts()
-		if (this.$store.state.session.id === ``) {
-			return
-		}
-		this.dark = document.documentElement.classList.contains(`dark`)
 	},
 	mounted() {
 		const container = document.getElementById(`column`)

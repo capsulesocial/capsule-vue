@@ -23,8 +23,8 @@
 			width="20"
 			height="20"
 			viewBox="0 0 530 530"
-			:fill="dark ? `#7097AC` : `#2E556A`"
-			:stroke="dark ? `#7097AC` : `#2E556A`"
+			:fill="$colorMode.dark ? `#7097AC` : `#2E556A`"
+			:stroke="$colorMode.dark ? `#7097AC` : `#2E556A`"
 			stroke-width="8"
 			stroke-linecap="round"
 			stroke-linejoin="round"
@@ -40,24 +40,12 @@
 <script lang="ts">
 import Vue from 'vue'
 
-interface IData {
-	dark: boolean
-}
-
 export default Vue.extend({
 	props: {
 		isActive: {
 			type: Boolean,
 			default: false,
 		},
-	},
-	data(): IData {
-		return {
-			dark: false,
-		}
-	},
-	created() {
-		this.dark = document.documentElement.classList.contains(`dark`)
 	},
 })
 </script>

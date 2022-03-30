@@ -117,7 +117,7 @@
 									<div
 										v-show="showDelete"
 										class="border-lightBorder modal-animation absolute z-10 flex w-36 flex-col rounded-lg border bg-lightBG dark:bg-darkBG p-1 shadow-lg"
-										:class="dark ? `dropdownDeleteOpenDark` : `dropdownDeleteOpen`"
+										:class="$colorMode.dark ? `dropdownDeleteOpenDark` : `dropdownDeleteOpen`"
 										:style="
 											quote && quote.authorID === $store.state.session.id
 												? `top: 55px; right: 40px`
@@ -289,7 +289,7 @@
 								<div
 									v-show="showQuoteDelete"
 									class="border-lightBorder modal-animation absolute z-10 flex w-48 flex-col rounded-lg border bg-lightBG dark:bg-darkBG p-1 shadow-lg"
-									:class="dark ? `dropdownDeleteOpenDark` : `dropdownDeleteOpen`"
+									:class="$colorMode.dark ? `dropdownDeleteOpenDark` : `dropdownDeleteOpen`"
 									style="top: 35px; right: -10px"
 								>
 									<!-- Delete -->
@@ -377,7 +377,7 @@
 								<div
 									v-show="showDelete"
 									class="dropdownDeleteOpen border-lightBorder modal-animation absolute z-10 flex w-36 flex-col rounded-lg border bg-lightBG dark:bg-darkBG p-1 shadow-lg"
-									:class="dark ? `dropdownDeleteOpenDark` : `dropdownDeleteOpen`"
+									:class="$colorMode.dark ? `dropdownDeleteOpenDark` : `dropdownDeleteOpen`"
 									:style="
 										quote && quote.authorID === $store.state.session.id
 											? `top: 55px; right: -10px`
@@ -574,7 +574,6 @@ interface IData {
 	} | null
 	postCID: string
 	readingTime: number | null
-	dark: boolean
 }
 
 export default Vue.extend({
@@ -683,12 +682,9 @@ export default Vue.extend({
 			postCID: ``,
 			quoteContent: ``,
 			readingTime: null,
-			dark: false,
 		}
 	},
 	async created() {
-		// check dark mode
-		this.dark = document.documentElement.classList.contains(`dark`)
 		// Get post CID if on full post page
 		if (this.post._id === undefined) {
 			this.postCID = this.$route.params.post

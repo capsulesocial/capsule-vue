@@ -16,7 +16,7 @@
 					{{ this.profilebgImage.label }}
 				</p>
 				<img
-					:src="dark ? profilebgImage.dark : profilebgImage.light"
+					:src="$colorMode.dark ? profilebgImage.dark : profilebgImage.light"
 					class="h-20 w-32 rounded-lg bg-lightBG dark:bg-darkBG border border-lightBorder"
 				/>
 			</button>
@@ -66,12 +66,12 @@
 					>
 						<img
 							v-if="selectedBG === x"
-							:src="dark ? x.dark : x.light"
+							:src="$colorMode.dark ? x.dark : x.light"
 							class="border-primary dark:border-secondary h-44 w-64 rounded-lg border shadow-lg bg-lightBG dark:bg-darkBG"
 						/>
 						<img
 							v-else
-							:src="dark ? x.dark : x.light"
+							:src="$colorMode.dark ? x.dark : x.light"
 							class="border-lightBorder h-44 w-64 rounded-lg border shadow-lg bg-lightBG dark:bg-darkBG"
 						/>
 						<span class="text-primary dark:text-secondary mt-1 text-center">{{ x.label }}</span>
@@ -157,7 +157,6 @@ interface IData {
 	selectedBG: IBackground
 	currentcolor: null | string
 	profilebgImage: IBackground
-	dark: boolean
 }
 
 export default Vue.extend({
@@ -175,7 +174,6 @@ export default Vue.extend({
 			selectedBG: backgrounds[0],
 			currentcolor: null,
 			profilebgImage: backgrounds[0],
-			dark: false,
 		}
 	},
 	head() {
@@ -185,7 +183,6 @@ export default Vue.extend({
 		}
 	},
 	async created() {
-		this.dark = document.documentElement.classList.contains(`dark`)
 		window.addEventListener(`click`, this.handleDropdown, false)
 		const { profile } = await getProfile(this.$store.state.session.id)
 		this.profile = profile
@@ -243,18 +240,6 @@ export default Vue.extend({
 			}
 		},
 		setColorMode(type: string): void {
-			if (type === `Dark`) {
-				this.dark = true
-			} else if (type === `Light`) {
-				this.dark = false
-			} else if (type === `OS`) {
-				if (window.matchMedia(`(prefers-color-scheme: dark)`).matches) {
-					this.dark = true
-				} else if (window.matchMedia(`(prefers-color-scheme: light)`).matches) {
-					this.dark = false
-				}
-			}
-			this.$emit(`changeColorMode`, this.dark)
 			this.$store.commit(`settings/changeDarkMode`, type)
 			this.$setColorMode(this.$store.state.settings.darkMode)
 		},

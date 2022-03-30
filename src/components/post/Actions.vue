@@ -105,7 +105,11 @@
 						<div v-for="f in faceStats.slice(page * 6, page * 6 + 6)" :key="f.face.label" class="flex w-24 flex-col">
 							<div class="flex flex-col rounded-lg border p-1" :class="`border-` + getStyle(f.face.label)">
 								<span class="self-center text-xs dark:text-darkPrimaryText">{{ f.face.label.replace(/_/g, ' ') }}</span>
-								<img :src="dark ? f.face.dark : f.face.light" :alt="f.face.label" class="h-16 w-16 self-center mt-1" />
+								<img
+									:src="$colorMode.dark ? f.face.dark : f.face.light"
+									:alt="f.face.label"
+									class="h-16 w-16 self-center mt-1"
+								/>
 							</div>
 							<span class="mt-1 self-center text-sm font-semibold dark:text-darkPrimaryText"
 								>{{ ((f.count / getCommentCount(`total`)) * 100).toFixed(1) }}%</span
@@ -213,7 +217,7 @@
 								<button class="focus:outline-none h-auto flex-shrink-0" @click="toggleShowEmotions">
 									<span v-if="activeEmotion.label !== ``">
 										<img
-											:src="dark ? activeEmotion.dark : activeEmotion.light"
+											:src="$colorMode.dark ? activeEmotion.dark : activeEmotion.light"
 											:alt="activeEmotion.label"
 											class="object-contain w-24 h-24 lg:w-32 lg:h-32"
 											style="transform: rotateY(180deg)"
@@ -302,7 +306,7 @@
 											@click="setEmotion($event, face)"
 										>
 											<img
-												:src="dark ? face.dark : face.light"
+												:src="$colorMode.dark ? face.dark : face.light"
 												:alt="face.label"
 												class="h-20 w-20"
 												style="transform: rotateY(180deg)"
@@ -438,7 +442,6 @@ interface IData {
 	faceStats: FaceStat[]
 	page: number
 	selectedEmotionColor: `positive` | `neutral` | `negative` | `neutralLightest`
-	dark: boolean
 	sendingComment: boolean
 }
 
@@ -500,14 +503,12 @@ export default Vue.extend({
 			faceStats: [],
 			page: 0,
 			selectedEmotionColor: `neutralLightest`,
-			dark: false,
 			sendingComment: false,
 		}
 	},
 	created() {
 		this.initComments()
 		this.initReposters()
-		this.dark = document.documentElement.classList.contains(`dark`)
 	},
 	methods: {
 		async initComments() {

@@ -2,7 +2,7 @@
 	<main
 		class="bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightMainBG dark:bg-darkBG"
 		:style="
-			dark
+			$colorMode.dark
 				? {
 						backgroundImage: `url(` + bgImage.dark + `)`,
 				  }
@@ -66,7 +66,7 @@
 					<section v-else class="modal-animation flex w-full justify-center">
 						<div
 							class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
-							:style="dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
+							:style="$colorMode.dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
 						></div>
 					</section>
 				</div>
@@ -164,7 +164,6 @@ interface IData {
 	showFollowers: boolean
 	showFollowing: boolean
 	showMutuals: boolean
-	dark: boolean
 	showAvatar: boolean
 }
 
@@ -201,7 +200,6 @@ export default Vue.extend({
 			showFollowers: false,
 			showFollowing: false,
 			showMutuals: false,
-			dark: false,
 			showAvatar: false,
 		}
 	},
@@ -245,7 +243,6 @@ export default Vue.extend({
 	created() {
 		// Set color mode
 		this.$setColorMode(this.$store.state.settings.darkMode)
-		this.dark = document.documentElement.classList.contains(`dark`)
 	},
 	mounted() {
 		// Fetch visiting profile

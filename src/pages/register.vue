@@ -8,7 +8,7 @@
 			<div v-show="isLoading" class="modal-animation flex w-full justify-center lg:w-3/4 xl:w-1/2 z-20">
 				<div
 					class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
-					:style="dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
+					:style="$colorMode.dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
 				></div>
 			</div>
 			<div v-show="!isLoading" class="flex w-full h-full flex-col justify-center items-center px-14">
@@ -70,7 +70,6 @@ interface IData {
 	userInfo: null | IWalletStatus
 	isLoading: boolean
 	showInfos: boolean
-	dark: boolean
 	step: `inviteCode` | `registerMethods` | `signUp` | `downloadKey`
 }
 
@@ -89,7 +88,6 @@ export default Vue.extend({
 			userInfo: null,
 			isLoading: true,
 			showInfos: false,
-			dark: false,
 			step: `inviteCode`,
 		}
 	},
@@ -150,7 +148,6 @@ export default Vue.extend({
 		if (this.$store.state.session.id !== `` && accountId) {
 			this.$router.push(`/home`)
 		}
-		this.dark = document.documentElement.classList.contains(`dark`)
 	},
 	methods: {
 		...mapMutations(sessionStoreNamespace, {

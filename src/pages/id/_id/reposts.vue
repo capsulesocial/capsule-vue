@@ -39,7 +39,7 @@
 		<article v-show="isLoading" class="flex justify-center">
 			<div
 				class="loader m-10 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
-				:style="dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
+				:style="$colorMode.dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
 			></div>
 		</article>
 	</section>
@@ -62,7 +62,6 @@ interface IData {
 	following: Set<string>
 	algorithm: Algorithm
 	noMorePosts: boolean
-	dark: boolean
 }
 
 export default Vue.extend({
@@ -84,7 +83,6 @@ export default Vue.extend({
 			following: new Set(),
 			algorithm: `NEW`,
 			noMorePosts: false,
-			dark: false,
 		}
 	},
 	async created() {
@@ -92,7 +90,6 @@ export default Vue.extend({
 		if (this.$store.state.session.id === ``) {
 			return
 		}
-		this.dark = document.documentElement.classList.contains(`dark`)
 		this.updateFollowers()
 	},
 	mounted() {

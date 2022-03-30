@@ -57,7 +57,7 @@
 					class="tooltip focus:outline-none border-lightBorder relative inline-block h-24 w-24 transform rounded-xl border transition duration-500 ease-in-out hover:scale-105"
 				>
 					<img
-						:src="dark ? reactionList[r].dark : reactionList[r].light"
+						:src="$colorMode.dark ? reactionList[r].dark : reactionList[r].light"
 						:alt="reactionList[r].label"
 						class="h-24 w-24 flex-shrink-0"
 						@click="updateFilter(reactionList[r].label)"
@@ -82,7 +82,6 @@ interface IData {
 	feelingList: Record<string, any>
 	feeling: string
 	showFilter: boolean
-	dark: boolean
 }
 
 export default Vue.extend({
@@ -103,13 +102,11 @@ export default Vue.extend({
 			feelingList: feelings,
 			feeling: `positive`,
 			showFilter: false,
-			dark: false,
 		}
 	},
 	created() {
 		// Set filter dropdown event handler
 		window.addEventListener(`click`, this.handleDropdown, false)
-		this.dark = document.documentElement.classList.contains(`dark`)
 	},
 	destroyed() {
 		window.removeEventListener(`click`, this.handleDropdown)

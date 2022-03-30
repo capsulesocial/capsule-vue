@@ -51,7 +51,7 @@
 		<article v-if="isLoading" class="flex w-full justify-center">
 			<div
 				class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
-				:style="dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
+				:style="$colorMode.dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
 			></div>
 		</article>
 	</div>
@@ -62,10 +62,6 @@ import Vue from 'vue'
 import { IPostResponse } from '@/backend/post'
 import SecondaryButton from '@/components/SecondaryButton.vue'
 import BookmarkIcon from '@/components/icons/Bookmark.vue'
-
-interface IData {
-	dark: boolean
-}
 
 export default Vue.extend({
 	components: {
@@ -89,14 +85,6 @@ export default Vue.extend({
 			type: Boolean,
 			required: false,
 		},
-	},
-	data(): IData {
-		return {
-			dark: false,
-		}
-	},
-	created() {
-		this.dark = document.documentElement.classList.contains(`dark`)
 	},
 	methods: {
 		toggleHomeFeed() {

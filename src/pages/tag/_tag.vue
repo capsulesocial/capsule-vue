@@ -50,7 +50,7 @@
 		<article v-show="isLoading" class="flex w-full justify-center mt-12">
 			<div
 				class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
-				:style="dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
+				:style="$colorMode.dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
 			></div>
 		</article>
 	</section>
@@ -70,7 +70,6 @@ interface IData {
 	limit: number
 	algorithm: Algorithm
 	noMorePosts: boolean
-	dark: boolean
 	fromExternalSite: boolean
 }
 
@@ -109,7 +108,6 @@ export default Vue.extend({
 			limit: 10,
 			algorithm: `NEW`,
 			noMorePosts: false,
-			dark: false,
 			fromExternalSite: false,
 		}
 	},
@@ -137,7 +135,6 @@ export default Vue.extend({
 	async created() {
 		// Fetch posts with tag (unauthenticated)
 		this.posts = await this.fetchPosts()
-		this.dark = document.documentElement.classList.contains(`dark`)
 	},
 	mounted() {
 		const container = this.$refs.container as HTMLElement

@@ -28,7 +28,7 @@
 				<div
 					v-show="showDelete"
 					class="border-lightBorder modal-animation absolute z-10 flex w-44 flex-col items-center rounded-lg border bg-lightBG dark:bg-darkBG p-1 shadow-lg"
-					:class="dark ? `dropdownDeleteOpenDark` : `dropdownDeleteOpen`"
+					:class="$colorMode.dark ? `dropdownDeleteOpenDark` : `dropdownDeleteOpen`"
 					style="top: 40px; right: 0px"
 				>
 					<!-- Delete -->
@@ -66,7 +66,6 @@ interface IData {
 	name: string
 	replyDeleted: boolean
 	showDelete: boolean
-	dark: boolean
 }
 
 export default Vue.extend({
@@ -89,7 +88,6 @@ export default Vue.extend({
 			name: ``,
 			replyDeleted: false,
 			showDelete: false,
-			dark: false,
 		}
 	},
 	async created() {
@@ -117,8 +115,6 @@ export default Vue.extend({
 				this.avatar = a
 			})
 		}
-		// check for dark mode
-		this.dark = document.documentElement.classList.contains(`dark`)
 		// Close more dropdown
 		window.addEventListener(`click`, () => {
 			if (this.showDelete) {

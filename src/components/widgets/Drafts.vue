@@ -45,7 +45,7 @@
 		<div
 			v-show="showInfo"
 			class="absolute z-10 border-lightBorder modal-animation rounded-lg border bg-lightBG dark:bg-darkBG p-2 shadow-lg text-gray5 dark:text-gray1 self-center text-xs"
-			:class="dark ? `DraftInfoOpenDark` : `DraftInfoOpen`"
+			:class="$colorMode.dark ? `DraftInfoOpenDark` : `DraftInfoOpen`"
 			style="top: 55px; right: 7px; width: 80%"
 		>
 			Note: drafts are stored in your browser's local storage any may be erased on actions such as clearing history
@@ -62,7 +62,6 @@ import InfoIcon from '@/components/icons/Info.vue'
 interface IData {
 	showPopup: boolean
 	showInfo: boolean
-	dark: boolean
 }
 
 export default Vue.extend({
@@ -74,7 +73,6 @@ export default Vue.extend({
 		return {
 			showPopup: false,
 			showInfo: false,
-			dark: false,
 		}
 	},
 	computed: {
@@ -83,9 +81,6 @@ export default Vue.extend({
 			s.reverse()
 			return s.slice(0, 3)
 		},
-	},
-	created() {
-		this.dark = document.documentElement.classList.contains(`dark`)
 	},
 	methods: {
 		handleDraftPopup(): void {

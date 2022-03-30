@@ -16,7 +16,7 @@
 					<article v-else-if="isSaving === `true`" class="modal-animation absolute right-0 top-0 p-8">
 						<div
 							class="loader border-2 border-gray1 dark:border-gray7 h-6 w-6 rounded-3xl"
-							:style="dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
+							:style="$colorMode.dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
 						></div>
 					</article>
 					<p v-else class="text-positive modal-animation absolute right-0 top-0 p-8">
@@ -126,7 +126,6 @@ interface IData {
 	toggleAddContent: boolean
 	addContentPosTop: number
 	addContentPosLeft: number
-	dark: boolean
 	waitingImage: boolean
 }
 
@@ -193,7 +192,6 @@ export default Vue.extend({
 			toggleAddContent: false,
 			addContentPosTop: 0,
 			addContentPosLeft: 0,
-			dark: false,
 			waitingImage: false,
 		}
 	},
@@ -212,7 +210,6 @@ export default Vue.extend({
 		}
 	},
 	mounted() {
-		this.dark = document.documentElement.classList.contains(`dark`)
 		this.setupEditor()
 	},
 	methods: {

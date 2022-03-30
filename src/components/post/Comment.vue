@@ -48,7 +48,7 @@
 								<!-- Reaction face image -->
 								<div class="flex float-right flex-shrink-0 items-center justify-center overflow-hidden">
 									<img
-										:src="dark ? emotion.dark : emotion.light"
+										:src="$colorMode.dark ? emotion.dark : emotion.light"
 										class="-mb-1 mt-2 h-32 w-32 bg-transparent"
 										:class="emotion.label === `default` ? `animate-pulse` : ``"
 										:style="emotion.label === `default` ? `filter: blur(5px)` : ``"
@@ -110,7 +110,7 @@
 				<div
 					v-show="showDelete"
 					class="border-lightBorder modal-animation absolute z-10 flex w-44 flex-col items-center rounded-lg border bg-lightBG dark:bg-darkBG p-1 shadow-lg"
-					:class="dark ? `dropdownDeleteOpenDark` : `dropdownDeleteOpen`"
+					:class="$colorMode.dark ? `dropdownDeleteOpenDark` : `dropdownDeleteOpen`"
 					style="top: 40px; right: 0px"
 				>
 					<!-- Delete -->
@@ -194,7 +194,6 @@ interface IData {
 	emotionType: string
 	content: string
 	showLabel: boolean
-	dark: boolean
 	commentDeleted: boolean
 	showDelete: boolean
 }
@@ -229,7 +228,6 @@ export default Vue.extend({
 			emotionType: ``,
 			content: ``,
 			showLabel: false,
-			dark: false,
 			commentDeleted: false,
 			showDelete: false,
 		}
@@ -268,7 +266,6 @@ export default Vue.extend({
 		}
 		// Fetch replies
 		await this.fetchReplies()
-		this.dark = document.documentElement.classList.contains(`dark`)
 		// Close more dropdown
 		window.addEventListener(`click`, () => {
 			if (this.showDelete) {

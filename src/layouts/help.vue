@@ -2,7 +2,7 @@
 	<main
 		class="bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightMainBG dark:bg-darkBG"
 		:style="
-			dark
+			$colorMode.dark
 				? {
 						backgroundImage: `url(` + bgImage.dark + `)`,
 				  }
@@ -64,7 +64,6 @@ interface IData {
 	showWidgets: boolean
 	displayOnboarding: boolean
 	bgImage: IBackground
-	dark: boolean
 }
 
 export default Vue.extend({
@@ -84,13 +83,11 @@ export default Vue.extend({
 			showWidgets: false,
 			displayOnboarding: false,
 			bgImage: backgrounds[0],
-			dark: false,
 		}
 	},
 	async created() {
 		// Set color mode
 		this.$setColorMode(this.$store.state.settings.darkMode)
-		this.dark = document.documentElement.classList.contains(`dark`)
 		// unauth
 		if (this.$store.state.session.id === ``) {
 			return

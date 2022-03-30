@@ -101,7 +101,7 @@
 			<article v-show="isLoading" class="modal-animation flex h-screen w-full justify-center pt-12">
 				<div
 					class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
-					:style="dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
+					:style="$colorMode.dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
 				></div>
 			</article>
 		</div>
@@ -123,7 +123,6 @@ interface IData {
 	currentOffset: number
 	limit: number
 	noMorePosts: boolean
-	dark: boolean
 }
 
 export default Vue.extend({
@@ -149,7 +148,6 @@ export default Vue.extend({
 			currentOffset: 0,
 			limit: 10,
 			noMorePosts: false,
-			dark: false,
 		}
 	},
 	head() {
@@ -168,7 +166,6 @@ export default Vue.extend({
 	async created() {
 		// Unauthenticated view
 		this.posts = await this.fetchPosts(this.algorithm)
-		this.dark = document.documentElement.classList.contains(`dark`)
 	},
 	mounted() {
 		const container = this.$refs.container as HTMLElement

@@ -169,11 +169,6 @@ export default Vue.extend({
 		if (this.$store.state.session.email !== ``) {
 			this.newEmail = this.$store.state.session.email
 		}
-		// Check for dark mode
-		// const prefersDarkMode = window.matchMedia(`(prefers-color-scheme: dark)`).matches
-		// if (prefersDarkMode) {
-		// 	this.$store.commit(`settings/changeDarkMode`, this.$store.state.settings.darkMode)
-		// }
 	},
 	errorCaptured(err: Error) {
 		this.$toastError(`Error: ` + err.message)

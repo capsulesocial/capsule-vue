@@ -2,7 +2,7 @@
 	<main
 		class="bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightMainBG dark:bg-darkBG"
 		:style="
-			dark
+			$colorMode.dark
 				? {
 						backgroundImage: `url(` + bgImage.dark + `)`,
 				  }
@@ -108,7 +108,6 @@ interface IData {
 	activeSort: BookmarkSort
 	isLoading: boolean
 	bgImage: IBackground
-	dark: boolean
 }
 
 export default Vue.extend({
@@ -129,13 +128,11 @@ export default Vue.extend({
 			activeSort: `BOOKMARK_DESC`,
 			isLoading: true,
 			bgImage: backgrounds[0],
-			dark: false,
 		}
 	},
 	async created() {
 		// Set color mode
 		this.$setColorMode(this.$store.state.settings.darkMode)
-		this.dark = document.documentElement.classList.contains(`dark`)
 		// Check if logged in user
 		if (this.$store.state.session.id === ``) {
 			this.isLoading = false

@@ -31,7 +31,7 @@
 		<div
 			v-show="showInfo"
 			class="absolute z-10 border-lightBorder modal-animation rounded-lg border bg-lightBG dark:bg-gray7 p-2 shadow-lg text-gray5 dark:text-gray1 self-center text-xs"
-			:class="dark ? `NodesInfoOpenDark` : `NodesInfoOpen`"
+			:class="$colorMode.dark ? `NodesInfoOpenDark` : `NodesInfoOpen`"
 			style="top: -5px; right: 205px; width: 140%"
 		>
 			Number of hosts on Blogchain's public network currently in use to serve content
@@ -49,7 +49,6 @@ export interface IData {
 	initNodes: boolean
 	initIPFS: boolean
 	showInfo: boolean
-	dark: boolean
 }
 
 export default Vue.extend({
@@ -62,11 +61,9 @@ export default Vue.extend({
 			initNodes: true,
 			initIPFS: true,
 			showInfo: false,
-			dark: false,
 		}
 	},
 	created() {
-		this.dark = document.documentElement.classList.contains(`dark`)
 		ipfs().initResult.then(async () => {
 			this.initIPFS = false
 			await this.update()

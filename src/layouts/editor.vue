@@ -2,7 +2,7 @@
 	<main
 		class="bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightMainBG dark:bg-darkBG"
 		:style="
-			dark
+			$colorMode.dark
 				? {
 						backgroundImage: `url(` + bgImage.dark + `)`,
 				  }
@@ -82,7 +82,6 @@ interface IData {
 	showConfirm: boolean
 	buttonHidden: boolean
 	bgImage: IBackground
-	dark: boolean
 }
 
 export default Vue.extend({
@@ -105,7 +104,6 @@ export default Vue.extend({
 			showConfirm: false,
 			buttonHidden: false,
 			bgImage: backgrounds[0],
-			dark: false,
 		}
 	},
 	head() {
@@ -138,7 +136,6 @@ export default Vue.extend({
 		if (this.$store.state.draft.drafts[this.$store.state.draft.activeIndex] === undefined) {
 			this.$store.commit(`draft/setActiveDraft`, 0)
 		}
-		this.dark = document.documentElement.classList.contains(`dark`)
 	},
 	methods: {
 		toggleConfirmPost() {

@@ -15,7 +15,7 @@
 		<div
 			v-show="showReposts"
 			class="bg-lightBG dark:bg-darkBG text-lightPrimaryText dark:text-darkPrimaryText border-lightBorder modal-animation absolute z-20 flex w-40 flex-col rounded-lg border p-2 shadow-lg"
-			:class="dark ? `dropdownRepostOpenDark` : `dropdownRepostOpen`"
+			:class="$colorMode.dark ? `dropdownRepostOpenDark` : `dropdownRepostOpen`"
 			style="left: 50px; bottom: 0px"
 		>
 			<!-- Simple Repost -->
@@ -53,7 +53,6 @@ interface IData {
 	showReposts: boolean
 	isReposted: boolean
 	repostOffset: number
-	dark: boolean
 }
 
 export default Vue.extend({
@@ -88,7 +87,6 @@ export default Vue.extend({
 			showReposts: false,
 			isReposted: false,
 			repostOffset: 0,
-			dark: false,
 		}
 	},
 	created() {
@@ -113,7 +111,6 @@ export default Vue.extend({
 			},
 			false,
 		)
-		this.dark = document.documentElement.classList.contains(`dark`)
 	},
 	methods: {
 		sendRepost,
