@@ -14,7 +14,7 @@ export interface SettingState {
 
 export const state = (): SettingState => ({
 	mode: `Light`,
-	color: `Orange`,
+	color: `Green`,
 	recentlyPosted: false,
 	recentlyInSettings: false,
 	showUnauthPopup: false,
@@ -23,7 +23,7 @@ export const state = (): SettingState => ({
 export const getters: GetterTree<SettingState, RootState> = {}
 
 export const MutationType = {
-	CHANGE_MODE: `changeMode`,
+	CHANGE_COLOR_MODE: `changeColorMode`,
 	CHANGE_COLOR: `changeColor`,
 	SET_RECENTLY_POSTED: `setRecentlyPosted`,
 	SET_RECENTLY_IN_SETTINGS: `setRecentlyInSettings`,
@@ -31,7 +31,7 @@ export const MutationType = {
 }
 
 export const mutations: MutationTree<SettingState> = {
-	[MutationType.CHANGE_MODE]: (state, newMode: string) => {
+	[MutationType.CHANGE_COLOR_MODE]: (state, newMode: string) => {
 		state.mode = newMode
 	},
 	[MutationType.CHANGE_COLOR]: (state, newColor: string) => {
@@ -54,7 +54,7 @@ export const actionType = {
 
 export const actions: ActionTree<SettingState, RootState> = {
 	nuxtServerInit({ commit }, _context: Context) {
-		commit(MutationType.CHANGE_MODE, `OS`)
-		commit(MutationType.CHANGE_COLOR, `Orange`)
+		commit(MutationType.CHANGE_COLOR_MODE, `OS`)
+		commit(MutationType.CHANGE_COLOR, `Green`)
 	},
 }

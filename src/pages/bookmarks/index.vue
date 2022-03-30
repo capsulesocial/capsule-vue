@@ -17,9 +17,7 @@
 				<SecondaryButton :text="`Home`" :action="toggleHomeFeed" />
 			</div>
 			<div v-else class="dark:text-gray3">
-				<button class="text-primary dark:text-secondary focus:outline-none mr-1" @click="$router.push(`/register`)">
-					Sign up
-				</button>
+				<button class="text-primary focus:outline-none mr-1" @click="$router.push(`/register`)">Sign up</button>
 				to bookmark posts
 			</div>
 			<img :src="require(`@/assets/images/brand/Bookmarks.webp`)" class="top-0 mt-64 xl:-mt-2" />

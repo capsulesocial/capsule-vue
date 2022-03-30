@@ -23,7 +23,7 @@
 				</p>
 			</div>
 		</div>
-		<button class="text-primary dark:text-secondary text-sm" @click="$emit(`openMutuals`)">Show more</button>
+		<button class="text-primary text-sm" @click="$emit(`openMutuals`)">Show more</button>
 	</article>
 </template>
 

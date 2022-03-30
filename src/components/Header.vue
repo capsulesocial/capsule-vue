@@ -75,7 +75,7 @@
 			<!-- Mobile menu dropdown -->
 			<div class="relative">
 				<button class="mobileDropdown" @click="showMobileMenu = !showMobileMenu">
-					<MobileNav class="mobileDropdown text-primary dark:text-secondary" />
+					<MobileNav class="mobileDropdown text-primary" />
 				</button>
 				<div
 					v-show="showMobileMenu"
@@ -108,8 +108,8 @@
 			<!-- Middle branding -->
 			<nuxt-link to="/home">
 				<div class="flex items-center">
-					<CapsuleIcon class="text-primary dark:text-secondary mr-2" />
-					<h1 class="text-primary dark:text-secondary font-sans text-xl font-bold">Blogchain</h1>
+					<CapsuleIcon class="text-primary mr-2" />
+					<h1 class="text-primary font-sans text-xl font-bold">Blogchain</h1>
 				</div>
 			</nuxt-link>
 			<div class="relative mt-2">
@@ -254,7 +254,7 @@ export default Vue.extend({
 			let res: string = ``
 			// Check if current tab
 			if (this.$route.name === tab) {
-				res += `font-bold text-primary dark:text-secondary`
+				res += `font-bold text-primary`
 			} else {
 				res += `font-regular text-gray5 dark:text-gray3`
 			}

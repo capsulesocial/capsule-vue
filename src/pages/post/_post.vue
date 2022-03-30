@@ -27,7 +27,7 @@
 								<nuxt-link v-else :to="`/id/` + post.authorID" class="text-gray5 dark:text-gray3 font-semibold">{{
 									post.authorID
 								}}</nuxt-link>
-								<nuxt-link :to="`/id/` + post.authorID" class="text-primary dark:text-secondary text-xs">
+								<nuxt-link :to="`/id/` + post.authorID" class="text-gray5 dark:text-gray3 text-xs">
 									@{{ post.authorID }}</nuxt-link
 								>
 							</div>
@@ -59,7 +59,7 @@
 			<section v-if="post !== null" class="mb-5 p-5 lg:p-0 pb-16 pt-2 md:pb-5">
 				<!-- Category and elipses -->
 				<article class="my-5 flex w-full justify-between">
-					<nuxt-link :to="`/discover/` + post.category" class="text-primary dark:text-secondary capitalize">{{
+					<nuxt-link :to="`/discover/` + post.category" class="text-primary capitalize">{{
 						post.category.replace(`-`, ` `)
 					}}</nuxt-link>
 					<div class="flex">
@@ -71,8 +71,8 @@
 						/>
 						<!-- Share popup button -->
 						<button
-							class="focus:outline-none text-gray5 dark:text-gray3 hover:text-primary dark:hover:text-secondary hover:fill-primary flex items-center"
-							:class="showShare ? `text-primary dark:text-secondary` : ``"
+							class="focus:outline-none text-gray5 dark:text-gray3 hover:text-primary hover:fill-primary flex items-center"
+							:class="showShare ? `text-primary` : ``"
 							style="margin-top: 2px"
 							@click="showShare = !showShare"
 						>
@@ -169,8 +169,8 @@
 							/>
 							<!-- Share popup button -->
 							<button
-								class="focus:outline-none text-gray5 dark:text-gray3 hover:text-primary dark:hover:text-secondary mr-4 hover:fill-primary flex items-center"
-								:class="showShare ? `text-primary dark:text-secondary` : ``"
+								class="focus:outline-none text-gray5 dark:text-gray3 hover:text-primary mr-4 hover:fill-primary flex items-center"
+								:class="showShare ? `text-primary` : ``"
 								style="margin-top: 2px"
 								@click="showShare = !showShare"
 							>

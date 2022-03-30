@@ -21,7 +21,7 @@
 		<!-- Export Private Key -->
 		<div class="mb-8 flex w-full flex-row items-center">
 			<label for="export" class="w-48 font-semibold text-gray5 dark:text-gray3 text-sm">Blogchain Private Key</label>
-			<button id="export" class="text-primary dark:text-secondary focus:outline-none" @click="downloadPrivateKey">
+			<button id="export" class="text-primary focus:outline-none" @click="downloadPrivateKey">
 				Export Blogchain Private Key
 			</button>
 		</div>
@@ -29,7 +29,7 @@
 		<h3 class="text-lightPrimaryText dark:text-darkPrimaryText pb-4 text-base font-semibold">Account Profile</h3>
 		<div class="mb-8 flex w-full flex-row items-center justify-between xl:justify-start">
 			<label for="editProfile" class="w-48 font-semibold text-gray5 dark:text-gray3 text-sm">Public Profile</label>
-			<button class="bg-secondary focus:outline-none block rounded-lg xl:hidden" @click="redirectProfile">
+			<button class="bg-darkBG focus:outline-none block rounded-lg xl:hidden" @click="redirectProfile">
 				<PencilIcon class="m-2 h-5 w-5 text-white" />
 			</button>
 			<SecondaryButton :text="`Edit Profile`" :action="redirectProfile" class="hidden xl:block" />
@@ -69,20 +69,17 @@
 						v-model="generatedInviteCode"
 						type="text"
 						placeholder="Eg. a5bX2cYY"
-						class="focus:outline-none focus:border-primary text-primary dark:text-secondary bg-gray1 dark:bg-gray7 border-primary dark:border-secondary w-full rounded-lg border border-dashed px-4 py-2 font-sans text-sm"
+						class="focus:outline-none focus:border-primary text-primary bg-gray1 dark:bg-gray7 border-primary w-full rounded-lg border border-dashed px-4 py-2 font-sans text-sm"
 						style="height: 3rem"
 						@focus="$event.target.select()"
 					/>
-					<button
-						class="text-primary dark:text-secondary focus:outline-none absolute right-0 mr-4 text-xs"
-						@click="copyURL"
-					>
+					<button class="text-primaryfocus:outline-none absolute right-0 mr-4 text-xs" @click="copyURL">
 						<CopyIcon class="h-5 w-5 fill-current" />
 					</button>
 				</div>
 				<button
 					v-if="inviteCodesRemaining >= 1"
-					class="text-primary dark:text-secondary focus:outline-none text-sm text-right"
+					class="text-primaryfocus:outline-none text-sm text-right"
 					@click="generateNewInviteCode"
 				>
 					Generate a new code
@@ -104,7 +101,7 @@
 					class="flex flex-row justify-between py-4 items-center"
 					:class="inviteCodes.length > 1 ? `border-b border-lightBorder` : `pb-0`"
 				>
-					<p class="w-1/3 text-primary dark:text-secondary">{{ code.code }}</p>
+					<p class="w-1/3 text-primary">{{ code.code }}</p>
 					<p class="w-1/3 text-gray7 dark:text-gray2">{{ $getFormat(new Date(code.exp)) }}</p>
 					<div class="w-1/3">
 						<p

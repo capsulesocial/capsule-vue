@@ -1,13 +1,11 @@
 <template>
 	<div class="relative flex items-end">
 		<button
-			class="focus:outline-none hover:text-primary dark:hover:text-secondary toggleRepost flex items-end"
-			:class="showReposts ? 'text-primary dark:text-secondary' : ''"
+			class="focus:outline-none hover:text-primary toggleRepost flex items-end"
+			:class="showReposts ? 'text-primary ' : ''"
 			@click.stop="toggleDropdown"
 		>
-			<div
-				class="text-gray5 dark:text-gray3 hover:text-primary dark:hover:text-secondary hover:fill-primary flex items-center"
-			>
+			<div class="text-gray5 dark:text-gray3 hover:text-primary hover:fill-primary flex items-center">
 				<RepostIcon :isActive="isReposted" />
 				<span class="ml-1 text-sm">{{ repostCount + repostOffset }}</span>
 			</div>
@@ -20,7 +18,7 @@
 		>
 			<!-- Simple Repost -->
 			<button
-				class="hover:text-primary dark:hover:text-secondary focus:outline-none text-gray5 dark:text-gray3 flex mr-4 items-center"
+				class="hover:text-primary focus:outline-none text-gray5 dark:text-gray3 flex mr-4 items-center"
 				@click="handleRepost()"
 			>
 				<RepostIcon :isActive="isReposted" :shrink="true" class="mr-2 p-1" />
@@ -29,7 +27,7 @@
 			</button>
 			<!-- Quote Repost -->
 			<button
-				class="hover:text-primary dark:hover:text-secondary focus:outline-none text-gray5 dark:text-gray3 flex mr-4 items-center"
+				class="hover:text-primary focus:outline-none text-gray5 dark:text-gray3 flex mr-4 items-center"
 				@click="$emit(`toggleRepost`)"
 			>
 				<QuoteIcon class="mr-2 p-1" />

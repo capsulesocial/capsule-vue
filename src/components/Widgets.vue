@@ -51,7 +51,7 @@
 			:style="{ backgroundImage: `url(${require(`@/assets/images/brand/configure-my-capsule.webp`)})` }"
 			@click="toggleConfigure"
 		>
-			<p class="text-primary dark:text-secondary text-right text-sm flex flex-row justify-end">
+			<p class="text-primary text-right text-sm flex flex-row justify-end">
 				<span class="p-6 xl:pr-0" style="background: opacity 0.9em">Configure</span>
 				<span class="p-6 pl-1 hidden xl:block">my Blogchain</span>
 			</p>

@@ -99,18 +99,18 @@
 
 	/* Handle */
 	::-webkit-scrollbar-thumb {
-		background: #2e556a;
+		background: #121212;
 		border-radius: 50px;
 	}
 
 	/* Handle on hover */
 	::-webkit-scrollbar-thumb:hover {
-		background: #7097ac;
+		opacity: 0.8
 	}
 
 	/* Dark Handle */
 	.dark ::-webkit-scrollbar-thumb {
-		background: #7097ac;
+		background: #FFFFFF;
 	}
 	/* Hide aside scrollbar for Chrome, Safari and Opera */
 	aside::-webkit-scrollbar {

@@ -8,10 +8,7 @@
 		<h3 class="text-lightPrimaryText dark:text-darkPrimaryText pb-4 text-base font-semibold">Display</h3>
 		<div class="mb-8 flex w-full xl:w-4/5 items-center justify-between">
 			<h3 class="w-36 xl:w-56 font-semibold text-gray5 dark:text-gray3 text-sm">App Background</h3>
-			<button
-				class="text-primary dark:text-secondary focus:outline-none flex flex-row items-center"
-				@click="toggleBGSelector"
-			>
+			<button class="text-primary focus:outline-none flex flex-row items-center" @click="toggleBGSelector">
 				<p class="mr-4">
 					{{ this.profilebgImage.label }}
 				</p>
@@ -23,10 +20,7 @@
 		</div>
 		<div class="mb-8 flex w-full xl:w-4/5 items-center justify-between">
 			<h3 class="w-56 font-semibold text-gray5 dark:text-gray3 text-sm">App Light Mode</h3>
-			<button
-				class="text-primary dark:text-secondary focus:outline-none flex flex-row items-center"
-				@click="toggleModeSelector"
-			>
+			<button class="text-primary focus:outline-none flex flex-row items-center" @click="toggleModeSelector">
 				<p class="mr-4">{{ $store.state.settings.mode }}</p>
 				<div
 					class="h-8 w-8 shadow-lg rounded-3xl border border-darkBG dark:border-lightBG bg-lightBG dark:bg-darkBG"
@@ -34,21 +28,14 @@
 				<div
 					class="h-8 w-8 -ml-2 shadow-lg rounded-3xl border border-darkBG dark:border-lightBG bg-gray5 dark:bg-gray3"
 				></div>
-				<div
-					class="h-8 w-8 -ml-2 shadow-lg rounded-3xl border border-darkBG dark:border-lightBG bg-primary dark:bg-secondary"
-				></div>
+				<div class="h-8 w-8 -ml-2 shadow-lg rounded-3xl border border-darkBG dark:border-lightBG bg-primary"></div>
 			</button>
 		</div>
 		<div class="mb-8 flex w-full xl:w-4/5 items-center justify-between">
 			<h3 class="w-56 font-semibold text-gray5 dark:text-gray3 text-sm">App Color Theme</h3>
-			<button
-				class="text-primary dark:text-secondary focus:outline-none flex flex-row items-center"
-				@click="toggleColorSelector"
-			>
+			<button class="text-primary focus:outline-none flex flex-row items-center" @click="toggleColorSelector">
 				<p class="mr-4">{{ $store.state.settings.color }}</p>
-				<div
-					class="h-8 w-8 shadow-lg rounded-3xl border border-darkBG dark:border-lightBG bg-primary dark:bg-secondary"
-				></div>
+				<div class="h-8 w-8 shadow-lg rounded-3xl border border-darkBG dark:border-lightBG bg-primary"></div>
 			</button>
 		</div>
 		<!-- Popup background selector -->
@@ -81,26 +68,21 @@
 						<img
 							v-if="selectedBG === x"
 							:src="$colorMode.dark ? x.dark : x.light"
-							class="border-primary dark:border-secondary h-44 w-64 rounded-lg border shadow-lg bg-lightBG dark:bg-darkBG"
+							class="border-primary h-44 w-64 rounded-lg border shadow-lg bg-lightBG dark:bg-darkBG"
 						/>
 						<img
 							v-else
 							:src="$colorMode.dark ? x.dark : x.light"
 							class="border-lightBorder h-44 w-64 rounded-lg border shadow-lg bg-lightBG dark:bg-darkBG"
 						/>
-						<span
-							class="mt-1 text-center"
-							:class="selectedBG === x ? `text-primary dark:text-secondary` : `text-gray5 dark:text-gray3`"
-							>{{ x.label }}</span
-						>
+						<span class="mt-1 text-center" :class="selectedBG === x ? `text-primar` : `text-gray5 dark:text-gray3`">{{
+							x.label
+						}}</span>
 					</button>
 				</div>
 				<!-- Select button -->
 				<div class="flex items-center justify-end p-6 pt-5">
-					<button
-						class="bg-primary dark:bg-secondary focus:outline-none rounded-lg px-4 py-2 text-white"
-						@click="confirmBackgroundImage"
-					>
+					<button class="bg-primary focus:outline-none rounded-lg px-4 py-2 text-white" @click="confirmBackgroundImage">
 						Select
 					</button>
 				</div>
@@ -136,26 +118,19 @@
 						<img
 							v-if="$store.state.settings.mode === x.label"
 							:src="x.image"
-							class="border-primary dark:border-secondary h-32 w-44 rounded-lg border shadow-lg"
+							class="border-primary h-32 w-44 rounded-lg border shadow-lg"
 						/>
 						<img v-else :src="x.image" class="border-lightBorder h-32 w-44 rounded-lg border shadow-lg" />
 						<span
 							class="mt-1 text-center"
-							:class="
-								$store.state.settings.mode === x.label
-									? `text-primary dark:text-secondary`
-									: `text-gray5 dark:text-gray3`
-							"
+							:class="$store.state.settings.mode === x.label ? `text-primary` : `text-gray5 dark:text-gray3`"
 							>{{ x.label }}</span
 						>
 					</button>
 				</div>
 				<!-- Select button -->
 				<div class="flex items-center justify-end p-6 pt-5">
-					<button
-						class="bg-primary dark:bg-secondary focus:outline-none rounded-lg px-4 py-2 text-white"
-						@click="confirmColorMode"
-					>
+					<button class="bg-primary focus:outline-none rounded-lg px-4 py-2 text-white" @click="confirmColorMode">
 						Select
 					</button>
 				</div>
@@ -209,10 +184,7 @@
 				</div>
 				<!-- Select button -->
 				<div class="flex items-center justify-end p-6 pt-5">
-					<button
-						class="bg-primary dark:bg-secondary focus:outline-none rounded-lg px-4 py-2 text-white"
-						@click="confirmColor"
-					>
+					<button class="bg-primary focus:outline-none rounded-lg px-4 py-2 text-white" @click="confirmColor">
 						Select
 					</button>
 				</div>
@@ -336,8 +308,8 @@ export default Vue.extend({
 			}
 		},
 		setColorMode(type: string): void {
-			this.$store.commit(`settings/changeDarkMode`, type)
-			this.$setColorMode(this.$store.state.settings.darkMode)
+			this.$store.commit(`settings/changeColorMode`, type)
+			this.$setColorMode(this.$store.state.settings.mode)
 		},
 		confirmColorMode(): void {
 			if (this.$store.state.settings.mode) {
@@ -350,7 +322,6 @@ export default Vue.extend({
 			}
 		},
 		setColor(type: string): void {
-			this.$emit(`changeColor`, type)
 			this.$store.commit(`settings/changeColor`, type)
 			this.$setColor(this.$store.state.settings.color)
 		},

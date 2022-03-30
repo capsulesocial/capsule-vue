@@ -8,7 +8,7 @@
 						v-if="isSaving === `false` && this.$route.name !== 'home'"
 						class="absolute right-0 top-0 flex flex-row items-center m-8"
 					>
-						<p class="mr-5 cursor-pointer text-primary dark:text-secondary" @click="handleSave">Save</p>
+						<p class="mr-5 cursor-pointer text-primary" @click="handleSave">Save</p>
 						<button class="bg-gray1 dark:bg-gray5 focus:outline-none rounded-full p-1" @click="saveContent">
 							<XIcon />
 						</button>
@@ -77,9 +77,7 @@
 				>
 					<p v-if="!isCollapsed">Time to publish?</p>
 					<PencilIcon v-else class="fill-current p-1" @close="$router.push(`/post`)" />
-					<button class="text-primary dark:text-secondary focus:outline-none ml-2" @click="$router.push(`/post`)">
-						Add meta
-					</button>
+					<button class="text-primary focus:outline-none ml-2" @click="$router.push(`/post`)">Add meta</button>
 				</div>
 			</section>
 		</div>

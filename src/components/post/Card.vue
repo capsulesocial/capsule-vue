@@ -176,7 +176,7 @@
 							style="transition: all 0.4s"
 						>
 							<button
-								class="bg-primary dark:bg-secondary focus:outline-none block rounded-lg lg:hidden"
+								class="bg-primary focus:outline-none block rounded-lg lg:hidden"
 								style="margin-right: 15.2px; margin-bottom: 15px"
 								@click="handleSendRepost"
 							>
@@ -274,7 +274,7 @@
 									>
 										{{ quote.authorID }}
 									</span>
-									<span class="text-primary dark:text-secondary"> @{{ quote.authorID }} </span>
+									<span class="text-gray5 dark:text-gray3"> @{{ quote.authorID }} </span>
 								</nuxt-link>
 								<span v-if="quote.bio !== ``" class="mt-2 dark:text-darkPrimaryText"> {{ quote.bio }} </span>
 							</div>
@@ -423,8 +423,8 @@
 								<div class="text-gray5 dark:text-gray3 mt-1 hidden xl:flex xl:items-center">
 									<!-- Comment -->
 									<button
-										class="focus:outline-none text-gray5 dark:text-gray3 hover:text-primary dark:hover:text-secondary mr-4 hover:fill-primary flex items-center"
-										:class="showComments ? `text-primary dark:text-secondary` : ``"
+										class="focus:outline-none text-gray5 dark:text-gray3 hover:text-primary mr-4 hover:fill-primary flex items-center"
+										:class="showComments ? `text-primary` : ``"
 										@click="toggleComments"
 									>
 										<CommentIcon :isActive="showComments" />
@@ -442,8 +442,8 @@
 									/>
 									<!-- Share popup button -->
 									<button
-										class="focus:outline-none text-gray5 dark:text-gray3 hover:text-primary dark:hover:text-secondary mr-4 hover:fill-primary flex items-center"
-										:class="showShare ? `text-primary dark:text-secondary` : ``"
+										class="focus:outline-none text-gray5 dark:text-gray3 hover:text-primary mr-4 hover:fill-primary flex items-center"
+										:class="showShare ? `text-primary` : ``"
 										style="margin-top: 2px"
 										@click="showShare = !showShare"
 									>
@@ -467,8 +467,8 @@
 						<!-- Comment and share (Mobile) -->
 						<div class="text-gray5 dark:text-gray3 mt-1 flex xl:hidden">
 							<button
-								class="focus:outline-none text-gray5 dark:text-gray3 hover:text-primary dark:hover:text-secondary mr-4 hover:fill-primary flex items-center"
-								:class="showComments ? `text-primary dark:text-secondary` : ``"
+								class="focus:outline-none text-gray5 dark:text-gray3 hover:text-primary mr-4 hover:fill-primary flex items-center"
+								:class="showComments ? `text-primary` : ``"
 								@click="toggleComments"
 							>
 								<CommentIcon :isActive="showComments" />
@@ -485,8 +485,8 @@
 							/>
 							<!-- Share popup button -->
 							<button
-								class="focus:outline-none text-gray5 dark:text-gray3 hover:text-primary dark:hover:text-secondary mr-4 hover:fill-primary flex items-center"
-								:class="showShare ? `text-primary dark:text-secondary` : ``"
+								class="focus:outline-none text-gray5 dark:text-gray3 hover:text-primary mr-4 hover:fill-primary flex items-center"
+								:class="showShare ? `text-primary` : ``"
 								style="margin-top: 2px"
 								@click="showShare = !showShare"
 							>

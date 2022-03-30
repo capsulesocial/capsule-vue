@@ -74,7 +74,7 @@
 								<!-- Reply button -->
 								<div class="flex flex-row items-center absolute bottom-0 pb-2">
 									<button
-										class="text-primary dark:text-secondary focus:outline-none text-left font-sans text-sm"
+										class="text-primary focus:outline-none text-left font-sans text-sm"
 										@click="isReplying = !isReplying"
 									>
 										Reply
@@ -146,7 +146,7 @@
 					<span class="relative w-1/5 flex justify-end items-end">
 						<button
 							v-if="reply !== ''"
-							class="text-primary dark:text-secondary focus:outline-none text-left font-sans text-sm p-4"
+							class="text-primary focus:outline-none text-left font-sans text-sm p-4"
 							@click="sendReply"
 						>
 							Post reply

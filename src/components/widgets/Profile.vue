@@ -14,21 +14,17 @@
 		</div>
 		<div v-else>
 			<div v-if="location !== ``" class="flex flex-row items-center dark:text-darkPrimaryText">
-				<PinIcon class="text-primary dark:text-secondary mr-3 h-4 w-4" /> {{ location }}
+				<PinIcon class="text-primary mr-3 h-4 w-4" /> {{ location }}
 			</div>
 			<div v-if="website !== `` && location !== ``" class="mb-2"></div>
-			<div v-if="website !== ``" class="text-secondary flex flex-row items-center">
-				<LinkIcon class="text-primary dark:text-secondary mr-3 h-4 w-4" /><button @click="redirectWebsite">
+			<div v-if="website !== ``" class="flex flex-row items-center">
+				<LinkIcon class="text-primary mr-3 h-4 w-4" /><button @click="redirectWebsite">
 					{{ website }}
 				</button>
 			</div>
 			<div v-if="email !== `` && (location !== `` || website !== ``)" class="mb-2"></div>
 			<div v-if="email !== ``" class="flex flex-row items-center dark:text-darkPrimaryText">
-				<MailIcon class="text-primary dark:text-secondary mr-3 h-4 w-4" /><a
-					:href="`mailto:` + email"
-					target="_blank"
-					>{{ email }}</a
-				>
+				<MailIcon class="text-primary mr-3 h-4 w-4" /><a :href="`mailto:` + email" target="_blank">{{ email }}</a>
 			</div>
 		</div>
 	</article>

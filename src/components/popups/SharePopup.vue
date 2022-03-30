@@ -95,7 +95,7 @@
 							@focus="$event.target.select()"
 						/>
 						<button
-							class="text-primary dark:text-secondary flex items-center focus:outline-none absolute right-0 mr-3 text-xs"
+							class="text-primary flex items-center focus:outline-none absolute right-0 mr-3 text-xs"
 							@click="copyDirectLink"
 						>
 							<CopyIcon class="h-4 w-4 fill-current mr-1" />
@@ -135,7 +135,7 @@
 							@focus="$event.target.select()"
 						/>
 						<button
-							class="text-primary dark:text-secondary flex items-center focus:outline-none absolute right-0 mr-3 text-xs"
+							class="text-primary flex items-center focus:outline-none absolute right-0 mr-3 text-xs"
 							@click="copyBlogchainLink"
 						>
 							<CopyIcon class="h-4 w-4 fill-current mr-1" />

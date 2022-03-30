@@ -38,7 +38,7 @@
 								<nuxt-link
 									:class="
 										$route.name === `settings-account`
-											? `bg-lightInput dark:bg-darkInput font-semibold text-primary dark:text-secondary`
+											? `bg-lightInput dark:bg-darkInput font-semibold text-primary`
 											: `text-gray5 dark:text-gray3`
 									"
 									class="focus:outline-none mb-4 w-full rounded-lg py-2 px-4 text-left flex flex-row items-center"
@@ -65,7 +65,7 @@
 									to="/settings/styling"
 									:class="
 										$route.name === `settings-styling`
-											? `bg-lightInput dark:bg-darkInput font-semibold text-primary dark:text-secondary`
+											? `bg-lightInput dark:bg-darkInput font-semibold text-primary`
 											: `text-gray5 dark:text-gray3`
 									"
 									class="focus:outline-none mb-4 w-full rounded-lg py-2 px-4 text-left flex flex-row items-center"
@@ -120,7 +120,7 @@ export default Vue.extend({
 	},
 	async created() {
 		// Set color mode
-		this.$setColorMode(this.$store.state.settings.darkMode)
+		this.$setColorMode(this.$store.state.settings.mode)
 		this.$setColor(this.$store.state.settings.color)
 		// Check if logged in user
 		if (this.$store.state.session.id === ``) {

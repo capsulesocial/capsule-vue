@@ -36,7 +36,7 @@
 				</div>
 				<p class="text-gray7 dark:text-gray3 mt-2 mb-4 text-center text-sm">
 					Already have an account?
-					<nuxt-link to="/login" class="text-primary dark:text-secondary text-center font-bold">Log in</nuxt-link>
+					<nuxt-link to="/login" class="text-primary text-center font-bold">Log in</nuxt-link>
 				</p>
 			</article>
 		</div>

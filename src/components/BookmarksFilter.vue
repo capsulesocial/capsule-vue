@@ -23,18 +23,14 @@
 			<div class="hotzone flex justify-start items-start flex-col dark:text-gray3">
 				<button
 					class="hotzone focus:outline-none mb-4"
-					:class="
-						filter === `BOOKMARK_DESC` ? `text-primary dark:text-secondary font-semibold` : `text-gray5 dark:text-gray3`
-					"
+					:class="filter === `BOOKMARK_DESC` ? `text-primary font-semibold` : `text-gray5 dark:text-gray3`"
 					@click="updateSort(`BOOKMARK_DESC`)"
 				>
 					Bookmarks date
 				</button>
 				<button
 					class="hotzone focus:outline-none"
-					:class="
-						filter === `POST_DESC` ? ` text-primary dark:text-secondary font-semibold` : `text-gray5 dark:text-gray3`
-					"
+					:class="filter === `POST_DESC` ? ` text-primary font-semibold` : `text-gray5 dark:text-gray3`"
 					@click="updateSort(`POST_DESC`)"
 				>
 					Posts date

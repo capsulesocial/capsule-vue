@@ -50,9 +50,7 @@
 								<h6 class="text-lightPrimaryText dark:text-darkPrimaryText text-base font-semibold">
 									Filter by Category
 								</h6>
-								<button class="focus:outline-none text-primary dark:text-secondary pr-1 text-sm" @click="setFilter(``)">
-									Clear
-								</button>
+								<button class="focus:outline-none text-primary pr-1 text-sm" @click="setFilter(``)">Clear</button>
 							</div>
 							<button
 								v-for="c in categoryList"
@@ -71,11 +69,7 @@
 								/>
 								<span
 									class="ml-2"
-									:class="
-										activeFilter === c
-											? ' font-semibold text-primary dark:text-secondary'
-											: ' text-gray5 dark:text-gray3'
-									"
+									:class="activeFilter === c ? ' font-semibold text-primary' : ' text-gray5 dark:text-gray3'"
 								>
 									{{ c.replace(`-`, ` `) }}</span
 								>
@@ -136,7 +130,7 @@ export default Vue.extend({
 	},
 	async created() {
 		// Set color mode
-		this.$setColorMode(this.$store.state.settings.darkMode)
+		this.$setColorMode(this.$store.state.settings.mode)
 		this.$setColor(this.$store.state.settings.color)
 		// Check if logged in user
 		if (this.$store.state.session.id === ``) {

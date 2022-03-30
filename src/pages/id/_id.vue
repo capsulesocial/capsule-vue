@@ -91,7 +91,7 @@
 									Posts
 								</div>
 								<button
-									class="pl-5 text-sm text-gray5 dark:text-gray3 hover:text-primary dark:hover:text-secondary hover:font-bold"
+									class="pl-5 text-sm text-gray5 dark:text-gray3 hover:text-primary hover:font-bold"
 									@click="$emit(`openFollowers`)"
 								>
 									<span class="text-lightPrimaryText dark:text-darkPrimaryText hover:text-primary font-bold">{{
@@ -100,7 +100,7 @@
 									Followers
 								</button>
 								<button
-									class="pl-5 text-sm text-gray5 dark:text-gray3 hover:text-primary dark:hover:text-secondary hover:font-bold"
+									class="pl-5 text-sm text-gray5 dark:text-gray3 hover:text-primary hover:font-bold"
 									@click="$emit(`openFollowing`)"
 								>
 									<span class="text-lightPrimaryText dark:text-darkPrimaryText hover:text-primary font-bold">{{
@@ -144,7 +144,7 @@
 				</div>
 				<button
 					v-show="longBio && !scrollingDown"
-					class="focus:outline-none text-xs text-primary dark:text-secondary px-1"
+					class="focus:outline-none text-xs text-primary px-1"
 					@click="expandBio = !expandBio"
 				>
 					Read <span v-if="!expandBio">more </span><span v-else>less</span>
@@ -394,7 +394,7 @@ export default Vue.extend({
 		getStyles(tab: string): string {
 			let res = ``
 			if (this.$route.name === tab) {
-				res += ` text-primary dark:text-secondary font-bold`
+				res += ` text-primary font-bold`
 			} else {
 				if (this.$route.name !== `id-followers` && this.$route.name !== `id-following`) {
 					res += ` text-grey1`

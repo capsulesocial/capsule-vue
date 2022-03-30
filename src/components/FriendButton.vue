@@ -26,7 +26,7 @@
 			>
 			<!-- Mobile -->
 			<div
-				class="bg-secondary rounded-lg p-1 text-lightOnPrimaryText shadow-sm border border-lightBorder transition duration-300 ease-in-out xl:hidden"
+				class="bg-primary rounded-lg p-1 text-lightOnPrimaryText shadow-sm border border-lightBorder transition duration-300 ease-in-out xl:hidden"
 			>
 				<FriendAddIcon class="m-1 h-5 w-5" />
 			</div>

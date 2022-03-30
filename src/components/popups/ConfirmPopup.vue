@@ -43,11 +43,9 @@
 					</div>
 				</div>
 				<div class="flex justify-end items-center">
-					<button class="text-primary dark:text-secondary focus:outline-none mr-6" @click="$emit(`close`)">
-						Keep writing
-					</button>
+					<button class="text-primary focus:outline-none mr-6" @click="$emit(`close`)">Keep writing</button>
 					<button
-						class="focus:outline-none bg-primary dark:bg-secondary text-lightButtonText transform rounded-lg px-12 py-2 font-bold shadow-lg transition duration-500 ease-in-out hover:scale-105"
+						class="focus:outline-none bg-primary text-lightButtonText transform rounded-lg px-12 py-2 font-bold shadow-lg transition duration-500 ease-in-out hover:scale-105"
 						@click="handlePost"
 					>
 						Publish

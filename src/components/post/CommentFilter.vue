@@ -13,7 +13,7 @@
 				<ChevronDown v-else />
 			</button>
 			<button v-show="filter !== ``" @click="$emit(`clicked`, ``)">
-				<span class="ml-2 text-sm text-primary dark:text-secondary">Clear</span>
+				<span class="ml-2 text-sm text-primary">Clear</span>
 			</button>
 		</div>
 		<!-- comment filter dropdown -->

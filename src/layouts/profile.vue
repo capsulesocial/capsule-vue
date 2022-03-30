@@ -242,7 +242,7 @@ export default Vue.extend({
 	},
 	created() {
 		// Set color mode
-		this.$setColorMode(this.$store.state.settings.darkMode)
+		this.$setColorMode(this.$store.state.settings.mode)
 		this.$setColor(this.$store.state.settings.color)
 	},
 	mounted() {

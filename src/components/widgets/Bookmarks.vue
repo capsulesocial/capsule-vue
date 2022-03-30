@@ -24,7 +24,7 @@
 				<img v-if="p.featuredPhoto" :src="p.featuredPhoto" class="h-16 w-full flex-shrink-0 rounded-lg object-cover" />
 			</div>
 		</nuxt-link>
-		<nuxt-link to="/bookmarks" class="italics text-primary dark:text-secondary px-6 text-sm">Show all</nuxt-link>
+		<nuxt-link to="/bookmarks" class="italics text-primary px-6 text-sm">Show all</nuxt-link>
 	</article>
 </template>
 

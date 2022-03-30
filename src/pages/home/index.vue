@@ -6,9 +6,7 @@
 		>
 			<div class="flex items-center">
 				<button
-					:class="
-						algorithm === `FOLLOWING` ? ` text-primary dark:text-secondary font-semibold` : `text-gray5 dark:text-gray3`
-					"
+					:class="algorithm === `FOLLOWING` ? ` text-primary font-semibold` : `text-gray5 dark:text-gray3`"
 					class="focus:outline-none h-full w-full pb-4"
 					@click="sortFeed('FOLLOWING')"
 				>
@@ -17,9 +15,7 @@
 			</div>
 			<div class="flex items-center px-12">
 				<button
-					:class="
-						algorithm === `NEW` ? ` text-primary dark:text-secondary font-semibold` : `text-gray5 dark:text-gray3`
-					"
+					:class="algorithm === `NEW` ? ` text-primary font-semibold` : `text-gray5 dark:text-gray3`"
 					class="focus:outline-none h-full w-full pb-4"
 					@click="sortFeed('NEW')"
 				>
@@ -28,9 +24,7 @@
 			</div>
 			<div class="flex items-center">
 				<button
-					:class="
-						algorithm === `TOP` ? ` text-primary dark:text-secondary font-semibold` : `text-gray5 dark:text-gray3`
-					"
+					:class="algorithm === `TOP` ? ` text-primary font-semibold` : `text-gray5 dark:text-gray3`"
 					class="focus:outline-none h-full w-full pb-4"
 					@click="sortFeed('TOP')"
 				>

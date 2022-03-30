@@ -33,14 +33,10 @@
 							style="backdrop-filter: blur(10px)"
 						>
 							<p v-if="!buttonHidden" class="mr-2">Resume writing?</p>
-							<button
-								v-if="!buttonHidden"
-								class="text-primary dark:text-secondary focus:outline-none"
-								@click="openDraftsPopup"
-							>
+							<button v-if="!buttonHidden" class="text-primary focus:outline-none" @click="openDraftsPopup">
 								Show drafts
 							</button>
-							<button v-else class="text-primary dark:text-secondary focus:outline-none" @click="openDraftsPopup">
+							<button v-else class="text-primary focus:outline-none" @click="openDraftsPopup">
 								<PencilIcon class="fill-current p-1" />
 							</button>
 						</div>

@@ -17,9 +17,7 @@
 			>
 				<div class="text-gray5 dark:text-gray3 pt-3 text-sm mb-4">
 					You don't have any drafts yet,
-					<button class="text-primary dark:text-secondary focus:outline-none ml-1" @click="$router.push(`/post`)">
-						write a new draft
-					</button>
+					<button class="text-primaryfocus:outline-none ml-1" @click="$router.push(`/post`)">write a new draft</button>
 				</div>
 			</div>
 			<DraftPreview
@@ -31,14 +29,12 @@
 				:numberOfDrafts="draftSubset.length"
 				:inWidget="true"
 			/>
-			<p class="text-primary dark:text-secondary">
+			<p class="text-primary">
 				<button class="focus:outline-none text-sm" @click="handleDraftPopup">Show all</button>
 			</p>
 		</div>
 		<div v-else class="text-gray5 dark:text-gray3 pt-3 text-sm">
-			<button class="text-primary dark:text-secondary focus:outline-none ml-1" @click="$router.push(`/register`)">
-				Sign up
-			</button>
+			<button class="text-primary focus:outline-none ml-1" @click="$router.push(`/register`)">Sign up</button>
 			to create drafts and save content
 		</div>
 		<!-- Info hover -->
