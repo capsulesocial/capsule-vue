@@ -452,6 +452,9 @@ export default Vue.extend({
 			}, 1500)
 		}
 	},
+	beforeDestroy() {
+		history.replaceState(null, ``, this.realURL)
+	},
 	methods: {
 		getReposts,
 		isPostBookmarkedByUser,
