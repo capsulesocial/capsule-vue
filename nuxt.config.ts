@@ -84,6 +84,7 @@ const config: NuxtConfig = {
 		{ src: `@/plugins/toast.ts` },
 		{ src: `@/plugins/helpers.ts` },
 		{ src: `@/plugins/background.ts` },
+		{ src: `@/plugins/color.ts` },
 		{ src: `@/plugins/colormode.ts` },
 		{ src: `@/plugins/backend.ts` },
 	],
