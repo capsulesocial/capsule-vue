@@ -277,7 +277,7 @@ interface IData {
 	showShare: boolean
 	readingTime: number | null
 	realURL: string
-	hasSetURL: boolean
+	isLeaving: boolean
 }
 
 export default Vue.extend({
@@ -297,7 +297,7 @@ export default Vue.extend({
 		SharePopup,
 	},
 	beforeRouteLeave(to, from, next) {
-		if (this.realURL !== `` && to.path !== from.path && this.hasSetURL) {
+		if (this.realURL !== `` && to.path !== from.path) {
 			history.replaceState(null, ``, this.realURL)
 		}
 		next()
@@ -329,7 +329,7 @@ export default Vue.extend({
 			showShare: false,
 			readingTime: null,
 			realURL: ``,
-			hasSetURL: false,
+			isLeaving: false,
 		}
 	},
 	head() {
@@ -364,6 +364,9 @@ export default Vue.extend({
 			],
 		}
 	},
+	beforeDestroy() {
+		this.isLeaving = true
+	},
 	async created() {
 		// Fetch post from IPFS
 		this.post = await getRegularPost(this.$route.params.post)
@@ -397,11 +400,12 @@ export default Vue.extend({
 		// Get reading time
 		this.calculateReadingTime()
 		// Change URL to social-friendly link, preserve real for Vue router
-		this.realURL = this.$route.fullPath
 		createShareableLink(this.$route.params.post)
 			.then((friendlyUrl) => {
-				history.replaceState(null, ``, friendlyUrl)
-				this.hasSetURL = true
+				if (!this.isLeaving) {
+					this.realURL = this.$route.fullPath
+					history.replaceState(null, ``, friendlyUrl)
+				}
 			})
 			.catch((err) => {
 				// eslint-disable-next-line no-console
