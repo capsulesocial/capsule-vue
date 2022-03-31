@@ -209,13 +209,6 @@ export default Vue.extend({
 			this.$store.commit(`draft/deleteDraft`, i)
 		}
 	},
-	async created() {
-		const url = `https://medium.com/nearprotocol/announcing-the-launch-of-pagoda-the-worlds-first-web3-startup-platform-f8e14903ee99`
-		const html = await (await fetch(url)).text()
-		console.log(html)
-		const doc = new DOMParser().parseFromString(html, `text/html`)
-		console.log(doc)
-	},
 	mounted() {
 		this.setupEditor()
 	},

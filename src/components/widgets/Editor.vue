@@ -150,6 +150,14 @@
 				</button>
 			</div>
 		</article>
+		<!-- Get post in URL -->
+		<article
+			class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder mb-5 rounded-lg border bg-gradient-to-r p-6 shadow-lg"
+			style="backdrop-filter: blur(10px)"
+		>
+			<input ref="postURL" type="text" class="border" />
+			<button @click="fetchURLPost">Fetch Post</button>
+		</article>
 	</div>
 </template>
 
@@ -211,6 +219,15 @@ export default Vue.extend({
 		this.fetchActiveDraft()
 	},
 	methods: {
+		async fetchURLPost() {
+			const url = this.$refs.postURL as HTMLInputElement
+			const html = await (await fetch(url.value)).text()
+			// eslint-disable-next-line no-console
+			console.log(html)
+			const doc = new DOMParser().parseFromString(html, `text/html`)
+			// eslint-disable-next-line no-console
+			console.log(doc)
+		},
 		fetchActiveDraft(): void {
 			this.featuredPhoto = null
 			const { featuredPhotoCID } = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex]
