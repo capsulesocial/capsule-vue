@@ -37,7 +37,7 @@
 		<!-- Popup background selector -->
 		<div
 			v-if="showPopupBG"
-			class="popup bg-darkBG dark:bg-gray7 modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center dark:bg-opacity-50 bg-opacity-50"
+			class="popup bg-darkBG dark:bg-gray5 modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center dark:bg-opacity-50 bg-opacity-50"
 		>
 			<!-- Inner space -->
 			<div
@@ -87,7 +87,7 @@
 		<!-- Popup Mode selector -->
 		<div
 			v-if="showPopupMode"
-			class="popup bg-darkBG dark:bg-gray7 modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
+			class="popup bg-darkBG dark:bg-gray5 modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
 		>
 			<!-- Inner space -->
 			<div
@@ -135,7 +135,7 @@
 		<!-- Popup Color selector -->
 		<div
 			v-if="showPopupColor"
-			class="popup bg-darkBG dark:bg-gray7 modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
+			class="popup bg-darkBG dark:bg-gray5 modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
 		>
 			<!-- Inner space -->
 			<div
