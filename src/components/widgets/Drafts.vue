@@ -17,7 +17,7 @@
 			>
 				<div class="text-gray5 dark:text-gray3 pt-3 text-sm mb-4">
 					You don't have any drafts yet,
-					<button class="text-primaryfocus:outline-none ml-1" @click="$router.push(`/post`)">write a new draft</button>
+					<button class="text-primary focus:outline-none ml-1" @click="$router.push(`/post`)">write a new draft</button>
 				</div>
 			</div>
 			<DraftPreview
