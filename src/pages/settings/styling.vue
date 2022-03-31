@@ -71,7 +71,7 @@
 							:src="$colorMode.dark ? x.dark : x.light"
 							class="border-lightBorder h-44 w-64 rounded-lg border shadow-lg bg-lightBG dark:bg-darkBG"
 						/>
-						<span class="mt-1 text-center" :class="selectedBG === x ? `text-primar` : `text-gray5 dark:text-gray3`">{{
+						<span class="mt-1 text-center" :class="selectedBG === x ? `text-primary` : `text-gray5 dark:text-gray3`">{{
 							x.label
 						}}</span>
 					</button>
@@ -106,7 +106,7 @@
 				<!-- color mode grid -->
 				<div class="flex flex-col lg:flex-row justify-between p-6 pt-4">
 					<button
-						v-for="x of colors"
+						v-for="x of modes"
 						:key="x.label"
 						class="focus:outline-none mb-4 flex flex-shrink-0 flex-col items-center"
 						@click="setColorMode(x.label)"
@@ -152,31 +152,51 @@
 					</button>
 				</div>
 				<!-- color grid -->
-				<div class="flex flex-col lg:flex-row justify-between p-6 pt-4">
-					<button class="focus:outline-none mb-4 flex flex-shrink-0 flex-col items-center" @click="setColor(`Green`)">
-						<div
-							class="h-8 w-8 -ml-2 shadow-lg rounded-3xl border border-darkBG dark:border-lightBG"
-							style="background-color: #7097ac"
-						></div>
+				<div class="flex flex-col lg:flex-row justify-between m-6 py-4 bg-lightInput dark:bg-darkInput rounded-lg">
+					<button
+						v-for="x of colors"
+						:key="x.label"
+						class="focus:outline-none flex flex-shrink-0 flex-col items-center w-1/5"
+						@click="setColor(x.id)"
+					>
+						<div class="flex flex-col justify-center items-center">
+							<Check v-if="$store.state.settings.color === x.id" class="text-lightBG h-4 w-4 absolute" />
+							<div
+								class="h-8 w-8 shadow-lg rounded-3xl border border-lightBorder"
+								:style="`background-color:` + x.hex"
+							></div>
+						</div>
+						<p
+							class="mt-2"
+							:class="$store.state.settings.color === x.id ? `text-primary` : `text-gray5 dark:text-gray3`"
+						>
+							{{ x.id }}
+						</p>
 					</button>
-					<button class="focus:outline-none mb-4 flex flex-shrink-0 flex-col items-center" @click="setColor(`Orange`)">
+					<!-- <button class="focus:outline-none flex flex-shrink-0 flex-col items-center" @click="setColor(`Orange`)">
 						<div
-							class="h-8 w-8 -ml-2 shadow-lg rounded-3xl border border-darkBG dark:border-lightBG"
+							class="h-8 w-8 shadow-lg rounded-3xl border border-lightBorder"
 							style="background-color: #ff4747"
 						></div>
 					</button>
-					<button class="focus:outline-none mb-4 flex flex-shrink-0 flex-col items-center" @click="setColor(`Blue`)">
+					<button class="focus:outline-none flex flex-shrink-0 flex-col items-center" @click="setColor(`Blue`)">
 						<div
-							class="h-8 w-8 -ml-2 shadow-lg rounded-3xl border border-darkBG dark:border-lightBG"
+							class="h-8 w-8 shadow-lg rounded-3xl border border-lightBorder"
 							style="background-color: #396bf8"
 						></div>
 					</button>
-					<button class="focus:outline-none mb-4 flex flex-shrink-0 flex-col items-center" @click="setColor(`Pink`)">
+					<button class="focus:outline-none flex flex-shrink-0 flex-col items-center" @click="setColor(`Pink`)">
 						<div
-							class="h-8 w-8 -ml-2 shadow-lg rounded-3xl border border-darkBG dark:border-lightBG"
+							class="h-8 w-8 shadow-lg rounded-3xl border border-lightBorder"
 							style="background-color: #eb3d7c"
 						></div>
 					</button>
+					<button class="focus:outline-none flex flex-shrink-0 flex-col items-center" @click="setColor(`Yellow`)">
+						<div
+							class="h-8 w-8 shadow-lg rounded-3xl border border-lightBorder"
+							style="background-color: #ffcc33"
+						></div>
+					</button> -->
 				</div>
 				<!-- Select button -->
 				<div class="flex items-center justify-end p-6 pt-5">
@@ -194,10 +214,11 @@ import Vue from 'vue'
 import { mapMutations } from 'vuex'
 import XIcon from '@/components/icons/X.vue'
 import ChevronLeft from '@/components/icons/ChevronLeft.vue'
+import Check from '@/components/icons/Check.vue'
 
 import { MutationType, getProfileFromSession, namespace as sessionStoreNamespace } from '~/store/session'
 import { setProfile, getProfile, Profile } from '@/backend/profile'
-import { IBackground, backgrounds, colors } from '@/config'
+import { IBackground, backgrounds, modes, colors } from '@/config'
 
 interface IData {
 	profile: Profile | null
@@ -206,6 +227,7 @@ interface IData {
 	showPopupMode: boolean
 	showPopupColor: boolean
 	backgrounds: any
+	modes: any
 	colors: any
 	currentbg: null | string
 	selectedBG: IBackground
@@ -215,7 +237,7 @@ interface IData {
 }
 
 export default Vue.extend({
-	components: { XIcon, ChevronLeft },
+	components: { XIcon, ChevronLeft, Check },
 	layout: `settings`,
 	data(): IData {
 		return {
@@ -225,6 +247,7 @@ export default Vue.extend({
 			showPopupMode: false,
 			showPopupColor: false,
 			backgrounds,
+			modes,
 			colors,
 			currentbg: null,
 			selectedBG: backgrounds[0],
@@ -295,7 +318,7 @@ export default Vue.extend({
 				const backendProfile = getProfileFromSession(this.$store.state.session)
 				const cid = await setProfile(backendProfile)
 				this.changeCID(cid)
-				this.$toastSuccess(`Background changed!`)
+				this.$toastSuccess(`Your background has been updated`)
 				this.toggleBGSelector()
 				// location.reload()
 				this.$emit(`initProfile`)

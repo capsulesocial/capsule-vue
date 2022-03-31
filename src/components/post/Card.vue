@@ -423,7 +423,7 @@
 								<div class="text-gray5 dark:text-gray3 mt-1 hidden xl:flex xl:items-center">
 									<!-- Comment -->
 									<button
-										class="focus:outline-none text-gray5 dark:text-gray3 hover:text-primary mr-4 hover:fill-primary flex items-center"
+										class="focus:outline-none text-gray5 dark:text-gray3 hover:text-primary dark:hover:text-primary mr-4 flex items-center"
 										:class="showComments ? `text-primary` : ``"
 										@click="toggleComments"
 									>
@@ -442,7 +442,7 @@
 									/>
 									<!-- Share popup button -->
 									<button
-										class="focus:outline-none text-gray5 dark:text-gray3 hover:text-primary mr-4 hover:fill-primary flex items-center"
+										class="focus:outline-none text-gray5 dark:text-gray3 hover:text-primary mr-4 dark:hover:text-primary flex items-center"
 										:class="showShare ? `text-primary` : ``"
 										style="margin-top: 2px"
 										@click="showShare = !showShare"

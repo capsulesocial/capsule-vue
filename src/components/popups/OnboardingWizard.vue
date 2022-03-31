@@ -1,9 +1,9 @@
 <template>
 	<section
-		class="popup bg-darkBG dark:bg-gray7 modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-start justify-center bg-opacity-50 dark:bg-opacity-50"
+		class="popup bg-darkBG dark:bg-gray7 modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
 	>
 		<div
-			class="popup from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation mt-12 overflow-y-auto rounded-lg bg-gradient-to-r p-6 pt-4 shadow-lg backdrop-blur-lg backdrop-filter"
+			class="popup from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation overflow-y-auto rounded-lg bg-gradient-to-r p-6 pt-4 shadow-lg backdrop-blur-lg backdrop-filter"
 			style="max-height: 90%; width: 650px; backdrop-filter: blur(10px)"
 		>
 			<!-- Header and close icon -->
