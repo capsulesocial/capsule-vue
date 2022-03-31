@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/named
 import { SubVerifierDetails, TORUS_NETWORK_TYPE } from '@toruslabs/customauth'
 import { ILocalNetNearConfig, INearConfig } from '../near'
 

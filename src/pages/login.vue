@@ -63,7 +63,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapMutations } from 'vuex'
-// eslint-disable-next-line import/named
 import DirectWebSdk, { TorusLoginResponse } from '@toruslabs/customauth'
 
 import CapsuleIcon from '@/components/icons/CapsuleNew.vue'

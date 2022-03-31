@@ -103,14 +103,11 @@ async function createIPFSInterface(): Promise<IPFSInterface> {
 		const peers = await node.swarm.peers()
 		return peers.length
 	}
-	// eslint-disable-next-line no-console
-	console.log(`IPFS is initialising...`)
+
 	const initResult = node.start().then(() => {
 		ipfsInitialised = true
 		_maintainConnection()
 		_resolveCachedPromises()
-		// eslint-disable-next-line no-console
-		console.log(`IPFS initialised!`)
 	})
 
 	return {
