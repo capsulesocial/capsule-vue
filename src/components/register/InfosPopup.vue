@@ -7,7 +7,7 @@
 				class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation z-10 mr-5 max-h-90 overflow-y-auto rounded-lg bg-gradient-to-r px-6 pt-4 pb-2 shadow-lg"
 			>
 				<div class="sticky flex items-center justify-between">
-					<h2 class="text-primary dark:text-secondary text-2xl font-semibold">Sign Up Methods</h2>
+					<h2 class="text-lightPrimaryText dark:text-gray1 text-2xl font-semibold">Sign Up Methods</h2>
 					<button class="focus:outline-none bg-gray1 dark:bg-gray5 rounded-full p-1" @click="$emit(`close`)">
 						<CloseIcon />
 					</button>

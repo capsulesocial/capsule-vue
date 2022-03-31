@@ -3,12 +3,12 @@
 		style="backdrop-filter: blur(10px)"
 		class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop h-screen w-full flex flex-col justify-between overflow-y-scroll bg-gradient-to-r lg:w-3/5"
 	>
-		<CapsuleIcon class="pt-6 pb-2 pl-10 text-primary dark:text-secondary" />
+		<CapsuleIcon class="pt-6 pb-2 pl-10 text-lightPrimaryText dark:text-gray1" />
 		<section class="flex items-center justify-center">
 			<div v-show="isLoading" class="modal-animation flex w-full justify-center lg:w-3/4 xl:w-1/2 z-20">
 				<div
 					class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
-					:style="$colorMode.dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
+					:style="`border-top: 2px solid` + $color.hex"
 				></div>
 			</div>
 			<div v-show="!isLoading" class="flex w-full h-full flex-col justify-center items-center px-14">
@@ -36,7 +36,7 @@
 		</p>
 		<div
 			v-if="showInfos"
-			class="popup bg-primary dark:bg-secondary modal-animation z-30 absolute top-0 right-0 flex h-full w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
+			class="popup bg-darkBG dark:bg-gray7 modal-animation z-30 absolute top-0 right-0 flex h-full w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
 		>
 			<InfosPopup @close="showInfos = false" />
 		</div>

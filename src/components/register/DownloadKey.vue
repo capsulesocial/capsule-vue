@@ -11,9 +11,7 @@
 			</div>
 			<BrandedButton :text="`Download`" :action="downloadPrivateKey" />
 		</div>
-		<nuxt-link v-if="hasDownloadedKey" to="/home" class="text-primary dark:text-secondary text-center"
-			>Continue to Homepage</nuxt-link
-		>
+		<nuxt-link v-if="hasDownloadedKey" to="/home" class="text-primary text-center">Continue to Homepage</nuxt-link>
 	</article>
 </template>
 

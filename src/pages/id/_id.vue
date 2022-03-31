@@ -91,21 +91,23 @@
 									Posts
 								</div>
 								<button
-									class="pl-5 text-sm text-gray5 dark:text-gray3 hover:text-primary hover:font-bold"
+									class="pl-5 text-sm text-gray5 dark:text-gray3 hover:text-primary dark:hover:text-primary hover:font-bold"
 									@click="$emit(`openFollowers`)"
 								>
-									<span class="text-lightPrimaryText dark:text-darkPrimaryText hover:text-primary font-bold">{{
-										followers.size
-									}}</span>
+									<span
+										class="text-lightPrimaryText dark:text-darkPrimaryText hover:text-primary dark:hover:text-primary font-bold"
+										>{{ followers.size }}</span
+									>
 									Followers
 								</button>
 								<button
-									class="pl-5 text-sm text-gray5 dark:text-gray3 hover:text-primary hover:font-bold"
+									class="pl-5 text-sm text-gray5 dark:text-gray3 hover:text-primary dark:hover:text-primary hover:font-bold"
 									@click="$emit(`openFollowing`)"
 								>
-									<span class="text-lightPrimaryText dark:text-darkPrimaryText hover:text-primary font-bold">{{
-										following.size
-									}}</span>
+									<span
+										class="text-lightPrimaryText dark:text-darkPrimaryText hover:text-primary dark:hover:text-primary font-bold"
+										>{{ following.size }}</span
+									>
 									Following
 								</button>
 							</div>

@@ -34,7 +34,7 @@
 							</span>
 							<span
 								v-if="authorID === postAuthor"
-								class="bg-darkBG dark:bg-lightBG dark:text-darkPrimaryText ml-2 rounded-2xl bg-opacity-25 py-1 px-2 text-xs"
+								class="bg-darkBG dark:bg-lightBG dark:text-darkPrimaryText ml-2 rounded-2xl bg-opacity-25 dark:bg-opacity-25 py-1 px-2 text-xs"
 							>
 								Author
 							</span>

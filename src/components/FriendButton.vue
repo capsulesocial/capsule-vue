@@ -20,7 +20,7 @@
 		<div v-else>
 			<!-- Desktop -->
 			<span
-				class="bg-darkBG hover:bg-opacity-75 hidden rounded-lg px-5 text-sm font-semibold text-lightOnPrimaryText shadow-sm border border-lightBorder transition duration-300 ease-in-out xl:block"
+				class="bg-darkBG hover:bg-opacity-75 hidden rounded-lg px-5 text-sm font-semibold text-lightOnPrimaryText shadow-sm border border-lightBorder dark:border-gray7 transition duration-300 ease-in-out xl:block"
 				style="padding-top: 0.4rem; padding-bottom: 0.4rem"
 				>Follow</span
 			>

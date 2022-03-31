@@ -59,7 +59,7 @@
 							>
 								<img
 									:src="
-										dark
+										$colorMode.dark
 											? require(`@/assets/images/category/` + c + `/dark/icon.webp`)
 											: require(`@/assets/images/category/` + c + `/light/icon.webp`)
 									"

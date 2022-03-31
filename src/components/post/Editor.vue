@@ -16,7 +16,7 @@
 					<article v-else-if="isSaving === `true`" class="modal-animation absolute right-0 top-0 p-8">
 						<div
 							class="loader border-2 border-gray1 dark:border-gray7 h-6 w-6 rounded-3xl"
-							:style="$colorMode.dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
+							:style="`border-top: 2px solid` + $color.hex"
 						></div>
 					</article>
 					<p v-else class="text-positive modal-animation absolute right-0 top-0 p-8">

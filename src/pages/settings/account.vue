@@ -69,7 +69,7 @@
 						v-model="generatedInviteCode"
 						type="text"
 						placeholder="Eg. a5bX2cYY"
-						class="focus:outline-none focus:border-primary text-primary bg-gray1 dark:bg-gray7 border-primary w-full rounded-lg border border-dashed px-4 py-2 font-sans text-sm"
+						class="focus:outline-none focus:border-lightBorder dark:border-darkBorder text-primary bg-gray1 dark:bg-gray7 border-primary w-full rounded-lg border border-dashed px-4 py-2 font-sans text-sm"
 						style="height: 3rem"
 						@focus="$event.target.select()"
 					/>

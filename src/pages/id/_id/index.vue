@@ -38,7 +38,7 @@
 		<article v-show="isLoading" class="modal-animation flex justify-center">
 			<div
 				class="loader m-10 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
-				:style="$colorMode.dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
+				:style="`border-top: 2px solid` + $color.hex"
 			></div>
 		</article>
 	</section>

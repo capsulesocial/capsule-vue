@@ -66,7 +66,7 @@
 					<section v-else class="modal-animation flex w-full justify-center">
 						<div
 							class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
-							:style="$colorMode.dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
+							:style="`border-top: 2px solid` + $color.hex"
 						></div>
 					</section>
 				</div>
