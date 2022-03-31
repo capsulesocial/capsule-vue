@@ -52,7 +52,6 @@ import Footer from '@/components/Footer.vue'
 import SupportWidget from '@/components/widgets/Support.vue'
 import ReportWidget from '@/components/widgets/Report.vue'
 import ResourcesWidget from '@/components/widgets/Resources.vue'
-import OnboardingWizard from '@/components/popups/OnboardingWizard.vue'
 
 import { IBackground, backgrounds } from '@/config'
 import { getProfile, Profile } from '@/backend/profile'
@@ -73,7 +72,7 @@ export default Vue.extend({
 		SupportWidget,
 		ResourcesWidget,
 		ReportWidget,
-		OnboardingWizard,
+		OnboardingWizard: () => import(`@/components/popups/OnboardingWizard.vue`),
 	},
 	middleware: `auth`,
 	data(): IData {
