@@ -49,7 +49,7 @@
 							class="modal-animation w-5/12 -mr-5 -mt-4 overflow-y-auto p-4"
 							style="min-height: calc(100vh - 70px); height: calc(100vh - 70px)"
 						>
-							<EditorWidgets :wordCount="wordCount" @confirm="toggleConfirmPost" />
+							<EditorWidgets :wordCount="wordCount" @confirm="checkPost" />
 							<Footer />
 						</aside>
 					</section>
@@ -57,7 +57,7 @@
 			</div>
 		</div>
 		<DraftsPopup v-if="showDrafts" @close="closeDraftsPopup" />
-		<ConfirmPopup v-if="showConfirm" @close="showConfirmPopup" @post="handlePost" />
+		<ConfirmPopup v-if="showConfirm" @close="showConfirmPopup" @post="sendPost" />
 	</main>
 </template>
 
@@ -138,11 +138,14 @@ export default Vue.extend({
 		}
 	},
 	methods: {
-		toggleConfirmPost() {
-			this.showConfirm = true
+		checkPost() {
+			const validPost = this.$refs.editor.checkPost(true)
+			if (validPost) {
+				this.showConfirm = true
+			}
 		},
-		async handlePost() {
-			await this.$refs.editor.post()
+		sendPost() {
+			this.$refs.editor.checkPost()
 		},
 		updateWordCount(num: number) {
 			this.wordCount = num
