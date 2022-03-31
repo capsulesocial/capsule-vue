@@ -104,7 +104,7 @@ import {
 	counterModuleFactory,
 	listRule,
 } from '@/pages/post/quillExtensions'
-import { createRegularPost, sendRegularPost } from '@/backend/post'
+import { createRegularPost, sendRegularPost, Tag } from '@/backend/post'
 import { preUploadPhoto, uploadPhoto } from '@/backend/photos'
 import { isValidFileType } from '@/backend/utilities/helpers'
 import textLimits from '@/backend/utilities/text_limits'
@@ -599,7 +599,7 @@ export default Vue.extend({
 			// Sanitize HTML
 			return this.sanitize(input.innerHTML)
 		},
-		async post(): Promise<void> {
+		checkPost(checksOnly: boolean = false): boolean {
 			const title = this.$refs.title as HTMLInputElement
 			const subtitle = this.$refs.subtitle as HTMLInputElement
 			this.title = title.value.trim()
@@ -610,13 +610,13 @@ export default Vue.extend({
 			const titleCheck = this.$qualityTitle(this.title)
 			if (this.$isError(titleCheck)) {
 				this.$toastError(titleCheck.error)
-				return
+				return false
 			}
 			// Check if using a subtitle and is a quality subtitle
 			const subtitleCheck = this.$qualitySubtitle(this.subtitle)
 			if (this.$isError(subtitleCheck)) {
 				this.$toastError(subtitleCheck.error)
-				return
+				return false
 			}
 
 			// Check for quality featuredPhotoCaption
@@ -624,19 +624,19 @@ export default Vue.extend({
 				const featuredPhotoCaptionCheck = this.$qualityFeaturedPhotoCaption(featuredPhotoCaption)
 				if (this.$isError(featuredPhotoCaptionCheck)) {
 					this.$toastError(featuredPhotoCaptionCheck.error)
-					return
+					return false
 				}
 			}
 
 			if (category === ``) {
 				this.$toastError(`Missing category`)
-				return
+				return false
 			}
 
 			for (const { name } of tags) {
 				if (name.replace(/\s/, ``).trim() !== name) {
 					this.$toastError(`Tag with spaces is not allowed`)
-					return
+					return false
 				}
 			}
 
@@ -645,16 +645,30 @@ export default Vue.extend({
 			const contentQualityCheck = this.$qualityContent(clean)
 			if (this.$isError(contentQualityCheck)) {
 				this.$toastError(contentQualityCheck.error)
-				return
+				return false
 			}
 			if (this.hasPosted) {
-				return
+				return false
 			}
 			const postImages = Array.from(createPostImagesSet(clean, this.postImages))
 			if (postImages.length > textLimits.post_images.max) {
 				this.$toastError(`Cannot add more than ${textLimits.post_images.max} images in a post`)
-				return
+				return false
 			}
+			if (checksOnly) {
+				return true
+			}
+			this.sendPost(clean, category, tags, featuredPhotoCID, featuredPhotoCaption, postImages)
+			return true
+		},
+		async sendPost(
+			clean: string,
+			category: string,
+			tags: Tag[],
+			featuredPhotoCID?: string | null,
+			featuredPhotoCaption?: string | null,
+			postImages?: Array<string>,
+		): Promise<void> {
 			const p = createRegularPost(
 				this.title,
 				this.subtitle === `` ? null : this.subtitle,
