@@ -491,13 +491,13 @@ export default Vue.extend({
 		scrollToBottom(e: ClipboardEvent) {
 			const scrollContainer = this.$refs.scrollContainer as HTMLElement
 			if (e && e.target) {
-				// @ts-ignore
-				if (e.target.outerHTML === `<br>`) {
+				const target = e.target as HTMLElement
+				if (target.outerHTML === `<br>`) {
 					scrollContainer.scrollTop = this.addContentPosTop
 					return
 				}
-				// @ts-ignore
-				e.target.scrollIntoView()
+
+				target.scrollIntoView()
 			}
 		},
 		async handleImage(e: Event) {

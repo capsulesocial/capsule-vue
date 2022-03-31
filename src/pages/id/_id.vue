@@ -231,9 +231,8 @@ export default Vue.extend({
 		PencilIcon,
 	},
 	beforeRouteEnter(to, from, next) {
-		next((vm) => {
+		next((vm: any) => {
 			if (to && from.name === null) {
-				// @ts-ignore
 				vm.fromExternalSite = true
 			}
 		})

@@ -536,8 +536,11 @@ export default Vue.extend({
 			this.filterComments()
 		},
 		setEmotion(e: PointerEvent, r: { label: string; light: any; dark: any }) {
-			// @ts-ignore
-			e.target.scrollIntoView({ behavior: `smooth`, block: `center` })
+			if (!e.target) {
+				return
+			}
+			const target = e.target as HTMLElement
+			target.scrollIntoView({ behavior: `smooth`, block: `center` })
 			this.selectedEmotion = r
 			if (feelings.positive.has(r.label)) {
 				this.selectedEmotionColor = `positive`
