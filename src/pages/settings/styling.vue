@@ -46,7 +46,7 @@
 			>
 				<!-- Header and close icon -->
 				<div class="flex items-center justify-between p-6 pb-2">
-					<h4 class="text-lightPrimaryText dark:text-darkPrimaryText mb-4 text-xl font-semibold">
+					<h4 class="text-lightPrimaryText dark:text-darkPrimaryText text-xl font-semibold">
 						Change your Blogchain background
 					</h4>
 					<button class="bg-gray1 dark:bg-gray5 focus:outline-none rounded-full p-1" @click="toggleBGSelector">
@@ -263,7 +263,9 @@ export default Vue.extend({
 		}
 	},
 	async created() {
-		window.addEventListener(`click`, this.handleDropdown, false)
+		window.addEventListener(`click`, this.handleDropdownBG, false)
+		window.addEventListener(`click`, this.handleDropdownMode, false)
+		window.addEventListener(`click`, this.handleDropdownColor, false)
 		const { profile } = await getProfile(this.$store.state.session.id)
 		this.profile = profile
 		this.profilebgImage = this.$getBGImage(this.profile?.background, `local`)
@@ -295,7 +297,7 @@ export default Vue.extend({
 				this.currentcolor = this.$store.state.settings.color
 			}
 		},
-		handleDropdown(e: any): void {
+		handleDropdownBG(e: any): void {
 			if (!this.showPopupBG) {
 				return
 			}
@@ -304,6 +306,28 @@ export default Vue.extend({
 			}
 			if (e.target.firstChild.classList.contains(`popup`)) {
 				this.toggleBGSelector()
+			}
+		},
+		handleDropdownMode(e: any): void {
+			if (!this.showPopupMode) {
+				return
+			}
+			if (!e.target || e.target.firstChild === null || e.target.firstChild.classList === undefined) {
+				return
+			}
+			if (e.target.firstChild.classList.contains(`popup`)) {
+				this.toggleModeSelector()
+			}
+		},
+		handleDropdownColor(e: any): void {
+			if (!this.showPopupColor) {
+				return
+			}
+			if (!e.target || e.target.firstChild === null || e.target.firstChild.classList === undefined) {
+				return
+			}
+			if (e.target.firstChild.classList.contains(`popup`)) {
+				this.toggleColorSelector()
 			}
 		},
 		setBackgroundImage(image: IBackground): void {
