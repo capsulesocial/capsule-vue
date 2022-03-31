@@ -11,7 +11,7 @@
 				>Connecting to peers...</span
 			>
 			<span v-else class="text-gray5 dark:text-gray1 mr-1 text-sm modal-animation">{{ nodes }} peered nodes</span>
-			<CapsuleIcon v-if="!initNodes" :shrink="true" class="text-darkBG dark:text-lightBG modal-animation" />
+			<CapsuleIcon v-if="!initNodes" :shrink="true" class="text-darkBG dark:text-gray2 modal-animation" />
 			<span v-if="initNodes" class="ml-1 flex h-3 w-3 modal-animation">
 				<span class="absolute inline-flex h-3 w-3 animate-ping rounded-full opacity-75 bg-gray5 dark:bg-gray3"></span>
 				<span class="relative inline-flex h-3 w-3 rounded-full bg-gray5 dark:bg-gray3"></span>

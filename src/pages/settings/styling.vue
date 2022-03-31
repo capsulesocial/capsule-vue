@@ -22,20 +22,16 @@
 			<h3 class="w-56 font-semibold text-gray5 dark:text-gray3 text-sm">App Light Mode</h3>
 			<button class="text-primary focus:outline-none flex flex-row items-center" @click="toggleModeSelector">
 				<p class="mr-4">{{ $store.state.settings.mode }}</p>
-				<div
-					class="h-8 w-8 shadow-lg rounded-3xl border border-darkBG dark:border-lightBG bg-lightBG dark:bg-darkBG"
-				></div>
-				<div
-					class="h-8 w-8 -ml-2 shadow-lg rounded-3xl border border-darkBG dark:border-lightBG bg-gray5 dark:bg-gray3"
-				></div>
-				<div class="h-8 w-8 -ml-2 shadow-lg rounded-3xl border border-darkBG dark:border-lightBG bg-primary"></div>
+				<div class="h-8 w-8 shadow-lg rounded-3xl border border-lightBorder bg-lightBG dark:bg-darkBG"></div>
+				<div class="h-8 w-8 -ml-2 shadow-lg rounded-3xl border border-lightBorder bg-gray5 dark:bg-gray3"></div>
+				<div class="h-8 w-8 -ml-2 shadow-lg rounded-3xl border border-lightBorder bg-darkBG dark:bg-lightBG"></div>
 			</button>
 		</div>
 		<div class="mb-8 flex w-full xl:w-4/5 items-center justify-between">
 			<h3 class="w-56 font-semibold text-gray5 dark:text-gray3 text-sm">App Color Theme</h3>
 			<button class="text-primary focus:outline-none flex flex-row items-center" @click="toggleColorSelector">
 				<p class="mr-4">{{ $store.state.settings.color }}</p>
-				<div class="h-8 w-8 shadow-lg rounded-3xl border border-darkBG dark:border-lightBG bg-primary"></div>
+				<div class="h-8 w-8 shadow-lg rounded-3xl border border-lightBorder bg-primary"></div>
 			</button>
 		</div>
 		<!-- Popup background selector -->

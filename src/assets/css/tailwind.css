@@ -110,7 +110,7 @@
 
 	/* Dark Handle */
 	.dark ::-webkit-scrollbar-thumb {
-		background: #FFFFFF;
+		background: #DDDDDD;
 	}
 	/* Hide aside scrollbar for Chrome, Safari and Opera */
 	aside::-webkit-scrollbar {

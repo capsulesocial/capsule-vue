@@ -544,6 +544,13 @@ export const backgrounds: IBackground[] = [
 		dark: require(`@/assets/images/backgrounds/light/urbanstuff001.webp`),
 		label: `Urban 02`,
 	},
+	{
+		id: `orangeMesh`,
+		type: `local`,
+		light: require(`@/assets/images/backgrounds/light/orange.webp`),
+		dark: require(`@/assets/images/backgrounds/light/orange.webp`),
+		label: `Orange Mesh`,
+	},
 ]
 
 export const colors = [

@@ -7,7 +7,7 @@
 		<nav class="w-full flex-no-wrap hidden flex-row items-center justify-between py-5 lg:flex">
 			<!-- Left side: Links + write post button -->
 			<div class="flex flex-row items-center" style="font-size: 0.95rem">
-				<nuxt-link to="/home" class="mr-5 text-darkBG dark:text-lightBG">
+				<nuxt-link to="/home" class="mr-5 text-darkBG dark:text-gray2">
 					<CapsuleIcon />
 				</nuxt-link>
 				<nuxt-link to="/home" class="mx-4" :class="getStyles(`home`)"> Home </nuxt-link>
