@@ -84,7 +84,6 @@ import Nodes from '@/components/Nodes.vue'
 import Widgets from '@/components/Widgets.vue'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
-import OnboardingWizard from '@/components/popups/OnboardingWizard.vue'
 import FollowersPopup from '@/components/popups/FollowersPopup.vue'
 import UnauthPopup from '@/components/popups/UnauthPopup.vue'
 
@@ -119,7 +118,7 @@ export default Vue.extend({
 		Footer,
 		PostEditor: () => import(`@/components/post/Editor.vue`),
 		Nodes,
-		OnboardingWizard,
+		OnboardingWizard: () => import(`@/components/popups/OnboardingWizard.vue`),
 		UnauthPopup,
 		FollowersPopup,
 	},
