@@ -33,7 +33,6 @@
 					<h1 v-else class="text-lightSecondaryText dark:text-gray1 text-3xl font-semibold xl:text-4xl">Hello!</h1>
 					<Nodes />
 				</div> -->
-				<!-- Content container -->
 				<section class="w-full lg:w-11/12 xl:w-10/12 max-w-1220 relative h-full flex flex-row justify-between">
 					<PostEditor
 						v-if="$store.state.widgets.primary === `editor` && $route.name === `home`"

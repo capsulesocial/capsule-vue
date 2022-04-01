@@ -1,6 +1,6 @@
 <template>
 	<main
-		class="bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightBG dark:bg-darkBG"
+		class="w-full flex flex-col items-center bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightMainBG dark:bg-darkBG"
 		:style="
 			$colorMode.dark
 				? {
@@ -11,6 +11,20 @@
 				  }
 		"
 	>
+		<Header :avatar="avatar" class="lg:w-11/12 xl:w-10/12 max-w-1220 my-5 fixed top-0" />
+		<div class="w-full lg:w-11/12 xl:w-10/12 max-w-1220 mt-20 relative">
+			<div
+				class="w-full lg:w-1220 absolute min-h-70 h-70 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder overflow-y-auto rounded-t-lg bg-gradient-to-r shadow-lg"
+			></div>
+		</div>
+
+		<!-- Main content scroll -->
+		<div ref="container" class="flex w-full overflow-y-auto overflow-x-hidden justify-center">
+			<!-- Content container -->
+			<div class="flex w-full h-full lg:w-11/12 xl:w-10/12 relative max-w-1220 flex-row justify-between">
+				<nuxt-child ref="childPage" class="w-full" @showPhoto="showPhoto" />
+			</div>
+		</div>
 		<!-- Featured photo popup -->
 		<div
 			v-if="displayPhoto"
@@ -29,21 +43,6 @@
 				>
 					{{ featuredPhoto.caption }}
 				</p>
-			</div>
-		</div>
-		<!-- Wrapper -->
-		<div class="flex w-full justify-center">
-			<div class="flex w-full lg:w-11/12 xl:w-10/12 max-w-1220 flex-col">
-				<!-- Header -->
-				<Header :avatar="avatar" />
-				<!-- Body -->
-				<!-- Content -->
-				<section class="flex flex-row">
-					<nuxt-child
-						class="min-h-61 h-61 lg:min-h-70 lg:h-70 border-lightBorder from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop w-full overflow-y-auto lg:rounded-lg border bg-gradient-to-r pt-0 shadow-lg xl:h-80 xl:pt-0"
-						@showPhoto="showPhoto"
-					/>
-				</section>
 			</div>
 		</div>
 		<UnauthPopup />
@@ -73,6 +72,9 @@ interface IData {
 	displayPhoto: boolean
 	featuredPhoto: FeaturedPhoto
 	bgImage: IBackground
+	lastScroll: number
+	scrollingDown: boolean
+	lastScrollingDown: boolean
 }
 
 export default Vue.extend({
@@ -92,6 +94,9 @@ export default Vue.extend({
 				caption: null,
 			},
 			bgImage: backgrounds[0],
+			lastScroll: 0,
+			scrollingDown: false,
+			lastScrollingDown: false,
 		}
 	},
 	async created() {
@@ -113,10 +118,30 @@ export default Vue.extend({
 			})
 		}
 	},
+	mounted() {
+		const container = this.$refs.container as HTMLElement
+		container.addEventListener(`scroll`, this.handleScroll)
+	},
 	methods: {
 		showPhoto(d: FeaturedPhoto): void {
 			this.featuredPhoto = d
 			this.displayPhoto = !this.displayPhoto
+		},
+		handleScroll() {
+			const container = this.$refs.container as HTMLElement
+			this.lastScrollingDown = this.scrollingDown
+			if (container.scrollTop > this.lastScroll && container.scrollTop !== 0) {
+				// scrolling down
+				this.scrollingDown = true
+			} else {
+				// scrolling up
+				this.scrollingDown = false
+			}
+			this.lastScroll = container.scrollTop
+			if (this.lastScrollingDown !== this.scrollingDown) {
+				// @ts-ignore
+				this.$refs.childPage.showHeader(true)
+			}
 		},
 	},
 })

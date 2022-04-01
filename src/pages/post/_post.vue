@@ -1,9 +1,5 @@
 <template>
-	<div
-		id="post"
-		class="modal-animation card-animation flex w-full justify-center"
-		:style="showQuoteRepost || showShare ? `background-color: #fff` : `backdrop-filter: blur(10px)`"
-	>
+	<div id="post" class="modal-animation card-animation flex w-full h-fit max-w-1220 justify-center">
 		<!-- Inner post area -->
 		<div v-if="post && author" class="lg:w-760 lg:max-w-760 h-fit w-full">
 			<!-- Magic header that disappears on scroll down -->
@@ -263,8 +259,6 @@ interface IData {
 	userIsFollowed: boolean
 	myReposts: Set<string>
 	isBookmarked: boolean
-	lastScroll: number
-	showHeader: boolean
 	repostCount: number
 	comments: ICommentData[]
 	isLoading: boolean
@@ -315,8 +309,6 @@ export default Vue.extend({
 			userIsFollowed: false,
 			myReposts: new Set(),
 			isBookmarked: false,
-			lastScroll: 0,
-			showHeader: true,
 			repostCount: 0,
 			comments: [],
 			isLoading: true,
@@ -445,10 +437,6 @@ export default Vue.extend({
 		this.myReposts = new Set(repostData.map((p) => p.repost.postCID))
 	},
 	mounted() {
-		const container = document.getElementById(`post`)
-		if (container) {
-			container.addEventListener(`scroll`, this.handleScroll)
-		}
 		// This is a new post
 		if (this.$store.state.settings.recentlyPosted) {
 			this.$toastSuccess(`Your post has been successfully published on Blogchain`)
@@ -497,32 +485,22 @@ export default Vue.extend({
 			}
 		},
 		// Hide header on scroll down
-		handleScroll() {
-			const body = document.getElementById(`post`)
+		showHeader(show: boolean) {
 			const header = document.getElementById(`header`)
 			const scrollUp = `scroll-up`
 			const scrollDown = `scroll-down`
-			if (!body) {
-				return
-			}
-			const currentScroll = body.scrollTop
 			if (!header) {
 				return
 			}
-			if (body.scrollTop <= 0) {
-				header.classList.remove(scrollUp)
-				return
-			}
-			if (currentScroll > this.lastScroll && !header.classList.contains(scrollDown)) {
-				// down
-				header.classList.remove(scrollUp)
-				header.classList.add(scrollDown)
-			} else if (currentScroll < this.lastScroll && header.classList.contains(scrollDown)) {
-				// up
+			if (show && header.classList.contains(scrollDown)) {
 				header.classList.remove(scrollDown)
 				header.classList.add(scrollUp)
+				return
 			}
-			this.lastScroll = currentScroll
+			if (!header.classList.contains(scrollDown)) {
+				header.classList.remove(scrollUp)
+				header.classList.add(scrollDown)
+			}
 		},
 		handleClose() {
 			if (this.$router.history._startLocation === this.$route.path) {
