@@ -113,6 +113,11 @@ const config: NuxtConfig = {
 		extend(conf, _) {
 			conf.resolve.alias.vue = `vue/dist/vue.common`
 		},
+		splitChunks: {
+			commons: true,
+			layouts: true,
+			pages: true,
+		},
 	},
 	typescript: {
 		typeCheck: {
