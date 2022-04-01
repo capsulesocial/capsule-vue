@@ -23,7 +23,7 @@
 				v-model="inputCode"
 				type="text"
 				placeholder="Paste it here to get started"
-				class="focus:outline-none focus:border-primary text-lightOnPrimaryText dark:text-darkOnPrimaryText bg-gray2 border-primary mt-1 mb-5 w-full rounded-lg border border-dashed px-4 py-2 font-sans text-sm"
+				class="focus:outline-none focus:border-primary text-lightPrimaryText dark:text-darkPrimaryText bg-gray2 border-primary mt-1 mb-5 w-full rounded-lg border border-dashed px-4 py-2 font-sans text-sm"
 				style="height: 3rem"
 			/>
 			<div class="flex flex-row justify-between">
