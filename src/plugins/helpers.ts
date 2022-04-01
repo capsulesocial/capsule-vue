@@ -11,7 +11,6 @@ type handleErrorFormat = (error: unknown) => void
 
 // eslint-disable-next-line quotes
 declare module 'vue/types/vue' {
-	// eslint-disable-next-line no-shadow
 	interface Vue {
 		$getFormat: dateString
 		$formatDate: dateFormat

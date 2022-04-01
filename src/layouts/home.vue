@@ -214,8 +214,8 @@ export default Vue.extend({
 		},
 		saveDraftState(): void {
 			if (this.$refs.editor) {
-				// @ts-ignore
-				this.$refs.editor.saveContent()
+				const editor = this.$refs.editor as any
+				editor.saveContent()
 			}
 		},
 	},

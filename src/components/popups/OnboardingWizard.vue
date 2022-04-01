@@ -149,8 +149,11 @@ export default Vue.extend({
 			i === null ? (this.step = this.step + 1) : (this.step = i)
 			if ((this.$route.name === `help` && this.step >= 5) || this.step >= 6) {
 				if (this.$route.name !== `help`) {
-					// @ts-ignore
-					this.$refs.settings.updateSettings()
+					if (!(`settings` in this.$refs && this.$refs.settings)) {
+						throw new Error(`This shouldn't happen`)
+					}
+					const settings = this.$refs.settings as any
+					settings.updateSettings()
 				}
 				this.closeWizard()
 			}

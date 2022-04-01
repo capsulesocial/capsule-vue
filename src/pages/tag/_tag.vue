@@ -80,9 +80,8 @@ export default Vue.extend({
 		BackIcon,
 	},
 	beforeRouteEnter(to, from, next) {
-		next((vm) => {
+		next((vm: any) => {
 			if (to && from.name === null) {
-				// @ts-ignore
 				vm.fromExternalSite = true
 			}
 		})
