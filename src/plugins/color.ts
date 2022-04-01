@@ -13,11 +13,9 @@ declare module 'vue/types/vue' {
 
 const colorPlugin: Plugin = (_context, inject) => {
 	const state: { hex: string } = VueInstance.observable({ hex: `#7097ac` })
-	let color: `Green` | `Orange` | `Blue` | `Yellow` | `Pink` = `Pink`
 
 	const setColor: SetColor = (newColor = `Green`) => {
-		color = newColor
-		switch (color) {
+		switch (newColor) {
 			case `Green`:
 				document.documentElement.classList.add(`green`)
 				document.documentElement.classList.remove(`orange`)
