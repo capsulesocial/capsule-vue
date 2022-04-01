@@ -44,7 +44,7 @@
 			:class="$colorMode.dark ? `DraftInfoOpenDark` : `DraftInfoOpen`"
 			style="top: 55px; right: 7px; width: 80%"
 		>
-			Note: drafts are stored in your browser's local storage any may be erased on actions such as clearing history
+			Note: drafts are stored in your browser's local storage and may be erased on actions such as clearing history
 		</div>
 	</article>
 </template>
