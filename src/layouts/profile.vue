@@ -76,8 +76,8 @@
 					class="xl:min-h-80 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder z-10 overflow-y-auto rounded-lg border bg-gradient-to-r shadow-lg xl:h-80"
 				>
 					<div class="items-ceter flex w-full flex-col p-5">
-						<h1 class="text-negative mt-16 text-center font-sans text-6xl font-bold">404</h1>
-						<h2 class="text-center text-2xl font-semibold text-darkPrimaryText">This page was not found</h2>
+						<h1 class="text-negative mt-16 text-center font-sans text-6xl font-bold mb-8">404</h1>
+						<h2 class="text-center text-2xl font-semibold dark:text-darkPrimaryText">This page was not found</h2>
 						<p class="text-gray5 dark:text-gray3 mb-5 mt-2 self-center text-center" style="width: 360px">
 							It seems that this page doesn't exist, we suggest you to go back home
 						</p>

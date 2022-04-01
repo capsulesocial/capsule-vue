@@ -18,12 +18,12 @@
 				<Header :avatar="myAvatar" />
 				<div
 					style="min-height: calc(100vh - 70px); height: calc(100vh - 70px); backdrop-filter: blur(10px)"
-					class="from-lightBGStart to-lightBGStop z-10 overflow-y-auto rounded-lg bg-gradient-to-r shadow-lg"
+					class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop z-10 overflow-y-auto rounded-lg bg-gradient-to-r shadow-lg"
 				>
 					<div class="items-center flex w-full flex-col p-5">
-						<h1 class="text-negative mt-16 text-center font-sans text-6xl font-bold">500</h1>
-						<h2 class="text-center text-2xl font-semibold">Something went wrong</h2>
-						<p class="text-gray7 mb-5 mt-2 self-center text-center" style="width: 360px">
+						<h1 class="text-negative mt-16 text-center font-sans text-6xl font-bold mb-8">500</h1>
+						<h2 class="text-center text-2xl font-semibold dark:text-darkPrimaryText">Something went wrong</h2>
+						<p class="text-gray5 dark:text-gray3 mb-5 mt-2 self-center text-center" style="width: 360px">
 							We apologize for the issue, we suggest you to go back home
 						</p>
 						<div class="flex justify-center">
