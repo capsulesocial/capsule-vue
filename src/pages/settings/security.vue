@@ -1,4 +1,4 @@
-<template><main>Nothing here yet</main></template>
+<template><section class="flex flex-col min-h-screen max-w-760">Nothing here yet</section></template>
 
 <script lang="ts">
 import Vue from 'vue'

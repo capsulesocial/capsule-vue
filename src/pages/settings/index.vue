@@ -1,5 +1,5 @@
 <template>
-	<main>
+	<section class="flex flex-col min-h-screen max-w-760">
 		<div
 			class="from-lightBGStart to-lightBGStop dark:from-darkBG dark:to-darkBG border-lightBorder modal-animation flex flex-col overflow-hidden rounded-lg border bg-gradient-to-r py-4 px-6 pb-2 shadow-lg"
 			style="backdrop-filter: blur(10px)"
@@ -43,7 +43,7 @@
 				<span class="bg-gray1 dark:bg-gray5 rounded-full p-1"><ChevronRight /></span>
 			</nuxt-link>
 		</div>
-	</main>
+	</section>
 </template>
 
 <script lang="ts">

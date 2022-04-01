@@ -1,5 +1,5 @@
 <template>
-	<main>
+	<section class="flex flex-col h-full min-h-screen w-full lg:max-w-760">
 		<!-- Mobile back button -->
 		<nuxt-link to="/settings" class="mb-6 flex items-center lg:hidden">
 			<span class="bg-gray1 dark:bg-gray5 mr-4 rounded-full p-1"><ChevronLeft /></span>
@@ -47,7 +47,7 @@
 		<!-- Account Invites -->
 		<h3 class="text-lightPrimaryText dark:text-darkPrimaryText pb-4 text-base font-semibold">Account Invites</h3>
 		<div
-			class="from-lightBGStart to-lightBGStop dark:from-darkBG dark:to-darkBG border-lightBorder relative mt-4 overflow-hidden rounded-lg bg-gradient-to-r p-5 shadow-lg"
+			class="from-lightBGStart to-lightBGStop dark:from-darkBG dark:to-darkBG border-lightBorder relative mt-4 h-fit rounded-lg bg-gradient-to-r p-5 shadow-lg"
 		>
 			<label for="id" class="mb-2 block pb-1 text-sm font-semibold dark:text-darkPrimaryText"
 				>Generate an invite code</label
@@ -126,7 +126,7 @@
 				</div>
 			</div>
 		</div>
-	</main>
+	</section>
 </template>
 
 <script lang="ts">

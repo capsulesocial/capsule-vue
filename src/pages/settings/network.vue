@@ -1,5 +1,5 @@
 <template>
-	<main>
+	<section class="flex flex-col min-h-screen max-w-760">
 		<!-- Mobile back button -->
 		<nuxt-link to="/settings" class="mb-4 flex items-center xl:hidden">
 			<span class="bg-gray1 mr-2 rounded-full p-1"><ChevronLeft /></span>
@@ -33,7 +33,7 @@
 				Save Changes
 			</button>
 		</div>
-	</main>
+	</section>
 </template>
 
 <script lang="ts">
