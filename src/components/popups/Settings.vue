@@ -189,12 +189,12 @@ export default Vue.extend({
 		}),
 		hasChanged() {
 			return (
-				(this.newAvatarCID !== `` && this.newAvatarCID !== this.$store.state.session.avatar) ||
-				(this.newName !== `` && this.newName !== this.$store.state.session.name) ||
-				(this.newEmail !== `` && this.newEmail !== this.$store.state.session.email) ||
-				(this.location !== `` && this.location !== this.$store.state.session.location) ||
-				(this.website !== `` && this.website !== this.$store.state.session.website) ||
-				(this.bio !== `` && this.bio !== this.$store.state.session.bio)
+				this.newAvatarCID !== this.$store.state.session.avatar ||
+				this.newName !== this.$store.state.session.name ||
+				this.newEmail !== this.$store.state.session.email ||
+				this.location !== this.$store.state.session.location ||
+				this.website !== this.$store.state.session.website ||
+				this.bio !== this.$store.state.session.bio
 			)
 		},
 		async handleImage(e: HTMLInputEvent) {
