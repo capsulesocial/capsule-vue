@@ -1,6 +1,6 @@
 <template>
 	<main
-		class="bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightBG dark:bg-darkBG overscroll-none"
+		class="w-full flex flex-col items-center bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightMainBG dark:bg-darkBG"
 		:style="
 			$colorMode.dark
 				? {
@@ -11,40 +11,45 @@
 				  }
 		"
 	>
-		<!-- Wrapper -->
-		<div class="flex w-full justify-center">
-			<div class="flex w-full lg:w-11/12 xl:w-10/12 flex-col max-w-1220">
-				<!-- Header -->
-				<Header :avatar="avatar" />
-				<!-- Body -->
+		<Header :avatar="avatar" class="lg:w-11/12 xl:w-10/12 max-w-1220 my-5 fixed top-0" />
+		<div class="w-full lg:w-11/12 xl:w-10/12 max-w-1220 mt-20 relative">
+			<div
+				class="w-full lg:w-760 absolute min-h-70 h-70 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder overflow-y-auto rounded-t-lg bg-gradient-to-r shadow-lg"
+			></div>
+		</div>
+
+		<!-- Main content scroll -->
+		<div ref="container" class="flex w-full overflow-y-auto overflow-x-hidden justify-center">
+			<!-- Content container -->
+			<div class="flex w-full lg:w-11/12 xl:w-10/12 relative flex-row justify-between max-w-1220">
 				<!-- Title and peered nodes -->
-				<div
+				<!-- <div
 					class="modal-animation hidden lg:flex w-full items-center justify-between px-3 lg:px-0"
 					style="height: 62px"
 				>
-					<!-- Title -->
-					<h1 v-if="profile" class="text-lightSecondaryText dark:text-gray1 text-3xl font-semibold xl:text-4xl">
+					<h1 v-if="profile" class="text-primary dark:text-secondary text-3xl font-semibold xl:text-4xl">
 						Hello, {{ profile.name }}
 					</h1>
 					<h1 v-else class="text-lightSecondaryText dark:text-gray1 text-3xl font-semibold xl:text-4xl">Hello!</h1>
 					<Nodes />
-				</div>
-				<!-- Content -->
-				<section class="relative flex flex-row lg:mt-2 xl:mt-5 overscroll-none">
+				</div> -->
+				<!-- Content container -->
+				<section class="w-full lg:w-11/12 xl:w-10/12 max-w-1220 relative h-full flex flex-row justify-between">
 					<PostEditor
 						v-if="$store.state.widgets.primary === `editor` && $route.name === `home`"
 						ref="editor"
-						style="min-height: calc(100vh - 150px); height: calc(100vh - 150px); backdrop-filter: blur(10px)"
-						class="lg:w-7.5 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop modal-animation overflow-y-auto overflow-x-hidden rounded-lg bg-gradient-to-r p-6 shadow-lg"
+						class="w-full lg:w-760 lg:flex-shrink-0 p-6"
 					/>
 					<nuxt-child
 						v-else
-						class="lg:w-7.5 min-h-61 h-61 xl:min-h-120 xl:h-120 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder border modal-animation box-border w-full overflow-y-auto rounded-lg bg-gradient-to-r shadow-lg"
+						ref="childPage"
+						class="w-full lg:w-760 lg:flex-shrink-0 p-6"
 						:class="showWidgets ? `` : `z-10`"
 						:toggleFriend="toggleFriend"
 						:following="following"
 						:followers="followers"
 						@updateBookmarks="fetchBookmarks"
+						@scrollToTop="scrollToTop"
 					/>
 					<!-- Widgets -->
 					<aside
@@ -80,7 +85,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import Nodes from '@/components/Nodes.vue'
+// import Nodes from '@/components/Nodes.vue'
 import Widgets from '@/components/Widgets.vue'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
@@ -117,7 +122,7 @@ export default Vue.extend({
 		Header,
 		Footer,
 		PostEditor: () => import(`@/components/post/Editor.vue`),
-		Nodes,
+		// Nodes,
 		OnboardingWizard: () => import(`@/components/popups/OnboardingWizard.vue`),
 		UnauthPopup,
 		FollowersPopup,
@@ -158,6 +163,9 @@ export default Vue.extend({
 		this.fetchConnections()
 		// Get recent bookmarks
 		this.fetchBookmarks()
+		// scroll event listener
+		const container = this.$refs.container as HTMLElement
+		container.addEventListener(`scroll`, this.handleScroll)
 	},
 	methods: {
 		async fetchConnections() {
@@ -218,6 +226,17 @@ export default Vue.extend({
 				const editor = this.$refs.editor as any
 				editor.saveContent()
 			}
+		},
+		handleScroll(e: Event) {
+			const { scrollTop, scrollHeight, clientHeight } = e.srcElement as HTMLElement
+			if (scrollTop + clientHeight >= scrollHeight - 5) {
+				// @ts-ignore
+				this.$refs.childPage.loadPosts()
+			}
+		},
+		scrollToTop(): void {
+			const container = this.$refs.container as HTMLElement
+			container.scrollTo({ top: 0, behavior: `smooth` })
 		},
 	},
 })

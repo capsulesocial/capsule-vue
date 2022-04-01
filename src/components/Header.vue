@@ -1,10 +1,7 @@
 <template>
-	<header
-		class="sticky top-0 w-full bg-gradient-to-r px-3 lg:px-0"
-		:class="showMobileMenu || showDropdown ? `z-20` : ``"
-	>
+	<header class="h-20 w-full bg-gradient-to-r px-3 lg:px-0" :class="showMobileMenu || showDropdown ? `z-20` : ``">
 		<!-- Desktop header -->
-		<nav class="w-full flex-no-wrap hidden flex-row items-center justify-between py-5 lg:flex">
+		<nav class="w-full flex-no-wrap hidden flex-row items-center justify-between lg:flex">
 			<!-- Left side: Links + write post button -->
 			<div class="flex flex-row items-center" style="font-size: 0.95rem">
 				<nuxt-link to="/home" class="mr-5 text-lightSecondaryText dark:text-gray1">

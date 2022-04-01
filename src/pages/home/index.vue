@@ -1,7 +1,7 @@
 <template>
-	<section>
+	<section class="flex flex-col min-h-screen max-w-760">
 		<nav
-			class="z-20 flex w-full flex-row px-5 pt-3 text-sm xl:px-6 xl:pt-4 rounded-t-lg"
+			class="z-20 fixed flex w-full lg:w-760 lg:-m-6 flex-row px-5 pt-3 text-base xl:px-6 xl:pt-4 rounded-t-lg"
 			style="backdrop-filter: blur(10px)"
 		>
 			<div class="flex items-center">
@@ -32,15 +32,8 @@
 				</button>
 			</div>
 		</nav>
-		<div
-			v-if="posts"
-			ref="container"
-			class="min-h-120 h-120 xl:min-h-220 xl:h-220 modal-animation w-full overflow-y-auto"
-		>
-			<div
-				v-if="!isLoading && algorithm === `FOLLOWING` && following.size === 0 && posts.length === 0"
-				class="relative h-full overflow-y-hidden"
-			>
+		<div v-if="posts" class="modal-animation w-full mt-8">
+			<div v-if="!isLoading && algorithm === `FOLLOWING` && following.size === 0 && posts.length === 0" class="h-full">
 				<div class="flex flex-col justify-center p-12">
 					<h2 class="text-center text-2xl font-semibold dark:text-darkPrimaryText">Welcome 🚀</h2>
 					<p class="text-gray5 dark:text-gray3 mb-5 mt-2 self-center text-center xl:mx-14">
@@ -155,10 +148,7 @@ export default Vue.extend({
 		// Unauthenticated view
 		this.posts = await this.fetchPosts(this.algorithm)
 	},
-	mounted() {
-		const container = this.$refs.container as HTMLElement
-		container.addEventListener(`scroll`, this.handleScroll)
-	},
+	mounted() {},
 	methods: {
 		getReposts,
 		async fetchPosts(alg: Algorithm) {
@@ -192,8 +182,7 @@ export default Vue.extend({
 				this.$store.commit(`settings/toggleUnauthPopup`)
 				return this.posts
 			}
-			const container = this.$refs.container as HTMLElement
-			container.addEventListener(`scroll`, this.handleScroll)
+			this.$emit(`scrollToTop`)
 			this.noMorePosts = false
 			this.posts = []
 			this.currentOffset = 0
@@ -203,22 +192,17 @@ export default Vue.extend({
 			return this.posts
 		},
 		async loadPosts() {
+			if (this.noMorePosts || this.isLoading) {
+				return
+			}
+			this.isLoading = true
 			const res = await this.fetchPosts(this.algorithm)
 			this.posts = this.posts.concat(res)
 			// When no more posts
 			if (res.length === 0) {
-				const container = this.$refs.container as HTMLElement
-				container.removeEventListener(`scroll`, this.handleScroll)
 				this.noMorePosts = true
 			}
-		},
-		handleScroll(e: Event) {
-			if (!this.isLoading) {
-				const { scrollTop, scrollHeight, clientHeight } = e.srcElement as HTMLElement
-				if (scrollTop + clientHeight >= scrollHeight - 5) {
-					this.loadPosts()
-				}
-			}
+			this.isLoading = false
 		},
 		generateKey(p: IPostResponse | IRepostResponse) {
 			let key: string = p.post._id
