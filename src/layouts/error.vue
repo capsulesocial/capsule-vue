@@ -29,7 +29,7 @@
 import Vue from 'vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 import Header from '@/components/Header.vue'
-import { IBackground, backgrounds } from '@/config'
+import { IBackground, backgrounds } from '@/config/backgrounds'
 
 interface IData {
 	bgImage: IBackground

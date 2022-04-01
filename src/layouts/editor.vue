@@ -68,7 +68,7 @@ import DraftsPopup from '@/components/popups/DraftsPopup.vue'
 import ConfirmPopup from '@/components/popups/ConfirmPopup.vue'
 import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
-import { IBackground, backgrounds } from '@/config'
+import { IBackground, backgrounds } from '@/config/backgrounds'
 
 interface IData {
 	profile: Profile | null

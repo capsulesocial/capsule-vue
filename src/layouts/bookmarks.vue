@@ -92,7 +92,8 @@ import UnauthPopup from '@/components/popups/UnauthPopup.vue'
 import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import { IPostResponse } from '@/backend/post'
-import { categories, IBackground, backgrounds } from '@/config'
+import { categories } from '@/config/config'
+import { IBackground, backgrounds } from '@/config/backgrounds'
 import { getBookmarksOfUser, BookmarkSort } from '@/backend/bookmarks'
 
 interface IData {

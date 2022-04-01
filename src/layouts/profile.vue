@@ -141,7 +141,7 @@ import ImagePopup from '@/components/popups/Image.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 import UnauthPopup from '@/components/popups/UnauthPopup.vue'
 
-import { IBackground, backgrounds } from '@/config'
+import { IBackground, backgrounds } from '@/config/backgrounds'
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'

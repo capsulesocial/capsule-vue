@@ -87,7 +87,7 @@ import Footer from '@/components/Footer.vue'
 import FollowersPopup from '@/components/popups/FollowersPopup.vue'
 import UnauthPopup from '@/components/popups/UnauthPopup.vue'
 
-import { IBackground, backgrounds } from '@/config'
+import { IBackground, backgrounds } from '@/config/backgrounds'
 import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
