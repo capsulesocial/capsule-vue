@@ -29,10 +29,12 @@
 								{{ name }}
 							</span>
 							<span v-else class="text-gray5 dark:text-gray3 font-medium">{{ authorID }}</span>
-							<span class="text-primary dark:text-secondary ml-2 text-sm lg:text-base"> @{{ authorID }} </span>
+							<span class="text-lightPrimaryText dark:text-darkPrimaryText ml-2 text-sm lg:text-base">
+								@{{ authorID }}
+							</span>
 							<span
 								v-if="authorID === postAuthor"
-								class="bg-primary dark:bg-secondary dark:text-darkPrimaryText ml-2 rounded-2xl bg-opacity-25 py-1 px-2 text-xs"
+								class="bg-darkBG dark:bg-lightBG dark:text-darkPrimaryText ml-2 rounded-2xl bg-opacity-25 dark:bg-opacity-25 py-1 px-2 text-xs"
 							>
 								Author
 							</span>
@@ -72,7 +74,7 @@
 								<!-- Reply button -->
 								<div class="flex flex-row items-center absolute bottom-0 pb-2">
 									<button
-										class="text-primary dark:text-secondary focus:outline-none text-left font-sans text-sm"
+										class="text-primary focus:outline-none text-left font-sans text-sm"
 										@click="isReplying = !isReplying"
 									>
 										Reply
@@ -144,7 +146,7 @@
 					<span class="relative w-1/5 flex justify-end items-end">
 						<button
 							v-if="reply !== ''"
-							class="text-primary dark:text-secondary focus:outline-none text-left font-sans text-sm p-4"
+							class="text-primary focus:outline-none text-left font-sans text-sm p-4"
 							@click="sendReply"
 						>
 							Post reply

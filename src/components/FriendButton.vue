@@ -3,7 +3,7 @@
 		<div v-if="userIsFollowed">
 			<!-- Desktop -->
 			<div
-				class="friendbtn text-grey5 hidden rounded-lg bg-white px-5 text-sm font-semibold shadow-sm border border-lightBorder transition duration-300 ease-in-out hover:bg-black hover:text-white xl:block"
+				class="friendbtn text-grey5 hidden rounded-lg bg-lightBG px-5 text-sm font-semibold shadow-sm border border-lightBorder transition duration-300 ease-in-out hover:text-negative hover:border-negative xl:block"
 				style="padding-top: 0.4rem; padding-bottom: 0.4rem"
 			>
 				<span class="following">Following</span>
@@ -20,13 +20,13 @@
 		<div v-else>
 			<!-- Desktop -->
 			<span
-				class="bg-secondary hover:bg-primary hidden rounded-lg px-5 text-sm font-semibold text-white shadow-sm border border-lightBorder transition duration-300 ease-in-out xl:block"
+				class="bg-darkBG hover:bg-opacity-75 hidden rounded-lg px-5 text-sm font-semibold text-lightOnPrimaryText shadow-sm border border-lightBorder dark:border-gray7 transition duration-300 ease-in-out xl:block"
 				style="padding-top: 0.4rem; padding-bottom: 0.4rem"
 				>Follow</span
 			>
 			<!-- Mobile -->
 			<div
-				class="bg-secondary rounded-lg p-1 text-white shadow-sm border border-lightBorder transition duration-300 ease-in-out xl:hidden"
+				class="bg-primary rounded-lg p-1 text-lightOnPrimaryText shadow-sm border border-lightBorder transition duration-300 ease-in-out xl:hidden"
 			>
 				<FriendAddIcon class="m-1 h-5 w-5" />
 			</div>

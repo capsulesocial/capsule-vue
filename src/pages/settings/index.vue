@@ -4,7 +4,7 @@
 			class="from-lightBGStart to-lightBGStop dark:from-darkBG dark:to-darkBG border-lightBorder modal-animation flex flex-col overflow-hidden rounded-lg border bg-gradient-to-r py-4 px-6 pb-2 shadow-lg"
 			style="backdrop-filter: blur(10px)"
 		>
-			<h3 class="text-primary dark:text-secondary pb-4 text-base font-semibold">Settings</h3>
+			<h3 class="text-primary pb-4 text-base font-semibold">Settings</h3>
 			<nuxt-link
 				:class="$route.name === `settings-account` ? `bg-lightInput font-semibold` : ``"
 				class="text-gray5 dark:text-gray3 focus:outline-none mb-2 flex w-full items-center justify-between rounded-lg py-2 text-left"

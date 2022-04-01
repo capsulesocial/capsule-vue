@@ -1,6 +1,6 @@
 <template>
 	<main
-		class="bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightMainBG dark:bg-darkBG"
+		class="bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightBG dark:bg-darkBG"
 		:style="
 			$colorMode.dark
 				? {
@@ -23,7 +23,7 @@
 					style="height: 62px"
 				>
 					<!-- Title -->
-					<h1 class="text-primary dark:text-secondary text-3xl font-semibold xl:text-4xl">Bookmarks list</h1>
+					<h1 class="text-lightSecondaryText dark:text-gray1 text-3xl font-semibold xl:text-4xl">Bookmarks list</h1>
 					<!-- Peered nodes -->
 					<Nodes />
 				</div>
@@ -45,10 +45,10 @@
 							class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder mb-5 h-full w-full overflow-y-scroll rounded-lg border bg-gradient-to-r px-6 py-4 shadow-lg"
 						>
 							<div class="flex flex-row items-center justify-between pb-4">
-								<h6 class="text-primary dark:text-secondary text-base font-semibold">Filter by Category</h6>
-								<button class="focus:outline-none text-primary dark:text-secondary pr-1 text-sm" @click="setFilter(``)">
-									Clear
-								</button>
+								<h6 class="text-lightPrimaryText dark:text-darkPrimaryText text-base font-semibold">
+									Filter by Category
+								</h6>
+								<button class="focus:outline-none text-primary pr-1 text-sm" @click="setFilter(``)">Clear</button>
 							</div>
 							<button
 								v-for="c in categoryList"
@@ -59,19 +59,15 @@
 							>
 								<img
 									:src="
-										dark
+										$colorMode.dark
 											? require(`@/assets/images/category/` + c + `/dark/icon.webp`)
 											: require(`@/assets/images/category/` + c + `/light/icon.webp`)
 									"
 									class="hotzone mr-1 h-8 w-8"
 								/>
 								<span
-									class="ml-2 border-b"
-									:class="
-										activeFilter === c
-											? 'border-primary text-primary dark:border-secondary dark:text-secondary'
-											: ' text-primary dark:text-gray3 border-transparent'
-									"
+									class="ml-2"
+									:class="activeFilter === c ? ' font-semibold text-primary' : ' text-gray5 dark:text-gray3'"
 								>
 									{{ c.replace(`-`, ` `) }}</span
 								>
@@ -132,7 +128,8 @@ export default Vue.extend({
 	},
 	async created() {
 		// Set color mode
-		this.$setColorMode(this.$store.state.settings.darkMode)
+		this.$setColorMode(this.$store.state.settings.mode)
+		this.$setColor(this.$store.state.settings.color)
 		// Check if logged in user
 		if (this.$store.state.session.id === ``) {
 			this.isLoading = false

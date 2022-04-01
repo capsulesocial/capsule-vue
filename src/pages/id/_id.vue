@@ -78,30 +78,36 @@
 									{{ visitProfile.name }}
 								</h3>
 								<h3 v-else class="text-gray5 dark:text-gray3 pr-4 text-2xl font-semibold">{{ visitProfile.id }}</h3>
-								<h5 class="text-primary dark:text-secondary text-lg">@{{ visitProfile.id }}</h5>
+								<h5 class="text-gray5 dark:text-gray3 text-lg">@{{ visitProfile.id }}</h5>
 							</div>
 							<!-- Tabs: posts, following, followers -->
-							<div class="text-gray6 -mr-12 flex flex-row pt-2 text-sm">
+							<div class="text-gray5 -mr-12 flex flex-row pt-2 text-sm">
 								<div v-if="totalPostsCount === 1" class="text-sm text-gray5 dark:text-gray3">
-									<span class="text-primary dark:text-secondary font-bold">{{ totalPostsCount }}</span>
+									<span class="text-lightPrimaryText dark:text-darkPrimaryText font-bold">{{ totalPostsCount }}</span>
 									Post
 								</div>
 								<div v-else class="text-sm text-gray5 dark:text-gray3">
-									<span class="text-primary dark:text-secondary font-bold">{{ totalPostsCount }}</span>
+									<span class="text-lightPrimaryText dark:text-darkPrimaryText font-bold">{{ totalPostsCount }}</span>
 									Posts
 								</div>
 								<button
-									class="pl-5 text-sm text-gray5 dark:text-gray3 hover:text-primary dark:hover:text-secondary hover:font-bold"
+									class="pl-5 text-sm text-gray5 dark:text-gray3 hover:text-primary dark:hover:text-primary hover:font-bold"
 									@click="$emit(`openFollowers`)"
 								>
-									<span class="text-primary dark:text-secondary font-bold">{{ followers.size }}</span>
+									<span
+										class="text-lightPrimaryText dark:text-darkPrimaryText hover:text-primary dark:hover:text-primary font-bold"
+										>{{ followers.size }}</span
+									>
 									Followers
 								</button>
 								<button
-									class="pl-5 text-sm text-gray5 dark:text-gray3 hover:text-primary dark:hover:text-secondary hover:font-bold"
+									class="pl-5 text-sm text-gray5 dark:text-gray3 hover:text-primary dark:hover:text-primary hover:font-bold"
 									@click="$emit(`openFollowing`)"
 								>
-									<span class="text-primary dark:text-secondary font-bold">{{ following.size }}</span>
+									<span
+										class="text-lightPrimaryText dark:text-darkPrimaryText hover:text-primary dark:hover:text-primary font-bold"
+										>{{ following.size }}</span
+									>
 									Following
 								</button>
 							</div>
@@ -115,7 +121,7 @@
 					>
 						<!-- Edit profile button -->
 						<span v-if="$store.state.session.id === $route.params.id">
-							<button class="bg-secondary focus:outline-none block rounded-lg xl:hidden" @click="toggleSettings">
+							<button class="bg-darkBG focus:outline-none block rounded-lg xl:hidden" @click="toggleSettings">
 								<PencilIcon class="m-2 h-5 w-5 text-white" />
 							</button>
 							<SecondaryButton :text="`Edit Profile`" :action="toggleSettings" class="hidden xl:block" />
@@ -140,14 +146,18 @@
 				</div>
 				<button
 					v-show="longBio && !scrollingDown"
-					class="focus:outline-none text-xs text-primary dark:text-secondary px-1"
+					class="focus:outline-none text-xs text-primary px-1"
 					@click="expandBio = !expandBio"
 				>
 					Read <span v-if="!expandBio">more </span><span v-else>less</span>
 				</button>
 				<div v-show="!visitProfile.bio" id="bio" class="header-profile"></div>
+				<div id="divider" class="w-full bg-lightBorder dark:bg-darkBorder my-4 rounded" style="height: 1px"></div>
 				<!-- Tabs -->
-				<div id="tabs" class="text-gray5 dark:text-gray3 header-profile flex w-full justify-between pt-6 xl:px-6">
+				<div
+					id="tabs"
+					class="text-gray5 dark:text-gray3 text-sm header-profile flex w-full justify-between pb-3 xl:px-6"
+				>
 					<nuxt-link :to="'/id/' + $route.params.id" class="pb-1" :class="getStyles('id-id')">
 						<span class="px-4">Posts</span>
 					</nuxt-link>
@@ -185,7 +195,7 @@
 		<!-- Settings popup -->
 		<div
 			v-if="showSettings"
-			class="bg-primary dark:bg-secondary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
+			class="bg-darkBG dark:bg-gray5 modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
 		>
 			<SettingsPopup
 				class="lg:w-589 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation w-full rounded-lg bg-gradient-to-r shadow-lg backdrop-blur-lg backdrop-filter"
@@ -386,10 +396,7 @@ export default Vue.extend({
 		getStyles(tab: string): string {
 			let res = ``
 			if (this.$route.name === tab) {
-				res += ` text-primary dark:text-secondary font-bold`
-				if (this.$route.name !== `id-id-followers` && this.$route.name !== `id-id-following`) {
-					res += ` border-b dark:border-secondary`
-				}
+				res += ` text-primary font-bold`
 			} else {
 				if (this.$route.name !== `id-followers` && this.$route.name !== `id-following`) {
 					res += ` text-grey1`
@@ -409,6 +416,7 @@ export default Vue.extend({
 			const buttons = document.getElementById(`buttons`)
 			const infos = document.getElementById(`infos`)
 			const tabs = document.getElementById(`tabs`)
+			const divider = document.getElementById(`divider`)
 			const bio = document.getElementById(`bio`)
 			const small = document.getElementById(`small`)
 			this.padding = header?.clientHeight + `px`
@@ -416,7 +424,7 @@ export default Vue.extend({
 			const scrollDown = `headercollapsed`
 			const opacity1 = `opacity1`
 			const opacity0 = `opacity0`
-			if (!body || !buttons || !infos || !header || !tabs || !bio || !small) {
+			if (!body || !buttons || !infos || !header || !tabs || !divider || !bio || !small) {
 				return
 			}
 			// Close header
@@ -430,6 +438,8 @@ export default Vue.extend({
 				infos.classList.add(opacity0)
 				tabs.classList.add(opacity0)
 				tabs.classList.remove(opacity1)
+				divider.classList.add(opacity0)
+				divider.classList.remove(opacity1)
 				bio.classList.add(opacity0)
 				bio.classList.remove(opacity1)
 				small.classList.add(opacity1)
@@ -446,6 +456,8 @@ export default Vue.extend({
 			infos.classList.add(opacity1)
 			tabs.classList.remove(opacity0)
 			tabs.classList.add(opacity1)
+			divider.classList.remove(opacity0)
+			divider.classList.add(opacity1)
 			bio.classList.remove(opacity0)
 			bio.classList.add(opacity1)
 			small.classList.remove(opacity1)

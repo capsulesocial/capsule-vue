@@ -544,9 +544,44 @@ export const backgrounds: IBackground[] = [
 		dark: require(`@/assets/images/backgrounds/light/urbanstuff001.webp`),
 		label: `Urban 02`,
 	},
+	{
+		id: `greenMesh`,
+		type: `local`,
+		light: require(`@/assets/images/backgrounds/light/green.webp`),
+		dark: require(`@/assets/images/backgrounds/dark/green.webp`),
+		label: `Green Mesh`,
+	},
+	{
+		id: `orangeMesh`,
+		type: `local`,
+		light: require(`@/assets/images/backgrounds/light/orange.webp`),
+		dark: require(`@/assets/images/backgrounds/dark/orange.webp`),
+		label: `Orange Mesh`,
+	},
+	{
+		id: `blueMesh`,
+		type: `local`,
+		light: require(`@/assets/images/backgrounds/light/blue.webp`),
+		dark: require(`@/assets/images/backgrounds/dark/blue.webp`),
+		label: `Blue Mesh`,
+	},
+	{
+		id: `pinkMesh`,
+		type: `local`,
+		light: require(`@/assets/images/backgrounds/light/pink.webp`),
+		dark: require(`@/assets/images/backgrounds/dark/pink.webp`),
+		label: `Pink Mesh`,
+	},
+	{
+		id: `yellowMesh`,
+		type: `local`,
+		light: require(`@/assets/images/backgrounds/light/yellow.webp`),
+		dark: require(`@/assets/images/backgrounds/dark/yellow.webp`),
+		label: `Yellow Mesh`,
+	},
 ]
 
-export const colors = [
+export const modes = [
 	{
 		image: require(`@/assets/images/colors/light.webp`),
 		label: `Light`,
@@ -558,5 +593,28 @@ export const colors = [
 	{
 		image: require(`@/assets/images/colors/OS.webp`),
 		label: `OS`,
+	},
+]
+
+export const colors = [
+	{
+		id: `Green`,
+		hex: `#7097ac`,
+	},
+	{
+		id: `Orange`,
+		hex: `#ff4747`,
+	},
+	{
+		id: `Blue`,
+		hex: `#396bf8`,
+	},
+	{
+		id: `Pink`,
+		hex: `#eb3d7c`,
+	},
+	{
+		id: `Yellow`,
+		hex: `#ffcc33`,
 	},
 ]

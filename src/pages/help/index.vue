@@ -3,10 +3,12 @@
 		<section>
 			<!-- Page title -->
 			<article class="px-4 py-4 xl:px-6 xl:py-5">
-				<h1 class="text-primary dark:text-secondary text-3xl font-semibold xl:text-4xl">Need Some Help?</h1>
+				<h1 class="text-lightPrimaryText dark:text-darkPrimaryText text-3xl font-semibold xl:text-4xl">
+					Need Some Help?
+				</h1>
 			</article>
 			<div class="container px-4 pb-6 xl:px-6">
-				<h3 class="text-primary dark:text-secondary mb-6 mt-4 text-xl font-semibold">Frequently Asked Questions</h3>
+				<h3 class="text-primary mb-6 mt-4 text-xl font-semibold">Frequently Asked Questions</h3>
 				<article class="message mb-4 w-full xl:w-10/12">
 					<div class="message-header relative flex items-center justify-between" @click="toggleAccordion1">
 						<h4 class="text-lightPrimaryText dark:text-darkPrimaryText w-10/12 text-base font-semibold">
@@ -32,7 +34,7 @@
 							<a
 								href="https://corporatefinanceinstitute.com/resources/knowledge/economics/rent-seeking/"
 								target="_blank"
-								class="text-secondary"
+								class="text-primary"
 								>rent-seeking</a
 							>
 							profits.
@@ -136,8 +138,8 @@
 					<div :class="isOpen5 ? `` : `is-closed`" class="message-body w-full xl:w-10/12">
 						<p class="message-content text-gray5 dark:text-gray3 py-2 text-sm">
 							Blogchain is created and operated by
-							<a href="http://capsule.social" target="_blank" class="text-secondary">Capsule Social</a>. We are working
-							to add new payment features soon that will allow writers to get paid for the content they create, minus a
+							<a href="http://capsule.social" target="_blank" class="text-primary">Capsule Social</a>. We are working to
+							add new payment features soon that will allow writers to get paid for the content they create, minus a
 							small transaction fee.
 						</p>
 						<p class="message-content text-gray5 dark:text-gray3 pb-2 text-sm">

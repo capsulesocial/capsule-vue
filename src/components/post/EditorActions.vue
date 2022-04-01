@@ -1,11 +1,11 @@
 <template>
 	<div class="flex items-end">
 		<button
-			class="focus:outline-none hover:text-primary dark:hover:text-secondary toggle flex items-end"
-			:class="showSocialShares ? 'text-primary dark:text-secondary' : ''"
+			class="focus:outline-none hover:text-primary toggle flex items-end"
+			:class="showSocialShares ? 'text-primary' : ''"
 			@click.stop="toggleDropdown"
 		>
-			<div class="text-gray3 hover:text-primary dark:hover:text-secondary hover:fill-primary flex">
+			<div class="text-gray3 hover:text-primary hover:fill-primary flex">
 				<PlusIcon :isActive="showSocialShares" style="transform: scale(1.2); margin-top: -1px" />
 			</div>
 		</button>

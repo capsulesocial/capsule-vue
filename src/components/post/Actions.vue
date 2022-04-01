@@ -164,7 +164,7 @@
 					class="z-10 mr-1 hidden lg:flex flex-row justify-between rounded-tr-lg bg-lightBG dark:bg-darkBG p-5 lg:w-3/5"
 					style="margin-bottom: -112px; margin-top: 1px; pointer-events: none"
 				>
-					<h6 class="text-primary dark:text-secondary self-center text-center text-2xl font-semibold">
+					<h6 class="text-lightPrimaryText dark:text-darkPrimaryText self-center text-center text-2xl font-semibold">
 						How do you feel?
 					</h6>
 				</div>
@@ -252,7 +252,7 @@
 								<div class="relative">
 									<span class="absolute bottom-0 right-0 flex flex-col">
 										<button
-											class="bg-primary dark:bg-secondary focus:outline-none block rounded-lg lg:hidden"
+											class="bg-primary focus:outline-none block rounded-lg lg:hidden"
 											style="margin-right: 15.2px; margin-bottom: 15px"
 											:class="comment !== '' && activeEmotion.label !== '' ? '' : 'opacity-50'"
 											@click="sendComment"
@@ -348,12 +348,7 @@
 							</div>
 						</div>
 						<div v-else class="text-gray5 dark:text-gray3 pt-3 text-sm">
-							<button
-								class="text-primary dark:text-secondary focus:outline-none ml-1"
-								@click="$router.push(`/register`)"
-							>
-								Sign up
-							</button>
+							<button class="text-primary focus:outline-none ml-1" @click="$router.push(`/register`)">Sign up</button>
 							to comment on this post and be part of the debate
 						</div>
 					</div>
@@ -366,7 +361,7 @@
 					style="height: 111px; margin-top: -112px; margin-left: 10px; margin-bottom: 1px; pointer-events: none"
 				></div>
 				<button
-					class="bg-primary dark:bg-secondary focus:outline-none absolute bottom-0 right-0 z-20 mb-7 mr-7 rounded-lg px-6 py-2 text-white"
+					class="bg-primary focus:outline-none absolute bottom-0 right-0 z-20 mb-7 mr-7 rounded-lg px-6 py-2 text-white"
 					@click="confirmEmotion"
 				>
 					Select

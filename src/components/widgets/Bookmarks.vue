@@ -1,6 +1,6 @@
 <template>
 	<article class="py-4">
-		<h3 class="text-primary dark:text-secondary px-6 pb-4 text-base font-semibold">Recent Bookmarks</h3>
+		<h3 class="text-lightPrimaryText dark:text-darkPrimaryText px-6 pb-4 text-base font-semibold">Recent Bookmarks</h3>
 		<article v-if="this.$store.state.recentBookmarks.length == 0">
 			<p class="text-gray5 dark:text-gray3 mb-4 px-6 text-sm">
 				<span>
@@ -24,7 +24,7 @@
 				<img v-if="p.featuredPhoto" :src="p.featuredPhoto" class="h-16 w-full flex-shrink-0 rounded-lg object-cover" />
 			</div>
 		</nuxt-link>
-		<nuxt-link to="/bookmarks" class="italics text-primary dark:text-secondary px-6 text-sm">See More</nuxt-link>
+		<nuxt-link to="/bookmarks" class="italics text-primary px-6 text-sm">Show all</nuxt-link>
 	</article>
 </template>
 

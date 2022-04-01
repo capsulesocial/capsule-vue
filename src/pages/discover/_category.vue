@@ -3,7 +3,7 @@
 		<!-- Header -->
 		<div
 			id="header"
-			class="bg-primary dark:bg-secondary border-lightBorder animatefast flex h-56 w-full flex-row items-center rounded-lg shadow-lg"
+			class="bg-darkBG dark:bg-lightBG border-lightBorder animatefast flex h-56 w-full flex-row items-center rounded-lg shadow-lg"
 			:style="{
 				background: `linear-gradient(180deg, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.8) 100%), url(${require(`@/assets/images/category/` +
 					$route.params.category +
@@ -20,7 +20,7 @@
 					<p id="buttontitle" class="animatefast pl-3 pr-4 font-semibold">All categories</p>
 					<h2
 						id="hiddentitle"
-						class="text-primary dark:text-secondary animatelong absolute ml-8 -mt-1 px-2 text-xl font-semibold capitalize opacity-0"
+						class="text-lightPrimaryText dark:text-darkPrimaryText animatelong absolute ml-8 -mt-1 px-2 text-xl font-semibold capitalize opacity-0"
 					>
 						{{ $route.params.category.replace(`-`, ` `) }}
 					</h2>
@@ -87,7 +87,7 @@
 		<article v-show="isLoading" class="modal-animation flex w-full justify-center mt-20">
 			<div
 				class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
-				:style="$colorMode.dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
+				:style="`border-top: 2px solid` + $color.hex"
 			></div>
 		</article>
 	</section>
@@ -310,7 +310,7 @@ export default Vue.extend({
 	z-index: 50;
 }
 .scrolldown {
-	background: linear-gradient(180deg, rgba(46, 85, 106, 0.25) 0%, rgba(46, 85, 106, 0.25) 100%), none !important;
+	background: linear-gradient(180deg, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.25) 100%), none !important;
 	height: 4rem;
 	backdrop-filter: blur(10px);
 }

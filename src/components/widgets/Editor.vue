@@ -5,9 +5,9 @@
 			class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder mb-5 rounded-lg border bg-gradient-to-r px-6 py-4 shadow-lg"
 			style="backdrop-filter: blur(10px)"
 		>
-			<h6 class="text-primary dark:text-secondary font-semibold">Featured Image</h6>
+			<h6 class="text-lightPrimaryText dark:text-darkPrimaryText font-semibold">Featured Image</h6>
 			<button
-				class="border-gray5 dark:border-gray3 transition duration-500 ease-in-out hover:border-primary dark:hover:border-secondary focus:outline-none mt-3 mb-2 flex h-40 w-full items-center justify-center overflow-hidden rounded-lg border border-dashed"
+				class="border-gray5 dark:border-gray3 transition duration-500 ease-in-out hover:border-primary focus:outline-none mt-3 mb-2 flex h-40 w-full items-center justify-center overflow-hidden rounded-lg border border-dashed"
 				@click="handleUploadImageClick"
 			>
 				<input
@@ -28,7 +28,7 @@
 				</div>
 				<div v-if="featuredPhoto === null && !waitingImage" class="flex flex-col justify-center">
 					<UploadIcon class="self-center text-gray5 dark:text-gray3" />
-					<p class="text-primary dark:text-secondary mt-2 text-left text-sm font-light">Upload an Image</p>
+					<p class="text-primary mt-2 text-left text-sm font-light">Upload an Image</p>
 				</div>
 				<div v-else class="h-full w-full">
 					<img :src="featuredPhoto" class="h-40 w-full object-cover" />
@@ -36,10 +36,8 @@
 			</button>
 			<!-- Photo Uploaded -->
 			<div v-if="featuredPhoto !== null" class="w-full">
-				<button class="text-primary dark:text-secondary focus:outline-none text-sm" @click="handleUploadImageClick">
-					Change Image
-				</button>
-				<button class="text-lightError focus:outline-none ml-4 text-sm" @click="removeImage()">Remove Image</button>
+				<button class="text-primary focus:outline-none text-sm" @click="handleUploadImageClick">Change Image</button>
+				<button class="text-negative focus:outline-none ml-4 text-sm" @click="removeImage()">Remove Image</button>
 			</div>
 			<div
 				class="bg-gray1 dark:bg-gray7 text-gray5 dark:text-gray3 placeholder-gray5 dark:placeholder-gray3 my-1 mt-3 w-full rounded-lg p-2"
@@ -60,7 +58,7 @@
 			class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder mb-5 rounded-lg border bg-gradient-to-r px-6 py-4 shadow-lg"
 			style="backdrop-filter: blur(10px)"
 		>
-			<h6 class="text-primary dark:text-secondary font-semibold">Category</h6>
+			<h6 class="text-lightPrimaryText dark:text-darkPrimaryText font-semibold">Category</h6>
 			<button
 				class="bg-gray1 dark:bg-gray7 text-gray5 dark:text-gray3 placeholder-gray5 dark:placeholder-gray3 focus:outline-none my-1 mt-3 w-full rounded-lg p-2"
 				@click="showCategoryDropdown = !showCategoryDropdown"
@@ -88,14 +86,7 @@
 					@click="changeCategory(c)"
 				>
 					<img :src="getCategoryIcon(c)" class="hotzone mr-1 ml-2 h-6 w-6" />
-					<span
-						class="ml-2 border-b"
-						:class="
-							category === c
-								? 'border-primary text-primary dark:border-secondary dark:text-secondary'
-								: ' text-primary dark:text-secondary border-transparent'
-						"
-					>
+					<span class="ml-2" :class="category === c ? ' font-semibold text-primary' : ' text-gray5 dark:text-gray3'">
 						{{ c.replace(`-`, ` `) }}</span
 					>
 				</button>
@@ -106,7 +97,7 @@
 			class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder mb-5 rounded-lg border bg-gradient-to-r px-6 py-4 pb-6 shadow-lg"
 			style="backdrop-filter: blur(10px)"
 		>
-			<h6 class="text-primary dark:text-secondary mb-3 font-semibold">Tags</h6>
+			<h6 class="text-lightPrimaryText dark:text-darkPrimaryText mb-3 font-semibold">Tags</h6>
 			<div
 				class="bg-gray1 dark:bg-gray7 text-gray5 dark:text-gray3 placeholder-gray5 dark:placeholder-gray3 my-1 w-full rounded-lg p-2"
 			>
@@ -138,12 +129,12 @@
 			<div class="flex flex-row items-center justify-between">
 				<div>
 					<h5 v-show="wordCount > 1" class="text-gray5 dark:text-gray3 text-sm">
-						<span class="text-primary dark:text-secondary">{{ wordCount }}</span> words
+						<span class="text-primary">{{ wordCount }}</span> words
 					</h5>
 					<h5 class="text-gray5 dark:text-gray3 text-sm">Auto-save on close.</h5>
 				</div>
 				<button
-					class="focus:outline-none bg-primary dark:bg-secondary text-lightButtonText transform rounded-lg px-12 py-2 font-bold shadow-lg transition duration-500 ease-in-out hover:scale-105"
+					class="focus:outline-none bg-primary text-lightButtonText transform rounded-lg px-12 py-2 font-bold shadow-lg transition duration-500 ease-in-out hover:scale-105"
 					@click="confirmPost"
 				>
 					Publish

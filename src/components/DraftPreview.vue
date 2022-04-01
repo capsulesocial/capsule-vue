@@ -45,9 +45,9 @@
 				:class="$colorMode.dark ? `dropdownDraftOpenDark` : `dropdownDraftOpen`"
 				style="top: 35px; right: -5px"
 			>
-				<button class="focus:outline-none text-primary dark:text-secondary flex" @click="setActiveDraft(draft)">
+				<button class="focus:outline-none text-primary flex" @click="setActiveDraft(draft)">
 					<PencilIcon class="fill-current p-1" />
-					<span class="text-primary dark:text-secondary ml-1 self-center text-sm">Edit this draft</span>
+					<span class="text-primary ml-1 self-center text-sm">Edit this draft</span>
 				</button>
 				<!-- Delete -->
 				<button class="focus:outline-none text-negative mt-2 flex" @click="deleteDraft(draft)">

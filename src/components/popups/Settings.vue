@@ -2,7 +2,7 @@
 	<div class="popup w-full p-5">
 		<!-- Header and Close button -->
 		<header v-if="$store.state.session.id === $route.params.id" class="mb-6 flex flex-row justify-between items-center">
-			<h2 class="text-primary dark:text-secondary text-3xl font-semibold">Edit your profile</h2>
+			<h2 class="text-lightPrimaryText dark:text-darkPrimaryText text-3xl font-semibold">Edit your profile</h2>
 			<button class="bg-gray1 dark:bg-gray5 focus:outline-none rounded-full p-1" @click="$emit(`close`)">
 				<CloseIcon />
 			</button>
@@ -14,7 +14,7 @@
 					<Avatar :authorID="$store.state.session.id" :avatar="profilePic" :noClick="true" :size="`w-24 h-24`" />
 				</span>
 				<span
-					class="bg-lightOnSurfaceText text-lightOnPrimaryText relative inline-flex h-24 w-24 items-center justify-center rounded-lg bg-opacity-25"
+					class="bg-darkOnPrimaryText text-lightOnPrimaryText relative inline-flex h-24 w-24 items-center justify-center rounded-lg bg-opacity-25"
 				>
 					<PencilIcon class="h-5 w-5 fill-current" />
 				</span>

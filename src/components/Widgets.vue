@@ -3,7 +3,7 @@
 		<!-- Configure my Blogchain overlay -->
 		<div
 			v-if="configureWidgets"
-			class="popup bg-primary dark:bg-secondary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
+			class="popup bg-darkBG dark:bg-gray5 modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
 		>
 			<ConfigureWidgets @close="toggleConfigure" @save="saveDraft" />
 		</div>
@@ -51,7 +51,7 @@
 			:style="{ backgroundImage: `url(${require(`@/assets/images/brand/configure-my-capsule.webp`)})` }"
 			@click="toggleConfigure"
 		>
-			<p class="text-primary dark:text-secondary text-right text-sm flex flex-row justify-end">
+			<p class="text-primary text-right text-sm flex flex-row justify-end">
 				<span class="p-6 xl:pr-0" style="background: opacity 0.9em">Configure</span>
 				<span class="p-6 pl-1 hidden xl:block">my Blogchain</span>
 			</p>

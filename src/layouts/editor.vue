@@ -1,6 +1,6 @@
 <template>
 	<main
-		class="bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightMainBG dark:bg-darkBG"
+		class="bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightBG dark:bg-darkBG"
 		:style="
 			$colorMode.dark
 				? {
@@ -33,14 +33,10 @@
 							style="backdrop-filter: blur(10px)"
 						>
 							<p v-if="!buttonHidden" class="mr-2">Resume writing?</p>
-							<button
-								v-if="!buttonHidden"
-								class="text-primary dark:text-secondary focus:outline-none"
-								@click="openDraftsPopup"
-							>
+							<button v-if="!buttonHidden" class="text-primary focus:outline-none" @click="openDraftsPopup">
 								Show drafts
 							</button>
-							<button v-else class="text-primary dark:text-secondary focus:outline-none" @click="openDraftsPopup">
+							<button v-else class="text-primary focus:outline-none" @click="openDraftsPopup">
 								<PencilIcon class="fill-current p-1" />
 							</button>
 						</div>
@@ -121,7 +117,8 @@ export default Vue.extend({
 			this.$router.push(`/home`)
 		}
 		// Set color mode
-		this.$setColorMode(this.$store.state.settings.darkMode)
+		this.$setColorMode(this.$store.state.settings.mode)
+		this.$setColor(this.$store.state.settings.color)
 		// get logged in profile
 		const { profile } = await getProfile(this.$store.state.session.id)
 		this.profile = profile

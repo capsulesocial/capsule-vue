@@ -1,6 +1,6 @@
 <template>
 	<main
-		class="bg-img-unauth m-0 h-screen overflow-y-hidden p-0 bg-lightMainBG dark:bg-darkBG"
+		class="bg-img-unauth m-0 h-screen overflow-y-hidden p-0 bg-lightBG dark:bg-darkBG"
 		:style="{ backgroundImage: `url(${require(`@/assets/images/brand/auth.webp`)})` }"
 	>
 		<Nuxt />
@@ -14,7 +14,8 @@ export default Vue.extend({
 	middleware: `auth`,
 	created() {
 		// Set color mode
-		this.$setColorMode(this.$store.state.settings.darkMode)
+		this.$setColorMode(this.$store.state.settings.mode)
+		this.$setColor(this.$store.state.settings.color)
 	},
 })
 </script>

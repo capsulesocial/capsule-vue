@@ -1,5 +1,5 @@
 <template>
-	<div class="flex">
+	<div class="flex items-center">
 		<Avatar :authorID="profile.id" :avatar="avatar" size="w-12 h-12" />
 		<div class="h-12 flex-grow px-4">
 			<nuxt-link :to="`/id/` + profile.id" class="flex flex-col">
@@ -7,7 +7,7 @@
 					{{ profile.name }}
 				</span>
 				<span v-else class="text-gray5 dark:text-gray3 text-base font-medium"> {{ profile.id }} </span>
-				<span class="text-primary dark:text-secondary text-sm">@{{ profile.id }}</span>
+				<span class="text-gray5 dark:text-gray3 text-sm">@{{ profile.id }}</span>
 			</nuxt-link>
 		</div>
 		<FriendButton
@@ -16,6 +16,12 @@
 			:toggleFriend="toggleFriend"
 			class="justify-self-end"
 		/>
+		<span
+			v-else
+			class="bg-darkBG dark:bg-lightBG dark:text-darkPrimaryText rounded-2xl bg-opacity-25 dark:bg-opacity-25 py-1 px-2 text-xs"
+		>
+			You
+		</span>
 	</div>
 </template>
 

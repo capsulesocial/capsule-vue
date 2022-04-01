@@ -24,7 +24,7 @@
 			height="23"
 			viewBox="0 0 24 24"
 			fill="none"
-			:stroke="$colorMode.dark ? `#7097AC` : `#2E556A`"
+			:stroke="$color.hex"
 			stroke-width="1.8"
 			stroke-linecap="round"
 			stroke-linejoin="round"

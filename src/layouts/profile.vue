@@ -1,6 +1,6 @@
 <template>
 	<main
-		class="bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightMainBG dark:bg-darkBG"
+		class="bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightBG dark:bg-darkBG"
 		:style="
 			$colorMode.dark
 				? {
@@ -66,7 +66,7 @@
 					<section v-else class="modal-animation flex w-full justify-center">
 						<div
 							class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
-							:style="$colorMode.dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
+							:style="`border-top: 2px solid` + $color.hex"
 						></div>
 					</section>
 				</div>
@@ -242,7 +242,8 @@ export default Vue.extend({
 	},
 	created() {
 		// Set color mode
-		this.$setColorMode(this.$store.state.settings.darkMode)
+		this.$setColorMode(this.$store.state.settings.mode)
+		this.$setColor(this.$store.state.settings.color)
 	},
 	mounted() {
 		// Fetch visiting profile

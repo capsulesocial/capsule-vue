@@ -99,18 +99,18 @@
 
 	/* Handle */
 	::-webkit-scrollbar-thumb {
-		background: #2e556a;
+		background: #454545;
 		border-radius: 50px;
 	}
 
 	/* Handle on hover */
 	::-webkit-scrollbar-thumb:hover {
-		background: #7097ac;
+		opacity: 0.8
 	}
 
 	/* Dark Handle */
 	.dark ::-webkit-scrollbar-thumb {
-		background: #7097ac;
+		background: #DDDDDD;
 	}
 	/* Hide aside scrollbar for Chrome, Safari and Opera */
 	aside::-webkit-scrollbar {
@@ -317,4 +317,21 @@
 	background-size: cover !important;
 	background-repeat: no-repeat !important;
 	background-position: center right !important;
+}
+
+/* accent colors */
+.green {
+	--color-text-primary: #7097AC;
+}
+.orange {
+	--color-text-primary: #FF4747;
+}
+.blue {
+	--color-text-primary: #396BF8;
+}
+.pink {
+	--color-text-primary: #EB3D7C;
+}
+.yellow {
+	--color-text-primary: #FFCC33;
 }

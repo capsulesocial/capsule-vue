@@ -26,7 +26,7 @@
 			:style="shrink ? `width: 15px; height: 15px` : `margin-top: 1px`"
 			viewBox="0 0 24 24"
 			fill="none"
-			:stroke="$colorMode.dark ? `#7097AC` : `#2E556A`"
+			:stroke="$color.hex"
 			stroke-width="2"
 			stroke-linecap="round"
 			stroke-linejoin="round"

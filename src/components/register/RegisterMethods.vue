@@ -3,11 +3,11 @@
 		<div v-show="isLoading" class="modal-animation flex w-full justify-center z-20">
 			<div
 				class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
-				:style="$colorMode.dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
+				:style="`border-top: 2px solid` + $color.hex"
 			></div>
 		</div>
 		<div v-show="!isLoading">
-			<h1 class="text-primary dark:text-secondary mb-10 font-semibold" style="font-size: 2.6rem">Sign up</h1>
+			<h1 class="text-lightPrimaryText dark:text-gray1 mb-10 font-semibold" style="font-size: 2.6rem">Sign up</h1>
 			<button
 				class="bg-gray2 dark:bg-gray7 focus:outline-none mb-4 flex w-full items-center justify-center rounded-lg py-2"
 				@click="() => torusLogin('discord')"
@@ -41,7 +41,7 @@
 				<h6 class="text-gray7 dark:text-gray2 ml-4 text-sm font-semibold">Create implicit account</h6>
 			</button>
 			<button
-				class="w-full flex flex-row items-center justify-center text-center mt-10 text-gray5 hover:text-primary text-sm"
+				class="w-full flex flex-row items-center justify-center text-center mt-10 text-gray5 dark:text-gray3 hover:text-primary dark:hover:text-primary text-sm"
 				@click="$emit(`infos`)"
 			>
 				<InfoIcon class="mr-3 h-4 w-4" />
@@ -49,7 +49,7 @@
 			</button>
 			<p class="text-gray7 dark:text-gray3 mt-10 text-center">
 				Already have an account?
-				<nuxt-link to="/login" class="text-primary dark:text-secondary text-center font-bold">Log in</nuxt-link>
+				<nuxt-link to="/login" class="text-primary text-center font-bold">Log in</nuxt-link>
 			</p>
 		</div>
 	</article>

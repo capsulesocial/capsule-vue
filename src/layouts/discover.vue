@@ -1,6 +1,6 @@
 <template>
 	<main
-		class="bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightMainBG dark:bg-darkBG"
+		class="bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightBG dark:bg-darkBG"
 		:style="
 			$colorMode.dark
 				? {
@@ -24,7 +24,7 @@
 					style="height: 62px"
 				>
 					<!-- Title -->
-					<h1 class="text-primary dark:text-secondary text-3xl font-semibold xl:text-4xl">Browse Blogchain</h1>
+					<h1 class="text-lightSecondaryText dark:text-gray1 text-3xl font-semibold xl:text-4xl">Browse Blogchain</h1>
 					<!-- Peered nodes -->
 					<Nodes />
 				</div>
@@ -99,7 +99,8 @@ export default Vue.extend({
 	},
 	async created() {
 		// Set color mode
-		this.$setColorMode(this.$store.state.settings.darkMode)
+		this.$setColorMode(this.$store.state.settings.mode)
+		this.$setColor(this.$store.state.settings.color)
 		// Check if logged in user
 		if (this.$store.state.session.id === ``) {
 			return

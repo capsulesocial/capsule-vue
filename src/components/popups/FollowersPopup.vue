@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="bg-primary dark:bg-secondary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
+		class="bg-darkBG dark:bg-gray5 modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
 	>
 		<!-- Container -->
 		<section class="popup">
@@ -12,14 +12,19 @@
 				<div class="sticky flex items-center justify-between mb-6">
 					<h2
 						v-if="$route.params.id === $store.state.session.id || $route.name === `home`"
-						class="text-primary dark:text-secondary text-3xl font-semibold"
+						class="text-lightPrimaryText dark:text-darkPrimaryText text-3xl font-semibold"
 					>
 						Your followers
 					</h2>
-					<h2 v-else-if="profile.name !== ``" class="text-primary dark:text-secondary text-3xl font-semibold">
+					<h2
+						v-else-if="profile.name !== ``"
+						class="text-lightPrimaryText dark:text-darkPrimaryText text-3xl font-semibold"
+					>
 						{{ profile.name }}'s followers
 					</h2>
-					<h2 v-else class="text-primary dark:text-secondary text-3xl font-semibold">{{ profile.id }}'s followers</h2>
+					<h2 v-else class="text-lightPrimaryText dark:text-darkPrimaryText text-3xl font-semibold">
+						{{ profile.id }}'s followers
+					</h2>
 					<button class="focus:outline-none bg-gray1 dark:bg-gray5 rounded-full p-1" @click="$emit(`close`)">
 						<CloseIcon />
 					</button>

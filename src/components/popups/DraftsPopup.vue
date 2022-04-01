@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="popup bg-primary dark:bg-secondary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
+		class="popup bg-darkBG dark:bg-gray5 modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
 	>
 		<!-- Container -->
 		<section>
@@ -9,7 +9,7 @@
 				class="min-h-40 max-h-90 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation z-10 mr-5 overflow-y-auto rounded-lg bg-gradient-to-r p-6 pt-4 shadow-lg"
 			>
 				<div class="sticky flex items-center justify-between">
-					<h2 class="text-primary dark:text-secondary text-3xl font-semibold">Drafts</h2>
+					<h2 class="text-lightPrimaryText dark:text-darkPrimaryText text-3xl font-semibold">Drafts</h2>
 					<button class="focus:outline-none bg-gray1 dark:bg-gray5 rounded-full p-1" @click="$emit(`close`)">
 						<CloseIcon />
 					</button>

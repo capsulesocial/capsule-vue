@@ -7,7 +7,7 @@
 		<nav class="w-full flex-no-wrap hidden flex-row items-center justify-between py-5 lg:flex">
 			<!-- Left side: Links + write post button -->
 			<div class="flex flex-row items-center" style="font-size: 0.95rem">
-				<nuxt-link to="/home" class="mr-5 text-primary dark:text-secondary">
+				<nuxt-link to="/home" class="mr-5 text-lightSecondaryText dark:text-gray1">
 					<CapsuleIcon />
 				</nuxt-link>
 				<nuxt-link to="/home" class="mx-4" :class="getStyles(`home`)"> Home </nuxt-link>
@@ -62,7 +62,7 @@
 					>
 					<button
 						v-if="$store.state.session.id !== ``"
-						class="focus:outline-none text-lightError flex w-full flex-row items-center text-left"
+						class="focus:outline-none text-negative flex w-full flex-row items-center text-left"
 						@click="disconnect"
 					>
 						<LogoutIcon class="mr-2 h-5 w-5 flex-shrink-0" />Disconnect
@@ -75,7 +75,7 @@
 			<!-- Mobile menu dropdown -->
 			<div class="relative">
 				<button class="mobileDropdown" @click="showMobileMenu = !showMobileMenu">
-					<MobileNav class="mobileDropdown text-primary dark:text-secondary" />
+					<MobileNav class="mobileDropdown text-primary" />
 				</button>
 				<div
 					v-show="showMobileMenu"
@@ -108,8 +108,8 @@
 			<!-- Middle branding -->
 			<nuxt-link to="/home">
 				<div class="flex items-center">
-					<CapsuleIcon class="text-primary dark:text-secondary mr-2" />
-					<h1 class="text-primary dark:text-secondary font-sans text-xl font-bold">Blogchain</h1>
+					<CapsuleIcon class="text-primary mr-2" />
+					<h1 class="text-primary font-sans text-xl font-bold">Blogchain</h1>
 				</div>
 			</nuxt-link>
 			<div class="relative mt-2">
@@ -157,7 +157,7 @@
 					>
 					<button
 						v-if="$store.state.session.id !== ``"
-						class="focus:outline-none text-lightError flex w-full flex-row items-center text-left"
+						class="focus:outline-none text-negative flex w-full flex-row items-center text-left"
 						@click="disconnect"
 					>
 						<LogoutIcon class="mr-2 h-5 w-5 flex-shrink-0" />Disconnect
@@ -254,7 +254,7 @@ export default Vue.extend({
 			let res: string = ``
 			// Check if current tab
 			if (this.$route.name === tab) {
-				res += `font-bold text-primary dark:text-secondary border-primary dark:border-secondary border-b`
+				res += `font-bold text-primary`
 			} else {
 				res += `font-regular text-gray5 dark:text-gray3`
 			}

@@ -3,7 +3,7 @@
 		v-if="mutuals.size !== 0"
 		class="mb-5 w-full rounded-lg bg-gradient-to-r from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder p-4 shadow-lg"
 	>
-		<h6 class="text-primary dark:text-secondary mb-2 font-semibold">Mutual Followers</h6>
+		<h6 class="text-lightPrimaryText dark:text-darkPrimaryText mb-2 font-semibold">Mutual Followers</h6>
 		<div>
 			<!-- Profile photos -->
 			<div class="flex flex-row flex-wrap pl-4">
@@ -23,7 +23,7 @@
 				</p>
 			</div>
 		</div>
-		<button class="text-primary dark:text-secondary text-sm" @click="$emit(`openMutuals`)">Show more</button>
+		<button class="text-primary text-sm" @click="$emit(`openMutuals`)">Show more</button>
 	</article>
 </template>
 

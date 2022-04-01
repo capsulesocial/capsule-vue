@@ -2,7 +2,7 @@
 	<!-- Step 0: Code redeem -->
 	<article>
 		<h1
-			class="text-primary text-center lg:text-left dark:text-secondary mb-5 font-semibold xl:mb-10"
+			class="text-lightPrimaryText dark:text-gray1 text-center lg:text-left mb-5 font-semibold xl:mb-10"
 			style="font-size: 2.6rem"
 		>
 			Welcome
@@ -23,7 +23,7 @@
 				v-model="inputCode"
 				type="text"
 				placeholder="Paste it here to get started"
-				class="focus:outline-none focus:border-primary text-primary bg-gray2 border-primary mt-1 mb-5 w-full rounded-lg border border-dashed px-4 py-2 font-sans text-sm"
+				class="focus:outline-none focus:border-primary text-lightOnPrimaryText dark:text-darkOnPrimaryText bg-gray2 border-primary mt-1 mb-5 w-full rounded-lg border border-dashed px-4 py-2 font-sans text-sm"
 				style="height: 3rem"
 			/>
 			<div class="flex flex-row justify-between">
@@ -40,14 +40,14 @@
 		</div>
 		<p class="text-gray7 dark:text-gray3 mt-6 text-center text-sm">
 			Already have an account?
-			<nuxt-link to="/login" class="text-primary dark:text-secondary text-center font-bold">Log in</nuxt-link>
+			<nuxt-link to="/login" class="text-primary text-center font-bold">Log in</nuxt-link>
 		</p>
 		<p class="text-gray7 dark:text-gray3 mt-10 text-center text-sm">
 			Don’t have an invite yet? Request one
 			<a
 				href="https://forms.zohopublic.com/peter96/form/BlogchainInviteRequests/formperma/7xCuELT6HdgR08w13-Nt8WFx9SmsnZh1YFL9mcP_oCc"
 				target="_blank"
-				class="text-primary dark:text-secondary font-semibold"
+				class="text-primary font-semibold"
 				>here.</a
 			>
 			You can also join our community on Discord, or follow our company blog to receive future updates.

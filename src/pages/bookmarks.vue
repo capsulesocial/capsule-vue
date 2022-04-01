@@ -1,7 +1,10 @@
 <template>
 	<div>
 		<div class="flex flex-row items-center justify-between px-5 pt-3 pb-3 xl:px-6 xl:pt-4">
-			<h2 class="text-primary dark:text-secondary text-lg font-semibold xl:text-xl" style="backdrop-filter: blur(10px)">
+			<h2
+				class="text-lightPrimaryText dark:text-darkPrimaryText text-lg font-semibold xl:text-xl"
+				style="backdrop-filter: blur(10px)"
+			>
 				My bookmarks
 			</h2>
 			<BookmarksFilter class="modal-animation" :filter="filter" @clicked="setSort" />

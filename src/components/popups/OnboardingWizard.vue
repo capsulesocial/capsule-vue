@@ -1,14 +1,14 @@
 <template>
 	<section
-		class="popup bg-primary dark:bg-secondary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-start justify-center bg-opacity-50 dark:bg-opacity-50"
+		class="popup bg-darkBG dark:bg-gray5 modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
 	>
 		<div
-			class="popup from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation mt-12 overflow-y-auto rounded-lg bg-gradient-to-r p-6 pt-4 shadow-lg backdrop-blur-lg backdrop-filter"
+			class="popup from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation overflow-y-auto rounded-lg bg-gradient-to-r p-6 pt-4 shadow-lg backdrop-blur-lg backdrop-filter"
 			style="max-height: 90%; width: 650px; backdrop-filter: blur(10px)"
 		>
 			<!-- Header and close icon -->
 			<div class="flex items-center justify-between pb-6">
-				<h1 class="text-primary dark:text-secondary text-4xl font-semibold">Welcome!</h1>
+				<h1 class="text-lightPrimaryText dark:text-darkPrimaryText text-4xl font-semibold">Welcome!</h1>
 				<button class="bg-gray1 dark:bg-gray5 focus:outline-none rounded-full p-1" @click="closeWizard">
 					<CloseIcon />
 				</button>
@@ -52,33 +52,30 @@
 				</p>
 				<!-- progress circles -->
 				<div class="mb-10 self-center">
+					<button class="bg-primaryfocus:outline-none mx-1 rounded-full p-1" @click="setStep(0)"></button>
 					<button
-						class="bg-primary dark:bg-secondary focus:outline-none mx-1 rounded-full p-1"
-						@click="setStep(0)"
-					></button>
-					<button
-						:class="step > 0 ? `bg-primary dark:bg-secondary` : `bg-gray3`"
+						:class="step > 0 ? `bg-primary` : `bg-gray3`"
 						class="focus:outline-none mx-1 rounded-full p-1"
 						@click="setStep(1)"
 					></button>
 					<button
-						:class="step > 1 ? `bg-primary dark:bg-secondary` : `bg-gray3`"
+						:class="step > 1 ? `bg-primary` : `bg-gray3`"
 						class="focus:outline-none mx-1 rounded-full p-1"
 						@click="setStep(2)"
 					></button>
 					<button
-						:class="step > 2 ? `bg-primary dark:bg-secondary` : `bg-gray3`"
+						:class="step > 2 ? `bg-primary` : `bg-gray3`"
 						class="focus:outline-none mx-1 rounded-full p-1"
 						@click="setStep(3)"
 					></button>
 					<button
-						:class="step > 3 ? `bg-primary dark:bg-secondary` : `bg-gray3`"
+						:class="step > 3 ? `bg-primary` : `bg-gray3`"
 						class="focus:outline-none mx-1 rounded-full p-1"
 						@click="setStep(4)"
 					></button>
 					<button
 						v-if="this.$route.name != `help`"
-						:class="step > 4 ? `bg-primary dark:bg-secondary` : `bg-gray3`"
+						:class="step > 4 ? `bg-primary` : `bg-gray3`"
 						class="focus:outline-none mx-1 rounded-full p-1"
 						@click="setStep(5)"
 					></button>

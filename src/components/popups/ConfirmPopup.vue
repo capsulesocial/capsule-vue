@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="popup bg-primary dark:bg-secondary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
+		class="popup bg-darkBG dark:bg-gray5 modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
 	>
 		<!-- Container -->
 		<section>
@@ -9,7 +9,7 @@
 				class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation z-10 mr-5 overflow-y-auto rounded-lg bg-gradient-to-r p-6 pt-4 shadow-lg"
 			>
 				<div class="sticky flex items-center justify-between">
-					<h2 class="text-primary dark:text-secondary text-2xl font-semibold">All set?</h2>
+					<h2 class="text-lightPrimaryText dark:text-darkPrimaryText text-2xl font-semibold">All set?</h2>
 					<button class="focus:outline-none bg-gray1 dark:bg-gray5 rounded-full p-1" @click="$emit(`close`)">
 						<CloseIcon />
 					</button>
@@ -21,7 +21,7 @@
 					<p class="my-4 text-gray5 dark:text-gray3">
 						Attention, after you publish this post, it can't be edited or
 						<span
-							class="text-secondary cursor-default"
+							class="text-negative cursor-default"
 							@mouseover="showInfoBubble = true"
 							@mouseleave="showInfoBubble = false"
 							>deleted</span
@@ -43,11 +43,9 @@
 					</div>
 				</div>
 				<div class="flex justify-end items-center">
-					<button class="text-primary dark:text-secondary focus:outline-none mr-6" @click="$emit(`close`)">
-						Keep writing
-					</button>
+					<button class="text-primary focus:outline-none mr-6" @click="$emit(`close`)">Keep writing</button>
 					<button
-						class="focus:outline-none bg-primary dark:bg-secondary text-lightButtonText transform rounded-lg px-12 py-2 font-bold shadow-lg transition duration-500 ease-in-out hover:scale-105"
+						class="focus:outline-none bg-primary text-lightButtonText transform rounded-lg px-12 py-2 font-bold shadow-lg transition duration-500 ease-in-out hover:scale-105"
 						@click="handlePost"
 					>
 						Publish

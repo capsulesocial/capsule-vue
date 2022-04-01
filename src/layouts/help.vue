@@ -1,6 +1,6 @@
 <template>
 	<main
-		class="bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightMainBG dark:bg-darkBG"
+		class="bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightBG dark:bg-darkBG"
 		:style="
 			$colorMode.dark
 				? {
@@ -86,7 +86,8 @@ export default Vue.extend({
 	},
 	async created() {
 		// Set color mode
-		this.$setColorMode(this.$store.state.settings.darkMode)
+		this.$setColorMode(this.$store.state.settings.mode)
+		this.$setColor(this.$store.state.settings.color)
 		// unauth
 		if (this.$store.state.session.id === ``) {
 			return

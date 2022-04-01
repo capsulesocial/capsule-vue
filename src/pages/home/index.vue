@@ -1,17 +1,13 @@
 <template>
 	<section>
 		<nav
-			class="z-20 flex w-full flex-row px-5 pt-3 text-base xl:px-6 xl:pt-4 rounded-t-lg"
+			class="z-20 flex w-full flex-row px-5 pt-3 text-sm xl:px-6 xl:pt-4 rounded-t-lg"
 			style="backdrop-filter: blur(10px)"
 		>
 			<div class="flex items-center">
 				<button
-					:class="
-						algorithm === `FOLLOWING`
-							? ` text-primary dark:text-secondary border-primary dark:border-secondary border-b-2 font-semibold`
-							: `text-gray5 dark:text-gray3`
-					"
-					class="focus:outline-none h-full w-full pb-3"
+					:class="algorithm === `FOLLOWING` ? ` text-primary font-semibold` : `text-gray5 dark:text-gray3`"
+					class="focus:outline-none h-full w-full pb-4"
 					@click="sortFeed('FOLLOWING')"
 				>
 					Following
@@ -19,12 +15,8 @@
 			</div>
 			<div class="flex items-center px-12">
 				<button
-					:class="
-						algorithm === `NEW`
-							? ` text-primary dark:text-secondary border-primary dark:border-secondary border-b-2 font-semibold`
-							: `text-gray5 dark:text-gray3`
-					"
-					class="focus:outline-none h-full w-full pb-3"
+					:class="algorithm === `NEW` ? ` text-primary font-semibold` : `text-gray5 dark:text-gray3`"
+					class="focus:outline-none h-full w-full pb-4"
 					@click="sortFeed('NEW')"
 				>
 					New
@@ -32,12 +24,8 @@
 			</div>
 			<div class="flex items-center">
 				<button
-					:class="
-						algorithm === `TOP`
-							? ` text-primary dark:text-secondary border-primary dark:border-secondary border-b-2 font-semibold`
-							: `text-gray5 dark:text-gray3`
-					"
-					class="focus:outline-none h-full w-full pb-3"
+					:class="algorithm === `TOP` ? ` text-primary font-semibold` : `text-gray5 dark:text-gray3`"
+					class="focus:outline-none h-full w-full pb-4"
 					@click="sortFeed('TOP')"
 				>
 					Top
@@ -101,7 +89,7 @@
 			<article v-show="isLoading" class="modal-animation flex h-screen w-full justify-center pt-12">
 				<div
 					class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
-					:style="$colorMode.dark ? `border-top: 2px solid #7097ac` : `border-top: 2px solid #2e556a`"
+					:style="`border-top: 2px solid` + $color.hex"
 				></div>
 			</article>
 		</div>

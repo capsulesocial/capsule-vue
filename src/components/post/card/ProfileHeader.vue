@@ -14,7 +14,7 @@
 		>
 			{{ authorID }}
 		</span>
-		<span class="text-primary dark:text-secondary" :class="isHoverCard ? `` : `ml-2`"> @{{ authorID }} </span>
+		<span class="text-gray5 dark:text-gray3" :class="isHoverCard ? `` : `ml-2`"> @{{ authorID }} </span>
 	</nuxt-link>
 </template>
 

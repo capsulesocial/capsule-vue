@@ -1,6 +1,6 @@
 <template>
 	<main
-		class="bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightMainBG dark:bg-darkBG overscroll-none"
+		class="bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightBG dark:bg-darkBG overscroll-none"
 		:style="
 			$colorMode.dark
 				? {
@@ -23,10 +23,10 @@
 					style="height: 62px"
 				>
 					<!-- Title -->
-					<h1 v-if="profile" class="text-primary dark:text-secondary text-3xl font-semibold xl:text-4xl">
+					<h1 v-if="profile" class="text-lightSecondaryText dark:text-gray1 text-3xl font-semibold xl:text-4xl">
 						Hello, {{ profile.name }}
 					</h1>
-					<h1 v-else class="text-primary dark:text-secondary text-3xl font-semibold xl:text-4xl">Hello!</h1>
+					<h1 v-else class="text-lightSecondaryText dark:text-gray1 text-3xl font-semibold xl:text-4xl">Hello!</h1>
 					<Nodes />
 				</div>
 				<!-- Content -->
@@ -136,7 +136,8 @@ export default Vue.extend({
 	},
 	created() {
 		// Set color mode
-		this.$setColorMode(this.$store.state.settings.darkMode)
+		this.$setColorMode(this.$store.state.settings.mode)
+		this.$setColor(this.$store.state.settings.color)
 	},
 	async mounted() {
 		// Check if logged in user

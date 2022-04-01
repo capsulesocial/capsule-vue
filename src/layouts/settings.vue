@@ -1,6 +1,6 @@
 <template>
 	<main
-		class="bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightMainBG dark:bg-darkBG"
+		class="bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightBG dark:bg-darkBG"
 		:style="
 			$colorMode.dark
 				? {
@@ -34,11 +34,11 @@
 								class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation mb-5 flex flex-col overflow-hidden rounded-lg border bg-gradient-to-r py-4 px-6 pb-2 shadow-lg"
 								style="backdrop-filter: blur(10px)"
 							>
-								<h3 class="text-primary dark:text-secondary pb-4 text-base font-semibold">Settings</h3>
+								<h3 class="text-lightPrimaryText dark:text-darkPrimaryText pb-4 text-base font-semibold">Settings</h3>
 								<nuxt-link
 									:class="
 										$route.name === `settings-account`
-											? `bg-lightInput dark:bg-darkInput font-semibold text-primary dark:text-secondary`
+											? `bg-lightInput dark:bg-darkInput font-semibold text-primary`
 											: `text-gray5 dark:text-gray3`
 									"
 									class="focus:outline-none mb-4 w-full rounded-lg py-2 px-4 text-left flex flex-row items-center"
@@ -65,7 +65,7 @@
 									to="/settings/styling"
 									:class="
 										$route.name === `settings-styling`
-											? `bg-lightInput dark:bg-darkInput font-semibold text-primary dark:text-secondary`
+											? `bg-lightInput dark:bg-darkInput font-semibold text-primary`
 											: `text-gray5 dark:text-gray3`
 									"
 									class="focus:outline-none mb-4 w-full rounded-lg py-2 px-4 text-left flex flex-row items-center"
@@ -120,7 +120,8 @@ export default Vue.extend({
 	},
 	async created() {
 		// Set color mode
-		this.$setColorMode(this.$store.state.settings.darkMode)
+		this.$setColorMode(this.$store.state.settings.mode)
+		this.$setColor(this.$store.state.settings.color)
 		// Check if logged in user
 		if (this.$store.state.session.id === ``) {
 			this.$router.push(`/`)

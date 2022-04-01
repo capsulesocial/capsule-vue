@@ -13,7 +13,7 @@
 				<ChevronDown v-else />
 			</button>
 			<button v-show="filter !== ``" @click="$emit(`clicked`, ``)">
-				<span class="ml-2 text-sm text-primary dark:text-secondary">Clear</span>
+				<span class="ml-2 text-sm text-primary">Clear</span>
 			</button>
 		</div>
 		<!-- comment filter dropdown -->
@@ -23,24 +23,24 @@
 			style="margin-top: 28px"
 		>
 			<!-- Select charge of reaction button -->
-			<div class="hotzone mb-6 flex justify-start flex-row dark:text-gray3">
+			<div class="hotzone mb-6 flex justify-start flex-row text-gray5 dark:text-gray3">
 				<button
-					class="hotzone focus:outline-none mr-4 border-b-2"
-					:class="feeling === `positive` ? `border-positive` : `border-transparent`"
+					class="hotzone focus:outline-none mr-4"
+					:class="feeling === `positive` ? `text-positive font-semibold` : ``"
 					@click="setCommentFilterFeeling(`positive`)"
 				>
 					Positive
 				</button>
 				<button
-					class="hotzone focus:outline-none mr-4 border-b-2"
-					:class="feeling === `neutral` ? `border-neutral` : `border-transparent`"
+					class="hotzone focus:outline-none mr-4"
+					:class="feeling === `neutral` ? `text-neutral font-semibold` : ``"
 					@click="setCommentFilterFeeling(`neutral`)"
 				>
 					Neutral
 				</button>
 				<button
-					class="hotzone focus:outline-none mr-4 border-b-2"
-					:class="feeling === `negative` ? ` border-negative` : `border-transparent`"
+					class="hotzone focus:outline-none mr-4"
+					:class="feeling === `negative` ? ` text-negative font-semibold` : ``"
 					@click="setCommentFilterFeeling(`negative`)"
 				>
 					Negative
