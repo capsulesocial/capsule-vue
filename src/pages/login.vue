@@ -150,6 +150,7 @@ export default Vue.extend({
 			changeEmail: MutationType.CHANGE_EMAIL,
 			changeAvatar: MutationType.CHANGE_AVATAR,
 			changeBio: MutationType.CHANGE_BIO,
+			changeWebsite: MutationType.CHANGE_WEBSITE,
 			changeLocation: MutationType.CHANGE_LOCATION,
 		}),
 		async torusLogin(type: TorusVerifiers) {
@@ -238,6 +239,7 @@ export default Vue.extend({
 				this.changeAvatar(account.avatar)
 				this.changeBio(account.bio)
 				this.changeLocation(account.location)
+				this.changeWebsite(account.website)
 				this.$router.push(`/home`)
 			} catch (err: unknown) {
 				this.$handleError(err)
@@ -284,6 +286,7 @@ export default Vue.extend({
 				this.changeAvatar(account.avatar)
 				this.changeBio(account.bio)
 				this.changeLocation(account.location)
+				this.changeWebsite(account.website)
 				this.$router.push(`/home`)
 			} catch (err: unknown) {
 				this.isLoading = false
