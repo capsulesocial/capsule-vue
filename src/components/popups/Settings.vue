@@ -189,12 +189,12 @@ export default Vue.extend({
 		}),
 		hasChanged() {
 			return (
-				(this.newAvatarCID !== `` && this.newAvatarCID !== this.$store.state.session.avatar) ||
-				(this.newName !== `` && this.newName !== this.$store.state.session.name) ||
-				(this.newEmail !== `` && this.newEmail !== this.$store.state.session.email) ||
-				(this.location !== `` && this.location !== this.$store.state.session.location) ||
-				(this.website !== `` && this.website !== this.$store.state.session.website) ||
-				(this.bio !== `` && this.bio !== this.$store.state.session.bio)
+				this.newAvatarCID.trim() !== this.$store.state.session.avatar ||
+				this.newName.trim() !== this.$store.state.session.name ||
+				this.newEmail.trim() !== this.$store.state.session.email ||
+				this.location.trim() !== this.$store.state.session.location ||
+				this.website.trim() !== this.$store.state.session.website ||
+				this.bio.trim() !== this.$store.state.session.bio
 			)
 		},
 		async handleImage(e: HTMLInputEvent) {
@@ -247,43 +247,53 @@ export default Vue.extend({
 				this.$toastWarning(`nothing to update`)
 				return
 			}
+
+			const trimmedName = this.newName.trim()
+			const trimmedBio = this.bio.trim()
+			const trimmedEmail = this.newEmail.trim()
+			const trimmedLocation = this.location.trim()
+			const trimmedWebsite = this.website.trim()
+
 			// Update name
-			if (this.newName !== `` && this.newName !== this.$store.state.session.name) {
-				if (this.newName.length < 2 || this.newName.length > 32) {
-					this.$toastError(`Invalid name length`)
-					return
-				}
-				this.changeName(this.newName.trim())
-			}
-			// Update bio
-			if (this.bio !== this.$store.state.session.bio && this.checkBio() > 0) {
-				this.changeBio(this.bio.trim())
-			}
-			// Update email
-			const qualityEmail = this.$qualityEmail(this.newEmail)
-			if (this.newEmail.length > 0 && this.$isError(qualityEmail)) {
-				this.$toastError(qualityEmail.error)
+			if (trimmedName.length !== 0 && (trimmedName.length < 2 || trimmedName.length > 32)) {
+				this.$toastError(`Invalid name length`)
 				return
 			}
-			this.changeEmail(this.newEmail.trim())
-			// Update location
-			if (this.location !== this.$store.state.session.location) {
-				this.changeLocation(this.location.trim())
+			this.changeName(trimmedName)
+
+			// Update bio
+			if (this.checkBio() < 0) {
+				this.$toastError(`Bio too long`)
+				return
 			}
-			// Update website
-			if (this.website !== this.$store.state.session.website && this.website && this.website !== ``) {
-				if (URLRegex.test(this.website)) {
-					this.changeWebsite(this.website)
-				} else {
-					this.$toastError(`Invalid URL`)
+			this.changeBio(trimmedBio)
+
+			// Update email
+			if (trimmedEmail.length > 0) {
+				const qualityEmail = this.$qualityEmail(trimmedEmail)
+				if (this.$isError(qualityEmail)) {
+					this.$toastError(qualityEmail.error)
 					return
 				}
 			}
+			this.changeEmail(trimmedEmail)
+
+			// Update location
+			this.changeLocation(trimmedLocation)
+
+			// Update website
+			if (trimmedWebsite.length > 0 && !URLRegex.test(trimmedWebsite)) {
+				this.$toastError(`Invalid URL`)
+				return
+			}
+			this.changeWebsite(trimmedWebsite)
+
 			// Update Avatar
 			if (this.newAvatarCID !== ``) {
 				this.changeAvatar(this.newAvatarCID)
 				getProfile(this.$store.state.session.id, true) // Update cached profile
 			}
+
 			try {
 				const profileUpdated = await this.updateProfile()
 				if (profileUpdated) {
