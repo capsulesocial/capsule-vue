@@ -51,11 +51,14 @@
 						@updateBookmarks="fetchBookmarks"
 						@scrollToTop="scrollToTop"
 					/>
-					<!-- Widgets -->
-					<aside
-						class="w-5/12 -mr-5 modal-animation -mt-4 hidden overflow-y-auto p-4 lg:block"
-						:class="showWidgets ? `z-10` : ``"
-						style="min-height: calc(100vh - 150px); height: calc(100vh - 150px)"
+				</section>
+			</div>
+			<!-- Widgets -->
+			<aside class="fixed w-full flex justify-center top-20" :class="showWidgets ? `z-10` : ``">
+				<div class="w-full hidden lg:flex flex-row-reverse justify-between lg:w-11/12 xl:w-10/12 max-w-1220 relative">
+					<div
+						style="left: 760px; right: 0px"
+						class="shrink ml-5 absolute max-w-500 h-screen overflow-y-auto p-5 pb-24"
 					>
 						<Widgets
 							:followers="followers"
@@ -65,9 +68,9 @@
 							@openFollowers="showFollowers = true"
 						/>
 						<Footer />
-					</aside>
-				</section>
-			</div>
+					</div>
+				</div>
+			</aside>
 		</div>
 		<FollowersPopup
 			v-if="showFollowers"
@@ -241,3 +244,16 @@ export default Vue.extend({
 	},
 })
 </script>
+
+<style scoped>
+/* Hide scrollbar for Chrome, Safari and Opera */
+aside::-webkit-scrollbar {
+	display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+aside {
+	-ms-overflow-style: none; /* IE and Edge */
+	scrollbar-width: none; /* Firefox */
+}
+</style>
