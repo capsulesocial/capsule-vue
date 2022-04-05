@@ -14,26 +14,28 @@
 		<Header :avatar="avatar" class="lg:w-11/12 xl:w-10/12 max-w-1220 my-5 fixed top-0" />
 		<div class="w-full lg:w-11/12 xl:w-10/12 max-w-1220 mt-20 relative">
 			<div
+				style="margin-top: 62px"
 				class="w-full lg:w-760 absolute min-h-70 h-70 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder overflow-y-auto rounded-t-lg bg-gradient-to-r shadow-lg"
 			></div>
+		</div>
+
+		<!-- Title and peered nodes -->
+		<div
+			class="modal-animation hidden lg:flex w-full lg:max-w-1220 items-center justify-between px-3 lg:px-0 mb-5"
+			style="height: 62px"
+		>
+			<h1 v-if="profile" class="text-primary dark:text-secondary text-3xl font-semibold xl:text-4xl">
+				Hello, {{ profile.name }}
+			</h1>
+			<h1 v-else class="text-lightSecondaryText dark:text-gray1 text-3xl font-semibold xl:text-4xl">Hello!</h1>
+			<Nodes />
 		</div>
 
 		<!-- Main content scroll -->
 		<div ref="container" class="flex w-full overflow-y-auto overflow-x-hidden justify-center">
 			<!-- Content container -->
 			<div class="flex w-full lg:w-11/12 xl:w-10/12 relative flex-row justify-between max-w-1220">
-				<!-- Title and peered nodes -->
-				<!-- <div
-					class="modal-animation hidden lg:flex w-full items-center justify-between px-3 lg:px-0"
-					style="height: 62px"
-				>
-					<h1 v-if="profile" class="text-primary dark:text-secondary text-3xl font-semibold xl:text-4xl">
-						Hello, {{ profile.name }}
-					</h1>
-					<h1 v-else class="text-lightSecondaryText dark:text-gray1 text-3xl font-semibold xl:text-4xl">Hello!</h1>
-					<Nodes />
-				</div> -->
-				<section class="w-full lg:w-11/12 xl:w-10/12 max-w-1220 relative h-full flex flex-row justify-between">
+				<div class="w-full lg:w-11/12 xl:w-10/12 max-w-1220 relative h-full flex flex-row justify-between">
 					<PostEditor
 						v-if="$store.state.widgets.primary === `editor` && $route.name === `home`"
 						ref="editor"
@@ -50,13 +52,13 @@
 						@updateBookmarks="fetchBookmarks"
 						@scrollToTop="scrollToTop"
 					/>
-				</section>
+				</div>
 			</div>
 			<!-- Widgets -->
-			<aside class="fixed w-full flex justify-center top-20" :class="showWidgets ? `z-10` : ``">
+			<aside class="fixed w-full flex justify-center top-24" :class="showWidgets ? `z-10` : ``">
 				<div class="w-full hidden lg:flex flex-row-reverse justify-between lg:w-11/12 xl:w-10/12 max-w-1220 relative">
 					<div
-						style="left: 760px; right: 0px"
+						style="left: 760px; right: 0px; top: 20px"
 						class="shrink ml-5 absolute max-w-500 h-screen overflow-y-auto p-5 pb-24"
 					>
 						<Widgets
