@@ -368,7 +368,10 @@ export default Vue.extend({
 	},
 	async created() {
 		// Fetch post from IPFS
-		this.post = await getRegularPost(this.$route.params.post)
+		// ESLint screams camelcase error if I use public_key directly
+		const { data: postData, sig, public_key: publicKey } = await getRegularPost(this.$route.params.post)
+		this.post = postData
+
 		if (!this.post) {
 			this.$toastError(`This post has not been found`)
 			throw new Error(`Post is null!`)

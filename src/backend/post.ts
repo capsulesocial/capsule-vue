@@ -139,12 +139,12 @@ export async function sendEncryptedPost(data: IEncryptedPost): Promise<string> {
 	return cid
 }
 
-export async function getRegularPost(cid: string): Promise<IRegularPost> {
+export async function getRegularPost(cid: string): Promise<ISignedIPFSObject<IRegularPost>> {
 	const post = await ipfs().getJSONData<ISignedIPFSObject<IRegularPost>>(cid)
 	if (!isRegularPost(post.data)) {
 		throw new Error(`Post is encrypted`)
 	}
-	return post.data
+	return post
 }
 
 // TODO: Fix this
