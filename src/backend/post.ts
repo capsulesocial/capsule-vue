@@ -232,10 +232,7 @@ export async function verifyPostAuthenticity(content: ISignedIPFSObject<Post>) {
 	try {
 		const { publicKey } = await getUserInfoNEAR(content.data.authorID)
 		const verified = verifyContent(content.data, hexStringToUint8Array(content.sig), publicKey)
-		if (!verified) {
-			return false
-		}
-		return true
+		return verified
 	} catch (err: any) {
 		return false
 	}
