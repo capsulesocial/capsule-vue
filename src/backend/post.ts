@@ -1,11 +1,12 @@
 import axios from 'axios'
 
-import { signContent } from './utilities/keys'
+import { signContent, verifyContent } from './utilities/keys'
 import ipfs from './utilities/ipfs'
-import { isError, ISignedIPFSObject, uint8ArrayToHexString } from './utilities/helpers'
+import { hexStringToUint8Array, isError, ISignedIPFSObject, uint8ArrayToHexString } from './utilities/helpers'
 import { nodeUrl, capsuleServer, sigValidity } from './utilities/config'
 import { IRepost } from './reposts'
 import { decryptData, encryptAndSignData } from './crypto'
+import { getUserInfoNEAR } from './near'
 export interface Tag {
 	name: string
 }
@@ -225,4 +226,17 @@ export async function getTags(): Promise<string[]> {
 export async function getOnePost(cid: string, bookmarker: string): Promise<IPostResponse> {
 	const res = await axios.get(`${nodeUrl()}/content/${cid}`, { params: { bookmarker } })
 	return res.data.data
+}
+
+export async function verifyPostAuthenticity(content: ISignedIPFSObject<Post>) {
+	try {
+		const { publicKey } = await getUserInfoNEAR(content.data.authorID)
+		const verified = verifyContent(content.data, hexStringToUint8Array(content.sig), publicKey)
+		if (!verified) {
+			return false
+		}
+		return true
+	} catch (err: any) {
+		return false
+	}
 }
