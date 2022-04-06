@@ -152,7 +152,7 @@ import ChevronUp from '@/components/icons/ChevronUp.vue'
 import ChevronDown from '@/components/icons/ChevronDown.vue'
 
 import { addPhotoToIPFS, preUploadPhoto } from '@/backend/photos'
-import { categories } from '@/config'
+import { categories } from '@/config/config'
 import { Tag } from '@/backend/post'
 import { getCompressedImage } from '@/backend/utilities/imageCompression'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'

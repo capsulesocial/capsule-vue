@@ -23,7 +23,7 @@
 import Vue from 'vue'
 import CategoryCard from '@/components/CategoryCard.vue'
 
-import { categories } from '@/config'
+import { categories } from '@/config/config'
 import { getTags } from '@/backend/post'
 import ogImage from '@/assets/images/util/ogImage.png'
 

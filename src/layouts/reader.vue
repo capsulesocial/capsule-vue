@@ -58,7 +58,7 @@ import Header from '@/components/Header.vue'
 import UnauthPopup from '@/components/popups/UnauthPopup.vue'
 import XIcon from '@/components/icons/X.vue'
 
-import { IBackground, backgrounds } from '@/config'
+import { IBackground, backgrounds } from '@/config/backgrounds'
 import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
 

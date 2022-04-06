@@ -218,7 +218,8 @@ import Check from '@/components/icons/Check.vue'
 
 import { MutationType, getProfileFromSession, namespace as sessionStoreNamespace } from '~/store/session'
 import { setProfile, getProfile, Profile } from '@/backend/profile'
-import { IBackground, backgrounds, modes, colors } from '@/config'
+import { colors, modes } from '@/config/colors'
+import { IBackground, backgrounds } from '@/config/backgrounds'
 
 interface IData {
 	profile: Profile | null

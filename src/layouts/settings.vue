@@ -89,7 +89,7 @@ import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
-import { IBackground, backgrounds } from '@/config'
+import { IBackground, backgrounds } from '@/config/backgrounds'
 import ProfileIcon from '@/components/icons/Profile.vue'
 import BrushlIcon from '@/components/icons/Brush.vue'
 

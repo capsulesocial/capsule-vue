@@ -75,7 +75,8 @@
 import Vue from 'vue'
 import ChevronUp from '@/components/icons/ChevronUp.vue'
 import ChevronDown from '@/components/icons/ChevronDown.vue'
-import { faces, feelings } from '@/config'
+import { feelings } from '@/config/config'
+import { faces } from '@/config/faces'
 
 interface IData {
 	reactionList: Record<string, any>

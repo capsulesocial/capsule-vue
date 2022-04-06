@@ -53,7 +53,7 @@ import SupportWidget from '@/components/widgets/Support.vue'
 import ReportWidget from '@/components/widgets/Report.vue'
 import ResourcesWidget from '@/components/widgets/Resources.vue'
 
-import { IBackground, backgrounds } from '@/config'
+import { IBackground, backgrounds } from '@/config/backgrounds'
 import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
 

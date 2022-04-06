@@ -31,7 +31,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { avatars } from '@/config'
+import { avatars } from '@/config/avatars'
 
 interface IData {
 	avatarList: Array<any>

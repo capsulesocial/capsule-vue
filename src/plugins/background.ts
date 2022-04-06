@@ -1,5 +1,5 @@
 import type { Plugin } from '@nuxt/types'
-import { backgrounds, IBackground } from '@/config'
+import { IBackground, backgrounds } from '@/config/backgrounds'
 
 type backgroundURL = (id: string | undefined, type: `local` | `ipfs`) => IBackground
 
