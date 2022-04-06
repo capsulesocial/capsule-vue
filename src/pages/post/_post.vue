@@ -250,7 +250,8 @@ import { isPostBookmarkedByUser } from '@/backend/bookmarks'
 import ogImage from '@/assets/images/util/ogImage.png'
 import { domain } from '@/backend/utilities/config'
 import { createShareableLink } from '@/backend/shareable_links'
-import { calculateReadingTime } from '@/backend/utilities/helpers'
+import { calculateReadingTime, hexStringToUint8Array } from '@/backend/utilities/helpers'
+import { verifyContent } from '@/backend/utilities/keys'
 
 interface IData {
 	post: Post | null
@@ -375,6 +376,13 @@ export default Vue.extend({
 		if (!this.post) {
 			this.$toastError(`This post has not been found`)
 			throw new Error(`Post is null!`)
+		}
+
+		const verified = verifyContent(postData, hexStringToUint8Array(sig), hexStringToUint8Array(publicKey))
+		if (!verified) {
+			this.$toastError(`Post not verified`)
+		} else {
+			this.$toastSuccess(`Post verified!`)
 		}
 
 		// Get featured photo
