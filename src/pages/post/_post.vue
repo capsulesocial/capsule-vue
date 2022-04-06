@@ -242,7 +242,7 @@ import PostCard from '@/components/post/Card.vue'
 import SharePopup from '@/components/popups/SharePopup.vue'
 
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
-import { getRegularPost, getOnePost, Post } from '@/backend/post'
+import { getRegularPost, getOnePost, Post, verifyPostAuthenticity } from '@/backend/post'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
 import { getReposts } from '@/backend/reposts'
@@ -250,8 +250,7 @@ import { isPostBookmarkedByUser } from '@/backend/bookmarks'
 import ogImage from '@/assets/images/util/ogImage.png'
 import { domain } from '@/backend/utilities/config'
 import { createShareableLink } from '@/backend/shareable_links'
-import { calculateReadingTime, hexStringToUint8Array } from '@/backend/utilities/helpers'
-import { verifyContent } from '@/backend/utilities/keys'
+import { calculateReadingTime } from '@/backend/utilities/helpers'
 
 interface IData {
 	post: Post | null
@@ -369,21 +368,19 @@ export default Vue.extend({
 	},
 	async created() {
 		// Fetch post from IPFS
-		// ESLint screams camelcase error if I use public_key directly
-		const { data: postData, sig, public_key: publicKey } = await getRegularPost(this.$route.params.post)
-		this.post = postData
+		const post = await getRegularPost(this.$route.params.post)
+		this.post = post.data
 
 		if (!this.post) {
 			this.$toastError(`This post has not been found`)
 			throw new Error(`Post is null!`)
 		}
 
-		const verified = verifyContent(postData, hexStringToUint8Array(sig), hexStringToUint8Array(publicKey))
-		if (!verified) {
-			this.$toastError(`Post not verified`)
-		} else {
-			this.$toastSuccess(`Post verified!`)
-		}
+		verifyPostAuthenticity(post).then((verified) => {
+			if (!verified) {
+				this.$toastError(`Post not verified!`)
+			}
+		})
 
 		// Get featured photo
 		if (this.post.featuredPhotoCID) {
