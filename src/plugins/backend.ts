@@ -1,10 +1,11 @@
 import { Plugin } from '@nuxt/types'
+import { ready } from 'libsodium-wrappers'
 import { initIPFS } from '@/backend/utilities/ipfs'
 import { initContract, initNear, initWalletConnection } from '@/backend/near'
 
 const backend: Plugin = async (context) => {
 	try {
-		const [, ipfs] = await Promise.all([initNear(), initIPFS()])
+		const [, ipfs] = await Promise.all([initNear(), initIPFS(), ready])
 		ipfs.initResult.catch((err: unknown) => {
 			if (err instanceof Error) {
 				context.$toastError(err.message)
