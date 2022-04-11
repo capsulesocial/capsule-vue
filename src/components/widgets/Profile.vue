@@ -17,7 +17,7 @@
 				<PinIcon class="text-primary mr-3 h-4 w-4" /> {{ location }}
 			</div>
 			<div v-if="website !== `` && location !== ``" class="mb-2"></div>
-			<div v-if="website !== ``" class="flex flex-row items-center">
+			<div v-if="website !== ``" class="flex flex-row items-center dark:text-primary">
 				<LinkIcon class="text-primary mr-3 h-4 w-4" /><button @click="redirectWebsite">
 					{{ website }}
 				</button>
