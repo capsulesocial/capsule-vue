@@ -112,6 +112,7 @@ import { addPhotoToIPFS, preUploadPhoto } from '@/backend/photos'
 import { URLRegex } from '@/plugins/quality'
 import { getCompressedImage } from '@/backend/utilities/imageCompression'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
+import textLimits from '@/backend/utilities/text_limits'
 
 interface IData {
 	newName: string
@@ -143,7 +144,7 @@ export default Vue.extend({
 			location: ``,
 			website: ``,
 			bio: ``,
-			maxCharBio: 256,
+			maxCharBio: textLimits.bio.max,
 			newAvatarCID: ``,
 		}
 	},
@@ -168,6 +169,9 @@ export default Vue.extend({
 		}
 		if (this.$store.state.session.email !== ``) {
 			this.newEmail = this.$store.state.session.email
+		}
+		if (this.$store.state.session.avatar !== ``) {
+			this.newAvatarCID = this.$store.state.session.avatar
 		}
 	},
 	errorCaptured(err: Error) {
@@ -262,8 +266,9 @@ export default Vue.extend({
 			this.changeName(trimmedName)
 
 			// Update bio
-			if (this.checkBio() < 0) {
-				this.$toastError(`Bio too long`)
+			const checkQualityBio = this.$qualityBio(trimmedBio)
+			if (this.$isError(checkQualityBio)) {
+				this.$toastError(checkQualityBio.error)
 				return
 			}
 			this.changeBio(trimmedBio)
@@ -279,6 +284,11 @@ export default Vue.extend({
 			this.changeEmail(trimmedEmail)
 
 			// Update location
+			const checkQualityLocation = this.$qualityLocation(trimmedLocation)
+			if (this.$isError(checkQualityLocation)) {
+				this.$toastError(checkQualityLocation.error)
+				return
+			}
 			this.changeLocation(trimmedLocation)
 
 			// Update website
