@@ -170,6 +170,9 @@ export default Vue.extend({
 		if (this.$store.state.session.email !== ``) {
 			this.newEmail = this.$store.state.session.email
 		}
+		if (this.$store.state.session.avatar !== ``) {
+			this.newAvatarCID = this.$store.state.session.avatar
+		}
 	},
 	errorCaptured(err: Error) {
 		this.$toastError(`Error: ` + err.message)
