@@ -43,6 +43,14 @@ const textLimits = {
 		min: 5,
 		max: 180,
 	},
+	bio: {
+		min: 0,
+		max: 5000,
+	},
+	location: {
+		min: 0,
+		max: 100,
+	},
 }
 
 export default textLimits

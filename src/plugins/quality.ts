@@ -20,6 +20,8 @@ declare module 'vue/types/vue' {
 		$qualityTags: TagsCheck
 		$qualityComment: StringInputCheck
 		$qualityContent: StringInputCheck
+		$qualityBio: StringInputCheck
+		$qualityLocation: StringInputCheck
 	}
 }
 
@@ -156,6 +158,28 @@ const qualityContent: StringInputCheck = (input) => {
 	return { success: true }
 }
 
+const qualityBio: StringInputCheck = (input) => {
+	const bio = input.trim()
+
+	if (bio.length < textLimits.bio.min) {
+		return { error: `Bio length cannot be less than ${textLimits.bio.min} characters` }
+	}
+	if (bio.length > textLimits.bio.max) {
+		return { error: `Bio length cannot be more than ${textLimits.bio.max} characters` }
+	}
+	return { success: true }
+}
+
+const qualityLocation: StringInputCheck = (input) => {
+	if (input.length < textLimits.location.min) {
+		return { error: `Location length cannot be less than ${textLimits.location.min} characters` }
+	}
+	if (input.length > textLimits.location.max) {
+		return { error: `Location length cannot be more than ${textLimits.location.max} characters` }
+	}
+	return { success: true }
+}
+
 const qualityPlugin: Plugin = (_context, inject) => {
 	inject(`qualityID`, qualityID)
 	inject(`qualityEmail`, qualityEmail)
@@ -166,6 +190,8 @@ const qualityPlugin: Plugin = (_context, inject) => {
 	inject(`qualityTags`, qualityTags)
 	inject(`qualityContent`, qualityContent)
 	inject(`qualityComment`, qualityComment)
+	inject(`qualityBio`, qualityBio)
+	inject(`qualityLocation`, qualityLocation)
 }
 
 export default qualityPlugin
