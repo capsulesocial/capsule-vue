@@ -611,7 +611,7 @@ export default Vue.extend({
 		},
 		commentsCount: {
 			type: Number,
-			default: undefined,
+			default: 0,
 		},
 		profile: {
 			type: Object as PropType<Profile>,
