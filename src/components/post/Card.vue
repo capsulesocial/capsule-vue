@@ -428,7 +428,7 @@
 										@click="toggleComments"
 									>
 										<CommentIcon :isActive="showComments" />
-										<span v-if="comments" class="ml-1 text-sm">{{ comments.length }}</span>
+										<span class="ml-1 text-sm">{{ commentsCount }}</span>
 									</button>
 									<!-- Repost popup -->
 									<Repost
@@ -472,7 +472,7 @@
 								@click="toggleComments"
 							>
 								<CommentIcon :isActive="showComments" />
-								<span v-if="comments" class="ml-1 text-sm">{{ comments.length }}</span>
+								<span class="ml-1 text-sm">{{ commentsCount }}</span>
 							</button>
 							<Repost
 								:repost="repost"
@@ -540,7 +540,6 @@ import { getProfileFromSession } from '@/store/session'
 import { isPostBookmarkedByUser } from '@/backend/bookmarks'
 import { sendPostDeletion } from '@/backend/postDeletion'
 import { IRepost, sendRepost } from '@/backend/reposts'
-import { ICommentData } from '@/backend/comment'
 import { calculateReadingTime } from '@/backend/utilities/helpers'
 
 interface IData {
@@ -610,9 +609,9 @@ export default Vue.extend({
 			type: String,
 			default: ``,
 		},
-		comments: {
-			type: Array as PropType<ICommentData[] | undefined>,
-			default: undefined,
+		commentsCount: {
+			type: Number,
+			default: 0,
 		},
 		profile: {
 			type: Object as PropType<Profile>,

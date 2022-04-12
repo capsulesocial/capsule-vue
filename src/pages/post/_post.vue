@@ -199,12 +199,12 @@
 		<div v-if="showQuoteRepost">
 			<PostCard
 				:post="post"
-				:comments="comments"
 				:profile="author"
 				:usersFollowing="following"
 				:toggleFriend="toggleFriend"
 				:bookmarked="isBookmarked"
 				:repostCount="repostCount"
+				:commentsCount="commentsCount"
 				:bookmarksCount="bookmarksCount"
 				:displayRepost="true"
 				:isDeleted="post.deleted"
@@ -247,7 +247,6 @@ import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
 import { getReposts } from '@/backend/reposts'
 import { isPostBookmarkedByUser } from '@/backend/bookmarks'
-import { ICommentData } from '@/backend/comment'
 import ogImage from '@/assets/images/util/ogImage.png'
 import { domain } from '@/backend/utilities/config'
 import { createShareableLink } from '@/backend/shareable_links'
@@ -266,7 +265,7 @@ interface IData {
 	lastScroll: number
 	showHeader: boolean
 	repostCount: number
-	comments: ICommentData[]
+	commentsCount: number
 	isLoading: boolean
 	showQuoteRepost: boolean
 	following: Set<string>
@@ -318,7 +317,7 @@ export default Vue.extend({
 			lastScroll: 0,
 			showHeader: true,
 			repostCount: 0,
-			comments: [],
+			commentsCount: 0,
 			isLoading: true,
 			showQuoteRepost: false,
 			following: new Set(),
@@ -422,7 +421,7 @@ export default Vue.extend({
 			this.bookmarksCount = postMetadata.bookmarksCount
 			this.isBookmarked = postMetadata.bookmarked
 			this.repostCount = postMetadata.repostCount
-			this.comments = postMetadata.comments
+			this.commentsCount = postMetadata.commentsCount
 			this.isLoading = false
 			return
 		}
@@ -431,7 +430,7 @@ export default Vue.extend({
 		this.bookmarksCount = postMetadata.bookmarksCount
 		this.isBookmarked = postMetadata.bookmarked
 		this.repostCount = postMetadata.repostCount
-		this.comments = postMetadata.comments
+		this.commentsCount = postMetadata.commentsCount
 		this.isLoading = false
 		// Get my followers
 		getFollowersAndFollowing(this.$store.state.session.id).then((data) => {

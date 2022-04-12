@@ -5,7 +5,6 @@ import ipfs from './utilities/ipfs'
 import { isError, ISignedIPFSObject, uint8ArrayToHexString } from './utilities/helpers'
 import { nodeUrl, capsuleServer, sigValidity } from './utilities/config'
 import { IRepost } from './reposts'
-import { ICommentData } from './comment'
 import { decryptData, encryptAndSignData } from './crypto'
 export interface Tag {
 	name: string
@@ -37,11 +36,10 @@ export type RetrievedPost = Omit<Post, `content`> & { _id: string; excerpt: stri
 
 export interface IGenericPostResponse {
 	post: RetrievedPost
-	comments: ICommentData[]
 	bookmarked: boolean
 	reposted?: string
-	usersParticipating: string[]
 	bookmarksCount: number
+	commentsCount: number
 	repostCount: number
 	repost?: IRepost
 }
