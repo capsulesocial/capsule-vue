@@ -231,6 +231,9 @@ export async function getOnePost(cid: string, bookmarker: string): Promise<IPost
 export async function verifyPostAuthenticity(content: ISignedIPFSObject<Post>) {
 	try {
 		const { publicKey } = await getUserInfoNEAR(content.data.authorID)
+		if (uint8ArrayToHexString(publicKey) !== content.public_key) {
+			return false
+		}
 		const verified = verifyContent(content.data, hexStringToUint8Array(content.sig), publicKey)
 		return verified
 	} catch (err: any) {
