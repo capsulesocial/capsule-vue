@@ -253,7 +253,9 @@ export default Vue.extend({
 			}
 
 			const trimmedName = this.newName.trim()
+			const trimmedBio = this.bio.trim()
 			const trimmedEmail = this.newEmail.trim()
+			const trimmedLocation = this.location.trim()
 			const trimmedWebsite = this.website.trim()
 
 			// Update name
@@ -264,12 +266,12 @@ export default Vue.extend({
 			this.changeName(trimmedName)
 
 			// Update bio
-			const checkQualityBio = this.$qualityBio(this.bio)
+			const checkQualityBio = this.$qualityBio(trimmedBio)
 			if (this.$isError(checkQualityBio)) {
 				this.$toastError(checkQualityBio.error)
 				return
 			}
-			this.changeBio(this.bio.trim())
+			this.changeBio(trimmedBio)
 
 			// Update email
 			if (trimmedEmail.length > 0) {
@@ -282,12 +284,12 @@ export default Vue.extend({
 			this.changeEmail(trimmedEmail)
 
 			// Update location
-			const checkQualityLocation = this.$qualityLocation(this.location)
+			const checkQualityLocation = this.$qualityLocation(trimmedLocation)
 			if (this.$isError(checkQualityLocation)) {
 				this.$toastError(checkQualityLocation.error)
 				return
 			}
-			this.changeLocation(this.location.trim())
+			this.changeLocation(trimmedLocation)
 
 			// Update website
 			if (trimmedWebsite.length > 0 && !URLRegex.test(trimmedWebsite)) {

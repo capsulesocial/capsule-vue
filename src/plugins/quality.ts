@@ -159,24 +159,20 @@ const qualityContent: StringInputCheck = (input) => {
 }
 
 const qualityBio: StringInputCheck = (input) => {
-	const bio = input.trim()
-
-	if (bio.length < textLimits.bio.min) {
+	if (input.length < textLimits.bio.min) {
 		return { error: `Bio length cannot be less than ${textLimits.bio.min} characters` }
 	}
-	if (bio.length > textLimits.bio.max) {
+	if (input.length > textLimits.bio.max) {
 		return { error: `Bio length cannot be more than ${textLimits.bio.max} characters` }
 	}
 	return { success: true }
 }
 
 const qualityLocation: StringInputCheck = (input) => {
-	const location = input.trim()
-
-	if (location.length < textLimits.location.min) {
+	if (input.length < textLimits.location.min) {
 		return { error: `Location length cannot be less than ${textLimits.location.min} characters` }
 	}
-	if (location.length > textLimits.location.max) {
+	if (input.length > textLimits.location.max) {
 		return { error: `Location length cannot be more than ${textLimits.location.max} characters` }
 	}
 	return { success: true }
