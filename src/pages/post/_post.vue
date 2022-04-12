@@ -242,7 +242,7 @@ import PostCard from '@/components/post/Card.vue'
 import SharePopup from '@/components/popups/SharePopup.vue'
 
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
-import { getRegularPost, getOnePost, Post } from '@/backend/post'
+import { getRegularPost, getOnePost, Post, verifyPostAuthenticity } from '@/backend/post'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
 import { getReposts } from '@/backend/reposts'
@@ -368,11 +368,19 @@ export default Vue.extend({
 	},
 	async created() {
 		// Fetch post from IPFS
-		this.post = await getRegularPost(this.$route.params.post)
+		const post = await getRegularPost(this.$route.params.post)
+		this.post = post.data
+
 		if (!this.post) {
 			this.$toastError(`This post has not been found`)
 			throw new Error(`Post is null!`)
 		}
+
+		verifyPostAuthenticity(post).then((verified) => {
+			if (!verified) {
+				this.$toastError(`Post not verified!`)
+			}
+		})
 
 		// Get featured photo
 		if (this.post.featuredPhotoCID) {

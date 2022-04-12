@@ -1,11 +1,12 @@
 import axios from 'axios'
 
-import { signContent } from './utilities/keys'
+import { signContent, verifyContent } from './utilities/keys'
 import ipfs from './utilities/ipfs'
-import { isError, ISignedIPFSObject, uint8ArrayToHexString } from './utilities/helpers'
+import { hexStringToUint8Array, isError, ISignedIPFSObject, uint8ArrayToHexString } from './utilities/helpers'
 import { nodeUrl, capsuleServer, sigValidity } from './utilities/config'
 import { IRepost } from './reposts'
 import { decryptData, encryptAndSignData } from './crypto'
+import { getUserInfoNEAR } from './near'
 export interface Tag {
 	name: string
 }
@@ -139,12 +140,12 @@ export async function sendEncryptedPost(data: IEncryptedPost): Promise<string> {
 	return cid
 }
 
-export async function getRegularPost(cid: string): Promise<IRegularPost> {
+export async function getRegularPost(cid: string): Promise<ISignedIPFSObject<IRegularPost>> {
 	const post = await ipfs().getJSONData<ISignedIPFSObject<IRegularPost>>(cid)
 	if (!isRegularPost(post.data)) {
 		throw new Error(`Post is encrypted`)
 	}
-	return post.data
+	return post
 }
 
 // TODO: Fix this
@@ -225,4 +226,17 @@ export async function getTags(): Promise<string[]> {
 export async function getOnePost(cid: string, bookmarker: string): Promise<IPostResponse> {
 	const res = await axios.get(`${nodeUrl()}/content/${cid}`, { params: { bookmarker } })
 	return res.data.data
+}
+
+export async function verifyPostAuthenticity(content: ISignedIPFSObject<Post>) {
+	try {
+		const { publicKey } = await getUserInfoNEAR(content.data.authorID)
+		if (uint8ArrayToHexString(publicKey) !== content.public_key) {
+			return false
+		}
+		const verified = verifyContent(content.data, hexStringToUint8Array(content.sig), publicKey)
+		return verified
+	} catch (err: any) {
+		return false
+	}
 }

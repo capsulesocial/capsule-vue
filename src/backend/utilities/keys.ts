@@ -3,7 +3,6 @@ import { KeyPairEd25519 } from 'near-api-js/lib/utils'
 import { base_decode as baseDecode } from 'near-api-js/lib/utils/serialize'
 import { sign } from 'tweetnacl'
 
-import { Post } from '../post'
 import { getNearConfig } from './config'
 import { stableOrderObj, uint8ArrayToHexString } from './helpers'
 
@@ -36,7 +35,7 @@ export async function signContent<T>(content: T) {
 	return { sig: sign.detached(message, keypair.secretKey), publicKey: pk }
 }
 
-export function verifyContent(content: Post, signature: Uint8Array, publicKey: Uint8Array) {
+export function verifyContent<T>(content: T, signature: Uint8Array, publicKey: Uint8Array) {
 	const ec = new TextEncoder()
 	const message = ec.encode(JSON.stringify(stableOrderObj(content)))
 	return sign.detached.verify(message, signature, publicKey)
