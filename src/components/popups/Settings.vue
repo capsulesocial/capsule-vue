@@ -269,7 +269,7 @@ export default Vue.extend({
 				this.$toastError(checkQualityBio.error)
 				return
 			}
-			this.changeBio(this.bio)
+			this.changeBio(this.bio.trim())
 
 			// Update email
 			if (trimmedEmail.length > 0) {
@@ -287,7 +287,7 @@ export default Vue.extend({
 				this.$toastError(checkQualityLocation.error)
 				return
 			}
-			this.changeLocation(this.location)
+			this.changeLocation(this.location.trim())
 
 			// Update website
 			if (trimmedWebsite.length > 0 && !URLRegex.test(trimmedWebsite)) {
