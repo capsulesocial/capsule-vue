@@ -1,9 +1,9 @@
 <template>
-	<section class="border-lightBorder w-full border">
+	<section class="flex flex-col min-h-screen max-w-760 relative">
 		<!-- Header -->
 		<div
 			id="header"
-			class="bg-darkBG dark:bg-lightBG border-lightBorder animatefast flex h-56 w-full flex-row items-center rounded-lg shadow-lg"
+			class="fixed max-w-760 w-full -m-6 lg:w-760 bg-darkBG dark:bg-lightBG border-lightBorder animatefast flex h-56 flex-row items-center rounded-lg shadow-lg"
 			:style="{
 				background: `linear-gradient(180deg, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.8) 100%), url(${require(`@/assets/images/category/` +
 					$route.params.category +
@@ -11,9 +11,10 @@
 					`header.webp`)})`,
 				backgroundSize: 'cover',
 			}"
+			style="pointer-events: none"
 		>
 			<div class="flex h-full flex-col justify-between px-4 py-5 xl:px-6">
-				<button class="focus:outline-none relative flex" @click="handleBack">
+				<button class="focus:outline-none relative flex" style="pointer-events: all" @click="handleBack">
 					<div class="bg-gray1 z-10 flex-shrink-0 rounded-full">
 						<BackIcon />
 					</div>
@@ -42,11 +43,25 @@
 		<!-- Posts loaded -->
 		<div
 			id="column"
-			class="w-full overflow-y-auto"
+			class="w-full"
 			:style="
 				!scrollDown
-					? `min-height: calc(100vh - ` + `310px` + `); height: calc(100vh - ` + `310px` + `)`
-					: `min-height: calc(100vh - ` + `152px` + `); height: calc(100vh - ` + `152px` + `)`
+					? `min-height: calc(100vh - ` +
+					  `310px` +
+					  `); height: calc(100vh - ` +
+					  `310px` +
+					  `);` +
+					  `padding-top: ` +
+					  padding +
+					  `px`
+					: `min-height: calc(100vh - ` +
+					  `152px` +
+					  `); height: calc(100vh - ` +
+					  `152px` +
+					  `); ` +
+					  `padding-top: ` +
+					  padding +
+					  `px`
 			"
 		>
 			<article
@@ -141,7 +156,7 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			posts: [],
-			isLoading: true,
+			isLoading: false,
 			currentOffset: 0,
 			limit: 10,
 			algorithm: `NEW`,
@@ -168,14 +183,11 @@ export default Vue.extend({
 	async created() {
 		this.posts = await this.fetchPosts()
 	},
-	mounted() {
-		const container = document.getElementById(`column`)
-		if (container) {
-			container.addEventListener(`scroll`, this.handleScrollHeader, true)
-		}
-	},
 	methods: {
 		async fetchPosts(): Promise<(IRepostResponse | IPostResponse)[]> {
+			if (this.isLoading || this.noMorePosts) {
+				return this.posts
+			}
 			this.isLoading = true
 			const id = this.$store.state.session.id === `` ? `x` : this.$store.state.session.id
 			const posts = await getPosts({ category: this.$route.params.category }, id, {
@@ -183,19 +195,58 @@ export default Vue.extend({
 				limit: this.limit,
 				offset: this.currentOffset,
 			})
+			this.posts = this.posts.concat(posts)
 			this.currentOffset += this.limit
 			this.isLoading = false
 			// No more posts
 			if (posts.length < this.limit) {
-				if (posts.length > 0) {
-					this.noMorePosts = true
-				}
-				const container = document.getElementById(`column`)
-				if (container) {
-					container.removeEventListener(`scroll`, this.handleScrollHeader)
-				}
+				this.noMorePosts = true
 			}
-			return this.posts.concat(posts)
+			return this.posts
+		},
+		handleHeader(showHeader: boolean = true) {
+			if (this.scrollDown === !showHeader) {
+				return
+			}
+			const body = document.getElementById(`column`)
+			const header = document.getElementById(`header`)
+			const buttontitle = document.getElementById(`buttontitle`)
+			const buttonbg = document.getElementById(`buttonbg`)
+			const title = document.getElementById(`title`)
+			const hiddentitle = document.getElementById(`hiddentitle`)
+			const scrollUp = `scrollup`
+			const scrollDown = `scrolldown`
+			const opacity0 = `opacity0`
+			const opacity1 = `opacity1`
+			if (!body || !header || !buttontitle || !buttonbg || !title || !hiddentitle) {
+				return
+			}
+			if (showHeader) {
+				this.scrollDown = false
+				header.classList.remove(scrollDown)
+				buttontitle.classList.remove(opacity0)
+				buttonbg.classList.remove(opacity0)
+				title.classList.remove(opacity0)
+				hiddentitle.classList.remove(opacity1)
+				header.classList.add(scrollUp)
+				buttontitle.classList.add(opacity1)
+				title.classList.add(opacity1)
+				hiddentitle.classList.add(opacity0)
+			}
+			if (!showHeader) {
+				this.scrollDown = true
+				header.classList.remove(scrollUp)
+				buttontitle.classList.remove(opacity1)
+				buttonbg.classList.remove(opacity1)
+				title.classList.remove(opacity1)
+				hiddentitle.classList.remove(opacity0)
+				header.classList.add(scrollDown)
+				buttontitle.classList.add(opacity0)
+				buttonbg.classList.add(opacity0)
+				title.classList.add(opacity0)
+				hiddentitle.classList.add(opacity1)
+			}
+			this.padding = this.scrollDown ? 64 : 224
 		},
 		async handleScrollHeader() {
 			const body = document.getElementById(`column`)

@@ -1,14 +1,10 @@
 <template>
-	<div class="min-h-61 h-61 xl:min-h-160 xl:h-160 border-lightBorder w-full border" style="backdrop-filter: blur(10px)">
-		<div class="px-5 pb-2 pt-3 xl:px-6 xl:pt-4">
-			<h2 class="text-lightPrimaryText dark:text-darkPrimaryText mb-1 text-lg font-semibold xl:text-xl">
-				Featured Categories
-			</h2>
-			<p class="text-gray5 dark:text-gray3">Read more of what you love by browsing top categories:</p>
-		</div>
-		<article
-			class="min-h-170 h-170 xl:min-h-240 xl:h-240 box-border grid w-full grid-cols-1 gap-4 overflow-y-auto px-6 pb-8 pt-4 xl:grid-cols-2"
-		>
+	<section class="flex flex-col min-h-screen w-full max-w-760">
+		<h2 class="text-lightPrimaryText dark:text-darkPrimaryText mb-1 text-lg font-semibold xl:text-xl">
+			Featured Categories
+		</h2>
+		<p class="text-gray5 dark:text-gray3">Read more of what you love by browsing top categories:</p>
+		<article class="grid w-full grid-cols-1 gap-4 px-6 pb-8 pt-4 xl:grid-cols-2">
 			<CategoryCard
 				v-for="c in categoryList"
 				:key="c"
@@ -16,7 +12,7 @@
 				:bgImage="require('@/assets/images/category/' + c + '/' + c + '.webp')"
 			/>
 		</article>
-	</div>
+	</section>
 </template>
 
 <script lang="ts">

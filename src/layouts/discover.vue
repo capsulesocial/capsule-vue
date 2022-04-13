@@ -1,6 +1,6 @@
 <template>
 	<main
-		class="bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightBG dark:bg-darkBG"
+		class="w-full flex flex-col items-center bg-img m-0 h-screen overflow-y-hidden p-0 bg-lightMainBG dark:bg-darkBG"
 		:style="
 			$colorMode.dark
 				? {
@@ -11,50 +11,54 @@
 				  }
 		"
 	>
-		<!-- Wrapper -->
-		<div class="flex w-full justify-center">
-			<div class="flex flex-col w-full lg:w-11/12 xl:w-10/12 max-w-1220">
-				<!-- Header -->
-				<Header :avatar="avatar" />
-				<!-- Body -->
-				<!-- Title and peered nodes -->
-				<div
-					v-if="$route.name === `discover`"
-					class="modal-animation hidden lg:flex w-full items-center justify-between px-3 lg:px-0"
-					style="height: 62px"
-				>
-					<!-- Title -->
-					<h1 class="text-lightSecondaryText dark:text-gray1 text-3xl font-semibold xl:text-4xl">Browse Blogchain</h1>
-					<!-- Peered nodes -->
-					<Nodes />
-				</div>
-				<!-- Content -->
-				<section class="modal-animation flex flex-row lg:mt-2 xl:mt-5">
+		<Header :avatar="avatar" class="lg:w-11/12 xl:w-10/12 max-w-1220 my-5 fixed top-0" />
+		<div class="w-full lg:w-11/12 xl:w-10/12 max-w-1220 mt-20 relative">
+			<div
+				style="margin-top: 62px"
+				class="w-full lg:w-760 absolute min-h-70 h-70 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder overflow-y-auto rounded-t-lg bg-gradient-to-r shadow-lg"
+			></div>
+		</div>
+
+		<!-- Title and peered nodes -->
+		<div
+			v-if="this.$route.name === `discover`"
+			class="modal-animation hidden lg:flex w-full lg:max-w-1220 items-center justify-between px-3 lg:px-0 mb-5"
+			style="height: 62px"
+		>
+			<h1 class="text-primary dark:text-secondary text-3xl font-semibold xl:text-4xl">Browse Blogchain</h1>
+			<Nodes />
+		</div>
+
+		<!-- Main content scroll -->
+		<div ref="container" class="flex w-full overflow-y-auto overflow-x-hidden justify-center" style="margin-top: 6px">
+			<!-- Content container -->
+			<div class="flex w-full lg:w-11/12 xl:w-10/12 relative flex-row justify-between max-w-1220">
+				<div class="w-full lg:w-11/12 xl:w-10/12 max-w-1220 relative h-full flex flex-row justify-between">
 					<nuxt-child
-						:class="$route.name === `discover` ? `` : `lg:-mt-2 xl:-mt-4`"
-						class="lg:w-7.5 min-h-61 h-61 xl:min-h-80 xl:h-80 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop z-10 box-content w-full overflow-y-hidden rounded-lg bg-gradient-to-r shadow-lg"
+						ref="child"
+						class="w-full lg:w-760 lg:flex-shrink-0 p-6"
 						:toggleFriend="toggleFriend"
 						:following="following"
 					/>
-					<!-- Widgets -->
-					<aside
-						:class="$route.name === `discover` ? `` : `lg:-mt-6 xl:-mt-8`"
-						class="w-5/12 -mr-5 -mt-4 hidden overflow-y-auto p-4 lg:block"
-						:style="
-							$route.name === `discover`
-								? `min-height: calc(100vh - 150px); height: calc(100vh - 80px)`
-								: `min-height: calc(100vh - 150px); height: calc(100vh - 80px)`
-						"
+				</div>
+			</div>
+			<!-- Widgets -->
+			<aside class="fixed w-full flex justify-center top-24">
+				<div class="w-full hidden lg:flex flex-row-reverse justify-between lg:w-11/12 xl:w-10/12 max-w-1220 relative">
+					<div
+						style="left: 760px; right: 0px; top: 20px"
+						class="shrink ml-5 absolute max-w-500 h-screen overflow-y-auto p-5 pb-24"
 					>
 						<TagsWidget
 							class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder mb-5 overflow-hidden rounded-lg border bg-gradient-to-r shadow-lg"
 							style="backdrop-filter: blur(10px)"
 						/>
 						<Footer />
-					</aside>
-				</section>
-			</div>
+					</div>
+				</div>
+			</aside>
 		</div>
+
 		<UnauthPopup />
 		<portal-target name="card-popup"></portal-target>
 	</main>
@@ -78,6 +82,7 @@ interface IData {
 	avatar: string | ArrayBuffer | null
 	following: Set<string>
 	bgImage: IBackground
+	lastScroll: number
 }
 
 export default Vue.extend({
@@ -95,7 +100,14 @@ export default Vue.extend({
 			avatar: null,
 			following: new Set(),
 			bgImage: backgrounds[0],
+			lastScroll: 0,
 		}
+	},
+	watch: {
+		$route() {
+			const container = this.$refs.container as HTMLElement
+			container.scrollTo({ top: 0, behavior: `smooth` })
+		},
 	},
 	async created() {
 		// Set color mode
@@ -120,7 +132,39 @@ export default Vue.extend({
 			this.following = following
 		})
 	},
+	mounted() {
+		const container = this.$refs.container as HTMLElement
+		container.addEventListener(`scroll`, this.handleScroll, true)
+	},
 	methods: {
+		handleScroll() {
+			if (this.$route.name === `discover`) {
+				return
+			}
+			const container = this.$refs.container as HTMLElement
+			const childPage = this.$refs.child as HTMLElement
+			// scrolling down
+			if (container.scrollTop > this.lastScroll) {
+				// @ts-ignore
+				childPage.handleHeader(false)
+			}
+			// reached bottom
+			if (container.scrollTop + container.clientHeight === container.scrollHeight) {
+				// @ts-ignore
+				childPage.fetchPosts()
+			}
+			// scrolling up
+			if (container.scrollTop < this.lastScroll) {
+				// @ts-ignore
+				childPage.handleHeader(true)
+			}
+			// reached top
+			if (container.scrollTop === 0) {
+				// @ts-ignore
+				childPage.handleHeader(true)
+			}
+			this.lastScroll = container.scrollTop
+		},
 		async toggleFriend(authorID: string) {
 			// Unauth
 			if (this.$store.state.session.id === ``) {
