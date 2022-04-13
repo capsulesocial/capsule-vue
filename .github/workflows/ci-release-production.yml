@@ -65,13 +65,13 @@ jobs:
       image: node:16-alpine
     steps:
 
+      - name: install git
+        run: apk add --no-cache git
+
       - name: workaround for git directory permission issue, see https://github.com/actions/checkout/issues/760
         run: git config --global --add safe.directory /__w/capsule-vue/capsule-vue
 
       - uses: actions/checkout@v1
-
-      - name: install git
-        run: apk add --no-cache git
 
       - name: Set DEPLOY_ENV + DEPLOY_TARGET in github env
         run: |
@@ -123,6 +123,9 @@ jobs:
     container:
       image: lexauw/ansible-alpine:latest
     steps:
+
+      - name: install git
+        run: apk add --no-cache git
 
       - name: workaround for git directory permission issue, see https://github.com/actions/checkout/issues/760
         run: git config --global --add safe.directory /__w/capsule-vue/capsule-vue
