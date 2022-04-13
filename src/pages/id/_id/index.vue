@@ -18,7 +18,7 @@
 			<PostCard
 				:post="p.post"
 				:cid="p.post._id"
-				:comments="p.comments"
+				:commentsCount="p.commentsCount"
 				:bookmarked="p.bookmarked"
 				:hideRepostIcon="algorithm === `NEW` || algorithm === `TOP`"
 				:bookmarksCount="p.bookmarksCount"
