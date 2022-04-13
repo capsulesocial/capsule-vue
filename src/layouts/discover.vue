@@ -143,15 +143,19 @@ export default Vue.extend({
 			}
 			const container = this.$refs.container as HTMLElement
 			const childPage = this.$refs.child as HTMLElement
-			// scrolling down
-			if (container.scrollTop > this.lastScroll) {
-				// @ts-ignore
-				childPage.handleHeader(false)
-			}
 			// reached bottom
 			if (container.scrollTop + container.clientHeight === container.scrollHeight) {
 				// @ts-ignore
 				childPage.fetchPosts()
+			}
+			if (this.$route.name === `tag-tag`) {
+				return
+			}
+			// Below methods only relevant to discover page with header
+			// scrolling down
+			if (container.scrollTop > this.lastScroll) {
+				// @ts-ignore
+				childPage.handleHeader(false)
 			}
 			// scrolling up
 			if (container.scrollTop < this.lastScroll) {

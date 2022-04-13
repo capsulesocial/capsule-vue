@@ -1,17 +1,21 @@
 <template>
-	<section class="border-lightBorder w-full border">
+	<section class="flex flex-col min-h-screen max-w-760 relative">
 		<!-- Tag page header -->
 		<div
-			class="border-lightBorder bg-darkBG flex flex-row items-center rounded-lg bg-opacity-25 p-2 shadow-lg"
-			style="backdrop-filter: blur(10px)"
+			class="fixed z-20 max-w-760 lg:w-760 -m-6 w-full border-lightBorder bg-darkBG flex flex-row items-center rounded-lg bg-opacity-25 p-2 shadow-lg"
+			style="backdrop-filter: blur(10px); pointer-events: none"
 		>
-			<button class="bg-gray1 focus:outline-none m-3 flex-shrink-0 rounded-full" @click="handleBack">
+			<button
+				class="bg-gray1 focus:outline-none m-3 flex-shrink-0 rounded-full"
+				style="pointer-events: all"
+				@click="handleBack"
+			>
 				<BackIcon />
 			</button>
 			<h2 class="text-lightPrimaryText dark:text-darkPrimaryText text-2xl font-semibold">{{ $route.params.tag }}</h2>
 		</div>
 		<!-- Posts loaded -->
-		<div ref="container" class="min-h-130 h-130 xl:min-h-150 xl:h-150 w-full overflow-y-auto">
+		<div ref="container" class="w-full" style="margin-top: 64px">
 			<article
 				v-if="posts.length == 0 && !isLoading"
 				class="mt-10 grid justify-items-center overflow-y-hidden px-6 xl:px-0"
@@ -102,7 +106,7 @@ export default Vue.extend({
 		return {
 			posts: [],
 			tag: this.$route.params.tag,
-			isLoading: true,
+			isLoading: false,
 			currentOffset: 0,
 			limit: 10,
 			algorithm: `NEW`,
@@ -119,11 +123,9 @@ export default Vue.extend({
 	watch: {
 		$route(n, o) {
 			if (n.params.tag !== o.params.tag) {
-				const container = this.$refs.container as HTMLElement
-				container.addEventListener(`scroll`, this.handleScroll)
 				this.currentOffset = 0
 				this.noMorePosts = false
-				this.isLoading = true
+				this.isLoading = false
 				this.posts = []
 				this.fetchPosts().then((posts) => {
 					this.posts = posts
@@ -135,12 +137,11 @@ export default Vue.extend({
 		// Fetch posts with tag (unauthenticated)
 		this.posts = await this.fetchPosts()
 	},
-	mounted() {
-		const container = this.$refs.container as HTMLElement
-		container.addEventListener(`scroll`, this.handleScroll)
-	},
 	methods: {
 		async fetchPosts(): Promise<any> {
+			if (this.isLoading || this.noMorePosts) {
+				return new Promise(() => null)
+			}
 			this.isLoading = true
 			const id = this.$store.state.session.id === `` ? `x` : this.$store.state.session.id
 			const posts = await getPosts({ tag: this.$route.params.tag }, id, {
@@ -148,25 +149,13 @@ export default Vue.extend({
 				offset: this.currentOffset,
 				limit: this.limit,
 			})
+			this.posts = this.posts.concat(posts)
 			this.currentOffset += this.limit
-			if (posts.length === 0) {
-				const container = this.$refs.container as HTMLElement
-				container.removeEventListener(`scroll`, this.handleScroll)
-			}
-			if (posts.length < this.limit && posts.length > 0) {
+			if (posts.length < this.limit) {
 				this.noMorePosts = true
 			}
 			this.isLoading = false
-			return this.posts.concat(posts)
-		},
-		async handleScroll(e: Event) {
-			if (this.isLoading) {
-				return
-			}
-			const { scrollTop, scrollHeight, clientHeight } = e.srcElement as HTMLElement
-			if (scrollTop + clientHeight >= scrollHeight - 5) {
-				this.posts = await this.fetchPosts()
-			}
+			return this.posts
 		},
 		toggleHomeFeed() {
 			this.$router.push(`/home`)
