@@ -27,7 +27,7 @@
 					:repost="p.repost"
 					:post="p.post"
 					:cid="p.post._id"
-					:comments="p.comments"
+					:commentsCount="p.commentsCount"
 					:toggleFriend="toggleFriend"
 					:usersFollowing="following"
 					:repostedBy="p.repost ? p.repost.authorID : undefined"
