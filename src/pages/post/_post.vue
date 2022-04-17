@@ -367,6 +367,16 @@ export default Vue.extend({
 		this.isLeaving = true
 	},
 	async created() {
+		const sessionID = this.$store.state.session.id
+		const postCID = this.$route.params.post
+		const postMetadata = await getOnePost(postCID, sessionID || `x`)
+
+		if (postMetadata.hidden) {
+			this.$toastError(`Cannot display post. Post is hidden by the author`)
+			this.$router.push(`/`)
+			return
+		}
+
 		// Fetch post from IPFS
 		const post = await getRegularPost(this.$route.params.post)
 		this.post = post.data
@@ -423,23 +433,16 @@ export default Vue.extend({
 		const caption = document.getElementById(`photoCaption`)
 		this.captionHeight = caption?.offsetHeight
 
-		// unauthenticated
-		if (this.$store.state.session.id === ``) {
-			const postMetadata = await getOnePost(this.$route.params.post, `x`)
-			this.bookmarksCount = postMetadata.bookmarksCount
-			this.isBookmarked = postMetadata.bookmarked
-			this.repostCount = postMetadata.repostCount
-			this.commentsCount = postMetadata.commentsCount
-			this.isLoading = false
-			return
-		}
-		// Authenticated
-		const postMetadata = await getOnePost(this.$route.params.post, this.$store.state.session.id)
 		this.bookmarksCount = postMetadata.bookmarksCount
 		this.isBookmarked = postMetadata.bookmarked
 		this.repostCount = postMetadata.repostCount
 		this.commentsCount = postMetadata.commentsCount
 		this.isLoading = false
+
+		// Unauthenticated
+		if (sessionID === ``) {
+			return
+		}
 		// Get my followers
 		getFollowersAndFollowing(this.$store.state.session.id).then((data) => {
 			if (this.post !== null) {

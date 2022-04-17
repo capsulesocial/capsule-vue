@@ -223,7 +223,7 @@ export async function getTags(): Promise<string[]> {
 	return res.data.data
 }
 
-export async function getOnePost(cid: string, bookmarker: string): Promise<IPostResponse> {
+export async function getOnePost(cid: string, bookmarker: string): Promise<IPostResponse & { hidden: boolean }> {
 	const res = await axios.get(`${nodeUrl()}/content/${cid}`, { params: { bookmarker } })
 	return res.data.data
 }
