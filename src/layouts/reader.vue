@@ -42,11 +42,13 @@
 					<nuxt-child
 						class="min-h-61 h-61 lg:min-h-70 lg:h-70 border-lightBorder from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop w-full overflow-y-auto lg:rounded-lg border bg-gradient-to-r pt-0 shadow-lg xl:h-80 xl:pt-0"
 						@showPhoto="showPhoto"
+						@showWarning="toggleWarning"
 					/>
 				</section>
 			</div>
 		</div>
 		<UnauthPopup />
+		<WarningPopup v-if="showWarning" @close="toggleWarning" />
 		<portal-target name="card-popup"></portal-target>
 		<portal-target name="postPage"></portal-target>
 	</main>
@@ -57,6 +59,7 @@ import Vue from 'vue'
 import Header from '@/components/Header.vue'
 import UnauthPopup from '@/components/popups/UnauthPopup.vue'
 import XIcon from '@/components/icons/X.vue'
+import WarningPopup from '@/components/popups/WarningPopup.vue'
 
 import { IBackground, backgrounds } from '@/config/backgrounds'
 import { getProfile, Profile } from '@/backend/profile'
@@ -73,6 +76,7 @@ interface IData {
 	displayPhoto: boolean
 	featuredPhoto: FeaturedPhoto
 	bgImage: IBackground
+	showWarning: boolean
 }
 
 export default Vue.extend({
@@ -80,6 +84,7 @@ export default Vue.extend({
 		Header,
 		UnauthPopup,
 		XIcon,
+		WarningPopup,
 	},
 	middleware: `auth`,
 	data(): IData {
@@ -92,6 +97,7 @@ export default Vue.extend({
 				caption: null,
 			},
 			bgImage: backgrounds[0],
+			showWarning: false,
 		}
 	},
 	async created() {
@@ -117,6 +123,9 @@ export default Vue.extend({
 		showPhoto(d: FeaturedPhoto): void {
 			this.featuredPhoto = d
 			this.displayPhoto = !this.displayPhoto
+		},
+		toggleWarning() {
+			this.showWarning = !this.showWarning
 		},
 	},
 })

@@ -373,6 +373,7 @@ export default Vue.extend({
 
 		if (postMetadata.hidden) {
 			this.$toastError(`This post has been hidden by the author`)
+			this.$emit(`showWarning`)
 		}
 
 		// Fetch post from IPFS
