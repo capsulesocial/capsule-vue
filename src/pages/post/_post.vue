@@ -372,9 +372,7 @@ export default Vue.extend({
 		const postMetadata = await getOnePost(postCID, sessionID || `x`)
 
 		if (postMetadata.hidden) {
-			this.$toastError(`Cannot display post. Post is hidden by the author`)
-			this.$router.push(`/`)
-			return
+			this.$toastError(`This post has been hidden by the author`)
 		}
 
 		// Fetch post from IPFS
