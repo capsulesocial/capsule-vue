@@ -46,6 +46,7 @@ export interface IGenericPostResponse {
 }
 
 export type IPostResponse = Omit<IGenericPostResponse, `repost`>
+export type IPostResponseWithHidden = IPostResponse & { hidden: boolean }
 export interface IRepostResponse extends IGenericPostResponse {
 	repost: IRepost
 	deleted: boolean
@@ -223,7 +224,7 @@ export async function getTags(): Promise<string[]> {
 	return res.data.data
 }
 
-export async function getOnePost(cid: string, bookmarker: string): Promise<IPostResponse & { hidden: boolean }> {
+export async function getOnePost(cid: string, bookmarker: string): Promise<IPostResponseWithHidden> {
 	const res = await axios.get(`${nodeUrl()}/content/${cid}`, { params: { bookmarker } })
 	return res.data.data
 }
