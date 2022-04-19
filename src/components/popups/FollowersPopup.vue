@@ -65,7 +65,7 @@ import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 
 interface IData {
 	isLoading: boolean
-	profiles: any
+	profiles: Profile[]
 }
 
 export default Vue.extend({

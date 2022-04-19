@@ -41,9 +41,8 @@
 						v-else
 						class="lg:w-7.5 min-h-61 h-61 xl:min-h-120 xl:h-120 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder border modal-animation box-border w-full overflow-y-auto rounded-lg bg-gradient-to-r shadow-lg"
 						:class="showWidgets ? `` : `z-10`"
-						:toggleFriend="toggleFriend"
-						:following="following"
-						:followers="followers"
+						:initFollowing="following"
+						:initFollowers="followers"
 						@updateBookmarks="fetchBookmarks"
 					/>
 					<!-- Widgets -->
@@ -90,7 +89,7 @@ import UnauthPopup from '@/components/popups/UnauthPopup.vue'
 import { IBackground, backgrounds } from '@/config/backgrounds'
 import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
-import { followChange, getFollowersAndFollowing } from '@/backend/following'
+import { getFollowersAndFollowing } from '@/backend/following'
 import { IPostResponse } from '@/backend/post'
 import { getBookmarksOfUser } from '@/backend/bookmarks'
 
@@ -155,16 +154,11 @@ export default Vue.extend({
 			})
 		}
 		// Get followers and following
-		this.fetchConnections()
+		this.updateFollowers()
 		// Get recent bookmarks
 		this.fetchBookmarks()
 	},
 	methods: {
-		async fetchConnections() {
-			const { followers, following } = await getFollowersAndFollowing(this.$store.state.session.id, true)
-			this.following = following
-			this.followers = followers
-		},
 		async fetchBookmarks() {
 			let bookmarks = await getBookmarksOfUser(this.$store.state.session.id)
 			bookmarks = bookmarks.reverse().slice(0, 2)
@@ -181,29 +175,6 @@ export default Vue.extend({
 				return post
 			})
 			this.$store.commit(`setRecentBookmarks`, await Promise.all(bookmarkPreviews))
-		},
-		async toggleFriend(authorID: string) {
-			// Unauth
-			if (this.$store.state.session.id === ``) {
-				this.$store.commit(`settings/toggleUnauthPopup`)
-				return
-			}
-			if (authorID !== this.$store.state.session.id) {
-				try {
-					await followChange(
-						this.following.has(authorID) ? `UNFOLLOW` : `FOLLOW`,
-						this.$store.state.session.id,
-						authorID,
-					)
-					const data = await getFollowersAndFollowing(this.$store.state.session.id, true)
-					this.following = data.following
-					this.fetchConnections()
-					this.updateFollowers()
-					this.$toastSuccess(this.following.has(authorID) ? `Followed ${authorID}` : `Unfollowed ${authorID}`)
-				} catch (err: unknown) {
-					this.$handleError(err)
-				}
-			}
 		},
 		async updateFollowers() {
 			const { followers, following } = await getFollowersAndFollowing(this.$store.state.session.id, true)

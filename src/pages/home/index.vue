@@ -103,6 +103,7 @@ import ogImage from '@/assets/images/util/ogImage.png'
 import PostCard from '@/components/post/Card.vue'
 import { getPosts, Algorithm, IRepostResponse, IPostResponse } from '@/backend/post'
 import { getReposts } from '@/backend/reposts'
+import { followChange, getFollowersAndFollowing } from '@/backend/following'
 
 interface IData {
 	posts: Array<IRepostResponse | IPostResponse>
@@ -111,6 +112,8 @@ interface IData {
 	currentOffset: number
 	limit: number
 	noMorePosts: boolean
+	following: Set<string>
+	followers: Set<string>
 }
 
 export default Vue.extend({
@@ -119,11 +122,11 @@ export default Vue.extend({
 	},
 	layout: `home`,
 	props: {
-		toggleFriend: {
-			type: Function as PropType<(id: string) => void>,
-			required: true,
+		initFollowing: {
+			type: Set as PropType<Set<string>>,
+			default: () => new Set<string>(),
 		},
-		following: {
+		initFollowers: {
 			type: Set as PropType<Set<string>>,
 			default: () => new Set<string>(),
 		},
@@ -136,6 +139,8 @@ export default Vue.extend({
 			currentOffset: 0,
 			limit: 10,
 			noMorePosts: false,
+			following: this.initFollowing,
+			followers: this.initFollowers,
 		}
 	},
 	head() {
@@ -229,6 +234,28 @@ export default Vue.extend({
 		},
 		updateBookmarks(): void {
 			this.$emit(`updateBookmarks`)
+		},
+		async toggleFriend(authorID: string) {
+			// Unauth
+			if (this.$store.state.session.id === ``) {
+				this.$store.commit(`settings/toggleUnauthPopup`)
+				return
+			}
+			if (authorID !== this.$store.state.session.id) {
+				try {
+					await followChange(
+						this.following.has(authorID) ? `UNFOLLOW` : `FOLLOW`,
+						this.$store.state.session.id,
+						authorID,
+					)
+					const { following, followers } = await getFollowersAndFollowing(this.$store.state.session.id, true)
+					this.following = following
+					this.followers = followers
+					this.$toastSuccess(this.following.has(authorID) ? `Followed ${authorID}` : `Unfollowed ${authorID}`)
+				} catch (err: unknown) {
+					this.$handleError(err)
+				}
+			}
 		},
 	},
 })
