@@ -24,7 +24,7 @@
 						<h1 class="text-negative mt-16 text-center font-sans text-6xl font-bold mb-8">500</h1>
 						<h2 class="text-center text-2xl font-semibold dark:text-darkPrimaryText">Something went wrong</h2>
 						<p class="text-gray5 dark:text-gray3 mb-5 mt-2 self-center text-center" style="width: 360px">
-							We apologize for the issue, we suggest you to go back home
+							We apologize for the issue. How about navigating back home?
 						</p>
 						<div class="flex justify-center">
 							<BrandedButton :action="handleReload" :text="`Back to home`" />
