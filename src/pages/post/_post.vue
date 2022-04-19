@@ -563,7 +563,7 @@ export default Vue.extend({
 			if (!this.post) {
 				throw new Error(`Post can't be null`)
 			}
-			const wordcount = this.post.content.split(/\s+/).length - 1
+			const wordcount = this.post.content.split(/\s+/).length
 			if (wordcount <= 0) {
 				throw new Error(`Word count can't be equal or less than zero`)
 			}
