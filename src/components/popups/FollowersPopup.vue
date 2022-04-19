@@ -47,7 +47,7 @@
 				</article>
 				<article>
 					<div v-for="p in profiles" :key="p.id">
-						<ProfilePreview :profile="p" :updateFollowers="updateFollowers" class="pb-4" />
+						<ProfilePreview :profile="p" class="pb-4" @updateFollowers="updateFollowers" />
 					</div>
 				</article>
 			</div>
@@ -79,10 +79,6 @@ export default Vue.extend({
 			type: Object as PropType<Profile | null>,
 			default: null,
 		},
-		updateFollowers: {
-			type: Function as PropType<() => void>,
-			required: true,
-		},
 	},
 	data(): IData {
 		return {
@@ -95,6 +91,9 @@ export default Vue.extend({
 		window.addEventListener(`click`, this.handleCloseClick, false)
 	},
 	methods: {
+		updateFollowers(): void {
+			this.$emit(`updateFollowers`)
+		},
 		handleCloseClick(e: any): void {
 			if (!e.target || e.target.parentNode === null || e.target.parentNode.classList === undefined) {
 				return

@@ -41,8 +41,8 @@
 						v-else
 						class="lg:w-7.5 min-h-61 h-61 xl:min-h-120 xl:h-120 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder border modal-animation box-border w-full overflow-y-auto rounded-lg bg-gradient-to-r shadow-lg"
 						:class="showWidgets ? `` : `z-10`"
-						:initFollowing="following"
-						:initFollowers="followers"
+						:following="following"
+						@updateFollowers="updateFollowers"
 						@updateBookmarks="fetchBookmarks"
 					/>
 					<!-- Widgets -->
@@ -53,7 +53,7 @@
 					>
 						<Widgets
 							:followers="followers"
-							:updateFollowers="updateFollowers"
+							@updateFollowers="updateFollowers"
 							@overlay="toggleZIndex"
 							@saveDraft="saveDraftState"
 							@openFollowers="showFollowers = true"
@@ -67,7 +67,7 @@
 			v-if="showFollowers"
 			:profile="profile"
 			:followers="followers"
-			:updateFollowers="updateFollowers"
+			@updateFollowers="updateFollowers"
 			@close="showFollowers = false"
 		/>
 		<!-- Onboarding Wizard -->
@@ -159,6 +159,11 @@ export default Vue.extend({
 		this.fetchBookmarks()
 	},
 	methods: {
+		async updateFollowers() {
+			const { followers, following } = await getFollowersAndFollowing(this.$store.state.session.id, true)
+			this.followers = followers
+			this.following = following
+		},
 		async fetchBookmarks() {
 			let bookmarks = await getBookmarksOfUser(this.$store.state.session.id)
 			bookmarks = bookmarks.reverse().slice(0, 2)
@@ -175,11 +180,6 @@ export default Vue.extend({
 				return post
 			})
 			this.$store.commit(`setRecentBookmarks`, await Promise.all(bookmarkPreviews))
-		},
-		async updateFollowers() {
-			const { followers, following } = await getFollowersAndFollowing(this.$store.state.session.id, true)
-			this.followers = followers
-			this.following = following
 		},
 		toggleZIndex() {
 			this.showWidgets = !this.showWidgets

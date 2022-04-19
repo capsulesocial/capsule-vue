@@ -86,12 +86,8 @@ export default Vue.extend({
 	},
 	props: {
 		followers: {
-			type: Set,
+			type: Set as PropType<Set<string>>,
 			default: new Set(),
-		},
-		updateFollowers: {
-			type: Function as PropType<() => void>,
-			required: true,
 		},
 	},
 	data(): IData {
@@ -101,6 +97,9 @@ export default Vue.extend({
 		}
 	},
 	methods: {
+		updateFollowers(): void {
+			this.$emit(`updateFollowers`)
+		},
 		saveDraft(): void {
 			this.$emit(`saveDraft`)
 		},

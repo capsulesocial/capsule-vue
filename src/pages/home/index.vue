@@ -103,7 +103,7 @@ import ogImage from '@/assets/images/util/ogImage.png'
 import PostCard from '@/components/post/Card.vue'
 import { getPosts, Algorithm, IRepostResponse, IPostResponse } from '@/backend/post'
 import { getReposts } from '@/backend/reposts'
-import { followChange, getFollowersAndFollowing } from '@/backend/following'
+import { followChange } from '@/backend/following'
 
 interface IData {
 	posts: Array<IRepostResponse | IPostResponse>
@@ -112,8 +112,6 @@ interface IData {
 	currentOffset: number
 	limit: number
 	noMorePosts: boolean
-	following: Set<string>
-	followers: Set<string>
 }
 
 export default Vue.extend({
@@ -122,11 +120,7 @@ export default Vue.extend({
 	},
 	layout: `home`,
 	props: {
-		initFollowing: {
-			type: Set as PropType<Set<string>>,
-			default: () => new Set<string>(),
-		},
-		initFollowers: {
+		following: {
 			type: Set as PropType<Set<string>>,
 			default: () => new Set<string>(),
 		},
@@ -139,8 +133,6 @@ export default Vue.extend({
 			currentOffset: 0,
 			limit: 10,
 			noMorePosts: false,
-			following: this.initFollowing,
-			followers: this.initFollowers,
 		}
 	},
 	head() {
@@ -248,9 +240,7 @@ export default Vue.extend({
 						this.$store.state.session.id,
 						authorID,
 					)
-					const { following, followers } = await getFollowersAndFollowing(this.$store.state.session.id, true)
-					this.following = following
-					this.followers = followers
+					this.$emit(`updateFollowers`)
 					this.$toastSuccess(this.following.has(authorID) ? `Followed ${authorID}` : `Unfollowed ${authorID}`)
 				} catch (err: unknown) {
 					this.$handleError(err)
