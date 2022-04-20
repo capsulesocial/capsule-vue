@@ -365,12 +365,6 @@ export default Vue.extend({
 			throw new Error(`Post is null!`)
 		}
 
-		if (window.Worker) {
-			const worker = new Worker(`/worker.js`, { type: `module` })
-			worker.postMessage([post])
-			console.log(`WINDOW WORKER`)
-		}
-
 		verifyPostAuthenticity(post).then((verified) => {
 			if (!verified) {
 				this.$toastError(`Post not verified!`)
