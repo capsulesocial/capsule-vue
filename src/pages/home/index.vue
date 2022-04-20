@@ -103,6 +103,7 @@ import ogImage from '@/assets/images/util/ogImage.png'
 import PostCard from '@/components/post/Card.vue'
 import { getPosts, Algorithm, IRepostResponse, IPostResponse } from '@/backend/post'
 import { getReposts } from '@/backend/reposts'
+import { followChange } from '@/backend/following'
 
 interface IData {
 	posts: Array<IRepostResponse | IPostResponse>
@@ -119,10 +120,6 @@ export default Vue.extend({
 	},
 	layout: `home`,
 	props: {
-		toggleFriend: {
-			type: Function as PropType<(id: string) => void>,
-			required: true,
-		},
 		following: {
 			type: Set as PropType<Set<string>>,
 			default: () => new Set<string>(),
@@ -229,6 +226,26 @@ export default Vue.extend({
 		},
 		updateBookmarks(): void {
 			this.$emit(`updateBookmarks`)
+		},
+		async toggleFriend(authorID: string) {
+			// Unauth
+			if (this.$store.state.session.id === ``) {
+				this.$store.commit(`settings/toggleUnauthPopup`)
+				return
+			}
+			if (authorID !== this.$store.state.session.id) {
+				try {
+					await followChange(
+						this.following.has(authorID) ? `UNFOLLOW` : `FOLLOW`,
+						this.$store.state.session.id,
+						authorID,
+					)
+					this.$emit(`updateFollowers`)
+					this.$toastSuccess(this.following.has(authorID) ? `Followed ${authorID}` : `Unfollowed ${authorID}`)
+				} catch (err: unknown) {
+					this.$handleError(err)
+				}
+			}
 		},
 	},
 })

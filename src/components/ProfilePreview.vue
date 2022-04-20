@@ -32,6 +32,7 @@ import Avatar from '@/components/Avatar.vue'
 import FriendButton from '@/components/FriendButton.vue'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
+import { Profile } from '@/backend/profile'
 
 interface IData {
 	isFollowing: boolean
@@ -46,12 +47,8 @@ export default Vue.extend({
 	},
 	props: {
 		profile: {
-			type: Object,
+			type: Object as PropType<Profile>,
 			default: null,
-		},
-		updateFollowers: {
-			type: Function as PropType<() => void>,
-			required: true,
 		},
 	},
 	data(): IData {
@@ -83,9 +80,7 @@ export default Vue.extend({
 					await followChange(this.isFollowing ? `UNFOLLOW` : `FOLLOW`, this.$store.state.session.id, this.profile.id)
 					this.isFollowing = !this.isFollowing
 					this.$toastSuccess(this.isFollowing ? `Followed ${this.profile.id}` : `Unfollowed ${this.profile.id}`)
-					if (this.updateFollowers) {
-						this.updateFollowers()
-					}
+					this.$emit(`updateFollowers`)
 				}
 			} catch (err: unknown) {
 				this.$handleError(err)
