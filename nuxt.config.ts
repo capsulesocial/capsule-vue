@@ -116,7 +116,7 @@ const config: NuxtConfig = {
 		},
 		splitChunks: {
 			commons: true,
-			layouts: true,
+			layouts: false,
 			pages: true,
 		},
 	},
