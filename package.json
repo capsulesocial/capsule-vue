@@ -58,6 +58,7 @@
 		"@toruslabs/openlogin-ed25519": "^1.7.0",
 		"axios": "^0.26.1",
 		"browser-image-compression": "^2.0.0",
+		"capsule-config": "^1.2.2",
 		"dompurify": "^2.3.6",
 		"highlight.js": "^11.5.1",
 		"intl-tel-input": "^17.0.16",
