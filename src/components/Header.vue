@@ -75,7 +75,7 @@
 			<!-- Mobile menu dropdown -->
 			<div class="relative">
 				<button class="mobileDropdown" @click="showMobileMenu = !showMobileMenu">
-					<MobileNav class="mobileDropdown text-primary" />
+					<MobileNav class="mobileDropdown text-lightSecondaryText dark:text-gray1" />
 				</button>
 				<div
 					v-show="showMobileMenu"
@@ -108,8 +108,8 @@
 			<!-- Middle branding -->
 			<nuxt-link to="/home">
 				<div class="flex items-center">
-					<CapsuleIcon class="text-primary mr-2" />
-					<h1 class="text-primary font-sans text-xl font-bold">Blogchain</h1>
+					<CapsuleIcon class="text-lightSecondaryText dark:text-gray1 mr-2" />
+					<h1 class="text-lightSecondaryText dark:text-gray1 font-sans text-xl font-bold">Blogchain</h1>
 				</div>
 			</nuxt-link>
 			<div class="relative mt-2">
