@@ -56,7 +56,6 @@ import InfosPopup from '@/components/register/InfosPopup.vue'
 import SignUp from '@/components/register/SignUp.vue'
 
 import CapsuleIcon from '@/components/icons/CapsuleNew.vue'
-import ogImage from '@/assets/images/util/ogImage.png'
 
 import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
 
@@ -94,10 +93,7 @@ export default Vue.extend({
 	head() {
 		return {
 			title: `Create an account on Blogchain`,
-			meta: [
-				{ hid: `register`, name: `register`, content: `Create a Blogchain account` },
-				{ hid: `og:image`, property: `og:image`, content: `${document.location.origin}${ogImage}` },
-			],
+			meta: [{ hid: `register`, name: `register`, content: `Create a Blogchain account` }],
 		}
 	},
 	errorCaptured(err: Error) {

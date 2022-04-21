@@ -25,7 +25,6 @@ import CategoryCard from '@/components/CategoryCard.vue'
 
 import { categories } from '@/config/config'
 import { getTags } from '@/backend/post'
-import ogImage from '@/assets/images/util/ogImage.png'
 
 interface IData {
 	categoryList: string[]
@@ -56,7 +55,6 @@ export default Vue.extend({
 					name: `discover`,
 					content: `Discover - Blogchain`,
 				},
-				{ hid: `og:image`, property: `og:image`, content: `${document.location.origin}${ogImage}` },
 			],
 		}
 	},

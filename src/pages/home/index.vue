@@ -99,7 +99,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import type { PropType } from 'vue'
-import ogImage from '@/assets/images/util/ogImage.png'
 import PostCard from '@/components/post/Card.vue'
 import { getPosts, Algorithm, IRepostResponse, IPostResponse } from '@/backend/post'
 import { getReposts } from '@/backend/reposts'
@@ -144,7 +143,6 @@ export default Vue.extend({
 					name: `home`,
 					content: `Home - Blogchain`,
 				},
-				{ hid: `og:image`, property: `og:image`, content: `${document.location.origin}${ogImage}` },
 			],
 		}
 	},

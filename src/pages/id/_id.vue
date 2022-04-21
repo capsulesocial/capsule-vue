@@ -216,7 +216,6 @@ import SecondaryButton from '@/components/SecondaryButton.vue'
 import BackButton from '@/components/icons/ChevronLeft.vue'
 import PencilIcon from '@/components/icons/Pencil.vue'
 import { getProfile, Profile } from '@/backend/profile'
-import ogImage from '@/assets/images/util/ogImage.png'
 
 interface IData {
 	totalPostsCount: number
@@ -319,23 +318,6 @@ export default Vue.extend({
 					name: `profile`,
 					content: `${this.visitProfile.name} (${this.$route.params.id}) on Blogchain`,
 				},
-				{
-					hid: `og:title`,
-					property: `og:title`,
-					content: `${this.visitProfile.name} (${this.$route.params.id}) on Blogchain`,
-				},
-				{
-					hid: `og:description`,
-					property: `og:description`,
-					content: `${this.visitProfile.bio}`,
-				},
-				{ hid: `og:site_name`, property: `og:site_name`, content: `Blogchain` },
-				{ hid: `og:url`, property: `og:url`, content: `https://blogchain.app` },
-				{ hid: `og:image`, property: `og:image`, content: `${document.location.origin}${ogImage}` },
-				{ hid: `twitter:image`, property: `twitter:image`, content: `${document.location.origin}${ogImage}` },
-				{ hid: `twitter:site`, property: `twitter:site`, content: `@capsulesoc` },
-				{ hid: `twitter:creator`, property: `twitter:creator`, content: `@capsulesoc` },
-				{ hid: `twitter:card`, property: `twitter:card`, content: `summary` },
 			],
 		}
 	},
