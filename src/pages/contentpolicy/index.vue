@@ -1,6 +1,9 @@
 <template>
-	<main class="xl:w-750 w-full">
-		<section>
+	<main class="w-full flex flex-col items-center pt-10">
+		<button class="focus:outline-none bg-gray1 dark:bg-gray5 rounded-full p-1" @click="goBack">
+			<CloseIcon />
+		</button>
+		<section class="lg:w-760 lg:max-w-760 mt-10">
 			<!-- Page title -->
 			<article class="px-4 py-4 xl:px-6 xl:py-5">
 				<h1 class="text-lightPrimaryText dark:text-darkPrimaryText text-3xl font-semibold xl:text-4xl">
@@ -12,7 +15,7 @@
 					Blogchain’s mission is to be a decentralized discourse platform, allowing participants to benefit from
 					stronger guarantees against censorship.
 				</h2>
-				<article class="message mb-4 w-full xl:w-11/12">
+				<article class="message mb-4 w-full">
 					<h2 class="text-lightPrimaryText dark:text-darkPrimaryText text-h2 font-semibold py-2">
 						Why We Built Blogchain
 					</h2>
@@ -27,10 +30,10 @@
 						and will be moderated off the platform.
 					</p>
 					<p class="message-content text-gray5 dark:text-gray3 py-2 text-sm text-justify">
-						<strong
+						<strong class="font-extrabold"
 							>Let’s talk in real, concrete examples regarding speech that we want to make more resilient, speech that
-							we have seen censored on other platforms and that would remain on Blogchain.</strong
-						>
+							we have seen censored on other platforms and that would remain on Blogchain:</strong
+						><br />
 						In 2021, both Facebook and Twitter instituted policies immediately banning and censoring any account that
 						discussed the possibility that the COVID-19 pandemic may have originated from a failed laboratory
 						experiment. We do not have a concrete position on this topic and don’t believe that our opinion on this lab
@@ -54,7 +57,9 @@
 						to occur in 2021.
 					</p>
 					<p class="message-content text-gray5 dark:text-gray3 py-2 text-sm text-justify">
-						<strong>Let’s talk in real, concrete examples regarding speech that aren’t why we built Blogchain.</strong>
+						<strong class="font-extrabold"
+							>Let’s talk in real, concrete examples regarding speech that aren’t why we built Blogchain:</strong
+						><br />
 						Our commitment to free discourse and freedom of expression does cover intellectual expression in the
 						broadest sense. But we simply won’t dedicate our time or the time of our team to uphold speech that doesn’t
 						carry value: threats, harassment, intimidation, extortion, and violence are not why we’re here.
@@ -116,7 +121,7 @@
 					<p class="message-content text-gray5 dark:text-gray3 py-2 text-sm text-justify">
 						Here’s an essential overview:
 					</p>
-					<ul class="message-content text-gray5 dark:text-gray3 py-2 text-sm list-disc list-inside py-2 px-5">
+					<ul class="message-content text-gray5 dark:text-gray3 py-2 text-sm list-disc list-inside px-5">
 						<li>
 							<strong>Generation 1</strong> (this policy document) outlines a content policy that is enforced by Capsule
 							Social and Blogchain admins themselves, in a relatively centralized fashion. This is counter-balanced by
@@ -148,7 +153,7 @@
 					<p class="message-content text-gray5 dark:text-gray3 py-2 text-sm text-justify">
 						Content may only be delisted through a smart contract call, which must include the following information:
 					</p>
-					<ul class="list-disc list-inside message-content text-gray5 dark:text-gray3 py-2 text-sm py-2 px-5">
+					<ul class="list-disc list-inside message-content text-gray5 dark:text-gray3 py-2 text-sm px-5">
 						<li>The username that is being locked.</li>
 						<li>The IPFS CID of the post that led to the delisting.</li>
 						<li>A timestamp.</li>
@@ -162,7 +167,7 @@
 						“Delistable Content” refers to types of content that are against the Blogchain Content Policy. Delistable
 						content categories are currently defined as follows:
 					</p>
-					<ul class="list-disc list-inside message-content text-gray5 dark:text-gray3 py-2 text-sm py-2 px-5">
+					<ul class="list-disc list-inside message-content text-gray5 dark:text-gray3 py-2 text-sm px-5">
 						<li>
 							Content that is deemed illegal under United States law or Delaware state law, where Capsule Social, Inc.
 							is based. This includes terrorism, fraud, extortion, and many types of pornography or non-consensual
@@ -204,8 +209,10 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import CloseIcon from '@/components/icons/X.vue'
 
 export default Vue.extend({
+	components: { CloseIcon },
 	layout: `contentpolicy`,
 	head() {
 		return {
@@ -219,6 +226,10 @@ export default Vue.extend({
 			],
 		}
 	},
-	methods: {},
+	methods: {
+		goBack() {
+			this.$router.go(-1)
+		},
+	},
 })
 </script>
