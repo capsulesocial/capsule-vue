@@ -80,6 +80,8 @@ export const categories = [
 	`philosophy`,
 	`news`,
 	`sports`,
+	`economics`,
+	`photography`,
 	`short-stories`,
 	`others`,
 ]
