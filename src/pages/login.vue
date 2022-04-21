@@ -77,7 +77,6 @@ import { getUserInfoNEAR, getUsernameNEAR } from '@/backend/near'
 import { torusNetwork, torusVerifiers, TorusVerifiers } from '@/backend/utilities/config'
 import { revokeDiscordKey } from '@/backend/discordRevoke'
 import { HTMLInputEvent } from '@/interfaces/HTMLInputEvent'
-import ogImage from '@/assets/images/util/ogImage.png'
 
 interface IData {
 	id: string
@@ -122,10 +121,7 @@ export default Vue.extend({
 	head() {
 		return {
 			title: `Login - Blogchain`,
-			meta: [
-				{ hid: `login`, name: `login`, content: `Log into Blogchain` },
-				{ hid: `og:image`, property: `og:image`, content: `${document.location.origin}${ogImage}` },
-			],
+			meta: [{ hid: `login`, name: `login`, content: `Log into Blogchain` }],
 		}
 	},
 	async created() {

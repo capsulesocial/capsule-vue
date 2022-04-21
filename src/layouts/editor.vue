@@ -59,7 +59,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import ogImage from '@/assets/images/util/ogImage.png'
 
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
@@ -105,10 +104,7 @@ export default Vue.extend({
 	head() {
 		return {
 			title: `Write a post - Blogchain`,
-			meta: [
-				{ hid: `editor`, name: `editor`, content: `Write a post on Blogchain` },
-				{ hid: `og:image`, property: `og:image`, content: `${document.location.origin}${ogImage}` },
-			],
+			meta: [{ hid: `editor`, name: `editor`, content: `Write a post on Blogchain` }],
 		}
 	},
 	async created() {

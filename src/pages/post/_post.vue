@@ -247,8 +247,6 @@ import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
 import { getReposts } from '@/backend/reposts'
 import { isPostBookmarkedByUser } from '@/backend/bookmarks'
-import ogImage from '@/assets/images/util/ogImage.png'
-import { domain } from '@/backend/utilities/config'
 import { createShareableLink } from '@/backend/shareable_links'
 import { calculateReadingTime } from '@/backend/utilities/helpers'
 
@@ -342,24 +340,6 @@ export default Vue.extend({
 					// @ts-ignore
 					content: `${this.post?.title} by ${this.post?.authorID} on Blogchain`,
 				},
-				{
-					hid: `og:title`,
-					property: `og:title`,
-					// @ts-ignore
-					content: `${this.post?.title}`,
-				},
-				{
-					hid: `og:description`,
-					property: `og:description`,
-					// @ts-ignore
-					content: `${this.post?.subtitle}`,
-				},
-				{
-					hid: `og:type`,
-					property: `og:type`,
-					content: `article`,
-				},
-				{ hid: `og:image`, property: `og:image`, content: `${domain}` + ogImage },
 			],
 		}
 	},
