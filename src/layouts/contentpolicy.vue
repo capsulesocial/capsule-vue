@@ -22,20 +22,9 @@
 					<section class="relative flex flex-row">
 						<nuxt-child
 							style="backdrop-filter: blur(10px); min-height: calc(100vh - 60px); height: calc(100vh - 60px)"
-							class="lg:w-7.5 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation box-border w-full overflow-y-auto rounded-lg border bg-gradient-to-r shadow-lg"
+							class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation box-border w-full overflow-y-auto rounded-lg border bg-gradient-to-r shadow-lg"
 							:class="showWidgets ? `` : `z-10`"
 						/>
-						<!-- Widgets -->
-						<aside
-							class="w-5/12 -mr-5 modal-animation -mt-4 hidden overflow-y-auto p-4 lg:block"
-							:class="showWidgets ? `z-10` : ``"
-							style="min-height: calc(100vh - 70px); height: calc(100vh - 70px)"
-						>
-							<SupportWidget />
-							<ReportWidget />
-							<ResourcesWidget v-if="this.$store.state.session.id !== ``" @overlay="openOnboarding" />
-							<Footer />
-						</aside>
 					</section>
 				</div>
 			</div>
@@ -68,10 +57,6 @@ interface IData {
 export default Vue.extend({
 	components: {
 		Header,
-		Footer,
-		SupportWidget,
-		ResourcesWidget,
-		ReportWidget,
 		OnboardingWizard: () => import(`@/components/popups/OnboardingWizard.vue`),
 	},
 	middleware: `auth`,
