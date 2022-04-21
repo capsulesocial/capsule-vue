@@ -110,7 +110,7 @@
 					<p class="message-content text-gray5 dark:text-gray3 py-2 text-sm text-justify">
 						This document refers to “Generation 1” of Blogchain’s content policy. Generation 1 policies are, relative to
 						future generations, the most centralized approach we’ll be taking to moderation. The idea is to be
-						conservative at first at first, and to expand it as we continue to test the platform, eliminate bugs, better
+						conservative at first, and to expand it as we continue to test the platform, eliminate bugs, better
 						understand what we’re building, and actually have time to implement more complex features.
 					</p>
 					<p class="message-content text-gray5 dark:text-gray3 py-2 text-sm text-justify">
