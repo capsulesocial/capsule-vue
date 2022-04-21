@@ -204,7 +204,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import ogImage from '@/assets/images/brand/Bookmarks.png'
 
 export default Vue.extend({
 	layout: `contentpolicy`,
@@ -225,8 +224,8 @@ export default Vue.extend({
 				},
 				{ hid: `og:site_name`, property: `og:site_name`, content: `Blogchain` },
 				{ hid: `og:url`, property: `og:url`, content: `https://blogchain.app` },
-				{ hid: `og:image`, property: `og:image`, content: `${document.location.origin}${ogImage}` },
-				{ hid: `twitter:image`, property: `twitter:image`, content: `${document.location.origin}${ogImage}` },
+				{ hid: `og:image`, property: `og:image`, content: `https://blogchain.app/bookmarks.png` },
+				{ hid: `twitter:image`, property: `twitter:image`, content: `https://blogchain.app/bookmarks.png` },
 				{ hid: `twitter:site`, property: `twitter:site`, content: `@capsulesoc` },
 				{ hid: `twitter:creator`, property: `twitter:creator`, content: `@capsulesoc` },
 				{ hid: `twitter:card`, property: `twitter:card`, content: `summary` },

@@ -99,8 +99,6 @@ import PostCard from '@/components/post/Card.vue'
 import BackIcon from '@/components/icons/ChevronLeft.vue'
 import { getPosts, Algorithm, IPostResponse, IRepostResponse } from '@/backend/post'
 
-import ogImage from '@/assets/images/util/ogImage.png'
-
 interface IData {
 	posts: Array<IRepostResponse | IPostResponse>
 	isLoading: boolean
@@ -161,16 +159,16 @@ export default Vue.extend({
 					name: `${this.$route.params.category}`,
 					content: `${this.$route.params.category} category on Blogchain`,
 				},
-				{ hid: `og:title`, property: `og:title`, content: `${this.$route.params.category} category on Blogchain` },
+				{ hid: `og:title`, property: `og:title`, content: `Discover - Blogchain` },
 				{
 					hid: `og:description`,
 					property: `og:description`,
-					content: `Discover new ${this.$route.params.category} on Blogchain.`,
+					content: `Discover new articles on Blogchain.`,
 				},
 				{ hid: `og:site_name`, property: `og:site_name`, content: `Blogchain` },
 				{ hid: `og:url`, property: `og:url`, content: `https://blogchain.app` },
-				{ hid: `og:image`, property: `og:image`, content: `${document.location.origin}${ogImage}` },
-				{ hid: `twitter:image`, property: `twitter:image`, content: `${document.location.origin}${ogImage}` },
+				{ hid: `og:image`, property: `og:image`, content: `https://blogchain.app/discover.png` },
+				{ hid: `twitter:image`, property: `twitter:image`, content: `https://blogchain.app/discover.png` },
 				{ hid: `twitter:site`, property: `twitter:site`, content: `@capsulesoc` },
 				{ hid: `twitter:creator`, property: `twitter:creator`, content: `@capsulesoc` },
 				{ hid: `twitter:card`, property: `twitter:card`, content: `summary` },
