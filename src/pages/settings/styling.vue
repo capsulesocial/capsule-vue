@@ -152,7 +152,7 @@
 					</button>
 				</div>
 				<!-- color grid -->
-				<div class="flex flex-col lg:flex-row justify-between m-6 py-4 bg-lightInput dark:bg-darkInput rounded-lg">
+				<div class="flex flex-row justify-between m-6 py-4 bg-lightInput dark:bg-darkInput rounded-lg">
 					<button
 						v-for="x of colors"
 						:key="x.label"
