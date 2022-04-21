@@ -37,10 +37,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import Header from '@/components/Header.vue'
-import Footer from '@/components/Footer.vue'
-import SupportWidget from '@/components/widgets/Support.vue'
-import ReportWidget from '@/components/widgets/Report.vue'
-import ResourcesWidget from '@/components/widgets/Resources.vue'
 
 import { IBackground, backgrounds } from '@/config/backgrounds'
 import { getProfile, Profile } from '@/backend/profile'
