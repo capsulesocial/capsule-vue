@@ -63,7 +63,7 @@ const config: NuxtConfig = {
 			{
 				hid: `twitter:image`,
 				name: `twitter:image`,
-				content: `/discover.png`,
+				content: `https://blogchain.app/discover.png`,
 			},
 		],
 		link: [{ rel: `icon`, type: `image/x-icon`, href: `/favicon.ico` }],
