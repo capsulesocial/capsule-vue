@@ -96,7 +96,7 @@ export default Vue.extend({
 			title: `Create an account on Blogchain`,
 			meta: [
 				{ hid: `register`, name: `register`, content: `Create a Blogchain account` },
-				{ hid: `og:image`, property: `og:image`, content: `${document.location.origin}` + ogImage },
+				{ hid: `og:image`, property: `og:image`, content: `${document.location.origin}${ogImage}` },
 			],
 		}
 	},

@@ -124,7 +124,7 @@ export default Vue.extend({
 			title: `Login - Blogchain`,
 			meta: [
 				{ hid: `login`, name: `login`, content: `Log into Blogchain` },
-				{ hid: `og:image`, property: `og:image`, content: `${document.location.origin}` + ogImage },
+				{ hid: `og:image`, property: `og:image`, content: `${document.location.origin}${ogImage}` },
 			],
 		}
 	},

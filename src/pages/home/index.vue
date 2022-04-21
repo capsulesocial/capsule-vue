@@ -144,7 +144,7 @@ export default Vue.extend({
 					name: `home`,
 					content: `Home - Blogchain`,
 				},
-				{ hid: `og:image`, property: `og:image`, content: `${document.location.origin}` + ogImage },
+				{ hid: `og:image`, property: `og:image`, content: `${document.location.origin}${ogImage}` },
 			],
 		}
 	},

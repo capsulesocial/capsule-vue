@@ -107,7 +107,7 @@ export default Vue.extend({
 			title: `Write a post - Blogchain`,
 			meta: [
 				{ hid: `editor`, name: `editor`, content: `Write a post on Blogchain` },
-				{ hid: `og:image`, property: `og:image`, content: `${document.location.origin}` + ogImage },
+				{ hid: `og:image`, property: `og:image`, content: `${document.location.origin}${ogImage}` },
 			],
 		}
 	},

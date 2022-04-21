@@ -56,7 +56,7 @@ export default Vue.extend({
 					name: `discover`,
 					content: `Discover - Blogchain`,
 				},
-				{ hid: `og:image`, property: `og:image`, content: `${document.location.origin}` + ogImage },
+				{ hid: `og:image`, property: `og:image`, content: `${document.location.origin}${ogImage}` },
 			],
 		}
 	},
