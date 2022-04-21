@@ -1,14 +1,14 @@
 <template>
-	<main class="w-full">
-		<section>
+	<main class="w-full flex flex-col items-center pt-10">
+		<button class="focus:outline-none bg-gray1 dark:bg-gray5 rounded-full p-1" @click="goBack">
+			<CloseIcon />
+		</button>
+		<section class="lg:w-760 lg:max-w-760 mt-10">
 			<!-- Page title -->
-			<article class="px-4 py-4 xl:px-6 xl:py-5 flex flex-row justify-between items-center">
+			<article class="px-4 py-4 xl:px-6 xl:py-5">
 				<h1 class="text-lightPrimaryText dark:text-darkPrimaryText text-3xl font-semibold xl:text-4xl">
 					Content Policy &amp; Roadmap
 				</h1>
-				<button class="focus:outline-none bg-gray1 dark:bg-gray5 rounded-full p-1" @click="goBack">
-					<CloseIcon />
-				</button>
 			</article>
 			<div class="container px-4 pb-6 xl:px-6">
 				<h2 class="text-primary mb-6 mt-4 text-xl font-semibold">
