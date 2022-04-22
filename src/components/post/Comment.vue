@@ -199,6 +199,8 @@ interface IData {
 	showLabel: boolean
 	commentDeleted: boolean
 	showDelete: boolean
+	currentRepliesOffset: number
+	repliesLimit: number
 }
 
 export default Vue.extend({
@@ -233,6 +235,8 @@ export default Vue.extend({
 			showLabel: false,
 			commentDeleted: false,
 			showDelete: false,
+			currentRepliesOffset: 0,
+			repliesLimit: 10,
 		}
 	},
 	async created() {
@@ -327,7 +331,7 @@ export default Vue.extend({
 			this.showDelete = !this.showDelete
 		},
 		async fetchReplies() {
-			this.replies = await getCommentsOfPost(this.cid)
+			this.replies = await getCommentsOfPost(this.cid, this.currentRepliesOffset, this.repliesLimit)
 		},
 	},
 })

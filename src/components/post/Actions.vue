@@ -438,6 +438,8 @@ interface IData {
 	page: number
 	selectedEmotionColor: `positive` | `neutral` | `negative` | `neutralLightest`
 	sendingComment: boolean
+	currentCommentstOffset: number
+	commentsLimit: number
 }
 
 export default Vue.extend({
@@ -499,6 +501,8 @@ export default Vue.extend({
 			page: 0,
 			selectedEmotionColor: `neutralLightest`,
 			sendingComment: false,
+			currentCommentstOffset: 0,
+			commentsLimit: 10,
 		}
 	},
 	created() {
@@ -507,7 +511,7 @@ export default Vue.extend({
 	},
 	methods: {
 		async initComments() {
-			this.comments = await getCommentsOfPost(this.postCID)
+			this.comments = await getCommentsOfPost(this.postCID, this.currentCommentstOffset, this.commentsLimit)
 			// get comment stats
 			this.updateFaceStats()
 			if (this.$store.state.session.avatar !== ``) {
@@ -596,17 +600,25 @@ export default Vue.extend({
 		async filterComments() {
 			// Fetch comments
 			if (this.filter === ``) {
-				this.comments = await getCommentsOfPost(this.postCID)
+				this.comments = await getCommentsOfPost(this.postCID, this.currentCommentstOffset, this.commentsLimit)
 				return
 			}
 			if (this.filter === `positive` || this.filter === `neutral` || this.filter === `negative`) {
 				// Get a list of comments with multiple emotions under the same category
-				this.comments = await getCommentsOfPost(this.postCID, undefined, this.filter)
+				this.comments = await getCommentsOfPost(
+					this.postCID,
+					this.currentCommentstOffset,
+					this.commentsLimit,
+					undefined,
+					this.filter,
+				)
 				return
 			}
 			// Get a list of comments with a specific emotion
 			this.comments = await getCommentsOfPost(
 				this.postCID,
+				this.currentCommentstOffset,
+				this.commentsLimit,
 				this.filter.charAt(0).toLowerCase() + this.filter.replace(/\s/g, ``).substring(1),
 			)
 		},
