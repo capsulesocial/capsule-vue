@@ -1,6 +1,6 @@
 import axios, { AxiosError } from 'axios'
 
-import { signContent, verifyContentLib } from './utilities/keys'
+import { signContent, verifyContent } from './utilities/keys'
 import ipfs from './utilities/ipfs'
 import { hexStringToUint8Array, isError, ISignedIPFSObject, uint8ArrayToHexString } from './utilities/helpers'
 import { nodeUrl, capsuleServer, sigValidity } from './utilities/config'
@@ -235,7 +235,7 @@ export async function verifyPostAuthenticity(content: ISignedIPFSObject<Post>) {
 		if (uint8ArrayToHexString(publicKey) !== content.public_key) {
 			return false
 		}
-		const verified = verifyContentLib(content.data, hexStringToUint8Array(content.sig), publicKey)
+		const verified = verifyContent(content.data, hexStringToUint8Array(content.sig), publicKey)
 		return verified
 	} catch (err: any) {
 		return false

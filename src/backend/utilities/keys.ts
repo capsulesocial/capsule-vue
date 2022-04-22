@@ -2,7 +2,10 @@ import { keyStores } from 'near-api-js'
 import { KeyPairEd25519 } from 'near-api-js/lib/utils'
 import { base_decode as baseDecode } from 'near-api-js/lib/utils/serialize'
 import { sign } from 'tweetnacl'
-import { crypto_sign_verify_detached as cryptoSignVerifyDetached } from 'libsodium-wrappers'
+import {
+	crypto_sign_verify_detached as cryptoSignVerifyDetached,
+	crypto_sign_detached as cryptoSignDetached,
+} from 'libsodium-wrappers'
 
 import { getNearConfig } from './config'
 import { stableOrderObj, uint8ArrayToHexString } from './helpers'
@@ -33,16 +36,10 @@ export async function signContent<T>(content: T) {
 
 	const ec = new TextEncoder()
 	const message = ec.encode(JSON.stringify(stableOrderObj(content)))
-	return { sig: sign.detached(message, keypair.secretKey), publicKey: pk }
+	return { sig: cryptoSignDetached(message, sk), publicKey: pk }
 }
 
 export function verifyContent<T>(content: T, signature: Uint8Array, publicKey: Uint8Array) {
-	const ec = new TextEncoder()
-	const message = ec.encode(JSON.stringify(stableOrderObj(content)))
-	return sign.detached.verify(message, signature, publicKey)
-}
-
-export function verifyContentLib<T>(content: T, signature: Uint8Array, publicKey: Uint8Array) {
 	const ec = new TextEncoder()
 	const message = ec.encode(JSON.stringify(stableOrderObj(content)))
 	return cryptoSignVerifyDetached(signature, message, publicKey)
