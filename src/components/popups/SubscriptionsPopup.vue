@@ -240,7 +240,7 @@ export default Vue.extend({
 	},
 	mounted() {
 		window.addEventListener(`click`, this.handleCloseClick, false)
-		this.fetchProfiles({ username: this.author?.id })
+		this.fetchProfile({ username: this.author?.id })
 	},
 	methods: {
 		async selectPaymentType(paymentType: string) {
@@ -313,7 +313,7 @@ export default Vue.extend({
 			this.$emit(`close`)
 		},
 		...mapActions(paymentProfileNamespace, {
-			fetchProfiles: ActionType.FETCH_PROFILE,
+			fetchProfile: ActionType.FETCH_PROFILE,
 		}),
 	},
 })
