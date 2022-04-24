@@ -273,7 +273,7 @@ export default Vue.extend({
 			}
 
 			this.nextStep()
-			// TODO: This should be the one that is selected from a list of tiers.
+			// TODO: The tier should be the one that is selected from a list of tiers.
 			const tier = profile.tiers[0]
 
 			const stripe: Stripe | null = await loadStripe(stripePublishableKey, {
@@ -281,17 +281,22 @@ export default Vue.extend({
 			})
 			const username = this.$store.state.session.id
 			const tierId = tier._id
-			// TODO: This should be according to the selected period
+			// TODO: The following should be according to the selected period
 			// check tier.monthlyEnabled, yearlyEnabled, before showing the tier in list of tiers to select
 			const period = `month`
 			const amount = tier.monthlyPrice
 			const paymentAttempt = await generatePaymentIntent(username, tierId, amount, period)
+			if (!paymentAttempt?.paymentClientSecret) {
+				this.$toastError(`Could not start payment`)
+				return
+			}
 			const clientSecret: string = paymentAttempt.paymentClientSecret
 
 			const appearance: Appearance = {
 				theme: `stripe`,
 			}
 			if (!stripe) {
+				this.$toastError(`Network error: Could not initiate stripe`)
 				return
 			}
 			const elements = stripe.elements({ appearance, clientSecret })
