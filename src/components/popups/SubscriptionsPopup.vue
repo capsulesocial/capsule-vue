@@ -115,8 +115,16 @@
 				</article>
 				<!-- Step 2: Pay (Stripe) -->
 				<article v-if="step === 2">
-					STRIPE PAYMENT STUFF
-					<SecondaryButton :text="Pay" :action="nextStep" />
+					<form id="payment-form">
+						<div id="payment-element">
+							<!--Stripe.js injects the Payment Element-->
+						</div>
+						<!-- TODO: Clicking on the following button should trigger next payment process instead of nextStep() -->
+						<div class="mt-4 flex flex-row-reverse">
+							<SecondaryButton :text="`Pay Now`" :action="nextStep" :disabled="!isSelected" />
+						</div>
+						<div id="payment-message" class="hidden"></div>
+					</form>
 				</article>
 				<!-- Step 4: Confirmation page -->
 				<article v-show="step === 3" class="flex flex-col items-center">
@@ -169,6 +177,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import type { PropType } from 'vue'
+import { Appearance, Stripe, loadStripe } from '@stripe/stripe-js'
+import { mapActions, mapGetters } from 'vuex'
 import Avatar from '@/components/Avatar.vue'
 import SecondaryButton from '@/components/SecondaryButton.vue'
 import CloseIcon from '@/components/icons/X.vue'
@@ -178,11 +188,15 @@ import CreditCardIcon from '@/components/icons/CreditCard.vue'
 import AppleIcon from '@/components/icons/brands/Apple.vue'
 import GoogleIcon from '@/components/icons/brands/Google.vue'
 import { Profile } from '@/backend/profile'
+import { stripePublishableKey } from '@/backend/utilities/config'
+import { generatePaymentIntent } from '@/backend/payment'
+import { ActionType, namespace as paymentProfileNamespace, PaymentProfile } from '@/store/paymentProfile'
 
 interface IData {
 	step: number
 	isSelected: boolean
 	paymentType: string
+	stripePublishableKey: string
 }
 
 export default Vue.extend({
@@ -215,18 +229,74 @@ export default Vue.extend({
 			step: 0,
 			isSelected: true,
 			paymentType: ``,
+			stripePublishableKey,
 		}
+	},
+	computed: {
+		...mapGetters(paymentProfileNamespace, [`getProfile`]),
 	},
 	created() {
 		// Fetch subscription options
 	},
 	mounted() {
 		window.addEventListener(`click`, this.handleCloseClick, false)
+		this.fetchProfiles({ username: this.author?.id })
 	},
 	methods: {
-		selectPaymentType(paymentType: string) {
+		async selectPaymentType(paymentType: string) {
 			this.paymentType = paymentType
+			// TODO: Start a loading spinner here
+			if (!this.author) {
+				this.$toastError(`Author profile is missing`)
+				return
+			}
+
+			const profile: PaymentProfile = this.getProfile(this.author.id)
+			if (!profile) {
+				this.$toastError(`Payment profile of author is missing`)
+				return
+			}
+
+			if (!profile.stripeAccountId) {
+				this.$toastError(`Author subscription profile is missing`)
+				return
+			}
+
+			if (!profile.paymentsEnabled) {
+				this.$toastError(`Author haven't enabled subscriptions`)
+				return
+			}
+
+			if (!profile.tiers) {
+				this.$toastError(`Author haven't set-up subscriptions`)
+				return
+			}
+
 			this.nextStep()
+			// TODO: This should be the one that is selected from a list of tiers.
+			const tier = profile.tiers[0]
+
+			const stripe: Stripe | null = await loadStripe(stripePublishableKey, {
+				stripeAccount: profile.stripeAccountId,
+			})
+			const username = this.$store.state.session.id
+			const tierId = tier._id
+			// TODO: This should be according to the selected period
+			// check tier.monthlyEnabled, yearlyEnabled, before showing the tier in list of tiers to select
+			const period = `month`
+			const amount = tier.monthlyPrice
+			const paymentAttempt = await generatePaymentIntent(username, tierId, amount, period)
+			const clientSecret: string = paymentAttempt.paymentClientSecret
+
+			const appearance: Appearance = {
+				theme: `stripe`,
+			}
+			if (!stripe) {
+				return
+			}
+			const elements = stripe.elements({ appearance, clientSecret })
+			const paymentElement = elements.create(`payment`)
+			paymentElement.mount(`#payment-element`)
 		},
 		nextStep(): void {
 			this.step += 1
@@ -242,6 +312,9 @@ export default Vue.extend({
 		closeDraftsPopup(): void {
 			this.$emit(`close`)
 		},
+		...mapActions(paymentProfileNamespace, {
+			fetchProfiles: ActionType.FETCH_PROFILE,
+		}),
 	},
 })
 </script>
