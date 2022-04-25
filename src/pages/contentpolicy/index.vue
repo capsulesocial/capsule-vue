@@ -1,8 +1,5 @@
 <template>
 	<main class="w-full flex flex-col items-center pt-10">
-		<button class="focus:outline-none bg-gray1 dark:bg-gray5 rounded-full p-1" @click="goBack">
-			<CloseIcon />
-		</button>
 		<section class="lg:w-760 lg:max-w-760 mt-10">
 			<!-- Page title -->
 			<article class="px-4 py-4 xl:px-6 xl:py-5">
@@ -209,10 +206,8 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import CloseIcon from '@/components/icons/X.vue'
 
 export default Vue.extend({
-	components: { CloseIcon },
 	layout: `contentpolicy`,
 	head() {
 		return {
