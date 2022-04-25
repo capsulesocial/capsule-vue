@@ -195,6 +195,22 @@ async function getEncryptionKeys(username: string, cid: string) {
 	}
 }
 
+export async function updateLockedPostTiers(cid: string, tiers: Array<string>) {
+	const exp = Date.now() + sigValidity
+	const { sig } = await signContent({ cid, exp, tiers, action: `updateLPostTiers` })
+
+	try {
+		await axios.post(`${capsuleServer}/content/${cid}`, { tiers, exp, sig })
+	} catch (err) {
+		if (axios.isAxiosError(err) && err.response) {
+			return { error: err.response.data.error }
+		}
+		throw err
+	}
+
+	return true
+}
+
 export interface IGetPostsOptions {
 	sort?: Algorithm
 	offset?: number
