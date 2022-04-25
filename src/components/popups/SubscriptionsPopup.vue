@@ -178,7 +178,7 @@
 import Vue from 'vue'
 import type { PropType } from 'vue'
 import { Appearance, Stripe, loadStripe } from '@stripe/stripe-js'
-import { mapActions, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 import Avatar from '@/components/Avatar.vue'
 import SecondaryButton from '@/components/SecondaryButton.vue'
 import CloseIcon from '@/components/icons/X.vue'
@@ -190,7 +190,7 @@ import GoogleIcon from '@/components/icons/brands/Google.vue'
 import { Profile } from '@/backend/profile'
 import { stripePublishableKey } from '@/backend/utilities/config'
 import { generatePaymentIntent } from '@/backend/payment'
-import { ActionType, namespace as paymentProfileNamespace, PaymentProfile } from '@/store/paymentProfile'
+import { namespace as paymentProfileNamespace, PaymentProfile } from '@/store/paymentProfile'
 
 interface IData {
 	step: number
@@ -240,7 +240,6 @@ export default Vue.extend({
 	},
 	mounted() {
 		window.addEventListener(`click`, this.handleCloseClick, false)
-		this.fetchProfile({ username: this.author?.id })
 	},
 	methods: {
 		async selectPaymentType(paymentType: string) {
@@ -285,7 +284,9 @@ export default Vue.extend({
 			// check tier.monthlyEnabled, yearlyEnabled, before showing the tier in list of tiers to select
 			const period = `month`
 			const amount = tier.monthlyPrice
-			const paymentAttempt = await generatePaymentIntent(username, tierId, amount, period)
+			// TODO: Email should be obtained from the form
+			const email = `hello@test.com`
+			const paymentAttempt = await generatePaymentIntent(username, tierId, amount, period, email)
 			if (!paymentAttempt?.paymentClientSecret) {
 				this.$toastError(`Could not start payment`)
 				return
@@ -317,9 +318,6 @@ export default Vue.extend({
 		closeDraftsPopup(): void {
 			this.$emit(`close`)
 		},
-		...mapActions(paymentProfileNamespace, {
-			fetchProfile: ActionType.FETCH_PROFILE,
-		}),
 	},
 })
 </script>

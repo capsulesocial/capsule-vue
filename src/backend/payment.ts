@@ -27,7 +27,13 @@ export async function refreshStripeAccount(username: string) {
 	return response.data.url
 }
 
-export async function generatePaymentIntent(username: string, tierId: string, amount: number, period: string) {
+export async function generatePaymentIntent(
+	username: string,
+	tierId: string,
+	amount: number,
+	period: string,
+	email: string,
+) {
 	try {
 		const data = {
 			username,
@@ -35,6 +41,7 @@ export async function generatePaymentIntent(username: string, tierId: string, am
 			tierId,
 			amount,
 			period,
+			email,
 			exp: getExpTimestamp(),
 		}
 		const { sig } = await signContent(data)
