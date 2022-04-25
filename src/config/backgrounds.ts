@@ -85,6 +85,13 @@ export const backgrounds: IBackground[] = [
 		label: `Sharkman`,
 	},
 	{
+		id: `philosopher`,
+		type: `Philosopher`,
+		light: require(`@/assets/images/backgrounds/light/old_guy.webp`),
+		dark: require(`@/assets/images/backgrounds/dark/old_guy.webp`),
+		label: `Philosopher`,
+	},
+	{
 		id: `textureText01`,
 		type: `local`,
 		light: require(`@/assets/images/backgrounds/light/texture-text01.webp`),
