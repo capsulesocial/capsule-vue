@@ -128,13 +128,13 @@ export async function sendRegularPost(data: IRegularPost): Promise<string> {
 	return cid
 }
 
-export async function sendEncryptedPost(data: IEncryptedPost): Promise<string> {
+export async function sendEncryptedPost(data: IEncryptedPost, tiers: Array<string>): Promise<string> {
 	const { data: post, key, counter, sig, publicKey } = await encryptAndSignData(data)
 
 	const ipfsData: ISignedIPFSObject<IEncryptedPost> = { data: post, sig, public_key: publicKey }
 
 	const cid = await ipfs().sendJSONData(ipfsData)
-	await axios.post(`${capsuleServer}/content`, { key, data: ipfsData, counter, cid })
+	await axios.post(`${capsuleServer}/content`, { key, data: ipfsData, counter, cid, tiers })
 	await axios.post(`${nodeUrl()}/content`, {
 		cid,
 		data: ipfsData,
