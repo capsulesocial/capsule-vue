@@ -18,7 +18,7 @@ export const backgrounds: IBackground[] = [
 		id: `blogginLife`,
 		type: `local`,
 		light: require(`@/assets/images/backgrounds/light/blogn_life.webp`),
-		dark: require(`@/assets/images/backgrounds/light/blogn_life.webp`),
+		dark: require(`@/assets/images/backgrounds/dark/blogn_life.webp`),
 		label: `Bloggin' life`,
 	},
 	{
@@ -109,7 +109,7 @@ export const backgrounds: IBackground[] = [
 		id: `urban02`,
 		type: `local`,
 		light: require(`@/assets/images/backgrounds/light/urbanstuff001.webp`),
-		dark: require(`@/assets/images/backgrounds/light/urbanstuff001.webp`),
+		dark: require(`@/assets/images/backgrounds/dark/urbanstuff001.webp`),
 		label: `Urban 02`,
 	},
 	{
