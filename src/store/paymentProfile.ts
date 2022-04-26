@@ -19,7 +19,7 @@ export interface SubscriptionTier {
 export interface PaymentProfile {
 	username: string
 	paymentsEnabled: boolean
-	currency: string | null
+	currency: string
 	stripeAccountId: string
 	tiers: SubscriptionTier[]
 }
@@ -60,10 +60,21 @@ export const actions = {
 }
 
 export const getters: GetterTree<PaymentProfileMap, RootState> = {
-	getProfiles: (state: PaymentProfileMap) => {
-		return state.profiles
+	getPaymentProfile: (state: PaymentProfileMap) => (username: string) => {
+		if (state.profiles[username]) {
+			return state.profiles[username]
+		}
+
+		return createDefaultPaymentProfile(username)
 	},
-	getProfile: (state: PaymentProfileMap) => (username: string) => {
-		return state.profiles[username]
-	},
+}
+
+export function createDefaultPaymentProfile(username: string): PaymentProfile {
+	return {
+		username,
+		paymentsEnabled: false,
+		currency: ``,
+		stripeAccountId: ``,
+		tiers: [],
+	}
 }
