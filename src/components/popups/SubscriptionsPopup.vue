@@ -121,7 +121,7 @@
 						</div>
 						<!-- TODO: Clicking on the following button should trigger next payment process instead of nextStep() -->
 						<div class="mt-4 flex flex-row-reverse">
-							<SecondaryButton :text="`Pay Now`" :action="nextStep" :disabled="!isSelected" />
+							<SecondaryButton :text="`Pay Now`" :action="submitPayment" />
 						</div>
 						<div id="payment-message" class="hidden"></div>
 					</form>
@@ -177,7 +177,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import type { PropType } from 'vue'
-import { Appearance, Stripe, loadStripe } from '@stripe/stripe-js'
+import { Appearance, Stripe, loadStripe, StripeElements } from '@stripe/stripe-js'
 import { mapGetters } from 'vuex'
 import Avatar from '@/components/Avatar.vue'
 import SecondaryButton from '@/components/SecondaryButton.vue'
@@ -188,16 +188,19 @@ import CreditCardIcon from '@/components/icons/CreditCard.vue'
 import AppleIcon from '@/components/icons/brands/Apple.vue'
 import GoogleIcon from '@/components/icons/brands/Google.vue'
 import { Profile } from '@/backend/profile'
-import { stripePublishableKey } from '@/backend/utilities/config'
+import { domain, stripePublishableKey } from '@/backend/utilities/config'
 import { generatePaymentIntent } from '@/backend/payment'
 import { namespace as paymentProfileNamespace, PaymentProfile } from '@/store/paymentProfile'
+import { HTMLInputEvent } from '@/interfaces/HTMLInputEvent'
 
 interface IData {
 	step: number
 	isSelected: boolean
 	paymentType: string
-	stripePublishableKey: string
 }
+
+let _stripe: Stripe | null = null
+let elements: StripeElements | null = null
 
 export default Vue.extend({
 	components: {
@@ -229,7 +232,6 @@ export default Vue.extend({
 			step: 0,
 			isSelected: true,
 			paymentType: ``,
-			stripePublishableKey,
 		}
 	},
 	computed: {
@@ -242,6 +244,17 @@ export default Vue.extend({
 		window.addEventListener(`click`, this.handleCloseClick, false)
 	},
 	methods: {
+		async stripeClient(connectId?: string): Promise<Stripe> {
+			if (!_stripe) {
+				_stripe = await loadStripe(stripePublishableKey, {
+					stripeAccount: connectId,
+				})
+			}
+			if (!_stripe) {
+				throw new Error(`Network error: Could not initiate stripe`)
+			}
+			return _stripe
+		},
 		async selectPaymentType(paymentType: string) {
 			this.paymentType = paymentType
 			// TODO: Start a loading spinner here
@@ -275,9 +288,7 @@ export default Vue.extend({
 			// TODO: The tier should be the one that is selected from a list of tiers.
 			const tier = profile.tiers[0]
 
-			const stripe: Stripe | null = await loadStripe(stripePublishableKey, {
-				stripeAccount: profile.stripeAccountId,
-			})
+			const stripe = await this.stripeClient(profile.stripeAccountId)
 			const username = this.$store.state.session.id
 			const tierId = tier._id
 			// TODO: The following should be according to the selected period
@@ -296,16 +307,30 @@ export default Vue.extend({
 			const appearance: Appearance = {
 				theme: `stripe`,
 			}
-			if (!stripe) {
-				this.$toastError(`Network error: Could not initiate stripe`)
-				return
-			}
-			const elements = stripe.elements({ appearance, clientSecret })
+			elements = stripe.elements({ appearance, clientSecret })
 			const paymentElement = elements.create(`payment`)
 			paymentElement.mount(`#payment-element`)
 		},
 		nextStep(): void {
 			this.step += 1
+		},
+		async submitPayment(e: HTMLInputEvent): Promise<void> {
+			e.preventDefault()
+			const stripe = await this.stripeClient()
+			if (!elements) {
+				throw new Error(`Stripe elements is not initialized`)
+			}
+
+			const { error } = await stripe.confirmPayment({
+				elements,
+				confirmParams: {
+					return_url: `${domain}/subscriptions?callback=true`,
+				},
+			})
+
+			if (error) {
+				this.$toastError(error.message ?? `An unknown error happened`)
+			}
 		},
 		handleCloseClick(e: any): void {
 			if (!e.target || e.target.parentNode === null || e.target.firstChild.classList === undefined) {
