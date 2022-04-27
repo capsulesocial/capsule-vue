@@ -269,8 +269,8 @@ interface IData {
 	following: Set<string>
 	bookmarksCount: number
 	popImage: boolean
-	readerViewElement: any | null
-	captionHeight: number | undefined
+	readerViewElement: unknown | null
+	captionHeight?: number
 	showShare: boolean
 	readingTime: number | null
 	realURL: string

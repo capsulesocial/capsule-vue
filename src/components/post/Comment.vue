@@ -181,7 +181,7 @@ import BinIcon from '@/components/icons/Bin.vue'
 
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 import { feelings } from '@/config/config'
-import { faces } from '@/config/faces'
+import { faces, IFace } from '@/config/faces'
 import { createComment, getComment, getCommentsOfPost, ICommentData, sendComment } from '@/backend/comment'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import { getProfileFromSession } from '@/store/session'
@@ -193,7 +193,7 @@ interface IData {
 	replies: ICommentData[]
 	avatar: string
 	name: string
-	emotion: { label: string; light: any; dark: any }
+	emotion: IFace
 	emotionType: string
 	content: string
 	showLabel: boolean

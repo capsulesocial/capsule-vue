@@ -76,11 +76,11 @@ import Vue from 'vue'
 import ChevronUp from '@/components/icons/ChevronUp.vue'
 import ChevronDown from '@/components/icons/ChevronDown.vue'
 import { feelings } from '@/config/config'
-import { faces } from '@/config/faces'
+import { faces, IFace } from '@/config/faces'
 
 interface IData {
-	reactionList: Record<string, any>
-	feelingList: Record<string, any>
+	reactionList: Record<string, IFace>
+	feelingList: { positive: Set<string>; negative: Set<string>; neutral: Set<string> }
 	feeling: string
 	showFilter: boolean
 }

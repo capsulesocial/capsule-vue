@@ -184,7 +184,7 @@ export default Vue.extend({
 	props: {
 		image: {
 			type: String,
-			required: true,
+			default: null,
 		},
 		title: {
 			type: String,
@@ -192,7 +192,7 @@ export default Vue.extend({
 		},
 		subtitle: {
 			type: String,
-			required: true,
+			default: null,
 		},
 		authorID: {
 			type: String,
@@ -200,7 +200,7 @@ export default Vue.extend({
 		},
 		excerpt: {
 			type: String,
-			required: true,
+			default: undefined,
 		},
 		cid: {
 			type: String,

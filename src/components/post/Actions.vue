@@ -400,7 +400,7 @@ import ChevronRight from '@/components/icons/ChevronRight.vue'
 import Avatar from '@/components/Avatar.vue'
 
 import { feelings } from '@/config/config'
-import { faces, faceGroupings } from '@/config/faces'
+import { faces, faceGroupings, IFace } from '@/config/faces'
 import {
 	createComment,
 	sendComment,
@@ -410,20 +410,20 @@ import {
 	ICommentsStats,
 } from '@/backend/comment'
 import { getReposters, IGetRepostsOptions } from '@/backend/reposts'
-import { createDefaultProfile, getProfile } from '@/backend/profile'
+import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 import { getFollowersAndFollowing } from '@/backend/following'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
 
 interface FaceStat {
-	face: { label: string; light: any; dark: any }
+	face: IFace
 	count: number
 }
 
 interface IData {
-	faceGroupings: object[]
-	feelingList: Record<string, any>
-	activeEmotion: { label: string; light: any; dark: any }
-	selectedEmotion: { label: string; light: any; dark: any }
+	faceGroupings: Array<[IFace, IFace, IFace]>
+	feelingList: { negative: Set<string>; positive: Set<string>; neutral: Set<string> }
+	activeEmotion: IFace
+	selectedEmotion: IFace
 	comments: ICommentData[]
 	avatar: string
 	comment: string
@@ -434,7 +434,7 @@ interface IData {
 	toggleStats: boolean
 	toggleReposters: boolean
 	reposters: Array<string>
-	profiles: any
+	profiles: Array<Profile>
 	followers: Set<string>
 	following: Set<string>
 	userIsFollowed: boolean
