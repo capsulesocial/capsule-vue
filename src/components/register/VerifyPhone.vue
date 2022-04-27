@@ -45,7 +45,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import intlTelInput from 'intl-tel-input'
-import axios from 'axios'
+import { AxiosError } from 'axios'
 
 import BrandedButton from '@/components/BrandedButton.vue'
 import { requestOTP, requestSponsor, waitForFunds } from '@/backend/funder'
@@ -118,7 +118,7 @@ export default Vue.extend({
 				this.$emit(`updateFunds`, balance)
 			} catch (err: any) {
 				this.isLoading = false
-				if (axios.isAxiosError(err) && err.response) {
+				if (err instanceof AxiosError && err.response) {
 					this.otp = ``
 					this.$toastError(err.response.data.error)
 					return

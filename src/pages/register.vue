@@ -47,7 +47,7 @@
 import Vue from 'vue'
 import { mapMutations } from 'vuex'
 import 'intl-tel-input/build/css/intlTelInput.css'
-import axios from 'axios'
+import { AxiosError } from 'axios'
 
 import InviteCode from '@/components/register/InviteCode.vue'
 import RegisterMethods from '@/components/register/RegisterMethods.vue'
@@ -101,7 +101,7 @@ export default Vue.extend({
 			this.$toastWarning(err.message)
 			return false
 		}
-		if (axios.isAxiosError(err)) {
+		if (err instanceof AxiosError) {
 			if (!err.response) {
 				this.$toastError(`Network error, please try again`)
 				return false

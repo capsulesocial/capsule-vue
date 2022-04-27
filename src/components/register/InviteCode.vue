@@ -77,7 +77,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import axios from 'axios'
+import { AxiosError } from 'axios'
 
 import CapsuleLogo from '@/components/icons/CapsuleLogo.vue'
 import DiscordLogo from '@/components/icons/Discord.vue'
@@ -108,7 +108,7 @@ export default Vue.extend({
 				await verifyCodeAndGetToken(this.inputCode)
 				this.$emit(`validInviteCode`)
 			} catch (err) {
-				if (axios.isAxiosError(err) && err.response) {
+				if (err instanceof AxiosError && err.response) {
 					if (err.response.status === 400 && err.response.data.error === `Invite code not found`) {
 						this.$toastWarning(`Invite code not found`)
 						return
