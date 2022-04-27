@@ -1,5 +1,5 @@
 <template>
-	<section>
+	<section ref="postActions">
 		<!-- Stats -->
 		<article v-show="toggleStats" class="pt-5">
 			<!-- Back button -->
@@ -385,6 +385,13 @@
 			<div v-if="comments.length === 0 && filter !== ``" class="text-gray5 dark:text-gray3 pt-5 text-sm text-center">
 				No comments under this filter
 			</div>
+			<div
+				v-if="noMoreComments && comments.length > 0"
+				class="text-gray5 dark:text-gray3 text-sm text-center"
+				:class="$route.name === `post-post` ? `py-5` : `pt-5`"
+			>
+				End of comments
+			</div>
 		</article>
 	</section>
 </template>
@@ -438,8 +445,10 @@ interface IData {
 	page: number
 	selectedEmotionColor: `positive` | `neutral` | `negative` | `neutralLightest`
 	sendingComment: boolean
-	currentCommentstOffset: number
+	currentCommentsOffset: number
 	commentsLimit: number
+	isLoading: boolean
+	noMoreComments: boolean
 }
 
 export default Vue.extend({
@@ -501,17 +510,36 @@ export default Vue.extend({
 			page: 0,
 			selectedEmotionColor: `neutralLightest`,
 			sendingComment: false,
-			currentCommentstOffset: 0,
+			currentCommentsOffset: 0,
 			commentsLimit: 10,
+			isLoading: true,
+			noMoreComments: false,
 		}
 	},
 	created() {
 		this.initComments()
 		this.initReposters()
+		this.isLoading = false
+	},
+	mounted() {
+		// comment pagination event handler
+		if (this.$route.name !== `post-post`) {
+			// Post card popup eventhandler
+			const postActions = this.$refs.postActions as HTMLElement
+			postActions.parentElement?.addEventListener(`scroll`, this.handleScroll)
+			return
+		}
+		// Full page event handler
+		const postActions = document.getElementById(`post`) as HTMLElement
+		postActions.addEventListener(`scroll`, this.handleScroll)
 	},
 	methods: {
 		async initComments() {
-			this.comments = await getCommentsOfPost(this.postCID, this.currentCommentstOffset, this.commentsLimit)
+			this.comments = await getCommentsOfPost(this.postCID, this.currentCommentsOffset, this.commentsLimit)
+			if (this.comments.length < 10) {
+				this.noMoreComments = true
+				this.removeScrollListener()
+			}
 			// get comment stats
 			this.updateFaceStats()
 			if (this.$store.state.session.avatar !== ``) {
@@ -533,7 +561,11 @@ export default Vue.extend({
 		},
 		setFilter(reaction: string): void {
 			this.filter = reaction
+			this.currentCommentsOffset = 0
+			this.noMoreComments = false
+			this.isLoading = true
 			this.filterComments()
+			this.isLoading = false
 		},
 		setEmotion(e: PointerEvent, r: { label: string; light: any; dark: any }) {
 			if (!e.target) {
@@ -581,16 +613,17 @@ export default Vue.extend({
 			try {
 				const c = createComment(this.$store.state.session.id, this.comment, this.activeEmotion.label, this.postCID)
 				const _id = await sendComment(c, `comment`)
-				this.comments.push({ _id, ...c })
+				this.comments.unshift({ _id, ...c })
 				// Apply filter to comments, in case new comment was added in filtered category
 				this.comment = ``
+				this.isLoading = true
 				this.filterComments()
+				this.isLoading = false
 				this.selectedEmotion = { label: ``, light: null, dark: null }
 				this.activeEmotion = { label: ``, light: null, dark: null }
 				this.emotion = ``
 				this.filter = ``
 				this.selectedEmotionColor = `neutralLightest`
-				this.filterComments()
 				this.updateFaceStats()
 				this.sendingComment = false
 			} catch (err: unknown) {
@@ -599,28 +632,33 @@ export default Vue.extend({
 		},
 		async filterComments() {
 			// Fetch comments
+			let moreComments: ICommentData[] = []
 			if (this.filter === ``) {
-				this.comments = await getCommentsOfPost(this.postCID, this.currentCommentstOffset, this.commentsLimit)
-				return
-			}
-			if (this.filter === `positive` || this.filter === `neutral` || this.filter === `negative`) {
+				moreComments = await getCommentsOfPost(this.postCID, this.currentCommentsOffset, this.commentsLimit)
+			} else if (this.filter === `positive` || this.filter === `neutral` || this.filter === `negative`) {
 				// Get a list of comments with multiple emotions under the same category
-				this.comments = await getCommentsOfPost(
+				moreComments = await getCommentsOfPost(
 					this.postCID,
-					this.currentCommentstOffset,
+					this.currentCommentsOffset,
 					this.commentsLimit,
 					undefined,
 					this.filter,
 				)
 				return
+			} else {
+				// Get a list of comments with a specific emotion
+				moreComments = await getCommentsOfPost(
+					this.postCID,
+					this.currentCommentsOffset,
+					this.commentsLimit,
+					this.filter.charAt(0).toLowerCase() + this.filter.replace(/\s/g, ``).substring(1),
+				)
 			}
-			// Get a list of comments with a specific emotion
-			this.comments = await getCommentsOfPost(
-				this.postCID,
-				this.currentCommentstOffset,
-				this.commentsLimit,
-				this.filter.charAt(0).toLowerCase() + this.filter.replace(/\s/g, ``).substring(1),
-			)
+			if (moreComments.length < 10) {
+				this.noMoreComments = true
+				this.removeScrollListener()
+			}
+			this.comments = this.comments.concat(moreComments)
 		},
 		getCommentCount(type: `total` | `positive` | `neutral` | `negative`): number {
 			if (type === `total`) {
@@ -698,6 +736,21 @@ export default Vue.extend({
 			this.followers = followers
 			this.following = following
 			this.userIsFollowed = followers.has(this.$store.state.session.id)
+		},
+		handleScroll(e: Event) {
+			const { scrollTop, scrollHeight, clientHeight } = e.srcElement as HTMLElement
+			if (scrollTop + clientHeight >= scrollHeight - 5) {
+				if (!this.isLoading && !this.noMoreComments) {
+					this.isLoading = true
+					this.currentCommentsOffset += this.commentsLimit
+					this.filterComments()
+					this.isLoading = false
+				}
+			}
+		},
+		removeScrollListener() {
+			const postActions = this.$refs.postActions as HTMLElement
+			postActions.parentElement?.removeEventListener(`scroll`, this.handleScroll)
 		},
 	},
 })

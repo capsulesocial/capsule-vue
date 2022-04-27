@@ -27,6 +27,7 @@
 		<article v-show="isLoading" class="modal-animation flex justify-center">
 			<div class="loader m-10"></div>
 		</article>
+		<div v-if="noMoreComments" class="text-gray5 dark:text-gray3 text-sm text-center pb-5">End of comments</div>
 	</section>
 </template>
 
@@ -43,6 +44,7 @@ interface IData {
 	isLoading: boolean
 	currentOffset: number
 	limit: number
+	noMoreComments: boolean
 }
 
 export default Vue.extend({
@@ -62,38 +64,43 @@ export default Vue.extend({
 			isLoading: true,
 			currentOffset: 0,
 			limit: 10,
+			noMoreComments: false,
 		}
 	},
-	async created() {
+	created() {
 		// Fetch comments from Orbit DB by ID
-		this.comments = await getCommentsOfUser(this.profile.id, this.currentOffset, this.limit)
-		this.currentOffset += this.limit
-		this.isLoading = false
-		window.addEventListener(`scroll`, this.handleScroll)
+		this.loadComments()
+	},
+	mounted() {
+		const scrollContainer = document.getElementById(`scrollContainer`) as HTMLElement
+		scrollContainer.addEventListener(`scroll`, this.handleScroll)
 	},
 	destroyed() {
 		window.removeEventListener(`scroll`, this.handleScroll)
 	},
 	methods: {
 		async loadComments() {
-			this.isLoading = true
 			try {
+				this.isLoading = true
 				const res = await getCommentsOfUser(this.profile.id, this.currentOffset, this.limit)
-				if (res.length === 0) {
-					this.isLoading = false
+				this.currentOffset += this.limit
+				if (res.length < 10) {
+					this.noMoreComments = true
 					window.removeEventListener(`scroll`, this.handleScroll)
 				}
 				this.comments = this.comments.concat(res)
+				this.isLoading = false
 			} catch (err: unknown) {
 				this.isLoading = false
 				this.$handleError(err)
 			}
 		},
-		async handleScroll() {
-			const { scrollTop, scrollHeight, clientHeight } = document.documentElement
+		async handleScroll(e: Event) {
+			const { scrollTop, scrollHeight, clientHeight } = e.srcElement as HTMLElement
 			if (scrollTop + clientHeight >= scrollHeight - 5) {
-				await this.loadComments()
-				this.currentOffset += this.limit
+				if (!this.isLoading && !this.noMoreComments) {
+					await this.loadComments()
+				}
 			}
 		},
 		toggleHomeFeed() {
