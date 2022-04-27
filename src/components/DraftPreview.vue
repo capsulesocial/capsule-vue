@@ -74,7 +74,7 @@ import { Post } from '@/backend/post'
 type DraftPost = Omit<Post, `authorID`>
 
 interface IData {
-	featuredPhoto: any
+	featuredPhoto: unknown
 	showDelete: boolean
 	delayActiveDraft: boolean
 }

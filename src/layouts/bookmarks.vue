@@ -139,7 +139,7 @@ export default Vue.extend({
 		// get logged in profile
 		const { profile } = await getProfile(this.$store.state.session.id)
 		this.profile = profile
-		this.bgImage = this.$getBGImage(this.profile?.background, `local`)
+		this.bgImage = this.$getBGImage(this.profile?.background)
 		// Get avatar
 		if (this.profile && this.profile.avatar.length > 1) {
 			getPhotoFromIPFS(this.profile.avatar).then((p) => {

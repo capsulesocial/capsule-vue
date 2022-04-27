@@ -93,7 +93,7 @@ export default Vue.extend({
 				this.myAvatar = p
 			})
 		}
-		this.bgImage = this.$getBGImage(this.myProfile?.background, `local`)
+		this.bgImage = this.$getBGImage(this.myProfile?.background)
 		const myConnections = await getFollowersAndFollowing(this.$store.state.session.id)
 		this.myFollowing = myConnections.following
 	},

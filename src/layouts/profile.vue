@@ -261,7 +261,6 @@ export default Vue.extend({
 				return
 			}
 			this.visitProfile = visitProfile || createDefaultProfile(this.$route.params.id)
-			// this.bgImage = this.$getBGImage(this.visitProfile?.background, `local`)
 			this.visitAvatar = null
 			if (this.visitProfile.avatar !== ``) {
 				getPhotoFromIPFS(this.visitProfile.avatar).then((p) => {
@@ -296,7 +295,7 @@ export default Vue.extend({
 		async getMyProfile(update: boolean = false) {
 			const { profile } = await getProfile(this.$store.state.session.id, update)
 			this.myProfile = profile || createDefaultProfile(this.$store.state.session.id)
-			this.bgImage = this.$getBGImage(this.myProfile?.background, `local`)
+			this.bgImage = this.$getBGImage(this.myProfile?.background)
 			if (this.myProfile.avatar.length > 1) {
 				getPhotoFromIPFS(this.myProfile.avatar).then((p) => {
 					this.myAvatar = p

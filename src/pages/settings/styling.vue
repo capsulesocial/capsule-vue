@@ -218,7 +218,7 @@ import Check from '@/components/icons/Check.vue'
 
 import { MutationType, getProfileFromSession, namespace as sessionStoreNamespace } from '~/store/session'
 import { setProfile, getProfile, Profile } from '@/backend/profile'
-import { colors, modes } from '@/config/colors'
+import { colors, IColor, IMode, modes } from '@/config/colors'
 import { IBackground, backgrounds } from '@/config/backgrounds'
 
 interface IData {
@@ -227,9 +227,9 @@ interface IData {
 	showPopupBG: boolean
 	showPopupMode: boolean
 	showPopupColor: boolean
-	backgrounds: any
-	modes: any
-	colors: any
+	backgrounds: Array<IBackground>
+	modes: Array<IMode>
+	colors: Array<IColor>
 	currentbg: null | string
 	selectedBG: IBackground
 	currentmode: null | string

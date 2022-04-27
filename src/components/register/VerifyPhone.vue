@@ -53,7 +53,7 @@ import { requestOTP, requestSponsor, waitForFunds } from '@/backend/funder'
 interface IData {
 	otp: string
 	otpSent: boolean
-	iti: any
+	iti: null | intlTelInput.Plugin
 	phoneNumber: string
 	inputCode: string
 	isLoading: boolean
@@ -90,6 +90,9 @@ export default Vue.extend({
 	},
 	methods: {
 		async sendOTP() {
+			if (this.iti === null) {
+				return
+			}
 			this.phoneNumber = this.iti.getNumber()
 			if (!this.iti.isValidNumber()) {
 				this.$toastError(`Invalid phone number`)

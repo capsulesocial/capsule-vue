@@ -124,7 +124,7 @@ export default Vue.extend({
 				this.avatar = p
 			})
 		}
-		this.bgImage = this.$getBGImage(this.profile?.background, `local`)
+		this.bgImage = this.$getBGImage(this.profile?.background)
 		// Check if the active draft exists
 		if (this.$store.state.draft.drafts[this.$store.state.draft.activeIndex] === undefined) {
 			this.$store.commit(`draft/setActiveDraft`, 0)
