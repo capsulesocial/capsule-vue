@@ -386,7 +386,7 @@
 				No comments under this filter
 			</div>
 			<div
-				v-if="noMoreComments"
+				v-if="noMoreComments && comments.length > 0"
 				class="text-gray5 dark:text-gray3 text-sm text-center"
 				:class="$route.name === `post-post` ? `py-5` : `pt-5`"
 			>
@@ -536,7 +536,7 @@ export default Vue.extend({
 	methods: {
 		async initComments() {
 			this.comments = await getCommentsOfPost(this.postCID, this.currentCommentsOffset, this.commentsLimit)
-			if (this.comments.length > 10) {
+			if (this.comments.length < 10) {
 				this.noMoreComments = true
 				this.removeScrollListener()
 			}
