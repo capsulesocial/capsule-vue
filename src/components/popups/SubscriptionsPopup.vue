@@ -145,6 +145,7 @@
 							<div class="mb-4 flex flex-col lg:flex-row">
 								<input
 									id="email"
+									v-model="customerEmail"
 									type="email"
 									placeholder="Email"
 									class="bg-gray1 dark:bg-gray7 dark:text-darkPrimaryText placeholder-gray5 dark:placeholder-gray3 focus:outline-none flex-grow rounded-lg px-2 py-1 text-black"
@@ -167,7 +168,7 @@
 						</div>
 						<!-- TODO: Clicking on the following button should trigger next payment process instead of nextStep() -->
 						<div class="mt-4 flex flex-row-reverse">
-							<SecondaryButton :text="`Pay Now`" :action="submitPayment" />
+							<SecondaryButton :text="`Pay Now`" :action="submitCardPayment" />
 						</div>
 						<div id="payment-message" class="hidden"></div>
 					</form>
@@ -223,7 +224,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import type { PropType } from 'vue'
-import { Stripe, loadStripe, StripeElements, PaymentRequest, StripeCardElement } from '@stripe/stripe-js'
+import { Stripe, loadStripe, StripeElements, PaymentRequest, StripeCardElement, PaymentMethod } from '@stripe/stripe-js'
 import { mapGetters } from 'vuex'
 import Avatar from '@/components/Avatar.vue'
 import SecondaryButton from '@/components/SecondaryButton.vue'
@@ -241,7 +242,7 @@ import {
 	PaymentProfile,
 	SubscriptionTier,
 } from '@/store/paymentProfile'
-import { getAmountFromTier, getCurrencySymbol, getZeroDecimalAmount } from '@/backend/payment'
+import { getAmountFromTier, getCurrencySymbol, getZeroDecimalAmount, startSubscriptionPayment } from '@/backend/payment'
 import { HTMLInputEvent } from '@/interfaces/HTMLInputEvent'
 
 interface IData {
@@ -253,6 +254,7 @@ interface IData {
 	cardErrorMessage: string | null
 	selectedTier: SubscriptionTier | null
 	selectedPeriod: string
+	customerEmail: string
 	displayButtons: {
 		applePay: boolean
 		googlePay: boolean
@@ -299,6 +301,7 @@ export default Vue.extend({
 			paymentProfile: createDefaultPaymentProfile(this.author.id),
 			displayCardElement: false,
 			cardErrorMessage: null,
+			customerEmail: ``,
 			displayButtons: {
 				applePay: false,
 				googlePay: false,
@@ -437,55 +440,69 @@ export default Vue.extend({
 			}
 			cardElement.mount(`#card-element`)
 			this.displayCardElement = true
-			// TODO: The tier should be the one that is selected from a list of tiers.
-			// const tier = profile.tiers[0]
-			// const username = this.$store.state.session.id
-			// const tierId = tier._id
-			// // TODO: The following should be according to the selected period
-			// // check tier.monthlyEnabled, yearlyEnabled, before showing the tier in list of tiers to select
-			// const period = `month`
-			// const amount = tier.monthlyPrice
-			// // TODO: Email should be obtained from the form
-			// const email = `hello@test.com`
-			// const paymentAttempt = await generatePaymentIntent(username, tierId, amount, period, email)
-			// if (!paymentAttempt?.paymentClientSecret) {
-			// 	this.$toastError(`Could not start payment`)
-			// 	return
-			// }
-			// const clientSecret: string = paymentAttempt.paymentClientSecret
-			// const appearance: Appearance = {
-			// 	theme: `stripe`,
-			// }
-			// elements = stripe.elements({ appearance, clientSecret })
-			// const paymentElement = elements.create(`payment`)
-			// paymentElement.mount(`#payment-element`)
 		},
 		nextStep(): void {
 			this.step += 1
 		},
-		async submitPayment(e: HTMLInputEvent): Promise<void> {
-			e.preventDefault()
-			const stripe = await this.stripeClient()
-			if (!elements) {
-				throw new Error(`Stripe elements is not initialized`)
+		async submitPayment(paymentMethod: PaymentMethod) {
+			if (!this.selectedTier) {
+				throw new Error(`Tier not selected. Invalid state`)
 			}
 
-			const { error } = await stripe.confirmPayment({
-				elements,
-				confirmParams: {
-					return_url: `${window.location.href}?payment_completed=true`,
+			const username = this.$store.state.session.id
+			try {
+				const response = await startSubscriptionPayment(
+					username,
+					this.selectedTier,
+					this.selectedPeriod,
+					paymentMethod.id,
+					this.customerEmail,
+				)
+
+				if (response.error) {
+					this.$toastError(response.error)
+					return
+				}
+				if (response.status === `succeeded`) {
+					this.step = 3
+				} else if (response.status === `requires_action`) {
+					this.$toastMessage(`needs further authentication`)
+				}
+			} catch (err) {
+				this.$toastError((err as Error).message ?? `Unkwon error`)
+			}
+		},
+		async submitCardPayment(e: HTMLInputEvent): Promise<void> {
+			// TODO Start loader for `Pay Now` button here
+			e.preventDefault()
+			const stripe = await this.stripeClient()
+			if (!cardElement) {
+				throw new Error(`Card elements is not initialized`)
+			}
+
+			if (!this.customerEmail) {
+				this.$toastError(`Invalid email address`)
+				return
+			}
+			const { error, paymentMethod } = await stripe.createPaymentMethod({
+				type: `card`,
+				card: cardElement,
+				billing_details: {
+					email: this.customerEmail,
 				},
 			})
 
 			if (error) {
 				this.$toastError(error.message ?? `An unknown error happened`)
+				return
 			}
-		},
-		submitCardPayment() {
-			if (this.cardErrorMessage) {
-				console.log(this.cardErrorMessage)
+
+			if (!paymentMethod) {
+				this.$toastError(`Invalid payment method`)
+				return
 			}
-			// TODO submit payment to server
+
+			await this.submitPayment(paymentMethod)
 		},
 		handleCloseClick(e: any): void {
 			if (!e.target || e.target.parentNode === null || e.target.firstChild?.classList === undefined) {

@@ -2,7 +2,7 @@ import type { GetterTree, MutationTree } from 'vuex'
 import { ActionContext } from 'vuex'
 import Vue from 'vue'
 import { RootState } from '.'
-import { fetchPaymentProfile } from '@/backend/payment'
+import { retrievePaymentProfile } from '@/backend/payment'
 
 export const namespace = `paymentProfile`
 
@@ -54,7 +54,7 @@ export const actions = {
 		payload: { username: string },
 	) {
 		const { username } = payload
-		const profile = await fetchPaymentProfile(username)
+		const profile = await retrievePaymentProfile(username)
 		context.commit(MutationType.ADD_PROFILE, profile)
 	},
 }

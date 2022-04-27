@@ -230,7 +230,6 @@ import BackButton from '@/components/icons/ChevronLeft.vue'
 import SubscribeButton from '@/components/SubscribeButton.vue'
 import PencilIcon from '@/components/icons/Pencil.vue'
 import { getProfile, Profile } from '@/backend/profile'
-import { fetchSubscriptionStatus } from '@/backend/payment'
 
 interface IData {
 	totalPostsCount: number
@@ -367,9 +366,6 @@ export default Vue.extend({
 		this.$nextTick(() => {
 			this.initHeader()
 		})
-		if (this.$route.query.payment_completed) {
-			this.finalizeSubscription()
-		}
 	},
 	destroyed() {
 		if (this.$store.state.settings.recentlyInSettings) {
@@ -377,19 +373,6 @@ export default Vue.extend({
 		}
 	},
 	methods: {
-		async finalizeSubscription() {
-			if (!this.$store.state.session.id) {
-				throw new Error(`You're not logged in`)
-			}
-			if (!this.$route.query.payment_intent) {
-				throw new Error(`Invalid redirect`)
-			}
-
-			const subscriptionStatus = await fetchSubscriptionStatus(
-				this.$store.state.session.id,
-				this.$route.query.payment_intent as string,
-			)
-		},
 		initHeader() {
 			// Set scroll padding
 			const topContainer = this.$refs.topContainer as HTMLElement

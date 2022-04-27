@@ -28,21 +28,23 @@ export async function refreshStripeAccount(username: string) {
 	return response.data.url
 }
 
-export async function generatePaymentIntent(
+export async function startSubscriptionPayment(
 	username: string,
-	tierId: string,
-	amount: number,
+	tier: SubscriptionTier,
 	period: string,
+	paymentMethodId: string,
 	email: string,
 ) {
+	const amount = getAmountFromTier(period, tier)
 	try {
 		const data = {
 			username,
 			action: `startSubscription`,
-			tierId,
+			tierId: tier._id,
 			amount,
 			period,
 			email,
+			paymentMethodId,
 			exp: getExpTimestamp(),
 		}
 		const { sig } = await signContent(data)
@@ -52,15 +54,16 @@ export async function generatePaymentIntent(
 		})
 		return response.data
 	} catch (err) {
-		return null
+		throw new Error(`Error with subscription: ${err}`)
 	}
 }
 
-export async function fetchPaymentProfile(username: string) {
+export async function retrievePaymentProfile(username: string) {
 	try {
 		const response = await axios.get(`${capsuleServer}/pay/profile/${username}`)
 		return response.data
 	} catch (err) {
+		// TODO handle error here or ignore?
 		return null
 	}
 }
@@ -121,23 +124,4 @@ export function getZeroDecimalAmount(currency: string, amount: number) {
 	}
 
 	return amount * 100
-}
-
-export async function fetchSubscriptionStatus(username: string, paymentIntent: string) {
-	try {
-		const data = {
-			username,
-			action: `checkSubscriptionStatus`,
-			paymentIntentId: paymentIntent,
-			exp: getExpTimestamp(),
-		}
-		const { sig } = await signContent(data)
-		const response = await axios.post(`${capsuleServer}/pay/stripe/subscribe/status`, {
-			data,
-			sig: uint8ArrayToHexString(sig),
-		})
-		return response.data
-	} catch (err) {
-		return null
-	}
 }
