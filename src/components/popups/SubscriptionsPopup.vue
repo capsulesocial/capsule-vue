@@ -460,7 +460,7 @@ export default Vue.extend({
 				)
 
 				if (response.error) {
-					this.$toastError(response.error)
+					this.$toastError(response.error.message)
 					return
 				}
 				if (response.status === `succeeded`) {
