@@ -36,23 +36,23 @@
 			<div class="flex h-44 justify-between">
 				<!-- Graph breakdown -->
 				<div
-					v-if="getCommentCount(`positive`) + getCommentCount(`neutral`) + getCommentCount(`negative`) !== 0"
+					v-if="commentsStats.positive + commentsStats.neutral + commentsStats.negative !== 0"
 					class="ml-5 pt-4 hidden h-full flex-row self-end lg:flex"
 				>
 					<!-- Positive -->
 					<span
 						class="bg-positive w-6 self-end rounded-t-full"
-						:style="`height: ` + (getCommentCount(`positive`) / getCommentCount(`total`)) * 100 + `%`"
+						:style="`height: ` + (commentsStats.positive / commentsStats.total) * 100 + `%`"
 					></span>
 					<!-- Neutral -->
 					<span
 						class="bg-neutral mx-2 w-6 self-end rounded-t-full"
-						:style="`height: ` + (getCommentCount(`neutral`) / getCommentCount(`total`)) * 100 + `%`"
+						:style="`height: ` + (commentsStats.neutral / commentsStats.total) * 100 + `%`"
 					></span>
 					<!-- Negative -->
 					<span
 						class="bg-negative w-6 self-end rounded-t-full"
-						:style="`height: ` + (getCommentCount(`negative`) / getCommentCount(`total`)) * 100 + `%`"
+						:style="`height: ` + (commentsStats.negative / commentsStats.total) * 100 + `%`"
 					></span>
 				</div>
 				<div
@@ -67,30 +67,30 @@
 					<!-- Bookmarks Count -->
 					<div class="mb-2 flex flex-row">
 						<div class="flex flex-col pr-4">
-							<h2 class="text-2xl font-semibold">{{ getCommentCount(`total`) }}</h2>
+							<h2 class="text-2xl font-semibold">{{ commentsStats.total }}</h2>
 							<span class="text-sm">Total comments</span>
 						</div>
 					</div>
 					<!-- Type breakdown Count -->
 					<div class="flex flex-row">
 						<div class="flex flex-col pr-4">
-							<h2 class="text-positive text-2xl font-semibold">{{ getCommentCount(`positive`) }}</h2>
+							<h2 class="text-positive text-2xl font-semibold">{{ commentsStats.positive }}</h2>
 							<span class="text-sm">Positive</span>
 						</div>
 						<div class="flex flex-col pr-4">
-							<h2 class="text-neutral text-2xl font-semibold">{{ getCommentCount(`neutral`) }}</h2>
+							<h2 class="text-neutral text-2xl font-semibold">{{ commentsStats.neutral }}</h2>
 							<span class="text-sm">Neutral</span>
 						</div>
 						<div class="flex flex-col pr-4">
-							<h2 class="text-negative text-2xl font-semibold">{{ getCommentCount(`negative`) }}</h2>
+							<h2 class="text-negative text-2xl font-semibold">{{ commentsStats.negative }}</h2>
 							<span class="text-sm">Negative</span>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div v-if="getCommentCount(`total`) !== 0" class="border-b w-full"></div>
+			<div v-if="commentsStats.total !== 0" class="border-b w-full"></div>
 			<!-- Comment Emotions -->
-			<div v-if="getCommentCount(`total`) !== 0" class="pt-5">
+			<div v-if="commentsStats.total !== 0" class="pt-5">
 				<h6 class="w-full pb-4 text-center text-sm font-semibold dark:text-darkPrimaryText">Comment Emotions</h6>
 				<!-- Row of faces -->
 				<div class="flex items-center">
@@ -112,7 +112,7 @@
 								/>
 							</div>
 							<span class="mt-1 self-center text-sm font-semibold dark:text-darkPrimaryText"
-								>{{ ((f.count / getCommentCount(`total`)) * 100).toFixed(1) }}%</span
+								>{{ ((f.count / commentsStats.total) * 100).toFixed(1) }}%</span
 							>
 						</div>
 					</div>
@@ -143,11 +143,8 @@
 		<article v-show="!toggleStats && !toggleReposters" id="section">
 			<div class="flex w-full justify-between py-5">
 				<div class="flex flex-row items-center">
-					<span v-if="getCommentCount(`total`) === 1" class="pr-2 font-semibold dark:text-darkPrimaryText"
-						>{{ getCommentCount(`total`) }} comment</span
-					>
-					<span v-else class="pr-2 font-semibold dark:text-darkPrimaryText"
-						>{{ getCommentCount(`total`) }} comments</span
+					<span class="pr-2 font-semibold dark:text-darkPrimaryText"
+						>{{ commentsStats.total }} {{ commentsStats.total === 1 ? 'comment' : 'comments' }}</span
 					>
 					<button class="focus:outline-none ml-2" @click="toggleStats = true"><StatsIcon /></button>
 				</div>
@@ -404,7 +401,14 @@ import Avatar from '@/components/Avatar.vue'
 
 import { feelings } from '@/config/config'
 import { faces, faceGroupings } from '@/config/faces'
-import { createComment, sendComment, ICommentData, getCommentsOfPost } from '@/backend/comment'
+import {
+	createComment,
+	sendComment,
+	ICommentData,
+	getCommentsOfPost,
+	getCommentsStats,
+	ICommentsStats,
+} from '@/backend/comment'
 import { getReposters, IGetRepostsOptions } from '@/backend/reposts'
 import { createDefaultProfile, getProfile } from '@/backend/profile'
 import { getFollowersAndFollowing } from '@/backend/following'
@@ -438,6 +442,7 @@ interface IData {
 	page: number
 	selectedEmotionColor: `positive` | `neutral` | `negative` | `neutralLightest`
 	sendingComment: boolean
+	commentsStats: ICommentsStats
 }
 
 export default Vue.extend({
@@ -499,6 +504,13 @@ export default Vue.extend({
 			page: 0,
 			selectedEmotionColor: `neutralLightest`,
 			sendingComment: false,
+			commentsStats: {
+				total: 0,
+				positive: 0,
+				neutral: 0,
+				negative: 0,
+				faceStats: {},
+			},
 		}
 	},
 	created() {
@@ -508,13 +520,26 @@ export default Vue.extend({
 	methods: {
 		async initComments() {
 			this.comments = await getCommentsOfPost(this.postCID)
-			// get comment stats
-			this.updateFaceStats()
+			await this.updateCommentsStats()
 			if (this.$store.state.session.avatar !== ``) {
 				getPhotoFromIPFS(this.$store.state.session.avatar).then((a) => {
 					this.avatar = a
 				})
 			}
+		},
+		async updateCommentsStats() {
+			const commentsStats = await getCommentsStats(this.postCID)
+			this.commentsStats = commentsStats
+			const stats: Record<string, FaceStat> = {}
+
+			for (const face in this.commentsStats.faceStats) {
+				if (!(face in faces)) {
+					continue
+				}
+				const f = faces[face]
+				stats[f.label] = { face: f, count: this.commentsStats.faceStats[face] }
+			}
+			this.faceStats = sortBy(Object.values(stats), `count`)
 		},
 		async toggleShowEmotions() {
 			this.showEmotions = !this.showEmotions
@@ -587,7 +612,7 @@ export default Vue.extend({
 				this.filter = ``
 				this.selectedEmotionColor = `neutralLightest`
 				this.filterComments()
-				this.updateFaceStats()
+				this.updateCommentsStats()
 				this.sendingComment = false
 			} catch (err: unknown) {
 				this.$handleError(err)
@@ -609,43 +634,6 @@ export default Vue.extend({
 				this.postCID,
 				this.filter.charAt(0).toLowerCase() + this.filter.replace(/\s/g, ``).substring(1),
 			)
-		},
-		getCommentCount(type: `total` | `positive` | `neutral` | `negative`): number {
-			if (type === `total`) {
-				return this.comments.length
-			}
-			let count: number = 0
-			for (const c of this.comments) {
-				const reaction = c.emotion as keyof typeof faces
-				if (!(reaction in faces)) {
-					continue
-				}
-
-				const label = faces[reaction].label
-				if (feelings[type].has(label)) {
-					count++
-				}
-			}
-			return count
-		},
-		updateFaceStats(): void {
-			const stats: Record<string, FaceStat> = {}
-			for (const c of this.comments) {
-				const reaction = c.emotion as keyof typeof faces
-				if (!(reaction in faces)) {
-					continue
-				}
-
-				const f = faces[reaction]
-				if (stats[f.label]) {
-					// Not the first entry
-					stats[f.label].count++
-					continue
-				}
-
-				stats[f.label] = { face: f, count: 1 }
-			}
-			this.faceStats = sortBy(Object.values(stats), `count`).reverse()
 		},
 		getStyle(emotionType: string): string {
 			if (feelings.positive.has(emotionType)) {
