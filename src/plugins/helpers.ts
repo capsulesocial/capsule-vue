@@ -3,7 +3,7 @@ import type { Plugin } from '@nuxt/types'
 import { getBlobExtension } from '@/backend/utilities/helpers'
 
 type dateString = (date: Date, hideYear?: boolean, preformattedDate?: string | null) => string
-type dateFormat = (input: object | Date | number) => string
+type dateFormat = (input: string | Date | number) => string
 type isErrorFormat = (obj: Record<string, unknown>) => obj is { error: string }
 type contentImgs = (content: string) => RegExpMatchArray[]
 type urlToFileFormat = (url: string) => Promise<{ file: File } | { error: string }>

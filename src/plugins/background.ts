@@ -1,16 +1,16 @@
 import type { Plugin } from '@nuxt/types'
 import { IBackground, backgrounds } from '@/config/backgrounds'
 
-type backgroundURL = (id: string | undefined, type: `local` | `ipfs`) => IBackground
+type BackgroundURLFunction = (id?: string) => IBackground
 
 // eslint-disable-next-line quotes
 declare module 'vue/types/vue' {
 	interface Vue {
-		$getBGImage: backgroundURL
+		$getBGImage: BackgroundURLFunction
 	}
 }
 
-const getBGImage: backgroundURL = (id: string | undefined) => {
+const getBGImage: BackgroundURLFunction = (id?: string) => {
 	const bg = backgrounds.filter((background) => {
 		return background.id === id
 	})
