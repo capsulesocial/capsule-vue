@@ -1,9 +1,9 @@
-import axios from 'axios'
+import { AxiosError } from 'axios'
 import type { Plugin } from '@nuxt/types'
 import { getBlobExtension } from '@/backend/utilities/helpers'
 
 type dateString = (date: Date, hideYear?: boolean, preformattedDate?: string | null) => string
-type dateFormat = (input: object | Date | number) => string
+type dateFormat = (input: string | Date | number) => string
 type isErrorFormat = (obj: Record<string, unknown>) => obj is { error: string }
 type contentImgs = (content: string) => RegExpMatchArray[]
 type urlToFileFormat = (url: string) => Promise<{ file: File } | { error: string }>
@@ -113,24 +113,24 @@ const urlToFile = async (url: string) => {
 }
 
 const helperPlugin: Plugin = (context, inject) => {
-	const handleError = (error: unknown) => {
-		if (axios.isAxiosError(error)) {
-			if (!error.response) {
+	const handleError = (err: unknown) => {
+		if (err instanceof AxiosError) {
+			if (!err.response) {
 				context.$toastError(`Network error, please try again`)
 				return
 			}
-			if (error.response.status === 429) {
+			if (err.response.status === 429) {
 				context.$toastError(`Too many requests, please try again in a minute`)
 				return
 			}
-			context.$toastError(error.response.data.error)
+			context.$toastError(err.response.data.error)
 			return
 		}
-		if (error instanceof Error) {
-			context.$toastError(error.message)
+		if (err instanceof Error) {
+			context.$toastError(err.message)
 			return
 		}
-		throw error
+		throw err
 	}
 	inject(`getFormat`, getFormat)
 	inject(`formatDate`, formatDate)

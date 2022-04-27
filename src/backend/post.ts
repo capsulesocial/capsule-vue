@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 
 import { signContent, verifyContent } from './utilities/keys'
 import ipfs from './utilities/ipfs'
@@ -183,7 +183,7 @@ async function getEncryptionKeys(username: string, cid: string) {
 		)
 		return res.data
 	} catch (err) {
-		if (axios.isAxiosError(err) && err.response) {
+		if (err instanceof AxiosError && err.response) {
 			return { error: err.response.data.error }
 		}
 		throw err

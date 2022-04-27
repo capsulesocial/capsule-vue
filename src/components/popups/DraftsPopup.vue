@@ -56,13 +56,8 @@ import DraftPreview from '@/components/DraftPreview.vue'
 import SecondaryButton from '@/components/SecondaryButton.vue'
 import CloseIcon from '@/components/icons/X.vue'
 
-interface IData {}
-
 export default Vue.extend({
 	components: { DraftPreview, CloseIcon, SecondaryButton },
-	data(): IData {
-		return {}
-	},
 	created() {
 		window.addEventListener(`click`, this.handleCloseClick, false)
 	},

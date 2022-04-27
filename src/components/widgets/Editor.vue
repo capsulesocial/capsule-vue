@@ -158,7 +158,7 @@ import { getCompressedImage } from '@/backend/utilities/imageCompression'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
 
 interface IData {
-	featuredPhoto: null | any
+	featuredPhoto: null | unknown
 	categoryList: string[]
 	category: string
 	tag: string

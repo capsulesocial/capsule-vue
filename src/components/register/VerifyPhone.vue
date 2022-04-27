@@ -45,7 +45,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import intlTelInput from 'intl-tel-input'
-import axios from 'axios'
+import { AxiosError } from 'axios'
 
 import BrandedButton from '@/components/BrandedButton.vue'
 import { requestOTP, requestSponsor, waitForFunds } from '@/backend/funder'
@@ -53,7 +53,7 @@ import { requestOTP, requestSponsor, waitForFunds } from '@/backend/funder'
 interface IData {
 	otp: string
 	otpSent: boolean
-	iti: any
+	iti: null | intlTelInput.Plugin
 	phoneNumber: string
 	inputCode: string
 	isLoading: boolean
@@ -90,6 +90,9 @@ export default Vue.extend({
 	},
 	methods: {
 		async sendOTP() {
+			if (this.iti === null) {
+				return
+			}
 			this.phoneNumber = this.iti.getNumber()
 			if (!this.iti.isValidNumber()) {
 				this.$toastError(`Invalid phone number`)
@@ -118,7 +121,7 @@ export default Vue.extend({
 				this.$emit(`updateFunds`, balance)
 			} catch (err: any) {
 				this.isLoading = false
-				if (axios.isAxiosError(err) && err.response) {
+				if (err instanceof AxiosError && err.response) {
 					this.otp = ``
 					this.$toastError(err.response.data.error)
 					return

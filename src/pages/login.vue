@@ -82,7 +82,7 @@ interface IData {
 	id: string
 	torus: DirectWebSdk
 	userInfo: null | TorusLoginResponse
-	username?: null | string
+	username: null | string
 	accountId: null | string
 	isLoading: boolean
 	phoneNumber: string
@@ -111,7 +111,7 @@ export default Vue.extend({
 			accountId: null,
 			userInfo: null,
 			isLoading: false,
-			username: undefined,
+			username: null,
 			accountIdInput: ``,
 			privateKey: ``,
 			currentYear: ``,

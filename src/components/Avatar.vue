@@ -34,7 +34,7 @@ import Vue from 'vue'
 import { avatars } from '@/config/avatars'
 
 interface IData {
-	avatarList: Array<any>
+	avatarList: Array<unknown>
 	hasAvatar: boolean
 }
 
