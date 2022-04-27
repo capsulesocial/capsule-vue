@@ -528,16 +528,16 @@ export default Vue.extend({
 			}
 		},
 		async updateCommentsStats() {
-			const commentsStats = await getCommentsStats(this.postCID)
-			this.commentsStats = commentsStats
+			this.commentsStats = await getCommentsStats(this.postCID)
+			const { faceStats } = this.commentsStats
 			const stats: Record<string, FaceStat> = {}
 
-			for (const face in this.commentsStats.faceStats) {
+			for (const face in faceStats) {
 				if (!(face in faces)) {
 					continue
 				}
 				const f = faces[face]
-				stats[f.label] = { face: f, count: this.commentsStats.faceStats[face] }
+				stats[f.label] = { face: f, count: faceStats[face] }
 			}
 			this.faceStats = sortBy(Object.values(stats), `count`)
 		},
