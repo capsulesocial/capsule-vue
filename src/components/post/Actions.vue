@@ -553,7 +553,7 @@ export default Vue.extend({
 				this.removeScrollListener()
 			}
 			// get comment stats
-			this.updateFaceStats()
+			// this.updateFaceStats()
 			await this.updateCommentsStats()
 			if (this.$store.state.session.avatar !== ``) {
 				getPhotoFromIPFS(this.$store.state.session.avatar).then((a) => {
@@ -651,7 +651,7 @@ export default Vue.extend({
 				this.emotion = ``
 				this.filter = ``
 				this.selectedEmotionColor = `neutralLightest`
-				this.updateFaceStats()
+				// this.updateFaceStats()
 				this.filterComments()
 				this.updateCommentsStats()
 				this.sendingComment = false
