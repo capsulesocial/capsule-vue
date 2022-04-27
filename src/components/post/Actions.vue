@@ -385,6 +385,13 @@
 			<div v-if="comments.length === 0 && filter !== ``" class="text-gray5 dark:text-gray3 pt-5 text-sm text-center">
 				No comments under this filter
 			</div>
+			<div
+				v-if="noMoreComments"
+				class="text-gray5 dark:text-gray3 text-sm text-center"
+				:class="$route.name === `post-post` ? `py-5` : `pt-5`"
+			>
+				End of comments
+			</div>
 		</article>
 	</section>
 </template>
@@ -515,8 +522,16 @@ export default Vue.extend({
 		this.isLoading = false
 	},
 	mounted() {
-		const postActions = this.$refs.postActions as HTMLElement
-		postActions.parentElement?.addEventListener(`scroll`, this.handleScroll)
+		// comment pagination event handler
+		if (this.$route.name !== `post-post`) {
+			// Post card popup eventhandler
+			const postActions = this.$refs.postActions as HTMLElement
+			postActions.parentElement?.addEventListener(`scroll`, this.handleScroll)
+			return
+		}
+		// Full page event handler
+		const postActions = document.getElementById(`post`) as HTMLElement
+		postActions.addEventListener(`scroll`, this.handleScroll)
 	},
 	methods: {
 		async initComments() {
