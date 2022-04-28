@@ -65,12 +65,33 @@ async function createIPFSInterface(): Promise<IPFSInterface> {
 
 	function _maintainConnection() {
 		setTimeout(async () => {
-			for (const a of bootstrapNodes) {
-				await node.swarm.disconnect(a)
-				await node.swarm.connect(a)
-			}
+			await ensureConnectedToBootstrapNodes()
 			_maintainConnection()
 		}, 10000)
+	}
+
+	async function ensureConnectedToBootstrapNodes() {
+		// get a list of all addresses for all of the peers we're currently connected to
+		const peerAddrs = new Set<string>()
+		try {
+			const swarmAddrs = await node.swarm.addrs({ timeout: 5000 })
+			swarmAddrs.forEach((p) => p.addrs.forEach((a) => peerAddrs.add(a.toString())))
+		} catch (err) {
+			// eslint-disable-next-line no-console
+			console.log(`Failed to get IPFS swarm addreses: ${err}`)
+			return
+		}
+
+		// get a list of boostrap nodes that we're not currently connected to, and try connecting to them
+		const disconnectedBootstrapNodes = bootstrapNodes.filter((bootstrapNode: string) => !peerAddrs.has(bootstrapNode))
+		for (const a of disconnectedBootstrapNodes) {
+			try {
+				await node.swarm.connect(a)
+			} catch (err) {
+				// eslint-disable-next-line no-console
+				console.error(`Failed to connect to ${a}: ${err}`)
+			}
+		}
 	}
 
 	const getData = async (cid: string) => {
