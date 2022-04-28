@@ -20,6 +20,14 @@ export interface ICommentData {
 	emotion: string
 }
 
+export interface ICommentsStats {
+	total: number
+	positive: number
+	neutral: number
+	negative: number
+	faceStats: Record<string, number>
+}
+
 export function createComment(authorID: string, content: string, emotion: string, parentCID: string): INewCommentData {
 	return {
 		authorID,
@@ -63,17 +71,24 @@ export async function sendComment(c: INewCommentData, type: `comment` | `reply`)
 
 export async function getCommentsOfPost(
 	parentCID: string,
+	offset: number,
+	limit: number,
 	emotion?: string,
 	emotionCategory?: `negative` | `neutral` | `positive`,
 ): Promise<ICommentData[]> {
 	const res = await axios.get(`${nodeUrl()}/content/${parentCID}/comments`, {
-		params: { ...(emotion ? { emotion } : {}), ...(emotionCategory ? { emotionCategory } : {}) },
+		params: { ...(emotion ? { emotion } : {}), ...(emotionCategory ? { emotionCategory } : {}), offset, limit },
 	})
 	if (res.data && res.data.data && res.data.data.comments) {
 		return res.data.data.comments
 	}
 
 	return []
+}
+
+export async function getCommentsStats(parentCID: string): Promise<ICommentsStats> {
+	const res = await axios.get(`${nodeUrl()}/content/${parentCID}/comments/stats`)
+	return res.data
 }
 
 export async function getCommentsOfUser(authorID: string, offset: number, limit: number): Promise<ICommentData[]> {

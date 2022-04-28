@@ -1,5 +1,5 @@
 <template>
-	<section>
+	<section ref="postActions">
 		<!-- Stats -->
 		<article v-show="toggleStats" class="pt-5">
 			<!-- Back button -->
@@ -36,23 +36,23 @@
 			<div class="flex h-44 justify-between">
 				<!-- Graph breakdown -->
 				<div
-					v-if="getCommentCount(`positive`) + getCommentCount(`neutral`) + getCommentCount(`negative`) !== 0"
+					v-if="commentsStats.positive + commentsStats.neutral + commentsStats.negative !== 0"
 					class="ml-5 pt-4 hidden h-full flex-row self-end lg:flex"
 				>
 					<!-- Positive -->
 					<span
 						class="bg-positive w-6 self-end rounded-t-full"
-						:style="`height: ` + (getCommentCount(`positive`) / getCommentCount(`total`)) * 100 + `%`"
+						:style="`height: ` + (commentsStats.positive / commentsStats.total) * 100 + `%`"
 					></span>
 					<!-- Neutral -->
 					<span
 						class="bg-neutral mx-2 w-6 self-end rounded-t-full"
-						:style="`height: ` + (getCommentCount(`neutral`) / getCommentCount(`total`)) * 100 + `%`"
+						:style="`height: ` + (commentsStats.neutral / commentsStats.total) * 100 + `%`"
 					></span>
 					<!-- Negative -->
 					<span
 						class="bg-negative w-6 self-end rounded-t-full"
-						:style="`height: ` + (getCommentCount(`negative`) / getCommentCount(`total`)) * 100 + `%`"
+						:style="`height: ` + (commentsStats.negative / commentsStats.total) * 100 + `%`"
 					></span>
 				</div>
 				<div
@@ -67,30 +67,30 @@
 					<!-- Bookmarks Count -->
 					<div class="mb-2 flex flex-row">
 						<div class="flex flex-col pr-4">
-							<h2 class="text-2xl font-semibold">{{ getCommentCount(`total`) }}</h2>
+							<h2 class="text-2xl font-semibold">{{ commentsStats.total }}</h2>
 							<span class="text-sm">Total comments</span>
 						</div>
 					</div>
 					<!-- Type breakdown Count -->
 					<div class="flex flex-row">
 						<div class="flex flex-col pr-4">
-							<h2 class="text-positive text-2xl font-semibold">{{ getCommentCount(`positive`) }}</h2>
+							<h2 class="text-positive text-2xl font-semibold">{{ commentsStats.positive }}</h2>
 							<span class="text-sm">Positive</span>
 						</div>
 						<div class="flex flex-col pr-4">
-							<h2 class="text-neutral text-2xl font-semibold">{{ getCommentCount(`neutral`) }}</h2>
+							<h2 class="text-neutral text-2xl font-semibold">{{ commentsStats.neutral }}</h2>
 							<span class="text-sm">Neutral</span>
 						</div>
 						<div class="flex flex-col pr-4">
-							<h2 class="text-negative text-2xl font-semibold">{{ getCommentCount(`negative`) }}</h2>
+							<h2 class="text-negative text-2xl font-semibold">{{ commentsStats.negative }}</h2>
 							<span class="text-sm">Negative</span>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div v-if="getCommentCount(`total`) !== 0" class="border-b w-full"></div>
+			<div v-if="commentsStats.total !== 0" class="border-b w-full"></div>
 			<!-- Comment Emotions -->
-			<div v-if="getCommentCount(`total`) !== 0" class="pt-5">
+			<div v-if="commentsStats.total !== 0" class="pt-5">
 				<h6 class="w-full pb-4 text-center text-sm font-semibold dark:text-darkPrimaryText">Comment Emotions</h6>
 				<!-- Row of faces -->
 				<div class="flex items-center">
@@ -112,7 +112,7 @@
 								/>
 							</div>
 							<span class="mt-1 self-center text-sm font-semibold dark:text-darkPrimaryText"
-								>{{ ((f.count / getCommentCount(`total`)) * 100).toFixed(1) }}%</span
+								>{{ ((f.count / commentsStats.total) * 100).toFixed(1) }}%</span
 							>
 						</div>
 					</div>
@@ -143,11 +143,8 @@
 		<article v-show="!toggleStats && !toggleReposters" id="section">
 			<div class="flex w-full justify-between py-5">
 				<div class="flex flex-row items-center">
-					<span v-if="getCommentCount(`total`) === 1" class="pr-2 font-semibold dark:text-darkPrimaryText"
-						>{{ getCommentCount(`total`) }} comment</span
-					>
-					<span v-else class="pr-2 font-semibold dark:text-darkPrimaryText"
-						>{{ getCommentCount(`total`) }} comments</span
+					<span class="pr-2 font-semibold dark:text-darkPrimaryText"
+						>{{ commentsStats.total }} {{ commentsStats.total === 1 ? 'comment' : 'comments' }}</span
 					>
 					<button class="focus:outline-none ml-2" @click="toggleStats = true"><StatsIcon /></button>
 				</div>
@@ -385,6 +382,13 @@
 			<div v-if="comments.length === 0 && filter !== ``" class="text-gray5 dark:text-gray3 pt-5 text-sm text-center">
 				No comments under this filter
 			</div>
+			<div
+				v-if="noMoreComments && comments.length > 0"
+				class="text-gray5 dark:text-gray3 text-sm text-center"
+				:class="$route.name === `post-post` ? `py-5` : `pt-5`"
+			>
+				End of comments
+			</div>
 		</article>
 	</section>
 </template>
@@ -404,7 +408,14 @@ import Avatar from '@/components/Avatar.vue'
 
 import { feelings } from '@/config/config'
 import { faces, faceGroupings, IFace } from '@/config/faces'
-import { createComment, sendComment, ICommentData, getCommentsOfPost } from '@/backend/comment'
+import {
+	createComment,
+	sendComment,
+	ICommentData,
+	getCommentsOfPost,
+	getCommentsStats,
+	ICommentsStats,
+} from '@/backend/comment'
 import { getReposters, IGetRepostsOptions } from '@/backend/reposts'
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 import { getFollowersAndFollowing } from '@/backend/following'
@@ -438,6 +449,11 @@ interface IData {
 	page: number
 	selectedEmotionColor: `positive` | `neutral` | `negative` | `neutralLightest`
 	sendingComment: boolean
+	currentCommentsOffset: number
+	commentsLimit: number
+	isLoading: boolean
+	noMoreComments: boolean
+	commentsStats: ICommentsStats
 }
 
 export default Vue.extend({
@@ -499,22 +515,65 @@ export default Vue.extend({
 			page: 0,
 			selectedEmotionColor: `neutralLightest`,
 			sendingComment: false,
+			currentCommentsOffset: 0,
+			commentsLimit: 10,
+			isLoading: true,
+			noMoreComments: false,
+			commentsStats: {
+				total: 0,
+				positive: 0,
+				neutral: 0,
+				negative: 0,
+				faceStats: {},
+			},
 		}
 	},
 	created() {
 		this.initComments()
 		this.initReposters()
+		this.isLoading = false
+	},
+	mounted() {
+		// comment pagination event handler
+		if (this.$route.name !== `post-post`) {
+			// Post card popup eventhandler
+			const postActions = this.$refs.postActions as HTMLElement
+			postActions.parentElement?.addEventListener(`scroll`, this.handleScroll)
+			return
+		}
+		// Full page event handler
+		const postActions = document.getElementById(`post`) as HTMLElement
+		postActions.addEventListener(`scroll`, this.handleScroll)
 	},
 	methods: {
 		async initComments() {
-			this.comments = await getCommentsOfPost(this.postCID)
+			this.comments = await getCommentsOfPost(this.postCID, this.currentCommentsOffset, this.commentsLimit)
+			if (this.comments.length < 10) {
+				this.noMoreComments = true
+				this.removeScrollListener()
+			}
 			// get comment stats
-			this.updateFaceStats()
+			// this.updateFaceStats()
+			await this.updateCommentsStats()
 			if (this.$store.state.session.avatar !== ``) {
 				getPhotoFromIPFS(this.$store.state.session.avatar).then((a) => {
 					this.avatar = a
 				})
 			}
+		},
+		async updateCommentsStats() {
+			this.commentsStats = await getCommentsStats(this.postCID)
+			const { faceStats } = this.commentsStats
+			const stats: Record<string, FaceStat> = {}
+
+			for (const face in faceStats) {
+				if (!(face in faces)) {
+					continue
+				}
+				const f = faces[face]
+				stats[f.label] = { face: f, count: faceStats[face] }
+			}
+			this.faceStats = sortBy(Object.values(stats), `count`)
 		},
 		async toggleShowEmotions() {
 			this.showEmotions = !this.showEmotions
@@ -529,7 +588,11 @@ export default Vue.extend({
 		},
 		setFilter(reaction: string): void {
 			this.filter = reaction
+			this.currentCommentsOffset = 0
+			this.noMoreComments = false
+			this.isLoading = true
 			this.filterComments()
+			this.isLoading = false
 		},
 		setEmotion(e: PointerEvent, r: { label: string; light: any; dark: any }) {
 			if (!e.target) {
@@ -577,17 +640,20 @@ export default Vue.extend({
 			try {
 				const c = createComment(this.$store.state.session.id, this.comment, this.activeEmotion.label, this.postCID)
 				const _id = await sendComment(c, `comment`)
-				this.comments.push({ _id, ...c })
+				this.comments.unshift({ _id, ...c })
 				// Apply filter to comments, in case new comment was added in filtered category
 				this.comment = ``
+				this.isLoading = true
 				this.filterComments()
+				this.isLoading = false
 				this.selectedEmotion = { label: ``, light: null, dark: null }
 				this.activeEmotion = { label: ``, light: null, dark: null }
 				this.emotion = ``
 				this.filter = ``
 				this.selectedEmotionColor = `neutralLightest`
+				// this.updateFaceStats()
 				this.filterComments()
-				this.updateFaceStats()
+				this.updateCommentsStats()
 				this.sendingComment = false
 			} catch (err: unknown) {
 				this.$handleError(err)
@@ -595,57 +661,33 @@ export default Vue.extend({
 		},
 		async filterComments() {
 			// Fetch comments
+			let moreComments: ICommentData[] = []
 			if (this.filter === ``) {
-				this.comments = await getCommentsOfPost(this.postCID)
-				return
-			}
-			if (this.filter === `positive` || this.filter === `neutral` || this.filter === `negative`) {
+				moreComments = await getCommentsOfPost(this.postCID, this.currentCommentsOffset, this.commentsLimit)
+			} else if (this.filter === `positive` || this.filter === `neutral` || this.filter === `negative`) {
 				// Get a list of comments with multiple emotions under the same category
-				this.comments = await getCommentsOfPost(this.postCID, undefined, this.filter)
+				moreComments = await getCommentsOfPost(
+					this.postCID,
+					this.currentCommentsOffset,
+					this.commentsLimit,
+					undefined,
+					this.filter,
+				)
 				return
+			} else {
+				// Get a list of comments with a specific emotion
+				moreComments = await getCommentsOfPost(
+					this.postCID,
+					this.currentCommentsOffset,
+					this.commentsLimit,
+					this.filter.charAt(0).toLowerCase() + this.filter.replace(/\s/g, ``).substring(1),
+				)
 			}
-			// Get a list of comments with a specific emotion
-			this.comments = await getCommentsOfPost(
-				this.postCID,
-				this.filter.charAt(0).toLowerCase() + this.filter.replace(/\s/g, ``).substring(1),
-			)
-		},
-		getCommentCount(type: `total` | `positive` | `neutral` | `negative`): number {
-			if (type === `total`) {
-				return this.comments.length
+			if (moreComments.length < 10) {
+				this.noMoreComments = true
+				this.removeScrollListener()
 			}
-			let count: number = 0
-			for (const c of this.comments) {
-				const reaction = c.emotion as keyof typeof faces
-				if (!(reaction in faces)) {
-					continue
-				}
-
-				const label = faces[reaction].label
-				if (feelings[type].has(label)) {
-					count++
-				}
-			}
-			return count
-		},
-		updateFaceStats(): void {
-			const stats: Record<string, FaceStat> = {}
-			for (const c of this.comments) {
-				const reaction = c.emotion as keyof typeof faces
-				if (!(reaction in faces)) {
-					continue
-				}
-
-				const f = faces[reaction]
-				if (stats[f.label]) {
-					// Not the first entry
-					stats[f.label].count++
-					continue
-				}
-
-				stats[f.label] = { face: f, count: 1 }
-			}
-			this.faceStats = sortBy(Object.values(stats), `count`).reverse()
+			this.comments = this.comments.concat(moreComments)
 		},
 		getStyle(emotionType: string): string {
 			if (feelings.positive.has(emotionType)) {
@@ -686,6 +728,21 @@ export default Vue.extend({
 			this.followers = followers
 			this.following = following
 			this.userIsFollowed = followers.has(this.$store.state.session.id)
+		},
+		handleScroll(e: Event) {
+			const { scrollTop, scrollHeight, clientHeight } = e.srcElement as HTMLElement
+			if (scrollTop + clientHeight >= scrollHeight - 5) {
+				if (!this.isLoading && !this.noMoreComments) {
+					this.isLoading = true
+					this.currentCommentsOffset += this.commentsLimit
+					this.filterComments()
+					this.isLoading = false
+				}
+			}
+		},
+		removeScrollListener() {
+			const postActions = this.$refs.postActions as HTMLElement
+			postActions.parentElement?.removeEventListener(`scroll`, this.handleScroll)
 		},
 	},
 })
