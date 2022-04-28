@@ -95,7 +95,7 @@ export default Vue.extend({
 		},
 		following: {
 			type: Set as PropType<Set<string>>,
-			default: () => new Set(),
+			default: () => new Set<string>(),
 		},
 	},
 	data(): IData {

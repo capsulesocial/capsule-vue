@@ -149,10 +149,10 @@ import { getUserInfoNEAR } from '@/backend/near'
 
 interface IData {
 	myProfile: Profile
-	myAvatar: string | ArrayBuffer | null
+	myAvatar?: string | ArrayBuffer
 	myFollowing: Set<string>
 	visitProfile: Profile
-	visitAvatar: string | ArrayBuffer | null
+	visitAvatar?: string | ArrayBuffer
 	followers: Set<string>
 	following: Set<string>
 	userIsFollowed: boolean
@@ -185,10 +185,8 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			myProfile: createDefaultProfile(this.$store.state.session.id),
-			myAvatar: null,
 			myFollowing: new Set(),
 			visitProfile: createDefaultProfile(this.$route.params.id),
-			visitAvatar: null,
 			followers: new Set(),
 			following: new Set(),
 			userIsFollowed: false,
@@ -261,7 +259,6 @@ export default Vue.extend({
 				return
 			}
 			this.visitProfile = visitProfile || createDefaultProfile(this.$route.params.id)
-			this.visitAvatar = null
 			if (this.visitProfile.avatar !== ``) {
 				getPhotoFromIPFS(this.visitProfile.avatar).then((p) => {
 					this.visitAvatar = p

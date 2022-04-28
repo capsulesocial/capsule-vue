@@ -41,8 +41,8 @@ export default Vue.extend({
 	},
 	props: {
 		authorAvatar: {
-			type: String as PropType<ArrayBuffer | string | null>,
-			default: null,
+			type: String as PropType<ArrayBuffer | string | undefined>,
+			default: undefined,
 		},
 		authorName: {
 			type: String,

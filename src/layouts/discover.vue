@@ -75,7 +75,7 @@ import { followChange, getFollowersAndFollowing } from '@/backend/following'
 
 interface IData {
 	profile: Profile | null
-	avatar: string | ArrayBuffer | null
+	avatar?: string | ArrayBuffer
 	following: Set<string>
 	bgImage: IBackground
 }
@@ -92,7 +92,6 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			profile: null,
-			avatar: null,
 			following: new Set(),
 			bgImage: backgrounds[0],
 		}

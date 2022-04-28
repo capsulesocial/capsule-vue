@@ -95,7 +95,7 @@ import BrushlIcon from '@/components/icons/Brush.vue'
 
 interface IData {
 	profile: Profile | null
-	avatar: string | ArrayBuffer | null
+	avatar?: string | ArrayBuffer
 	tab: string
 	showPopup: boolean
 	bgImage: IBackground
@@ -112,7 +112,6 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			profile: null,
-			avatar: null,
 			tab: `account`,
 			showPopup: false,
 			bgImage: backgrounds[0],

@@ -170,6 +170,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import type { PropType } from 'vue'
 import { mapMutations } from 'vuex'
 import { keyStores } from 'near-api-js'
 
@@ -206,7 +207,7 @@ export default Vue.extend({
 	},
 	props: {
 		avatar: {
-			type: String,
+			type: String as PropType<string | ArrayBuffer>,
 			default: ``,
 		},
 	},

@@ -98,7 +98,7 @@ import { getBookmarksOfUser, BookmarkSort } from '@/backend/bookmarks'
 
 interface IData {
 	profile: Profile | null
-	avatar: string | ArrayBuffer | null
+	avatar?: string | ArrayBuffer
 	posts: IPostResponse[]
 	categoryList: string[]
 	activeFilter: string
@@ -118,7 +118,6 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			profile: null,
-			avatar: null,
 			posts: [],
 			categoryList: categories,
 			activeFilter: ``,

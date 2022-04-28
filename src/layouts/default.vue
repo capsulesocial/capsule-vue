@@ -54,7 +54,7 @@ import { IBackground, backgrounds } from '@/config/backgrounds'
 
 interface IData {
 	myProfile: Profile
-	myAvatar: string | ArrayBuffer | null
+	myAvatar?: string | ArrayBuffer
 	myFollowing: Set<string>
 	followers: Set<string>
 	following: Set<string>
@@ -70,7 +70,6 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			myProfile: createDefaultProfile(this.$store.state.session.id),
-			myAvatar: null,
 			myFollowing: new Set(),
 			followers: new Set(),
 			following: new Set(),

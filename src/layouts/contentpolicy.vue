@@ -44,7 +44,7 @@ import { getPhotoFromIPFS } from '@/backend/getPhoto'
 
 interface IData {
 	profile: Profile | null
-	avatar: string | ArrayBuffer | null
+	avatar?: string | ArrayBuffer
 	showWidgets: boolean
 	displayOnboarding: boolean
 	bgImage: IBackground
@@ -59,7 +59,6 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			profile: null,
-			avatar: null,
 			showWidgets: false,
 			displayOnboarding: false,
 			bgImage: backgrounds[0],
