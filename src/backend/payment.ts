@@ -58,6 +58,26 @@ export async function startSubscriptionPayment(
 	}
 }
 
+export async function confirmSubscriptionPayment(username: string, paymentAttemptId: string, paymentIntentId: string) {
+	try {
+		const data = {
+			username,
+			action: `confirmSubscription`,
+			paymentAttemptId,
+			paymentIntentId,
+			exp: getExpTimestamp(),
+		}
+		const { sig } = await signContent(data)
+		const response = await axios.post(`${capsuleServer}/pay/stripe/subscribe/confirm`, {
+			data,
+			sig: uint8ArrayToHexString(sig),
+		})
+		return response.data
+	} catch (err) {
+		throw new Error(`Error with subscription: ${err}`)
+	}
+}
+
 export async function retrievePaymentProfile(username: string) {
 	try {
 		const response = await axios.get(`${capsuleServer}/pay/profile/${username}`)

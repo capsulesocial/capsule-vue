@@ -242,7 +242,13 @@ import {
 	PaymentProfile,
 	SubscriptionTier,
 } from '@/store/paymentProfile'
-import { getAmountFromTier, getCurrencySymbol, getZeroDecimalAmount, startSubscriptionPayment } from '@/backend/payment'
+import {
+	confirmSubscriptionPayment,
+	getAmountFromTier,
+	getCurrencySymbol,
+	getZeroDecimalAmount,
+	startSubscriptionPayment,
+} from '@/backend/payment'
 import { HTMLInputEvent } from '@/interfaces/HTMLInputEvent'
 
 interface IData {
@@ -323,6 +329,9 @@ export default Vue.extend({
 		},
 		async stripeClient(connectId?: string): Promise<Stripe> {
 			if (!_stripe) {
+				if (!connectId) {
+					throw new Error(`Stripe not initialized`)
+				}
 				_stripe = await loadStripe(stripePublishableKey, {
 					stripeAccount: connectId,
 					apiVersion: `2020-08-27`,
@@ -451,7 +460,7 @@ export default Vue.extend({
 
 			const username = this.$store.state.session.id
 			try {
-				const response = await startSubscriptionPayment(
+				const { error, status, clientSecret, paymentAttemptId } = await startSubscriptionPayment(
 					username,
 					this.selectedTier,
 					this.selectedPeriod,
@@ -459,14 +468,54 @@ export default Vue.extend({
 					this.customerEmail,
 				)
 
-				if (response.error) {
-					this.$toastError(response.error.message)
+				if (error) {
+					this.$toastError(error.message)
 					return
 				}
-				if (response.status === `succeeded`) {
+				if (status === `succeeded`) {
 					this.step = 3
-				} else if (response.status === `requires_action`) {
-					this.$toastMessage(`needs further authentication`)
+				} else if (status === `requires_action`) {
+					// TODO hide the payment form here and show a spinner according to https://stripe.com/docs/js/payment_intents/confirm_card_payment
+					await this.handleAuthenticatedPayment(paymentAttemptId, clientSecret)
+				} else {
+					this.$toastError(`Payment is in invalid state`)
+				}
+			} catch (err) {
+				this.$toastError((err as Error).message ?? `Unkwon error`)
+			}
+		},
+		async handleAuthenticatedPayment(paymentAttemptId: string, clientSecret: string) {
+			const stripe = await this.stripeClient()
+			const { paymentIntent, error } = await stripe.confirmCardPayment(clientSecret)
+
+			if (error) {
+				this.$toastError(error.message ?? `Unknown error when confirming payment`)
+				return
+			}
+
+			if (!paymentIntent?.id) {
+				this.$toastError(`Invalid payment intent`)
+				return
+			}
+
+			await this.confirmAuthenticatedPayment(paymentAttemptId, paymentIntent.id)
+		},
+		async confirmAuthenticatedPayment(paymentAttemptId: string, paymentIntentId: string) {
+			try {
+				const { error, status } = await confirmSubscriptionPayment(
+					this.$store.state.session.id,
+					paymentAttemptId,
+					paymentIntentId,
+				)
+				if (error) {
+					this.$toastError(error.message ?? `Subscription failed`)
+					return
+				}
+
+				if (status === `succeeded`) {
+					this.step = 3
+				} else {
+					this.$toastError(`This subscription payment failed with an unknown error`)
 				}
 			} catch (err) {
 				this.$toastError((err as Error).message ?? `Unkwon error`)
