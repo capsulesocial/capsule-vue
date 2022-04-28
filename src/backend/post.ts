@@ -53,6 +53,7 @@ export interface IRepostResponse extends IGenericPostResponse {
 }
 
 export type Algorithm = `NEW` | `FOLLOWING` | `TOP`
+export type Timeframe = `1` | `7` | `30` | `365`
 
 export function createRegularPost(
 	title: string,
@@ -198,7 +199,7 @@ export interface IGetPostsOptions {
 }
 
 export async function getPosts(
-	filter: { category?: string; authorID?: string; tag?: string; bookmarkedBy?: string },
+	filter: { category?: string; authorID?: string; tag?: string; bookmarkedBy?: string; timeframe?: Timeframe },
 	bookmarker: string,
 	options: IGetPostsOptions,
 ): Promise<IPostResponse[] | IRepostResponse[]> {
