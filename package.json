@@ -92,6 +92,7 @@
 		"@types/quill": "^2.0.9",
 		"@types/toastify-js": "^1.11.0",
 		"@types/turndown": "^5.0.1",
+		"@vue/runtime-dom": "^3.2.33",
 		"eslint": "^8.14.0",
 		"eslint-config-prettier": "^8.5.0",
 		"eslint-plugin-prettier-vue": "^3.1.0",
