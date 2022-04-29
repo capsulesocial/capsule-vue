@@ -8,7 +8,7 @@
 			<!-- Left side: Links + write post button -->
 			<div class="flex flex-row items-center" style="font-size: 0.95rem">
 				<nuxt-link to="/home" class="mr-5 text-lightSecondaryText dark:text-gray1">
-					<CapsuleIcon />
+					<CapsuleBlogchain />
 				</nuxt-link>
 				<nuxt-link to="/home" class="mx-4" :class="getStyles(`home`)"> Home </nuxt-link>
 				<nuxt-link to="/discover" class="mx-4" :class="getStyles(`discover`)"> Discover </nuxt-link>
@@ -184,6 +184,7 @@ import MobileNav from '@/components/icons/MobileNav.vue'
 import HomeIcon from '@/components/icons/Home.vue'
 import DiscoverIcon from '@/components/icons/Discover.vue'
 import BookmarksIcon from '@/components/icons/Bookmarks.vue'
+import CapsuleBlogchain from '@/components/icons/CapsuleBlogchain.vue'
 
 import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
 
@@ -204,6 +205,7 @@ export default Vue.extend({
 		HomeIcon,
 		DiscoverIcon,
 		BookmarksIcon,
+		CapsuleBlogchain,
 	},
 	props: {
 		avatar: {
