@@ -440,6 +440,24 @@ export default Vue.extend({
 			}
 			if (paymentType !== `card`) {
 				paymentRequest.show()
+				paymentRequest.on(`paymentmethod`, async (ev) => {
+					if (!ev.paymentMethod.id) {
+						this.$toastError(`Invalid payment method`)
+						ev.complete(`fail`)
+						return
+					}
+					if (!ev.payerEmail) {
+						this.$toastError(`Please provide your email`)
+						ev.complete(`fail`)
+						return
+					}
+					const paymentSuccess = await this.submitPayment(ev.paymentMethod, ev.payerEmail)
+					if (!paymentSuccess) {
+						ev.complete(`fail`)
+						return
+					}
+					ev.complete(`success`)
+				})
 				return
 			}
 
@@ -453,7 +471,7 @@ export default Vue.extend({
 		nextStep(): void {
 			this.step += 1
 		},
-		async submitPayment(paymentMethod: PaymentMethod) {
+		async submitPayment(paymentMethod: PaymentMethod, email: string): Promise<boolean> {
 			if (!this.selectedTier) {
 				throw new Error(`Tier not selected. Invalid state`)
 			}
@@ -465,42 +483,45 @@ export default Vue.extend({
 					this.selectedTier,
 					this.selectedPeriod,
 					paymentMethod.id,
-					this.customerEmail,
+					email,
 				)
 
 				if (error) {
 					this.$toastError(error.message)
-					return
+					return false
 				}
-				if (status === `succeeded`) {
-					this.step = 3
-				} else if (status === `requires_action`) {
+				if (status === `requires_action`) {
 					// TODO hide the payment form here and show a spinner according to https://stripe.com/docs/js/payment_intents/confirm_card_payment
-					await this.handleAuthenticatedPayment(paymentAttemptId, clientSecret)
-				} else {
+					return this.handleAuthenticatedPayment(paymentAttemptId, clientSecret)
+				} else if (status !== `succeeded`) {
 					this.$toastError(`Payment is in invalid state`)
+					return false
 				}
+
+				this.step = 3
+				return true
 			} catch (err) {
 				this.$toastError((err as Error).message ?? `Unkwon error`)
+				return false
 			}
 		},
-		async handleAuthenticatedPayment(paymentAttemptId: string, clientSecret: string) {
+		async handleAuthenticatedPayment(paymentAttemptId: string, clientSecret: string): Promise<boolean> {
 			const stripe = await this.stripeClient()
 			const { paymentIntent, error } = await stripe.confirmCardPayment(clientSecret)
 
 			if (error) {
 				this.$toastError(error.message ?? `Unknown error when confirming payment`)
-				return
+				return false
 			}
 
 			if (!paymentIntent?.id) {
 				this.$toastError(`Invalid payment intent`)
-				return
+				return false
 			}
 
-			await this.confirmAuthenticatedPayment(paymentAttemptId, paymentIntent.id)
+			return this.confirmAuthenticatedPayment(paymentAttemptId, paymentIntent.id)
 		},
-		async confirmAuthenticatedPayment(paymentAttemptId: string, paymentIntentId: string) {
+		async confirmAuthenticatedPayment(paymentAttemptId: string, paymentIntentId: string): Promise<boolean> {
 			try {
 				const { error, status } = await confirmSubscriptionPayment(
 					this.$store.state.session.id,
@@ -509,16 +530,18 @@ export default Vue.extend({
 				)
 				if (error) {
 					this.$toastError(error.message ?? `Subscription failed`)
-					return
+					return false
 				}
 
-				if (status === `succeeded`) {
-					this.step = 3
-				} else {
+				if (status !== `succeeded`) {
 					this.$toastError(`This subscription payment failed with an unknown error`)
+					return false
 				}
+				this.step = 3
+				return true
 			} catch (err) {
 				this.$toastError((err as Error).message ?? `Unkwon error`)
+				return false
 			}
 		},
 		async submitCardPayment(e: HTMLInputEvent): Promise<void> {
@@ -551,7 +574,7 @@ export default Vue.extend({
 				return
 			}
 
-			await this.submitPayment(paymentMethod)
+			await this.submitPayment(paymentMethod, this.customerEmail)
 		},
 		handleCloseClick(e: any): void {
 			if (!e.target || e.target.parentNode === null || e.target.firstChild?.classList === undefined) {
