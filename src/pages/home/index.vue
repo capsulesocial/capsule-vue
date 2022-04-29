@@ -51,7 +51,7 @@
 						<BrandedButton
 							:action="
 								() => {
-									this.sortFeed('TOP')
+									sortFeed('TOP')
 								}
 							"
 							:text="`Top posts`"
@@ -100,12 +100,12 @@
 import Vue from 'vue'
 import type { PropType } from 'vue'
 import PostCard from '@/components/post/Card.vue'
-import { getPosts, Algorithm, IRepostResponse, IPostResponse } from '@/backend/post'
+import { getPosts, Algorithm, IRepostResponse, IPostResponse, IGenericPostResponse } from '@/backend/post'
 import { getReposts } from '@/backend/reposts'
 import { followChange } from '@/backend/following'
 
 interface IData {
-	posts: Array<IRepostResponse | IPostResponse>
+	posts: Array<IGenericPostResponse>
 	isLoading: boolean
 	algorithm: Algorithm
 	currentOffset: number

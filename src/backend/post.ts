@@ -43,6 +43,7 @@ export interface IGenericPostResponse {
 	commentsCount: number
 	repostCount: number
 	repost?: IRepost
+	deleted?: boolean
 }
 
 export type IPostResponse = Omit<IGenericPostResponse, `repost`>

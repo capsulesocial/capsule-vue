@@ -4,7 +4,7 @@
 			v-if="posts.length == 0 && !isLoading"
 			class="mt-12 grid justify-items-center overflow-y-hidden px-6 xl:px-0"
 		>
-			<div v-if="this.$store.state.session.id !== ``" class="flex flex-col items-center">
+			<div v-if="$store.state.session.id !== ``" class="flex flex-col items-center">
 				<p class="text-gray5 dark:text-gray3 align-end mb-1 flex items-end text-sm" style="max-width: 400px">
 					It seems you don't have any bookmarked posts yet,
 				</p>
@@ -57,7 +57,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { IPostResponse } from '@/backend/post'
+import { IGenericPostResponse } from '@/backend/post'
 import SecondaryButton from '@/components/SecondaryButton.vue'
 import BookmarkIcon from '@/components/icons/Bookmark.vue'
 
@@ -76,7 +76,7 @@ export default Vue.extend({
 			required: true,
 		},
 		posts: {
-			type: Array as () => IPostResponse[],
+			type: Array as () => IGenericPostResponse[],
 			required: true,
 		},
 		isLoading: {

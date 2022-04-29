@@ -97,10 +97,10 @@
 import Vue, { PropType } from 'vue'
 import PostCard from '@/components/post/Card.vue'
 import BackIcon from '@/components/icons/ChevronLeft.vue'
-import { getPosts, Algorithm, IPostResponse, IRepostResponse } from '@/backend/post'
+import { getPosts, Algorithm, IPostResponse, IRepostResponse, IGenericPostResponse } from '@/backend/post'
 
 interface IData {
-	posts: Array<IRepostResponse | IPostResponse>
+	posts: Array<IGenericPostResponse>
 	isLoading: boolean
 	lastScroll: number
 	currentOffset: number
@@ -172,7 +172,7 @@ export default Vue.extend({
 		}
 	},
 	methods: {
-		async fetchPosts(): Promise<(IRepostResponse | IPostResponse)[]> {
+		async fetchPosts(): Promise<IGenericPostResponse[]> {
 			this.isLoading = true
 			const id = this.$store.state.session.id === `` ? `x` : this.$store.state.session.id
 			const posts = await getPosts({ category: this.$route.params.category }, id, {
