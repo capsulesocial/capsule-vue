@@ -72,7 +72,7 @@ interface FeaturedPhoto {
 
 interface IData {
 	profile: Profile | null
-	avatar: string | ArrayBuffer | null
+	avatar?: string | ArrayBuffer
 	displayPhoto: boolean
 	featuredPhoto: FeaturedPhoto
 	bgImage: IBackground
@@ -90,7 +90,6 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			profile: null,
-			avatar: null,
 			displayPhoto: false,
 			featuredPhoto: {
 				photo: null,

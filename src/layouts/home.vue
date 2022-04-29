@@ -102,7 +102,7 @@ interface PostPreview {
 
 interface IData {
 	profile: Profile | null
-	avatar: string | ArrayBuffer | null
+	avatar?: string | ArrayBuffer
 	showWidgets: boolean
 	following: Set<string>
 	followers: Set<string>
@@ -125,7 +125,6 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			profile: null,
-			avatar: null,
 			showWidgets: false,
 			following: new Set(),
 			followers: new Set(),

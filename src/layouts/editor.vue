@@ -71,7 +71,7 @@ import { IBackground, backgrounds } from '@/config/backgrounds'
 
 interface IData {
 	profile: Profile | null
-	avatar: string | ArrayBuffer | null
+	avatar?: string | ArrayBuffer
 	wordCount: number
 	showDrafts: boolean
 	showConfirm: boolean
@@ -93,7 +93,6 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			profile: null,
-			avatar: null,
 			wordCount: 0,
 			showDrafts: false,
 			showConfirm: false,

@@ -31,6 +31,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import type { PropType } from 'vue'
 import { avatars } from '@/config/avatars'
 
 interface IData {
@@ -41,7 +42,7 @@ interface IData {
 export default Vue.extend({
 	props: {
 		avatar: {
-			type: String,
+			type: String as PropType<string | ArrayBuffer>,
 			default: ``,
 		},
 		authorID: {

@@ -87,7 +87,7 @@ export default Vue.extend({
 	props: {
 		followers: {
 			type: Set as PropType<Set<string>>,
-			default: new Set(),
+			default: new Set<string>(),
 		},
 	},
 	data(): IData {

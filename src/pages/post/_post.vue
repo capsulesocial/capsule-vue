@@ -253,7 +253,7 @@ import { calculateReadingTime } from '@/backend/utilities/helpers'
 interface IData {
 	post: Post | null
 	author: Profile | null
-	authorAvatar: string | ArrayBuffer | null
+	authorAvatar?: string | ArrayBuffer
 	content: string
 	featuredPhoto: null | string
 	showFilter: boolean
@@ -305,7 +305,6 @@ export default Vue.extend({
 		return {
 			post: null,
 			author: null,
-			authorAvatar: null,
 			content: ``,
 			featuredPhoto: null,
 			showFilter: false,

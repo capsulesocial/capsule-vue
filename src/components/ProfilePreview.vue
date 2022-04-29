@@ -36,7 +36,7 @@ import { Profile } from '@/backend/profile'
 
 interface IData {
 	isFollowing: boolean
-	avatar: string | null
+	avatar?: string | ArrayBuffer
 }
 
 export default Vue.extend({
@@ -54,7 +54,6 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			isFollowing: false,
-			avatar: null,
 		}
 	},
 	async created() {

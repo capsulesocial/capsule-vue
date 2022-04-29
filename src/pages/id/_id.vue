@@ -254,8 +254,8 @@ export default Vue.extend({
 			default: null,
 		},
 		visitAvatar: {
-			type: String as PropType<ArrayBuffer | string | null>,
-			default: null,
+			type: String as PropType<ArrayBuffer | string | undefined>,
+			default: undefined,
 		},
 		followers: {
 			type: Set,
