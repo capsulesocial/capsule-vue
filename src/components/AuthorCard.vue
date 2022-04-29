@@ -11,8 +11,11 @@
 						</nuxt-link>
 						<nuxt-link v-else :to="'/id/' + authorID" class="text-gray5 text-2xl"> {{ authorID }} </nuxt-link>
 						<p class="text-gray5 dark:text-darkSecondaryText w-full">
-							{{ authorBio }}
+							{{ expandBio ? authorBio : authorBio.slice(0, 300).concat(`...`) }}
 						</p>
+						<button class="focus:outline-none text-xs text-primary px-1" @click="expandBio = !expandBio">
+							Read {{ expandBio ? `less` : `more` }}
+						</button>
 					</div>
 				</div>
 			</div>
@@ -33,6 +36,11 @@ import Vue from 'vue'
 import type { PropType } from 'vue'
 import FriendButton from '@/components/FriendButton.vue'
 import Avatar from '@/components/Avatar.vue'
+
+interface IData {
+	bioLength: number
+	expandBio: boolean
+}
 
 export default Vue.extend({
 	components: {
@@ -64,6 +72,12 @@ export default Vue.extend({
 			type: Function as PropType<() => void>,
 			required: true,
 		},
+	},
+	data(): IData {
+		return {
+			bioLength: this.authorBio.length,
+			expandBio: false,
+		}
 	},
 })
 </script>
