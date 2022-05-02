@@ -78,7 +78,7 @@ jobs:
         run: |
           cat <<EOF >.env
             CONTRACT_NAME="dev-1635323648697-81373157539648"
-            DOMAIN="https://cure53.blogchain.app/"
+            DOMAIN="https://cure53.blogchain.app"
             CAPSULE_SERVER="https://cure53.blogchain.app/server"
             ORBIT_URL="https://cure53.blogchain.app/orbit"
             TORUS_GOOGLE_VERIFIER="capsule-social-google-chris"
