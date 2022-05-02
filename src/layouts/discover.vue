@@ -94,6 +94,7 @@ export default Vue.extend({
 			profile: null,
 			following: new Set(),
 			bgImage: backgrounds[0],
+			avatar: undefined,
 		}
 	},
 	async created() {

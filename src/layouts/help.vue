@@ -81,6 +81,7 @@ export default Vue.extend({
 			showWidgets: false,
 			displayOnboarding: false,
 			bgImage: backgrounds[0],
+			avatar: undefined,
 		}
 	},
 	async created() {

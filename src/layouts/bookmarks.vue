@@ -124,6 +124,7 @@ export default Vue.extend({
 			activeSort: `BOOKMARK_DESC`,
 			isLoading: true,
 			bgImage: backgrounds[0],
+			avatar: undefined,
 		}
 	},
 	async created() {

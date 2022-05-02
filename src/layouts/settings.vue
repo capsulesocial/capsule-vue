@@ -115,6 +115,7 @@ export default Vue.extend({
 			tab: `account`,
 			showPopup: false,
 			bgImage: backgrounds[0],
+			avatar: undefined,
 		}
 	},
 	async created() {
