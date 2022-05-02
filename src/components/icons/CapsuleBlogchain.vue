@@ -2,8 +2,8 @@
 	<div>
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
-			width="180"
-			height="50"
+			width="150"
+			height="45"
 			viewBox="0 0 692 205"
 			class="fill-current text-030404 dark:text-gray1"
 			:style="shrink ? `transform: scale(0.7)` : `transform: scale(1)`"
