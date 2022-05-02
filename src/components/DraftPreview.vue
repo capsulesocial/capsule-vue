@@ -20,7 +20,7 @@
 		<button
 			class="mx-4 w-24 flex-shrink-0 items-center focus:outline-none"
 			:class="inWidget ? `hidden xl:flex` : `flex`"
-			@click="setActiveDraft(draft)"
+			@click="setActiveDraft"
 		>
 			<img
 				v-if="featuredPhoto !== null"
@@ -45,7 +45,7 @@
 				:class="$colorMode.dark ? `dropdownDraftOpenDark` : `dropdownDraftOpen`"
 				style="top: 35px; right: -5px"
 			>
-				<button class="focus:outline-none text-primary flex" @click="setActiveDraft(draft)">
+				<button class="focus:outline-none text-primary flex" @click="setActiveDraft">
 					<PencilIcon class="fill-current p-1" />
 					<span class="text-primary ml-1 self-center text-sm">Edit this draft</span>
 				</button>

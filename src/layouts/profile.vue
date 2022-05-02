@@ -199,6 +199,8 @@ export default Vue.extend({
 			showFollowing: false,
 			showMutuals: false,
 			showAvatar: false,
+			myAvatar: undefined,
+			visitAvatar: undefined,
 		}
 	},
 	watch: {

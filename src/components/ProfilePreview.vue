@@ -54,6 +54,7 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			isFollowing: false,
+			avatar: undefined,
 		}
 	},
 	async created() {

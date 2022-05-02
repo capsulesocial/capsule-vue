@@ -74,6 +74,7 @@ export default Vue.extend({
 			followers: new Set(),
 			following: new Set(),
 			bgImage: backgrounds[0],
+			myAvatar: undefined,
 		}
 	},
 	async created() {

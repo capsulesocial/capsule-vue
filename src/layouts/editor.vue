@@ -98,6 +98,7 @@ export default Vue.extend({
 			showConfirm: false,
 			buttonHidden: false,
 			bgImage: backgrounds[0],
+			avatar: undefined,
 		}
 	},
 	head() {
