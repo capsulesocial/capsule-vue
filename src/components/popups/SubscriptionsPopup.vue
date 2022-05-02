@@ -344,28 +344,28 @@ export default Vue.extend({
 		},
 		initializeProfile() {
 			if (!this.author) {
-				this.$toastError(`Author profile is missing`)
+				this.cardErrorMessage = `Author profile is missing`
 				return
 			}
 
 			this.paymentProfile = this.getPaymentProfile(this.author.id)
 			if (!this.paymentProfile) {
-				this.$toastError(`Payment profile of author is missing`)
+				this.cardErrorMessage = `Payment profile of author is missing`
 				return
 			}
 
 			if (!this.paymentProfile.stripeAccountId) {
-				this.$toastError(`Author subscription profile is missing`)
+				this.cardErrorMessage = `Author subscription profile is missing`
 				return
 			}
 
 			if (!this.paymentProfile.paymentsEnabled) {
-				this.$toastError(`Author haven't enabled subscriptions`)
+				this.cardErrorMessage = `Author haven't enabled subscriptions`
 				return
 			}
 
 			if (!this.paymentProfile.tiers) {
-				this.$toastError(`Author haven't set-up subscriptions`)
+				this.cardErrorMessage = `Author haven't set-up subscriptions`
 			}
 		},
 		selectTier(tier: SubscriptionTier) {
@@ -378,7 +378,7 @@ export default Vue.extend({
 			this.nextStep()
 			this.selectedPeriod = period
 			if (!this.selectedTier || !period) {
-				this.$toastError(`Invalid tier selected`)
+				this.cardErrorMessage = `Invalid tier selected`
 				return
 			}
 
@@ -435,19 +435,19 @@ export default Vue.extend({
 		},
 		selectPaymentType(paymentType: string) {
 			if (!paymentRequest) {
-				this.$toastError(`Unexpected error with payment request`)
+				this.cardErrorMessage = `Unexpected error with payment request`
 				return
 			}
 			if (paymentType !== `card`) {
 				paymentRequest.show()
 				paymentRequest.on(`paymentmethod`, async (ev) => {
 					if (!ev.paymentMethod.id) {
-						this.$toastError(`Invalid payment method`)
+						this.cardErrorMessage = `Invalid payment method`
 						ev.complete(`fail`)
 						return
 					}
 					if (!ev.payerEmail) {
-						this.$toastError(`Please provide your email`)
+						this.cardErrorMessage = `Please provide your email`
 						ev.complete(`fail`)
 						return
 					}
@@ -462,7 +462,7 @@ export default Vue.extend({
 			}
 
 			if (!cardElement) {
-				this.$toastError(`Couldn't load Stripe Card`)
+				this.cardErrorMessage = `Couldn't load Stripe Card`
 				return
 			}
 			cardElement.mount(`#card-element`)
@@ -478,6 +478,7 @@ export default Vue.extend({
 
 			const username = this.$store.state.session.id
 			try {
+				this.cardErrorMessage = null
 				const { error, status, clientSecret, paymentAttemptId } = await startSubscriptionPayment(
 					username,
 					this.selectedTier,
@@ -487,21 +488,21 @@ export default Vue.extend({
 				)
 
 				if (error) {
-					this.$toastError(error.message)
+					this.cardErrorMessage = error.message
 					return false
 				}
 				if (status === `requires_action`) {
 					// TODO hide the payment form here and show a spinner according to https://stripe.com/docs/js/payment_intents/confirm_card_payment
 					return this.handleAuthenticatedPayment(paymentAttemptId, clientSecret)
 				} else if (status !== `succeeded`) {
-					this.$toastError(`Payment is in invalid state`)
+					this.cardErrorMessage = `Payment is in invalid state`
 					return false
 				}
 
 				this.step = 3
 				return true
 			} catch (err) {
-				this.$toastError((err as Error).message ?? `Unkwon error`)
+				this.cardErrorMessage = (err as Error).message ?? `Unkwon error`
 				return false
 			}
 		},
@@ -510,12 +511,12 @@ export default Vue.extend({
 			const { paymentIntent, error } = await stripe.confirmCardPayment(clientSecret)
 
 			if (error) {
-				this.$toastError(error.message ?? `Unknown error when confirming payment`)
+				this.cardErrorMessage = error.message ?? `Unknown error when confirming payment`
 				return false
 			}
 
 			if (!paymentIntent?.id) {
-				this.$toastError(`Invalid payment intent`)
+				this.cardErrorMessage = `Invalid payment intent`
 				return false
 			}
 
@@ -523,24 +524,25 @@ export default Vue.extend({
 		},
 		async confirmAuthenticatedPayment(paymentAttemptId: string, paymentIntentId: string): Promise<boolean> {
 			try {
+				this.cardErrorMessage = null
 				const { error, status } = await confirmSubscriptionPayment(
 					this.$store.state.session.id,
 					paymentAttemptId,
 					paymentIntentId,
 				)
 				if (error) {
-					this.$toastError(error.message ?? `Subscription failed`)
+					this.cardErrorMessage = error.message ?? `Subscription failed`
 					return false
 				}
 
 				if (status !== `succeeded`) {
-					this.$toastError(`This subscription payment failed with an unknown error`)
+					this.cardErrorMessage = `This subscription payment failed with an unknown error`
 					return false
 				}
 				this.step = 3
 				return true
 			} catch (err) {
-				this.$toastError((err as Error).message ?? `Unkwon error`)
+				this.cardErrorMessage = (err as Error).message ?? `Unkwon error`
 				return false
 			}
 		},
@@ -553,7 +555,7 @@ export default Vue.extend({
 			}
 
 			if (!this.customerEmail) {
-				this.$toastError(`Invalid email address`)
+				this.cardErrorMessage = `Invalid email address`
 				return
 			}
 			const { error, paymentMethod } = await stripe.createPaymentMethod({
@@ -565,12 +567,12 @@ export default Vue.extend({
 			})
 
 			if (error) {
-				this.$toastError(error.message ?? `An unknown error happened`)
+				this.cardErrorMessage = error.message ?? `An unknown error happened`
 				return
 			}
 
 			if (!paymentMethod) {
-				this.$toastError(`Invalid payment method`)
+				this.cardErrorMessage = `Invalid payment method`
 				return
 			}
 

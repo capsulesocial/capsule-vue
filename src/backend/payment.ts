@@ -54,7 +54,10 @@ export async function startSubscriptionPayment(
 		})
 		return response.data
 	} catch (err) {
-		throw new Error(`Error with subscription: ${err}`)
+		if (axios.isAxiosError(err) && err.response?.status === 400) {
+			throw new Error(err.response.data?.error ?? err.message)
+		}
+		throw new Error(`Network error: ${err}`)
 	}
 }
 
@@ -74,7 +77,10 @@ export async function confirmSubscriptionPayment(username: string, paymentAttemp
 		})
 		return response.data
 	} catch (err) {
-		throw new Error(`Error with subscription: ${err}`)
+		if (axios.isAxiosError(err) && err.response?.status === 400) {
+			throw new Error(err.response.data?.error ?? err.message)
+		}
+		throw new Error(`Network error: ${err}`)
 	}
 }
 
