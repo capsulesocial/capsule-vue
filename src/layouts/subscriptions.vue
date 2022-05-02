@@ -92,7 +92,7 @@ export default Vue.extend({
 			// get logged in profile
 			const { profile } = await getProfile(this.$store.state.session.id, true)
 			this.profile = profile
-			this.bgImage = this.$getBGImage(this.profile?.background, `local`)
+			this.bgImage = this.$getBGImage(this.profile?.background)
 			// Get avatar
 			if (this.profile && this.profile.avatar.length > 1) {
 				getPhotoFromIPFS(this.profile.avatar).then((p) => {
@@ -102,7 +102,7 @@ export default Vue.extend({
 		},
 		// This method is used to change the local bg on the styling tab before changing
 		changeLocalBGImage(id: string): void {
-			this.bgImage = this.$getBGImage(id, `local`)
+			this.bgImage = this.$getBGImage(id)
 		},
 		updateColorMode(dark: boolean): void {
 			this.dark = dark
