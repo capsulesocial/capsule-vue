@@ -78,9 +78,9 @@ jobs:
         run: |
           cat <<EOF >.env
             CONTRACT_NAME="dev-1635323648697-81373157539648"
-            DOMAIN="https://alpha.capsule.social"
-            CAPSULE_SERVER="https://alpha.capsule.social/server"
-            ORBIT_URL="https://alpha.capsule.social/orbit"
+            DOMAIN="https://cure53.blogchain.app/"
+            CAPSULE_SERVER="https://cure53.blogchain.app/server"
+            ORBIT_URL="https://cure53.blogchain.app/orbit"
             TORUS_GOOGLE_VERIFIER="capsule-social-google-chris"
             TORUS_GOOGLE_CLIENTID="653379121360-j8t9ua763vfvd86d1qjguonhrgqvkigo.apps.googleusercontent.com"
             TORUS_DISCORD_VERIFIER="capsule-social-test-v2-discord"
