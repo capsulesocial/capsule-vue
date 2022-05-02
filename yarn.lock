@@ -12012,11 +12012,6 @@ scrypt-js@^3.0.0:
   resolved "https://registry.yarnpkg.com/scrypt-js/-/scrypt-js-3.0.1.tgz#d314a57c2aef69d1ad98a138a21fe9eafa9ee312"
   integrity sha512-cdwTTnqPu0Hyvf5in5asVdZocVDTNRmR7XEcJuIzMjJeSHybHl7vpB66AzwTaIg6CLSbtjcxc8fqcySfnTkccA==
 
-scrypt-wasm@^0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/scrypt-wasm/-/scrypt-wasm-0.1.1.tgz#35940c1e9310de5de102ea231bf5e3d4bc1b0f3e"
-  integrity sha512-lNqHZI3VPrlx4kzZkTQtvKWAsS2GdHVbrA8CCZavjlEcfPrcS3TML3bFFVtAsV+bntO5oTi6H0qTR3OANWtqyA==
-
 scule@^0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/scule/-/scule-0.2.1.tgz#0c1dc847b18e07219ae9a3832f2f83224e2079dc"
