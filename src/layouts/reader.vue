@@ -90,6 +90,7 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			profile: null,
+			avatar: undefined,
 			displayPhoto: false,
 			featuredPhoto: {
 				photo: null,

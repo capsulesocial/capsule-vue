@@ -305,6 +305,7 @@ export default Vue.extend({
 		return {
 			post: null,
 			author: null,
+			authorAvatar: undefined,
 			content: ``,
 			featuredPhoto: null,
 			showFilter: false,
