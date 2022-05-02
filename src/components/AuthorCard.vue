@@ -10,10 +10,20 @@
 							{{ authorName }}
 						</nuxt-link>
 						<nuxt-link v-else :to="'/id/' + authorID" class="text-gray5 text-2xl"> {{ authorID }} </nuxt-link>
-						<p class="text-gray5 dark:text-darkSecondaryText w-full">
-							{{ expandBio ? authorBio : authorBio.slice(0, 300).concat(`...`) }}
-						</p>
-						<button class="focus:outline-none text-xs text-primary px-1" @click="expandBio = !expandBio">
+						<div v-show="authorBio" id="bio" ref="bio" :style="expandBio ? `` : `max-height: 5.5rem; overflow: hidden`">
+							<p
+								v-for="(line, lineNumber) of authorBio.split('\n')"
+								:key="lineNumber"
+								class="text-gray5 dark:text-darkSecondaryText w-full"
+							>
+								{{ line }}<br />
+							</p>
+						</div>
+						<button
+							v-show="longBio"
+							class="focus:outline-none text-xs text-primary px-1"
+							@click="expandBio = !expandBio"
+						>
 							Read {{ expandBio ? `less` : `more` }}
 						</button>
 					</div>
@@ -38,7 +48,7 @@ import FriendButton from '@/components/FriendButton.vue'
 import Avatar from '@/components/Avatar.vue'
 
 interface IData {
-	bioLength: number
+	longBio: boolean
 	expandBio: boolean
 }
 
@@ -75,8 +85,14 @@ export default Vue.extend({
 	},
 	data(): IData {
 		return {
-			bioLength: this.authorBio.length,
+			longBio: false,
 			expandBio: false,
+		}
+	},
+	mounted() {
+		const bioContainer = this.$refs.bio as HTMLElement
+		if ((bioContainer && bioContainer.clientHeight > 72) || this.authorBio.length > 150) {
+			this.longBio = true
 		}
 	},
 })
