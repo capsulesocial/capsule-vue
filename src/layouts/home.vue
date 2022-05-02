@@ -125,6 +125,7 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			profile: null,
+			avatar: undefined,
 			showWidgets: false,
 			following: new Set(),
 			followers: new Set(),
