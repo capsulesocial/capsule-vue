@@ -1,4 +1,4 @@
-name: Capsule Vue -- Production Deploy
+name: Production Deploy
 on:
   release:
     types: [published]
