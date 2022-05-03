@@ -43,7 +43,7 @@ const config: NuxtConfig = {
 				property: `og:image`,
 				content: `https://blogchain.app/discover.png`,
 			},
-			{ name: `twitter:site`, content: `@capsuleSoc` },
+			{ name: `twitter:site`, content: `@BlogchainApp` },
 			{ name: `twitter:card`, content: `summary_large_image` },
 			{
 				hid: `twitter:url`,
