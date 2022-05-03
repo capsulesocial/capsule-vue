@@ -10,7 +10,7 @@
 							{{ authorName }}
 						</nuxt-link>
 						<nuxt-link v-else :to="'/id/' + authorID" class="text-gray5 text-2xl"> {{ authorID }} </nuxt-link>
-						<div v-show="authorBio" id="bio" ref="bio" :style="expandBio ? `` : `max-height: 5.5rem; overflow: hidden`">
+						<div v-show="authorBio" id="bio" ref="bio" style="max-height: 5.5rem; overflow: hidden">
 							<p
 								v-for="(line, lineNumber) of authorBio.split('\n')"
 								:key="lineNumber"
@@ -19,12 +19,11 @@
 								{{ line }}<br />
 							</p>
 						</div>
-						<button
-							v-show="longBio"
-							class="focus:outline-none text-xs text-primary px-1"
-							@click="expandBio = !expandBio"
-						>
-							Read {{ expandBio ? `less` : `more` }}
+						<div v-if="expandBio">
+							<BioPopup :bio="authorBio" />
+						</div>
+						<button v-show="longBio" class="focus:outline-none text-xs text-primary px-1" @click.prevent="bioPopup">
+							Read more
 						</button>
 					</div>
 				</div>
@@ -46,6 +45,7 @@ import Vue from 'vue'
 import type { PropType } from 'vue'
 import FriendButton from '@/components/FriendButton.vue'
 import Avatar from '@/components/Avatar.vue'
+import BioPopup from '@/components/popups/BioPopup.vue'
 
 interface IData {
 	longBio: boolean
@@ -56,6 +56,7 @@ export default Vue.extend({
 	components: {
 		FriendButton,
 		Avatar,
+		BioPopup,
 	},
 	props: {
 		authorAvatar: {
@@ -100,6 +101,11 @@ export default Vue.extend({
 				})
 			}
 		})
+	},
+	methods: {
+		bioPopup() {
+			this.expandBio = true
+		},
 	},
 })
 </script>
