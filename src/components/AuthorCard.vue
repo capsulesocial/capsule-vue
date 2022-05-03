@@ -90,10 +90,16 @@ export default Vue.extend({
 		}
 	},
 	mounted() {
-		const bioContainer = this.$refs.bio as HTMLElement
-		if ((bioContainer && bioContainer.clientHeight > 72) || this.authorBio.length > 150) {
-			this.longBio = true
-		}
+		this.$nextTick(() => {
+			if (this.$refs) {
+				this.$nextTick(() => {
+					const bioContainer = this.$refs.bio as HTMLElement
+					if ((bioContainer && bioContainer.clientHeight > 72) || this.authorBio.length > 150) {
+						this.longBio = true
+					}
+				})
+			}
+		})
 	},
 })
 </script>
