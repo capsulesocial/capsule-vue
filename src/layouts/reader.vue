@@ -20,7 +20,7 @@
 			<button class="bg-gray1 dark:bg-gray5 focus:outline-none mb-5 rounded-full p-1" @click="displayPhoto = false">
 				<XIcon />
 			</button>
-			<img :src="featuredPhoto.photo" class="modal-content rounded-lg w-3/5" />
+			<img :src="featuredPhoto.photo" class="modal-content max-w-3/5 h-auto rounded-lg" />
 			<div class="flex justify-center mt-5">
 				<p
 					v-if="featuredPhoto.caption"
