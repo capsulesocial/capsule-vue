@@ -46,25 +46,47 @@
 					</div>
 					<!-- Subscriptions -->
 					<button
+						v-for="tier in paymentProfile.tiers"
+						:key="tier._id"
 						class="flex flex-row items-center justify-between m-5 mb-20 p-4 border border-neutral shadow-lg rounded-lg"
-						@click="isSelected = true"
+						@click="selectTier(tier)"
 					>
 						<!-- Check mark -->
 						<div class="w-12 flex justify-center">
-							<CheckCircleIcon :isChecked="isSelected" class="text-neutral w-6 h-6 flex items-center" />
+							<CheckCircleIcon
+								:isChecked="selectedTier !== null && selectedTier._id === tier._id"
+								class="text-neutral w-6 h-6 flex items-center"
+							/>
 						</div>
 						<div class="flex flex-grow flex-col items-start ml-4 mr-2">
-							<h3 class="text-xl font-semibold dark:text-darkPrimaryText">Monthly subscription</h3>
+							<h3 class="text-xl font-semibold dark:text-darkPrimaryText">{{ tier.name }}</h3>
 							<p class="text-gray5 dark:text-gray3 text-left">
-								Base monthly subscription to access this author's premium content
+								Get access to exclusive articles by subscribing to {{ tier.name }}
 							</p>
 						</div>
-						<div class="font-semibold text-lg mr-2 dark:text-darkPrimaryText">
-							$2<span class="text-gray5 dark:text-gray3">/month</span>
+						<div v-if="tier.monthlyEnabled" class="font-semibold text-lg mr-2 dark:text-darkPrimaryText">
+							{{ displayCurrency(paymentProfile.currency) }}{{ tier.monthlyPrice }}
+							<span class="text-gray5 dark:text-gray3">/month</span>
+						</div>
+						<div v-if="tier.yearlyEnabled" class="font-semibold text-lg mr-2 dark:text-darkPrimaryText">
+							{{ displayCurrency(paymentProfile.currency) }}{{ tier.yearlyPrice }}
+							<span class="text-gray5 dark:text-gray3">/year</span>
 						</div>
 					</button>
 					<div class="flex flex-row-reverse">
-						<SecondaryButton :text="`Next`" :action="nextStep" :disabled="!isSelected" />
+						<!-- TODO: improve this UX of selecting monthly/yearly -->
+						<SecondaryButton
+							v-show="selectedTier !== null && selectedTier.monthlyEnabled"
+							class="m-2"
+							:text="`Monthly`"
+							:action="showPaymentButtons(`month`)"
+						/>
+						<SecondaryButton
+							v-show="selectedTier !== null && selectedTier.yearlyEnabled"
+							class="m-2"
+							:text="`Yearly`"
+							:action="showPaymentButtons(`year`)"
+						/>
 					</div>
 				</article>
 				<!-- Step 1: Payment -->
@@ -73,32 +95,40 @@
 						<CrownIcon class="text-neutral stroke-neutral self-center w-12 h-12 mb-2" />
 						<h6 class="font-semibold text-neutral text-xl mb-2">Your order</h6>
 						<p class="text-base text-center text-gray5 dark:text-gray3 mb-2">
-							Tier 1 monthly subscription plan to
+							{{ selectedTier ? selectedTier.name : `` }}
+							{{ this.selectedPeriod === `month` ? 'monthly' : 'yearly' }} subscription plan to
 							<span class="font-semibold text-primary dark:text-secondary">{{ author.name }}</span>
 						</p>
-						<div class="font-semibold text-lg mb-4 dark:text-darkPrimaryText">
-							$2<span class="text-gray5 dark:text-gray3">/month</span>
+						<div v-if="selectedTier !== null" class="font-semibold text-lg mb-4 dark:text-darkPrimaryText">
+							{{ displayCurrency(paymentProfile.currency)
+							}}{{ selectedPeriod === `month` ? selectedTier.monthlyPrice : selectedTier.yearlyPrice }}
+							<span class="text-gray5 dark:text-gray3">/{{ selectedPeriod }}</span>
 						</div>
 					</div>
 					<!-- Payment Methods -->
 					<div class="flex flex-col px-10">
 						<!-- Apple pay -->
 						<button
+							v-show="displayButtons.applePay"
 							class="w-full my-2 p-4 bg-black items-center rounded-lg flex justify-center"
-							@click="selectPaymentType(`apple_pay`)"
+							@click="selectPaymentType(`applePay`)"
 						>
 							<AppleIcon class="text-white w-6 h-6" />
 							<h6 class="text-white ml-2">Pay</h6>
 						</button>
 						<!-- Google pay -->
 						<button
+							v-show="displayButtons.googlePay"
 							class="w-full my-2 p-4 border border-black bg-white items-center rounded-lg flex justify-center"
-							@click="selectPaymentType(`google_pay`)"
+							@click="selectPaymentType(`googlePay`)"
 						>
 							<GoogleIcon class="w-6 h-6" />
 							<h6 class="text-gray5 ml-2">Pay</h6>
 						</button>
-						<div class="my-6 flex w-full items-center justify-center">
+						<div
+							v-show="displayButtons.googlePay || displayButtons.applePay"
+							class="my-6 flex w-full items-center justify-center"
+						>
 							<span class="border-gray5 dark:border-gray3 flex-grow rounded-lg border" style="height: 1px"></span>
 							<p class="text-gray5 dark:text-gray3 px-4 text-xs">OR</p>
 							<span class="border-gray5 dark:border-gray3 flex-grow rounded-lg border" style="height: 1px"></span>
@@ -106,17 +136,42 @@
 						<!-- Credit card -->
 						<button
 							class="w-full mt-2 mb-5 p-4 bg-gray1 dark:bg-gray7 items-center rounded-lg flex justify-center"
-							@click="selectPaymentType(`credit_cart`)"
+							@click="selectPaymentType(`card`)"
 						>
 							<CreditCardIcon class="text-gray5 dark:text-gray2 w-6 h-6" />
 							<h6 class="text-gray5 dark:text-gray2 ml-2">Credit card</h6>
 						</button>
+						<div v-show="displayCardElement">
+							<div class="mb-4 flex flex-col lg:flex-row">
+								<input
+									id="email"
+									v-model="customerEmail"
+									type="email"
+									placeholder="Email"
+									class="bg-gray1 dark:bg-gray7 dark:text-darkPrimaryText placeholder-gray5 dark:placeholder-gray3 focus:outline-none flex-grow rounded-lg px-2 py-1 text-black"
+								/>
+							</div>
+							<div id="card-element" class="mb-2 rounded-lg p-4 border border-black" />
+							<small v-show="cardErrorMessage !== null" style="color: #eb1c26" class="mb-5">{{
+								cardErrorMessage
+							}}</small>
+							<br />
+							<SecondaryButton class="m-2" :text="`Pay`" :action="submitCardPayment" />
+						</div>
 					</div>
 				</article>
 				<!-- Step 2: Pay (Stripe) -->
 				<article v-if="step === 2">
-					STRIPE PAYMENT STUFF
-					<SecondaryButton :text="Pay" :action="nextStep" />
+					<form id="payment-form">
+						<div id="payment-element">
+							<!--Stripe.js injects the Payment Element-->
+						</div>
+						<!-- TODO: Clicking on the following button should trigger next payment process instead of nextStep() -->
+						<div class="mt-4 flex flex-row-reverse">
+							<SecondaryButton :text="`Pay Now`" :action="submitCardPayment" />
+						</div>
+						<div id="payment-message" class="hidden"></div>
+					</form>
 				</article>
 				<!-- Step 4: Confirmation page -->
 				<article v-show="step === 3" class="flex flex-col items-center">
@@ -169,6 +224,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import type { PropType } from 'vue'
+import { Stripe, loadStripe, StripeElements, PaymentRequest, StripeCardElement, PaymentMethod } from '@stripe/stripe-js'
+import { mapGetters } from 'vuex'
 import Avatar from '@/components/Avatar.vue'
 import SecondaryButton from '@/components/SecondaryButton.vue'
 import CloseIcon from '@/components/icons/X.vue'
@@ -178,12 +235,42 @@ import CreditCardIcon from '@/components/icons/CreditCard.vue'
 import AppleIcon from '@/components/icons/brands/Apple.vue'
 import GoogleIcon from '@/components/icons/brands/Google.vue'
 import { Profile } from '@/backend/profile'
+import { stripePublishableKey } from '@/backend/utilities/config'
+import {
+	createDefaultPaymentProfile,
+	namespace as paymentProfileNamespace,
+	PaymentProfile,
+	SubscriptionTier,
+} from '@/store/paymentProfile'
+import {
+	confirmSubscriptionPayment,
+	getAmountFromTier,
+	getCurrencySymbol,
+	getZeroDecimalAmount,
+	startSubscriptionPayment,
+} from '@/backend/payment'
+import { HTMLInputEvent } from '@/interfaces/HTMLInputEvent'
 
 interface IData {
 	step: number
 	isSelected: boolean
 	paymentType: string
+	paymentProfile: PaymentProfile
+	displayCardElement: boolean
+	cardErrorMessage: string | null
+	selectedTier: SubscriptionTier | null
+	selectedPeriod: string
+	customerEmail: string
+	displayButtons: {
+		applePay: boolean
+		googlePay: boolean
+	}
 }
+
+let _stripe: Stripe | null = null
+let paymentRequest: PaymentRequest | null = null
+let elements: StripeElements | null = null
+let cardElement: StripeCardElement | null = null
 
 export default Vue.extend({
 	components: {
@@ -202,8 +289,8 @@ export default Vue.extend({
 			default: false,
 		},
 		author: {
-			type: Object as PropType<Profile | null>,
-			default: null,
+			type: Object as PropType<Profile>,
+			required: true,
 		},
 		authorAvatar: {
 			type: String as PropType<ArrayBuffer | string | null>,
@@ -215,24 +302,284 @@ export default Vue.extend({
 			step: 0,
 			isSelected: true,
 			paymentType: ``,
+			selectedTier: null,
+			selectedPeriod: `month`,
+			paymentProfile: createDefaultPaymentProfile(this.author.id),
+			displayCardElement: false,
+			cardErrorMessage: null,
+			customerEmail: ``,
+			displayButtons: {
+				applePay: false,
+				googlePay: false,
+			},
 		}
 	},
+	computed: {
+		...mapGetters(paymentProfileNamespace, [`getPaymentProfile`]),
+	},
 	created() {
-		// Fetch subscription options
+		this.initializeProfile()
 	},
 	mounted() {
 		window.addEventListener(`click`, this.handleCloseClick, false)
 	},
 	methods: {
-		selectPaymentType(paymentType: string) {
-			this.paymentType = paymentType
+		displayCurrency(currency: string) {
+			return getCurrencySymbol(currency)
+		},
+		async stripeClient(connectId?: string): Promise<Stripe> {
+			if (!_stripe) {
+				if (!connectId) {
+					throw new Error(`Stripe not initialized`)
+				}
+				_stripe = await loadStripe(stripePublishableKey, {
+					stripeAccount: connectId,
+					apiVersion: `2020-08-27`,
+				})
+			}
+			if (!_stripe) {
+				throw new Error(`Network error: Could not initiate stripe`)
+			}
+			return _stripe
+		},
+		initializeProfile() {
+			if (!this.author) {
+				this.cardErrorMessage = `Author profile is missing`
+				return
+			}
+
+			this.paymentProfile = this.getPaymentProfile(this.author.id)
+			if (!this.paymentProfile) {
+				this.cardErrorMessage = `Payment profile of author is missing`
+				return
+			}
+
+			if (!this.paymentProfile.stripeAccountId) {
+				this.cardErrorMessage = `Author subscription profile is missing`
+				return
+			}
+
+			if (!this.paymentProfile.paymentsEnabled) {
+				this.cardErrorMessage = `Author haven't enabled subscriptions`
+				return
+			}
+
+			if (!this.paymentProfile.tiers) {
+				this.cardErrorMessage = `Author haven't set-up subscriptions`
+			}
+		},
+		selectTier(tier: SubscriptionTier) {
+			this.selectedTier = tier
+		},
+		showPaymentButtons(period: string) {
+			return () => this._showPaymentButtons(period)
+		},
+		async _showPaymentButtons(period: string) {
 			this.nextStep()
+			this.selectedPeriod = period
+			if (!this.selectedTier || !period) {
+				this.cardErrorMessage = `Invalid tier selected`
+				return
+			}
+
+			const selectedAmount = getAmountFromTier(period, this.selectedTier)
+			const amount = getZeroDecimalAmount(this.paymentProfile.currency, selectedAmount)
+			// TODO: Start a loading spinner here
+			const stripe = await this.stripeClient(this.paymentProfile.stripeAccountId)
+			const currency = this.paymentProfile.currency
+			paymentRequest = stripe.paymentRequest({
+				country: `US`,
+				currency,
+				total: {
+					label: `Subscription to ${this.selectedTier.name}`,
+					amount,
+				},
+				requestPayerName: true,
+				requestPayerEmail: true,
+			})
+			elements = stripe.elements()
+			paymentRequest.canMakePayment().then((result) => {
+				if (!result) {
+					return
+				}
+
+				this.displayButtons.applePay = result.applePay
+				this.displayButtons.googlePay = result.googlePay
+			})
+
+			cardElement = elements.create(`card`, {
+				iconStyle: `solid`,
+				style: {
+					base: {
+						color: `#000000`,
+						fontSize: `16px`,
+						fontSmoothing: `antialiased`,
+						fontWeight: 500,
+						'::placeholder': {
+							color: `#CFD7DF`,
+						},
+					},
+					invalid: {
+						color: `#FF4433`,
+					},
+				},
+			})
+			cardElement.on(`change`, (event) => {
+				if (event.error) {
+					this.cardErrorMessage = event.error.message
+					return
+				}
+
+				this.cardErrorMessage = null
+			})
+		},
+		selectPaymentType(paymentType: string) {
+			if (!paymentRequest) {
+				this.cardErrorMessage = `Unexpected error with payment request`
+				return
+			}
+			if (paymentType !== `card`) {
+				paymentRequest.show()
+				paymentRequest.on(`paymentmethod`, async (ev) => {
+					if (!ev.paymentMethod.id) {
+						this.cardErrorMessage = `Invalid payment method`
+						ev.complete(`fail`)
+						return
+					}
+					if (!ev.payerEmail) {
+						this.cardErrorMessage = `Please provide your email`
+						ev.complete(`fail`)
+						return
+					}
+					const paymentSuccess = await this.submitPayment(ev.paymentMethod, ev.payerEmail)
+					if (!paymentSuccess) {
+						ev.complete(`fail`)
+						return
+					}
+					ev.complete(`success`)
+				})
+				return
+			}
+
+			if (!cardElement) {
+				this.cardErrorMessage = `Couldn't load Stripe Card`
+				return
+			}
+			cardElement.mount(`#card-element`)
+			this.displayCardElement = true
 		},
 		nextStep(): void {
 			this.step += 1
 		},
+		async submitPayment(paymentMethod: PaymentMethod, email: string): Promise<boolean> {
+			if (!this.selectedTier) {
+				throw new Error(`Tier not selected. Invalid state`)
+			}
+
+			const username = this.$store.state.session.id
+			try {
+				this.cardErrorMessage = null
+				const { error, status, clientSecret, paymentAttemptId } = await startSubscriptionPayment(
+					username,
+					this.selectedTier,
+					this.selectedPeriod,
+					paymentMethod.id,
+					email,
+				)
+
+				if (error) {
+					this.cardErrorMessage = error.message
+					return false
+				}
+				if (status === `requires_action`) {
+					// TODO hide the payment form here and show a spinner according to https://stripe.com/docs/js/payment_intents/confirm_card_payment
+					return this.handleAuthenticatedPayment(paymentAttemptId, clientSecret)
+				} else if (status !== `succeeded`) {
+					this.cardErrorMessage = `Payment is in invalid state`
+					return false
+				}
+
+				this.step = 3
+				return true
+			} catch (err) {
+				this.cardErrorMessage = (err as Error).message ?? `Unkwon error`
+				return false
+			}
+		},
+		async handleAuthenticatedPayment(paymentAttemptId: string, clientSecret: string): Promise<boolean> {
+			const stripe = await this.stripeClient()
+			const { paymentIntent, error } = await stripe.confirmCardPayment(clientSecret)
+
+			if (error) {
+				this.cardErrorMessage = error.message ?? `Unknown error when confirming payment`
+				return false
+			}
+
+			if (!paymentIntent?.id) {
+				this.cardErrorMessage = `Invalid payment intent`
+				return false
+			}
+
+			return this.confirmAuthenticatedPayment(paymentAttemptId, paymentIntent.id)
+		},
+		async confirmAuthenticatedPayment(paymentAttemptId: string, paymentIntentId: string): Promise<boolean> {
+			try {
+				this.cardErrorMessage = null
+				const { error, status } = await confirmSubscriptionPayment(
+					this.$store.state.session.id,
+					paymentAttemptId,
+					paymentIntentId,
+				)
+				if (error) {
+					this.cardErrorMessage = error.message ?? `Subscription failed`
+					return false
+				}
+
+				if (status !== `succeeded`) {
+					this.cardErrorMessage = `This subscription payment failed with an unknown error`
+					return false
+				}
+				this.step = 3
+				return true
+			} catch (err) {
+				this.cardErrorMessage = (err as Error).message ?? `Unkwon error`
+				return false
+			}
+		},
+		async submitCardPayment(e: HTMLInputEvent): Promise<void> {
+			// TODO Start loader for `Pay Now` button here
+			e.preventDefault()
+			const stripe = await this.stripeClient()
+			if (!cardElement) {
+				throw new Error(`Card elements is not initialized`)
+			}
+
+			if (!this.customerEmail) {
+				this.cardErrorMessage = `Invalid email address`
+				return
+			}
+			const { error, paymentMethod } = await stripe.createPaymentMethod({
+				type: `card`,
+				card: cardElement,
+				billing_details: {
+					email: this.customerEmail,
+				},
+			})
+
+			if (error) {
+				this.cardErrorMessage = error.message ?? `An unknown error happened`
+				return
+			}
+
+			if (!paymentMethod) {
+				this.cardErrorMessage = `Invalid payment method`
+				return
+			}
+
+			await this.submitPayment(paymentMethod, this.customerEmail)
+		},
 		handleCloseClick(e: any): void {
-			if (!e.target || e.target.parentNode === null || e.target.firstChild.classList === undefined) {
+			if (!e.target || e.target.parentNode === null || e.target.firstChild?.classList === undefined) {
 				return
 			}
 			if (e.target.firstChild.classList[0] === `popup`) {
