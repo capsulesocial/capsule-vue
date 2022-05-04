@@ -2108,6 +2108,11 @@
     "@stablelib/random" "^1.0.1"
     "@stablelib/wipe" "^1.0.1"
 
+"@stripe/stripe-js@^1.28.0":
+  version "1.28.0"
+  resolved "https://registry.yarnpkg.com/@stripe/stripe-js/-/stripe-js-1.28.0.tgz#eb14add69a6226a41ef6ccacc5dbcfa5b0e6880c"
+  integrity sha512-KWcsWqgdaetLAxb02AjFrx8B8KXEe2A2NW2x96xzTwESfqIKeocLqiJivtuQWd1FvyQ/Cvmvyx5DVDB/RgprvA==
+
 "@tailwindcss/typography@^0.4.1":
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/@tailwindcss/typography/-/typography-0.4.1.tgz#51ddbceea6a0ee9902c649dbe58871c81a831212"

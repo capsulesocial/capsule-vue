@@ -18,6 +18,10 @@ export const sufficientFunds = process.env.SUFFICIENT_ACCOUNT_FUNDS || `81800000
 export const sigValidity = 5 * 60000
 export const bootstrapNodes = process.env.BOOTSTRAP_NODES ? JSON.parse(process.env.BOOTSTRAP_NODES) : defaultBootstraps
 
+export const stripePublishableKey =
+	process.env.STRIPE_PUBLISHABLE_KEY ||
+	`pk_test_51I81pBCPCJ3FaYLGnUrPUMxipudV7gWWA7qAiqIVMAqnULA4a2uluUgBQxX8yKzAe2iGYOoSMX2rSbF45wtKlhXI00Olk8hJmc`
+
 const parsedTorusNetwork = process.env.TORUS_NETWORK
 if (parsedTorusNetwork && parsedTorusNetwork !== `mainnet` && parsedTorusNetwork !== `testnet`) {
 	throw new Error(`Unexpected Torus Network!`)
