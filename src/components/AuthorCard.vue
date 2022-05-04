@@ -33,10 +33,8 @@
 					:toggleFriend="toggleFriend"
 				/>
 			</div>
-			<div v-if="expandBio">
-				<BioPopup :bio="authorBio" @close="expandBio = false" />
-			</div>
 		</div>
+		<BioPopup v-if="expandBio" :bio="authorBio" @close="expandBio = false" />
 	</div>
 </template>
 

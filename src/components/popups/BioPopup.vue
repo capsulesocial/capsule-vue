@@ -8,7 +8,7 @@
 			class="w-full lg:w-600 min-h-40 max-h-90 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation z-10 overflow-y-auto rounded-lg bg-gradient-to-r p-6 pt-4 shadow-lg"
 		>
 			<div class="sticky flex items-center justify-center">
-				<button class="focus:outline-none bg-gray1 dark:bg-gray5 rounded-full p-1" @click="$emit(`close`)">
+				<button class="focus:outline-none bg-gray1 dark:bg-gray5 rounded-full p-3" @click="$emit(`close`)">
 					<CloseIcon />
 				</button>
 			</div>
