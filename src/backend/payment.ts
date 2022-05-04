@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import { capsuleServer } from './utilities/config'
 import { uint8ArrayToHexString } from './utilities/helpers'
 import { signContent } from './utilities/keys'
@@ -54,7 +54,7 @@ export async function startSubscriptionPayment(
 		})
 		return response.data
 	} catch (err) {
-		if (axios.isAxiosError(err) && err.response?.status === 400) {
+		if (err instanceof AxiosError && err.response) {
 			throw new Error(err.response.data?.error ?? err.message)
 		}
 		throw new Error(`Network error: ${err}`)
@@ -77,7 +77,7 @@ export async function confirmSubscriptionPayment(username: string, paymentAttemp
 		})
 		return response.data
 	} catch (err) {
-		if (axios.isAxiosError(err) && err.response?.status === 400) {
+		if (err instanceof AxiosError && err.response) {
 			throw new Error(err.response.data?.error ?? err.message)
 		}
 		throw new Error(`Network error: ${err}`)
