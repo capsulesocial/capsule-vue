@@ -20,7 +20,7 @@
 							</p>
 						</div>
 						<div v-if="expandBio">
-							<BioPopup :bio="authorBio" />
+							<BioPopup :bio="authorBio" @close="expandBio = false" />
 						</div>
 						<button v-show="longBio" class="focus:outline-none text-xs text-primary px-1" @click.prevent="bioPopup">
 							Read more

@@ -1,16 +1,20 @@
 <template>
-	<div class="popup">
+	<div
+		class="bg-darkBG dark:bg-lightBG fixed z-40 h-screen w-full overflow-auto bg-opacity-50 dark:bg-opacity-50 pt-16 flex flex-col justify-center items-center"
+	>
 		<!-- Container -->
 		<section
-			class="popup bg-darkBG dark:bg-gray5 modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
+			style="backdrop-filter: blur(10px)"
+			class="min-h-40 w-full lg:w-600 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation max-h-90 z-10 overflow-y-auto rounded-lg bg-gradient-to-r px-6 pt-4 pb-2 shadow-lg"
 		>
-			<CloseIcon @click="closePopup" />
-			<div
-				class="min-h-40 w-full lg:w-600 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation max-h-90 z-10 overflow-y-auto rounded-lg bg-gradient-to-r px-6 pt-4 pb-2 shadow-lg"
-				style="width: 600px; backdrop-filter: blur(5px)"
-			>
-				<p>{{ bio }}</p>
-			</div>
+			<button class="bg-gray1 dark:bg-gray5 focus:outline-none mb-5 rounded-full p-1" @click="$emit(`close`)">
+				<CloseIcon />
+			</button>
+			<article>
+				<div class="modal-content">
+					<p>{{ bio }}</p>
+				</div>
+			</article>
 		</section>
 	</div>
 </template>
@@ -38,3 +42,18 @@ export default Vue.extend({
 	},
 })
 </script>
+<style>
+.modal-content {
+	display: block;
+	max-width: 100%;
+	height: 100%;
+	max-height: 88%;
+}
+
+/* Add Animation */
+.modal-content,
+#caption {
+	animation-name: zoom;
+	animation-duration: 0.6s;
+}
+</style>
