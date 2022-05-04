@@ -53,6 +53,7 @@
 	},
 	"dependencies": {
 		"@nuxtjs/dotenv": "^1.4.1",
+		"@stripe/stripe-js": "^1.28.0",
 		"@tailwindcss/typography": "^0.4.1",
 		"@toruslabs/customauth": "^7.2.0",
 		"@toruslabs/openlogin-ed25519": "^1.7.0",
