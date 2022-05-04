@@ -136,6 +136,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapActions } from 'vuex'
 import ProfileWidget from '@/components/widgets/Profile.vue'
 import FollowersWidget from '@/components/widgets/Followers.vue'
 import MutualFollowersWidget from '@/components/widgets/MutualFollowers.vue'
@@ -154,6 +155,7 @@ import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
 import { getUserInfoNEAR } from '@/backend/near'
+import { ActionType, namespace as paymentProfileNamespace } from '@/store/paymentProfile'
 
 interface IData {
 	myProfile: Profile
@@ -259,6 +261,7 @@ export default Vue.extend({
 	mounted() {
 		// Fetch visiting profile
 		this.getVisitingProfile()
+		this.fetchPaymentProfile({ username: this.$route.params.id })
 	},
 	methods: {
 		async getVisitingProfile() {
@@ -364,6 +367,9 @@ export default Vue.extend({
 				throw err
 			}
 		},
+		...mapActions(paymentProfileNamespace, {
+			fetchPaymentProfile: ActionType.FETCH_PROFILE,
+		}),
 	},
 })
 </script>
