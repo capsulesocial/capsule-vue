@@ -202,7 +202,7 @@ export async function updateLockedPostTiers(cid: string, tiers: Array<string>) {
 	try {
 		await axios.post(`${capsuleServer}/content/${cid}`, { tiers, exp, sig })
 	} catch (err) {
-		if (axios.isAxiosError(err) && err.response) {
+		if (err instanceof AxiosError && err.response) {
 			return { error: err.response.data.error }
 		}
 		throw err
