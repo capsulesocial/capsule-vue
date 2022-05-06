@@ -1,24 +1,26 @@
 <template>
-	<div
-		class="popup bg-darkBG dark:bg-gray5 modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
-	>
-		<!-- Container -->
+	<portal to="bioPopup">
 		<div
-			style="backdrop-filter: blur(10px)"
-			class="w-full lg:w-600 min-h-40 max-h-90 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation z-10 overflow-y-auto rounded-lg bg-gradient-to-r p-6 pt-4 shadow-lg"
+			class="popup bg-darkBG dark:bg-gray5 modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
 		>
-			<div class="sticky flex items-center justify-center">
-				<button class="focus:outline-none bg-gray1 dark:bg-gray5 rounded-full p-3" @click="$emit(`close`)">
-					<CloseIcon />
-				</button>
-			</div>
-			<article>
-				<div class="text-gray5 dark:text-gray3 my-5 text-center text-sm">
-					<p>{{ bio }}</p>
+			<!-- Container -->
+			<div
+				style="backdrop-filter: blur(10px)"
+				class="w-full lg:w-600 min-h-40 max-h-90 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation z-10 overflow-y-auto rounded-lg bg-gradient-to-r p-6 pt-4 shadow-lg"
+			>
+				<div class="sticky flex items-center justify-center">
+					<button class="focus:outline-none bg-gray1 dark:bg-gray5 rounded-full p-3" @click="$emit(`close`)">
+						<CloseIcon />
+					</button>
 				</div>
-			</article>
+				<article>
+					<div class="text-gray5 dark:text-gray3 my-5 text-center text-sm">
+						<p>{{ bio }}</p>
+					</div>
+				</article>
+			</div>
 		</div>
-	</div>
+	</portal>
 </template>
 
 <script lang="ts">
