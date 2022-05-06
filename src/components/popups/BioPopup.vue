@@ -35,10 +35,6 @@ export default Vue.extend({
 			required: true,
 		},
 	},
-	created() {
-		/* eslint-disable no-console */
-		console.log(this.bio)
-	},
 })
 </script>
 <style></style>
