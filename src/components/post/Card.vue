@@ -362,7 +362,9 @@
 									/>
 								</div>
 								<CardProfileHeader :authorID="post.authorID" :authorName="authorName" :isHoverCard="true" />
-								<span v-if="authorBio !== ``" class="mt-2 dark:text-darkPrimaryText"> {{ authorBio }} </span>
+								<span v-if="authorBio !== ``" class="mt-2 dark:text-darkPrimaryText">
+									{{ authorBio.slice(0, 150) + (authorBio.length > 150 ? '...' : '') }}
+								</span>
 							</div>
 							<div class="relative flex items-center" :class="repostedBy !== `` ? `-mt-4` : ``">
 								<!-- Bookmarks button -->
