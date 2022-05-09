@@ -93,6 +93,7 @@ export function createEncryptedPost(
 	authorID: string,
 	featuredPhotoCID?: string | null,
 	featuredPhotoCaption?: string | null,
+	postImages?: Array<string>,
 ): IEncryptedPost {
 	if (subtitle !== null) {
 		subtitle = subtitle.trim()
@@ -108,6 +109,7 @@ export function createEncryptedPost(
 		...(featuredPhotoCID ? { featuredPhotoCID } : {}),
 		...(featuredPhotoCaption ? { featuredPhotoCaption } : {}),
 		encrypted: true,
+		postImages,
 	}
 }
 
@@ -126,16 +128,16 @@ export async function sendRegularPost(data: IRegularPost): Promise<string> {
 	return cid
 }
 
-// TODO: This needs fixing
-export async function sendEncryptedPost(data: IEncryptedPost): Promise<string> {
-	const { data: post, key, counter, sig } = await encryptAndSignData(data)
+export async function sendEncryptedPost(data: IEncryptedPost, tiers: Array<string>): Promise<string> {
+	const { data: post, key, counter, sig, publicKey } = await encryptAndSignData(data)
 
-	const cid = await ipfs().sendJSONData(post)
-	await axios.post(`${capsuleServer}/content`, { key, data: post, counter, sig, cid })
+	const ipfsData: ISignedIPFSObject<IEncryptedPost> = { data: post, sig, public_key: publicKey }
+
+	const cid = await ipfs().sendJSONData(ipfsData)
+	await axios.post(`${capsuleServer}/content`, { key, data: ipfsData, counter, cid, tiers })
 	await axios.post(`${nodeUrl()}/content`, {
 		cid,
-		data: post,
-		sig,
+		data: ipfsData,
 		type: `post`,
 	})
 
@@ -150,10 +152,12 @@ export async function getRegularPost(cid: string): Promise<ISignedIPFSObject<IRe
 	return post
 }
 
-// TODO: Fix this
-export async function getEncryptedPost(cid: string, username: string): Promise<IEncryptedPost | { error: string }> {
-	const post: Post = await ipfs().getJSONData(cid)
-	if (!isEncryptedPost(post)) {
+export async function getEncryptedPost(
+	cid: string,
+	username: string,
+): Promise<ISignedIPFSObject<IEncryptedPost> | { error: string }> {
+	const post = await ipfs().getJSONData<ISignedIPFSObject<IEncryptedPost>>(cid)
+	if (!isEncryptedPost(post.data)) {
 		throw new Error(`Post is not encrypted`)
 	}
 
@@ -162,7 +166,7 @@ export async function getEncryptedPost(cid: string, username: string): Promise<I
 		return result
 	}
 	const { key, counter } = result
-	post.content = await decryptData(post.content, key, counter)
+	post.data.content = await decryptData(post.data.content, key, counter)
 	return post
 }
 
@@ -176,7 +180,7 @@ export function isRegularPost(post: Post): post is IRegularPost {
 
 async function getEncryptionKeys(username: string, cid: string) {
 	const exp = Date.now() + sigValidity
-	const { sig } = await signContent({ username, cid, exp })
+	const { sig } = await signContent({ username, cid, exp, action: `getEncKey` })
 
 	try {
 		const res = await axios.get<{ key: string; counter: string }>(
@@ -189,6 +193,22 @@ async function getEncryptionKeys(username: string, cid: string) {
 		}
 		throw err
 	}
+}
+
+export async function updateLockedPostTiers(cid: string, tiers: Array<string>) {
+	const exp = Date.now() + sigValidity
+	const { sig } = await signContent({ cid, exp, tiers, action: `updateLPostTiers` })
+
+	try {
+		await axios.post(`${capsuleServer}/content/${cid}`, { tiers, exp, sig })
+	} catch (err) {
+		if (err instanceof AxiosError && err.response) {
+			return { error: err.response.data.error }
+		}
+		throw err
+	}
+
+	return true
 }
 
 export interface IGetPostsOptions {
