@@ -220,6 +220,7 @@ export default Vue.extend({
 		$route(n, o) {
 			if (n.params.id !== o.params.id) {
 				this.getVisitingProfile()
+				this.fetchPaymentProfile({ username: n.params.id })
 				this.componentKey += 1
 				this.showFollowers = false
 				this.showFollowing = false
