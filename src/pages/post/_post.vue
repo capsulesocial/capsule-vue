@@ -475,7 +475,7 @@ export default Vue.extend({
 
 		// Returning key retrieval errors for encrypted posts
 		// towards the end so that post metadata is loaded
-		if (isEncryptedPost(this.post) && encError.error) {
+		if (encError.error) {
 			this.$toastError(encError.error)
 		}
 	},

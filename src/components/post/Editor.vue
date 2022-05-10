@@ -700,8 +700,7 @@ export default Vue.extend({
 					postImages,
 				)
 				try {
-					const tiers: string[] = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex]
-						.accessTiers as string[]
+					const tiers: string[] = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].accessTiers
 					const cid: string = await sendEncryptedPost(p, tiers)
 					this.$router.push(`/post/` + cid)
 				} catch (err: unknown) {
