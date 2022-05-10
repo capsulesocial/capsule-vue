@@ -210,7 +210,10 @@
 							All of their premium articles are now<br />
 							unlocked for your account
 						</p>
-						<button class="px-5 py-2 rounded-lg bg-neutral focus:outline-none text-white mt-10 font-semibold">
+						<button
+							class="px-5 py-2 rounded-lg bg-neutral focus:outline-none text-white mt-10 font-semibold"
+							@click="$emit(`close`)"
+						>
 							Start reading
 						</button>
 					</div>
