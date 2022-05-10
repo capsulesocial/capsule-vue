@@ -48,7 +48,7 @@
 					<button
 						v-for="tier in paymentProfile.tiers"
 						:key="tier._id"
-						class="flex flex-row items-center justify-between m-5 mb-20 p-4 border border-neutral shadow-lg rounded-lg"
+						class="flex flex-row items-center justify-between m-5 p-4 border border-neutral shadow-lg rounded-lg"
 						@click="selectTier(tier)"
 					>
 						<!-- Check mark -->
@@ -205,7 +205,7 @@
 						</div>
 						<CrownIcon class="text-neutral stroke-neutral self-center w-9 h-9 ml-10" />
 					</div>
-					<div class="w-full flex flex-col justify-center items-center text-center px-10 my-5">
+					<div class="w-full flex flex-col justify-center items-center text-center px-10 mt-5">
 						<p class="text-base text-center text-gray5 dark:text-gray3 mb-4 max-w-md">
 							All of their premium articles are now<br />
 							unlocked for your account
@@ -214,7 +214,14 @@
 							Start reading
 						</button>
 					</div>
-					ADD IMAGE FROM HENRY HERE
+					<img
+						:src="
+							$colorMode.dark
+								? require(`@/assets/images/brand/dark/subscriptions.webp`)
+								: require(`@/assets/images/brand/light/subscriptions.webp`)
+						"
+						class="h-auto"
+					/>
 				</article>
 			</div>
 		</section>
