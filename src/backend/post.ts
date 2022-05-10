@@ -142,6 +142,18 @@ export async function sendEncryptedPost(data: IEncryptedPost, tiers: Array<strin
 	return cid
 }
 
+// Should I just use
+// `await ipfs().getJSONData<ISignedIPFSObject<Post>>(cid)`
+// directly in _post.vue instead?
+export async function getPost(cid: string) {
+	const post = await ipfs().getJSONData<ISignedIPFSObject<Post>>(cid)
+	// Always true
+	if (!isRegularPost && !isEncryptedPost(post.data)) {
+		throw new Error(`Post should either be encrypted o`)
+	}
+	return post
+}
+
 export async function getRegularPost(cid: string): Promise<ISignedIPFSObject<IRegularPost>> {
 	const post = await ipfs().getJSONData<ISignedIPFSObject<IRegularPost>>(cid)
 	if (!isRegularPost(post.data)) {
@@ -150,22 +162,19 @@ export async function getRegularPost(cid: string): Promise<ISignedIPFSObject<IRe
 	return post
 }
 
-export async function getEncryptedPost(
+export async function getDecryptedContent(
 	cid: string,
+	content: string,
 	username: string,
-): Promise<ISignedIPFSObject<IEncryptedPost> | { error: string }> {
-	const post = await ipfs().getJSONData<ISignedIPFSObject<IEncryptedPost>>(cid)
-	if (!isEncryptedPost(post.data)) {
-		throw new Error(`Post is not encrypted`)
-	}
-
+): Promise<{ content: string } | { error: string }> {
 	const result = await getEncryptionKeys(username, cid)
 	if (isError(result)) {
 		return result
 	}
+
 	const { key, counter } = result
-	post.data.content = await decryptData(post.data.content, key, counter)
-	return post
+	const decryptedContent = await decryptData(content, key, counter)
+	return { content: decryptedContent }
 }
 
 export function isEncryptedPost(post: Post): post is IEncryptedPost {
