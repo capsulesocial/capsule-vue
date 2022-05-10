@@ -242,13 +242,21 @@ import PostCard from '@/components/post/Card.vue'
 import SharePopup from '@/components/popups/SharePopup.vue'
 
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
-import { getRegularPost, getOnePost, Post, verifyPostAuthenticity } from '@/backend/post'
+import {
+	getRegularPost,
+	getOnePost,
+	Post,
+	verifyPostAuthenticity,
+	IEncryptedPost,
+	IRegularPost,
+	getEncryptedPost,
+} from '@/backend/post'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
 import { getReposts } from '@/backend/reposts'
 import { isPostBookmarkedByUser } from '@/backend/bookmarks'
 import { createShareableLink } from '@/backend/shareable_links'
-import { calculateReadingTime } from '@/backend/utilities/helpers'
+import { calculateReadingTime, ISignedIPFSObject } from '@/backend/utilities/helpers'
 
 interface IData {
 	post: Post | null
@@ -356,15 +364,30 @@ export default Vue.extend({
 			this.$emit(`showWarning`)
 		}
 
+		let post: ISignedIPFSObject<IEncryptedPost | IRegularPost> | { error: string } = {
+			error: `Post has not been fetched!`,
+		}
+
 		// Fetch post from IPFS
-		const post = await getRegularPost(this.$route.params.post)
-		this.post = post.data
+		if (postMetadata.post.encrypted) {
+			const fetchedPost: ISignedIPFSObject<IEncryptedPost> | { error: string } = await getEncryptedPost(
+				this.$route.params.post,
+				this.$store.state.session.id,
+			)
+			post = fetchedPost
+			// @ts-ignore
+			this.post = post.data
+		} else {
+			const fetchedPost: ISignedIPFSObject<IRegularPost> = await getRegularPost(this.$route.params.post)
+			post = fetchedPost
+			this.post = post.data
+		}
 
 		if (!this.post) {
 			this.$toastError(`This post has not been found`)
 			throw new Error(`Post is null!`)
 		}
-
+		// @ts-ignore
 		verifyPostAuthenticity(post).then((verified) => {
 			if (!verified) {
 				this.$toastError(`Post not verified!`)
