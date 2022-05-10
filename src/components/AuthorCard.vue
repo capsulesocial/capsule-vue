@@ -16,10 +16,10 @@
 								:key="lineNumber"
 								class="text-gray5 dark:text-darkSecondaryText w-full"
 							>
-								{{ line.slice(0, 280) + (line.length > 280 ? '...' : '') }}<br />
+								{{ line.slice(0, 180) + (line.length > 180 ? '...' : '') }}<br />
 							</p>
 						</div>
-						<button v-show="longBio" class="focus:outline-none text-xs text-primary px-1" @click="expandBio = true">
+						<button v-if="longBio" class="focus:outline-none text-xs text-primary px-1" @click="expandBio = true">
 							Read more
 						</button>
 					</div>
@@ -88,17 +88,10 @@ export default Vue.extend({
 			expandBio: false,
 		}
 	},
-	mounted() {
-		this.$nextTick(() => {
-			if (this.$refs) {
-				this.$nextTick(() => {
-					const bioContainer = this.$refs.bio as HTMLElement
-					if ((bioContainer && bioContainer.clientHeight > 72) || this.authorBio.length > 150) {
-						this.longBio = true
-					}
-				})
-			}
-		})
+	updated() {
+		if (this.authorBio.length > 150) {
+			this.longBio = true
+		}
 	},
 })
 </script>

@@ -14,7 +14,7 @@
 					</button>
 				</div>
 				<article>
-					<div class="text-gray5 dark:text-gray3 my-5 text-center text-sm">
+					<div class="text-gray5 dark:text-gray3 my-5 text-sm">
 						<p>{{ bio }}</p>
 					</div>
 				</article>
