@@ -202,8 +202,8 @@
 				@close="toggleSettings"
 			/>
 		</div>
-		<ProfilePopup v-if="expandBio" :bio="visitProfile.bio" @close="expandBio = false" />
-		<portal-target name="profilePopup"></portal-target>
+		<BioPopup v-if="expandBio" :bio="visitProfile.bio" @close="expandBio = false" />
+		<portal-target name="bioPopup"></portal-target>
 	</section>
 </template>
 
@@ -215,7 +215,7 @@ import FriendButton from '@/components/FriendButton.vue'
 import SecondaryButton from '@/components/SecondaryButton.vue'
 import BackButton from '@/components/icons/ChevronLeft.vue'
 import PencilIcon from '@/components/icons/Pencil.vue'
-import ProfilePopup from '@/components/popups/ProfilePopup.vue'
+import BioPopup from '@/components/popups/BioPopup.vue'
 import { getProfile, Profile } from '@/backend/profile'
 
 interface IData {
@@ -239,7 +239,7 @@ export default Vue.extend({
 		SettingsPopup: () => import(`@/components/popups/Settings.vue`),
 		BackButton,
 		PencilIcon,
-		ProfilePopup,
+		BioPopup,
 	},
 	beforeRouteEnter(to, from, next) {
 		next((vm: any) => {
