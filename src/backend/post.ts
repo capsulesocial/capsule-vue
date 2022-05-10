@@ -142,14 +142,11 @@ export async function sendEncryptedPost(data: IEncryptedPost, tiers: Array<strin
 	return cid
 }
 
-// Should I just use
-// `await ipfs().getJSONData<ISignedIPFSObject<Post>>(cid)`
-// directly in _post.vue instead?
 export async function getPost(cid: string) {
 	const post = await ipfs().getJSONData<ISignedIPFSObject<Post>>(cid)
-	// Always true
-	if (!isRegularPost && !isEncryptedPost(post.data)) {
-		throw new Error(`Post should either be encrypted o`)
+	// Always evaluates to false
+	if (!isRegularPost(post.data) && !isEncryptedPost(post.data)) {
+		throw new Error(`Post should either be encrypted or public`)
 	}
 	return post
 }
