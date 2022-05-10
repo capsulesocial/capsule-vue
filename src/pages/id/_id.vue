@@ -142,14 +142,12 @@
 					class="header-profile px-1 pt-4 dark:text-darkPrimaryText"
 					:style="expandBio ? `` : `max-height: 5.5rem; overflow: hidden`"
 				>
-					<p v-for="(line, lineNumber) of visitProfile.bio.split('\n')" :key="lineNumber">{{ line }}<br /></p>
+					<p v-for="(line, lineNumber) of visitProfile.bio.split('\n')" :key="lineNumber">
+						{{ line.slice(0, 200) + (line.length > 200 ? '...' : '') }}<br />
+					</p>
 				</div>
-				<button
-					v-show="longBio && !scrollingDown"
-					class="focus:outline-none text-xs text-primary px-1"
-					@click="expandBio = !expandBio"
-				>
-					Read <span v-if="!expandBio">more </span><span v-else>less</span>
+				<button v-show="longBio" class="focus:outline-none text-xs text-primary px-1" @click="expandBio = true">
+					Read more
 				</button>
 				<div v-show="!visitProfile.bio" id="bio" class="header-profile"></div>
 				<div id="divider" class="w-full bg-lightBorder dark:bg-darkBorder my-4 rounded" style="height: 1px"></div>
@@ -204,6 +202,8 @@
 				@close="toggleSettings"
 			/>
 		</div>
+		<ProfilePopup v-if="expandBio" :bio="visitProfile.bio" @close="expandBio = false" />
+		<portal-target name="profilePopup"></portal-target>
 	</section>
 </template>
 
@@ -215,6 +215,7 @@ import FriendButton from '@/components/FriendButton.vue'
 import SecondaryButton from '@/components/SecondaryButton.vue'
 import BackButton from '@/components/icons/ChevronLeft.vue'
 import PencilIcon from '@/components/icons/Pencil.vue'
+import ProfilePopup from '@/components/popups/ProfilePopup.vue'
 import { getProfile, Profile } from '@/backend/profile'
 
 interface IData {
@@ -238,6 +239,7 @@ export default Vue.extend({
 		SettingsPopup: () => import(`@/components/popups/Settings.vue`),
 		BackButton,
 		PencilIcon,
+		ProfilePopup,
 	},
 	beforeRouteEnter(to, from, next) {
 		next((vm: any) => {
@@ -364,11 +366,8 @@ export default Vue.extend({
 				container.addEventListener(`scroll`, this.handleScrollHeader)
 			}
 			// handle long bios
-			const bioContainer = this.$refs.bio as HTMLElement
-			if (bioContainer) {
-				if (bioContainer.clientHeight > 72) {
-					this.longBio = true
-				}
+			if (this.visitProfile.bio.length > 150) {
+				this.longBio = true
 			}
 		},
 		showAvatar() {
