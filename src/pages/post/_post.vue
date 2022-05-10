@@ -392,13 +392,12 @@ export default Vue.extend({
 			}
 		})
 
-		let encError: { error?: string } = {}
 		if (isEncryptedPost(post.data)) {
 			const decrypted = await getDecryptedContent(postCID, post.data.content, sessionID)
 			if (!(`error` in decrypted)) {
 				post.data.content = decrypted.content
 			} else {
-				encError = decrypted
+				this.$toastError(decrypted.error)
 				// Display premium post paywall
 				this.showPaywall = true
 			}
@@ -472,12 +471,6 @@ export default Vue.extend({
 		// Get reposts
 		const repostData = await getReposts({ authorID: this.$store.state.session.id }, {})
 		this.myReposts = new Set(repostData.map((p) => p.repost.postCID))
-
-		// Returning key retrieval errors for encrypted posts
-		// towards the end so that post metadata is loaded
-		if (encError.error) {
-			this.$toastError(encError.error)
-		}
 	},
 	mounted() {
 		const container = document.getElementById(`post`)
