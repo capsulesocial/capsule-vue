@@ -132,7 +132,9 @@
 				<p class="text-gray5 dark:text-gray3 text-sm">This post is for subscribers only</p>
 				<input ref="premiumPost" type="checkbox" value="premium" @change="togglePremiumPost" />
 			</div>
-			<button @click="openTiers">Manage access</button>
+			<button v-if="this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].encrypted" @click="openTiers">
+				Manage access
+			</button>
 		</article>
 		<article
 			class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder mb-5 rounded-lg border bg-gradient-to-r p-6 shadow-lg"

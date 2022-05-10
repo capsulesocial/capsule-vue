@@ -201,6 +201,16 @@ export default Vue.extend({
 			waitingImage: false,
 		}
 	},
+	computed: {
+		encrypted() {
+			return this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].encrypted
+		},
+	},
+	watch: {
+		encrypted() {
+			this.updateSubtitle()
+		},
+	},
 	beforeDestroy() {
 		if (this.isX || this.$store.state.settings.recentlyPosted) {
 			return
@@ -771,6 +781,10 @@ export default Vue.extend({
 			const subtitleInputValue = subtitleInput.value.trim()
 			if (updateStore) {
 				this.$store.commit(`draft/updateSubtitle`, subtitleInputValue)
+			}
+			if (this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].encrypted && subtitleInputValue === ``) {
+				this.subtitleError = `Subtitle is required on encrypted posts`
+				return
 			}
 			const subtitleQualityCheck = this.$qualitySubtitle(subtitleInputValue)
 			if (this.$isError(subtitleQualityCheck)) {

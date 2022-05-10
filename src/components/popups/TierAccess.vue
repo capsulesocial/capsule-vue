@@ -12,14 +12,39 @@
 				<h2 class="text-lightPrimaryText dark:text-darkPrimaryText text-3xl font-semibold">
 					Manage access to this post
 				</h2>
-				<button
-					v-for="t in this.$store.getters[`paymentProfile/getPaymentProfile`](this.$store.state.session.id).tiers"
-					:key="t._id"
-					class="border border-neutral rounded-lg"
-					@click="addTier(t.name)"
-				>
-					{{ t.name }}
-				</button>
+				<!-- Tier list -->
+				<div class="flex flex-col">
+					<button
+						v-for="t in this.$store.getters[`paymentProfile/getPaymentProfile`](this.$store.state.session.id).tiers"
+						:key="t._id"
+						class="border rounded-lg w-full flex flex-row justify-between p-5 my-2"
+						:class="
+							$store.state.draft.drafts[$store.state.draft.activeIndex].accessTiers.includes(t._id)
+								? `border-neutral`
+								: ``
+						"
+						@click="
+							$store.state.draft.drafts[$store.state.draft.activeIndex].accessTiers.includes(t._id)
+								? removeTier(t._id)
+								: addTier(t._id)
+						"
+					>
+						<div class="flex">
+							<CircleCheck
+								:isChecked="$store.state.draft.drafts[$store.state.draft.activeIndex].accessTiers.includes(t._id)"
+								class="text-neutral w-6 h-6 flex items-center"
+							/>
+							<h2 class="font-semibold ml-4 text-xl">{{ t.name }}</h2>
+						</div>
+						<p>
+							{{
+								$store.state.draft.drafts[$store.state.draft.activeIndex].accessTiers.includes(t._id)
+									? `Can see this post`
+									: `Cannot see this post`
+							}}
+						</p>
+					</button>
+				</div>
 			</div>
 		</section>
 	</div>
@@ -27,8 +52,11 @@
 
 <script lang="ts">
 import Vue from 'vue'
-
+import CircleCheck from '@/components/icons/CheckCircle.vue'
 export default Vue.extend({
+	components: {
+		CircleCheck,
+	},
 	methods: {
 		addTier(t: string) {
 			this.$store.commit(`draft/addAccessTier`, t)

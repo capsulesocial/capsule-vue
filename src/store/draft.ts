@@ -181,9 +181,6 @@ export const mutations: MutationTree<DraftState> = {
 		state.drafts[state.activeIndex].accessTiers.push(tier)
 	},
 	[MutationType.REMOVE_ACCESS_TIER]: (state, tier: string) => {
-		state.drafts[state.activeIndex].accessTiers = state.drafts[state.activeIndex].accessTiers.splice(
-			state.drafts[state.activeIndex].accessTiers.indexOf(tier),
-			1,
-		)
+		state.drafts[state.activeIndex].accessTiers.splice(state.drafts[state.activeIndex].accessTiers.indexOf(tier), 1)
 	},
 }
