@@ -122,6 +122,20 @@
 				</button>
 			</div>
 		</article>
+		<!-- Premium post -->
+		<article
+			v-if="this.$store.getters[`paymentProfile/getPaymentProfile`](this.$store.state.session.id).paymentsEnabled"
+			class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder mb-5 rounded-lg border bg-gradient-to-r px-6 py-4 pb-6 shadow-lg"
+			style="backdrop-filter: blur(10px)"
+		>
+			<div class="flex flex-row justify-between">
+				<p class="text-gray5 dark:text-gray3 text-sm">This post is for subscribers only</p>
+				<input ref="premiumPost" type="checkbox" value="premium" @change="togglePremiumPost" />
+			</div>
+			<button v-if="this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].encrypted" @click="openTiers">
+				Manage access
+			</button>
+		</article>
 		<article
 			class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder mb-5 rounded-lg border bg-gradient-to-r p-6 shadow-lg"
 			style="backdrop-filter: blur(10px)"
@@ -200,6 +214,11 @@ export default Vue.extend({
 	},
 	mounted() {
 		this.fetchActiveDraft()
+		// Check if post is encrypted in store
+		if (this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].encrypted) {
+			const premiumPost = this.$refs.premiumPost as HTMLInputElement
+			premiumPost.checked = true
+		}
 	},
 	methods: {
 		fetchActiveDraft(): void {
@@ -315,6 +334,12 @@ export default Vue.extend({
 		getCategoryIcon(category: string) {
 			const c = category || this.category
 			return c ? require(`@/assets/images/category/${c}/${this.$colorMode.dark ? `dark` : `light`}/icon.webp`) : ``
+		},
+		togglePremiumPost() {
+			this.$store.commit(`draft/togglePremium`)
+		},
+		openTiers() {
+			this.$emit(`openTierAccess`)
 		},
 	},
 })

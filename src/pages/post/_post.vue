@@ -121,8 +121,18 @@
 						{{ post.featuredPhotoCaption }}
 					</p>
 				</article>
+				<!-- Post paywall -->
+				<article v-if="showPaywall" class="w-full shadow shadow-lg flex flex-col items-center p-5">
+					<h4 class="text-xl font-semibold text-neutral">This post is for Paid subscribers</h4>
+					<p class="my-4">
+						Become a subscriber of <span class="font-semibold">{{ author.name }}</span> to access this post and only
+						subscriber-only content
+					</p>
+					<SubscribeButton :toggleSubscription="toggleSubscription" :userIsSubscribed="false" class="header-profile" />
+					<p>Manage my <nuxt-link to="/subscriptions" class="text-neutral">subscriptions</nuxt-link></p>
+				</article>
 				<!-- Content -->
-				<article class="mt-5">
+				<article v-else class="mt-5">
 					<div class="text-lightPrimaryText dark:text-darkSecondaryText editable content max-w-none break-words">
 						<component :is="readerViewElement" v-if="readerViewElement"></component>
 					</div>
@@ -221,6 +231,14 @@
 			:cid="$route.params.post"
 			@close="showShare = false"
 		/>
+		<portal to="postPage">
+			<SubscriptionsPopup
+				v-if="showSubscriptions"
+				:author="author"
+				:authorAvatar="authorAvatar"
+				@close="showSubscriptions = false"
+			/>
+		</portal>
 	</div>
 </template>
 
@@ -240,9 +258,11 @@ import LinkIcon from '@/components/icons/Link.vue'
 import FriendButton from '@/components/FriendButton.vue'
 import PostCard from '@/components/post/Card.vue'
 import SharePopup from '@/components/popups/SharePopup.vue'
+import SubscribeButton from '@/components/SubscribeButton.vue'
+import SubscriptionsPopup from '@/components/popups/SubscriptionsPopup.vue'
 
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
-import { getRegularPost, getOnePost, Post, verifyPostAuthenticity } from '@/backend/post'
+import { getOnePost, Post, verifyPostAuthenticity, getPost, isEncryptedPost, getDecryptedContent } from '@/backend/post'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
 import { getReposts } from '@/backend/reposts'
@@ -275,6 +295,8 @@ interface IData {
 	readingTime: number | null
 	realURL: string
 	isLeaving: boolean
+	showPaywall: boolean
+	showSubscriptions: boolean
 }
 
 export default Vue.extend({
@@ -292,6 +314,8 @@ export default Vue.extend({
 		PostCard,
 		RepostButton,
 		SharePopup,
+		SubscribeButton,
+		SubscriptionsPopup,
 	},
 	beforeRouteLeave(to, from, next) {
 		if (this.realURL !== `` && to.path !== from.path) {
@@ -327,6 +351,8 @@ export default Vue.extend({
 			readingTime: null,
 			realURL: ``,
 			isLeaving: false,
+			showPaywall: false,
+			showSubscriptions: false,
 		}
 	},
 	head() {
@@ -356,20 +382,33 @@ export default Vue.extend({
 			this.$emit(`showWarning`)
 		}
 
-		// Fetch post from IPFS
-		const post = await getRegularPost(this.$route.params.post)
+		const post = await getPost(postCID)
+
+		// Using spread operator so that post.data.content getting
+		// assigned before signature verification doesn't affect it
+		verifyPostAuthenticity({ ...post }).then((verified) => {
+			if (!verified) {
+				this.$toastError(`Post not verified!`)
+			}
+		})
+
+		if (isEncryptedPost(post.data)) {
+			const decrypted = await getDecryptedContent(postCID, post.data.content, sessionID)
+			if (!(`error` in decrypted)) {
+				post.data.content = decrypted.content
+			} else {
+				this.$toastError(decrypted.error)
+				// Display premium post paywall
+				this.showPaywall = true
+			}
+		}
+
 		this.post = post.data
 
 		if (!this.post) {
 			this.$toastError(`This post has not been found`)
 			throw new Error(`Post is null!`)
 		}
-
-		verifyPostAuthenticity(post).then((verified) => {
-			if (!verified) {
-				this.$toastError(`Post not verified!`)
-			}
-		})
 
 		// Get featured photo
 		if (this.post.featuredPhotoCID) {
@@ -548,6 +587,18 @@ export default Vue.extend({
 				throw new Error(`Word count can't be equal or less than zero`)
 			}
 			this.readingTime = calculateReadingTime(wordcount, this.post.postImages?.length)
+		},
+		toggleSubscription(authorID: string) {
+			// Unauth
+			if (this.$store.state.session.id === ``) {
+				this.$store.commit(`settings/toggleUnauthPopup`)
+				return
+			}
+			// Prevent self-subscribing
+			if (authorID !== this.$store.state.session.id) {
+				// Send subscription
+				this.showSubscriptions = !this.showSubscriptions
+			}
 		},
 	},
 })
