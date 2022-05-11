@@ -690,7 +690,7 @@ export default Vue.extend({
 			if (isEncrypted) {
 				const p: IEncryptedPost = createEncryptedPost(
 					this.title,
-					this.subtitle === `` ? null : this.subtitle,
+					this.subtitle,
 					clean,
 					category,
 					tags,
