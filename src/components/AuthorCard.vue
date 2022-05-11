@@ -10,9 +10,18 @@
 							{{ authorName }}
 						</nuxt-link>
 						<nuxt-link v-else :to="'/id/' + authorID" class="text-gray5 text-2xl"> {{ authorID }} </nuxt-link>
-						<p class="text-gray5 dark:text-darkSecondaryText w-full">
-							{{ authorBio }}
-						</p>
+						<div v-show="authorBio" id="bio" ref="bio" style="max-height: 6rem; overflow: hidden">
+							<p
+								v-for="(line, lineNumber) of authorBio.split('\n')"
+								:key="lineNumber"
+								class="text-gray5 dark:text-darkSecondaryText w-full"
+							>
+								{{ line.slice(0, 180) + (line.length > 180 ? '...' : '') }}<br />
+							</p>
+						</div>
+						<button v-if="longBio" class="focus:outline-none text-xs text-primary px-1" @click="expandBio = true">
+							Read more
+						</button>
 					</div>
 				</div>
 			</div>
@@ -25,6 +34,7 @@
 				/>
 			</div>
 		</div>
+		<BioPopup v-if="expandBio" :bio="authorBio" @close="expandBio = false" />
 	</div>
 </template>
 
@@ -33,11 +43,18 @@ import Vue from 'vue'
 import type { PropType } from 'vue'
 import FriendButton from '@/components/FriendButton.vue'
 import Avatar from '@/components/Avatar.vue'
+import BioPopup from '@/components/popups/BioPopup.vue'
+
+interface IData {
+	longBio: boolean
+	expandBio: boolean
+}
 
 export default Vue.extend({
 	components: {
 		FriendButton,
 		Avatar,
+		BioPopup,
 	},
 	props: {
 		authorAvatar: {
@@ -64,6 +81,17 @@ export default Vue.extend({
 			type: Function as PropType<() => void>,
 			required: true,
 		},
+	},
+	data(): IData {
+		return {
+			longBio: false,
+			expandBio: false,
+		}
+	},
+	updated() {
+		if (this.authorBio.length > 150) {
+			this.longBio = true
+		}
 	},
 })
 </script>

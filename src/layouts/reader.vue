@@ -51,6 +51,7 @@
 		<WarningPopup v-if="showWarning" @close="toggleWarning" />
 		<portal-target name="card-popup"></portal-target>
 		<portal-target name="postPage"></portal-target>
+		<portal-target name="bioPopup"></portal-target>
 	</main>
 </template>
 
