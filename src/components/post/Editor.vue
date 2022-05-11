@@ -620,7 +620,7 @@ export default Vue.extend({
 			const subtitle = this.$refs.subtitle as HTMLInputElement
 			this.title = title.value.trim()
 			this.subtitle = subtitle.value.trim()
-			const { category, tags, featuredPhotoCID, featuredPhotoCaption } =
+			const { category, tags, featuredPhotoCID, featuredPhotoCaption, encrypted } =
 				this.$store.state.draft.drafts[this.$store.state.draft.activeIndex]
 			// Check for quality title
 			const titleCheck = this.$qualityTitle(this.title)
@@ -628,6 +628,13 @@ export default Vue.extend({
 				this.$toastError(titleCheck.error)
 				return false
 			}
+
+			// Check for subtitle on encrypted posts
+			if (encrypted && this.subtitle === ``) {
+				this.$toastError(`Subtitles are required on encrypted premium posts`)
+				return false
+			}
+
 			// Check if using a subtitle and is a quality subtitle
 			const subtitleCheck = this.$qualitySubtitle(this.subtitle)
 			if (this.$isError(subtitleCheck)) {
