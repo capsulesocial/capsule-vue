@@ -106,7 +106,7 @@
 						</div>
 					</div>
 					<!-- Payment Methods -->
-					<div class="flex flex-col px-10">
+					<div v-show="!isLoading" class="flex flex-col px-10">
 						<!-- Apple pay -->
 						<button
 							v-show="displayButtons.applePay"
@@ -166,7 +166,6 @@
 						<div id="payment-element">
 							<!--Stripe.js injects the Payment Element-->
 						</div>
-						<!-- TODO: Clicking on the following button should trigger next payment process instead of nextStep() -->
 						<div class="mt-4 flex flex-row-reverse">
 							<SecondaryButton :text="`Pay Now`" :action="submitCardPayment" />
 						</div>
@@ -226,6 +225,12 @@
 						class="h-auto"
 					/>
 				</article>
+				<div v-show="isLoading" class="modal-animation flex w-full justify-center z-20 mt-24">
+					<div
+						class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
+						:style="`border-top: 2px solid` + $color.hex"
+					></div>
+				</div>
 			</div>
 		</section>
 	</div>
@@ -275,6 +280,7 @@ interface IData {
 		applePay: boolean
 		googlePay: boolean
 	}
+	isLoading: boolean
 }
 
 let _stripe: Stripe | null = null
@@ -322,6 +328,7 @@ export default Vue.extend({
 				applePay: false,
 				googlePay: false,
 			},
+			isLoading: false,
 		}
 	},
 	computed: {
@@ -395,6 +402,7 @@ export default Vue.extend({
 			const selectedAmount = getAmountFromTier(period, this.selectedTier)
 			const amount = getZeroDecimalAmount(this.paymentProfile.currency, selectedAmount)
 			// TODO: Start a loading spinner here
+			this.isLoading = true
 			const stripe = await this.stripeClient(this.paymentProfile.stripeAccountId)
 			const currency = this.paymentProfile.currency
 			paymentRequest = stripe.paymentRequest({
@@ -407,6 +415,7 @@ export default Vue.extend({
 				requestPayerName: true,
 				requestPayerEmail: true,
 			})
+			this.isLoading = false
 			elements = stripe.elements()
 			paymentRequest.canMakePayment().then((result) => {
 				if (!result) {
@@ -487,6 +496,7 @@ export default Vue.extend({
 			}
 
 			const username = this.$store.state.session.id
+			this.isLoading = true
 			try {
 				this.cardErrorMessage = null
 				const { error, status, clientSecret, paymentAttemptId } = await startSubscriptionPayment(
@@ -499,13 +509,18 @@ export default Vue.extend({
 
 				if (error) {
 					this.cardErrorMessage = error.message
+					this.isLoading = false
 					return false
 				}
 				if (status === `requires_action`) {
 					// TODO hide the payment form here and show a spinner according to https://stripe.com/docs/js/payment_intents/confirm_card_payment
-					return this.handleAuthenticatedPayment(paymentAttemptId, clientSecret)
+					this.isLoading = true
+					const res = this.handleAuthenticatedPayment(paymentAttemptId, clientSecret)
+					this.isLoading = false
+					return res
 				} else if (status !== `succeeded`) {
 					this.cardErrorMessage = `Payment is in invalid state`
+					this.isLoading = false
 					return false
 				}
 
@@ -558,14 +573,17 @@ export default Vue.extend({
 		},
 		async submitCardPayment(e: HTMLInputEvent): Promise<void> {
 			// TODO Start loader for `Pay Now` button here
+			this.isLoading = true
 			e.preventDefault()
 			const stripe = await this.stripeClient()
 			if (!cardElement) {
+				this.isLoading = false
 				throw new Error(`Card elements is not initialized`)
 			}
 
 			if (!this.customerEmail) {
 				this.cardErrorMessage = `Invalid email address`
+				this.isLoading = false
 				return
 			}
 			const { error, paymentMethod } = await stripe.createPaymentMethod({
@@ -578,15 +596,18 @@ export default Vue.extend({
 
 			if (error) {
 				this.cardErrorMessage = error.message ?? `An unknown error happened`
+				this.isLoading = false
 				return
 			}
 
 			if (!paymentMethod) {
 				this.cardErrorMessage = `Invalid payment method`
+				this.isLoading = false
 				return
 			}
 
 			await this.submitPayment(paymentMethod, this.customerEmail)
+			this.isLoading = false
 		},
 		handleCloseClick(e: any): void {
 			if (!e.target || e.target.parentNode === null || e.target.firstChild?.classList === undefined) {
