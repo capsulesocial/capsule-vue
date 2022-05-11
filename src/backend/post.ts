@@ -31,6 +31,7 @@ export interface IRegularPost extends Post {
 
 export interface IEncryptedPost extends Post {
 	encrypted: true
+	subtitle: string
 }
 
 export type RetrievedPost = Omit<Post, `content`> & { _id: string; excerpt: string; wordCount?: number }
@@ -86,7 +87,7 @@ export function createRegularPost(
 
 export function createEncryptedPost(
 	title: string,
-	subtitle: string | null,
+	subtitle: string,
 	content: string,
 	category: string,
 	tags: Tag[],
@@ -95,12 +96,9 @@ export function createEncryptedPost(
 	featuredPhotoCaption?: string | null,
 	postImages?: Array<string>,
 ): IEncryptedPost {
-	if (subtitle !== null) {
-		subtitle = subtitle.trim()
-	}
 	return {
 		title: title.trim(),
-		subtitle,
+		subtitle: subtitle.trim(),
 		content,
 		category,
 		timestamp: Date.now(),
