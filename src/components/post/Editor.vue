@@ -102,7 +102,15 @@ import {
 	counterModuleFactory,
 	listRule,
 } from '@/pages/post/quillExtensions'
-import { createRegularPost, sendRegularPost, Tag } from '@/backend/post'
+import {
+	createEncryptedPost,
+	createRegularPost,
+	IEncryptedPost,
+	IRegularPost,
+	sendEncryptedPost,
+	sendRegularPost,
+	Tag,
+} from '@/backend/post'
 import { preUploadPhoto, uploadPhoto } from '@/backend/photos'
 import { isValidFileType } from '@/backend/utilities/helpers'
 import textLimits from '@/backend/utilities/text_limits'
@@ -192,6 +200,16 @@ export default Vue.extend({
 			addContentPosLeft: 0,
 			waitingImage: false,
 		}
+	},
+	computed: {
+		encrypted() {
+			return this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].encrypted
+		},
+	},
+	watch: {
+		encrypted() {
+			this.updateSubtitle()
+		},
 	},
 	beforeDestroy() {
 		if (this.isX || this.$store.state.settings.recentlyPosted) {
@@ -667,29 +685,52 @@ export default Vue.extend({
 			featuredPhotoCaption?: string | null,
 			postImages?: Array<string>,
 		): Promise<void> {
-			const p = createRegularPost(
-				this.title,
-				this.subtitle === `` ? null : this.subtitle,
-				clean,
-				category,
-				tags,
-				this.$store.state.session.id,
-				featuredPhotoCID,
-				featuredPhotoCaption,
-				postImages,
-			)
-			try {
-				const cid = await sendRegularPost(p)
-				this.hasPosted = true
-				this.title = ``
-				this.subtitle = ``
-				this.input = ``
-				this.$store.commit(`draft/reset`)
-				this.$store.commit(`settings/setRecentlyPosted`, true)
-				this.$router.push(`/post/` + cid)
-			} catch (err: unknown) {
-				this.$handleError(err)
+			const isEncrypted = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].encrypted
+			// let p: IEncryptedPost | IRegularPost
+			if (isEncrypted) {
+				const p: IEncryptedPost = createEncryptedPost(
+					this.title,
+					this.subtitle,
+					clean,
+					category,
+					tags,
+					this.$store.state.session.id,
+					featuredPhotoCID,
+					featuredPhotoCaption,
+					postImages,
+				)
+				try {
+					const tiers: string[] = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].accessTiers
+					const cid: string = await sendEncryptedPost(p, tiers)
+					this.$router.push(`/post/` + cid)
+				} catch (err: unknown) {
+					this.$handleError(err)
+				}
+			} else {
+				const p: IRegularPost = createRegularPost(
+					this.title,
+					this.subtitle === `` ? null : this.subtitle,
+					clean,
+					category,
+					tags,
+					this.$store.state.session.id,
+					featuredPhotoCID,
+					featuredPhotoCaption,
+					postImages,
+				)
+				try {
+					const cid: string = await sendRegularPost(p)
+					this.$router.push(`/post/` + cid)
+				} catch (err: unknown) {
+					this.$handleError(err)
+				}
 			}
+			this.hasPosted = true
+			this.title = ``
+			this.subtitle = ``
+			this.input = ``
+			this.$store.commit(`draft/reset`)
+			this.$store.commit(`settings/setRecentlyPosted`, true)
 		},
 		handleTitle(e: any) {
 			if (!e) {
@@ -739,6 +780,10 @@ export default Vue.extend({
 			const subtitleInputValue = subtitleInput.value.trim()
 			if (updateStore) {
 				this.$store.commit(`draft/updateSubtitle`, subtitleInputValue)
+			}
+			if (this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].encrypted && subtitleInputValue === ``) {
+				this.subtitleError = `Subtitle is required on encrypted posts`
+				return
 			}
 			const subtitleQualityCheck = this.$qualitySubtitle(subtitleInputValue)
 			if (this.$isError(subtitleQualityCheck)) {
