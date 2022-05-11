@@ -45,7 +45,7 @@
 							class="modal-animation w-5/12 -mr-5 -mt-4 overflow-y-auto p-4"
 							style="min-height: calc(100vh - 70px); height: calc(100vh - 70px)"
 						>
-							<EditorWidgets :wordCount="wordCount" @confirm="checkPost" />
+							<EditorWidgets :wordCount="wordCount" @openTierAccess="toggleShowTiers" @confirm="checkPost" />
 							<Footer />
 						</aside>
 					</section>
@@ -54,6 +54,7 @@
 		</div>
 		<DraftsPopup v-if="showDrafts" @close="closeDraftsPopup" />
 		<ConfirmPopup v-if="showConfirm" @close="showConfirmPopup" @post="sendPost" />
+		<TierAccessPopup v-if="showTiers" @close="toggleShowTiers" />
 	</main>
 </template>
 
@@ -65,6 +66,7 @@ import Footer from '@/components/Footer.vue'
 import PencilIcon from '@/components/icons/Pencil.vue'
 import DraftsPopup from '@/components/popups/DraftsPopup.vue'
 import ConfirmPopup from '@/components/popups/ConfirmPopup.vue'
+import TierAccessPopup from '@/components/popups/TierAccess.vue'
 import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import { IBackground, backgrounds } from '@/config/backgrounds'
@@ -77,6 +79,7 @@ interface IData {
 	showConfirm: boolean
 	buttonHidden: boolean
 	bgImage: IBackground
+	showTiers: boolean
 }
 
 export default Vue.extend({
@@ -88,6 +91,7 @@ export default Vue.extend({
 		DraftsPopup,
 		ConfirmPopup,
 		PencilIcon,
+		TierAccessPopup,
 	},
 	middleware: `auth`,
 	data(): IData {
@@ -99,6 +103,7 @@ export default Vue.extend({
 			buttonHidden: false,
 			bgImage: backgrounds[0],
 			avatar: undefined,
+			showTiers: false,
 		}
 	},
 	head() {
@@ -168,6 +173,9 @@ export default Vue.extend({
 		},
 		showConfirmPopup(): void {
 			this.showConfirm = !this.showConfirm
+		},
+		toggleShowTiers() {
+			this.showTiers = !this.showTiers
 		},
 	},
 })

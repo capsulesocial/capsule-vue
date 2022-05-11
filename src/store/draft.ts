@@ -6,8 +6,12 @@ export const namespace = `draft`
 
 type DraftPost = Omit<Post, `authorID`>
 
+interface DraftPostState extends DraftPost {
+	accessTiers: Array<string>
+}
+
 interface DraftState {
-	drafts: Array<DraftPost>
+	drafts: Array<DraftPostState>
 	activeIndex: number
 	handleDraftWidget: boolean
 }
@@ -24,6 +28,8 @@ export const state = (): DraftState => ({
 			category: ``,
 			timestamp: 0,
 			postImages: [],
+			encrypted: false,
+			accessTiers: [],
 		},
 	],
 	activeIndex: 0,
@@ -49,6 +55,9 @@ export const MutationType = {
 	RESET: `reset`,
 	HANDLE_DRAFT_WIDGET: `handleDraftWidget`,
 	CLEAR_DRAFTS: `clearDrafts`,
+	TOGGLE_PREMIUM: `togglePremium`,
+	ADD_ACCESS_TIER: `addAccessTier`,
+	REMOVE_ACCESS_TIER: `removeAccessTier`,
 }
 
 export const mutations: MutationTree<DraftState> = {
@@ -98,6 +107,8 @@ export const mutations: MutationTree<DraftState> = {
 			tags: [],
 			category: ``,
 			timestamp: 0,
+			encrypted: false,
+			accessTiers: [],
 		})
 		state.activeIndex = state.drafts.length - 1
 	},
@@ -114,6 +125,8 @@ export const mutations: MutationTree<DraftState> = {
 				tags: [],
 				category: ``,
 				timestamp: 0,
+				encrypted: false,
+				accessTiers: [],
 			})
 			state.activeIndex = 0
 		}
@@ -134,6 +147,8 @@ export const mutations: MutationTree<DraftState> = {
 				tags: [],
 				category: ``,
 				timestamp: 0,
+				encrypted: false,
+				accessTiers: [],
 			})
 		}
 		state.activeIndex = state.drafts.length - 1
@@ -152,9 +167,20 @@ export const mutations: MutationTree<DraftState> = {
 				tags: [],
 				category: ``,
 				timestamp: 0,
+				encrypted: false,
+				accessTiers: [],
 			},
 		]
 		state.activeIndex = 0
 		state.handleDraftWidget = false
+	},
+	[MutationType.TOGGLE_PREMIUM]: (state) => {
+		state.drafts[state.activeIndex].encrypted = !state.drafts[state.activeIndex].encrypted
+	},
+	[MutationType.ADD_ACCESS_TIER]: (state, tier: string) => {
+		state.drafts[state.activeIndex].accessTiers.push(tier)
+	},
+	[MutationType.REMOVE_ACCESS_TIER]: (state, tier: string) => {
+		state.drafts[state.activeIndex].accessTiers.splice(state.drafts[state.activeIndex].accessTiers.indexOf(tier), 1)
 	},
 }
