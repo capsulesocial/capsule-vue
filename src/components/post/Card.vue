@@ -276,7 +276,9 @@
 									</span>
 									<span class="text-gray5 dark:text-gray3"> @{{ quote.authorID }} </span>
 								</nuxt-link>
-								<span v-if="quote.bio !== ``" class="mt-2 dark:text-darkPrimaryText"> {{ quote.bio }} </span>
+								<span v-if="quote.bio !== ``" class="mt-2 dark:text-darkPrimaryText">
+									{{ quote.bio.slice(0, 100) + (quote.bio.length > 100 ? '...' : '') }}
+								</span>
 							</div>
 							<!-- Delete quote repost button -->
 							<div v-if="quote.authorID === $store.state.session.id" class="relative">
