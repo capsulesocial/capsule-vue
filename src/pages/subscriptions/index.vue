@@ -9,7 +9,7 @@
 		<h2 class="text-primary dark:text-secondary mb-1 text-lg font-semibold xl:text-xl">My subscriptions</h2>
 		<p class="text-gray5 dark:text-gray3">Manage your active subscriptions to your favorite content creators here:</p>
 		<!-- subscriptions grid -->
-		<div class="grid grid-cols-3">
+		<div class="grid grid-cols-3 gap-3">
 			<!-- Subscription card -->
 			<div v-for="s in subCards" :key="s.authorID">
 				<SubCard :s="s" />
