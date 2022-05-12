@@ -23,7 +23,7 @@ import Vue from 'vue'
 import ChevronLeft from '@/components/icons/ChevronLeft.vue'
 import SubCard from '@/components/subscriptions/SubCard.vue'
 import { getUserSubscriptions, ISubscriptionResponse, ISubCardData } from '@/backend/subscription'
-import { getProfile } from '@/backend/profile'
+import { createDefaultProfile, getProfile } from '@/backend/profile'
 
 interface IData {
 	subscriptions: ISubscriptionResponse[]
@@ -49,16 +49,18 @@ export default Vue.extend({
 	async created() {
 		this.subscriptions = await getUserSubscriptions(this.$store.state.session.id, true)
 		this.subscriptions.forEach((s) => {
-			getProfile(s.authorID).then((p) => {
-				if (p.profile) {
+			let profile = createDefaultProfile(s.authorID)
+			getProfile(s.authorID).then((fetchedProfile) => {
+				if (fetchedProfile.profile) {
+					profile = fetchedProfile.profile
 					const newSubCard = {
-						name: p.profile.name,
+						name: profile.name,
 						id: s.authorID,
 						subscriptionId: s.subscriptionId,
 						tier: s.tier,
 						monthlySubs: -1,
 						renewDate: s.renewDate,
-						avatar: p.profile.avatar,
+						avatar: profile.avatar,
 					}
 					this.subCards.push(newSubCard)
 				}
