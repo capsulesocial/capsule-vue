@@ -53,17 +53,17 @@ export default Vue.extend({
 			getProfile(s.authorID).then((fetchedProfile) => {
 				if (fetchedProfile.profile) {
 					profile = fetchedProfile.profile
-					const newSubCard = {
-						name: profile.name,
-						id: s.authorID,
-						subscriptionId: s.subscriptionId,
-						tier: s.tier,
-						monthlySubs: -1,
-						renewDate: s.renewDate,
-						avatar: profile.avatar,
-					}
-					this.subCards.push(newSubCard)
 				}
+				const newSubCard = {
+					name: profile.name,
+					id: s.authorID,
+					subscriptionId: s.subscriptionId,
+					tier: s.tier,
+					monthlySubs: -1,
+					renewDate: s.renewDate,
+					avatar: profile.avatar,
+				}
+				this.subCards.push(newSubCard)
 			})
 		})
 	},
