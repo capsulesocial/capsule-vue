@@ -26,7 +26,8 @@ function sanitizeHTML(input: string) {
 export default function readerViewFactory(markdown: string, postImages?: Array<string>) {
 	const html = marked.parse(markdown)
 	const sanitizedHtml = sanitizeHTML(html)
-	const template = `<div>${transformPostToTemplate(sanitizedHtml, postImages)}</div>`
+	const removeExecution = sanitizedHtml.replace(/\{\{(.*)\}\}/g, `<span v-html="\`{{ $1 }}\`" />`)
+	const template = `<div>${transformPostToTemplate(removeExecution, postImages)}</div>`
 	return Vue.component(`ReaderView`, {
 		components: { IpfsImage },
 		template,
