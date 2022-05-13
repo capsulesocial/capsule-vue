@@ -7,7 +7,7 @@ import IpfsImage from '@/components/IpfsImage.vue'
 
 marked.use({ renderer: markedRenderer })
 
-function sanitizeHTML(input: string) {
+export function sanitizeHTML(input: string) {
 	DOMPurify.addHook(`afterSanitizeAttributes`, (node: Element) => {
 		// set all elements owning target to target=_blank
 		if ((`target` in node) as unknown as Element) {
@@ -26,8 +26,7 @@ function sanitizeHTML(input: string) {
 export default function readerViewFactory(markdown: string, postImages?: Array<string>) {
 	const html = marked.parse(markdown)
 	const sanitizedHtml = sanitizeHTML(html)
-	const removeExecution = sanitizedHtml.replace(/\{\{(.*)\}\}/g, `<span v-html="\`{{ $1 }}\`" />`)
-	const template = `<div>${transformPostToTemplate(removeExecution, postImages)}</div>`
+	const template = `<div>${transformPostToTemplate(sanitizedHtml, postImages)}</div>`
 	return Vue.component(`ReaderView`, {
 		components: { IpfsImage },
 		template,
