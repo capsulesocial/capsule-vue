@@ -5,7 +5,7 @@ import { signContent } from './utilities/keys'
 
 export interface ISubscriptionResponse {
 	authorID: string
-	tier: string
+	tier: { id: string; name: string }
 	isActive: boolean
 	renewDate?: number | undefined
 	subscriptionId: string
@@ -35,18 +35,10 @@ export async function getUserSubscriptions(self: string, includeExpired?: boolea
 		sig: uint8ArrayToHexString(sig),
 	})
 
-	return res.data.data as {
-		// to add:
-		// 1. number of months in a row
-		// 2. total number of months subscribed
-		authorID: string
-		// tier contains tierId right now,
-		// will contain tier name instead
-		tier: { id: string; name: string }
-		isActive: boolean
-		subscriptionId: string
-		renewalDate?: number
-	}[]
+	// to add:
+	// 1. number of months in a row
+	// 2. total number of months subscribed
+	return res.data.data as ISubscriptionResponse[]
 }
 
 export async function cancelSubscription(username: string, authorID: string) {

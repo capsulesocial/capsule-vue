@@ -58,7 +58,7 @@ export default Vue.extend({
 					name: profile.name,
 					id: s.authorID,
 					subscriptionId: s.subscriptionId,
-					tier: s.tier,
+					tier: s.tier.name,
 					monthlySubs: -1,
 					renewDate: s.renewDate,
 					avatar: profile.avatar,
