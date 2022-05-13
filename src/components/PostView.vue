@@ -32,7 +32,6 @@ function sanitizeHTML(input: string) {
 	return DOMPurify.sanitize(input, {
 		USE_PROFILES: { html: true },
 		ALLOWED_TAGS: [`pre`],
-		ADD_TAGS: [`ipfsimage`],
 		ADD_ATTR: [`cid`],
 	})
 }
@@ -61,9 +60,9 @@ export default Vue.extend({
 	computed: {
 		htmlContent() {
 			const html = marked.parse(this.content)
-			const sanitizedHtml = sanitizeHTML(html)
-			const transformed = transformPostToTemplate(sanitizedHtml, this.postImages)
-			return transformed
+			const transformedHtml = transformPostToTemplate(html, this.postImages)
+			const sanitizedHtml = sanitizeHTML(transformedHtml)
+			return sanitizedHtml
 		},
 	},
 	mounted() {
@@ -87,8 +86,8 @@ export default Vue.extend({
 				return
 			}
 			getPhotoFromIPFS(cid)
-				.then((p) => {
-					image.src = p
+				.then((dataUrl) => {
+					image.src = dataUrl
 				})
 				.catch((error) => {
 					this.imageError = error
