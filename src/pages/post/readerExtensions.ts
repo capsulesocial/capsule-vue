@@ -2,6 +2,7 @@
 
 import hljs from 'highlight.js/lib/common'
 import { marked } from 'marked'
+import { sanitizeHTML } from './readerView'
 
 // Marked
 
@@ -21,11 +22,15 @@ const imgRegexp = (cid: string) =>
 	)
 
 export function transformPostToTemplate(body: string, postImages?: Array<string>) {
+	let removeExecution = body.replace(/\{\{(.*)\}\}/su, (_, p1) => `<span v-html="\`{{ ${sanitizeHTML(p1)} }}\`" />`)
 	if (!postImages) {
-		return body
+		return removeExecution
 	}
 	for (const p of postImages) {
-		body = body.replace(imgRegexp(p), `<IpfsImage alt="${p}" class="ipfs_img" :cid="'${p}'" />`)
+		removeExecution = removeExecution.replace(
+			imgRegexp(p),
+			`<IpfsImage alt="${sanitizeHTML(p)}" class="ipfs_img" :cid="'${sanitizeHTML(p)}'" />`,
+		)
 	}
-	return body
+	return removeExecution
 }

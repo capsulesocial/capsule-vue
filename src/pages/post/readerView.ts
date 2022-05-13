@@ -7,7 +7,7 @@ import IpfsImage from '@/components/IpfsImage.vue'
 
 marked.use({ renderer: markedRenderer })
 
-function sanitizeHTML(input: string) {
+export function sanitizeHTML(input: string) {
 	DOMPurify.addHook(`afterSanitizeAttributes`, (node: Element) => {
 		// set all elements owning target to target=_blank
 		if ((`target` in node) as unknown as Element) {
