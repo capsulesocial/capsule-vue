@@ -47,25 +47,29 @@ export default Vue.extend({
 		}
 	},
 	async created() {
-		this.subscriptions = await getUserSubscriptions(this.$store.state.session.id, true)
-		this.subscriptions.forEach((s) => {
-			let profile = createDefaultProfile(s.authorID)
-			getProfile(s.authorID).then((fetchedProfile) => {
-				if (fetchedProfile.profile) {
-					profile = fetchedProfile.profile
-				}
-				const newSubCard = {
-					name: profile.name,
-					id: s.authorID,
-					subscriptionId: s.subscriptionId,
-					tier: s.tier.name,
-					monthlySubs: -1,
-					renewDate: s.renewDate,
-					avatar: profile.avatar,
-				}
-				this.subCards.push(newSubCard)
+		try {
+			this.subscriptions = await getUserSubscriptions(this.$store.state.session.id)
+			this.subscriptions.forEach((s) => {
+				let profile = createDefaultProfile(s.authorID)
+				getProfile(s.authorID).then((fetchedProfile) => {
+					if (fetchedProfile.profile) {
+						profile = fetchedProfile.profile
+					}
+					const newSubCard = {
+						name: profile.name,
+						id: s.authorID,
+						subscriptionId: s.subscriptionId,
+						tier: s.tier.name,
+						monthlySubs: -1,
+						renewDate: s.renewDate,
+						avatar: profile.avatar,
+					}
+					this.subCards.push(newSubCard)
+				})
 			})
-		})
+		} catch {
+			this.$toastError(`Error fetching subscriptions`)
+		}
 	},
 	methods: {},
 })
