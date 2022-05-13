@@ -11,7 +11,7 @@
 import DOMPurify from 'dompurify'
 import { marked } from 'marked'
 import Vue from 'vue'
-import { transformPostToTemplate } from './readerExtensions'
+import { transformPostToTemplate } from '../pages/post/readerExtensions'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import ImagePopup from '@/components/popups/Image.vue'
 

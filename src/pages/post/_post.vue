@@ -228,7 +228,7 @@
 import Vue from 'vue'
 import readerViewFactory from './readerView'
 
-import PostView from './PostView.vue'
+import PostView from '@/components/PostView.vue'
 import PostActions from '@/components/post/Actions.vue'
 import AuthorCard from '@/components/AuthorCard.vue'
 import TagCard from '@/components/Tag.vue'
