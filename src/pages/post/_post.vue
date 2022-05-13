@@ -124,7 +124,7 @@
 				<!-- Content -->
 				<article class="mt-5">
 					<div class="text-lightPrimaryText dark:text-darkSecondaryText editable content max-w-none break-words">
-						<component :is="readerViewElement" v-if="readerViewElement"></component>
+						<PostView :content="this.post.content" :postImages="this.post.postImages" />
 					</div>
 				</article>
 
@@ -228,6 +228,7 @@
 import Vue from 'vue'
 import readerViewFactory from './readerView'
 
+import PostView from './PostView.vue'
 import PostActions from '@/components/post/Actions.vue'
 import AuthorCard from '@/components/AuthorCard.vue'
 import TagCard from '@/components/Tag.vue'
@@ -292,6 +293,7 @@ export default Vue.extend({
 		PostCard,
 		RepostButton,
 		SharePopup,
+		PostView,
 	},
 	beforeRouteLeave(to, from, next) {
 		if (this.realURL !== `` && to.path !== from.path) {
