@@ -24,7 +24,7 @@ export async function getUserSubscriptions(self: string, includeExpired?: boolea
 		authorID: string
 		// tier contains tierId right now,
 		// will contain tier name instead
-		tier: string
+		tier: { id: string; name: string }
 		isActive: boolean
 		subscriptionId: string
 		renewalDate?: number
