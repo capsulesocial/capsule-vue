@@ -22,10 +22,7 @@ const imgRegexp = (cid: string) =>
 	)
 
 export function transformPostToTemplate(body: string, postImages?: Array<string>) {
-	let removeExecution = body.replace(
-		/\{\{(((.)|(\n))*)\}\}/,
-		(_, p1) => `<span v-html="\`{{ ${sanitizeHTML(p1)} }}\`" />`,
-	)
+	let removeExecution = body.replace(/\{\{(.*)\}\}/su, (_, p1) => `<span v-html="\`{{ ${sanitizeHTML(p1)} }}\`" />`)
 	if (!postImages) {
 		return removeExecution
 	}
