@@ -226,7 +226,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import readerViewFactory from './readerView'
 
 import PostView from '@/components/PostView.vue'
 import PostActions from '@/components/post/Actions.vue'
@@ -270,7 +269,6 @@ interface IData {
 	following: Set<string>
 	bookmarksCount: number
 	popImage: boolean
-	readerViewElement: unknown | null
 	captionHeight?: number
 	showShare: boolean
 	readingTime: number | null
@@ -323,7 +321,6 @@ export default Vue.extend({
 			following: new Set(),
 			bookmarksCount: 0,
 			popImage: false,
-			readerViewElement: null,
 			captionHeight: 0,
 			showShare: false,
 			readingTime: null,
@@ -379,8 +376,6 @@ export default Vue.extend({
 				this.featuredPhoto = p
 			})
 		}
-		// Create the ReaderView element from Markdown. This is a dynamic vue element.
-		this.readerViewElement = readerViewFactory(this.post.content, this.post.postImages)
 		// Get author profile
 		this.author = createDefaultProfile(this.post.authorID)
 		getProfile(this.post.authorID).then((p) => {
