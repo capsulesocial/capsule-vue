@@ -7,9 +7,9 @@
 			<div
 				v-if="author !== null"
 				style="backdrop-filter: blur(10px)"
-				class="min-h-40 w-full lg:w-600 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation max-h-90 z-10 overflow-y-auto rounded-lg bg-gradient-to-r px-6 py-5 shadow-lg"
+				class="min-h-40 w-full lg:w-600 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation max-h-90 z-10 overflow-y-auto rounded-lg bg-gradient-to-r px-6 pt-4 pb-2 shadow-lg"
 			>
-				<div class="sticky flex items-start justify-between mb-6">
+				<div class="sticky flex items-center justify-between mb-6">
 					<!-- avatar, name, id -->
 					<div v-if="step !== 3" class="flex flex-row">
 						<Avatar
