@@ -124,7 +124,7 @@
 				<!-- Content -->
 				<article class="mt-5">
 					<div class="text-lightPrimaryText dark:text-darkSecondaryText editable content max-w-none break-words">
-						<component :is="readerViewElement" v-if="readerViewElement"></component>
+						<PostView :content="this.post.content" :postImages="this.post.postImages" />
 					</div>
 				</article>
 
@@ -226,8 +226,8 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import readerViewFactory from './readerView'
 
+import PostView from '@/components/PostView.vue'
 import PostActions from '@/components/post/Actions.vue'
 import AuthorCard from '@/components/AuthorCard.vue'
 import TagCard from '@/components/Tag.vue'
@@ -269,7 +269,6 @@ interface IData {
 	following: Set<string>
 	bookmarksCount: number
 	popImage: boolean
-	readerViewElement: unknown | null
 	captionHeight?: number
 	showShare: boolean
 	readingTime: number | null
@@ -292,6 +291,7 @@ export default Vue.extend({
 		PostCard,
 		RepostButton,
 		SharePopup,
+		PostView,
 	},
 	beforeRouteLeave(to, from, next) {
 		if (this.realURL !== `` && to.path !== from.path) {
@@ -321,7 +321,6 @@ export default Vue.extend({
 			following: new Set(),
 			bookmarksCount: 0,
 			popImage: false,
-			readerViewElement: null,
 			captionHeight: 0,
 			showShare: false,
 			readingTime: null,
@@ -377,8 +376,6 @@ export default Vue.extend({
 				this.featuredPhoto = p
 			})
 		}
-		// Create the ReaderView element from Markdown. This is a dynamic vue element.
-		this.readerViewElement = readerViewFactory(this.post.content, this.post.postImages)
 		// Get author profile
 		this.author = createDefaultProfile(this.post.authorID)
 		getProfile(this.post.authorID).then((p) => {
