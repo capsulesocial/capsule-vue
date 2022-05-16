@@ -3,6 +3,24 @@ import { capsuleServer, sigValidity } from './utilities/config'
 import { uint8ArrayToHexString } from './utilities/helpers'
 import { signContent } from './utilities/keys'
 
+export interface ISubscriptionResponse {
+	authorID: string
+	tier: { id: string; name: string }
+	isActive: boolean
+	renewDate?: number | undefined
+	subscriptionId: string
+}
+
+export interface ISubCardData {
+	name: string
+	id: string
+	subscriptionId: string
+	tier: string
+	monthlySubs: number
+	renewDate?: number | undefined
+	avatar?: string
+}
+
 export async function getUserSubscriptions(self: string, includeExpired?: boolean) {
 	const data = {
 		username: self,
@@ -17,18 +35,10 @@ export async function getUserSubscriptions(self: string, includeExpired?: boolea
 		sig: uint8ArrayToHexString(sig),
 	})
 
-	return res.data.data as {
-		// to add:
-		// 1. number of months in a row
-		// 2. total number of months subscribed
-		authorID: string
-		// tier contains tierId right now,
-		// will contain tier name instead
-		tier: { id: string; name: string }
-		isActive: boolean
-		subscriptionId: string
-		renewalDate?: number
-	}[]
+	// to add:
+	// 1. number of months in a row
+	// 2. total number of months subscribed
+	return res.data.data as ISubscriptionResponse[]
 }
 
 export async function cancelSubscription(username: string, authorID: string) {

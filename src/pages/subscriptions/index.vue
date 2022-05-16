@@ -8,29 +8,69 @@
 		<!-- Network Tab -->
 		<h2 class="text-primary dark:text-secondary mb-1 text-lg font-semibold xl:text-xl">My subscriptions</h2>
 		<p class="text-gray5 dark:text-gray3">Manage your active subscriptions to your favorite content creators here:</p>
+		<!-- subscriptions grid -->
+		<div class="grid grid-cols-3 gap-3">
+			<!-- Subscription card -->
+			<div v-for="s in subCards" :key="s.authorID">
+				<SubCard :s="s" />
+			</div>
+		</div>
 	</main>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import ChevronLeft from '@/components/icons/ChevronLeft.vue'
+import SubCard from '@/components/subscriptions/SubCard.vue'
+import { getUserSubscriptions, ISubscriptionResponse, ISubCardData } from '@/backend/subscription'
+import { createDefaultProfile, getProfile } from '@/backend/profile'
 
-interface IData {}
+interface IData {
+	subscriptions: ISubscriptionResponse[]
+	subCards: ISubCardData[]
+}
 
 export default Vue.extend({
-	components: { ChevronLeft },
+	components: { ChevronLeft, SubCard },
 	layout: `subscriptions`,
 	props: {},
 	data(): IData {
-		return {}
+		return {
+			subscriptions: [],
+			subCards: [],
+		}
 	},
 	head() {
 		return {
-			title: `Network settings - Blogchain`,
-			meta: [{ hid: `settings-network`, name: `settings-network`, content: `Network settings on Blogchain` }],
+			title: `Active subscriptions - Blogchain`,
+			meta: [{ hid: `subscriptions`, name: `subscriptions`, content: `Manage subscriptions on Blogchain` }],
 		}
 	},
-	created() {},
+	async created() {
+		try {
+			this.subscriptions = await getUserSubscriptions(this.$store.state.session.id)
+			this.subscriptions.forEach((s) => {
+				let profile = createDefaultProfile(s.authorID)
+				getProfile(s.authorID).then((fetchedProfile) => {
+					if (fetchedProfile.profile) {
+						profile = fetchedProfile.profile
+					}
+					const newSubCard = {
+						name: profile.name,
+						id: s.authorID,
+						subscriptionId: s.subscriptionId,
+						tier: s.tier.name,
+						monthlySubs: -1,
+						renewDate: s.renewDate,
+						avatar: profile.avatar,
+					}
+					this.subCards.push(newSubCard)
+				})
+			})
+		} catch {
+			this.$toastError(`Error fetching subscriptions`)
+		}
+	},
 	methods: {},
 })
 </script>
