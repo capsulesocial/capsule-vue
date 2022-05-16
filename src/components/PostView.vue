@@ -10,6 +10,7 @@
 <script lang="ts">
 import DOMPurify from 'dompurify'
 import { marked } from 'marked'
+import type { PropType } from 'vue'
 import Vue from 'vue'
 import { transformPostToTemplate } from '../pages/post/readerExtensions'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
@@ -21,14 +22,17 @@ interface IData {
 	displayImagePopup: boolean
 }
 
-function sanitizeHTML(input: string) {
+function setupSanitization() {
 	DOMPurify.addHook(`afterSanitizeAttributes`, (node: Element) => {
 		// set all elements owning target to target=_blank
-		if ((`target` in node) as unknown as Element) {
+		if (`target` in node) {
 			node.setAttribute(`target`, `_blank`)
 			node.setAttribute(`rel`, `noopener`)
 		}
 	})
+}
+
+function sanitizeHTML(input: string) {
 	return DOMPurify.sanitize(input, {
 		USE_PROFILES: { html: true },
 		ALLOWED_TAGS: [`pre`],
@@ -46,7 +50,7 @@ export default Vue.extend({
 			required: true,
 		},
 		postImages: {
-			type: Array as () => string[],
+			type: Array as PropType<string[]>,
 			required: true,
 		},
 	},
@@ -70,6 +74,7 @@ export default Vue.extend({
 		images.forEach((image) => {
 			this.lazyLoad(image)
 		})
+		setupSanitization()
 	},
 	methods: {
 		openImagePopup(image: HTMLImageElement) {
