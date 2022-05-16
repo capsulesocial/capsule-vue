@@ -41,10 +41,10 @@ export async function getUserSubscriptions(self: string, includeExpired?: boolea
 	return res.data.data as ISubscriptionResponse[]
 }
 
-export async function cancelSubscription(username: string, authorID: string) {
+export async function cancelSubscription(username: string, subscriptionId: string) {
 	const data = {
 		username,
-		authorID,
+		subscriptionId,
 		exp: Date.now() + sigValidity,
 		action: `cancelSubscription`,
 	}
