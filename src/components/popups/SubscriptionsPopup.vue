@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="bg-primary dark:bg-secondary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
+		class="bg-darkBG dark:bg-gray5 modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
 	>
 		<!-- Container -->
 		<section class="popup">
@@ -44,6 +44,10 @@
 							<span class="font-semibold text-primary dark:text-secondary">{{ author.name }}</span>
 						</p>
 					</div>
+					<!-- Period switch -->
+					<div class="w-full flex justify-center">
+						<SwitchPeriod :period="this.selectedPeriod" @toggle="switchPeriod" />
+					</div>
 					<!-- Subscriptions -->
 					<button
 						v-for="tier in paymentProfile.tiers"
@@ -58,17 +62,23 @@
 								class="text-neutral w-6 h-6 flex items-center"
 							/>
 						</div>
-						<div class="flex flex-grow flex-col items-start ml-4 mr-2">
+						<div class="flex flex-grow flex-col items-start ml-4 mr-2 w-2/5">
 							<h3 class="text-xl font-semibold dark:text-darkPrimaryText">{{ tier.name }}</h3>
-							<p class="text-gray5 dark:text-gray3 text-left">
+							<p class="text-gray5 dark:text-gray3 text-left text-sm">
 								Get access to exclusive articles by subscribing to {{ tier.name }}
 							</p>
 						</div>
-						<div v-if="tier.monthlyEnabled" class="font-semibold text-lg mr-2 dark:text-darkPrimaryText">
+						<div
+							v-if="tier.monthlyEnabled && selectedPeriod === `month`"
+							class="font-semibold text-lg mr-2 dark:text-darkPrimaryText"
+						>
 							{{ displayCurrency(paymentProfile.currency) }}{{ tier.monthlyPrice }}
 							<span class="text-gray5 dark:text-gray3">/month</span>
 						</div>
-						<div v-if="tier.yearlyEnabled" class="font-semibold text-lg mr-2 dark:text-darkPrimaryText">
+						<div
+							v-if="tier.yearlyEnabled && selectedPeriod === `year`"
+							class="font-semibold text-lg mr-2 dark:text-darkPrimaryText"
+						>
 							{{ displayCurrency(paymentProfile.currency) }}{{ tier.yearlyPrice }}
 							<span class="text-gray5 dark:text-gray3">/year</span>
 						</div>
@@ -76,16 +86,9 @@
 					<div class="flex flex-row-reverse">
 						<!-- TODO: improve this UX of selecting monthly/yearly -->
 						<SecondaryButton
-							v-show="selectedTier !== null && selectedTier.monthlyEnabled"
-							class="m-2"
-							:text="`Monthly`"
-							:action="showPaymentButtons(`month`)"
-						/>
-						<SecondaryButton
-							v-show="selectedTier !== null && selectedTier.yearlyEnabled"
-							class="m-2"
-							:text="`Yearly`"
-							:action="showPaymentButtons(`year`)"
+							v-show="selectedTier !== null"
+							:text="`Next`"
+							:action="showPaymentButtons(selectedPeriod)"
 						/>
 					</div>
 				</article>
@@ -148,15 +151,16 @@
 									v-model="customerEmail"
 									type="email"
 									placeholder="Email"
-									class="bg-gray1 dark:bg-gray7 dark:text-darkPrimaryText placeholder-gray5 dark:placeholder-gray3 focus:outline-none flex-grow rounded-lg px-2 py-1 text-black"
+									class="bg-gray1 dark:bg-gray7 dark:text-darkPrimaryText placeholder-gray5 dark:placeholder-gray3 focus:outline-none flex-grow rounded-lg px-4 py-3 text-black"
 								/>
 							</div>
 							<div id="card-element" class="mb-2 rounded-lg p-4 border border-black" />
 							<small v-show="cardErrorMessage !== null" style="color: #eb1c26" class="mb-5">{{
 								cardErrorMessage
 							}}</small>
-							<br />
-							<SecondaryButton class="m-2" :text="`Pay`" :action="submitCardPayment" />
+							<div class="flex flex-row-reverse mt-4">
+								<SecondaryButton :text="`Pay`" :action="submitCardPayment" />
+							</div>
 						</div>
 					</div>
 				</article>
@@ -225,7 +229,7 @@
 						class="h-auto"
 					/>
 				</article>
-				<div v-show="isLoading" class="modal-animation flex w-full justify-center z-20 mt-24">
+				<div v-show="isLoading" class="modal-animation flex w-full justify-center z-20 mt-5">
 					<div
 						class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
 						:style="`border-top: 2px solid` + $color.hex"
@@ -249,6 +253,7 @@ import CheckCircleIcon from '@/components/icons/CheckCircle.vue'
 import CreditCardIcon from '@/components/icons/CreditCard.vue'
 import AppleIcon from '@/components/icons/brands/Apple.vue'
 import GoogleIcon from '@/components/icons/brands/Google.vue'
+import SwitchPeriod from '@/components/switch.vue'
 import { Profile } from '@/backend/profile'
 import { stripePublishableKey } from '@/backend/utilities/config'
 import {
@@ -298,6 +303,7 @@ export default Vue.extend({
 		CreditCardIcon,
 		AppleIcon,
 		GoogleIcon,
+		SwitchPeriod,
 	},
 	props: {
 		isSubscribed: {
@@ -387,6 +393,13 @@ export default Vue.extend({
 		},
 		selectTier(tier: SubscriptionTier) {
 			this.selectedTier = tier
+		},
+		switchPeriod() {
+			if (this.selectedPeriod === `month`) {
+				this.selectedPeriod = `year`
+			} else {
+				this.selectedPeriod = `month`
+			}
 		},
 		showPaymentButtons(period: string) {
 			return () => this._showPaymentButtons(period)
