@@ -129,8 +129,8 @@
 					<!-- Post paywall -->
 					<article
 						v-if="showPaywall"
-						class="from-lightBGStart to-transparent bg-gradient-to-t z-20 pt-20 absolute top-0 w-full h-full"
-						:class="featuredPhoto !== null ? `pb-48` : `pb-20`"
+						class="from-lightBGStart to-transparent bg-gradient-to-t z-20 absolute top-0 w-full h-full"
+						:class="featuredPhoto !== null ? `pb-48 pt-48` : `pb-20 pt-20`"
 					>
 						<div
 							class="w-full shadow-lg flex flex-col items-center pt-10 px-16 from-lightBGStart to-lightBGStop bg-gradient-to-r rounded-lg h-full"
