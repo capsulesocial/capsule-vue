@@ -84,6 +84,12 @@ export default Vue.extend({
 			}
 			getPhotoFromIPFS(cid)
 				.then((dataUrl) => {
+					if (!dataUrl.startsWith(`data:image`)) {
+						// To prevent linking to a malicious third party image
+						this.$toastError(`Ipfs image with invalid mimetype`)
+						return
+					}
+
 					image.src = dataUrl
 					image.onclick = () => {
 						this.openImagePopup(image)
