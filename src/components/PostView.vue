@@ -69,9 +69,6 @@ export default Vue.extend({
 		const images = this.$el.querySelectorAll(`img`)
 		images.forEach((image) => {
 			this.lazyLoad(image)
-			image.onclick = () => {
-				this.openImagePopup(image)
-			}
 		})
 	},
 	methods: {
@@ -88,6 +85,9 @@ export default Vue.extend({
 			getPhotoFromIPFS(cid)
 				.then((dataUrl) => {
 					image.src = dataUrl
+					image.onclick = () => {
+						this.openImagePopup(image)
+					}
 				})
 				.catch((error) => {
 					this.imageError = error
