@@ -54,8 +54,14 @@ export const actions = {
 		payload: { username: string },
 	) {
 		const { username } = payload
-		const profile = await retrievePaymentProfile(username)
-		context.commit(MutationType.ADD_PROFILE, profile)
+		try {
+			const profile = await retrievePaymentProfile(username)
+			context.commit(MutationType.ADD_PROFILE, profile)
+		} catch (ex) {
+			// TODO Here we can either throw the error or handle it silently.
+			// handling it silently. Decide whether to show a toast.
+			context.commit(MutationType.ADD_PROFILE, createDefaultPaymentProfile(username))
+		}
 	},
 }
 
