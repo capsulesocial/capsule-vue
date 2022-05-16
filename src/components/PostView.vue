@@ -25,7 +25,7 @@ interface IData {
 function setupSanitization() {
 	DOMPurify.addHook(`afterSanitizeAttributes`, (node: Element) => {
 		// set all elements owning target to target=_blank
-		if (`target` in node) {
+		if (node.getAttribute(`target`)) {
 			node.setAttribute(`target`, `_blank`)
 			node.setAttribute(`rel`, `noopener`)
 		}
