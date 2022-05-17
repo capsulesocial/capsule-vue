@@ -224,7 +224,7 @@
 					</form>
 				</article>
 				<!-- Step 4: Confirmation page -->
-				<article v-show="step === 3" class="flex flex-col items-center">
+				<article v-show="step === 4" class="flex flex-col items-center">
 					<div class="w-full flex flex-col justify-center text-center px-10">
 						<CrownIcon class="text-neutral stroke-neutral self-center w-12 h-12 mb-2" />
 						<h6 class="font-semibold text-neutral text-xl mb-2">Congrats!</h6>
@@ -261,7 +261,7 @@
 							unlocked for your account
 						</p>
 						<button
-							class="px-5 py-2 rounded-lg bg-neutral focus:outline-none text-white mt-10 font-semibold"
+							class="px-5 py-2 rounded-lg bg-neutral focus:outline-none text-white mt-6 font-semibold"
 							@click="$emit(`close`)"
 						>
 							Start reading
@@ -273,7 +273,7 @@
 								? require(`@/assets/images/brand/dark/subscriptions.webp`)
 								: require(`@/assets/images/brand/light/subscriptions.webp`)
 						"
-						class="h-auto"
+						class="h-auto rounded-lg"
 					/>
 				</article>
 				<div v-show="isLoading" class="modal-animation flex w-full justify-center z-20 mt-5">
@@ -592,7 +592,7 @@ export default Vue.extend({
 					return false
 				}
 
-				this.step = 3
+				this.step = 4
 				return true
 			} catch (err) {
 				this.cardErrorMessage = (err as Error).message ?? `Unkwon error`
@@ -632,7 +632,7 @@ export default Vue.extend({
 					this.cardErrorMessage = `This subscription payment failed with an unknown error`
 					return false
 				}
-				this.step = 3
+				this.step = 4
 				return true
 			} catch (err) {
 				this.cardErrorMessage = (err as Error).message ?? `Unkwon error`
