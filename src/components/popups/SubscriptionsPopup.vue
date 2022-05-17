@@ -177,8 +177,8 @@
 						</div>
 					</div>
 					<p class="text-negative text-sm">
-						This subscription will be reniewed every {{ selectedPeriod }} at the same date, you can manage you
-						subscriptions in the subscriptions page
+						This subscription will be renewed every {{ selectedPeriod }} at the same date, you can manage you
+						subscriptions on the <nuxt-link to="/subscriptions" class="underline">subscriptions page</nuxt-link>.
 					</p>
 					<div class="flex justify-between w-full mt-8 mb-8">
 						<p class="text-base text-center text-gray5 dark:text-gray3">Total to pay today</p>
