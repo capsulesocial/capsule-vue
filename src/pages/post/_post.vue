@@ -57,103 +57,127 @@
 				</div>
 			</header>
 			<section v-if="post !== null" class="mb-5 p-5 lg:p-0 pb-16 pt-2 md:pb-5">
-				<!-- Category and elipses -->
-				<article class="my-5 flex w-full justify-between">
-					<nuxt-link :to="`/discover/` + post.category" class="text-primary capitalize">{{
-						post.category.replace(`-`, ` `)
-					}}</nuxt-link>
-					<div class="flex">
-						<BookmarkButton
-							:postID="$route.params.post"
-							:hasBookmark="isBookmarked"
-							class="pr-2"
-							@clicked="getBookmarkStatus"
-						/>
-						<!-- Share popup button -->
-						<button
-							class="focus:outline-none text-gray5 dark:text-gray3 hover:text-primary hover:fill-primary flex items-center"
-							:class="showShare ? `text-primary` : ``"
-							style="margin-top: 2px"
-							@click="showShare = !showShare"
+				<!-- Post content -->
+				<article class="relative">
+					<!-- Category and elipses -->
+					<article class="my-5 flex w-full justify-between">
+						<nuxt-link :to="`/discover/` + post.category" class="text-primary capitalize">{{
+							post.category.replace(`-`, ` `)
+						}}</nuxt-link>
+						<div class="flex">
+							<BookmarkButton
+								:postID="$route.params.post"
+								:hasBookmark="isBookmarked"
+								class="pr-2"
+								@clicked="getBookmarkStatus"
+							/>
+							<!-- Share popup button -->
+							<button
+								class="focus:outline-none text-gray5 dark:text-gray3 hover:text-primary hover:fill-primary flex items-center"
+								:class="showShare ? `text-primary` : ``"
+								style="margin-top: 2px"
+								@click="showShare = !showShare"
+							>
+								<ShareIcon :isActive="showShare" />
+							</button>
+						</div>
+					</article>
+					<article>
+						<h1
+							class="text-lightPrimaryText dark:text-darkPrimaryText text-h1 mb-3 break-words font-serif font-semibold"
 						>
-							<ShareIcon :isActive="showShare" />
-						</button>
-					</div>
-				</article>
-				<article>
-					<h1 class="text-lightPrimaryText dark:text-darkPrimaryText text-h1 mb-3 break-words font-serif font-semibold">
-						{{ post.title }}
-					</h1>
-					<h2
-						v-if="post.subtitle"
-						class="text-lightSecondaryText dark:text-gray3 text-h2 mb-3 break-words font-serif font-medium"
+							{{ post.title }}
+						</h1>
+						<h2
+							v-if="post.subtitle"
+							class="text-lightSecondaryText dark:text-gray3 text-h2 mb-3 break-words font-serif font-medium"
+						>
+							{{ post.subtitle }}
+						</h2>
+					</article>
+					<!-- Featured Photo -->
+					<article
+						v-if="featuredPhoto !== null"
+						class="relative mb-5 mt-5 flex cursor-pointer flex-col justify-end"
+						@click="showPhoto"
 					>
-						{{ post.subtitle }}
-					</h2>
-				</article>
-				<!-- Featured Photo -->
-				<article
-					v-if="featuredPhoto !== null"
-					class="relative mb-5 mt-5 flex cursor-pointer flex-col justify-end"
-					@click="showPhoto"
-				>
-					<div
-						v-if="post.featuredPhotoCaption"
-						class="absolute w-full rounded-b-lg"
-						:class="
-							this.captionHeight > 72
-								? `h-48`
-								: this.captionHeight > 52
-								? `h-40`
-								: this.captionHeight > 32
-								? `h-32`
-								: `h-24`
-						"
-						style="background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.8) 100%)"
-					></div>
-					<img :src="featuredPhoto" class="w-full rounded-lg object-cover shadow-lg" />
-					<p
-						v-if="post.featuredPhotoCaption"
-						id="photoCaption"
-						class="text-lightOnPrimaryText absolute px-4 pb-3 text-sm drop-shadow-lg"
-						style="text-shadow: 0 0 10px #000"
+						<div
+							v-if="post.featuredPhotoCaption"
+							class="absolute w-full rounded-b-lg"
+							:class="
+								this.captionHeight > 72
+									? `h-48`
+									: this.captionHeight > 52
+									? `h-40`
+									: this.captionHeight > 32
+									? `h-32`
+									: `h-24`
+							"
+							style="background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.8) 100%)"
+						></div>
+						<img :src="featuredPhoto" class="w-full rounded-lg object-cover shadow-lg" />
+						<p
+							v-if="post.featuredPhotoCaption"
+							id="photoCaption"
+							class="text-lightOnPrimaryText absolute px-4 pb-3 text-sm drop-shadow-lg"
+							style="text-shadow: 0 0 10px #000"
+						>
+							{{ post.featuredPhotoCaption }}
+						</p>
+					</article>
+					<div v-else-if="showPaywall" class="h-72"></div>
+					<!-- Post paywall -->
+					<article
+						v-if="showPaywall"
+						class="from-lightBGStart to-transparent bg-gradient-to-t z-20 absolute top-0 w-full h-full"
+						:class="featuredPhoto !== null ? `pb-48 pt-48` : `pb-20 pt-20`"
 					>
-						{{ post.featuredPhotoCaption }}
-					</p>
-				</article>
-				<!-- Post paywall -->
-				<article v-if="showPaywall" class="w-full shadow shadow-lg flex flex-col items-center p-5">
-					<h4 class="text-xl font-semibold text-neutral">This post is for Paid subscribers</h4>
-					<p class="my-4">
-						Become a subscriber of <span class="font-semibold">{{ author.name }}</span> to access this post and only
-						subscriber-only content
-					</p>
-					<SubscribeButton :toggleSubscription="toggleSubscription" :userIsSubscribed="false" class="header-profile" />
-					<p>Manage my <nuxt-link to="/subscriptions" class="text-neutral">subscriptions</nuxt-link></p>
-				</article>
-				<!-- Content -->
-				<article v-else class="mt-5">
-					<div class="text-lightPrimaryText dark:text-darkSecondaryText editable content max-w-none break-words">
-						<component :is="readerViewElement" v-if="readerViewElement"></component>
-					</div>
-				</article>
+						<div
+							class="w-full shadow-lg flex flex-col items-center pt-10 px-16 from-lightBGStart to-lightBGStop bg-gradient-to-r rounded-lg h-full"
+							:class="featuredPhoto !== null ? `mt-48` : `mt-20`"
+							style="backdrop-filter: blur(10px)"
+						>
+							<h4 class="text-2xl font-semibold text-neutral mb-4">This post is for Paid subscribers</h4>
+							<p class="my-4 text-center">
+								Become a subscriber of <span class="font-semibold text-primary">{{ author.name }}</span> to access
+								<br />
+								this post and other subscriber-only content
+							</p>
+							<SubscribeButton
+								:toggleSubscription="toggleSubscription"
+								:userIsSubscribed="false"
+								class="header-profile my-4"
+								style="transform: scale(1.2)"
+							/>
+							<p class="text-sm mt-4">
+								Manage my <nuxt-link to="/subscriptions" class="text-neutral text">subscriptions</nuxt-link>
+							</p>
+						</div>
+					</article>
+					<!-- Content -->
+					<article v-else class="mt-5">
+						<div class="text-lightPrimaryText dark:text-darkSecondaryText editable content max-w-none break-words">
+							<component :is="readerViewElement" v-if="readerViewElement"></component>
+						</div>
+					</article>
 
-				<!-- Tags -->
-				<article class="mt-5 text-lg">
-					<TagCard v-for="t in post.tags" :key="t.name" class="mr-2 mb-2" :tag="t.name" />
+					<!-- Tags -->
+					<article class="mt-5 text-lg">
+						<TagCard v-for="t in post.tags" :key="t.name" class="mr-2 mb-2" :tag="t.name" />
+					</article>
+					<!-- IPFS CID -->
+					<div class="mt-3">
+						<a
+							:href="`https://ipfs.io/api/v0/dag/get?arg=` + $route.params.post"
+							target="_blank"
+							class="bg-gray1 dark:bg-gray7 text-gray5 dark:text-gray1 flex flex-row justify-between rounded-lg px-3 py-1"
+						>
+							<span class="mr-4" style="flex-shrink: 0">IPFS address </span>
+							<span class="overflow-hidden" style="text-overflow: ellipsis">{{ $route.params.post }}</span>
+							<span class="block"><LinkIcon class="py-1" /></span>
+						</a>
+					</div>
 				</article>
-				<!-- IPFS CID -->
-				<div class="mt-3">
-					<a
-						:href="`https://ipfs.io/api/v0/dag/get?arg=` + $route.params.post"
-						target="_blank"
-						class="bg-gray1 dark:bg-gray7 text-gray5 dark:text-gray1 flex flex-row justify-between rounded-lg px-3 py-1"
-					>
-						<span class="mr-4" style="flex-shrink: 0">IPFS address </span>
-						<span class="overflow-hidden" style="text-overflow: ellipsis">{{ $route.params.post }}</span>
-						<span class="block"><LinkIcon class="py-1" /></span>
-					</a>
-				</div>
 				<AuthorCard
 					:authorAvatar="authorAvatar"
 					:authorName="author.name"
