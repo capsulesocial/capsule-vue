@@ -37,6 +37,8 @@ function sanitizeHTML(input: string) {
 		USE_PROFILES: { html: true },
 		ALLOWED_TAGS: [`pre`],
 		ADD_ATTR: [`cid`],
+		FORBID_ATTR: [`style`],
+		FORBID_TAGS: [`style`],
 	})
 }
 
