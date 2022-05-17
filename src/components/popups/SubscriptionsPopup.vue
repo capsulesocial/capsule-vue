@@ -7,7 +7,7 @@
 			<div
 				v-if="author !== null"
 				style="backdrop-filter: blur(10px)"
-				class="min-h-40 w-full lg:w-600 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation max-h-90 z-10 overflow-y-auto rounded-lg bg-gradient-to-r px-6 pt-4 pb-2 shadow-lg"
+				class="min-h-40 w-full lg:w-600 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation max-h-90 z-10 overflow-y-auto rounded-lg bg-gradient-to-r px-6 pt-4 pb-6 shadow-lg"
 			>
 				<div class="sticky flex items-center justify-between mb-6">
 					<!-- avatar, name, id -->
@@ -45,7 +45,7 @@
 						</p>
 					</div>
 					<!-- Period switch -->
-					<div class="w-full flex justify-center">
+					<div class="w-full flex justify-center mt-1">
 						<SwitchPeriod :period="this.selectedPeriod" @toggle="switchPeriod" />
 					</div>
 					<!-- Subscriptions -->
@@ -64,7 +64,7 @@
 						</div>
 						<div class="flex flex-grow flex-col items-start ml-4 mr-2 w-2/5">
 							<h3 class="text-xl font-semibold dark:text-darkPrimaryText">{{ tier.name }}</h3>
-							<p class="text-gray5 dark:text-gray3 text-left text-sm">
+							<p class="text-gray5 dark:text-gray3 text-left text-sm pr-2">
 								Get access to exclusive articles by subscribing to {{ tier.name }}
 							</p>
 						</div>
@@ -84,15 +84,17 @@
 						</div>
 					</button>
 					<div class="flex flex-row-reverse">
-						<!-- TODO: improve this UX of selecting monthly/yearly -->
-						<SecondaryButton
-							v-show="selectedTier !== null"
-							:text="`Next`"
-							:action="showPaymentButtons(selectedPeriod)"
-						/>
+						<button
+							:class="selectedTier !== null ? `` : `opacity-50 cursor-not-allowed`"
+							class="bg-darkBG text-lightButtonText focus:outline-none transform rounded-lg font-bold transition duration-500 ease-in-out hover:bg-opacity-75"
+							style="padding: 0.4rem 1.5rem"
+							@click="showPaymentButtons(selectedPeriod)"
+						>
+							<span class="font-sans" style="font-size: 0.95rem"> Next </span>
+						</button>
 					</div>
 				</article>
-				<!-- Step 1: Payment -->
+				<!-- Step 1: Payment method selection -->
 				<article v-show="step === 1">
 					<div class="w-full flex flex-col justify-center text-center px-10">
 						<CrownIcon class="text-neutral stroke-neutral self-center w-12 h-12 mb-2" />
@@ -138,34 +140,79 @@
 						</div>
 						<!-- Credit card -->
 						<button
-							class="w-full mt-2 mb-5 p-4 bg-gray1 dark:bg-gray7 items-center rounded-lg flex justify-center"
+							class="w-full mt-2 mb-5 p-4 bg-gray1 dark:bg-gray7 border border-lightBorder items-center rounded-lg flex justify-center"
 							@click="selectPaymentType(`card`)"
 						>
 							<CreditCardIcon class="text-gray5 dark:text-gray2 w-6 h-6" />
 							<h6 class="text-gray5 dark:text-gray2 ml-2">Credit card</h6>
 						</button>
-						<div v-show="displayCardElement">
-							<div class="mb-4 flex flex-col lg:flex-row">
-								<input
-									id="email"
-									v-model="customerEmail"
-									type="email"
-									placeholder="Email"
-									class="bg-gray1 dark:bg-gray7 dark:text-darkPrimaryText placeholder-gray5 dark:placeholder-gray3 focus:outline-none flex-grow rounded-lg px-4 py-3 text-black"
-								/>
+					</div>
+				</article>
+				<!-- Step 2: Payment card info -->
+				<article v-show="step === 2">
+					<!-- Back button -->
+					<div class="flex justify-between w-full mb-8 mt-8">
+						<button class="flex items-center" @click="previousStep">
+							<div class="bg-gray1 dark:bg-gray5 focus:outline-none rounded-full">
+								<ChevronLeft />
 							</div>
-							<div id="card-element" class="mb-2 rounded-lg p-4 border border-black" />
-							<small v-show="cardErrorMessage !== null" style="color: #eb1c26" class="mb-5">{{
-								cardErrorMessage
-							}}</small>
-							<div class="flex flex-row-reverse mt-4">
-								<SecondaryButton :text="`Pay`" :action="submitCardPayment" />
-							</div>
+							<span class="pl-2 text-sm font-semibold dark:text-darkPrimaryText" style="margin-bottom: 2px"
+								>Payments methods</span
+							>
+						</button>
+						<div class="flex items-center">
+							<CreditCardIcon class="text-gray5 dark:text-gray2 w-6 h-6" />
+							<h6 class="text-gray5 dark:text-gray2 ml-2">Credit card</h6>
+						</div>
+					</div>
+					<!-- Order description -->
+					<div class="flex justify-between w-full mb-4">
+						<p class="text-base text-center text-gray5 dark:text-gray3">
+							1 x {{ selectedTier ? selectedTier.name : `` }}
+							{{ this.selectedPeriod === `month` ? 'monthly' : 'yearly' }} subscription plan
+						</p>
+						<div v-if="selectedTier !== null" class="font-semibold text-lg dark:text-darkPrimaryText opacity-50">
+							{{ displayCurrency(paymentProfile.currency)
+							}}{{ selectedPeriod === `month` ? selectedTier.monthlyPrice : selectedTier.yearlyPrice }}
+						</div>
+					</div>
+					<p class="text-negative text-sm">
+						This subscription will be reniewed every {{ selectedPeriod }} at the same date, you can manage you
+						subscriptions in the subscriptions page
+					</p>
+					<div class="flex justify-between w-full mt-8 mb-8">
+						<p class="text-base text-center text-gray5 dark:text-gray3">Total to pay today</p>
+						<div v-if="selectedTier !== null" class="font-semibold text-lg dark:text-darkPrimaryText">
+							{{ displayCurrency(paymentProfile.currency)
+							}}{{ selectedPeriod === `month` ? selectedTier.monthlyPrice : selectedTier.yearlyPrice }}
+						</div>
+					</div>
+					<!-- Payment infos -->
+					<div>
+						<div class="mb-4 flex flex-col lg:flex-row">
+							<input
+								id="email"
+								v-model="customerEmail"
+								type="email"
+								placeholder="Email"
+								class="emailInput bg-gray1 dark:bg-gray7 dark:text-darkPrimaryText placeholder-gray3 dark:placeholder-gray3 border border-lightBorder focus:outline-none flex-grow rounded-lg px-4 py-4 text-black"
+								style="font-weight: 400; font-size: 15.8px"
+							/>
+						</div>
+						<div
+							id="card-element"
+							class="mb-2 rounded-lg p-4 border border-lightBorder bg-gray1 dark:bg-gray7 placeholder-gray5 dark:placeholder-gray3 py-5"
+						/>
+						<small v-show="cardErrorMessage !== null" style="color: #eb1c26" class="mb-5 modal-animation">{{
+							cardErrorMessage
+						}}</small>
+						<div class="flex flex-row-reverse mt-4">
+							<SecondaryButton v-if="!isLoading" :text="`Pay`" :action="submitCardPayment" />
 						</div>
 					</div>
 				</article>
-				<!-- Step 2: Pay (Stripe) -->
-				<article v-if="step === 2">
+				<!-- Step 3: Pay (Stripe) -->
+				<article v-if="step === 3">
 					<form id="payment-form">
 						<div id="payment-element">
 							<!--Stripe.js injects the Payment Element-->
@@ -250,6 +297,7 @@ import SecondaryButton from '@/components/SecondaryButton.vue'
 import CloseIcon from '@/components/icons/X.vue'
 import CrownIcon from '@/components/icons/Crown.vue'
 import CheckCircleIcon from '@/components/icons/CheckCircle.vue'
+import ChevronLeft from '@/components/icons/ChevronLeft.vue'
 import CreditCardIcon from '@/components/icons/CreditCard.vue'
 import AppleIcon from '@/components/icons/brands/Apple.vue'
 import GoogleIcon from '@/components/icons/brands/Google.vue'
@@ -304,6 +352,7 @@ export default Vue.extend({
 		AppleIcon,
 		GoogleIcon,
 		SwitchPeriod,
+		ChevronLeft,
 	},
 	props: {
 		isSubscribed: {
@@ -402,7 +451,9 @@ export default Vue.extend({
 			}
 		},
 		showPaymentButtons(period: string) {
-			return () => this._showPaymentButtons(period)
+			if (this.selectedTier !== null) {
+				this._showPaymentButtons(period)
+			}
 		},
 		async _showPaymentButtons(period: string) {
 			this.nextStep()
@@ -498,10 +549,14 @@ export default Vue.extend({
 				return
 			}
 			cardElement.mount(`#card-element`)
-			this.displayCardElement = true
+			// this.displayCardElement = true
+			this.nextStep()
 		},
 		nextStep(): void {
 			this.step += 1
+		},
+		previousStep(): void {
+			this.step -= 1
 		},
 		async submitPayment(paymentMethod: PaymentMethod, email: string): Promise<boolean> {
 			if (!this.selectedTier) {
@@ -636,3 +691,25 @@ export default Vue.extend({
 	},
 })
 </script>
+<style>
+.emailInput::-webkit-input-placeholder {
+	/* WebKit browsers */
+	color: #515e80;
+	opacity: 0.2;
+}
+.emailInput:-moz-placeholder {
+	/* Mozilla Firefox 4 to 18 */
+	color: #515e80;
+	opacity: 0.2;
+}
+.emailInput::-moz-placeholder {
+	/* Mozilla Firefox 19+ */
+	color: #515e80;
+	opacity: 0.2;
+}
+.emailInput:-ms-input-placeholder {
+	/* Internet Explorer 10+ */
+	color: #515e80;
+	opacity: 0.2;
+}
+</style>
