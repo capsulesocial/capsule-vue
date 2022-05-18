@@ -364,7 +364,6 @@ export default Vue.extend({
 				this.cardErrorMessage = `Author profile is missing`
 				return
 			}
-			this.$store.dispatch(`paymentProfile/fetchProfile`, { username: this.author.id })
 			this.paymentProfile = this.getPaymentProfile(this.author.id)
 			if (!this.paymentProfile) {
 				this.cardErrorMessage = `Payment profile of author is missing`

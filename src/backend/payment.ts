@@ -58,13 +58,8 @@ export async function confirmSubscriptionPayment(username: string, paymentAttemp
 }
 
 export async function retrievePaymentProfile(username: string) {
-	try {
-		const response = await axios.get(`${capsuleServer}/pay/profile/${username}`)
-		return response.data
-	} catch (err) {
-		// TODO handle error here or ignore?
-		throw new Error(`Could not fetch payment profile: ${err}`)
-	}
+	const response = await axios.get(`${capsuleServer}/pay/profile/${username}`)
+	return response.data
 }
 
 export function getCurrencySymbol(currency: string) {
