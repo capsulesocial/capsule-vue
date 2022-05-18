@@ -65,6 +65,9 @@ export default Vue.extend({
 		CircleCheck,
 		CloseIcon,
 	},
+	async created() {
+		await this.$store.dispatch(`paymentProfile/fetchProfile`, { username: this.$store.state.session.id })
+	},
 	methods: {
 		addTier(t: string) {
 			this.$store.commit(`draft/addAccessTier`, t)
