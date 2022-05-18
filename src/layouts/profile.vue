@@ -137,6 +137,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapActions } from 'vuex'
+import { AxiosError } from 'axios'
 import ProfileWidget from '@/components/widgets/Profile.vue'
 import FollowersWidget from '@/components/widgets/Followers.vue'
 import MutualFollowersWidget from '@/components/widgets/MutualFollowers.vue'
@@ -220,7 +221,6 @@ export default Vue.extend({
 		$route(n, o) {
 			if (n.params.id !== o.params.id) {
 				this.getVisitingProfile()
-				this.fetchPaymentProfile({ username: n.params.id })
 				this.componentKey += 1
 				this.showFollowers = false
 				this.showFollowing = false
@@ -259,10 +259,16 @@ export default Vue.extend({
 		this.$setColorMode(this.$store.state.settings.mode)
 		this.$setColor(this.$store.state.settings.color)
 	},
-	mounted() {
+	async mounted() {
 		// Fetch visiting profile
 		this.getVisitingProfile()
-		this.fetchPaymentProfile({ username: this.$route.params.id })
+		try {
+			await this.fetchPaymentProfile({ username: this.$route.params.id })
+		} catch (err) {
+			if (!(err instanceof AxiosError && err.response?.status === 404)) {
+				this.$handleError(err)
+			}
+		}
 	},
 	methods: {
 		async getVisitingProfile() {
