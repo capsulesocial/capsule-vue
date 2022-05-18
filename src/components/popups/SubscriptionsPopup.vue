@@ -52,14 +52,19 @@
 					<button
 						v-for="tier in paymentProfile.tiers"
 						:key="tier._id"
-						class="flex flex-row items-center justify-between m-5 p-4 border border-neutral shadow-lg rounded-lg"
+						class="flex flex-row items-center justify-between m-5 p-4 border shadow-sm rounded-lg from-lightBGStart to-lightBGStop dark:from-darkBG dark:to-darkBG bg-gradient-to-r transition duration-500 ease-in-out"
+						:class="
+							selectedTier !== null && selectedTier._id === tier._id
+								? `border-neutral`
+								: `border-lightBorder dark:border-darkBorder`
+						"
 						@click="selectTier(tier)"
 					>
 						<!-- Check mark -->
 						<div class="w-12 flex justify-center">
 							<CheckCircleIcon
 								:isChecked="selectedTier !== null && selectedTier._id === tier._id"
-								class="text-neutral w-6 h-6 flex items-center"
+								class="text-neutral w-6 h-6 flex items-center transition duration-500 ease-in-out"
 							/>
 						</div>
 						<div class="flex flex-grow flex-col items-start ml-4 mr-2 w-2/5">
@@ -140,7 +145,7 @@
 						</div>
 						<!-- Credit card -->
 						<button
-							class="w-full mt-2 mb-5 p-4 bg-gray1 dark:bg-gray7 border border-lightBorder items-center rounded-lg flex justify-center"
+							class="w-full mt-2 mb-5 p-4 bg-gray1 dark:bg-gray7 border border-lightBorder dark:border-darkBorder items-center rounded-lg flex justify-center"
 							@click="selectPaymentType(`card`)"
 						>
 							<CreditCardIcon class="text-gray5 dark:text-gray2 w-6 h-6" />
@@ -195,7 +200,7 @@
 								v-model="customerEmail"
 								type="email"
 								placeholder="Email"
-								class="emailInput bg-gray1 dark:bg-gray7 dark:text-darkPrimaryText placeholder-gray3 dark:placeholder-gray3 border border-lightBorder focus:outline-none flex-grow rounded-lg px-4 py-4 text-black"
+								class="bg-gray1 dark:bg-gray7 dark:text-darkPrimaryText placeholder-gray3 dark:placeholder-gray2 border border-lightBorder focus:outline-none flex-grow rounded-lg px-4 py-4 text-black"
 								style="font-weight: 400; font-size: 15.8px"
 							/>
 						</div>
@@ -690,25 +695,3 @@ export default Vue.extend({
 	},
 })
 </script>
-<style>
-.emailInput::-webkit-input-placeholder {
-	/* WebKit browsers */
-	color: #515e80;
-	opacity: 0.2;
-}
-.emailInput:-moz-placeholder {
-	/* Mozilla Firefox 4 to 18 */
-	color: #515e80;
-	opacity: 0.2;
-}
-.emailInput::-moz-placeholder {
-	/* Mozilla Firefox 19+ */
-	color: #515e80;
-	opacity: 0.2;
-}
-.emailInput:-ms-input-placeholder {
-	/* Internet Explorer 10+ */
-	color: #515e80;
-	opacity: 0.2;
-}
-</style>
