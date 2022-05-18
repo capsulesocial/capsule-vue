@@ -2,7 +2,7 @@ import { AxiosError } from 'axios'
 import type { Plugin } from '@nuxt/types'
 import { getBlobExtension } from '@/backend/utilities/helpers'
 
-type dateString = (date: Date, hideYear?: boolean, preformattedDate?: string | null) => string
+type dateString = (date: Date, hideYear?: boolean, preformattedDate?: string | null, onlyDate?: boolean) => string
 type dateFormat = (input: string | Date | number) => string
 type isErrorFormat = (obj: Record<string, unknown>) => obj is { error: string }
 type contentImgs = (content: string) => RegExpMatchArray[]
@@ -23,12 +23,16 @@ declare module 'vue/types/vue' {
 
 const MONTH_NAMES = [`Jan`, `Feb`, `Mar`, `Apr`, `May`, `Jun`, `Jul`, `Aug`, `Sep`, `Oct`, `Nov`, `Dec`]
 
-const getFormat: dateString = (date, hideYear = false, preformattedDate = null) => {
+const getFormat: dateString = (date, hideYear = false, preformattedDate = null, onlyDate = false) => {
 	const day = date.getDate()
 	const month = MONTH_NAMES[date.getMonth()]
 	const year = date.getFullYear()
 	const hours = date.getHours()
 	const minutes = date.getMinutes()
+
+	if (onlyDate) {
+		return `${day} ${month} ${year}`
+	}
 
 	let minutesString = `${minutes}`
 	if (minutes < 10) {
@@ -53,6 +57,10 @@ const formatDate = (input: string | Date | number) => {
 	const DAY_IN_MS = 86400000 // 24 * 60 * 60 * 1000
 	const today = new Date()
 	const seconds = Math.round((today.getTime() - date.getTime()) / 1000)
+
+	if (seconds < 0) {
+		return getFormat(date, false, null, true)
+	}
 
 	if (seconds < 5) {
 		return `now`
