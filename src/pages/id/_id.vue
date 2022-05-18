@@ -242,7 +242,6 @@ interface IData {
 	expandBio: boolean
 	bottomPadding: boolean
 	fromExternalSite: boolean
-	paymentsEnabled: boolean
 }
 
 export default Vue.extend({
@@ -329,7 +328,6 @@ export default Vue.extend({
 			expandBio: false,
 			bottomPadding: false,
 			fromExternalSite: false,
-			paymentsEnabled: false,
 		}
 	},
 	head() {
@@ -344,13 +342,17 @@ export default Vue.extend({
 			],
 		}
 	},
+	computed: {
+		paymentsEnabled() {
+			return this.$store.getters[`paymentProfile/getPaymentProfile`](this.$route.params.id).paymentsEnabled
+		},
+	},
 	watch: {
 		$route(n, o) {
 			if (n.params.id !== o.params.id) {
 				// Updates post count
 				window.addEventListener(`click`, this.handleClose, false)
 				this.fetchProfile()
-				this.checkPaymentStatus()
 				// this.initHeader()
 			}
 		},
@@ -371,7 +373,6 @@ export default Vue.extend({
 		this.$nextTick(() => {
 			this.initHeader()
 		})
-		this.checkPaymentStatus()
 	},
 	destroyed() {
 		if (this.$store.state.settings.recentlyInSettings) {
@@ -540,11 +541,6 @@ export default Vue.extend({
 				return
 			}
 			this.$router.go(-1)
-		},
-		checkPaymentStatus() {
-			this.paymentsEnabled = this.$store.getters[`paymentProfile/getPaymentProfile`](
-				this.$route.params.id,
-			).paymentsEnabled
 		},
 	},
 })

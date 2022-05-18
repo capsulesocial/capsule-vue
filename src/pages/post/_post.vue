@@ -267,6 +267,8 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapActions } from 'vuex'
+import { AxiosError } from 'axios'
 
 import PostView from '@/components/PostView.vue'
 import PostActions from '@/components/post/Actions.vue'
@@ -292,6 +294,7 @@ import { getReposts } from '@/backend/reposts'
 import { isPostBookmarkedByUser } from '@/backend/bookmarks'
 import { createShareableLink } from '@/backend/shareable_links'
 import { calculateReadingTime } from '@/backend/utilities/helpers'
+import { ActionType, namespace as paymentProfileNamespace } from '@/store/paymentProfile'
 
 interface IData {
 	post: Post | null
@@ -413,6 +416,14 @@ export default Vue.extend({
 				this.$toastError(`Post not verified!`)
 			}
 		})
+
+		try {
+			await this.fetchPaymentProfile({ username: post.data.authorID })
+		} catch (err) {
+			if (!(err instanceof AxiosError && err.response?.status === 404)) {
+				this.$handleError(err)
+			}
+		}
 
 		if (isEncryptedPost(post.data)) {
 			const decrypted = await getDecryptedContent(postCID, post.data.content, sessionID)
@@ -620,6 +631,9 @@ export default Vue.extend({
 				this.showSubscriptions = !this.showSubscriptions
 			}
 		},
+		...mapActions(paymentProfileNamespace, {
+			fetchPaymentProfile: ActionType.FETCH_PROFILE,
+		}),
 	},
 })
 </script>
