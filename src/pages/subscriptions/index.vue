@@ -20,11 +20,12 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapGetters } from 'vuex'
 import ChevronLeft from '@/components/icons/ChevronLeft.vue'
 import SubCard from '@/components/subscriptions/SubCard.vue'
-import { getUserSubscriptions, ISubscriptionResponse, ISubCardData } from '@/backend/subscription'
+import { ISubscriptionResponse, ISubCardData } from '@/backend/subscription'
 import { createDefaultProfile, getProfile } from '@/backend/profile'
-
+import { namespace as SubscriptionsNamespace } from '@/store/subscriptions'
 interface IData {
 	subscriptions: ISubscriptionResponse[]
 	subCards: ISubCardData[]
@@ -46,10 +47,13 @@ export default Vue.extend({
 			meta: [{ hid: `subscriptions`, name: `subscriptions`, content: `Manage subscriptions on Blogchain` }],
 		}
 	},
+	computed: {
+		...mapGetters(SubscriptionsNamespace, [`activeSubs`, `inactiveSubs`]),
+	},
 	async created() {
+		await this.$store.dispatch(`subscriptions/fetchSubs`, this.$store.state.session.id)
 		try {
-			this.subscriptions = await getUserSubscriptions(this.$store.state.session.id)
-			this.subscriptions.forEach((s) => {
+			this.activeSubs.forEach((s: ISubscriptionResponse) => {
 				let profile = createDefaultProfile(s.authorID)
 				getProfile(s.authorID).then((fetchedProfile) => {
 					if (fetchedProfile.profile) {
