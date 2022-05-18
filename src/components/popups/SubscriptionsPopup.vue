@@ -1,13 +1,13 @@
 <template>
 	<div
-		class="bg-primary dark:bg-secondary modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
+		class="bg-darkBG dark:bg-gray5 modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
 	>
 		<!-- Container -->
 		<section class="popup">
 			<div
 				v-if="author !== null"
 				style="backdrop-filter: blur(10px)"
-				class="min-h-40 w-full lg:w-600 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation max-h-90 z-10 overflow-y-auto rounded-lg bg-gradient-to-r px-6 pt-4 pb-2 shadow-lg"
+				class="min-h-40 w-full lg:w-600 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation max-h-90 z-10 overflow-y-auto rounded-lg bg-gradient-to-r px-6 pt-4 pb-6 shadow-lg"
 			>
 				<div class="sticky flex items-center justify-between mb-6">
 					<!-- avatar, name, id -->
@@ -44,6 +44,10 @@
 							<span class="font-semibold text-primary dark:text-secondary">{{ author.name }}</span>
 						</p>
 					</div>
+					<!-- Period switch -->
+					<div class="w-full flex justify-center mt-1">
+						<SwitchPeriod :period="this.selectedPeriod" @toggle="switchPeriod" />
+					</div>
 					<!-- Subscriptions -->
 					<button
 						v-for="tier in paymentProfile.tiers"
@@ -58,38 +62,39 @@
 								class="text-neutral w-6 h-6 flex items-center"
 							/>
 						</div>
-						<div class="flex flex-grow flex-col items-start ml-4 mr-2">
+						<div class="flex flex-grow flex-col items-start ml-4 mr-2 w-2/5">
 							<h3 class="text-xl font-semibold dark:text-darkPrimaryText">{{ tier.name }}</h3>
-							<p class="text-gray5 dark:text-gray3 text-left">
+							<p class="text-gray5 dark:text-gray3 text-left text-sm pr-2">
 								Get access to exclusive articles by subscribing to {{ tier.name }}
 							</p>
 						</div>
-						<div v-if="tier.monthlyEnabled" class="font-semibold text-lg mr-2 dark:text-darkPrimaryText">
+						<div
+							v-if="tier.monthlyEnabled && selectedPeriod === `month`"
+							class="font-semibold text-lg mr-2 dark:text-darkPrimaryText"
+						>
 							{{ displayCurrency(paymentProfile.currency) }}{{ tier.monthlyPrice }}
 							<span class="text-gray5 dark:text-gray3">/month</span>
 						</div>
-						<div v-if="tier.yearlyEnabled" class="font-semibold text-lg mr-2 dark:text-darkPrimaryText">
+						<div
+							v-if="tier.yearlyEnabled && selectedPeriod === `year`"
+							class="font-semibold text-lg mr-2 dark:text-darkPrimaryText"
+						>
 							{{ displayCurrency(paymentProfile.currency) }}{{ tier.yearlyPrice }}
 							<span class="text-gray5 dark:text-gray3">/year</span>
 						</div>
 					</button>
 					<div class="flex flex-row-reverse">
-						<!-- TODO: improve this UX of selecting monthly/yearly -->
-						<SecondaryButton
-							v-show="selectedTier !== null && selectedTier.monthlyEnabled"
-							class="m-2"
-							:text="`Monthly`"
-							:action="showPaymentButtons(`month`)"
-						/>
-						<SecondaryButton
-							v-show="selectedTier !== null && selectedTier.yearlyEnabled"
-							class="m-2"
-							:text="`Yearly`"
-							:action="showPaymentButtons(`year`)"
-						/>
+						<button
+							:class="selectedTier !== null ? `` : `opacity-50 cursor-not-allowed`"
+							class="bg-darkBG text-lightButtonText focus:outline-none transform rounded-lg font-bold transition duration-500 ease-in-out hover:bg-opacity-75"
+							style="padding: 0.4rem 1.5rem"
+							@click="showPaymentButtons(selectedPeriod)"
+						>
+							<span class="font-sans" style="font-size: 0.95rem"> Next </span>
+						</button>
 					</div>
 				</article>
-				<!-- Step 1: Payment -->
+				<!-- Step 1: Payment method selection -->
 				<article v-show="step === 1">
 					<div class="w-full flex flex-col justify-center text-center px-10">
 						<CrownIcon class="text-neutral stroke-neutral self-center w-12 h-12 mb-2" />
@@ -135,33 +140,79 @@
 						</div>
 						<!-- Credit card -->
 						<button
-							class="w-full mt-2 mb-5 p-4 bg-gray1 dark:bg-gray7 items-center rounded-lg flex justify-center"
+							class="w-full mt-2 mb-5 p-4 bg-gray1 dark:bg-gray7 border border-lightBorder items-center rounded-lg flex justify-center"
 							@click="selectPaymentType(`card`)"
 						>
 							<CreditCardIcon class="text-gray5 dark:text-gray2 w-6 h-6" />
 							<h6 class="text-gray5 dark:text-gray2 ml-2">Credit card</h6>
 						</button>
-						<div v-show="displayCardElement">
-							<div class="mb-4 flex flex-col lg:flex-row">
-								<input
-									id="email"
-									v-model="customerEmail"
-									type="email"
-									placeholder="Email"
-									class="bg-gray1 dark:bg-gray7 dark:text-darkPrimaryText placeholder-gray5 dark:placeholder-gray3 focus:outline-none flex-grow rounded-lg px-2 py-1 text-black"
-								/>
+					</div>
+				</article>
+				<!-- Step 2: Payment card info -->
+				<article v-show="step === 2">
+					<!-- Back button -->
+					<div class="flex justify-between w-full mb-8 mt-8">
+						<button class="flex items-center" @click="previousStep">
+							<div class="bg-gray1 dark:bg-gray5 focus:outline-none rounded-full">
+								<ChevronLeft />
 							</div>
-							<div id="card-element" class="mb-2 rounded-lg p-4 border border-black" />
-							<small v-show="cardErrorMessage !== null" style="color: #eb1c26" class="mb-5">{{
-								cardErrorMessage
-							}}</small>
-							<br />
-							<SecondaryButton class="m-2" :text="`Pay`" :action="submitCardPayment" />
+							<span class="pl-2 text-sm font-semibold dark:text-darkPrimaryText" style="margin-bottom: 2px"
+								>Payments methods</span
+							>
+						</button>
+						<div class="flex items-center">
+							<CreditCardIcon class="text-gray5 dark:text-gray2 w-6 h-6" />
+							<h6 class="text-gray5 dark:text-gray2 ml-2">Credit card</h6>
+						</div>
+					</div>
+					<!-- Order description -->
+					<div class="flex justify-between w-full mb-4">
+						<p class="text-base text-center text-gray5 dark:text-gray3">
+							1 x {{ selectedTier ? selectedTier.name : `` }}
+							{{ this.selectedPeriod === `month` ? 'monthly' : 'yearly' }} subscription plan
+						</p>
+						<div v-if="selectedTier !== null" class="font-semibold text-lg dark:text-darkPrimaryText opacity-50">
+							{{ displayCurrency(paymentProfile.currency)
+							}}{{ selectedPeriod === `month` ? selectedTier.monthlyPrice : selectedTier.yearlyPrice }}
+						</div>
+					</div>
+					<p class="text-negative text-sm">
+						This subscription will be renewed every {{ selectedPeriod }} at the same date, you can manage you
+						subscriptions on the <nuxt-link to="/subscriptions" class="underline">subscriptions page</nuxt-link>.
+					</p>
+					<div class="flex justify-between w-full mt-8 mb-8">
+						<p class="text-base text-center text-gray5 dark:text-gray3">Total to pay today</p>
+						<div v-if="selectedTier !== null" class="font-semibold text-lg dark:text-darkPrimaryText">
+							{{ displayCurrency(paymentProfile.currency)
+							}}{{ selectedPeriod === `month` ? selectedTier.monthlyPrice : selectedTier.yearlyPrice }}
+						</div>
+					</div>
+					<!-- Payment infos -->
+					<div>
+						<div class="mb-4 flex flex-col lg:flex-row">
+							<input
+								id="email"
+								v-model="customerEmail"
+								type="email"
+								placeholder="Email"
+								class="emailInput bg-gray1 dark:bg-gray7 dark:text-darkPrimaryText placeholder-gray3 dark:placeholder-gray3 border border-lightBorder focus:outline-none flex-grow rounded-lg px-4 py-4 text-black"
+								style="font-weight: 400; font-size: 15.8px"
+							/>
+						</div>
+						<div
+							id="card-element"
+							class="mb-2 rounded-lg p-4 border border-lightBorder bg-gray1 dark:bg-gray7 placeholder-gray5 dark:placeholder-gray3 py-5"
+						/>
+						<small v-show="cardErrorMessage !== null" style="color: #eb1c26" class="mb-5 modal-animation">{{
+							cardErrorMessage
+						}}</small>
+						<div class="flex flex-row-reverse mt-4">
+							<SecondaryButton v-if="!isLoading" :text="`Pay`" :action="submitCardPayment" />
 						</div>
 					</div>
 				</article>
-				<!-- Step 2: Pay (Stripe) -->
-				<article v-if="step === 2">
+				<!-- Step 3: Pay (Stripe) -->
+				<article v-if="step === 3">
 					<form id="payment-form">
 						<div id="payment-element">
 							<!--Stripe.js injects the Payment Element-->
@@ -173,7 +224,7 @@
 					</form>
 				</article>
 				<!-- Step 4: Confirmation page -->
-				<article v-show="step === 3" class="flex flex-col items-center">
+				<article v-show="step === 4" class="flex flex-col items-center">
 					<div class="w-full flex flex-col justify-center text-center px-10">
 						<CrownIcon class="text-neutral stroke-neutral self-center w-12 h-12 mb-2" />
 						<h6 class="font-semibold text-neutral text-xl mb-2">Congrats!</h6>
@@ -210,7 +261,7 @@
 							unlocked for your account
 						</p>
 						<button
-							class="px-5 py-2 rounded-lg bg-neutral focus:outline-none text-white mt-10 font-semibold"
+							class="px-5 py-2 rounded-lg bg-neutral focus:outline-none text-white mt-6 font-semibold"
 							@click="$emit(`close`)"
 						>
 							Start reading
@@ -222,10 +273,10 @@
 								? require(`@/assets/images/brand/dark/subscriptions.webp`)
 								: require(`@/assets/images/brand/light/subscriptions.webp`)
 						"
-						class="h-auto"
+						class="h-auto rounded-lg"
 					/>
 				</article>
-				<div v-show="isLoading" class="modal-animation flex w-full justify-center z-20 mt-24">
+				<div v-show="isLoading" class="modal-animation flex w-full justify-center z-20 mt-5">
 					<div
 						class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
 						:style="`border-top: 2px solid` + $color.hex"
@@ -246,9 +297,11 @@ import SecondaryButton from '@/components/SecondaryButton.vue'
 import CloseIcon from '@/components/icons/X.vue'
 import CrownIcon from '@/components/icons/Crown.vue'
 import CheckCircleIcon from '@/components/icons/CheckCircle.vue'
+import ChevronLeft from '@/components/icons/ChevronLeft.vue'
 import CreditCardIcon from '@/components/icons/CreditCard.vue'
 import AppleIcon from '@/components/icons/brands/Apple.vue'
 import GoogleIcon from '@/components/icons/brands/Google.vue'
+import SwitchPeriod from '@/components/switch.vue'
 import { Profile } from '@/backend/profile'
 import { stripePublishableKey } from '@/backend/utilities/config'
 import {
@@ -298,6 +351,8 @@ export default Vue.extend({
 		CreditCardIcon,
 		AppleIcon,
 		GoogleIcon,
+		SwitchPeriod,
+		ChevronLeft,
 	},
 	props: {
 		isSubscribed: {
@@ -388,8 +443,17 @@ export default Vue.extend({
 		selectTier(tier: SubscriptionTier) {
 			this.selectedTier = tier
 		},
+		switchPeriod() {
+			if (this.selectedPeriod === `month`) {
+				this.selectedPeriod = `year`
+			} else {
+				this.selectedPeriod = `month`
+			}
+		},
 		showPaymentButtons(period: string) {
-			return () => this._showPaymentButtons(period)
+			if (this.selectedTier !== null) {
+				this._showPaymentButtons(period)
+			}
 		},
 		async _showPaymentButtons(period: string) {
 			this.nextStep()
@@ -485,10 +549,14 @@ export default Vue.extend({
 				return
 			}
 			cardElement.mount(`#card-element`)
-			this.displayCardElement = true
+			// this.displayCardElement = true
+			this.nextStep()
 		},
 		nextStep(): void {
 			this.step += 1
+		},
+		previousStep(): void {
+			this.step -= 1
 		},
 		async submitPayment(paymentMethod: PaymentMethod, email: string): Promise<boolean> {
 			if (!this.selectedTier) {
@@ -524,7 +592,7 @@ export default Vue.extend({
 					return false
 				}
 
-				this.step = 3
+				this.step = 4
 				return true
 			} catch (err) {
 				this.cardErrorMessage = (err as Error).message ?? `Unkwon error`
@@ -564,7 +632,7 @@ export default Vue.extend({
 					this.cardErrorMessage = `This subscription payment failed with an unknown error`
 					return false
 				}
-				this.step = 3
+				this.step = 4
 				return true
 			} catch (err) {
 				this.cardErrorMessage = (err as Error).message ?? `Unkwon error`
@@ -623,3 +691,25 @@ export default Vue.extend({
 	},
 })
 </script>
+<style>
+.emailInput::-webkit-input-placeholder {
+	/* WebKit browsers */
+	color: #515e80;
+	opacity: 0.2;
+}
+.emailInput:-moz-placeholder {
+	/* Mozilla Firefox 4 to 18 */
+	color: #515e80;
+	opacity: 0.2;
+}
+.emailInput::-moz-placeholder {
+	/* Mozilla Firefox 19+ */
+	color: #515e80;
+	opacity: 0.2;
+}
+.emailInput:-ms-input-placeholder {
+	/* Internet Explorer 10+ */
+	color: #515e80;
+	opacity: 0.2;
+}
+</style>
