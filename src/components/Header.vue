@@ -49,7 +49,9 @@
 					<!-- Authenticated -->
 					<div v-if="$store.state.session.id !== ``" class="flex items-center">
 						<div class="flex flex-col items-start">
-							<p class="text-lg text-lightPrimaryText font-semibold -mt-1">{{ $store.state.session.name }}</p>
+							<p class="text-lg text-lightPrimaryText dark:text-darkPrimaryText font-semibold -mt-1">
+								{{ $store.state.session.name }}
+							</p>
 							<p class="text-sm text-primary">@{{ $store.state.session.id }}</p>
 						</div>
 					</div>
@@ -183,7 +185,9 @@
 					>
 					<div v-if="$store.state.session.id !== ``" class="flex items-center">
 						<div class="flex flex-col items-start">
-							<p class="text-lg text-lightPrimaryText font-semibold -mt-1">{{ $store.state.session.name }}</p>
+							<p class="text-lg text-lightPrimaryText dark:text-darkPrimaryText font-semibold -mt-1">
+								{{ $store.state.session.name }}
+							</p>
 							<p class="text-sm text-primary">@{{ $store.state.session.id }}</p>
 						</div>
 					</div>

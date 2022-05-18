@@ -125,22 +125,22 @@
 							{{ post.featuredPhotoCaption }}
 						</p>
 					</article>
-					<div v-else-if="showPaywall" class="h-72"></div>
+					<div v-else-if="showPaywall" class="h-80 lg:h-72"></div>
 					<!-- Post paywall -->
 					<article
 						v-if="showPaywall"
-						class="from-lightBGStart to-transparent bg-gradient-to-t z-20 absolute top-0 w-full h-full"
+						class="from-lightBGStart to-transparent dark:from-darkBGStart dark:to-transparent bg-gradient-to-t z-20 absolute top-0 w-full h-full"
 						:class="featuredPhoto !== null ? `pb-48 pt-48` : `pb-20 pt-20`"
 					>
 						<div
-							class="w-full shadow-lg flex flex-col items-center pt-10 px-16 from-lightBGStart to-lightBGStop bg-gradient-to-r rounded-lg h-full"
+							class="w-full shadow-lg flex flex-col items-center pt-10 px-16 from-lightBGStart to-lightBGStop dark:from-darkBG dark:to-darkBG bg-gradient-to-r rounded-lg h-full"
 							:class="featuredPhoto !== null ? `mt-48` : `mt-20`"
 							style="backdrop-filter: blur(10px)"
 						>
-							<h4 class="text-2xl font-semibold text-neutral mb-4">This post is for Paid subscribers</h4>
-							<p class="my-4 text-center">
+							<h4 class="text-2xl font-semibold text-neutral mb-4 text-center">This post is for Paid subscribers</h4>
+							<p class="my-4 text-center text-gray5 dark:text-gray3">
 								Become a subscriber of <span class="font-semibold text-primary">{{ author.name }}</span> to access
-								<br />
+								<br class="hidden lg:block" />
 								this post and other subscriber-only content
 							</p>
 							<SubscribeButton
@@ -149,7 +149,7 @@
 								class="header-profile my-4"
 								style="transform: scale(1.2)"
 							/>
-							<p class="text-sm mt-4">
+							<p class="text-sm mt-4 text-gray5 dark:text-gray3">
 								Manage my <nuxt-link to="/subscriptions" class="text-neutral text">subscriptions</nuxt-link>
 							</p>
 						</div>
