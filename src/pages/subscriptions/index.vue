@@ -1,19 +1,11 @@
 <template>
 	<main>
-		<!-- Mobile back button -->
-		<button class="mb-4 flex items-center xl:hidden focus:outline-none" @click="$router.go(-1)">
-			<span class="bg-gray1 mr-2 rounded-full p-1"><ChevronLeft /></span>
-			<h6 class="font-semibold">Back</h6>
-		</button>
-		<!-- Network Tab -->
 		<h2 class="text-primary dark:text-secondary mb-1 text-lg font-semibold xl:text-xl">My subscriptions</h2>
 		<p class="text-gray5 dark:text-gray3">Manage your active subscriptions to your favorite content creators here:</p>
 		<!-- subscriptions grid -->
-		<div class="grid grid-cols-3 gap-3">
+		<div class="flex flex-wrap mt-4">
 			<!-- Subscription card -->
-			<div v-for="s in subCards" :key="s.authorID">
-				<SubCard :s="s" />
-			</div>
+			<SubCard v-for="s in subCards" :key="s.authorID" :s="s" />
 		</div>
 	</main>
 </template>
@@ -21,7 +13,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapGetters } from 'vuex'
-import ChevronLeft from '@/components/icons/ChevronLeft.vue'
 import SubCard from '@/components/subscriptions/SubCard.vue'
 import { ISubscriptionResponse, ISubCardData } from '@/backend/subscription'
 import { createDefaultProfile, getProfile } from '@/backend/profile'
@@ -32,7 +23,7 @@ interface IData {
 }
 
 export default Vue.extend({
-	components: { ChevronLeft, SubCard },
+	components: { SubCard },
 	layout: `subscriptions`,
 	props: {},
 	data(): IData {
