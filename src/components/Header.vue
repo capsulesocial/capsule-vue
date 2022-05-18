@@ -326,6 +326,9 @@ export default Vue.extend({
 			this.$store.commit(`draft/clearDrafts`)
 			this.$store.commit(`reset`)
 			this.$store.commit(`widgets/reset`)
+			this.$store.commit(`paymentProfile/reset`)
+			this.$store.commit(`subscriptions/reset`)
+			this.$store.commit(`subscriptionTiers/logout`)
 			this.$router.push(`/login`)
 		},
 		toggleMobileMenu() {
