@@ -404,7 +404,8 @@
 									<div class="flex max-w-full flex-col overflow-hidden pr-4">
 										<div class="flex flex-row w-full justify-between">
 											<h3 class="break-words pb-2 text-lg font-semibold dark:text-darkPrimaryText">
-												{{ post.title }}<CrownIcon v-if="post.encrypted" class="ml-2 inline text-neutral w-5 h-5" />
+												{{ post.title
+												}}<CrownIcon v-if="post.encrypted" class="ml-2 inline text-neutral w-5 h-5 -mt-1" />
 											</h3>
 										</div>
 										<h6

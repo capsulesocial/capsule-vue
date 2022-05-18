@@ -6,19 +6,23 @@
 		<div class="absolute left-0 z-10 flex justify-between items-center w-full">
 			<p
 				class="px-4 transition duration-300 ease-in-out"
-				:class="this.period === `month` ? `text-gray5` : `text-darkPrimaryText`"
+				:class="
+					this.period === `month` ? `text-gray5 dark:text-gray3` : `text-darkPrimaryText dark:text-lightPrimaryText`
+				"
 			>
 				Monthly
 			</p>
 			<p
 				class="px-6 transition duration-300 ease-in-out"
-				:class="this.period === `year` ? `text-gray5` : `text-darkPrimaryText`"
+				:class="
+					this.period === `year` ? `text-gray5 dark:text-gray3` : `text-darkPrimaryText dark:text-lightPrimaryText`
+				"
 			>
 				Yearly
 			</p>
 		</div>
 		<label
-			class="absolute left-0 z-0 w-24 h-8 transition duration-300 ease-in-out transform bg-white border-neutral border-2 rounded-full flex justify-center items-center text-sm"
+			class="absolute left-0 z-0 w-24 h-8 transition duration-300 ease-in-out transform bg-lightBG dark:bg-darkBG border-neutral border-2 rounded-full flex justify-center items-center text-sm"
 			:class="[active ? 'translate-x-full' : 'translate-x-0']"
 		>
 		</label>
