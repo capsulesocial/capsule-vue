@@ -69,7 +69,7 @@
 							$store.state.session.id !== `` &&
 							this.$store.getters[`paymentProfile/getPaymentProfile`](this.$store.state.session.id).paymentsEnabled
 						"
-						href="#"
+						:href="authordashboardURL"
 						class="text-gray5 dark:text-gray3 flex w-full flex-row items-center text-left"
 						><DashboardIcon class="mr-2 h-5 w-5 flex-shrink-0" />Author Dashboard</a
 					>
@@ -203,7 +203,7 @@
 							$store.state.session.id !== `` &&
 							this.$store.getters[`paymentProfile/getPaymentProfile`](this.$store.state.session.id).paymentsEnabled
 						"
-						href="#"
+						:href="authordashboardURL"
 						class="text-gray5 dark:text-gray3 flex w-full flex-row items-center text-left"
 						><DashboardIcon class="mr-2 h-5 w-5 flex-shrink-0" />Author Dashboard</a
 					>
@@ -272,6 +272,7 @@ import { MutationType, namespace as sessionStoreNamespace } from '~/store/sessio
 interface IData {
 	showDropdown: boolean
 	showMobileMenu: boolean
+	authordashboardURL: string
 }
 
 export default Vue.extend({
@@ -300,6 +301,7 @@ export default Vue.extend({
 		return {
 			showDropdown: false,
 			showMobileMenu: false,
+			authordashboardURL: window.location.origin + `/authordashboard`,
 		}
 	},
 	created() {
