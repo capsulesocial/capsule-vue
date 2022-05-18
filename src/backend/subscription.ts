@@ -7,18 +7,8 @@ export interface ISubscriptionResponse {
 	authorID: string
 	tier: { id: string; name: string }
 	isActive: boolean
-	renewDate?: number | undefined
+	renewalDate?: number | undefined
 	subscriptionId: string
-}
-
-export interface ISubCardData {
-	name: string
-	id: string
-	subscriptionId: string
-	tier: string
-	monthlySubs: number
-	renewDate?: number | undefined
-	avatar?: string
 }
 
 export async function getUserSubscriptions(self: string, includeExpired?: boolean) {
