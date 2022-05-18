@@ -4,12 +4,20 @@ import { RootState } from '.'
 import type { ISubscriptionResponse } from '@/backend/subscription'
 import { getUserSubscriptions } from '@/backend/subscription'
 import { ValidationError } from '@/errors'
+import { createDefaultProfile, getProfile } from '@/backend/profile'
 
 export const namespace = `subscriptions`
 
+export interface ISubscriptionWithProfile extends ISubscriptionResponse {
+	authorID: string
+	name: string
+	avatar: string
+	monthsSubbed: number
+}
+
 export interface ISubscriptionStore {
-	active: ISubscriptionResponse[]
-	inactive: ISubscriptionResponse[]
+	active: ISubscriptionWithProfile[]
+	inactive: ISubscriptionWithProfile[]
 }
 
 export const state = (): ISubscriptionStore => ({
@@ -28,10 +36,10 @@ export const ActionType = {
 }
 
 export const mutations: MutationTree<ISubscriptionStore> = {
-	[MutationType.ADD_ACTIVE]: (state, sub: ISubscriptionResponse) => {
+	[MutationType.ADD_ACTIVE]: (state, sub: ISubscriptionWithProfile) => {
 		state.active.push(sub)
 	},
-	[MutationType.ADD_INACTIVE]: (state, sub: ISubscriptionResponse) => {
+	[MutationType.ADD_INACTIVE]: (state, sub: ISubscriptionWithProfile) => {
 		state.inactive.push(sub)
 	},
 	[MutationType.RESET]: (state) => {
@@ -42,15 +50,24 @@ export const mutations: MutationTree<ISubscriptionStore> = {
 
 export const actions = {
 	async [ActionType.FETCH_SUBS](context: ActionContext<ISubscriptionStore, RootState>, id: string) {
-		context.commit(MutationType.RESET)
 		try {
 			const subs = await getUserSubscriptions(id)
-			subs.forEach((s) => {
-				if (s.isActive) {
-					context.commit(MutationType.ADD_ACTIVE, s)
+			context.commit(MutationType.RESET)
+			subs.forEach(async (sub) => {
+				const fetchedProfile = await getProfile(sub.authorID)
+				const profile = fetchedProfile?.profile ?? createDefaultProfile(sub.authorID)
+				const subWithProfile = {
+					...sub,
+					name: profile.name,
+					avatar: profile.avatar,
+					// TODO remove this when this value is provided by capsule-server
+					monthsSubbed: 0,
+				}
+				if (sub.isActive) {
+					context.commit(MutationType.ADD_ACTIVE, subWithProfile)
 					return
 				}
-				context.commit(MutationType.ADD_INACTIVE, s)
+				context.commit(MutationType.ADD_INACTIVE, subWithProfile)
 			})
 		} catch (err) {
 			throw new ValidationError(`Error when fetching subscriptions`)
