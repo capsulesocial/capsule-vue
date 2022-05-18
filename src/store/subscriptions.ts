@@ -52,8 +52,8 @@ export const actions = {
 	async [ActionType.FETCH_SUBS](context: ActionContext<ISubscriptionStore, RootState>, id: string) {
 		try {
 			const subs = await getUserSubscriptions(id)
-			context.commit(MutationType.RESET)
-			subs.forEach(async (sub) => {
+			const subsWithProfiles = []
+			for (const sub of subs) {
 				const fetchedProfile = await getProfile(sub.authorID)
 				const profile = fetchedProfile?.profile ?? createDefaultProfile(sub.authorID)
 				const subWithProfile = {
@@ -63,7 +63,11 @@ export const actions = {
 					// TODO remove this when this value is provided by capsule-server
 					monthsSubbed: 0,
 				}
-				if (sub.isActive) {
+				subsWithProfiles.push(subWithProfile)
+			}
+			context.commit(MutationType.RESET)
+			subsWithProfiles.forEach((subWithProfile) => {
+				if (subWithProfile.isActive) {
 					context.commit(MutationType.ADD_ACTIVE, subWithProfile)
 					return
 				}
