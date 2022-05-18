@@ -27,10 +27,11 @@
 						<!-- Expired subscriptions -->
 						<aside class="w-5/12 -mr-5 -mt-4 p-4 hidden lg:block overflow-y-auto">
 							<div
-								class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation mb-5 flex flex-col overflow-hidden rounded-lg border bg-gradient-to-r py-4 px-6 pb-2 shadow-lg"
+								class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation mb-5 flex flex-col overflow-hidden rounded-lg border bg-gradient-to-r py-4 px-6 shadow-lg"
 								style="backdrop-filter: blur(10px)"
 							>
 								<h3 class="text-primary dark:text-secondary text-base font-semibold mb-4">Expired subscriptions</h3>
+								<p class="textgray5 dark:text-gray3 mt-2 text-sm">you have not subscribe to anyone yet</p>
 							</div>
 							<Footer />
 						</aside>
@@ -73,17 +74,13 @@ export default Vue.extend({
 		}
 	},
 	async created() {
+		// Set color mode
+		this.$setColorMode(this.$store.state.settings.mode)
+		this.$setColor(this.$store.state.settings.color)
 		// Check if logged in user
 		if (this.$store.state.session.id === ``) {
 			this.$router.push(`/`)
 			return
-		}
-		// Set color mode
-		this.$setColorMode(this.$store.state.settings.darkMode)
-		if (document.documentElement.classList.contains(`dark`)) {
-			this.dark = true
-		} else {
-			this.dark = false
 		}
 		await this.initProfile()
 	},
