@@ -1,32 +1,7 @@
 import axios, { AxiosError } from 'axios'
 import { capsuleServer } from './utilities/config'
-import { uint8ArrayToHexString } from './utilities/helpers'
-import { signContent } from './utilities/keys'
+import { genericRequest } from './utilities/request'
 import { SubscriptionTier } from '@/store/paymentProfile'
-
-function getExpTimestamp() {
-	return Date.now() + 5 * 60 * 1000
-}
-
-export async function generateStripeOnboard(username: string) {
-	const data = { username, action: `onboardStripe`, exp: getExpTimestamp() }
-	const { sig } = await signContent(data)
-	const response = await axios.post(`${capsuleServer}/pay/stripe/connect/onboard`, {
-		data,
-		sig: uint8ArrayToHexString(sig),
-	})
-	return response.data.url
-}
-
-export async function refreshStripeAccount(username: string) {
-	const data = { username, action: `refreshStripe`, shouldUpdate: true, exp: getExpTimestamp() }
-	const { sig } = await signContent(data)
-	const response = await axios.post(`${capsuleServer}/pay/stripe/connect/refresh`, {
-		data,
-		sig: uint8ArrayToHexString(sig),
-	})
-	return response.data.url
-}
 
 export async function startSubscriptionPayment(
 	username: string,
@@ -39,20 +14,19 @@ export async function startSubscriptionPayment(
 	try {
 		const data = {
 			username,
-			action: `startSubscription`,
 			tierId: tier._id,
 			amount,
 			period,
 			email,
 			paymentMethodId,
-			exp: getExpTimestamp(),
 		}
-		const { sig } = await signContent(data)
-		const response = await axios.post(`${capsuleServer}/pay/stripe/subscribe/start`, {
-			data,
-			sig: uint8ArrayToHexString(sig),
+		const response = await genericRequest({
+			method: `post`,
+			path: `/pay/stripe/subscribe/start`,
+			username,
+			body: { data },
 		})
-		return response.data
+		return response
 	} catch (err) {
 		if (err instanceof AxiosError && err.response) {
 			throw new Error(err.response.data?.error ?? err.message)
@@ -65,17 +39,16 @@ export async function confirmSubscriptionPayment(username: string, paymentAttemp
 	try {
 		const data = {
 			username,
-			action: `confirmSubscription`,
 			paymentAttemptId,
 			paymentIntentId,
-			exp: getExpTimestamp(),
 		}
-		const { sig } = await signContent(data)
-		const response = await axios.post(`${capsuleServer}/pay/stripe/subscribe/confirm`, {
-			data,
-			sig: uint8ArrayToHexString(sig),
+		const response = await genericRequest({
+			method: `post`,
+			path: `/pay/stripe/subscribe/confirm`,
+			username,
+			body: { data },
 		})
-		return response.data
+		return response
 	} catch (err) {
 		if (err instanceof AxiosError && err.response) {
 			throw new Error(err.response.data?.error ?? err.message)
@@ -85,34 +58,60 @@ export async function confirmSubscriptionPayment(username: string, paymentAttemp
 }
 
 export async function retrievePaymentProfile(username: string) {
-	try {
-		const response = await axios.get(`${capsuleServer}/pay/profile/${username}`)
-		return response.data
-	} catch (err) {
-		// TODO handle error here or ignore?
-		return null
-	}
+	const response = await axios.get(`${capsuleServer}/pay/profile/${username}`)
+	return response.data
 }
 
 export function getCurrencySymbol(currency: string) {
 	switch (currency) {
-		case `gbp`:
-			return `£`
-		case `eur`:
-			return `€`
-		case `inr`:
-			return `₹`
-		case `yen`:
-			return `¥`
+		case `usd`:
+			return `$`
+		case `aed`:
+			return `د.إ`
+		case `aud`:
+			return `A$`
+		case `bgn`:
+			return `лв`
+		case `brl`:
+			return `R$`
 		case `cad`:
 			return `C$`
+		case `chf`:
+			return `Fr`
+		case `czk`:
+			return `Kč`
+		case `dkk`:
+			return `kr`
+		case `eur`:
+			return `€`
+		case `gbp`:
+			return `£`
+		case `hkd`:
+			return `HK$`
+		case `huf`:
+			return `Ft`
+		case `inr`:
+			return `₹`
+		case `jpy`:
+			return `¥`
+		case `mxn`:
+			return `M$`
+		case `myr`:
+			return `RM`
+		case `nok`:
+			return `kr`
+		case `NZD`:
+			return `N$`
+		case `pln`:
+			return `zł`
+		case `ron`:
+			return `lei`
+		case `sek`:
+			return `kr`
 		case `sgd`:
-			return `C$`
-		case `aud`:
 			return `S$`
-		case `usd`:
 		default:
-			return `$`
+			return currency
 	}
 }
 

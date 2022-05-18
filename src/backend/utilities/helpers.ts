@@ -101,3 +101,7 @@ export function calculateReadingTime(wordCount?: number, postImagesLength: numbe
 	const readingTime = Math.round(((textReadingTime + photoReadingTime) * 60) / 100)
 	return readingTime < 1 ? 1 : readingTime
 }
+
+export function getExpTimestamp() {
+	return Date.now() + 5 * 60 * 1000
+}

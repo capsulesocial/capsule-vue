@@ -54,8 +54,13 @@ export const actions = {
 		payload: { username: string },
 	) {
 		const { username } = payload
-		const profile = await retrievePaymentProfile(username)
-		context.commit(MutationType.ADD_PROFILE, profile)
+		try {
+			const profile = await retrievePaymentProfile(username)
+			context.commit(MutationType.ADD_PROFILE, profile)
+		} catch (ex) {
+			context.commit(MutationType.ADD_PROFILE, createDefaultPaymentProfile(username))
+			throw ex
+		}
 	},
 }
 
