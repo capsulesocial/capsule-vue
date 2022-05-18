@@ -22,7 +22,7 @@
 					<button
 						v-for="t in this.$store.getters[`paymentProfile/getPaymentProfile`](this.$store.state.session.id).tiers"
 						:key="t._id"
-						class="from-lightBGStart to-lightBGStop dark:from-darkBG dark:to-darkBG bg-gradient-to-r shadow-sm border rounded-lg w-full flex flex-row justify-between p-5 my-2 transition duration-500 ease-in-out"
+						class="from-lightBGStart to-lightBGStop dark:from-darkBG dark:to-darkBG bg-gradient-to-r shadow-sm border rounded-lg w-full flex flex-row justify-between items-center p-5 my-2 transition duration-500 ease-in-out"
 						:class="
 							$store.state.draft.drafts[$store.state.draft.activeIndex].accessTiers.includes(t._id)
 								? `border-neutral`
@@ -34,14 +34,14 @@
 								: addTier(t._id)
 						"
 					>
-						<div class="flex">
+						<div class="flex items-center">
 							<CircleCheck
 								:isChecked="$store.state.draft.drafts[$store.state.draft.activeIndex].accessTiers.includes(t._id)"
 								class="text-neutral w-6 h-6 flex items-center transition duration-500 ease-in-out"
 							/>
-							<h2 class="font-semibold ml-4 text-xl">{{ t.name }}</h2>
+							<h2 class="font-semibold ml-4 text-xl text-lightPrimaryText dark:text-darkPrimaryText">{{ t.name }}</h2>
 						</div>
-						<p class="transition duration-500 ease-in-out">
+						<p class="transition duration-500 ease-in-out text-gray5 dark:text-gray3">
 							{{
 								$store.state.draft.drafts[$store.state.draft.activeIndex].accessTiers.includes(t._id)
 									? `Can see this post`

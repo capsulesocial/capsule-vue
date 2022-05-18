@@ -5,7 +5,7 @@
 		@click="toggleSwitch"
 	>
 		<label
-			class="absolute left-0 w-7 h-7 mb-2 transition duration-300 ease-in-out transform bg-white border-2 rounded-full flex justify-center items-center"
+			class="absolute left-0 w-7 h-7 mb-2 transition duration-300 ease-in-out transform bg-lightBG dark:bg-darkBG border-2 rounded-full flex justify-center items-center"
 			:class="[active ? 'translate-x-full border-neutral' : 'translate-x-0 border-gray1 dark:border-gray7']"
 		>
 			<CrownIcon class="text-neutral stroke-neutral self-center w-4 h-4" />
