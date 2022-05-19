@@ -249,21 +249,13 @@
 								<div class="relative">
 									<span class="absolute bottom-0 right-0 flex flex-col">
 										<button
-											class="bg-primary focus:outline-none block rounded-lg lg:hidden"
-											style="margin-right: 15.2px; margin-bottom: 15px"
+											style="margin-right: 15.2px; margin-bottom: 15px; padding: 0.6rem 1.7rem"
 											:class="comment !== '' && activeEmotion.label !== '' ? '' : 'opacity-50'"
-											@click="sendComment"
+											class="hidden lg:block bg-primary text-lightButtonText focus:outline-none transform rounded-lg font-bold transition duration-500 ease-in-out hover:shadow-lg"
+											@click.prevent="postComment"
 										>
-											<SendIcon class="m-2 mb-3 ml-3 h-5 w-5 text-white transform rotate-45" />
+											<span class="font-sans" style="font-size: 0.95rem"> Post </span>
 										</button>
-										<BrandedButton
-											style="margin-right: 15.2px; margin-bottom: 15px"
-											text="Post"
-											class="hidden lg:block"
-											:action="sendComment"
-											:thin="true"
-											:class="comment !== '' && activeEmotion.label !== '' ? '' : 'opacity-50'"
-										/>
 									</span>
 								</div>
 							</div>
@@ -396,10 +388,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import sortBy from 'lodash/sortBy'
-import BrandedButton from '@/components/BrandedButton.vue'
 import Comment from '@/components/post/Comment.vue'
 import CommentFilter from '@/components/post/CommentFilter.vue'
-import SendIcon from '@/components/icons/Send.vue'
 import CloseIcon from '@/components/icons/X.vue'
 import StatsIcon from '@/components/icons/Stats.vue'
 import ChevronLeft from '@/components/icons/ChevronLeft.vue'
@@ -459,7 +449,6 @@ interface IData {
 export default Vue.extend({
 	name: `ComponentPostActions`,
 	components: {
-		BrandedButton,
 		Comment,
 		Avatar,
 		CommentFilter,
@@ -467,7 +456,6 @@ export default Vue.extend({
 		StatsIcon,
 		ChevronLeft,
 		ChevronRight,
-		SendIcon,
 	},
 	props: {
 		postCID: {
@@ -620,7 +608,7 @@ export default Vue.extend({
 			this.activeEmotion = this.selectedEmotion
 			this.showEmotions = false
 		},
-		async sendComment() {
+		async postComment() {
 			if (this.activeEmotion.label === ``) {
 				this.$toastError(`You must select a reaction before posting`)
 				return
@@ -644,7 +632,6 @@ export default Vue.extend({
 				// Apply filter to comments, in case new comment was added in filtered category
 				this.comment = ``
 				this.isLoading = true
-				this.filterComments()
 				this.isLoading = false
 				this.selectedEmotion = { label: ``, light: null, dark: null }
 				this.activeEmotion = { label: ``, light: null, dark: null }
@@ -652,7 +639,6 @@ export default Vue.extend({
 				this.filter = ``
 				this.selectedEmotionColor = `neutralLightest`
 				// this.updateFaceStats()
-				this.filterComments()
 				this.updateCommentsStats()
 				this.sendingComment = false
 			} catch (err: unknown) {
