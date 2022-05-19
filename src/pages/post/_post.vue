@@ -413,7 +413,7 @@ export default Vue.extend({
 
 		// Using spread operator so that post.data.content getting
 		// assigned before signature verification doesn't affect it
-		verifyPostAuthenticity({ ...post }).then((verified) => {
+		verifyPostAuthenticity({ ...post.data }, post.sig, post.public_key).then((verified) => {
 			if (!verified) {
 				this.$toastError(`Post not verified!`)
 			}
