@@ -29,7 +29,7 @@
 				:numberOfDrafts="draftSubset.length"
 				:inWidget="true"
 			/>
-			<p class="text-primary">
+			<p class="text-primary mt-2">
 				<button class="focus:outline-none text-sm" @click="handleDraftPopup">Show all</button>
 			</p>
 		</div>
