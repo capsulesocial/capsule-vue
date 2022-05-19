@@ -14,12 +14,14 @@ export interface Tier {
 	yearlyPrice: number
 }
 
-export interface Tiers {
+export interface IStore {
 	tierList: Tier[]
+	subscriptionsEnabled: boolean
 }
 
-export const state = (): Tiers => ({
+export const state = (): IStore => ({
 	tierList: [],
+	subscriptionsEnabled: false,
 })
 
 export const ActionType = {
@@ -28,28 +30,37 @@ export const ActionType = {
 
 export const MutationType = {
 	SET_TIERS: `setTiers`,
+	SET_SUBSCRIPTIONS_ENABLED: `setSubscriptionsEnabled`,
 	LOGOUT: `logout`,
 }
 
-export const getters: GetterTree<Tiers, RootState> = {
-	tiers: (state: Tiers): Tier[] => {
+export const getters: GetterTree<IStore, RootState> = {
+	tiers: (state: IStore): Tier[] => {
 		return state.tierList
+	},
+	enabledSubscriptions: (state: IStore): boolean => {
+		return state.subscriptionsEnabled
 	},
 }
 
-export const mutations: MutationTree<Tiers> = {
+export const mutations: MutationTree<IStore> = {
 	[MutationType.SET_TIERS]: (state, t: Tier[]) => {
 		state.tierList = t
 	},
+	[MutationType.SET_SUBSCRIPTIONS_ENABLED]: (state, enabled: boolean = false) => {
+		state.subscriptionsEnabled = enabled
+	},
 	[MutationType.LOGOUT]: (state) => {
 		state.tierList = []
+		state.subscriptionsEnabled = false
 	},
 }
 
 // Fetch my tiers
 export const actions = {
-	async [ActionType.GET_TIERS](context: ActionContext<Tiers, RootState>, id: string) {
+	async [ActionType.GET_TIERS](context: ActionContext<IStore, RootState>, id: string) {
 		const profile = await retrievePaymentProfile(id)
-		context.commit(MutationType.SET_TIERS, profile)
+		context.commit(MutationType.SET_TIERS, profile.tiers)
+		context.commit(MutationType.SET_SUBSCRIPTIONS_ENABLED, profile.paymentsEnabled)
 	},
 }
