@@ -134,6 +134,7 @@ export default Vue.extend({
 		if (this.$store.state.draft.drafts[this.$store.state.draft.activeIndex] === undefined) {
 			this.$store.commit(`draft/setActiveDraft`, 0)
 		}
+		this.$store.dispatch(`subscriptionTiers/getTiers`, this.$store.state.session.id)
 	},
 	methods: {
 		checkPost() {
