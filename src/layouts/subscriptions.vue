@@ -31,7 +31,7 @@
 								style="backdrop-filter: blur(10px)"
 							>
 								<h3 class="text-primary dark:text-secondary text-base font-semibold mb-4">Expired subscriptions</h3>
-								<p class="textgray5 dark:text-gray3 mt-2 text-sm">you have not subscribe to anyone yet</p>
+								<p class="textgray5 dark:text-gray3 text-sm pb-1">you have no expired subscriptions yet</p>
 							</div>
 							<Footer />
 						</aside>
