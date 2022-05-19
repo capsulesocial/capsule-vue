@@ -7,6 +7,7 @@ import { nodeUrl, capsuleServer, sigValidity } from './utilities/config'
 import { IRepost } from './reposts'
 import { decryptData, encryptAndSignData } from './crypto'
 import { getUserInfoNEAR } from './near'
+import { genericRequest } from './utilities/request'
 export interface Tag {
 	name: string
 }
@@ -132,7 +133,12 @@ export async function sendEncryptedPost(data: IEncryptedPost, tiers: Array<strin
 	const ipfsData: ISignedIPFSObject<IEncryptedPost> = { data: post, sig, public_key: publicKey }
 
 	const cid = await ipfs().sendJSONData(ipfsData)
-	await axios.post(`${capsuleServer}/content`, { key, data: ipfsData, counter, cid, tiers })
+	await genericRequest({
+		method: `post`,
+		path: `/content`,
+		body: { key, data: ipfsData, counter, cid, tiers },
+		username: post.authorID,
+	})
 	await axios.post(`${nodeUrl()}/content`, {
 		cid,
 		data: ipfsData,
@@ -183,14 +189,13 @@ export function isRegularPost(post: Post): post is IRegularPost {
 }
 
 async function getEncryptionKeys(username: string, cid: string) {
-	const exp = Date.now() + sigValidity
-	const { sig } = await signContent({ username, cid, exp, action: `getEncKey` })
-
 	try {
-		const res = await axios.get<{ key: string; counter: string }>(
-			`${capsuleServer}/content/${cid}?username=${username}&sig=${uint8ArrayToHexString(sig)}&exp=${exp}`,
-		)
-		return res.data
+		const res = await genericRequest<unknown, unknown, { key: string; counter: string }>({
+			method: `get`,
+			path: `/content/${cid}`,
+			username,
+		})
+		return res
 	} catch (err) {
 		if (err instanceof AxiosError && err.response) {
 			return { error: err.response.data.error }

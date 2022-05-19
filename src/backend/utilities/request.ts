@@ -2,15 +2,16 @@ import axios, { Method, AxiosError, AxiosRequestConfig } from 'axios'
 import { getToken } from '../tokenAuth'
 import { capsuleServer } from './config'
 
-export interface IGenericRequestConfig<T> {
+export interface IGenericRequestConfig<T, S> {
 	method: Method
 	path: string
 	body?: T
 	username?: string
+	params?: S
 }
 
-export async function genericRequest<T, R = any>(config: IGenericRequestConfig<T>) {
-	const { method, path, body, username } = config
+export async function genericRequest<T, S, R = any>(config: IGenericRequestConfig<T, S>) {
+	const { method, path, body, username, params } = config
 	let authToken: null | string = null
 	if (username) {
 		authToken = await getToken(username)
@@ -20,6 +21,7 @@ export async function genericRequest<T, R = any>(config: IGenericRequestConfig<T
 		method,
 		url: `${capsuleServer}${path}`,
 		data: body,
+		...(params ? { params } : {}),
 	}
 
 	try {
