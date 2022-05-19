@@ -2,12 +2,25 @@
 	<div
 		class="w-full sm:w-56 mr-2 mb-4 flex flex-col border border-lightBorder dark:border-darkBorder shadow-sm rounded-lg from-lightBGStart to-lightBGStop dark:from-darkBG dark:to-darkBG bg-gradient-to-r items-center p-4"
 	>
-		<Avatar
-			:avatar="avatar"
-			:authorID="s.authorID"
-			:size="`w-12 h-12 xl:w-14 xl:h-14`"
-			class="mb-4 border border-lightBorder dark:border-darkBorder"
-		/>
+		<div class="w-full flex justify-end -mt-2">
+			<div class="icon relative flex items-center">
+				<button class="focus:outline-none text-gray5 dark:text-gray3 ml-2" @click.stop="toggleDropdownDownload">
+					<MoreIcon />
+				</button>
+				<div
+					v-show="showDownload"
+					class="bg-lightBG dark:bg-darkBG dark:text-darkPrimaryText text-lightPrimaryText border-lightBorder modal-animation absolute z-10 flex w-44 flex-col rounded-lg border p-2 shadow-lg"
+					:class="$colorMode.dark ? `dropdownSubOpenDark` : `dropdownSubOpen`"
+					style="top: 35px; right: -5px"
+				>
+					<button class="focus:outline-none text-primary flex justify-center">
+						<DownloadIcon class="fill-current p-1" />
+						<span class="text-primary ml-1 self-center text-sm">Download receipt</span>
+					</button>
+				</div>
+			</div>
+		</div>
+		<Avatar :avatar="avatar" :authorID="s.authorID" :size="`w-12 h-12 xl:w-14 xl:h-14`" class="mb-4" />
 		<h5 v-if="s.name !== ``" class="font-semibold text-lg text-lightPrimaryText dark:text-darkPrimaryText">
 			{{ s.name }}
 		</h5>
@@ -20,11 +33,20 @@
 			<CrownIcon class="text-neutral mr-2 w-5 h-5" /><span class="truncate text-neutral">{{ s.tier.name }}</span>
 		</div>
 		<p class="text-gray5 dark:text-gray3 text-sm w-full mb-2">
-			Total number of months subscribed: <span class="font-semibold">{{ s.monthsSubbed }}</span>
+			Total number of months subscribed: <span class="font-semibold">{{ s.monthsSubbed + 1 }}</span>
 		</p>
+		<p class="text-gray5 dark:text-gray3 text-sm w-full mb-2">Months in a row: <span class="font-semibold">0</span></p>
 		<p class="text-gray5 dark:text-gray3 text-sm w-full">
 			Renewal date: <span class="font-semibold">{{ $formatDate(s.renewalDate) }}</span>
 		</p>
+		<div class="flex flex-col items-end w-full mt-4 pr-1">
+			<p class="text-primary">
+				<button class="focus:outline-none text-sm">Change billing</button>
+			</p>
+			<p class="text-negative mt-1">
+				<button class="focus:outline-none text-sm">Cancel subscription</button>
+			</p>
+		</div>
 	</div>
 </template>
 
@@ -33,14 +55,17 @@ import Vue, { PropType } from 'vue'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import Avatar from '@/components/Avatar.vue'
 import CrownIcon from '@/components/icons/Crown.vue'
+import MoreIcon from '@/components/icons/More.vue'
+import DownloadIcon from '@/components/icons/Download.vue'
 import { ISubscriptionWithProfile } from '@/store/subscriptions'
 
 interface IData {
 	avatar: string | ArrayBuffer
+	showDownload: Boolean
 }
 
 export default Vue.extend({
-	components: { Avatar, CrownIcon },
+	components: { Avatar, CrownIcon, MoreIcon, DownloadIcon },
 	props: {
 		s: {
 			type: Object as PropType<ISubscriptionWithProfile>,
@@ -50,12 +75,52 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			avatar: ``,
+			showDownload: false,
 		}
 	},
 	async created() {
 		if (this.s.avatar) {
 			this.avatar = await getPhotoFromIPFS(this.s.avatar)
 		}
+		window.addEventListener(`click`, this.handleDropdown, false)
+	},
+	methods: {
+		toggleDropdownDownload() {
+			this.showDownload = !this.showDownload
+		},
+		handleDropdown(e: any): void {
+			if (!e.target || e.target.parentNode === null || e.target.parentNode.classList === undefined) {
+				return
+			}
+			if (!e.target.parentNode.classList.contains(`icon`)) {
+				this.showDownload = false
+			}
+		},
 	},
 })
 </script>
+
+<style>
+.dropdownSubOpen::before {
+	content: '';
+	position: absolute;
+	top: -0.5rem;
+	right: 0.5rem;
+	transform: rotate(45deg);
+	width: 1rem;
+	height: 1rem;
+	background-color: #fff;
+	border-radius: 2px;
+}
+.dropdownSubOpenDark::before {
+	content: '';
+	position: absolute;
+	top: -0.5rem;
+	right: 0.5rem;
+	transform: rotate(45deg);
+	width: 1rem;
+	height: 1rem;
+	background-color: #121212;
+	border-radius: 2px;
+}
+</style>
