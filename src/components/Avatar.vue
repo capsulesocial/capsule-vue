@@ -3,13 +3,13 @@
 		<img
 			v-if="avatar !== `` && avatar !== null"
 			:src="avatar"
-			class="border-lightBorder rounded-lg border object-cover"
+			class="border border-lightBorder dark:border-darkBorder rounded-lg object-cover"
 			:class="size"
 		/>
 		<img
 			v-else
 			:src="avatarList[usernameToPicture(authorID)]"
-			class="border-lightBorder rounded-lg border object-cover"
+			class="border border-lightBorder dark:border-darkBorder rounded-lg object-cover"
 			:class="size"
 		/>
 	</button>
@@ -17,13 +17,13 @@
 		<img
 			v-if="avatar !== `` && avatar !== null"
 			:src="avatar"
-			class="border-lightBorder rounded-lg border object-cover"
+			class="border border-lightBorder dark:border-darkBorder rounded-lg object-cover"
 			:class="size"
 		/>
 		<img
 			v-else
 			:src="avatarList[usernameToPicture(authorID)]"
-			class="border-lightBorder rounded-lg border object-cover"
+			class="border border-lightBorder dark:border-darkBorder rounded-lg object-cover"
 			:class="size"
 		/>
 	</span>
