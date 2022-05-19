@@ -20,7 +20,7 @@
 				<!-- Tier list -->
 				<div class="flex flex-col mt-6">
 					<button
-						v-for="t in this.$store.getters[`paymentProfile/getPaymentProfile`](this.$store.state.session.id).tiers"
+						v-for="t in this.$store.getters[`subscriptionTiers/tiers`]"
 						:key="t._id"
 						class="from-lightBGStart to-lightBGStop dark:from-darkBG dark:to-darkBG bg-gradient-to-r shadow-sm border rounded-lg w-full flex flex-row justify-between items-center p-5 my-2 transition duration-500 ease-in-out"
 						:class="
