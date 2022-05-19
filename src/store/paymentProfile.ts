@@ -36,6 +36,7 @@ export const state = (): PaymentProfileMap => ({
 
 export const MutationType = {
 	ADD_PROFILE: `addProfile`,
+	RESET: `reset`,
 }
 
 export const ActionType = {
@@ -45,6 +46,9 @@ export const ActionType = {
 export const mutations: MutationTree<PaymentProfileMap> = {
 	[MutationType.ADD_PROFILE]: (state, paymentProfile) => {
 		Vue.set(state.profiles, paymentProfile.username, paymentProfile)
+	},
+	[MutationType.RESET]: (state) => {
+		state.profiles = {}
 	},
 }
 
