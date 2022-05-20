@@ -13,7 +13,6 @@ export async function startSubscriptionPayment(
 	const amount = getAmountFromTier(period, tier)
 	try {
 		const data = {
-			username,
 			tierId: tier._id,
 			amount,
 			period,
@@ -38,7 +37,6 @@ export async function startSubscriptionPayment(
 export async function confirmSubscriptionPayment(username: string, paymentAttemptId: string, paymentIntentId: string) {
 	try {
 		const data = {
-			username,
 			paymentAttemptId,
 			paymentIntentId,
 		}
