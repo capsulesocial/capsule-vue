@@ -37,7 +37,6 @@ export async function startSubscriptionPayment(
 export async function confirmSubscriptionPayment(username: string, paymentAttemptId: string, paymentIntentId: string) {
 	try {
 		const data = {
-			username,
 			paymentAttemptId,
 			paymentIntentId,
 		}
