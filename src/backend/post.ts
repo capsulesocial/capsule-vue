@@ -190,7 +190,7 @@ export function isRegularPost(post: Post): post is IRegularPost {
 
 async function getEncryptionKeys(username: string, cid: string) {
 	try {
-		const res = await genericRequest<unknown, unknown, { key: string; counter: string }>({
+		const res = await genericRequest<{ key: string; counter: string }>({
 			method: `get`,
 			path: `/content/${cid}`,
 			username,
