@@ -121,8 +121,8 @@ function getScope() {
 		<h1 class="title content" id="closeText" style="display: none;">You can close this window now</h1>
 	  </div>
 	  <script
-		src="https://scripts.toruswallet.io/broadcastChannel_4_12_1.js"
-		integrity="sha384-8WTXJv+VzHFI2P9OUntzR5Cra4kj0ppsri2XK1Cr3GD15YyKLpRL7s9VnOx4Xf/k"
+		src="https://scripts.toruswallet.io/broadcastChannel_5_0_2.js"
+		integrity="sha384-Bu0bRAeSlh2jpBuUxKk5ivkdotaHH37cQ2XiV20EmFJmghb41D0f8xME/M1WZxFC"
 		crossorigin="anonymous"
 	  ></script>
 	  <script>
@@ -238,7 +238,7 @@ function getScope() {
 					hashParams,
 				  });
 				} else {
-				  window.close();
+				  // window.close();
 				  showCloseText();
 				}
 			  });
@@ -258,7 +258,7 @@ function getScope() {
 		  } catch (err) {
 			console.error(err, "service worker error in redirect");
 			bc && bc.close();
-			window.close();
+			// window.close();
 			showCloseText();
 		  }
 		} else {
@@ -285,7 +285,7 @@ function getScope() {
 		  } catch (err) {
 			console.error(err, "service worker error in preopen");
 			bc && bc.close();
-			window.close();
+			// window.close();
 			showCloseText();
 		  }
 		}
