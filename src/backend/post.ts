@@ -3,7 +3,7 @@ import axios, { AxiosError } from 'axios'
 import { signContent, verifyContent } from './utilities/keys'
 import ipfs from './utilities/ipfs'
 import { hexStringToUint8Array, isError, ISignedIPFSObject, uint8ArrayToHexString } from './utilities/helpers'
-import { nodeUrl, capsuleServer, sigValidity } from './utilities/config'
+import { nodeUrl } from './utilities/config'
 import { IRepost } from './reposts'
 import { decryptData, encryptAndSignData } from './crypto'
 import { getUserInfoNEAR } from './near'
@@ -202,22 +202,6 @@ async function getEncryptionKeys(username: string, cid: string) {
 		}
 		throw err
 	}
-}
-
-export async function updateLockedPostTiers(cid: string, tiers: Array<string>) {
-	const exp = Date.now() + sigValidity
-	const { sig } = await signContent({ cid, exp, tiers, action: `updateLPostTiers` })
-
-	try {
-		await axios.post(`${capsuleServer}/content/${cid}`, { tiers, exp, sig })
-	} catch (err) {
-		if (err instanceof AxiosError && err.response) {
-			return { error: err.response.data.error }
-		}
-		throw err
-	}
-
-	return true
 }
 
 export interface IGetPostsOptions {
