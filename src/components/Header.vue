@@ -321,6 +321,7 @@ export default Vue.extend({
 		}),
 		disconnect(): void {
 			this.endSession()
+			localStorage.removeItem(`serverAuthToken`)
 			const keystore = new keyStores.BrowserLocalStorageKeyStore()
 			keystore.clear()
 			this.$store.commit(`draft/clearDrafts`)
