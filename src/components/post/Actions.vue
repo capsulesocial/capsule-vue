@@ -246,18 +246,24 @@
 									name="body"
 									placeholder="Be the first one to comment on this post..."
 								/>
-								<div class="relative">
-									<span class="absolute bottom-0 right-0 flex flex-col">
-										<button
-											style="margin-right: 15.2px; margin-bottom: 15px; padding: 0.6rem 1.7rem"
-											:class="comment !== '' && activeEmotion.label !== '' ? '' : 'opacity-50'"
-											class="hidden lg:block bg-primary text-lightButtonText focus:outline-none transform rounded-lg font-bold transition duration-500 ease-in-out hover:shadow-lg"
-											@click.prevent="postComment"
-										>
-											<span class="font-sans" style="font-size: 0.95rem"> Post </span>
-										</button>
-									</span>
-								</div>
+								<span class="absolute bottom-0 right-0 flex flex-col">
+									<button
+										class="bg-primary focus:outline-none block rounded-lg lg:hidden"
+										style="margin-right: 15.2px; margin-bottom: 15px"
+										:class="comment !== '' && activeEmotion.label !== '' ? '' : 'opacity-50'"
+										@click.prevent="postComment"
+									>
+										<SendIcon class="m-2 mb-3 ml-3 h-5 w-5 text-white transform rotate-45" />
+									</button>
+									<BrandedButton
+										style="margin-right: 15.2px; margin-bottom: 15px"
+										text="Post"
+										class="hidden lg:block"
+										:action="postComment"
+										:thin="true"
+										:class="comment !== '' && activeEmotion.label !== '' ? '' : 'opacity-50'"
+									/>
+								</span>
 							</div>
 							<!-- Back side: Choose reaction -->
 							<div
@@ -395,6 +401,8 @@ import StatsIcon from '@/components/icons/Stats.vue'
 import ChevronLeft from '@/components/icons/ChevronLeft.vue'
 import ChevronRight from '@/components/icons/ChevronRight.vue'
 import Avatar from '@/components/Avatar.vue'
+import SendIcon from '@/components/icons/Send.vue'
+import BrandedButton from '@/components/BrandedButton.vue'
 
 import { feelings } from '@/config/config'
 import { faces, faceGroupings, IFace } from '@/config/faces'
@@ -456,6 +464,8 @@ export default Vue.extend({
 		StatsIcon,
 		ChevronLeft,
 		ChevronRight,
+		BrandedButton,
+		SendIcon,
 	},
 	props: {
 		postCID: {
