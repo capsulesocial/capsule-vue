@@ -17,17 +17,17 @@ export interface SubsTransactions {
 }
 
 export async function getUserSubscriptions(self: string, includeExpired?: boolean) {
-	const res = await genericRequest({
+	const res = await genericRequest<unknown, { data: Array<ISubscriptionResponse> }>({
 		method: `get`,
 		path: `/subscription`,
 		username: self,
-		...(includeExpired ? { params: { expired: true } } : {}),
+		params: { expired: Boolean(includeExpired) },
 	})
 
 	// to add:
 	// 1. number of months in a row
 	// 2. total number of months subscribed
-	return res.data as ISubscriptionResponse[]
+	return res.data
 }
 
 export async function cancelSubscription(username: string, subscriptionId: string) {
@@ -40,11 +40,11 @@ export async function cancelSubscription(username: string, subscriptionId: strin
 }
 
 export async function getSubscriptionTransactions(self: string, subscriptionId: string) {
-	const res = await genericRequest({
+	const res = await genericRequest<{ data: Array<SubsTransactions> }>({
 		method: `get`,
 		path: `/subscription/transactions/${subscriptionId}`,
 		username: self,
 	})
 
-	return res.data as SubsTransactions[]
+	return res.data
 }
