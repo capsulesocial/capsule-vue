@@ -534,26 +534,29 @@ export default Vue.extend({
 		this.isLoading = false
 	},
 	mounted() {
-		// comment pagination event handler
-		if (this.$route.name !== `post-post`) {
-			// Post card popup eventhandler
-			const postActions = this.$refs.postActions as HTMLElement
-			postActions.parentElement?.addEventListener(`scroll`, this.handleScroll)
-			return
-		}
-		// Full page event handler
-		const postActions = document.getElementById(`post`) as HTMLElement
-		postActions.addEventListener(`scroll`, this.handleScroll)
+		this.addScrollHandler()
 	},
 	methods: {
+		addScrollHandler() {
+			// comment pagination event handler
+			if (this.$route.name !== `post-post`) {
+				// Post card popup eventhandler
+				const postActions = this.$refs.postActions as HTMLElement
+				postActions.parentElement?.addEventListener(`scroll`, this.handleScroll)
+				return
+			}
+			// Full page event handler
+			const postActions = document.getElementById(`post`) as HTMLElement
+			postActions.addEventListener(`scroll`, this.handleScroll)
+		},
 		async initComments() {
 			this.comments = await getCommentsOfPost(this.postCID, this.currentCommentsOffset, this.commentsLimit)
 			if (this.comments.length < 10) {
 				this.noMoreComments = true
 				this.removeScrollListener()
 			}
+			this.currentCommentsOffset += this.commentsLimit
 			// get comment stats
-			// this.updateFaceStats()
 			await this.updateCommentsStats()
 			if (this.$store.state.session.avatar !== ``) {
 				getPhotoFromIPFS(this.$store.state.session.avatar).then((a) => {
@@ -589,10 +592,10 @@ export default Vue.extend({
 		setFilter(reaction: string): void {
 			this.filter = reaction
 			this.currentCommentsOffset = 0
+			this.comments = []
 			this.noMoreComments = false
-			this.isLoading = true
+			this.addScrollHandler()
 			this.filterComments()
-			this.isLoading = false
 		},
 		setEmotion(e: PointerEvent, r: { label: string; light: any; dark: any }) {
 			if (!e.target) {
@@ -641,18 +644,12 @@ export default Vue.extend({
 				const c = createComment(this.$store.state.session.id, this.comment, this.activeEmotion.label, this.postCID)
 				const _id = await sendComment(c, `comment`)
 				this.comments.unshift({ _id, ...c })
-				// Apply filter to comments, in case new comment was added in filtered category
 				this.comment = ``
-				this.isLoading = true
-				this.filterComments()
-				this.isLoading = false
 				this.selectedEmotion = { label: ``, light: null, dark: null }
 				this.activeEmotion = { label: ``, light: null, dark: null }
 				this.emotion = ``
 				this.filter = ``
 				this.selectedEmotionColor = `neutralLightest`
-				// this.updateFaceStats()
-				this.filterComments()
 				this.updateCommentsStats()
 				this.sendingComment = false
 			} catch (err: unknown) {
@@ -660,34 +657,46 @@ export default Vue.extend({
 			}
 		},
 		async filterComments() {
-			// Fetch comments
-			let moreComments: ICommentData[] = []
-			if (this.filter === ``) {
-				moreComments = await getCommentsOfPost(this.postCID, this.currentCommentsOffset, this.commentsLimit)
-			} else if (this.filter === `positive` || this.filter === `neutral` || this.filter === `negative`) {
-				// Get a list of comments with multiple emotions under the same category
-				moreComments = await getCommentsOfPost(
-					this.postCID,
-					this.currentCommentsOffset,
-					this.commentsLimit,
-					undefined,
-					this.filter,
-				)
+			if (this.isLoading) {
 				return
-			} else {
-				// Get a list of comments with a specific emotion
-				moreComments = await getCommentsOfPost(
-					this.postCID,
-					this.currentCommentsOffset,
-					this.commentsLimit,
-					this.filter.charAt(0).toLowerCase() + this.filter.replace(/\s/g, ``).substring(1),
-				)
 			}
-			if (moreComments.length < 10) {
-				this.noMoreComments = true
-				this.removeScrollListener()
+			let moreComments: ICommentData[] = []
+			this.isLoading = true
+			try {
+				// Fetch comments
+				if (this.filter === ``) {
+					moreComments = await getCommentsOfPost(this.postCID, this.currentCommentsOffset, this.commentsLimit)
+				} else if (this.filter === `positive` || this.filter === `neutral` || this.filter === `negative`) {
+					// Get a list of comments with multiple emotions under the same category
+					moreComments = await getCommentsOfPost(
+						this.postCID,
+						this.currentCommentsOffset,
+						this.commentsLimit,
+						undefined,
+						this.filter,
+					)
+					return
+				} else {
+					// Get a list of comments with a specific emotion
+					moreComments = await getCommentsOfPost(
+						this.postCID,
+						this.currentCommentsOffset,
+						this.commentsLimit,
+						this.filter.charAt(0).toLowerCase() + this.filter.replace(/\s/g, ``).substring(1),
+					)
+				}
+			} catch (err) {
+				this.isLoading = false
+			} finally {
+				this.comments = this.comments.concat(moreComments)
+				this.isLoading = false
+				if (moreComments.length < 10) {
+					this.noMoreComments = true
+					this.removeScrollListener()
+				} else {
+					this.currentCommentsOffset += this.commentsLimit
+				}
 			}
-			this.comments = this.comments.concat(moreComments)
 		},
 		getStyle(emotionType: string): string {
 			if (feelings.positive.has(emotionType)) {
@@ -733,10 +742,7 @@ export default Vue.extend({
 			const { scrollTop, scrollHeight, clientHeight } = e.srcElement as HTMLElement
 			if (scrollTop + clientHeight >= scrollHeight - 5) {
 				if (!this.isLoading && !this.noMoreComments) {
-					this.isLoading = true
-					this.currentCommentsOffset += this.commentsLimit
 					this.filterComments()
-					this.isLoading = false
 				}
 			}
 		},
