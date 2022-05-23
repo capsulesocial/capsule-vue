@@ -553,7 +553,6 @@ export default Vue.extend({
 				this.removeScrollListener()
 			}
 			// get comment stats
-			// this.updateFaceStats()
 			await this.updateCommentsStats()
 			if (this.$store.state.session.avatar !== ``) {
 				getPhotoFromIPFS(this.$store.state.session.avatar).then((a) => {
@@ -641,18 +640,12 @@ export default Vue.extend({
 				const c = createComment(this.$store.state.session.id, this.comment, this.activeEmotion.label, this.postCID)
 				const _id = await sendComment(c, `comment`)
 				this.comments.unshift({ _id, ...c })
-				// Apply filter to comments, in case new comment was added in filtered category
 				this.comment = ``
-				this.isLoading = true
-				this.filterComments()
-				this.isLoading = false
 				this.selectedEmotion = { label: ``, light: null, dark: null }
 				this.activeEmotion = { label: ``, light: null, dark: null }
 				this.emotion = ``
 				this.filter = ``
 				this.selectedEmotionColor = `neutralLightest`
-				// this.updateFaceStats()
-				this.filterComments()
 				this.updateCommentsStats()
 				this.sendingComment = false
 			} catch (err: unknown) {
