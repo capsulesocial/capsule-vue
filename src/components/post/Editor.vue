@@ -656,16 +656,16 @@ export default Vue.extend({
 			if (checksOnly) {
 				return true
 			}
-			this.sendPost(clean, category, tags, featuredPhotoCID, featuredPhotoCaption, postImages)
+			this.sendPost(clean, category, tags, postImages, featuredPhotoCID, featuredPhotoCaption)
 			return true
 		},
 		async sendPost(
 			clean: string,
 			category: string,
 			tags: Tag[],
-			featuredPhotoCID?: string | null,
-			featuredPhotoCaption?: string | null,
-			postImages?: Array<string>,
+			postImages: Array<string>,
+			featuredPhotoCID: string | null,
+			featuredPhotoCaption: string | null,
 		): Promise<void> {
 			const p = createRegularPost(
 				this.title,
@@ -674,9 +674,9 @@ export default Vue.extend({
 				category,
 				tags,
 				this.$store.state.session.id,
+				postImages,
 				featuredPhotoCID,
 				featuredPhotoCaption,
-				postImages,
 			)
 			try {
 				const cid = await sendRegularPost(p)

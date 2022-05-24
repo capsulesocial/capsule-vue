@@ -24,6 +24,8 @@ export const state = (): DraftState => ({
 			category: ``,
 			timestamp: 0,
 			postImages: [],
+			version: `v1`,
+			lastUpdated: 0,
 		},
 	],
 	activeIndex: 0,
@@ -95,9 +97,12 @@ export const mutations: MutationTree<DraftState> = {
 			content: ``,
 			featuredPhotoCID: null,
 			featuredPhotoCaption: null,
+			postImages: [],
 			tags: [],
 			category: ``,
 			timestamp: 0,
+			version: `v1`,
+			lastUpdated: 0,
 		})
 		state.activeIndex = state.drafts.length - 1
 	},
@@ -111,9 +116,12 @@ export const mutations: MutationTree<DraftState> = {
 				content: ``,
 				featuredPhotoCID: null,
 				featuredPhotoCaption: null,
+				postImages: [],
 				tags: [],
 				category: ``,
 				timestamp: 0,
+				version: `v1`,
+				lastUpdated: 0,
 			})
 			state.activeIndex = 0
 		}
@@ -131,9 +139,12 @@ export const mutations: MutationTree<DraftState> = {
 				content: ``,
 				featuredPhotoCID: null,
 				featuredPhotoCaption: null,
+				postImages: [],
 				tags: [],
 				category: ``,
 				timestamp: 0,
+				version: `v1`,
+				lastUpdated: 0,
 			})
 		}
 		state.activeIndex = state.drafts.length - 1
@@ -149,9 +160,12 @@ export const mutations: MutationTree<DraftState> = {
 				content: ``,
 				featuredPhotoCID: null,
 				featuredPhotoCaption: null,
+				postImages: [],
 				tags: [],
 				category: ``,
 				timestamp: 0,
+				version: `v1`,
+				lastUpdated: 0,
 			},
 		]
 		state.activeIndex = 0
