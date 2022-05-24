@@ -6,6 +6,7 @@ export interface ISubscriptionResponse {
 	isActive: boolean
 	renewalDate?: number | undefined
 	subscriptionId: string
+	createdAt: number
 }
 
 export interface SubsTransactions {
@@ -16,12 +17,11 @@ export interface SubsTransactions {
 	status: string
 }
 
-export async function getUserSubscriptions(self: string, includeExpired?: boolean) {
-	const res = await genericRequest<unknown, { data: Array<ISubscriptionResponse> }>({
+export async function getUserSubscriptions(self: string) {
+	const res = await genericRequest<{ data: Array<ISubscriptionResponse> }>({
 		method: `get`,
 		path: `/subscription`,
 		username: self,
-		params: { expired: Boolean(includeExpired) },
 	})
 
 	// to add:
