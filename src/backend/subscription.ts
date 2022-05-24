@@ -6,7 +6,7 @@ export interface ISubscriptionResponse {
 	isActive: boolean
 	renewalDate?: number | undefined
 	subscriptionId: string
-	createdAt: number
+	startedOn: number
 }
 
 export interface SubsTransactions {
