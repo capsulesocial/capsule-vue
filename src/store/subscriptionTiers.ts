@@ -8,6 +8,8 @@ export const namespace = `subscriptionTiers`
 export interface Tier {
 	_id?: string
 	name: string
+	description?: string
+	details?: string
 	monthlyEnabled: boolean
 	monthlyPrice: number
 	yearlyEnabled: boolean
