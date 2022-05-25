@@ -55,6 +55,18 @@ export async function confirmSubscriptionPayment(username: string, paymentAttemp
 	}
 }
 
+export async function getBillingPortalUrl(username: string, subscriptionId: string): Promise<string> {
+	const data = { subscriptionId }
+	const response = await genericRequest({
+		method: `post`,
+		path: `/pay/stripe/connect/billingportal`,
+		username,
+		body: { data },
+	})
+
+	return response.url as string
+}
+
 export async function retrievePaymentProfile(username: string) {
 	const response = await axios.get(`${capsuleServer}/pay/profile/${username}`)
 	return response.data
