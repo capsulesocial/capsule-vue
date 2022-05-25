@@ -3,7 +3,7 @@
 		<div v-if="userIsSubscribed">
 			<!-- Desktop -->
 			<div
-				class="friendbtn text-grey5 hidden rounded-lg bg-white px-5 text-sm font-semibold shadow-sm border border-lightBorder transition duration-300 ease-in-out hover:bg-black hover:text-white xl:block"
+				class="friendbtn text-grey5 hidden rounded-lg bg-white px-5 text-sm font-semibold text-neutral shadow-sm border border-lightBorder transition duration-300 ease-in-out hover:text-negative hover:border-negative xl:block"
 				style="padding-top: 0.4rem; padding-bottom: 0.4rem"
 			>
 				<span class="following">Subscribed</span>
