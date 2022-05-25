@@ -53,7 +53,7 @@
 			<div class="flex items-center my-4">
 				<button class="text-primary py-2 text-sm flex flex-row items-center mr-10">
 					<CardIcon class="h-5 w-5 mr-2" />
-					<p class="focus:outline-none text-sm">change billing method/period</p>
+					<p class="focus:outline-none text-sm">change billing method</p>
 				</button>
 				<button class="text-negative py-2 text-sm flex flex-row items-center">
 					<CancelIcon class="h-5 w-5 mr-2" />
