@@ -3,12 +3,12 @@
 		<div v-if="userIsSubscribed">
 			<!-- Desktop -->
 			<div
-				class="friendbtn text-grey5 hidden rounded-lg bg-white px-5 text-sm font-semibold text-neutral shadow-sm border border-lightBorder transition duration-300 ease-in-out hover:text-negative hover:border-negative xl:block"
+				class="friendbtn text-grey5 hidden rounded-lg bg-white px-5 text-sm font-semibold text-neutral shadow-sm border border-lightBorder transition duration-300 ease-in-out hover:text-primary hover:border-primary xl:block"
 				style="padding-top: 0.4rem; padding-bottom: 0.4rem"
 			>
 				<span class="following">Subscribed</span>
 
-				<span class="unfollow" style="padding-right: 0.15rem; padding-left: 0.15rem">Unsubscribe</span>
+				<span class="unfollow" style="padding-right: 1.53rem; padding-left: 1.53rem">Edit</span>
 			</div>
 			<!-- Mobile -->
 			<div
