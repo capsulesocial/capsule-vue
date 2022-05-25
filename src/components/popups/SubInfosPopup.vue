@@ -51,7 +51,7 @@
 			</div>
 			<!-- actions -->
 			<div class="flex items-center my-4">
-				<button class="text-primary py-2 text-sm flex flex-row items-center mr-10">
+				<button class="text-primary py-2 text-sm flex flex-row items-center mr-10" @click="manageBilling">
 					<CardIcon class="h-5 w-5 mr-2" />
 					<p class="focus:outline-none text-sm">Change billing method</p>
 				</button>
@@ -106,6 +106,7 @@ import CloseIcon from '@/components/icons/X.vue'
 import DownloadIcon from '@/components/icons/Download.vue'
 import { ISubscriptionWithProfile } from '@/store/subscriptions'
 import { getSubscriptionTransactions, SubsTransaction } from '@/backend/subscription'
+import { getBillingPortalUrl } from '@/backend/payment'
 
 interface IData {
 	avatar: string | ArrayBuffer
@@ -143,6 +144,14 @@ export default Vue.extend({
 	methods: {
 		downloadReceipt(url: string) {
 			window.open(url, `_blank`, `noopener,noreferrer`)
+		},
+		async manageBilling(): Promise<void> {
+			try {
+				const portalUrl = await getBillingPortalUrl(this.$store.state.session.id, this.s.subscriptionId)
+				window.open(portalUrl, `_blank`)
+			} catch (ex) {
+				this.$handleError(ex)
+			}
 		},
 	},
 })
