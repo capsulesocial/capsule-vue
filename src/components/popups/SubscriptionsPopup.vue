@@ -306,7 +306,7 @@ import ChevronLeft from '@/components/icons/ChevronLeft.vue'
 import CreditCardIcon from '@/components/icons/CreditCard.vue'
 import AppleIcon from '@/components/icons/brands/Apple.vue'
 import GoogleIcon from '@/components/icons/brands/Google.vue'
-import SwitchPeriod from '@/components/switch.vue'
+import SwitchPeriod from '@/components/ToggleSwitch.vue'
 import { Profile } from '@/backend/profile'
 import { stripePublishableKey } from '@/backend/utilities/config'
 import {

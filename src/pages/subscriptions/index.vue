@@ -5,7 +5,7 @@
 		<!-- subscriptions grid -->
 		<div class="flex flex-wrap mt-4">
 			<!-- Subscription card -->
-			<SubCard v-for="s in activeSubs" :key="s.authorID" :s="s" />
+			<SubCard v-for="s in activeSubs" :key="s.authorID" :s="s" @popup="$emit(`popup`, s)" />
 		</div>
 	</main>
 </template>

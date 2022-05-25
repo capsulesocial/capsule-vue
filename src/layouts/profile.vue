@@ -130,6 +130,7 @@
 			:authorAvatar="visitAvatar"
 			@close="showSubscriptions = false"
 		/>
+		<SubInfosPopup v-if="showSubscriptionInfo && subInfo" :s="subInfo" @close="showSubscriptionInfo = false" />
 		<portal-target name="card-popup"></portal-target>
 	</main>
 </template>
@@ -150,6 +151,7 @@ import SubscriptionsPopup from '@/components/popups/SubscriptionsPopup.vue'
 import ImagePopup from '@/components/popups/Image.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 import UnauthPopup from '@/components/popups/UnauthPopup.vue'
+import SubInfosPopup from '@/components/popups/SubInfosPopup.vue'
 
 import { IBackground, backgrounds } from '@/config/backgrounds'
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
@@ -157,6 +159,7 @@ import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
 import { getUserInfoNEAR } from '@/backend/near'
 import { ActionType, namespace as paymentProfileNamespace } from '@/store/paymentProfile'
+import { ISubscriptionWithProfile } from '@/store/subscriptions'
 
 interface IData {
 	myProfile: Profile
@@ -177,6 +180,8 @@ interface IData {
 	showMutuals: boolean
 	showAvatar: boolean
 	showSubscriptions: boolean
+	showSubscriptionInfo: boolean
+	subInfo: ISubscriptionWithProfile | undefined
 }
 
 export default Vue.extend({
@@ -193,6 +198,7 @@ export default Vue.extend({
 		MutualFollowersPopup,
 		ImagePopup,
 		SubscriptionsPopup,
+		SubInfosPopup,
 	},
 	middleware: `auth`,
 	data(): IData {
@@ -215,6 +221,8 @@ export default Vue.extend({
 			myAvatar: undefined,
 			visitAvatar: undefined,
 			showSubscriptions: false,
+			showSubscriptionInfo: false,
+			subInfo: undefined,
 		}
 	},
 	watch: {
@@ -352,8 +360,17 @@ export default Vue.extend({
 			}
 			// Prevent self-subscribing
 			if (authorID !== this.$store.state.session.id) {
-				// Send subscription
-				this.showSubscriptions = !this.showSubscriptions
+				// If already subscribed
+				this.$store.state.subscriptions.active.forEach((sub: ISubscriptionWithProfile) => {
+					if (sub.authorID === this.$route.params.id) {
+						this.showSubscriptionInfo = true
+						this.subInfo = sub
+					}
+				})
+				// show add subscription
+				if (!this.showSubscriptionInfo) {
+					this.showSubscriptions = !this.showSubscriptions
+				}
 			}
 		},
 		async updateFollowers() {

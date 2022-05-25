@@ -3,24 +3,24 @@
 		<div v-if="userIsSubscribed">
 			<!-- Desktop -->
 			<div
-				class="friendbtn text-grey5 hidden rounded-lg bg-white px-5 text-sm font-semibold shadow-sm border border-lightBorder transition duration-300 ease-in-out hover:bg-black hover:text-white xl:block"
+				class="friendbtn text-grey5 hidden rounded-lg bg-white px-5 text-sm font-semibold text-neutral shadow-sm border border-lightBorder transition duration-300 ease-in-out hover:text-primary hover:border-primary xl:block"
 				style="padding-top: 0.4rem; padding-bottom: 0.4rem"
 			>
 				<span class="following">Subscribed</span>
 
-				<span class="unfollow" style="padding-right: 0.15rem; padding-left: 0.15rem">Unsubscribe</span>
+				<span class="unfollow" style="padding-right: 1.53rem; padding-left: 1.53rem">Edit</span>
 			</div>
 			<!-- Mobile -->
 			<div
-				class="friendbtn dark:bg-darkBG dark:text-gray3 text-grey5 rounded-lg p-1 shadow-sm border border-lightBorder transition duration-300 ease-in-out xl:hidden"
+				class="friendbtn dark:bg-darkBG text-primary rounded-lg p-1 shadow-sm border border-lightBorder transition duration-300 ease-in-out xl:hidden"
 			>
-				<CrownIcon class="m-1 h-5 w-5" />
+				<PenIcon class="m-1 h-5 w-5" />
 			</div>
 		</div>
 		<div v-else>
 			<!-- Desktop -->
 			<div
-				class="bg-neutral hover:bg-primary hidden rounded-lg px-5 text-sm font-semibold text-white shadow-sm border border-lightBorder transition duration-300 ease-in-out xl:flex flex-row items-center"
+				class="bg-neutral hover:bg-opacity-75 hidden rounded-lg px-5 text-sm font-semibold text-white shadow-sm border border-lightBorder transition duration-300 ease-in-out xl:flex flex-row items-center"
 				style="padding-top: 0.4rem; padding-bottom: 0.4rem"
 			>
 				<p class="self-center">Subscribe</p>
@@ -40,10 +40,12 @@
 import Vue from 'vue'
 import type { PropType } from 'vue'
 import CrownIcon from '@/components/icons/Crown.vue'
+import PenIcon from '@/components/icons/Pencil.vue'
 
 export default Vue.extend({
 	components: {
 		CrownIcon,
+		PenIcon,
 	},
 	props: {
 		userIsSubscribed: {
