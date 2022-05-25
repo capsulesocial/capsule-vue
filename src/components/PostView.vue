@@ -37,8 +37,9 @@ function sanitizeHTML(input: string) {
 		USE_PROFILES: { html: true },
 		ALLOWED_TAGS: [`pre`],
 		ADD_ATTR: [`cid`],
+		ADD_TAGS: [`ipfsimage`],
 		FORBID_ATTR: [`style`],
-		FORBID_TAGS: [`style`],
+		FORBID_TAGS: [`style`, `img`],
 	})
 }
 
@@ -66,9 +67,9 @@ export default Vue.extend({
 	computed: {
 		htmlContent() {
 			const html = marked.parse(this.content)
-			const transformedHtml = transformPostToTemplate(html, this.postImages)
-			const sanitizedHtml = sanitizeHTML(transformedHtml)
-			return sanitizedHtml
+			const sanitizedHtml = sanitizeHTML(html)
+			const transformedHtml = transformPostToTemplate(sanitizedHtml, this.postImages)
+			return transformedHtml
 		},
 	},
 	mounted() {
