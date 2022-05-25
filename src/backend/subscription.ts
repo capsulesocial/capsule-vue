@@ -9,11 +9,12 @@ export interface ISubscriptionResponse {
 	startedOn: number
 }
 
-export interface SubsTransactions {
+export interface SubsTransaction {
 	transactionId: string
 	receiptUrl: string
-	paidAmount: string
-	date: number
+	currency: string
+	amount: number
+	createdAt: Date
 	status: string
 }
 
@@ -39,11 +40,11 @@ export async function cancelSubscription(username: string, subscriptionId: strin
 	})
 }
 
-export async function getSubscriptionTransactions(self: string, subscriptionId: string) {
-	const res = await genericRequest<{ data: Array<SubsTransactions> }>({
+export async function getSubscriptionTransactions(username: string, subscriptionId: string) {
+	const res = await genericRequest<{ data: Array<SubsTransaction> }>({
 		method: `get`,
 		path: `/subscription/transactions/${subscriptionId}`,
-		username: self,
+		username,
 	})
 
 	return res.data
