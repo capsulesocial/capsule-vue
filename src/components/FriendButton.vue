@@ -12,7 +12,7 @@
 			</div>
 			<!-- Mobile -->
 			<div
-				class="friendbtn dark:bg-darkBG dark:text-gray3 text-grey5 rounded-lg p-1 shadow-sm border border-lightBorder transition duration-300 ease-in-out xl:hidden"
+				class="friendbtn dark:bg-darkBG dark:text-darkPrimaryText text-lightPrimaryText rounded-lg p-1 shadow-sm border border-lightBorder transition duration-300 ease-in-out xl:hidden"
 			>
 				<FriendRemoveIcon class="m-1 h-5 w-5" />
 			</div>
@@ -26,7 +26,7 @@
 			>
 			<!-- Mobile -->
 			<div
-				class="bg-primary rounded-lg p-1 text-lightOnPrimaryText shadow-sm border border-lightBorder transition duration-300 ease-in-out xl:hidden"
+				class="bg-darkBG rounded-lg p-1 text-lightOnPrimaryText shadow-sm border border-lightBorder transition duration-300 ease-in-out xl:hidden"
 			>
 				<FriendAddIcon class="m-1 h-5 w-5" />
 			</div>

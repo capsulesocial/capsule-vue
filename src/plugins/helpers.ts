@@ -52,13 +52,13 @@ const getFormat: dateString = (date, hideYear = false, preformattedDate = null, 
 	return `${day} ${month} ${year} at ${hours}:${minutesString}`
 }
 
-const formatDate = (input: string | Date | number) => {
+const formatDate = (input: string | Date | number, dateOnly = false) => {
 	const date = input instanceof Date ? input : new Date(input)
 	const DAY_IN_MS = 86400000 // 24 * 60 * 60 * 1000
 	const today = new Date()
 	const seconds = Math.round((today.getTime() - date.getTime()) / 1000)
 
-	if (seconds < 0) {
+	if (seconds < 0 || dateOnly) {
 		return getFormat(date, false, null, true)
 	}
 

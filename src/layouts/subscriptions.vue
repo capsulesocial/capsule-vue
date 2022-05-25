@@ -23,6 +23,7 @@
 						<nuxt-child
 							style="backdrop-filter: blur(10px)"
 							class="lg:w-7.5 min-h-70 h-70 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder z-10 w-full overflow-y-auto rounded-t-lg bg-gradient-to-r p-6 pt-4 shadow-lg"
+							@popup="toggleSubInfosPopup"
 						/>
 						<!-- Expired subscriptions -->
 						<aside class="w-5/12 -mr-5 -mt-4 p-4 hidden lg:block overflow-y-auto">
@@ -31,7 +32,7 @@
 								style="backdrop-filter: blur(10px)"
 							>
 								<h3 class="text-primary dark:text-secondary text-base font-semibold mb-4">Expired subscriptions</h3>
-								<p class="textgray5 dark:text-gray3 text-sm pb-1">you have no expired subscriptions yet</p>
+								<p class="text-gray5 dark:text-gray3 text-sm pb-1">you have no expired subscriptions yet</p>
 							</div>
 							<Footer />
 						</aside>
@@ -39,6 +40,7 @@
 				</div>
 			</div>
 		</div>
+		<SubInfos v-if="showPopup" :s="clickedSub" @close="toggleSubInfosPopup" />
 	</main>
 </template>
 
@@ -46,6 +48,7 @@
 import Vue from 'vue'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
+import SubInfos from '@/components/popups/SubInfosPopup.vue'
 import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import { IBackground, backgrounds } from '@/config/backgrounds'
@@ -56,12 +59,14 @@ interface IData {
 	showPopup: boolean
 	bgImage: IBackground
 	dark: boolean
+	clickedSub: any
 }
 
 export default Vue.extend({
 	components: {
 		Header,
 		Footer,
+		SubInfos,
 	},
 	middleware: `auth`,
 	data(): IData {
@@ -71,6 +76,7 @@ export default Vue.extend({
 			showPopup: false,
 			bgImage: backgrounds[0],
 			dark: false,
+			clickedSub: null,
 		}
 	},
 	async created() {
@@ -104,7 +110,10 @@ export default Vue.extend({
 		updateColorMode(dark: boolean): void {
 			this.dark = dark
 		},
-		togglePopup(): void {
+		toggleSubInfosPopup(clickedsub: any) {
+			if (clickedsub !== null) {
+				this.clickedSub = clickedsub
+			}
 			this.showPopup = !this.showPopup
 		},
 	},
