@@ -142,7 +142,7 @@
 						<SubscribeButton
 							v-if="$store.state.session.id !== $route.params.id && paymentsEnabled"
 							:toggleSubscription="toggleSubscription"
-							:userIsSubscribed="false"
+							:userIsSubscribed="activeSubscription"
 							class="header-profile flex-shrink-0 ml-2"
 						/>
 					</div>
@@ -227,6 +227,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import type { PropType } from 'vue'
+import { mapGetters } from 'vuex'
 import Avatar from '@/components/Avatar.vue'
 import FriendButton from '@/components/FriendButton.vue'
 import SecondaryButton from '@/components/SecondaryButton.vue'
@@ -235,6 +236,8 @@ import SubscribeButton from '@/components/SubscribeButton.vue'
 import PencilIcon from '@/components/icons/Pencil.vue'
 import BioPopup from '@/components/popups/BioPopup.vue'
 import { getProfile, Profile } from '@/backend/profile'
+import { namespace as SubscriptionsNamespace } from '@/store/subscriptions'
+import type { ISubscriptionResponse } from '@/backend/subscription'
 
 interface IData {
 	totalPostsCount: number
@@ -246,6 +249,7 @@ interface IData {
 	expandBio: boolean
 	bottomPadding: boolean
 	fromExternalSite: boolean
+	activeSubscription: boolean
 }
 
 export default Vue.extend({
@@ -332,6 +336,7 @@ export default Vue.extend({
 			expandBio: false,
 			bottomPadding: false,
 			fromExternalSite: false,
+			activeSubscription: false,
 		}
 	},
 	head() {
@@ -347,6 +352,7 @@ export default Vue.extend({
 		}
 	},
 	computed: {
+		...mapGetters(SubscriptionsNamespace, [`activeSubs`]),
 		paymentsEnabled() {
 			return this.$store.getters[`paymentProfile/getPaymentProfile`](this.$route.params.id).paymentsEnabled
 		},
@@ -367,8 +373,14 @@ export default Vue.extend({
 		},
 	},
 	created() {
-		window.addEventListener(`click`, this.handleClose, false)
 		this.fetchProfile()
+		// Check if existing subscription
+		this.$store.dispatch(`subscriptions/fetchSubs`, this.$store.state.session.id)
+		this.$store.state.subscriptions.active.forEach((sub: ISubscriptionResponse) => {
+			if (sub.authorID === this.$route.params.id) {
+				this.activeSubscription = true
+			}
+		})
 	},
 	mounted() {
 		if (this.$store.state.settings.recentlyInSettings) {
@@ -377,6 +389,7 @@ export default Vue.extend({
 		this.$nextTick(() => {
 			this.initHeader()
 		})
+		window.addEventListener(`click`, this.handleClose, false)
 	},
 	destroyed() {
 		if (this.$store.state.settings.recentlyInSettings) {
