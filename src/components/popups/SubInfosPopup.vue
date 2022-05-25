@@ -42,10 +42,10 @@
 				<!-- infos -->
 				<div class="flex flex-col mr-1 text-xs text-gray5 dark:text-gray3">
 					<p class="text-gray5 dark:text-gray3 text-sm w-full mb-2">
-						Subscribed since: <span class="font-semibold">March, 2021</span>
+						Subscribed since <span class="font-semibold">{{ $formatDate(s.startedOn, true) }}</span>
 					</p>
 					<p class="text-gray5 dark:text-gray3 text-sm w-full">
-						Renewal date: <span class="font-semibold">{{ $formatDate(s.renewalDate) }}</span>
+						Next Renewal on <span class="font-semibold">{{ $formatDate(s.renewalDate) }}</span>
 					</p>
 				</div>
 			</div>
@@ -53,7 +53,7 @@
 			<div class="flex items-center my-4">
 				<button class="text-primary py-2 text-sm flex flex-row items-center mr-10">
 					<CardIcon class="h-5 w-5 mr-2" />
-					<p class="focus:outline-none text-sm">change billing method</p>
+					<p class="focus:outline-none text-sm">Change billing method</p>
 				</button>
 				<button class="text-negative py-2 text-sm flex flex-row items-center">
 					<CancelIcon class="h-5 w-5 mr-2" />
@@ -71,20 +71,23 @@
 				<h4 class="text-sm font-semibold">Actions</h4>
 			</div>
 			<div
-				v-for="t in 9"
-				:key="t"
+				v-for="transaction in transactions"
+				:key="transaction.transactionId"
 				class="text-sm flex flex-row justify-start items-center py-4 border-b border-lightBorder dark:border-darkBorder text-lightPrimaryText dark:text-darkPrimaryText"
 			>
-				<h4 class="w-40">15th April 2022</h4>
-				<h4 class="w-40">USD 376.20</h4>
+				<h4 class="w-40">{{ $formatDate(transaction.createdAt) }}</h4>
+				<h4 class="w-40 uppercase">{{ transaction.currency }} {{ transaction.amount }}</h4>
 				<div class="w-32">
 					<h4
 						class="text-positive bg-positive bg-opacity-10 border border-positive px-3 py-1 text-sm rounded-3xl w-min"
 					>
-						Paid
+						{{ transaction.status }}
 					</h4>
 				</div>
-				<button class="text-gray5 dark:text-gray3 py-2 text-sm flex flex-row items-center">
+				<button
+					class="text-gray5 dark:text-gray3 py-2 text-sm flex flex-row items-center"
+					@click="downloadReceipt(transaction.receiptUrl)"
+				>
 					<DownloadIcon class="h-5 w-5 mr-1" />
 					<p class="focus:outline-none text-sm">Receipt</p>
 				</button>
@@ -102,9 +105,11 @@ import CardIcon from '@/components/icons/CardIcon.vue'
 import CloseIcon from '@/components/icons/X.vue'
 import DownloadIcon from '@/components/icons/Download.vue'
 import { ISubscriptionWithProfile } from '@/store/subscriptions'
+import { getSubscriptionTransactions, SubsTransaction } from '@/backend/subscription'
 
 interface IData {
 	avatar: string | ArrayBuffer
+	transactions: Array<SubsTransaction>
 }
 
 export default Vue.extend({
@@ -118,6 +123,7 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			avatar: ``,
+			transactions: [],
 		}
 	},
 	async created() {
@@ -125,6 +131,19 @@ export default Vue.extend({
 			this.avatar = await getPhotoFromIPFS(this.s.avatar)
 		}
 	},
-	methods: {},
+	mounted() {
+		getSubscriptionTransactions(this.$store.state.session.id, this.s.subscriptionId)
+			.then((transactions) => {
+				this.transactions = transactions
+			})
+			.catch((err) => {
+				this.$handleError(err)
+			})
+	},
+	methods: {
+		downloadReceipt(url: string) {
+			window.open(url, `_blank`, `noopener,noreferrer`)
+		},
+	},
 })
 </script>

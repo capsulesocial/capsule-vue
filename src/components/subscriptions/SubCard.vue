@@ -15,7 +15,7 @@
 				>
 					<button class="focus:outline-none text-primary flex justify-center items-center" @click="$emit(`popup`, s)">
 						<PenIcon class="fill-current h-4 w-4" />
-						<span class="text-primary ml-2 self-center text-sm">Edit Subscription</span>
+						<span class="text-primary ml-2 self-center text-xs">Manage Subscription</span>
 					</button>
 				</div>
 			</div>
@@ -33,10 +33,10 @@
 			<CrownIcon class="text-neutral mr-2 w-5 h-5" /><span class="truncate text-neutral">{{ s.tier.name }}</span>
 		</div>
 		<p class="text-gray5 dark:text-gray3 text-sm w-full mb-2">
-			Subscribed since: <span class="font-semibold">March, 2021</span>
+			Subscribed since <span class="font-semibold">{{ $formatDate(s.startedOn, true) }}</span>
 		</p>
 		<p class="text-gray5 dark:text-gray3 text-sm w-full">
-			Renewal date: <span class="font-semibold">{{ $formatDate(s.renewalDate) }}</span>
+			Next Renewal on <span class="font-semibold">{{ $formatDate(s.renewalDate) }}</span>
 		</p>
 	</div>
 </template>
