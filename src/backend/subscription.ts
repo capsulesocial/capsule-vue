@@ -14,7 +14,7 @@ export interface SubsTransaction {
 	receiptUrl: string
 	currency: string
 	amount: number
-	createdAt: Date
+	createdAt: number
 	status: string
 }
 
