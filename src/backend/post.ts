@@ -212,7 +212,14 @@ export interface IGetPostsOptions {
 }
 
 export async function getPosts(
-	filter: { category?: string; authorID?: string; tag?: string; bookmarkedBy?: string; timeframe?: Timeframe },
+	filter: {
+		category?: string
+		authorID?: string
+		tag?: string
+		bookmarkedBy?: string
+		timeframe?: Timeframe
+		encrypted?: boolean
+	},
 	bookmarker: string,
 	options: IGetPostsOptions,
 ): Promise<IPostResponse[] | IRepostResponse[]> {
