@@ -9,19 +9,26 @@ const config: NuxtConfig = {
 	ssr: false,
 	telemetry: false,
 	head: {
-		title: `Blogchain`,
+		title: `Blogchain — Decentralized discourse and publishing on Web3`,
 		htmlAttrs: {
 			lang: `en`,
 		},
 		meta: [
 			{ charset: `utf-8` },
 			{ name: `viewport`, content: `width=device-width, initial-scale=1` },
-			{ name: `description`, content: `Decentralized publishing platform for writers` },
-			{ hid: `capsule`, name: `Blogchain`, content: `Decentralized publishing platform for writers` },
+			{
+				name: `description`,
+				content: `Blogchain makes it easy for writers, journalists and social critics to publish, grow an audience and get paid on a fast and beautiful Web3 platform. Sign up today and participate in decentralized discourse.`,
+			},
+			{
+				hid: `capsule`,
+				name: `Blogchain`,
+				content: `Blogchain makes it easy for writers, journalists and social critics to publish, grow an audience and get paid on a fast and beautiful Web3 platform. Sign up today and participate in decentralized discourse.`,
+			},
 			// hid is used as unique identifier. Do not use `vmid` for it as it will not work
 			{
 				property: `og:site_name`,
-				content: `Decentralized publishing platform for writers`,
+				content: `Blogchain makes it easy for writers, journalists and social critics to publish, grow an audience and get paid on a fast and beautiful Web3 platform. Sign up today and participate in decentralized discourse.`,
 			},
 			{ hid: `og:type`, property: `og:type`, content: `website` },
 			{
@@ -32,12 +39,12 @@ const config: NuxtConfig = {
 			{
 				hid: `og:title`,
 				property: `og:title`,
-				content: `Blogchain`,
+				content: `Blogchain — Decentralized discourse and publishing on Web3`,
 			},
 			{
 				hid: `og:description`,
 				property: `og:description`,
-				content: `Decentralized publishing platform for writers`,
+				content: `Blogchain makes it easy for writers, journalists and social critics to publish, grow an audience and get paid on a fast and beautiful Web3 platform. Sign up today and participate in decentralized discourse.`,
 			},
 			{
 				hid: `og:image`,
@@ -54,12 +61,12 @@ const config: NuxtConfig = {
 			{
 				hid: `twitter:title`,
 				name: `twitter:title`,
-				content: `Blogchain`,
+				content: `Blogchain — Decentralized discourse and publishing on Web3`,
 			},
 			{
 				hid: `twitter:description`,
 				name: `twitter:description`,
-				content: `Decentralized publishing platform for writers`,
+				content: `Blogchain makes it easy for writers, journalists and social critics to publish, grow an audience and get paid on a fast and beautiful Web3 platform. Sign up today and participate in decentralized discourse.`,
 			},
 			{
 				hid: `twitter:image`,
