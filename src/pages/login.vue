@@ -28,14 +28,32 @@
 						<p class="text-gray5 dark:text-gray3 px-4 text-xs">OR</p>
 						<span class="border-gray5 dark:border-gray3 flex-grow rounded-lg border" style="height: 1px"></span>
 					</div>
-					<button
-						class="bg-gray2 dark:bg-gray7 focus:outline-none mb-4 flex w-full items-center justify-center rounded-lg py-3"
-						@click="handleKeyClick"
-					>
-						<FileIcon />
-						<span class="text-gray7 dark:text-gray2 ml-4 text-sm font-semibold"> Import Blogchain private key </span>
-						<input id="key" ref="key" type="file" name="key" accept=".json" class="hidden" @change="handleKey" />
-					</button>
+					<div class="flex w-full mb-4 relative">
+						<button
+							class="bg-gray2 dark:bg-gray7 mr-2 focus:outline-none flex w-full items-center justify-center rounded-lg py-3"
+							@click="handleKeyClick"
+						>
+							<FileIcon />
+							<span class="text-gray7 dark:text-gray2 ml-4 text-sm font-semibold"> Import Blogchain private key </span>
+							<input id="key" ref="key" type="file" name="key" accept=".json" class="hidden" @change="handleKey" />
+						</button>
+						<div
+							class="bg-gray2 dark:bg-gray7 focus:outline-none rounded-lg p-3 flex justify-center items-center cursor-pointer"
+							@mouseenter="showInfo = true"
+							@mouseleave="showInfo = false"
+						>
+							<InfoIcon class="h-6 w-6 text-gray5 dark:text-gray3" />
+						</div>
+						<div
+							v-show="showInfo"
+							class="absolute z-10 border-lightBorder modal-animation rounded-lg border bg-lightBG dark:bg-gray7 p-2 shadow-lg text-gray5 dark:text-gray1 self-center text-xs"
+							:class="$colorMode.dark ? `LoginInfoOpenDark` : `LoginInfoOpen`"
+							style="top: 55px; right: 0"
+						>
+							This is a Blogchain-specific key, not a NEAR seed phrase. We will never ask for your NEAR seed phrase and
+							make sure you are only importing your Blogchain key to https://blogchain.app/login
+						</div>
+					</div>
 					<p class="text-gray7 dark:text-gray3 mt-10 text-center text-sm xl:text-base">
 						Don't have an account yet?
 						<nuxt-link to="/register" class="text-primary text-center font-bold">Sign up</nuxt-link>
@@ -69,6 +87,7 @@ import CapsuleIcon from '@/components/icons/CapsuleNew.vue'
 import DiscordIcon from '@/components/icons/brands/Discord.vue'
 import GoogleIcon from '@/components/icons/brands/Google.vue'
 import FileIcon from '@/components/icons/File.vue'
+import InfoIcon from '@/components/icons/Info.vue'
 
 import { MutationType, createSessionFromProfile, namespace as sessionStoreNamespace } from '~/store/session'
 
@@ -90,6 +109,7 @@ interface IData {
 	privateKey: string
 	currentYear: string
 	keyFileTarget: HTMLInputElement | null
+	showInfo: boolean
 }
 
 export default Vue.extend({
@@ -98,6 +118,7 @@ export default Vue.extend({
 		DiscordIcon,
 		GoogleIcon,
 		FileIcon,
+		InfoIcon,
 	},
 	layout: `unauth`,
 	data(): IData {
@@ -116,6 +137,7 @@ export default Vue.extend({
 			privateKey: ``,
 			currentYear: ``,
 			keyFileTarget: null,
+			showInfo: false,
 		}
 	},
 	head() {
@@ -291,3 +313,30 @@ export default Vue.extend({
 	},
 })
 </script>
+
+<style>
+.LoginInfoOpen::before {
+	content: '';
+	position: absolute;
+	top: -0.5rem;
+	right: 1rem;
+	transform: rotate(45deg);
+	width: 1rem;
+	height: 1rem;
+	background-color: #fff;
+	border-radius: 2px;
+	z-index: 1;
+}
+.LoginInfoOpenDark::before {
+	content: '';
+	position: absolute;
+	top: -0.5rem;
+	right: 1rem;
+	transform: rotate(45deg);
+	width: 1rem;
+	height: 1rem;
+	background-color: #686868;
+	border-radius: 2px;
+	z-index: 1;
+}
+</style>
