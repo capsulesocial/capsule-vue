@@ -165,11 +165,7 @@ export async function getRegularPost(cid: string): Promise<ISignedIPFSObject<IRe
 	return post
 }
 
-export async function getDecryptedContent(
-	cid: string,
-	content: string,
-	username: string,
-): Promise<{ content: string } | { error: string }> {
+export async function getDecryptedContent(cid: string, content: string, username: string) {
 	const result = await getEncryptionKeys(username, cid)
 	if (isError(result)) {
 		return result
@@ -190,7 +186,7 @@ export function isRegularPost(post: Post): post is IRegularPost {
 
 async function getEncryptionKeys(username: string, cid: string) {
 	try {
-		const res = await genericRequest<{ key: string; counter: string }>({
+		const res = await genericRequest<{ key: string; counter: string } | { error: string; enabledTiers: string[] }>({
 			method: `get`,
 			path: `/content/${cid}`,
 			username,
@@ -198,7 +194,7 @@ async function getEncryptionKeys(username: string, cid: string) {
 		return res
 	} catch (err) {
 		if (err instanceof AxiosError && err.response) {
-			return { error: err.response.data.error }
+			return { error: err.response.data.error as string, enabledTiers: [] }
 		}
 		throw err
 	}
