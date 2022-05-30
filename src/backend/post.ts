@@ -1,8 +1,8 @@
-import axios, { AxiosError } from 'axios'
+import axios from 'axios'
 
 import { signContent, verifyContent } from './utilities/keys'
 import ipfs from './utilities/ipfs'
-import { hexStringToUint8Array, isError, ISignedIPFSObject, uint8ArrayToHexString } from './utilities/helpers'
+import { hexStringToUint8Array, ISignedIPFSObject, uint8ArrayToHexString } from './utilities/helpers'
 import { nodeUrl } from './utilities/config'
 import { IRepost } from './reposts'
 import { decryptData, encryptAndSignData } from './crypto'
@@ -52,6 +52,26 @@ export type IPostResponseWithHidden = IPostResponse & { hidden: boolean }
 export interface IRepostResponse extends IGenericPostResponse {
 	repost: IRepost
 	deleted: boolean
+}
+
+export type SubscriptionStatus = `SUBSCRIBED` | `INSUFFICIENT_TIER` | `NOT_SUBSCRIBED`
+export interface IKeyRetrievalStatus {
+	status: SubscriptionStatus
+}
+export interface IKeyRetrievalSuccess extends IKeyRetrievalStatus {
+	status: `SUBSCRIBED`
+	key: string
+	counter: string
+}
+export interface IKeyRetrievalFailure extends IKeyRetrievalStatus {
+	status: `INSUFFICIENT_TIER` | `NOT_SUBSCRIBED`
+	enabledTiers: Array<string>
+}
+
+export type IKeyRetrievalResult = IKeyRetrievalFailure | IKeyRetrievalSuccess
+
+export function keyRetrievalFailed(keyStatus: IKeyRetrievalResult): keyStatus is IKeyRetrievalFailure {
+	return keyStatus.status === `INSUFFICIENT_TIER` || keyStatus.status === `NOT_SUBSCRIBED`
 }
 
 export type Algorithm = `NEW` | `FOLLOWING` | `TOP`
@@ -165,13 +185,10 @@ export async function getRegularPost(cid: string): Promise<ISignedIPFSObject<IRe
 	return post
 }
 
-export async function getDecryptedContent(
-	cid: string,
-	content: string,
-	username: string,
-): Promise<{ content: string } | { error: string }> {
+export async function getDecryptedContent(cid: string, content: string, username: string) {
 	const result = await getEncryptionKeys(username, cid)
-	if (isError(result)) {
+
+	if (keyRetrievalFailed(result)) {
 		return result
 	}
 
@@ -189,19 +206,12 @@ export function isRegularPost(post: Post): post is IRegularPost {
 }
 
 async function getEncryptionKeys(username: string, cid: string) {
-	try {
-		const res = await genericRequest<{ key: string; counter: string }>({
-			method: `get`,
-			path: `/content/${cid}`,
-			username,
-		})
-		return res
-	} catch (err) {
-		if (err instanceof AxiosError && err.response) {
-			return { error: err.response.data.error }
-		}
-		throw err
-	}
+	const res = await genericRequest<IKeyRetrievalResult>({
+		method: `get`,
+		path: `/content/${cid}`,
+		username,
+	})
+	return res
 }
 
 export interface IGetPostsOptions {

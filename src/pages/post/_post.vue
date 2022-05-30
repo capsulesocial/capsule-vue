@@ -428,13 +428,24 @@ export default Vue.extend({
 		}
 
 		if (isEncryptedPost(post.data)) {
-			const decrypted = await getDecryptedContent(postCID, post.data.content, sessionID)
-			if (!(`error` in decrypted)) {
-				post.data.content = decrypted.content
-			} else {
-				// this.$toastError(decrypted.error)
-				// Display premium post paywall
+			try {
+				const decrypted = await getDecryptedContent(postCID, post.data.content, sessionID)
+				if (`content` in decrypted) {
+					post.data.content = decrypted.content
+				} else {
+					// TODO: show proper error message according to retrieval status
+					// decrypted.status is of type `INSUFFICIENT_TIER` | `NOT_SUBSCRIBED`
+					// this.$toastError(decrypted.status)
+					// Display premium post paywall
+					this.showPaywall = true
+				}
+			} catch (err) {
 				this.showPaywall = true
+				if (err instanceof AxiosError && err.response && err.response.data.error) {
+					this.$toastError(err.response.data.error)
+				} else {
+					throw err
+				}
 			}
 		}
 
