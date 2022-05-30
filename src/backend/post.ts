@@ -70,7 +70,7 @@ export interface IKeyRetrievalFailure extends IKeyRetrievalStatus {
 
 export type IKeyRetrievalResult = IKeyRetrievalFailure | IKeyRetrievalSuccess
 
-export function keyRetrievalFailed(keyStatus: IKeyRetrievalStatus): keyStatus is IKeyRetrievalFailure {
+export function keyRetrievalFailed(keyStatus: IKeyRetrievalResult): keyStatus is IKeyRetrievalFailure {
 	return keyStatus.status === `INSUFFICIENT_TIER` || keyStatus.status === `NOT_SUBSCRIBED`
 }
 
