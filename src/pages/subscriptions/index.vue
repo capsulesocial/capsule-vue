@@ -1,6 +1,8 @@
 <template>
 	<main>
-		<h2 class="text-primary dark:text-secondary mb-1 text-lg font-semibold xl:text-xl">My subscriptions</h2>
+		<h2 class="text-lightPrimaryText dark:text-darkPrimaryText mb-1 text-lg font-semibold xl:text-xl">
+			My subscriptions
+		</h2>
 		<p class="text-gray5 dark:text-gray3">Manage your active subscriptions to your favorite content creators here:</p>
 		<!-- subscriptions grid -->
 		<div class="flex flex-wrap mt-4">
