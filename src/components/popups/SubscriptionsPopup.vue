@@ -263,14 +263,22 @@
 					<div class="w-full flex flex-col justify-center items-center text-center px-10 mt-5">
 						<p class="text-base text-center text-gray5 dark:text-gray3 mb-4 max-w-md">
 							All of their premium articles are now<br />
-							unlocked for your account
+							unlocked for your account.
 						</p>
 						<button
+							v-if="userIsFollowed"
 							class="px-5 py-2 rounded-lg bg-neutral focus:outline-none text-white mt-6 font-semibold"
 							@click="$emit(`close`)"
 						>
 							Start reading
 						</button>
+						<div v-else class="flex flex-col items-center">
+							<p class="text-base text-center text-gray5 dark:text-gray3 mb-4 max-w-md">
+								Don't forget to follow this author to see<br />
+								his latest posts in your home feed:
+							</p>
+							<FriendButton :toggleFriend="toggleFriend" :userIsFollowed="userIsFollowed" class="hidden lg:block" />
+						</div>
 					</div>
 					<img
 						:src="
@@ -297,6 +305,7 @@ import Vue from 'vue'
 import type { PropType } from 'vue'
 import { Stripe, loadStripe, StripeElements, PaymentRequest, StripeCardElement, PaymentMethod } from '@stripe/stripe-js'
 import { mapGetters } from 'vuex'
+
 import Avatar from '@/components/Avatar.vue'
 import SecondaryButton from '@/components/SecondaryButton.vue'
 import CloseIcon from '@/components/icons/X.vue'
@@ -307,7 +316,9 @@ import CreditCardIcon from '@/components/icons/CreditCard.vue'
 import AppleIcon from '@/components/icons/brands/Apple.vue'
 import GoogleIcon from '@/components/icons/brands/Google.vue'
 import SwitchPeriod from '@/components/ToggleSwitch.vue'
+
 import { Profile } from '@/backend/profile'
+import { followChange, getFollowersAndFollowing } from '@/backend/following'
 import { stripePublishableKey } from '@/backend/utilities/config'
 import {
 	createDefaultPaymentProfile,
@@ -339,6 +350,8 @@ interface IData {
 		googlePay: boolean
 	}
 	isLoading: boolean
+	userIsFollowed: boolean
+	following: Set<string>
 }
 
 let _stripe: Stripe | null = null
@@ -389,6 +402,8 @@ export default Vue.extend({
 				googlePay: false,
 			},
 			isLoading: false,
+			userIsFollowed: false,
+			following: new Set(),
 		}
 	},
 	computed: {
@@ -399,6 +414,11 @@ export default Vue.extend({
 	},
 	mounted() {
 		window.addEventListener(`click`, this.handleCloseClick, false)
+		// Get my followers
+		getFollowersAndFollowing(this.$store.state.session.id).then((data) => {
+			this.following = data.following
+			this.userIsFollowed = data.following.has(this.author.id)
+		})
 	},
 	methods: {
 		displayCurrency(currency: string) {
@@ -680,6 +700,21 @@ export default Vue.extend({
 
 			await this.submitPayment(paymentMethod, this.customerEmail)
 			this.isLoading = false
+		},
+		async toggleFriend() {
+			// Unauth
+			if (this.$store.state.session.id === ``) {
+				this.$store.commit(`settings/toggleUnauthPopup`)
+				return
+			}
+			try {
+				await followChange(this.userIsFollowed ? `UNFOLLOW` : `FOLLOW`, this.$store.state.session.id, this.author.id)
+				this.$toastSuccess(this.userIsFollowed ? `Unfollowed ${this.author.id}` : `Followed ${this.author.id}`)
+				const { following } = await getFollowersAndFollowing(this.$store.state.session.id, true)
+				this.userIsFollowed = following.has(this.author.id)
+			} catch (err: unknown) {
+				this.$handleError(err)
+			}
 		},
 		handleCloseClick(e: any): void {
 			if (!e.target || e.target.parentNode === null || e.target.firstChild?.classList === undefined) {
