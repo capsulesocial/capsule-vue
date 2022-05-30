@@ -57,19 +57,18 @@ export interface IRepostResponse extends IGenericPostResponse {
 export type SubscriptionStatus = `SUBSCRIBED` | `INSUFFICIENT_TIER` | `NOT_SUBSCRIBED`
 export interface IKeyRetrievalStatus {
 	status: SubscriptionStatus
-	key?: string
-	counter?: string
-	enabledTiers?: Array<string>
 }
-export interface IKeyRetrievalSuccess extends Omit<IKeyRetrievalStatus, `enabledTiers`> {
+export interface IKeyRetrievalSuccess extends IKeyRetrievalStatus {
 	status: `SUBSCRIBED`
 	key: string
 	counter: string
 }
-export interface IKeyRetrievalFailure extends Omit<IKeyRetrievalStatus, `key` | `counter`> {
+export interface IKeyRetrievalFailure extends IKeyRetrievalStatus {
 	status: `INSUFFICIENT_TIER` | `NOT_SUBSCRIBED`
 	enabledTiers: Array<string>
 }
+
+export type IKeyRetrievalResult = IKeyRetrievalFailure | IKeyRetrievalSuccess
 
 export function keyRetrievalFailed(keyStatus: IKeyRetrievalStatus): keyStatus is IKeyRetrievalFailure {
 	return keyStatus.status === `INSUFFICIENT_TIER` || keyStatus.status === `NOT_SUBSCRIBED`
@@ -207,7 +206,7 @@ export function isRegularPost(post: Post): post is IRegularPost {
 }
 
 async function getEncryptionKeys(username: string, cid: string) {
-	const res = await genericRequest<IKeyRetrievalSuccess | IKeyRetrievalFailure>({
+	const res = await genericRequest<IKeyRetrievalResult>({
 		method: `get`,
 		path: `/content/${cid}`,
 		username,
