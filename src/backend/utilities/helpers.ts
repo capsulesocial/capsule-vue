@@ -24,10 +24,6 @@ export function stableOrderObj<T extends Record<string, any>>(obj: T): T {
 	return newObj as T
 }
 
-export function isError(obj: Record<string, unknown>): obj is { error: any } {
-	return `error` in obj
-}
-
 export function getBlobExtension(blob: Blob): string | null {
 	switch (blob.type) {
 		case `image/png`:
