@@ -1,6 +1,6 @@
 <template>
 	<article
-		class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation mb-5 w-full rounded-lg border bg-gradient-to-r p-4 shadow-lg"
+		class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation mb-5 w-full rounded-lg border bg-gradient-to-r px-6 py-4 shadow-lg"
 	>
 		<h6 class="text-lightPrimaryText dark:text-darkPrimaryText mb-4 font-semibold">Send us feedback</h6>
 		<a href="https://xc633ok49p2.typeform.com/to/v5Xrfcpp" target="_blank">
