@@ -130,6 +130,7 @@
 			:authorAvatar="visitAvatar"
 			@close="showSubscriptions = false"
 		/>
+		<unFollowWarningPopup v-if="showUnfollowWarning" @close="showUnfollowWarning = false" />
 		<SubInfosPopup v-if="showSubscriptionInfo && subInfo" :s="subInfo" @close="showSubscriptionInfo = false" />
 		<portal-target name="card-popup"></portal-target>
 	</main>
@@ -152,6 +153,7 @@ import ImagePopup from '@/components/popups/Image.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 import UnauthPopup from '@/components/popups/UnauthPopup.vue'
 import SubInfosPopup from '@/components/popups/SubInfosPopup.vue'
+import unFollowWarningPopup from '@/components/popups/unFollowWarningPopup.vue'
 
 import { IBackground, backgrounds } from '@/config/backgrounds'
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
@@ -160,6 +162,7 @@ import { followChange, getFollowersAndFollowing } from '@/backend/following'
 import { getUserInfoNEAR } from '@/backend/near'
 import { ActionType, namespace as paymentProfileNamespace } from '@/store/paymentProfile'
 import { ISubscriptionWithProfile } from '@/store/subscriptions'
+import type { ISubscriptionResponse } from '@/backend/subscription'
 
 interface IData {
 	myProfile: Profile
@@ -182,6 +185,8 @@ interface IData {
 	showSubscriptions: boolean
 	showSubscriptionInfo: boolean
 	subInfo: ISubscriptionWithProfile | undefined
+	activeSubscription: boolean
+	showUnfollowWarning: boolean
 }
 
 export default Vue.extend({
@@ -199,6 +204,7 @@ export default Vue.extend({
 		ImagePopup,
 		SubscriptionsPopup,
 		SubInfosPopup,
+		unFollowWarningPopup,
 	},
 	middleware: `auth`,
 	data(): IData {
@@ -223,6 +229,8 @@ export default Vue.extend({
 			showSubscriptions: false,
 			showSubscriptionInfo: false,
 			subInfo: undefined,
+			activeSubscription: false,
+			showUnfollowWarning: false,
 		}
 	},
 	watch: {
@@ -301,6 +309,12 @@ export default Vue.extend({
 			this.following = following
 			this.userIsFollowed = followers.has(this.$store.state.session.id)
 
+			this.$store.state.subscriptions.active.forEach((sub: ISubscriptionResponse) => {
+				if (sub.authorID === this.$route.params.id) {
+					this.activeSubscription = true
+				}
+			})
+
 			if (this.$store.state.session.id !== ``) {
 				// get my profile and avatar
 				this.getMyProfile()
@@ -350,6 +364,9 @@ export default Vue.extend({
 				} catch (err: unknown) {
 					this.$handleError(err)
 				}
+			}
+			if (this.activeSubscription === true && this.userIsFollowed === true) {
+				this.showUnfollowWarning = !this.showUnfollowWarning
 			}
 		},
 		toggleSubscription(authorID: string) {
