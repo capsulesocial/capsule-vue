@@ -95,86 +95,88 @@
 							{{ post.subtitle }}
 						</h2>
 					</article>
-					<!-- Featured Photo -->
-					<article
-						v-if="featuredPhoto !== null"
-						class="relative mb-5 mt-5 flex cursor-pointer flex-col justify-end"
-						@click="showPhoto"
-					>
-						<div
-							v-if="post.featuredPhotoCaption"
-							class="absolute w-full rounded-b-lg"
-							:class="
-								this.captionHeight > 72
-									? `h-48`
-									: this.captionHeight > 52
-									? `h-40`
-									: this.captionHeight > 32
-									? `h-32`
-									: `h-24`
-							"
-							style="background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.8) 100%)"
-						></div>
-						<img :src="featuredPhoto" class="w-full rounded-lg object-cover shadow-lg" />
-						<p
-							v-if="post.featuredPhotoCaption"
-							id="photoCaption"
-							class="text-lightOnPrimaryText absolute px-4 pb-3 text-sm drop-shadow-lg"
-							style="text-shadow: 0 0 10px #000"
+					<!-- Private sensitive content -->
+					<div class="relative">
+						<!-- Featured Photo -->
+						<article
+							v-if="featuredPhoto !== null"
+							class="relative mb-5 mt-5 flex cursor-pointer flex-col justify-end"
+							@click="showPhoto"
 						>
-							{{ post.featuredPhotoCaption }}
-						</p>
-					</article>
-					<div v-else-if="showPaywall" class="h-80 lg:h-72"></div>
-					<!-- Post paywall -->
-					<article
-						v-if="showPaywall"
-						class="from-lightBGStart to-transparent dark:from-darkBGStart dark:to-transparent bg-gradient-to-t z-20 absolute top-0 w-full h-full"
-						:class="featuredPhoto !== null ? `pb-48 pt-48` : `pb-20 pt-20`"
-					>
-						<div
-							class="w-full shadow-lg flex flex-col items-center pt-10 px-16 from-lightBGStart to-lightBGStop dark:from-darkBG dark:to-darkBG bg-gradient-to-r rounded-lg h-full"
-							:class="featuredPhoto !== null ? `mt-48` : `mt-20`"
-							style="backdrop-filter: blur(10px)"
-						>
-							<h4 class="text-2xl font-semibold text-neutral mb-4 text-center">This post is for Paid subscribers</h4>
-							<p class="my-4 text-center text-gray5 dark:text-gray3">
-								Become a subscriber of <span class="font-semibold text-primary">{{ author.name }}</span> to access
-								<br class="hidden lg:block" />
-								this post and other subscriber-only content
+							<div
+								v-if="post.featuredPhotoCaption"
+								class="absolute w-full rounded-b-lg"
+								:class="
+									this.captionHeight > 72
+										? `h-48`
+										: this.captionHeight > 52
+										? `h-40`
+										: this.captionHeight > 32
+										? `h-32`
+										: `h-24`
+								"
+								style="background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.8) 100%)"
+							></div>
+							<img :src="featuredPhoto" class="w-full rounded-lg object-cover shadow-lg" />
+							<p
+								v-if="post.featuredPhotoCaption"
+								id="photoCaption"
+								class="text-lightOnPrimaryText absolute px-4 pb-3 text-sm drop-shadow-lg"
+								style="text-shadow: 0 0 10px #000"
+							>
+								{{ post.featuredPhotoCaption }}
 							</p>
-							<SubscribeButton
-								:toggleSubscription="toggleSubscription"
-								:userIsSubscribed="false"
-								class="header-profile my-4"
-								style="transform: scale(1.2)"
-							/>
-							<p class="text-sm mt-4 text-gray5 dark:text-gray3">
-								Manage my <nuxt-link to="/subscriptions" class="text-neutral text">subscriptions</nuxt-link>
-							</p>
-						</div>
-					</article>
-					<!-- Content -->
-					<article v-else class="mt-5">
-						<div class="text-lightPrimaryText dark:text-darkSecondaryText editable content max-w-none break-words">
-							<PostView :content="this.post.content" :postImages="this.post.postImages" />
-						</div>
-					</article>
-					<!-- Tags -->
-					<article class="mt-5 text-lg">
-						<TagCard v-for="t in post.tags" :key="t.name" class="mr-2 mb-2" :tag="t.name" />
-					</article>
-					<!-- IPFS CID -->
-					<div class="mt-3">
-						<a
-							:href="`https://ipfs.io/api/v0/dag/get?arg=` + $route.params.post"
-							target="_blank"
-							class="bg-gray1 dark:bg-gray7 text-gray5 dark:text-gray1 flex flex-row justify-between rounded-lg px-3 py-1"
+						</article>
+						<div v-else-if="showPaywall" class="h-80 lg:h-72"></div>
+						<!-- Post paywall -->
+						<article
+							v-if="showPaywall"
+							class="from-lightBGStart to-transparent dark:from-darkBGStart dark:to-transparent bg-gradient-to-t z-20 absolute top-0 w-full h-full flex"
 						>
-							<span class="mr-4" style="flex-shrink: 0">IPFS address </span>
-							<span class="overflow-hidden" style="text-overflow: ellipsis">{{ $route.params.post }}</span>
-							<span class="block"><LinkIcon class="py-1" /></span>
-						</a>
+							<div
+								class="w-full shadow-lg flex flex-col items-center py-10 px-16 from-lightBGStart to-lightBGStop dark:from-darkBG dark:to-darkBG bg-gradient-to-r rounded-lg h-min"
+								style="backdrop-filter: blur(10px)"
+								:class="featuredPhoto !== null ? `mt-36` : `mt-0`"
+							>
+								<h4 class="text-2xl font-semibold text-neutral mb-4 text-center">This post is for Paid subscribers</h4>
+								<p class="my-4 text-center text-gray5 dark:text-gray3">
+									Become a subscriber of <span class="font-semibold text-primary">{{ author.name }}</span> to access
+									<br class="hidden lg:block" />
+									this post and other subscriber-only content
+								</p>
+								<SubscribeButton
+									:toggleSubscription="toggleSubscription"
+									:userIsSubscribed="false"
+									class="header-profile my-4"
+									style="transform: scale(1.2)"
+								/>
+								<p class="text-sm mt-4 text-gray5 dark:text-gray3">
+									Manage my <nuxt-link to="/subscriptions" class="text-neutral text">subscriptions</nuxt-link>
+								</p>
+							</div>
+						</article>
+						<!-- Content -->
+						<article v-else class="mt-5">
+							<div class="text-lightPrimaryText dark:text-darkSecondaryText editable content max-w-none break-words">
+								<PostView :content="this.post.content" :postImages="this.post.postImages" />
+							</div>
+						</article>
+						<!-- Tags -->
+						<article class="mt-5 text-lg">
+							<TagCard v-for="t in post.tags" :key="t.name" class="mr-2 mb-2" :tag="t.name" />
+						</article>
+						<!-- IPFS CID -->
+						<div class="mt-3">
+							<a
+								:href="`https://ipfs.io/api/v0/dag/get?arg=` + $route.params.post"
+								target="_blank"
+								class="bg-gray1 dark:bg-gray7 text-gray5 dark:text-gray1 flex flex-row justify-between rounded-lg px-3 py-1"
+							>
+								<span class="mr-4" style="flex-shrink: 0">IPFS address </span>
+								<span class="overflow-hidden" style="text-overflow: ellipsis">{{ $route.params.post }}</span>
+								<span class="block"><LinkIcon class="py-1" /></span>
+							</a>
+						</div>
 					</div>
 				</article>
 				<AuthorCard
@@ -430,7 +432,7 @@ export default Vue.extend({
 			if (!(`error` in decrypted)) {
 				post.data.content = decrypted.content
 			} else {
-				this.$toastError(decrypted.error)
+				// this.$toastError(decrypted.error)
 				// Display premium post paywall
 				this.showPaywall = true
 			}
