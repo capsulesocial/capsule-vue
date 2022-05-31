@@ -8,39 +8,41 @@
 </template>
 
 <script lang="ts">
+import Vue from 'vue'
+import type { PropType } from 'vue'
 import DOMPurify from 'dompurify'
 import { marked } from 'marked'
-import type { PropType } from 'vue'
-import Vue from 'vue'
-import { transformPostToTemplate } from '../pages/post/readerExtensions'
+import { markedRenderer, transformPostToTemplate } from '../pages/post/readerExtensions'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import ImagePopup from '@/components/popups/Image.vue'
+
+const ALLOWED_TAGS = [
+	`pre`,
+	`ipfsimage`,
+	`p`,
+	`code`,
+	`ol`,
+	`li`,
+	`strong`,
+	`em`,
+	`u`,
+	`del`,
+	`blockquote`,
+	`h1`,
+	`h2`,
+	`h3`,
+	`h4`,
+	`h5`,
+	`a`,
+	`span`,
+]
+
+const ALLOWED_ATTR = [`cid`, `alt`, `class`, `id`, `href`]
 
 interface IData {
 	clickedImage: null | string
 	imageError: null | string
 	displayImagePopup: boolean
-}
-
-function setupSanitization() {
-	DOMPurify.addHook(`afterSanitizeAttributes`, (node: Element) => {
-		// set all elements owning target to target=_blank
-		if (node.getAttribute(`target`)) {
-			node.setAttribute(`target`, `_blank`)
-			node.setAttribute(`rel`, `noopener`)
-		}
-	})
-}
-
-function sanitizeHTML(input: string) {
-	return DOMPurify.sanitize(input, {
-		USE_PROFILES: { html: true },
-		ALLOWED_TAGS: [`pre`],
-		ADD_ATTR: [`cid`],
-		ADD_TAGS: [`ipfsimage`],
-		FORBID_ATTR: [`style`],
-		FORBID_TAGS: [`style`, `img`],
-	})
 }
 
 export default Vue.extend({
@@ -67,17 +69,28 @@ export default Vue.extend({
 	computed: {
 		htmlContent() {
 			const html = marked.parse(this.content)
-			const sanitizedHtml = sanitizeHTML(html)
-			const transformedHtml = transformPostToTemplate(sanitizedHtml, this.postImages)
-			return transformedHtml
+			const sanitizedHtml = DOMPurify.sanitize(html, {
+				ALLOWED_TAGS,
+				ALLOWED_ATTR,
+			})
+			return transformPostToTemplate(sanitizedHtml, this.postImages)
 		},
+	},
+	created() {
+		marked.use({ renderer: markedRenderer })
+		DOMPurify.addHook(`afterSanitizeAttributes`, (node: Element) => {
+			// set all elements owning target and all links to target=_blank
+			if (node.getAttribute(`target`) || node.tagName === `A`) {
+				node.setAttribute(`target`, `_blank`)
+				node.setAttribute(`rel`, `noopener`)
+			}
+		})
 	},
 	mounted() {
 		const images = this.$el.querySelectorAll(`img`)
 		images.forEach((image) => {
 			this.lazyLoad(image)
 		})
-		setupSanitization()
 	},
 	methods: {
 		openImagePopup(image: HTMLImageElement) {
