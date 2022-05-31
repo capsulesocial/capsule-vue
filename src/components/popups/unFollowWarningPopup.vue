@@ -21,8 +21,7 @@
 						<InfoIcon class="mr-4 h-8 w-8 text-gray5 dark:text-gray3" />
 					</div>
 					<p class="my-4 text-gray5 dark:text-gray3">
-						Attention, you unfollowed an author you are subscribed to. You will not see his posts on your home feed
-						anymore.<br />
+						You unfollowed an author you are subscribed to. You will not see his posts on your home feed anymore.<br />
 						If you want to cancel your subscription to this author, go to the
 						<nuxt-link to="/subscriptions" class="text-primary focus:outline-none mr-6" @click="$emit(`close`)"
 							>subscription page</nuxt-link
