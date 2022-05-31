@@ -36,6 +36,9 @@ export default Vue.extend({
 			active: false,
 		}
 	},
+	created() {
+		this.active = this.$props.enabled
+	},
 	methods: {
 		toggleSwitch() {
 			this.active = !this.active
