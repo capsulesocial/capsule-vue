@@ -38,6 +38,16 @@ export function loadProfileFromIPFS(cid: string) {
 export const getProfile = cache(_getProfile)
 
 export async function setProfile(p: Profile) {
+	// profile v1
+	// const profile: any = { ...p, version: `v1`, lastUpdated: Date.now() }
+	// const [cid, { sig }] = await Promise.all([addProfileToIPFS(profile), signContent(profile)])
+
+	// const res = await sendProfileServer(cid, profile, sig)
+	// if (!res.success) {
+	// 	throw new Error(`Profile didn't update on the server!`)
+	// }
+
+	// profile v0
 	const [cid, { sig }] = await Promise.all([addProfileToIPFS(p), signContent(p)])
 
 	const res = await sendProfileServer(cid, p, sig)
