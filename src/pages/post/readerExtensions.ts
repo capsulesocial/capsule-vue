@@ -22,7 +22,7 @@ const imgRegexp = (cid: string) =>
 
 const blankImage = `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAABCAQAAABeK7cBAAAADUlEQVR42mM8fIaBAQAFegGROSevSQAAAABJRU5ErkJggg==`
 
-export function transformPostToTemplate(body: string, postImages?: Array<string>) {
+export function transformPostToHTML(body: string, postImages?: Array<string>) {
 	if (!postImages) {
 		return body
 	}

@@ -12,7 +12,7 @@ import Vue from 'vue'
 import type { PropType } from 'vue'
 import DOMPurify from 'dompurify'
 import { marked } from 'marked'
-import { markedRenderer, transformPostToTemplate } from '../pages/post/readerExtensions'
+import { markedRenderer, transformPostToHTML } from '../pages/post/readerExtensions'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import ImagePopup from '@/components/popups/Image.vue'
 
@@ -73,7 +73,7 @@ export default Vue.extend({
 				ALLOWED_TAGS,
 				ALLOWED_ATTR,
 			})
-			return transformPostToTemplate(sanitizedHtml, this.postImages)
+			return transformPostToHTML(sanitizedHtml, this.postImages)
 		},
 	},
 	created() {
@@ -82,7 +82,7 @@ export default Vue.extend({
 			// set all elements owning target and all links to target=_blank
 			if (node.getAttribute(`target`) || node.tagName === `A`) {
 				node.setAttribute(`target`, `_blank`)
-				node.setAttribute(`rel`, `noopener`)
+				node.setAttribute(`rel`, `noopener noreferrer`)
 			}
 		})
 	},
