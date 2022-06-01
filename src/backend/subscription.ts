@@ -7,6 +7,14 @@ export interface ISubscriptionResponse {
 	renewalDate?: number | undefined
 	subscriptionId: string
 	startedOn: number
+	renewalInfo?: {
+		message?: string
+		lastInvoiceId?: string
+		createdAt: Date
+		updatedAt: Date
+		dueDate?: Date
+		status: string
+	}
 }
 
 export interface SubsTransaction {

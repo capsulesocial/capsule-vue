@@ -44,8 +44,11 @@
 					<p class="text-gray5 dark:text-gray3 text-sm w-full mb-2">
 						Subscribed since <span class="font-semibold">{{ $formatDate(s.startedOn, true) }}</span>
 					</p>
-					<p class="text-gray5 dark:text-gray3 text-sm w-full">
-						Next Renewal on <span class="font-semibold">{{ $formatDate(s.renewalDate) }}</span>
+					<p v-if="s.renewalInfo && s.renewalInfo.status === 'cancelled'" class="text-negative text-sm w-full">
+						Cancels on <span class="font-semibold">{{ $formatDate(s.renewalInfo.dueDate, true) }}</span>
+					</p>
+					<p v-else class="text-gray5 dark:text-gray3 text-sm w-full">
+						Next Renewal on <span class="font-semibold">{{ $formatDate(s.renewalDate, true) }}</span>
 					</p>
 				</div>
 			</div>
@@ -55,7 +58,11 @@
 					<CardIcon class="h-5 w-5 mr-2" />
 					<p class="focus:outline-none text-sm">Change billing method</p>
 				</button>
-				<button class="text-negative py-2 text-sm flex flex-row items-center" @click="cancelSubscription">
+				<button
+					v-if="s.isActive && (!s.renewalInfo || s.renewalInfo.status !== 'cancelled')"
+					class="text-negative py-2 text-sm flex flex-row items-center"
+					@click="cancelSubscription"
+				>
 					<CancelIcon class="h-5 w-5 mr-2" />
 					<p class="focus:outline-none text-sm">Cancel my subscription</p>
 				</button>
