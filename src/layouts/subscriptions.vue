@@ -22,7 +22,7 @@
 					<section class="flex flex-row">
 						<nuxt-child
 							style="backdrop-filter: blur(10px)"
-							class="lg:w-7.5 min-h-70 h-70 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder z-10 w-full overflow-y-auto rounded-t-lg bg-gradient-to-r p-6 pt-4 shadow-lg"
+							class="lg:w-7.5 min-h-70 h-70 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder z-10 w-full overflow-y-auto rounded-t-lg bg-gradient-to-r shadow-lg"
 							@popup="toggleSubInfosPopup"
 						/>
 						<!-- Expired subscriptions -->
