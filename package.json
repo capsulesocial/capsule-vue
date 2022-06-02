@@ -52,6 +52,7 @@
 		"postinstall": "husky install"
 	},
 	"dependencies": {
+		"@braintree/sanitize-url": "^6.0.0",
 		"@nuxtjs/dotenv": "^1.4.1",
 		"@tailwindcss/typography": "^0.4.1",
 		"@toruslabs/customauth": "^9.0.0",
