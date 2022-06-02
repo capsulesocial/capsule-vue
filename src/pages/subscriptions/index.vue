@@ -40,8 +40,8 @@ export default Vue.extend({
 	computed: {
 		...mapGetters(SubscriptionsNamespace, [`activeSubs`, `inactiveSubs`]),
 	},
-	created() {
-		this.$store.dispatch(`subscriptions/fetchSubs`, this.$store.state.session.id)
+	async mounted() {
+		await this.$store.dispatch(`subscriptions/fetchSubs`, this.$store.state.session.id)
 	},
 	methods: {},
 })
