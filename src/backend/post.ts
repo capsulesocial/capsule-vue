@@ -1,12 +1,13 @@
-import axios, { AxiosError } from 'axios'
+import axios from 'axios'
 
 import { signContent, verifyContent } from './utilities/keys'
 import ipfs from './utilities/ipfs'
-import { hexStringToUint8Array, isError, ISignedIPFSObject, uint8ArrayToHexString } from './utilities/helpers'
-import { nodeUrl, capsuleServer, sigValidity } from './utilities/config'
+import { hexStringToUint8Array, ISignedIPFSObject, uint8ArrayToHexString } from './utilities/helpers'
+import { nodeUrl } from './utilities/config'
 import { IRepost } from './reposts'
 import { decryptData, encryptAndSignData } from './crypto'
 import { getUserInfoNEAR } from './near'
+import { genericRequest } from './utilities/request'
 export interface Tag {
 	name: string
 }
@@ -31,6 +32,7 @@ export interface IRegularPost extends Post {
 
 export interface IEncryptedPost extends Post {
 	encrypted: true
+	subtitle: string
 }
 
 export type RetrievedPost = Omit<Post, `content`> & { _id: string; excerpt: string; wordCount?: number }
@@ -50,6 +52,26 @@ export type IPostResponseWithHidden = IPostResponse & { hidden: boolean }
 export interface IRepostResponse extends IGenericPostResponse {
 	repost: IRepost
 	deleted: boolean
+}
+
+export type SubscriptionStatus = `SUBSCRIBED` | `INSUFFICIENT_TIER` | `NOT_SUBSCRIBED`
+export interface IKeyRetrievalStatus {
+	status: SubscriptionStatus
+}
+export interface IKeyRetrievalSuccess extends IKeyRetrievalStatus {
+	status: `SUBSCRIBED`
+	key: string
+	counter: string
+}
+export interface IKeyRetrievalFailure extends IKeyRetrievalStatus {
+	status: `INSUFFICIENT_TIER` | `NOT_SUBSCRIBED`
+	enabledTiers: Array<string>
+}
+
+export type IKeyRetrievalResult = IKeyRetrievalFailure | IKeyRetrievalSuccess
+
+export function keyRetrievalFailed(keyStatus: IKeyRetrievalResult): keyStatus is IKeyRetrievalFailure {
+	return keyStatus.status === `INSUFFICIENT_TIER` || keyStatus.status === `NOT_SUBSCRIBED`
 }
 
 export type Algorithm = `NEW` | `FOLLOWING` | `TOP`
@@ -86,20 +108,18 @@ export function createRegularPost(
 
 export function createEncryptedPost(
 	title: string,
-	subtitle: string | null,
+	subtitle: string,
 	content: string,
 	category: string,
 	tags: Tag[],
 	authorID: string,
 	featuredPhotoCID?: string | null,
 	featuredPhotoCaption?: string | null,
+	postImages?: Array<string>,
 ): IEncryptedPost {
-	if (subtitle !== null) {
-		subtitle = subtitle.trim()
-	}
 	return {
 		title: title.trim(),
-		subtitle,
+		subtitle: subtitle.trim(),
 		content,
 		category,
 		timestamp: Date.now(),
@@ -108,6 +128,7 @@ export function createEncryptedPost(
 		...(featuredPhotoCID ? { featuredPhotoCID } : {}),
 		...(featuredPhotoCaption ? { featuredPhotoCaption } : {}),
 		encrypted: true,
+		postImages,
 	}
 }
 
@@ -126,20 +147,34 @@ export async function sendRegularPost(data: IRegularPost): Promise<string> {
 	return cid
 }
 
-// TODO: This needs fixing
-export async function sendEncryptedPost(data: IEncryptedPost): Promise<string> {
-	const { data: post, key, counter, sig } = await encryptAndSignData(data)
+export async function sendEncryptedPost(data: IEncryptedPost, tiers: Array<string>): Promise<string> {
+	const { data: post, key, counter, sig, publicKey } = await encryptAndSignData(data)
 
-	const cid = await ipfs().sendJSONData(post)
-	await axios.post(`${capsuleServer}/content`, { key, data: post, counter, sig, cid })
+	const ipfsData: ISignedIPFSObject<IEncryptedPost> = { data: post, sig, public_key: publicKey }
+
+	const cid = await ipfs().sendJSONData(ipfsData)
+	await genericRequest({
+		method: `post`,
+		path: `/content`,
+		body: { key, data: ipfsData, counter, cid, tiers },
+		username: post.authorID,
+	})
 	await axios.post(`${nodeUrl()}/content`, {
 		cid,
-		data: post,
-		sig,
+		data: ipfsData,
 		type: `post`,
 	})
 
 	return cid
+}
+
+export async function getPost(cid: string) {
+	const post = await ipfs().getJSONData<ISignedIPFSObject<Post>>(cid)
+	// Always evaluates to false
+	if (!isRegularPost(post.data) && !isEncryptedPost(post.data)) {
+		throw new Error(`Post should either be encrypted or public`)
+	}
+	return post
 }
 
 export async function getRegularPost(cid: string): Promise<ISignedIPFSObject<IRegularPost>> {
@@ -150,20 +185,16 @@ export async function getRegularPost(cid: string): Promise<ISignedIPFSObject<IRe
 	return post
 }
 
-// TODO: Fix this
-export async function getEncryptedPost(cid: string, username: string): Promise<IEncryptedPost | { error: string }> {
-	const post: Post = await ipfs().getJSONData(cid)
-	if (!isEncryptedPost(post)) {
-		throw new Error(`Post is not encrypted`)
-	}
-
+export async function getDecryptedContent(cid: string, content: string, username: string) {
 	const result = await getEncryptionKeys(username, cid)
-	if (isError(result)) {
+
+	if (keyRetrievalFailed(result)) {
 		return result
 	}
+
 	const { key, counter } = result
-	post.content = await decryptData(post.content, key, counter)
-	return post
+	const decryptedContent = await decryptData(content, key, counter)
+	return { content: decryptedContent }
 }
 
 export function isEncryptedPost(post: Post): post is IEncryptedPost {
@@ -175,20 +206,12 @@ export function isRegularPost(post: Post): post is IRegularPost {
 }
 
 async function getEncryptionKeys(username: string, cid: string) {
-	const exp = Date.now() + sigValidity
-	const { sig } = await signContent({ username, cid, exp })
-
-	try {
-		const res = await axios.get<{ key: string; counter: string }>(
-			`${capsuleServer}/content/${cid}?username=${username}&sig=${uint8ArrayToHexString(sig)}&exp=${exp}`,
-		)
-		return res.data
-	} catch (err) {
-		if (err instanceof AxiosError && err.response) {
-			return { error: err.response.data.error }
-		}
-		throw err
-	}
+	const res = await genericRequest<IKeyRetrievalResult>({
+		method: `get`,
+		path: `/content/${cid}`,
+		username,
+	})
+	return res
 }
 
 export interface IGetPostsOptions {
@@ -199,7 +222,14 @@ export interface IGetPostsOptions {
 }
 
 export async function getPosts(
-	filter: { category?: string; authorID?: string; tag?: string; bookmarkedBy?: string; timeframe?: Timeframe },
+	filter: {
+		category?: string
+		authorID?: string
+		tag?: string
+		bookmarkedBy?: string
+		timeframe?: Timeframe
+		encrypted?: boolean
+	},
 	bookmarker: string,
 	options: IGetPostsOptions,
 ): Promise<IPostResponse[] | IRepostResponse[]> {
@@ -230,13 +260,13 @@ export async function getOnePost(cid: string, bookmarker: string): Promise<IPost
 	return res.data.data
 }
 
-export async function verifyPostAuthenticity(content: ISignedIPFSObject<Post>) {
+export async function verifyPostAuthenticity(post: Post, sig: string, publicKey: string) {
 	try {
-		const { publicKey } = await getUserInfoNEAR(content.data.authorID)
-		if (uint8ArrayToHexString(publicKey) !== content.public_key) {
+		const { publicKey: contractPubKey } = await getUserInfoNEAR(post.authorID)
+		if (uint8ArrayToHexString(contractPubKey) !== publicKey) {
 			return false
 		}
-		const verified = verifyContent(content.data, hexStringToUint8Array(content.sig), publicKey)
+		const verified = verifyContent(post, hexStringToUint8Array(sig), contractPubKey)
 		return verified
 	} catch (err: any) {
 		return false

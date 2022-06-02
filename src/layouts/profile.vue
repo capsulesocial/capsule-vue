@@ -28,6 +28,7 @@
 							:followers="followers"
 							:following="following"
 							:toggleFriend="toggleFriend"
+							:toggleSubscription="toggleSubscription"
 							:updateFollowers="updateFollowers"
 							:userIsFollowed="userIsFollowed"
 							:mutuals="mutuals"
@@ -123,12 +124,22 @@
 		/>
 		<ImagePopup v-if="showAvatar" :image="visitAvatar" @close="showAvatar = false" />
 		<UnauthPopup />
+		<SubscriptionsPopup
+			v-if="showSubscriptions"
+			:author="visitProfile"
+			:authorAvatar="visitAvatar"
+			@close="showSubscriptions = false"
+		/>
+		<unFollowWarningPopup v-if="showUnfollowWarning" @close="showUnfollowWarning = false" />
+		<SubInfosPopup v-if="showSubscriptionInfo && subInfo" :s="subInfo" @close="showSubscriptionInfo = false" />
 		<portal-target name="card-popup"></portal-target>
 	</main>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapActions } from 'vuex'
+import { AxiosError } from 'axios'
 import ProfileWidget from '@/components/widgets/Profile.vue'
 import FollowersWidget from '@/components/widgets/Followers.vue'
 import MutualFollowersWidget from '@/components/widgets/MutualFollowers.vue'
@@ -137,15 +148,21 @@ import Footer from '@/components/Footer.vue'
 import FollowersPopup from '@/components/popups/FollowersPopup.vue'
 import FollowingPopup from '@/components/popups/FollowingPopup.vue'
 import MutualFollowersPopup from '@/components/popups/MutualFollowersPopup.vue'
+import SubscriptionsPopup from '@/components/popups/SubscriptionsPopup.vue'
 import ImagePopup from '@/components/popups/Image.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 import UnauthPopup from '@/components/popups/UnauthPopup.vue'
+import SubInfosPopup from '@/components/popups/SubInfosPopup.vue'
+import unFollowWarningPopup from '@/components/popups/unFollowWarningPopup.vue'
 
 import { IBackground, backgrounds } from '@/config/backgrounds'
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
 import { getUserInfoNEAR } from '@/backend/near'
+import { ActionType, namespace as paymentProfileNamespace } from '@/store/paymentProfile'
+import { ISubscriptionWithProfile } from '@/store/subscriptions'
+import type { ISubscriptionResponse } from '@/backend/subscription'
 
 interface IData {
 	myProfile: Profile
@@ -165,6 +182,11 @@ interface IData {
 	showFollowing: boolean
 	showMutuals: boolean
 	showAvatar: boolean
+	showSubscriptions: boolean
+	showSubscriptionInfo: boolean
+	subInfo: ISubscriptionWithProfile | undefined
+	activeSubscription: boolean
+	showUnfollowWarning: boolean
 }
 
 export default Vue.extend({
@@ -180,6 +202,9 @@ export default Vue.extend({
 		FollowingPopup,
 		MutualFollowersPopup,
 		ImagePopup,
+		SubscriptionsPopup,
+		SubInfosPopup,
+		unFollowWarningPopup,
 	},
 	middleware: `auth`,
 	data(): IData {
@@ -201,6 +226,11 @@ export default Vue.extend({
 			showAvatar: false,
 			myAvatar: undefined,
 			visitAvatar: undefined,
+			showSubscriptions: false,
+			showSubscriptionInfo: false,
+			subInfo: undefined,
+			activeSubscription: false,
+			showUnfollowWarning: false,
 		}
 	},
 	watch: {
@@ -245,9 +275,16 @@ export default Vue.extend({
 		this.$setColorMode(this.$store.state.settings.mode)
 		this.$setColor(this.$store.state.settings.color)
 	},
-	mounted() {
+	async mounted() {
 		// Fetch visiting profile
 		this.getVisitingProfile()
+		try {
+			await this.fetchPaymentProfile({ username: this.$route.params.id })
+		} catch (err) {
+			if (!(err instanceof AxiosError && err.response?.status === 404)) {
+				this.$handleError(err)
+			}
+		}
 	},
 	methods: {
 		async getVisitingProfile() {
@@ -271,6 +308,12 @@ export default Vue.extend({
 			this.followers = followers
 			this.following = following
 			this.userIsFollowed = followers.has(this.$store.state.session.id)
+
+			this.$store.state.subscriptions.active.forEach((sub: ISubscriptionResponse) => {
+				if (sub.authorID === this.$route.params.id) {
+					this.activeSubscription = true
+				}
+			})
 
 			if (this.$store.state.session.id !== ``) {
 				// get my profile and avatar
@@ -322,6 +365,30 @@ export default Vue.extend({
 					this.$handleError(err)
 				}
 			}
+			if (this.activeSubscription === true && this.userIsFollowed === true) {
+				this.showUnfollowWarning = !this.showUnfollowWarning
+			}
+		},
+		toggleSubscription(authorID: string) {
+			// Unauth
+			if (this.$store.state.session.id === ``) {
+				this.$store.commit(`settings/toggleUnauthPopup`)
+				return
+			}
+			// Prevent self-subscribing
+			if (authorID !== this.$store.state.session.id) {
+				// If already subscribed
+				this.$store.state.subscriptions.active.forEach((sub: ISubscriptionWithProfile) => {
+					if (sub.authorID === this.$route.params.id) {
+						this.showSubscriptionInfo = true
+						this.subInfo = sub
+					}
+				})
+				// show add subscription
+				if (!this.showSubscriptionInfo) {
+					this.showSubscriptions = !this.showSubscriptions
+				}
+			}
 		},
 		async updateFollowers() {
 			const { followers, following } = await getFollowersAndFollowing(this.$route.params.id, true)
@@ -341,6 +408,9 @@ export default Vue.extend({
 				throw err
 			}
 		},
+		...mapActions(paymentProfileNamespace, {
+			fetchPaymentProfile: ActionType.FETCH_PROFILE,
+		}),
 	},
 })
 </script>

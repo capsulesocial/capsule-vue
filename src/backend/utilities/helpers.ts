@@ -24,10 +24,6 @@ export function stableOrderObj<T extends Record<string, any>>(obj: T): T {
 	return newObj as T
 }
 
-export function isError(obj: Record<string, unknown>): obj is { error: any } {
-	return `error` in obj
-}
-
 export function getBlobExtension(blob: Blob): string | null {
 	switch (blob.type) {
 		case `image/png`:
@@ -100,4 +96,8 @@ export function calculateReadingTime(wordCount?: number, postImagesLength: numbe
 	const photoReadingTime = (postImagesLength * ((12 * 100) / 60)) / 100
 	const readingTime = Math.round(((textReadingTime + photoReadingTime) * 60) / 100)
 	return readingTime < 1 ? 1 : readingTime
+}
+
+export function getExpTimestamp() {
+	return Date.now() + 5 * 60 * 1000
 }

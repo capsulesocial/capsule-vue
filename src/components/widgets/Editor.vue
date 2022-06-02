@@ -122,6 +122,35 @@
 				</button>
 			</div>
 		</article>
+		<!-- Premium post -->
+		<article
+			v-if="this.$store.getters[`subscriptionTiers/enabledSubscriptions`]"
+			class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder mb-5 rounded-lg border bg-gradient-to-r p-6 py-5 shadow-lg"
+			style="backdrop-filter: blur(10px)"
+		>
+			<div class="flex flex-row justify-between items-center">
+				<div class="flex flex-col items-start">
+					<p class="text-gray5 dark:text-gray3 text-sm">This post is for subscribers only</p>
+					<button
+						class="text-neutral text-sm mt-1"
+						:class="
+							this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].encrypted
+								? ``
+								: `opacity-50 cursor-not-allowed`
+						"
+						:disabled="!this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].encrypted"
+						@click="openTiers"
+					>
+						Manage access
+					</button>
+				</div>
+				<PremiumSwitchEditor
+					:enabled="this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].encrypted"
+					@toggle="togglePremiumPost"
+				/>
+			</div>
+		</article>
+		<!-- Publish -->
 		<article
 			class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder mb-5 rounded-lg border bg-gradient-to-r p-6 shadow-lg"
 			style="backdrop-filter: blur(10px)"
@@ -150,6 +179,7 @@ import XIcon from '@/components/icons/X.vue'
 import UploadIcon from '@/components/icons/Upload.vue'
 import ChevronUp from '@/components/icons/ChevronUp.vue'
 import ChevronDown from '@/components/icons/ChevronDown.vue'
+import PremiumSwitchEditor from '@/components/PremiumSwitchEditor.vue'
 
 import { addPhotoToIPFS, preUploadPhoto } from '@/backend/photos'
 import { categories } from '@/config/config'
@@ -174,6 +204,7 @@ export default Vue.extend({
 		UploadIcon,
 		ChevronUp,
 		ChevronDown,
+		PremiumSwitchEditor,
 	},
 	props: {
 		wordCount: {
@@ -315,6 +346,12 @@ export default Vue.extend({
 		getCategoryIcon(category: string) {
 			const c = category || this.category
 			return c ? require(`@/assets/images/category/${c}/${this.$colorMode.dark ? `dark` : `light`}/icon.webp`) : ``
+		},
+		togglePremiumPost() {
+			this.$store.commit(`draft/togglePremium`)
+		},
+		openTiers() {
+			this.$emit(`openTierAccess`)
 		},
 	},
 })

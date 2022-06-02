@@ -1,27 +1,51 @@
-import axios from 'axios'
-import { capsuleServer, sigValidity } from './utilities/config'
-import { uint8ArrayToHexString } from './utilities/helpers'
-import { signContent } from './utilities/keys'
+import { genericRequest } from './utilities/request'
 
-export interface ISubscriptionEvent {
-	action: `SUBSCRIBE` | `UNSUBSCRIBE`
-	subject: string
-	object: string
-	exp: number
+export interface ISubscriptionResponse {
+	authorID: string
+	tier: { id: string; name: string }
+	isActive: boolean
+	renewalDate?: number | undefined
+	subscriptionId: string
+	startedOn: number
 }
 
-export async function subscriptionChange(action: `SUBSCRIBE` | `UNSUBSCRIBE`, self: string, user: string) {
-	const data: ISubscriptionEvent = {
-		action,
-		subject: self,
-		object: user,
-		exp: Date.now() + sigValidity,
-	}
+export interface SubsTransaction {
+	transactionId: string
+	receiptUrl: string
+	currency: string
+	amount: number
+	createdAt: number
+	status: string
+}
 
-	const { sig } = await signContent(data)
-
-	await axios.post(`${capsuleServer}/subscription/subscribe`, {
-		event: data,
-		sig: uint8ArrayToHexString(sig),
+export async function getUserSubscriptions(self: string) {
+	const res = await genericRequest<{ data: Array<ISubscriptionResponse> }>({
+		method: `get`,
+		path: `/subscription`,
+		username: self,
 	})
+
+	// to add:
+	// 1. number of months in a row
+	// 2. total number of months subscribed
+	return res.data
+}
+
+export async function cancelSubscription(username: string, subscriptionId: string) {
+	await genericRequest({
+		method: `post`,
+		path: `/subscription/unsubscribe`,
+		username,
+		body: { subscriptionId },
+	})
+}
+
+export async function getSubscriptionTransactions(username: string, subscriptionId: string) {
+	const res = await genericRequest<{ data: Array<SubsTransaction> }>({
+		method: `get`,
+		path: `/subscription/transactions/${subscriptionId}`,
+		username,
+	})
+
+	return res.data
 }

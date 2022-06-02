@@ -29,7 +29,7 @@
 				<!-- Dropdown: Profile, settings, disconnect -->
 				<div
 					v-show="showDropdown"
-					class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation absolute mt-16 flex flex-col rounded-lg border bg-gradient-to-r p-4 shadow-lg backdrop-blur-lg backdrop-filter"
+					class="w-max from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation absolute mt-16 flex flex-col rounded-lg border bg-gradient-to-r p-4 shadow-lg backdrop-blur-lg backdrop-filter right-0"
 					:class="$colorMode.dark ? `dropdownOpenDark` : `dropdownOpen`"
 				>
 					<!-- Unauthenticated: Log in -->
@@ -47,16 +47,58 @@
 						>Register</nuxt-link
 					>
 					<!-- Authenticated -->
+					<div v-if="$store.state.session.id !== ``" class="flex items-center">
+						<div class="flex flex-col items-start">
+							<p class="text-lg text-lightPrimaryText dark:text-darkPrimaryText font-semibold -mt-1">
+								{{ $store.state.session.name }}
+							</p>
+							<p class="text-sm text-primary">@{{ $store.state.session.id }}</p>
+						</div>
+					</div>
+					<div
+						v-if="$store.state.session.id !== ``"
+						class="bg-lightBorder dark:bg-darkBorder w-full rounded my-3"
+						style="height: 1px"
+					></div>
 					<nuxt-link
 						v-if="$store.state.session.id !== ``"
 						:to="`/id/` + $store.state.session.id"
-						class="text-gray5 dark:text-gray3 mb-4 flex w-full flex-row items-center text-left"
+						class="text-gray5 dark:text-gray3 mb-2 flex w-full flex-row items-center text-left"
 						><ProfileIcon class="mr-2 h-5 w-5 flex-shrink-0" />Profile</nuxt-link
 					>
+					<a
+						v-if="
+							$store.state.session.id !== `` &&
+							this.$store.getters[`paymentProfile/getPaymentProfile`](this.$store.state.session.id).paymentsEnabled
+						"
+						:href="authordashboardURL"
+						class="text-gray5 dark:text-gray3 flex w-full flex-row items-center text-left"
+						><DashboardIcon class="mr-2 h-5 w-5 flex-shrink-0" />Author Dashboard</a
+					>
+					<div
+						v-if="
+							$store.state.session.id !== `` &&
+							this.$store.getters[`paymentProfile/getPaymentProfile`](this.$store.state.session.id).paymentsEnabled
+						"
+						class="bg-lightBorder dark:bg-darkBorder w-full rounded my-3"
+						style="height: 1px"
+					></div>
+					<nuxt-link
+						v-if="$store.state.session.id !== ``"
+						to="/subscriptions"
+						class="text-gray5 dark:text-gray3 flex w-full flex-row items-center text-left"
+					>
+						<Crown2Icon class="mr-2 h-5 w-5 flex-shrink-0" />Subscriptions</nuxt-link
+					>
+					<div
+						v-if="$store.state.session.id !== ``"
+						class="bg-lightBorder dark:bg-darkBorder w-full rounded my-3"
+						style="height: 1px"
+					></div>
 					<nuxt-link
 						v-if="$store.state.session.id !== ``"
 						to="/settings/account"
-						class="text-gray5 dark:text-gray3 mb-4 flex w-full flex-row items-center text-left"
+						class="text-gray5 dark:text-gray3 mb-2 flex w-full flex-row items-center text-left"
 					>
 						<SettingsIcon class="mr-2 h-5 w-5 flex-shrink-0" />Settings</nuxt-link
 					>
@@ -124,14 +166,14 @@
 				<!-- Dropdown: Profile, settings, disconnect -->
 				<div
 					v-show="showDropdown"
-					class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation absolute mt-2 flex flex-col rounded-lg border bg-gradient-to-r p-4 shadow-lg backdrop-blur-lg backdrop-filter"
+					class="w-max from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation absolute mt-2 flex flex-col rounded-lg border bg-gradient-to-r p-4 shadow-lg backdrop-blur-lg backdrop-filter right-0"
 					:class="$colorMode.dark ? `dropdownOpenDark` : `dropdownOpen`"
 				>
 					<!-- Unauthenticated: Log in -->
 					<nuxt-link
 						v-if="$store.state.session.id === ``"
 						to="/login"
-						class="text-gray5 dark:text-gray3 mx-2 mb-4 flex w-24 flex-row items-center text-left"
+						class="text-gray5 dark:text-gray3 mx-2 mb-2 flex w-24 flex-row items-center text-left"
 						>Log In</nuxt-link
 					>
 					<!-- Unauthenticated: Register -->
@@ -141,17 +183,58 @@
 						class="text-gray5 dark:text-gray3 mx-2 flex w-24 flex-row items-center text-left"
 						>Register</nuxt-link
 					>
-					<!-- Authenticated -->
+					<div v-if="$store.state.session.id !== ``" class="flex items-center">
+						<div class="flex flex-col items-start">
+							<p class="text-lg text-lightPrimaryText dark:text-darkPrimaryText font-semibold -mt-1">
+								{{ $store.state.session.name }}
+							</p>
+							<p class="text-sm text-primary">@{{ $store.state.session.id }}</p>
+						</div>
+					</div>
+					<div
+						v-if="$store.state.session.id !== ``"
+						class="bg-lightBorder dark:bg-darkBorder w-full rounded my-3"
+						style="height: 1px"
+					></div>
 					<nuxt-link
 						v-if="$store.state.session.id !== ``"
 						:to="`/id/` + $store.state.session.id"
-						class="text-gray5 dark:text-gray3 mb-4 flex w-full flex-row items-center text-left"
+						class="text-gray5 dark:text-gray3 mb-2 flex w-full flex-row items-center text-left"
 						><ProfileIcon class="mr-2 h-5 w-5 flex-shrink-0" />Profile</nuxt-link
 					>
+					<a
+						v-if="
+							$store.state.session.id !== `` &&
+							this.$store.getters[`paymentProfile/getPaymentProfile`](this.$store.state.session.id).paymentsEnabled
+						"
+						:href="authordashboardURL"
+						class="text-gray5 dark:text-gray3 flex w-full flex-row items-center text-left"
+						><DashboardIcon class="mr-2 h-5 w-5 flex-shrink-0" />Author Dashboard</a
+					>
+					<div
+						v-if="
+							$store.state.session.id !== `` &&
+							this.$store.getters[`paymentProfile/getPaymentProfile`](this.$store.state.session.id).paymentsEnabled
+						"
+						class="bg-lightBorder dark:bg-darkBorder w-full rounded my-3"
+						style="height: 1px"
+					></div>
+					<nuxt-link
+						v-if="$store.state.session.id !== ``"
+						to="/subscriptions"
+						class="text-gray5 dark:text-gray3 flex w-full flex-row items-center text-left"
+					>
+						<Crown2Icon class="mr-2 h-5 w-5 flex-shrink-0" />Subscriptions</nuxt-link
+					>
+					<div
+						v-if="$store.state.session.id !== ``"
+						class="bg-lightBorder dark:bg-darkBorder w-full rounded my-3"
+						style="height: 1px"
+					></div>
 					<nuxt-link
 						v-if="$store.state.session.id !== ``"
 						to="/settings/account"
-						class="text-gray5 dark:text-gray3 mb-4 flex w-full flex-row items-center text-left"
+						class="text-gray5 dark:text-gray3 mb-2 flex w-full flex-row items-center text-left"
 					>
 						<SettingsIcon class="mr-2 h-5 w-5 flex-shrink-0" />Settings</nuxt-link
 					>
@@ -185,12 +268,15 @@ import HomeIcon from '@/components/icons/Home.vue'
 import DiscoverIcon from '@/components/icons/Discover.vue'
 import BookmarksIcon from '@/components/icons/Bookmarks.vue'
 import CapsuleBlogchain from '@/components/icons/CapsuleBlogchain.vue'
+import Crown2Icon from '@/components/icons/Crown2.vue'
+import DashboardIcon from '@/components/icons/OverviewIcon.vue'
 
 import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
 
 interface IData {
 	showDropdown: boolean
 	showMobileMenu: boolean
+	authordashboardURL: string
 }
 
 export default Vue.extend({
@@ -206,6 +292,8 @@ export default Vue.extend({
 		DiscoverIcon,
 		BookmarksIcon,
 		CapsuleBlogchain,
+		Crown2Icon,
+		DashboardIcon,
 	},
 	props: {
 		avatar: {
@@ -217,6 +305,7 @@ export default Vue.extend({
 		return {
 			showDropdown: false,
 			showMobileMenu: false,
+			authordashboardURL: window.location.origin + `/authordashboard`,
 		}
 	},
 	created() {
@@ -234,9 +323,7 @@ export default Vue.extend({
 			this.endSession()
 			const keystore = new keyStores.BrowserLocalStorageKeyStore()
 			keystore.clear()
-			this.$store.commit(`draft/clearDrafts`)
-			this.$store.commit(`reset`)
-			this.$store.commit(`widgets/reset`)
+			localStorage.clear()
 			this.$router.push(`/login`)
 		},
 		toggleMobileMenu() {

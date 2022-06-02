@@ -402,9 +402,12 @@
 							<div class="mr-4 flex w-full flex-col justify-between">
 								<nuxt-link :to="'/post/' + postCID">
 									<div class="flex max-w-full flex-col overflow-hidden pr-4">
-										<h3 class="break-words pb-2 text-lg font-semibold dark:text-darkPrimaryText">
-											{{ post.title }}
-										</h3>
+										<div class="flex flex-row w-full justify-between">
+											<h3 class="break-words pb-2 text-lg font-semibold dark:text-darkPrimaryText">
+												{{ post.title
+												}}<CrownIcon v-if="post.encrypted" class="ml-2 inline text-neutral w-5 h-5 -mt-1" />
+											</h3>
+										</div>
 										<h6
 											v-if="(post.subtitle || post.excerpt) && featuredPhoto"
 											class="max-w-420 break-words dark:text-darkSecondaryText"
@@ -536,6 +539,7 @@ import BinIcon from '@/components/icons/Bin.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 import SharePopup from '@/components/popups/SharePopup.vue'
 import CardProfileHeader from '@/components/post/card/ProfileHeader.vue'
+import CrownIcon from '@/components/icons/Crown.vue'
 
 import { RetrievedPost, getRegularPost } from '@/backend/post'
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
@@ -599,6 +603,7 @@ export default Vue.extend({
 		SendIcon,
 		SharePopup,
 		CardProfileHeader,
+		CrownIcon,
 	},
 	props: {
 		repost: {

@@ -57,93 +57,130 @@
 				</div>
 			</header>
 			<section v-if="post !== null" class="mb-5 p-5 lg:p-0 pb-16 pt-2 md:pb-5">
-				<!-- Category and elipses -->
-				<article class="my-5 flex w-full justify-between">
-					<nuxt-link :to="`/discover/` + post.category" class="text-primary capitalize">{{
-						post.category.replace(`-`, ` `)
-					}}</nuxt-link>
-					<div class="flex">
-						<BookmarkButton
-							:postID="$route.params.post"
-							:hasBookmark="isBookmarked"
-							class="pr-2"
-							@clicked="getBookmarkStatus"
-						/>
-						<!-- Share popup button -->
-						<button
-							class="focus:outline-none text-gray5 dark:text-gray3 hover:text-primary hover:fill-primary flex items-center"
-							:class="showShare ? `text-primary` : ``"
-							style="margin-top: 2px"
-							@click="showShare = !showShare"
+				<!-- Post content -->
+				<article class="relative">
+					<!-- Category and elipses -->
+					<article class="my-5 flex w-full justify-between">
+						<nuxt-link :to="`/discover/` + post.category" class="text-primary capitalize">{{
+							post.category.replace(`-`, ` `)
+						}}</nuxt-link>
+						<div class="flex">
+							<BookmarkButton
+								:postID="$route.params.post"
+								:hasBookmark="isBookmarked"
+								class="pr-2"
+								@clicked="getBookmarkStatus"
+							/>
+							<!-- Share popup button -->
+							<button
+								class="focus:outline-none text-gray5 dark:text-gray3 hover:text-primary hover:fill-primary flex items-center"
+								:class="showShare ? `text-primary` : ``"
+								style="margin-top: 2px"
+								@click="showShare = !showShare"
+							>
+								<ShareIcon :isActive="showShare" />
+							</button>
+						</div>
+					</article>
+					<article>
+						<h1
+							class="text-lightPrimaryText dark:text-darkPrimaryText text-h1 mb-3 break-words font-serif font-semibold"
 						>
-							<ShareIcon :isActive="showShare" />
-						</button>
+							{{ post.title }}
+						</h1>
+						<h2
+							v-if="post.subtitle"
+							class="text-lightSecondaryText dark:text-gray3 text-h2 mb-3 break-words font-serif font-medium"
+						>
+							{{ post.subtitle }}
+						</h2>
+					</article>
+					<!-- Private sensitive content -->
+					<div class="relative">
+						<!-- Featured Photo -->
+						<article
+							v-if="featuredPhoto !== null"
+							class="relative mb-5 mt-5 flex cursor-pointer flex-col justify-end"
+							@click="showPhoto"
+						>
+							<div
+								v-if="post.featuredPhotoCaption"
+								class="absolute w-full rounded-b-lg"
+								:class="
+									this.captionHeight > 72
+										? `h-48`
+										: this.captionHeight > 52
+										? `h-40`
+										: this.captionHeight > 32
+										? `h-32`
+										: `h-24`
+								"
+								style="background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.8) 100%)"
+							></div>
+							<img :src="featuredPhoto" class="w-full rounded-lg object-cover shadow-lg" />
+							<p
+								v-if="post.featuredPhotoCaption"
+								id="photoCaption"
+								class="text-lightOnPrimaryText absolute px-4 pb-3 text-sm drop-shadow-lg"
+								style="text-shadow: 0 0 10px #000"
+							>
+								{{ post.featuredPhotoCaption }}
+							</p>
+						</article>
+						<div v-else-if="showPaywall" class="h-80 lg:h-72"></div>
+						<!-- Post paywall -->
+						<article
+							v-if="showPaywall"
+							class="from-lightBGStart to-transparent dark:from-darkBGStart dark:to-transparent bg-gradient-to-t z-20 absolute top-0 w-full h-full flex"
+						>
+							<div
+								class="w-full shadow-lg flex flex-col items-center py-10 px-16 from-lightBGStart to-lightBGStop dark:from-darkBG dark:to-darkBG bg-gradient-to-r rounded-lg h-min"
+								style="backdrop-filter: blur(10px)"
+								:class="featuredPhoto !== null ? `mt-36` : `mt-0`"
+							>
+								<h4 class="text-2xl font-semibold text-neutral mb-4 text-center">This post is for Paid subscribers</h4>
+								<p class="my-4 text-center text-gray5 dark:text-gray3">
+									Become a subscriber of
+									<span v-if="author.name !== ``" class="font-semibold text-primary">{{ author.name }}</span>
+									<span v-else class="font-semibold text-primary">@{{ author.id }}</span> to access
+									<br class="hidden lg:block" />
+									this post and other subscriber-only content
+								</p>
+								<SubscribeButton
+									:toggleSubscription="toggleSubscription"
+									:userIsSubscribed="false"
+									class="header-profile my-4"
+									style="transform: scale(1.2)"
+								/>
+								<p class="text-sm mt-4 text-gray5 dark:text-gray3">
+									Manage my <nuxt-link to="/subscriptions" class="text-neutral text">subscriptions</nuxt-link>
+								</p>
+							</div>
+						</article>
+						<!-- Content -->
+						<article v-else class="mt-5">
+							<div class="text-lightPrimaryText dark:text-darkSecondaryText editable content max-w-none break-words">
+								<PostView :content="this.post.content" :postImages="this.post.postImages" />
+							</div>
+						</article>
+						<!-- Tags -->
+						<article class="mt-5 text-lg">
+							<TagCard v-for="t in post.tags" :key="t.name" class="mr-2 mb-2" :tag="t.name" />
+						</article>
+						<!-- IPFS CID -->
+						<div class="mt-3">
+							<a
+								:href="`https://ipfs.io/api/v0/dag/get?arg=` + $route.params.post"
+								target="_blank"
+								class="bg-gray1 dark:bg-gray7 text-gray5 dark:text-gray1 flex flex-row justify-between rounded-lg px-3 py-1"
+							>
+								<span class="mr-4" style="flex-shrink: 0">IPFS address </span>
+								<span class="overflow-hidden" style="text-overflow: ellipsis">{{ $route.params.post }}</span>
+								<span class="block"><LinkIcon class="py-1" /></span>
+							</a>
+						</div>
 					</div>
 				</article>
-				<article>
-					<h1 class="text-lightPrimaryText dark:text-darkPrimaryText text-h1 mb-3 break-words font-serif font-semibold">
-						{{ post.title }}
-					</h1>
-					<h2
-						v-if="post.subtitle"
-						class="text-lightSecondaryText dark:text-gray3 text-h2 mb-3 break-words font-serif font-medium"
-					>
-						{{ post.subtitle }}
-					</h2>
-				</article>
-				<!-- Featured Photo -->
-				<article
-					v-if="featuredPhoto !== null"
-					class="relative mb-5 mt-5 flex cursor-pointer flex-col justify-end"
-					@click="showPhoto"
-				>
-					<div
-						v-if="post.featuredPhotoCaption"
-						class="absolute w-full rounded-b-lg"
-						:class="
-							this.captionHeight > 72
-								? `h-48`
-								: this.captionHeight > 52
-								? `h-40`
-								: this.captionHeight > 32
-								? `h-32`
-								: `h-24`
-						"
-						style="background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.8) 100%)"
-					></div>
-					<img :src="featuredPhoto" class="w-full rounded-lg object-cover shadow-lg" />
-					<p
-						v-if="post.featuredPhotoCaption"
-						id="photoCaption"
-						class="text-lightOnPrimaryText absolute px-4 pb-3 text-sm drop-shadow-lg"
-						style="text-shadow: 0 0 10px #000"
-					>
-						{{ post.featuredPhotoCaption }}
-					</p>
-				</article>
-				<!-- Content -->
-				<article class="mt-5">
-					<div class="text-lightPrimaryText dark:text-darkSecondaryText editable content max-w-none break-words">
-						<PostView :content="this.post.content" :postImages="this.post.postImages" />
-					</div>
-				</article>
-
-				<!-- Tags -->
-				<article class="mt-5 text-lg">
-					<TagCard v-for="t in post.tags" :key="t.name" class="mr-2 mb-2" :tag="t.name" />
-				</article>
-				<!-- IPFS CID -->
-				<div class="mt-3">
-					<a
-						:href="`https://ipfs.io/api/v0/dag/get?arg=` + $route.params.post"
-						target="_blank"
-						class="bg-gray1 dark:bg-gray7 text-gray5 dark:text-gray1 flex flex-row justify-between rounded-lg px-3 py-1"
-					>
-						<span class="mr-4" style="flex-shrink: 0">IPFS address </span>
-						<span class="overflow-hidden" style="text-overflow: ellipsis">{{ $route.params.post }}</span>
-						<span class="block"><LinkIcon class="py-1" /></span>
-					</a>
-				</div>
 				<AuthorCard
 					:authorAvatar="authorAvatar"
 					:authorName="author.name"
@@ -221,11 +258,21 @@
 			:cid="$route.params.post"
 			@close="showShare = false"
 		/>
+		<portal to="postPage">
+			<SubscriptionsPopup
+				v-if="showSubscriptions"
+				:author="author"
+				:authorAvatar="authorAvatar"
+				@close="showSubscriptions = false"
+			/>
+		</portal>
 	</div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapActions } from 'vuex'
+import { AxiosError } from 'axios'
 
 import PostView from '@/components/PostView.vue'
 import PostActions from '@/components/post/Actions.vue'
@@ -240,15 +287,18 @@ import LinkIcon from '@/components/icons/Link.vue'
 import FriendButton from '@/components/FriendButton.vue'
 import PostCard from '@/components/post/Card.vue'
 import SharePopup from '@/components/popups/SharePopup.vue'
+import SubscribeButton from '@/components/SubscribeButton.vue'
+import SubscriptionsPopup from '@/components/popups/SubscriptionsPopup.vue'
 
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
-import { getRegularPost, getOnePost, Post, verifyPostAuthenticity } from '@/backend/post'
+import { getOnePost, Post, verifyPostAuthenticity, getPost, isEncryptedPost, getDecryptedContent } from '@/backend/post'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
 import { getReposts } from '@/backend/reposts'
 import { isPostBookmarkedByUser } from '@/backend/bookmarks'
 import { createShareableLink } from '@/backend/shareable_links'
 import { calculateReadingTime } from '@/backend/utilities/helpers'
+import { ActionType, namespace as paymentProfileNamespace } from '@/store/paymentProfile'
 
 interface IData {
 	post: Post | null
@@ -274,6 +324,8 @@ interface IData {
 	readingTime: number | null
 	realURL: string
 	isLeaving: boolean
+	showPaywall: boolean
+	showSubscriptions: boolean
 }
 
 export default Vue.extend({
@@ -292,6 +344,8 @@ export default Vue.extend({
 		RepostButton,
 		SharePopup,
 		PostView,
+		SubscribeButton,
+		SubscriptionsPopup,
 	},
 	beforeRouteLeave(to, from, next) {
 		if (this.realURL !== `` && to.path !== from.path) {
@@ -326,6 +380,8 @@ export default Vue.extend({
 			readingTime: null,
 			realURL: ``,
 			isLeaving: false,
+			showPaywall: false,
+			showSubscriptions: false,
 		}
 	},
 	head() {
@@ -355,20 +411,52 @@ export default Vue.extend({
 			this.$emit(`showWarning`)
 		}
 
-		// Fetch post from IPFS
-		const post = await getRegularPost(this.$route.params.post)
+		const post = await getPost(postCID)
+
+		// Using spread operator so that post.data.content getting
+		// assigned before signature verification doesn't affect it
+		verifyPostAuthenticity({ ...post.data }, post.sig, post.public_key).then((verified) => {
+			if (!verified) {
+				this.$toastError(`Post not verified!`)
+			}
+		})
+
+		try {
+			await this.fetchPaymentProfile({ username: post.data.authorID })
+		} catch (err) {
+			if (!(err instanceof AxiosError && err.response?.status === 404)) {
+				this.$handleError(err)
+			}
+		}
+
+		if (isEncryptedPost(post.data)) {
+			try {
+				const decrypted = await getDecryptedContent(postCID, post.data.content, sessionID)
+				if (`content` in decrypted) {
+					post.data.content = decrypted.content
+				} else {
+					// TODO: show proper error message according to retrieval status
+					// decrypted.status is of type `INSUFFICIENT_TIER` | `NOT_SUBSCRIBED`
+					// this.$toastError(decrypted.status)
+					// Display premium post paywall
+					this.showPaywall = true
+				}
+			} catch (err) {
+				this.showPaywall = true
+				if (err instanceof AxiosError && err.response && err.response.data.error) {
+					this.$toastError(err.response.data.error)
+				} else {
+					throw err
+				}
+			}
+		}
+
 		this.post = post.data
 
 		if (!this.post) {
 			this.$toastError(`This post has not been found`)
 			throw new Error(`Post is null!`)
 		}
-
-		verifyPostAuthenticity(post).then((verified) => {
-			if (!verified) {
-				this.$toastError(`Post not verified!`)
-			}
-		})
 
 		// Get featured photo
 		if (this.post.featuredPhotoCID) {
@@ -546,6 +634,21 @@ export default Vue.extend({
 			}
 			this.readingTime = calculateReadingTime(wordcount, this.post.postImages?.length)
 		},
+		toggleSubscription(authorID: string) {
+			// Unauth
+			if (this.$store.state.session.id === ``) {
+				this.$store.commit(`settings/toggleUnauthPopup`)
+				return
+			}
+			// Prevent self-subscribing
+			if (authorID !== this.$store.state.session.id) {
+				// Send subscription
+				this.showSubscriptions = !this.showSubscriptions
+			}
+		},
+		...mapActions(paymentProfileNamespace, {
+			fetchPaymentProfile: ActionType.FETCH_PROFILE,
+		}),
 	},
 })
 </script>
