@@ -140,7 +140,9 @@
 							>
 								<h4 class="text-2xl font-semibold text-neutral mb-4 text-center">This post is for Paid subscribers</h4>
 								<p class="my-4 text-center text-gray5 dark:text-gray3">
-									Become a subscriber of <span class="font-semibold text-primary">{{ author.name }}</span> to access
+									Become a subscriber of
+									<span v-if="author.name !== ``" class="font-semibold text-primary">{{ author.name }}</span>
+									<span v-else class="font-semibold text-primary">@{{ author.id }}</span> to access
 									<br class="hidden lg:block" />
 									this post and other subscriber-only content
 								</p>
