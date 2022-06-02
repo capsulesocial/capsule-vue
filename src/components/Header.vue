@@ -321,16 +321,9 @@ export default Vue.extend({
 		}),
 		disconnect(): void {
 			this.endSession()
-			localStorage.removeItem(`serverAuthToken`)
-			localStorage.clear()
 			const keystore = new keyStores.BrowserLocalStorageKeyStore()
 			keystore.clear()
-			this.$store.commit(`draft/clearDrafts`)
-			this.$store.commit(`reset`)
-			this.$store.commit(`widgets/reset`)
-			this.$store.commit(`paymentProfile/reset`)
-			this.$store.commit(`subscriptions/reset`)
-			this.$store.commit(`subscriptionTiers/logout`)
+			localStorage.clear()
 			this.$router.push(`/login`)
 		},
 		toggleMobileMenu() {
