@@ -10,8 +10,8 @@ export interface ISubscriptionResponse {
 	renewalInfo?: {
 		message?: string
 		lastInvoiceId?: string
-		createdAt: Date
-		updatedAt: Date
+		invoiceCreationDate: Date
+		invoiceUpdationDate: Date
 		dueDate?: Date
 		status: string
 	}
