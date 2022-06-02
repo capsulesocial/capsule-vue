@@ -1,8 +1,7 @@
 import type { MutationTree } from 'vuex'
 import { ActionContext } from 'vuex'
 import { RootState } from '.'
-import type { ISubscriptionResponse } from '@/backend/subscription'
-import { getUserSubscriptions } from '@/backend/subscription'
+import { cancelSubscription, ISubscriptionResponse, getUserSubscriptions } from '@/backend/subscription'
 import { ValidationError } from '@/errors'
 import { createDefaultProfile, getProfile } from '@/backend/profile'
 
@@ -33,6 +32,7 @@ export const MutationType = {
 
 export const ActionType = {
 	FETCH_SUBS: `fetchSubs`,
+	DELETE_SUB: `deleteSub`,
 }
 
 export const mutations: MutationTree<ISubscriptionStore> = {
@@ -76,6 +76,13 @@ export const actions = {
 		} catch (err) {
 			throw new ValidationError(`Error when fetching subscriptions`)
 		}
+	},
+	async [ActionType.DELETE_SUB](
+		context: ActionContext<ISubscriptionStore, RootState>,
+		payload: { username: string; id: string },
+	) {
+		await cancelSubscription(payload.username, payload.id)
+		context.dispatch(ActionType.FETCH_SUBS, payload.username)
 	},
 }
 

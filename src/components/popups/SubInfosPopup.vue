@@ -44,8 +44,11 @@
 					<p class="text-gray5 dark:text-gray3 text-sm w-full mb-2">
 						Subscribed since <span class="font-semibold">{{ $formatDate(s.startedOn, true) }}</span>
 					</p>
-					<p class="text-gray5 dark:text-gray3 text-sm w-full">
-						Next Renewal on <span class="font-semibold">{{ $formatDate(s.renewalDate) }}</span>
+					<p v-if="s.renewalInfo && s.renewalInfo.status === 'cancelled'" class="text-negative text-sm w-full">
+						Cancels on <span class="font-semibold">{{ $formatDate(s.renewalInfo.dueDate, true) }}</span>
+					</p>
+					<p v-else class="text-gray5 dark:text-gray3 text-sm w-full">
+						Next Renewal on <span class="font-semibold">{{ $formatDate(s.renewalDate, true) }}</span>
 					</p>
 				</div>
 			</div>
@@ -55,7 +58,11 @@
 					<CardIcon class="h-5 w-5 mr-2" />
 					<p class="focus:outline-none text-sm">Change billing method</p>
 				</button>
-				<button class="text-negative py-2 text-sm flex flex-row items-center">
+				<button
+					v-if="s.isActive && (!s.renewalInfo || s.renewalInfo.status !== 'cancelled')"
+					class="text-negative py-2 text-sm flex flex-row items-center"
+					@click="cancelSubscription"
+				>
 					<CancelIcon class="h-5 w-5 mr-2" />
 					<p class="focus:outline-none text-sm">Cancel my subscription</p>
 				</button>
@@ -98,13 +105,14 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+import { mapActions } from 'vuex'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import Avatar from '@/components/Avatar.vue'
 import CancelIcon from '@/components/icons/CancelIcon.vue'
 import CardIcon from '@/components/icons/CardIcon.vue'
 import CloseIcon from '@/components/icons/X.vue'
 import DownloadIcon from '@/components/icons/Download.vue'
-import { ISubscriptionWithProfile } from '@/store/subscriptions'
+import { ActionType, ISubscriptionWithProfile, namespace as subscriptionNamespace } from '@/store/subscriptions'
 import { getSubscriptionTransactions, SubsTransaction } from '@/backend/subscription'
 import { getBillingPortalUrl } from '@/backend/payment'
 
@@ -153,6 +161,21 @@ export default Vue.extend({
 				this.$handleError(ex)
 			}
 		},
+		async cancelSubscription(): Promise<void> {
+			if (!confirm(`Are you sure you want to cancel this subscription?`)) {
+				return
+			}
+
+			try {
+				await this.deleteSubscription({ username: this.$store.state.session.id, id: this.s.subscriptionId })
+				this.$emit(`close`)
+			} catch (ex) {
+				this.$handleError(ex)
+			}
+		},
+		...mapActions(subscriptionNamespace, {
+			deleteSubscription: ActionType.DELETE_SUB,
+		}),
 	},
 })
 </script>
