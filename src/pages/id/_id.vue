@@ -200,7 +200,13 @@
 				@close="toggleSettings"
 			/>
 		</div>
-		<BioPopup v-if="expandBio" :bio="visitProfile.bio" @close="expandBio = false" />
+		<BioPopup
+			v-if="expandBio"
+			:bio="visitProfile.bio"
+			:authorname="visitProfile.name"
+			:authorID="visitProfile.id"
+			@close="expandBio = false"
+		/>
 		<portal-target name="bioPopup"></portal-target>
 	</section>
 </template>

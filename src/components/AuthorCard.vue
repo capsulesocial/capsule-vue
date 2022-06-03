@@ -34,7 +34,13 @@
 				/>
 			</div>
 		</div>
-		<BioPopup v-if="expandBio" :bio="authorBio" @close="expandBio = false" />
+		<BioPopup
+			v-if="expandBio"
+			:bio="authorBio"
+			:authorname="authorName"
+			:authorID="authorID"
+			@close="expandBio = false"
+		/>
 	</div>
 </template>
 
