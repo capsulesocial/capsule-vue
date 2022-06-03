@@ -331,6 +331,7 @@ import {
 	getAmountFromTier,
 	getCurrencySymbol,
 	getZeroDecimalAmount,
+	retrieveReaderProfile,
 	startSubscriptionPayment,
 } from '@/backend/payment'
 import { HTMLInputEvent } from '@/interfaces/HTMLInputEvent'
@@ -418,6 +419,9 @@ export default Vue.extend({
 		getFollowersAndFollowing(this.$store.state.session.id).then((data) => {
 			this.following = data.following
 			this.userIsFollowed = data.following.has(this.author.id)
+		})
+		retrieveReaderProfile(this.$store.state.session.id).then(({ email }) => {
+			this.customerEmail = email ?? ``
 		})
 	},
 	methods: {

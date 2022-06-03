@@ -3,12 +3,19 @@ import { capsuleServer } from './utilities/config'
 import { genericRequest } from './utilities/request'
 import { SubscriptionTier } from '@/store/paymentProfile'
 
+export interface IReaderProfile {
+	username: string
+	email?: string
+}
+
 export async function startSubscriptionPayment(
 	username: string,
 	tier: SubscriptionTier,
 	period: string,
 	paymentMethodId: string,
 	email: string,
+	// TODO This value should come from a checkbox from UI
+	storeEmail = true,
 ) {
 	const amount = getAmountFromTier(period, tier)
 	try {
@@ -17,6 +24,7 @@ export async function startSubscriptionPayment(
 			amount,
 			period,
 			email,
+			storeEmail,
 			paymentMethodId,
 		}
 		const response = await genericRequest({
@@ -70,6 +78,16 @@ export async function getBillingPortalUrl(username: string, subscriptionId: stri
 export async function retrievePaymentProfile(username: string) {
 	const response = await axios.get(`${capsuleServer}/pay/profile/${username}`)
 	return response.data
+}
+
+export async function retrieveReaderProfile(username: string) {
+	const response = await genericRequest<IReaderProfile>({
+		method: `get`,
+		path: `/pay/reader`,
+		username,
+	})
+
+	return response
 }
 
 export function getCurrencySymbol(currency: string) {
