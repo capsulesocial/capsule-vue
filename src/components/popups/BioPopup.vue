@@ -8,8 +8,14 @@
 				style="backdrop-filter: blur(10px)"
 				class="w-full lg:w-600 min-h-40 max-h-90 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation z-10 overflow-y-auto rounded-lg bg-gradient-to-r p-6 pt-4 shadow-lg"
 			>
-				<div class="sticky flex items-center justify-center">
-					<button class="focus:outline-none bg-gray1 dark:bg-gray5 rounded-full p-3" @click.prevent="$emit(`close`)">
+				<div class="sticky flex items-center justify-between">
+					<h2 v-if="authorname !== ``" class="text-lightPrimaryText dark:text-darkPrimaryText text-2xl font-semibold">
+						{{ authorname }}'s bio
+					</h2>
+					<h2 v-else class="text-lightPrimaryText dark:text-darkPrimaryText text-2xl font-semibold">
+						@{{ authorID }}'s bio
+					</h2>
+					<button class="focus:outline-none bg-gray1 dark:bg-gray5 rounded-full p-1" @click.prevent="$emit(`close`)">
 						<CloseIcon />
 					</button>
 				</div>
@@ -31,6 +37,14 @@ export default Vue.extend({
 	components: { CloseIcon },
 	props: {
 		bio: {
+			type: String,
+			required: true,
+		},
+		authorname: {
+			type: String,
+			required: true,
+		},
+		authorID: {
 			type: String,
 			required: true,
 		},
