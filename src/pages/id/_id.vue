@@ -142,9 +142,7 @@
 					class="header-profile px-1 pt-4 dark:text-darkPrimaryText"
 					:style="expandBio ? `` : `max-height: 5.5rem; overflow: hidden`"
 				>
-					<p v-for="(line, lineNumber) of visitProfile.bio.split('\n')" :key="lineNumber">
-						{{ line.slice(0, 200) + (line.length > 200 ? '...' : '') }}<br />
-					</p>
+					<p>{{ visitProfile.bio.slice(0, 200) + (visitProfile.bio.length > 200 ? '...' : '') }}<br /></p>
 				</div>
 				<button v-show="longBio" class="focus:outline-none text-xs text-primary px-1" @click="expandBio = true">
 					Read more
