@@ -12,7 +12,7 @@ export async function startSubscriptionPayment(
 ) {
 	const amount = getAmountFromTier(period, tier)
 	try {
-		const data = {
+		const body = {
 			tierId: tier._id,
 			amount,
 			period,
@@ -23,7 +23,7 @@ export async function startSubscriptionPayment(
 			method: `post`,
 			path: `/pay/stripe/subscribe/start`,
 			username,
-			body: { data },
+			body,
 		})
 		return response
 	} catch (err) {
@@ -36,7 +36,7 @@ export async function startSubscriptionPayment(
 
 export async function confirmSubscriptionPayment(username: string, paymentAttemptId: string, paymentIntentId: string) {
 	try {
-		const data = {
+		const body = {
 			paymentAttemptId,
 			paymentIntentId,
 		}
@@ -44,7 +44,7 @@ export async function confirmSubscriptionPayment(username: string, paymentAttemp
 			method: `post`,
 			path: `/pay/stripe/subscribe/confirm`,
 			username,
-			body: { data },
+			body,
 		})
 		return response
 	} catch (err) {
@@ -56,12 +56,12 @@ export async function confirmSubscriptionPayment(username: string, paymentAttemp
 }
 
 export async function getBillingPortalUrl(username: string, subscriptionId: string): Promise<string> {
-	const data = { subscriptionId }
+	const body = { subscriptionId }
 	const response = await genericRequest({
 		method: `post`,
 		path: `/pay/stripe/connect/billingportal`,
 		username,
-		body: { data },
+		body,
 	})
 
 	return response.url as string
