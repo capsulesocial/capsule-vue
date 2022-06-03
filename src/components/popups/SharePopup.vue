@@ -150,6 +150,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { sanitizeUrl } from '@braintree/sanitize-url'
 import CloseIcon from '@/components/icons/X.vue'
 import TwitterIcon from '@/components/icons/brands/solid/Twitter.vue'
 import FacebookIcon from '@/components/icons/brands/solid/Facebook.vue'
@@ -278,24 +279,28 @@ export default Vue.extend({
 		},
 		twitterShare() {
 			window.open(
-				`https://twitter.com/share?url=${encodeURIComponent(this.generatedDirectLink)}&hashtags=blogchain&text=${
-					this.title
-				} by ${this.authorID}`,
+				sanitizeUrl(
+					`https://twitter.com/share?url=${encodeURIComponent(this.generatedDirectLink)}&hashtags=blogchain&text=${
+						this.title
+					} by ${this.authorID}`,
+				),
 			)
 		},
 		linkedinShare() {
 			window.open(
-				`https://www.linkedin.com/shareArticle?url=${this.generatedDirectLink}&title=${this.title}&summary=${this.subtitle}&source=blogchain.app`,
+				sanitizeUrl(
+					`https://www.linkedin.com/shareArticle?url=${this.generatedDirectLink}&title=${this.title}&summary=${this.subtitle}&source=blogchain.app`,
+				),
 			)
 		},
 		facebookShare() {
-			window.open(`https://www.facebook.com/sharer/sharer.php?u=${this.generatedDirectLink}`)
+			window.open(sanitizeUrl(`https://www.facebook.com/sharer/sharer.php?u=${this.generatedDirectLink}`))
 		},
 		redditShare() {
-			window.open(`https://reddit.com/submit?url=${this.generatedDirectLink}&title=${this.title}`)
+			window.open(sanitizeUrl(`https://reddit.com/submit?url=${this.generatedDirectLink}&title=${this.title}`))
 		},
 		mailShare() {
-			window.open(`mailto:?subject=${this.title}&body=${this.subtitle}%0D%0A%0D%0A${this.generatedDirectLink}`)
+			window.open(sanitizeUrl(`mailto:?subject=${this.title}%0D%0A%0D%0A${this.generatedDirectLink}`))
 		},
 	},
 })
