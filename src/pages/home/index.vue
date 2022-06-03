@@ -99,7 +99,9 @@
 <script lang="ts">
 import Vue from 'vue'
 import type { PropType } from 'vue'
+import { mapGetters } from 'vuex'
 import PostCard from '@/components/post/Card.vue'
+import { namespace as SubscriptionsNamespace } from '@/store/subscriptions'
 import { getPosts, Algorithm, IRepostResponse, IPostResponse } from '@/backend/post'
 import { getReposts } from '@/backend/reposts'
 import { followChange } from '@/backend/following'
@@ -145,6 +147,12 @@ export default Vue.extend({
 				},
 			],
 		}
+	},
+	computed: {
+		...mapGetters(SubscriptionsNamespace, [`activeSubs`]),
+		paymentsEnabled() {
+			return this.$store.getters[`paymentProfile/getPaymentProfile`](this.$route.params.id).paymentsEnabled
+		},
 	},
 	async created() {
 		// Unauthenticated view
