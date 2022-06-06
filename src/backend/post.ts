@@ -1,4 +1,5 @@
 import axios, { AxiosError } from 'axios'
+import { CID } from 'ipfs-core'
 
 import { signContent, verifyContent } from './utilities/keys'
 import ipfs from './utilities/ipfs'
@@ -17,16 +18,26 @@ export interface Post {
 	subtitle: string | null
 	content: string
 	category: string
-	featuredPhotoCID?: string | null
-	featuredPhotoCaption?: string | null
+	featuredPhotoCID: string | null
+	featuredPhotoCaption: string | null
 	timestamp: number
 	tags: Tag[]
 	encrypted?: boolean
-	postImages?: Array<string>
+	postImages: Array<string>
+	version: string
+	lastUpdated: number
 }
 
 export interface IRegularPost extends Post {
-	encrypted?: false
+	encrypted: false
+}
+
+export interface IRegularPostDAG extends Omit<Post, `featuredPhotoCID` | `postImages`> {
+	encrypted: false
+	featuredPhotoCID: CID | null
+	postImages: Array<CID>
+	version: string
+	lastUpdated: number
 }
 
 export interface IEncryptedPost extends Post {
@@ -62,9 +73,11 @@ export function createRegularPost(
 	category: string,
 	tags: Tag[],
 	authorID: string,
-	featuredPhotoCID?: string | null,
-	featuredPhotoCaption?: string | null,
-	postImages?: Array<string>,
+	postImages: Array<string>,
+	featuredPhotoCID: string | null,
+	featuredPhotoCaption: string | null,
+	version: string = `v1`,
+	lastUpdated: number = Date.now(),
 ): IRegularPost {
 	if (subtitle !== null) {
 		subtitle = subtitle.trim()
@@ -77,10 +90,12 @@ export function createRegularPost(
 		timestamp: Date.now(),
 		tags,
 		authorID,
-		...(featuredPhotoCID ? { featuredPhotoCID } : {}),
-		...(featuredPhotoCaption ? { featuredPhotoCaption } : {}),
-		encrypted: false,
 		postImages,
+		featuredPhotoCID,
+		featuredPhotoCaption,
+		encrypted: false,
+		version,
+		lastUpdated,
 	}
 }
 
@@ -91,8 +106,11 @@ export function createEncryptedPost(
 	category: string,
 	tags: Tag[],
 	authorID: string,
-	featuredPhotoCID?: string | null,
-	featuredPhotoCaption?: string | null,
+	postImages: Array<string>,
+	featuredPhotoCID: string | null,
+	featuredPhotoCaption: string | null,
+	version: string,
+	lastUpdated: number,
 ): IEncryptedPost {
 	if (subtitle !== null) {
 		subtitle = subtitle.trim()
@@ -105,21 +123,46 @@ export function createEncryptedPost(
 		timestamp: Date.now(),
 		tags,
 		authorID,
-		...(featuredPhotoCID ? { featuredPhotoCID } : {}),
-		...(featuredPhotoCaption ? { featuredPhotoCaption } : {}),
+		postImages,
+		featuredPhotoCID,
+		featuredPhotoCaption,
 		encrypted: true,
+		version,
+		lastUpdated,
 	}
 }
 
 export async function sendRegularPost(data: IRegularPost): Promise<string> {
 	const { sig, publicKey } = await signContent(data)
+	const featuredPhotoCID = data.featuredPhotoCID ? CID.parse(data.featuredPhotoCID) : null
+	const postImages = data.postImages.map((imageCID) => CID.parse(imageCID))
 
-	const ipfsData: ISignedIPFSObject<IRegularPost> = { data, sig: uint8ArrayToHexString(sig), public_key: publicKey }
+	const ipfsData: ISignedIPFSObject<IRegularPostDAG> = {
+		data: {
+			authorID: data.authorID,
+			title: data.title,
+			subtitle: data.subtitle,
+			content: data.content,
+			category: data.category,
+			postImages,
+			featuredPhotoCID,
+			featuredPhotoCaption: data.featuredPhotoCaption,
+			timestamp: data.timestamp,
+			tags: data.tags,
+			encrypted: data.encrypted,
+			version: data.version,
+			lastUpdated: data.lastUpdated,
+		},
+		sig: uint8ArrayToHexString(sig),
+		public_key: publicKey,
+	}
 
 	const cid = await ipfs().sendJSONData(ipfsData)
+
+	const postData: ISignedIPFSObject<IRegularPost> = { data, sig: uint8ArrayToHexString(sig), public_key: publicKey }
 	await axios.post(`${nodeUrl()}/content`, {
 		cid,
-		data: ipfsData,
+		data: postData,
 		type: `post`,
 	})
 
