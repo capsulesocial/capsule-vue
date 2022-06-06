@@ -496,7 +496,6 @@ export default Vue.extend({
 
 			const selectedAmount = getAmountFromTier(period, this.selectedTier)
 			const amount = getZeroDecimalAmount(this.paymentProfile.currency, selectedAmount)
-			// TODO: Start a loading spinner here
 			this.isLoading = true
 			const stripe = await this.stripeClient(this.paymentProfile.stripeAccountId)
 			const currency = this.paymentProfile.currency
@@ -612,7 +611,6 @@ export default Vue.extend({
 					return false
 				}
 				if (status === `requires_action`) {
-					// TODO hide the payment form here and show a spinner according to https://stripe.com/docs/js/payment_intents/confirm_card_payment
 					this.isLoading = true
 					const res = this.handleAuthenticatedPayment(paymentAttemptId, clientSecret)
 					this.isLoading = false
@@ -671,7 +669,6 @@ export default Vue.extend({
 			}
 		},
 		async submitCardPayment(e: HTMLInputEvent): Promise<void> {
-			// TODO Start loader for `Pay Now` button here
 			this.isLoading = true
 			e.preventDefault()
 			const stripe = await this.stripeClient()

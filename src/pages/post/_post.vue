@@ -138,7 +138,20 @@
 								style="backdrop-filter: blur(10px)"
 								:class="featuredPhoto !== null ? `mt-36` : `mt-0`"
 							>
-								<h4 class="text-2xl font-semibold text-neutral mb-4 text-center">This post is for Paid subscribers</h4>
+								<!-- Not a subscriber -->
+								<h4
+									v-if="subscriptionStatus === `NOT_SUBSCRIBED`"
+									class="text-2xl font-semibold text-neutral mb-4 text-center"
+								>
+									This post is for Paid subscribers
+								</h4>
+								<!-- Subscribed, but to a different tier -->
+								<h4
+									v-if="subscriptionStatus === `INSUFFICIENT_TIER`"
+									class="text-2xl font-semibold text-neutral mb-4 text-center"
+								>
+									Your subscription tier does not include this post
+								</h4>
 								<p class="my-4 text-center text-gray5 dark:text-gray3">
 									Become a subscriber of
 									<span v-if="author.name !== ``" class="font-semibold text-primary">{{ author.name }}</span>
@@ -328,6 +341,7 @@ interface IData {
 	showPaywall: boolean
 	showSubscriptions: boolean
 	enabledTiers: Array<string>
+	subscriptionStatus: `INSUFFICIENT_TIER` | `NOT_SUBSCRIBED` | ``
 }
 
 export default Vue.extend({
@@ -385,6 +399,7 @@ export default Vue.extend({
 			showPaywall: false,
 			showSubscriptions: false,
 			enabledTiers: [],
+			subscriptionStatus: ``,
 		}
 	},
 	head() {
@@ -438,9 +453,10 @@ export default Vue.extend({
 				if (`content` in decrypted) {
 					post.data.content = decrypted.content
 				} else {
-					// TODO: show proper error message according to retrieval status
+					// show proper error message according to retrieval status
 					// decrypted.status is of type `INSUFFICIENT_TIER` | `NOT_SUBSCRIBED`
 					this.enabledTiers = decrypted.enabledTiers
+					this.subscriptionStatus = decrypted.status
 					// this.$toastError(decrypted.status)
 					// Display premium post paywall
 					this.showPaywall = true
