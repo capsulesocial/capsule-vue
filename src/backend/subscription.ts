@@ -4,9 +4,9 @@ export interface ISubscriptionResponse {
 	authorID: string
 	tier: { id: string; name: string }
 	isActive: boolean
-	renewalDate?: number | undefined
+	expiredAt?: number | undefined
 	subscriptionId: string
-	startedOn: number
+	createdAt: number
 	renewalInfo?: {
 		message?: string
 		lastInvoiceId?: string
