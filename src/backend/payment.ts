@@ -15,7 +15,7 @@ export async function startSubscriptionPayment(
 	paymentMethodId: string,
 	email: string,
 	// TODO This value should come from a checkbox from UI
-	storeEmail = true,
+	storeEmail: boolean,
 ) {
 	const amount = getAmountFromTier(period, tier)
 	try {
