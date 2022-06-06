@@ -48,46 +48,47 @@
 					<div class="w-full flex justify-center mt-1">
 						<SwitchPeriod :period="this.selectedPeriod" @toggle="switchPeriod" />
 					</div>
-					<!-- Subscriptions -->
-					<button
-						v-for="tier in paymentProfile.tiers"
-						:key="tier._id"
-						class="flex flex-row items-center justify-between m-5 p-4 border shadow-sm rounded-lg from-lightBGStart to-lightBGStop dark:from-darkBG dark:to-darkBG bg-gradient-to-r transition duration-500 ease-in-out"
-						:class="
-							selectedTier !== null && selectedTier._id === tier._id
-								? `border-neutral`
-								: `border-lightBorder dark:border-darkBorder`
-						"
-						@click="selectTier(tier)"
-					>
-						<!-- Check mark -->
-						<div class="w-12 flex justify-center">
-							<CheckCircleIcon
-								:isChecked="selectedTier !== null && selectedTier._id === tier._id"
-								class="text-neutral w-6 h-6 flex items-center transition duration-500 ease-in-out"
-							/>
-						</div>
-						<div class="flex flex-grow flex-col items-start ml-4 mr-2 w-2/5">
-							<h3 class="text-xl font-semibold dark:text-darkPrimaryText">{{ tier.name }}</h3>
-							<p class="text-gray5 dark:text-gray3 text-left text-sm pr-2">
-								Get access to exclusive articles by subscribing to {{ tier.name }}
-							</p>
-						</div>
-						<div
-							v-if="tier.monthlyEnabled && selectedPeriod === `month`"
-							class="font-semibold text-lg mr-2 dark:text-darkPrimaryText"
+					<!-- Subscriptions list -->
+					<div v-for="tier in paymentProfile.tiers" :key="tier._id">
+						<button
+							v-if="enabledTiers.includes(tier._id) || enabledTiers.length === 0"
+							class="flex flex-row items-center justify-between m-5 p-4 border shadow-sm rounded-lg from-lightBGStart to-lightBGStop dark:from-darkBG dark:to-darkBG bg-gradient-to-r transition duration-500 ease-in-out"
+							:class="
+								selectedTier !== null && selectedTier._id === tier._id
+									? `border-neutral`
+									: `border-lightBorder dark:border-darkBorder`
+							"
+							@click="selectTier(tier)"
 						>
-							{{ displayCurrency(paymentProfile.currency) }}{{ tier.monthlyPrice }}
-							<span class="text-gray5 dark:text-gray3">/month</span>
-						</div>
-						<div
-							v-if="tier.yearlyEnabled && selectedPeriod === `year`"
-							class="font-semibold text-lg mr-2 dark:text-darkPrimaryText"
-						>
-							{{ displayCurrency(paymentProfile.currency) }}{{ tier.yearlyPrice }}
-							<span class="text-gray5 dark:text-gray3">/year</span>
-						</div>
-					</button>
+							<!-- Check mark -->
+							<div class="w-12 flex justify-center">
+								<CheckCircleIcon
+									:isChecked="selectedTier !== null && selectedTier._id === tier._id"
+									class="text-neutral w-6 h-6 flex items-center transition duration-500 ease-in-out"
+								/>
+							</div>
+							<div class="flex flex-grow flex-col items-start ml-4 mr-2 w-2/5">
+								<h3 class="text-xl font-semibold dark:text-darkPrimaryText">{{ tier.name }}</h3>
+								<p class="text-gray5 dark:text-gray3 text-left text-sm pr-2">
+									Get access to exclusive articles by subscribing to {{ tier.name }}
+								</p>
+							</div>
+							<div
+								v-if="tier.monthlyEnabled && selectedPeriod === `month`"
+								class="font-semibold text-lg mr-2 dark:text-darkPrimaryText"
+							>
+								{{ displayCurrency(paymentProfile.currency) }}{{ tier.monthlyPrice }}
+								<span class="text-gray5 dark:text-gray3">/month</span>
+							</div>
+							<div
+								v-if="tier.yearlyEnabled && selectedPeriod === `year`"
+								class="font-semibold text-lg mr-2 dark:text-darkPrimaryText"
+							>
+								{{ displayCurrency(paymentProfile.currency) }}{{ tier.yearlyPrice }}
+								<span class="text-gray5 dark:text-gray3">/year</span>
+							</div>
+						</button>
+					</div>
 					<div class="flex flex-row-reverse">
 						<button
 							:class="selectedTier !== null ? `` : `opacity-50 cursor-not-allowed`"
@@ -384,6 +385,12 @@ export default Vue.extend({
 		authorAvatar: {
 			type: String as PropType<ArrayBuffer | string | null>,
 			default: null,
+		},
+		enabledTiers: {
+			type: Array as PropType<string[]>,
+			default: () => {
+				return []
+			},
 		},
 	},
 	data(): IData {

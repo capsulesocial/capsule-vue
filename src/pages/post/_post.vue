@@ -263,6 +263,7 @@
 				v-if="showSubscriptions"
 				:author="author"
 				:authorAvatar="authorAvatar"
+				:enabledTiers="enabledTiers"
 				@close="showSubscriptions = false"
 			/>
 		</portal>
@@ -326,6 +327,7 @@ interface IData {
 	isLeaving: boolean
 	showPaywall: boolean
 	showSubscriptions: boolean
+	enabledTiers: Array<string>
 }
 
 export default Vue.extend({
@@ -382,6 +384,7 @@ export default Vue.extend({
 			isLeaving: false,
 			showPaywall: false,
 			showSubscriptions: false,
+			enabledTiers: [],
 		}
 	},
 	head() {
@@ -437,6 +440,7 @@ export default Vue.extend({
 				} else {
 					// TODO: show proper error message according to retrieval status
 					// decrypted.status is of type `INSUFFICIENT_TIER` | `NOT_SUBSCRIBED`
+					this.enabledTiers = decrypted.enabledTiers
 					// this.$toastError(decrypted.status)
 					// Display premium post paywall
 					this.showPaywall = true
