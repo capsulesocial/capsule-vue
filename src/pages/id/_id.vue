@@ -55,7 +55,7 @@
 							<!-- Subscription button -->
 							<SubscribeButton
 								:toggleSubscription="toggleSubscription"
-								:userIsSubscribed="false"
+								:userIsSubscribed="activeSubscription"
 								class="header-profile"
 							/>
 						</div>

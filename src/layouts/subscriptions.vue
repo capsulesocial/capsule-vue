@@ -34,7 +34,16 @@
 								<h3 class="text-lightPrimaryText dark:text-darkPrimaryText text-base font-semibold mb-4">
 									Expired subscriptions
 								</h3>
-								<p class="text-gray5 dark:text-gray3 text-sm pb-1">you have no expired subscriptions yet</p>
+								<div v-if="inactiveSubs.length > 0">
+									<ExpiredSub
+										v-for="s in inactiveSubs"
+										:key="s.authorID"
+										:s="s"
+										:toggleSubscription="toggleSubscription"
+										@popup="toggleSubInfosPopup(s)"
+									/>
+								</div>
+								<p v-else class="text-gray5 dark:text-gray3 text-sm pb-1">you have no expired subscriptions yet</p>
 							</div>
 							<Footer />
 						</aside>
@@ -43,15 +52,25 @@
 			</div>
 		</div>
 		<SubInfos v-if="showPopup" :s="clickedSub" @close="toggleSubInfosPopup" />
+		<SubscriptionsPopup
+			v-if="showSubscriptions"
+			:author="subscriptionProfile"
+			:authorAvatar="subscriptionProfileAvatar"
+			@close="showSubscriptions = false"
+		/>
 	</main>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapGetters } from 'vuex'
+import { ISubscriptionWithProfile, namespace as SubscriptionsNamespace } from '@/store/subscriptions'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 import SubInfos from '@/components/popups/SubInfosPopup.vue'
-import { getProfile, Profile } from '@/backend/profile'
+import ExpiredSub from '@/components/subscriptions/ExpiredSub.vue'
+import SubscriptionsPopup from '@/components/popups/SubscriptionsPopup.vue'
+import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import { IBackground, backgrounds } from '@/config/backgrounds'
 
@@ -62,6 +81,11 @@ interface IData {
 	bgImage: IBackground
 	dark: boolean
 	clickedSub: any
+	showSubscriptionInfo: boolean
+	subInfo: ISubscriptionWithProfile | undefined
+	showSubscriptions: boolean
+	subscriptionProfile: Profile
+	subscriptionProfileAvatar: null | string
 }
 
 export default Vue.extend({
@@ -69,6 +93,8 @@ export default Vue.extend({
 		Header,
 		Footer,
 		SubInfos,
+		ExpiredSub,
+		SubscriptionsPopup,
 	},
 	middleware: `auth`,
 	data(): IData {
@@ -79,7 +105,15 @@ export default Vue.extend({
 			bgImage: backgrounds[0],
 			dark: false,
 			clickedSub: null,
+			showSubscriptionInfo: false,
+			subInfo: undefined,
+			showSubscriptions: false,
+			subscriptionProfile: createDefaultProfile(this.$store.state.session.id),
+			subscriptionProfileAvatar: null,
 		}
+	},
+	computed: {
+		...mapGetters(SubscriptionsNamespace, [`inactiveSubs`]),
 	},
 	async created() {
 		// Set color mode
@@ -117,6 +151,29 @@ export default Vue.extend({
 				this.clickedSub = clickedsub
 			}
 			this.showPopup = !this.showPopup
+		},
+		toggleSubscription(author: { s: ISubscriptionWithProfile; avatar: string }) {
+			this.subscriptionProfile = createDefaultProfile(author.s.authorID)
+			this.subscriptionProfileAvatar = author.avatar
+			// Unauth
+			if (this.$store.state.session.id === ``) {
+				this.$store.commit(`settings/toggleUnauthPopup`)
+				return
+			}
+			// Prevent self-subscribing
+			if (author.s.authorID !== this.$store.state.session.id) {
+				// If already subscribed
+				this.$store.state.subscriptions.active.forEach((sub: ISubscriptionWithProfile) => {
+					if (sub.authorID === this.$route.params.id) {
+						this.showSubscriptionInfo = true
+						this.subInfo = sub
+					}
+				})
+				// show add subscription
+				if (!this.showSubscriptionInfo) {
+					this.showSubscriptions = !this.showSubscriptions
+				}
+			}
 		},
 	},
 })
