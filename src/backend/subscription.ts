@@ -1,19 +1,19 @@
 import { genericRequest } from './utilities/request'
 
 export interface ISubscriptionResponse {
-	username: string
-	authorID: string
-	tier: { id: string; name: string }
-	isActive: boolean
-	expiredAt?: number | undefined
 	subscriptionId: string
+	authorID: string
+	username: string
+	tier: { name: string; id: string }
 	createdAt: number
+	isActive: boolean
+	expiredAt: number | null
 	renewalInfo?: {
 		message?: string
 		lastInvoiceId?: string
-		invoiceCreationDate: Date
-		invoiceUpdationDate: Date
-		dueDate?: Date
+		invoiceCreationDate: number
+		invoiceUpdationDate: number
+		dueDate: number | null
 		status: string
 	}
 }
