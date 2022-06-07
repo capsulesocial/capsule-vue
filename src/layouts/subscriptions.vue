@@ -34,7 +34,14 @@
 								<h3 class="text-lightPrimaryText dark:text-darkPrimaryText text-base font-semibold mb-4">
 									Expired subscriptions
 								</h3>
-								<p class="text-gray5 dark:text-gray3 text-sm pb-1">you have no expired subscriptions yet</p>
+								<div
+									v-if="inactiveSubs.length > 0"
+									class="flex flex-wrap mt-4"
+									style="padding-right: 1.45rem; padding-left: 1.45rem"
+								>
+									<SubCard v-for="s in inactiveSubs" :key="s.authorID" :s="s" @popup="toggleSubInfosPopup(s)" />
+								</div>
+								<p v-else class="text-gray5 dark:text-gray3 text-sm pb-1">you have no expired subscriptions yet</p>
 							</div>
 							<Footer />
 						</aside>
@@ -48,9 +55,12 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapGetters } from 'vuex'
+import { namespace as SubscriptionsNamespace } from '@/store/subscriptions'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 import SubInfos from '@/components/popups/SubInfosPopup.vue'
+import SubCard from '@/components/subscriptions/SubCard.vue'
 import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import { IBackground, backgrounds } from '@/config/backgrounds'
@@ -69,6 +79,7 @@ export default Vue.extend({
 		Header,
 		Footer,
 		SubInfos,
+		SubCard,
 	},
 	middleware: `auth`,
 	data(): IData {
@@ -80,6 +91,9 @@ export default Vue.extend({
 			dark: false,
 			clickedSub: null,
 		}
+	},
+	computed: {
+		...mapGetters(SubscriptionsNamespace, [`inactiveSubs`]),
 	},
 	async created() {
 		// Set color mode
