@@ -1,6 +1,7 @@
 import { genericRequest } from './utilities/request'
 
 export interface ISubscriptionResponse {
+	username: string
 	authorID: string
 	tier: { id: string; name: string }
 	isActive: boolean
