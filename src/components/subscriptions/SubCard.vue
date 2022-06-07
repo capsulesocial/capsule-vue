@@ -33,13 +33,16 @@
 			<CrownIcon class="text-neutral mr-2 w-5 h-5" /><span class="truncate text-neutral">{{ s.tier.name }}</span>
 		</div>
 		<p class="text-gray5 dark:text-gray3 text-sm w-full mb-2">
-			Subscribed since <span class="font-semibold">{{ $formatDate(s.startedOn, true) }}</span>
+			Subscribed since <span class="font-semibold">{{ $formatDate(s.createdAt, true) }}</span>
 		</p>
-		<p v-if="s.renewalInfo && s.renewalInfo.status === 'cancelled'" class="text-negative text-sm w-full">
+		<p
+			v-if="s.renewalInfo && s.renewalInfo.status === 'cancelled' && s.renewalInfo.dueDate"
+			class="text-negative text-sm w-full"
+		>
 			Cancels on <span class="font-semibold">{{ $formatDate(s.renewalInfo.dueDate, true) }}</span>
 		</p>
-		<p v-else class="text-gray5 dark:text-gray3 text-sm w-full">
-			Next Renewal on <span class="font-semibold">{{ $formatDate(s.renewalDate, true) }}</span>
+		<p v-else-if="s.expiredAt" class="text-gray5 dark:text-gray3 text-sm w-full">
+			Next Renewal on <span class="font-semibold">{{ $formatDate(s.expiredAt, true) }}</span>
 		</p>
 	</div>
 </template>
