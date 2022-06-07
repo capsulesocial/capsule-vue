@@ -207,7 +207,7 @@
 						<!-- Save email for future subscriptions -->
 						<div class="flex flex-row justify-between items-center mb-4">
 							<p class="text-base text-center text-gray5 dark:text-gray3">Save email for future subscriptions</p>
-							<input ref="saveEmail" type="checkbox" />
+							<input ref="saveEmail" type="checkbox" checked />
 						</div>
 						<div
 							id="card-element"
