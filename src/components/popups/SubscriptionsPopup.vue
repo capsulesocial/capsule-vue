@@ -205,6 +205,11 @@
 								style="font-weight: 400; font-size: 15.8px"
 							/>
 						</div>
+						<!-- Save email for future subscriptions -->
+						<div class="flex flex-row justify-between items-center mb-4">
+							<p class="text-base text-center text-gray5 dark:text-gray3">Save email for future subscriptions</p>
+							<input ref="saveEmail" type="checkbox" checked />
+						</div>
 						<div
 							id="card-element"
 							class="mb-2 rounded-lg p-4 border border-lightBorder bg-gray1 dark:bg-gray7 placeholder-gray5 dark:placeholder-gray3 py-5"
@@ -332,6 +337,7 @@ import {
 	getAmountFromTier,
 	getCurrencySymbol,
 	getZeroDecimalAmount,
+	retrieveReaderProfile,
 	startSubscriptionPayment,
 } from '@/backend/payment'
 import { HTMLInputEvent } from '@/interfaces/HTMLInputEvent'
@@ -425,6 +431,9 @@ export default Vue.extend({
 		getFollowersAndFollowing(this.$store.state.session.id).then((data) => {
 			this.following = data.following
 			this.userIsFollowed = data.following.has(this.author.id)
+		})
+		retrieveReaderProfile(this.$store.state.session.id).then(({ email }) => {
+			this.customerEmail = email ?? ``
 		})
 	},
 	methods: {
@@ -592,7 +601,7 @@ export default Vue.extend({
 			if (!this.selectedTier) {
 				throw new Error(`Tier not selected. Invalid state`)
 			}
-
+			const storeEmail: boolean = (this.$refs.saveEmail as HTMLInputElement).checked
 			const username = this.$store.state.session.id
 			this.isLoading = true
 			try {
@@ -603,6 +612,7 @@ export default Vue.extend({
 					this.selectedPeriod,
 					paymentMethod.id,
 					email,
+					storeEmail,
 				)
 
 				if (error) {
