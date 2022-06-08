@@ -70,7 +70,6 @@ export function uploadPhoto(file: File, encrypt?: true) {
 							if (encrypt) {
 								results = await encryptImage(results.data, file.name)
 							}
-							console.log(results)
 							const cid = await addPhotoToIPFS(results.data)
 							resolve({
 								cid,

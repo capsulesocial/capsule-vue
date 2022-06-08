@@ -314,7 +314,7 @@ export default Vue.extend({
 		},
 		refreshPostImages() {
 			const clean = turndownService.turndown(this.getInputHTML())
-			this.postImages = createPostImagesSet(clean, new Set(this.postImages.keys()))
+			this.postImages = createPostImagesSet(clean, this.postImages)
 		},
 		async updatePostImages(
 			cid: string,
@@ -450,7 +450,6 @@ export default Vue.extend({
 				this.waitingImage = true
 				this.toggleAddContent = false
 				const res = await uploadPhoto(file, this.encrypted)
-				console.log(res)
 				const { cid, url, image, imageName } = res
 				const updatedPostImages = await this.updatePostImages(
 					cid,
@@ -698,7 +697,7 @@ export default Vue.extend({
 			if (this.hasPosted) {
 				return false
 			}
-			const postImages = Array.from(createPostImagesSet(clean, new Set(this.postImages.keys())).keys())
+			const postImages = Array.from(createPostImagesSet(clean, this.postImages).keys())
 			if (postImages.length > textLimits.post_images.max) {
 				this.$toastError(`Cannot add more than ${textLimits.post_images.max} images in a post`)
 				return false
