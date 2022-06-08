@@ -45,8 +45,6 @@ import {
 import { MutationType, createSessionFromProfile, namespace as sessionStoreNamespace } from '~/store/session'
 import { setNearUserFromPrivateKey, login, register, IAuthResult, IWalletStatus } from '@/backend/auth'
 import { ValidationError } from '@/errors'
-import { verifyTokenAndOnboard } from '@/backend/invite'
-import { getInviteToken } from '@/backend/utilities/helpers'
 
 interface IData {
 	funds: string
@@ -80,17 +78,12 @@ export default Vue.extend({
 		try {
 			const username = await getUsernameNEAR(this.userInfo.accountId)
 			if (!username) {
-				const inviteToken = getInviteToken()
-				if (!inviteToken) {
-					const isAccountOnboarded = await getIsAccountIdOnboarded(this.userInfo.accountId)
-					if (!isAccountOnboarded) {
-						this.$emit(`updateUserInfo`, null)
-						this.$emit(`setIsLoading`, false)
-						this.$emit(`stepForward`)
-						return
-					}
-				} else {
-					await verifyTokenAndOnboard(this.userInfo.accountId)
+				const isAccountOnboarded = await getIsAccountIdOnboarded(this.userInfo.accountId)
+				if (!isAccountOnboarded) {
+					this.$emit(`updateUserInfo`, null)
+					this.$emit(`setIsLoading`, false)
+					this.$emit(`stepForward`)
+					return
 				}
 				await this.checkFunds()
 				this.$emit(`setIsLoading`, false)
@@ -101,7 +94,6 @@ export default Vue.extend({
 			if (this.userInfo.type === `torus`) {
 				this.username = username
 				await this.verify(this.username)
-				window.localStorage.removeItem(`inviteToken`)
 				return
 			}
 			if (this.userInfo.type === `near`) {
@@ -110,7 +102,6 @@ export default Vue.extend({
 				if (pk) {
 					this.username = username
 					await this.verify(this.username)
-					window.localStorage.removeItem(`inviteToken`)
 					return
 				}
 				await removeNearPrivateKey(this.userInfo.accountId)

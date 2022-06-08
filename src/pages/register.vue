@@ -12,11 +12,9 @@
 				></div>
 			</div>
 			<div v-show="!isLoading" class="flex w-full h-full flex-col justify-center items-center px-14">
-				<!-- Step 0: Code redeem -->
-				<InviteCode v-if="step === `inviteCode`" class="w-full lg:w-3/4 xl:w-1/2" @validInviteCode="stepForward" />
 				<!-- Step 1: Choose Login / register -->
 				<RegisterMethods
-					v-else-if="step === `registerMethods`"
+					v-if="step === `registerMethods`"
 					class="w-full lg:w-3/4 xl:w-1/2"
 					@updateUserInfo="updateUserInfo"
 					@infos="showInfos = true"
@@ -49,7 +47,6 @@ import { mapMutations } from 'vuex'
 import 'intl-tel-input/build/css/intlTelInput.css'
 import { AxiosError } from 'axios'
 
-import InviteCode from '@/components/register/InviteCode.vue'
 import RegisterMethods from '@/components/register/RegisterMethods.vue'
 
 import InfosPopup from '@/components/register/InfosPopup.vue'
@@ -61,7 +58,6 @@ import { MutationType, namespace as sessionStoreNamespace } from '~/store/sessio
 
 import { removeNearPrivateKey, walletLogout } from '@/backend/near'
 import { ValidationError } from '@/errors'
-import { getInviteToken } from '@/backend/utilities/helpers'
 import { getUserInfo, IWalletStatus } from '@/backend/auth'
 
 interface IData {
@@ -75,7 +71,6 @@ interface IData {
 export default Vue.extend({
 	components: {
 		CapsuleIcon,
-		InviteCode,
 		RegisterMethods,
 		InfosPopup,
 		SignUp,
@@ -87,7 +82,7 @@ export default Vue.extend({
 			userInfo: null,
 			isLoading: true,
 			showInfos: false,
-			step: `inviteCode`,
+			step: `registerMethods`,
 		}
 	},
 	head() {
@@ -115,7 +110,6 @@ export default Vue.extend({
 					removeNearPrivateKey(this.userInfo.accountId)
 				}
 				walletLogout()
-				window.localStorage.removeItem(`inviteToken`)
 				if (err.response.data.error === `Cannot reuse token`) {
 					window.localStorage.clear()
 					this.userInfo = null
@@ -157,7 +151,6 @@ export default Vue.extend({
 		}),
 		async stepForward() {
 			this.isLoading = true
-			const inviteToken = getInviteToken()
 
 			if (!this.userInfo) {
 				this.userInfo = await getUserInfo()
@@ -166,7 +159,7 @@ export default Vue.extend({
 			// Check if we already have any sign-in info set up
 
 			this.isLoading = false
-			if (inviteToken && !this.userInfo) {
+			if (!this.userInfo) {
 				this.step = `registerMethods`
 				return
 			}
