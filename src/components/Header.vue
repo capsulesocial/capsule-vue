@@ -67,19 +67,13 @@
 						><ProfileIcon class="mr-2 h-5 w-5 flex-shrink-0" />Profile</nuxt-link
 					>
 					<a
-						v-if="
-							$store.state.session.id !== `` &&
-							this.$store.getters[`paymentProfile/getPaymentProfile`](this.$store.state.session.id).paymentsEnabled
-						"
+						v-if="paymentsEnabled"
 						:href="authordashboardURL"
 						class="text-gray5 dark:text-gray3 flex w-full flex-row items-center text-left"
 						><DashboardIcon class="mr-2 h-5 w-5 flex-shrink-0" />Author Dashboard</a
 					>
 					<div
-						v-if="
-							$store.state.session.id !== `` &&
-							this.$store.getters[`paymentProfile/getPaymentProfile`](this.$store.state.session.id).paymentsEnabled
-						"
+						v-if="paymentsEnabled"
 						class="bg-lightBorder dark:bg-darkBorder w-full rounded my-3"
 						style="height: 1px"
 					></div>
@@ -203,19 +197,13 @@
 						><ProfileIcon class="mr-2 h-5 w-5 flex-shrink-0" />Profile</nuxt-link
 					>
 					<a
-						v-if="
-							$store.state.session.id !== `` &&
-							this.$store.getters[`paymentProfile/getPaymentProfile`](this.$store.state.session.id).paymentsEnabled
-						"
+						v-if="paymentsEnabled"
 						:href="authordashboardURL"
 						class="text-gray5 dark:text-gray3 flex w-full flex-row items-center text-left"
 						><DashboardIcon class="mr-2 h-5 w-5 flex-shrink-0" />Author Dashboard</a
 					>
 					<div
-						v-if="
-							$store.state.session.id !== `` &&
-							this.$store.getters[`paymentProfile/getPaymentProfile`](this.$store.state.session.id).paymentsEnabled
-						"
+						v-if="paymentsEnabled"
 						class="bg-lightBorder dark:bg-darkBorder w-full rounded my-3"
 						style="height: 1px"
 					></div>
@@ -254,7 +242,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import type { PropType } from 'vue'
-import { mapMutations } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import { keyStores } from 'near-api-js'
 
 import CapsuleIcon from '@/components/icons/CapsuleNew.vue'
@@ -270,6 +258,7 @@ import BookmarksIcon from '@/components/icons/Bookmarks.vue'
 import CapsuleBlogchain from '@/components/icons/CapsuleBlogchain.vue'
 import Crown2Icon from '@/components/icons/Crown2.vue'
 import DashboardIcon from '@/components/icons/OverviewIcon.vue'
+import { namespace as paymentProfileNamespace } from '@/store/paymentProfile'
 
 import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
 
@@ -307,6 +296,15 @@ export default Vue.extend({
 			showMobileMenu: false,
 			authordashboardURL: window.location.origin + `/authordashboard`,
 		}
+	},
+	computed: {
+		...mapGetters(paymentProfileNamespace, [`getPaymentProfile`]),
+		paymentsEnabled(): boolean {
+			if (!this.$store.state.session.id) {
+				return false
+			}
+			return this.getPaymentProfile(this.$store.state.session.id)?.paymentsEnabled
+		},
 	},
 	created() {
 		// Set filter dropdown event handler

@@ -257,6 +257,7 @@ export default Vue.extend({
 				this.changeBio(account.bio)
 				this.changeLocation(account.location)
 				this.changeWebsite(account.website)
+				this.$store.dispatch(`paymentProfile/fetchProfile`, { username: account.id })
 				this.$router.push(`/home`)
 			} catch (err: unknown) {
 				this.$handleError(err)
@@ -304,6 +305,7 @@ export default Vue.extend({
 				this.changeBio(account.bio)
 				this.changeLocation(account.location)
 				this.changeWebsite(account.website)
+				this.$store.dispatch(`paymentProfile/fetchProfile`, { username: account.id })
 				this.$router.push(`/home`)
 			} catch (err: unknown) {
 				this.isLoading = false
