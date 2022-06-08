@@ -705,8 +705,6 @@ export default Vue.extend({
 			if (checksOnly) {
 				return true
 			}
-			// TODO: Handle sending of keys to capsule server
-			console.log(this.postImages)
 			this.sendPost(clean, category, tags, featuredPhotoCID, featuredPhotoCaption, postImages)
 			return true
 		},
@@ -734,6 +732,9 @@ export default Vue.extend({
 				)
 				try {
 					const tiers: string[] = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].accessTiers
+					// TODO: Handle sending of keys to capsule server
+					// eslint-disable-next-line no-console
+					console.log(this.postImages)
 					const cid: string = await sendEncryptedPost(p, tiers)
 					this.$router.push(`/post/` + cid)
 				} catch (err: unknown) {
