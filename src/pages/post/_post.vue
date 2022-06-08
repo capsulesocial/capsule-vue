@@ -433,7 +433,7 @@ export default Vue.extend({
 
 		// Using spread operator so that post.data.content getting
 		// assigned before signature verification doesn't affect it
-		verifyPostAuthenticity({ ...post.data }, post.sig, post.public_key).then((verified) => {
+		verifyPostAuthenticity(post.data, post.sig, post.public_key).then((verified) => {
 			if (!verified) {
 				this.$toastError(`Post not verified!`)
 			}
@@ -447,11 +447,13 @@ export default Vue.extend({
 			}
 		}
 
-		if (isEncryptedPost(post.data)) {
+		const postData = { ...post.data }
+
+		if (isEncryptedPost(postData)) {
 			try {
-				const decrypted = await getDecryptedContent(postCID, post.data.content, sessionID)
+				const decrypted = await getDecryptedContent(postCID, postData.content, sessionID)
 				if (`content` in decrypted) {
-					post.data.content = decrypted.content
+					postData.content = decrypted.content
 				} else {
 					// show proper error message according to retrieval status
 					// decrypted.status is of type `INSUFFICIENT_TIER` | `NOT_SUBSCRIBED`

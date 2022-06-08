@@ -128,7 +128,7 @@ interface IData {
 	isSaving: `true` | `false` | `done`
 	isX: boolean
 	isCollapsed: boolean
-	postImages: Set<string>
+	postImages: Map<string, { key?: string; counter?: string }>
 	toggleAddContent: boolean
 	addContentPosTop: number
 	addContentPosLeft: number
@@ -175,6 +175,7 @@ export default Vue.extend({
 	},
 	data(): IData {
 		let input: string = ``
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const { content, title, subtitle, postImages } = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex]
 		if (content !== ``) {
 			input = content
@@ -192,7 +193,7 @@ export default Vue.extend({
 			isSaving: `false`,
 			isX: false,
 			isCollapsed: false,
-			postImages: new Set(postImages),
+			postImages: new Map(), // TODO: fix drafts
 			qeditor: null,
 			editor: null,
 			toggleAddContent: false,
@@ -313,12 +314,13 @@ export default Vue.extend({
 		},
 		refreshPostImages() {
 			const clean = turndownService.turndown(this.getInputHTML())
-			this.postImages = createPostImagesSet(clean, this.postImages)
+			this.postImages = createPostImagesSet(clean, new Set(this.postImages.keys()))
 		},
 		async updatePostImages(
 			cid: string,
 			compressedImage: Blob,
 			imageName: string,
+			encryptionData?: { key: string; counter: string },
 		): Promise<{ error: string } | { success: boolean }> {
 			// If we have already added this image in the past, we don't need to reupload it to the server
 			if (this.postImages.has(cid)) {
@@ -328,7 +330,7 @@ export default Vue.extend({
 				this.waitingImage = false
 				return { error: `Cannot add more than ${textLimits.post_images.max} images in a post` }
 			}
-			this.postImages.add(cid)
+			this.postImages.set(cid, encryptionData ?? {})
 			this.$store.commit(`draft/updatePostImages`, Array.from(this.postImages))
 			await preUploadPhoto(cid, compressedImage, imageName, this.$store.state.session.id)
 			return { success: true }
@@ -416,8 +418,14 @@ export default Vue.extend({
 					continue
 				}
 				try {
-					const { cid, url, image, imageName } = await uploadPhoto(f.file)
-					const updatedPostImages = await this.updatePostImages(cid, image, imageName)
+					const res = await uploadPhoto(f.file, this.encrypted)
+					const { cid, url, image, imageName } = res
+					const updatedPostImages = await this.updatePostImages(
+						cid,
+						image,
+						imageName,
+						this.encrypted ? { key: res.key, counter: res.counter } : undefined,
+					)
 					if (this.$isError(updatedPostImages)) {
 						this.$toastError(updatedPostImages.error)
 						return null
@@ -441,8 +449,15 @@ export default Vue.extend({
 			try {
 				this.waitingImage = true
 				this.toggleAddContent = false
-				const { cid, url, image, imageName } = await uploadPhoto(file)
-				const updatedPostImages = await this.updatePostImages(cid, image, imageName)
+				const res = await uploadPhoto(file, this.encrypted)
+				console.log(res)
+				const { cid, url, image, imageName } = res
+				const updatedPostImages = await this.updatePostImages(
+					cid,
+					image,
+					imageName,
+					this.encrypted ? { key: res.key, counter: res.counter } : undefined,
+				)
 				if (this.$isError(updatedPostImages)) {
 					this.$toastError(updatedPostImages.error)
 					this.waitingImage = false
@@ -683,7 +698,7 @@ export default Vue.extend({
 			if (this.hasPosted) {
 				return false
 			}
-			const postImages = Array.from(createPostImagesSet(clean, this.postImages))
+			const postImages = Array.from(createPostImagesSet(clean, new Set(this.postImages.keys())).keys())
 			if (postImages.length > textLimits.post_images.max) {
 				this.$toastError(`Cannot add more than ${textLimits.post_images.max} images in a post`)
 				return false
@@ -691,6 +706,8 @@ export default Vue.extend({
 			if (checksOnly) {
 				return true
 			}
+			// TODO: Handle sending of keys to capsule server
+			console.log(this.postImages)
 			this.sendPost(clean, category, tags, featuredPhotoCID, featuredPhotoCaption, postImages)
 			return true
 		},
