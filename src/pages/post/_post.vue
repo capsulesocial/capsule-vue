@@ -173,7 +173,12 @@
 						<!-- Content -->
 						<article v-else class="mt-5">
 							<div class="text-lightPrimaryText dark:text-darkSecondaryText editable content max-w-none break-words">
-								<PostView :content="this.post.content" :postImages="this.post.postImages" />
+								<PostView
+									:content="this.content"
+									:postImages="this.post.postImages"
+									:encrypted="this.post.encrypted"
+									:postImageKeys="this.postImageKeys"
+								/>
 							</div>
 						</article>
 						<!-- Tags -->
@@ -342,6 +347,7 @@ interface IData {
 	showSubscriptions: boolean
 	enabledTiers: Array<string>
 	subscriptionStatus: `INSUFFICIENT_TIER` | `NOT_SUBSCRIBED` | ``
+	postImageKeys: Array<{ imageCID: string; key: string; counter: string }>
 }
 
 export default Vue.extend({
@@ -400,6 +406,7 @@ export default Vue.extend({
 			showSubscriptions: false,
 			enabledTiers: [],
 			subscriptionStatus: ``,
+			postImageKeys: [],
 		}
 	},
 	head() {
@@ -453,7 +460,8 @@ export default Vue.extend({
 			try {
 				const decrypted = await getDecryptedContent(postCID, postData.content, sessionID)
 				if (`content` in decrypted) {
-					postData.content = decrypted.content
+					this.content = decrypted.content
+					this.postImageKeys = decrypted.postImageKeys
 				} else {
 					// show proper error message according to retrieval status
 					// decrypted.status is of type `INSUFFICIENT_TIER` | `NOT_SUBSCRIBED`
@@ -650,7 +658,7 @@ export default Vue.extend({
 			if (!this.post) {
 				throw new Error(`Post can't be null`)
 			}
-			const wordcount = this.post.content.split(/\s+/).length
+			const wordcount = this.content.split(/\s+/).length
 			if (wordcount <= 0) {
 				throw new Error(`Word count can't be equal or less than zero`)
 			}

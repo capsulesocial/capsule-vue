@@ -15,6 +15,7 @@ import Vue from 'vue'
 import { transformPostToTemplate } from '../pages/post/readerExtensions'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import ImagePopup from '@/components/popups/Image.vue'
+import { decryptData } from '@/backend/crypto'
 
 interface IData {
 	clickedImage: null | string
@@ -56,6 +57,11 @@ export default Vue.extend({
 			type: Array as PropType<string[]>,
 			required: true,
 		},
+		encrypted: { type: Boolean, required: true },
+		postImageKeys: {
+			type: Array as PropType<Array<{ imageCID: string; key: string; counter: string }>>,
+			required: true,
+		},
 	},
 	data(): IData {
 		return {
@@ -91,9 +97,18 @@ export default Vue.extend({
 				return
 			}
 			getPhotoFromIPFS(cid)
-				.then((dataUrl) => {
+				.then(async (dataUrl) => {
+					// To prevent linking to a malicious third party image
+					if (this.encrypted) {
+						const keyData = this.postImageKeys.find((k) => k.imageCID === cid)
+						if (!keyData) {
+							this.$toastError(`Key not found to decrypt image!`)
+							return
+						}
+
+						dataUrl = await decryptData(dataUrl, keyData.key, keyData.counter)
+					}
 					if (!dataUrl.startsWith(`data:image`)) {
-						// To prevent linking to a malicious third party image
 						this.$toastError(`Ipfs image with invalid mimetype`)
 						return
 					}

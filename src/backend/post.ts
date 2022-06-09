@@ -60,8 +60,8 @@ export interface IKeyRetrievalStatus {
 }
 export interface IKeyRetrievalSuccess extends IKeyRetrievalStatus {
 	status: `SUBSCRIBED`
-	key: string
-	counter: string
+	post: { key: string; counter: string }
+	postImages: Array<{ imageCID: string; key: string; counter: string }>
 }
 export interface IKeyRetrievalFailure extends IKeyRetrievalStatus {
 	status: `INSUFFICIENT_TIER` | `NOT_SUBSCRIBED`
@@ -196,14 +196,14 @@ export async function getRegularPost(cid: string): Promise<ISignedIPFSObject<IRe
 
 export async function getDecryptedContent(cid: string, content: string, username: string) {
 	const result = await getEncryptionKeys(username, cid)
-
 	if (keyRetrievalFailed(result)) {
 		return result
 	}
 
-	const { key, counter } = result
+	const { key, counter } = result.post
 	const decryptedContent = await decryptData(content, key, counter)
-	return { content: decryptedContent }
+
+	return { content: decryptedContent, postImageKeys: result.postImages }
 }
 
 export function isEncryptedPost(post: Post): post is IEncryptedPost {
