@@ -310,7 +310,15 @@ import SubscribeButton from '@/components/SubscribeButton.vue'
 import SubscriptionsPopup from '@/components/popups/SubscriptionsPopup.vue'
 
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
-import { getOnePost, Post, verifyPostAuthenticity, getPost, isEncryptedPost, getDecryptedContent } from '@/backend/post'
+import {
+	getOnePost,
+	Post,
+	verifyPostAuthenticity,
+	getPost,
+	isEncryptedPost,
+	getDecryptedContent,
+	IPostImageKey,
+} from '@/backend/post'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
 import { getReposts } from '@/backend/reposts'
@@ -347,7 +355,7 @@ interface IData {
 	showSubscriptions: boolean
 	enabledTiers: Array<string>
 	subscriptionStatus: `INSUFFICIENT_TIER` | `NOT_SUBSCRIBED` | ``
-	postImageKeys: Array<{ imageCID: string; key: string; counter: string }>
+	postImageKeys: Array<IPostImageKey>
 }
 
 export default Vue.extend({

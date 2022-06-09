@@ -106,6 +106,7 @@ import {
 	createEncryptedPost,
 	createRegularPost,
 	IEncryptedPost,
+	IKeyData,
 	IRegularPost,
 	sendEncryptedPost,
 	sendRegularPost,
@@ -128,7 +129,7 @@ interface IData {
 	isSaving: `true` | `false` | `done`
 	isX: boolean
 	isCollapsed: boolean
-	postImages: Map<string, { key?: string; counter?: string }>
+	postImages: Map<string, IKeyData | {}>
 	toggleAddContent: boolean
 	addContentPosTop: number
 	addContentPosLeft: number
@@ -211,6 +212,23 @@ export default Vue.extend({
 		encrypted() {
 			this.updateSubtitle()
 		},
+	},
+	created() {
+		const postImages = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].postImages
+		if (!Array.isArray(postImages)) {
+			return
+		}
+
+		if (postImages.length < 1) {
+			return
+		}
+
+		postImages.forEach((pI) => {
+			if (`key` in pI && `counter` in pI && `imageCID` in pI) {
+				const item = { key: pI.key, counter: pI.counter }
+				this.postImages.set(pI.imageCID, item)
+			}
+		})
 	},
 	beforeDestroy() {
 		if (this.isX || this.$store.state.settings.recentlyPosted) {
@@ -320,7 +338,7 @@ export default Vue.extend({
 			cid: string,
 			compressedImage: Blob,
 			imageName: string,
-			encryptionData?: { key: string; counter: string },
+			encryptionData?: IKeyData,
 		): Promise<{ error: string } | { success: boolean }> {
 			// If we have already added this image in the past, we don't need to reupload it to the server
 			if (this.postImages.has(cid)) {
@@ -331,7 +349,24 @@ export default Vue.extend({
 				return { error: `Cannot add more than ${textLimits.post_images.max} images in a post` }
 			}
 			this.postImages.set(cid, encryptionData ?? {})
-			this.$store.commit(`draft/updatePostImages`, Array.from(this.postImages))
+			this.$store.commit(
+				`draft/updatePostImages`,
+				Array.from(this.postImages.keys()).map((k) => {
+					const imgData = this.postImages.get(k)
+					if (imgData === undefined) {
+						throw new Error(`This shouldn't happen`)
+					}
+					if (`key` in imgData && `counter` in imgData) {
+						return {
+							imageCID: k,
+							key: imgData.key,
+							counter: imgData.counter,
+						}
+					}
+
+					return { imageCID: k }
+				}),
+			)
 			await preUploadPhoto(cid, compressedImage, imageName, this.$store.state.session.id, this.encrypted)
 			return { success: true }
 		},

@@ -16,6 +16,7 @@ import { transformPostToTemplate } from '../pages/post/readerExtensions'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import ImagePopup from '@/components/popups/Image.vue'
 import { decryptData } from '@/backend/crypto'
+import { IPostImageKey } from '@/backend/post'
 
 interface IData {
 	clickedImage: null | string
@@ -59,7 +60,7 @@ export default Vue.extend({
 		},
 		encrypted: { type: Boolean, required: true },
 		postImageKeys: {
-			type: Array as PropType<Array<{ imageCID: string; key: string; counter: string }>>,
+			type: Array as PropType<Array<IPostImageKey>>,
 			required: true,
 		},
 	},

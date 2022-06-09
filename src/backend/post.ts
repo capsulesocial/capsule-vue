@@ -58,10 +58,19 @@ export type SubscriptionStatus = `SUBSCRIBED` | `INSUFFICIENT_TIER` | `NOT_SUBSC
 export interface IKeyRetrievalStatus {
 	status: SubscriptionStatus
 }
+
+export interface IKeyData {
+	key: string
+	counter: string
+}
+export interface IPostImageKey extends IKeyData {
+	imageCID: string
+}
+
 export interface IKeyRetrievalSuccess extends IKeyRetrievalStatus {
 	status: `SUBSCRIBED`
-	post: { key: string; counter: string }
-	postImages: Array<{ imageCID: string; key: string; counter: string }>
+	post: IKeyData
+	postImages: Array<IPostImageKey>
 }
 export interface IKeyRetrievalFailure extends IKeyRetrievalStatus {
 	status: `INSUFFICIENT_TIER` | `NOT_SUBSCRIBED`
