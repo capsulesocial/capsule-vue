@@ -147,8 +147,17 @@ export async function sendRegularPost(data: IRegularPost): Promise<string> {
 	return cid
 }
 
-export async function sendEncryptedPost(data: IEncryptedPost, tiers: Array<string>): Promise<string> {
+export async function sendEncryptedPost(
+	data: IEncryptedPost,
+	tiers: Array<string>,
+	imageKeysMap: Map<string, { key?: string; counter?: string }> = new Map(),
+): Promise<string> {
 	const { data: post, key, counter, sig, publicKey } = await encryptAndSignData(data)
+	const imageKeys = Array.from(imageKeysMap.keys()).map((k) => ({
+		cid: k,
+		key: imageKeysMap.get(k)?.key,
+		counter: imageKeysMap.get(k)?.counter,
+	}))
 
 	const ipfsData: ISignedIPFSObject<IEncryptedPost> = { data: post, sig, public_key: publicKey }
 
@@ -156,7 +165,7 @@ export async function sendEncryptedPost(data: IEncryptedPost, tiers: Array<strin
 	await genericRequest({
 		method: `post`,
 		path: `/content`,
-		body: { key, data: ipfsData, counter, cid, tiers },
+		body: { postKey: { key, counter }, data: ipfsData, cid, tiers, imageKeys },
 		username: post.authorID,
 	})
 	await axios.post(`${nodeUrl()}/content`, {

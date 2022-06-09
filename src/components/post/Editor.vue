@@ -735,7 +735,7 @@ export default Vue.extend({
 					// TODO: Handle sending of keys to capsule server
 					// eslint-disable-next-line no-console
 					console.log(this.postImages)
-					const cid: string = await sendEncryptedPost(p, tiers)
+					const cid: string = await sendEncryptedPost(p, tiers, this.postImages)
 					this.$router.push(`/post/` + cid)
 				} catch (err: unknown) {
 					this.$handleError(err)
