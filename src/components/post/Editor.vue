@@ -622,6 +622,16 @@ export default Vue.extend({
 			this.subtitle = subtitle.value.trim()
 			const { category, tags, featuredPhotoCID, featuredPhotoCaption, encrypted } =
 				this.$store.state.draft.drafts[this.$store.state.draft.activeIndex]
+
+			// Check for tiers on premium post
+			if (
+				this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].encrypted &&
+				this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].accessTiers.length === 0
+			) {
+				this.$toastError(`At least one subscription tier must be selected`)
+				return false
+			}
+
 			// Check for quality title
 			const titleCheck = this.$qualityTitle(this.title)
 			if (this.$isError(titleCheck)) {
