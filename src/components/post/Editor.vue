@@ -332,7 +332,7 @@ export default Vue.extend({
 			}
 			this.postImages.set(cid, encryptionData ?? {})
 			this.$store.commit(`draft/updatePostImages`, Array.from(this.postImages))
-			await preUploadPhoto(cid, compressedImage, imageName, this.$store.state.session.id)
+			await preUploadPhoto(cid, compressedImage, imageName, this.$store.state.session.id, this.encrypted)
 			return { success: true }
 		},
 		insertContent(content: string | IImageData | null, plainText = false) {

@@ -18,18 +18,23 @@ interface IUploadEncryptedPhotoResult extends IUploadPhotoResult {
 	counter: string
 }
 
-export async function preUploadPhoto(cid: string, photo: Blob, filename: string, authorID: string) {
+export async function preUploadPhoto(cid: string, photo: Blob, filename: string, authorID: string, encrypted = false) {
 	const exp = (Date.now() + sigValidity).toString()
 	const { sig } = await signContent({ cid, exp, authorID })
 
 	const formData = new FormData()
-	formData.append(`photo`, photo, filename)
 	formData.append(`cid`, cid)
 	formData.append(`exp`, exp)
 	formData.append(`authorID`, authorID)
 	formData.append(`sig`, uint8ArrayToHexString(sig))
 
-	axios.post(`${nodeUrl()}/photos/upload`, formData)
+	if (encrypted) {
+		formData.append(`encrypted`, `true`)
+	}
+
+	// For multer to behave correctly on the server, the file should be the last thing appended on the formData.
+	formData.append(`photo`, photo, filename)
+	return axios.post(`${nodeUrl()}/photos/upload`, formData)
 }
 
 export function addPhotoToIPFS(content: string | ArrayBuffer) {
