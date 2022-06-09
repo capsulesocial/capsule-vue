@@ -349,6 +349,9 @@ export default Vue.extend({
 		},
 		togglePremiumPost() {
 			this.$store.commit(`draft/togglePremium`)
+			if (this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].encrypted) {
+				this.$emit(`openTierAccess`)
+			}
 		},
 		openTiers() {
 			this.$emit(`openTierAccess`)

@@ -50,6 +50,12 @@
 						</p>
 					</button>
 				</div>
+				<button
+					class="px-5 py-2 rounded-lg bg-neutral focus:outline-none text-white my-3 font-semibold w-full"
+					@click="$emit(`close`)"
+				>
+					Confirm
+				</button>
 			</div>
 		</section>
 	</div>
