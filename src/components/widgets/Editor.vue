@@ -337,6 +337,13 @@ export default Vue.extend({
 			return c ? require(`@/assets/images/category/${c}/${this.$colorMode.dark ? `dark` : `light`}/icon.webp`) : ``
 		},
 		togglePremiumPost() {
+			const postImages = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex]?.postImages
+			if (postImages && postImages.length > 0) {
+				this.$toastError(
+					`You can't make a toggle the access status of post when it already has images. Please remove the images and re-upload them after you toggle it.`,
+				)
+				return
+			}
 			this.$store.commit(`draft/togglePremium`)
 			if (this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].encrypted) {
 				this.$emit(`openTierAccess`)
