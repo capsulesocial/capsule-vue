@@ -274,7 +274,7 @@
 						<button
 							v-if="userIsFollowed"
 							class="px-5 py-2 rounded-lg bg-neutral focus:outline-none text-white mt-6 font-semibold"
-							@click="$emit(`close`)"
+							@click="startReading"
 						>
 							Start reading
 						</button>
@@ -437,6 +437,10 @@ export default Vue.extend({
 		})
 	},
 	methods: {
+		startReading() {
+			this.$emit(`close`)
+			location.reload()
+		},
 		displayCurrency(currency: string) {
 			return getCurrencySymbol(currency)
 		},
