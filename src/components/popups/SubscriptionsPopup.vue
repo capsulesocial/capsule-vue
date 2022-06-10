@@ -439,7 +439,9 @@ export default Vue.extend({
 	methods: {
 		startReading() {
 			this.$emit(`close`)
-			location.reload()
+			if (this.$route.name === `post-post`) {
+				location.reload()
+			}
 		},
 		displayCurrency(currency: string) {
 			return getCurrencySymbol(currency)
