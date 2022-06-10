@@ -194,7 +194,7 @@ export default Vue.extend({
 			isSaving: `false`,
 			isX: false,
 			isCollapsed: false,
-			postImages: new Map(), // TODO: fix drafts
+			postImages: new Map(),
 			qeditor: null,
 			editor: null,
 			toggleAddContent: false,
@@ -767,9 +767,6 @@ export default Vue.extend({
 				)
 				try {
 					const tiers: string[] = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].accessTiers
-					// TODO: Handle sending of keys to capsule server
-					// eslint-disable-next-line no-console
-					console.log(this.postImages)
 					const cid: string = await sendEncryptedPost(p, tiers, this.postImages)
 					this.$router.push(`/post/` + cid)
 				} catch (err: unknown) {

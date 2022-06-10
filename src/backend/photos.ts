@@ -6,6 +6,9 @@ import { uint8ArrayToHexString } from './utilities/helpers'
 import { getCompressedImage } from './utilities/imageCompression'
 import { encryptData } from './crypto'
 
+const validFileTypes = [`image/jpeg`, `image/jpg`, `image/png`, `image/avif`, `image/webp`]
+const regExpString = `^data:${validFileTypes.join(`|`)}:base64,([a-fA-F0-9]+)$`
+
 interface IUploadPhotoResult {
 	cid: string
 	url: string | ArrayBuffer
@@ -41,6 +44,15 @@ export function addPhotoToIPFS(content: string | ArrayBuffer) {
 	return ipfs().sendData(content)
 }
 
+export function isValidPhoto(content: string) {
+	const regExp = new RegExp(regExpString)
+	if (!regExp.test(content)) {
+		return false
+	}
+
+	return true
+}
+
 interface IBasicImageResult {
 	data: string | ArrayBuffer
 }
@@ -54,8 +66,9 @@ interface IEncryptImageResult extends IBasicImageResult {
 
 async function encryptImage(rawData: string | ArrayBuffer, imageName: string): Promise<IEncryptImageResult> {
 	const { data, key, counter } = await encryptData(rawData.toString())
-	const image = new File([data], imageName)
-	return { data, image, key, counter }
+	const imageData = `data:encryptedImage:` + data
+	const image = new File([imageData], imageName)
+	return { data: imageData, image, key, counter }
 }
 
 export function uploadPhoto(file: File, encrypt: true): Promise<IUploadEncryptedPhotoResult>

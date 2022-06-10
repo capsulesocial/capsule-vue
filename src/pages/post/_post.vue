@@ -446,8 +446,6 @@ export default Vue.extend({
 
 		const post = await getPost(postCID)
 
-		// Using spread operator so that post.data.content getting
-		// assigned before signature verification doesn't affect it
 		verifyPostAuthenticity(post.data, post.sig, post.public_key).then((verified) => {
 			if (!verified) {
 				this.$toastError(`Post not verified!`)
@@ -462,7 +460,7 @@ export default Vue.extend({
 			}
 		}
 
-		const postData = { ...post.data }
+		const postData = post.data
 
 		if (isEncryptedPost(postData)) {
 			try {
