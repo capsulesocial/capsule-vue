@@ -438,6 +438,7 @@ export default Vue.extend({
 		retrieveReaderProfile(this.$store.state.session.id).then(({ email }) => {
 			this.customerEmail = email ?? ``
 		})
+		this.$store.dispatch(`paymentProfile/fetchProfile`, { username: this.author.id })
 	},
 	methods: {
 		startReading() {
@@ -466,27 +467,27 @@ export default Vue.extend({
 		},
 		initializeProfile() {
 			if (!this.author) {
-				this.cardErrorMessage = `Author profile is missing`
+				this.$toastError(`Author profile is missing`)
 				return
 			}
 			this.paymentProfile = this.getPaymentProfile(this.author.id)
 			if (!this.paymentProfile) {
-				this.cardErrorMessage = `Payment profile of author is missing`
+				this.$toastError(`Payment profile of author is missing`)
 				return
 			}
 
 			if (!this.paymentProfile.stripeAccountId) {
-				this.cardErrorMessage = `Author subscription profile is missing`
+				this.$toastError(`Author subscription profile is missing`)
 				return
 			}
 
 			if (!this.paymentProfile.paymentsEnabled) {
-				this.cardErrorMessage = `Author haven't enabled subscriptions`
+				this.$toastError(`Author haven't enabled subscriptions`)
 				return
 			}
 
 			if (!this.paymentProfile.tiers) {
-				this.cardErrorMessage = `Author haven't set-up subscriptions`
+				this.$toastError(`Author haven't set-up subscriptions`)
 			}
 		},
 		selectTier(tier: SubscriptionTier) {
