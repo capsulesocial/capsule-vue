@@ -670,14 +670,14 @@ export default Vue.extend({
 			}
 			this.readingTime = calculateReadingTime(wordcount, this.post.postImages?.length)
 		},
-		toggleSubscription(authorID: string) {
+		toggleSubscription() {
 			// Unauth
 			if (this.$store.state.session.id === ``) {
 				this.$store.commit(`settings/toggleUnauthPopup`)
 				return
 			}
 			// Prevent self-subscribing
-			if (authorID !== this.$store.state.session.id) {
+			if (this.author?.id !== this.$store.state.session.id) {
 				// Send subscription
 				this.showSubscriptions = !this.showSubscriptions
 			}
