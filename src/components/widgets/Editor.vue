@@ -124,7 +124,7 @@
 		</article>
 		<!-- Premium post -->
 		<article
-			v-if="true"
+			v-if="this.$store.getters[`subscriptionTiers/enabledSubscriptions`]"
 			class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder mb-5 rounded-lg border bg-gradient-to-r p-6 py-5 shadow-lg"
 			style="backdrop-filter: blur(10px)"
 		>
