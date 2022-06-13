@@ -404,7 +404,7 @@ export default Vue.extend({
 	},
 	data(): IData {
 		return {
-			step: 4,
+			step: 0,
 			isSelected: true,
 			paymentType: ``,
 			selectedTier: null,
