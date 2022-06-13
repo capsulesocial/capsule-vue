@@ -81,7 +81,7 @@ import { faces, IFace } from '@/config/faces'
 interface IData {
 	reactionList: Record<string, IFace>
 	feelingList: { positive: Set<string>; negative: Set<string>; neutral: Set<string> }
-	feeling: string
+	feeling: `positive` | `negative` | `neutral`
 	showFilter: boolean
 }
 
@@ -124,7 +124,7 @@ export default Vue.extend({
 				this.showFilter = true
 			}
 		},
-		setCommentFilterFeeling(feeling: string) {
+		setCommentFilterFeeling(feeling: `positive` | `negative` | `neutral`) {
 			this.feeling = feeling
 			this.$emit(`clicked`, feeling)
 			this.showFilter = true
