@@ -136,6 +136,9 @@
 							<GoogleIcon class="w-6 h-6" />
 							<h6 class="text-gray5 ml-2">Pay</h6>
 						</button>
+						<small v-show="cardErrorMessage !== null" style="color: #eb1c26" class="mb-5 modal-animation">{{
+							cardErrorMessage
+						}}</small>
 						<div
 							v-show="displayButtons.googlePay || displayButtons.applePay"
 							class="my-6 flex w-full items-center justify-center"
@@ -565,19 +568,16 @@ export default Vue.extend({
 				paymentRequest.on(`paymentmethod`, async (ev) => {
 					if (!ev.paymentMethod.id) {
 						this.cardErrorMessage = `Invalid payment method`
-						ev.complete(`fail`)
+						ev.complete(`success`)
 						return
 					}
 					if (!ev.payerEmail) {
 						this.cardErrorMessage = `Please provide your email`
-						ev.complete(`fail`)
+						ev.complete(`success`)
 						return
 					}
-					const paymentSuccess = await this.submitPayment(ev.paymentMethod, ev.payerEmail)
-					if (!paymentSuccess) {
-						ev.complete(`fail`)
-						return
-					}
+					await this.submitPayment(ev.paymentMethod, ev.payerEmail)
+					this.isLoading = false
 					ev.complete(`success`)
 				})
 				return
@@ -634,7 +634,7 @@ export default Vue.extend({
 				this.step = 4
 				return true
 			} catch (err) {
-				this.cardErrorMessage = (err as Error).message ?? `Unkwon error`
+				this.cardErrorMessage = (err as Error).message ?? `Unknown error`
 				return false
 			}
 		},
