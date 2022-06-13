@@ -62,6 +62,23 @@ export async function verifyAndDecryptData(data: IEncryptedPost, key: string, co
 	return decryptedPost
 }
 
+export async function encryptData(data: string) {
+	// 32-byte key for AES-256
+	const key = window.crypto.getRandomValues(new Uint8Array(32))
+	// 16-byte counter block for AES-256
+	const counter = window.crypto.getRandomValues(new Uint8Array(16))
+	const ec = new TextEncoder()
+	const byteData = ec.encode(data)
+
+	const encryptedData = await _encryptData(byteData, counter, key)
+
+	return {
+		data: uint8ArrayToHexString(encryptedData),
+		key: uint8ArrayToHexString(key),
+		counter: uint8ArrayToHexString(counter),
+	}
+}
+
 export async function decryptData(data: string, key: string, counter: string) {
 	const dec = new TextDecoder()
 

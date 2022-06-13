@@ -80,13 +80,13 @@ const imgRegexp = (cid: string) =>
 		`g`,
 	)
 
-export function createPostImagesSet(content: string, uploadedImages: Set<string>) {
-	const usedImages: Set<string> = new Set()
-	uploadedImages.forEach((cid) => {
+export function createPostImagesSet(content: string, uploadedImages: Map<string, { key?: string; counter?: string }>) {
+	const usedImages: Map<string, { key?: string; counter?: string }> = new Map()
+	uploadedImages.forEach((val, cid) => {
 		if (!content.match(imgRegexp(cid))) {
 			return
 		}
-		usedImages.add(cid)
+		usedImages.set(cid, val)
 	})
 
 	return usedImages
