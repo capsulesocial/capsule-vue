@@ -4,7 +4,7 @@
 			<h2 class="text-lightPrimaryText dark:text-darkPrimaryText mb-1 text-lg font-semibold xl:text-xl">
 				My subscriptions
 			</h2>
-			<p class="text-gray5 dark:text-gray3">You can manage your active subscriptions to your favorite authors here</p>
+			<p class="text-gray5 dark:text-gray3">Here you can manage your active subscriptions to your favorite authors</p>
 		</div>
 		<!-- subscriptions grid -->
 		<div v-if="activeSubs.length > 0" class="flex flex-wrap mt-4" style="padding-right: 1.45rem; padding-left: 1.45rem">
@@ -14,8 +14,8 @@
 		<div v-else class="mt-5">
 			<div v-if="this.$store.state.session.id !== ``" class="flex flex-col items-center">
 				<p class="text-gray5 dark:text-gray3 align-end mb-1 flex items-end text-sm w-3/4 text-center">
-					It seems you don't have any active subscriptions yet, browse Blogchain and subscribe to authors to manage your
-					subscriptions here
+					It seems like you don't currently have any active subscriptions. Browse Blogchain and subscribe to authors to
+					view them here
 				</p>
 				<img
 					:src="
