@@ -677,7 +677,7 @@ export default Vue.extend({
 				return
 			}
 			// Prevent self-subscribing
-			if (this.author.id !== this.$store.state.session.id) {
+			if (this.author?.id !== this.$store.state.session.id) {
 				// Send subscription
 				this.showSubscriptions = !this.showSubscriptions
 			}
