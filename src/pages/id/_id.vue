@@ -41,11 +41,12 @@
 							</button>
 						</div>
 						<div class="flex items-center">
-							<SecondaryButton
-								v-if="$store.state.session.id === $route.params.id"
-								:text="`Edit Profile`"
-								:action="toggleSettings"
-							/>
+							<span v-if="$store.state.session.id === $route.params.id">
+								<button class="bg-darkBG focus:outline-none block rounded-lg xl:hidden" @click="toggleSettings">
+									<PencilIcon class="m-2 h-5 w-5 text-white" />
+								</button>
+								<SecondaryButton :text="`Edit Profile`" :action="toggleSettings" class="hidden xl:block" />
+							</span>
 							<FriendButton
 								v-else
 								:toggleFriend="toggleFriend"
@@ -54,6 +55,7 @@
 							/>
 							<!-- Subscription button -->
 							<SubscribeButton
+								v-if="$store.state.session.id !== $route.params.id && paymentsEnabled"
 								:toggleSubscription="toggleSubscription"
 								:userIsSubscribed="activeSubscription"
 								class="header-profile"
