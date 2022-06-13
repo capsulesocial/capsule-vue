@@ -286,7 +286,7 @@
 								Don't forget to follow this author to see<br />
 								his latest posts in your home feed:
 							</p>
-							<FriendButton :toggleFriend="toggleFriend" :userIsFollowed="userIsFollowed" class="hidden lg:block" />
+							<FriendButton :toggleFriend="toggleFriend" :userIsFollowed="userIsFollowed" />
 						</div>
 					</div>
 					<img
@@ -404,7 +404,7 @@ export default Vue.extend({
 	},
 	data(): IData {
 		return {
-			step: 0,
+			step: 4,
 			isSelected: true,
 			paymentType: ``,
 			selectedTier: null,
