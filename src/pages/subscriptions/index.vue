@@ -4,9 +4,7 @@
 			<h2 class="text-lightPrimaryText dark:text-darkPrimaryText mb-1 text-lg font-semibold xl:text-xl">
 				My subscriptions
 			</h2>
-			<p class="text-gray5 dark:text-gray3">
-				You can manage your active subscriptions to your favorite content creators here
-			</p>
+			<p class="text-gray5 dark:text-gray3">You can manage your active subscriptions to your favorite authors here</p>
 		</div>
 		<!-- subscriptions grid -->
 		<div v-if="activeSubs.length > 0" class="flex flex-wrap mt-4" style="padding-right: 1.45rem; padding-left: 1.45rem">
