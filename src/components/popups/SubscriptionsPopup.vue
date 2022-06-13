@@ -451,15 +451,18 @@ export default Vue.extend({
 			return getCurrencySymbol(currency)
 		},
 		async stripeClient(connectId?: string): Promise<Stripe> {
-			if (!_stripe) {
-				if (!connectId) {
-					throw new Error(`Stripe not initialized`)
-				}
+			// Either connectId should be passed or Stripe should already be initialized
+			if (!connectId && !_stripe) {
+				throw new Error(`Stripe not initialized`)
+			}
+			// Always create a new instance if connectId is passed.
+			if (connectId) {
 				_stripe = await loadStripe(stripePublishableKey, {
 					stripeAccount: connectId,
 					apiVersion: `2020-08-27`,
 				})
 			}
+			// If stripe is still not initialized at this point, throw an error.
 			if (!_stripe) {
 				throw new Error(`Network error: Could not initiate stripe`)
 			}
