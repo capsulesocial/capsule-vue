@@ -10,7 +10,7 @@ export async function requestOTP(phoneNumber: string) {
 }
 
 export async function getFundTransferStatus(accountId: string): Promise<`PROCESSING` | `SENT` | `FAILED`> {
-	const response = await axios.get(`${capsuleServer}/status?accountId=${accountId}`)
+	const response = await axios.get(`${capsuleServer}/sponsor/status?accountId=${accountId}`)
 	return response.data.data
 }
 
