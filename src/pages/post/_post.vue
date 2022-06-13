@@ -173,7 +173,12 @@
 						<!-- Content -->
 						<article v-else class="mt-5">
 							<div class="text-lightPrimaryText dark:text-darkSecondaryText editable content max-w-none break-words">
-								<PostView :content="this.post.content" :postImages="this.post.postImages" />
+								<PostView
+									:content="this.content"
+									:postImages="this.post.postImages"
+									:encrypted="this.post.encrypted"
+									:postImageKeys="this.postImageKeys"
+								/>
 							</div>
 						</article>
 						<!-- Tags -->
@@ -305,7 +310,15 @@ import SubscribeButton from '@/components/SubscribeButton.vue'
 import SubscriptionsPopup from '@/components/popups/SubscriptionsPopup.vue'
 
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
-import { getOnePost, Post, verifyPostAuthenticity, getPost, isEncryptedPost, getDecryptedContent } from '@/backend/post'
+import {
+	getOnePost,
+	Post,
+	verifyPostAuthenticity,
+	getPost,
+	isEncryptedPost,
+	getDecryptedContent,
+	IPostImageKey,
+} from '@/backend/post'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
 import { getReposts } from '@/backend/reposts'
@@ -342,6 +355,7 @@ interface IData {
 	showSubscriptions: boolean
 	enabledTiers: Array<string>
 	subscriptionStatus: `INSUFFICIENT_TIER` | `NOT_SUBSCRIBED` | ``
+	postImageKeys: Array<IPostImageKey>
 }
 
 export default Vue.extend({
@@ -400,6 +414,7 @@ export default Vue.extend({
 			showSubscriptions: false,
 			enabledTiers: [],
 			subscriptionStatus: ``,
+			postImageKeys: [],
 		}
 	},
 	head() {
@@ -431,9 +446,7 @@ export default Vue.extend({
 
 		const post = await getPost(postCID)
 
-		// Using spread operator so that post.data.content getting
-		// assigned before signature verification doesn't affect it
-		verifyPostAuthenticity({ ...post.data }, post.sig, post.public_key).then((verified) => {
+		verifyPostAuthenticity(post.data, post.sig, post.public_key).then((verified) => {
 			if (!verified) {
 				this.$toastError(`Post not verified!`)
 			}
@@ -447,11 +460,14 @@ export default Vue.extend({
 			}
 		}
 
-		if (isEncryptedPost(post.data)) {
+		const postData = post.data
+
+		if (isEncryptedPost(postData)) {
 			try {
-				const decrypted = await getDecryptedContent(postCID, post.data.content, sessionID)
+				const decrypted = await getDecryptedContent(postCID, postData.content, sessionID)
 				if (`content` in decrypted) {
-					post.data.content = decrypted.content
+					this.content = decrypted.content
+					this.postImageKeys = decrypted.postImageKeys
 				} else {
 					// show proper error message according to retrieval status
 					// decrypted.status is of type `INSUFFICIENT_TIER` | `NOT_SUBSCRIBED`
@@ -648,7 +664,7 @@ export default Vue.extend({
 			if (!this.post) {
 				throw new Error(`Post can't be null`)
 			}
-			const wordcount = this.post.content.split(/\s+/).length
+			const wordcount = this.content.split(/\s+/).length
 			if (wordcount <= 0) {
 				throw new Error(`Word count can't be equal or less than zero`)
 			}

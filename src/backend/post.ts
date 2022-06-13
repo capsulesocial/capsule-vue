@@ -58,10 +58,19 @@ export type SubscriptionStatus = `SUBSCRIBED` | `INSUFFICIENT_TIER` | `NOT_SUBSC
 export interface IKeyRetrievalStatus {
 	status: SubscriptionStatus
 }
-export interface IKeyRetrievalSuccess extends IKeyRetrievalStatus {
-	status: `SUBSCRIBED`
+
+export interface IKeyData {
 	key: string
 	counter: string
+}
+export interface IPostImageKey extends IKeyData {
+	imageCID: string
+}
+
+export interface IKeyRetrievalSuccess extends IKeyRetrievalStatus {
+	status: `SUBSCRIBED`
+	post: IKeyData
+	postImages: Array<IPostImageKey>
 }
 export interface IKeyRetrievalFailure extends IKeyRetrievalStatus {
 	status: `INSUFFICIENT_TIER` | `NOT_SUBSCRIBED`
@@ -147,8 +156,17 @@ export async function sendRegularPost(data: IRegularPost): Promise<string> {
 	return cid
 }
 
-export async function sendEncryptedPost(data: IEncryptedPost, tiers: Array<string>): Promise<string> {
+export async function sendEncryptedPost(
+	data: IEncryptedPost,
+	tiers: Array<string>,
+	imageKeysMap: Map<string, { key?: string; counter?: string }> = new Map(),
+): Promise<string> {
 	const { data: post, key, counter, sig, publicKey } = await encryptAndSignData(data)
+	const imageKeys = Array.from(imageKeysMap.keys()).map((k) => ({
+		cid: k,
+		key: imageKeysMap.get(k)?.key,
+		counter: imageKeysMap.get(k)?.counter,
+	}))
 
 	const ipfsData: ISignedIPFSObject<IEncryptedPost> = { data: post, sig, public_key: publicKey }
 
@@ -156,7 +174,7 @@ export async function sendEncryptedPost(data: IEncryptedPost, tiers: Array<strin
 	await genericRequest({
 		method: `post`,
 		path: `/content`,
-		body: { key, data: ipfsData, counter, cid, tiers },
+		body: { postKey: { key, counter }, data: ipfsData, cid, tiers, imageKeys },
 		username: post.authorID,
 	})
 	await axios.post(`${nodeUrl()}/content`, {
@@ -187,14 +205,14 @@ export async function getRegularPost(cid: string): Promise<ISignedIPFSObject<IRe
 
 export async function getDecryptedContent(cid: string, content: string, username: string) {
 	const result = await getEncryptionKeys(username, cid)
-
 	if (keyRetrievalFailed(result)) {
 		return result
 	}
 
-	const { key, counter } = result
+	const { key, counter } = result.post
 	const decryptedContent = await decryptData(content, key, counter)
-	return { content: decryptedContent }
+
+	return { content: decryptedContent, postImageKeys: result.postImages }
 }
 
 export function isEncryptedPost(post: Post): post is IEncryptedPost {

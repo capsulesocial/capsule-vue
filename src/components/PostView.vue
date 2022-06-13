@@ -15,6 +15,9 @@ import { marked } from 'marked'
 import { markedRenderer, transformPostToHTML } from '../pages/post/readerExtensions'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import ImagePopup from '@/components/popups/Image.vue'
+import { decryptData } from '@/backend/crypto'
+import { IPostImageKey } from '@/backend/post'
+import { isValidPhoto } from '@/backend/photos'
 
 const ALLOWED_TAGS = [
 	`pre`,
@@ -57,6 +60,13 @@ export default Vue.extend({
 		postImages: {
 			type: Array as PropType<string[]>,
 			required: true,
+		},
+		encrypted: { type: Boolean, required: true },
+		postImageKeys: {
+			type: Array as PropType<Array<IPostImageKey>>,
+			default() {
+				return []
+			},
 		},
 	},
 	data(): IData {
@@ -104,10 +114,20 @@ export default Vue.extend({
 				return
 			}
 			getPhotoFromIPFS(cid)
-				.then((dataUrl) => {
-					if (!dataUrl.startsWith(`data:image`)) {
-						// To prevent linking to a malicious third party image
-						this.$toastError(`Ipfs image with invalid mimetype`)
+				.then(async (dataUrl) => {
+					if (dataUrl.startsWith(`data:encryptedImage:`) && this.encrypted) {
+						const keyData = this.postImageKeys.find((k) => k.imageCID === cid)
+						if (!keyData) {
+							this.$toastError(`key not found to decrypt image!`)
+							return
+						}
+
+						dataUrl = await decryptData(dataUrl.substring(`data:encryptedImage:`.length), keyData.key, keyData.counter)
+					}
+
+					// To prevent linking to a malicious third party image
+					if (!isValidPhoto(dataUrl)) {
+						this.$toastError(`invalid in-post image`)
 						return
 					}
 

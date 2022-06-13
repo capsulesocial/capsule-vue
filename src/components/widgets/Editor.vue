@@ -181,10 +181,9 @@ import ChevronUp from '@/components/icons/ChevronUp.vue'
 import ChevronDown from '@/components/icons/ChevronDown.vue'
 import PremiumSwitchEditor from '@/components/PremiumSwitchEditor.vue'
 
-import { addPhotoToIPFS, preUploadPhoto } from '@/backend/photos'
+import { preUploadPhoto, uploadPhoto } from '@/backend/photos'
 import { categories } from '@/config/config'
 import { Tag } from '@/backend/post'
-import { getCompressedImage } from '@/backend/utilities/imageCompression'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
 
 interface IData {
@@ -237,7 +236,7 @@ export default Vue.extend({
 			this.featuredPhoto = null
 			const { featuredPhotoCID } = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex]
 			if (featuredPhotoCID !== null) {
-				this.featuredPhoto = this.downloadImage(featuredPhotoCID)
+				this.featuredPhoto = this.downloadImage(featuredPhotoCID) // decrypt photo
 			}
 			this.caption = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].featuredPhotoCaption
 			this.category = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].category
@@ -280,13 +279,6 @@ export default Vue.extend({
 			this.$store.commit(`draft/updateFeaturedPhotoCaption`, null)
 			this.$store.commit(`draft/updateFeaturedPhotoCID`, null)
 		},
-		async uploadImage(image: any, blobImage: Blob, filename: string): Promise<void> {
-			const cid = await addPhotoToIPFS(image)
-			await preUploadPhoto(cid, blobImage, filename, this.$store.state.session.id)
-			this.$store.commit(`draft/updateFeaturedPhotoCID`, cid)
-			await this.downloadImage(cid)
-			this.waitingImage = false
-		},
 		async downloadImage(cid: string): Promise<void> {
 			this.featuredPhoto = await getPhotoFromIPFS(cid)
 		},
@@ -296,7 +288,7 @@ export default Vue.extend({
 				element.click()
 			}
 		},
-		async handleImage(e: Event): Promise<void> {
+		handleImage(e: Event) {
 			const eventTarget = e.target
 			if (!eventTarget) {
 				return
@@ -307,28 +299,25 @@ export default Vue.extend({
 			if (!target.files || target.files.length < 1) {
 				return
 			}
-			const image = target.files[0]
-			if (!image) {
+			const imageFile = target.files[0]
+			if (!imageFile) {
 				return
 			}
 			try {
 				this.waitingImage = true
-				const compressedImage = await getCompressedImage(image)
-				const reader = new FileReader()
-				reader.readAsDataURL(compressedImage)
-				reader.onload = (i) => {
-					if (i.target !== null) {
-						this.uploadImage(i.target.result, compressedImage, image.name).catch((err) => {
-							target.value = ``
-							this.waitingImage = false
-							this.$handleError(err)
-						})
+				uploadPhoto(imageFile).then(async (res) => {
+					try {
+						const { cid, image, imageName, url } = res
+						await preUploadPhoto(cid, image, imageName, this.$store.state.session.id)
+						this.$store.commit(`draft/updateFeaturedPhotoCID`, cid)
+						this.featuredPhoto = url
+					} catch (err) {
+						this.$handleError(err)
+					} finally {
+						target.value = ``
+						this.waitingImage = false
 					}
-				}
-				reader.onerror = (_ev) => {
-					target.value = ``
-					throw new Error(`Something went wrong while loading the image`)
-				}
+				})
 			} catch (err: unknown) {
 				target.value = ``
 				this.waitingImage = false
@@ -348,6 +337,13 @@ export default Vue.extend({
 			return c ? require(`@/assets/images/category/${c}/${this.$colorMode.dark ? `dark` : `light`}/icon.webp`) : ``
 		},
 		togglePremiumPost() {
+			const postImages = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex]?.postImages
+			if (postImages && postImages.length > 0) {
+				this.$toastError(
+					`You can't make a toggle the access status of post when it already has images. Please remove the images and re-upload them after you toggle it.`,
+				)
+				return
+			}
 			this.$store.commit(`draft/togglePremium`)
 			if (this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].encrypted) {
 				this.$emit(`openTierAccess`)
