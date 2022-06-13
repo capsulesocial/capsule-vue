@@ -31,7 +31,7 @@
 								class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation mb-5 flex flex-col overflow-hidden rounded-lg border bg-gradient-to-r py-4 px-6 shadow-lg"
 								style="backdrop-filter: blur(10px)"
 							>
-								<h3 class="text-lightPrimaryText dark:text-darkPrimaryText text-base font-semibold mb-4">
+								<h3 class="text-lightPrimaryText dark:text-darkPrimaryText text-base font-semibold">
 									Expired subscriptions
 								</h3>
 								<div v-if="inactiveSubs.length > 0">

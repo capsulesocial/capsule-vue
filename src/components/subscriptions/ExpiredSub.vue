@@ -1,5 +1,5 @@
 <template>
-	<div class="w-full flex flex-row justify-between mb-4">
+	<div class="w-full flex flex-row justify-between mt-4 mb-1">
 		<div class="flex flex-row">
 			<!-- Avatar -->
 			<Avatar :avatar="avatar" :authorID="s.authorID" :size="`w-12 h-12 xl:w-14 xl:h-14`" class="self-center" />
