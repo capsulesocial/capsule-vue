@@ -8,6 +8,12 @@
 			style="backdrop-filter: blur(10px)"
 			class="w-full lg:w-600 min-h-40 max-h-90 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation z-10 overflow-y-auto rounded-lg bg-gradient-to-r p-6 pt-5 shadow-lg"
 		>
+			<BasicConfirmAlert
+				v-if="showAlert"
+				:text="`Are you sure you want to cancel this subscription? You can still re-subscribe to this author later`"
+				@close="showAlert = false"
+				@confirm="cancelSubscription"
+			/>
 			<!-- popup title -->
 			<div class="sticky flex items-center justify-between mb-6">
 				<div class="flex items-center">
@@ -64,7 +70,7 @@
 				<button
 					v-if="s.isActive && (!s.renewalInfo || s.renewalInfo.status !== 'cancelled')"
 					class="text-negative py-2 text-sm flex flex-row items-center"
-					@click="cancelSubscription"
+					@click="toggleCancelAlert"
 				>
 					<CancelIcon class="h-5 w-5 mr-2" />
 					<p class="focus:outline-none text-sm">Cancel my subscription</p>
@@ -115,6 +121,7 @@ import CancelIcon from '@/components/icons/CancelIcon.vue'
 import CardIcon from '@/components/icons/CardIcon.vue'
 import CloseIcon from '@/components/icons/X.vue'
 import DownloadIcon from '@/components/icons/Download.vue'
+import BasicConfirmAlert from '@/components/popups/BasicConfirmAlert.vue'
 import { ActionType, ISubscriptionWithProfile, namespace as subscriptionNamespace } from '@/store/subscriptions'
 import { getSubscriptionTransactions, SubsTransaction } from '@/backend/subscription'
 import { getBillingPortalUrl } from '@/backend/payment'
@@ -122,10 +129,11 @@ import { getBillingPortalUrl } from '@/backend/payment'
 interface IData {
 	avatar: string | ArrayBuffer
 	transactions: Array<SubsTransaction>
+	showAlert: boolean
 }
 
 export default Vue.extend({
-	components: { Avatar, CancelIcon, CardIcon, CloseIcon, DownloadIcon },
+	components: { Avatar, CancelIcon, CardIcon, CloseIcon, DownloadIcon, BasicConfirmAlert },
 	props: {
 		s: {
 			type: Object as PropType<ISubscriptionWithProfile>,
@@ -136,6 +144,7 @@ export default Vue.extend({
 		return {
 			avatar: ``,
 			transactions: [],
+			showAlert: false,
 		}
 	},
 	async created() {
@@ -164,11 +173,10 @@ export default Vue.extend({
 				this.$handleError(ex)
 			}
 		},
+		toggleCancelAlert() {
+			this.showAlert = !this.showAlert
+		},
 		async cancelSubscription(): Promise<void> {
-			if (!confirm(`Are you sure you want to cancel this subscription?`)) {
-				return
-			}
-
 			try {
 				await this.deleteSubscription({ username: this.$store.state.session.id, id: this.s.subscriptionId })
 				this.$emit(`close`)
