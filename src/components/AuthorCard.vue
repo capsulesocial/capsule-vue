@@ -11,12 +11,8 @@
 						</nuxt-link>
 						<nuxt-link v-else :to="'/id/' + authorID" class="text-gray5 text-2xl"> {{ authorID }} </nuxt-link>
 						<div v-show="authorBio" id="bio" ref="bio" style="max-height: 6rem; overflow: hidden">
-							<p
-								v-for="(line, lineNumber) of authorBio.split('\n')"
-								:key="lineNumber"
-								class="text-gray5 dark:text-darkSecondaryText w-full"
-							>
-								{{ line.slice(0, 180) + (line.length > 180 ? '...' : '') }}<br />
+							<p class="text-gray5 dark:text-darkSecondaryText w-full">
+								{{ authorBio.slice(0, 180) + (authorBio.length > 180 ? '...' : '') }}<br />
 							</p>
 						</div>
 						<button v-if="longBio" class="focus:outline-none text-xs text-primary px-1" @click="expandBio = true">

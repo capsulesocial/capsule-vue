@@ -21,7 +21,7 @@
 				</div>
 				<article>
 					<div class="text-gray5 dark:text-gray3 my-5 text-sm">
-						<p>{{ bio }}</p>
+						<p v-for="(line, lineNumber) of bio.split('\n')" :key="lineNumber">{{ line }}</p>
 					</div>
 				</article>
 			</div>
