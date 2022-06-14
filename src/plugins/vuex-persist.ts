@@ -4,7 +4,7 @@ import VuexPersistence from 'vuex-persist'
 const storePlugin: Plugin = ({ store }) => {
 	new VuexPersistence({
 		/* your options */
-		key: `capsule-store`,
+		key: `capsule-store-v2`,
 	}).plugin(store)
 }
 
