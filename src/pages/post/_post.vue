@@ -485,6 +485,8 @@ export default Vue.extend({
 					throw err
 				}
 			}
+		} else {
+			this.content = post.data.content
 		}
 
 		this.post = post.data
