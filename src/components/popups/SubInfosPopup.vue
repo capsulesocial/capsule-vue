@@ -8,7 +8,7 @@
 			style="backdrop-filter: blur(10px)"
 			class="w-full lg:w-600 min-h-40 max-h-90 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation z-10 overflow-y-auto rounded-lg bg-gradient-to-r p-6 pt-5 shadow-lg"
 		>
-			<BasicAlert
+			<BasicConfirmAlert
 				v-if="showAlert"
 				:text="`Are you sure you want to cancel this subscription? You can still re-subscribe to this author later`"
 				@close="showAlert = false"
@@ -121,7 +121,7 @@ import CancelIcon from '@/components/icons/CancelIcon.vue'
 import CardIcon from '@/components/icons/CardIcon.vue'
 import CloseIcon from '@/components/icons/X.vue'
 import DownloadIcon from '@/components/icons/Download.vue'
-import BasicAlert from '@/components/popups/BasicConfirmAlert.vue'
+import BasicConfirmAlert from '@/components/popups/BasicConfirmAlert.vue'
 import { ActionType, ISubscriptionWithProfile, namespace as subscriptionNamespace } from '@/store/subscriptions'
 import { getSubscriptionTransactions, SubsTransaction } from '@/backend/subscription'
 import { getBillingPortalUrl } from '@/backend/payment'
@@ -133,7 +133,7 @@ interface IData {
 }
 
 export default Vue.extend({
-	components: { Avatar, CancelIcon, CardIcon, CloseIcon, DownloadIcon, BasicAlert },
+	components: { Avatar, CancelIcon, CardIcon, CloseIcon, DownloadIcon, BasicConfirmAlert },
 	props: {
 		s: {
 			type: Object as PropType<ISubscriptionWithProfile>,
