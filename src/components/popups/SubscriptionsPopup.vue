@@ -215,7 +215,7 @@
 						<!-- Save email for future subscriptions -->
 						<div class="flex flex-row justify-between items-center mb-4">
 							<p class="text-base text-center text-gray5 dark:text-gray3">Save email for future subscriptions</p>
-							<input ref="saveEmail" type="checkbox" checked />
+							<BasicSwitch :enabled="this.saveEmail" @toggle="toggleSaveEmail" />
 						</div>
 						<div
 							id="card-element"
@@ -329,6 +329,7 @@ import CreditCardIcon from '@/components/icons/CreditCard.vue'
 import AppleIcon from '@/components/icons/brands/Apple.vue'
 import GoogleIcon from '@/components/icons/brands/Google.vue'
 import SwitchPeriod from '@/components/ToggleSwitch.vue'
+import BasicSwitch from '@/components/BasicSwitch.vue'
 
 import { Profile } from '@/backend/profile'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
@@ -366,6 +367,7 @@ interface IData {
 	isLoading: boolean
 	userIsFollowed: boolean
 	following: Set<string>
+	saveEmail: boolean
 }
 
 let _stripe: Stripe | null = null
@@ -385,6 +387,7 @@ export default Vue.extend({
 		GoogleIcon,
 		SwitchPeriod,
 		ChevronLeft,
+		BasicSwitch,
 	},
 	props: {
 		isSubscribed: {
@@ -424,6 +427,7 @@ export default Vue.extend({
 			isLoading: false,
 			userIsFollowed: false,
 			following: new Set(),
+			saveEmail: true,
 		}
 	},
 	computed: {
@@ -615,7 +619,7 @@ export default Vue.extend({
 			if (!this.selectedTier) {
 				throw new Error(`Tier not selected. Invalid state`)
 			}
-			const storeEmail: boolean = (this.$refs.saveEmail as HTMLInputElement).checked
+			const storeEmail = this.saveEmail
 			const username = this.$store.state.session.id
 			this.isLoading = true
 			try {
@@ -743,6 +747,9 @@ export default Vue.extend({
 			} catch (err: unknown) {
 				this.$handleError(err)
 			}
+		},
+		toggleSaveEmail() {
+			this.saveEmail = !this.saveEmail
 		},
 		handleCloseClick(e: any): void {
 			if (!e.target || e.target.parentNode === null || e.target.firstChild?.classList === undefined) {

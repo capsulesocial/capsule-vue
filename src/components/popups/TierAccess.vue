@@ -50,12 +50,14 @@
 						</p>
 					</button>
 				</div>
-				<button
-					class="px-5 py-2 rounded-lg bg-neutral focus:outline-none text-white my-3 font-semibold w-full"
-					@click="$emit(`close`)"
-				>
-					Confirm
-				</button>
+				<div class="flex justify-end w-full">
+					<button
+						class="px-6 py-2 rounded-lg bg-neutral focus:outline-none text-white my-3 font-semibold"
+						@click="$emit(`close`)"
+					>
+						Save
+					</button>
+				</div>
 			</div>
 		</section>
 	</div>
