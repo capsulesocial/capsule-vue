@@ -64,7 +64,11 @@ interface IData {
 	userInfo: null | IWalletStatus
 	isLoading: boolean
 	showInfos: boolean
+<<<<<<< HEAD
 	step: `registerMethods` | `signUp`
+=======
+	step: `registerMethods` | `signUp` | `downloadKey`
+>>>>>>> e9a7d57e (feat: register account without invites)
 }
 
 export default Vue.extend({
