@@ -58,7 +58,7 @@
 								v-if="$store.state.session.id !== $route.params.id && paymentsEnabled"
 								:toggleSubscription="toggleSubscription"
 								:userIsSubscribed="activeSubscription"
-								class="header-profile"
+								class="header-profile ml-2"
 							/>
 						</div>
 					</div>
