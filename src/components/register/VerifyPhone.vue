@@ -48,7 +48,7 @@ import intlTelInput from 'intl-tel-input'
 import { AxiosError } from 'axios'
 
 import BrandedButton from '@/components/BrandedButton.vue'
-import { requestOTP, requestSponsor, waitForFunds } from '@/backend/funder'
+import { requestOTP, requestOnboard, waitForFunds } from '@/backend/funder'
 
 interface IData {
 	otp: string
@@ -116,7 +116,7 @@ export default Vue.extend({
 					this.isLoading = false
 					return
 				}
-				await requestSponsor(this.phoneNumber, this.otp, this.accountId)
+				await requestOnboard(this.phoneNumber, this.otp, this.accountId)
 				const { balance } = await waitForFunds(this.accountId)
 				this.$emit(`updateFunds`, balance)
 			} catch (err: any) {
