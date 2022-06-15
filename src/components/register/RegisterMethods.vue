@@ -92,15 +92,15 @@ export default Vue.extend({
 			isLoading: false,
 		}
 	},
-	async created() {
+	async mounted() {
 		this.isLoading = true
 		await this.torus.init()
 		this.isLoading = false
 	},
 	methods: {
 		async torusLogin(type: TorusVerifiers) {
-			this.isLoading = true
 			try {
+				this.isLoading = true
 				const info = await this.torus.triggerLogin(torusVerifiers[type])
 				if (info.userInfo.typeOfLogin === `discord`) {
 					await revokeDiscordKey(info.userInfo.accessToken)
@@ -114,10 +114,8 @@ export default Vue.extend({
 				this.$emit(`updateUserInfo`, userInfo)
 				this.$emit(`stepForward`)
 				// If no username is found then register...
+			} finally {
 				this.isLoading = false
-			} catch (e) {
-				this.isLoading = false
-				throw e
 			}
 		},
 		async walletLoginComponent() {

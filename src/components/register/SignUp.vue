@@ -11,12 +11,12 @@
 			<SelectID
 				v-else
 				:funds="funds"
-				:checkFunds="checkFunds"
 				:userInfo="userInfo"
-				:verify="verify"
 				:accountId="userInfo.accountId"
 				:nearWallet="userInfo.type === `near`"
 				class="w-full h-full xl:w-1/2"
+				@checkFunds="checkFunds"
+				@verify="verify"
 			/>
 		</article>
 		<!-- Step 4: Download key -->
@@ -130,6 +130,7 @@ export default Vue.extend({
 			if (!this.userInfo) {
 				throw new Error(`Unexpected condition!`)
 			}
+			this.$emit(`setIsLoading`, true)
 			let res: false | IAuthResult = false
 			if (this.username) {
 				// Login
@@ -170,6 +171,7 @@ export default Vue.extend({
 
 			this.username = account.id
 			window.localStorage.setItem(`accountId`, this.userInfo.accountId)
+			this.$emit(`setIsLoading`, false)
 			if (this.userInfo.type !== `near`) {
 				this.$router.push(`/home`)
 			} else {

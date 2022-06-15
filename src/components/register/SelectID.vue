@@ -18,7 +18,7 @@
 				Ensure that the NEAR account with ID: "{{ userInfo.accountId }}" has sufficient funds before signing up.
 			</p>
 			<p class="justify-between p-5 font-sans text-sm text-gray7 dark:text-gray3">Available funds: {{ funds }} yN</p>
-			<BrandedButton :text="`Re-check funds`" class="w-full" :action="checkFunds" />
+			<BrandedButton :text="`Re-check funds`" class="w-full" :action="() => $emit(`checkFunds`)" />
 		</div>
 	</article>
 </template>
@@ -48,16 +48,8 @@ export default Vue.extend({
 			type: String,
 			required: true,
 		},
-		checkFunds: {
-			type: Function as PropType<() => Promise<void>>,
-			required: true,
-		},
 		userInfo: {
 			type: Object as PropType<IWalletStatus>,
-			required: true,
-		},
-		verify: {
-			type: Function as PropType<(id: string) => Promise<void>>,
 			required: true,
 		},
 	},
@@ -86,7 +78,7 @@ export default Vue.extend({
 					this.isLoading = false
 					throw new ValidationError(idValidity.error)
 				}
-				await this.verify(this.id)
+				this.$emit(`verify`, this.id)
 			} catch (error) {
 				this.$handleError(error)
 			} finally {
