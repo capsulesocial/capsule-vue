@@ -38,7 +38,13 @@ import SelectID from './SelectID.vue'
 import DownloadKey from './DownloadKey.vue'
 
 import { hasSufficientFunds } from '@/backend/funder'
-import { checkAccountStatus, getUsernameNEAR, removeNearPrivateKey, walletLogout } from '@/backend/near'
+import {
+	checkAccountStatus,
+	getIsAccountIdOnboarded,
+	getUsernameNEAR,
+	removeNearPrivateKey,
+	walletLogout,
+} from '@/backend/near'
 
 import { MutationType, createSessionFromProfile, namespace as sessionStoreNamespace } from '~/store/session'
 import { setNearUserFromPrivateKey, login, register, IAuthResult, IWalletStatus } from '@/backend/auth'
