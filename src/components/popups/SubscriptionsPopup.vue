@@ -191,7 +191,7 @@
 						</div>
 					</div>
 					<p class="text-negative text-sm">
-						This subscription will be renewed every {{ selectedPeriod }} at the same date, you can manage you
+						This subscription will be renewed every {{ selectedPeriod }} on the same date, you can manage your
 						subscriptions on the <nuxt-link to="/subscriptions" class="underline">subscriptions page</nuxt-link>.
 					</p>
 					<div class="flex justify-between w-full mt-8 mb-8">
@@ -289,7 +289,7 @@
 						<div v-else class="flex flex-col items-center">
 							<p class="text-base text-center text-gray5 dark:text-gray3 mb-4 max-w-md">
 								Don't forget to follow this author to see<br />
-								his latest posts in your home feed:
+								their latest posts on your home feed:
 							</p>
 							<FriendButton :toggleFriend="toggleFriend" :userIsFollowed="userIsFollowed" />
 						</div>
