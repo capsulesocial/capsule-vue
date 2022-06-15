@@ -121,7 +121,7 @@
 						</div>
 					</div>
 					<!-- Payment Methods -->
-					<div v-show="!isLoading" class="flex flex-col px-10">
+					<div v-show="!isLoading" class="flex flex-col items-center px-10">
 						<!-- Apple pay -->
 						<button
 							v-show="displayButtons.applePay"
@@ -159,6 +159,7 @@
 							<CreditCardIcon class="text-gray5 dark:text-gray2 w-6 h-6" />
 							<h6 class="text-gray5 dark:text-gray2 ml-2">Credit card</h6>
 						</button>
+						<p class="text-sm text-gray5 dark:text-gray3 mt-4 mb-1 italic">Cryptocurrency options coming soon</p>
 					</div>
 				</article>
 				<!-- Step 2: Payment card info -->
