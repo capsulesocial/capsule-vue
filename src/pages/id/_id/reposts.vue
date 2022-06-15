@@ -2,9 +2,7 @@
 	<section class="px-0">
 		<article v-if="reposts.length === 0 && !isLoading" class="mt-24 grid justify-items-center px-10 xl:px-0">
 			<p class="text-gray5 dark:text-gray3 mb-5 text-sm">
-				<span v-if="$route.params.id === $store.state.session.id"
-					>It seems you haven't reposted any content yet, you can repost any post:</span
-				>
+				<span v-if="$route.params.id === $store.state.session.id">It seems you haven't reposted any content yet.</span>
 				<span v-else>{{ $route.params.id }} hasn't reposted any content yet</span>
 			</p>
 			<SecondaryButton

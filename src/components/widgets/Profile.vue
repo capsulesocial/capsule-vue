@@ -7,7 +7,7 @@
 		<div v-if="location === `` && email === `` && website === ``">
 			<p class="text-gray5 dark:text-gray3 text-sm">
 				<span v-if="$route.params.id === $store.state.session.id">
-					You can display more information about you by editing your profile!
+					Display more information here by editing your profile!
 				</span>
 				<span v-else> {{ $route.params.id }} hasn't updated their bio yet</span>
 			</p>

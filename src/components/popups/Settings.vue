@@ -31,7 +31,7 @@
 		</div>
 		<!-- Name -->
 		<div class="mb-4 flex flex-col lg:flex-row">
-			<label for="newName" class="mb-2 w-32 font-semibold lg:mb-0 dark:text-darkPrimaryText">Name</label>
+			<label for="newName" class="mb-2 w-32 font-semibold lg:mb-0 dark:text-darkPrimaryText">Display Name</label>
 			<input
 				id="newName"
 				v-model="newName"
@@ -42,13 +42,13 @@
 		</div>
 		<!-- Bio -->
 		<div class="mb-6 flex flex-col lg:flex-row">
-			<label for="bio" class="mb-2 w-32 font-semibold lg:mb-0 dark:text-darkPrimaryText"> Bio: </label>
+			<label for="bio" class="mb-2 w-32 font-semibold lg:mb-0 dark:text-darkPrimaryText">Bio</label>
 			<div class="flex-grow">
 				<textarea
 					id="bio"
 					:maxlength="maxCharBio"
 					:value="bio"
-					:placeholder="`Your Blogchain Bio`"
+					:placeholder="`Display Blogchain Bio`"
 					class="bg-gray1 dark:bg-gray7 dark:text-darkPrimaryText placeholder-gray5 dark:placeholder-gray3 focus:outline-none w-full rounded-lg px-2 py-1 text-black"
 					@input="bio = $event.target.value"
 					@keyup="checkBio()"
