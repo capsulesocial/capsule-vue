@@ -44,7 +44,7 @@
 						</p>
 					</div>
 					<div class="flex flex-col my-4">
-						<h4 class="text-lg font-semibold dark:text-darkPrimaryText">Sign up with Implicit Account</h4>
+						<h4 class="text-lg font-semibold dark:text-darkPrimaryText">Sign up with Blogchain private key</h4>
 						<p class="my-2 text-gray5 dark:text-gray3">
 							Create an account where you self manage your account keys. You’ll need to provide your phone number to
 							verify your human identity and enable Capsule Social to sponsor you with NEAR tokens. These NEAR tokens

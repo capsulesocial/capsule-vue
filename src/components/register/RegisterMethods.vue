@@ -38,7 +38,7 @@
 				class="bg-gray2 dark:bg-gray7 focus:outline-none mb-4 flex w-full items-center justify-center rounded-lg py-3"
 				@click="implicitAccountCreate"
 			>
-				<h6 class="text-gray7 dark:text-gray2 ml-4 text-sm font-semibold">Create implicit account</h6>
+				<h6 class="text-gray7 dark:text-gray2 ml-4 text-sm font-semibold">Signup with Blogchain private key</h6>
 			</button>
 			<button
 				class="w-full flex flex-row items-center justify-center text-center mt-10 text-gray5 dark:text-gray3 hover:text-primary dark:hover:text-primary text-sm"
