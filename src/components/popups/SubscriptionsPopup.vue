@@ -289,7 +289,7 @@
 						<div v-else class="flex flex-col items-center">
 							<p class="text-base text-center text-gray5 dark:text-gray3 mb-4 max-w-md">
 								Don't forget to follow this author to see<br />
-								his latest posts in your home feed:
+								their latest posts on your home feed:
 							</p>
 							<FriendButton :toggleFriend="toggleFriend" :userIsFollowed="userIsFollowed" />
 						</div>
