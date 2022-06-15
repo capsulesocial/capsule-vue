@@ -2147,18 +2147,18 @@
     socket.io-client "^4.5.1"
     unload "^2.3.1"
 
-"@toruslabs/customauth@^9.0.0":
-  version "9.0.0"
-  resolved "https://registry.yarnpkg.com/@toruslabs/customauth/-/customauth-9.0.0.tgz#f27dcf714b83e8b63b8dcfe423cca83bff536b6e"
-  integrity sha512-RFy5yCS9IC0imvpZTyl7bdhPvfTh7gCa1fS2XVr7vK+TNe3qigF0R1Ebihn3GR0J/7omL7nFPXcwWcvt9Gpouw==
+"@toruslabs/customauth@^9.1.0":
+  version "9.1.0"
+  resolved "https://registry.yarnpkg.com/@toruslabs/customauth/-/customauth-9.1.0.tgz#f808afe9383ec2908b455271a72ebd13a434e9f0"
+  integrity sha512-Ov3Y7JR8EJJJfBkdESovcxf1unp/8JTL9PaV0SVu4pwWmecPH8juc+w4ZNF54JYUqX9k1N8fzQWe1WCOXMaUag==
   dependencies:
     "@chaitanyapotti/register-service-worker" "^1.7.3"
     "@toruslabs/broadcast-channel" "^5.0.2"
     "@toruslabs/eccrypto" "^1.1.8"
-    "@toruslabs/fetch-node-details" "^6.0.1"
+    "@toruslabs/fetch-node-details" "^7.0.1"
     "@toruslabs/http-helpers" "^3.0.0"
     "@toruslabs/metadata-helpers" "^3.0.0"
-    "@toruslabs/torus.js" "^6.0.0"
+    "@toruslabs/torus.js" "^6.0.1"
     bowser "^2.11.0"
     events "^3.3.0"
     jwt-decode "^3.1.2"
@@ -2178,10 +2178,10 @@
   optionalDependencies:
     secp256k1 "^3.8.0"
 
-"@toruslabs/fetch-node-details@^6.0.1":
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/@toruslabs/fetch-node-details/-/fetch-node-details-6.0.1.tgz#f060524446456aeca02c163b5619a126d55d3790"
-  integrity sha512-842lwbpo56ASlQrc7xdGMXYxuZVTNAwQQ8jDtbjFgDuehlimDELBcL5s4Bs1mC973alESy6aUMKSJFgQq6enkA==
+"@toruslabs/fetch-node-details@^7.0.1":
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/@toruslabs/fetch-node-details/-/fetch-node-details-7.0.1.tgz#22563e4e52e0961f78bb6ed6dc947a8f02f37a20"
+  integrity sha512-JDYHcet3w5dNdXH+vbgWYLR3SOLOs6Zewzmu+Ffs+AZb8HfH5At+I+w3WaBYCzzQU+MNURKhOTdIdjCjRMpZeg==
   dependencies:
     web3-eth-contract "^1.7.3"
     web3-utils "^1.7.3"
@@ -2212,14 +2212,14 @@
   dependencies:
     "@toruslabs/tweetnacl-js" "^1.0.3"
 
-"@toruslabs/torus.js@^6.0.0":
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/@toruslabs/torus.js/-/torus.js-6.0.0.tgz#91030c086f1784391d10f12f07f9d86e401a4f1f"
-  integrity sha512-H7/qC5HGPtYzRN2bQnA1KzmSwM+beYqzYdrq1gBSsNBvj2CS49BDl6SESCoGg8ndB83vlikA7KGykqMhdXd2gw==
+"@toruslabs/torus.js@^6.0.1":
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/@toruslabs/torus.js/-/torus.js-6.0.1.tgz#550e71e46eb1a65be523e5ca15faba63ee61c5a2"
+  integrity sha512-ceJO+URHCCqDLeTyNIYVknwmQmuVJhJL11wfuRI2USZs+LMjVPqH1N3T17Yv8JINr1VPZrrkq0MTtCf0YvjH8g==
   dependencies:
     "@toruslabs/eccrypto" "^1.1.8"
     "@toruslabs/http-helpers" "^3.0.0"
-    bn.js "^5.2.0"
+    bn.js "^5.2.1"
     elliptic "^6.5.4"
     json-stable-stringify "^1.0.1"
     keccak "^3.0.2"

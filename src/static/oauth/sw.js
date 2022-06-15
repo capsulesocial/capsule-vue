@@ -238,7 +238,7 @@ function getScope() {
 					hashParams,
 				  });
 				} else {
-				  // window.close();
+				  window.close();
 				  showCloseText();
 				}
 			  });
@@ -258,7 +258,7 @@ function getScope() {
 		  } catch (err) {
 			console.error(err, "service worker error in redirect");
 			bc && bc.close();
-			// window.close();
+			window.close();
 			showCloseText();
 		  }
 		} else {
@@ -285,7 +285,7 @@ function getScope() {
 		  } catch (err) {
 			console.error(err, "service worker error in preopen");
 			bc && bc.close();
-			// window.close();
+			window.close();
 			showCloseText();
 		  }
 		}
