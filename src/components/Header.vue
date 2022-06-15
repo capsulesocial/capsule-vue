@@ -66,17 +66,10 @@
 						class="text-gray5 dark:text-gray3 mb-2 flex w-full flex-row items-center text-left"
 						><ProfileIcon class="mr-2 h-5 w-5 flex-shrink-0" />Profile</nuxt-link
 					>
-					<a
-						v-if="paymentsEnabled"
-						:href="authordashboardURL"
-						class="text-gray5 dark:text-gray3 flex w-full flex-row items-center text-left"
+					<a :href="authordashboardURL" class="text-gray5 dark:text-gray3 flex w-full flex-row items-center text-left"
 						><DashboardIcon class="mr-2 h-5 w-5 flex-shrink-0" />Author Dashboard</a
 					>
-					<div
-						v-if="paymentsEnabled"
-						class="bg-lightBorder dark:bg-darkBorder w-full rounded my-3"
-						style="height: 1px"
-					></div>
+					<div class="bg-lightBorder dark:bg-darkBorder w-full rounded my-3" style="height: 1px"></div>
 					<nuxt-link
 						v-if="$store.state.session.id !== ``"
 						to="/subscriptions"
@@ -196,17 +189,10 @@
 						class="text-gray5 dark:text-gray3 mb-2 flex w-full flex-row items-center text-left"
 						><ProfileIcon class="mr-2 h-5 w-5 flex-shrink-0" />Profile</nuxt-link
 					>
-					<a
-						v-if="paymentsEnabled"
-						:href="authordashboardURL"
-						class="text-gray5 dark:text-gray3 flex w-full flex-row items-center text-left"
+					<a :href="authordashboardURL" class="text-gray5 dark:text-gray3 flex w-full flex-row items-center text-left"
 						><DashboardIcon class="mr-2 h-5 w-5 flex-shrink-0" />Author Dashboard</a
 					>
-					<div
-						v-if="paymentsEnabled"
-						class="bg-lightBorder dark:bg-darkBorder w-full rounded my-3"
-						style="height: 1px"
-					></div>
+					<div class="bg-lightBorder dark:bg-darkBorder w-full rounded my-3" style="height: 1px"></div>
 					<nuxt-link
 						v-if="$store.state.session.id !== ``"
 						to="/subscriptions"
@@ -299,12 +285,6 @@ export default Vue.extend({
 	},
 	computed: {
 		...mapGetters(paymentProfileNamespace, [`getPaymentProfile`]),
-		paymentsEnabled(): boolean {
-			if (!this.$store.state.session.id) {
-				return false
-			}
-			return this.getPaymentProfile(this.$store.state.session.id)?.paymentsEnabled
-		},
 	},
 	created() {
 		// Set filter dropdown event handler
