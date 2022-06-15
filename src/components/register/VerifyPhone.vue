@@ -110,17 +110,15 @@ export default Vue.extend({
 			this.isLoading = false
 		},
 		async validateOTP() {
-			this.isLoading = true
 			try {
 				if (this.otp.length !== 6) {
 					this.$toastError(`OTP should have 6 digits`)
-					this.isLoading = false
 					return
 				}
 				if (!this.accountId) {
-					this.isLoading = false
 					return
 				}
+				this.isLoading = true
 				await requestOnboard(this.phoneNumber, this.otp, this.accountId)
 				this.isLoading = false
 				this.waitingForFunds = true
