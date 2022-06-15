@@ -452,8 +452,15 @@ export default Vue.extend({
 	methods: {
 		startReading() {
 			this.$emit(`close`)
+			this.$store.dispatch(`subscriptions/fetchSubs`, this.$store.state.session.id)
 			if (this.$route.name === `post-post`) {
 				location.reload()
+			}
+			if (this.$route.name === `id-id`) {
+				this.$toastSuccess(`Subscribed! Reloading profile...`)
+				setTimeout(() => {
+					location.reload()
+				}, 4000)
 			}
 		},
 		displayCurrency(currency: string) {
@@ -494,12 +501,12 @@ export default Vue.extend({
 			}
 
 			if (!this.paymentProfile.paymentsEnabled) {
-				this.$toastError(`Author haven't enabled subscriptions`)
+				this.$toastError(`Author hasn't enabled subscriptions`)
 				return
 			}
 
 			if (!this.paymentProfile.tiers) {
-				this.$toastError(`Author haven't set-up subscriptions`)
+				this.$toastError(`Author hasn't set-up subscriptions`)
 			}
 		},
 		selectTier(tier: SubscriptionTier) {
