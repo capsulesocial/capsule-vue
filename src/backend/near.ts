@@ -260,7 +260,7 @@ export async function setUserInfoNEAR(username: string) {
 		case SetUserInfoStatus.NearAccountAlreadyLinked:
 			return { success: false, error: `Your NEAR Account is already linked to another username` }
 		case SetUserInfoStatus.AccountNotOnboarded:
-			return { success: false, error: `Account does not have a valid invite code` }
+			return { success: false, error: `Account has not been onboarded` }
 		case SetUserInfoStatus.UsernameBlockListed:
 			return { success: false, error: `Username should not contain blocklisted keywords` }
 		case SetUserInfoStatus.InvalidCharsUsername:

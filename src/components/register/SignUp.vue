@@ -72,18 +72,6 @@ export default Vue.extend({
 		try {
 			const username = await getUsernameNEAR(this.userInfo.accountId)
 			if (!username) {
-				// const inviteToken = getInviteToken()
-				// if (!inviteToken) {
-				// 	const isAccountOnboarded = await getIsAccountIdOnboarded(this.userInfo.accountId)
-				// 	if (!isAccountOnboarded) {
-				// 		this.$emit(`updateUserInfo`, null)
-				// 		this.$emit(`setIsLoading`, false)
-				// 		this.$emit(`stepForward`)
-				// 		return
-				// 	}
-				// } else {
-				// 	await verifyTokenAndOnboard(this.userInfo.accountId)
-				// }
 				await this.checkFunds()
 				this.$emit(`setIsLoading`, false)
 				return

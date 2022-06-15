@@ -12,8 +12,6 @@
 				></div>
 			</div>
 			<div v-show="!isLoading" class="flex w-full h-full flex-col justify-center items-center px-14">
-				<!-- Step 0: Code redeem -->
-				<!-- <InviteCode v-if="step === `inviteCode`" class="w-full lg:w-3/4 xl:w-1/2" @validInviteCode="stepForward" /> -->
 				<!-- Step 1: Choose Login / register -->
 				<RegisterMethods
 					v-if="step === `registerMethods`"
