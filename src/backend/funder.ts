@@ -53,7 +53,7 @@ export function waitForFunds(accountId: string) {
 }
 
 export async function requestSponsor(phoneNumber: string, code: string, accountId: string) {
-	const response = await axios.post(`${capsuleServer}/sponsor`, {
+	const response = await axios.post(`${capsuleServer}/onboard`, {
 		phoneNumber,
 		code,
 		accountId,
