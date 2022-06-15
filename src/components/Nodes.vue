@@ -34,7 +34,7 @@
 			:class="$colorMode.dark ? `NodesInfoOpenDark` : `NodesInfoOpen`"
 			style="top: -5px; right: 205px; width: 140%"
 		>
-			Number of hosts on Blogchain's public network currently in use to serve content
+			Number of hosts on Blogchain's public networking currently serving content
 		</div>
 	</div>
 </template>

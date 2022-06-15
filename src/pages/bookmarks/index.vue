@@ -6,10 +6,10 @@
 		>
 			<div v-if="this.$store.state.session.id !== ``" class="flex flex-col items-center">
 				<p class="text-gray5 dark:text-gray3 align-end mb-1 flex items-end text-sm" style="max-width: 400px">
-					It seems you don't have any bookmarked posts yet,
+					It seems you don't have any bookmarked posts yet.
 				</p>
 				<p class="text-gray5 dark:text-gray3 align-end mb-5 flex items-end text-sm" style="max-width: 400px">
-					you can bookmark any post by clicking the<span>
+					You can bookmark any post by clicking the<span>
 						<BookmarkIcon class="h-5 w-5 fill-current" />
 					</span>
 					icon:

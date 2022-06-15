@@ -36,7 +36,7 @@
 							you can start follow content creators all around Blogchain:
 						</span>
 						<span v-else-if="profile.name !== ``"> It seems that {{ profile.name }} is not following anyone yet!</span>
-						<span v-else> It seems that {{ profile.id }} is not following anyone yet!</span>
+						<span v-else> It looks like {{ profile.id }} is not following anyone yet!</span>
 					</p>
 					<SecondaryButton
 						v-if="$store.state.session.id === $route.params.id"

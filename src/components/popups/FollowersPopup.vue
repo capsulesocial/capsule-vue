@@ -35,7 +35,7 @@
 							It seems you don't have any followers yet!
 						</span>
 						<span v-else-if="profile.name !== ``">
-							It seems that {{ profile.name }} doesn't have any followers yet!
+							It looks like {{ profile.name }} doesn't have any followers yet!
 						</span>
 						<span v-else> It seems that {{ profile.id }} doesn't have any followers yet! </span>
 					</p>

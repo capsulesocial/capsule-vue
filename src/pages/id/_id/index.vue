@@ -3,7 +3,7 @@
 		<article v-if="posts.length == 0 && !isLoading" class="mt-24 grid justify-items-center px-10 xl:px-0">
 			<p class="text-gray5 dark:text-gray3 mb-5 text-sm">
 				<span v-if="$route.params.id === $store.state.session.id">
-					It seems you haven't written any posts yet, it's never too late to start:
+					It seems you haven't written any posts yet. It's never too late to start:
 				</span>
 				<span v-else> {{ $route.params.id }} hasn't written any posts yet</span>
 			</p>
