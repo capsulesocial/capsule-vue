@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { checkAccountStatus } from './near'
+import { checkAccountStatus, getIsAccountIdOnboarded } from './near'
 import { capsuleServer, sufficientFunds } from './utilities/config'
 
 export async function requestOTP(phoneNumber: string) {
@@ -22,8 +22,11 @@ export function waitForFunds(accountId: string) {
 	let secWaited = 0
 	return new Promise<{ balance: string }>((resolve, reject) => {
 		const waiter = async () => {
-			const { balance } = await checkAccountStatus(accountId)
-			if (hasSufficientFunds(balance)) {
+			const [{ balance }, onboarded] = await Promise.all([
+				checkAccountStatus(accountId),
+				getIsAccountIdOnboarded(accountId),
+			])
+			if (hasSufficientFunds(balance) && onboarded) {
 				resolve({ balance })
 				return
 			}

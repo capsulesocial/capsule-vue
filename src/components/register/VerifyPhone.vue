@@ -126,6 +126,7 @@ export default Vue.extend({
 				this.waitingForFunds = true
 				const { balance } = await waitForFunds(this.accountId)
 				this.waitingForFunds = false
+				this.$emit(`setIsOnboarded`, true)
 				this.$emit(`updateFunds`, balance)
 			} catch (err: any) {
 				this.isLoading = false
