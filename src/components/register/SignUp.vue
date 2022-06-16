@@ -21,7 +21,7 @@
 		<!-- Step 4: Download key -->
 		<DownloadKey
 			v-if="downloadKey && username"
-			:aid="username"
+			:username="username"
 			:accountId="userInfo.accountId"
 			class="w-full xl:w-1/2"
 		/>
