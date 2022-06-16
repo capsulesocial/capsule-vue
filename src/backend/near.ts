@@ -112,11 +112,6 @@ export function walletLogout() {
 	}
 }
 
-export function signedInToWallet() {
-	const walletConnection = getWalletConnection()
-	return walletConnection.isSignedIn()
-}
-
 export function initContract(accountId: string) {
 	// Initialize connection to the NEAR network
 	if (!_near) {
