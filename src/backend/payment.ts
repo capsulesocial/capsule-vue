@@ -62,6 +62,35 @@ export async function confirmSubscriptionPayment(username: string, paymentAttemp
 	}
 }
 
+export async function switchSubscriptionTier(
+	username: string,
+	subscriptionId: string,
+	newTier: SubscriptionTier,
+	period: string,
+) {
+	try {
+		const amount = getAmountFromTier(period, newTier)
+		const body = {
+			subscriptionId,
+			tierId: newTier._id,
+			amount,
+			period,
+		}
+		const response = await genericRequest({
+			method: `post`,
+			path: `/pay/stripe/subscribe/switch`,
+			username,
+			body,
+		})
+		return response
+	} catch (err) {
+		if (err instanceof AxiosError && err.response) {
+			throw new Error(err.response.data?.error ?? err.message)
+		}
+		throw new Error(`Network error: ${err}`)
+	}
+}
+
 export async function getBillingPortalUrl(username: string, subscriptionId: string): Promise<string> {
 	const body = { subscriptionId }
 	const response = await genericRequest({
