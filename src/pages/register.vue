@@ -61,11 +61,10 @@ import { ValidationError } from '@/errors'
 import { getUserInfo, IWalletStatus } from '@/backend/auth'
 
 interface IData {
-	id: string
 	userInfo: null | IWalletStatus
 	isLoading: boolean
 	showInfos: boolean
-	step: `registerMethods` | `signUp` | `downloadKey`
+	step: `registerMethods` | `signUp`
 }
 
 export default Vue.extend({
@@ -78,7 +77,6 @@ export default Vue.extend({
 	layout: `unauth`,
 	data(): IData {
 		return {
-			id: ``,
 			userInfo: null,
 			isLoading: true,
 			showInfos: false,
