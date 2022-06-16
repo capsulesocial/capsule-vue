@@ -227,6 +227,11 @@
 						}}</small>
 						<div class="flex flex-row-reverse mt-4">
 							<SecondaryButton v-if="!isLoading" :text="`Pay`" :action="submitCardPayment" />
+							<div class="w-full">
+								<nuxt-link to="/payment-policy" class="text-gray5 dark:text-gray3 underline self-center text-xs italic"
+									>Payment policy</nuxt-link
+								>
+							</div>
 						</div>
 					</div>
 				</article>
