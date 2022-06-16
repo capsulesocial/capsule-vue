@@ -92,10 +92,12 @@ const toastWarning: Warning = (text: string): void => {
 const toastError: Error = (text: string): void => {
 	Toastify({
 		text,
-		duration: 4000,
+		duration: 8000,
 		gravity: `bottom`, // `top` or `bottom`
 		position: `left`,
 		avatar: require(`~/assets/images/util/error.png`),
+		close: true,
+		stopOnFocus: true,
 		style: {
 			background: `#FDE9EF`,
 			border: `1px solid`,
