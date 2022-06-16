@@ -75,6 +75,15 @@
 					<CancelIcon class="h-5 w-5 mr-2" />
 					<p class="focus:outline-none text-sm">Cancel my subscription</p>
 				</button>
+				<!-- TODO: Improve this button placement -->
+				<button
+					v-if="s.isActive && (!s.renewalInfo || s.renewalInfo.status !== 'cancelled')"
+					class="text-neutral px-2 py-2 text-sm flex flex-row items-center"
+					@click="switchTier"
+				>
+					<CardIcon class="h-5 w-5 mr-2" />
+					<p class="focus:outline-none text-sm">Change tier</p>
+				</button>
 			</div>
 			<!-- divider -->
 			<div class="bg-gray1 dark:bg-darkBorder w-full rounded-lg" style="height: 1px"></div>
@@ -114,7 +123,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import Avatar from '@/components/Avatar.vue'
 import CancelIcon from '@/components/icons/CancelIcon.vue'
@@ -124,12 +133,18 @@ import DownloadIcon from '@/components/icons/Download.vue'
 import BasicConfirmAlert from '@/components/popups/BasicConfirmAlert.vue'
 import { ActionType, ISubscriptionWithProfile, namespace as subscriptionNamespace } from '@/store/subscriptions'
 import { getSubscriptionTransactions, SubsTransaction } from '@/backend/subscription'
-import { getBillingPortalUrl } from '@/backend/payment'
+import { getBillingPortalUrl, switchSubscriptionTier } from '@/backend/payment'
+import {
+	createDefaultPaymentProfile,
+	namespace as paymentProfileNamespace,
+	PaymentProfile,
+} from '@/store/paymentProfile'
 
 interface IData {
 	avatar: string | ArrayBuffer
 	transactions: Array<SubsTransaction>
 	showAlert: boolean
+	paymentProfile: PaymentProfile
 }
 
 export default Vue.extend({
@@ -145,7 +160,11 @@ export default Vue.extend({
 			avatar: ``,
 			transactions: [],
 			showAlert: false,
+			paymentProfile: createDefaultPaymentProfile(this.s.authorID),
 		}
+	},
+	computed: {
+		...mapGetters(paymentProfileNamespace, [`getPaymentProfile`]),
 	},
 	async created() {
 		if (this.s.avatar) {
@@ -160,6 +179,7 @@ export default Vue.extend({
 			.catch((err) => {
 				this.$handleError(err)
 			})
+		this.paymentProfile = this.getPaymentProfile(this.s.authorID)
 	},
 	methods: {
 		downloadReceipt(url: string) {
@@ -182,6 +202,31 @@ export default Vue.extend({
 				this.$emit(`close`)
 			} catch (ex) {
 				this.$handleError(ex)
+			}
+		},
+		async switchTier(): Promise<void> {
+			try {
+				// TODO the selected tier and period should come from a popup of all the tiers except current one
+				const selectedTier = this.paymentProfile.tiers[1]
+				const selectedPeriod = `month`
+
+				// TODO maybe a loader here?
+				const response = await switchSubscriptionTier(
+					this.$store.state.session.id,
+					this.s.subscriptionId,
+					selectedTier,
+					selectedPeriod,
+				)
+				if (response.status !== `succeeded`) {
+					this.$toastError(`Switching tier failed`)
+					return
+				}
+
+				this.$toastSuccess(`Switched tiers successfully!`)
+				this.$store.dispatch(`subscriptions/fetchSubs`, this.$store.state.session.id)
+				this.$emit(`close`)
+			} catch (err) {
+				this.$handleError(err)
 			}
 		},
 		...mapActions(subscriptionNamespace, {
