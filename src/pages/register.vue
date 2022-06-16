@@ -46,6 +46,7 @@ import Vue from 'vue'
 import { mapMutations } from 'vuex'
 import 'intl-tel-input/build/css/intlTelInput.css'
 import { AxiosError } from 'axios'
+import CustomAuth from '@toruslabs/customauth'
 
 import RegisterMethods from '@/components/register/RegisterMethods.vue'
 
@@ -58,13 +59,20 @@ import { MutationType, namespace as sessionStoreNamespace } from '~/store/sessio
 
 import { removeNearPrivateKey, walletLogout } from '@/backend/near'
 import { ValidationError } from '@/errors'
-import { getUserInfo, IWalletStatus } from '@/backend/auth'
+import { getAccountIdFromPrivateKey, getUserInfo, IWalletStatus } from '@/backend/auth'
+import { torusNetwork } from '@/backend/utilities/config'
+import { revokeDiscordKey } from '@/backend/discordRevoke'
 
 interface IData {
 	userInfo: null | IWalletStatus
 	isLoading: boolean
 	showInfos: boolean
 	step: `registerMethods` | `signUp`
+}
+
+interface ITorusResponse {
+	userInfo: { accessToken: string; typeOfLogin: `discord` | `google` }
+	privateKey: string
 }
 
 export default Vue.extend({
@@ -147,11 +155,46 @@ export default Vue.extend({
 			changeBio: MutationType.CHANGE_BIO,
 			changeLocation: MutationType.CHANGE_LOCATION,
 		}),
+		async discordRevoke(accessToken: string) {
+			try {
+				await revokeDiscordKey(accessToken)
+			} catch (err) {
+				this.$toastWarning(`We couldn't revoke the Discord key, this might hinder you to login for the next 30 minutes`)
+			}
+		},
 		async stepForward() {
 			this.isLoading = true
-
 			if (!this.userInfo) {
-				this.userInfo = await getUserInfo()
+				const torus = new CustomAuth({
+					baseUrl: location.origin,
+					redirectPathName: `register`,
+					uxMode: `redirect`,
+					network: torusNetwork,
+				})
+				let res: ITorusResponse | null = null
+				try {
+					const info = await torus.getRedirectResult()
+					res = info.result as { userInfo: any; privateKey: string }
+				} catch (err) {
+					// the error here can be safely dismissed (it will also error out in nominal cases)
+				}
+
+				if (res) {
+					if (res.userInfo.typeOfLogin === `discord`) {
+						this.discordRevoke(res.userInfo.accessToken)
+					}
+					const accountId = getAccountIdFromPrivateKey(res.privateKey)
+					const userInfo: IWalletStatus = {
+						type: `torus`,
+						accountId,
+						privateKey: res.privateKey,
+					}
+					this.userInfo = userInfo
+				}
+
+				if (!this.userInfo) {
+					this.userInfo = await getUserInfo()
+				}
 			}
 
 			// Check if we already have any sign-in info set up

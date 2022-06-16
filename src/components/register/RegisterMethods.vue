@@ -58,7 +58,7 @@
 <script lang="ts">
 import Vue from 'vue'
 
-import DirectWebSdk from '@toruslabs/customauth'
+import DirectWebSdk, { UX_MODE } from '@toruslabs/customauth'
 
 import GoogleIcon from '@/components/icons/brands/Google.vue'
 import NearIcon from '@/components/icons/brands/Near.vue'
@@ -66,9 +66,8 @@ import DiscordIcon from '@/components/icons/Discord.vue'
 import InfoIcon from '@/components/icons/Info.vue'
 
 import { domain, torusNetwork, torusVerifiers, TorusVerifiers } from '@/backend/utilities/config'
-import { getAccountIdFromPrivateKey, IWalletStatus } from '@/backend/auth'
+import { IWalletStatus } from '@/backend/auth'
 import { walletLogin, generateAndSetKey } from '@/backend/near'
-import { revokeDiscordKey } from '@/backend/discordRevoke'
 
 interface IData {
 	torus: DirectWebSdk
@@ -86,34 +85,24 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			torus: new DirectWebSdk({
-				baseUrl: `${domain}/oauth`,
+				baseUrl: `${domain}`,
+				redirectPathName: `register`,
 				network: torusNetwork, // details for test net
+				uxMode: UX_MODE.REDIRECT,
 			}),
-			isLoading: false,
+			isLoading: true,
 		}
 	},
 	async mounted() {
 		this.isLoading = true
-		await this.torus.init()
+		await this.torus.init({ skipSw: true })
 		this.isLoading = false
 	},
 	methods: {
 		async torusLogin(type: TorusVerifiers) {
 			try {
 				this.isLoading = true
-				const info = await this.torus.triggerLogin(torusVerifiers[type])
-				if (info.userInfo.typeOfLogin === `discord`) {
-					await revokeDiscordKey(info.userInfo.accessToken)
-				}
-				const accountId = getAccountIdFromPrivateKey(info.privateKey)
-				const userInfo: IWalletStatus = {
-					type: `torus`,
-					accountId,
-					privateKey: info.privateKey,
-				}
-				this.$emit(`updateUserInfo`, userInfo)
-				this.$emit(`stepForward`)
-				// If no username is found then register...
+				await this.torus.triggerLogin(torusVerifiers[type])
 			} finally {
 				this.isLoading = false
 			}

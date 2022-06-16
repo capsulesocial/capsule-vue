@@ -81,7 +81,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapMutations } from 'vuex'
-import DirectWebSdk, { TorusLoginResponse } from '@toruslabs/customauth'
+import DirectWebSdk, { UX_MODE } from '@toruslabs/customauth'
 
 import CapsuleIcon from '@/components/icons/CapsuleNew.vue'
 import DiscordIcon from '@/components/icons/brands/Discord.vue'
@@ -93,18 +93,22 @@ import { MutationType, createSessionFromProfile, namespace as sessionStoreNamesp
 
 import { getAccountIdFromPrivateKey, login, loginNearAccount } from '@/backend/auth'
 import { getUserInfoNEAR, getUsernameNEAR } from '@/backend/near'
-import { torusNetwork, torusVerifiers, TorusVerifiers } from '@/backend/utilities/config'
+import { domain, torusNetwork, torusVerifiers, TorusVerifiers } from '@/backend/utilities/config'
 import { revokeDiscordKey } from '@/backend/discordRevoke'
 import { HTMLInputEvent } from '@/interfaces/HTMLInputEvent'
+
+interface ITorusResponse {
+	userInfo: { accessToken: string; typeOfLogin: `discord` | `google` }
+	privateKey: string
+}
 
 interface IData {
 	id: string
 	torus: DirectWebSdk
-	userInfo: null | TorusLoginResponse
+	userInfo: null | ITorusResponse
 	username: null | string
 	accountId: null | string
 	isLoading: boolean
-	phoneNumber: string
 	accountIdInput: string
 	privateKey: string
 	currentYear: string
@@ -124,14 +128,15 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			id: ``,
-			phoneNumber: ``,
 			torus: new DirectWebSdk({
-				baseUrl: `${process.env.DOMAIN}/oauth`,
+				baseUrl: `${domain}`,
+				redirectPathName: `login`,
 				network: torusNetwork, // details for test net
+				uxMode: UX_MODE.REDIRECT,
 			}),
 			accountId: null,
 			userInfo: null,
-			isLoading: false,
+			isLoading: true,
 			username: null,
 			accountIdInput: ``,
 			privateKey: ``,
@@ -146,18 +151,63 @@ export default Vue.extend({
 			meta: [{ hid: `login`, name: `login`, content: `Log into Blogchain` }],
 		}
 	},
-	async created() {
+	async mounted() {
 		this.isLoading = true
-		await this.torus.init()
-		this.isLoading = false
-	},
-	mounted() {
-		const accountId = window.localStorage.getItem(`accountId`)
-		if (this.$store.state.session.id !== `` && accountId) {
-			this.$router.push(`/home`)
-		}
 		const theDate = new Date()
 		this.currentYear = theDate.getFullYear().toString()
+		const accountIdLocalStorage = window.localStorage.getItem(`accountId`)
+		if (this.$store.state.session.id !== `` && accountIdLocalStorage) {
+			this.$router.push(`/home`)
+			return
+		}
+
+		try {
+			let res: ITorusResponse | null = null
+			try {
+				const info = await this.torus.getRedirectResult()
+				res = info.result as ITorusResponse
+			} catch (err) {
+				// the error here can be safely dismissed (it will also error out in nominal cases)
+			}
+
+			if (!res) {
+				await this.torus.init({ skipSw: true })
+				return
+			}
+
+			if (res.userInfo.typeOfLogin === `discord`) {
+				this.discordRevoke(res.userInfo.accessToken)
+			}
+			this.userInfo = res
+			this.accountId = getAccountIdFromPrivateKey(res.privateKey)
+			this.username = await getUsernameNEAR(this.accountId)
+
+			if (!this.username) {
+				// If no username is found then register...
+				this.$toastWarning(`looks like you don't have an account`)
+				this.$router.push(`/register`)
+				return
+			}
+
+			const { blocked } = await getUserInfoNEAR(this.username)
+			if (blocked) {
+				// If account is blocked then send to register page...
+				this.$toastError(`Your account has been deactivated or banned`)
+				this.$router.push(`/register`)
+				return
+			}
+
+			await this.verify()
+		} catch (err: unknown) {
+			if (err instanceof Error) {
+				this.$toastError(err.message)
+				return
+			}
+
+			throw err
+		} finally {
+			this.isLoading = false
+		}
 	},
 	methods: {
 		...mapMutations(sessionStoreNamespace, {
@@ -171,35 +221,18 @@ export default Vue.extend({
 			changeLocation: MutationType.CHANGE_LOCATION,
 		}),
 		async torusLogin(type: TorusVerifiers) {
-			this.isLoading = true
 			try {
-				this.userInfo = await this.torus.triggerLogin(torusVerifiers[type])
-				if (this.userInfo.userInfo.typeOfLogin === `discord`) {
-					await revokeDiscordKey(this.userInfo.userInfo.accessToken)
-				}
-				this.accountId = getAccountIdFromPrivateKey(this.userInfo.privateKey)
-				this.username = await getUsernameNEAR(this.accountId)
-
-				if (!this.username) {
-					// If no username is found then register...
-					this.$toastWarning(`looks like you don't have an account`)
-					this.$router.push(`/register`)
-					return
-				}
-
-				const { blocked } = await getUserInfoNEAR(this.username)
-				if (blocked) {
-					// If account is blocked then send to register page...
-					this.$toastError(`Your account has been deactivated or banned`)
-					this.$router.push(`/register`)
-					return
-				}
-				// If a username is found then proceed to login...
-				this.verify()
-				return
-			} catch (e: any) {
-				this.$toastError(`oops, ` + e)
+				this.isLoading = true
+				await this.torus.triggerLogin(torusVerifiers[type])
+			} finally {
 				this.isLoading = false
+			}
+		},
+		async discordRevoke(accessToken: string) {
+			try {
+				await revokeDiscordKey(accessToken)
+			} catch (err) {
+				this.$toastWarning(`We couldn't revoke the Discord key, this might hinder you to login for the next 30 minutes`)
 			}
 		},
 		handleKeyClick(): void {
