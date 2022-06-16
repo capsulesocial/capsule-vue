@@ -60,7 +60,7 @@ import { MutationType, namespace as sessionStoreNamespace } from '~/store/sessio
 import { removeNearPrivateKey, walletLogout } from '@/backend/near'
 import { ValidationError } from '@/errors'
 import { getAccountIdFromPrivateKey, getUserInfo, IWalletStatus } from '@/backend/auth'
-import { torusNetwork } from '@/backend/utilities/config'
+import { domain, torusNetwork } from '@/backend/utilities/config'
 import { revokeDiscordKey } from '@/backend/discordRevoke'
 
 interface IData {
@@ -166,7 +166,7 @@ export default Vue.extend({
 			this.isLoading = true
 			if (!this.userInfo) {
 				const torus = new CustomAuth({
-					baseUrl: location.origin,
+					baseUrl: domain,
 					redirectPathName: `register`,
 					uxMode: `redirect`,
 					network: torusNetwork,
@@ -174,7 +174,7 @@ export default Vue.extend({
 				let res: ITorusResponse | null = null
 				try {
 					const info = await torus.getRedirectResult()
-					res = info.result as { userInfo: any; privateKey: string }
+					res = info.result as ITorusResponse
 				} catch (err) {
 					// the error here can be safely dismissed (it will also error out in nominal cases)
 				}
