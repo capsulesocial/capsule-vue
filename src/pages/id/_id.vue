@@ -159,7 +159,12 @@
 				>
 					<p>{{ visitProfile.bio.slice(0, 200) + (visitProfile.bio.length > 200 ? '...' : '') }}<br /></p>
 				</div>
-				<button v-show="longBio" class="focus:outline-none text-xs text-primary px-1" @click="expandBio = true">
+				<button
+					v-show="longBio"
+					id="readMore"
+					class="header-profile focus:outline-none text-xs text-primary px-1"
+					@click="expandBio = true"
+				>
 					Read more
 				</button>
 				<div v-show="!visitProfile.bio" id="bio" class="header-profile"></div>
@@ -458,13 +463,14 @@ export default Vue.extend({
 			const tabs = document.getElementById(`tabs`)
 			const divider = document.getElementById(`divider`)
 			const bio = document.getElementById(`bio`)
+			const readMore = document.getElementById(`readMore`)
 			const small = document.getElementById(`small`)
 			this.padding = header?.clientHeight + `px`
 			const scrollUp = `headernotcollapsed`
 			const scrollDown = `headercollapsed`
 			const opacity1 = `opacity1`
 			const opacity0 = `opacity0`
-			if (!body || !buttons || !infos || !header || !tabs || !divider || !bio || !small) {
+			if (!body || !buttons || !infos || !header || !tabs || !divider || !bio || !small || !readMore) {
 				return
 			}
 			// Close header
@@ -482,6 +488,8 @@ export default Vue.extend({
 				divider.classList.remove(opacity1)
 				bio.classList.add(opacity0)
 				bio.classList.remove(opacity1)
+				readMore.classList.add(opacity0)
+				readMore.classList.remove(opacity1)
 				small.classList.add(opacity1)
 				small.classList.remove(opacity0)
 				return
@@ -500,6 +508,8 @@ export default Vue.extend({
 			divider.classList.add(opacity1)
 			bio.classList.remove(opacity0)
 			bio.classList.add(opacity1)
+			readMore.classList.remove(opacity0)
+			readMore.classList.add(opacity1)
 			small.classList.remove(opacity1)
 			small.classList.add(opacity0)
 		},
