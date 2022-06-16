@@ -27,6 +27,11 @@
 					<div class="bg-neutral ml-4 bg-opacity-25 rounded-3xl border border-neutral px-3 py-1 text-neutral text-xs">
 						{{ s.tier.name }}
 					</div>
+					<div class="flex justify-center items-end ml-4 text-neutral">
+						<p class="font-semibold text-lg">$5</p>
+						<p>/</p>
+						<p>month</p>
+					</div>
 				</div>
 				<button class="focus:outline-none bg-gray1 dark:bg-gray5 rounded-full p-1" @click="$emit(`close`)">
 					<CloseIcon />
