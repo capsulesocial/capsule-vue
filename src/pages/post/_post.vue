@@ -136,7 +136,7 @@
 							<div
 								class="w-full shadow-lg flex flex-col items-center py-10 px-16 from-lightBGStart to-lightBGStop dark:from-darkBG dark:to-darkBG bg-gradient-to-r rounded-lg h-min"
 								style="backdrop-filter: blur(10px)"
-								:class="featuredPhoto !== null ? `mt-36` : `mt-0`"
+								:class="featuredPhoto !== null ? `sm:mt-36` : `mt-0`"
 							>
 								<!-- Not a subscriber -->
 								<h4

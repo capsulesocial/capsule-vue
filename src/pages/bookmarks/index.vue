@@ -5,10 +5,16 @@
 			class="mt-12 grid justify-items-center overflow-y-hidden px-6 xl:px-0"
 		>
 			<div v-if="this.$store.state.session.id !== ``" class="flex flex-col items-center">
-				<p class="text-gray5 dark:text-gray3 align-end mb-1 flex items-end text-sm" style="max-width: 400px">
+				<p
+					class="text-gray5 dark:text-gray3 align-end mb-1 flex items-end text-sm text-center"
+					style="max-width: 400px"
+				>
 					It seems you don't have any bookmarked posts yet.
 				</p>
-				<p class="text-gray5 dark:text-gray3 align-end mb-5 flex items-end text-sm" style="max-width: 400px">
+				<p
+					class="text-gray5 dark:text-gray3 align-end mb-5 flex flex-col sm:flex-row items-center sm:items-end text-sm text-center"
+					style="max-width: 400px"
+				>
 					You can bookmark any post by clicking the<span>
 						<BookmarkIcon class="h-5 w-5 fill-current" />
 					</span>

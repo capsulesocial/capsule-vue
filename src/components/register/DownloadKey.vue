@@ -4,7 +4,7 @@
 			Here is your Blogchain private key file. Download this file in a safe spot. You will need it to access your
 			account. To download your Blogchain private key again, visit the Settings page
 		</p>
-		<div class="bg-gray2 dark:bg-gray7 my-10 flex items-center justify-between rounded-lg p-4">
+		<div class="bg-gray2 dark:bg-gray7 my-10 flex flex-col sm:flex-row items-center justify-between rounded-lg p-4">
 			<div class="flex flex-row items-center">
 				<FileDownloadIcon />
 				<h6 class="text-gray pl-4 text-lg font-semibold dark:text-darkPrimaryText">Blogchain Private Key</h6>
