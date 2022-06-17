@@ -7,6 +7,7 @@ const defaultBootstraps = [
 	`/dns4/node3.blogchain.app/tcp/443/wss/p2p/12D3KooWLtqhi2h8Mnb7NxfEWuAkVEkTi9FVLQPDV1PZ3ioQooW2`,
 	`/dns4/node4.blogchain.app/tcp/443/wss/p2p/12D3KooWRzXVsB3cf57W9KzDD97EFVcQZFP8Cb4XBbmwK3SK3tME`,
 	`/dns4/alpha.capsule.social/tcp/443/wss/p2p/12D3KooWF5TY7Wisj3nZzfoE2uKTxUpBAooUSUU8yucsJnkBxbpo`,
+	`/dns4/payments.capsule.social/tcp/443/wss/p2p/12D3KooWBUvj6A9iNe6zPoz3i8sxhJSBNiGGL8tqRN5bY3a3khPv`,
 ]
 
 export const capsuleOrbit = process.env.ORBIT_URL || `https://test-node.capsule.social/orbit`
