@@ -55,6 +55,9 @@
 					<!-- Subscriptions list -->
 					<div v-for="tier in paymentProfile.tiers" :key="tier._id">
 						<button
+							v-if="
+								(tier.monthlyEnabled && selectedPeriod === `month`) || (tier.yearlyEnabled && selectedPeriod === `year`)
+							"
 							class="flex flex-row items-center justify-between m-5 p-4 border shadow-sm rounded-lg from-lightBGStart to-lightBGStop dark:from-darkBG dark:to-darkBG bg-gradient-to-r transition duration-500 ease-in-out"
 							:class="
 								selectedTier !== null && selectedTier._id === tier._id
