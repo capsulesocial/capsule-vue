@@ -28,7 +28,7 @@
 						{{ s.tier.name }}
 					</div>
 					<div class="flex justify-center items-end ml-4 text-neutral">
-						<p class="font-semibold text-lg">{{ currency }}{{ s.amount}}</p>
+						<p class="font-semibold text-lg">{{ currency }}{{ s.amount }}</p>
 						<p>/</p>
 						<p>{{ s.period }}</p>
 					</div>
