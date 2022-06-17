@@ -67,10 +67,18 @@
 				</div>
 			</div>
 			<!-- actions -->
-			<div class="flex items-center my-4">
-				<button class="text-primary py-2 text-sm flex flex-row items-center mr-10" @click="manageBilling">
+			<div class="flex flex-col lg:flex-row justify-between items-center my-4">
+				<button class="text-primary py-2 text-sm flex flex-row items-center" @click="manageBilling">
 					<CardIcon class="h-5 w-5 mr-2" />
 					<p class="focus:outline-none text-sm">Change billing method</p>
+				</button>
+				<button
+					v-if="s.isActive && (!s.renewalInfo || s.renewalInfo.status !== 'cancelled')"
+					class="text-neutral px-2 py-2 text-sm flex flex-row items-center"
+					@click="switchTier"
+				>
+					<CheckCircleStaticIcon class="h-5 w-5 mr-2" />
+					<p class="focus:outline-none text-sm">Change tier</p>
 				</button>
 				<button
 					v-if="s.isActive && (!s.renewalInfo || s.renewalInfo.status !== 'cancelled')"
@@ -79,15 +87,6 @@
 				>
 					<CancelIcon class="h-5 w-5 mr-2" />
 					<p class="focus:outline-none text-sm">Cancel my subscription</p>
-				</button>
-				<!-- TODO: Improve this button placement -->
-				<button
-					v-if="s.isActive && (!s.renewalInfo || s.renewalInfo.status !== 'cancelled')"
-					class="text-neutral px-2 py-2 text-sm flex flex-row items-center"
-					@click="switchTier"
-				>
-					<CardIcon class="h-5 w-5 mr-2" />
-					<p class="focus:outline-none text-sm">Change tier</p>
 				</button>
 			</div>
 			<!-- divider -->
@@ -134,6 +133,7 @@ import Avatar from '@/components/Avatar.vue'
 import CancelIcon from '@/components/icons/CancelIcon.vue'
 import CardIcon from '@/components/icons/CardIcon.vue'
 import CloseIcon from '@/components/icons/X.vue'
+import CheckCircleStaticIcon from '@/components/icons/CheckCircleStatic.vue'
 import DownloadIcon from '@/components/icons/Download.vue'
 import BasicConfirmAlert from '@/components/popups/BasicConfirmAlert.vue'
 import { ActionType, ISubscriptionWithProfile, namespace as subscriptionNamespace } from '@/store/subscriptions'
@@ -153,7 +153,7 @@ interface IData {
 }
 
 export default Vue.extend({
-	components: { Avatar, CancelIcon, CardIcon, CloseIcon, DownloadIcon, BasicConfirmAlert },
+	components: { Avatar, CancelIcon, CardIcon, CloseIcon, DownloadIcon, BasicConfirmAlert, CheckCircleStaticIcon },
 	props: {
 		s: {
 			type: Object as PropType<ISubscriptionWithProfile>,
