@@ -95,7 +95,7 @@ interface IData {
 	subscriptionProfile: Profile
 	subscriptionProfileAvatar: null | string
 	showChangeTier: boolean
-	authorPaymentProfile: ISubscriptionWithProfile | null
+	authorPaymentProfile: ISubscriptionWithProfile | undefined
 }
 
 export default Vue.extend({
@@ -122,7 +122,7 @@ export default Vue.extend({
 			subscriptionProfile: createDefaultProfile(this.$store.state.session.id),
 			subscriptionProfileAvatar: null,
 			showChangeTier: false,
-			authorPaymentProfile: null,
+			authorPaymentProfile: undefined,
 		}
 	},
 	computed: {
