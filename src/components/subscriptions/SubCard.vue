@@ -84,7 +84,7 @@ export default Vue.extend({
 		}
 	},
 	computed: {
-		currency() {
+		currency(): string {
 			return getCurrencySymbol(this.s.currency)
 		},
 	},
