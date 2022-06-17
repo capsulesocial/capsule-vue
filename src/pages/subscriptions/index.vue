@@ -7,9 +7,9 @@
 			<p class="text-gray5 dark:text-gray3">Here you can manage your active subscriptions to your favorite authors</p>
 		</div>
 		<!-- subscriptions grid -->
-		<div v-if="activeSubs.length > 0" class="flex flex-wrap mt-4" style="padding-right: 1.45rem; padding-left: 1.45rem">
+		<div v-if="activeSubs.length > 0" class="flex flex-wrap mt-4" style="padding-right: 1.31rem; padding-left: 1.31rem">
 			<!-- Subscription card -->
-			<SubCard v-for="s in activeSubs" :key="s.authorID" :s="s" @popup="$emit(`popup`, s)" />
+			<SubCard v-for="s in activeSubs" :key="s.authorID" :s="s" @infoPopup="$emit(`infoPopup`, s)" />
 		</div>
 		<div v-else class="mt-5">
 			<div v-if="this.$store.state.session.id !== ``" class="flex flex-col items-center">

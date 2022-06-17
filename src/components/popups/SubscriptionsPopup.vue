@@ -41,7 +41,10 @@
 						<h6 class="font-semibold text-neutral text-xl mb-2">Your subscription plan</h6>
 						<p class="text-base text-center text-gray5 dark:text-gray3 mb-4">
 							Choose a subscription plan and a billing method to access subscribers-only content of
-							<span class="font-semibold text-primary dark:text-secondary">{{ author.name }}</span>
+							<span v-if="author.name !== ``" class="font-semibold text-primary dark:text-secondary">{{
+								author.name
+							}}</span>
+							<span v-else class="font-semibold text-primary dark:text-secondary">@{{ author.id }}</span>
 						</p>
 					</div>
 					<!-- Period switch -->

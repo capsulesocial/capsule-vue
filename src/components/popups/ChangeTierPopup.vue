@@ -1,0 +1,392 @@
+<template>
+	<div
+		class="bg-darkBG dark:bg-gray5 modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
+	>
+		<!-- Container -->
+		<section class="popup">
+			<div
+				v-if="author !== null"
+				style="backdrop-filter: blur(10px)"
+				class="min-h-40 w-full lg:w-600 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation max-h-90 z-10 overflow-y-auto rounded-lg bg-gradient-to-r px-6 pt-4 pb-6 shadow-lg"
+			>
+				<div class="sticky flex items-center justify-between mb-6">
+					<!-- avatar, name, id -->
+					<div v-if="step !== 3" class="flex flex-row">
+						<Avatar
+							class="flex-shrink-0"
+							:authorID="author.id"
+							:avatar="authorAvatar"
+							:noClick="true"
+							:size="`w-14 h-14`"
+						/>
+						<div class="flex flex-col ml-4">
+							<h4 v-if="author.name !== ``" class="text-xl font-semibold dark:text-darkPrimaryText">
+								{{ author.name }}
+							</h4>
+							<h4 v-else class="text-xl font-semibold text-gray5 dark:text-gray3">
+								{{ author.id }}
+							</h4>
+							<h5 class="text-lg text-primary dark:text-secondary">@{{ author.id }}</h5>
+						</div>
+					</div>
+					<div v-else></div>
+					<button class="focus:outline-none bg-gray1 dark:bg-gray5 rounded-full p-1" @click="$emit(`close`)">
+						<CloseIcon />
+					</button>
+				</div>
+				<!-- Step 0: Choose a subscription plan -->
+				<article v-show="step === 0">
+					<div class="w-full flex flex-col justify-center text-center px-10">
+						<CrownIcon class="text-neutral stroke-neutral self-center w-12 h-12 mb-2" />
+						<h6 class="font-semibold text-neutral text-xl mb-2">Change Tier</h6>
+						<p class="text-base text-center text-gray5 dark:text-gray3 mb-4">
+							Easily change you Tier access to
+							<span v-if="author.name !== ``" class="font-semibold text-primary dark:text-secondary">{{
+								author.name
+							}}</span>
+							<span v-else class="font-semibold text-primary dark:text-secondary">@{{ author.id }}</span>
+							to access new content
+						</p>
+					</div>
+					<!-- Period switch -->
+					<div class="w-full flex justify-center mt-1">
+						<SwitchPeriod :period="this.selectedPeriod" @toggle="switchPeriod" />
+					</div>
+					<!-- Subscriptions list -->
+					<div v-for="tier in paymentProfile.tiers" :key="tier._id">
+						<button
+							class="flex flex-row items-center justify-between m-5 p-4 border shadow-sm rounded-lg from-lightBGStart to-lightBGStop dark:from-darkBG dark:to-darkBG bg-gradient-to-r transition duration-500 ease-in-out"
+							:class="s.tier.id === tier._id ? `opacity-50` : ``"
+							:disabled="s.tier.id === tier._id"
+							@click="selectTier(tier)"
+						>
+							<!-- Check mark -->
+							<div class="w-12 flex justify-center">
+								<CheckCircleIcon
+									:isChecked="selectedTier !== null && selectedTier._id === tier._id"
+									class="text-neutral w-6 h-6 flex items-center transition duration-500 ease-in-out"
+								/>
+							</div>
+							<div class="flex flex-grow flex-col items-start ml-4 mr-2 w-2/5">
+								<h3 class="text-xl font-semibold dark:text-darkPrimaryText">{{ tier.name }}</h3>
+								<p class="text-gray5 dark:text-gray3 text-left text-sm pr-2">
+									Get access to exclusive articles by subscribing to {{ tier.name }}
+								</p>
+							</div>
+							<div
+								v-if="tier.monthlyEnabled && selectedPeriod === `month`"
+								class="font-semibold text-lg mr-2 dark:text-darkPrimaryText"
+							>
+								{{ displayCurrency(paymentProfile.currency) }}{{ tier.monthlyPrice }}
+								<span class="text-gray5 dark:text-gray3">/month</span>
+							</div>
+							<div
+								v-if="tier.yearlyEnabled && selectedPeriod === `year`"
+								class="font-semibold text-lg mr-2 dark:text-darkPrimaryText"
+							>
+								{{ displayCurrency(paymentProfile.currency) }}{{ tier.yearlyPrice }}
+								<span class="text-gray5 dark:text-gray3">/year</span>
+							</div>
+						</button>
+					</div>
+					<div class="flex flex-row-reverse">
+						<button
+							:class="selectedTier !== null ? `` : `opacity-50 cursor-not-allowed`"
+							class="bg-darkBG text-lightButtonText focus:outline-none transform rounded-lg font-bold transition duration-500 ease-in-out hover:bg-opacity-75"
+							style="padding: 0.4rem 1.5rem"
+							:disabled="this.selectedTier === null"
+							@click="switchTier"
+						>
+							<span class="font-sans" style="font-size: 0.95rem"> Next </span>
+						</button>
+					</div>
+				</article>
+				<!-- Step 4: Confirmation page -->
+				<article v-show="step === 4" class="flex flex-col items-center">
+					<div class="w-full flex flex-col justify-center text-center px-10">
+						<CrownIcon class="text-neutral stroke-neutral self-center w-12 h-12 mb-2" />
+						<h6 class="font-semibold text-neutral text-xl mb-2">Congrats!</h6>
+						<p class="text-base text-center text-gray5 dark:text-gray3 mb-4">You are now subscribed to:</p>
+					</div>
+					<!-- Premium profile preview -->
+					<div class="flex flex-row items-center p-4 border border-neutral rounded-lg max-w-md">
+						<Avatar
+							class="flex-shrink-0"
+							:authorID="author.id"
+							:avatar="authorAvatar"
+							:noClick="true"
+							:size="`w-14 h-14`"
+						/>
+						<div class="flex flex-col ml-4 flex-grow w-3/5">
+							<h4 v-if="author.name !== ``" class="text-xl font-semibold dark:text-darkPrimaryText">
+								{{ author.name }}
+							</h4>
+							<h4 v-else class="text-xl font-semibold text-gray5 dark:text-gray3">
+								{{ author.id }}
+							</h4>
+							<h5
+								class="text-lg text-primary dark:text-secondary w-full overflow-hidden"
+								style="text-overflow: ellipsis"
+							>
+								@{{ author.id }}
+							</h5>
+						</div>
+						<CrownIcon class="text-neutral stroke-neutral self-center w-9 h-9 ml-10" />
+					</div>
+					<div class="w-full flex flex-col justify-center items-center text-center px-10 mt-5">
+						<p class="text-base text-center text-gray5 dark:text-gray3 mb-4 max-w-md">
+							All of their premium articles are now<br />
+							unlocked for your account.
+						</p>
+						<button
+							v-if="userIsFollowed"
+							class="px-5 py-2 rounded-lg bg-neutral focus:outline-none text-white mt-6 font-semibold"
+							@click="startReading"
+						>
+							Start reading
+						</button>
+						<div v-else class="flex flex-col items-center">
+							<p class="text-base text-center text-gray5 dark:text-gray3 mb-4 max-w-md">
+								Don't forget to follow this author to see<br />
+								their latest posts on your home feed:
+							</p>
+							<FriendButton :toggleFriend="toggleFriend" :userIsFollowed="userIsFollowed" />
+						</div>
+					</div>
+					<img
+						:src="
+							$colorMode.dark
+								? require(`@/assets/images/brand/dark/subscriptions.webp`)
+								: require(`@/assets/images/brand/light/subscriptions.webp`)
+						"
+						class="h-auto rounded-lg"
+					/>
+				</article>
+				<div v-show="isLoading" class="modal-animation flex w-full justify-center z-20 mt-5">
+					<div
+						class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
+						:style="`border-top: 2px solid` + $color.hex"
+					></div>
+				</div>
+			</div>
+		</section>
+	</div>
+</template>
+
+<script lang="ts">
+import Vue from 'vue'
+import type { PropType } from 'vue'
+import { mapGetters } from 'vuex'
+
+import Avatar from '@/components/Avatar.vue'
+import CloseIcon from '@/components/icons/X.vue'
+import CrownIcon from '@/components/icons/Crown.vue'
+import CheckCircleIcon from '@/components/icons/CheckCircle.vue'
+import SwitchPeriod from '@/components/ToggleSwitch.vue'
+
+import { Profile } from '@/backend/profile'
+import { followChange, getFollowersAndFollowing } from '@/backend/following'
+import {
+	createDefaultPaymentProfile,
+	namespace as paymentProfileNamespace,
+	PaymentProfile,
+	SubscriptionTier,
+} from '@/store/paymentProfile'
+import { getCurrencySymbol, retrieveReaderProfile, switchSubscriptionTier } from '@/backend/payment'
+import { ISubscriptionWithProfile } from '@/store/subscriptions'
+
+interface IData {
+	step: number
+	isSelected: boolean
+	paymentType: string
+	paymentProfile: PaymentProfile
+	displayCardElement: boolean
+	cardErrorMessage: string | null
+	selectedTier: SubscriptionTier | null
+	selectedPeriod: string
+	customerEmail: string
+	displayButtons: {
+		applePay: boolean
+		googlePay: boolean
+	}
+	isLoading: boolean
+	userIsFollowed: boolean
+	following: Set<string>
+	saveEmail: boolean
+}
+
+export default Vue.extend({
+	components: {
+		Avatar,
+		CloseIcon,
+		CrownIcon,
+		CheckCircleIcon,
+		SwitchPeriod,
+	},
+	props: {
+		author: {
+			type: Object as PropType<Profile>,
+			required: true,
+		},
+		s: {
+			type: Object as PropType<ISubscriptionWithProfile>,
+			required: true,
+		},
+		authorAvatar: {
+			type: String as PropType<ArrayBuffer | string | null>,
+			default: null,
+		},
+	},
+	data(): IData {
+		return {
+			step: 0,
+			isSelected: true,
+			paymentType: ``,
+			selectedTier: null,
+			selectedPeriod: `month`,
+			paymentProfile: createDefaultPaymentProfile(this.author.id),
+			displayCardElement: false,
+			cardErrorMessage: null,
+			customerEmail: ``,
+			displayButtons: {
+				applePay: false,
+				googlePay: false,
+			},
+			isLoading: false,
+			userIsFollowed: false,
+			following: new Set(),
+			saveEmail: true,
+		}
+	},
+	computed: {
+		...mapGetters(paymentProfileNamespace, [`getPaymentProfile`]),
+	},
+	created() {
+		this.initializeProfile()
+	},
+	mounted() {
+		window.addEventListener(`click`, this.handleCloseClick, false)
+		// Get my followers
+		getFollowersAndFollowing(this.$store.state.session.id).then((data) => {
+			this.following = data.following
+			this.userIsFollowed = data.following.has(this.author.id)
+		})
+		retrieveReaderProfile(this.$store.state.session.id).then(({ email }) => {
+			this.customerEmail = email ?? ``
+		})
+		this.$store.dispatch(`paymentProfile/fetchProfile`, { username: this.author.id })
+	},
+	methods: {
+		startReading() {
+			this.$emit(`close`)
+			this.$store.dispatch(`subscriptions/fetchSubs`, this.$store.state.session.id)
+			if (this.$route.name === `post-post`) {
+				location.reload()
+			}
+			if (this.$route.name === `id-id`) {
+				this.$toastSuccess(`Subscribed! Reloading profile...`)
+				setTimeout(() => {
+					location.reload()
+				}, 4000)
+			}
+		},
+		displayCurrency(currency: string) {
+			return getCurrencySymbol(currency)
+		},
+		initializeProfile() {
+			if (!this.author) {
+				this.$toastError(`Author profile is missing`)
+				return
+			}
+			this.paymentProfile = this.getPaymentProfile(this.author.id)
+			if (!this.paymentProfile) {
+				this.$toastError(`Payment profile of author is missing`)
+				return
+			}
+
+			if (!this.paymentProfile.stripeAccountId) {
+				this.$toastError(`Author subscription profile is missing`)
+				return
+			}
+
+			if (!this.paymentProfile.paymentsEnabled) {
+				this.$toastError(`Author hasn't enabled subscriptions`)
+				return
+			}
+
+			if (!this.paymentProfile.tiers) {
+				this.$toastError(`Author hasn't set-up subscriptions`)
+			}
+		},
+		selectTier(tier: SubscriptionTier) {
+			this.selectedTier = tier
+		},
+		switchPeriod() {
+			if (this.selectedPeriod === `month`) {
+				this.selectedPeriod = `year`
+			} else {
+				this.selectedPeriod = `month`
+			}
+		},
+		nextStep(): void {
+			this.step += 1
+		},
+		previousStep(): void {
+			this.step -= 1
+		},
+		async toggleFriend() {
+			// Unauth
+			if (this.$store.state.session.id === ``) {
+				this.$store.commit(`settings/toggleUnauthPopup`)
+				return
+			}
+			try {
+				await followChange(this.userIsFollowed ? `UNFOLLOW` : `FOLLOW`, this.$store.state.session.id, this.author.id)
+				this.$toastSuccess(this.userIsFollowed ? `Unfollowed ${this.author.id}` : `Followed ${this.author.id}`)
+				const { following } = await getFollowersAndFollowing(this.$store.state.session.id, true)
+				this.userIsFollowed = following.has(this.author.id)
+			} catch (err: unknown) {
+				this.$handleError(err)
+			}
+		},
+		async switchTier(): Promise<void> {
+			if (this.selectedTier === null) {
+				return
+			}
+			try {
+				const selectedTier = this.selectedTier
+				const selectedPeriod = this.selectedPeriod
+
+				// TODO maybe a loader here?
+				const response = await switchSubscriptionTier(
+					this.$store.state.session.id,
+					this.s.subscriptionId,
+					selectedTier,
+					selectedPeriod,
+				)
+				if (response.status !== `succeeded`) {
+					this.$toastError(`Switching tier failed`)
+					return
+				}
+
+				this.$toastSuccess(`Switched tiers successfully!`)
+				this.$store.dispatch(`subscriptions/fetchSubs`, this.$store.state.session.id)
+				this.$emit(`close`)
+			} catch (err) {
+				this.$handleError(err)
+			}
+		},
+		handleCloseClick(e: any): void {
+			if (!e.target || e.target.parentNode === null || e.target.firstChild?.classList === undefined) {
+				return
+			}
+			if (e.target.firstChild.classList[0] === `popup`) {
+				this.closeDraftsPopup()
+			}
+		},
+		closeDraftsPopup(): void {
+			this.$emit(`close`)
+		},
+	},
+})
+</script>

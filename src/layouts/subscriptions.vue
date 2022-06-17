@@ -23,7 +23,7 @@
 						<nuxt-child
 							style="backdrop-filter: blur(10px)"
 							class="lg:w-7.5 min-h-70 h-70 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder z-10 w-full overflow-y-auto rounded-t-lg bg-gradient-to-r shadow-lg"
-							@popup="toggleSubInfosPopup"
+							@infoPopup="toggleSubInfosPopup"
 						/>
 						<!-- Expired subscriptions -->
 						<aside class="w-5/12 -mr-5 -mt-4 p-4 hidden lg:block overflow-y-auto">
@@ -40,7 +40,7 @@
 										:key="s.authorID"
 										:s="s"
 										:toggleSubscription="toggleSubscription"
-										@popup="toggleSubInfosPopup(s)"
+										@infoPopup="toggleSubInfosPopup(s)"
 									/>
 								</div>
 								<p v-else class="text-gray5 dark:text-gray3 text-sm pb-1">you have no expired subscriptions</p>
@@ -51,7 +51,14 @@
 				</div>
 			</div>
 		</div>
-		<SubInfos v-if="showPopup" :s="clickedSub" @close="toggleSubInfosPopup" />
+		<SubInfos v-if="showPopup" :s="clickedSub" @switchPopup="toggleChangeTierPopup" @close="toggleSubInfosPopup" />
+		<ChangeTierPopup
+			v-if="showChangeTier"
+			:author="subscriptionProfile"
+			:authorAvatar="subscriptionProfileAvatar"
+			:s="authorPaymentProfile"
+			@close="showChangeTier = false"
+		/>
 		<SubscriptionsPopup
 			v-if="showSubscriptions"
 			:author="subscriptionProfile"
@@ -70,6 +77,7 @@ import Footer from '@/components/Footer.vue'
 import SubInfos from '@/components/popups/SubInfosPopup.vue'
 import ExpiredSub from '@/components/subscriptions/ExpiredSub.vue'
 import SubscriptionsPopup from '@/components/popups/SubscriptionsPopup.vue'
+import ChangeTierPopup from '@/components/popups/ChangeTierPopup.vue'
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import { IBackground, backgrounds } from '@/config/backgrounds'
@@ -86,6 +94,8 @@ interface IData {
 	showSubscriptions: boolean
 	subscriptionProfile: Profile
 	subscriptionProfileAvatar: null | string
+	showChangeTier: boolean
+	authorPaymentProfile: ISubscriptionWithProfile | null
 }
 
 export default Vue.extend({
@@ -95,6 +105,7 @@ export default Vue.extend({
 		SubInfos,
 		ExpiredSub,
 		SubscriptionsPopup,
+		ChangeTierPopup,
 	},
 	middleware: `auth`,
 	data(): IData {
@@ -110,6 +121,8 @@ export default Vue.extend({
 			showSubscriptions: false,
 			subscriptionProfile: createDefaultProfile(this.$store.state.session.id),
 			subscriptionProfileAvatar: null,
+			showChangeTier: false,
+			authorPaymentProfile: null,
 		}
 	},
 	computed: {
@@ -151,6 +164,16 @@ export default Vue.extend({
 				this.clickedSub = clickedsub
 			}
 			this.showPopup = !this.showPopup
+		},
+		toggleChangeTierPopup(author: { s: ISubscriptionWithProfile; avatar: string }) {
+			this.subscriptionProfile = createDefaultProfile(author.s.authorID)
+			this.subscriptionProfileAvatar = author.avatar
+			this.authorPaymentProfile = author.s
+			// Unauth
+			if (this.$store.state.session.id === ``) {
+				this.$store.commit(`settings/toggleUnauthPopup`)
+			}
+			this.showChangeTier = !this.showChangeTier
 		},
 		toggleSubscription(author: { s: ISubscriptionWithProfile; avatar: string }) {
 			this.subscriptionProfile = createDefaultProfile(author.s.authorID)

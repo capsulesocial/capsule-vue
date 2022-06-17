@@ -13,7 +13,10 @@
 					:class="$colorMode.dark ? `dropdownSubOpenDark` : `dropdownSubOpen`"
 					style="top: 35px; right: -5px"
 				>
-					<button class="focus:outline-none text-primary flex justify-center items-center" @click="$emit(`popup`, s)">
+					<button
+						class="focus:outline-none text-primary flex justify-center items-center"
+						@click="$emit(`infoPopup`, s)"
+					>
 						<PenIcon class="fill-current h-4 w-4" />
 						<span class="text-primary ml-2 self-center text-xs">Manage Subscription</span>
 					</button>
