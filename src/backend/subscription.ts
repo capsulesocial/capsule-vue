@@ -4,6 +4,9 @@ export interface ISubscriptionResponse {
 	subscriptionId: string
 	authorID: string
 	username: string
+	amount: number
+	period: string
+	currency: string
 	tier: { name: string; id: string }
 	createdAt: number
 	isActive: boolean

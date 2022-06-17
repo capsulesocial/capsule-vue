@@ -27,6 +27,11 @@
 					<div class="bg-neutral ml-4 bg-opacity-25 rounded-3xl border border-neutral px-3 py-1 text-neutral text-xs">
 						{{ s.tier.name }}
 					</div>
+					<div class="flex justify-center items-end ml-4 text-neutral">
+						<p class="font-semibold text-lg">{{ currency }}{{ s.amount }}</p>
+						<p>/</p>
+						<p>{{ s.period }}</p>
+					</div>
 				</div>
 				<button class="focus:outline-none bg-gray1 dark:bg-gray5 rounded-full p-1" @click="$emit(`close`)">
 					<CloseIcon />
@@ -124,7 +129,7 @@ import DownloadIcon from '@/components/icons/Download.vue'
 import BasicConfirmAlert from '@/components/popups/BasicConfirmAlert.vue'
 import { ActionType, ISubscriptionWithProfile, namespace as subscriptionNamespace } from '@/store/subscriptions'
 import { getSubscriptionTransactions, SubsTransaction } from '@/backend/subscription'
-import { getBillingPortalUrl } from '@/backend/payment'
+import { getBillingPortalUrl, getCurrencySymbol } from '@/backend/payment'
 
 interface IData {
 	avatar: string | ArrayBuffer
@@ -146,6 +151,11 @@ export default Vue.extend({
 			transactions: [],
 			showAlert: false,
 		}
+	},
+	computed: {
+		currency(): string {
+			return getCurrencySymbol(this.s.currency)
+		},
 	},
 	async created() {
 		if (this.s.avatar) {
