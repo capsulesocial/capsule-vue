@@ -178,6 +178,7 @@ export default Vue.extend({
 		if (this.s.avatar) {
 			this.avatar = await getPhotoFromIPFS(this.s.avatar)
 		}
+		this.$store.dispatch(`paymentProfile/fetchProfile`, { username: this.s.authorID })
 	},
 	mounted() {
 		getSubscriptionTransactions(this.$store.state.session.id, this.s.subscriptionId)
@@ -215,7 +216,7 @@ export default Vue.extend({
 		async switchTier(): Promise<void> {
 			try {
 				// TODO the selected tier and period should come from a popup of all the tiers except current one
-				const selectedTier = this.paymentProfile.tiers[1]
+				const selectedTier = this.paymentProfile.tiers[0]
 				const selectedPeriod = `month`
 
 				// TODO maybe a loader here?
