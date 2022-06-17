@@ -219,34 +219,21 @@ import SpinnerIcon from '@/components/icons/SpinnerIcon.vue'
 import SwitchPeriod from '@/components/ToggleSwitch.vue'
 
 import { Profile } from '@/backend/profile'
-import { followChange, getFollowersAndFollowing } from '@/backend/following'
 import {
 	createDefaultPaymentProfile,
 	namespace as paymentProfileNamespace,
 	PaymentProfile,
 	SubscriptionTier,
 } from '@/store/paymentProfile'
-import { getCurrencySymbol, retrieveReaderProfile, switchSubscriptionTier } from '@/backend/payment'
+import { getCurrencySymbol, switchSubscriptionTier } from '@/backend/payment'
 import { ISubscriptionWithProfile } from '@/store/subscriptions'
 
 interface IData {
 	step: number
-	isSelected: boolean
-	paymentType: string
 	paymentProfile: PaymentProfile
-	displayCardElement: boolean
-	cardErrorMessage: string | null
 	selectedTier: SubscriptionTier | null
 	selectedPeriod: string
-	customerEmail: string
-	displayButtons: {
-		applePay: boolean
-		googlePay: boolean
-	}
 	isLoading: boolean
-	userIsFollowed: boolean
-	following: Set<string>
-	saveEmail: boolean
 }
 
 export default Vue.extend({
@@ -276,22 +263,10 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			step: 0,
-			isSelected: true,
-			paymentType: ``,
 			selectedTier: null,
 			selectedPeriod: `month`,
 			paymentProfile: createDefaultPaymentProfile(this.author.id),
-			displayCardElement: false,
-			cardErrorMessage: null,
-			customerEmail: ``,
-			displayButtons: {
-				applePay: false,
-				googlePay: false,
-			},
 			isLoading: false,
-			userIsFollowed: false,
-			following: new Set(),
-			saveEmail: true,
 		}
 	},
 	computed: {
@@ -303,29 +278,9 @@ export default Vue.extend({
 	mounted() {
 		window.addEventListener(`click`, this.handleCloseClick, false)
 		// Get my followers
-		getFollowersAndFollowing(this.$store.state.session.id).then((data) => {
-			this.following = data.following
-			this.userIsFollowed = data.following.has(this.author.id)
-		})
-		retrieveReaderProfile(this.$store.state.session.id).then(({ email }) => {
-			this.customerEmail = email ?? ``
-		})
 		this.$store.dispatch(`paymentProfile/fetchProfile`, { username: this.author.id })
 	},
 	methods: {
-		startReading() {
-			this.$emit(`close`)
-			this.$store.dispatch(`subscriptions/fetchSubs`, this.$store.state.session.id)
-			if (this.$route.name === `post-post`) {
-				location.reload()
-			}
-			if (this.$route.name === `id-id`) {
-				this.$toastSuccess(`Subscribed! Reloading profile...`)
-				setTimeout(() => {
-					location.reload()
-				}, 4000)
-			}
-		},
 		displayCurrency(currency: string) {
 			return getCurrencySymbol(currency)
 		},
@@ -366,24 +321,6 @@ export default Vue.extend({
 		},
 		nextStep(): void {
 			this.step += 1
-		},
-		previousStep(): void {
-			this.step -= 1
-		},
-		async toggleFriend() {
-			// Unauth
-			if (this.$store.state.session.id === ``) {
-				this.$store.commit(`settings/toggleUnauthPopup`)
-				return
-			}
-			try {
-				await followChange(this.userIsFollowed ? `UNFOLLOW` : `FOLLOW`, this.$store.state.session.id, this.author.id)
-				this.$toastSuccess(this.userIsFollowed ? `Unfollowed ${this.author.id}` : `Followed ${this.author.id}`)
-				const { following } = await getFollowersAndFollowing(this.$store.state.session.id, true)
-				this.userIsFollowed = following.has(this.author.id)
-			} catch (err: unknown) {
-				this.$handleError(err)
-			}
 		},
 		async switchTier(): Promise<void> {
 			if (this.selectedTier === null) {
