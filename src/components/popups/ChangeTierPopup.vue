@@ -34,7 +34,7 @@
 						<CloseIcon />
 					</button>
 				</div>
-				<!-- Step 0: Choose a subscription plan -->
+				<!-- Step 0: Change tier -->
 				<article v-show="step === 0">
 					<div class="w-full flex flex-col justify-center text-center px-10">
 						<CrownIcon class="text-neutral stroke-neutral self-center w-12 h-12 mb-2" />
@@ -56,15 +56,29 @@
 					<div v-for="tier in paymentProfile.tiers" :key="tier._id">
 						<button
 							class="flex flex-row items-center justify-between m-5 p-4 border shadow-sm rounded-lg from-lightBGStart to-lightBGStop dark:from-darkBG dark:to-darkBG bg-gradient-to-r transition duration-500 ease-in-out"
-							:class="s.tier.id === tier._id ? `opacity-50` : ``"
+							:class="
+								selectedTier !== null && selectedTier._id === tier._id
+									? s.tier.id !== tier._id
+										? `opacity-100 cursor-pointer border-neutral`
+										: `opacity-50 cursor-not-allowed border-neutral`
+									: s.tier.id !== tier._id
+									? `opacity-100 cursor-pointer border-lightBorder dark:border-darkBorder`
+									: `opacity-50 cursor-not-allowed border-gray5`
+							"
 							:disabled="s.tier.id === tier._id"
 							@click="selectTier(tier)"
 						>
 							<!-- Check mark -->
 							<div class="w-12 flex justify-center">
 								<CheckCircleIcon
+									v-if="s.tier.id !== tier._id"
 									:isChecked="selectedTier !== null && selectedTier._id === tier._id"
 									class="text-neutral w-6 h-6 flex items-center transition duration-500 ease-in-out"
+								/>
+								<CheckCircleIcon
+									v-else
+									:isChecked="true"
+									class="text-gray5 w-6 h-6 flex items-center transition duration-500 ease-in-out"
 								/>
 							</div>
 							<div class="flex flex-grow flex-col items-start ml-4 mr-2 w-2/5">
@@ -73,20 +87,23 @@
 									Get access to exclusive articles by subscribing to {{ tier.name }}
 								</p>
 							</div>
-							<div
-								v-if="tier.monthlyEnabled && selectedPeriod === `month`"
-								class="font-semibold text-lg mr-2 dark:text-darkPrimaryText"
-							>
-								{{ displayCurrency(paymentProfile.currency) }}{{ tier.monthlyPrice }}
-								<span class="text-gray5 dark:text-gray3">/month</span>
+							<div v-if="s.tier.id !== tier._id">
+								<div
+									v-if="tier.monthlyEnabled && selectedPeriod === `month`"
+									class="font-semibold text-lg mr-2 dark:text-darkPrimaryText"
+								>
+									{{ displayCurrency(paymentProfile.currency) }}{{ tier.monthlyPrice }}
+									<span class="text-gray5 dark:text-gray3">/month</span>
+								</div>
+								<div
+									v-if="tier.yearlyEnabled && selectedPeriod === `year`"
+									class="font-semibold text-lg mr-2 dark:text-darkPrimaryText"
+								>
+									{{ displayCurrency(paymentProfile.currency) }}{{ tier.yearlyPrice }}
+									<span class="text-gray5 dark:text-gray3">/year</span>
+								</div>
 							</div>
-							<div
-								v-if="tier.yearlyEnabled && selectedPeriod === `year`"
-								class="font-semibold text-lg mr-2 dark:text-darkPrimaryText"
-							>
-								{{ displayCurrency(paymentProfile.currency) }}{{ tier.yearlyPrice }}
-								<span class="text-gray5 dark:text-gray3">/year</span>
-							</div>
+							<div v-else class="font-semibold text-lg mr-2 text-gray5">Current tier</div>
 						</button>
 					</div>
 					<div class="flex flex-row-reverse">
@@ -95,79 +112,94 @@
 							class="bg-darkBG text-lightButtonText focus:outline-none transform rounded-lg font-bold transition duration-500 ease-in-out hover:bg-opacity-75"
 							style="padding: 0.4rem 1.5rem"
 							:disabled="this.selectedTier === null"
-							@click="switchTier"
+							@click="nextStep"
 						>
 							<span class="font-sans" style="font-size: 0.95rem"> Next </span>
 						</button>
 					</div>
 				</article>
-				<!-- Step 4: Confirmation page -->
-				<article v-show="step === 4" class="flex flex-col items-center">
+				<!-- Step 1: Confirmation page -->
+				<article v-show="step === 1" class="flex flex-col items-center">
 					<div class="w-full flex flex-col justify-center text-center px-10">
 						<CrownIcon class="text-neutral stroke-neutral self-center w-12 h-12 mb-2" />
-						<h6 class="font-semibold text-neutral text-xl mb-2">Congrats!</h6>
-						<p class="text-base text-center text-gray5 dark:text-gray3 mb-4">You are now subscribed to:</p>
-					</div>
-					<!-- Premium profile preview -->
-					<div class="flex flex-row items-center p-4 border border-neutral rounded-lg max-w-md">
-						<Avatar
-							class="flex-shrink-0"
-							:authorID="author.id"
-							:avatar="authorAvatar"
-							:noClick="true"
-							:size="`w-14 h-14`"
-						/>
-						<div class="flex flex-col ml-4 flex-grow w-3/5">
-							<h4 v-if="author.name !== ``" class="text-xl font-semibold dark:text-darkPrimaryText">
-								{{ author.name }}
-							</h4>
-							<h4 v-else class="text-xl font-semibold text-gray5 dark:text-gray3">
-								{{ author.id }}
-							</h4>
-							<h5
-								class="text-lg text-primary dark:text-secondary w-full overflow-hidden"
-								style="text-overflow: ellipsis"
-							>
-								@{{ author.id }}
-							</h5>
-						</div>
-						<CrownIcon class="text-neutral stroke-neutral self-center w-9 h-9 ml-10" />
-					</div>
-					<div class="w-full flex flex-col justify-center items-center text-center px-10 mt-5">
-						<p class="text-base text-center text-gray5 dark:text-gray3 mb-4 max-w-md">
-							All of their premium articles are now<br />
-							unlocked for your account.
+						<h6 class="font-semibold text-neutral text-xl mb-2">Are you sure?</h6>
+						<p class="text-base text-center text-gray5 dark:text-gray3">
+							You are about to change the Tier of subscription to
+							<span v-if="author.name !== ``" class="font-semibold text-primary dark:text-secondary">{{
+								author.name
+							}}</span>
+							<span v-else class="font-semibold text-primary dark:text-secondary">@{{ author.id }}</span>
 						</p>
-						<button
-							v-if="userIsFollowed"
-							class="px-5 py-2 rounded-lg bg-neutral focus:outline-none text-white mt-6 font-semibold"
-							@click="startReading"
-						>
-							Start reading
-						</button>
-						<div v-else class="flex flex-col items-center">
-							<p class="text-base text-center text-gray5 dark:text-gray3 mb-4 max-w-md">
-								Don't forget to follow this author to see<br />
-								their latest posts on your home feed:
+					</div>
+					<!-- Tier change preview -->
+					<div
+						class="flex flex-row items-center justify-between m-5 p-4 border shadow-sm rounded-lg from-lightBGStart to-lightBGStop dark:from-darkBG dark:to-darkBG bg-gradient-to-r transition duration-500 ease-in-out opacity-100 border-gray5"
+					>
+						<!-- Check mark -->
+						<div class="w-12 flex justify-center">
+							<CheckCircleIcon
+								:isChecked="true"
+								class="text-gray5 w-6 h-6 flex items-center transition duration-500 ease-in-out"
+							/>
+						</div>
+						<div class="flex flex-grow flex-col items-start ml-4 mr-2 w-2/5">
+							<h3 class="text-xl font-semibold dark:text-darkPrimaryText">{{ s.tier.name }}</h3>
+							<p class="text-gray5 dark:text-gray3 text-left text-sm pr-2">
+								Get access to exclusive articles by subscribing to {{ s.tier.name }}
 							</p>
-							<FriendButton :toggleFriend="toggleFriend" :userIsFollowed="userIsFollowed" />
+						</div>
+						<div class="font-semibold text-lg mr-2 text-gray5">Current tier</div>
+					</div>
+					<ChevronDownIcon class="w-5 h-5 text-gray5 dark:text-gray3" />
+					<div
+						class="flex flex-row items-center justify-between m-5 p-4 border shadow-sm rounded-lg from-lightBGStart to-lightBGStop dark:from-darkBG dark:to-darkBG bg-gradient-to-r transition duration-500 ease-in-out opacity-100 border-neutral"
+					>
+						<!-- Check mark -->
+						<div class="w-12 flex justify-center">
+							<CheckCircleIcon
+								:isChecked="true"
+								class="text-neutral w-6 h-6 flex items-center transition duration-500 ease-in-out"
+							/>
+						</div>
+						<div v-if="selectedTier" class="flex flex-grow flex-col items-start ml-4 mr-2 w-2/5">
+							<h3 class="text-xl font-semibold dark:text-darkPrimaryText">{{ selectedTier.name }}</h3>
+							<p class="text-gray5 dark:text-gray3 text-left text-sm pr-2">
+								Get access to exclusive articles by subscribing to {{ selectedTier.name }}
+							</p>
+						</div>
+						<div
+							v-if="selectedTier && selectedPeriod === `month`"
+							class="font-semibold text-lg mr-2 dark:text-darkPrimaryText"
+						>
+							{{ displayCurrency(paymentProfile.currency) }}{{ selectedTier.monthlyPrice }}
+							<span class="text-gray5 dark:text-gray3">/month</span>
+						</div>
+						<div
+							v-if="selectedTier && selectedPeriod === `year`"
+							class="font-semibold text-lg mr-2 dark:text-darkPrimaryText"
+						>
+							{{ displayCurrency(paymentProfile.currency) }}{{ selectedTier.yearlyPrice }}
+							<span class="text-gray5 dark:text-gray3">/year</span>
 						</div>
 					</div>
-					<img
-						:src="
-							$colorMode.dark
-								? require(`@/assets/images/brand/dark/subscriptions.webp`)
-								: require(`@/assets/images/brand/light/subscriptions.webp`)
-						"
-						class="h-auto rounded-lg"
-					/>
+					<p class="text-sm text-center text-negative px-8 mb-5 py-1">
+						This change will be reflected on your next billing, using the same billing method previously setup on this
+						subscription. You can always manage your subscriptions on the
+						<nuxt-link to="/subscriptions" class="underline">subscriptions page</nuxt-link>.
+					</p>
+					<div class="flex flex-row-reverse w-full">
+						<button
+							:class="selectedTier !== null ? `` : `opacity-50 cursor-not-allowed`"
+							class="bg-darkBG text-lightButtonText focus:outline-none transform rounded-lg font-bold transition duration-500 ease-in-out hover:bg-opacity-75"
+							style="padding: 0.4rem 1.5rem"
+							:disabled="this.selectedTier === null"
+							@click="switchTier"
+						>
+							<SpinnerIcon v-if="isLoading" class="mx-2 p-1" />
+							<span v-else class="font-sans" style="font-size: 0.95rem"> Confirm change </span>
+						</button>
+					</div>
 				</article>
-				<div v-show="isLoading" class="modal-animation flex w-full justify-center z-20 mt-5">
-					<div
-						class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
-						:style="`border-top: 2px solid` + $color.hex"
-					></div>
-				</div>
 			</div>
 		</section>
 	</div>
@@ -182,6 +214,8 @@ import Avatar from '@/components/Avatar.vue'
 import CloseIcon from '@/components/icons/X.vue'
 import CrownIcon from '@/components/icons/Crown.vue'
 import CheckCircleIcon from '@/components/icons/CheckCircle.vue'
+import ChevronDownIcon from '@/components/icons/ChevronDown.vue'
+import SpinnerIcon from '@/components/icons/SpinnerIcon.vue'
 import SwitchPeriod from '@/components/ToggleSwitch.vue'
 
 import { Profile } from '@/backend/profile'
@@ -222,6 +256,8 @@ export default Vue.extend({
 		CrownIcon,
 		CheckCircleIcon,
 		SwitchPeriod,
+		ChevronDownIcon,
+		SpinnerIcon,
 	},
 	props: {
 		author: {
@@ -357,7 +393,8 @@ export default Vue.extend({
 				const selectedTier = this.selectedTier
 				const selectedPeriod = this.selectedPeriod
 
-				// TODO maybe a loader here?
+				this.isLoading = true
+
 				const response = await switchSubscriptionTier(
 					this.$store.state.session.id,
 					this.s.subscriptionId,
@@ -367,11 +404,12 @@ export default Vue.extend({
 				if (response.status !== `succeeded`) {
 					this.$toastError(`Switching tier failed`)
 					return
+				} else {
+					this.$toastSuccess(`Switched tiers successfully!`)
+					this.$store.dispatch(`subscriptions/fetchSubs`, this.$store.state.session.id)
+					this.$emit(`close`)
 				}
-
-				this.$toastSuccess(`Switched tiers successfully!`)
-				this.$store.dispatch(`subscriptions/fetchSubs`, this.$store.state.session.id)
-				this.$emit(`close`)
+				this.isLoading = false
 			} catch (err) {
 				this.$handleError(err)
 			}
