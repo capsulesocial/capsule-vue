@@ -23,15 +23,10 @@
 					style="height: 62px"
 				>
 					<!-- Title -->
-					<h1
-						v-if="profile && headerName !== ``"
-						class="text-lightSecondaryText dark:text-gray1 text-3xl font-semibold xl:text-4xl"
-					>
-						Hello, {{ headerName }}
+					<h1 v-if="profile" class="text-lightSecondaryText dark:text-gray1 text-3xl font-semibold xl:text-4xl">
+						Hello, {{ profile.name === `` ? `@` + profile.id : profile.name }}
 					</h1>
-					<h1 v-else-if="profile" class="text-lightSecondaryText dark:text-gray1 text-3xl font-semibold xl:text-4xl">
-						Hello, @{{ profile.id }}
-					</h1>
+					<h1 v-else class="text-lightSecondaryText dark:text-gray1 text-3xl font-semibold xl:text-4xl">Hello!</h1>
 					<Nodes />
 				</div>
 				<!-- Content -->
@@ -92,7 +87,7 @@ import FollowersPopup from '@/components/popups/FollowersPopup.vue'
 import UnauthPopup from '@/components/popups/UnauthPopup.vue'
 
 import { IBackground, backgrounds } from '@/config/backgrounds'
-import { getProfile, Profile } from '@/backend/profile'
+import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import { getFollowersAndFollowing } from '@/backend/following'
 import { IPostResponse } from '@/backend/post'
@@ -113,7 +108,6 @@ interface IData {
 	followers: Set<string>
 	bgImage: IBackground
 	showFollowers: boolean
-	headerName: string
 }
 
 export default Vue.extend({
@@ -137,28 +131,20 @@ export default Vue.extend({
 			followers: new Set(),
 			bgImage: backgrounds[0],
 			showFollowers: false,
-			headerName: ``,
 		}
 	},
-	created() {
+	async created() {
 		// Set color mode
 		this.$setColorMode(this.$store.state.settings.mode)
 		this.$setColor(this.$store.state.settings.color)
-	},
-	async mounted() {
 		// Check if logged in user
 		if (this.$store.state.session.id === ``) {
 			return
 		}
 		// get logged in profile
-		const { profile } = await getProfile(this.$store.state.session.id)
-		this.profile = profile
+		const [{ profile: myProfile }] = await Promise.all([getProfile(this.$store.state.session.id)])
+		this.profile = myProfile || createDefaultProfile(this.$store.state.session.id)
 		this.bgImage = this.$getBGImage(this.profile?.background)
-		if (this.profile) {
-			if (this.profile.name !== ``) {
-				this.headerName = this.profile.name.split(` `)[0]
-			}
-		}
 		// Get avatar
 		if (this.profile && this.profile.avatar.length > 1) {
 			getPhotoFromIPFS(this.profile.avatar).then((p) => {
