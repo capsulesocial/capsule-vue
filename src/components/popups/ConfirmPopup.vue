@@ -45,7 +45,9 @@
 				<div class="flex justify-end items-center">
 					<button class="text-primary focus:outline-none mr-6" @click="$emit(`close`)">Keep writing</button>
 					<button
+						:class="isPosting ? `opacity-50` : `opacity-100`"
 						class="focus:outline-none bg-primary text-lightButtonText transform rounded-lg px-12 py-2 font-bold shadow-lg transition duration-500 ease-in-out hover:scale-105"
+						:disabled="isPosting"
 						@click="handlePost"
 					>
 						Publish
@@ -63,6 +65,7 @@ import CloseIcon from '@/components/icons/X.vue'
 
 interface IData {
 	showInfoBubble: boolean
+	isPosting: boolean
 }
 
 export default Vue.extend({
@@ -70,6 +73,7 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			showInfoBubble: false,
+			isPosting: false,
 		}
 	},
 	created() {
@@ -88,7 +92,11 @@ export default Vue.extend({
 			}
 		},
 		handlePost(): void {
+			if (this.isPosting) {
+				return
+			}
 			this.$emit(`post`)
+			this.isPosting = true
 		},
 	},
 })
