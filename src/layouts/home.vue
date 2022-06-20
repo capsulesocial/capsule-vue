@@ -23,15 +23,10 @@
 					style="height: 62px"
 				>
 					<!-- Title -->
-					<h1
-						v-if="profile && headerName !== ``"
-						class="text-lightSecondaryText dark:text-gray1 text-3xl font-semibold xl:text-4xl"
-					>
-						Hello, {{ headerName }}
+					<h1 v-if="profile" class="text-lightSecondaryText dark:text-gray1 text-3xl font-semibold xl:text-4xl">
+						Hello, {{ profile.name }}
 					</h1>
-					<h1 v-else-if="profile" class="text-lightSecondaryText dark:text-gray1 text-3xl font-semibold xl:text-4xl">
-						Hello, @{{ profile.id }}
-					</h1>
+					<h1 v-else class="text-lightSecondaryText dark:text-gray1 text-3xl font-semibold xl:text-4xl">Hello!</h1>
 					<Nodes />
 				</div>
 				<!-- Content -->
@@ -113,7 +108,6 @@ interface IData {
 	followers: Set<string>
 	bgImage: IBackground
 	showFollowers: boolean
-	headerName: string
 }
 
 export default Vue.extend({
@@ -137,7 +131,6 @@ export default Vue.extend({
 			followers: new Set(),
 			bgImage: backgrounds[0],
 			showFollowers: false,
-			headerName: ``,
 		}
 	},
 	created() {
@@ -154,11 +147,6 @@ export default Vue.extend({
 		const { profile } = await getProfile(this.$store.state.session.id)
 		this.profile = profile
 		this.bgImage = this.$getBGImage(this.profile?.background)
-		if (this.profile) {
-			if (this.profile.name !== ``) {
-				this.headerName = this.profile.name.split(` `)[0]
-			}
-		}
 		// Get avatar
 		if (this.profile && this.profile.avatar.length > 1) {
 			getPhotoFromIPFS(this.profile.avatar).then((p) => {
