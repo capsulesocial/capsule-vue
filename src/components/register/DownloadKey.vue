@@ -57,7 +57,7 @@ export default Vue.extend({
 				const blob = new Blob([JSON.stringify({ accountId: this.accountId, privateKey })], { type: `application/json` })
 				const link = document.createElement(`a`)
 				link.href = URL.createObjectURL(blob)
-				link.download = `blogchain-priv-key-${this.username}`
+				link.download = `blogchain-priv-key-${this.aid}.json`
 				link.click()
 				URL.revokeObjectURL(link.href)
 				this.$toastSuccess(`Downloaded Blogchain private key`)
