@@ -5,19 +5,11 @@ export interface RepostLink {
 	repostID: string
 }
 
-interface PostPreview {
-	title: string
-	authorID: string
-	featuredPhoto: string | null
-	postCID: string
-}
-
 export interface RootState {
 	nodeURL: string
 	backgroundImage: string | null
 	reposts: { [key: string]: string }
 	recentlyJoined: boolean
-	recentBookmarks: Set<PostPreview>
 }
 
 export const state = (): RootState => ({
@@ -25,7 +17,6 @@ export const state = (): RootState => ({
 	backgroundImage: `/_nuxt/src/assets/images/backgrounds/mainBG.webp`,
 	reposts: {},
 	recentlyJoined: false,
-	recentBookmarks: new Set(),
 })
 
 export const MutationType = {
@@ -35,7 +26,6 @@ export const MutationType = {
 	ADD_REPOST: `addRepost`,
 	REMOVE_REPOST: `removeRepost`,
 	RESET_REPOST: `resetRepost`,
-	SET_RECENT_BOOKMARKS: `setRecentBookmarks`,
 	WELCOME: `setWelcome`,
 	RESET: `reset`,
 }
@@ -59,11 +49,6 @@ export const mutations: MutationTree<RootState> = {
 	[MutationType.RESET_REPOST]: (state) => {
 		state.reposts = {}
 	},
-	[MutationType.SET_RECENT_BOOKMARKS]: (state, recentBookmarks) => {
-		state.recentBookmarks = new Set()
-		state.recentBookmarks = recentBookmarks
-		// state.recentBookmarks = recentBookmarks
-	},
 	[MutationType.WELCOME]: (state, type: boolean) => {
 		state.recentlyJoined = type
 	},
@@ -72,7 +57,6 @@ export const mutations: MutationTree<RootState> = {
 		state.backgroundImage = null
 		state.reposts = {}
 		state.recentlyJoined = false
-		state.recentBookmarks = new Set()
 	},
 }
 
