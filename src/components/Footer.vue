@@ -3,6 +3,7 @@
 		<div class="mb-5 mt-1 flex flex-wrap">
 			<nuxt-link to="/help" class="pr-6">Help</nuxt-link>
 			<nuxt-link to="/contentpolicy" class="pr-6">Content Policy</nuxt-link>
+			<nuxt-link to="/payment-policy" class="pr-6">Payment Policy</nuxt-link>
 			<a href="https://www.capsule.social/writers" target="_blank" class="pr-6 mb-2">Writers</a>
 			<nuxt-link to="/id/capsule" class="pr-6">Blog</nuxt-link>
 			<a href="https://www.capsule.social/careers" target="_blank" class="pr-6">Careers</a>

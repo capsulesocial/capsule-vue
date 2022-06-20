@@ -35,7 +35,7 @@
 					</button>
 				</div>
 				<!-- Step 0: Choose a subscription plan -->
-				<article v-show="step === 0">
+				<article v-show="step === 0" class="modal-animation">
 					<div class="w-full flex flex-col justify-center text-center px-10">
 						<CrownIcon class="text-neutral stroke-neutral self-center w-12 h-12 mb-2" />
 						<h6 class="font-semibold text-neutral text-xl mb-2">Your subscription plan</h6>
@@ -105,7 +105,7 @@
 					</div>
 				</article>
 				<!-- Step 1: Payment method selection -->
-				<article v-show="step === 1">
+				<article v-show="step === 1" class="modal-animation">
 					<div class="w-full flex flex-col justify-center text-center px-10">
 						<CrownIcon class="text-neutral stroke-neutral self-center w-12 h-12 mb-2" />
 						<h6 class="font-semibold text-neutral text-xl mb-2">Your order</h6>
@@ -163,7 +163,7 @@
 					</div>
 				</article>
 				<!-- Step 2: Payment card info -->
-				<article v-show="step === 2">
+				<article v-show="step === 2" class="modal-animation">
 					<!-- Back button -->
 					<div class="flex justify-between w-full mb-8 mt-8">
 						<button class="flex items-center" @click="previousStep">
@@ -225,18 +225,16 @@
 						<small v-show="cardErrorMessage !== null" style="color: #eb1c26" class="mb-5 modal-animation">{{
 							cardErrorMessage
 						}}</small>
-						<div class="flex flex-row-reverse mt-4">
+						<div class="flex flex-row-reverse items-center mt-4">
 							<SecondaryButton v-if="!isLoading" :text="`Pay`" :action="submitCardPayment" />
 							<div class="w-full">
-								<nuxt-link to="/payment-policy" class="text-gray5 dark:text-gray3 underline self-center text-xs italic"
-									>Payment policy</nuxt-link
-								>
+								<button class="text-primary self-center text-sm" @click="step = 5">Payment policy</button>
 							</div>
 						</div>
 					</div>
 				</article>
 				<!-- Step 3: Pay (Stripe) -->
-				<article v-if="step === 3">
+				<article v-if="step === 3" class="modal-animation">
 					<form id="payment-form">
 						<div id="payment-element">
 							<!--Stripe.js injects the Payment Element-->
@@ -248,7 +246,7 @@
 					</form>
 				</article>
 				<!-- Step 4: Confirmation page -->
-				<article v-show="step === 4" class="flex flex-col items-center">
+				<article v-show="step === 4" class="flex flex-col items-center modal-animation">
 					<div class="w-full flex flex-col justify-center text-center px-10">
 						<CrownIcon class="text-neutral stroke-neutral self-center w-12 h-12 mb-2" />
 						<h6 class="font-semibold text-neutral text-xl mb-2">Congrats!</h6>
@@ -307,6 +305,54 @@
 						"
 						class="h-auto rounded-lg"
 					/>
+				</article>
+				<!-- Step 5: Payment policy page -->
+				<article v-show="step === 5" class="modal-animation">
+					<!-- back button -->
+					<button class="flex items-center mb-4" @click="step = 2">
+						<div class="bg-gray1 dark:bg-gray5 focus:outline-none rounded-full">
+							<ChevronLeft />
+						</div>
+						<span class="pl-2 text-sm font-semibold dark:text-darkPrimaryText" style="margin-bottom: 2px"
+							>Payments</span
+						>
+					</button>
+					<!-- Page title -->
+					<h1 class="text-lightPrimaryText dark:text-darkPrimaryText text-2xl xl:text-3xl font-semibold">
+						Renewal, Refund &amp; Cancellation Policy
+					</h1>
+					<h2 class="text-primary mb-2 mt-4 text-lg font-semibold">
+						Blogchain provides a platform for authors to be paid directly by readers. Blogchain will not refund on
+						behalf of authors. Authors can issue refunds to readers at their discretion.
+					</h2>
+					<article class="message w-full">
+						<h2 class="text-lightPrimaryText dark:text-darkPrimaryText text-xl font-semibold py-2">
+							How do I request a refund on my subscription?
+						</h2>
+						<p class="message-content text-gray5 dark:text-gray3 py-2 text-sm text-justify">
+							Refunds are issued at the discretion of the Author. Please contact them directly.
+						</p>
+						<h2 class="text-lightPrimaryText dark:text-darkPrimaryText text-lg font-semibold py-2">Important note:</h2>
+						<p class="message-content text-gray5 dark:text-gray3 py-2 text-sm text-justify">
+							Subscription refunds from the author will not revoke access to your “subscribers only” posts for the
+							current month.
+						</p>
+						<h2 class="text-lightPrimaryText dark:text-darkPrimaryText text-xl font-semibold py-2">
+							Cancellation Policy
+						</h2>
+						<p class="message-content text-gray5 dark:text-gray3 py-2 text-sm text-justify">
+							In the event of a subscription cancellation by the author or subscribed reader, the subscription will
+							cancel at the period's end. Subscription cancellation will stop the auto-renewal of readers'
+							subscriptions. The reader will still have access to content under that subscription until the end of the
+							month of the cancellation.
+						</p>
+						<h2 class="text-lightPrimaryText dark:text-darkPrimaryText text-xl font-semibold py-2">Renewal Policy</h2>
+						<p class="message-content text-gray5 dark:text-gray3 py-2 text-sm text-justify">
+							Reader’s subscription will auto-renew with existing price plans based on monthly or yearly subscription
+							dates. Subscribed reader’s will receive an email notification from Stripe for each subscription
+							immediately after the renewal payment has been fully processed.
+						</p>
+					</article>
 				</article>
 				<div v-show="isLoading" class="modal-animation flex w-full justify-center z-20 mt-5">
 					<div
