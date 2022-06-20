@@ -4,8 +4,7 @@
 		<!-- Enter phone number -->
 		<div v-show="!otpSent">
 			<p class="text-gray7 dark:text-gray3 my-10 text-center">
-				Verify you’re a human with your phone number so that Blogchain can fund your wallet. This is the last step
-				needed to create your Blogchain account.
+				Verify you’re a human with your phone number so that Blogchain can fund your wallet.
 			</p>
 			<label for="phoneNumber" class="text-gray5 dark:text-gray3 block pb-1 text-sm font-semibold">Phone Number</label>
 			<input
@@ -17,6 +16,7 @@
 			<div class="flex w-full justify-end mt-4">
 				<BrandedButton :text="otpSent ? `Re-send code` : `Send Code`" :action="sendOTP" />
 			</div>
+			<h6 v-show="isLoading" class="text-primary text-center">Sending SMS...</h6>
 		</div>
 		<!-- Enter SMS code to complete verify -->
 		<div v-show="otpSent" class="mt-10">
@@ -30,8 +30,9 @@
 				placeholder=""
 				class="focus:outline-none focus:border-primary text-primary dark:text-darkPrimaryText bg-gray2 dark:bg-gray7 mt-1 mb-5 w-full rounded-lg px-3 py-2 font-sans text-sm"
 			/>
-			<BrandedButton v-show="!isLoading" :text="`Verify`" class="w-full" :action="validateOTP" />
+			<BrandedButton v-show="!isLoading && !waitingForFunds" :text="`Verify`" class="w-full" :action="validateOTP" />
 			<h6 v-show="isLoading" class="text-primary text-center">Verifying...</h6>
+			<h6 v-show="waitingForFunds" class="text-primary text-center">Executing smart contract...</h6>
 		</div>
 		<p v-show="otpSent" class="text-gray7 dark:text-gray2 mt-10 text-center text-sm">
 			Didn't receive a code?
@@ -48,7 +49,7 @@ import intlTelInput from 'intl-tel-input'
 import { AxiosError } from 'axios'
 
 import BrandedButton from '@/components/BrandedButton.vue'
-import { requestOTP, requestSponsor, waitForFunds } from '@/backend/funder'
+import { requestOTP, requestOnboard, waitForFunds } from '@/backend/funder'
 
 interface IData {
 	otp: string
@@ -57,6 +58,7 @@ interface IData {
 	phoneNumber: string
 	inputCode: string
 	isLoading: boolean
+	waitingForFunds: boolean
 }
 
 export default Vue.extend({
@@ -77,6 +79,7 @@ export default Vue.extend({
 			phoneNumber: ``,
 			inputCode: ``,
 			isLoading: false,
+			waitingForFunds: false,
 		}
 	},
 	mounted() {
@@ -98,29 +101,34 @@ export default Vue.extend({
 				this.$toastError(`Invalid phone number`)
 				return
 			}
+			this.isLoading = true
 			await requestOTP(this.phoneNumber)
 			this.otpSent = true
 			this.$toastSuccess(
 				`If you haven't used this phone number before on Blogchain, you'll receive a code on your phone`,
 			)
+			this.isLoading = false
 		},
 		async validateOTP() {
-			this.isLoading = true
 			try {
 				if (this.otp.length !== 6) {
 					this.$toastError(`OTP should have 6 digits`)
-					this.isLoading = false
 					return
 				}
 				if (!this.accountId) {
-					this.isLoading = false
 					return
 				}
-				await requestSponsor(this.phoneNumber, this.otp, this.accountId)
+				this.isLoading = true
+				await requestOnboard(this.phoneNumber, this.otp, this.accountId)
+				this.isLoading = false
+				this.waitingForFunds = true
 				const { balance } = await waitForFunds(this.accountId)
+				this.waitingForFunds = false
+				this.$emit(`setIsOnboarded`, true)
 				this.$emit(`updateFunds`, balance)
 			} catch (err: any) {
 				this.isLoading = false
+				this.waitingForFunds = false
 				if (err instanceof AxiosError && err.response) {
 					this.otp = ``
 					this.$toastError(err.response.data.error)

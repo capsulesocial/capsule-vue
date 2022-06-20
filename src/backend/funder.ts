@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { checkAccountStatus } from './near'
+import { checkAccountStatus, getIsAccountIdOnboarded } from './near'
 import { capsuleServer, sufficientFunds } from './utilities/config'
 
 export async function requestOTP(phoneNumber: string) {
@@ -10,7 +10,7 @@ export async function requestOTP(phoneNumber: string) {
 }
 
 export async function getFundTransferStatus(accountId: string): Promise<`PROCESSING` | `SENT` | `FAILED`> {
-	const response = await axios.get(`${capsuleServer}/sponsor/status?accountId=${accountId}`)
+	const response = await axios.get(`${capsuleServer}/onboard/sponsor/status?accountId=${accountId}`)
 	return response.data.data
 }
 
@@ -22,8 +22,11 @@ export function waitForFunds(accountId: string) {
 	let secWaited = 0
 	return new Promise<{ balance: string }>((resolve, reject) => {
 		const waiter = async () => {
-			const { balance } = await checkAccountStatus(accountId)
-			if (hasSufficientFunds(balance)) {
+			const [{ balance }, onboarded] = await Promise.all([
+				checkAccountStatus(accountId),
+				getIsAccountIdOnboarded(accountId),
+			])
+			if (hasSufficientFunds(balance) && onboarded) {
 				resolve({ balance })
 				return
 			}
@@ -52,8 +55,8 @@ export function waitForFunds(accountId: string) {
 	})
 }
 
-export async function requestSponsor(phoneNumber: string, code: string, accountId: string) {
-	const response = await axios.post(`${capsuleServer}/sponsor`, {
+export async function requestOnboard(phoneNumber: string, code: string, accountId: string) {
+	const response = await axios.post(`${capsuleServer}/onboard`, {
 		phoneNumber,
 		code,
 		accountId,

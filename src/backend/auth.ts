@@ -2,14 +2,7 @@ import { getED25519Key } from '@toruslabs/openlogin-ed25519'
 import { base_decode as baseDecode, base_encode as baseEncode } from 'near-api-js/lib/utils/serialize'
 import { PublicKey } from 'near-api-js/lib/utils'
 
-import {
-	initContract,
-	setUserInfoNEAR,
-	setNearPrivateKey,
-	signedInToWallet,
-	getWalletConnection,
-	getNearPrivateKey,
-} from './near'
+import { initContract, setUserInfoNEAR, setNearPrivateKey, getWalletConnection, getNearPrivateKey } from './near'
 import { addProfileToIPFS, createDefaultProfile, getProfile, Profile } from './profile'
 import { uint8ArrayToHexString } from './utilities/helpers'
 
@@ -84,9 +77,9 @@ export async function loginNearAccount(id: string, privateKey: string, accountId
 
 export async function getUserInfo(): Promise<IWalletStatus | null> {
 	// In the case of near wallet sign up
-	const nearWallet = signedInToWallet()
+	const walletConnection = getWalletConnection()
+	const nearWallet = walletConnection.isSignedIn()
 	if (nearWallet) {
-		const walletConnection = getWalletConnection()
 		const accountId: string = walletConnection.getAccountId()
 		if (!accountId) {
 			throw new Error(`Wallet without accountId!`)
