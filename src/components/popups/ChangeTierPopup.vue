@@ -186,8 +186,9 @@
 						</div>
 					</div>
 					<p class="text-sm text-center text-negative px-8 mb-5 py-1">
-						This change will be reflected on your next billing, using the same billing method previously setup on this
-						subscription. You can always manage your subscriptions on the
+						This change will be reflected on your next charge, using the same billing method previously setup on this
+						subscription. Please note you can only change tiers once every 30 days. You can always manage your
+						subscriptions on the
 						<nuxt-link to="/subscriptions" class="underline">subscriptions page</nuxt-link>.
 					</p>
 					<div class="flex flex-row-reverse w-full">
@@ -349,10 +350,10 @@ export default Vue.extend({
 					this.$store.dispatch(`subscriptions/fetchSubs`, this.$store.state.session.id)
 					this.$emit(`close`)
 				}
-				this.isLoading = false
 			} catch (err) {
 				this.$handleError(err)
 			}
+			this.isLoading = false
 		},
 		handleCloseClick(e: any): void {
 			if (!e.target || e.target.parentNode === null || e.target.firstChild?.classList === undefined) {

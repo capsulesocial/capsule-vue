@@ -7,11 +7,15 @@
 			<p class="text-gray5 dark:text-gray3">Here you can manage your active subscriptions to your favorite authors</p>
 		</div>
 		<!-- subscriptions grid -->
-		<div v-if="activeSubs.length > 0" class="flex flex-wrap mt-4" style="padding-right: 1.31rem; padding-left: 1.31rem">
+		<div
+			v-if="activeSubs.length > 0 && !isLoading"
+			class="flex flex-wrap mt-4"
+			style="padding-right: 1.31rem; padding-left: 1.31rem"
+		>
 			<!-- Subscription card -->
 			<SubCard v-for="s in activeSubs" :key="s.authorID" :s="s" @infoPopup="$emit(`infoPopup`, s)" />
 		</div>
-		<div v-else class="mt-5">
+		<div v-else-if="!isLoading" class="mt-5">
 			<div v-if="this.$store.state.session.id !== ``" class="flex flex-col items-center">
 				<p class="text-gray5 dark:text-gray3 align-end mb-1 flex items-end text-sm w-3/4 text-center">
 					It seems like you don't currently have any active subscriptions. Browse Blogchain and subscribe to authors to
@@ -27,6 +31,12 @@
 				/>
 			</div>
 		</div>
+		<article v-if="isLoading" class="flex w-full justify-center mt-10">
+			<div
+				class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
+				:style="`border-top: 2px solid` + $color.hex"
+			></div>
+		</article>
 	</main>
 </template>
 
@@ -34,10 +44,9 @@
 import Vue from 'vue'
 import { mapGetters } from 'vuex'
 import SubCard from '@/components/subscriptions/SubCard.vue'
-import { ISubscriptionResponse } from '@/backend/subscription'
 import { namespace as SubscriptionsNamespace } from '@/store/subscriptions'
 interface IData {
-	subscriptions: ISubscriptionResponse[]
+	isLoading: boolean
 }
 
 export default Vue.extend({
@@ -46,7 +55,7 @@ export default Vue.extend({
 	props: {},
 	data(): IData {
 		return {
-			subscriptions: [],
+			isLoading: true,
 		}
 	},
 	head() {
@@ -60,6 +69,8 @@ export default Vue.extend({
 	},
 	async mounted() {
 		await this.$store.dispatch(`subscriptions/fetchSubs`, this.$store.state.session.id)
+		this.activeSubs = []
+		this.isLoading = false
 	},
 	methods: {},
 })
