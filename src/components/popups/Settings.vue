@@ -259,8 +259,8 @@ export default Vue.extend({
 			const trimmedWebsite = this.website.trim()
 
 			// Update name
-			if (trimmedName.length !== 0 && (trimmedName.length < 2 || trimmedName.length > 32)) {
-				this.$toastError(`Invalid name length`)
+			if (trimmedName.length !== 0 && (trimmedName.length <= 2 || trimmedName.length > 32)) {
+				this.$toastError(`Name length must be between 3 and 32 chars`)
 				return
 			}
 			this.changeName(trimmedName)
