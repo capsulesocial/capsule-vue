@@ -130,8 +130,20 @@
 			:authorAvatar="visitAvatar"
 			@close="showSubscriptions = false"
 		/>
+		<ChangeTierPopup
+			v-if="showChangeTier"
+			:author="visitProfile"
+			:authorAvatar="visitAvatar"
+			:s="authorPaymentProfile"
+			@close="showChangeTier = false"
+		/>
 		<unFollowWarningPopup v-if="showUnfollowWarning" @close="showUnfollowWarning = false" />
-		<SubInfosPopup v-if="showSubscriptionInfo && subInfo" :s="subInfo" @close="showSubscriptionInfo = false" />
+		<SubInfosPopup
+			v-if="showSubscriptionInfo && subInfo"
+			:s="subInfo"
+			@switchPopup="toggleChangeTierPopup"
+			@close="showSubscriptionInfo = false"
+		/>
 		<portal-target name="card-popup"></portal-target>
 	</main>
 </template>
@@ -149,6 +161,7 @@ import FollowersPopup from '@/components/popups/FollowersPopup.vue'
 import FollowingPopup from '@/components/popups/FollowingPopup.vue'
 import MutualFollowersPopup from '@/components/popups/MutualFollowersPopup.vue'
 import SubscriptionsPopup from '@/components/popups/SubscriptionsPopup.vue'
+import ChangeTierPopup from '@/components/popups/ChangeTierPopup.vue'
 import ImagePopup from '@/components/popups/Image.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
 import UnauthPopup from '@/components/popups/UnauthPopup.vue'
@@ -187,6 +200,8 @@ interface IData {
 	subInfo: ISubscriptionWithProfile | undefined
 	activeSubscription: boolean
 	showUnfollowWarning: boolean
+	authorPaymentProfile: ISubscriptionWithProfile | undefined
+	showChangeTier: boolean
 }
 
 export default Vue.extend({
@@ -205,6 +220,7 @@ export default Vue.extend({
 		SubscriptionsPopup,
 		SubInfosPopup,
 		unFollowWarningPopup,
+		ChangeTierPopup,
 	},
 	middleware: `auth`,
 	data(): IData {
@@ -231,6 +247,8 @@ export default Vue.extend({
 			subInfo: undefined,
 			activeSubscription: false,
 			showUnfollowWarning: false,
+			authorPaymentProfile: undefined,
+			showChangeTier: false,
 		}
 	},
 	watch: {
@@ -368,6 +386,14 @@ export default Vue.extend({
 			if (this.activeSubscription === true && this.userIsFollowed === true) {
 				this.showUnfollowWarning = !this.showUnfollowWarning
 			}
+		},
+		toggleChangeTierPopup(author: { s: ISubscriptionWithProfile; avatar: string }) {
+			this.authorPaymentProfile = author.s
+			// Unauth
+			if (this.$store.state.session.id === ``) {
+				this.$store.commit(`settings/toggleUnauthPopup`)
+			}
+			this.showChangeTier = !this.showChangeTier
 		},
 		toggleSubscription(authorID: string) {
 			// Unauth

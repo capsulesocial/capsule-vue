@@ -75,7 +75,7 @@
 				<button
 					v-if="s.isActive && (!s.renewalInfo || s.renewalInfo.status !== 'cancelled')"
 					class="text-neutral px-2 py-2 text-sm flex flex-row items-center"
-					@click="switchTier"
+					@click="toggleSwitchPopup(s)"
 				>
 					<CheckCircleStaticIcon class="h-5 w-5 mr-2" />
 					<p class="focus:outline-none text-sm">Change tier</p>
@@ -138,7 +138,7 @@ import DownloadIcon from '@/components/icons/Download.vue'
 import BasicConfirmAlert from '@/components/popups/BasicConfirmAlert.vue'
 import { ActionType, ISubscriptionWithProfile, namespace as subscriptionNamespace } from '@/store/subscriptions'
 import { getSubscriptionTransactions, SubsTransaction } from '@/backend/subscription'
-import { getBillingPortalUrl, getCurrencySymbol, switchSubscriptionTier } from '@/backend/payment'
+import { getBillingPortalUrl, getCurrencySymbol } from '@/backend/payment'
 import {
 	createDefaultPaymentProfile,
 	namespace as paymentProfileNamespace,
@@ -205,37 +205,16 @@ export default Vue.extend({
 		toggleCancelAlert() {
 			this.showAlert = !this.showAlert
 		},
+		toggleSwitchPopup(subProfile: ISubscriptionWithProfile) {
+			this.$emit(`switchPopup`, { s: subProfile, avatar: this.avatar })
+			this.$emit(`close`)
+		},
 		async cancelSubscription(): Promise<void> {
 			try {
 				await this.deleteSubscription({ username: this.$store.state.session.id, id: this.s.subscriptionId })
 				this.$emit(`close`)
 			} catch (ex) {
 				this.$handleError(ex)
-			}
-		},
-		async switchTier(): Promise<void> {
-			try {
-				// TODO the selected tier and period should come from a popup of all the tiers except current one
-				const selectedTier = this.paymentProfile.tiers[0]
-				const selectedPeriod = `month`
-
-				// TODO maybe a loader here?
-				const response = await switchSubscriptionTier(
-					this.$store.state.session.id,
-					this.s.subscriptionId,
-					selectedTier,
-					selectedPeriod,
-				)
-				if (response.status !== `succeeded`) {
-					this.$toastError(`Switching tier failed`)
-					return
-				}
-
-				this.$toastSuccess(`Switched tiers successfully!`)
-				this.$store.dispatch(`subscriptions/fetchSubs`, this.$store.state.session.id)
-				this.$emit(`close`)
-			} catch (err) {
-				this.$handleError(err)
 			}
 		},
 		...mapActions(subscriptionNamespace, {

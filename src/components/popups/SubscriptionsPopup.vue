@@ -41,7 +41,10 @@
 						<h6 class="font-semibold text-neutral text-xl mb-2">Your subscription plan</h6>
 						<p class="text-base text-center text-gray5 dark:text-gray3 mb-4">
 							Choose a subscription plan and a billing method to access subscribers-only content of
-							<span class="font-semibold text-primary dark:text-secondary">{{ author.name }}</span>
+							<span v-if="author.name !== ``" class="font-semibold text-primary dark:text-secondary">{{
+								author.name
+							}}</span>
+							<span v-else class="font-semibold text-primary dark:text-secondary">@{{ author.id }}</span>
 						</p>
 					</div>
 					<!-- Period switch -->
@@ -51,6 +54,9 @@
 					<!-- Subscriptions list -->
 					<div v-for="tier in paymentProfile.tiers" :key="tier._id">
 						<button
+							v-if="
+								(tier.monthlyEnabled && selectedPeriod === `month`) || (tier.yearlyEnabled && selectedPeriod === `year`)
+							"
 							class="flex flex-row items-center justify-between m-5 p-4 border shadow-sm rounded-lg from-lightBGStart to-lightBGStop dark:from-darkBG dark:to-darkBG bg-gradient-to-r transition duration-500 ease-in-out"
 							:class="
 								selectedTier !== null && selectedTier._id === tier._id
