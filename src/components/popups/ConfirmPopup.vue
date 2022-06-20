@@ -63,6 +63,7 @@ import CloseIcon from '@/components/icons/X.vue'
 
 interface IData {
 	showInfoBubble: boolean
+	isPosting: boolean
 }
 
 export default Vue.extend({
@@ -70,6 +71,7 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			showInfoBubble: false,
+			isPosting: false,
 		}
 	},
 	created() {
@@ -88,7 +90,11 @@ export default Vue.extend({
 			}
 		},
 		handlePost(): void {
+			if (this.isPosting) {
+				return
+			}
 			this.$emit(`post`)
+			this.isPosting = true
 		},
 	},
 })
