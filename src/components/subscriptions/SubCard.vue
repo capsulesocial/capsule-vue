@@ -21,11 +21,16 @@
 			</div>
 		</div>
 		<Avatar :avatar="avatar" :authorID="s.authorID" :size="`w-12 h-12 xl:w-14 xl:h-14`" class="mb-4" />
-		<h5 v-if="s.name !== ``" class="font-semibold text-lg text-lightPrimaryText dark:text-darkPrimaryText">
+		<h5
+			v-if="s.name !== ``"
+			class="w-full text-center font-semibold text-lg text-lightPrimaryText dark:text-darkPrimaryText truncate"
+		>
 			{{ s.name }}
 		</h5>
-		<h5 v-else class="font-semibold text-lg text-gray5 dark:text-gray3">{{ s.authorID }}</h5>
-		<h6 class="text-primary">@{{ s.authorID }}</h6>
+		<h5 v-else class="w-full text-center font-semibold text-lg text-gray5 dark:text-gray3 truncate">
+			{{ s.authorID }}
+		</h5>
+		<h6 class="text-primary w-full text-center truncate">@{{ s.authorID }}</h6>
 		<!-- Crown with tier label -->
 		<div
 			class="w-full border border-neutral rounded-lg flex flex-row justify-center items-center bg-neutral bg-opacity-25 p-2 my-4 max-w-full"
