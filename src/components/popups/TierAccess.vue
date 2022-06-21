@@ -1,7 +1,7 @@
 <template>
 	<div
 		class="bg-darkBG dark:bg-gray5 modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
-		@click.self="$emit(`close`)"
+		@click.self="handleClose"
 	>
 		<!-- Container -->
 		<section class="popup">
@@ -13,12 +13,13 @@
 					<h2 class="text-lightPrimaryText dark:text-darkPrimaryText text-3xl font-semibold">
 						Manage access to this post
 					</h2>
-					<button class="focus:outline-none bg-gray1 dark:bg-gray5 rounded-full p-1" @click="$emit(`close`)">
+					<button class="focus:outline-none bg-gray1 dark:bg-gray5 rounded-full p-1" @click="handleClose">
 						<CloseIcon />
 					</button>
 				</div>
+				<p class="text-gray5 dark:text-gray3 mt-6">Subscribers to:</p>
 				<!-- Tier list -->
-				<div class="flex flex-col mt-6">
+				<div class="flex flex-col mt-2">
 					<button
 						v-for="t in this.$store.getters[`subscriptionTiers/tiers`]"
 						:key="t._id"
@@ -53,7 +54,10 @@
 				<div class="flex justify-end w-full">
 					<button
 						class="px-6 py-2 rounded-lg bg-neutral focus:outline-none text-white my-3 font-semibold"
-						@click="$emit(`close`)"
+						:class="
+							$store.state.draft.drafts[$store.state.draft.activeIndex].accessTiers.length < 1 ? `opacity-50` : ``
+						"
+						@click="save"
 					>
 						Save
 					</button>
@@ -80,6 +84,28 @@ export default Vue.extend({
 		removeTier(t: string) {
 			// TODO: Implement this button
 			this.$store.commit(`draft/removeAccessTier`, t)
+		},
+		save() {
+			if (this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].accessTiers.length < 1) {
+				this.$toastError(`you must select at least one Tier of subscription to make this post premium`)
+			} else {
+				this.$emit(`close`)
+			}
+		},
+		handleClose() {
+			if (this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].accessTiers.length > 0) {
+				this.$emit(`close`)
+				return
+			}
+			const postImages = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex]?.postImages
+			if (postImages && postImages.length > 0) {
+				this.$toastError(`You must select at least one tier`)
+				return
+			}
+			if (this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].accessTiers.length === 0) {
+				this.$store.commit(`draft/togglePremium`)
+				this.$emit(`close`)
+			}
 		},
 	},
 })

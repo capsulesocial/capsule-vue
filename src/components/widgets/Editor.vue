@@ -340,7 +340,7 @@ export default Vue.extend({
 			const postImages = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex]?.postImages
 			if (postImages && postImages.length > 0) {
 				this.$toastError(
-					`You can't make a toggle the access status of post when it already has images. Please remove the images and re-upload them after you toggle it.`,
+					`Encrypted image mismatch. Please remove the images, toggle the premium status, and re-upload.`,
 				)
 				return
 			}
