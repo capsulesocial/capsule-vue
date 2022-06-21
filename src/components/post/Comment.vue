@@ -156,6 +156,10 @@
 						</button>
 					</span>
 				</div>
+				<div v-else class="text-gray5 dark:text-gray3 p-4 text-sm bg-lightBG dark:bg-darkBG rounded-lg mb-4">
+					<button class="text-primary focus:outline-none ml-1" @click="$router.push(`/register`)">Sign up</button>
+					to reply to this comment and be part of the debate
+				</div>
 				<!-- List replies -->
 				<div v-if="filterReplies().length > 0" class="pl-5 mt-2">
 					<Reply

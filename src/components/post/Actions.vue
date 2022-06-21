@@ -201,7 +201,7 @@
 							  selectedEmotionColor === `neutral` ||
 							  selectedEmotionColor === `negative`
 							? `border p-2 bg-` + selectedEmotionColor
-							: `p-2 bg-gray1 dark:bg-gray7`
+							: `p-2 bg-lightBG dark:bg-darkBG`
 					"
 				>
 					<div
