@@ -13,7 +13,7 @@
 					<h2 class="text-lightPrimaryText dark:text-darkPrimaryText text-3xl font-semibold">
 						Manage access to this post
 					</h2>
-					<button class="focus:outline-none bg-gray1 dark:bg-gray5 rounded-full p-1" @click="$emit(`close`)">
+					<button class="focus:outline-none bg-gray1 dark:bg-gray5 rounded-full p-1" @click="handleClose">
 						<CloseIcon />
 					</button>
 				</div>
