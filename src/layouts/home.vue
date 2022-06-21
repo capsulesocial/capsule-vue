@@ -30,7 +30,7 @@
 					<Nodes />
 				</div>
 				<!-- Content -->
-				<section class="relative flex flex-row lg:mt-2 xl:mt-5 overscroll-none">
+				<section class="flex flex-row lg:mt-2 xl:mt-5 overscroll-none">
 					<PostEditor
 						v-if="$store.state.widgets.primary === `editor` && $route.name === `home`"
 						ref="editor"

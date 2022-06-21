@@ -1,42 +1,63 @@
 <template>
 	<section>
-		<nav
-			class="z-20 flex w-full flex-row px-5 pt-3 text-sm xl:px-6 xl:pt-4 rounded-t-lg"
-			style="backdrop-filter: blur(10px)"
-		>
-			<div class="flex items-center">
+		<nav class="flex w-full flex-row justify-between px-5 pt-3 text-sm xl:px-6 xl:pt-4 rounded-t-lg">
+			<div class="flex" style="backdrop-filter: blur(10px)">
 				<button
 					:class="algorithm === `FOLLOWING` ? ` text-primary font-semibold` : `text-gray5 dark:text-gray3`"
-					class="focus:outline-none h-full w-full pb-4"
+					class="flex items-center focus:outline-none h-full w-full pb-4 pr-6"
 					@click="sortFeed('FOLLOWING')"
 				>
 					Following
 				</button>
-			</div>
-			<div class="flex items-center px-12">
 				<button
 					:class="algorithm === `NEW` ? ` text-primary font-semibold` : `text-gray5 dark:text-gray3`"
-					class="focus:outline-none h-full w-full pb-4"
+					class="flex items-center px-6 focus:outline-none h-full w-full pb-4"
 					@click="sortFeed('NEW')"
 				>
 					New
 				</button>
-			</div>
-			<div class="flex items-center">
 				<button
 					:class="algorithm === `TOP` ? ` text-primary font-semibold` : `text-gray5 dark:text-gray3`"
-					class="focus:outline-none h-full w-full pb-4"
+					class="flex items-center focus:outline-none h-full w-full pb-4 pl-6"
 					@click="sortFeed('TOP')"
 				>
 					Top
 				</button>
 			</div>
+			<!-- Top algorithms -->
+			<div v-if="algorithm === `TOP`" class="flex items-center relative modal-animation z-50">
+				<label for="filter" class="hidden lg:block text-gray5 dark:text-gray3">Sort by: </label>
+				<button
+					id="filter"
+					class="toggle focus:outline-none ml-4 flex items-center justify-between rounded-lg border dark:border-gray3 px-4 text-sm shadow-lg dark:text-gray3"
+					@click="showAlgorithmDropdown = !showAlgorithmDropdown"
+				>
+					<span class="toggle font-bold capitalize"> {{ topAlgorithm }} </span>
+					<ChevronUp v-if="showAlgorithmDropdown" />
+					<ChevronDown v-else />
+				</button>
+				<div
+					v-if="showAlgorithmDropdown"
+					class="hotzone border-lightBorder modal-animation absolute top-0 right-0 z-20 rounded-lg border bg-lightBG dark:bg-darkBG px-4 py-3 shadow-lg"
+					style="margin-top: 28px"
+				>
+					<div
+						v-for="a in [`All Time`, `Day`, `Week`, `Month`, `Year`]"
+						:key="a"
+						class="hotzone flex justify-start items-start flex-col dark:text-gray3"
+					>
+						<button
+							:class="topAlgorithm === a ? ` text-primary font-semibold` : `text-gray5 dark:text-gray3`"
+							class="hotzone focus:outline-none my-1 px-2"
+							@click="setTopAlgorithm(a)"
+						>
+							{{ a }}
+						</button>
+					</div>
+				</div>
+			</div>
 		</nav>
-		<div
-			v-if="posts"
-			ref="container"
-			class="min-h-120 h-120 xl:min-h-220 xl:h-220 modal-animation w-full overflow-y-auto"
-		>
+		<div v-if="posts" ref="container" class="min-h-120 h-120 lg:min-h-220 lg:h-220 w-full overflow-y-auto">
 			<div
 				v-if="!isLoading && algorithm === `FOLLOWING` && following.size === 0 && posts.length === 0"
 				class="relative h-full overflow-y-hidden"
@@ -101,6 +122,8 @@ import Vue from 'vue'
 import type { PropType } from 'vue'
 import { mapGetters } from 'vuex'
 import PostCard from '@/components/post/Card.vue'
+import ChevronUp from '@/components/icons/ChevronUp.vue'
+import ChevronDown from '@/components/icons/ChevronDown.vue'
 import { namespace as SubscriptionsNamespace } from '@/store/subscriptions'
 import { getPosts, Algorithm, IRepostResponse, IPostResponse } from '@/backend/post'
 import { getReposts } from '@/backend/reposts'
@@ -113,11 +136,15 @@ interface IData {
 	currentOffset: number
 	limit: number
 	noMorePosts: boolean
+	topAlgorithm: `All Time` | `Day` | `Week` | `Month` | `Year`
+	showAlgorithmDropdown: boolean
 }
 
 export default Vue.extend({
 	components: {
 		PostCard,
+		ChevronUp,
+		ChevronDown,
 	},
 	layout: `home`,
 	props: {
@@ -134,6 +161,8 @@ export default Vue.extend({
 			currentOffset: 0,
 			limit: 10,
 			noMorePosts: false,
+			topAlgorithm: `All Time`,
+			showAlgorithmDropdown: false,
 		}
 	},
 	head() {
@@ -168,12 +197,7 @@ export default Vue.extend({
 			this.isLoading = true
 			const id = this.$store.state.session.id === `` ? `x` : this.$store.state.session.id
 			const followingParam: string | undefined = id === `x` ? undefined : this.$store.state.session.id
-			const payload = {
-				sort: alg,
-				limit: this.limit,
-				offset: this.currentOffset,
-				following: followingParam,
-			}
+			const payload = this.getTopPayload(alg, followingParam)
 			const posts = await getPosts({}, id, payload)
 			this.currentOffset += this.limit
 			this.isLoading = false
@@ -251,6 +275,47 @@ export default Vue.extend({
 				} catch (err: unknown) {
 					this.$handleError(err)
 				}
+			}
+		},
+		setTopAlgorithm(a: `All Time` | `Day` | `Week` | `Month` | `Year`) {
+			this.topAlgorithm = a
+			this.showAlgorithmDropdown = false
+			this.sortFeed(this.algorithm)
+		},
+		getTopPayload(alg: Algorithm, followingParam: string | undefined) {
+			if (alg !== `TOP`) {
+				return {
+					sort: alg,
+					limit: this.limit,
+					offset: this.currentOffset,
+					following: followingParam,
+				}
+			}
+			let timeframe: undefined | `1` | `7` | `30` | `365` = `1`
+			switch (this.topAlgorithm) {
+				case `All Time`:
+					break
+				case `Day`:
+					timeframe = `1`
+					break
+				case `Week`:
+					timeframe = `7`
+					break
+				case `Month`:
+					timeframe = `30`
+					break
+				case `Year`:
+					timeframe = `365`
+					break
+				default:
+					timeframe = undefined
+			}
+			return {
+				sort: alg,
+				limit: this.limit,
+				offset: this.currentOffset,
+				timeframe,
+				following: followingParam,
 			}
 		},
 	},

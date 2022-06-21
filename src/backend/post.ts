@@ -235,6 +235,7 @@ async function getEncryptionKeys(username: string, cid: string) {
 export interface IGetPostsOptions {
 	sort?: Algorithm
 	offset?: number
+	timeframe?: `1` | `7` | `30` | `365`
 	limit?: number
 	following?: string
 }
