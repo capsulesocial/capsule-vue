@@ -137,10 +137,13 @@
 				>
 					<textarea
 						v-model="reply"
+						rows="4"
 						type="text"
 						placeholder="Reply.."
-						class="resize-vertical focus:outline-none w-4/5 overflow-y-auto py-1 px-2 text-sm leading-normal bg-lightBG dark:bg-darkBG text-lightPrimaryText dark:text-darkPrimaryText"
+						class="focus:outline-none w-4/5 overflow-hidden py-1 px-2 text-sm leading-normal bg-lightBG dark:bg-darkBG text-lightPrimaryText dark:text-darkPrimaryText"
 						style="resize: none"
+						:style="`height:` + replyInputHeight + `px`"
+						@keydown="handleResize"
 					>
 					</textarea>
 					<span class="relative w-1/5 flex justify-end items-end">
@@ -201,6 +204,7 @@ interface IData {
 	showDelete: boolean
 	currentRepliesOffset: number
 	repliesLimit: number
+	replyInputHeight: number
 }
 
 export default Vue.extend({
@@ -237,6 +241,7 @@ export default Vue.extend({
 			showDelete: false,
 			currentRepliesOffset: 0,
 			repliesLimit: 10,
+			replyInputHeight: 64,
 		}
 	},
 	async created() {
@@ -332,6 +337,11 @@ export default Vue.extend({
 		},
 		async fetchReplies() {
 			this.replies = await getCommentsOfPost(this.cid, this.currentRepliesOffset, this.repliesLimit)
+		},
+		handleResize(e: any) {
+			if (e.srcElement.clientHeight !== e.srcElement.scrollHeight) {
+				this.replyInputHeight = e.srcElement.scrollHeight
+			}
 		},
 	},
 })
