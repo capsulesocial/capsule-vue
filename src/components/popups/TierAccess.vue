@@ -17,8 +17,9 @@
 						<CloseIcon />
 					</button>
 				</div>
+				<p class="text-gray5 dark:text-gray3 mt-6">Subscribers to:</p>
 				<!-- Tier list -->
-				<div class="flex flex-col mt-6">
+				<div class="flex flex-col mt-2">
 					<button
 						v-for="t in this.$store.getters[`subscriptionTiers/tiers`]"
 						:key="t._id"
@@ -53,7 +54,10 @@
 				<div class="flex justify-end w-full">
 					<button
 						class="px-6 py-2 rounded-lg bg-neutral focus:outline-none text-white my-3 font-semibold"
-						@click="$emit(`close`)"
+						:class="
+							$store.state.draft.drafts[$store.state.draft.activeIndex].accessTiers.length < 1 ? `opacity-50` : ``
+						"
+						@click="save"
 					>
 						Save
 					</button>
@@ -80,6 +84,13 @@ export default Vue.extend({
 		removeTier(t: string) {
 			// TODO: Implement this button
 			this.$store.commit(`draft/removeAccessTier`, t)
+		},
+		save() {
+			if (this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].accessTiers.length < 1) {
+				this.$toastError(`you must select at least one Tier of subscription to make this post premium`)
+			} else {
+				this.$emit(`close`)
+			}
 		},
 	},
 })
