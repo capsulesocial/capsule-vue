@@ -1,7 +1,7 @@
 <template>
 	<div
 		class="bg-darkBG dark:bg-gray5 modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
-		@click.self="$emit(`close`)"
+		@click.self="handleClose"
 	>
 		<!-- Container -->
 		<section class="popup">
@@ -89,6 +89,21 @@ export default Vue.extend({
 			if (this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].accessTiers.length < 1) {
 				this.$toastError(`you must select at least one Tier of subscription to make this post premium`)
 			} else {
+				this.$emit(`close`)
+			}
+		},
+		handleClose() {
+			if (this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].accessTiers.length > 0) {
+				this.$emit(`close`)
+				return
+			}
+			const postImages = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex]?.postImages
+			if (postImages && postImages.length > 0) {
+				this.$toastError(`You must select at least one tier`)
+				return
+			}
+			if (this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].accessTiers.length === 0) {
+				this.$store.commit(`draft/togglePremium`)
 				this.$emit(`close`)
 			}
 		},
