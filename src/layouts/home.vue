@@ -24,7 +24,7 @@
 				>
 					<!-- Title -->
 					<h1 v-if="profile" class="text-lightSecondaryText dark:text-gray1 text-3xl font-semibold xl:text-4xl">
-						Hello, {{ profile.name === `` ? `@` + profile.id : profile.name }}
+						Hello, {{ profile.name === `` ? `@` + profile.id : headerName }}
 					</h1>
 					<h1 v-else class="text-lightSecondaryText dark:text-gray1 text-3xl font-semibold xl:text-4xl">Hello!</h1>
 					<Nodes />
@@ -108,6 +108,7 @@ interface IData {
 	followers: Set<string>
 	bgImage: IBackground
 	showFollowers: boolean
+	headerName: string
 }
 
 export default Vue.extend({
@@ -131,6 +132,7 @@ export default Vue.extend({
 			followers: new Set(),
 			bgImage: backgrounds[0],
 			showFollowers: false,
+			headerName: ``,
 		}
 	},
 	async created() {
@@ -145,6 +147,9 @@ export default Vue.extend({
 		const [{ profile: myProfile }] = await Promise.all([getProfile(this.$store.state.session.id)])
 		this.profile = myProfile || createDefaultProfile(this.$store.state.session.id)
 		this.bgImage = this.$getBGImage(this.profile?.background)
+		if (this.profile.name !== ``) {
+			this.headerName = this.profile.name.split(` `)[0]
+		}
 		// Get avatar
 		if (this.profile && this.profile.avatar.length > 1) {
 			getPhotoFromIPFS(this.profile.avatar).then((p) => {
