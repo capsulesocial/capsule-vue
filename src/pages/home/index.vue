@@ -26,7 +26,7 @@
 			</div>
 			<!-- Top algorithms -->
 			<div v-if="algorithm === `TOP`" class="flex items-center relative modal-animation z-50">
-				<label for="filter" class="hidden lg:block text-gray5 dark:text-gray3">Sort by: </label>
+				<label for="filter" class="toggle hidden lg:block text-gray5 dark:text-gray3">Sort by: </label>
 				<button
 					id="filter"
 					class="toggle focus:outline-none ml-4 flex items-center justify-between rounded-lg border dark:border-gray3 px-4 text-sm shadow-lg dark:text-gray3"
@@ -34,7 +34,7 @@
 				>
 					<span class="toggle font-bold capitalize"> {{ topAlgorithm }} </span>
 					<ChevronUp v-if="showAlgorithmDropdown" />
-					<ChevronDown v-else />
+					<ChevronDown v-else class="toggle" />
 				</button>
 				<div
 					v-if="showAlgorithmDropdown"
@@ -190,6 +190,7 @@ export default Vue.extend({
 	mounted() {
 		const container = this.$refs.container as HTMLElement
 		container.addEventListener(`scroll`, this.handleScroll)
+		window.addEventListener(`click`, this.handleDropdown, false)
 	},
 	methods: {
 		getReposts,
@@ -316,6 +317,14 @@ export default Vue.extend({
 				offset: this.currentOffset,
 				timeframe,
 				following: followingParam,
+			}
+		},
+		handleDropdown(e: any): void {
+			if (!e.target || e.target.parentNode === null || e.target.parentNode.classList === undefined) {
+				return
+			}
+			if (!e.target.parentNode.classList.contains(`toggle`)) {
+				this.showAlgorithmDropdown = false
 			}
 		},
 	},
