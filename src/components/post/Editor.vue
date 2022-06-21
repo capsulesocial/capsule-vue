@@ -264,7 +264,25 @@ export default Vue.extend({
 			}
 			const metaButton = document.getElementById(`metaButton`)
 			// Handle updates to body
-			const onTextChange = () => {
+			const onTextChange = (_delta?: any, oldDelta?: any, source?: string) => {
+				if (this.qeditor) {
+					const currentContent = this.qeditor.getContents()
+					const diff = currentContent.diff(oldDelta)
+					let imageDeleted = false
+					if (source === `user` && diff.ops.length > 0) {
+						for (let i = 0; i < diff.ops.length; i++) {
+							const op: any = diff.ops[i]
+							if (op.insert && op.insert.image) {
+								imageDeleted = true
+								break
+							}
+						}
+						if (imageDeleted) {
+							this.refreshPostImages()
+							this.updateDraftPostImages()
+						}
+					}
+				}
 				this.$emit(`isWriting`, true)
 				if (metaButton) {
 					metaButton.classList.add(`hidemetaButton`)
@@ -334,21 +352,7 @@ export default Vue.extend({
 			const clean = turndownService.turndown(this.getInputHTML())
 			this.postImages = createPostImagesSet(clean, this.postImages)
 		},
-		async updatePostImages(
-			cid: string,
-			compressedImage: Blob,
-			imageName: string,
-			encryptionData?: IKeyData,
-		): Promise<{ error: string } | { success: boolean }> {
-			// If we have already added this image in the past, we don't need to reupload it to the server
-			if (this.postImages.has(cid)) {
-				return { success: true }
-			}
-			if (this.postImages.size === textLimits.post_images.max) {
-				this.waitingImage = false
-				return { error: `Cannot add more than ${textLimits.post_images.max} images in a post` }
-			}
-			this.postImages.set(cid, encryptionData ?? {})
+		updateDraftPostImages() {
 			this.$store.commit(
 				`draft/updatePostImages`,
 				Array.from(this.postImages.keys()).map((k) => {
@@ -367,6 +371,23 @@ export default Vue.extend({
 					return { imageCID: k }
 				}),
 			)
+		},
+		async updatePostImages(
+			cid: string,
+			compressedImage: Blob,
+			imageName: string,
+			encryptionData?: IKeyData,
+		): Promise<{ error: string } | { success: boolean }> {
+			// If we have already added this image in the past, we don't need to reupload it to the server
+			if (this.postImages.has(cid)) {
+				return { success: true }
+			}
+			if (this.postImages.size === textLimits.post_images.max) {
+				this.waitingImage = false
+				return { error: `Cannot add more than ${textLimits.post_images.max} images in a post` }
+			}
+			this.postImages.set(cid, encryptionData ?? {})
+			this.updateDraftPostImages()
 			await preUploadPhoto(cid, compressedImage, imageName, this.$store.state.session.id, this.encrypted)
 			return { success: true }
 		},
