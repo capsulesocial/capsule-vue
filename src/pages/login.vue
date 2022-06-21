@@ -162,10 +162,10 @@ export default Vue.extend({
 		}
 
 		try {
-			let res: ITorusResponse | null = null
+			let res: ITorusResponse | null | {} = null
 			try {
 				const info = await this.torus.getRedirectResult()
-				res = info.result as ITorusResponse
+				res = info.result as ITorusResponse | {}
 			} catch (err) {
 				// the error here can be safely dismissed (it will also error out in nominal cases)
 			}
@@ -173,6 +173,10 @@ export default Vue.extend({
 			if (!res) {
 				await this.torus.init({ skipSw: true })
 				return
+			}
+
+			if (!(`userInfo` in res)) {
+				throw new Error(`Malformed Torus response, please report this to Blogchain team.`)
 			}
 
 			if (res.userInfo.typeOfLogin === `discord`) {

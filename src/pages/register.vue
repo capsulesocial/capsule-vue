@@ -171,7 +171,7 @@ export default Vue.extend({
 					uxMode: `redirect`,
 					network: torusNetwork,
 				})
-				let res: ITorusResponse | null = null
+				let res: ITorusResponse | null | {} = null
 				try {
 					const info = await torus.getRedirectResult()
 					res = info.result as ITorusResponse
@@ -180,6 +180,10 @@ export default Vue.extend({
 				}
 
 				if (res) {
+					if (!(`userInfo` in res)) {
+						throw new Error(`Malformed Torus response, please report this to Blogchain team.`)
+					}
+
 					if (res.userInfo.typeOfLogin === `discord`) {
 						this.discordRevoke(res.userInfo.accessToken)
 					}
