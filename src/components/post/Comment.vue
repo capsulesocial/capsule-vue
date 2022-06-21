@@ -140,8 +140,8 @@
 						rows="4"
 						type="text"
 						placeholder="Reply.."
-						class="focus:outline-none w-4/5 overflow-y-auto py-1 px-2 text-sm leading-normal bg-lightBG dark:bg-darkBG text-lightPrimaryText dark:text-darkPrimaryText"
-						style="resize: none; height: auto"
+						class="focus:outline-none w-4/5 overflow-hidden py-1 px-2 text-sm leading-normal bg-lightBG dark:bg-darkBG text-lightPrimaryText dark:text-darkPrimaryText"
+						style="resize: none"
 						:style="`height:` + replyInputHeight + `px`"
 						@keydown="handleResize"
 					>
