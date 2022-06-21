@@ -35,6 +35,7 @@
 		/>
 		<BookmarksWidgets
 			v-if="$store.state.widgets.secondary === `bookmarks`"
+			ref="bookmarksWidget"
 			class="from-lightBGStart to-lightBGStop border-lightBorder dark:from-darkBGStart dark:to-darkBGStop mb-5 rounded-lg border bg-gradient-to-r shadow-lg backdrop-blur-lg backdrop-filter"
 			style="backdrop-filter: blur(10px)"
 		/>
@@ -97,6 +98,10 @@ export default Vue.extend({
 		}
 	},
 	methods: {
+		fetchBookmarks() {
+			// @ts-ignore-next-line
+			this.$refs.bookmarksWidget.fetchBookmarks()
+		},
 		updateFollowers(): void {
 			this.$emit(`updateFollowers`)
 		},

@@ -52,6 +52,7 @@
 						style="min-height: calc(100vh - 150px); height: calc(100vh - 150px)"
 					>
 						<Widgets
+							ref="widgets"
 							:followers="followers"
 							@updateFollowers="updateFollowers"
 							@overlay="toggleZIndex"
@@ -90,15 +91,6 @@ import { IBackground, backgrounds } from '@/config/backgrounds'
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import { getFollowersAndFollowing } from '@/backend/following'
-import { IPostResponse } from '@/backend/post'
-import { getBookmarksOfUser } from '@/backend/bookmarks'
-
-interface PostPreview {
-	title: string
-	authorID: string
-	featuredPhoto: string | null
-	postCID: string
-}
 
 interface IData {
 	profile: Profile | null
@@ -153,8 +145,6 @@ export default Vue.extend({
 		}
 		// Get followers and following
 		this.updateFollowers()
-		// Get recent bookmarks
-		this.fetchBookmarks()
 	},
 	methods: {
 		async updateFollowers() {
@@ -162,22 +152,11 @@ export default Vue.extend({
 			this.followers = followers
 			this.following = following
 		},
-		async fetchBookmarks() {
-			let bookmarks = await getBookmarksOfUser(this.$store.state.session.id)
-			bookmarks = bookmarks.reverse().slice(0, 2)
-			const bookmarkPreviews = bookmarks.map(async (p: IPostResponse) => {
-				const post: PostPreview = {
-					title: p.post.title,
-					authorID: p.post.authorID,
-					featuredPhoto: null,
-					postCID: p.post._id,
-				}
-				if (p.post.featuredPhotoCID) {
-					post.featuredPhoto = await getPhotoFromIPFS(p.post.featuredPhotoCID)
-				}
-				return post
-			})
-			this.$store.commit(`setRecentBookmarks`, await Promise.all(bookmarkPreviews))
+		fetchBookmarks() {
+			if (this.$store.state.widgets.secondary === `bookmarks`) {
+				// @ts-ignore-next-line
+				this.$refs.widgets.fetchBookmarks()
+			}
 		},
 		toggleZIndex() {
 			this.showWidgets = !this.showWidgets
