@@ -9,12 +9,12 @@
 		</header>
 		<!-- Change avatar -->
 		<div class="mb-5 flex w-full justify-center">
-			<button class="focus:outline-none" @click="handleImageClick">
-				<span class="absolute inline-flex">
+			<button class="focus:outline-none relative h-24 w-24" @click="handleImageClick">
+				<span class="absolute inline-flex w-24 h-24 top-0 left-0">
 					<Avatar :authorID="$store.state.session.id" :avatar="profilePic" :noClick="true" :size="`w-24 h-24`" />
 				</span>
 				<span
-					class="bg-darkOnPrimaryText text-lightOnPrimaryText relative inline-flex h-24 w-24 items-center justify-center rounded-lg bg-opacity-25"
+					class="bg-darkOnPrimaryText text-lightOnPrimaryText absolute inline-flex h-24 w-24 top-0 left-0 items-center justify-center rounded-lg bg-opacity-25"
 				>
 					<PencilIcon class="h-5 w-5 fill-current" />
 				</span>
