@@ -198,8 +198,16 @@ export default Vue.extend({
 			this.isLoading = true
 			const id = this.$store.state.session.id === `` ? `x` : this.$store.state.session.id
 			const followingParam: string | undefined = id === `x` ? undefined : this.$store.state.session.id
-			const payload = this.getTopPayload(alg, followingParam)
-			const posts = await getPosts({}, id, payload)
+			const payload = {
+				sort: alg,
+				limit: this.limit,
+				offset: this.currentOffset,
+				following: followingParam,
+			}
+			const posts =
+				alg === `TOP`
+					? await getPosts({ timeframe: this.convertTimeframe() }, id, payload)
+					: await getPosts({}, id, payload)
 			this.currentOffset += this.limit
 			this.isLoading = false
 			// End of unauth functions
@@ -283,18 +291,11 @@ export default Vue.extend({
 			this.showAlgorithmDropdown = false
 			this.sortFeed(this.algorithm)
 		},
-		getTopPayload(alg: Algorithm, followingParam: string | undefined) {
-			if (alg !== `TOP`) {
-				return {
-					sort: alg,
-					limit: this.limit,
-					offset: this.currentOffset,
-					following: followingParam,
-				}
-			}
+		convertTimeframe() {
 			let timeframe: undefined | `1` | `7` | `30` | `365` = `1`
 			switch (this.topAlgorithm) {
 				case `All Time`:
+					timeframe = undefined
 					break
 				case `Day`:
 					timeframe = `1`
@@ -311,13 +312,7 @@ export default Vue.extend({
 				default:
 					timeframe = undefined
 			}
-			return {
-				sort: alg,
-				limit: this.limit,
-				offset: this.currentOffset,
-				timeframe,
-				following: followingParam,
-			}
+			return timeframe
 		},
 		handleDropdown(e: any): void {
 			if (!e.target || e.target.parentNode === null || e.target.parentNode.classList === undefined) {
