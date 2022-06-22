@@ -320,6 +320,8 @@ export default Vue.extend({
 				getPhotoFromIPFS(this.visitProfile.avatar).then((p) => {
 					this.visitAvatar = p
 				})
+			} else {
+				this.visitAvatar = ``
 			}
 			this.updateFollowers()
 			const { followers, following } = await getFollowersAndFollowing(this.$route.params.id)
