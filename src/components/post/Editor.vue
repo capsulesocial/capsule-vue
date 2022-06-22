@@ -265,22 +265,15 @@ export default Vue.extend({
 			const metaButton = document.getElementById(`metaButton`)
 			// Handle updates to body
 			const onTextChange = (_delta?: any, oldDelta?: any, source?: string) => {
-				if (this.qeditor) {
+				if (this.qeditor && source === `user`) {
 					const currentContent = this.qeditor.getContents()
 					const diff = currentContent.diff(oldDelta)
-					let imageDeleted = false
-					if (source === `user` && diff.ops.length > 0) {
-						for (let i = 0; i < diff.ops.length; i++) {
-							const op: any = diff.ops[i]
-							if (op.insert && op.insert.image) {
-								imageDeleted = true
-								break
-							}
-						}
-						if (imageDeleted) {
-							this.refreshPostImages()
-							this.updateDraftPostImages()
-						}
+					const imageInCurrentContent = currentContent.ops.find((op: any) => op.insert && op.insert.image)
+					const imageInDiff = diff.ops.find((op: any) => op.insert && op.insert.image)
+					if (imageInCurrentContent || imageInDiff) {
+						const clean = turndownService.turndown(this.getInputHTML())
+						this.postImages = createPostImagesSet(clean, this.postImages)
+						this.updateDraftPostImages()
 					}
 				}
 				this.$emit(`isWriting`, true)
@@ -347,10 +340,6 @@ export default Vue.extend({
 		},
 		actionsUpload() {
 			document.getElementById(`getFile`)?.click()
-		},
-		refreshPostImages() {
-			const clean = turndownService.turndown(this.getInputHTML())
-			this.postImages = createPostImagesSet(clean, this.postImages)
 		},
 		updateDraftPostImages() {
 			this.$store.commit(
@@ -434,10 +423,8 @@ export default Vue.extend({
 			}
 
 			if (!file && (droppedHtml || droppedHtml !== ``)) {
-				this.refreshPostImages()
 				const content = await this.handleHtml(droppedHtml)
 				this.insertContent(content)
-				this.refreshPostImages()
 				return
 			}
 
@@ -501,7 +488,6 @@ export default Vue.extend({
 				this.$toastError(`image of type ${file.type} is invalid`)
 				return
 			}
-			this.refreshPostImages()
 			try {
 				this.waitingImage = true
 				this.toggleAddContent = false
@@ -520,10 +506,8 @@ export default Vue.extend({
 				}
 				this.insertContent({ cid, url })
 				this.waitingImage = false
-				this.refreshPostImages()
 			} catch (err: unknown) {
 				this.waitingImage = false
-				this.refreshPostImages()
 				this.$handleError(err)
 			}
 		},
@@ -555,10 +539,8 @@ export default Vue.extend({
 
 			// handle pasted content
 			if (pastedContent || pastedContent !== ``) {
-				this.refreshPostImages()
 				const content = await this.handleHtml(pastedContent)
 				this.insertContent(content)
-				this.refreshPostImages()
 				this.scrollToBottom(e)
 				return
 			}
