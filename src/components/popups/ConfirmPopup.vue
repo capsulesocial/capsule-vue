@@ -6,7 +6,7 @@
 		<section>
 			<div
 				style="width: 600px; backdrop-filter: blur(5px)"
-				class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation z-10 mr-5 overflow-y-auto rounded-lg bg-gradient-to-r p-6 pt-4 shadow-lg"
+				class="relative from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation z-10 mr-5 overflow-y-auto rounded-lg bg-gradient-to-r p-6 pt-4 shadow-lg"
 			>
 				<div class="sticky flex items-center justify-between">
 					<h2 class="text-lightPrimaryText dark:text-darkPrimaryText text-2xl font-semibold">All set?</h2>
