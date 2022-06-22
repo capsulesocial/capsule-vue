@@ -67,10 +67,18 @@
 				</div>
 			</div>
 			<!-- actions -->
-			<div class="flex items-center my-4">
-				<button class="text-primary py-2 text-sm flex flex-row items-center mr-10" @click="manageBilling">
+			<div class="flex flex-col lg:flex-row justify-between items-center my-4">
+				<button class="text-primary py-2 text-sm flex flex-row items-center" @click="manageBilling">
 					<CardIcon class="h-5 w-5 mr-2" />
 					<p class="focus:outline-none text-sm">Change billing method</p>
+				</button>
+				<button
+					v-if="s.isActive && (!s.renewalInfo || s.renewalInfo.status !== 'cancelled')"
+					class="text-neutral px-2 py-2 text-sm flex flex-row items-center"
+					@click="toggleSwitchPopup(s)"
+				>
+					<CheckCircleStaticIcon class="h-5 w-5 mr-2" />
+					<p class="focus:outline-none text-sm">Change tier</p>
 				</button>
 				<button
 					v-if="s.isActive && (!s.renewalInfo || s.renewalInfo.status !== 'cancelled')"
@@ -119,26 +127,33 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import Avatar from '@/components/Avatar.vue'
 import CancelIcon from '@/components/icons/CancelIcon.vue'
 import CardIcon from '@/components/icons/CardIcon.vue'
 import CloseIcon from '@/components/icons/X.vue'
+import CheckCircleStaticIcon from '@/components/icons/CheckCircleStatic.vue'
 import DownloadIcon from '@/components/icons/Download.vue'
 import BasicConfirmAlert from '@/components/popups/BasicConfirmAlert.vue'
 import { ActionType, ISubscriptionWithProfile, namespace as subscriptionNamespace } from '@/store/subscriptions'
 import { getSubscriptionTransactions, SubsTransaction } from '@/backend/subscription'
 import { getBillingPortalUrl, getCurrencySymbol } from '@/backend/payment'
+import {
+	createDefaultPaymentProfile,
+	namespace as paymentProfileNamespace,
+	PaymentProfile,
+} from '@/store/paymentProfile'
 
 interface IData {
 	avatar: string | ArrayBuffer
 	transactions: Array<SubsTransaction>
 	showAlert: boolean
+	paymentProfile: PaymentProfile
 }
 
 export default Vue.extend({
-	components: { Avatar, CancelIcon, CardIcon, CloseIcon, DownloadIcon, BasicConfirmAlert },
+	components: { Avatar, CancelIcon, CardIcon, CloseIcon, DownloadIcon, BasicConfirmAlert, CheckCircleStaticIcon },
 	props: {
 		s: {
 			type: Object as PropType<ISubscriptionWithProfile>,
@@ -150,17 +165,20 @@ export default Vue.extend({
 			avatar: ``,
 			transactions: [],
 			showAlert: false,
+			paymentProfile: createDefaultPaymentProfile(this.s.authorID),
 		}
 	},
 	computed: {
 		currency(): string {
 			return getCurrencySymbol(this.s.currency)
 		},
+		...mapGetters(paymentProfileNamespace, [`getPaymentProfile`]),
 	},
 	async created() {
 		if (this.s.avatar) {
 			this.avatar = await getPhotoFromIPFS(this.s.avatar)
 		}
+		this.$store.dispatch(`paymentProfile/fetchProfile`, { username: this.s.authorID })
 	},
 	mounted() {
 		getSubscriptionTransactions(this.$store.state.session.id, this.s.subscriptionId)
@@ -170,6 +188,7 @@ export default Vue.extend({
 			.catch((err) => {
 				this.$handleError(err)
 			})
+		this.paymentProfile = this.getPaymentProfile(this.s.authorID)
 	},
 	methods: {
 		downloadReceipt(url: string) {
@@ -185,6 +204,10 @@ export default Vue.extend({
 		},
 		toggleCancelAlert() {
 			this.showAlert = !this.showAlert
+		},
+		toggleSwitchPopup(subProfile: ISubscriptionWithProfile) {
+			this.$emit(`switchPopup`, { s: subProfile, avatar: this.avatar })
+			this.$emit(`close`)
 		},
 		async cancelSubscription(): Promise<void> {
 			try {
