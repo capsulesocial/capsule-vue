@@ -1,35 +1,35 @@
 <template>
 	<section>
-		<nav class="flex w-full flex-row justify-between px-5 pt-3 text-sm xl:px-6 xl:pt-4 rounded-t-lg">
+		<nav class="flex w-full flex-row justify-between text-sm rounded-t-lg">
 			<div class="flex" style="backdrop-filter: blur(10px)">
 				<button
 					:class="algorithm === `FOLLOWING` ? ` text-primary font-semibold` : `text-gray5 dark:text-gray3`"
-					class="flex items-center focus:outline-none h-full w-full pb-4 pr-6"
+					class="flex items-center focus:outline-none h-full w-full py-4 px-6"
 					@click="sortFeed('FOLLOWING')"
 				>
 					Following
 				</button>
 				<button
 					:class="algorithm === `NEW` ? ` text-primary font-semibold` : `text-gray5 dark:text-gray3`"
-					class="flex items-center px-6 focus:outline-none h-full w-full pb-4"
+					class="flex items-center px-6 focus:outline-none h-full w-full py-4"
 					@click="sortFeed('NEW')"
 				>
 					New
 				</button>
 				<button
 					:class="algorithm === `TOP` ? ` text-primary font-semibold` : `text-gray5 dark:text-gray3`"
-					class="flex items-center focus:outline-none h-full w-full pb-4 pl-6"
+					class="flex items-center focus:outline-none h-full w-full py-4 px-6"
 					@click="sortFeed('TOP')"
 				>
 					Top
 				</button>
 			</div>
 			<!-- Top algorithms -->
-			<div v-if="algorithm === `TOP`" class="flex items-center relative modal-animation z-50">
+			<div v-if="algorithm === `TOP`" class="flex items-center relative modal-animation z-50 lg:pr-6">
 				<label for="filter" class="toggle hidden lg:block text-gray5 dark:text-gray3">Sort by: </label>
 				<button
 					id="filter"
-					class="toggle focus:outline-none ml-4 flex items-center justify-between rounded-lg border dark:border-gray3 px-4 text-sm shadow-lg dark:text-gray3"
+					class="toggle focus:outline-none lg:ml-4 flex items-center justify-between rounded-lg border dark:border-gray3 px-4 text-sm shadow-lg dark:text-gray3"
 					@click="showAlgorithmDropdown = !showAlgorithmDropdown"
 				>
 					<span class="toggle font-bold capitalize"> {{ topAlgorithm }} </span>
@@ -38,8 +38,8 @@
 				</button>
 				<div
 					v-if="showAlgorithmDropdown"
-					class="hotzone border-lightBorder modal-animation absolute top-0 right-0 z-20 rounded-lg border bg-lightBG dark:bg-darkBG px-4 py-3 shadow-lg"
-					style="margin-top: 28px"
+					class="hotzone border-lightBorder modal-animation absolute top-0 right-0 z-20 rounded-lg border bg-lightBG dark:bg-darkBG px-4 py-3 shadow-lg mr-0 lg:mr-6"
+					style="margin-top: 40px"
 				>
 					<div
 						v-for="a in [`All Time`, `Day`, `Week`, `Month`, `Year`]"
