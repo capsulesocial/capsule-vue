@@ -214,7 +214,7 @@ export default Vue.extend({
 		},
 	},
 	created() {
-		const postImages = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].postImages
+		const { postImages, encrypted } = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex]
 		if (!Array.isArray(postImages)) {
 			return
 		}
@@ -224,8 +224,8 @@ export default Vue.extend({
 		}
 
 		postImages.forEach((pI) => {
-			if (`key` in pI && `counter` in pI && `imageCID` in pI) {
-				const item = { key: pI.key, counter: pI.counter }
+			if (`imageCID` in pI) {
+				const item = encrypted ? { key: pI.key, counter: pI.counter } : {}
 				this.postImages.set(pI.imageCID, item)
 			}
 		})
