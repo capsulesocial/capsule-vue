@@ -29,12 +29,12 @@
 				<label for="filter" class="toggle hidden lg:block text-gray5 dark:text-gray3">Sort by: </label>
 				<button
 					id="filter"
-					class="toggle focus:outline-none lg:ml-4 flex items-center justify-between rounded-lg border dark:border-gray3 px-4 text-sm shadow-lg dark:text-gray3"
+					class="toggle focus:outline-none lg:ml-4 flex items-center justify-between rounded-lg border dark:border-gray3 text-sm shadow-lg dark:text-gray3"
 					@click="showAlgorithmDropdown = !showAlgorithmDropdown"
 				>
-					<span class="toggle font-bold capitalize"> {{ topAlgorithm }} </span>
-					<ChevronUp v-if="showAlgorithmDropdown" />
-					<ChevronDown v-else class="toggle" />
+					<span class="toggle font-bold capitalize pl-4"> {{ topAlgorithm }} </span>
+					<ChevronUp v-if="showAlgorithmDropdown" class="pr-4" />
+					<ChevronDown v-else class="toggle pr-4" />
 				</button>
 				<div
 					v-if="showAlgorithmDropdown"
@@ -42,7 +42,7 @@
 					style="margin-top: 40px"
 				>
 					<div
-						v-for="a in [`All Time`, `Day`, `Week`, `Month`, `Year`]"
+						v-for="a in [`Day`, `Week`, `Month`, `Year`, `All Time`]"
 						:key="a"
 						class="hotzone flex justify-start items-start flex-col dark:text-gray3"
 					>
@@ -80,6 +80,11 @@
 					</div>
 				</div>
 				<img :src="require(`@/assets/images/brand/follow-window.webp`)" class="top-0 mt-24 xl:mt-0" />
+			</div>
+			<div v-if="!isLoading && algorithm === `TOP` && posts.length === 0">
+				<p class="text-gray5 dark:text-gray3 mb-5 mt-12 self-center text-center xl:mx-14 px-10">
+					It seems like there is no posts published in this time frame. you might try to change the sorting.
+				</p>
 			</div>
 			<!-- content -->
 			<article v-for="p in posts" :key="generateKey(p)">
@@ -136,7 +141,7 @@ interface IData {
 	currentOffset: number
 	limit: number
 	noMorePosts: boolean
-	topAlgorithm: `All Time` | `Day` | `Week` | `Month` | `Year`
+	topAlgorithm: `Day` | `Week` | `Month` | `Year` | `All Time`
 	showAlgorithmDropdown: boolean
 }
 
@@ -161,7 +166,7 @@ export default Vue.extend({
 			currentOffset: 0,
 			limit: 10,
 			noMorePosts: false,
-			topAlgorithm: `All Time`,
+			topAlgorithm: `Month`,
 			showAlgorithmDropdown: false,
 		}
 	},
@@ -286,7 +291,7 @@ export default Vue.extend({
 				}
 			}
 		},
-		setTopAlgorithm(a: `All Time` | `Day` | `Week` | `Month` | `Year`) {
+		setTopAlgorithm(a: `Day` | `Week` | `Month` | `Year` | `All Time`) {
 			this.topAlgorithm = a
 			this.showAlgorithmDropdown = false
 			this.sortFeed(this.algorithm)
@@ -294,9 +299,6 @@ export default Vue.extend({
 		convertTimeframe() {
 			let timeframe: undefined | `1` | `7` | `30` | `365` = `1`
 			switch (this.topAlgorithm) {
-				case `All Time`:
-					timeframe = undefined
-					break
 				case `Day`:
 					timeframe = `1`
 					break
@@ -308,6 +310,9 @@ export default Vue.extend({
 					break
 				case `Year`:
 					timeframe = `365`
+					break
+				case `All Time`:
+					timeframe = undefined
 					break
 				default:
 					timeframe = undefined
