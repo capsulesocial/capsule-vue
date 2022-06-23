@@ -31,7 +31,9 @@
 					class="toggle focus:outline-none lg:ml-4 flex items-center justify-between rounded-lg border dark:border-gray3 text-sm shadow-lg dark:text-gray3"
 					@click="showAlgorithmDropdown = !showAlgorithmDropdown"
 				>
-					<span class="toggle font-bold capitalize pl-4"> {{ topAlgorithm }} </span>
+					<span class="toggle font-bold capitalize pl-4">
+						{{ topAlgorithm }}
+					</span>
 					<ChevronUp v-if="showAlgorithmDropdown" class="pr-4" />
 					<ChevronDown v-else class="toggle pr-4" />
 				</button>
@@ -41,13 +43,13 @@
 					style="margin-top: 40px"
 				>
 					<div
-						v-for="a in [`Top today`, `This week`, `This month`, `This year`, `All time`]"
+						v-for="a in [`Today`, `This week`, `This month`, `This year`, `All time`]"
 						:key="a"
 						class="hotzone flex justify-start items-start flex-col dark:text-gray3"
 					>
 						<button
 							:class="topAlgorithm === a ? ` text-primary font-semibold` : `text-gray5 dark:text-gray3`"
-							class="hotzone focus:outline-none my-1 px-2"
+							class="hotzone focus:outline-none my-1 px-2 whitespace-nowrap"
 							@click="setTopAlgorithm(a)"
 						>
 							{{ a }}
@@ -140,7 +142,7 @@ interface IData {
 	currentOffset: number
 	limit: number
 	noMorePosts: boolean
-	topAlgorithm: `Top today` | `This week` | `This month` | `This year` | `All time`
+	topAlgorithm: `Today` | `This week` | `This month` | `This year` | `All time`
 	showAlgorithmDropdown: boolean
 }
 
@@ -290,7 +292,7 @@ export default Vue.extend({
 				}
 			}
 		},
-		setTopAlgorithm(a: `Top today` | `This week` | `This month` | `This year` | `All time`) {
+		setTopAlgorithm(a: `Today` | `This week` | `This month` | `This year` | `All time`) {
 			this.topAlgorithm = a
 			this.showAlgorithmDropdown = false
 			this.sortFeed(this.algorithm)
@@ -298,7 +300,7 @@ export default Vue.extend({
 		convertTimeframe() {
 			let timeframe: undefined | `1` | `7` | `30` | `365` = `1`
 			switch (this.topAlgorithm) {
-				case `Top today`:
+				case `Today`:
 					timeframe = `1`
 					break
 				case `This week`:
