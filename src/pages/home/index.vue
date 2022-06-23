@@ -26,15 +26,16 @@
 			</div>
 			<!-- Top algorithms -->
 			<div v-if="algorithm === `TOP`" class="flex items-center relative modal-animation z-50 lg:pr-6">
-				<label for="filter" class="toggle hidden lg:block text-gray5 dark:text-gray3">Sort by: </label>
 				<button
 					id="filter"
-					class="toggle focus:outline-none lg:ml-4 flex items-center justify-between rounded-lg border dark:border-gray3 px-4 text-sm shadow-lg dark:text-gray3"
+					class="toggle focus:outline-none lg:ml-4 flex items-center justify-between rounded-lg border dark:border-gray3 text-sm shadow-lg dark:text-gray3"
 					@click="showAlgorithmDropdown = !showAlgorithmDropdown"
 				>
-					<span class="toggle font-bold capitalize"> {{ topAlgorithm }} </span>
-					<ChevronUp v-if="showAlgorithmDropdown" />
-					<ChevronDown v-else class="toggle" />
+					<span class="toggle font-bold capitalize pl-4">
+						{{ topAlgorithm }}
+					</span>
+					<ChevronUp v-if="showAlgorithmDropdown" class="pr-4" />
+					<ChevronDown v-else class="toggle pr-4" />
 				</button>
 				<div
 					v-if="showAlgorithmDropdown"
@@ -42,13 +43,13 @@
 					style="margin-top: 40px"
 				>
 					<div
-						v-for="a in [`All Time`, `Day`, `Week`, `Month`, `Year`]"
+						v-for="a in [`Today`, `This week`, `This month`, `This year`, `All time`]"
 						:key="a"
 						class="hotzone flex justify-start items-start flex-col dark:text-gray3"
 					>
 						<button
 							:class="topAlgorithm === a ? ` text-primary font-semibold` : `text-gray5 dark:text-gray3`"
-							class="hotzone focus:outline-none my-1 px-2"
+							class="hotzone focus:outline-none my-1 px-2 whitespace-nowrap"
 							@click="setTopAlgorithm(a)"
 						>
 							{{ a }}
@@ -80,6 +81,11 @@
 					</div>
 				</div>
 				<img :src="require(`@/assets/images/brand/follow-window.webp`)" class="top-0 mt-24 xl:mt-0" />
+			</div>
+			<div v-if="!isLoading && algorithm === `TOP` && posts.length === 0">
+				<p class="text-gray5 dark:text-gray3 mb-5 mt-12 self-center text-center xl:mx-14 px-10">
+					It seems like there are no posts published in this timeframe. You might want to try expanding the time filter.
+				</p>
 			</div>
 			<!-- content -->
 			<article v-for="p in posts" :key="generateKey(p)">
@@ -136,7 +142,7 @@ interface IData {
 	currentOffset: number
 	limit: number
 	noMorePosts: boolean
-	topAlgorithm: `All Time` | `Day` | `Week` | `Month` | `Year`
+	topAlgorithm: `Today` | `This week` | `This month` | `This year` | `All time`
 	showAlgorithmDropdown: boolean
 }
 
@@ -161,7 +167,7 @@ export default Vue.extend({
 			currentOffset: 0,
 			limit: 10,
 			noMorePosts: false,
-			topAlgorithm: `All Time`,
+			topAlgorithm: `This month`,
 			showAlgorithmDropdown: false,
 		}
 	},
@@ -286,7 +292,7 @@ export default Vue.extend({
 				}
 			}
 		},
-		setTopAlgorithm(a: `All Time` | `Day` | `Week` | `Month` | `Year`) {
+		setTopAlgorithm(a: `Today` | `This week` | `This month` | `This year` | `All time`) {
 			this.topAlgorithm = a
 			this.showAlgorithmDropdown = false
 			this.sortFeed(this.algorithm)
@@ -294,20 +300,20 @@ export default Vue.extend({
 		convertTimeframe() {
 			let timeframe: undefined | `1` | `7` | `30` | `365` = `1`
 			switch (this.topAlgorithm) {
-				case `All Time`:
-					timeframe = undefined
-					break
-				case `Day`:
+				case `Today`:
 					timeframe = `1`
 					break
-				case `Week`:
+				case `This week`:
 					timeframe = `7`
 					break
-				case `Month`:
+				case `This month`:
 					timeframe = `30`
 					break
-				case `Year`:
+				case `This year`:
 					timeframe = `365`
+					break
+				case `All time`:
+					timeframe = undefined
 					break
 				default:
 					timeframe = undefined
