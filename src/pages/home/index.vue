@@ -26,7 +26,6 @@
 			</div>
 			<!-- Top algorithms -->
 			<div v-if="algorithm === `TOP`" class="flex items-center relative modal-animation z-50 lg:pr-6">
-				<label for="filter" class="toggle hidden lg:block text-gray5 dark:text-gray3">Sort by: </label>
 				<button
 					id="filter"
 					class="toggle focus:outline-none lg:ml-4 flex items-center justify-between rounded-lg border dark:border-gray3 text-sm shadow-lg dark:text-gray3"
@@ -42,7 +41,7 @@
 					style="margin-top: 40px"
 				>
 					<div
-						v-for="a in [`Day`, `Week`, `Month`, `Year`, `All Time`]"
+						v-for="a in [`Top today`, `This week`, `This month`, `This year`, `All time`]"
 						:key="a"
 						class="hotzone flex justify-start items-start flex-col dark:text-gray3"
 					>
@@ -141,7 +140,7 @@ interface IData {
 	currentOffset: number
 	limit: number
 	noMorePosts: boolean
-	topAlgorithm: `Day` | `Week` | `Month` | `Year` | `All Time`
+	topAlgorithm: `Top today` | `This week` | `This month` | `This year` | `All time`
 	showAlgorithmDropdown: boolean
 }
 
@@ -166,7 +165,7 @@ export default Vue.extend({
 			currentOffset: 0,
 			limit: 10,
 			noMorePosts: false,
-			topAlgorithm: `Month`,
+			topAlgorithm: `This month`,
 			showAlgorithmDropdown: false,
 		}
 	},
@@ -291,7 +290,7 @@ export default Vue.extend({
 				}
 			}
 		},
-		setTopAlgorithm(a: `Day` | `Week` | `Month` | `Year` | `All Time`) {
+		setTopAlgorithm(a: `Top today` | `This week` | `This month` | `This year` | `All time`) {
 			this.topAlgorithm = a
 			this.showAlgorithmDropdown = false
 			this.sortFeed(this.algorithm)
@@ -299,19 +298,19 @@ export default Vue.extend({
 		convertTimeframe() {
 			let timeframe: undefined | `1` | `7` | `30` | `365` = `1`
 			switch (this.topAlgorithm) {
-				case `Day`:
+				case `Top today`:
 					timeframe = `1`
 					break
-				case `Week`:
+				case `This week`:
 					timeframe = `7`
 					break
-				case `Month`:
+				case `This month`:
 					timeframe = `30`
 					break
-				case `Year`:
+				case `This year`:
 					timeframe = `365`
 					break
-				case `All Time`:
+				case `All time`:
 					timeframe = undefined
 					break
 				default:
