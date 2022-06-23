@@ -39,7 +39,14 @@
 			</article>
 			<TagCard v-for="t in tags" :key="t" :tag="t" class="my-2 mr-4 text-lg" />
 		</div>
-		<img v-if="checkRoute()" :src="require(`@/assets/images/brand/discover.webp`)" />
+		<img
+			v-if="checkRoute()"
+			:src="
+				$colorMode.dark
+					? require(`@/assets/images/brand/dark/discover.webp`)
+					: require(`@/assets/images/brand/light/discover.webp`)
+			"
+		/>
 	</article>
 </template>
 
