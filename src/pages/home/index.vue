@@ -84,7 +84,7 @@
 			</div>
 			<div v-if="!isLoading && algorithm === `TOP` && posts.length === 0">
 				<p class="text-gray5 dark:text-gray3 mb-5 mt-12 self-center text-center xl:mx-14 px-10">
-					It seems like there is no posts published in this time frame. you might try to change the sorting.
+					It seems like there are no posts published in this timeframe. You might want to try expanding the time filter.
 				</p>
 			</div>
 			<!-- content -->
