@@ -138,9 +138,10 @@
 					<div :class="isOpen5 ? `` : `is-closed`" class="message-body w-full xl:w-10/12">
 						<p class="message-content text-gray5 dark:text-gray3 py-2 text-sm">
 							Blogchain is created and operated by
-							<a href="http://capsule.social" target="_blank" class="text-primary">Capsule Social</a>. We are working to
-							add new payment features soon that will allow writers to get paid for the content they create, minus a
-							small transaction fee.
+							<a href="http://capsule.social" target="_blank" class="text-primary">Capsule Social</a>. Payment features
+							allow writers to get paid for the content they create. An industry-standard 10% transaction fee is
+							deducted from the payout to the author on Stripe payments. Cryptocurrency payments will be available in
+							the future.
 						</p>
 						<p class="message-content text-gray5 dark:text-gray3 pb-2 text-sm">
 							What we will <b>not</b> do, however, is sell ads or user information to third parties. We want to
