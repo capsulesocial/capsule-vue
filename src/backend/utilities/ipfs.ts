@@ -1,4 +1,4 @@
-import { create, Options, CID } from 'ipfs-core'
+import type { Options, IPFS, CID } from 'ipfs-core'
 import { bootstrapNodes } from './config'
 
 export interface IPFSInterface {
@@ -24,13 +24,23 @@ const ipfsConfig: Options = {
 	},
 }
 
+async function loadAndInitIPFS() {
+	const { create, CID: CIDObj } = await import(`ipfs-core`)
+	const ipfs = await create(ipfsConfig)
+
+	return { ipfs, CIDObj }
+}
+
 /**
  * An IPFS interface is created, but the node doesn't start right away. Generally we observed that the node starting procedure is slow and blocks the loading of the whole app.
  * Hence, we made the loading of the node async and we basically keep a cache of all the requests to IPFS while the node is initialising to dispatch them after the fact.
  */
-async function createIPFSInterface(): Promise<IPFSInterface> {
+function createIPFSInterface(): IPFSInterface {
 	let ipfsInitialised = false
-	const node = await create(ipfsConfig)
+	let node: IPFS | null = null
+	let CIDClass: typeof CID | null = null
+
+	const promise = loadAndInitIPFS()
 
 	const promiseCache: Array<{
 		func: (...args: any[]) => Promise<any>
@@ -71,6 +81,9 @@ async function createIPFSInterface(): Promise<IPFSInterface> {
 	}
 
 	async function ensureConnectedToBootstrapNodes() {
+		if (!node) {
+			throw new Error(`Not initialised!`)
+		}
 		// get a list of all addresses for all of the peers we're currently connected to
 		const peerAddrs = new Set<string>()
 		try {
@@ -95,6 +108,9 @@ async function createIPFSInterface(): Promise<IPFSInterface> {
 	}
 
 	const getData = async (cid: string) => {
+		if (!node) {
+			throw new Error(`Not initialised!`)
+		}
 		const content: Buffer[] = []
 		for await (const chunk of node.cat(cid)) {
 			content.push(Buffer.from(chunk))
@@ -103,7 +119,10 @@ async function createIPFSInterface(): Promise<IPFSInterface> {
 	}
 
 	const getJSONData = async <T>(cid: string) => {
-		const res = await node.dag.get(CID.parse(cid))
+		if (!node || !CIDClass) {
+			throw new Error(`Not initialised!`)
+		}
+		const res = await node.dag.get(CIDClass.parse(cid))
 		if (!res.value) {
 			throw new Error(`No data found!`)
 		}
@@ -111,21 +130,34 @@ async function createIPFSInterface(): Promise<IPFSInterface> {
 	}
 
 	const sendData = async (content: string | ArrayBuffer) => {
+		if (!node) {
+			throw new Error(`Not initialised!`)
+		}
 		const { cid } = await node.add(content)
 		return cid.toString()
 	}
 
 	const sendJSONData = async <T>(content: T) => {
+		if (!node) {
+			throw new Error(`Not initialised!`)
+		}
 		const cid = await node.dag.put(content)
 		return cid.toString()
 	}
 
 	const getNodes = async () => {
+		if (!node) {
+			throw new Error(`Not initialised!`)
+		}
 		const peers = await node.swarm.peers()
 		return peers.length
 	}
 
-	const initResult = node.start().then(() => {
+	const initResult = promise.then(async ({ ipfs, CIDObj }) => {
+		node = ipfs
+		CIDClass = CIDObj
+
+		await node.start()
 		ipfsInitialised = true
 		_maintainConnection()
 		_resolveCachedPromises()
@@ -143,12 +175,12 @@ async function createIPFSInterface(): Promise<IPFSInterface> {
 
 let _ipfs: IPFSInterface | null = null
 
-export async function initIPFS() {
+export function initIPFS() {
 	if (_ipfs) {
 		return _ipfs
 	}
 
-	_ipfs = await createIPFSInterface()
+	_ipfs = createIPFSInterface()
 	return _ipfs
 }
 
