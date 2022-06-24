@@ -17,6 +17,7 @@ const config: NuxtConfig = {
 			{ charset: `utf-8` },
 			{ name: `viewport`, content: `width=device-width, initial-scale=1` },
 			{
+				hid: `description`,
 				name: `description`,
 				content: `Blogchain makes it easy for writers, journalists and social critics to publish, grow an audience and get paid on a fast and beautiful Web3 platform. Sign up today and participate in decentralized discourse.`,
 			},

@@ -318,6 +318,7 @@ import {
 	isEncryptedPost,
 	getDecryptedContent,
 	IPostImageKey,
+	IPostResponseWithHidden,
 } from '@/backend/post'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
@@ -329,6 +330,7 @@ import { ActionType, namespace as paymentProfileNamespace } from '@/store/paymen
 
 interface IData {
 	post: Post | null
+	postMetadata: IPostResponseWithHidden | null
 	author: Profile | null
 	authorAvatar?: string | ArrayBuffer
 	content: string
@@ -388,6 +390,7 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			post: null,
+			postMetadata: null,
 			author: null,
 			authorAvatar: undefined,
 			content: ``,
@@ -420,13 +423,16 @@ export default Vue.extend({
 	head() {
 		return {
 			// @ts-ignore
-			title: this.post ? `${this.post.title} by ${this.post.authorID} on Blogchain` : `Loading...`,
+			title: this.postMetadata
+				? // @ts-ignore
+				  `${this.postMetadata.post.title} by ${this.postMetadata.post.authorID} on Blogchain`
+				: `Loading...`,
 			meta: [
 				{
-					hid: `post - ${this.$route.params.post}`,
-					name: `Post`,
+					hid: `description`,
+					name: `description`,
 					// @ts-ignore
-					content: `${this.post?.title} by ${this.post?.authorID} on Blogchain`,
+					content: this.postMetadata?.post.subtitle ?? this.postMetadata?.post.excerpt,
 				},
 			],
 		}
@@ -438,12 +444,46 @@ export default Vue.extend({
 		const sessionID = this.$store.state.session.id
 		const postCID = this.$route.params.post
 		const postMetadata = await getOnePost(postCID, sessionID || `x`)
+		this.postMetadata = postMetadata
 
 		if (postMetadata.hidden) {
 			this.$toastError(`This post has been hidden by the author`)
 			this.$emit(`showWarning`)
 		}
 
+		this.bookmarksCount = postMetadata.bookmarksCount
+		this.isBookmarked = postMetadata.bookmarked
+		this.repostCount = postMetadata.repostCount
+		this.commentsCount = postMetadata.commentsCount
+
+		// Get author profile
+		this.author = createDefaultProfile(postMetadata.post.authorID)
+
+		// Unauthenticated
+		if (sessionID === ``) {
+			return
+		}
+
+		try {
+			await this.fetchPaymentProfile({ username: postMetadata.post.authorID })
+		} catch (err) {
+			if (!(err instanceof AxiosError && err.response?.status === 404)) {
+				this.$handleError(err)
+			}
+		}
+		// This is a new post
+		if (this.$store.state.settings.recentlyPosted) {
+			this.$toastSuccess(`Your post has been successfully published on Blogchain`)
+			this.$store.commit(`settings/setRecentlyPosted`, false)
+			// Trigger share popup
+			setTimeout(() => {
+				this.showShare = true
+			}, 1500)
+		}
+	},
+	async mounted() {
+		const postCID = this.$route.params.post
+		const sessionID = this.$store.state.session.id
 		const post = await getPost(postCID)
 
 		verifyPostAuthenticity(post.data, post.sig, post.public_key).then((verified) => {
@@ -451,14 +491,6 @@ export default Vue.extend({
 				this.$toastError(`Post not verified!`)
 			}
 		})
-
-		try {
-			await this.fetchPaymentProfile({ username: post.data.authorID })
-		} catch (err) {
-			if (!(err instanceof AxiosError && err.response?.status === 404)) {
-				this.$handleError(err)
-			}
-		}
 
 		const postData = post.data
 
@@ -496,28 +528,22 @@ export default Vue.extend({
 			throw new Error(`Post is null!`)
 		}
 
+		// Get reading time
+		this.calculateReadingTime()
+
+		// Get caption height
+		const caption = document.getElementById(`photoCaption`)
+		this.captionHeight = caption?.offsetHeight
+
+		this.isLoading = false
+
 		// Get featured photo
 		if (this.post.featuredPhotoCID) {
 			getPhotoFromIPFS(this.post.featuredPhotoCID).then((p) => {
 				this.featuredPhoto = p
 			})
 		}
-		// Get author profile
-		this.author = createDefaultProfile(this.post.authorID)
-		getProfile(this.post.authorID).then((p) => {
-			const { profile } = p
-			if (profile) {
-				this.author = profile
-			}
-			if (profile && profile.avatar.length > 1) {
-				getPhotoFromIPFS(profile.avatar).then((photo) => {
-					this.authorAvatar = photo
-				})
-			}
-		})
 
-		// Get reading time
-		this.calculateReadingTime()
 		// Change URL to social-friendly link, preserve real for Vue router
 		createShareableLink(this.$route.params.post)
 			.then((friendlyUrl) => {
@@ -531,15 +557,17 @@ export default Vue.extend({
 				console.log(`Cannot replace state to shareable link: ${err.message}`)
 			})
 
-		// Get caption height
-		const caption = document.getElementById(`photoCaption`)
-		this.captionHeight = caption?.offsetHeight
-
-		this.bookmarksCount = postMetadata.bookmarksCount
-		this.isBookmarked = postMetadata.bookmarked
-		this.repostCount = postMetadata.repostCount
-		this.commentsCount = postMetadata.commentsCount
-		this.isLoading = false
+		getProfile(this.post.authorID).then((p) => {
+			const { profile } = p
+			if (profile) {
+				this.author = profile
+			}
+			if (profile && profile.avatar.length > 1) {
+				getPhotoFromIPFS(profile.avatar).then((photo) => {
+					this.authorAvatar = photo
+				})
+			}
+		})
 
 		// Unauthenticated
 		if (sessionID === ``) {
@@ -553,22 +581,12 @@ export default Vue.extend({
 			}
 		})
 		// Get reposts
-		const repostData = await getReposts({ authorID: this.$store.state.session.id }, {})
-		this.myReposts = new Set(repostData.map((p) => p.repost.postCID))
-	},
-	mounted() {
+		getReposts({ authorID: this.$store.state.session.id }, {}).then((repostData) => {
+			this.myReposts = new Set(repostData.map((p) => p.repost.postCID))
+		})
 		const container = document.getElementById(`post`)
 		if (container) {
 			container.addEventListener(`scroll`, this.handleScroll)
-		}
-		// This is a new post
-		if (this.$store.state.settings.recentlyPosted) {
-			this.$toastSuccess(`Your post has been successfully published on Blogchain`)
-			this.$store.commit(`settings/setRecentlyPosted`, false)
-			// Trigger share popup
-			setTimeout(() => {
-				this.showShare = true
-			}, 1500)
 		}
 	},
 	methods: {
