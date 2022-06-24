@@ -331,8 +331,8 @@
 					</div>
 					<div :class="isOpen13 ? `` : `is-closed`" class="message-body w-full xl:w-10/12">
 						<p class="message-content text-gray5 dark:text-gray3 py-2 text-sm">
-							An industry-standard 10% transaction fee is deducted from the payout. Stripe receives a 2.9% fee from the
-							payout, and 0.30 cents USD per transaction.
+							An industry-standard 10% platform fee is deducted from the payout, plus Stripe transaction fees, should
+							you elect to use Stripe as your payment processor.
 						</p>
 					</div>
 				</article>
