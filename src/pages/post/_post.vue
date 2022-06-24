@@ -4,6 +4,29 @@
 		class="modal-animation card-animation flex w-full justify-center"
 		:style="showQuoteRepost || showShare ? `background-color: #fff` : `backdrop-filter: blur(10px)`"
 	>
+		<!-- loader -->
+		<article v-if="isMetadataLoading" class="modal-animation fixed mt-20 flex w-full justify-center">
+			<div
+				class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
+				:style="`border-top: 2px solid` + $color.hex"
+			></div>
+		</article>
+		<div v-if="!isMetadataLoading && isContentLoading" class="lg:w-760 lg:max-w-760 h-fit w-full mt-20">
+			<!-- Featured Photo loader -->
+			<div class="h-72 w-full rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-6"></div>
+			<!-- Content loader -->
+			<div>
+				<div class="h-3 w-full rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-2"></div>
+				<div class="h-3 w-full rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-2"></div>
+				<div class="h-3 w-4/5 rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-4"></div>
+				<div class="h-6 w-1/2 rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-4"></div>
+				<div class="h-3 w-full rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-2"></div>
+				<div class="h-3 w-full rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-2"></div>
+				<div class="h-3 w-full rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-2"></div>
+				<div class="h-3 w-3/5 rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-6"></div>
+				<div class="h-3 w-2/5 rounded-xl bg-gray1 dark:bg-gray7 animate-pulse"></div>
+			</div>
+		</div>
 		<!-- Inner post area -->
 		<div v-if="post && author" class="lg:w-760 lg:max-w-760 h-fit w-full">
 			<!-- Magic header that disappears on scroll down -->
@@ -97,23 +120,6 @@
 					</article>
 					<!-- Private sensitive content -->
 					<div class="relative">
-						<!-- Featured Photo loader -->
-						<div
-							v-if="featuredPhoto !== null && !isMetadataLoading && isContentLoading"
-							class="h-72 w-full rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-6"
-						></div>
-						<!-- Content loader -->
-						<div v-if="!isMetadataLoading && isContentLoading">
-							<div class="h-3 w-full rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-2"></div>
-							<div class="h-3 w-full rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-2"></div>
-							<div class="h-3 w-4/5 rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-4"></div>
-							<div class="h-6 w-1/2 rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-4"></div>
-							<div class="h-3 w-full rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-2"></div>
-							<div class="h-3 w-full rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-2"></div>
-							<div class="h-3 w-full rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-2"></div>
-							<div class="h-3 w-3/5 rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-6"></div>
-							<div class="h-3 w-2/5 rounded-xl bg-gray1 dark:bg-gray7 animate-pulse"></div>
-						</div>
 						<!-- Featured Photo -->
 						<article
 							v-if="featuredPhoto !== null"
@@ -259,14 +265,13 @@
 					/>
 				</article>
 			</section>
-			<section v-else>Post not found</section>
 		</div>
-		<article v-show="isLoading" class="modal-animation fixed mt-20 flex w-full justify-center">
-			<div
-				class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
-				:style="`border-top: 2px solid` + $color.hex"
-			></div>
-		</article>
+		<section v-if="postNotFound">
+			<div class="items-center flex w-full flex-col p-5">
+				<h1 class="text-negative mt-16 text-center font-sans text-6xl font-bold mb-8">404</h1>
+				<h2 class="text-center text-2xl font-semibold dark:text-darkPrimaryText">Post not found</h2>
+			</div>
+		</section>
 		<!-- Show Post preview card on quote repost -->
 		<div v-if="showQuoteRepost">
 			<PostCard
@@ -360,7 +365,6 @@ interface IData {
 	showHeader: boolean
 	repostCount: number
 	commentsCount: number
-	isLoading: boolean
 	showQuoteRepost: boolean
 	following: Set<string>
 	bookmarksCount: number
@@ -377,6 +381,7 @@ interface IData {
 	postImageKeys: Array<IPostImageKey>
 	isMetadataLoading: boolean
 	isContentLoading: boolean
+	postNotFound: boolean
 }
 
 export default Vue.extend({
@@ -422,7 +427,6 @@ export default Vue.extend({
 			showHeader: true,
 			repostCount: 0,
 			commentsCount: 0,
-			isLoading: true,
 			showQuoteRepost: false,
 			following: new Set(),
 			bookmarksCount: 0,
@@ -437,8 +441,9 @@ export default Vue.extend({
 			enabledTiers: [],
 			subscriptionStatus: ``,
 			postImageKeys: [],
-			isMetadataLoading: false,
-			isContentLoading: false,
+			isMetadataLoading: true,
+			isContentLoading: true,
+			postNotFound: false,
 		}
 	},
 	head() {
@@ -464,34 +469,43 @@ export default Vue.extend({
 	async created() {
 		const sessionID = this.$store.state.session.id
 		const postCID = this.$route.params.post
-		const postMetadata = await getOnePost(postCID, sessionID || `x`)
-		this.postMetadata = postMetadata
-
-		if (postMetadata.hidden) {
-			this.$toastError(`This post has been hidden by the author`)
-			this.$emit(`showWarning`)
-		}
-
-		this.bookmarksCount = postMetadata.bookmarksCount
-		this.isBookmarked = postMetadata.bookmarked
-		this.repostCount = postMetadata.repostCount
-		this.commentsCount = postMetadata.commentsCount
-
-		// Get author profile
-		this.author = createDefaultProfile(postMetadata.post.authorID)
-
-		// Unauthenticated
-		if (sessionID === ``) {
-			return
-		}
-
 		try {
-			await this.fetchPaymentProfile({ username: postMetadata.post.authorID })
-		} catch (err) {
-			if (!(err instanceof AxiosError && err.response?.status === 404)) {
-				this.$handleError(err)
+			const postMetadata = await getOnePost(postCID, sessionID || `x`)
+			this.postMetadata = postMetadata
+			if (postMetadata.hidden) {
+				this.$toastError(`This post has been hidden by the author`)
+				this.$emit(`showWarning`)
 			}
+
+			this.bookmarksCount = postMetadata.bookmarksCount
+			this.isBookmarked = postMetadata.bookmarked
+			this.repostCount = postMetadata.repostCount
+			this.commentsCount = postMetadata.commentsCount
+
+			// Get author profile
+			this.author = createDefaultProfile(postMetadata.post.authorID)
+
+			// Unauthenticated
+			if (sessionID === ``) {
+				return
+			}
+
+			try {
+				await this.fetchPaymentProfile({ username: postMetadata.post.authorID })
+			} catch (err) {
+				if (!(err instanceof AxiosError && err.response?.status === 404)) {
+					this.$handleError(err)
+				}
+			}
+		} catch (err) {
+			this.postNotFound = true
+			this.isContentLoading = false
+			this.$toastError(err as string)
+			return
+		} finally {
+			this.isMetadataLoading = false
 		}
+
 		// This is a new post
 		if (this.$store.state.settings.recentlyPosted) {
 			this.$toastSuccess(`Your post has been successfully published on Blogchain`)
@@ -505,48 +519,49 @@ export default Vue.extend({
 	async mounted() {
 		const postCID = this.$route.params.post
 		const sessionID = this.$store.state.session.id
-		const post = await getPost(postCID)
+		try {
+			const post = await getPost(postCID)
+			verifyPostAuthenticity(post.data, post.sig, post.public_key).then((verified) => {
+				if (!verified) {
+					this.$toastError(`Post not verified!`)
+				}
+			})
 
-		verifyPostAuthenticity(post.data, post.sig, post.public_key).then((verified) => {
-			if (!verified) {
-				this.$toastError(`Post not verified!`)
-			}
-		})
+			const postData = post.data
 
-		const postData = post.data
-
-		if (isEncryptedPost(postData)) {
-			try {
-				const decrypted = await getDecryptedContent(postCID, postData.content, sessionID)
-				if (`content` in decrypted) {
-					this.content = decrypted.content
-					this.postImageKeys = decrypted.postImageKeys
-				} else {
-					// show proper error message according to retrieval status
-					// decrypted.status is of type `INSUFFICIENT_TIER` | `NOT_SUBSCRIBED`
-					this.enabledTiers = decrypted.enabledTiers
-					this.subscriptionStatus = decrypted.status
-					// this.$toastError(decrypted.status)
-					// Display premium post paywall
+			if (isEncryptedPost(postData)) {
+				try {
+					const decrypted = await getDecryptedContent(postCID, postData.content, sessionID)
+					if (`content` in decrypted) {
+						this.content = decrypted.content
+						this.postImageKeys = decrypted.postImageKeys
+					} else {
+						// show proper error message according to retrieval status
+						// decrypted.status is of type `INSUFFICIENT_TIER` | `NOT_SUBSCRIBED`
+						this.enabledTiers = decrypted.enabledTiers
+						this.subscriptionStatus = decrypted.status
+						// this.$toastError(decrypted.status)
+						// Display premium post paywall
+						this.showPaywall = true
+					}
+				} catch (err) {
 					this.showPaywall = true
+					if (err instanceof AxiosError && err.response && err.response.data.error) {
+						this.$toastError(err.response.data.error)
+					} else {
+						throw err
+					}
 				}
-			} catch (err) {
-				this.showPaywall = true
-				if (err instanceof AxiosError && err.response && err.response.data.error) {
-					this.$toastError(err.response.data.error)
-				} else {
-					throw err
-				}
+			} else {
+				this.content = post.data.content
 			}
-		} else {
-			this.content = post.data.content
-		}
 
-		this.post = post.data
-
-		if (!this.post) {
-			this.$toastError(`This post has not been found`)
-			throw new Error(`Post is null!`)
+			this.isContentLoading = false
+			this.post = post.data
+		} catch (err) {
+			this.$toastError(err as string)
+			this.postNotFound = true
+			return
 		}
 
 		// Get reading time
@@ -555,8 +570,6 @@ export default Vue.extend({
 		// Get caption height
 		const caption = document.getElementById(`photoCaption`)
 		this.captionHeight = caption?.offsetHeight
-
-		this.isLoading = false
 
 		// Get featured photo
 		if (this.post.featuredPhotoCID) {
@@ -589,6 +602,10 @@ export default Vue.extend({
 				})
 			}
 		})
+		const container = document.getElementById(`post`)
+		if (container) {
+			container.addEventListener(`scroll`, this.handleScroll)
+		}
 
 		// Unauthenticated
 		if (sessionID === ``) {
@@ -605,10 +622,6 @@ export default Vue.extend({
 		getReposts({ authorID: this.$store.state.session.id }, {}).then((repostData) => {
 			this.myReposts = new Set(repostData.map((p) => p.repost.postCID))
 		})
-		const container = document.getElementById(`post`)
-		if (container) {
-			container.addEventListener(`scroll`, this.handleScroll)
-		}
 	},
 	methods: {
 		getReposts,
