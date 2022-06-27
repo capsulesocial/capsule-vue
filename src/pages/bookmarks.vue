@@ -10,13 +10,20 @@
 			<BookmarksFilter class="modal-animation mt-2 sm:mt-0" :filter="filter" @clicked="setSort" />
 		</div>
 		<div class="min-h-120 h-120 lg:min-h-220 lg:h-220 w-full overflow-y-auto">
-			<nuxt-child :posts="posts" :followingList="following" :toggleFriend="toggleFriend" :isLoading="isLoading" />
+			<nuxt-child
+				:posts="posts"
+				:followingList="following"
+				:toggleFriend="toggleFriend"
+				:isLoading="isLoading"
+				:noMorePosts="noMorePosts"
+				@fetchPosts="handleScroll"
+			/>
 		</div>
 	</div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { PropType } from 'vue'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
 import { IPostResponse } from '@/backend/post'
 import BookmarksFilter from '@/components/BookmarksFilter.vue'
@@ -43,6 +50,10 @@ export default Vue.extend({
 		filter: {
 			type: String,
 			default: `BOOKMARK_DESC`,
+		},
+		noMorePosts: {
+			type: Boolean as PropType<boolean>,
+			required: true,
 		},
 	},
 	data(): IData {
@@ -81,6 +92,9 @@ export default Vue.extend({
 		setSort(sort: BookmarkSort) {
 			// When a user selects a filter
 			this.$emit(`clicked`, sort)
+		},
+		handleScroll() {
+			this.$emit(`fetchPosts`)
 		},
 	},
 })
