@@ -200,15 +200,10 @@ export default Vue.extend({
 		window.addEventListener(`click`, this.handleDropdown, false)
 	},
 	updated() {
-		if (this.$store.state.settings.lastActivePost !== ``) {
-			const lastClickedPost = document.getElementById(`active`)
-			if (lastClickedPost) {
-				if (lastClickedPost.parentElement) {
-					lastClickedPost.parentElement.scrollTop = lastClickedPost.offsetTop
-				}
-			} else {
-				console.log(`not in this batch, searching for more`)
-				this.loadPosts()
+		const lastClickedPost = document.getElementById(`active`)
+		if (lastClickedPost) {
+			if (lastClickedPost.parentElement) {
+				lastClickedPost.parentElement.scrollTop = lastClickedPost.offsetTop
 			}
 		}
 	},
@@ -261,7 +256,6 @@ export default Vue.extend({
 			return this.posts
 		},
 		async loadPosts() {
-			console.log(`loadPosts`)
 			const res = await this.fetchPosts(this.algorithm)
 			this.posts = this.posts.concat(res)
 			// When no more posts
