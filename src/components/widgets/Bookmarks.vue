@@ -2,42 +2,48 @@
 	<article class="py-4">
 		<h3 class="text-lightPrimaryText dark:text-darkPrimaryText px-6 pb-4 text-base font-semibold">Recent Bookmarks</h3>
 		<!-- Loading spinner -->
-		<div v-if="isLoading" class="modal-animation flex w-full justify-center z-20 my-5">
-			<div
-				class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
-				:style="`border-top: 2px solid` + $color.hex"
-			></div>
+		<div v-if="notLoggedIn" class="text-gray5 dark:text-gray3 text-sm px-6 pb-4">
+			<button class="text-primary focus:outline-none ml-1" @click="$router.push(`/register`)">Sign up</button>
+			to create drafts and save content
 		</div>
-		<!-- No posts -->
 		<div v-else>
-			<article v-if="recentBookmarks.length == 0">
-				<p class="text-gray5 dark:text-gray3 mb-4 px-6 text-sm">
-					<span>
-						You haven't bookmarked any posts yet. Click the bookmark icon on a post to add it to your bookmark list
-					</span>
-				</p>
-			</article>
-			<nuxt-link
-				v-for="p in recentBookmarks"
-				:key="p.cid"
-				:to="`/post/` + p.cid"
-				class="flex w-full flex-row items-center px-6 pb-4"
-			>
-				<!-- Left side: title and author name -->
-				<div class="flex flex-grow flex-col">
-					<h5 class="font-semibold dark:text-darkSecondaryText">{{ p.title }}</h5>
-					<h6 class="text-gray5 dark:text-gray3">By {{ p.author }}</h6>
-				</div>
-				<!-- Right side: featured photo -->
-				<div class="w-24 hidden xl:block">
-					<img
-						v-if="p.featuredPhoto"
-						:src="p.featuredPhoto"
-						class="h-16 w-full flex-shrink-0 rounded-lg object-cover"
-					/>
-				</div>
-			</nuxt-link>
-			<nuxt-link to="/bookmarks" class="italics text-primary px-6 text-sm">Show all</nuxt-link>
+			<div v-if="isLoading" class="modal-animation flex w-full justify-center z-20 my-5">
+				<div
+					class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
+					:style="`border-top: 2px solid` + $color.hex"
+				></div>
+			</div>
+			<!-- No posts -->
+			<div v-else>
+				<article v-if="recentBookmarks.length == 0">
+					<p class="text-gray5 dark:text-gray3 mb-4 px-6 text-sm">
+						<span>
+							You haven't bookmarked any posts yet. Click the bookmark icon on a post to add it to your bookmark list
+						</span>
+					</p>
+				</article>
+				<nuxt-link
+					v-for="p in recentBookmarks"
+					:key="p.cid"
+					:to="`/post/` + p.cid"
+					class="flex w-full flex-row items-center px-6 pb-4"
+				>
+					<!-- Left side: title and author name -->
+					<div class="flex flex-grow flex-col">
+						<h5 class="font-semibold dark:text-darkSecondaryText">{{ p.title }}</h5>
+						<h6 class="text-gray5 dark:text-gray3">By {{ p.author }}</h6>
+					</div>
+					<!-- Right side: featured photo -->
+					<div class="w-24 hidden xl:block">
+						<img
+							v-if="p.featuredPhoto"
+							:src="p.featuredPhoto"
+							class="h-16 w-full flex-shrink-0 rounded-lg object-cover"
+						/>
+					</div>
+				</nuxt-link>
+				<nuxt-link to="/bookmarks" class="italics text-primary px-6 text-sm">Show all</nuxt-link>
+			</div>
 		</div>
 	</article>
 </template>
@@ -58,6 +64,7 @@ interface PostPreview {
 interface IData {
 	recentBookmarks: PostPreview[]
 	isLoading: boolean
+	notLoggedIn: boolean
 }
 
 export default Vue.extend({
@@ -65,9 +72,15 @@ export default Vue.extend({
 		return {
 			recentBookmarks: [],
 			isLoading: true,
+			notLoggedIn: false,
 		}
 	},
 	async created() {
+		if (this.$store.state.session.id === ``) {
+			this.notLoggedIn = true
+			this.isLoading = false
+			return
+		}
 		await this.fetchBookmarks()
 	},
 	methods: {
