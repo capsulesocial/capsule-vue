@@ -87,14 +87,14 @@
 								v-if="tier.monthlyEnabled && selectedPeriod === `month`"
 								class="font-semibold text-lg mr-2 dark:text-darkPrimaryText"
 							>
-								{{ displayCurrency(paymentProfile.currency) }}{{ tier.monthlyPrice }}
+								{{ displayCurrency(paymentProfile.currency) }}{{ tier.monthlyPrice.toLocaleString() }}
 								<span class="text-gray5 dark:text-gray3">/month</span>
 							</div>
 							<div
 								v-if="tier.yearlyEnabled && selectedPeriod === `year`"
 								class="font-semibold text-lg mr-2 dark:text-darkPrimaryText"
 							>
-								{{ displayCurrency(paymentProfile.currency) }}{{ tier.yearlyPrice }}
+								{{ displayCurrency(paymentProfile.currency) }}{{ tier.yearlyPrice.toLocaleString() }}
 								<span class="text-gray5 dark:text-gray3">/year</span>
 							</div>
 						</button>
@@ -122,7 +122,11 @@
 						</p>
 						<div v-if="selectedTier !== null" class="font-semibold text-lg mb-4 dark:text-darkPrimaryText">
 							{{ displayCurrency(paymentProfile.currency)
-							}}{{ selectedPeriod === `month` ? selectedTier.monthlyPrice : selectedTier.yearlyPrice }}
+							}}{{
+								selectedPeriod === `month`
+									? selectedTier.monthlyPrice.toLocaleString()
+									: selectedTier.yearlyPrice.toLocaleString()
+							}}
 							<span class="text-gray5 dark:text-gray3">/{{ selectedPeriod }}</span>
 						</div>
 					</div>
@@ -193,7 +197,11 @@
 						</p>
 						<div v-if="selectedTier !== null" class="font-semibold text-lg dark:text-darkPrimaryText opacity-50">
 							{{ displayCurrency(paymentProfile.currency)
-							}}{{ selectedPeriod === `month` ? selectedTier.monthlyPrice : selectedTier.yearlyPrice }}
+							}}{{
+								selectedPeriod === `month`
+									? selectedTier.monthlyPrice.toLocaleString()
+									: selectedTier.yearlyPrice.toLocaleString()
+							}}
 						</div>
 					</div>
 					<p class="text-negative text-sm">
@@ -204,7 +212,11 @@
 						<p class="text-base text-center text-gray5 dark:text-gray3">Total to pay today</p>
 						<div v-if="selectedTier !== null" class="font-semibold text-lg dark:text-darkPrimaryText">
 							{{ displayCurrency(paymentProfile.currency)
-							}}{{ selectedPeriod === `month` ? selectedTier.monthlyPrice : selectedTier.yearlyPrice }}
+							}}{{
+								selectedPeriod === `month`
+									? selectedTier.monthlyPrice.toLocaleString()
+									: selectedTier.yearlyPrice.toLocaleString()
+							}}
 						</div>
 					</div>
 					<!-- Payment infos -->

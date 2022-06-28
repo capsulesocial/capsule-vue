@@ -41,7 +41,7 @@
 			<CrownIcon class="text-neutral mr-2 w-5 h-5" /><span class="truncate text-neutral">{{ s.tier.name }}</span>
 		</div>
 		<div class="flex justify-center items-end mb-4 text-neutral">
-			<p class="font-semibold text-lg">{{ currency }}{{ s.amount }}</p>
+			<p class="font-semibold text-lg">{{ currency }}{{ s.amount.toLocaleString() }}</p>
 			<p>/</p>
 			<p>{{ s.period }}</p>
 		</div>
