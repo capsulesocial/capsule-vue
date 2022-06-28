@@ -181,7 +181,7 @@ export default Vue.extend({
 			try {
 				const posts = await getBookmarksOfUser(
 					this.$store.state.session.id,
-					category,
+					category ?? this.activeFilter,
 					bookmarkSort,
 					this.limit,
 					this.offset,

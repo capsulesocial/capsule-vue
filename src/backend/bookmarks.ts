@@ -27,7 +27,7 @@ export async function getBookmarksOfUser(
 	limit = 10,
 	offset = 0,
 ): Promise<IPostResponse[]> {
-	const response = await axios.get(`${nodeUrl()}/bookmark/${userID}`, { params: { sort, limit, offset } })
+	const response = await axios.get(`${nodeUrl()}/bookmark/${userID}`, { params: { sort, limit, offset, category } })
 
 	const bookmarks: IPostResponse[] = response.data.data.bookmarks
 
