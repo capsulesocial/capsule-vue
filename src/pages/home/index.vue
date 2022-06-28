@@ -132,14 +132,14 @@ import PostCard from '@/components/post/Card.vue'
 import ChevronUp from '@/components/icons/ChevronUp.vue'
 import ChevronDown from '@/components/icons/ChevronDown.vue'
 import { namespace as SubscriptionsNamespace } from '@/store/subscriptions'
-import { getPosts, Algorithm, IRepostResponse, IPostResponse } from '@/backend/post'
+import { getPosts, IRepostResponse, IPostResponse } from '@/backend/post'
 import { getReposts } from '@/backend/reposts'
 import { followChange } from '@/backend/following'
 
 interface IData {
 	posts: Array<IRepostResponse | IPostResponse>
 	isLoading: boolean
-	algorithm: Algorithm
+	algorithm: `TOP` | `NEW` | `FOLLOWING`
 	currentOffset: number
 	limit: number
 	noMorePosts: boolean
@@ -162,7 +162,7 @@ export default Vue.extend({
 	},
 	data(): IData {
 		return {
-			algorithm: this.$store.state.session.id === `` ? `TOP` : `FOLLOWING`,
+			algorithm: this.$store.state.session.homeFeed,
 			posts: [],
 			isLoading: true,
 			currentOffset: 0,
@@ -209,7 +209,7 @@ export default Vue.extend({
 	},
 	methods: {
 		getReposts,
-		async fetchPosts(alg: Algorithm) {
+		async fetchPosts(alg: `TOP` | `NEW` | `FOLLOWING`) {
 			this.isLoading = true
 			const id = this.$store.state.session.id === `` ? `x` : this.$store.state.session.id
 			const followingParam: string | undefined = id === `x` ? undefined : this.$store.state.session.id
@@ -237,7 +237,7 @@ export default Vue.extend({
 			})
 			return posts
 		},
-		async sortFeed(a: Algorithm) {
+		async sortFeed(a: `TOP` | `NEW` | `FOLLOWING`) {
 			// Unauth
 			if (this.$store.state.session.id === `` && a === `FOLLOWING`) {
 				this.$store.commit(`settings/toggleUnauthPopup`)
@@ -250,6 +250,7 @@ export default Vue.extend({
 			this.currentOffset = 0
 			this.isLoading = true
 			this.algorithm = a
+			this.$store.commit(`session/updateHomeFeed`, a)
 			this.posts = await this.fetchPosts(a)
 			return this.posts
 		},
