@@ -165,7 +165,7 @@ export default Vue.extend({
 			algorithm: this.$store.state.session.id === `` ? `TOP` : `FOLLOWING`,
 			posts: [],
 			isLoading: true,
-			currentOffset: 40,
+			currentOffset: 0,
 			limit: 10,
 			noMorePosts: false,
 			topAlgorithm: `This month`,
@@ -201,15 +201,15 @@ export default Vue.extend({
 	},
 	updated() {
 		const lastClickedPost = document.getElementById(`active`)
-		console.log(lastClickedPost)
 		if (lastClickedPost) {
-			lastClickedPost.scrollIntoView({ block: `start` })
+			if (lastClickedPost.parentElement) {
+				lastClickedPost.parentElement.scrollTop = lastClickedPost.offsetTop
+			}
 		}
 	},
 	methods: {
 		getReposts,
 		async fetchPosts(alg: Algorithm) {
-			console.log(this.currentOffset)
 			this.isLoading = true
 			const id = this.$store.state.session.id === `` ? `x` : this.$store.state.session.id
 			const followingParam: string | undefined = id === `x` ? undefined : this.$store.state.session.id
