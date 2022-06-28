@@ -9,6 +9,7 @@ export interface SettingState {
 	color: string
 	recentlyPosted: boolean
 	recentlyInSettings: boolean
+	lastActivePost: string
 	showUnauthPopup: boolean
 }
 
@@ -17,6 +18,7 @@ export const state = (): SettingState => ({
 	color: `Green`,
 	recentlyPosted: false,
 	recentlyInSettings: false,
+	lastActivePost: ``,
 	showUnauthPopup: false,
 })
 
@@ -27,6 +29,7 @@ export const MutationType = {
 	CHANGE_COLOR: `changeColor`,
 	SET_RECENTLY_POSTED: `setRecentlyPosted`,
 	SET_RECENTLY_IN_SETTINGS: `setRecentlyInSettings`,
+	SET_LAST_ACTIVE_POST: `setRecentlyInSettings`,
 	TOGGLE_UNAUTH_POPUP: `toggleUnauthPopup`,
 }
 
@@ -42,6 +45,9 @@ export const mutations: MutationTree<SettingState> = {
 	},
 	[MutationType.SET_RECENTLY_IN_SETTINGS]: (state, recentlyInSettings: boolean) => {
 		state.recentlyInSettings = recentlyInSettings
+	},
+	[MutationType.SET_LAST_ACTIVE_POST]: (state, newLastActivePost: string) => {
+		state.lastActivePost = newLastActivePost
 	},
 	[MutationType.TOGGLE_UNAUTH_POPUP]: (state, c: boolean = !state.showUnauthPopup) => {
 		state.showUnauthPopup = c

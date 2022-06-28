@@ -209,7 +209,7 @@
 		</portal>
 		<!-- Feed view -->
 		<div v-if="this.$route.name !== `post-post`">
-			<div class="card">
+			<div :id="activePost === postCID ? `active` : ``" class="card">
 				<div
 					class="sticky top-0 border-b dark:border-darkBG dark:border-opacity-25 py-4 px-5 xl:py-5 xl:px-6 transition ease-in-out hover:bg-gray1 dark:hover:bg-darkBG hover:bg-opacity-25 dark:hover:bg-opacity-25"
 					style="backdrop-filter: blur(10px)"
@@ -400,7 +400,7 @@
 						<div class="mt-4 flex flex-col justify-between xl:flex-row">
 							<!-- Left side: Title, subtitle / preview, tags -->
 							<div class="mr-4 flex w-full flex-col justify-between">
-								<nuxt-link :to="'/post/' + postCID">
+								<nuxt-link :to="'/post/' + postCID" @click="activePost = postCID">
 									<div class="flex max-w-full flex-col overflow-hidden pr-4">
 										<div class="flex flex-row w-full justify-between">
 											<h3 class="break-words pb-2 text-lg font-semibold dark:text-darkPrimaryText">
