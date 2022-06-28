@@ -173,12 +173,19 @@ export default Vue.extend({
 			this.fetchPosts(this.activeFilter, this.activeSort)
 		},
 		async fetchPosts(category?: string, sort?: BookmarkSort) {
+			const bookmarkSort = sort || this.activeSort
 			if (this.isLoading || this.noMorePosts) {
 				return
 			}
 			this.isLoading = true
 			try {
-				const posts = await getBookmarksOfUser(this.$store.state.session.id, category, sort, this.limit, this.offset)
+				const posts = await getBookmarksOfUser(
+					this.$store.state.session.id,
+					category,
+					bookmarkSort,
+					this.limit,
+					this.offset,
+				)
 				if (posts.length < this.limit) {
 					// no more posts
 					this.noMorePosts = true
