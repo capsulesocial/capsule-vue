@@ -54,6 +54,7 @@
 	"dependencies": {
 		"@braintree/sanitize-url": "^6.0.0",
 		"@nuxtjs/dotenv": "^1.4.1",
+		"@nuxtjs/robots": "^2.5.0",
 		"@stripe/stripe-js": "^1.28.0",
 		"@tailwindcss/typography": "^0.4.1",
 		"@toruslabs/customauth": "^9.1.0",

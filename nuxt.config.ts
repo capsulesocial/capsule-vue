@@ -129,7 +129,25 @@ const config: NuxtConfig = {
 	},
 
 	// Modules: https://go.nuxtjs.dev/config-modules
-	modules: [[`@nuxtjs/dotenv`, { path: `./` }], `portal-vue/nuxt`],
+	modules: [[`@nuxtjs/dotenv`, { path: `./` }], `portal-vue/nuxt`, `@nuxtjs/robots`],
+	robots: [
+		{
+			UserAgent: `*`,
+			Disallow: `/bookmarks`,
+		},
+		{
+			UserAgent: `*`,
+			Disallow: `/settings`,
+		},
+		{
+			UserAgent: `*`,
+			Disallow: `/_nuxt`,
+		},
+		{
+			UserAgent: `*`,
+			Disallow: `/subscriptions`,
+		},
+	],
 
 	// Build Configuration: https://go.nuxtjs.dev/config-build
 	build: {
