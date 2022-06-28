@@ -105,9 +105,9 @@
 							{{ subtitle }}
 						</h2>
 					</article>
-					<div v-if="!content && !showPaywall && !featuredPhoto" class="lg:w-760 lg:max-w-760 h-fit w-full mt-20">
+					<div v-if="!content && !showPaywall" class="lg:w-760 lg:max-w-760 h-fit w-full mt-6">
 						<!-- Featured Photo loader -->
-						<div class="h-72 w-full rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-6"></div>
+						<div v-if="featuredPhoto" class="h-72 w-full rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-6"></div>
 						<!-- Content loader -->
 						<div>
 							<div class="h-3 w-full rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-2"></div>
