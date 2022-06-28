@@ -5,47 +5,15 @@
 		:style="showQuoteRepost || showShare ? `background-color: #fff` : `backdrop-filter: blur(10px)`"
 	>
 		<!-- loader -->
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> cb79b7c (feat: load post metadata gradually)
 		<article
 			v-if="!title || !authorID || !timestamp || !category"
 			class="modal-animation fixed mt-20 flex w-full justify-center"
 		>
-<<<<<<< HEAD
-=======
-		<article v-if="isMetadataLoading" class="modal-animation fixed mt-20 flex w-full justify-center">
->>>>>>> 2e287c1 (feat: 404 message and loading binding)
-=======
->>>>>>> cb79b7c (feat: load post metadata gradually)
 			<div
 				class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
 				:style="`border-top: 2px solid` + $color.hex"
 			></div>
 		</article>
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-		<div v-if="!isMetadataLoading && isContentLoading" class="lg:w-760 lg:max-w-760 h-fit w-full mt-20">
-			<!-- Featured Photo loader -->
-			<div class="h-72 w-full rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-6"></div>
-			<!-- Content loader -->
-			<div>
-				<div class="h-3 w-full rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-2"></div>
-				<div class="h-3 w-full rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-2"></div>
-				<div class="h-3 w-4/5 rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-4"></div>
-				<div class="h-6 w-1/2 rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-4"></div>
-				<div class="h-3 w-full rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-2"></div>
-				<div class="h-3 w-full rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-2"></div>
-				<div class="h-3 w-full rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-2"></div>
-				<div class="h-3 w-3/5 rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-6"></div>
-				<div class="h-3 w-2/5 rounded-xl bg-gray1 dark:bg-gray7 animate-pulse"></div>
-			</div>
-		</div>
->>>>>>> 2e287c1 (feat: 404 message and loading binding)
-=======
->>>>>>> cb79b7c (feat: load post metadata gradually)
 		<!-- Inner post area -->
 		<div v-else class="lg:w-760 lg:max-w-760 h-fit w-full">
 			<!-- Magic header that disappears on scroll down -->
@@ -137,15 +105,9 @@
 							{{ subtitle }}
 						</h2>
 					</article>
-<<<<<<< HEAD
 					<div v-if="!content && !showPaywall" class="lg:w-760 lg:max-w-760 h-fit w-full mt-6">
 						<!-- Featured Photo loader -->
 						<div v-if="featuredPhoto" class="h-72 w-full rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-6"></div>
-=======
-					<div v-if="!content && !showPaywall && !featuredPhoto" class="lg:w-760 lg:max-w-760 h-fit w-full mt-20">
-						<!-- Featured Photo loader -->
-						<div class="h-72 w-full rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-6"></div>
->>>>>>> cb79b7c (feat: load post metadata gradually)
 						<!-- Content loader -->
 						<div>
 							<div class="h-3 w-full rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-2"></div>
@@ -317,18 +279,6 @@
 				</article>
 			</section>
 		</div>
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-		<section v-if="postNotFound">
-			<div class="items-center flex w-full flex-col p-5">
-				<h1 class="text-negative mt-16 text-center font-sans text-6xl font-bold mb-8">404</h1>
-				<h2 class="text-center text-2xl font-semibold dark:text-darkPrimaryText">Post not found</h2>
-			</div>
-		</section>
->>>>>>> 2e287c1 (feat: 404 message and loading binding)
-=======
->>>>>>> cb79b7c (feat: load post metadata gradually)
 		<!-- Show Post preview card on quote repost -->
 		<div v-if="showQuoteRepost">
 			<PostCard
@@ -542,18 +492,8 @@ export default Vue.extend({
 		const postCID = this.$route.params.post
 		try {
 			const postMetadata = await getOnePost(postCID, sessionID || `x`)
-<<<<<<< HEAD
-<<<<<<< HEAD
 			if (postMetadata.hidden) {
 				this.deleted = true
-=======
-			this.postMetadata = postMetadata
-			if (postMetadata.hidden) {
->>>>>>> 2e287c1 (feat: 404 message and loading binding)
-=======
-			if (postMetadata.hidden) {
-				this.deleted = true
->>>>>>> cb79b7c (feat: load post metadata gradually)
 				this.$toastError(`This post has been hidden by the author`)
 				this.$emit(`showWarning`)
 			}
@@ -563,10 +503,6 @@ export default Vue.extend({
 			this.repostCount = postMetadata.repostCount
 			this.commentsCount = postMetadata.commentsCount
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> cb79b7c (feat: load post metadata gradually)
 			const postData = postMetadata.post
 
 			this.updatePostMetadata(postData)
@@ -579,7 +515,6 @@ export default Vue.extend({
 				})
 			}
 
-<<<<<<< HEAD
 			// Get author profile
 			this.author = createDefaultProfile(postData.authorID)
 			getProfile(postData.authorID).then((p) => {
@@ -606,38 +541,6 @@ export default Vue.extend({
 					// eslint-disable-next-line no-console
 					console.log(`Cannot replace state to shareable link: ${err.message}`)
 				})
-=======
-			// Get author profile
-			this.author = createDefaultProfile(postMetadata.post.authorID)
->>>>>>> 2e287c1 (feat: 404 message and loading binding)
-=======
-			// Get author profile
-			this.author = createDefaultProfile(postData.authorID)
-			getProfile(postData.authorID).then((p) => {
-				const { profile } = p
-				if (profile) {
-					this.author = profile
-				}
-				if (profile && profile.avatar.length > 1) {
-					getPhotoFromIPFS(profile.avatar).then((photo) => {
-						this.authorAvatar = photo
-					})
-				}
-			})
-
-			// Change URL to social-friendly link, preserve real for Vue router
-			createShareableLink(this.$route.params.post)
-				.then((friendlyUrl) => {
-					if (!this.isLeaving) {
-						this.realURL = this.$route.fullPath
-						history.replaceState(null, ``, friendlyUrl)
-					}
-				})
-				.catch((err) => {
-					// eslint-disable-next-line no-console
-					console.log(`Cannot replace state to shareable link: ${err.message}`)
-				})
->>>>>>> cb79b7c (feat: load post metadata gradually)
 
 			// Unauthenticated
 			if (sessionID === ``) {
@@ -645,24 +548,12 @@ export default Vue.extend({
 			}
 
 			try {
-<<<<<<< HEAD
-<<<<<<< HEAD
 				await this.fetchPaymentProfile({ username: this.authorID })
-=======
-				await this.fetchPaymentProfile({ username: postMetadata.post.authorID })
->>>>>>> 2e287c1 (feat: 404 message and loading binding)
-=======
-				await this.fetchPaymentProfile({ username: this.authorID })
->>>>>>> cb79b7c (feat: load post metadata gradually)
 			} catch (err) {
 				if (!(err instanceof AxiosError && err.response?.status === 404)) {
 					this.$handleError(err)
 				}
 			}
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> cb79b7c (feat: load post metadata gradually)
 		} catch (err: unknown) {
 			if (!(err instanceof Error)) {
 				throw err
@@ -672,16 +563,6 @@ export default Vue.extend({
 			}
 
 			this.$toastError(err.message)
-<<<<<<< HEAD
-=======
-		} catch (err) {
-			this.postNotFound = true
-			this.isContentLoading = false
-			this.$toastError(err as string)
-			return
->>>>>>> 2e287c1 (feat: 404 message and loading binding)
-=======
->>>>>>> cb79b7c (feat: load post metadata gradually)
 		} finally {
 			this.isMetadataLoading = false
 		}
@@ -708,10 +589,6 @@ export default Vue.extend({
 			})
 
 			const postData = post.data
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> cb79b7c (feat: load post metadata gradually)
 			this.updatePostMetadata(postData)
 			// Get featured photo
 			if (postData.featuredPhotoCID && !this.featuredPhoto) {
@@ -719,38 +596,19 @@ export default Vue.extend({
 					this.featuredPhoto = p
 				})
 			}
-<<<<<<< HEAD
-=======
->>>>>>> 2e287c1 (feat: 404 message and loading binding)
-=======
->>>>>>> cb79b7c (feat: load post metadata gradually)
 
 			if (isEncryptedPost(postData)) {
 				try {
 					const decrypted = await getDecryptedContent(postCID, postData.content, sessionID)
 					if (`content` in decrypted) {
 						this.content = decrypted.content
-<<<<<<< HEAD
-<<<<<<< HEAD
 						this.excerpt = decrypted.content.slice(0, 100) // TODO refine
-=======
->>>>>>> 2e287c1 (feat: 404 message and loading binding)
-=======
-						this.excerpt = decrypted.content.slice(0, 100) // TODO refine
->>>>>>> cb79b7c (feat: load post metadata gradually)
 						this.postImageKeys = decrypted.postImageKeys
 					} else {
 						// show proper error message according to retrieval status
 						// decrypted.status is of type `INSUFFICIENT_TIER` | `NOT_SUBSCRIBED`
 						this.enabledTiers = decrypted.enabledTiers
 						this.subscriptionStatus = decrypted.status
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-						// this.$toastError(decrypted.status)
->>>>>>> 2e287c1 (feat: 404 message and loading binding)
-=======
->>>>>>> cb79b7c (feat: load post metadata gradually)
 						// Display premium post paywall
 						this.showPaywall = true
 					}
@@ -763,8 +621,6 @@ export default Vue.extend({
 					}
 				}
 			} else {
-<<<<<<< HEAD
-<<<<<<< HEAD
 				this.content = postData.content
 				this.excerpt = postData.content.slice(0, 100) // TODO refine
 			}
@@ -777,30 +633,6 @@ export default Vue.extend({
 				throw err
 			}
 			this.$toastError(err.message)
-=======
-				this.content = post.data.content
-			}
-
-			this.isContentLoading = false
-			this.post = post.data
-		} catch (err) {
-			this.$toastError(err as string)
-			this.postNotFound = true
->>>>>>> 2e287c1 (feat: 404 message and loading binding)
-=======
-				this.content = postData.content
-				this.excerpt = postData.content.slice(0, 100) // TODO refine
-			}
-
-			this.isContentLoading = false
-
-			this.post = postData
-		} catch (err: unknown) {
-			if (!(err instanceof Error)) {
-				throw err
-			}
-			this.$toastError(err.message)
->>>>>>> cb79b7c (feat: load post metadata gradually)
 			return
 		}
 
@@ -818,36 +650,6 @@ export default Vue.extend({
 			})
 		}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-		// Change URL to social-friendly link, preserve real for Vue router
-		createShareableLink(this.$route.params.post)
-			.then((friendlyUrl) => {
-				if (!this.isLeaving) {
-					this.realURL = this.$route.fullPath
-					history.replaceState(null, ``, friendlyUrl)
-				}
-			})
-			.catch((err) => {
-				// eslint-disable-next-line no-console
-				console.log(`Cannot replace state to shareable link: ${err.message}`)
-			})
-
-		getProfile(this.post.authorID).then((p) => {
-			const { profile } = p
-			if (profile) {
-				this.author = profile
-			}
-			if (profile && profile.avatar.length > 1) {
-				getPhotoFromIPFS(profile.avatar).then((photo) => {
-					this.authorAvatar = photo
-				})
-			}
-		})
->>>>>>> 2e287c1 (feat: 404 message and loading binding)
-=======
->>>>>>> cb79b7c (feat: load post metadata gradually)
 		const container = document.getElementById(`post`)
 		if (container) {
 			container.addEventListener(`scroll`, this.handleScroll)
