@@ -282,7 +282,7 @@ export default Vue.extend({
 	layout: `profile`,
 	props: {
 		visitProfile: {
-			type: Object as PropType<Profile>,
+			type: Object as PropType<Profile | null>,
 			default: null,
 		},
 		visitAvatar: {
@@ -348,12 +348,14 @@ export default Vue.extend({
 	},
 	head() {
 		return {
-			title: `${this.visitProfile.name} (${this.$route.params.id}) on Blogchain`,
+			title: this.visitProfile?.name
+				? `${this.visitProfile.name} (${this.$route.params.id}) - Blogchain`
+				: `${this.$route.params.id} - Blogchain`,
 			meta: [
 				{
-					hid: `profile`,
-					name: `profile`,
-					content: `${this.visitProfile.name} (${this.$route.params.id}) on Blogchain`,
+					hid: `description`,
+					name: `description`,
+					content: this.visitProfile?.bio ? this.visitProfile.bio : `${this.$route.params.id}'s profile on Blogchain.`,
 				},
 			],
 		}
@@ -414,7 +416,7 @@ export default Vue.extend({
 				container.addEventListener(`scroll`, this.handleScrollHeader)
 			}
 			// handle long bios
-			if (this.visitProfile.bio.length > 150) {
+			if (this.visitProfile && this.visitProfile.bio.length > 150) {
 				this.longBio = true
 			}
 		},
