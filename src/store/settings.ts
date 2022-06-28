@@ -29,7 +29,7 @@ export const MutationType = {
 	CHANGE_COLOR: `changeColor`,
 	SET_RECENTLY_POSTED: `setRecentlyPosted`,
 	SET_RECENTLY_IN_SETTINGS: `setRecentlyInSettings`,
-	SET_LAST_ACTIVE_POST: `setRecentlyInSettings`,
+	SET_LAST_ACTIVE_POST: `setLastActivePost`,
 	TOGGLE_UNAUTH_POPUP: `toggleUnauthPopup`,
 }
 

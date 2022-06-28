@@ -58,7 +58,7 @@
 				</div>
 			</div>
 		</nav>
-		<div v-if="posts" ref="container" class="min-h-120 h-120 lg:min-h-220 lg:h-220 w-full overflow-y-auto">
+		<div v-if="posts" ref="container" class="min-h-120 h-120 lg:min-h-220 lg:h-220 w-full overflow-y-auto relative">
 			<div
 				v-if="!isLoading && algorithm === `FOLLOWING` && following.size === 0 && posts.length === 0"
 				class="relative h-full overflow-y-hidden"
@@ -88,23 +88,24 @@
 				</p>
 			</div>
 			<!-- content -->
-			<article v-for="p in posts" :key="generateKey(p)">
-				<PostCard
-					:repost="p.repost"
-					:post="p.post"
-					:cid="p.post._id"
-					:commentsCount="p.commentsCount"
-					:toggleFriend="toggleFriend"
-					:usersFollowing="following"
-					:repostedBy="p.repost ? p.repost.authorID : undefined"
-					:bookmarked="p.bookmarked"
-					:hideRepostIcon="algorithm === `NEW` || algorithm === `TOP`"
-					:bookmarksCount="p.bookmarksCount"
-					:repostCount="p.repostCount"
-					:isDeleted="p.deleted"
-					@updateBookmarks="updateBookmarks"
-				/>
-			</article>
+			<PostCard
+				v-for="p in posts"
+				:id="$store.state.settings.lastActivePost === p.post._id ? `active` : ``"
+				:key="generateKey(p)"
+				:repost="p.repost"
+				:post="p.post"
+				:cid="p.post._id"
+				:commentsCount="p.commentsCount"
+				:toggleFriend="toggleFriend"
+				:usersFollowing="following"
+				:repostedBy="p.repost ? p.repost.authorID : undefined"
+				:bookmarked="p.bookmarked"
+				:hideRepostIcon="algorithm === `NEW` || algorithm === `TOP`"
+				:bookmarksCount="p.bookmarksCount"
+				:repostCount="p.repostCount"
+				:isDeleted="p.deleted"
+				@updateBookmarks="updateBookmarks"
+			/>
 			<p
 				v-if="noMorePosts"
 				class="text-gray5 dark:text-gray3 py-5 text-center text-sm"
@@ -164,7 +165,7 @@ export default Vue.extend({
 			algorithm: this.$store.state.session.id === `` ? `TOP` : `FOLLOWING`,
 			posts: [],
 			isLoading: true,
-			currentOffset: 0,
+			currentOffset: 40,
 			limit: 10,
 			noMorePosts: false,
 			topAlgorithm: `This month`,
@@ -198,9 +199,17 @@ export default Vue.extend({
 		container.addEventListener(`scroll`, this.handleScroll)
 		window.addEventListener(`click`, this.handleDropdown, false)
 	},
+	updated() {
+		const lastClickedPost = document.getElementById(`active`)
+		console.log(lastClickedPost)
+		if (lastClickedPost) {
+			lastClickedPost.scrollIntoView({ block: `start` })
+		}
+	},
 	methods: {
 		getReposts,
 		async fetchPosts(alg: Algorithm) {
+			console.log(this.currentOffset)
 			this.isLoading = true
 			const id = this.$store.state.session.id === `` ? `x` : this.$store.state.session.id
 			const followingParam: string | undefined = id === `x` ? undefined : this.$store.state.session.id
