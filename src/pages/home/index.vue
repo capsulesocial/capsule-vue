@@ -203,6 +203,7 @@ export default Vue.extend({
 		const lastClickedPost = document.getElementById(`active`)
 		if (lastClickedPost) {
 			if (lastClickedPost.parentElement) {
+				console.log(`here`)
 				lastClickedPost.parentElement.scrollTop = lastClickedPost.offsetTop
 			}
 		}
@@ -250,6 +251,7 @@ export default Vue.extend({
 			this.currentOffset = 0
 			this.isLoading = true
 			this.algorithm = a
+			this.$store.commit(`settings/setLastActivePost`, ``)
 			this.$store.commit(`session/updateHomeFeed`, a)
 			this.posts = await this.fetchPosts(a)
 			return this.posts
