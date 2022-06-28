@@ -203,7 +203,6 @@ export default Vue.extend({
 		const lastClickedPost = document.getElementById(`active`)
 		if (lastClickedPost) {
 			if (lastClickedPost.parentElement) {
-				console.log(`here`)
 				lastClickedPost.parentElement.scrollTop = lastClickedPost.offsetTop
 			}
 		}
