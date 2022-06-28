@@ -77,6 +77,7 @@ export const mutations: MutationTree<Session> = {
 		removeNearPrivateKey()
 		window.localStorage.removeItem(`accountId`)
 		walletLogout()
+		state.homeFeed = `TOP`
 	},
 }
 

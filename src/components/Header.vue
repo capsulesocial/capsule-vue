@@ -317,6 +317,7 @@ export default Vue.extend({
 			keystore.clear()
 			localStorage.clear()
 			this.$router.push(`/login`)
+			this.$store.commit(`widgets/reset`)
 		},
 		toggleMobileMenu() {
 			this.showDropdown = !this.showDropdown
