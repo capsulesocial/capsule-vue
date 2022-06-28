@@ -4,8 +4,18 @@
 		class="modal-animation card-animation flex w-full justify-center"
 		:style="showQuoteRepost || showShare ? `background-color: #fff` : `backdrop-filter: blur(10px)`"
 	>
+		<!-- loader -->
+		<article
+			v-if="!title || !authorID || !timestamp || !category"
+			class="modal-animation fixed mt-20 flex w-full justify-center"
+		>
+			<div
+				class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
+				:style="`border-top: 2px solid` + $color.hex"
+			></div>
+		</article>
 		<!-- Inner post area -->
-		<div v-if="post && author" class="lg:w-760 lg:max-w-760 h-fit w-full">
+		<div v-else class="lg:w-760 lg:max-w-760 h-fit w-full">
 			<!-- Magic header that disappears on scroll down -->
 			<header
 				id="header"
@@ -16,23 +26,23 @@
 					<div class="flex w-full justify-between xl:min-w-max xl:max-w-3xl">
 						<!-- Left side: name, avatar, date -->
 						<div class="flex items-center">
-							<Avatar :avatar="authorAvatar" :authorID="post.authorID" size="w-10 h-10" class="mr-4 flex-shrink-0" />
+							<Avatar :avatar="authorAvatar" :authorID="authorID" size="w-10 h-10" class="mr-4 flex-shrink-0" />
 							<div class="pr-8 flex flex-col">
 								<nuxt-link
-									v-if="author.name != ``"
-									:to="`/id/` + post.authorID"
+									v-if="author && author.name !== ``"
+									:to="`/id/` + authorID"
 									class="font-semibold dark:text-darkPrimaryText"
 									>{{ author.name }}</nuxt-link
 								>
-								<nuxt-link v-else :to="`/id/` + post.authorID" class="text-gray5 dark:text-gray3 font-semibold">{{
-									post.authorID
+								<nuxt-link v-else :to="`/id/` + authorID" class="text-gray5 dark:text-gray3 font-semibold">{{
+									authorID
 								}}</nuxt-link>
-								<nuxt-link :to="`/id/` + post.authorID" class="text-gray5 dark:text-gray3 text-xs">
-									@{{ post.authorID }}</nuxt-link
+								<nuxt-link :to="`/id/` + authorID" class="text-gray5 dark:text-gray3 text-xs">
+									@{{ authorID }}</nuxt-link
 								>
 							</div>
 							<FriendButton
-								v-if="post.authorID !== $store.state.session.id"
+								v-if="authorID !== $store.state.session.id"
 								:toggleFriend="toggleFriend"
 								:userIsFollowed="userIsFollowed"
 								class="hidden lg:block"
@@ -40,7 +50,7 @@
 							<!-- Timestamp and reading time -->
 							<div class="flex flex-col lg:flex-row items-center lg:ml-8">
 								<span class="text-sm text-gray5 dark:text-gray3">
-									{{ $formatDate(post.timestamp) }}
+									{{ $formatDate(timestamp) }}
 								</span>
 								<div v-if="readingTime" class="hidden lg:block h-1 w-1 rounded bg-gray5 dark:bg-gray3 mx-2"></div>
 								<span v-if="readingTime" class="text-xs lg:text-sm text-gray5 dark:text-gray3">
@@ -56,13 +66,13 @@
 					</div>
 				</div>
 			</header>
-			<section v-if="post !== null" class="mb-5 p-5 lg:p-0 pb-16 pt-2 md:pb-5">
+			<section class="mb-5 p-5 lg:p-0 pb-16 pt-2 md:pb-5">
 				<!-- Post content -->
 				<article class="relative">
 					<!-- Category and elipses -->
 					<article class="my-5 flex w-full justify-between">
-						<nuxt-link :to="`/discover/` + post.category" class="text-primary capitalize">{{
-							post.category.replace(`-`, ` `)
+						<nuxt-link :to="`/discover/` + category" class="text-primary capitalize">{{
+							category.replace(`-`, ` `)
 						}}</nuxt-link>
 						<div class="flex">
 							<BookmarkButton
@@ -86,16 +96,31 @@
 						<h1
 							class="text-lightPrimaryText dark:text-darkPrimaryText text-h1 mb-3 break-words font-serif font-semibold"
 						>
-							{{ post.title }}
+							{{ title }}
 						</h1>
 						<h2
-							v-if="post.subtitle"
+							v-if="subtitle"
 							class="text-lightSecondaryText dark:text-gray3 text-h2 mb-3 break-words font-serif font-medium"
 						>
-							{{ post.subtitle }}
+							{{ subtitle }}
 						</h2>
 					</article>
-					<!-- Private sensitive content -->
+					<div v-if="!content && !showPaywall" class="lg:w-760 lg:max-w-760 h-fit w-full mt-6">
+						<!-- Featured Photo loader -->
+						<div v-if="featuredPhoto" class="h-72 w-full rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-6"></div>
+						<!-- Content loader -->
+						<div>
+							<div class="h-3 w-full rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-2"></div>
+							<div class="h-3 w-full rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-2"></div>
+							<div class="h-3 w-4/5 rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-4"></div>
+							<div class="h-6 w-1/2 rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-4"></div>
+							<div class="h-3 w-full rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-2"></div>
+							<div class="h-3 w-full rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-2"></div>
+							<div class="h-3 w-full rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-2"></div>
+							<div class="h-3 w-3/5 rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-6"></div>
+							<div class="h-3 w-2/5 rounded-xl bg-gray1 dark:bg-gray7 animate-pulse"></div>
+						</div>
+					</div>
 					<div class="relative">
 						<!-- Featured Photo -->
 						<article
@@ -104,22 +129,16 @@
 							@click="showPhoto"
 						>
 							<div
-								v-if="post.featuredPhotoCaption"
+								v-if="post && post.featuredPhotoCaption && captionHeight !== undefined"
 								class="absolute w-full rounded-b-lg"
 								:class="
-									this.captionHeight > 72
-										? `h-48`
-										: this.captionHeight > 52
-										? `h-40`
-										: this.captionHeight > 32
-										? `h-32`
-										: `h-24`
+									captionHeight > 72 ? `h-48` : captionHeight > 52 ? `h-40` : captionHeight > 32 ? `h-32` : `h-24`
 								"
 								style="background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.8) 100%)"
 							></div>
 							<img :src="featuredPhoto" class="w-full rounded-lg object-cover shadow-lg" />
 							<p
-								v-if="post.featuredPhotoCaption"
+								v-if="post && post.featuredPhotoCaption"
 								id="photoCaption"
 								class="text-lightOnPrimaryText absolute px-4 pb-3 text-sm drop-shadow-lg"
 								style="text-shadow: 0 0 10px #000"
@@ -127,6 +146,7 @@
 								{{ post.featuredPhotoCaption }}
 							</p>
 						</article>
+						<!-- Private sensitive content -->
 						<div v-else-if="showPaywall" class="h-80 lg:h-72"></div>
 						<!-- Post paywall -->
 						<article
@@ -154,8 +174,8 @@
 								</h4>
 								<p class="my-4 text-center text-gray5 dark:text-gray3">
 									Become a subscriber of
-									<span v-if="author.name !== ``" class="font-semibold text-primary">{{ author.name }}</span>
-									<span v-else class="font-semibold text-primary">@{{ author.id }}</span> to access
+									<span v-if="author && author.name !== ``" class="font-semibold text-primary">{{ author.name }}</span>
+									<span v-else class="font-semibold text-primary">@{{ authorID }}</span> to access
 									<br class="hidden lg:block" />
 									this post and other subscriber-only content
 								</p>
@@ -170,20 +190,36 @@
 								</p>
 							</div>
 						</article>
+						<div v-if="!content && !showPaywall && featuredPhoto" class="lg:w-760 lg:max-w-760 h-fit w-full mt-20">
+							<!-- Featured Photo loader -->
+							<div class="h-72 w-full rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-6"></div>
+							<!-- Content loader -->
+							<div>
+								<div class="h-3 w-full rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-2"></div>
+								<div class="h-3 w-full rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-2"></div>
+								<div class="h-3 w-4/5 rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-4"></div>
+								<div class="h-6 w-1/2 rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-4"></div>
+								<div class="h-3 w-full rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-2"></div>
+								<div class="h-3 w-full rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-2"></div>
+								<div class="h-3 w-full rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-2"></div>
+								<div class="h-3 w-3/5 rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-6"></div>
+								<div class="h-3 w-2/5 rounded-xl bg-gray1 dark:bg-gray7 animate-pulse"></div>
+							</div>
+						</div>
 						<!-- Content -->
-						<article v-else class="mt-5">
+						<article v-else-if="post !== null" class="mt-5">
 							<div class="text-lightPrimaryText dark:text-darkSecondaryText editable content max-w-none break-words">
 								<PostView
-									:content="this.content"
-									:postImages="this.post.postImages"
-									:encrypted="this.post.encrypted"
-									:postImageKeys="this.postImageKeys"
+									:content="content"
+									:postImages="post.postImages"
+									:encrypted="post.encrypted"
+									:postImageKeys="postImageKeys"
 								/>
 							</div>
 						</article>
 						<!-- Tags -->
 						<article class="mt-5 text-lg">
-							<TagCard v-for="t in post.tags" :key="t.name" class="mr-2 mb-2" :tag="t.name" />
+							<TagCard v-for="t in tags" :key="t.name" class="mr-2 mb-2" :tag="t.name" />
 						</article>
 						<!-- IPFS CID -->
 						<div class="mt-3">
@@ -201,15 +237,15 @@
 				</article>
 				<AuthorCard
 					:authorAvatar="authorAvatar"
-					:authorName="author.name"
-					:authorID="author.id"
-					:authorBio="author.bio"
+					:authorName="author ? author.name : ``"
+					:authorID="authorID"
+					:authorBio="author ? author.bio : ``"
 					:isFollowed="userIsFollowed"
 					:toggleFriend="toggleFriend"
 				/>
 
 				<!-- Comments -->
-				<article class="pt-5">
+				<article v-if="post !== null" class="pt-5">
 					<!-- Choose reaction -->
 					<div class="flex flex-row justify-between">
 						<div class="flex items-center">
@@ -238,18 +274,11 @@
 						:postCID="$route.params.post"
 						:bookmarksCount="bookmarksCount"
 						:repostsCount="repostCount"
-						:postAuthor="author.id"
+						:postAuthor="authorID"
 					/>
 				</article>
 			</section>
-			<section v-else>Post not found</section>
 		</div>
-		<article v-show="isLoading" class="modal-animation fixed mt-20 flex w-full justify-center">
-			<div
-				class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
-				:style="`border-top: 2px solid` + $color.hex"
-			></div>
-		</article>
 		<!-- Show Post preview card on quote repost -->
 		<div v-if="showQuoteRepost">
 			<PostCard
@@ -262,17 +291,17 @@
 				:commentsCount="commentsCount"
 				:bookmarksCount="bookmarksCount"
 				:displayRepost="true"
-				:isDeleted="post.deleted"
+				:isDeleted="deleted"
 				@closePopup="closePopup"
 			/>
 		</div>
 		<SharePopup
-			v-if="showShare"
-			:image="featuredPhoto"
-			:title="post.title"
-			:subtitle="post.subtitle"
-			:excerpt="post.excerpt"
-			:authorID="post.authorID"
+			v-if="showShare && authorID"
+			:image="featuredPhoto ? featuredPhoto : undefined"
+			:title="title ? title : ''"
+			:subtitle="subtitle"
+			:excerpt="excerpt"
+			:authorID="authorID"
 			:cid="$route.params.post"
 			@close="showShare = false"
 		/>
@@ -318,6 +347,7 @@ import {
 	isEncryptedPost,
 	getDecryptedContent,
 	IPostImageKey,
+	Tag,
 } from '@/backend/post'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
@@ -329,6 +359,15 @@ import { ActionType, namespace as paymentProfileNamespace } from '@/store/paymen
 
 interface IData {
 	post: Post | null
+	title: string | null
+	subtitle: string | null
+	authorID: string | null
+	timestamp: number | null
+	excerpt: string | null
+	category: string | null
+	encrypted: boolean
+	deleted: boolean
+	tags: Tag[]
 	author: Profile | null
 	authorAvatar?: string | ArrayBuffer
 	content: string
@@ -341,7 +380,6 @@ interface IData {
 	showHeader: boolean
 	repostCount: number
 	commentsCount: number
-	isLoading: boolean
 	showQuoteRepost: boolean
 	following: Set<string>
 	bookmarksCount: number
@@ -356,6 +394,8 @@ interface IData {
 	enabledTiers: Array<string>
 	subscriptionStatus: `INSUFFICIENT_TIER` | `NOT_SUBSCRIBED` | ``
 	postImageKeys: Array<IPostImageKey>
+	isMetadataLoading: boolean
+	isContentLoading: boolean
 }
 
 export default Vue.extend({
@@ -387,6 +427,15 @@ export default Vue.extend({
 	// mixins: [markdown],
 	data(): IData {
 		return {
+			title: null,
+			subtitle: null,
+			authorID: null,
+			timestamp: null,
+			excerpt: null,
+			category: null,
+			deleted: false,
+			encrypted: false,
+			tags: [],
 			post: null,
 			author: null,
 			authorAvatar: undefined,
@@ -400,7 +449,6 @@ export default Vue.extend({
 			showHeader: true,
 			repostCount: 0,
 			commentsCount: 0,
-			isLoading: true,
 			showQuoteRepost: false,
 			following: new Set(),
 			bookmarksCount: 0,
@@ -415,18 +463,23 @@ export default Vue.extend({
 			enabledTiers: [],
 			subscriptionStatus: ``,
 			postImageKeys: [],
+			isMetadataLoading: true,
+			isContentLoading: true,
 		}
 	},
 	head() {
 		return {
 			// @ts-ignore
-			title: this.post ? `${this.post.title} by ${this.post.authorID} on Blogchain` : `Loading...`,
+			title: this.title
+				? // @ts-ignore
+				  `${this.title} by ${this.authorID} on Blogchain`
+				: `Loading...`,
 			meta: [
 				{
-					hid: `post - ${this.$route.params.post}`,
-					name: `Post`,
+					hid: `description`,
+					name: `description`,
 					// @ts-ignore
-					content: `${this.post?.title} by ${this.post?.authorID} on Blogchain`,
+					content: this.subtitle ?? this.excerpt,
 				},
 			],
 		}
@@ -437,64 +490,158 @@ export default Vue.extend({
 	async created() {
 		const sessionID = this.$store.state.session.id
 		const postCID = this.$route.params.post
-		const postMetadata = await getOnePost(postCID, sessionID || `x`)
-
-		if (postMetadata.hidden) {
-			this.$toastError(`This post has been hidden by the author`)
-			this.$emit(`showWarning`)
-		}
-
-		const post = await getPost(postCID)
-
-		verifyPostAuthenticity(post.data, post.sig, post.public_key).then((verified) => {
-			if (!verified) {
-				this.$toastError(`Post not verified!`)
-			}
-		})
-
 		try {
-			await this.fetchPaymentProfile({ username: post.data.authorID })
-		} catch (err) {
-			if (!(err instanceof AxiosError && err.response?.status === 404)) {
-				this.$handleError(err)
+			const postMetadata = await getOnePost(postCID, sessionID || `x`)
+			if (postMetadata.hidden) {
+				this.deleted = true
+				this.$toastError(`This post has been hidden by the author`)
+				this.$emit(`showWarning`)
 			}
-		}
 
-		const postData = post.data
+			this.bookmarksCount = postMetadata.bookmarksCount
+			this.isBookmarked = postMetadata.bookmarked
+			this.repostCount = postMetadata.repostCount
+			this.commentsCount = postMetadata.commentsCount
 
-		if (isEncryptedPost(postData)) {
+			const postData = postMetadata.post
+
+			this.updatePostMetadata(postData)
+			this.excerpt = postData.excerpt
+
+			// Get featured photo
+			if (postData.featuredPhotoCID) {
+				getPhotoFromIPFS(postData.featuredPhotoCID).then((p) => {
+					this.featuredPhoto = p
+				})
+			}
+
+			// Get author profile
+			this.author = createDefaultProfile(postData.authorID)
+			getProfile(postData.authorID).then((p) => {
+				const { profile } = p
+				if (profile) {
+					this.author = profile
+				}
+				if (profile && profile.avatar.length > 1) {
+					getPhotoFromIPFS(profile.avatar).then((photo) => {
+						this.authorAvatar = photo
+					})
+				}
+			})
+
+			// Change URL to social-friendly link, preserve real for Vue router
+			createShareableLink(this.$route.params.post)
+				.then((friendlyUrl) => {
+					if (!this.isLeaving) {
+						this.realURL = this.$route.fullPath
+						history.replaceState(null, ``, friendlyUrl)
+					}
+				})
+				.catch((err) => {
+					// eslint-disable-next-line no-console
+					console.log(`Cannot replace state to shareable link: ${err.message}`)
+				})
+
+			// Unauthenticated
+			if (sessionID === ``) {
+				return
+			}
+
 			try {
-				const decrypted = await getDecryptedContent(postCID, postData.content, sessionID)
-				if (`content` in decrypted) {
-					this.content = decrypted.content
-					this.postImageKeys = decrypted.postImageKeys
-				} else {
-					// show proper error message according to retrieval status
-					// decrypted.status is of type `INSUFFICIENT_TIER` | `NOT_SUBSCRIBED`
-					this.enabledTiers = decrypted.enabledTiers
-					this.subscriptionStatus = decrypted.status
-					// this.$toastError(decrypted.status)
-					// Display premium post paywall
-					this.showPaywall = true
-				}
+				await this.fetchPaymentProfile({ username: this.authorID })
 			} catch (err) {
-				this.showPaywall = true
-				if (err instanceof AxiosError && err.response && err.response.data.error) {
-					this.$toastError(err.response.data.error)
-				} else {
-					throw err
+				if (!(err instanceof AxiosError && err.response?.status === 404)) {
+					this.$handleError(err)
 				}
 			}
-		} else {
-			this.content = post.data.content
+		} catch (err: unknown) {
+			if (!(err instanceof Error)) {
+				throw err
+			}
+			if (err instanceof AxiosError && err.response?.status === 404) {
+				return
+			}
+
+			this.$toastError(err.message)
+		} finally {
+			this.isMetadataLoading = false
 		}
 
-		this.post = post.data
-
-		if (!this.post) {
-			this.$toastError(`This post has not been found`)
-			throw new Error(`Post is null!`)
+		// This is a new post
+		if (this.$store.state.settings.recentlyPosted) {
+			this.$toastSuccess(`Your post has been successfully published on Blogchain`)
+			this.$store.commit(`settings/setRecentlyPosted`, false)
+			// Trigger share popup
+			setTimeout(() => {
+				this.showShare = true
+			}, 1500)
 		}
+	},
+	async mounted() {
+		const postCID = this.$route.params.post
+		const sessionID = this.$store.state.session.id
+		try {
+			const post = await getPost(postCID)
+			verifyPostAuthenticity(post.data, post.sig, post.public_key).then((verified) => {
+				if (!verified) {
+					this.$toastError(`Post not verified!`)
+				}
+			})
+
+			const postData = post.data
+			this.updatePostMetadata(postData)
+			// Get featured photo
+			if (postData.featuredPhotoCID && !this.featuredPhoto) {
+				getPhotoFromIPFS(postData.featuredPhotoCID).then((p) => {
+					this.featuredPhoto = p
+				})
+			}
+
+			if (isEncryptedPost(postData)) {
+				try {
+					const decrypted = await getDecryptedContent(postCID, postData.content, sessionID)
+					if (`content` in decrypted) {
+						this.content = decrypted.content
+						this.excerpt = decrypted.content.slice(0, 100) // TODO refine
+						this.postImageKeys = decrypted.postImageKeys
+					} else {
+						// show proper error message according to retrieval status
+						// decrypted.status is of type `INSUFFICIENT_TIER` | `NOT_SUBSCRIBED`
+						this.enabledTiers = decrypted.enabledTiers
+						this.subscriptionStatus = decrypted.status
+						// Display premium post paywall
+						this.showPaywall = true
+					}
+				} catch (err) {
+					this.showPaywall = true
+					if (err instanceof AxiosError && err.response && err.response.data.error) {
+						this.$toastError(err.response.data.error)
+					} else {
+						throw err
+					}
+				}
+			} else {
+				this.content = postData.content
+				this.excerpt = postData.content.slice(0, 100) // TODO refine
+			}
+
+			this.isContentLoading = false
+
+			this.post = postData
+		} catch (err: unknown) {
+			if (!(err instanceof Error)) {
+				throw err
+			}
+			this.$toastError(err.message)
+			return
+		}
+
+		// Get reading time
+		this.calculateReadingTime()
+
+		// Get caption height
+		const caption = document.getElementById(`photoCaption`)
+		this.captionHeight = caption?.offsetHeight
 
 		// Get featured photo
 		if (this.post.featuredPhotoCID) {
@@ -502,44 +649,11 @@ export default Vue.extend({
 				this.featuredPhoto = p
 			})
 		}
-		// Get author profile
-		this.author = createDefaultProfile(this.post.authorID)
-		getProfile(this.post.authorID).then((p) => {
-			const { profile } = p
-			if (profile) {
-				this.author = profile
-			}
-			if (profile && profile.avatar.length > 1) {
-				getPhotoFromIPFS(profile.avatar).then((photo) => {
-					this.authorAvatar = photo
-				})
-			}
-		})
 
-		// Get reading time
-		this.calculateReadingTime()
-		// Change URL to social-friendly link, preserve real for Vue router
-		createShareableLink(this.$route.params.post)
-			.then((friendlyUrl) => {
-				if (!this.isLeaving) {
-					this.realURL = this.$route.fullPath
-					history.replaceState(null, ``, friendlyUrl)
-				}
-			})
-			.catch((err) => {
-				// eslint-disable-next-line no-console
-				console.log(`Cannot replace state to shareable link: ${err.message}`)
-			})
-
-		// Get caption height
-		const caption = document.getElementById(`photoCaption`)
-		this.captionHeight = caption?.offsetHeight
-
-		this.bookmarksCount = postMetadata.bookmarksCount
-		this.isBookmarked = postMetadata.bookmarked
-		this.repostCount = postMetadata.repostCount
-		this.commentsCount = postMetadata.commentsCount
-		this.isLoading = false
+		const container = document.getElementById(`post`)
+		if (container) {
+			container.addEventListener(`scroll`, this.handleScroll)
+		}
 
 		// Unauthenticated
 		if (sessionID === ``) {
@@ -553,27 +667,34 @@ export default Vue.extend({
 			}
 		})
 		// Get reposts
-		const repostData = await getReposts({ authorID: this.$store.state.session.id }, {})
-		this.myReposts = new Set(repostData.map((p) => p.repost.postCID))
-	},
-	mounted() {
-		const container = document.getElementById(`post`)
-		if (container) {
-			container.addEventListener(`scroll`, this.handleScroll)
-		}
-		// This is a new post
-		if (this.$store.state.settings.recentlyPosted) {
-			this.$toastSuccess(`Your post has been successfully published on Blogchain`)
-			this.$store.commit(`settings/setRecentlyPosted`, false)
-			// Trigger share popup
-			setTimeout(() => {
-				this.showShare = true
-			}, 1500)
-		}
+		getReposts({ authorID: this.$store.state.session.id }, {}).then((repostData) => {
+			this.myReposts = new Set(repostData.map((p) => p.repost.postCID))
+		})
 	},
 	methods: {
 		getReposts,
 		isPostBookmarkedByUser,
+		updatePostMetadata(postData: {
+			subtitle: string | null
+			title: string
+			authorID: string
+			timestamp: number
+			category: string
+			tags: Tag[]
+			encrypted?: boolean
+		}) {
+			this.title = postData.title
+			if (postData.subtitle) {
+				this.subtitle = postData.subtitle
+			}
+			this.authorID = postData.authorID
+			this.timestamp = postData.timestamp
+			this.category = postData.category
+			if (postData.encrypted) {
+				this.encrypted = postData.encrypted
+			}
+			this.tags = postData.tags
+		},
 		async getBookmarkStatus() {
 			this.isBookmarked = await isPostBookmarkedByUser(this.$route.params.post, this.$store.state.session.id)
 		},

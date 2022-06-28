@@ -6,7 +6,7 @@
 				<div class="flex pr-5">
 					<Avatar :avatar="authorAvatar" :authorID="authorID" size="w-16 h-16" class="flex-shrink-0 self-start" />
 					<div class="mx-4">
-						<nuxt-link v-if="authorName != ``" :to="'/id/' + authorID" class="text-2xl dark:text-darkPrimaryText">
+						<nuxt-link v-if="authorName !== ``" :to="'/id/' + authorID" class="text-2xl dark:text-darkPrimaryText">
 							{{ authorName }}
 						</nuxt-link>
 						<nuxt-link v-else :to="'/id/' + authorID" class="text-gray5 text-2xl"> {{ authorID }} </nuxt-link>
@@ -65,7 +65,7 @@ export default Vue.extend({
 		},
 		authorName: {
 			type: String,
-			required: true,
+			default: () => ``,
 		},
 		authorID: {
 			type: String,

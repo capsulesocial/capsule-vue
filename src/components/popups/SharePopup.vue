@@ -150,6 +150,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import type { PropType } from 'vue'
 import { sanitizeUrl } from '@braintree/sanitize-url'
 import CloseIcon from '@/components/icons/X.vue'
 import TwitterIcon from '@/components/icons/brands/solid/Twitter.vue'
@@ -192,7 +193,7 @@ export default Vue.extend({
 			required: true,
 		},
 		subtitle: {
-			type: String,
+			type: String as PropType<string | null>,
 			default: null,
 		},
 		authorID: {
@@ -200,8 +201,8 @@ export default Vue.extend({
 			required: true,
 		},
 		excerpt: {
-			type: String,
-			default: undefined,
+			type: String as PropType<string | null>,
+			default: null,
 		},
 		cid: {
 			type: String,
@@ -239,6 +240,9 @@ export default Vue.extend({
 			this.$router.push(`/post`)
 		},
 		postExcerpt(): string {
+			if (!this.excerpt) {
+				return this.subtitle || ``
+			}
 			const excerpt = this.excerpt.slice(0, 127).trim()
 			if (excerpt.endsWith(`...`)) {
 				return excerpt

@@ -58,10 +58,10 @@ export default Vue.extend({
 			required: true,
 		},
 		postImages: {
-			type: Array as PropType<string[]>,
-			required: true,
+			type: Array as PropType<string[] | undefined>,
+			default: () => [],
 		},
-		encrypted: { type: Boolean, required: true },
+		encrypted: { type: Boolean as PropType<boolean | undefined>, default: () => false },
 		postImageKeys: {
 			type: Array as PropType<Array<IPostImageKey>>,
 			default() {
