@@ -28,7 +28,7 @@
 						{{ s.tier.name }}
 					</div>
 					<div class="flex justify-center items-end ml-4 text-neutral">
-						<p class="font-semibold text-lg">{{ currency }}{{ s.amount }}</p>
+						<p class="font-semibold text-lg">{{ currency }}{{ s.amount.toLocaleString() }}</p>
 						<p>/</p>
 						<p>{{ s.period }}</p>
 					</div>
@@ -105,7 +105,7 @@
 				class="text-sm flex flex-row justify-start items-center py-4 border-b border-lightBorder dark:border-darkBorder text-lightPrimaryText dark:text-darkPrimaryText"
 			>
 				<h4 class="w-40">{{ $formatDate(transaction.createdAt) }}</h4>
-				<h4 class="w-40 uppercase">{{ transaction.currency }} {{ transaction.amount }}</h4>
+				<h4 class="w-40 uppercase">{{ transaction.currency }} {{ transaction.amount.toLocaleString() }}</h4>
 				<div class="w-32">
 					<h4
 						class="text-positive bg-positive bg-opacity-10 border border-positive px-3 py-1 text-sm rounded-3xl w-min"
