@@ -293,12 +293,12 @@
 								@{{ author.id }}
 							</h5>
 						</div>
-						<CrownIcon class="text-neutral stroke-neutral self-center w-9 h-9 ml-10" />
+						<TagPill class="text-neutral stroke-neutral self-center w-9 h-9 ml-10" />
 					</div>
 					<div class="w-full flex flex-col justify-center items-center text-center px-10 mt-5">
 						<p class="text-base text-center text-gray5 dark:text-gray3 mb-4 max-w-md">
-							All of their premium articles are now<br />
-							unlocked for your account.
+							All premium articles under {{ selectedTier ? selectedTier.name : `` }} tier<br />
+							are now unlocked for your account.
 						</p>
 						<button
 							v-if="userIsFollowed"
@@ -400,6 +400,7 @@ import AppleIcon from '@/components/icons/brands/Apple.vue'
 import GoogleIcon from '@/components/icons/brands/Google.vue'
 import SwitchPeriod from '@/components/ToggleSwitch.vue'
 import BasicSwitch from '@/components/BasicSwitch.vue'
+import TagPill from '@/components/Tag.vue'
 
 import { Profile } from '@/backend/profile'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
@@ -458,6 +459,7 @@ export default Vue.extend({
 		SwitchPeriod,
 		ChevronLeft,
 		BasicSwitch,
+		TagPill,
 	},
 	props: {
 		isSubscribed: {

@@ -159,26 +159,37 @@
 								:class="featuredPhoto !== null ? `sm:mt-36` : `mt-0`"
 							>
 								<!-- Not a subscriber -->
-								<h4
-									v-if="subscriptionStatus === `NOT_SUBSCRIBED`"
-									class="text-2xl font-semibold text-neutral mb-4 text-center"
-								>
-									This post is for Paid subscribers
-								</h4>
+								<div v-if="subscriptionStatus === `NOT_SUBSCRIBED`">
+									<h4 class="text-2xl font-semibold text-neutral mb-4 text-center">
+										This post is for Paid subscribers
+									</h4>
+									<p class="my-4 text-center text-gray5 dark:text-gray3">
+										Become a subscriber of
+										<span v-if="author && author.name !== ``" class="font-semibold text-primary">{{
+											author.name
+										}}</span>
+										<span v-else class="font-semibold text-primary">@{{ authorID }}</span> to access
+										<br class="hidden lg:block" />
+										this post and other subscriber-only content
+									</p>
+								</div>
+
 								<!-- Subscribed, but to a different tier -->
-								<h4
-									v-if="subscriptionStatus === `INSUFFICIENT_TIER`"
-									class="text-2xl font-semibold text-neutral mb-4 text-center"
-								>
-									Your subscription tier does not include this post
-								</h4>
-								<p class="my-4 text-center text-gray5 dark:text-gray3">
-									Become a subscriber of
-									<span v-if="author && author.name !== ``" class="font-semibold text-primary">{{ author.name }}</span>
-									<span v-else class="font-semibold text-primary">@{{ authorID }}</span> to access
-									<br class="hidden lg:block" />
-									this post and other subscriber-only content
-								</p>
+								<div v-if="subscriptionStatus === `INSUFFICIENT_TIER`">
+									<h4 class="text-2xl font-semibold text-neutral mb-4 text-center">
+										Your subscription tier does not include this post
+									</h4>
+									<p class="my-4 text-center text-gray5 dark:text-gray3">
+										Subscribe to the {{}} tier of
+										<span v-if="author && author.name !== ``" class="font-semibold text-primary">{{
+											author.name
+										}}</span>
+										<span v-else class="font-semibold text-primary">@{{ authorID }}</span> to access
+										<br class="hidden lg:block" />
+										this post and other posts of this tier.
+									</p>
+								</div>
+
 								<SubscribeButton
 									:toggleSubscription="toggleSubscription"
 									:userIsSubscribed="false"
