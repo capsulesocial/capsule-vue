@@ -7,47 +7,44 @@
 			style="backdrop-filter: blur(10px)"
 		>
 			<!-- Header and close icon -->
-			<div class="flex items-center justify-between pb-6">
+			<div class="flex items-center justify-between pb-4">
 				<h4 class="text-xl font-semibold dark:text-darkPrimaryText">Configure newsletter</h4>
-				<button class="bg-gray1 focus:outline-none rounded-full p-1" @click="closePopup"><CloseIcon /></button>
+				<button
+					class="focus:outline-none bg-gray1 dark:bg-gray5 rounded-full p-1"
+					@click="$emit(`toggleNewsletterPopup`)"
+				>
+					<CloseIcon />
+				</button>
 			</div>
 			<!-- Self-view view -->
 			<div v-if="$store.state.session.id === $route.params.id">
-				<p class="text-gray7 mb-4">
+				<p class="text-gray5 dark:text-gray3 mb-4">
 					Display highlighted tags on your profile for readers to enable email newsletter to receive your posts in their
 					inbox. You can highlight up to three different tags:
 				</p>
 				<div class="flex flex-row justify-between mb-3 mt-8">
 					<!-- Add tag input -->
-					<label for="tagInput" class="font-semibold col-span-1 mr-20 mt-2">Topics</label>
+					<label
+						for="tagInput"
+						class="font-semibold col-span-1 mr-20 mt-2 text-lightPrimaryText dark:text-darkPrimaryText"
+						>Topics</label
+					>
 					<div class="flex flex-col w-full">
-						<div class="bg-gray1 rounded-lg px-4 py-2">
-							<input
-								id="tagInput"
-								:ref="tagInput"
-								type="text"
-								placeholder="Add three topics to your profile..."
-								class="w-full text-gray7 bg-gray1 focus:outline-none"
-							/>
-						</div>
+						<input
+							id="tagInput"
+							:ref="tagInput"
+							type="text"
+							placeholder="Add three topics to your profile..."
+							class="w-full rounded-lg px-4 py-2 bg-gray1 dark:bg-gray7 dark:text-darkPrimaryText placeholder-gray5 dark:placeholder-gray3 focus:outline-none"
+						/>
 						<div class="flex flex-row flex-wrap mt-2">
 							<button
-								class="focus:outline-none bg-gray1 z-10 mr-4 mt-2 flex flex-row items-center rounded-lg px-3 py-1"
+								v-for="tag in 3"
+								:key="tag.id"
+								class="focus:outline-none bg-gray1 dark:bg-gray7 z-10 mr-4 mt-2 flex flex-row items-center rounded-lg px-3 py-1"
 							>
-								<span class="text-gray5 text-lg"><p class="text-sm">Elon Musk</p></span
-								><CloseIcon class="text-gray5 p-1 pr-0" />
-							</button>
-							<button
-								class="focus:outline-none bg-gray1 z-10 mr-4 mt-2 flex flex-row items-center rounded-lg px-3 py-1"
-							>
-								<span class="text-gray5 text-lg"><p class="text-sm">Internet</p></span
-								><CloseIcon class="text-gray5 p-1 pr-0" />
-							</button>
-							<button
-								class="focus:outline-none bg-gray1 z-10 mr-4 mt-2 flex flex-row items-center rounded-lg px-3 py-1"
-							>
-								<span class="text-gray5 text-lg"><p class="text-sm">Web3</p></span
-								><CloseIcon class="text-gray5 p-1 pr-0" />
+								<span class="text-gray5 dark:text-gray1 text-lg"><p class="text-sm">Elon Musk</p></span
+								><CloseIcon class="text-gray5 dark:text-gray1 p-1 pr-0" />
 							</button>
 						</div>
 					</div>
@@ -70,22 +67,24 @@
 				<!-- Avatar and description -->
 				<div class="flex mb-6 items-center">
 					<Avatar :avatar="avatar" :authorID="profile.id" :noClick="true" :size="`w-12 h-12`" />
-					<p v-if="profile.name !== ``" class="text-gray7 ml-4 w-10/12">
+					<p v-if="profile.name !== ``" class="text-lightPrimaryText dark:text-darkPrimaryText ml-4 w-10/12">
 						Create your personalised email newsletter from {{ profile.name }}'s posts and manage it here:
 					</p>
-					<p v-else class="text-gray7 ml-4 w-10/12">
-						Create your personalised email newsletter from {{ profile.id }}'s posts and manage it here:
+					<p v-else class="text-lightPrimaryText dark:text-darkPrimaryText ml-4 w-10/12">
+						Create your personalised email newsletter from @{{ profile.id }}'s posts and manage it here:
 					</p>
 				</div>
 				<!-- Topics -->
 				<div class="flex flex-row justify-between mb-3 mt-8">
-					<label for="tagInput" class="font-semibold mr-20">Topics</label>
+					<label for="tagInput" class="font-semibold mr-20 text-lightPrimaryText dark:text-darkPrimaryText"
+						>Topics</label
+					>
 					<div class="flex flex-col w-full">
 						<div class="flex justify-between items-center">
-							<p>Receive email newsletter for all new posts</p>
+							<p class="text-gray5 dark:text-gray3 w-4/5">Receive email newsletter for all new posts</p>
 							<BasicSwitch :enabled="this.allPosts" @toggle="toggleAllPosts" />
 						</div>
-						<p class="mt-6 mb-3">Or receive email newsletter based on topics:</p>
+						<p class="mt-6 mb-3 text-gray5 dark:text-gray3">Or receive email newsletter based on topics:</p>
 						<div class="flex flex-row flex-wrap text-lg">
 							<div v-for="tag in 3" :key="tag._id">
 								<button
@@ -101,7 +100,9 @@
 				</div>
 				<!-- frequency -->
 				<div class="flex flex-row mb-3 mt-8">
-					<label for="tagInput" class="font-semibold mr-11 mt-4">Frequency</label>
+					<label for="tagInput" class="font-semibold mr-11 mt-4 text-lightPrimaryText dark:text-darkPrimaryText"
+						>Frequency</label
+					>
 					<div class="flex flex-row flex-wrap text-lg">
 						<div v-for="period in 4" :key="period._id">
 							<button
@@ -120,7 +121,9 @@
 				</div>
 				<!-- email Destination -->
 				<div class="flex flex-row justify-between mb-3 mt-10">
-					<label for="tagInput" class="font-semibold mr-9">Destination</label>
+					<label for="tagInput" class="font-semibold mr-9 text-lightPrimaryText dark:text-darkPrimaryText"
+						>Destination</label
+					>
 					<div class="flex flex-col w-full">
 						<div class="col-span-4 flex flex-col">
 							<!-- For each active email -->
@@ -129,7 +132,7 @@
 									<input type="checkbox" checked="checked" />
 									<span class="checkmark"></span>
 								</label>
-								<p class="ml-2">{{ $store.state.session.email }}</p>
+								<p class="ml-2 text-lightPrimaryText dark:text-darkPrimaryText">{{ $store.state.session.email }}</p>
 							</div>
 							<button
 								class="flex items-center text-primary text-sm focus:outline-none mt-3"
