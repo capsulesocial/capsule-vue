@@ -49,6 +49,7 @@
 								:email="visitProfile.email"
 								:website="visitProfile.website"
 							/>
+							<EmailNewsletterWidget :profile="visitProfile" @toggleNewsletterPopup="toggleNewsletterPopup" />
 							<MutualFollowersWidget
 								v-if="this.$route.params.id !== this.$store.state.session.id"
 								:mutuals="mutuals"
@@ -156,6 +157,7 @@ import { AxiosError } from 'axios'
 import ProfileWidget from '@/components/widgets/Profile.vue'
 import FollowersWidget from '@/components/widgets/Followers.vue'
 import MutualFollowersWidget from '@/components/widgets/MutualFollowers.vue'
+import EmailNewsletterWidget from '@/components/widgets/EmailNewsletter.vue'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 import FollowersPopup from '@/components/popups/FollowersPopup.vue'
@@ -203,6 +205,7 @@ interface IData {
 	showUnfollowWarning: boolean
 	authorPaymentProfile: ISubscriptionWithProfile | undefined
 	showChangeTier: boolean
+	showNewsletterPopup: boolean
 }
 
 export default Vue.extend({
@@ -212,6 +215,7 @@ export default Vue.extend({
 		Header,
 		Footer,
 		MutualFollowersWidget,
+		EmailNewsletterWidget,
 		BrandedButton,
 		UnauthPopup,
 		FollowersPopup,
@@ -250,6 +254,7 @@ export default Vue.extend({
 			showUnfollowWarning: false,
 			authorPaymentProfile: undefined,
 			showChangeTier: false,
+			showNewsletterPopup: false,
 		}
 	},
 	watch: {
@@ -418,6 +423,9 @@ export default Vue.extend({
 					this.showSubscriptions = !this.showSubscriptions
 				}
 			}
+		},
+		toggleNewsletterPopup() {
+			this.showNewsletterPopup = !this.showNewsletterPopup
 		},
 		async updateFollowers() {
 			const { followers, following } = await getFollowersAndFollowing(this.$route.params.id, true)
