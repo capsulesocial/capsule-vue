@@ -1,12 +1,12 @@
 <template>
 	<article
-		class="from-lightBGStart to-lightBGStop border-lightBorder mb-5 w-full rounded-lg border bg-gradient-to-r px-6 pt-4 pb-5 shadow-lg"
+		class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder mb-5 w-full rounded-lg border bg-gradient-to-r px-6 pt-4 pb-5 shadow-lg"
 		style="backdrop-filter: blur(10px)"
 	>
 		<!-- Self-view -->
 		<div v-if="$store.state.session.id === $route.params.id">
 			<h6 class="text-lightPrimaryText dark:text-darkPrimaryText mb-3 font-semibold">Email newsletter</h6>
-			<p class="text-gray5 text-sm mb-4">
+			<p class="text-gray5 dark:text-gray3 text-sm mb-4">
 				Display highlighted tags on your profile for readers to enable email newsletter to receive your posts:
 			</p>
 			<!-- IF No tags -->
@@ -32,10 +32,10 @@
 		<!-- Public view -->
 		<div v-else>
 			<h6 class="text-lightPrimaryText dark:text-darkPrimaryText mb-3 font-semibold">Email newsletter</h6>
-			<p v-if="profile.name !== ``" class="text-gray5 text-sm mb-4">
+			<p v-if="profile.name !== ``" class="text-gray5 dark:text-gray3 text-sm mb-4">
 				{{ profile.name }} has enabled the option for future posts with these tags to be available for email delivery:
 			</p>
-			<p v-else class="text-gray5 text-sm mb-4">
+			<p v-else class="text-gray5 dark:text-gray3 text-sm mb-4">
 				{{ $route.params.id }} has enabled the option for future posts with these tags to be available for email
 				delivery:
 			</p>
