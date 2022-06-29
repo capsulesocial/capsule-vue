@@ -388,6 +388,8 @@ interface IData {
 	captionHeight?: number
 	showShare: boolean
 	readingTime: number | null
+	wordcount: number | null
+	postImages: Array<string>
 	realURL: string
 	isLeaving: boolean
 	showPaywall: boolean
@@ -435,6 +437,8 @@ export default Vue.extend({
 			deleted: false,
 			encrypted: false,
 			friendlyUrl: null,
+			postImages: [],
+			wordcount: null,
 			tags: [],
 			post: null,
 			author: null,
@@ -512,6 +516,8 @@ export default Vue.extend({
 
 			this.updatePostMetadata(postData)
 			this.excerpt = postData.excerpt
+			// Get reading time
+			this.calculateReadingTime()
 
 			// Get featured photo
 			if (postData.featuredPhotoCID) {
@@ -585,6 +591,8 @@ export default Vue.extend({
 		const postCID = this.$route.params.post
 		const sessionID = this.$store.state.session.id
 		try {
+			// Uncomment this to test the loading behaviour/what google sees
+			// await new Promise((resolve) => setTimeout(resolve, 1000 * 1000))
 			const post = await getPost(postCID)
 			verifyPostAuthenticity(post.data, post.sig, post.public_key).then((verified) => {
 				if (!verified) {
@@ -686,6 +694,8 @@ export default Vue.extend({
 			category: string
 			tags: Tag[]
 			encrypted?: boolean
+			wordCount?: number
+			postImages?: Array<string>
 		}) {
 			this.title = postData.title
 			if (postData.subtitle) {
@@ -696,6 +706,12 @@ export default Vue.extend({
 			this.category = postData.category
 			if (postData.encrypted) {
 				this.encrypted = postData.encrypted
+			}
+			if (postData.wordCount) {
+				this.wordcount = postData.wordCount
+			}
+			if (postData.postImages) {
+				this.postImages = postData.postImages
 			}
 			this.tags = postData.tags
 		},
@@ -788,14 +804,17 @@ export default Vue.extend({
 			})
 		},
 		calculateReadingTime() {
-			if (!this.post) {
-				throw new Error(`Post can't be null`)
+			let wordcount = this.wordcount
+			if (this.content) {
+				wordcount = this.content.split(/\s+/).length
 			}
-			const wordcount = this.content.split(/\s+/).length
+			if (!wordcount) {
+				return
+			}
 			if (wordcount <= 0) {
 				throw new Error(`Word count can't be equal or less than zero`)
 			}
-			this.readingTime = calculateReadingTime(wordcount, this.post.postImages?.length)
+			this.readingTime = calculateReadingTime(wordcount, this.postImages.length)
 		},
 		toggleSubscription() {
 			// Unauth
