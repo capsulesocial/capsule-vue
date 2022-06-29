@@ -225,8 +225,13 @@ export default Vue.extend({
 		selectTag(tag: any) {
 			return tag
 		},
+		selectPeriod(period: any) {
+			return period
+		},
 		saveNewsletterTags() {},
-		createNewsletter() {},
+		createNewsletter() {
+			this.closePopup()
+		},
 	},
 })
 </script>
