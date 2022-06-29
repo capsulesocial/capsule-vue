@@ -141,10 +141,6 @@ const config: NuxtConfig = {
 		},
 		{
 			UserAgent: `*`,
-			Disallow: `/_nuxt`,
-		},
-		{
-			UserAgent: `*`,
 			Disallow: `/subscriptions`,
 		},
 	],
