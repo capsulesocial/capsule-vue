@@ -395,7 +395,6 @@ interface IData {
 	enabledTiers: Array<string>
 	subscriptionStatus: `INSUFFICIENT_TIER` | `NOT_SUBSCRIBED` | ``
 	postImageKeys: Array<IPostImageKey>
-	isMetadataLoading: boolean
 	isContentLoading: boolean
 }
 
@@ -425,7 +424,6 @@ export default Vue.extend({
 		next()
 	},
 	layout: `reader`,
-	// mixins: [markdown],
 	data(): IData {
 		return {
 			title: null,
@@ -465,7 +463,6 @@ export default Vue.extend({
 			enabledTiers: [],
 			subscriptionStatus: ``,
 			postImageKeys: [],
-			isMetadataLoading: true,
 			isContentLoading: true,
 		}
 	},
@@ -572,8 +569,6 @@ export default Vue.extend({
 			}
 
 			this.$toastError(err.message)
-		} finally {
-			this.isMetadataLoading = false
 		}
 
 		// This is a new post
