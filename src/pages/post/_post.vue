@@ -365,6 +365,7 @@ interface IData {
 	timestamp: number | null
 	excerpt: string | null
 	category: string | null
+	friendlyUrl: string | null
 	encrypted: boolean
 	deleted: boolean
 	tags: Tag[]
@@ -387,6 +388,8 @@ interface IData {
 	captionHeight?: number
 	showShare: boolean
 	readingTime: number | null
+	wordcount: number | null
+	postImages: Array<string>
 	realURL: string
 	isLeaving: boolean
 	showPaywall: boolean
@@ -394,7 +397,6 @@ interface IData {
 	enabledTiers: Array<string>
 	subscriptionStatus: `INSUFFICIENT_TIER` | `NOT_SUBSCRIBED` | ``
 	postImageKeys: Array<IPostImageKey>
-	isMetadataLoading: boolean
 	isContentLoading: boolean
 }
 
@@ -424,7 +426,6 @@ export default Vue.extend({
 		next()
 	},
 	layout: `reader`,
-	// mixins: [markdown],
 	data(): IData {
 		return {
 			title: null,
@@ -435,6 +436,9 @@ export default Vue.extend({
 			category: null,
 			deleted: false,
 			encrypted: false,
+			friendlyUrl: null,
+			postImages: [],
+			wordcount: null,
 			tags: [],
 			post: null,
 			author: null,
@@ -463,17 +467,18 @@ export default Vue.extend({
 			enabledTiers: [],
 			subscriptionStatus: ``,
 			postImageKeys: [],
-			isMetadataLoading: true,
 			isContentLoading: true,
 		}
 	},
 	head() {
+		const canonicalLink = {
+			rel: `canonical`,
+			// @ts-ignore
+			href: this.friendlyUrl,
+		}
 		return {
 			// @ts-ignore
-			title: this.title
-				? // @ts-ignore
-				  `${this.title} by ${this.authorID} on Blogchain`
-				: `Loading...`,
+			title: this.title ?? `Loading...`,
 			meta: [
 				{
 					hid: `description`,
@@ -481,6 +486,10 @@ export default Vue.extend({
 					// @ts-ignore
 					content: this.subtitle ?? this.excerpt,
 				},
+			],
+			link: [
+				// @ts-ignore
+				...(this.friendlyUrl ? [canonicalLink] : []),
 			],
 		}
 	},
@@ -507,13 +516,22 @@ export default Vue.extend({
 
 			this.updatePostMetadata(postData)
 			this.excerpt = postData.excerpt
+			// Get reading time
+			this.calculateReadingTime()
 
-			// Get featured photo
-			if (postData.featuredPhotoCID) {
-				getPhotoFromIPFS(postData.featuredPhotoCID).then((p) => {
-					this.featuredPhoto = p
+			// Change URL to social-friendly link, preserve real for Vue router
+			createShareableLink(this.$route.params.post)
+				.then((friendlyUrl) => {
+					this.friendlyUrl = friendlyUrl
+					if (!this.isLeaving) {
+						this.realURL = this.$route.fullPath
+						history.replaceState(null, ``, friendlyUrl)
+					}
 				})
-			}
+				.catch((err) => {
+					// eslint-disable-next-line no-console
+					console.log(`Cannot replace state to shareable link: ${err.message}`)
+				})
 
 			// Get author profile
 			this.author = createDefaultProfile(postData.authorID)
@@ -529,30 +547,16 @@ export default Vue.extend({
 				}
 			})
 
-			// Change URL to social-friendly link, preserve real for Vue router
-			createShareableLink(this.$route.params.post)
-				.then((friendlyUrl) => {
-					if (!this.isLeaving) {
-						this.realURL = this.$route.fullPath
-						history.replaceState(null, ``, friendlyUrl)
-					}
+			// Get featured photo
+			if (postData.featuredPhotoCID) {
+				getPhotoFromIPFS(postData.featuredPhotoCID).then((p) => {
+					this.featuredPhoto = p
 				})
-				.catch((err) => {
-					// eslint-disable-next-line no-console
-					console.log(`Cannot replace state to shareable link: ${err.message}`)
-				})
+			}
 
 			// Unauthenticated
 			if (sessionID === ``) {
 				return
-			}
-
-			try {
-				await this.fetchPaymentProfile({ username: this.authorID })
-			} catch (err) {
-				if (!(err instanceof AxiosError && err.response?.status === 404)) {
-					this.$handleError(err)
-				}
 			}
 		} catch (err: unknown) {
 			if (!(err instanceof Error)) {
@@ -563,8 +567,6 @@ export default Vue.extend({
 			}
 
 			this.$toastError(err.message)
-		} finally {
-			this.isMetadataLoading = false
 		}
 
 		// This is a new post
@@ -581,6 +583,8 @@ export default Vue.extend({
 		const postCID = this.$route.params.post
 		const sessionID = this.$store.state.session.id
 		try {
+			// Uncomment this to test the loading behaviour/what google sees
+			// await new Promise((resolve) => setTimeout(resolve, 1000 * 1000))
 			const post = await getPost(postCID)
 			verifyPostAuthenticity(post.data, post.sig, post.public_key).then((verified) => {
 				if (!verified) {
@@ -590,6 +594,13 @@ export default Vue.extend({
 
 			const postData = post.data
 			this.updatePostMetadata(postData)
+
+			this.fetchPaymentProfile({ username: this.authorID }).catch((err) => {
+				if (!(err instanceof AxiosError && err.response?.status === 404)) {
+					this.$handleError(err)
+				}
+			})
+
 			// Get featured photo
 			if (postData.featuredPhotoCID && !this.featuredPhoto) {
 				getPhotoFromIPFS(postData.featuredPhotoCID).then((p) => {
@@ -682,6 +693,8 @@ export default Vue.extend({
 			category: string
 			tags: Tag[]
 			encrypted?: boolean
+			wordCount?: number
+			postImages?: Array<string>
 		}) {
 			this.title = postData.title
 			if (postData.subtitle) {
@@ -692,6 +705,12 @@ export default Vue.extend({
 			this.category = postData.category
 			if (postData.encrypted) {
 				this.encrypted = postData.encrypted
+			}
+			if (postData.wordCount) {
+				this.wordcount = postData.wordCount
+			}
+			if (postData.postImages) {
+				this.postImages = postData.postImages
 			}
 			this.tags = postData.tags
 		},
@@ -784,14 +803,17 @@ export default Vue.extend({
 			})
 		},
 		calculateReadingTime() {
-			if (!this.post) {
-				throw new Error(`Post can't be null`)
+			let wordcount = this.wordcount
+			if (this.content) {
+				wordcount = this.content.split(/\s+/).length
 			}
-			const wordcount = this.content.split(/\s+/).length
+			if (!wordcount) {
+				return
+			}
 			if (wordcount <= 0) {
 				throw new Error(`Word count can't be equal or less than zero`)
 			}
-			this.readingTime = calculateReadingTime(wordcount, this.post.postImages?.length)
+			this.readingTime = calculateReadingTime(wordcount, this.postImages.length)
 		},
 		toggleSubscription() {
 			// Unauth
