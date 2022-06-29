@@ -186,7 +186,7 @@ export default Vue.extend({
 			currentOffset: 0,
 			limit: 10,
 			noMorePosts: false,
-			topAlgorithm: `This month`,
+			topAlgorithm: this.$store.state.settings.lastTopAlgorithm,
 			showAlgorithmDropdown: false,
 		}
 	},
