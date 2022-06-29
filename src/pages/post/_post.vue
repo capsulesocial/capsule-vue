@@ -365,6 +365,7 @@ interface IData {
 	timestamp: number | null
 	excerpt: string | null
 	category: string | null
+	friendlyUrl: string | null
 	encrypted: boolean
 	deleted: boolean
 	tags: Tag[]
@@ -435,6 +436,7 @@ export default Vue.extend({
 			category: null,
 			deleted: false,
 			encrypted: false,
+			friendlyUrl: null,
 			tags: [],
 			post: null,
 			author: null,
@@ -468,12 +470,14 @@ export default Vue.extend({
 		}
 	},
 	head() {
+		const canonicalLink = {
+			rel: `canonical`,
+			// @ts-ignore
+			href: this.friendlyUrl,
+		}
 		return {
 			// @ts-ignore
-			title: this.title
-				? // @ts-ignore
-				  `${this.title} by ${this.authorID} on Blogchain`
-				: `Loading...`,
+			title: this.title ?? `Loading...`,
 			meta: [
 				{
 					hid: `description`,
@@ -481,6 +485,10 @@ export default Vue.extend({
 					// @ts-ignore
 					content: this.subtitle ?? this.excerpt,
 				},
+			],
+			link: [
+				// @ts-ignore
+				...(this.friendlyUrl ? [canonicalLink] : []),
 			],
 		}
 	},
@@ -532,6 +540,7 @@ export default Vue.extend({
 			// Change URL to social-friendly link, preserve real for Vue router
 			createShareableLink(this.$route.params.post)
 				.then((friendlyUrl) => {
+					this.friendlyUrl = friendlyUrl
 					if (!this.isLeaving) {
 						this.realURL = this.$route.fullPath
 						history.replaceState(null, ``, friendlyUrl)

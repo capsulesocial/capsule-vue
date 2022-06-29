@@ -137,6 +137,7 @@ const config: NuxtConfig = {
 			ignoreOrder: false,
 		},
 		extend(conf, _) {
+			// @ts-ignore
 			conf.resolve.alias.vue = `vue/dist/vue.common`
 		},
 		splitChunks: {
