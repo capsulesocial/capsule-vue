@@ -32,7 +32,7 @@
 					@click="showAlgorithmDropdown = !showAlgorithmDropdown"
 				>
 					<span class="toggle font-bold capitalize pl-4">
-						{{ topAlgorithm }}
+						{{ $store.state.settings.lastTopAlgorithm }}
 					</span>
 					<ChevronUp v-if="showAlgorithmDropdown" class="pr-4" />
 					<ChevronDown v-else class="toggle pr-4" />
@@ -87,6 +87,21 @@
 					It seems like there are no posts published in this timeframe. You might want to try expanding the time filter.
 				</p>
 			</div>
+			<p>{{ `showPreviousPostsButton: ` + showPreviousPostsButton }}</p>
+			<p>{{ `currentOffset: ` + currentOffset }}</p>
+			<p>{{ `$store.state.settings.lastActivePostOffset:` + $store.state.settings.lastActivePostOffset }}</p>
+			<div v-if="showPreviousPostsButton">
+				<button
+					@click="
+						() => {
+							this.$store.commit(`settings/setLastActivePost`, { newLastActivePost: ``, offset: 0 })
+							this.sortFeed(this.algorithm)
+						}
+					"
+				>
+					Show previous posts
+				</button>
+			</div>
 			<!-- content -->
 			<PostCard
 				v-for="p in posts"
@@ -105,6 +120,12 @@
 				:repostCount="p.repostCount"
 				:isDeleted="p.deleted"
 				@updateBookmarks="updateBookmarks"
+				@click.native="
+					$store.commit(`settings/setLastActivePost`, {
+						newLastActivePost: p.post._id,
+						offset: calculateOffset(posts.indexOf(p)),
+					})
+				"
 			/>
 			<p
 				v-if="noMorePosts"
@@ -145,6 +166,7 @@ interface IData {
 	noMorePosts: boolean
 	topAlgorithm: `Today` | `This week` | `This month` | `This year` | `All time`
 	showAlgorithmDropdown: boolean
+	showPreviousPostsButton: boolean
 }
 
 export default Vue.extend({
@@ -170,6 +192,7 @@ export default Vue.extend({
 			noMorePosts: false,
 			topAlgorithm: `This month`,
 			showAlgorithmDropdown: false,
+			showPreviousPostsButton: false,
 		}
 	},
 	head() {
@@ -191,7 +214,12 @@ export default Vue.extend({
 		},
 	},
 	async created() {
-		// Unauthenticated view
+		// Find last active post and set offset
+		if (this.$store.state.settings.lastActivePost !== ``) {
+			this.currentOffset = this.$store.state.settings.lastActivePostOffset
+			this.showPreviousPostsButton = true
+			console.log(`created offset: `, this.currentOffset)
+		}
 		this.posts = await this.fetchPosts(this.algorithm)
 	},
 	mounted() {
@@ -202,8 +230,10 @@ export default Vue.extend({
 	updated() {
 		const lastClickedPost = document.getElementById(`active`)
 		if (lastClickedPost) {
+			console.log(`lastClickedPost: `, this.$store.state.settings.lastActivePost)
 			if (lastClickedPost.parentElement) {
 				lastClickedPost.parentElement.scrollTop = lastClickedPost.offsetTop
+				this.$store.commit(`settings/setLastActivePost`, { newLastActivePost: ``, offset: 0 })
 			}
 		}
 	},
@@ -219,12 +249,14 @@ export default Vue.extend({
 				offset: this.currentOffset,
 				following: followingParam,
 			}
+			console.log(`fetching posts with offset: `, this.currentOffset)
 			const posts =
 				alg === `TOP`
 					? await getPosts({ timeframe: this.convertTimeframe() }, id, payload)
 					: await getPosts({}, id, payload)
 			this.currentOffset += this.limit
 			this.isLoading = false
+
 			// End of unauth functions
 			if (id === `x`) {
 				return posts
@@ -250,7 +282,7 @@ export default Vue.extend({
 			this.currentOffset = 0
 			this.isLoading = true
 			this.algorithm = a
-			this.$store.commit(`settings/setLastActivePost`, ``)
+			this.$store.commit(`settings/setLastActivePost`, { newLastActivePost: ``, offset: 0 })
 			this.$store.commit(`session/updateHomeFeed`, a)
 			this.posts = await this.fetchPosts(a)
 			return this.posts
@@ -306,6 +338,7 @@ export default Vue.extend({
 		setTopAlgorithm(a: `Today` | `This week` | `This month` | `This year` | `All time`) {
 			this.topAlgorithm = a
 			this.showAlgorithmDropdown = false
+			this.$store.commit(`settings/setLastActiveTopAlgorithm`, this.topAlgorithm)
 			this.sortFeed(this.algorithm)
 		},
 		convertTimeframe() {
@@ -338,6 +371,12 @@ export default Vue.extend({
 			if (!e.target.parentNode.classList.contains(`toggle`)) {
 				this.showAlgorithmDropdown = false
 			}
+		},
+		calculateOffset(index: number) {
+			console.log(`number from top: `, this.currentOffset - (this.limit - index))
+			console.log(`post index: `, index, `\ncurrent offset: `, this.currentOffset)
+			return this.currentOffset - (this.limit - index)
+			// posts.indexOf(p) === posts.length && currentOffset ? currentOffset - limit - 1 : currentOffset - limit
 		},
 	},
 })

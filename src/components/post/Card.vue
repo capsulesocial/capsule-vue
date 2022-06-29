@@ -400,10 +400,7 @@
 						<div class="mt-4 flex flex-col justify-between xl:flex-row">
 							<!-- Left side: Title, subtitle / preview, tags -->
 							<div class="mr-4 flex w-full flex-col justify-between">
-								<nuxt-link
-									:to="'/post/' + postCID"
-									@click.native="$store.commit(`settings/setLastActivePost`, postCID)"
-								>
+								<nuxt-link :to="'/post/' + postCID">
 									<div class="flex max-w-full flex-col overflow-hidden pr-4">
 										<div class="flex flex-row w-full justify-between">
 											<h3 class="break-words pb-2 text-lg font-semibold dark:text-darkPrimaryText">
