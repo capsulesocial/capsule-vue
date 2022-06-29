@@ -146,6 +146,12 @@
 			@switchPopup="toggleChangeTierPopup"
 			@close="showSubscriptionInfo = false"
 		/>
+		<ConfigureNewsletterPopup
+			v-if="showNewsletterPopup"
+			:profile="visitProfile"
+			:avatar="visitAvatar"
+			@toggleNewsletterPopup="toggleNewsletterPopup"
+		/>
 		<portal-target name="card-popup"></portal-target>
 	</main>
 </template>
@@ -170,6 +176,7 @@ import BrandedButton from '@/components/BrandedButton.vue'
 import UnauthPopup from '@/components/popups/UnauthPopup.vue'
 import SubInfosPopup from '@/components/popups/SubInfosPopup.vue'
 import unFollowWarningPopup from '@/components/popups/unFollowWarningPopup.vue'
+import ConfigureNewsletterPopup from '@/components/popups/ConfigureNewsletter.vue'
 
 import { IBackground, backgrounds } from '@/config/backgrounds'
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
@@ -226,6 +233,7 @@ export default Vue.extend({
 		SubInfosPopup,
 		unFollowWarningPopup,
 		ChangeTierPopup,
+		ConfigureNewsletterPopup,
 	},
 	middleware: `auth`,
 	data(): IData {
