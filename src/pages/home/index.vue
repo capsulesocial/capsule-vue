@@ -87,10 +87,7 @@
 					It seems like there are no posts published in this timeframe. You might want to try expanding the time filter.
 				</p>
 			</div>
-			<p>{{ `showPreviousPostsButton: ` + showPreviousPostsButton }}</p>
-			<p>{{ `currentOffset: ` + currentOffset }}</p>
-			<p>{{ `$store.state.settings.lastActivePostOffset:` + $store.state.settings.lastActivePostOffset }}</p>
-			<div v-if="showPreviousPostsButton">
+			<div v-if="$store.state.settings.lastActivePostOffset !== 0">
 				<button
 					@click="
 						() => {
@@ -166,7 +163,6 @@ interface IData {
 	noMorePosts: boolean
 	topAlgorithm: `Today` | `This week` | `This month` | `This year` | `All time`
 	showAlgorithmDropdown: boolean
-	showPreviousPostsButton: boolean
 }
 
 export default Vue.extend({
@@ -192,7 +188,6 @@ export default Vue.extend({
 			noMorePosts: false,
 			topAlgorithm: `This month`,
 			showAlgorithmDropdown: false,
-			showPreviousPostsButton: false,
 		}
 	},
 	head() {
@@ -217,8 +212,6 @@ export default Vue.extend({
 		// Find last active post and set offset
 		if (this.$store.state.settings.lastActivePost !== ``) {
 			this.currentOffset = this.$store.state.settings.lastActivePostOffset
-			this.showPreviousPostsButton = true
-			console.log(`created offset: `, this.currentOffset)
 		}
 		this.posts = await this.fetchPosts(this.algorithm)
 	},
@@ -226,16 +219,6 @@ export default Vue.extend({
 		const container = this.$refs.container as HTMLElement
 		container.addEventListener(`scroll`, this.handleScroll)
 		window.addEventListener(`click`, this.handleDropdown, false)
-	},
-	updated() {
-		const lastClickedPost = document.getElementById(`active`)
-		if (lastClickedPost) {
-			console.log(`lastClickedPost: `, this.$store.state.settings.lastActivePost)
-			if (lastClickedPost.parentElement) {
-				lastClickedPost.parentElement.scrollTop = lastClickedPost.offsetTop
-				this.$store.commit(`settings/setLastActivePost`, { newLastActivePost: ``, offset: 0 })
-			}
-		}
 	},
 	methods: {
 		getReposts,
@@ -249,7 +232,6 @@ export default Vue.extend({
 				offset: this.currentOffset,
 				following: followingParam,
 			}
-			console.log(`fetching posts with offset: `, this.currentOffset)
 			const posts =
 				alg === `TOP`
 					? await getPosts({ timeframe: this.convertTimeframe() }, id, payload)
@@ -339,6 +321,7 @@ export default Vue.extend({
 			this.topAlgorithm = a
 			this.showAlgorithmDropdown = false
 			this.$store.commit(`settings/setLastActiveTopAlgorithm`, this.topAlgorithm)
+			this.$store.commit(`settings/setLastActivePost`, { newLastActivePost: ``, offset: 0 })
 			this.sortFeed(this.algorithm)
 		},
 		convertTimeframe() {
@@ -373,10 +356,7 @@ export default Vue.extend({
 			}
 		},
 		calculateOffset(index: number) {
-			console.log(`number from top: `, this.currentOffset - (this.limit - index))
-			console.log(`post index: `, index, `\ncurrent offset: `, this.currentOffset)
-			return this.currentOffset - (this.limit - index)
-			// posts.indexOf(p) === posts.length && currentOffset ? currentOffset - limit - 1 : currentOffset - limit
+			return index + this.$store.state.settings.lastActivePostOffset
 		},
 	},
 })
