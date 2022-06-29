@@ -519,12 +519,19 @@ export default Vue.extend({
 			// Get reading time
 			this.calculateReadingTime()
 
-			// Get featured photo
-			if (postData.featuredPhotoCID) {
-				getPhotoFromIPFS(postData.featuredPhotoCID).then((p) => {
-					this.featuredPhoto = p
+			// Change URL to social-friendly link, preserve real for Vue router
+			createShareableLink(this.$route.params.post)
+				.then((friendlyUrl) => {
+					this.friendlyUrl = friendlyUrl
+					if (!this.isLeaving) {
+						this.realURL = this.$route.fullPath
+						history.replaceState(null, ``, friendlyUrl)
+					}
 				})
-			}
+				.catch((err) => {
+					// eslint-disable-next-line no-console
+					console.log(`Cannot replace state to shareable link: ${err.message}`)
+				})
 
 			// Get author profile
 			this.author = createDefaultProfile(postData.authorID)
@@ -540,31 +547,16 @@ export default Vue.extend({
 				}
 			})
 
-			// Change URL to social-friendly link, preserve real for Vue router
-			createShareableLink(this.$route.params.post)
-				.then((friendlyUrl) => {
-					this.friendlyUrl = friendlyUrl
-					if (!this.isLeaving) {
-						this.realURL = this.$route.fullPath
-						history.replaceState(null, ``, friendlyUrl)
-					}
+			// Get featured photo
+			if (postData.featuredPhotoCID) {
+				getPhotoFromIPFS(postData.featuredPhotoCID).then((p) => {
+					this.featuredPhoto = p
 				})
-				.catch((err) => {
-					// eslint-disable-next-line no-console
-					console.log(`Cannot replace state to shareable link: ${err.message}`)
-				})
+			}
 
 			// Unauthenticated
 			if (sessionID === ``) {
 				return
-			}
-
-			try {
-				await this.fetchPaymentProfile({ username: this.authorID })
-			} catch (err) {
-				if (!(err instanceof AxiosError && err.response?.status === 404)) {
-					this.$handleError(err)
-				}
 			}
 		} catch (err: unknown) {
 			if (!(err instanceof Error)) {
@@ -602,6 +594,13 @@ export default Vue.extend({
 
 			const postData = post.data
 			this.updatePostMetadata(postData)
+
+			this.fetchPaymentProfile({ username: this.authorID }).catch((err) => {
+				if (!(err instanceof AxiosError && err.response?.status === 404)) {
+					this.$handleError(err)
+				}
+			})
+
 			// Get featured photo
 			if (postData.featuredPhotoCID && !this.featuredPhoto) {
 				getPhotoFromIPFS(postData.featuredPhotoCID).then((p) => {
