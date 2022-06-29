@@ -45,6 +45,18 @@
 									<ProfileIcon class="w-4 h-4" />
 									<p class="ml-4">Account</p>
 								</nuxt-link>
+								<nuxt-link
+									:class="
+										$route.name === `settings-notifications`
+											? `bg-lightInput dark:bg-darkInput font-semibold text-primary`
+											: `text-gray5 dark:text-gray3`
+									"
+									class="focus:outline-none mb-4 w-full rounded-lg py-2 px-4 text-left flex flex-row items-center"
+									to="/settings/notifications"
+								>
+									<BellIcon class="w-4 h-4" />
+									<p class="ml-4">Notifications</p>
+								</nuxt-link>
 								<!-- <nuxt-link
 									:class="$route.name === `settings-security` ? `bg-lightInput font-semibold` : ``"
 									class="w-full rounded-lg text-gray5 py-2 px-4 mb-4 text-left focus:outline-none"
@@ -90,6 +102,7 @@ import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import { IBackground, backgrounds } from '@/config/backgrounds'
 import ProfileIcon from '@/components/icons/Profile.vue'
+import BellIcon from '@/components/icons/Bell.vue'
 import BrushlIcon from '@/components/icons/Brush.vue'
 
 interface IData {
@@ -106,6 +119,7 @@ export default Vue.extend({
 		Footer,
 		ProfileIcon,
 		BrushlIcon,
+		BellIcon,
 	},
 	middleware: `auth`,
 	data(): IData {
