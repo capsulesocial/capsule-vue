@@ -182,7 +182,7 @@
 									<p class="my-4 text-center text-gray5 dark:text-gray3">
 										Subscribe to the
 										<span
-											v-for="(tier, index) in disabledTiers.slice(0, 1)"
+											v-for="(tier, index) in enabledTierNames.slice(0, 1)"
 											:key="index"
 											class="text-neutral font-semibold"
 											>{{ tier }}</span
@@ -416,7 +416,7 @@ interface IData {
 	subscriptionStatus: `INSUFFICIENT_TIER` | `NOT_SUBSCRIBED` | ``
 	postImageKeys: Array<IPostImageKey>
 	isContentLoading: boolean
-	disabledTiers: Array<string>
+	enabledTierNames: Array<string>
 }
 
 export default Vue.extend({
@@ -487,7 +487,7 @@ export default Vue.extend({
 			subscriptionStatus: ``,
 			postImageKeys: [],
 			isContentLoading: true,
-			disabledTiers: [],
+			enabledTierNames: [],
 		}
 	},
 	head() {
@@ -774,9 +774,11 @@ export default Vue.extend({
 		},
 		initializeProfile() {
 			const { tiers } = this.getPaymentProfile(this.authorID)
-			for (let i = 0; i < tiers.length; i++) {
-				if (tiers[i]._id !== this.enabledTiers[i]) {
-					this.disabledTiers.push(tiers[i].name)
+			for (let i = 0; i < this.enabledTiers.length; i++) {
+				for (let j = 0; j < tiers.length; j++) {
+					if (this.enabledTiers[i] === tiers[j]._id) {
+						this.enabledTierNames.push(tiers[j].name)
+					}
 				}
 			}
 		},
