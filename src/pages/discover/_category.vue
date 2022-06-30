@@ -1,5 +1,5 @@
 <template>
-	<section class="border-lightBorder w-full border">
+	<section class="border-lightBorder w-full border" style="backdrop-filter: blur(10px)">
 		<!-- Header -->
 		<div
 			id="header"
@@ -27,7 +27,7 @@
 					<div
 						id="buttonbg"
 						class="bg-lightBG animatefast absolute h-full rounded-full bg-opacity-50"
-						style="backdrop-filter: blur(10px); width: 155px; z-index: 0"
+						style="width: 155px; z-index: 0"
 					></div>
 				</button>
 				<h2

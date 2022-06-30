@@ -1,12 +1,7 @@
 <template>
 	<div>
 		<div class="flex flex-col sm:flex-row items-center justify-between px-5 pt-3 pb-3 xl:px-6 xl:pt-4">
-			<h2
-				class="text-lightPrimaryText dark:text-darkPrimaryText text-lg font-semibold xl:text-xl"
-				style="backdrop-filter: blur(10px)"
-			>
-				My bookmarks
-			</h2>
+			<h2 class="text-lightPrimaryText dark:text-darkPrimaryText text-lg font-semibold xl:text-xl">My bookmarks</h2>
 			<BookmarksFilter class="modal-animation mt-2 sm:mt-0" :filter="filter" @clicked="setSort" />
 		</div>
 		<div class="min-h-120 h-120 lg:min-h-220 lg:h-220 w-full overflow-y-auto">

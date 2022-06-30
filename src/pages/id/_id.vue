@@ -1,13 +1,8 @@
 <template>
 	<section class="w-full">
-		<div>
+		<div style="backdrop-filter: blur(10px)">
 			<!-- top -->
-			<article
-				id="header"
-				ref="topContainer"
-				class="min-h-fit header-profile z-20 w-full px-4 pt-3 xl:px-6 xl:pt-4"
-				style="backdrop-filter: blur(10px)"
-			>
+			<article id="header" ref="topContainer" class="min-h-fit header-profile z-20 w-full px-4 pt-3 xl:px-6 xl:pt-4">
 				<!-- Back button -->
 				<div class="flex flex-row items-center pb-4">
 					<button
@@ -214,7 +209,7 @@
 			class="bg-darkBG dark:bg-gray5 modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
 		>
 			<SettingsPopup
-				class="w-full h-screen overflow-y-auto lg:w-589 lg:h-auto from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation w-full rounded-lg bg-gradient-to-r shadow-lg backdrop-blur-lg backdrop-filter"
+				class="w-full h-screen overflow-y-auto lg:w-589 lg:h-auto from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation w-full rounded-lg bg-gradient-to-r shadow-lg"
 				style="backdrop-filter: blur(10px)"
 				:updateProfileMethod="updateProfileMethod"
 				@close="toggleSettings"

@@ -34,7 +34,7 @@
 						:posts="posts"
 						:isLoading="isLoading"
 						:filter="activeSort"
-						:noMorePosts="noMorePosts"
+						style="backdrop-filter: blur(10px)"
 						@clicked="setSort"
 						@fetchPosts="fetchPosts"
 					/>

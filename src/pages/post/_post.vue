@@ -20,7 +20,6 @@
 			<header
 				id="header"
 				class="page-header xl:w-760 xl:max-w-760 from-lightBGStart to-lightBGStop dark:from-darkBG dark:to-darkBG sticky top-0 z-10 flex w-full items-center rounded-b-lg bg-gradient-to-r py-2 px-5"
-				style="backdrop-filter: blur(10px)"
 			>
 				<div class="trigger-menu-wrapper flex w-full justify-center py-2 ease-in-out">
 					<div class="flex w-full justify-between xl:min-w-max xl:max-w-3xl">

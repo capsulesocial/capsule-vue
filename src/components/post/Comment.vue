@@ -17,7 +17,6 @@
 			<div
 				class="relative flex flex-row w-full overflow-x-auto justify-between rounded-lg border border-dashed"
 				:style="getStyle(`border-`)"
-				style="backdrop-filter: blur(10px)"
 			>
 				<!-- Text -->
 				<div class="flex w-full flex-grow flex-col px-3 py-1 pt-2">

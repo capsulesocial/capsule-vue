@@ -1,7 +1,7 @@
 <template>
-	<section>
+	<section style="backdrop-filter: blur(10px)">
 		<nav class="flex w-full flex-row justify-between text-sm rounded-t-lg">
-			<div class="flex" style="backdrop-filter: blur(10px)">
+			<div class="flex">
 				<button
 					:class="algorithm === `FOLLOWING` ? ` text-primary font-semibold` : `text-gray5 dark:text-gray3`"
 					class="flex items-center focus:outline-none h-full w-full py-4 px-6"
@@ -126,13 +126,7 @@
 					})
 				"
 			/>
-			<p
-				v-if="noMorePosts"
-				class="text-gray5 dark:text-gray3 py-5 text-center text-sm"
-				style="backdrop-filter: blur(10px)"
-			>
-				No more posts
-			</p>
+			<p v-if="noMorePosts" class="text-gray5 dark:text-gray3 py-5 text-center text-sm">No more posts</p>
 			<!-- Not loaded yet -->
 			<article v-show="isLoading" class="modal-animation flex h-screen w-full justify-center pt-12">
 				<div
