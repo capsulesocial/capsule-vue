@@ -157,7 +157,7 @@
 						:disabled="false"
 						@click="createNewsletter"
 					>
-						<span class="font-sans" style="font-size: 0.95rem"> Create newsletter </span>
+						<span class="font-sans" style="font-size: 0.95rem"> Save </span>
 					</button>
 				</div>
 			</div>
