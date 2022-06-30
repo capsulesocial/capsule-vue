@@ -225,7 +225,6 @@ export default Vue.extend({
 		window.addEventListener(`click`, this.handleDropdown, false)
 		this.scrollToRecentPost()
 	},
-	updated() {},
 	methods: {
 		getReposts,
 		async fetchPosts(alg: `TOP` | `NEW` | `FOLLOWING`) {
