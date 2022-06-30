@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { signContent } from './utilities/keys'
+import libsodium from './utilities/keys'
 import { nodeUrl } from './utilities/config'
 import { uint8ArrayToHexString } from './utilities/helpers'
 
@@ -11,7 +11,7 @@ export async function sendPostDeletion(action: `HIDE`, postCID: string, authorID
 		authorID,
 	}
 
-	const { sig } = await signContent(event)
+	const { sig } = await libsodium().signContent(event)
 
 	await axios.post(`${nodeUrl()}/posts`, {
 		event,

@@ -1,7 +1,7 @@
 import axios from 'axios'
 import ipfs from './utilities/ipfs'
 import { nodeUrl, sigValidity } from './utilities/config'
-import { signContent } from './utilities/keys'
+import libsodium from './utilities/keys'
 import { uint8ArrayToHexString } from './utilities/helpers'
 import { getCompressedImage } from './utilities/imageCompression'
 import { encryptData } from './crypto'
@@ -23,7 +23,7 @@ interface IUploadEncryptedPhotoResult extends IUploadPhotoResult {
 
 export async function preUploadPhoto(cid: string, photo: Blob, filename: string, authorID: string, encrypted = false) {
 	const exp = (Date.now() + sigValidity).toString()
-	const { sig } = await signContent({ cid, exp, authorID })
+	const { sig } = await libsodium().signContent({ cid, exp, authorID })
 
 	const formData = new FormData()
 	formData.append(`cid`, cid)

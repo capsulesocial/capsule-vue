@@ -1,13 +1,17 @@
+/* eslint-disable camelcase */
 import { keyStores } from 'near-api-js'
 import { KeyPairEd25519 } from 'near-api-js/lib/utils'
 import { base_decode as baseDecode } from 'near-api-js/lib/utils/serialize'
-import {
-	crypto_sign_verify_detached as cryptoSignVerifyDetached,
-	crypto_sign_detached as cryptoSignDetached,
-} from 'libsodium-wrappers'
+import type { crypto_sign_verify_detached, crypto_sign_detached } from 'libsodium-wrappers'
 
 import { getNearConfig } from './config'
 import { stableOrderObj, uint8ArrayToHexString } from './helpers'
+
+export interface LibsodiumInterface {
+	signContent: <T>(content: T) => Promise<{ sig: Uint8Array; publicKey: string }>
+	verifyContent: <T>(content: T, signature: Uint8Array, publicKey: Uint8Array) => Promise<boolean>
+	initResult: Promise<void>
+}
 
 const nearConfig = getNearConfig()
 
@@ -26,15 +30,105 @@ async function getNearPrivateKey() {
 	return { sk: privateKeyBytes, pk: uint8ArrayToHexString(keypair.publicKey.data) }
 }
 
-export async function signContent<T>(content: T) {
-	const { sk, pk } = await getNearPrivateKey()
-	const ec = new TextEncoder()
-	const message = ec.encode(JSON.stringify(stableOrderObj(content)))
-	return { sig: cryptoSignDetached(message, sk), publicKey: pk }
+async function loadAndInitLibSodium() {
+	const { default: res } = await import(`libsodium-wrappers`)
+
+	await res.ready
+
+	const { crypto_sign_verify_detached, crypto_sign_detached } = res
+	// @ts-ignore
+	return { crypto_sign_verify_detached, crypto_sign_detached, ready: res.ready }
 }
 
-export function verifyContent<T>(content: T, signature: Uint8Array, publicKey: Uint8Array) {
-	const ec = new TextEncoder()
-	const message = ec.encode(JSON.stringify(stableOrderObj(content)))
-	return cryptoSignVerifyDetached(signature, message, publicKey)
+function createLibSodium() {
+	let libSodiumInitialised = false
+	let cryptoSignVerify: typeof crypto_sign_verify_detached | null = null
+	let cryptoSign: typeof crypto_sign_detached | null = null
+
+	const promise = loadAndInitLibSodium()
+
+	const promiseCache: Array<{
+		func: (...args: any[]) => Promise<any>
+		args: any[]
+		resolver: (value: any) => void
+	}> = []
+
+	function _resolveCachedPromises() {
+		for (const v of promiseCache) {
+			const { resolver, func, args } = v
+			resolver(func(...args))
+		}
+
+		// Clear the array
+		promiseCache.splice(0, promiseCache.length)
+	}
+
+	function _promiseWrapper<T>(func: (...funcArgs: any[]) => Promise<T>, ...args: any[]) {
+		if (libSodiumInitialised) {
+			return func(...args)
+		}
+
+		let resolver: (value: T) => void = () => null
+		const promise = new Promise<T>((resolve) => {
+			resolver = resolve
+		})
+
+		promiseCache.push({ func, args, resolver })
+
+		return promise
+	}
+
+	const signContent = async <T>(content: T) => {
+		if (cryptoSign === null) {
+			throw new Error(`Not initialised!`)
+		}
+		const { sk, pk } = await getNearPrivateKey()
+		const ec = new TextEncoder()
+		const message = ec.encode(JSON.stringify(stableOrderObj(content)))
+		return { sig: cryptoSign(message, sk), publicKey: pk }
+	}
+
+	const verifyContent = <T>(content: T, signature: Uint8Array, publicKey: Uint8Array) => {
+		if (cryptoSignVerify === null) {
+			throw new Error(`Not initialised!`)
+		}
+		const ec = new TextEncoder()
+		const message = ec.encode(JSON.stringify(stableOrderObj(content)))
+		const res = cryptoSignVerify(signature, message, publicKey)
+		return Promise.resolve(res)
+	}
+
+	const initResult = promise.then(({ crypto_sign_verify_detached, crypto_sign_detached }) => {
+		cryptoSignVerify = crypto_sign_verify_detached
+		cryptoSign = crypto_sign_detached
+		libSodiumInitialised = true
+		_resolveCachedPromises()
+	})
+
+	return {
+		signContent: <T>(content: T) => _promiseWrapper<{ sig: Uint8Array; publicKey: string }>(signContent, content),
+		verifyContent: <T>(content: T, signature: Uint8Array, publicKey: Uint8Array) =>
+			_promiseWrapper<boolean>(verifyContent, content, signature, publicKey),
+		initResult,
+	}
 }
+
+let _libsodium: LibsodiumInterface | null = null
+
+export function initLibSodium() {
+	if (_libsodium) {
+		return _libsodium
+	}
+
+	_libsodium = createLibSodium()
+	return _libsodium
+}
+
+function libsodium() {
+	if (!_libsodium) {
+		throw new Error(`Libsodium isn't initiated!`)
+	}
+	return _libsodium
+}
+
+export default libsodium

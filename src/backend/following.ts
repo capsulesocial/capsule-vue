@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { nodeUrl } from './utilities/config'
-import { signContent } from './utilities/keys'
+import libsodium from './utilities/keys'
 import { uint8ArrayToHexString } from './utilities/helpers'
 import cache from './utilities/caching'
 
@@ -19,7 +19,7 @@ export async function followChange(action: `FOLLOW` | `UNFOLLOW`, self: string, 
 		timestamp: Date.now(),
 	}
 
-	const { sig } = await signContent(data)
+	const { sig } = await libsodium().signContent(data)
 
 	await axios.post(`${nodeUrl()}/follow`, {
 		event: data,
