@@ -11,7 +11,13 @@
 			You are currently receiving email newsletter from the following authors:
 		</p>
 		<div v-if="!isLoading" class="flex flex-wrap mt-4">
-			<ProfilePreviewCard v-for="profiles in 4" :key="profiles.id" :profile="author1" class="pb-4 mx-1 mb-2" />
+			<ProfilePreviewCard
+				v-for="profiles in 4"
+				:key="profiles.id"
+				:profile="author1"
+				class="pb-4 mx-1 mb-2"
+				@manageNewsletter="$emit(`manageNewsletter`, author1)"
+			/>
 		</div>
 	</main>
 </template>

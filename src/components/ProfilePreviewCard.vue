@@ -13,7 +13,7 @@
 				<span class="text-gray5 dark:text-gray3 text-sm truncate w-full">@{{ profile.id }}</span>
 			</div>
 		</div>
-		<button class="text-primary text-sm mt-2" @click="$emit(`manageNewsletter`)">Manage</button>
+		<button class="text-primary text-sm mt-2" @click="$emit(`manageNewsletter`, profile)">Manage</button>
 	</div>
 	<div
 		v-else
