@@ -14,6 +14,7 @@ export interface Session {
 	avatar: Profile[`avatar`]
 	socials: Profile[`socials`]
 	background: Profile[`background`]
+	homeFeed: `TOP` | `NEW` | `FOLLOWING`
 	cid: string
 	subscriptionEnabled: boolean
 }
@@ -34,6 +35,7 @@ export const MutationType = {
 	CHANGE_LOCATION: `updateLocation`,
 	CHANGE_WEBSITE: `updateWebsite`,
 	CHANGE_BACKGROUND: `updateBackground`,
+	CHANGE_HOMEFEED: `updateHomeFeed`,
 	LOGOUT: `logout`,
 }
 
@@ -56,6 +58,9 @@ export const mutations: MutationTree<Session> = {
 	[MutationType.CHANGE_BACKGROUND]: (state, newBackground: string) => {
 		state.background = newBackground
 	},
+	[MutationType.CHANGE_HOMEFEED]: (state, newSorting: `TOP` | `NEW` | `FOLLOWING`) => {
+		state.homeFeed = newSorting
+	},
 	[MutationType.CHANGE_AVATAR]: (state, newAvatar: string) => {
 		state.avatar = newAvatar
 	},
@@ -72,6 +77,7 @@ export const mutations: MutationTree<Session> = {
 		removeNearPrivateKey()
 		window.localStorage.removeItem(`accountId`)
 		walletLogout()
+		state.homeFeed = `TOP`
 	},
 }
 
@@ -89,6 +95,7 @@ export function createDefaultSession(id: string): Session {
 		avatar: ``,
 		website: ``,
 		background: ``,
+		homeFeed: id === `` ? `TOP` : `FOLLOWING`,
 		subscriptionEnabled: false,
 	}
 }
@@ -119,6 +126,7 @@ export function createSessionFromProfile(cid: string, p: Profile): Session {
 		socials: [],
 		website: p.website,
 		background: p.background,
+		homeFeed: p.id === `` ? `TOP` : `FOLLOWING`,
 		subscriptionEnabled: true,
 	}
 }

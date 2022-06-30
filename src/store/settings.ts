@@ -9,6 +9,9 @@ export interface SettingState {
 	color: string
 	recentlyPosted: boolean
 	recentlyInSettings: boolean
+	lastActivePost: string
+	lastActivePostOffset: number
+	lastTopAlgorithm: `Today` | `This week` | `This month` | `This year` | `All time`
 	showUnauthPopup: boolean
 }
 
@@ -17,7 +20,10 @@ export const state = (): SettingState => ({
 	color: `Green`,
 	recentlyPosted: false,
 	recentlyInSettings: false,
+	lastActivePost: ``,
+	lastActivePostOffset: 0,
 	showUnauthPopup: false,
+	lastTopAlgorithm: `This month`,
 })
 
 export const getters: GetterTree<SettingState, RootState> = {}
@@ -27,6 +33,8 @@ export const MutationType = {
 	CHANGE_COLOR: `changeColor`,
 	SET_RECENTLY_POSTED: `setRecentlyPosted`,
 	SET_RECENTLY_IN_SETTINGS: `setRecentlyInSettings`,
+	SET_LAST_ACTIVE_POST: `setLastActivePost`,
+	SET_LAST_ACTIVE_TOP_ALGORITHM: `setLastActiveTopAlgorithm`,
 	TOGGLE_UNAUTH_POPUP: `toggleUnauthPopup`,
 }
 
@@ -42,6 +50,16 @@ export const mutations: MutationTree<SettingState> = {
 	},
 	[MutationType.SET_RECENTLY_IN_SETTINGS]: (state, recentlyInSettings: boolean) => {
 		state.recentlyInSettings = recentlyInSettings
+	},
+	[MutationType.SET_LAST_ACTIVE_TOP_ALGORITHM]: (
+		state,
+		algorithm: `Today` | `This week` | `This month` | `This year` | `All time`,
+	) => {
+		state.lastTopAlgorithm = algorithm
+	},
+	[MutationType.SET_LAST_ACTIVE_POST]: (state, data: { newLastActivePost: string; offset: number }) => {
+		state.lastActivePost = data.newLastActivePost
+		state.lastActivePostOffset = data.offset
 	},
 	[MutationType.TOGGLE_UNAUTH_POPUP]: (state, c: boolean = !state.showUnauthPopup) => {
 		state.showUnauthPopup = c
