@@ -26,6 +26,7 @@
 							@togglePopup="togglePopup"
 							@changeLocalBGImage="changeLocalBGImage"
 							@initProfile="initProfile"
+							@manageNewsletter="toggleNewsletterPopup"
 						/>
 						<!-- Settings tabs -->
 						<aside class="w-5/12 -mr-5 -mt-4 p-4 hidden lg:block overflow-y-auto">
@@ -89,6 +90,12 @@
 					</section>
 				</div>
 			</div>
+			<ConfigureNewsletterPopup
+				v-if="showNewsletterPopup"
+				:profile="clickedAuthor"
+				:avatar="clickedAuthorAvatar"
+				@toggleNewsletterPopup="toggleNewsletterPopup"
+			/>
 		</div>
 		<portal-target name="settingsLayout"></portal-target>
 	</main>
@@ -104,6 +111,7 @@ import { IBackground, backgrounds } from '@/config/backgrounds'
 import ProfileIcon from '@/components/icons/Profile.vue'
 import BellIcon from '@/components/icons/Bell.vue'
 import BrushlIcon from '@/components/icons/Brush.vue'
+import ConfigureNewsletterPopup from '@/components/popups/ConfigureNewsletter.vue'
 
 interface IData {
 	profile: Profile | null
@@ -111,6 +119,9 @@ interface IData {
 	tab: string
 	showPopup: boolean
 	bgImage: IBackground
+	showNewsletterPopup: boolean
+	clickedAuthor: Profile | null
+	clickedAuthorAvatar?: string | ArrayBuffer
 }
 
 export default Vue.extend({
@@ -120,6 +131,7 @@ export default Vue.extend({
 		ProfileIcon,
 		BrushlIcon,
 		BellIcon,
+		ConfigureNewsletterPopup,
 	},
 	middleware: `auth`,
 	data(): IData {
@@ -129,6 +141,9 @@ export default Vue.extend({
 			showPopup: false,
 			bgImage: backgrounds[0],
 			avatar: undefined,
+			showNewsletterPopup: false,
+			clickedAuthor: null,
+			clickedAuthorAvatar: undefined,
 		}
 	},
 	async created() {
@@ -163,6 +178,15 @@ export default Vue.extend({
 		},
 		togglePopup(): void {
 			this.showPopup = !this.showPopup
+		},
+		toggleNewsletterPopup(clickedauthor: any) {
+			if (clickedauthor !== undefined) {
+				this.clickedAuthor = clickedauthor
+				getPhotoFromIPFS(clickedauthor.avatar).then((p) => {
+					this.clickedAuthorAvatar = p
+				})
+			}
+			this.showNewsletterPopup = !this.showNewsletterPopup
 		},
 	},
 })
