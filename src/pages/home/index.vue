@@ -32,7 +32,7 @@
 					@click="showAlgorithmDropdown = !showAlgorithmDropdown"
 				>
 					<span class="toggle font-bold capitalize pl-4">
-						{{ topAlgorithm }}
+						{{ $store.state.settings.lastTopAlgorithm }}
 					</span>
 					<ChevronUp v-if="showAlgorithmDropdown" class="pr-4" />
 					<ChevronDown v-else class="toggle pr-4" />
@@ -87,6 +87,19 @@
 					It seems like there are no posts published in this timeframe. You might want to try expanding the time filter.
 				</p>
 			</div>
+			<button
+				v-if="$store.state.settings.lastActivePostOffset !== 0"
+				class="flex w-full justify-center items-center text-sm text-primary py-2 hover:bg-gray1 dark:hover:bg-darkBG hover:bg-opacity-25 dark:hover:bg-opacity-25 transition ease-in-out"
+				@click="
+					() => {
+						this.$store.commit(`settings/setLastActivePost`, { newLastActivePost: ``, offset: 0 })
+						this.sortFeed(this.algorithm)
+					}
+				"
+			>
+				<ReloadIcon class="mr-2 w-4 h-4" />
+				Load newest posts
+			</button>
 			<!-- content -->
 			<PostCard
 				v-for="p in posts"
@@ -105,6 +118,12 @@
 				:repostCount="p.repostCount"
 				:isDeleted="p.deleted"
 				@updateBookmarks="updateBookmarks"
+				@click.native="
+					$store.commit(`settings/setLastActivePost`, {
+						newLastActivePost: p.post._id,
+						offset: calculateOffset(posts.indexOf(p)),
+					})
+				"
 			/>
 			<p
 				v-if="noMorePosts"
@@ -131,6 +150,7 @@ import { mapGetters } from 'vuex'
 import PostCard from '@/components/post/Card.vue'
 import ChevronUp from '@/components/icons/ChevronUp.vue'
 import ChevronDown from '@/components/icons/ChevronDown.vue'
+import ReloadIcon from '@/components/icons/Reload.vue'
 import { namespace as SubscriptionsNamespace } from '@/store/subscriptions'
 import { getPosts, IRepostResponse, IPostResponse } from '@/backend/post'
 import { getReposts } from '@/backend/reposts'
@@ -152,6 +172,7 @@ export default Vue.extend({
 		PostCard,
 		ChevronUp,
 		ChevronDown,
+		ReloadIcon,
 	},
 	layout: `home`,
 	props: {
@@ -168,7 +189,7 @@ export default Vue.extend({
 			currentOffset: 0,
 			limit: 10,
 			noMorePosts: false,
-			topAlgorithm: `This month`,
+			topAlgorithm: this.$store.state.settings.lastTopAlgorithm,
 			showAlgorithmDropdown: false,
 		}
 	},
@@ -191,7 +212,10 @@ export default Vue.extend({
 		},
 	},
 	async created() {
-		// Unauthenticated view
+		// Find last active post and set offset
+		if (this.$store.state.settings.lastActivePost !== ``) {
+			this.currentOffset = this.$store.state.settings.lastActivePostOffset
+		}
 		this.posts = await this.fetchPosts(this.algorithm)
 	},
 	mounted() {
@@ -200,10 +224,12 @@ export default Vue.extend({
 		window.addEventListener(`click`, this.handleDropdown, false)
 	},
 	updated() {
-		const lastClickedPost = document.getElementById(`active`)
-		if (lastClickedPost) {
-			if (lastClickedPost.parentElement) {
-				lastClickedPost.parentElement.scrollTop = lastClickedPost.offsetTop
+		if (this.$store.state.settings.lastActivePost !== ``) {
+			const lastClickedPost = document.getElementById(`active`)
+			if (lastClickedPost) {
+				if (lastClickedPost.parentElement) {
+					lastClickedPost.parentElement.scrollTo({ top: lastClickedPost.offsetTop, behavior: `smooth` })
+				}
 			}
 		}
 	},
@@ -225,6 +251,7 @@ export default Vue.extend({
 					: await getPosts({}, id, payload)
 			this.currentOffset += this.limit
 			this.isLoading = false
+
 			// End of unauth functions
 			if (id === `x`) {
 				return posts
@@ -250,7 +277,7 @@ export default Vue.extend({
 			this.currentOffset = 0
 			this.isLoading = true
 			this.algorithm = a
-			this.$store.commit(`settings/setLastActivePost`, ``)
+			this.$store.commit(`settings/setLastActivePost`, { newLastActivePost: ``, offset: 0 })
 			this.$store.commit(`session/updateHomeFeed`, a)
 			this.posts = await this.fetchPosts(a)
 			return this.posts
@@ -306,6 +333,8 @@ export default Vue.extend({
 		setTopAlgorithm(a: `Today` | `This week` | `This month` | `This year` | `All time`) {
 			this.topAlgorithm = a
 			this.showAlgorithmDropdown = false
+			this.$store.commit(`settings/setLastActiveTopAlgorithm`, this.topAlgorithm)
+			this.$store.commit(`settings/setLastActivePost`, { newLastActivePost: ``, offset: 0 })
 			this.sortFeed(this.algorithm)
 		},
 		convertTimeframe() {
@@ -338,6 +367,9 @@ export default Vue.extend({
 			if (!e.target.parentNode.classList.contains(`toggle`)) {
 				this.showAlgorithmDropdown = false
 			}
+		},
+		calculateOffset(index: number) {
+			return index + this.$store.state.settings.lastActivePostOffset
 		},
 	},
 })
