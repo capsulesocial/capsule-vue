@@ -179,11 +179,15 @@
 									<h4 class="text-2xl font-semibold text-neutral mb-4 text-center">
 										Your subscription tier does not include this post
 									</h4>
-									{{ author.id }} <br />
-									{{ authorTiers }} <br />
-									{{ enabledTiers }}
 									<p class="my-4 text-center text-gray5 dark:text-gray3">
-										Subscribe to the {{}} tier of
+										Subscribe to the
+										<span
+											v-for="(tier, index) in disabledTiers.slice(0, 1)"
+											:key="index"
+											class="text-neutral font-semibold"
+											>{{ tier }}</span
+										>
+										tier of
 										<span v-if="author && author.name !== ``" class="font-semibold text-primary">{{
 											author.name
 										}}</span>
@@ -412,7 +416,7 @@ interface IData {
 	subscriptionStatus: `INSUFFICIENT_TIER` | `NOT_SUBSCRIBED` | ``
 	postImageKeys: Array<IPostImageKey>
 	isContentLoading: boolean
-	authorTiers: Array<string>
+	disabledTiers: Array<string>
 }
 
 export default Vue.extend({
@@ -483,7 +487,7 @@ export default Vue.extend({
 			subscriptionStatus: ``,
 			postImageKeys: [],
 			isContentLoading: true,
-			authorTiers: [],
+			disabledTiers: [],
 		}
 	},
 	head() {
@@ -597,7 +601,6 @@ export default Vue.extend({
 				this.showShare = true
 			}, 1500)
 		}
-		this.initializeProfile()
 	},
 	async mounted() {
 		const postCID = this.$route.params.post
@@ -701,6 +704,7 @@ export default Vue.extend({
 		getReposts({ authorID: this.$store.state.session.id }, {}).then((repostData) => {
 			this.myReposts = new Set(repostData.map((p) => p.repost.postCID))
 		})
+		this.initializeProfile()
 	},
 	methods: {
 		getReposts,
@@ -770,11 +774,9 @@ export default Vue.extend({
 		},
 		initializeProfile() {
 			const { tiers } = this.getPaymentProfile(this.authorID)
-			console.log(tier)
 			for (let i = 0; i < tiers.length; i++) {
 				if (tiers[i]._id !== this.enabledTiers[i]) {
-					console.log(this.enabledTiers)
-					this.authorTiers.push(tiers[i].name)
+					this.disabledTiers.push(tiers[i].name)
 				}
 			}
 		},
