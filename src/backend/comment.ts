@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { nodeUrl } from './utilities/config'
 import ipfs from './utilities/ipfs'
-import { signContent } from './utilities/keys'
+import libsodium from './utilities/keys'
 import { ISignedIPFSObject, uint8ArrayToHexString } from './utilities/helpers'
 
 export interface INewCommentData {
@@ -52,7 +52,7 @@ export async function sendComment(c: INewCommentData, type: `comment` | `reply`)
 		authorID: c.authorID,
 	}
 
-	const { sig, publicKey } = await signContent(comment)
+	const { sig, publicKey } = await libsodium().signContent(comment)
 
 	const data: ISignedIPFSObject<INewCommentData> = {
 		data: comment,

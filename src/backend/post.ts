@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { signContent, verifyContent } from './utilities/keys'
+import libsodium from './utilities/keys'
 import ipfs from './utilities/ipfs'
 import { hexStringToUint8Array, ISignedIPFSObject, uint8ArrayToHexString } from './utilities/helpers'
 import { nodeUrl } from './utilities/config'
@@ -142,7 +142,7 @@ export function createEncryptedPost(
 }
 
 export async function sendRegularPost(data: IRegularPost): Promise<string> {
-	const { sig, publicKey } = await signContent(data)
+	const { sig, publicKey } = await libsodium().signContent(data)
 
 	const ipfsData: ISignedIPFSObject<IRegularPost> = { data, sig: uint8ArrayToHexString(sig), public_key: publicKey }
 
@@ -285,7 +285,7 @@ export async function verifyPostAuthenticity(post: Post, sig: string, publicKey:
 		if (uint8ArrayToHexString(contractPubKey) !== publicKey) {
 			return false
 		}
-		const verified = verifyContent(post, hexStringToUint8Array(sig), contractPubKey)
+		const verified = await libsodium().verifyContent(post, hexStringToUint8Array(sig), contractPubKey)
 		return verified
 	} catch (err: any) {
 		return false

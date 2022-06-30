@@ -1,6 +1,6 @@
 import { hexStringToUint8Array, uint8ArrayToHexString } from './utilities/helpers'
 import { IEncryptedPost } from './post'
-import { signContent, verifyContent } from './utilities/keys'
+import libsodium from './utilities/keys'
 import { getUserInfoNEAR } from './near'
 
 async function _encryptData(data: Uint8Array, counter: Uint8Array, key: Uint8Array) {
@@ -33,7 +33,7 @@ export async function encryptAndSignData(data: IEncryptedPost) {
 	const encryptedData = await _encryptData(byteData, counter, key)
 	const encryptedPost: IEncryptedPost = { ...data, content: uint8ArrayToHexString(encryptedData) }
 
-	const { sig, publicKey } = await signContent(encryptedPost)
+	const { sig, publicKey } = await libsodium().signContent(encryptedPost)
 
 	return {
 		data: encryptedPost,
@@ -46,7 +46,7 @@ export async function encryptAndSignData(data: IEncryptedPost) {
 
 export async function verifyAndDecryptData(data: IEncryptedPost, key: string, counter: string, sig: string) {
 	const { publicKey } = await getUserInfoNEAR(data.authorID)
-	const verified = verifyContent(data, hexStringToUint8Array(sig), publicKey)
+	const verified = await libsodium().verifyContent(data, hexStringToUint8Array(sig), publicKey)
 	if (!verified) {
 		throw new Error(`Signature not verified!`)
 	}

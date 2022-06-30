@@ -3,7 +3,7 @@ import axios from 'axios'
 import ipfs from './utilities/ipfs'
 import cache from './utilities/caching'
 import { nodeUrl } from './utilities/config'
-import { signContent } from './utilities/keys'
+import libsodium from './utilities/keys'
 import { uint8ArrayToHexString } from './utilities/helpers'
 
 export interface Profile {
@@ -38,7 +38,7 @@ export function loadProfileFromIPFS(cid: string) {
 export const getProfile = cache(_getProfile)
 
 export async function setProfile(p: Profile) {
-	const [cid, { sig }] = await Promise.all([addProfileToIPFS(p), signContent(p)])
+	const [cid, { sig }] = await Promise.all([addProfileToIPFS(p), libsodium().signContent(p)])
 
 	const res = await sendProfileServer(cid, p, sig)
 	if (!res.success) {

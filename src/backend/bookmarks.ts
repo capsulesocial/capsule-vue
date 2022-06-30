@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { signContent } from './utilities/keys'
+import libsodium from './utilities/keys'
 import { nodeUrl } from './utilities/config'
 import { uint8ArrayToHexString } from './utilities/helpers'
 import { IPostResponse } from './post'
@@ -7,7 +7,7 @@ import { IPostResponse } from './post'
 export async function sendBookmarkEvent(action: `ADD` | `REMOVE`, authorID: string, postCID: string) {
 	const event = { action, authorID, postCID, timestamp: Date.now() }
 
-	const { sig } = await signContent(event)
+	const { sig } = await libsodium().signContent(event)
 
 	await axios.post(`${nodeUrl()}/bookmark`, { event, sig: uint8ArrayToHexString(sig) })
 }

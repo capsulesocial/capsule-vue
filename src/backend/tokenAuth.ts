@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { capsuleServer } from './utilities/config'
 import { getExpTimestamp, uint8ArrayToHexString } from './utilities/helpers'
-import { signContent } from './utilities/keys'
+import libsodium from './utilities/keys'
 
 interface ITokenData {
 	token: string
@@ -10,7 +10,7 @@ interface ITokenData {
 
 async function getAuthToken(username: string): Promise<ITokenData> {
 	const data = { username, action: `authentication`, exp: getExpTimestamp() }
-	const { sig } = await signContent(data)
+	const { sig } = await libsodium().signContent(data)
 	const response = await axios.post(`${capsuleServer}/auth`, {
 		data,
 		sig: uint8ArrayToHexString(sig),

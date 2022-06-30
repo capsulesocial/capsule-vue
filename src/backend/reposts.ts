@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { signContent } from './utilities/keys'
+import libsodium from './utilities/keys'
 import { Algorithm, IRepostResponse } from './post'
 import { nodeUrl } from './utilities/config'
 import { ISignedIPFSObject, uint8ArrayToHexString } from './utilities/helpers'
@@ -22,7 +22,7 @@ export async function sendRepost(authorID: string, postCID: string, content: str
 		content,
 	}
 
-	const { sig, publicKey } = await signContent(data)
+	const { sig, publicKey } = await libsodium().signContent(data)
 
 	const ipfsData: ISignedIPFSObject<Omit<IRepost, `_id` | `sig` | `type`> & { content: string }> = {
 		data,
