@@ -89,6 +89,7 @@
 			</div>
 			<button
 				v-if="$store.state.settings.lastActivePostOffset !== 0"
+				ref="reload"
 				class="flex w-full justify-center items-center text-sm text-primary py-2 hover:bg-gray1 dark:hover:bg-darkBG hover:bg-opacity-25 dark:hover:bg-opacity-25 transition ease-in-out"
 				@click="
 					() => {
@@ -222,16 +223,7 @@ export default Vue.extend({
 		const container = this.$refs.container as HTMLElement
 		container.addEventListener(`scroll`, this.handleScroll)
 		window.addEventListener(`click`, this.handleDropdown, false)
-	},
-	updated() {
-		if (this.$store.state.settings.lastActivePost !== ``) {
-			const lastClickedPost = document.getElementById(`active`)
-			if (lastClickedPost) {
-				if (lastClickedPost.parentElement) {
-					lastClickedPost.parentElement.scrollTo({ top: lastClickedPost.offsetTop, behavior: `smooth` })
-				}
-			}
-		}
+		this.scrollToRecentPost()
 	},
 	methods: {
 		getReposts,
@@ -370,6 +362,13 @@ export default Vue.extend({
 		},
 		calculateOffset(index: number) {
 			return index + this.$store.state.settings.lastActivePostOffset
+		},
+		scrollToRecentPost() {
+			if (this.$store.state.settings.lastActivePost !== ``) {
+				const reloadRef = this.$refs.reload as HTMLElement
+				const container = this.$refs.container as HTMLElement
+				container.scrollBy(0, reloadRef.clientHeight)
+			}
 		},
 	},
 })
