@@ -172,6 +172,12 @@
 										<br class="hidden lg:block" />
 										this post and other subscriber-only content
 									</p>
+									<SubscribeButton
+										:toggleSubscription="toggleSubscription"
+										:userIsSubscribed="false"
+										class="header-profile my-4"
+										style="transform: scale(1.2)"
+									/>
 								</div>
 
 								<!-- Subscribed, but to a different tier -->
@@ -195,14 +201,25 @@
 										<br class="hidden lg:block" />
 										this post and other posts of this tier.
 									</p>
+									<!-- change tier -->
+									<div class="flex items-center justify-center">
+										<button
+											class="flex flex-row items-center px-6 py-2 mt-4 bg-neutral text-center text-lightButtonText dark:from-darkBG dark:to-darkBG focus:outline-none transform rounded-lg font-bold transition duration-500 ease-in-out hover:shadow-lg"
+											@click.prevent="switchTierPopup()"
+										>
+											<CheckCircleStaticIcon class="h-5 w-5 mr-2" />
+											<p class="focus:outline-none">Switch Tier</p>
+										</button>
+									</div>
+									<ChangeTierPopup
+										v-if="showChangeTier"
+										:author="subscriptionProfile"
+										:authorAvatar="subscriptionProfileAvatar"
+										:s="authorPaymentProfile"
+										@close="showChangeTier = false"
+									/>
 								</div>
 
-								<SubscribeButton
-									:toggleSubscription="toggleSubscription"
-									:userIsSubscribed="false"
-									class="header-profile my-4"
-									style="transform: scale(1.2)"
-								/>
 								<p class="text-sm mt-4 text-gray5 dark:text-gray3">
 									Manage my <nuxt-link to="/subscriptions" class="text-neutral text">subscriptions</nuxt-link>
 								</p>
@@ -355,6 +372,8 @@ import PostCard from '@/components/post/Card.vue'
 import SharePopup from '@/components/popups/SharePopup.vue'
 import SubscribeButton from '@/components/SubscribeButton.vue'
 import SubscriptionsPopup from '@/components/popups/SubscriptionsPopup.vue'
+import CheckCircleStaticIcon from '@/components/icons/CheckCircleStatic.vue'
+import ChangeTierPopup from '@/components/popups/ChangeTierPopup.vue'
 
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 import {
@@ -374,6 +393,7 @@ import { isPostBookmarkedByUser } from '@/backend/bookmarks'
 import { createShareableLink } from '@/backend/shareable_links'
 import { calculateReadingTime } from '@/backend/utilities/helpers'
 import { ActionType, namespace as paymentProfileNamespace } from '@/store/paymentProfile'
+import { ISubscriptionWithProfile } from '@/store/subscriptions'
 
 interface IData {
 	post: Post | null
@@ -417,6 +437,8 @@ interface IData {
 	postImageKeys: Array<IPostImageKey>
 	isContentLoading: boolean
 	enabledTierNames: Array<string>
+	showChangeTier: boolean
+	authorPaymentProfile: ISubscriptionWithProfile | undefined
 }
 
 export default Vue.extend({
@@ -437,6 +459,8 @@ export default Vue.extend({
 		PostView,
 		SubscribeButton,
 		SubscriptionsPopup,
+		CheckCircleStaticIcon,
+		ChangeTierPopup,
 	},
 	beforeRouteLeave(to, from, next) {
 		if (this.realURL !== `` && to.path !== from.path) {
@@ -488,6 +512,7 @@ export default Vue.extend({
 			postImageKeys: [],
 			isContentLoading: true,
 			enabledTierNames: [],
+			showChangeTier: false,
 		}
 	},
 	head() {
@@ -781,6 +806,10 @@ export default Vue.extend({
 					}
 				}
 			}
+		},
+		// switch tier popup
+		switchTierPopup() {
+			console.log(`Working`)
 		},
 		// Hide header on scroll down
 		handleScroll() {
