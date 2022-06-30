@@ -271,7 +271,7 @@
 						<p class="text-base text-center text-gray5 dark:text-gray3 mb-4">You are now subscribed to:</p>
 					</div>
 					<!-- Premium profile preview -->
-					<div class="flex flex-row items-center p-4 border border-neutral rounded-lg max-w-md">
+					<div class="flex flex-row items-center p-4 border border-neutral rounded-lg w-2/3">
 						<Avatar
 							class="flex-shrink-0"
 							:authorID="author.id"
@@ -293,7 +293,11 @@
 								@{{ author.id }}
 							</h5>
 						</div>
-						<TagPill class="text-neutral stroke-neutral self-center w-9 h-9 ml-10" />
+						<div
+							class="bg-neutral bg-opacity-25 rounded-3xl border border-neutral px-3 py-2 text-neutral text-xs mt-2 truncate pl-2"
+						>
+							{{ selectedTier ? selectedTier.name : `` }}
+						</div>
 					</div>
 					<div class="w-full flex flex-col justify-center items-center text-center px-10 mt-5">
 						<p class="text-base text-center text-gray5 dark:text-gray3 mb-4 max-w-md">
@@ -400,7 +404,6 @@ import AppleIcon from '@/components/icons/brands/Apple.vue'
 import GoogleIcon from '@/components/icons/brands/Google.vue'
 import SwitchPeriod from '@/components/ToggleSwitch.vue'
 import BasicSwitch from '@/components/BasicSwitch.vue'
-import TagPill from '@/components/Tag.vue'
 
 import { Profile } from '@/backend/profile'
 import { followChange, getFollowersAndFollowing } from '@/backend/following'
@@ -459,7 +462,6 @@ export default Vue.extend({
 		SwitchPeriod,
 		ChevronLeft,
 		BasicSwitch,
-		TagPill,
 	},
 	props: {
 		isSubscribed: {

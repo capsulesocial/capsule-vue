@@ -179,6 +179,9 @@
 									<h4 class="text-2xl font-semibold text-neutral mb-4 text-center">
 										Your subscription tier does not include this post
 									</h4>
+									{{ author.id }} <br />
+									{{ authorTiers }} <br />
+									{{ enabledTiers }}
 									<p class="my-4 text-center text-gray5 dark:text-gray3">
 										Subscribe to the {{}} tier of
 										<span v-if="author && author.name !== ``" class="font-semibold text-primary">{{
@@ -330,7 +333,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { AxiosError } from 'axios'
 
 import PostView from '@/components/PostView.vue'
@@ -409,6 +412,7 @@ interface IData {
 	subscriptionStatus: `INSUFFICIENT_TIER` | `NOT_SUBSCRIBED` | ``
 	postImageKeys: Array<IPostImageKey>
 	isContentLoading: boolean
+	authorTiers: Array<string>
 }
 
 export default Vue.extend({
@@ -479,6 +483,7 @@ export default Vue.extend({
 			subscriptionStatus: ``,
 			postImageKeys: [],
 			isContentLoading: true,
+			authorTiers: [],
 		}
 	},
 	head() {
@@ -503,6 +508,9 @@ export default Vue.extend({
 				...(this.friendlyUrl ? [canonicalLink] : []),
 			],
 		}
+	},
+	computed: {
+		...mapGetters(paymentProfileNamespace, [`getPaymentProfile`]),
 	},
 	beforeDestroy() {
 		this.isLeaving = true
@@ -589,6 +597,7 @@ export default Vue.extend({
 				this.showShare = true
 			}, 1500)
 		}
+		this.initializeProfile()
 	},
 	async mounted() {
 		const postCID = this.$route.params.post
@@ -757,6 +766,16 @@ export default Vue.extend({
 		openWindow(url: string) {
 			if (process.client) {
 				window.open(url, `_blank`)
+			}
+		},
+		initializeProfile() {
+			const { tiers } = this.getPaymentProfile(this.authorID)
+			console.log(tier)
+			for (let i = 0; i < tiers.length; i++) {
+				if (tiers[i]._id !== this.enabledTiers[i]) {
+					console.log(this.enabledTiers)
+					this.authorTiers.push(tiers[i].name)
+				}
 			}
 		},
 		// Hide header on scroll down
