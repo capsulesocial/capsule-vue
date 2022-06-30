@@ -87,18 +87,19 @@
 					It seems like there are no posts published in this timeframe. You might want to try expanding the time filter.
 				</p>
 			</div>
-			<div v-if="$store.state.settings.lastActivePostOffset !== 0">
-				<button
-					@click="
-						() => {
-							this.$store.commit(`settings/setLastActivePost`, { newLastActivePost: ``, offset: 0 })
-							this.sortFeed(this.algorithm)
-						}
-					"
-				>
-					Show previous posts
-				</button>
-			</div>
+			<button
+				v-if="$store.state.settings.lastActivePostOffset !== 0"
+				class="flex w-full justify-center items-center text-sm text-primary py-2 hover:bg-gray1 dark:hover:bg-darkBG hover:bg-opacity-25 dark:hover:bg-opacity-25 transition ease-in-out"
+				@click="
+					() => {
+						this.$store.commit(`settings/setLastActivePost`, { newLastActivePost: ``, offset: 0 })
+						this.sortFeed(this.algorithm)
+					}
+				"
+			>
+				<ReloadIcon class="mr-2 w-4 h-4" />
+				Load newest posts
+			</button>
 			<!-- content -->
 			<PostCard
 				v-for="p in posts"
@@ -149,6 +150,7 @@ import { mapGetters } from 'vuex'
 import PostCard from '@/components/post/Card.vue'
 import ChevronUp from '@/components/icons/ChevronUp.vue'
 import ChevronDown from '@/components/icons/ChevronDown.vue'
+import ReloadIcon from '@/components/icons/Reload.vue'
 import { namespace as SubscriptionsNamespace } from '@/store/subscriptions'
 import { getPosts, IRepostResponse, IPostResponse } from '@/backend/post'
 import { getReposts } from '@/backend/reposts'
@@ -170,6 +172,7 @@ export default Vue.extend({
 		PostCard,
 		ChevronUp,
 		ChevronDown,
+		ReloadIcon,
 	},
 	layout: `home`,
 	props: {
@@ -219,6 +222,16 @@ export default Vue.extend({
 		const container = this.$refs.container as HTMLElement
 		container.addEventListener(`scroll`, this.handleScroll)
 		window.addEventListener(`click`, this.handleDropdown, false)
+	},
+	updated() {
+		if (this.$store.state.settings.lastActivePost !== ``) {
+			const lastClickedPost = document.getElementById(`active`)
+			if (lastClickedPost) {
+				if (lastClickedPost.parentElement) {
+					lastClickedPost.parentElement.scrollTo({ top: lastClickedPost.offsetTop, behavior: `smooth` })
+				}
+			}
+		}
 	},
 	methods: {
 		getReposts,
