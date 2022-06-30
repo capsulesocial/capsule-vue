@@ -4,6 +4,9 @@ export interface ISignedIPFSObject<T> {
 	public_key: string
 }
 
+export const validFileTypes = [`png`, `jpeg`, `jpg`, `avif`, `webp`]
+export const validMimeTypes = validFileTypes.map((t) => `image/${t}`)
+
 export function uint8ArrayToHexString(uint8Array: Uint8Array): string {
 	return Buffer.from(uint8Array).toString(`hex`)
 }
@@ -39,14 +42,6 @@ export function getBlobExtension(blob: Blob): string | null {
 		default:
 			return null
 	}
-}
-
-export function isValidFileType(fileType: string) {
-	const validFileTypes = [`image/png`, `image/jpeg`, `image/jpg`, `image/avif`, `image/webp`]
-	if (!validFileTypes.includes(fileType)) {
-		return false
-	}
-	return true
 }
 
 export function calculateReadingTime(wordCount?: number, postImagesLength: number = 0) {
