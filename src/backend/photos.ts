@@ -7,7 +7,7 @@ import { getCompressedImage } from './utilities/imageCompression'
 import { encryptData } from './crypto'
 
 const validFileTypes = [`image/jpeg`, `image/jpg`, `image/png`, `image/avif`, `image/webp`]
-const regExpString = `^data:${validFileTypes.join(`|`)}:base64,([a-fA-F0-9]+)$`
+const regExpString = `^data:${validFileTypes.join(`|`)};base64,([a-zA-Z0-9+/]+=*)$`
 
 interface IUploadPhotoResult {
 	cid: string
