@@ -367,7 +367,9 @@ export default Vue.extend({
 			if (this.$store.state.settings.lastActivePost !== ``) {
 				const reloadRef = this.$refs.reload as HTMLElement
 				const container = this.$refs.container as HTMLElement
-				container.scrollBy(0, reloadRef.clientHeight)
+				if (container && reloadRef) {
+					container.scrollBy(0, reloadRef.clientHeight)
+				}
 			}
 		},
 	},
