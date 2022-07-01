@@ -1,8 +1,8 @@
 /* eslint-disable camelcase */
+import type { crypto_sign_verify_detached, crypto_sign_detached } from 'libsodium-wrappers'
 import { keyStores } from 'near-api-js'
 import { KeyPairEd25519 } from 'near-api-js/lib/utils'
 import { base_decode as baseDecode } from 'near-api-js/lib/utils/serialize'
-import type { crypto_sign_verify_detached, crypto_sign_detached } from 'libsodium-wrappers'
 
 import { getNearConfig } from './config'
 import { stableOrderObj, uint8ArrayToHexString } from './helpers'

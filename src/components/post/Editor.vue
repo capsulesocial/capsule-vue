@@ -89,18 +89,18 @@ import Vue from 'vue'
 import DOMPurify from 'dompurify'
 import Turndown from 'turndown'
 import { strikethrough } from 'turndown-plugin-gfm'
-import Quill, { RangeStatic } from 'quill'
+import type { RangeStatic, Quill } from 'quill'
 import QuillMarkdown from 'quilljs-markdown'
 import XIcon from '@/components/icons/X.vue'
 import PencilIcon from '@/components/icons/Pencil.vue'
 import AddContent from '@/components/post/EditorActions.vue'
 import {
-	ImageBlot,
 	preRule,
 	ipfsImageRule,
 	createPostImagesSet,
 	counterModuleFactory,
 	listRule,
+	ImageBlotFactory,
 } from '@/pages/post/quillExtensions'
 import {
 	createEncryptedPost,
@@ -249,9 +249,10 @@ export default Vue.extend({
 	},
 	methods: {
 		// Quilljs Editor init
-		setupEditor(): void {
+		async setupEditor() {
 			// Handle link validation
-			const Link = Quill.import(`formats/link`)
+			const { default: QuillClass } = await import(`quill`)
+			const Link = QuillClass.import(`formats/link`)
 			const builtInFunc = Link.sanitize
 			Link.sanitize = function customSanitizeLinkInput(linkValueInput: string) {
 				let val = linkValueInput
@@ -306,13 +307,18 @@ export default Vue.extend({
 				}
 			}
 
-			Quill.register(ImageBlot, true)
-			Quill.register(
+			QuillClass.register(ImageBlotFactory(QuillClass), true)
+			QuillClass.register(
 				`modules/counter`,
-				counterModuleFactory(onTextChange.bind(this), onSelectionChange.bind(this), onEditorChange.bind(this)),
+				counterModuleFactory(
+					QuillClass,
+					onTextChange.bind(this),
+					onSelectionChange.bind(this),
+					onEditorChange.bind(this),
+				),
 				true,
 			)
-			const editor = new Quill(`#editor`, options)
+			const editor = new QuillClass(`#editor`, options)
 			this.qeditor = editor
 			this.qeditor.root.addEventListener(`drop`, (ev: DragEvent) => {
 				this.handleDroppedContent(ev)
@@ -432,8 +438,9 @@ export default Vue.extend({
 				this.insertContent(droppedText, true)
 			}
 		},
-		handleCutPaste(range: RangeStatic, pastedText: string) {
-			const Delta = Quill.import(`delta`)
+		async handleCutPaste(range: RangeStatic, pastedText: string) {
+			const { default: QuillClass } = await import(`quill`)
+			const Delta = QuillClass.import(`delta`)
 			const delta = new Delta().compose(new Delta().retain(range.index + range.length).insert(pastedText))
 			this.qeditor?.updateContents(delta)
 			setTimeout(() => this.qeditor?.setSelection(range.index + pastedText.length, 0, `user`), 0)

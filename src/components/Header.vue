@@ -243,7 +243,7 @@
 import Vue from 'vue'
 import type { PropType } from 'vue'
 import { mapGetters, mapMutations } from 'vuex'
-import { keyStores } from 'near-api-js'
+import { BrowserLocalStorageKeyStore } from 'near-api-js/lib/key_stores/browser_local_storage_key_store'
 
 import CapsuleIcon from '@/components/icons/CapsuleNew.vue'
 import Avatar from '@/components/Avatar.vue'
@@ -313,7 +313,7 @@ export default Vue.extend({
 		}),
 		disconnect(): void {
 			this.endSession()
-			const keystore = new keyStores.BrowserLocalStorageKeyStore()
+			const keystore = new BrowserLocalStorageKeyStore()
 			keystore.clear()
 			localStorage.clear()
 			this.$router.push(`/login`)

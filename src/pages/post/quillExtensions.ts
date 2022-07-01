@@ -1,13 +1,14 @@
-import Quill, { RangeStatic } from 'quill'
+import type { RangeStatic, Quill } from 'quill'
 import TurndownService from 'turndown'
 
 // Quill
 export function counterModuleFactory(
+	QuillClass: typeof Quill,
 	onTextChange: () => void,
 	onSelectionChange: (range: RangeStatic) => void,
 	onEditorChange: (eventName: string, ...args: any[]) => void,
 ) {
-	const Module = Quill.import(`core/module`)
+	const Module = QuillClass.import(`core/module`)
 	return class CounterModule extends Module {
 		constructor(quill: Quill) {
 			super()
@@ -18,23 +19,24 @@ export function counterModuleFactory(
 	}
 }
 
-const BlockEmbed = Quill.import(`blots/block/embed`)
+export function ImageBlotFactory(QuillClass: typeof Quill) {
+	const BlockEmbed = QuillClass.import(`blots/block/embed`)
+	return class ImageBlot extends BlockEmbed {
+		static blotName = `image`
+		static tagName = `img`
 
-export class ImageBlot extends BlockEmbed {
-	static blotName = `image`
-	static tagName = `img`
+		static create(value: { alt: string; url: string; ipfsimage: string }) {
+			const node = super.create()
+			node.setAttribute(`alt`, value.alt)
+			node.setAttribute(`src`, value.url)
+			return node
+		}
 
-	static create(value: { alt: string; url: string; ipfsimage: string }) {
-		const node = super.create()
-		node.setAttribute(`alt`, value.alt)
-		node.setAttribute(`src`, value.url)
-		return node
-	}
-
-	static value(node: { getAttribute: (arg0: string) => any }) {
-		return {
-			alt: node.getAttribute(`alt`),
-			url: node.getAttribute(`src`),
+		static value(node: { getAttribute: (arg0: string) => any }) {
+			return {
+				alt: node.getAttribute(`alt`),
+				url: node.getAttribute(`src`),
+			}
 		}
 	}
 }

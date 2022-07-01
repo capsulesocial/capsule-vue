@@ -3,8 +3,11 @@ import ipfs from './utilities/ipfs'
 import { nodeUrl, sigValidity } from './utilities/config'
 import libsodium from './utilities/keys'
 import { uint8ArrayToHexString } from './utilities/helpers'
-import { getCompressedImage } from './utilities/imageCompression'
 import { encryptData } from './crypto'
+
+const MAX_IMAGE_SIZE_MB = 0.9
+const MAX_IMAGE_WIDTH_OR_HEIGHT = 1920
+const IMAGE_INITIAL_QUALITY = 0.9
 
 interface IUploadPhotoResult {
 	cid: string
@@ -58,7 +61,14 @@ async function encryptImage(rawData: string | ArrayBuffer, imageName: string): P
 export function uploadPhoto(file: File, encrypt: true): Promise<IUploadEncryptedPhotoResult>
 export function uploadPhoto(file: File): Promise<IUploadPhotoResult>
 export async function uploadPhoto(file: File, encrypt?: true) {
-	const compressedImage = await getCompressedImage(file)
+	const { default: imageCompression } = await import(`browser-image-compression`)
+	const compressedImage = await imageCompression(file, {
+		maxSizeMB: MAX_IMAGE_SIZE_MB,
+		maxWidthOrHeight: MAX_IMAGE_WIDTH_OR_HEIGHT,
+		initialQuality: IMAGE_INITIAL_QUALITY,
+		useWebWorker: true,
+	})
+
 	return new Promise<IUploadPhotoResult | IUploadEncryptedPhotoResult>((resolve, reject) => {
 		try {
 			const reader = new FileReader()
@@ -82,7 +92,7 @@ export async function uploadPhoto(file: File, encrypt?: true) {
 				}
 			}
 			reader.onerror = (_ev) => {
-				throw new Error(`Something went wrong while loading the image`)
+				throw new Error(`Something went wrong while uploading the image`)
 			}
 		} catch (err) {
 			reject(err)
