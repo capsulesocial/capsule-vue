@@ -108,9 +108,8 @@ import BrandedButton from '@/components/BrandedButton.vue'
 import PencilIcon from '@/components/icons/Pencil.vue'
 import { MutationType, getProfileFromSession, namespace as sessionStoreNamespace } from '~/store/session'
 import { getProfile, setProfile } from '@/backend/profile'
-import { addPhotoToIPFS, preUploadPhoto } from '@/backend/photos'
+import { preUploadPhoto, uploadPhoto } from '@/backend/photos'
 import { URLRegex } from '@/plugins/quality'
-import { getCompressedImage } from '@/backend/utilities/imageCompression'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import textLimits from '@/backend/utilities/text_limits'
 
@@ -206,19 +205,15 @@ export default Vue.extend({
 				this.$toastError(`No image selected`)
 				return
 			}
-			const image = e.target.files[0]
-			if (image) {
+			const img = e.target.files[0]
+			if (img) {
 				try {
-					const compressedImage = await getCompressedImage(image)
-					const reader = new FileReader()
-					reader.readAsDataURL(compressedImage)
-					reader.onload = (i: Event) => {
-						if (i.target !== null && reader.result !== null) {
-							this.uploadImage(reader.result, compressedImage, image.name)
-						}
-					}
+					const { cid, url, image, imageName } = await uploadPhoto(img)
+					await preUploadPhoto(cid, image, imageName, this.$store.state.session.id)
+					this.profilePic = url
+					this.newAvatarCID = cid
 				} catch (err) {
-					this.$toastError(`Please try again`)
+					this.$toastError(`Unsuccessful avatar upload!`)
 				}
 			}
 		},
@@ -228,19 +223,6 @@ export default Vue.extend({
 			this.changeCID(cid)
 			this.updateProfileMethod(true)
 			return true
-		},
-		async uploadImage(image: string | ArrayBuffer, blobImage: Blob, filename: string) {
-			try {
-				const avatarCID = await addPhotoToIPFS(image)
-				await preUploadPhoto(avatarCID, blobImage, filename, this.$store.state.session.id)
-				this.profilePic = image
-				this.newAvatarCID = avatarCID
-			} catch (err) {
-				this.$toastError(`Unsuccessful avatar upload!`)
-			}
-		},
-		async downloadImage(cid: string) {
-			this.profilePic = await addPhotoToIPFS(cid)
 		},
 		checkBio() {
 			const charCount = this.bio.trim().length

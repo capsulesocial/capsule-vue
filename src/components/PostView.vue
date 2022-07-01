@@ -13,11 +13,10 @@ import type { PropType } from 'vue'
 import DOMPurify from 'dompurify'
 import { marked } from 'marked'
 import { markedRenderer, transformPostToHTML } from '../pages/post/readerExtensions'
-import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import ImagePopup from '@/components/popups/Image.vue'
 import { decryptData } from '@/backend/crypto'
 import { IPostImageKey } from '@/backend/post'
-import { isValidPhoto } from '@/backend/photos'
+import { isValidPhoto, getPhotoFromIPFS } from '@/backend/getPhoto'
 
 const ALLOWED_TAGS = [
 	`pre`,
