@@ -36,7 +36,7 @@ async function loadAndInitLibSodium() {
 	await res.ready
 
 	const { crypto_sign_verify_detached, crypto_sign_detached } = res
-	// @ts-ignore
+
 	return { crypto_sign_verify_detached, crypto_sign_detached, ready: res.ready }
 }
 
