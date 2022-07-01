@@ -218,6 +218,7 @@
 											:author="author"
 											:authorAvatar="subscriptionProfileAvatar"
 											:s="authorPaymentProfile"
+											:toPreSelectTier="toPreSelectTiers[0]"
 											@close="showChangeTier = false"
 										/>
 									</portal>
@@ -395,7 +396,7 @@ import { getReposts } from '@/backend/reposts'
 import { isPostBookmarkedByUser } from '@/backend/bookmarks'
 import { createShareableLink } from '@/backend/shareable_links'
 import { calculateReadingTime } from '@/backend/utilities/helpers'
-import { ActionType, namespace as paymentProfileNamespace } from '@/store/paymentProfile'
+import { ActionType, namespace as paymentProfileNamespace, SubscriptionTier } from '@/store/paymentProfile'
 import { getUserSubscriptions, ISubscriptionResponse } from '@/backend/subscription'
 interface IData {
 	post: Post | null
@@ -439,6 +440,7 @@ interface IData {
 	postImageKeys: Array<IPostImageKey>
 	isContentLoading: boolean
 	enabledTierNames: Array<string>
+	toPreSelectTiers: Array<SubscriptionTier>
 	showChangeTier: boolean
 	authorPaymentProfile: ISubscriptionResponse | undefined
 	subscriptionProfile: Profile
@@ -515,6 +517,7 @@ export default Vue.extend({
 			postImageKeys: [],
 			isContentLoading: true,
 			enabledTierNames: [],
+			toPreSelectTiers: [],
 			showChangeTier: false,
 			authorPaymentProfile: undefined,
 			subscriptionProfile: createDefaultProfile(this.$store.state.session.id),
@@ -815,6 +818,7 @@ export default Vue.extend({
 				for (let j = 0; j < tiers.length; j++) {
 					if (this.enabledTiers[i] === tiers[j]._id) {
 						this.enabledTierNames.push(tiers[j].name)
+						this.toPreSelectTiers.push(tiers[i])
 					}
 				}
 			}

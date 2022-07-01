@@ -263,6 +263,10 @@ export default Vue.extend({
 			type: String as PropType<ArrayBuffer | string | null>,
 			default: null,
 		},
+		toPreSelectTier: {
+			type: Object as PropType<SubscriptionTier>,
+			default: null,
+		},
 	},
 	data(): IData {
 		return {
@@ -283,6 +287,10 @@ export default Vue.extend({
 		window.addEventListener(`click`, this.handleCloseClick, false)
 		// Get my followers
 		this.$store.dispatch(`paymentProfile/fetchProfile`, { username: this.author.id })
+		// prefill selected tier
+		if (this.toPreSelectTier) {
+			this.selectedTier = this.toPreSelectTier
+		}
 	},
 	methods: {
 		displayCurrency(currency: string) {
