@@ -40,7 +40,7 @@
 						<CrownIcon class="text-neutral stroke-neutral self-center w-12 h-12 mb-2" />
 						<h6 class="font-semibold text-neutral text-xl mb-2">Change Tier</h6>
 						<p class="text-base text-center text-gray5 dark:text-gray3 mb-4">
-							Easily change you Tier access to
+							Easily change your Tier access to
 							<span v-if="author.name !== ``" class="font-semibold text-primary dark:text-secondary">{{
 								author.name
 							}}</span>
