@@ -1,6 +1,8 @@
 <template>
 	<div>
-		<div class="flex flex-col sm:flex-row items-center justify-between px-5 pt-3 pb-3 xl:px-6 xl:pt-4">
+		<div
+			class="bg-lightBG dark:bg-darkBGStop flex flex-col sm:flex-row items-center justify-between px-5 pt-3 pb-3 xl:px-6 xl:pt-4"
+		>
 			<h2 class="text-lightPrimaryText dark:text-darkPrimaryText text-lg font-semibold xl:text-xl">My bookmarks</h2>
 			<BookmarksFilter class="modal-animation mt-2 sm:mt-0" :filter="filter" @clicked="setSort" />
 		</div>

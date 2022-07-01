@@ -1,5 +1,5 @@
 <template>
-	<section style="backdrop-filter: blur(10px)">
+	<section>
 		<nav class="flex w-full flex-row justify-between text-sm rounded-t-lg">
 			<div class="flex">
 				<button

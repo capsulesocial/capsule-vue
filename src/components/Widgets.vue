@@ -18,25 +18,25 @@
 			v-if="$store.state.widgets.secondary2 === `followers` && followers.size > 0"
 			:followers="followers"
 			:updateFollowers="updateFollowers"
-			class="from-lightBGStart to-lightBGStop border-lightBorder dark:from-darkBGStart dark:to-darkBGStop mb-5 overflow-hidden rounded-lg border bg-gradient-to-r shadow-lg backdrop-blur-lg backdrop-filter"
+			class="from-lightBGStart to-lightBGStop border-lightBorder dark:from-darkBGStart dark:to-darkBGStop mb-5 overflow-hidden rounded-lg border bg-gradient-to-r shadow-lg"
 			style="backdrop-filter: blur(10px)"
 			@openFollowers="$emit(`openFollowers`)"
 		/>
 		<TagsWidget
 			v-if="$store.state.widgets.secondary2 === `tags`"
-			class="from-lightBGStart to-lightBGStop border-lightBorder dark:from-darkBGStart dark:to-darkBGStop mb-5 overflow-hidden rounded-lg border bg-gradient-to-r shadow-lg backdrop-blur-lg backdrop-filter"
+			class="from-lightBGStart to-lightBGStop border-lightBorder dark:from-darkBGStart dark:to-darkBGStop mb-5 overflow-hidden rounded-lg border bg-gradient-to-r shadow-lg"
 			style="backdrop-filter: blur(10px)"
 		/>
 		<DraftsWidget
 			v-if="$store.state.widgets.secondary === `drafts`"
-			class="from-lightBGStart to-lightBGStop border-lightBorder dark:from-darkBGStart dark:to-darkBGStop mb-5 rounded-lg border bg-gradient-to-r shadow-lg backdrop-blur-lg backdrop-filter"
+			class="from-lightBGStart to-lightBGStop border-lightBorder dark:from-darkBGStart dark:to-darkBGStop mb-5 rounded-lg border bg-gradient-to-r shadow-lg"
 			style="backdrop-filter: blur(10px)"
 			@handleDraftPopup="handleDraftPopup"
 		/>
 		<BookmarksWidgets
 			v-if="$store.state.widgets.secondary === `bookmarks`"
 			ref="bookmarksWidget"
-			class="from-lightBGStart to-lightBGStop border-lightBorder dark:from-darkBGStart dark:to-darkBGStop mb-5 rounded-lg border bg-gradient-to-r shadow-lg backdrop-blur-lg backdrop-filter"
+			class="from-lightBGStart to-lightBGStop border-lightBorder dark:from-darkBGStart dark:to-darkBGStop mb-5 rounded-lg border bg-gradient-to-r shadow-lg"
 			style="backdrop-filter: blur(10px)"
 		/>
 		<!-- Configure my Blogchain -->

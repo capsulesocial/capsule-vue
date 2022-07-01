@@ -7,10 +7,10 @@
 				class="bg-darkBG dark:bg-gray5 modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
 			>
 				<div
-					class="card lg:w-750 max-h-90 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation m-2 mt-10 w-full overflow-y-auto overflow-x-hidden rounded-lg bg-gradient-to-r shadow-lg lg:m-0"
+					class="card lg:w-750 max-h-90 from-lightBG to-lightBG dark:from-darkBGStart dark:to-darkBGStop card-animation m-2 mt-10 w-full overflow-y-auto overflow-x-hidden rounded-lg bg-gradient-to-r shadow-lg lg:m-0"
 				>
 					<div
-						class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop sticky top-0 z-40 bg-gradient-to-r px-4 py-4 lg:px-6 lg:py-5"
+						class="shadow-sm from-lightBG to-lightBG dark:from-darkBGStart dark:to-darkBGStop sticky top-0 z-40 bg-gradient-to-r px-4 py-4 lg:px-6 lg:py-5"
 					>
 						<!-- Show Quote Repost input -->
 						<div v-if="showRepostEditor" class="flex flex-row pb-4">
@@ -209,7 +209,7 @@
 		<div v-if="this.$route.name !== `post-post`">
 			<div class="card">
 				<div
-					class="sticky top-0 border-b dark:border-darkBG dark:border-opacity-25 py-4 px-5 xl:py-5 xl:px-6 transition ease-in-out hover:bg-gray1 dark:hover:bg-darkBG hover:bg-opacity-25 dark:hover:bg-opacity-25"
+					class="sticky bg-lightBG dark:bg-darkBGStop top-0 border-b dark:border-darkBG dark:border-opacity-25 py-4 px-5 xl:py-5 xl:px-6 transition ease-in-out hover:bg-gray1 dark:hover:bg-darkBG"
 					:class="showProfileCard || showQuoteCard ? `z-20` : `z-10`"
 				>
 					<!-- Quote repost -->

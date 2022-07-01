@@ -29,7 +29,7 @@
 				<!-- Dropdown: Profile, settings, disconnect -->
 				<div
 					v-show="showDropdown"
-					class="w-max from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation absolute mt-16 flex flex-col rounded-lg border bg-gradient-to-r p-4 shadow-lg backdrop-blur-lg backdrop-filter right-0"
+					class="w-max from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation absolute mt-16 flex flex-col rounded-lg border bg-gradient-to-r p-4 shadow-lg right-0"
 					:class="$colorMode.dark ? `dropdownOpenDark` : `dropdownOpen`"
 				>
 					<!-- Unauthenticated: Log in -->
@@ -115,7 +115,7 @@
 				</button>
 				<div
 					v-show="showMobileMenu"
-					class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation absolute mt-2 ml-0 flex flex-col rounded-lg border bg-gradient-to-r p-4 shadow-lg backdrop-blur-lg backdrop-filter"
+					class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation absolute mt-2 ml-0 flex flex-col rounded-lg border bg-gradient-to-r p-4 shadow-lg"
 					:class="$colorMode.dark ? `dropdownMainOpenDark` : `dropdownMainOpen`"
 				>
 					<nuxt-link
@@ -160,7 +160,7 @@
 				<!-- Dropdown: Profile, settings, disconnect -->
 				<div
 					v-show="showDropdown"
-					class="w-max from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation absolute mt-2 flex flex-col rounded-lg border bg-gradient-to-r p-4 shadow-lg backdrop-blur-lg backdrop-filter right-0"
+					class="w-max from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation absolute mt-2 flex flex-col rounded-lg border bg-gradient-to-r p-4 shadow-lg right-0"
 					:class="$colorMode.dark ? `dropdownOpenDark` : `dropdownOpen`"
 				>
 					<!-- Unauthenticated: Log in -->

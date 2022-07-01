@@ -39,7 +39,7 @@
 					/>
 					<nuxt-child
 						v-else
-						class="lg:w-7.5 min-h-61 h-61 xl:min-h-120 xl:h-120 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder border modal-animation box-border w-full overflow-y-auto rounded-lg bg-gradient-to-r shadow-lg"
+						class="lg:w-7.5 min-h-61 h-61 xl:min-h-120 xl:h-120 bg-lightBG dark:bg-darkBGStop border-lightBorder border modal-animation box-border w-full overflow-y-auto rounded-lg shadow-lg"
 						:class="showWidgets ? `` : `z-10`"
 						:following="following"
 						@updateFollowers="updateFollowers"
