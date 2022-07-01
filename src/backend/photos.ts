@@ -2,12 +2,9 @@ import axios from 'axios'
 import ipfs from './utilities/ipfs'
 import { nodeUrl, sigValidity } from './utilities/config'
 import libsodium from './utilities/keys'
-import { uint8ArrayToHexString } from './utilities/helpers'
+import { uint8ArrayToHexString, validFileTypes } from './utilities/helpers'
 import { getCompressedImage } from './utilities/imageCompression'
 import { encryptData } from './crypto'
-
-const validFileTypes = [`image/jpeg`, `image/jpg`, `image/png`, `image/avif`, `image/webp`]
-const regExpString = `^data:${validFileTypes.join(`|`)}:base64,([a-fA-F0-9]+)$`
 
 interface IUploadPhotoResult {
 	cid: string
@@ -45,7 +42,7 @@ export function addPhotoToIPFS(content: string | ArrayBuffer) {
 }
 
 export function isValidPhoto(content: string) {
-	const regExp = new RegExp(regExpString)
+	const regExp = new RegExp(`^data:image/(?:${validFileTypes.join(`|`)});base64,([a-zA-Z0-9+/]+=*)$`)
 	if (!regExp.test(content)) {
 		return false
 	}

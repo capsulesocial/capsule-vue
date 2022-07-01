@@ -113,7 +113,7 @@ import {
 	Tag,
 } from '@/backend/post'
 import { preUploadPhoto, uploadPhoto } from '@/backend/photos'
-import { isValidFileType } from '@/backend/utilities/helpers'
+import { validMimeTypes } from '@/backend/utilities/helpers'
 import textLimits from '@/backend/utilities/text_limits'
 
 interface IData {
@@ -484,7 +484,7 @@ export default Vue.extend({
 			return pastedContent
 		},
 		async handleFile(file: File) {
-			if (!isValidFileType(file.type)) {
+			if (!validMimeTypes.includes(file.type)) {
 				this.$toastError(`image of type ${file.type} is invalid`)
 				return
 			}
