@@ -34,7 +34,9 @@
 						:posts="posts"
 						:isLoading="isLoading"
 						:filter="activeSort"
+						:noMorePosts="noMorePosts"
 						@clicked="setSort"
+						@fetchPosts="fetchPosts"
 					/>
 					<!-- Widgets -->
 					<aside
@@ -105,6 +107,9 @@ interface IData {
 	activeSort: BookmarkSort
 	isLoading: boolean
 	bgImage: IBackground
+	limit: number
+	offset: number
+	noMorePosts: boolean
 }
 
 export default Vue.extend({
@@ -122,9 +127,12 @@ export default Vue.extend({
 			categoryList: categories,
 			activeFilter: ``,
 			activeSort: `BOOKMARK_DESC`,
-			isLoading: true,
+			isLoading: false,
 			bgImage: backgrounds[0],
 			avatar: undefined,
+			limit: 10,
+			offset: 0,
+			noMorePosts: false,
 		}
 	},
 	async created() {
@@ -133,7 +141,6 @@ export default Vue.extend({
 		this.$setColor(this.$store.state.settings.color)
 		// Check if logged in user
 		if (this.$store.state.session.id === ``) {
-			this.isLoading = false
 			return
 		}
 		// get logged in profile
@@ -153,6 +160,7 @@ export default Vue.extend({
 			if (this.$store.state.session.id === ``) {
 				return
 			}
+			this.resetScroll()
 			this.activeFilter = c
 			this.fetchPosts(this.activeFilter, this.activeSort)
 		},
@@ -160,11 +168,40 @@ export default Vue.extend({
 			if (this.$store.state.session.id === ``) {
 				return
 			}
+			this.resetScroll()
 			this.activeSort = o
 			this.fetchPosts(this.activeFilter, this.activeSort)
 		},
 		async fetchPosts(category?: string, sort?: BookmarkSort) {
-			this.posts = await getBookmarksOfUser(this.$store.state.session.id, category, sort)
+			const bookmarkSort = sort || this.activeSort
+			if (this.isLoading || this.noMorePosts) {
+				return
+			}
+			this.isLoading = true
+			try {
+				const posts = await getBookmarksOfUser(
+					this.$store.state.session.id,
+					category ?? this.activeFilter,
+					bookmarkSort,
+					this.limit,
+					this.offset,
+				)
+				if (posts.length < this.limit) {
+					// no more posts
+					this.noMorePosts = true
+				}
+				this.posts.push(...posts)
+			} catch (err) {
+				throw new Error(err as string)
+			} finally {
+				this.isLoading = false
+				this.offset += this.limit
+			}
+		},
+		resetScroll() {
+			this.posts = []
+			this.noMorePosts = false
+			this.offset = 0
 			this.isLoading = false
 		},
 	},

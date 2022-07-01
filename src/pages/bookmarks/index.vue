@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div ref="container">
 		<article
 			v-if="posts.length == 0 && !isLoading"
 			class="mt-12 grid justify-items-center overflow-y-hidden px-6 xl:px-0"
@@ -45,7 +45,7 @@
 			/>
 		</article>
 		<p
-			v-if="posts.length > 0"
+			v-if="noMorePosts"
 			class="text-gray5 dark:text-gray3 py-5 text-center text-sm"
 			style="backdrop-filter: blur(10px)"
 		>
@@ -62,7 +62,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { PropType } from 'vue'
 import { IPostResponse } from '@/backend/post'
 import SecondaryButton from '@/components/SecondaryButton.vue'
 import BookmarkIcon from '@/components/icons/Bookmark.vue'
@@ -89,10 +89,28 @@ export default Vue.extend({
 			type: Boolean,
 			required: false,
 		},
+		noMorePosts: {
+			type: Boolean as PropType<boolean>,
+			required: true,
+		},
+	},
+	mounted() {
+		const container = this.$refs.container as HTMLElement
+		if (container && container.parentNode) {
+			container.parentNode.addEventListener(`scroll`, this.handleScroll, true)
+		}
 	},
 	methods: {
 		toggleHomeFeed() {
 			this.$router.push(`/home`)
+		},
+		handleScroll(e: Event) {
+			if (!this.isLoading) {
+				const { scrollTop, scrollHeight, clientHeight } = e.srcElement as HTMLElement
+				if (scrollTop + clientHeight >= scrollHeight - 5) {
+					this.$emit(`fetchPosts`)
+				}
+			}
 		},
 	},
 })
