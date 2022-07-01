@@ -211,13 +211,16 @@
 											<p class="focus:outline-none">Switch Tier</p>
 										</button>
 									</div>
-									<ChangeTierPopup
-										v-if="showChangeTier"
-										:author="subscriptionProfile"
-										:authorAvatar="subscriptionProfileAvatar"
-										:s="authorPaymentProfile"
-										@close="showChangeTier = false"
-									/>
+									<!-- change tier popup -->
+									<portal to="postPage">
+										<ChangeTierPopup
+											v-if="showChangeTier"
+											:author="author"
+											:authorAvatar="subscriptionProfileAvatar"
+											:s="authorPaymentProfile"
+											@close="showChangeTier = false"
+										/>
+									</portal>
 								</div>
 
 								<p class="text-sm mt-4 text-gray5 dark:text-gray3">
@@ -393,8 +396,7 @@ import { isPostBookmarkedByUser } from '@/backend/bookmarks'
 import { createShareableLink } from '@/backend/shareable_links'
 import { calculateReadingTime } from '@/backend/utilities/helpers'
 import { ActionType, namespace as paymentProfileNamespace } from '@/store/paymentProfile'
-import { ISubscriptionWithProfile } from '@/store/subscriptions'
-
+import { getUserSubscriptions, ISubscriptionResponse } from '@/backend/subscription'
 interface IData {
 	post: Post | null
 	title: string | null
@@ -438,7 +440,8 @@ interface IData {
 	isContentLoading: boolean
 	enabledTierNames: Array<string>
 	showChangeTier: boolean
-	authorPaymentProfile: ISubscriptionWithProfile | undefined
+	authorPaymentProfile: ISubscriptionResponse | undefined
+	subscriptionProfile: Profile
 }
 
 export default Vue.extend({
@@ -513,6 +516,8 @@ export default Vue.extend({
 			isContentLoading: true,
 			enabledTierNames: [],
 			showChangeTier: false,
+			authorPaymentProfile: [],
+			subscriptionProfile: createDefaultProfile(this.$store.state.session.id),
 		}
 	},
 	head() {
@@ -625,6 +630,13 @@ export default Vue.extend({
 			setTimeout(() => {
 				this.showShare = true
 			}, 1500)
+		}
+
+		const profile = await getUserSubscriptions(this.$store.state.session.id)
+		for (let i = 0; i < profile.length; i++) {
+			if (profile[i].authorID === this.authorID) {
+				this.authorPaymentProfile = profile[i]
+			}
 		}
 	},
 	async mounted() {
@@ -809,7 +821,7 @@ export default Vue.extend({
 		},
 		// switch tier popup
 		switchTierPopup() {
-			console.log(`Working`)
+			this.showChangeTier = !this.showChangeTier
 		},
 		// Hide header on scroll down
 		handleScroll() {
