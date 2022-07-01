@@ -516,7 +516,7 @@ export default Vue.extend({
 			isContentLoading: true,
 			enabledTierNames: [],
 			showChangeTier: false,
-			authorPaymentProfile: [],
+			authorPaymentProfile: undefined,
 			subscriptionProfile: createDefaultProfile(this.$store.state.session.id),
 		}
 	},
