@@ -18,37 +18,27 @@
 			v-if="$store.state.widgets.secondary2 === `followers` && followers.size > 0"
 			:followers="followers"
 			:updateFollowers="updateFollowers"
-			class="from-lightBGStart to-lightBGStop border-lightBorder dark:from-darkBGStart dark:to-darkBGStop mb-5 overflow-hidden rounded-lg border bg-gradient-to-r shadow-lg"
-			style="backdrop-filter: blur(10px)"
+			class="bg-lightBG dark:bg-darkBGStop mb-5 overflow-hidden rounded-lg border border-lightBorder shadow-lg"
 			@openFollowers="$emit(`openFollowers`)"
 		/>
 		<TagsWidget
 			v-if="$store.state.widgets.secondary2 === `tags`"
-			class="from-lightBGStart to-lightBGStop border-lightBorder dark:from-darkBGStart dark:to-darkBGStop mb-5 overflow-hidden rounded-lg border bg-gradient-to-r shadow-lg"
-			style="backdrop-filter: blur(10px)"
+			class="bg-lightBG dark:bg-darkBGStop mb-5 overflow-hidden rounded-lg border border-lightBorder shadow-lg"
 		/>
 		<DraftsWidget
 			v-if="$store.state.widgets.secondary === `drafts`"
-			class="from-lightBGStart to-lightBGStop border-lightBorder dark:from-darkBGStart dark:to-darkBGStop mb-5 rounded-lg border bg-gradient-to-r shadow-lg"
-			style="backdrop-filter: blur(10px)"
+			class="bg-lightBG dark:bg-darkBGStop mb-5 rounded-lg border border-lightBorder shadow-lg"
 			@handleDraftPopup="handleDraftPopup"
 		/>
 		<BookmarksWidgets
 			v-if="$store.state.widgets.secondary === `bookmarks`"
 			ref="bookmarksWidget"
-			class="from-lightBGStart to-lightBGStop border-lightBorder dark:from-darkBGStart dark:to-darkBGStop mb-5 rounded-lg border bg-gradient-to-r shadow-lg"
-			style="backdrop-filter: blur(10px)"
+			class="bg-lightBG dark:bg-darkBGStop mb-5 rounded-lg border border-lightBorder shadow-lg"
 		/>
 		<!-- Configure my Blogchain -->
 		<button
-			class="bg-lightBG dark:bg-darkBGStart from-lightBGStart to-lightBGStop border-lightBorder dark:from-darkBGStart dark:to-darkBGStop focus:outline-none mb-5 w-full rounded-lg border bg-gradient-to-r shadow-lg"
-			style="
-				height: 80px;
-				background-repeat: no-repeat;
-				background-position: -6em center;
-				background-size: cover;
-				backdrop-filter: blur(10px);
-			"
+			class="bg-lightBG dark:bg-darkBGStop focus:outline-none mb-5 w-full rounded-lg border border-lightBorder shadow-lg"
+			style="height: 80px; background-repeat: no-repeat; background-position: -6em center; background-size: cover"
 			:style="{ backgroundImage: `url(${require(`@/assets/images/brand/configure-my-capsule.webp`)})` }"
 			@click="toggleConfigure"
 		>
