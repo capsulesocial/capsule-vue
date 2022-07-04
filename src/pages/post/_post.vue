@@ -636,10 +636,9 @@ export default Vue.extend({
 		}
 
 		const profile = await getUserSubscriptions(this.$store.state.session.id)
-		for (let i = 0; i < profile.length; i++) {
-			if (profile[i].authorID === this.authorID) {
-				this.authorPaymentProfile = profile[i]
-			}
+		const foundProfile = profile.find((p) => p.authorID === this.authorID)
+		if (foundProfile) {
+			this.authorPaymentProfile = foundProfile
 		}
 	},
 	async mounted() {
@@ -814,14 +813,13 @@ export default Vue.extend({
 		},
 		initializeProfile() {
 			const { tiers } = this.getPaymentProfile(this.authorID)
-			for (let i = 0; i < this.enabledTiers.length; i++) {
-				for (let j = 0; j < tiers.length; j++) {
-					if (this.enabledTiers[i] === tiers[j]._id) {
-						this.enabledTierNames.push(tiers[j].name)
-						this.toPreSelectTiers.push(tiers[i])
-					}
+			this.enabledTiers.forEach((tId) => {
+				const foundTier = tiers.find((tier: SubscriptionTier) => tier._id === tId)
+				if (foundTier) {
+					this.enabledTierNames.push(foundTier.name)
+					this.toPreSelectTiers.push(foundTier)
 				}
-			}
+			})
 		},
 		// switch tier popup
 		switchTierPopup() {
