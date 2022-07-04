@@ -1,6 +1,6 @@
 import { getED25519Key } from '@toruslabs/openlogin-ed25519'
 import { base_decode as baseDecode, base_encode as baseEncode } from 'near-api-js/lib/utils/serialize'
-import { PublicKey } from 'near-api-js/lib/utils'
+import { PublicKey } from 'near-api-js/lib/utils/key_pair'
 
 import { initContract, setUserInfoNEAR, setNearPrivateKey, getWalletConnection, getNearPrivateKey } from './near'
 import { addProfileToIPFS, createDefaultProfile, getProfile, Profile } from './profile'

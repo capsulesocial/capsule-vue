@@ -288,7 +288,7 @@ export default Vue.extend({
 				element.click()
 			}
 		},
-		handleImage(e: Event) {
+		async handleImage(e: Event) {
 			const eventTarget = e.target
 			if (!eventTarget) {
 				return
@@ -303,25 +303,17 @@ export default Vue.extend({
 			if (!imageFile) {
 				return
 			}
+			this.waitingImage = true
 			try {
-				this.waitingImage = true
-				uploadPhoto(imageFile).then(async (res) => {
-					try {
-						const { cid, image, imageName, url } = res
-						await preUploadPhoto(cid, image, imageName, this.$store.state.session.id)
-						this.$store.commit(`draft/updateFeaturedPhotoCID`, cid)
-						this.featuredPhoto = url
-					} catch (err) {
-						this.$handleError(err)
-					} finally {
-						target.value = ``
-						this.waitingImage = false
-					}
-				})
-			} catch (err: unknown) {
+				const { cid, image, imageName, url } = await uploadPhoto(imageFile)
+				await preUploadPhoto(cid, image, imageName, this.$store.state.session.id)
+				this.$store.commit(`draft/updateFeaturedPhotoCID`, cid)
+				this.featuredPhoto = url
+			} catch (err) {
+				this.$handleError(err)
+			} finally {
 				target.value = ``
 				this.waitingImage = false
-				this.$handleError(err)
 			}
 		},
 		handleCategoryDropdown(e: any): void {
