@@ -407,16 +407,7 @@
 												}}<CrownIcon v-if="post.encrypted" class="ml-2 inline text-neutral w-5 h-5 -mt-1" />
 											</h3>
 										</div>
-										<h6
-											v-if="(post.subtitle || post.excerpt) && featuredPhoto"
-											class="max-w-420 break-words dark:text-darkSecondaryText"
-										>
-											{{ post.subtitle ? post.subtitle : postExcerpt() }}
-										</h6>
-										<h6
-											v-if="(post.subtitle || post.excerpt) && !featuredPhoto"
-											class="max-w-mobileCard xl:max-w-700 break-words text-lightSecondaryText dark:text-darkSecondaryText"
-										>
+										<h6 class="break-words text-lightSecondaryText dark:text-darkSecondaryText">
 											{{ post.subtitle ? post.subtitle : postExcerpt() }}
 										</h6>
 									</div>
@@ -462,9 +453,9 @@
 							<!-- Right side: Image -->
 							<div
 								v-if="featuredPhotoLoading"
-								class="w-full xl:w-56 h-48 xl:h-32 bg-gray1 flex-shrink-0 animate-pulse rounded-lg mt-2 xl:mt-0"
+								class="w-full xl:w-56 h-48 xl:h-32 bg-gray1 flex-shrink-0 animate-pulse rounded-lg mt-4 xl:mt-0"
 							></div>
-							<div v-if="featuredPhoto !== ``" class="mt-2 w-full flex-shrink-0 xl:mt-0 xl:w-56">
+							<div v-if="featuredPhoto !== ``" class="mt-4 w-full flex-shrink-0 xl:mt-0 xl:w-56">
 								<nuxt-link :to="'/post/' + postCID">
 									<img :src="featuredPhoto" class="h-48 w-full flex-shrink-0 rounded-lg object-cover xl:h-32" />
 								</nuxt-link>
