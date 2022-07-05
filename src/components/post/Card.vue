@@ -704,6 +704,15 @@ export default Vue.extend({
 		} else {
 			this.postCID = this.post._id
 		}
+
+		// Populate Featured Photo
+		if (this.post.featuredPhotoCID) {
+			this.featuredPhotoLoading = true
+			getPhotoFromIPFS(this.post.featuredPhotoCID).then((p) => {
+				this.featuredPhoto = p
+				this.featuredPhotoLoading = false
+			})
+		}
 		// Populate author profile
 		let profile = this.profile
 		if (!profile) {
@@ -732,14 +741,7 @@ export default Vue.extend({
 			})
 		}
 		this.authorBio = profile.bio
-		// Populate Featured Photo
-		if (this.post.featuredPhotoCID) {
-			this.featuredPhotoLoading = true
-			getPhotoFromIPFS(this.post.featuredPhotoCID).then((p) => {
-				this.featuredPhoto = p
-				this.featuredPhotoLoading = false
-			})
-		}
+
 		// Get bookmark status
 		this.isBookmarked = this.bookmarked
 
