@@ -157,6 +157,10 @@
 									</div>
 								</div>
 								<!-- Right side: Image -->
+								<div
+									v-if="featuredPhotoLoading"
+									class="w-full lg:w-56 h-48 lg:h-32 bg-gray1 animate-pulse rounded-lg mt-2 lg:mt-0"
+								></div>
 								<div v-if="featuredPhoto !== ``" class="mt-2 w-full flex-shrink-0 lg:mt-0 lg:w-56">
 									<nuxt-link :to="'/post/' + postCID">
 										<img :src="featuredPhoto" class="h-48 w-full flex-shrink-0 rounded-lg object-cover lg:h-32" />
@@ -456,6 +460,10 @@
 								</div>
 							</div>
 							<!-- Right side: Image -->
+							<div
+								v-if="featuredPhotoLoading"
+								class="w-full xl:w-56 h-48 xl:h-32 bg-gray1 animate-pulse rounded-lg mt-2 xl:mt-0"
+							></div>
 							<div v-if="featuredPhoto !== ``" class="mt-2 w-full flex-shrink-0 xl:mt-0 xl:w-56">
 								<nuxt-link :to="'/post/' + postCID">
 									<img :src="featuredPhoto" class="h-48 w-full flex-shrink-0 rounded-lg object-cover xl:h-32" />
@@ -576,6 +584,7 @@ interface IData {
 	} | null
 	postCID: string
 	readingTime: number | null
+	featuredPhotoLoading: boolean
 }
 
 export default Vue.extend({
@@ -685,6 +694,7 @@ export default Vue.extend({
 			postCID: ``,
 			quoteContent: ``,
 			readingTime: null,
+			featuredPhotoLoading: false,
 		}
 	},
 	async created() {
@@ -724,8 +734,10 @@ export default Vue.extend({
 		this.authorBio = profile.bio
 		// Populate Featured Photo
 		if (this.post.featuredPhotoCID) {
+			this.featuredPhotoLoading = true
 			getPhotoFromIPFS(this.post.featuredPhotoCID).then((p) => {
 				this.featuredPhoto = p
+				this.featuredPhotoLoading = false
 			})
 		}
 		// Get bookmark status
