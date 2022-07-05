@@ -6,8 +6,7 @@
 		<!-- Container -->
 		<section>
 			<div
-				style="backdrop-filter: blur(10px)"
-				class="w-full lg:w-600 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation z-10 mr-5 overflow-y-auto rounded-lg bg-gradient-to-r p-6 pt-4 shadow-lg"
+				class="w-full lg:w-600 min-h-40 max-h-90 bg-lightBG dark:bg-darkBGStop card-animation z-10 mr-5 overflow-y-auto rounded-lg p-6 pt-4 shadow-lg"
 			>
 				<div class="sticky flex items-center justify-between">
 					<h2 class="text-lightPrimaryText dark:text-darkPrimaryText text-2xl font-semibold">

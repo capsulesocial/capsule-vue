@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="w-full sm:w-56 mr-2 mb-4 flex flex-col border border-lightBorder dark:border-darkBorder shadow-sm rounded-lg from-lightBGStart to-lightBGStop dark:from-darkBG dark:to-darkBG bg-gradient-to-r items-center p-4"
+		class="w-full sm:w-56 mr-2 mb-4 flex flex-col border border-lightBorder dark:border-darkBorder shadow-sm rounded-lg bg-lightBG dark:bg-darkBGStop items-center p-4"
 	>
 		<div class="w-full flex justify-end -mt-2">
 			<div class="icon relative flex items-center">

@@ -922,11 +922,10 @@
 	border-color: #fff;
 }
 .ql-bubble .ql-tooltip {
-	background: linear-gradient(90deg, rgba(256, 256, 256, 0.95) 0%, rgba(256, 256, 256, 0.9) 100%);
+	background: rgba(256, 256, 256, 1);
 	border-radius: 10px;
 	box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 	color: #000000;
-	backdrop-filter: blur(10px);
 	border-width: 1px;
 	border-color: rgba(46, 85, 106, 0.05);
 }
@@ -983,10 +982,9 @@
 	white-space: break-spaces;
 }
 .ql-container.ql-bubble:not(.ql-disabled) a::before {
-	background: linear-gradient(90deg, rgba(256, 256, 256, 0.95) 0%, rgba(256, 256, 256, 0.9) 100%);
+	background: rgba(256, 256, 256, 1);
 	border-radius: 5px;
 	box-shadow: 0 10px 15px -3px rgb(0 0 0 / 10%), 0 4px 6px -4px rgb(0 0 0 / 10%);
-	backdrop-filter: blur(10px);
 	border-width: 1px;
 	border-color: rgba(46, 85, 106, 0.05);
 	top: -5px;

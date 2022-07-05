@@ -1,8 +1,5 @@
 <template>
-	<header
-		class="sticky top-0 w-full bg-gradient-to-r px-3 lg:px-0"
-		:class="showMobileMenu || showDropdown ? `z-20` : ``"
-	>
+	<header class="sticky top-0 w-full px-3 lg:px-0" :class="showMobileMenu || showDropdown ? `z-20` : ``">
 		<!-- Desktop header -->
 		<nav class="w-full flex-no-wrap hidden flex-row items-center justify-between py-5 lg:flex">
 			<!-- Left side: Links + write post button -->
@@ -29,7 +26,7 @@
 				<!-- Dropdown: Profile, settings, disconnect -->
 				<div
 					v-show="showDropdown"
-					class="w-max from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation absolute mt-16 flex flex-col rounded-lg border bg-gradient-to-r p-4 shadow-lg right-0"
+					class="w-max bg-lightBG dark:bg-darkBGStop border-lightBorder modal-animation absolute mt-16 flex flex-col rounded-lg border p-4 shadow-lg right-0"
 					:class="$colorMode.dark ? `dropdownOpenDark` : `dropdownOpen`"
 				>
 					<!-- Unauthenticated: Log in -->
@@ -115,7 +112,7 @@
 				</button>
 				<div
 					v-show="showMobileMenu"
-					class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation absolute mt-2 ml-0 flex flex-col rounded-lg border bg-gradient-to-r p-4 shadow-lg"
+					class="bg-lightBG dark:bg-darkBGStop border-lightBorder modal-animation absolute mt-2 ml-0 flex flex-col rounded-lg border p-4 shadow-lg"
 					:class="$colorMode.dark ? `dropdownMainOpenDark` : `dropdownMainOpen`"
 				>
 					<nuxt-link
@@ -160,7 +157,7 @@
 				<!-- Dropdown: Profile, settings, disconnect -->
 				<div
 					v-show="showDropdown"
-					class="w-max from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation absolute mt-2 flex flex-col rounded-lg border bg-gradient-to-r p-4 shadow-lg right-0"
+					class="w-max bg-lightBG dark:bg-darkBGStop border-lightBorder modal-animation absolute mt-2 flex flex-col rounded-lg border p-4 shadow-lg right-0"
 					:class="$colorMode.dark ? `dropdownOpenDark` : `dropdownOpen`"
 				>
 					<!-- Unauthenticated: Log in -->
@@ -366,11 +363,9 @@ export default Vue.extend({
 <style>
 .dropdownOpen {
 	margin-left: -6rem;
-	backdrop-filter: blur(10px);
 }
 .dropdownOpenDark {
 	margin-left: -6rem;
-	backdrop-filter: blur(10px);
 }
 .dropdownOpen::before {
 	content: '';
@@ -397,7 +392,6 @@ export default Vue.extend({
 .dropdownMainOpen {
 	margin-top: 1rem !important;
 	margin-left: -1rem !important;
-	backdrop-filter: blur(10px);
 }
 .dropdownMainOpen::before {
 	content: '';

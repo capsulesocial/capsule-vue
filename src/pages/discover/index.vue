@@ -1,5 +1,5 @@
 <template>
-	<div class="min-h-61 h-61 xl:min-h-160 xl:h-160 border-lightBorder w-full border" style="backdrop-filter: blur(10px)">
+	<div class="min-h-61 h-61 xl:min-h-160 xl:h-160 border-lightBorder w-full border">
 		<div class="px-5 pb-2 pt-3 xl:px-6 xl:pt-4">
 			<h2 class="text-lightPrimaryText dark:text-darkPrimaryText mb-1 text-lg font-semibold xl:text-xl">
 				Featured Categories

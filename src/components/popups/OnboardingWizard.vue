@@ -3,8 +3,7 @@
 		class="popup bg-darkBG dark:bg-gray5 modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
 	>
 		<div
-			class="popup from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation overflow-y-auto rounded-lg bg-gradient-to-r p-6 pt-4 shadow-lg backdrop-blur-lg backdrop-filter"
-			style="max-height: 90%; width: 650px; backdrop-filter: blur(10px)"
+			class="popup w-full lg:w-600 min-h-40 max-h-90 bg-lightBG dark:bg-darkBGStop card-animation overflow-y-auto rounded-lg p-6 pt-4 shadow-lg"
 		>
 			<!-- Header and close icon -->
 			<div class="flex items-center justify-between pb-6">
@@ -52,7 +51,7 @@
 				</p>
 				<!-- progress circles -->
 				<div class="mb-10 self-center">
-					<button class="bg-primaryfocus:outline-none mx-1 rounded-full p-1" @click="setStep(0)"></button>
+					<button class="bg-primary focus:outline-none mx-1 rounded-full p-1" @click="setStep(0)"></button>
 					<button
 						:class="step > 0 ? `bg-primary` : `bg-gray3`"
 						class="focus:outline-none mx-1 rounded-full p-1"

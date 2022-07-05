@@ -30,7 +30,7 @@
 				<!-- Content -->
 				<section class="flex flex-row lg:mt-2 xl:mt-5">
 					<nuxt-child
-						class="lg:w-7.5 min-h-61 h-61 xl:min-h-150 xl:h-150 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation z-10 w-full overflow-y-hidden rounded-lg border bg-gradient-to-r shadow-lg"
+						class="lg:w-7.5 min-h-61 h-61 xl:min-h-150 xl:h-150 bg-lightBG dark:bg-darkBGStop border-lightBorder modal-animation z-10 w-full overflow-y-hidden rounded-lg border shadow-lg"
 						:posts="posts"
 						:isLoading="isLoading"
 						:filter="activeSort"
@@ -40,10 +40,10 @@
 					<!-- Widgets -->
 					<aside
 						class="w-5/12 -mr-5 -mt-4 p-4 modal-animation hidden lg:block"
-						style="min-height: calc(80vh - 160px); height: calc(80vh - 160px); backdrop-filter: blur(10px)"
+						style="min-height: calc(80vh - 160px); height: calc(80vh - 160px)"
 					>
 						<article
-							class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder mb-5 h-full w-full overflow-y-scroll rounded-lg border bg-gradient-to-r px-6 py-4 shadow-lg"
+							class="bg-lightBG dark:bg-darkBGStop border-lightBorder mb-5 h-full w-full overflow-y-scroll rounded-lg border px-6 py-4 shadow-lg"
 						>
 							<div class="flex flex-row items-center justify-between pb-4">
 								<h6 class="text-lightPrimaryText dark:text-darkPrimaryText text-base font-semibold">

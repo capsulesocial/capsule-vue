@@ -1,8 +1,7 @@
 <template>
 	<main>
 		<div
-			class="from-lightBGStart to-lightBGStop dark:from-darkBG dark:to-darkBG border-lightBorder modal-animation flex flex-col overflow-hidden rounded-lg border bg-gradient-to-r py-4 px-6 pb-2 shadow-lg"
-			style="backdrop-filter: blur(10px)"
+			class="bg-lightBG dark:bg-darkBGStop border-lightBorder modal-animation flex flex-col overflow-hidden rounded-lg border py-4 px-6 pb-2 shadow-lg"
 		>
 			<h3 class="text-primary pb-4 text-base font-semibold">Settings</h3>
 			<nuxt-link

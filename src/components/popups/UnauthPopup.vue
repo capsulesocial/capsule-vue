@@ -4,8 +4,7 @@
 		class="bg-darkBG dark:bg-gray5 modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-start justify-center bg-opacity-50 dark:bg-opacity-50"
 	>
 		<div
-			class="popupCard from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation mt-12 overflow-y-auto rounded-lg bg-gradient-to-r p-6 pt-4 shadow-lg backdrop-blur-lg"
-			style="max-height: 90%; width: 650px; backdrop-filter: blur(10px)"
+			class="popupCard w-full lg:w-600 min-h-40 max-h-90 bg-lightBG dark:bg-darkBGStop card-animation mt-12 overflow-y-auto rounded-lg p-6 pt-4 shadow-lg"
 		>
 			<!-- Header and close icon -->
 			<div class="flex items-center justify-between pb-6">

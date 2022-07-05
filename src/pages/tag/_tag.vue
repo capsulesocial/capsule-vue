@@ -1,10 +1,7 @@
 <template>
 	<section class="border-lightBorder w-full border">
 		<!-- Tag page header -->
-		<div
-			class="border-lightBorder bg-darkBG flex flex-row items-center rounded-lg bg-opacity-25 p-2 shadow-lg"
-			style="backdrop-filter: blur(10px)"
-		>
+		<div class="border-lightBorder bg-gray7 flex flex-row items-center rounded-lg bg-opacity-25 p-2 shadow-lg">
 			<button class="bg-gray1 focus:outline-none m-3 flex-shrink-0 rounded-full" @click="handleBack">
 				<BackIcon />
 			</button>

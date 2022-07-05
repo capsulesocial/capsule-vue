@@ -1,5 +1,5 @@
 <template>
-	<section class="border-lightBorder w-full border" style="backdrop-filter: blur(10px)">
+	<section class="border-lightBorder w-full border">
 		<!-- Header -->
 		<div
 			id="header"
@@ -75,13 +75,7 @@
 					:isDeleted="p.deleted"
 				/>
 			</article>
-			<p
-				v-if="noMorePosts"
-				class="text-gray5 dark:text-gray3 py-5 text-center text-sm"
-				style="backdrop-filter: blur(10px)"
-			>
-				No more posts
-			</p>
+			<p v-if="noMorePosts" class="text-gray5 dark:text-gray3 pt-5 pb-6 text-center text-sm">No more posts</p>
 		</div>
 		<!-- Not loaded yet -->
 		<article v-show="isLoading" class="modal-animation flex w-full justify-center mt-20">
@@ -309,7 +303,6 @@ export default Vue.extend({
 .scrolldown {
 	background: linear-gradient(180deg, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.25) 100%), none !important;
 	height: 4rem;
-	backdrop-filter: blur(10px);
 }
 .scrollup {
 	opacity: 1;

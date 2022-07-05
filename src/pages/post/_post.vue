@@ -1,9 +1,5 @@
 <template>
-	<div
-		id="post"
-		class="modal-animation card-animation flex w-full justify-center"
-		:style="showQuoteRepost || showShare ? `background-color: #fff` : `backdrop-filter: blur(10px)`"
-	>
+	<div id="post" class="modal-animation card-animation flex w-full justify-center">
 		<!-- loader -->
 		<article
 			v-if="!title || !authorID || !timestamp || !category"
@@ -19,7 +15,7 @@
 			<!-- Magic header that disappears on scroll down -->
 			<header
 				id="header"
-				class="page-header xl:w-760 xl:max-w-760 from-lightBGStart to-lightBGStop dark:from-darkBG dark:to-darkBG sticky top-0 z-10 flex w-full items-center rounded-b-lg bg-gradient-to-r py-2 px-5"
+				class="page-header xl:w-760 xl:max-w-760 bg-lightBG dark:bg-darkBGStop sticky top-0 z-10 flex w-full items-center rounded-b-lg py-2 px-5"
 			>
 				<div class="trigger-menu-wrapper flex w-full justify-center py-2 ease-in-out">
 					<div class="flex w-full justify-between xl:min-w-max xl:max-w-3xl">
@@ -153,8 +149,7 @@
 							class="from-lightBGStart to-transparent dark:from-darkBGStart dark:to-transparent bg-gradient-to-t z-20 absolute top-0 w-full h-full flex"
 						>
 							<div
-								class="w-full shadow-lg flex flex-col items-center py-10 px-16 from-lightBGStart to-lightBGStop dark:from-darkBG dark:to-darkBG bg-gradient-to-r rounded-lg h-min"
-								style="backdrop-filter: blur(10px)"
+								class="w-full shadow-lg flex flex-col items-center py-10 px-16 bg-lightBG dark:bg-darkBGStop rounded-lg h-min"
 								:class="featuredPhoto !== null ? `sm:mt-36` : `mt-0`"
 							>
 								<!-- Not a subscriber -->

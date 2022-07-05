@@ -57,7 +57,7 @@
 							v-if="
 								(tier.monthlyEnabled && selectedPeriod === `month`) || (tier.yearlyEnabled && selectedPeriod === `year`)
 							"
-							class="flex flex-row items-center justify-between m-5 p-4 border shadow-sm rounded-lg from-lightBGStart to-lightBGStop dark:from-darkBG dark:to-darkBG bg-gradient-to-r transition duration-500 ease-in-out"
+							class="flex flex-row items-center justify-between m-5 p-4 border shadow-sm rounded-lg bg-lightBG dark:bg-darkBG transition duration-500 ease-in-out"
 							:class="getStyles(tier)"
 							:disabled="s.tier.id === tier._id || !enabledTiers.includes(tier._id)"
 							@click="selectTier(tier)"
@@ -127,7 +127,7 @@
 					</div>
 					<!-- Tier change preview -->
 					<div
-						class="flex flex-row items-center justify-between m-5 p-4 border shadow-sm rounded-lg from-lightBGStart to-lightBGStop dark:from-darkBG dark:to-darkBG bg-gradient-to-r transition duration-500 ease-in-out opacity-100 border-gray5"
+						class="flex flex-row items-center justify-between m-5 p-4 border shadow-sm rounded-lg bg-lightBG dark:bg-darkBG transition duration-500 ease-in-out opacity-100 border-gray5"
 					>
 						<!-- Check mark -->
 						<div class="w-12 flex justify-center">
@@ -146,7 +146,7 @@
 					</div>
 					<ChevronDownIcon class="w-5 h-5 text-gray5 dark:text-gray3" />
 					<div
-						class="flex flex-row items-center justify-between m-5 p-4 border shadow-sm rounded-lg from-lightBGStart to-lightBGStop dark:from-darkBG dark:to-darkBG bg-gradient-to-r transition duration-500 ease-in-out opacity-100 border-neutral"
+						class="flex flex-row items-center justify-between m-5 p-4 border shadow-sm rounded-lg bg-lightBG dark:bg-darkBG transition duration-500 ease-in-out opacity-100 border-neutral"
 					>
 						<!-- Check mark -->
 						<div class="w-12 flex justify-center">

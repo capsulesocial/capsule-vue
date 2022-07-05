@@ -41,8 +41,7 @@
 		>
 			<!-- Inner space -->
 			<div
-				style="width: 650px; backdrop-filter: blur(10px)"
-				class="popup from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder card-animation rounded-lg bg-gradient-to-r shadow-lg"
+				class="popup w-full lg:w-600 min-h-40 max-h-90 bg-lightBG dark:bg-darkBGStop card-animation rounded-lg shadow-lg"
 			>
 				<!-- Header and close icon -->
 				<div class="flex items-center justify-between p-6 pb-2">
@@ -91,8 +90,7 @@
 		>
 			<!-- Inner space -->
 			<div
-				style="width: 650px; backdrop-filter: blur(10px)"
-				class="popup from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder card-animation rounded-lg bg-gradient-to-r shadow-lg"
+				class="popup w-full lg:w-600 min-h-40 max-h-90 bg-lightBG dark:bg-darkBGStop card-animation rounded-lg shadow-lg"
 			>
 				<!-- Header and close icon -->
 				<div class="flex items-center justify-between p-6 pb-2 mb-4">
@@ -138,10 +136,7 @@
 			class="popup bg-darkBG dark:bg-gray5 modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
 		>
 			<!-- Inner space -->
-			<div
-				style="width: 650px; backdrop-filter: blur(10px)"
-				class="popup from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder card-animation rounded-lg bg-gradient-to-r shadow-lg"
-			>
+			<div class="popup w-full lg:w-600 max-h-90 bg-lightBG dark:bg-darkBGStop card-animation rounded-lg shadow-lg">
 				<!-- Header and close icon -->
 				<div class="flex items-center justify-between p-6 pb-2 mb-4">
 					<h4 class="text-lightPrimaryText dark:text-darkPrimaryText text-xl font-semibold">
