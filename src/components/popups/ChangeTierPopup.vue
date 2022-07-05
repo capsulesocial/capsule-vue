@@ -376,10 +376,10 @@ export default Vue.extend({
 			let res: string = ``
 			if (this.s.tier.id === DisplayedTier._id) {
 				// current tier
-				res = `opacity-50 cursor-not-allowed border-gray5`
+				res = `opacity-75 cursor-not-allowed border-gray5`
 			} else if (!this.enabledTiers.includes(DisplayedTier._id)) {
 				// not in enabled tiers for this post
-				res = `opacity-50 cursor-not-allowed border-lightBorder dark:border-darkBorder`
+				res = `opacity-75 cursor-not-allowed border-lightBorder dark:border-darkBorder`
 			} else if (this.selectedTier?._id === DisplayedTier._id) {
 				// in enabled tier and selected
 				res = `opacity-100 cursor-pointer border-neutral`
