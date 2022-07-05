@@ -95,6 +95,7 @@ export default Vue.extend({
 		return {
 			title: `Create an account on Blogchain`,
 			meta: [{ hid: `register`, name: `register`, content: `Create a Blogchain account` }],
+			script: [{ src: `https://js.hcaptcha.com/1/api.js`, defer: true, async: true }],
 		}
 	},
 	errorCaptured(err: Error) {
