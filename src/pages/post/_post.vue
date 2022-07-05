@@ -211,7 +211,7 @@
 											@click.prevent="switchTierPopup()"
 										>
 											<CheckCircleStaticIcon class="h-5 w-5 mr-2" />
-											<p class="focus:outline-none">Switch Tier</p>
+											<p class="focus:outline-none">Change Tier</p>
 										</button>
 									</div>
 									<!-- change tier popup -->
@@ -222,6 +222,7 @@
 											:authorAvatar="subscriptionProfileAvatar"
 											:s="authorPaymentProfile"
 											:toPreSelectTier="toPreSelectTiers[0]"
+											:enabledTiers="enabledTiers"
 											@close="showChangeTier = false"
 										/>
 									</portal>

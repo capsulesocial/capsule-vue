@@ -59,16 +59,8 @@
 								(tier.monthlyEnabled && selectedPeriod === `month`) || (tier.yearlyEnabled && selectedPeriod === `year`)
 							"
 							class="flex flex-row items-center justify-between m-5 p-4 border shadow-sm rounded-lg from-lightBGStart to-lightBGStop dark:from-darkBG dark:to-darkBG bg-gradient-to-r transition duration-500 ease-in-out"
-							:class="
-								selectedTier !== null && selectedTier._id === tier._id
-									? s.tier.id !== tier._id
-										? `opacity-100 cursor-pointer border-neutral`
-										: `opacity-50 cursor-not-allowed border-neutral`
-									: s.tier.id !== tier._id
-									? `opacity-100 cursor-pointer border-lightBorder dark:border-darkBorder`
-									: `opacity-50 cursor-not-allowed border-gray5`
-							"
-							:disabled="s.tier.id === tier._id || !enabledTiers.includes(toPreSelectTier._id)"
+							:class="getStyles(tier)"
+							:disabled="s.tier.id === tier._id || !enabledTiers.includes(tier._id)"
 							@click="selectTier(tier)"
 						>
 							<!-- Check mark -->
@@ -379,6 +371,23 @@ export default Vue.extend({
 		},
 		closeDraftsPopup(): void {
 			this.$emit(`close`)
+		},
+		getStyles(DisplayedTier: SubscriptionTier): String {
+			let res: string = ``
+			if (this.s.tier.id === DisplayedTier._id) {
+				// current tier
+				res = `opacity-50 cursor-not-allowed border-gray5`
+			} else if (!this.enabledTiers.includes(DisplayedTier._id)) {
+				// not in enabled tiers for this post
+				res = `opacity-50 cursor-not-allowed border-lightBorder dark:border-darkBorder`
+			} else if (this.selectedTier?._id === DisplayedTier._id) {
+				// in enabled tier and selected
+				res = `opacity-100 cursor-pointer border-neutral`
+			} else {
+				// in enabled tier but not selected
+				res = `opacity-100 cursor-pointer border-lightBorder dark:border-darkBorder`
+			}
+			return res
 		},
 	},
 })
