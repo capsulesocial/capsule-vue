@@ -159,7 +159,7 @@
 								<!-- Right side: Image -->
 								<div
 									v-if="featuredPhotoLoading"
-									class="w-full lg:w-56 h-48 lg:h-32 bg-gray1 animate-pulse rounded-lg mt-2 lg:mt-0"
+									class="w-full lg:w-56 h-48 lg:h-32 bg-gray1 animate-pulse rounded-lg flex-shrink-0 mt-2 lg:mt-0"
 								></div>
 								<div v-if="featuredPhoto !== ``" class="mt-2 w-full flex-shrink-0 lg:mt-0 lg:w-56">
 									<nuxt-link :to="'/post/' + postCID">
@@ -462,7 +462,7 @@
 							<!-- Right side: Image -->
 							<div
 								v-if="featuredPhotoLoading"
-								class="w-full xl:w-56 h-48 xl:h-32 bg-gray1 animate-pulse rounded-lg mt-2 xl:mt-0"
+								class="w-full xl:w-56 h-48 xl:h-32 bg-gray1 flex-shrink-0 animate-pulse rounded-lg mt-2 xl:mt-0"
 							></div>
 							<div v-if="featuredPhoto !== ``" class="mt-2 w-full flex-shrink-0 xl:mt-0 xl:w-56">
 								<nuxt-link :to="'/post/' + postCID">
