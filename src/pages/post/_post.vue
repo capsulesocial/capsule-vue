@@ -172,12 +172,15 @@
 										<br class="hidden lg:block" />
 										this post and other subscriber-only content
 									</p>
-									<SubscribeButton
-										:toggleSubscription="toggleSubscription"
-										:userIsSubscribed="false"
-										class="header-profile my-4"
-										style="transform: scale(1.2)"
-									/>
+									<div class="flex items-center justify-center">
+										<SubscribeButton
+											:toggleSubscription="toggleSubscription"
+											:userIsSubscribed="false"
+											:enabledTiers="enabledTiers"
+											class="header-profile my-4"
+											style="transform: scale(1.2)"
+										/>
+									</div>
 								</div>
 
 								<!-- Subscribed, but to a different tier -->

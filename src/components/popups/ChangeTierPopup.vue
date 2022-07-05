@@ -68,7 +68,7 @@
 									? `opacity-100 cursor-pointer border-lightBorder dark:border-darkBorder`
 									: `opacity-50 cursor-not-allowed border-gray5`
 							"
-							:disabled="s.tier.id === tier._id"
+							:disabled="s.tier.id === tier._id || !enabledTiers.includes(toPreSelectTier._id)"
 							@click="selectTier(tier)"
 						>
 							<!-- Check mark -->
@@ -266,6 +266,12 @@ export default Vue.extend({
 		toPreSelectTier: {
 			type: Object as PropType<SubscriptionTier>,
 			default: null,
+		},
+		enabledTiers: {
+			type: Array as PropType<string[]>,
+			default: () => {
+				return []
+			},
 		},
 	},
 	data(): IData {
