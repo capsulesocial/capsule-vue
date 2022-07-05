@@ -159,32 +159,75 @@
 								:class="featuredPhoto !== null ? `sm:mt-36` : `mt-0`"
 							>
 								<!-- Not a subscriber -->
-								<h4
-									v-if="subscriptionStatus === `NOT_SUBSCRIBED`"
-									class="text-2xl font-semibold text-neutral mb-4 text-center"
-								>
-									This post is for Paid subscribers
-								</h4>
+								<div v-if="subscriptionStatus === `NOT_SUBSCRIBED`">
+									<h4 class="text-2xl font-semibold text-neutral mb-4 text-center">
+										This post is for Paid subscribers
+									</h4>
+									<p class="my-4 text-center text-gray5 dark:text-gray3">
+										Become a subscriber of
+										<span v-if="author && author.name !== ``" class="font-semibold text-primary">{{
+											author.name
+										}}</span>
+										<span v-else class="font-semibold text-primary">@{{ authorID }}</span> to access
+										<br class="hidden lg:block" />
+										this post and other subscriber-only content
+									</p>
+									<div class="flex items-center justify-center">
+										<SubscribeButton
+											:toggleSubscription="toggleSubscription"
+											:userIsSubscribed="false"
+											:enabledTiers="enabledTiers"
+											class="header-profile my-4"
+											style="transform: scale(1.2)"
+										/>
+									</div>
+								</div>
+
 								<!-- Subscribed, but to a different tier -->
-								<h4
-									v-if="subscriptionStatus === `INSUFFICIENT_TIER`"
-									class="text-2xl font-semibold text-neutral mb-4 text-center"
-								>
-									Your subscription tier does not include this post
-								</h4>
-								<p class="my-4 text-center text-gray5 dark:text-gray3">
-									Become a subscriber of
-									<span v-if="author && author.name !== ``" class="font-semibold text-primary">{{ author.name }}</span>
-									<span v-else class="font-semibold text-primary">@{{ authorID }}</span> to access
-									<br class="hidden lg:block" />
-									this post and other subscriber-only content
-								</p>
-								<SubscribeButton
-									:toggleSubscription="toggleSubscription"
-									:userIsSubscribed="false"
-									class="header-profile my-4"
-									style="transform: scale(1.2)"
-								/>
+								<div v-if="subscriptionStatus === `INSUFFICIENT_TIER`">
+									<h4 class="text-2xl font-semibold text-neutral mb-4 text-center">
+										Your subscription tier does not include this post
+									</h4>
+									<p class="my-4 text-center text-gray5 dark:text-gray3">
+										Subscribe to the
+										<span
+											v-for="(tier, index) in enabledTierNames.slice(0, 1)"
+											:key="index"
+											class="text-neutral font-semibold"
+											>{{ tier }}</span
+										>
+										tier of
+										<span v-if="author && author.name !== ``" class="font-semibold text-primary">{{
+											author.name
+										}}</span>
+										<span v-else class="font-semibold text-primary">@{{ authorID }}</span> to access
+										<br class="hidden lg:block" />
+										this post and other posts of this tier.
+									</p>
+									<!-- change tier -->
+									<div class="flex items-center justify-center">
+										<button
+											class="flex flex-row items-center px-6 py-2 mt-4 bg-neutral text-center text-lightButtonText dark:from-darkBG dark:to-darkBG focus:outline-none transform rounded-lg font-bold transition duration-500 ease-in-out hover:shadow-lg"
+											@click.prevent="switchTierPopup()"
+										>
+											<CheckCircleStaticIcon class="h-5 w-5 mr-2" />
+											<p class="focus:outline-none">Change Tier</p>
+										</button>
+									</div>
+									<!-- change tier popup -->
+									<portal to="postPage">
+										<ChangeTierPopup
+											v-if="showChangeTier"
+											:author="author"
+											:authorAvatar="subscriptionProfileAvatar"
+											:s="authorPaymentProfile"
+											:toPreSelectTier="toPreSelectTiers[0]"
+											:enabledTiers="enabledTiers"
+											@close="showChangeTier = false"
+										/>
+									</portal>
+								</div>
+
 								<p class="text-sm mt-4 text-gray5 dark:text-gray3">
 									Manage my <nuxt-link to="/subscriptions" class="text-neutral text">subscriptions</nuxt-link>
 								</p>
@@ -319,7 +362,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { AxiosError } from 'axios'
 
 import PostView from '@/components/PostView.vue'
@@ -337,6 +380,8 @@ import PostCard from '@/components/post/Card.vue'
 import SharePopup from '@/components/popups/SharePopup.vue'
 import SubscribeButton from '@/components/SubscribeButton.vue'
 import SubscriptionsPopup from '@/components/popups/SubscriptionsPopup.vue'
+import CheckCircleStaticIcon from '@/components/icons/CheckCircleStatic.vue'
+import ChangeTierPopup from '@/components/popups/ChangeTierPopup.vue'
 
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 import {
@@ -355,8 +400,8 @@ import { getReposts } from '@/backend/reposts'
 import { isPostBookmarkedByUser } from '@/backend/bookmarks'
 import { createShareableLink } from '@/backend/shareable_links'
 import { calculateReadingTime } from '@/backend/utilities/helpers'
-import { ActionType, namespace as paymentProfileNamespace } from '@/store/paymentProfile'
-
+import { ActionType, namespace as paymentProfileNamespace, SubscriptionTier } from '@/store/paymentProfile'
+import { getUserSubscriptions, ISubscriptionResponse } from '@/backend/subscription'
 interface IData {
 	post: Post | null
 	title: string | null
@@ -398,6 +443,11 @@ interface IData {
 	subscriptionStatus: `INSUFFICIENT_TIER` | `NOT_SUBSCRIBED` | ``
 	postImageKeys: Array<IPostImageKey>
 	isContentLoading: boolean
+	enabledTierNames: Array<string>
+	toPreSelectTiers: Array<SubscriptionTier>
+	showChangeTier: boolean
+	authorPaymentProfile: ISubscriptionResponse | undefined
+	subscriptionProfile: Profile
 }
 
 export default Vue.extend({
@@ -418,6 +468,8 @@ export default Vue.extend({
 		PostView,
 		SubscribeButton,
 		SubscriptionsPopup,
+		CheckCircleStaticIcon,
+		ChangeTierPopup,
 	},
 	beforeRouteLeave(to, from, next) {
 		if (this.realURL !== `` && to.path !== from.path) {
@@ -468,6 +520,11 @@ export default Vue.extend({
 			subscriptionStatus: ``,
 			postImageKeys: [],
 			isContentLoading: true,
+			enabledTierNames: [],
+			toPreSelectTiers: [],
+			showChangeTier: false,
+			authorPaymentProfile: undefined,
+			subscriptionProfile: createDefaultProfile(this.$store.state.session.id),
 		}
 	},
 	head() {
@@ -492,6 +549,9 @@ export default Vue.extend({
 				...(this.friendlyUrl ? [canonicalLink] : []),
 			],
 		}
+	},
+	computed: {
+		...mapGetters(paymentProfileNamespace, [`getPaymentProfile`]),
 	},
 	beforeDestroy() {
 		this.isLeaving = true
@@ -577,6 +637,12 @@ export default Vue.extend({
 			setTimeout(() => {
 				this.showShare = true
 			}, 1500)
+		}
+
+		const profile = await getUserSubscriptions(this.$store.state.session.id)
+		const foundProfile = profile.find((p) => p.authorID === this.authorID)
+		if (foundProfile) {
+			this.authorPaymentProfile = foundProfile
 		}
 	},
 	async mounted() {
@@ -681,6 +747,7 @@ export default Vue.extend({
 		getReposts({ authorID: this.$store.state.session.id }, {}).then((repostData) => {
 			this.myReposts = new Set(repostData.map((p) => p.repost.postCID))
 		})
+		this.initializeProfile()
 	},
 	methods: {
 		getReposts,
@@ -747,6 +814,20 @@ export default Vue.extend({
 			if (process.client) {
 				window.open(url, `_blank`)
 			}
+		},
+		initializeProfile() {
+			const { tiers } = this.getPaymentProfile(this.authorID)
+			this.enabledTiers.forEach((tId) => {
+				const foundTier = tiers.find((tier: SubscriptionTier) => tier._id === tId)
+				if (foundTier) {
+					this.enabledTierNames.push(foundTier.name)
+					this.toPreSelectTiers.push(foundTier)
+				}
+			})
+		},
+		// switch tier popup
+		switchTierPopup() {
+			this.showChangeTier = !this.showChangeTier
 		},
 		// Hide header on scroll down
 		handleScroll() {

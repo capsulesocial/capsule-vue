@@ -40,7 +40,7 @@
 						<CrownIcon class="text-neutral stroke-neutral self-center w-12 h-12 mb-2" />
 						<h6 class="font-semibold text-neutral text-xl mb-2">Change Tier</h6>
 						<p class="text-base text-center text-gray5 dark:text-gray3 mb-4">
-							Easily change you Tier access to
+							Easily change your Tier access to
 							<span v-if="author.name !== ``" class="font-semibold text-primary dark:text-secondary">{{
 								author.name
 							}}</span>
@@ -59,16 +59,8 @@
 								(tier.monthlyEnabled && selectedPeriod === `month`) || (tier.yearlyEnabled && selectedPeriod === `year`)
 							"
 							class="flex flex-row items-center justify-between m-5 p-4 border shadow-sm rounded-lg from-lightBGStart to-lightBGStop dark:from-darkBG dark:to-darkBG bg-gradient-to-r transition duration-500 ease-in-out"
-							:class="
-								selectedTier !== null && selectedTier._id === tier._id
-									? s.tier.id !== tier._id
-										? `opacity-100 cursor-pointer border-neutral`
-										: `opacity-50 cursor-not-allowed border-neutral`
-									: s.tier.id !== tier._id
-									? `opacity-100 cursor-pointer border-lightBorder dark:border-darkBorder`
-									: `opacity-50 cursor-not-allowed border-gray5`
-							"
-							:disabled="s.tier.id === tier._id"
+							:class="getStyles(tier)"
+							:disabled="s.tier.id === tier._id || !enabledTiers.includes(tier._id)"
 							@click="selectTier(tier)"
 						>
 							<!-- Check mark -->
@@ -263,6 +255,16 @@ export default Vue.extend({
 			type: String as PropType<ArrayBuffer | string | null>,
 			default: null,
 		},
+		toPreSelectTier: {
+			type: Object as PropType<SubscriptionTier>,
+			default: null,
+		},
+		enabledTiers: {
+			type: Array as PropType<string[]>,
+			default: () => {
+				return []
+			},
+		},
 	},
 	data(): IData {
 		return {
@@ -283,6 +285,10 @@ export default Vue.extend({
 		window.addEventListener(`click`, this.handleCloseClick, false)
 		// Get my followers
 		this.$store.dispatch(`paymentProfile/fetchProfile`, { username: this.author.id })
+		// prefill selected tier
+		if (this.toPreSelectTier) {
+			this.selectedTier = this.toPreSelectTier
+		}
 	},
 	methods: {
 		displayCurrency(currency: string) {
@@ -365,6 +371,23 @@ export default Vue.extend({
 		},
 		closeDraftsPopup(): void {
 			this.$emit(`close`)
+		},
+		getStyles(DisplayedTier: SubscriptionTier): String {
+			let res: string = ``
+			if (this.s.tier.id === DisplayedTier._id) {
+				// current tier
+				res = `opacity-75 cursor-not-allowed border-gray5`
+			} else if (!this.enabledTiers.includes(DisplayedTier._id)) {
+				// not in enabled tiers for this post
+				res = `opacity-75 cursor-not-allowed border-lightBorder dark:border-darkBorder`
+			} else if (this.selectedTier?._id === DisplayedTier._id) {
+				// in enabled tier and selected
+				res = `opacity-100 cursor-pointer border-neutral`
+			} else {
+				// in enabled tier but not selected
+				res = `opacity-100 cursor-pointer border-lightBorder dark:border-darkBorder`
+			}
+			return res
 		},
 	},
 })
