@@ -127,7 +127,7 @@
 					</div>
 				</article>
 				<div
-					class="bg-lightBG dark:bg-darkBGStop focus:outline-none card-animation-delay3 mb-5 flex w-full flex-row items-center rounded-lg border shadow-lg"
+					class="bg-lightBG dark:bg-darkBGStop focus:outline-none card-animation-delay3 mb-5 flex w-full flex-row items-center rounded-lg shadow-lg"
 					style="height: 60px"
 				>
 					<div class="flex flex-col xl:flex-row items-start justify-between px-6">

@@ -15,7 +15,7 @@
 			<!-- Magic header that disappears on scroll down -->
 			<header
 				id="header"
-				class="page-header xl:w-760 xl:max-w-760 bg-lightBG dark:bg-darkBGStop sticky top-0 z-10 flex w-full items-center rounded-b-lg py-2 px-5"
+				class="page-header xl:w-760 xl:max-w-760 bg-lightBG dark:bg-darkBG border-b border-r border-l border-lightBorder shadow-sm sticky top-0 z-10 flex w-full items-center rounded-b-lg py-2 px-5"
 			>
 				<div class="trigger-menu-wrapper flex w-full justify-center py-2 ease-in-out">
 					<div class="flex w-full justify-between xl:min-w-max xl:max-w-3xl">
