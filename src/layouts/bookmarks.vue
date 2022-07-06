@@ -49,7 +49,13 @@
 								<h6 class="text-lightPrimaryText dark:text-darkPrimaryText text-base font-semibold">
 									Filter by Category
 								</h6>
-								<button class="focus:outline-none text-primary pr-1 text-sm" @click="setFilter(``)">Clear</button>
+								<button
+									v-if="activeFilter !== ``"
+									class="focus:outline-none text-primary pr-1 text-sm"
+									@click="setFilter(``)"
+								>
+									Clear
+								</button>
 							</div>
 							<button
 								v-for="c in categoryList"
