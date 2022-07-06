@@ -41,7 +41,7 @@
 										@infoPopup="toggleSubInfosPopup(s)"
 									/>
 								</div>
-								<p v-else class="text-gray5 dark:text-gray3 text-sm pb-1">you have no expired subscriptions</p>
+								<p v-else class="text-gray5 dark:text-gray3 text-sm pb-1 mt-2">you have no expired subscriptions</p>
 							</div>
 							<Footer />
 						</aside>
