@@ -945,7 +945,7 @@
   resolved "https://registry.yarnpkg.com/@braintree/sanitize-url/-/sanitize-url-6.0.0.tgz#fe364f025ba74f6de6c837a84ef44bdb1d61e68f"
   integrity sha512-mgmE7XBYY/21erpzhexk4Cj1cyTQ9LzvnTxtzM17BJ7ERMNE6W72mQRo0I1Ud8eFJ+RVVIcBNhLFZ3GX4XFz5w==
 
-"@capsulesocial/capsule-config@^1.2.5":
+"@capsulesocial/capsule-config@^1.2.6":
   version "1.2.6"
   resolved "https://registry.yarnpkg.com/@capsulesocial/capsule-config/-/capsule-config-1.2.6.tgz#639d987e4227245efa9576952a3d54dcb2619bad"
   integrity sha512-bkS9fBrvDZoshzR3u7n7wh3LO2Sf4RMrUrX1pJrBDglSJfsIBdEnYDXWgNYmRggnQyBXoUTPPRhtNdOMoxHmSw==
