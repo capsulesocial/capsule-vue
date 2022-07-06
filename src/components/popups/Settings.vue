@@ -1,5 +1,5 @@
 <template>
-	<div class="popup w-full p-5">
+	<div class="popup w-full p-6 pt-4">
 		<!-- Header and Close button -->
 		<header v-if="$store.state.session.id === $route.params.id" class="mb-6 flex flex-row justify-between items-center">
 			<h2 class="text-lightPrimaryText dark:text-darkPrimaryText text-3xl font-semibold">Edit your profile</h2>

@@ -40,7 +40,7 @@
 				<!-- Content -->
 				<section class="flex flex-row">
 					<nuxt-child
-						class="min-h-61 h-61 lg:min-h-70 lg:h-70 border-lightBorder from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop w-full overflow-y-auto lg:rounded-lg border bg-gradient-to-r pt-0 shadow-lg xl:h-80 xl:pt-0"
+						class="min-h-61 h-61 lg:min-h-70 lg:h-70 border-lightBorder bg-lightBG dark:bg-darkBGStop w-full overflow-y-auto lg:rounded-lg border pt-0 shadow-lg xl:h-80 xl:pt-0"
 						@showPhoto="showPhoto"
 						@showWarning="toggleWarning"
 					/>

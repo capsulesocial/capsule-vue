@@ -6,8 +6,7 @@
 		<!-- Container -->
 		<section class="popup">
 			<div
-				style="backdrop-filter: blur(10px)"
-				class="min-h-40 w-full lg:w-600 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation max-h-90 z-10 overflow-y-auto rounded-lg bg-gradient-to-r px-6 pt-4 pb-2 shadow-lg"
+				class="w-full lg:w-600 min-h-40 max-h-90 bg-lightBG dark:bg-darkBGStop card-animation z-10 overflow-y-auto rounded-lg px-6 pt-4 pb-2 shadow-lg"
 			>
 				<div class="sticky flex items-center justify-between">
 					<h2 class="text-lightPrimaryText dark:text-darkPrimaryText text-3xl font-semibold">
@@ -23,7 +22,7 @@
 					<button
 						v-for="t in this.$store.getters[`subscriptionTiers/tiers`]"
 						:key="t._id"
-						class="from-lightBGStart to-lightBGStop dark:from-darkBG dark:to-darkBG bg-gradient-to-r shadow-sm border rounded-lg w-full flex flex-row justify-between items-center p-5 my-2 transition duration-500 ease-in-out"
+						class="bg-lightBG dark:bg-darkBG shadow-sm border rounded-lg w-full flex flex-row justify-between items-center p-5 my-2 transition duration-500 ease-in-out"
 						:class="
 							$store.state.draft.drafts[$store.state.draft.activeIndex].accessTiers.includes(t._id)
 								? `border-neutral`

@@ -7,13 +7,9 @@
 				class="bg-darkBG dark:bg-gray5 modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
 			>
 				<div
-					class="card lg:w-750 max-h-90 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation m-2 mt-10 w-full overflow-y-auto overflow-x-hidden rounded-lg bg-gradient-to-r shadow-lg lg:m-0"
-					style="backdrop-filter: blur(10px)"
+					class="card lg:w-750 max-h-90 bg-lightBG dark:bg-darkBGStop card-animation m-2 mt-10 w-full overflow-y-auto overflow-x-hidden rounded-lg shadow-lg lg:m-0"
 				>
-					<div
-						class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop sticky top-0 z-40 bg-gradient-to-r px-4 py-4 lg:px-6 lg:py-5"
-						style="backdrop-filter: blur(10px)"
-					>
+					<div class="shadow-sm bg-lightBG dark:bg-darkBGStop sticky top-0 z-40 px-4 py-4 lg:px-6 lg:py-5">
 						<!-- Show Quote Repost input -->
 						<div v-if="showRepostEditor" class="flex flex-row pb-4">
 							<Avatar :authorID="$store.state.session.id" :avatar="myAvatar" class="flex-shrink-0" />
@@ -161,6 +157,10 @@
 									</div>
 								</div>
 								<!-- Right side: Image -->
+								<div
+									v-if="featuredPhotoLoading"
+									class="w-full lg:w-56 h-48 lg:h-32 bg-gray1 animate-pulse rounded-lg flex-shrink-0 mt-2 lg:mt-0"
+								></div>
 								<div v-if="featuredPhoto !== ``" class="mt-2 w-full flex-shrink-0 lg:mt-0 lg:w-56">
 									<nuxt-link :to="'/post/' + postCID">
 										<img :src="featuredPhoto" class="h-48 w-full flex-shrink-0 rounded-lg object-cover lg:h-32" />
@@ -211,8 +211,7 @@
 		<div v-if="this.$route.name !== `post-post`">
 			<div class="card">
 				<div
-					class="sticky top-0 border-b dark:border-darkBG dark:border-opacity-25 py-4 px-5 xl:py-5 xl:px-6 transition ease-in-out hover:bg-gray1 dark:hover:bg-darkBG hover:bg-opacity-25 dark:hover:bg-opacity-25"
-					style="backdrop-filter: blur(10px)"
+					class="sticky bg-lightBG dark:bg-darkBGStop top-0 border-b dark:border-darkBG dark:border-opacity-25 border-opacity-75 py-4 px-5 xl:py-5 xl:px-6 transition ease-in-out hover:bg-hoverPost dark:hover:bg-darkBG dark:hover:bg-opacity-25"
 					:class="showProfileCard || showQuoteCard ? `z-20` : `z-10`"
 				>
 					<!-- Quote repost -->
@@ -408,16 +407,7 @@
 												}}<CrownIcon v-if="post.encrypted" class="ml-2 inline text-neutral w-5 h-5 -mt-1" />
 											</h3>
 										</div>
-										<h6
-											v-if="(post.subtitle || post.excerpt) && featuredPhoto"
-											class="max-w-420 break-words dark:text-darkSecondaryText"
-										>
-											{{ post.subtitle ? post.subtitle : postExcerpt() }}
-										</h6>
-										<h6
-											v-if="(post.subtitle || post.excerpt) && !featuredPhoto"
-											class="max-w-mobileCard xl:max-w-700 break-words text-lightSecondaryText dark:text-darkSecondaryText"
-										>
+										<h6 class="break-words text-lightSecondaryText dark:text-darkSecondaryText">
 											{{ post.subtitle ? post.subtitle : postExcerpt() }}
 										</h6>
 									</div>
@@ -461,7 +451,11 @@
 								</div>
 							</div>
 							<!-- Right side: Image -->
-							<div v-if="featuredPhoto !== ``" class="mt-2 w-full flex-shrink-0 xl:mt-0 xl:w-56">
+							<div
+								v-if="featuredPhotoLoading"
+								class="w-full xl:w-56 h-48 xl:h-32 bg-gray1 dark:bg-gray7 flex-shrink-0 animate-pulse rounded-lg mt-4 xl:mt-0"
+							></div>
+							<div v-if="featuredPhoto !== ``" class="mt-4 w-full flex-shrink-0 xl:mt-0 xl:w-56">
 								<nuxt-link :to="'/post/' + postCID">
 									<img :src="featuredPhoto" class="h-48 w-full flex-shrink-0 rounded-lg object-cover xl:h-32" />
 								</nuxt-link>
@@ -581,6 +575,7 @@ interface IData {
 	} | null
 	postCID: string
 	readingTime: number | null
+	featuredPhotoLoading: boolean
 }
 
 export default Vue.extend({
@@ -690,6 +685,7 @@ export default Vue.extend({
 			postCID: ``,
 			quoteContent: ``,
 			readingTime: null,
+			featuredPhotoLoading: false,
 		}
 	},
 	async created() {
@@ -698,6 +694,15 @@ export default Vue.extend({
 			this.postCID = this.$route.params.post
 		} else {
 			this.postCID = this.post._id
+		}
+
+		// Populate Featured Photo
+		if (this.post.featuredPhotoCID) {
+			this.featuredPhotoLoading = true
+			getPhotoFromIPFS(this.post.featuredPhotoCID).then((p) => {
+				this.featuredPhoto = p
+				this.featuredPhotoLoading = false
+			})
 		}
 		// Populate author profile
 		let profile = this.profile
@@ -727,12 +732,7 @@ export default Vue.extend({
 			})
 		}
 		this.authorBio = profile.bio
-		// Populate Featured Photo
-		if (this.post.featuredPhotoCID) {
-			getPhotoFromIPFS(this.post.featuredPhotoCID).then((p) => {
-				this.featuredPhoto = p
-			})
-		}
+
 		// Get bookmark status
 		this.isBookmarked = this.bookmarked
 

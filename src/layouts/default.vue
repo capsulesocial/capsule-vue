@@ -17,8 +17,8 @@
 				<!-- Header -->
 				<Header :avatar="myAvatar" />
 				<div
-					style="min-height: calc(100vh - 70px); height: calc(100vh - 70px); backdrop-filter: blur(10px)"
-					class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop z-10 overflow-y-auto rounded-lg bg-gradient-to-r shadow-lg"
+					style="min-height: calc(100vh - 70px); height: calc(100vh - 70px)"
+					class="bg-lightBG dark:bg-darkBGStop z-10 overflow-y-auto rounded-lg shadow-lg"
 				>
 					<div class="items-center flex w-full flex-col p-5">
 						<h1 class="text-negative mt-16 text-center font-sans text-6xl font-bold mb-8">500</h1>

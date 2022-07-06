@@ -28,13 +28,7 @@
 				:isDeleted="p.deleted"
 			/>
 		</article>
-		<p
-			v-if="noMorePosts"
-			class="text-gray5 dark:text-gray3 py-5 text-center text-sm"
-			style="backdrop-filter: blur(10px)"
-		>
-			No more posts
-		</p>
+		<p v-if="noMorePosts" class="text-gray5 dark:text-gray3 py-5 text-center text-sm">No more posts</p>
 		<article v-show="isLoading" class="modal-animation flex justify-center">
 			<div
 				class="loader m-10 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"

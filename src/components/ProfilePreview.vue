@@ -18,7 +18,7 @@
 		/>
 		<span
 			v-else
-			class="bg-darkBG dark:bg-lightBG dark:text-darkPrimaryText rounded-2xl bg-opacity-25 dark:bg-opacity-25 py-1 px-2 text-xs"
+			class="bg-gray1 dark:bg-lightBG dark:text-darkPrimaryText rounded-2xl dark:bg-opacity-25 py-1 px-2 text-xs"
 		>
 			You
 		</span>

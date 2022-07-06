@@ -1,5 +1,5 @@
 <template>
-	<article class="px-6 py-4">
+	<article class="px-6 py-4 relative">
 		<div class="flex flex-row justify-between items-center">
 			<h3 class="text-lightPrimaryText dark:text-darkPrimaryText font-semibold">Drafts</h3>
 			<div @mouseenter="showInfo = true" @mouseleave="showInfo = false">

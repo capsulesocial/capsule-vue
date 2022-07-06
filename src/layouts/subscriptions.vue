@@ -21,15 +21,13 @@
 					<!-- Content -->
 					<section class="flex flex-row">
 						<nuxt-child
-							style="backdrop-filter: blur(10px)"
-							class="lg:w-7.5 min-h-70 h-70 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder z-10 w-full overflow-y-auto rounded-t-lg bg-gradient-to-r shadow-lg"
+							class="lg:w-7.5 min-h-70 h-70 bg-lightBG dark:bg-darkBGStop border-lightBorder z-10 w-full overflow-y-auto rounded-t-lg border shadow-lg pb-6"
 							@infoPopup="toggleSubInfosPopup"
 						/>
 						<!-- Expired subscriptions -->
 						<aside class="w-5/12 -mr-5 -mt-4 p-4 hidden lg:block overflow-y-auto">
 							<div
-								class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation mb-5 flex flex-col overflow-hidden rounded-lg border bg-gradient-to-r py-4 px-6 shadow-lg"
-								style="backdrop-filter: blur(10px)"
+								class="bg-lightBG dark:bg-darkBGStop border-lightBorder modal-animation mb-5 flex flex-col overflow-hidden rounded-lg border py-4 px-6 shadow-lg"
 							>
 								<h3 class="text-lightPrimaryText dark:text-darkPrimaryText text-base font-semibold">
 									Expired subscriptions
@@ -43,7 +41,7 @@
 										@infoPopup="toggleSubInfosPopup(s)"
 									/>
 								</div>
-								<p v-else class="text-gray5 dark:text-gray3 text-sm pb-1">you have no expired subscriptions</p>
+								<p v-else class="text-gray5 dark:text-gray3 text-sm pb-1 mt-2">you have no expired subscriptions</p>
 							</div>
 							<Footer />
 						</aside>

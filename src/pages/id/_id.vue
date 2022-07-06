@@ -1,212 +1,197 @@
 <template>
 	<section class="w-full">
-		<div>
-			<!-- top -->
-			<article
-				id="header"
-				ref="topContainer"
-				class="min-h-fit header-profile z-20 w-full px-4 pt-3 xl:px-6 xl:pt-4"
-				style="backdrop-filter: blur(10px)"
-			>
-				<!-- Back button -->
-				<div class="flex flex-row items-center pb-4">
-					<button
-						v-if="$route.params.id !== $store.state.session.id"
-						class="focus:outline-none flex flex-row items-center"
-						@click="handleBack"
-					>
-						<span class="bg-gray1 dark:bg-gray5 rounded-full p-1"><BackButton :reduceSize="true" /></span>
-						<h6 class="ml-2 font-sans font-semibold dark:text-darkPrimaryText">Back</h6>
-					</button>
-					<div
-						id="small"
-						class="header-profile flex w-full flex-row items-center justify-between z-40 opacity0"
-						:class="$route.params.id === $store.state.session.id ? `` : `ml-6`"
-					>
-						<div class="flex flex-row items-center">
-							<button class="focus:outline-none" @click="showAvatar">
-								<Avatar
-									:avatar="visitAvatar"
-									:authorID="$route.params.id"
-									:size="`w-8 h-8`"
-									:noClick="true"
-									class="rounded-base flex-shrink-0"
-								/>
-							</button>
-							<button class="focus:outline-none" @click="openHeader(true)">
-								<h6 v-if="visitProfile.name != ``" class="ml-2 font-sans font-semibold dark:text-darkPrimaryText">
-									{{ visitProfile.name }}
-								</h6>
-								<h6 v-else class="text-gray5 dark:text-gray3 ml-2 font-sans font-semibold">{{ visitProfile.id }}</h6>
-							</button>
-						</div>
-						<div class="flex items-center">
-							<span v-if="$store.state.session.id === $route.params.id">
-								<button class="bg-darkBG focus:outline-none block rounded-lg xl:hidden" @click="toggleSettings">
-									<PencilIcon class="m-2 h-5 w-5 text-white" />
-								</button>
-								<SecondaryButton :text="`Edit Profile`" :action="toggleSettings" class="hidden xl:block" />
-							</span>
-							<FriendButton
-								v-else
-								:toggleFriend="toggleFriend"
-								:userIsFollowed="userIsFollowed"
-								class="header-profile"
-							/>
-							<!-- Subscription button -->
-							<SubscribeButton
-								v-if="$store.state.session.id !== $route.params.id && paymentsEnabled"
-								:toggleSubscription="toggleSubscription"
-								:userIsSubscribed="activeSubscription"
-								class="header-profile ml-2"
-							/>
-						</div>
-					</div>
-				</div>
-				<!-- Name, socials, follow, bio -->
-				<div class="flex flex-row justify-between">
-					<div
-						id="infos"
-						class="header-profile flex items-center"
-						:class="$route.params.id === $store.state.session.id ? `-mt-12` : ``"
-					>
+		<!-- top -->
+		<article id="header" ref="topContainer" class="min-h-fit header-profile z-20 w-full px-4 pt-3 xl:px-6 xl:pt-4">
+			<!-- Back button -->
+			<div class="flex flex-row items-center pb-4">
+				<button
+					v-if="$route.params.id !== $store.state.session.id"
+					class="focus:outline-none flex flex-row items-center"
+					@click="handleBack"
+				>
+					<span class="bg-gray1 dark:bg-gray5 rounded-full p-1"><BackButton :reduceSize="true" /></span>
+					<h6 class="ml-2 font-sans font-semibold dark:text-darkPrimaryText">Back</h6>
+				</button>
+				<div
+					id="small"
+					class="header-profile flex w-full flex-row items-center justify-between z-40 opacity0"
+					:class="$route.params.id === $store.state.session.id ? `` : `ml-6`"
+				>
+					<div class="flex flex-row items-center">
 						<button class="focus:outline-none" @click="showAvatar">
 							<Avatar
 								:avatar="visitAvatar"
 								:authorID="$route.params.id"
-								:size="`w-20 h-20`"
+								:size="`w-8 h-8`"
 								:noClick="true"
-								class="flex-shrink-0 rounded-lg"
+								class="rounded-base flex-shrink-0"
 							/>
 						</button>
-						<div class="ml-5 flex flex-grow flex-col">
-							<!-- Name Username, Follow button -->
-							<div class="flex flex-col">
-								<h3 v-if="visitProfile.name != ``" class="pr-4 text-2xl font-semibold dark:text-darkPrimaryText">
-									{{ visitProfile.name }}
-								</h3>
-								<h3 v-else class="text-gray5 dark:text-gray3 pr-4 text-2xl font-semibold">{{ visitProfile.id }}</h3>
-								<h5 class="text-gray5 dark:text-gray3 text-lg">@{{ visitProfile.id }}</h5>
-							</div>
-							<!-- Tabs: posts, following, followers -->
-							<div class="text-gray5 -mr-12 flex flex-row pt-2 text-sm">
-								<div v-if="totalPostsCount === 1" class="text-sm text-gray5 dark:text-gray3">
-									<span class="text-lightPrimaryText dark:text-darkPrimaryText font-bold">{{ totalPostsCount }}</span>
-									Post
-								</div>
-								<div v-else class="text-sm text-gray5 dark:text-gray3">
-									<span class="text-lightPrimaryText dark:text-darkPrimaryText font-bold">{{ totalPostsCount }}</span>
-									Posts
-								</div>
-								<button
-									class="pl-5 text-sm text-gray5 dark:text-gray3 hover:text-primary dark:hover:text-primary hover:font-bold"
-									@click="$emit(`openFollowers`)"
-								>
-									<span
-										class="text-lightPrimaryText dark:text-darkPrimaryText hover:text-primary dark:hover:text-primary font-bold"
-										>{{ followers.size }}</span
-									>
-									Followers
-								</button>
-								<button
-									class="pl-5 text-sm text-gray5 dark:text-gray3 hover:text-primary dark:hover:text-primary hover:font-bold"
-									@click="$emit(`openFollowing`)"
-								>
-									<span
-										class="text-lightPrimaryText dark:text-darkPrimaryText hover:text-primary dark:hover:text-primary font-bold"
-										>{{ following.size }}</span
-									>
-									Following
-								</button>
-							</div>
-						</div>
+						<button class="focus:outline-none" @click="openHeader(true)">
+							<h6 v-if="visitProfile.name != ``" class="ml-2 font-sans font-semibold dark:text-darkPrimaryText">
+								{{ visitProfile.name }}
+							</h6>
+							<h6 v-else class="text-gray5 dark:text-gray3 ml-2 font-sans font-semibold">{{ visitProfile.id }}</h6>
+						</button>
 					</div>
-					<!-- Profile buttons -->
-					<div
-						id="buttons"
-						class="header-profile h-fit flex items-center xl:h-auto"
-						:class="$route.params.id === $store.state.session.id ? `-mt-12` : ``"
-					>
-						<!-- Edit profile button -->
+					<div class="flex items-center">
 						<span v-if="$store.state.session.id === $route.params.id">
 							<button class="bg-darkBG focus:outline-none block rounded-lg xl:hidden" @click="toggleSettings">
 								<PencilIcon class="m-2 h-5 w-5 text-white" />
 							</button>
 							<SecondaryButton :text="`Edit Profile`" :action="toggleSettings" class="hidden xl:block" />
 						</span>
-						<FriendButton
-							v-else
-							:toggleFriend="toggleFriend"
-							:userIsFollowed="userIsFollowed"
-							class="header-profile flex-shrink-0"
-						/>
+						<FriendButton v-else :toggleFriend="toggleFriend" :userIsFollowed="userIsFollowed" class="header-profile" />
 						<!-- Subscription button -->
 						<SubscribeButton
 							v-if="$store.state.session.id !== $route.params.id && paymentsEnabled"
 							:toggleSubscription="toggleSubscription"
 							:userIsSubscribed="activeSubscription"
-							class="header-profile flex-shrink-0 ml-2"
+							class="header-profile ml-2"
 						/>
 					</div>
 				</div>
-				<!-- Bio -->
-				<div
-					v-show="visitProfile.bio"
-					id="bio"
-					ref="bio"
-					class="header-profile px-1 pt-4 dark:text-darkPrimaryText"
-					:style="expandBio ? `` : `max-height: 5.5rem; overflow: hidden`"
-				>
-					<p>{{ visitProfile.bio.slice(0, 200) + (visitProfile.bio.length > 200 ? '...' : '') }}<br /></p>
-				</div>
-				<button
-					v-show="longBio"
-					id="readMore"
-					class="header-profile focus:outline-none text-xs text-primary px-1"
-					@click="expandBio = true"
-				>
-					Read more
-				</button>
-				<div v-show="!visitProfile.bio" id="bio" class="header-profile"></div>
-				<div id="divider" class="w-full bg-lightBorder dark:bg-darkBorder my-4 rounded" style="height: 1px"></div>
-				<!-- Tabs -->
-				<div
-					id="tabs"
-					class="text-gray5 dark:text-gray3 text-sm header-profile flex w-full justify-between pb-3 xl:px-6"
-				>
-					<nuxt-link :to="'/id/' + $route.params.id" class="pb-1" :class="getStyles('id-id')">
-						<span class="px-4">Posts</span>
-					</nuxt-link>
-					<nuxt-link :to="'/id/' + $route.params.id + '/comments'" class="pb-1" :class="getStyles('id-id-comments')">
-						<span class="px-4">Comments</span>
-					</nuxt-link>
-					<nuxt-link :to="'/id/' + $route.params.id + '/reposts'" class="pb-1" :class="getStyles('id-id-reposts')">
-						<span class="px-4">Reposts</span>
-					</nuxt-link>
-				</div>
-			</article>
-			<div
-				v-if="loadedContent()"
-				id="scrollContainer"
-				ref="scrollContainer"
-				class="w-full overflow-y-auto"
-				:style="
-					!scrollingDown
-						? `min-height: calc(100vh - ` + `290px` + `); height: calc(100vh - ` + `290px` + `)`
-						: `min-height: calc(100vh - ` + `150px` + `); height: calc(100vh - ` + `150px` + `)`
-				"
-			>
-				<nuxt-child
-					:profile="visitProfile"
-					:updateFollowers="updateFollowers"
-					:followers="followers"
-					:mutuals="mutuals"
-					:mutualProfiles="mutualProfiles"
-					:toggleFriend="toggleFriend"
-					:userIsFollowed="userIsFollowed"
-					:class="bottomPadding ? `pb-64 mb-64` : ``"
-				/>
 			</div>
+			<!-- Name, socials, follow, bio -->
+			<div class="flex flex-row justify-between">
+				<div
+					id="infos"
+					class="header-profile flex items-center"
+					:class="$route.params.id === $store.state.session.id ? `-mt-12` : ``"
+				>
+					<button class="focus:outline-none" @click="showAvatar">
+						<Avatar
+							:avatar="visitAvatar"
+							:authorID="$route.params.id"
+							:size="`w-20 h-20`"
+							:noClick="true"
+							class="flex-shrink-0 rounded-lg"
+						/>
+					</button>
+					<div class="ml-5 flex flex-grow flex-col">
+						<!-- Name Username, Follow button -->
+						<div class="flex flex-col">
+							<h3 v-if="visitProfile.name != ``" class="pr-4 text-2xl font-semibold dark:text-darkPrimaryText">
+								{{ visitProfile.name }}
+							</h3>
+							<h3 v-else class="text-gray5 dark:text-gray3 pr-4 text-2xl font-semibold">{{ visitProfile.id }}</h3>
+							<h5 class="text-gray5 dark:text-gray3 text-lg">@{{ visitProfile.id }}</h5>
+						</div>
+						<!-- Tabs: posts, following, followers -->
+						<div class="text-gray5 -mr-12 flex flex-row pt-2 text-sm">
+							<div v-if="totalPostsCount === 1" class="text-sm text-gray5 dark:text-gray3">
+								<span class="text-lightPrimaryText dark:text-darkPrimaryText font-bold">{{ totalPostsCount }}</span>
+								Post
+							</div>
+							<div v-else class="text-sm text-gray5 dark:text-gray3">
+								<span class="text-lightPrimaryText dark:text-darkPrimaryText font-bold">{{ totalPostsCount }}</span>
+								Posts
+							</div>
+							<button
+								class="pl-5 text-sm text-gray5 dark:text-gray3 hover:text-primary dark:hover:text-primary hover:font-bold"
+								@click="$emit(`openFollowers`)"
+							>
+								<span
+									class="text-lightPrimaryText dark:text-darkPrimaryText hover:text-primary dark:hover:text-primary font-bold"
+									>{{ followers.size }}</span
+								>
+								Followers
+							</button>
+							<button
+								class="pl-5 text-sm text-gray5 dark:text-gray3 hover:text-primary dark:hover:text-primary hover:font-bold"
+								@click="$emit(`openFollowing`)"
+							>
+								<span
+									class="text-lightPrimaryText dark:text-darkPrimaryText hover:text-primary dark:hover:text-primary font-bold"
+									>{{ following.size }}</span
+								>
+								Following
+							</button>
+						</div>
+					</div>
+				</div>
+				<!-- Profile buttons -->
+				<div
+					id="buttons"
+					class="header-profile h-fit flex items-center xl:h-auto"
+					:class="$route.params.id === $store.state.session.id ? `-mt-12` : ``"
+				>
+					<!-- Edit profile button -->
+					<span v-if="$store.state.session.id === $route.params.id">
+						<button class="bg-darkBG focus:outline-none block rounded-lg xl:hidden" @click="toggleSettings">
+							<PencilIcon class="m-2 h-5 w-5 text-white" />
+						</button>
+						<SecondaryButton :text="`Edit Profile`" :action="toggleSettings" class="hidden xl:block" />
+					</span>
+					<FriendButton
+						v-else
+						:toggleFriend="toggleFriend"
+						:userIsFollowed="userIsFollowed"
+						class="header-profile flex-shrink-0"
+					/>
+					<!-- Subscription button -->
+					<SubscribeButton
+						v-if="$store.state.session.id !== $route.params.id && paymentsEnabled"
+						:toggleSubscription="toggleSubscription"
+						:userIsSubscribed="activeSubscription"
+						class="header-profile flex-shrink-0 ml-2"
+					/>
+				</div>
+			</div>
+			<!-- Bio -->
+			<div
+				v-show="visitProfile.bio"
+				id="bio"
+				ref="bio"
+				class="header-profile px-1 pt-4 dark:text-darkPrimaryText"
+				:style="expandBio ? `` : `max-height: 5.5rem; overflow: hidden`"
+			>
+				<p>{{ visitProfile.bio.slice(0, 200) + (visitProfile.bio.length > 200 ? '...' : '') }}<br /></p>
+			</div>
+			<button
+				v-show="longBio"
+				id="readMore"
+				class="header-profile focus:outline-none text-xs text-primary px-1"
+				@click="expandBio = true"
+			>
+				Read more
+			</button>
+			<div v-show="!visitProfile.bio" id="bio" class="header-profile"></div>
+			<div id="divider" class="w-full bg-lightBorder dark:bg-darkBorder my-4 rounded" style="height: 1px"></div>
+			<!-- Tabs -->
+			<div id="tabs" class="text-gray5 dark:text-gray3 text-sm header-profile flex w-full justify-between pb-3 xl:px-6">
+				<nuxt-link :to="'/id/' + $route.params.id" class="pb-1" :class="getStyles('id-id')">
+					<span class="px-4">Posts</span>
+				</nuxt-link>
+				<nuxt-link :to="'/id/' + $route.params.id + '/comments'" class="pb-1" :class="getStyles('id-id-comments')">
+					<span class="px-4">Comments</span>
+				</nuxt-link>
+				<nuxt-link :to="'/id/' + $route.params.id + '/reposts'" class="pb-1" :class="getStyles('id-id-reposts')">
+					<span class="px-4">Reposts</span>
+				</nuxt-link>
+			</div>
+		</article>
+		<div
+			v-if="loadedContent()"
+			id="scrollContainer"
+			ref="scrollContainer"
+			class="w-full overflow-y-auto"
+			:style="
+				!scrollingDown
+					? `min-height: calc(100vh - ` + `290px` + `); height: calc(100vh - ` + `290px` + `)`
+					: `min-height: calc(100vh - ` + `150px` + `); height: calc(100vh - ` + `150px` + `)`
+			"
+		>
+			<nuxt-child
+				:profile="visitProfile"
+				:updateFollowers="updateFollowers"
+				:followers="followers"
+				:mutuals="mutuals"
+				:mutualProfiles="mutualProfiles"
+				:toggleFriend="toggleFriend"
+				:userIsFollowed="userIsFollowed"
+				:class="bottomPadding ? `pb-64 mb-64` : ``"
+			/>
 		</div>
 		<!-- Settings popup -->
 		<div
@@ -214,8 +199,7 @@
 			class="bg-darkBG dark:bg-gray5 modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
 		>
 			<SettingsPopup
-				class="w-full h-screen overflow-y-auto lg:w-589 lg:h-auto from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation w-full rounded-lg bg-gradient-to-r shadow-lg backdrop-blur-lg backdrop-filter"
-				style="backdrop-filter: blur(10px)"
+				class="overflow-y-auto min-h-40 max-h-90 w-full lg:w-600 bg-lightBG dark:bg-darkBGStop card-animation rounded-lg shadow-lg"
 				:updateProfileMethod="updateProfileMethod"
 				@close="toggleSettings"
 			/>

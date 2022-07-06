@@ -1,7 +1,7 @@
 <template>
 	<article
 		v-if="mutuals.size !== 0"
-		class="mb-5 w-full rounded-lg bg-gradient-to-r from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder px-6 py-4 shadow-lg"
+		class="mb-5 w-full rounded-lg bg-lightBG dark:bg-darkBGStop border-lightBorder px-6 py-4 shadow-lg"
 	>
 		<h6 class="text-lightPrimaryText dark:text-darkPrimaryText mb-2 font-semibold">Mutual Followers</h6>
 		<div>

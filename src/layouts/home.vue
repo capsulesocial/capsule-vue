@@ -34,12 +34,12 @@
 					<PostEditor
 						v-if="$store.state.widgets.primary === `editor` && $route.name === `home`"
 						ref="editor"
-						style="min-height: calc(100vh - 150px); height: calc(100vh - 150px); backdrop-filter: blur(10px)"
-						class="lg:w-7.5 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop modal-animation overflow-y-auto overflow-x-hidden rounded-lg bg-gradient-to-r p-6 shadow-lg"
+						style="min-height: calc(100vh - 150px); height: calc(100vh - 150px)"
+						class="lg:w-7.5 bg-lightBG dark:bg-darkBGStop modal-animation overflow-y-auto overflow-x-hidden rounded-lg p-6 shadow-lg"
 					/>
 					<nuxt-child
 						v-else
-						class="lg:w-7.5 min-h-61 h-61 xl:min-h-120 xl:h-120 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder border modal-animation box-border w-full overflow-y-auto rounded-lg bg-gradient-to-r shadow-lg"
+						class="lg:w-7.5 min-h-61 h-61 xl:min-h-120 xl:h-120 bg-lightBG dark:bg-darkBGStop border-lightBorder border modal-animation box-border w-full overflow-y-auto rounded-lg shadow-lg"
 						:class="showWidgets ? `` : `z-10`"
 						:following="following"
 						@updateFollowers="updateFollowers"

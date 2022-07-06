@@ -1,4 +1,4 @@
-const config = require(`capsule-config`).config
+const config = require(`@capsulesocial/capsule-config`).config
 
 config.content.push(`./src/pages/**`)
 config.content.push(`./src/layouts/**`)

@@ -22,7 +22,7 @@
 					<section v-if="visitProfile" class="flex flex-row">
 						<nuxt-child
 							:key="componentKey"
-							class="lg:w-7.5 min-h-61 h-61 xl:min-h-80 xl:h-80 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation z-10 overflow-y-hidden rounded-lg border bg-gradient-to-r shadow-lg"
+							class="lg:w-7.5 min-h-61 h-61 xl:min-h-80 xl:h-80 bg-lightBG dark:bg-darkBGStop border-lightBorder modal-animation z-10 overflow-y-hidden rounded-lg border shadow-lg"
 							:visitProfile="visitProfile"
 							:visitAvatar="visitAvatar"
 							:followers="followers"
@@ -73,8 +73,8 @@
 				</div>
 				<div
 					v-else
-					style="min-height: calc(100vh - 70px); height: calc(100vh - 70px); backdrop-filter: blur(10px)"
-					class="xl:min-h-80 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder z-10 overflow-y-auto rounded-lg border bg-gradient-to-r shadow-lg xl:h-80"
+					style="min-height: calc(100vh - 70px); height: calc(100vh - 70px)"
+					class="xl:min-h-80 bg-lightBG dark:bg-darkBGStop border-lightBorder z-10 overflow-y-auto rounded-lg border shadow-lg xl:h-80"
 				>
 					<div class="items-ceter flex w-full flex-col p-5">
 						<h1 class="text-negative mt-16 text-center font-sans text-6xl font-bold mb-8">404</h1>

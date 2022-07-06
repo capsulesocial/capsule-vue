@@ -7,8 +7,8 @@
 		<section class="flex w-full lg:w-11/12 xl:w-10/12 flex-row max-w-1220">
 			<!-- Primary widget -->
 			<article
-				style="min-height: calc(100vh - 140px); height: calc(100vh - 140px); backdrop-filter: blur(5px)"
-				class="lg:w-7.5 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation z-10 overflow-y-auto rounded-lg bg-gradient-to-r p-6 pt-4 shadow-lg"
+				style="min-height: calc(100vh - 140px); height: calc(100vh - 140px)"
+				class="lg:w-7.5 bg-lightBG dark:bg-darkBGStop card-animation z-10 overflow-y-auto rounded-lg p-6 pt-4 shadow-lg"
 			>
 				<h3 class="text-lightPrimaryText dark:text-darkPrimaryText mb-4 text-base font-semibold">Primary widget</h3>
 				<!-- Select a main widget -->
@@ -48,8 +48,7 @@
 			<!-- Right side: side widgets -->
 			<div class="w-5/12 -mr-5 -mt-4 hidden overflow-y-auto p-4 lg:block">
 				<article
-					class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation-delay1 z-10 mb-5 overflow-y-auto rounded-lg bg-gradient-to-r p-6 pt-4 shadow-lg"
-					style="backdrop-filter: blur(5px)"
+					class="bg-lightBG dark:bg-darkBGStop card-animation-delay1 z-10 mb-5 overflow-y-auto rounded-lg p-6 pt-4 shadow-lg"
 				>
 					<h3 class="text-lightPrimaryText dark:text-darkPrimaryText mb-4 text-base font-semibold">Side widget</h3>
 					<div class="grid grid-cols-2 gap-5">
@@ -87,8 +86,7 @@
 					</div>
 				</article>
 				<article
-					class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation-delay2 z-10 mb-5 overflow-y-auto rounded-lg bg-gradient-to-r p-6 pt-4 shadow-lg backdrop-blur-lg backdrop-filter"
-					style="backdrop-filter: blur(5px)"
+					class="bg-lightBG dark:bg-darkBGStop card-animation-delay2 z-10 mb-5 overflow-y-auto rounded-lg p-6 pt-4 shadow-lg"
 				>
 					<h3 class="text-lightPrimaryText dark:text-darkPrimaryText mb-4 text-base font-semibold">Side widget</h3>
 					<div class="grid grid-cols-2 gap-5">
@@ -129,8 +127,8 @@
 					</div>
 				</article>
 				<div
-					class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder focus:outline-none card-animation-delay3 mb-5 flex w-full flex-row items-center rounded-lg border bg-gradient-to-r shadow-lg backdrop-blur-lg backdrop-filter"
-					style="height: 60px; backdrop-filter: blur(10px)"
+					class="bg-lightBG dark:bg-darkBGStop focus:outline-none card-animation-delay3 mb-5 flex w-full flex-row items-center rounded-lg shadow-lg"
+					style="height: 60px"
 				>
 					<div class="flex flex-col xl:flex-row items-start justify-between px-6">
 						<p class="text-gray5 dark:text-gray3 text-sm">

@@ -22,8 +22,7 @@
 					<section class="flex flex-row">
 						<nuxt-child
 							:tab="tab"
-							:style="showPopup ? `` : `backdrop-filter: blur(10px);`"
-							class="lg:w-7.5 min-h-70 h-70 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder z-10 w-full overflow-y-auto rounded-t-lg bg-gradient-to-r p-6 pt-4 shadow-lg"
+							class="lg:w-7.5 min-h-70 h-70 bg-lightBG dark:bg-darkBGStop border-lightBorder border z-10 w-full overflow-y-auto rounded-t-lg p-6 pt-4 shadow-lg"
 							@togglePopup="togglePopup"
 							@changeLocalBGImage="changeLocalBGImage"
 							@initProfile="initProfile"
@@ -31,8 +30,7 @@
 						<!-- Settings tabs -->
 						<aside class="w-5/12 -mr-5 -mt-4 p-4 hidden lg:block overflow-y-auto">
 							<div
-								class="from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation mb-5 flex flex-col overflow-hidden rounded-lg border bg-gradient-to-r py-4 px-6 pb-2 shadow-lg"
-								style="backdrop-filter: blur(10px)"
+								class="bg-lightBG dark:bg-darkBGStop border-lightBorder modal-animation mb-5 flex flex-col overflow-hidden rounded-lg border py-4 px-6 pb-2 shadow-lg"
 							>
 								<h3 class="text-lightPrimaryText dark:text-darkPrimaryText pb-4 text-base font-semibold">Settings</h3>
 								<nuxt-link

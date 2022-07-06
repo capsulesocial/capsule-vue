@@ -5,8 +5,7 @@
 		<!-- Container -->
 		<section>
 			<div
-				style="backdrop-filter: blur(5px)"
-				class="w-full from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation z-10 overflow-y-auto rounded-lg bg-gradient-to-r p-6 pt-4 shadow-lg"
+				class="w-full bg-lightBG dark:bg-darkBGStop card-animation z-10 overflow-y-auto rounded-lg p-6 pt-4 shadow-lg"
 			>
 				<div class="flex items-center">
 					<div @mouseover="showInfoBubble = true" @mouseleave="showInfoBubble = false">

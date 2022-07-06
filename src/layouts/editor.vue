@@ -22,15 +22,14 @@
 					<section class="flex flex-row">
 						<PostEditor
 							ref="editor"
-							style="overflow-y: auto; overflow-x: hidden; backdrop-filter: blur(10px)"
-							class="lg:w-7.5 min-h-61 h-61 xl:min-h-80 xl:h-80 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation fixed z-10 rounded-t-lg border bg-gradient-to-r p-8 shadow-lg"
+							style="overflow-y: auto; overflow-x: hidden"
+							class="lg:w-7.5 min-h-61 h-61 xl:min-h-80 xl:h-80 bg-lightBG dark:bg-darkBGStop border-lightBorder modal-animation fixed z-10 rounded-t-lg border p-8 shadow-lg"
 							@update="updateWordCount"
 							@isWriting="hideDraftButton"
 						/>
 						<div
 							id="draftButton"
-							class="animatedraftButton from-lightBGStart to-lightBGStop dark:from-darkBG dark:to-darkBG border-lightBorder text-xs text-gray5 dark:text-gray3 modal-animation card-animation-delay1 absolute bottom-0 z-10 m-4 flex rounded-lg bg-gradient-to-r px-5 py-3 shadow-lg"
-							style="backdrop-filter: blur(10px)"
+							class="animatedraftButton bg-lightBG dark:bg-darkBG border-lightBorder text-xs text-gray5 dark:text-gray3 modal-animation card-animation-delay1 absolute bottom-0 z-10 m-4 flex rounded-lg px-5 py-3 shadow-lg"
 						>
 							<p v-if="!buttonHidden" class="mr-2">Resume writing?</p>
 							<button v-if="!buttonHidden" class="text-primary focus:outline-none" @click="openDraftsPopup">

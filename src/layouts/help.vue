@@ -21,8 +21,8 @@
 					<!-- Content -->
 					<section class="relative flex flex-row">
 						<nuxt-child
-							style="backdrop-filter: blur(10px); min-height: calc(100vh - 60px); height: calc(100vh - 60px)"
-							class="lg:w-7.5 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop border-lightBorder modal-animation box-border w-full overflow-y-auto rounded-lg border bg-gradient-to-r shadow-lg"
+							style="min-height: calc(100vh - 60px); height: calc(100vh - 60px)"
+							class="lg:w-7.5 bg-lightBG dark:bg-darkBGStop border-lightBorder modal-animation box-border w-full overflow-y-auto rounded-lg border shadow-lg"
 							:class="showWidgets ? `` : `z-10`"
 						/>
 						<!-- Widgets -->
