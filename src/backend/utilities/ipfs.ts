@@ -1,4 +1,5 @@
-import type { Options, IPFS, CID } from 'ipfs-core'
+import type { Options, IPFS } from 'ipfs-core'
+import { CID } from 'multiformats/cid'
 import { bootstrapNodes } from './config'
 
 export interface IPFSInterface {
@@ -13,7 +14,7 @@ export interface IPFSInterface {
 const ipfsConfig: Options = {
 	start: false,
 	libp2p: {
-		peerStore: { persistence: false },
+		// peerStore: { persistence: false },
 	},
 	init: { algorithm: `Ed25519` },
 	preload: {
@@ -25,10 +26,11 @@ const ipfsConfig: Options = {
 }
 
 async function loadAndInitIPFS() {
-	const { create, CID: CIDObj } = await import(`ipfs-core`)
+	const { default: res } = await import(`ipfs-core`)
+	const { create } = res
 	const ipfs = await create(ipfsConfig)
 
-	return { ipfs, CIDObj }
+	return { ipfs }
 }
 
 /**
@@ -38,7 +40,6 @@ async function loadAndInitIPFS() {
 function createIPFSInterface(): IPFSInterface {
 	let ipfsInitialised = false
 	let node: IPFS | null = null
-	let CIDClass: typeof CID | null = null
 
 	const promise = loadAndInitIPFS()
 
@@ -119,10 +120,10 @@ function createIPFSInterface(): IPFSInterface {
 	}
 
 	const getJSONData = async <T>(cid: string) => {
-		if (!node || !CIDClass) {
+		if (!node) {
 			throw new Error(`Not initialised!`)
 		}
-		const res = await node.dag.get(CIDClass.parse(cid))
+		const res = await node.dag.get(CID.parse(cid))
 		if (!res.value) {
 			throw new Error(`No data found!`)
 		}
@@ -153,9 +154,8 @@ function createIPFSInterface(): IPFSInterface {
 		return peers.length
 	}
 
-	const initResult = promise.then(async ({ ipfs, CIDObj }) => {
+	const initResult = promise.then(async ({ ipfs }) => {
 		node = ipfs
-		CIDClass = CIDObj
 
 		await node.start()
 		ipfsInitialised = true

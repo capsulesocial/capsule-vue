@@ -153,6 +153,8 @@ const config: NuxtConfig = {
 		extend(conf, _) {
 			// @ts-ignore
 			conf.resolve.alias.vue = `vue/dist/vue.common`
+			// @ts-ignore
+			conf.module.noParse = /ipfs-core/
 		},
 		splitChunks: {
 			commons: true,
