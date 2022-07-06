@@ -229,19 +229,19 @@
 									<div @mouseover="triggerQuoteCardTrue" @mouseleave="triggerQuoteCardFalse">
 										<nuxt-link :to="`/id/` + quote.authorID" class="mr-4 flex">
 											<span
-												v-if="this.quote.name != ``"
+												v-if="quote.name != ``"
 												class="text-base font-medium transition ease-in-out hover:underline dark:text-darkPrimaryText"
-												>{{ this.quote.name }}</span
+												>{{ quote.name }}</span
 											>
 											<span
 												v-else
 												class="text-gray5 dark:text-gray3 text-base font-medium transition ease-in-out hover:underline"
-												>{{ this.quote.authorID }}</span
+												>{{ quote.authorID }}</span
 											>
-											<span class="text-gray5 dark:text-gray3 ml-2">@{{ this.quote.authorID }}</span>
+											<span class="text-gray5 dark:text-gray3 ml-2">@{{ quote.authorID }}</span>
 										</nuxt-link>
 									</div>
-									<span class="text-xs dark:text-gray3">{{ $formatDate(this.quote.timestamp) }}</span>
+									<span class="text-xs dark:text-gray3">{{ $formatDate(quote.timestamp) }}</span>
 								</div>
 							</div>
 							<div
@@ -301,7 +301,7 @@
 								</div>
 							</div>
 						</div>
-						<p class="my-2 break-words dark:text-darkPrimaryText">{{ this.quote.content }}</p>
+						<p class="my-2 break-words dark:text-darkPrimaryText">{{ quote.content }}</p>
 					</div>
 					<!-- Wrapper for rounded outline on quote repost -->
 					<div v-if="!isDeleted" :class="quote ? `bg-lightBorder xl:dark:bg-darkInput rounded-lg p-4` : ``">
@@ -572,6 +572,7 @@ interface IData {
 		content: string
 		avatar: string
 		name: string
+		bio: string
 	} | null
 	postCID: string
 	readingTime: number | null
@@ -704,6 +705,11 @@ export default Vue.extend({
 				this.featuredPhotoLoading = false
 			})
 		}
+
+		// Check if this is a repost
+		if (this.repost && this.repost.type === `quote`) {
+			await this.getQuoteRepost(this.repost._id)
+		}
 		// Populate author profile
 		let profile = this.profile
 		if (!profile) {
@@ -735,11 +741,6 @@ export default Vue.extend({
 
 		// Get bookmark status
 		this.isBookmarked = this.bookmarked
-
-		// Check if this is a repost
-		if (this.repost && this.repost.type === `quote`) {
-			this.getQuoteRepost(this.repost._id)
-		}
 
 		// Handle quote repost on full post page
 		if (this.displayRepost) {
@@ -875,7 +876,6 @@ export default Vue.extend({
 		},
 		async getQuoteRepost(postCID: string) {
 			const { data: content } = await this.getRegularPost(postCID)
-			const { profile } = await this.getProfile(content.authorID)
 			const q = {
 				content: content.content,
 				timestamp: content.timestamp,
@@ -884,16 +884,22 @@ export default Vue.extend({
 				avatar: ``,
 				bio: ``,
 			}
-			if (profile) {
-				q.name = profile.name
-				q.bio = profile.bio
-				if (profile.avatar && profile.avatar !== ``) {
-					getPhotoFromIPFS(profile.avatar).then((p) => {
-						q.avatar = p
-					})
-				}
-			}
+
 			this.quote = q
+			this.getProfile(content.authorID).then(({ profile }) => {
+				if (profile) {
+					const newQ = { ...q }
+					newQ.name = profile.name
+					newQ.bio = profile.bio
+					if (profile.avatar && profile.avatar !== ``) {
+						getPhotoFromIPFS(profile.avatar).then((p) => {
+							newQ.avatar = p
+						})
+					}
+
+					this.quote = newQ
+				}
+			})
 		},
 		triggerProfileCardFalse() {
 			setTimeout(() => {
