@@ -15,7 +15,7 @@ const ipfsConfig: Options = {
 	libp2p: {
 		peerStore: { persistence: false },
 	},
-	init: { algorithm: `Ed25519` },
+	init: { algorithm: `RSA` },
 	preload: {
 		enabled: false,
 	},
