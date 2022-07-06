@@ -29,7 +29,7 @@
 						/>
 						<div
 							id="draftButton"
-							class="animatedraftButton bg-lightBG dark:bg-darkBGStop border-lightBorder text-xs text-gray5 dark:text-gray3 modal-animation card-animation-delay1 absolute bottom-0 z-10 m-4 flex rounded-lg px-5 py-3 shadow-lg"
+							class="animatedraftButton bg-lightBG dark:bg-darkBG border-lightBorder text-xs text-gray5 dark:text-gray3 modal-animation card-animation-delay1 absolute bottom-0 z-10 m-4 flex rounded-lg px-5 py-3 shadow-lg"
 						>
 							<p v-if="!buttonHidden" class="mr-2">Resume writing?</p>
 							<button v-if="!buttonHidden" class="text-primary focus:outline-none" @click="openDraftsPopup">

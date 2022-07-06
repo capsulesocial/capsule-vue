@@ -211,7 +211,7 @@
 		<div v-if="this.$route.name !== `post-post`">
 			<div class="card">
 				<div
-					class="sticky bg-lightBG dark:bg-darkBGStop top-0 border-b dark:border-darkBG dark:border-opacity-25 py-4 px-5 xl:py-5 xl:px-6 transition ease-in-out hover:bg-gray1 dark:hover:bg-darkBG"
+					class="sticky bg-lightBG dark:bg-darkBGStop top-0 border-b dark:border-darkBG dark:border-opacity-25 py-4 px-5 xl:py-5 xl:px-6 transition ease-in-out hover:bg-hoverPost dark:hover:bg-darkBG dark:hover:bg-opacity-25"
 					:class="showProfileCard || showQuoteCard ? `z-20` : `z-10`"
 				>
 					<!-- Quote repost -->
@@ -453,7 +453,7 @@
 							<!-- Right side: Image -->
 							<div
 								v-if="featuredPhotoLoading"
-								class="w-full xl:w-56 h-48 xl:h-32 bg-gray1 flex-shrink-0 animate-pulse rounded-lg mt-4 xl:mt-0"
+								class="w-full xl:w-56 h-48 xl:h-32 bg-gray1 dark:bg-gray7 flex-shrink-0 animate-pulse rounded-lg mt-4 xl:mt-0"
 							></div>
 							<div v-if="featuredPhoto !== ``" class="mt-4 w-full flex-shrink-0 xl:mt-0 xl:w-56">
 								<nuxt-link :to="'/post/' + postCID">
