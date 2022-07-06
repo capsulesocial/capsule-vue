@@ -945,6 +945,14 @@
   resolved "https://registry.yarnpkg.com/@braintree/sanitize-url/-/sanitize-url-6.0.0.tgz#fe364f025ba74f6de6c837a84ef44bdb1d61e68f"
   integrity sha512-mgmE7XBYY/21erpzhexk4Cj1cyTQ9LzvnTxtzM17BJ7ERMNE6W72mQRo0I1Ud8eFJ+RVVIcBNhLFZ3GX4XFz5w==
 
+"@capsulesocial/capsule-config@^1.2.5":
+  version "1.2.5"
+  resolved "https://npm.pkg.github.com/download/@capsulesocial/capsule-config/1.2.5/5af79e667476a07856754437388e5b1b13d6a6dd5b292432eb945092a8f2be59#6fc8da5ab09001ecfa96a7bc78c64449d27fc199"
+  integrity sha512-/EeBmZQjnhbDfCzBaBIEhuXZ3HJiepqThP0I9zGX5asBFM6sCVSU9RbxD2Yu1E19/WNGivIkf/JDXOHygrFyYg==
+  dependencies:
+    "@tailwindcss/typography" "^0.5.2"
+    tailwindcss "^3.0.24"
+
 "@chainsafe/libp2p-noise@^5.0.0", "@chainsafe/libp2p-noise@^5.0.1":
   version "5.0.3"
   resolved "https://registry.yarnpkg.com/@chainsafe/libp2p-noise/-/libp2p-noise-5.0.3.tgz#d9fbdef7cb3fada7ba467e3495ca74a0710d6274"
@@ -4095,14 +4103,6 @@ capability@^0.2.5:
   version "0.2.5"
   resolved "https://registry.yarnpkg.com/capability/-/capability-0.2.5.tgz#51ad87353f1936ffd77f2f21c74633a4dea88801"
   integrity sha512-rsJZYVCgXd08sPqwmaIqjAd5SUTfonV0z/gDJ8D6cN8wQphky1kkAYEqQ+hmDxTw7UihvBfjUVUSY+DBEe44jg==
-
-capsule-config@^1.2.3:
-  version "1.2.3"
-  resolved "https://registry.yarnpkg.com/capsule-config/-/capsule-config-1.2.3.tgz#262813b31652aa06eeb9102aed2cde28f7671d41"
-  integrity sha512-qwv7PCk9W4i6A2cZK1EmzJHw69HLTf3+VmJnEFOCNqy15WRYtMZGCv0lKCjCPArrIG2Wm4bylbBmB959xRvQ4g==
-  dependencies:
-    "@tailwindcss/typography" "^0.5.2"
-    tailwindcss "^3.0.24"
 
 caseless@~0.12.0:
   version "0.12.0"
