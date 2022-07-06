@@ -708,7 +708,7 @@ export default Vue.extend({
 
 		// Check if this is a repost
 		if (this.repost && this.repost.type === `quote`) {
-			await this.getQuoteRepost(this.repost._id)
+			this.getQuoteRepost(this.repost._id)
 		}
 		// Populate author profile
 		let profile = this.profile
