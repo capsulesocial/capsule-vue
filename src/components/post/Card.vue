@@ -211,7 +211,7 @@
 		<div v-if="this.$route.name !== `post-post`">
 			<div class="card">
 				<div
-					class="sticky bg-lightBG dark:bg-darkBGStop top-0 border-b dark:border-darkBG dark:border-opacity-25 py-4 px-5 xl:py-5 xl:px-6 transition ease-in-out hover:bg-hoverPost dark:hover:bg-darkBG dark:hover:bg-opacity-25"
+					class="sticky bg-lightBG dark:bg-darkBGStop top-0 border-b dark:border-darkBG dark:border-opacity-25 border-opacity-75 py-4 px-5 xl:py-5 xl:px-6 transition ease-in-out hover:bg-hoverPost dark:hover:bg-darkBG dark:hover:bg-opacity-25"
 					:class="showProfileCard || showQuoteCard ? `z-20` : `z-10`"
 				>
 					<!-- Quote repost -->

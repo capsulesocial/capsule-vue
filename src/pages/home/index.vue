@@ -25,7 +25,7 @@
 				</button>
 			</div>
 			<!-- Top algorithms -->
-			<div v-if="algorithm === `TOP`" class="flex items-center relative modal-animation z-50 lg:pr-6">
+			<div v-if="algorithm === `TOP`" class="flex items-center relative modal-animation lg:pr-6">
 				<button
 					id="filter"
 					class="toggle focus:outline-none lg:ml-4 flex items-center justify-between rounded-lg border dark:border-gray3 text-sm shadow-lg dark:text-gray3"
