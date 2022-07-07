@@ -155,7 +155,7 @@
 								:class="featuredPhoto !== null ? `sm:mt-36` : `mt-0`"
 							>
 								<!-- Not a subscriber -->
-								<div v-if="subscriptionStatus === `NOT_SUBSCRIBED`">
+								<div v-if="subscriptionStatus === `NOT_SUBSCRIBED` || !subscriptionProfile.id">
 									<h4 class="text-2xl font-semibold text-neutral mb-4 text-center">
 										This post is for Paid subscribers
 									</h4>
@@ -223,10 +223,6 @@
 										/>
 									</portal>
 								</div>
-
-								<p class="text-sm mt-4 text-gray5 dark:text-gray3">
-									Manage my <nuxt-link to="/subscriptions" class="text-neutral text">subscriptions</nuxt-link>
-								</p>
 							</div>
 						</article>
 						<!-- Content -->
