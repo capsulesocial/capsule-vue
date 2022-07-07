@@ -11,13 +11,16 @@
 				>
 					<div class="shadow-sm bg-lightBG dark:bg-darkBGStop sticky top-0 z-40 px-4 py-4 lg:px-6 lg:py-5">
 						<!-- Show Quote Repost input -->
-						<div v-if="showRepostEditor" class="flex flex-row pb-4">
+						<div v-if="showRepostEditor" class="flex items-start flex-row pb-4">
 							<Avatar :authorID="$store.state.session.id" :avatar="myAvatar" class="flex-shrink-0" />
 							<textarea
 								ref="repostText"
 								v-model="quoteContent"
-								class="focus:outline-none ml-4 mt-2 w-full resize-none bg-transparent placeholder-gray5 dark:placeholder-gray3 dark:text-darkPrimaryText"
+								class="focus:outline-none ml-4 mt-2 pr-8 w-full bg-transparent placeholder-gray5 dark:placeholder-gray3 dark:text-darkPrimaryText"
 								placeholder="What's your response?"
+								style="resize: none"
+								:style="`height:` + replyInputHeight + `px`"
+								@keydown="handleResize"
 							></textarea>
 							<button
 								class="bg-gray1 dark:bg-gray5 focus:outline-none absolute right-0 top-0 m-6 rounded-full p-1"
@@ -35,7 +38,11 @@
 							>
 								<RepostIcon class="hidden lg:block" style="width: 15px; height: 15px" :shrink="true" />
 								<p class="text-gray5 dark:text-gray3 hidden pl-2 text-sm lg:block">
-									<nuxt-link v-if="repostedBy != ``" :to="`/id/` + repostedBy">{{ repostedBy }} </nuxt-link>
+									<nuxt-link
+										v-if="repostedBy === this.$store.state.session.id"
+										:to="`/id/` + this.$store.state.session.id"
+										>You</nuxt-link
+									>
 									<nuxt-link v-else :to="`/id/` + repostedBy">{{ repostedBy }}</nuxt-link>
 									reposted
 								</p>
@@ -59,7 +66,7 @@
 											@mouseleave="triggerPopupCardFalse"
 										/>
 										<!-- Timestamp -->
-										<span class="text-xs dark:text-gray3">
+										<span class="text-xs text-gray5 dark:text-gray3">
 											{{ $formatDate(post.timestamp) }}
 										</span>
 									</div>
@@ -241,7 +248,7 @@
 											<span class="text-gray5 dark:text-gray3 ml-2">@{{ quote.authorID }}</span>
 										</nuxt-link>
 									</div>
-									<span class="text-xs dark:text-gray3">{{ $formatDate(quote.timestamp) }}</span>
+									<span class="mt-1 text-xs text-gray5 dark:text-gray3">{{ $formatDate(quote.timestamp) }}</span>
 								</div>
 							</div>
 							<div
@@ -311,8 +318,12 @@
 							class="text-gray5 dark:text-gray3 -mt-2 mb-3 flex w-full items-center pt-2"
 						>
 							<RepostIcon :shrink="true" />
-							<p class="text-gray5 dark:text-gray3 pl-2 text-sm">
-								<nuxt-link v-if="repostedBy != ``" :to="`/id/` + repostedBy">{{ repostedBy }} </nuxt-link>
+							<p class="text-gray5 dark:text-gray3 hidden pl-2 text-sm lg:block">
+								<nuxt-link
+									v-if="repostedBy === this.$store.state.session.id"
+									:to="`/id/` + this.$store.state.session.id"
+									>You</nuxt-link
+								>
 								<nuxt-link v-else :to="`/id/` + repostedBy">{{ repostedBy }}</nuxt-link>
 								reposted
 							</p>
@@ -577,6 +588,7 @@ interface IData {
 	postCID: string
 	readingTime: number | null
 	featuredPhotoLoading: boolean
+	replyInputHeight: number
 }
 
 export default Vue.extend({
@@ -687,6 +699,7 @@ export default Vue.extend({
 			quoteContent: ``,
 			readingTime: null,
 			featuredPhotoLoading: false,
+			replyInputHeight: 64,
 		}
 	},
 	async created() {
@@ -946,6 +959,11 @@ export default Vue.extend({
 				return
 			}
 			this.readingTime = readingTime
+		},
+		handleResize(e: any) {
+			if (e.srcElement.clientHeight !== e.srcElement.scrollHeight) {
+				this.replyInputHeight = e.srcElement.scrollHeight
+			}
 		},
 	},
 })
