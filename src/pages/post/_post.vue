@@ -657,26 +657,30 @@ export default Vue.extend({
 			}
 
 			if (isEncryptedPost(postData)) {
-				try {
-					const decrypted = await getDecryptedContent(postCID, postData.content, sessionID)
-					if (`content` in decrypted) {
-						this.content = decrypted.content
-						this.excerpt = decrypted.content.slice(0, 100) // TODO refine
-						this.postImageKeys = decrypted.postImageKeys
-					} else {
-						// show proper error message according to retrieval status
-						// decrypted.status is of type `INSUFFICIENT_TIER` | `NOT_SUBSCRIBED`
-						this.enabledTiers = decrypted.enabledTiers
-						this.subscriptionStatus = decrypted.status
-						// Display premium post paywall
-						this.showPaywall = true
-					}
-				} catch (err) {
+				if (sessionID === ``) {
 					this.showPaywall = true
-					if (err instanceof AxiosError && err.response && err.response.data.error) {
-						this.$toastError(err.response.data.error)
-					} else {
-						throw err
+				} else {
+					try {
+						const decrypted = await getDecryptedContent(postCID, postData.content, sessionID)
+						if (`content` in decrypted) {
+							this.content = decrypted.content
+							this.excerpt = decrypted.content.slice(0, 100) // TODO refine
+							this.postImageKeys = decrypted.postImageKeys
+						} else {
+							// show proper error message according to retrieval status
+							// decrypted.status is of type `INSUFFICIENT_TIER` | `NOT_SUBSCRIBED`
+							this.enabledTiers = decrypted.enabledTiers
+							this.subscriptionStatus = decrypted.status
+							// Display premium post paywall
+							this.showPaywall = true
+						}
+					} catch (err) {
+						this.showPaywall = true
+						if (err instanceof AxiosError && err.response && err.response.data.error) {
+							this.$toastError(err.response.data.error)
+						} else {
+							throw err
+						}
 					}
 				}
 			} else {
