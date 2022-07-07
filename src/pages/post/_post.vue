@@ -155,7 +155,7 @@
 								:class="featuredPhoto !== null ? `sm:mt-36` : `mt-0`"
 							>
 								<!-- Not a subscriber -->
-								<div v-if="subscriptionStatus === `NOT_SUBSCRIBED` || !subscriptionProfile.id">
+								<div v-if="subscriptionStatus === `NOT_SUBSCRIBED` || !this.$store.state.session.id">
 									<h4 class="text-2xl font-semibold text-neutral mb-4 text-center">
 										This post is for Paid subscribers
 									</h4>
@@ -177,6 +177,9 @@
 											style="transform: scale(1.2)"
 										/>
 									</div>
+									<p v-if="this.$store.state.session.id" class="text-sm mt-8 text-center text-gray5 dark:text-gray3">
+										Manage my <nuxt-link to="/subscriptions" class="text-neutral text">subscriptions</nuxt-link>
+									</p>
 								</div>
 
 								<!-- Subscribed, but to a different tier -->
@@ -210,6 +213,9 @@
 											<p class="focus:outline-none">Change Tier</p>
 										</button>
 									</div>
+									<p v-if="this.$store.state.session.id" class="text-sm mt-8 text-center text-gray5 dark:text-gray3">
+										Manage my <nuxt-link to="/subscriptions" class="text-neutral text">subscriptions</nuxt-link>
+									</p>
 									<!-- change tier popup -->
 									<portal to="postPage">
 										<ChangeTierPopup
