@@ -1,5 +1,5 @@
-import { SubVerifierDetails, TORUS_NETWORK_TYPE } from '@toruslabs/customauth'
-import { ILocalNetNearConfig, INearConfig } from '../near'
+import type { SubVerifierDetails, TORUS_NETWORK_TYPE } from '@toruslabs/customauth'
+import type { ILocalNetNearConfig, INearConfig } from '../near'
 
 const defaultBootstraps = [
 	`/dns4/node1.blogchain.app/tcp/443/wss/p2p/12D3KooW9qeCwGnG7ncn1YFh7Kth7oH93TCmMuAzdafV8WwGTMkX`,
