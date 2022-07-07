@@ -1,7 +1,7 @@
 <template>
 	<section ref="postActions">
 		<!-- Stats -->
-		<article v-show="toggleStats" class="pt-5">
+		<article v-show="toggleStats" class="pt-5 modal-animation">
 			<!-- Back button -->
 			<div class="flex items-center">
 				<button class="bg-gray1 dark:bg-gray5 focus:outline-none rounded-full" @click="toggleStats = false">
@@ -12,11 +12,13 @@
 				>
 			</div>
 			<!-- Global Activity -->
-			<div class="flex h-32 justify-between border-b pt-5">
+			<div class="flex h-32 justify-between items-center border-b pt-5">
 				<!-- Stats image -->
-				<img :src="require(`@/assets/images/brand/stats.webp`)" class="hidden h-full flex-shrink-0 pl-5 lg:block" />
+				<div class="w-2/5 hidden lg:block">
+					<img :src="require(`@/assets/images/brand/stats.webp`)" class="h-28 flex-shrink-0 pl-5" />
+				</div>
 				<!-- Text stats -->
-				<div class="flex w-3/5 flex-col dark:text-darkPrimaryText">
+				<div class="flex w-2/5 flex-col dark:text-darkPrimaryText">
 					<h6 class="pb-4 text-sm font-semibold">Global Post Activity</h6>
 					<div class="flex flex-row">
 						<!-- Bookmarks Count -->
@@ -25,12 +27,18 @@
 							<span class="text-sm">Bookmarks</span>
 						</div>
 						<!-- Reposts count -->
-						<div class="flex flex-col transition ease-in-out hover:underline cursor-pointer" @click="openReposters">
+						<div class="flex flex-col">
 							<h2 class="text-2xl font-semibold">{{ repostsCount }}</h2>
 							<span class="text-sm">Reposts</span>
 						</div>
 					</div>
 				</div>
+				<button v-if="profiles.length > 0" class="text-sm text-primary w-1/5 h-fit" @click="openReposters">
+					See reposters
+				</button>
+				<button v-else class="text-sm text-primary w-1/5 h-fit cursor-default" disabled style="opacity: 0">
+					See reposters
+				</button>
 			</div>
 			<!-- Comments Activity -->
 			<div class="flex h-44 justify-between">
@@ -127,7 +135,7 @@
 			</div>
 		</article>
 		<!-- Show reposters -->
-		<article v-show="toggleReposters" class="pt-5">
+		<article v-show="toggleReposters" class="pt-5 modal-animation">
 			<!-- Back button -->
 			<div class="flex items-center">
 				<button class="bg-gray1 dark:bg-gray5 focus:outline-none rounded-full" @click="closeReposters">
@@ -140,7 +148,7 @@
 			</div>
 		</article>
 		<!-- Post a Comment -->
-		<article v-show="!toggleStats && !toggleReposters" id="section">
+		<article v-show="!toggleStats && !toggleReposters" id="section" class="modal-animation">
 			<div class="flex w-full justify-between py-5">
 				<div class="flex flex-row items-center">
 					<span class="pr-2 font-semibold dark:text-darkPrimaryText"
@@ -712,8 +720,9 @@ export default Vue.extend({
 			return new Promise((resolve) => setTimeout(resolve, ms))
 		},
 		openReposters() {
-			this.toggleStats = false
-			this.toggleReposters = true
+			// this.toggleStats = false
+			// this.toggleReposters = true
+			this.$emit(`reposters`)
 		},
 		closeReposters() {
 			this.toggleStats = true
