@@ -100,9 +100,9 @@
 							{{ subtitle }}
 						</h2>
 					</article>
-					<div v-if="!content && !showPaywall" class="lg:w-760 lg:max-w-760 h-fit w-full mt-6">
+					<div v-if="!content && !showPaywall && !featuredPhoto" class="lg:w-760 lg:max-w-760 h-fit w-full mt-6">
 						<!-- Featured Photo loader -->
-						<div v-if="!featuredPhoto" class="h-72 w-full rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-6"></div>
+						<div v-if="hasFeaturedPhoto" class="h-72 w-full rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-6"></div>
 					</div>
 					<div class="relative">
 						<!-- Featured Photo -->
@@ -428,6 +428,7 @@ interface IData {
 	showChangeTier: boolean
 	authorPaymentProfile: ISubscriptionResponse | undefined
 	subscriptionProfile: Profile
+	hasFeaturedPhoto: boolean
 }
 
 export default Vue.extend({
@@ -505,6 +506,7 @@ export default Vue.extend({
 			showChangeTier: false,
 			authorPaymentProfile: undefined,
 			subscriptionProfile: createDefaultProfile(this.$store.state.session.id),
+			hasFeaturedPhoto: false,
 		}
 	},
 	head() {
@@ -553,6 +555,10 @@ export default Vue.extend({
 			this.commentsCount = postMetadata.commentsCount
 
 			const postData = postMetadata.post
+
+			if (postData.featuredPhotoCID) {
+				this.hasFeaturedPhoto = true
+			}
 
 			this.updatePostMetadata(postData)
 			this.excerpt = postData.excerpt
