@@ -270,7 +270,7 @@
 				/>
 
 				<!-- Comments -->
-				<article v-if="post !== null" class="pt-5">
+				<article v-if="post !== null" class="pt-5 pb-14">
 					<!-- Choose reaction -->
 					<div class="flex flex-row justify-between">
 						<div class="flex items-center">
@@ -300,6 +300,7 @@
 						:bookmarksCount="bookmarksCount"
 						:repostsCount="repostCount"
 						:postAuthor="authorID"
+						@reposters="toggleReposters"
 					/>
 				</article>
 			</section>
@@ -330,6 +331,7 @@
 			:cid="$route.params.post"
 			@close="showShare = false"
 		/>
+		<RepostersPopup v-if="showReposters" :postCID="$route.params.post" @close="toggleReposters" />
 		<portal to="postPage">
 			<SubscriptionsPopup
 				v-if="showSubscriptions"
@@ -364,6 +366,7 @@ import SubscribeButton from '@/components/SubscribeButton.vue'
 import SubscriptionsPopup from '@/components/popups/SubscriptionsPopup.vue'
 import CheckCircleStaticIcon from '@/components/icons/CheckCircleStatic.vue'
 import ChangeTierPopup from '@/components/popups/ChangeTierPopup.vue'
+import RepostersPopup from '@/components/popups/RepostersPopup.vue'
 
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 import {
@@ -431,6 +434,7 @@ interface IData {
 	authorPaymentProfile: ISubscriptionResponse | undefined
 	subscriptionProfile: Profile
 	hasFeaturedPhoto: boolean
+	showReposters: boolean
 }
 
 export default Vue.extend({
@@ -453,6 +457,7 @@ export default Vue.extend({
 		SubscriptionsPopup,
 		CheckCircleStaticIcon,
 		ChangeTierPopup,
+		RepostersPopup,
 	},
 	beforeRouteLeave(to, from, next) {
 		if (this.realURL !== `` && to.path !== from.path) {
@@ -509,6 +514,7 @@ export default Vue.extend({
 			authorPaymentProfile: undefined,
 			subscriptionProfile: createDefaultProfile(this.$store.state.session.id),
 			hasFeaturedPhoto: false,
+			showReposters: false,
 		}
 	},
 	head() {
@@ -903,6 +909,9 @@ export default Vue.extend({
 		...mapActions(paymentProfileNamespace, {
 			fetchPaymentProfile: ActionType.FETCH_PROFILE,
 		}),
+		toggleReposters() {
+			this.showReposters = !this.showReposters
+		},
 	},
 })
 </script>

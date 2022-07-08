@@ -89,6 +89,9 @@ export default Vue.extend({
 		this.followers.forEach(this.getFollowers)
 		window.addEventListener(`click`, this.handleCloseClick, false)
 	},
+	destroyed() {
+		window.removeEventListener(`click`, this.handleCloseClick)
+	},
 	methods: {
 		updateFollowers(): void {
 			this.$emit(`updateFollowers`)
