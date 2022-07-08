@@ -255,9 +255,17 @@ import BookmarksIcon from '@/components/icons/Bookmarks.vue'
 import CapsuleBlogchain from '@/components/icons/CapsuleBlogchain.vue'
 import Crown2Icon from '@/components/icons/Crown2.vue'
 import DashboardIcon from '@/components/icons/OverviewIcon.vue'
-import { namespace as paymentProfileNamespace } from '@/store/paymentProfile'
+import { MutationType as profileMutation, namespace as paymentProfileNamespace } from '@/store/paymentProfile'
 
 import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
+import { MutationType as subscriptionMutation, namespace as subscriptionNamespace } from '~/store/subscriptions'
+import {
+	MutationType as subscriptionTierMutation,
+	namespace as subscriptionTierNamespace,
+} from '~/store/subscriptionTiers'
+import { MutationType as draftMutation, namespace as draftNamespace } from '~/store/draft'
+import { MutationType as settingMutation, namespace as settingNamespace } from '~/store/settings'
+import { walletLogout } from '@/backend/near'
 
 interface IData {
 	showDropdown: boolean
@@ -308,13 +316,39 @@ export default Vue.extend({
 		...mapMutations(sessionStoreNamespace, {
 			endSession: MutationType.LOGOUT,
 		}),
+		...mapMutations(paymentProfileNamespace, {
+			resetProfile: profileMutation.RESET,
+		}),
+		...mapMutations(subscriptionNamespace, {
+			resetSubs: subscriptionMutation.RESET,
+		}),
+		...mapMutations(subscriptionTierNamespace, {
+			resetSubTiers: subscriptionTierMutation.LOGOUT,
+		}),
+		...mapMutations(draftNamespace, {
+			clearDrafts: draftMutation.CLEAR_DRAFTS,
+		}),
+		...mapMutations(settingNamespace, {
+			resetSettings: settingMutation.RESET_SETTINGS,
+		}),
 		disconnect(): void {
 			this.endSession()
+			this.resetProfile()
+			this.resetSubs()
+			this.resetSubTiers()
+			this.clearDrafts()
+			this.resetSettings()
+
+			this.$store.commit(`reset`)
+			this.$store.commit(`widgets/reset`)
+
 			const keystore = new BrowserLocalStorageKeyStore()
 			keystore.clear()
-			localStorage.clear()
+
+			window.localStorage.clear()
+			walletLogout()
+
 			this.$router.push(`/login`)
-			this.$store.commit(`widgets/reset`)
 		},
 		toggleMobileMenu() {
 			this.showDropdown = !this.showDropdown

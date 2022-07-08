@@ -1,9 +1,7 @@
 // import type { Context } from '@nuxt/types'
 import type { GetterTree, MutationTree } from 'vuex'
-import { keyStores } from 'near-api-js'
 import type { RootState } from './index'
 import { Profile } from '@/backend/profile'
-import { removeNearPrivateKey, walletLogout } from '@/backend/near'
 export interface Session {
 	id: Profile[`id`]
 	name: Profile[`name`]
@@ -71,12 +69,7 @@ export const mutations: MutationTree<Session> = {
 		state.location = newLocation
 	},
 	[MutationType.LOGOUT]: (state) => {
-		const keystore = new keyStores.BrowserLocalStorageKeyStore()
-		keystore.clear()
 		Object.assign(state, createDefaultSession(``))
-		removeNearPrivateKey()
-		window.localStorage.removeItem(`accountId`)
-		walletLogout()
 		state.homeFeed = `TOP`
 	},
 }

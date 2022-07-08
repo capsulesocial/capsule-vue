@@ -15,16 +15,7 @@ export interface SettingState {
 	showUnauthPopup: boolean
 }
 
-export const state = (): SettingState => ({
-	mode: `Light`,
-	color: `Green`,
-	recentlyPosted: false,
-	recentlyInSettings: false,
-	lastActivePost: ``,
-	lastActivePostOffset: 0,
-	showUnauthPopup: false,
-	lastTopAlgorithm: `This month`,
-})
+export const state = (): SettingState => createDefaultSetting()
 
 export const getters: GetterTree<SettingState, RootState> = {}
 
@@ -36,6 +27,7 @@ export const MutationType = {
 	SET_LAST_ACTIVE_POST: `setLastActivePost`,
 	SET_LAST_ACTIVE_TOP_ALGORITHM: `setLastActiveTopAlgorithm`,
 	TOGGLE_UNAUTH_POPUP: `toggleUnauthPopup`,
+	RESET_SETTINGS: `resetSettings`,
 }
 
 export const mutations: MutationTree<SettingState> = {
@@ -64,6 +56,9 @@ export const mutations: MutationTree<SettingState> = {
 	[MutationType.TOGGLE_UNAUTH_POPUP]: (state, c: boolean = !state.showUnauthPopup) => {
 		state.showUnauthPopup = c
 	},
+	[MutationType.RESET_SETTINGS]: (state) => {
+		Object.assign(state, createDefaultSetting())
+	},
 }
 
 export const actionType = {
@@ -75,4 +70,17 @@ export const actions: ActionTree<SettingState, RootState> = {
 		commit(MutationType.CHANGE_COLOR_MODE, `OS`)
 		commit(MutationType.CHANGE_COLOR, `Green`)
 	},
+}
+
+export function createDefaultSetting(): SettingState {
+	return {
+		mode: `Light`,
+		color: `Green`,
+		recentlyPosted: false,
+		recentlyInSettings: false,
+		lastActivePost: ``,
+		lastActivePostOffset: 0,
+		showUnauthPopup: false,
+		lastTopAlgorithm: `This month`,
+	}
 }
