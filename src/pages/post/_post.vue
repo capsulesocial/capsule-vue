@@ -155,7 +155,7 @@
 								:class="featuredPhoto !== null ? `sm:mt-36` : `mt-0`"
 							>
 								<!-- Not a subscriber -->
-								<div v-if="subscriptionStatus === `NOT_SUBSCRIBED`">
+								<div v-if="subscriptionStatus === `NOT_SUBSCRIBED` || !this.$store.state.session.id">
 									<h4 class="text-2xl font-semibold text-neutral mb-4 text-center">
 										This post is for Paid subscribers
 									</h4>
@@ -177,6 +177,9 @@
 											style="transform: scale(1.2)"
 										/>
 									</div>
+									<p v-if="this.$store.state.session.id" class="text-sm mt-8 text-center text-gray5 dark:text-gray3">
+										Manage my <nuxt-link to="/subscriptions" class="text-neutral text">subscriptions</nuxt-link>
+									</p>
 								</div>
 
 								<!-- Subscribed, but to a different tier -->
@@ -210,6 +213,9 @@
 											<p class="focus:outline-none">Change Tier</p>
 										</button>
 									</div>
+									<p v-if="this.$store.state.session.id" class="text-sm mt-8 text-center text-gray5 dark:text-gray3">
+										Manage my <nuxt-link to="/subscriptions" class="text-neutral text">subscriptions</nuxt-link>
+									</p>
 									<!-- change tier popup -->
 									<portal to="postPage">
 										<ChangeTierPopup
@@ -223,10 +229,6 @@
 										/>
 									</portal>
 								</div>
-
-								<p class="text-sm mt-4 text-gray5 dark:text-gray3">
-									Manage my <nuxt-link to="/subscriptions" class="text-neutral text">subscriptions</nuxt-link>
-								</p>
 							</div>
 						</article>
 						<!-- Content -->
@@ -661,26 +663,30 @@ export default Vue.extend({
 			}
 
 			if (isEncryptedPost(postData)) {
-				try {
-					const decrypted = await getDecryptedContent(postCID, postData.content, sessionID)
-					if (`content` in decrypted) {
-						this.content = decrypted.content
-						this.excerpt = decrypted.content.slice(0, 100) // TODO refine
-						this.postImageKeys = decrypted.postImageKeys
-					} else {
-						// show proper error message according to retrieval status
-						// decrypted.status is of type `INSUFFICIENT_TIER` | `NOT_SUBSCRIBED`
-						this.enabledTiers = decrypted.enabledTiers
-						this.subscriptionStatus = decrypted.status
-						// Display premium post paywall
-						this.showPaywall = true
-					}
-				} catch (err) {
+				if (sessionID === ``) {
 					this.showPaywall = true
-					if (err instanceof AxiosError && err.response && err.response.data.error) {
-						this.$toastError(err.response.data.error)
-					} else {
-						throw err
+				} else {
+					try {
+						const decrypted = await getDecryptedContent(postCID, postData.content, sessionID)
+						if (`content` in decrypted) {
+							this.content = decrypted.content
+							this.excerpt = decrypted.content.slice(0, 100) // TODO refine
+							this.postImageKeys = decrypted.postImageKeys
+						} else {
+							// show proper error message according to retrieval status
+							// decrypted.status is of type `INSUFFICIENT_TIER` | `NOT_SUBSCRIBED`
+							this.enabledTiers = decrypted.enabledTiers
+							this.subscriptionStatus = decrypted.status
+							// Display premium post paywall
+							this.showPaywall = true
+						}
+					} catch (err) {
+						this.showPaywall = true
+						if (err instanceof AxiosError && err.response && err.response.data.error) {
+							this.$toastError(err.response.data.error)
+						} else {
+							throw err
+						}
 					}
 				}
 			} else {
