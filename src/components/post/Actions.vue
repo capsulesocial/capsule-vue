@@ -174,7 +174,14 @@
 					</h6>
 				</div>
 				<div class="absolute z-20 mt-8 lg:mt-10 mr-8 flex items-center">
-					<button class="bg-gray1 dark:bg-gray5 focus:outline-none rounded-full p-1" @click="showEmotions = false">
+					<button
+						class="bg-gray1 dark:bg-gray5 focus:outline-none rounded-full p-1"
+						@click="
+							showEmotions = false
+							selectedEmotionColor = `neutralLightest`
+							selectedEmotion = { label: ``, light: null, dark: null }
+						"
+					>
 						<CloseIcon />
 					</button>
 				</div>
@@ -205,9 +212,10 @@
 					:class="
 						showEmotions
 							? ``
-							: selectedEmotionColor === `positive` ||
-							  selectedEmotionColor === `neutral` ||
-							  selectedEmotionColor === `negative`
+							: (selectedEmotionColor === `positive` ||
+									selectedEmotionColor === `neutral` ||
+									selectedEmotionColor === `negative`) &&
+							  selectedEmotion.label !== ``
 							? `border p-2 bg-` + selectedEmotionColor
 							: `p-2 bg-lightBG dark:bg-darkBG`
 					"
@@ -319,7 +327,9 @@
 											<p
 												class="capitalize lg:hidden mt-1"
 												:class="
-													selectedEmotion.label === face.label ? `font-bold text-` + selectedEmotionColor : `text-gray7`
+													selectedEmotion.label === face.label
+														? `font-bold text-` + selectedEmotionColor
+														: `text-gray7 dark:text-gray3`
 												"
 											>
 												{{ face.label.replace(/_/g, ' ') }}
