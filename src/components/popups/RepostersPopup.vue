@@ -61,18 +61,23 @@ export default Vue.extend({
 	},
 	mounted() {
 		this.initReposters()
-		window.addEventListener(`click`, this.handleCloseClick, false)
+		window.addEventListener(`click`, this.handleCloseClick, true)
 	},
 	destroyed() {
-		window.removeEventListener(`click`, this.handleCloseClick)
+		window.removeEventListener(`click`, this.handleCloseClick, true)
 	},
 	methods: {
 		updateFollowers(): void {
 			this.$emit(`updateFollowers`)
 		},
 		handleCloseClick(e: any): void {
-			// console.log(e.target.firstChild)
 			if (!e.target || e.target.parentNode === null || e.target.parentNode.classList === undefined) {
+				return
+			}
+			if (!e.target.firstChild?.classList) {
+				return
+			}
+			if (e.target.firstChild.classList.length < 1) {
 				return
 			}
 			if (e.target.firstChild.classList[0] === `popup`) {
