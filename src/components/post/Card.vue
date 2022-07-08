@@ -200,6 +200,7 @@
 						:repostsCount="repostCount"
 						:openStats="showStats"
 						class="px-4 pb-4 xl:px-6 xl:pb-6"
+						@reposters="toggleReposters"
 					/>
 				</div>
 			</div>
@@ -213,6 +214,7 @@
 				:cid="postCID"
 				@close="showShare = false"
 			/>
+			<RepostersPopup v-if="showReposters" :postCID="postCID" @close="toggleReposters" />
 		</portal>
 		<!-- Feed view -->
 		<div v-if="this.$route.name !== `post-post`">
@@ -545,6 +547,7 @@ import BrandedButton from '@/components/BrandedButton.vue'
 import SharePopup from '@/components/popups/SharePopup.vue'
 import CardProfileHeader from '@/components/post/card/ProfileHeader.vue'
 import CrownIcon from '@/components/icons/Crown.vue'
+import RepostersPopup from '@/components/popups/RepostersPopup.vue'
 
 import { RetrievedPost, getRegularPost } from '@/backend/post'
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
@@ -589,6 +592,7 @@ interface IData {
 	readingTime: number | null
 	featuredPhotoLoading: boolean
 	replyInputHeight: number
+	showReposters: boolean
 }
 
 export default Vue.extend({
@@ -612,6 +616,7 @@ export default Vue.extend({
 		SharePopup,
 		CardProfileHeader,
 		CrownIcon,
+		RepostersPopup,
 	},
 	props: {
 		repost: {
@@ -700,6 +705,7 @@ export default Vue.extend({
 			readingTime: null,
 			featuredPhotoLoading: false,
 			replyInputHeight: 64,
+			showReposters: false,
 		}
 	},
 	async created() {
@@ -964,6 +970,11 @@ export default Vue.extend({
 			if (e.srcElement.clientHeight !== e.srcElement.scrollHeight) {
 				this.replyInputHeight = e.srcElement.scrollHeight
 			}
+		},
+		toggleReposters() {
+			this.showReposters = !this.showReposters
+			this.showPopup = !this.showPopup
+			this.showStats = true
 		},
 	},
 })
