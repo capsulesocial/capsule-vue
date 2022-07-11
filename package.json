@@ -58,7 +58,7 @@
 		"@nuxtjs/robots": "^2.5.0",
 		"@stripe/stripe-js": "^1.28.0",
 		"@tailwindcss/typography": "^0.4.1",
-		"@toruslabs/customauth": "^9.1.0",
+		"@toruslabs/customauth": "^10.0.0",
 		"@toruslabs/openlogin-ed25519": "^2.0.0",
 		"axios": "^0.27.2",
 		"browser-image-compression": "^2.0.0",
