@@ -6,7 +6,13 @@
 			@mouseenter="showInfo = true"
 			@mouseleave="showInfo = false"
 		>
-			<span v-if="initIPFS" class="text-gray5 dark:text-gray1 mr-1 text-sm modal-animation">Initialising IPFS...</span>
+			<span v-if="loadingIPFS" class="text-gray5 dark:text-gray1 mr-1 text-sm modal-animation">Loading IPFS...</span>
+			<span v-else-if="initIPFS" class="text-gray5 dark:text-gray1 mr-1 text-sm modal-animation"
+				>Initialising IPFS...</span
+			>
+			<span v-else-if="startIPFS" class="text-gray5 dark:text-gray1 mr-1 text-sm modal-animation"
+				>Starting IPFS...</span
+			>
 			<span v-else-if="initNodes" class="text-gray5 dark:text-gray1 mr-1 text-sm modal-animation"
 				>Connecting to peers...</span
 			>
@@ -47,6 +53,8 @@ import ipfs from '@/backend/utilities/ipfs'
 export interface IData {
 	nodes: number
 	initNodes: boolean
+	loadingIPFS: boolean
+	startIPFS: boolean
 	initIPFS: boolean
 	showInfo: boolean
 }
@@ -59,13 +67,23 @@ export default Vue.extend({
 		return {
 			nodes: 0,
 			initNodes: true,
-			initIPFS: true,
+			startIPFS: false,
+			initIPFS: false,
+			loadingIPFS: true,
 			showInfo: false,
 		}
 	},
-	created() {
-		ipfs().initResult.then(async () => {
+	async created() {
+		await ipfs().loadingResult
+		this.loadingIPFS = false
+		this.initIPFS = true
+		await ipfs().initResult
+		this.startIPFS = true
+		this.initIPFS = false
+		ipfs().startResult.then(async () => {
+			this.startIPFS = false
 			this.initIPFS = false
+			this.loadingIPFS = false
 			await this.update()
 			this.updateLoop()
 		})
