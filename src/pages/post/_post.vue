@@ -5,10 +5,12 @@
 			v-if="!title || !authorID || !timestamp || !category"
 			class="modal-animation fixed mt-20 flex w-full justify-center"
 		>
-			<div
-				class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
-				:style="`border-top: 2px solid` + $color.hex"
-			></div>
+			<div class="flex flex-col items-center mt-10">
+				<div
+					class="loader m-5 border-2 border-gray1 dark:border-gray7 h-8 w-8 rounded-3xl"
+					:style="`border-top: 2px solid` + $color.hex"
+				></div>
+			</div>
 		</article>
 		<!-- Inner post area -->
 		<div v-else class="lg:w-760 lg:max-w-760 h-fit w-full">
@@ -100,9 +102,49 @@
 							{{ subtitle }}
 						</h2>
 					</article>
-					<div v-if="!content && !showPaywall && !featuredPhoto" class="lg:w-760 lg:max-w-760 h-fit w-full mt-6">
+					<div v-if="!content && !showPaywall && !featuredPhoto" class="lg:w-760 lg:max-w-760 h-fit w-full">
 						<!-- Featured Photo loader -->
-						<div v-if="hasFeaturedPhoto" class="h-72 w-full rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-6"></div>
+						<div
+							v-if="hasFeaturedPhoto"
+							class="h-72 w-full rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-6 flex justify-center items-center mt-6"
+						>
+							<div class="flex items-center">
+								<span v-if="loadingIPFS" class="text-gray5 dark:text-gray1 mr-1 text-sm modal-animation"
+									>Loading IPFS...</span
+								>
+								<span v-else-if="initIPFS" class="text-gray5 dark:text-gray1 mr-1 text-sm modal-animation"
+									>Initialising IPFS...</span
+								>
+								<span v-else-if="startIPFS" class="text-gray5 dark:text-gray1 mr-1 text-sm modal-animation"
+									>Starting IPFS...</span
+								>
+								<span v-if="loadingIPFS || initIPFS || startIPFS" class="ml-1 flex h-3 w-3 modal-animation">
+									<span
+										class="absolute inline-flex h-3 w-3 animate-ping rounded-full opacity-75 bg-gray5 dark:bg-gray3"
+									></span>
+									<span class="relative inline-flex h-3 w-3 rounded-full bg-gray5 dark:bg-gray3"></span>
+								</span>
+							</div>
+						</div>
+						<div v-else-if="loadingIPFS || initIPFS || startIPFS" class="mt-6">
+							<div class="flex items-center">
+								<span v-if="loadingIPFS" class="text-gray5 dark:text-gray1 mr-1 text-sm modal-animation"
+									>Loading IPFS...</span
+								>
+								<span v-else-if="initIPFS" class="text-gray5 dark:text-gray1 mr-1 text-sm modal-animation"
+									>Initialising IPFS...</span
+								>
+								<span v-else-if="startIPFS" class="text-gray5 dark:text-gray1 mr-1 text-sm modal-animation"
+									>Starting IPFS...</span
+								>
+								<span v-if="loadingIPFS || initIPFS || startIPFS" class="ml-1 flex h-3 w-3 modal-animation">
+									<span
+										class="absolute inline-flex h-3 w-3 animate-ping rounded-full opacity-75 bg-gray5 dark:bg-gray3"
+									></span>
+									<span class="relative inline-flex h-3 w-3 rounded-full bg-gray5 dark:bg-gray3"></span>
+								</span>
+							</div>
+						</div>
 					</div>
 					<div class="relative">
 						<!-- Featured Photo -->
@@ -130,6 +172,17 @@
 							</p>
 						</article>
 						<div v-if="!content && !showPaywall" class="lg:w-760 lg:max-w-760 h-fit w-full mt-6">
+							<div v-if="initNodes && !loadingIPFS && !initIPFS && !startIPFS" class="mb-6">
+								<div class="flex items-center">
+									<span class="text-gray5 dark:text-gray1 mr-1 text-sm modal-animation">Connecting to peers...</span>
+									<span class="ml-1 flex h-3 w-3 modal-animation">
+										<span
+											class="absolute inline-flex h-3 w-3 animate-ping rounded-full opacity-75 bg-gray5 dark:bg-gray3"
+										></span>
+										<span class="relative inline-flex h-3 w-3 rounded-full bg-gray5 dark:bg-gray3"></span>
+									</span>
+								</div>
+							</div>
 							<!-- Content loader -->
 							<div>
 								<div class="h-3 w-full rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-2"></div>
@@ -387,6 +440,8 @@ import { createShareableLink } from '@/backend/shareable_links'
 import { calculateReadingTime } from '@/backend/utilities/helpers'
 import { ActionType, namespace as paymentProfileNamespace, SubscriptionTier } from '@/store/paymentProfile'
 import { getUserSubscriptions, ISubscriptionResponse } from '@/backend/subscription'
+import ipfs from '@/backend/utilities/ipfs'
+
 interface IData {
 	post: Post | null
 	title: string | null
@@ -435,6 +490,11 @@ interface IData {
 	subscriptionProfile: Profile
 	hasFeaturedPhoto: boolean
 	showReposters: boolean
+	nodes: number
+	initNodes: boolean
+	loadingIPFS: boolean
+	startIPFS: boolean
+	initIPFS: boolean
 }
 
 export default Vue.extend({
@@ -515,6 +575,11 @@ export default Vue.extend({
 			subscriptionProfile: createDefaultProfile(this.$store.state.session.id),
 			hasFeaturedPhoto: false,
 			showReposters: false,
+			nodes: 0,
+			initNodes: true,
+			startIPFS: false,
+			initIPFS: false,
+			loadingIPFS: true,
 		}
 	},
 	head() {
@@ -547,6 +612,19 @@ export default Vue.extend({
 		this.isLeaving = true
 	},
 	async created() {
+		await ipfs().loadingResult
+		this.loadingIPFS = false
+		this.initIPFS = true
+		await ipfs().initResult
+		this.startIPFS = true
+		this.initIPFS = false
+		ipfs().startResult.then(async () => {
+			this.startIPFS = false
+			this.initIPFS = false
+			this.loadingIPFS = false
+			await this.update()
+			this.updateLoop()
+		})
 		const sessionID = this.$store.state.session.id
 		const postCID = this.$route.params.post
 		try {
@@ -911,6 +989,19 @@ export default Vue.extend({
 		}),
 		toggleReposters() {
 			this.showReposters = !this.showReposters
+		},
+		updateLoop() {
+			setTimeout(async () => {
+				await this.update()
+				this.updateLoop()
+			}, 1000)
+		},
+		async update() {
+			const nodes = await ipfs().getNodes()
+			this.nodes = nodes
+			if (this.initNodes && nodes !== 0) {
+				this.initNodes = false
+			}
 		},
 	},
 })
