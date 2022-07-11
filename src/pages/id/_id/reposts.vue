@@ -10,7 +10,7 @@
 				:text="`Repost content`"
 				:action="toggleHomeFeed"
 			/>
-			<img src="/images/post.webp" class="top-0 mt-52 xl:-mt-2" />
+			<nuxt-img src="/images/post.webp" loading="lazy" class="top-0 mt-52 xl:-mt-2" />
 		</article>
 		<article v-for="p in reposts" :key="p.repost._id">
 			<PostCard
