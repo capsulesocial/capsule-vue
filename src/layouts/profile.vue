@@ -92,12 +92,7 @@
 								:text="`Back to Home`"
 							/>
 						</div>
-						<img
-							:src="require(`@/assets/images/brand/error.webp`)"
-							alt="error image"
-							class="mt-10 self-center"
-							style="width: 500px"
-						/>
+						<img src="/image/error.webp" alt="error image" class="mt-10 self-center" style="width: 500px" />
 					</div>
 				</div>
 			</div>

@@ -12,7 +12,7 @@
 				:text="`Write a post`"
 				:action="togglePostEditor"
 			/>
-			<img :src="require(`@/assets/images/brand/post.webp`)" class="top-0 mt-52 xl:-mt-2" />
+			<nuxt-img src="/images/post.webp`)" class="top-0 mt-52 xl:-mt-2" />
 		</article>
 		<article v-for="p in posts" :key="p.post._id">
 			<PostCard

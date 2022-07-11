@@ -318,12 +318,8 @@
 							<FriendButton :toggleFriend="toggleFriend" :userIsFollowed="userIsFollowed" />
 						</div>
 					</div>
-					<img
-						:src="
-							$colorMode.dark
-								? require(`@/assets/images/brand/dark/subscriptions.webp`)
-								: require(`@/assets/images/brand/light/subscriptions.webp`)
-						"
+					<nuxt-img
+						:src="$colorMode.dark ? `/images/dark/subscriptions.webp` : `/images/light/subscriptions.webp`"
 						class="h-auto rounded-lg"
 					/>
 				</article>

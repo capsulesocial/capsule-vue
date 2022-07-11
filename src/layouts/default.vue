@@ -29,12 +29,7 @@
 						<div class="flex justify-center">
 							<BrandedButton :action="handleReload" :text="`Back to home`" />
 						</div>
-						<img
-							:src="require(`@/assets/images/brand/error.webp`)"
-							alt="error image"
-							class="mt-10 self-center"
-							style="width: 500px"
-						/>
+						<nuxt-img src="/images/error.webp" alt="error image" class="mt-10 self-center" style="width: 500px" />
 					</div>
 				</div>
 			</div>

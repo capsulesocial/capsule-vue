@@ -28,7 +28,7 @@
 			</a>
 		</div>
 		<section>
-			<img src="~/assets/images/brand/help-page.webp" alt="" class="w-full" />
+			<img src="/images/help-page.webp" alt="" class="w-full" />
 		</section>
 	</article>
 </template>
