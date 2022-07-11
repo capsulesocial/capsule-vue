@@ -5,7 +5,7 @@
 			id="header"
 			class="bg-darkBG dark:bg-lightBG border-lightBorder animatefast flex h-56 w-full flex-row items-center rounded-lg shadow-lg"
 			:style="{
-				background: `linear-gradient(180deg, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.8) 100%), url(${require(`@/assets/images/category/` +
+				background: `linear-gradient(180deg, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.8) 100%), url(${require(`@/static/images/category/` +
 					$route.params.category +
 					`/` +
 					`header.webp`)})`,

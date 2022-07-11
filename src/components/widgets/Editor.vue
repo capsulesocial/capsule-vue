@@ -313,7 +313,7 @@ export default Vue.extend({
 		},
 		getCategoryIcon(category: string) {
 			const c = category || this.category
-			return c ? require(`@/assets/images/category/${c}/${this.$colorMode.dark ? `dark` : `light`}/icon.webp`) : ``
+			return c ? `/images/category/${c}/${this.$colorMode.dark ? `dark` : `light`}/icon.webp` : ``
 		},
 		togglePremiumPost() {
 			const postImages = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex]?.postImages
