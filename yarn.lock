@@ -2154,10 +2154,10 @@
     lodash.isplainobject "^4.0.6"
     lodash.merge "^4.6.2"
 
-"@toruslabs/broadcast-channel@^5.0.2":
-  version "5.0.2"
-  resolved "https://registry.yarnpkg.com/@toruslabs/broadcast-channel/-/broadcast-channel-5.0.2.tgz#90117e37bf0937793995740516713a305b0812f7"
-  integrity sha512-B4kMZfcSZWzIi81gfb7deHFOa55RvCTUtIhCvTrGVobo8WZ8cCJC/4bLm1AbzgiPky8dbh8cb7mewuvnqaZpbA==
+"@toruslabs/broadcast-channel@^6.0.0":
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/@toruslabs/broadcast-channel/-/broadcast-channel-6.0.0.tgz#0ac27b192c7ac115f5a3edbd459fcc5337b4984e"
+  integrity sha512-bDS5VqDDzHoL4mvhRMyRRz+gKqo8Lx+qPCVhjY+brKU+X0odQ4M4bKA5ktyUBnEo290d5ui2vpWRp7qJ5E28MQ==
   dependencies:
     "@babel/runtime" "^7.17.9"
     "@toruslabs/eccrypto" "^1.1.8"
@@ -2169,24 +2169,24 @@
     socket.io-client "^4.5.1"
     unload "^2.3.1"
 
-"@toruslabs/customauth@^9.1.0":
-  version "9.1.0"
-  resolved "https://registry.yarnpkg.com/@toruslabs/customauth/-/customauth-9.1.0.tgz#f808afe9383ec2908b455271a72ebd13a434e9f0"
-  integrity sha512-Ov3Y7JR8EJJJfBkdESovcxf1unp/8JTL9PaV0SVu4pwWmecPH8juc+w4ZNF54JYUqX9k1N8fzQWe1WCOXMaUag==
+"@toruslabs/customauth@^10.0.0":
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/@toruslabs/customauth/-/customauth-10.0.0.tgz#4b020a8547ab4b09d3c2ceb1fe88c4b0507a0c10"
+  integrity sha512-LG26i3i9EWJaQfV6EzZVYB+yWuX2f10OaszC8linG3i83yy8wB3UfAVCR7VP8Vx/mh0V4UigeNuKIJG+GvkGNg==
   dependencies:
     "@chaitanyapotti/register-service-worker" "^1.7.3"
-    "@toruslabs/broadcast-channel" "^5.0.2"
+    "@toruslabs/broadcast-channel" "^6.0.0"
     "@toruslabs/eccrypto" "^1.1.8"
-    "@toruslabs/fetch-node-details" "^7.0.1"
+    "@toruslabs/fetch-node-details" "^7.0.2"
     "@toruslabs/http-helpers" "^3.0.0"
     "@toruslabs/metadata-helpers" "^3.0.0"
-    "@toruslabs/torus.js" "^6.0.1"
+    "@toruslabs/torus.js" "^6.1.0"
     bowser "^2.11.0"
     events "^3.3.0"
     jwt-decode "^3.1.2"
     lodash.merge "^4.6.2"
     loglevel "^1.8.0"
-    web3-utils "^1.7.3"
+    web3-utils "^1.7.4"
 
 "@toruslabs/eccrypto@^1.1.8":
   version "1.1.8"
@@ -2200,7 +2200,7 @@
   optionalDependencies:
     secp256k1 "^3.8.0"
 
-"@toruslabs/fetch-node-details@^7.0.1":
+"@toruslabs/fetch-node-details@^7.0.2":
   version "7.0.2"
   resolved "https://registry.yarnpkg.com/@toruslabs/fetch-node-details/-/fetch-node-details-7.0.2.tgz#6267f8fb943e5cb5366531ff4f9d4f394d6deed0"
   integrity sha512-k4Ep4Gh56CCVWuHwO3zjh4Mq2cp/6JGV7tWafi3DIers2TIAI9Vdz8syTxi+jMVvSj2a9csJZF737ynqtZCkzw==
@@ -2234,7 +2234,7 @@
   dependencies:
     "@toruslabs/tweetnacl-js" "^1.0.3"
 
-"@toruslabs/torus.js@^6.0.1":
+"@toruslabs/torus.js@^6.1.0":
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/@toruslabs/torus.js/-/torus.js-6.1.0.tgz#cc8e8192964664b99c7442309d78fd961ea5ace8"
   integrity sha512-HI6zShOcG44pV382dHyhvdNawUxHtdP/HD9IE3ofasIrL308n/Wa/VuTS/VlaoYuQoBtPQZ1HYrKxlyIy2vXLA==
@@ -13805,7 +13805,7 @@ web3-providers-ws@1.7.4:
     web3-core-helpers "1.7.4"
     websocket "^1.0.32"
 
-web3-utils@1.7.4, web3-utils@^1.7.3, web3-utils@^1.7.4:
+web3-utils@1.7.4, web3-utils@^1.7.4:
   version "1.7.4"
   resolved "https://registry.yarnpkg.com/web3-utils/-/web3-utils-1.7.4.tgz#eb6fa3706b058602747228234453811bbee017f5"
   integrity sha512-acBdm6Evd0TEZRnChM/MCvGsMwYKmSh7OaUfNf5OKG0CIeGWD/6gqLOWIwmwSnre/2WrA1nKGId5uW2e5EfluA==
