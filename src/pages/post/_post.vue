@@ -144,11 +144,11 @@
 							</div>
 						</div>
 						<!-- Private sensitive content -->
-						<div v-else-if="showPaywall" class="h-80 lg:h-72"></div>
+						<div v-else-if="showPaywall && !hasFeaturedPhoto" class="h-10 lg:h-60"></div>
 						<!-- Post paywall -->
 						<article
 							v-if="showPaywall"
-							class="from-lightBGStart to-transparent dark:from-darkBGStart dark:to-transparent bg-gradient-to-t z-20 absolute top-0 w-full h-full flex"
+							class="from-lightBGStart to-transparent dark:from-darkBGStart dark:to-transparent bg-gradient-to-t z-10 absolute top-0 w-full h-full flex"
 						>
 							<div
 								class="w-full shadow-lg flex flex-col items-center py-10 px-16 bg-lightBG dark:bg-darkBGStop rounded-lg h-min"
