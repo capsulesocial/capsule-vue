@@ -24,6 +24,7 @@
 				<nuxt-img
 					:src="$colorMode.dark ? `/images/dark/subscriptions.webp` : `/images/light/subscriptions.webp`"
 					class="h-auto"
+					loading="lazy"
 				/>
 			</div>
 		</div>

@@ -41,6 +41,7 @@
 		</div>
 		<nuxt-img
 			v-if="checkRoute()"
+			loading="lazy"
 			:src="$colorMode.dark ? `/images/dark/discover.webp` : `/images/light/discover.webp`"
 		/>
 	</article>

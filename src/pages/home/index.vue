@@ -80,7 +80,7 @@
 						/>
 					</div>
 				</div>
-				<nuxt-img src="/images/follow-window.webp" class="top-0 mt-24 xl:mt-0" />
+				<nuxt-img src="/images/follow-window.webp" loading="lazy" class="top-0 mt-24 xl:mt-0" />
 			</div>
 			<div v-if="!isLoading && algorithm === `TOP` && posts.length === 0">
 				<p class="text-gray5 dark:text-gray3 mb-5 mt-12 self-center text-center xl:mx-14 px-10">

@@ -15,7 +15,7 @@
 			<div class="flex h-32 justify-between items-center border-b pt-5">
 				<!-- Stats image -->
 				<div class="w-2/5 hidden lg:block">
-					<nuxt-img src="/images/stats.webp" class="h-28 flex-shrink-0 pl-5" />
+					<nuxt-img loading="lazy" src="/images/stats.webp" class="h-28 flex-shrink-0 pl-5" />
 				</div>
 				<!-- Text stats -->
 				<div class="flex w-2/5 flex-col dark:text-darkPrimaryText">
