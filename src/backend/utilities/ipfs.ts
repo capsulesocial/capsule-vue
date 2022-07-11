@@ -7,7 +7,9 @@ export interface IPFSInterface {
 	getJSONData: <T>(hash: string) => Promise<T>
 	sendJSONData: <T>(content: T) => Promise<string>
 	getNodes: () => Promise<number>
-	initResult: Promise<void>
+	loadingResult: Promise<{ create: (options?: Options | undefined) => Promise<IPFS>; CID: typeof CID }>
+	initResult: Promise<{ ipfs: IPFS; CIDObj: typeof CID }>
+	startResult: Promise<void>
 }
 
 const ipfsConfig: Options = {
@@ -24,13 +26,6 @@ const ipfsConfig: Options = {
 	},
 }
 
-async function loadAndInitIPFS() {
-	const { create, CID: CIDObj } = await import(`ipfs-core`)
-	const ipfs = await create(ipfsConfig)
-
-	return { ipfs, CIDObj }
-}
-
 /**
  * An IPFS interface is created, but the node doesn't start right away. Generally we observed that the node starting procedure is slow and blocks the loading of the whole app.
  * Hence, we made the loading of the node async and we basically keep a cache of all the requests to IPFS while the node is initialising to dispatch them after the fact.
@@ -40,7 +35,13 @@ function createIPFSInterface(): IPFSInterface {
 	let node: IPFS | null = null
 	let CIDClass: typeof CID | null = null
 
-	const promise = loadAndInitIPFS()
+	const loadingResult = import(`ipfs-core`)
+
+	const promise = loadingResult.then(async ({ create, CID: CIDObj }) => {
+		const ipfs = await create(ipfsConfig)
+
+		return { ipfs, CIDObj }
+	})
 
 	const promiseCache: Array<{
 		func: (...args: any[]) => Promise<any>
@@ -153,7 +154,9 @@ function createIPFSInterface(): IPFSInterface {
 		return peers.length
 	}
 
-	const initResult = promise.then(async ({ ipfs, CIDObj }) => {
+	const initResult = promise
+
+	const startResult = promise.then(async ({ ipfs, CIDObj }) => {
 		node = ipfs
 		CIDClass = CIDObj
 
@@ -169,7 +172,9 @@ function createIPFSInterface(): IPFSInterface {
 		sendData: (content: string | ArrayBuffer) => _promiseWrapper(sendData, content),
 		getData: (cid: string) => _promiseWrapper(getData, cid),
 		getNodes: () => _promiseWrapper(getNodes),
+		loadingResult,
 		initResult,
+		startResult,
 	}
 }
 
