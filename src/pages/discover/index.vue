@@ -13,7 +13,7 @@
 				v-for="c in categoryList"
 				:key="c"
 				:text="c"
-				:bgImage="require('@/assets/images/category/' + c + '/' + c + '.webp')"
+				:bgImage="`/images/category/` + c + '/' + c + `.webp`"
 			/>
 		</article>
 	</div>

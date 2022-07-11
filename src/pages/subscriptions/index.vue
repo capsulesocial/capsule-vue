@@ -21,13 +21,10 @@
 					It seems like you don't currently have any active subscriptions. Browse Blogchain and subscribe to authors to
 					view them here
 				</p>
-				<img
-					:src="
-						$colorMode.dark
-							? require(`@/assets/images/brand/dark/subscriptions.webp`)
-							: require(`@/assets/images/brand/light/subscriptions.webp`)
-					"
+				<nuxt-img
+					:src="$colorMode.dark ? `/images/dark/subscriptions.webp` : `/images/light/subscriptions.webp`"
 					class="h-auto"
+					loading="lazy"
 				/>
 			</div>
 		</div>

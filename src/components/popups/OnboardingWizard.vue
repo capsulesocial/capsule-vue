@@ -14,29 +14,34 @@
 			</div>
 			<!-- Slide 1 -->
 			<article class="flex flex-col items-center text-center">
-				<img
+				<nuxt-img
 					v-show="step === 0"
-					:src="require(`@/assets/images/onboarding/slide1.webp`)"
+					loading="lazy"
+					src="/images/onboarding/slide1.webp"
 					class="mb-10 w-4/6 rounded-lg shadow-lg"
 				/>
-				<img
+				<nuxt-img
 					v-show="step === 1"
-					:src="require(`@/assets/images/onboarding/slide2.webp`)"
+					loading="lazy"
+					src="/images/onboarding/slide2.webp"
 					class="mb-10 w-4/6 rounded-lg shadow-lg"
 				/>
-				<img
+				<nuxt-img
 					v-show="step === 2"
-					:src="require(`@/assets/images/onboarding/slide3.webp`)"
+					loading="lazy"
+					src="/images/onboarding/slide3.webp"
 					class="mb-10 w-4/6 rounded-lg shadow-lg"
 				/>
-				<img
+				<nuxt-img
 					v-show="step === 3"
-					:src="require(`@/assets/images/onboarding/slide4.webp`)"
+					loading="lazy"
+					src="/images/onboarding/slide4.webp"
 					class="mb-10 w-4/6 rounded-lg shadow-lg"
 				/>
-				<img
+				<nuxt-img
 					v-show="step === 4"
-					:src="require(`@/assets/images/onboarding/slide5.webp`)"
+					loading="lazy"
+					src="/images/onboarding/slide5.webp"
 					class="mb-10 w-4/6 rounded-lg shadow-lg"
 				/>
 				<h6 class="mb-5 text-xl font-bold dark:text-darkPrimaryText">{{ getTitle() }}</h6>
