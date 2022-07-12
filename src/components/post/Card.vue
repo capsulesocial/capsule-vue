@@ -11,7 +11,7 @@
 				>
 					<div class="shadow-sm bg-lightBG dark:bg-darkBGStop sticky top-0 z-40 px-4 py-4 lg:px-6 lg:py-5">
 						<!-- Show Quote Repost input -->
-						<div v-if="showRepostEditor" class="flex items-start flex-row pb-4">
+						<div v-if="showRepostEditor" class="flex items-start flex-row lg:pb-4">
 							<Avatar :authorID="$store.state.session.id" :avatar="myAvatar" class="flex-shrink-0" />
 							<textarea
 								ref="repostText"
@@ -320,7 +320,7 @@
 							class="text-gray5 dark:text-gray3 -mt-2 mb-3 flex w-full items-center pt-2"
 						>
 							<RepostIcon :shrink="true" />
-							<p class="text-gray5 dark:text-gray3 hidden pl-2 text-sm lg:block">
+							<p class="text-gray5 dark:text-gray3 pl-2 text-sm">
 								<nuxt-link
 									v-if="repostedBy === this.$store.state.session.id"
 									:to="`/id/` + this.$store.state.session.id"
