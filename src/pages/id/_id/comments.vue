@@ -12,7 +12,12 @@
 				:text="`Comment on a post`"
 				:action="toggleHomeFeed"
 			/>
-			<nuxt-img src="/images/post.webp" loading="lazy" class="top-0 mt-52 xl:-mt-2" />
+			<nuxt-img
+				v-if="this.$store.state.session.id === this.$route.params.id"
+				src="/images/post.webp"
+				loading="lazy"
+				class="top-0 hidden lg:block"
+			/>
 		</article>
 		<article v-for="comment in comments" :key="comment._id">
 			<div class="pb-5">
@@ -27,7 +32,9 @@
 		<article v-show="isLoading" class="modal-animation flex justify-center">
 			<div class="loader m-10"></div>
 		</article>
-		<div v-if="noMoreComments" class="text-gray5 dark:text-gray3 text-sm text-center pb-5">End of comments</div>
+		<div v-if="noMoreComments && comments.length !== 0" class="text-gray5 dark:text-gray3 text-sm text-center pb-5">
+			End of comments
+		</div>
 	</section>
 </template>
 
