@@ -303,7 +303,7 @@ export default Vue.extend({
 			window.open(sanitizeUrl(`https://reddit.com/submit?url=${this.generatedDirectLink}&title=${this.title}`))
 		},
 		mailShare() {
-			window.open(sanitizeUrl(`mailto:?subject=${this.title}%0D%0A%0D%0A${this.generatedDirectLink}`))
+			window.open(sanitizeUrl(`mailto:?${encodeURI(`subject=${this.title}&body=${this.generatedDirectLink}`)}`))
 		},
 	},
 })
