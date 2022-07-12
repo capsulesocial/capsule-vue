@@ -93,7 +93,7 @@
 							/>
 						</div>
 						<nuxt-img
-							src="/image/error.webp"
+							src="/images/error.webp"
 							alt="error image"
 							loading="lazy"
 							class="mt-10 self-center"
