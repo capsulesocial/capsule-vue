@@ -12,7 +12,12 @@
 				:text="`Write a post`"
 				:action="togglePostEditor"
 			/>
-			<nuxt-img src="/images/post.webp" loading="lazy" class="top-0 mt-52 xl:-mt-2" />
+			<nuxt-img
+				v-if="this.$store.state.session.id === this.$route.params.id"
+				src="/images/post.webp"
+				loading="lazy"
+				class="top-0 hidden lg:block"
+			/>
 		</article>
 		<article v-for="p in posts" :key="p.post._id">
 			<PostCard
