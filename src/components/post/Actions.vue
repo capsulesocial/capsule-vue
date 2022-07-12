@@ -251,37 +251,35 @@
 								<textarea
 									v-if="comments.length > 0"
 									v-model="comment"
-									class="focus:outline-none placeholder-gray5 dark:placeholder-gray3 dark:text-darkPrimaryText mr-6 h-40 w-full resize-none overflow-y-auto py-4 pl-2 pr-10 lg:pr-16 leading-normal bg-transparent"
+									class="focus:outline-none placeholder-gray5 dark:placeholder-gray3 dark:text-darkPrimaryText h-40 w-full resize-none overflow-y-auto mr-2 py-4 pl-2 leading-normal bg-transparent"
 									name="body"
 									placeholder="What's your response?"
 								/>
 								<textarea
 									v-else
 									v-model="comment"
-									class="focus:outline-none placeholder-gray5 dark:placeholder-gray3 dark:text-darkPrimaryText mr-6 h-40 w-full resize-none overflow-y-auto py-4 pl-2 pr-10 lg:pr-16 leading-normal bg-transparent"
+									class="focus:outline-none placeholder-gray5 dark:placeholder-gray3 dark:text-darkPrimaryText h-40 w-full resize-none overflow-y-auto mr-2 py-4 pl-2 leading-normal bg-transparent"
 									name="body"
 									placeholder="Be the first one to comment on this post..."
 								/>
-								<div class="relative">
-									<span class="absolute bottom-0 right-0 flex flex-col">
-										<button
-											class="bg-primary focus:outline-none block rounded-lg lg:hidden"
-											style="margin-right: 15.2px; margin-bottom: 15px"
-											:class="comment !== '' && activeEmotion.label !== '' ? '' : 'opacity-50'"
-											@click="sendComment"
-										>
-											<SendIcon class="m-2 mb-3 ml-3 h-5 w-5 text-white transform rotate-45" />
-										</button>
-										<BrandedButton
-											style="margin-right: 15.2px; margin-bottom: 15px"
-											text="Post"
-											class="hidden lg:block"
-											:action="sendComment"
-											:thin="true"
-											:class="comment !== '' && activeEmotion.label !== '' ? '' : 'opacity-50'"
-										/>
-									</span>
-								</div>
+								<span class="flex flex-col justify-end relative">
+									<button
+										class="bg-primary focus:outline-none block rounded-lg lg:hidden"
+										style="margin-right: 15.2px; margin-bottom: 12px"
+										:class="comment !== '' && activeEmotion.label !== '' ? '' : 'opacity-50'"
+										@click="sendComment"
+									>
+										<SendIcon class="m-2 mb-3 ml-3 h-5 w-5 text-white transform rotate-45" />
+									</button>
+									<BrandedButton
+										style="margin-right: 15.2px; margin-bottom: 12px"
+										text="Post"
+										class="hidden lg:block"
+										:action="sendComment"
+										:thin="true"
+										:class="comment !== '' && activeEmotion.label !== '' ? '' : 'opacity-50'"
+									/>
+								</span>
 							</div>
 							<!-- Back side: Choose reaction -->
 							<div
