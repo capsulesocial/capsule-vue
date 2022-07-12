@@ -144,7 +144,10 @@
 							</div>
 						</div>
 						<!-- Private sensitive content -->
-						<div v-else-if="showPaywall && !hasFeaturedPhoto" class="h-10 lg:h-60"></div>
+						<div
+							v-else-if="showPaywall && (!hasFeaturedPhoto || (hasFeaturedPhoto && !featuredPhoto))"
+							class="h-64"
+						></div>
 						<!-- Post paywall -->
 						<article
 							v-if="showPaywall"
