@@ -190,7 +190,6 @@
 				:mutualProfiles="mutualProfiles"
 				:toggleFriend="toggleFriend"
 				:userIsFollowed="userIsFollowed"
-				:class="bottomPadding ? `pb-64 mb-64` : ``"
 			/>
 		</div>
 		<!-- Settings popup -->
@@ -238,7 +237,6 @@ interface IData {
 	scrollingDown: boolean
 	longBio: boolean
 	expandBio: boolean
-	bottomPadding: boolean
 	fromExternalSite: boolean
 	activeSubscription: boolean
 }
@@ -325,7 +323,6 @@ export default Vue.extend({
 			scrollingDown: false,
 			longBio: false,
 			expandBio: false,
-			bottomPadding: false,
 			fromExternalSite: false,
 			activeSubscription: false,
 		}
@@ -356,7 +353,7 @@ export default Vue.extend({
 				// Updates post count
 				window.addEventListener(`click`, this.handleClose, false)
 				this.fetchProfile()
-				// this.initHeader()
+				this.initHeader()
 			}
 		},
 		visitProfile() {
@@ -518,10 +515,12 @@ export default Vue.extend({
 			if (currentScroll + body.clientHeight + 1 >= body.scrollHeight) {
 				if (body.scrollHeight === body.clientHeight && currentScroll === 0) {
 					this.openHeader(true)
-					this.bottomPadding = true
+					const container = document.getElementById(`scrollContainer`)
+					if (container) {
+						container.removeEventListener(`scroll`, this.handleScrollHeader)
+					}
 					return
 				}
-				this.bottomPadding = false
 				return
 			}
 
