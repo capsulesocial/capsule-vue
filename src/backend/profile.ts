@@ -58,6 +58,7 @@ export async function sendProfileServer(
 			cid,
 			data,
 			sig: uint8ArrayToHexString(sig),
+			type: `profile`,
 		})
 		if (response.data.success) {
 			return { success: true, cid: response.data.cid }
