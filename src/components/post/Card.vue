@@ -30,7 +30,7 @@
 							</button>
 						</div>
 						<!-- Wrapper for rounded outline on quote repost -->
-						<div :class="showRepostEditor || quote ? `lg:bg-lightBorder lg:dark:bg-darkInput rounded-lg lg:p-4` : ``">
+						<div :class="showRepostEditor ? `lg:bg-lightBorder lg:dark:bg-darkInput rounded-lg lg:p-4` : ``">
 							<!-- Simple repost -->
 							<div
 								v-if="repostedBy !== `` && !hideRepostIcon && quote === null"
@@ -224,8 +224,18 @@
 					:class="showProfileCard || showQuoteCard ? `z-20` : `z-10`"
 				>
 					<!-- Quote repost -->
+					<div v-if="this.repost && this.repost.type === `quote` && quote === null" class="flex flex-col mb-3.5">
+						<div class="flex items-center">
+							<div class="w-12 h-12 bg-gray1 dark:bg-gray7 animate-pulse rounded-lg"></div>
+							<div class="flex flex-col w-1/2 ml-4">
+								<div class="h-3 w-3/5 rounded-xl bg-gray1 dark:bg-gray7 animate-pulse mb-2"></div>
+								<div class="h-3 w-2/5 rounded-xl bg-gray1 dark:bg-gray7 animate-pulse"></div>
+							</div>
+						</div>
+						<div class="mt-5 h-3 w-full rounded-xl bg-gray1 dark:bg-gray7 animate-pulse"></div>
+					</div>
 					<div v-if="quote">
-						<div class="flex w-full justify-between">
+						<div class="flex w-full justify-between modal-animation">
 							<div class="flex flex-row">
 								<div @mouseover="triggerQuoteCardTrue" @mouseleave="triggerQuoteCardFalse">
 									<Avatar
@@ -313,10 +323,15 @@
 						<p class="my-2 break-words dark:text-darkPrimaryText">{{ quote.content }}</p>
 					</div>
 					<!-- Wrapper for rounded outline on quote repost -->
-					<div v-if="!isDeleted" :class="quote ? `bg-lightBorder xl:dark:bg-darkInput rounded-lg p-4` : ``">
+					<div
+						v-if="!isDeleted"
+						:class="
+							this.repost && this.repost.type === `quote` ? `bg-lightBorder xl:dark:bg-darkInput rounded-lg p-4` : ``
+						"
+					>
 						<!-- Simple repost -->
 						<div
-							v-if="repostedBy !== `` && !hideRepostIcon && quote === null"
+							v-if="repostedBy !== `` && !hideRepostIcon && this.repost.type !== `quote` && quote === null"
 							class="text-gray5 dark:text-gray3 -mt-2 mb-3 flex w-full items-center pt-2"
 						>
 							<RepostIcon :shrink="true" />
@@ -334,10 +349,12 @@
 						<div class="flex w-full justify-between">
 							<div class="flex flex-row">
 								<div @mouseover="triggerProfileCardTrue" @mouseleave="triggerProfileCardFalse">
+									<div v-if="avatarIsLoading" class="w-12 h-12 bg-gray1 dark:bg-gray7 animate-pulse rounded-lg"></div>
 									<Avatar
+										v-else
 										:avatar="avatar"
 										:authorID="post.authorID"
-										size="w-12 h-12 transition ease-in-out hover:opacity-75"
+										size="w-12 h-12 transition ease-in-out hover:opacity-75 modal-animation"
 									/>
 								</div>
 								<div class="ml-4 flex flex-grow flex-col">
@@ -468,7 +485,7 @@
 								v-if="featuredPhotoLoading"
 								class="w-full xl:w-56 h-48 xl:h-32 bg-gray1 dark:bg-gray7 flex-shrink-0 animate-pulse rounded-lg mt-4 xl:mt-0"
 							></div>
-							<div v-if="featuredPhoto !== ``" class="mt-4 w-full flex-shrink-0 xl:mt-0 xl:w-56">
+							<div v-if="featuredPhoto !== ``" class="mt-4 w-full flex-shrink-0 xl:mt-0 xl:w-56 modal-animation">
 								<nuxt-link :to="'/post/' + postCID">
 									<img :src="featuredPhoto" class="h-48 w-full flex-shrink-0 rounded-lg object-cover xl:h-32" />
 								</nuxt-link>
@@ -593,6 +610,7 @@ interface IData {
 	featuredPhotoLoading: boolean
 	replyInputHeight: number
 	showReposters: boolean
+	avatarIsLoading: boolean
 }
 
 export default Vue.extend({
@@ -706,6 +724,7 @@ export default Vue.extend({
 			featuredPhotoLoading: false,
 			replyInputHeight: 64,
 			showReposters: false,
+			avatarIsLoading: true,
 		}
 	},
 	async created() {
@@ -756,6 +775,7 @@ export default Vue.extend({
 				this.avatar = p
 			})
 		}
+		this.avatarIsLoading = false
 		this.authorBio = profile.bio
 
 		// Get bookmark status
