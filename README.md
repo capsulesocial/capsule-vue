@@ -15,7 +15,7 @@ Capsule-Vue is the Front-End powering Capsule Social's platform interface.
 ### .env Setup
 
 ```bash
-CONTRACT_NAME=dev-1635323648697-81373157539648
+CONTRACT_NAME=dev-1657702549987-47675900699610
 DOMAIN=http://localhost:3000
 
 # ORBIT_URL=https://test-node.capsule.social/orbit
