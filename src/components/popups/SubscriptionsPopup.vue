@@ -318,7 +318,7 @@
 							<FriendButton :toggleFriend="toggleFriend" :userIsFollowed="userIsFollowed" />
 						</div>
 					</div>
-					<nuxt-img
+					<img
 						:src="
 							$colorMode.dark
 								? require(`@/assets/images/brand/dark/subscriptions.webp`)
