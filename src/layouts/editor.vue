@@ -59,7 +59,7 @@
 		<DraftsPopup v-if="showDrafts" @close="closeDraftsPopup" />
 		<ConfirmPopup v-if="showConfirm" @close="showConfirmPopup" @post="sendPost" />
 		<TierAccessPopup v-if="showTiers" @close="toggleShowTiers" />
-		<PreviewPopup v-if="showPreview" @close="togglePreview" />
+		<PreviewPopup v-if="showPreview" :previewContent="previewContent" @close="togglePreview" />
 	</main>
 </template>
 
@@ -87,6 +87,7 @@ interface IData {
 	bgImage: IBackground
 	showTiers: boolean
 	showPreview: boolean
+	previewContent: string | null
 }
 
 export default Vue.extend({
@@ -113,6 +114,7 @@ export default Vue.extend({
 			avatar: undefined,
 			showTiers: false,
 			showPreview: false,
+			previewContent: null,
 		}
 	},
 	head() {
@@ -188,6 +190,7 @@ export default Vue.extend({
 			this.showTiers = !this.showTiers
 		},
 		togglePreview() {
+			this.previewContent = this.$refs.editor.getInputHTML()
 			this.showPreview = !this.showPreview
 		},
 	},

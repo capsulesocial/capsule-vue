@@ -76,8 +76,8 @@
 						<!-- Content -->
 						<article class="mt-5">
 							<div class="text-lightPrimaryText dark:text-darkSecondaryText editable content max-w-none break-words">
-								<PostView
-									:content="post.content"
+								<PostPreview
+									:content="previewContent"
 									:postImages="post.postImages"
 									:encrypted="false"
 									:postImageKeys="post.postImages"
@@ -101,7 +101,7 @@ import Vue from 'vue'
 import PreviewIcon from '@/components/icons/Preview.vue'
 import XIcon from '@/components/icons/X.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
-import PostView from '@/components/PostView.vue'
+import PostPreview from '@/components/PostPreview.vue'
 import TagCard from '@/components/Tag.vue'
 
 import { Post } from '@/backend/post'
@@ -114,7 +114,13 @@ interface IData {
 }
 
 export default Vue.extend({
-	components: { PreviewIcon, XIcon, BrandedButton, PostView, TagCard },
+	components: { PreviewIcon, XIcon, BrandedButton, PostPreview, TagCard },
+	props: {
+		previewContent: {
+			type: String,
+			required: true,
+		},
+	},
 	data(): IData {
 		const p = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex]
 		return {
