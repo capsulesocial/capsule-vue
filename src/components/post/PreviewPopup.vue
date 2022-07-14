@@ -34,8 +34,62 @@
 							</div>
 						</div>
 					</header>
-
-					{{ post }}
+					<section class="mb-5 p-5 lg:p-0 pb-16 pt-2 md:pb-5">
+						<!-- Title, subtitle, category -->
+						<h6 class="text-primary capitalize my-5">{{ post.category.replace(`-`, ` `) }}</h6>
+						<article>
+							<h1
+								class="text-lightPrimaryText dark:text-darkPrimaryText text-h1 mb-3 break-words font-serif font-semibold"
+							>
+								{{ post.title }}
+							</h1>
+							<h2
+								v-if="post.subtitle"
+								class="text-lightSecondaryText dark:text-gray3 text-h2 mb-3 break-words font-serif font-medium"
+							>
+								{{ post.subtitle }}
+							</h2>
+						</article>
+						<!-- Featured photo & caption -->
+						<article
+							v-if="post.featuredPhoto !== null"
+							class="relative mb-5 mt-5 flex cursor-pointer flex-col justify-end"
+						>
+							<div
+								v-if="post && post.featuredPhotoCaption && captionHeight !== undefined"
+								class="absolute w-full rounded-b-lg"
+								:class="
+									captionHeight > 72 ? `h-48` : captionHeight > 52 ? `h-40` : captionHeight > 32 ? `h-32` : `h-24`
+								"
+								style="background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.8) 100%)"
+							></div>
+							<img :src="featuredPhoto" class="w-full rounded-lg object-cover shadow-lg" />
+							<p
+								v-if="post && post.featuredPhotoCaption"
+								id="photoCaption"
+								class="text-lightOnPrimaryText absolute px-4 pb-3 text-sm drop-shadow-lg"
+								style="text-shadow: 0 0 10px #000"
+							>
+								{{ post.featuredPhotoCaption }}
+							</p>
+						</article>
+						<!-- Content -->
+						<article class="mt-5">
+							<div class="text-lightPrimaryText dark:text-darkSecondaryText editable content max-w-none break-words">
+								<PostView
+									:content="post.content"
+									:postImages="post.postImages"
+									:encrypted="false"
+									:postImageKeys="post.postImages"
+								/>
+							</div>
+						</article>
+						<!-- Tags -->
+						<article class="mt-5 text-lg">
+							<TagCard v-for="t in post.tags" :key="t.name" class="mr-2 mb-2" :tag="t.name" />
+						</article>
+					</section>
+					<!-- {{ post }} -->
 				</div>
 			</div>
 		</section>
@@ -47,20 +101,230 @@ import Vue from 'vue'
 import PreviewIcon from '@/components/icons/Preview.vue'
 import XIcon from '@/components/icons/X.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
+import PostView from '@/components/PostView.vue'
+import TagCard from '@/components/Tag.vue'
+
 import { Post } from '@/backend/post'
+import { getPhotoFromIPFS } from '@/backend/getPhoto'
 
 interface IData {
 	post: Post
+	featuredPhoto: null | string
+	captionHeight?: number
 }
 
 export default Vue.extend({
-	components: { PreviewIcon, XIcon, BrandedButton },
+	components: { PreviewIcon, XIcon, BrandedButton, PostView, TagCard },
 	data(): IData {
 		const p = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex]
 		return {
 			post: p,
+			featuredPhoto: null,
+			captionHeight: 0,
 		}
+	},
+	created() {
+		if (this.post.featuredPhotoCID) {
+			getPhotoFromIPFS(this.post.featuredPhotoCID).then((p) => {
+				this.featuredPhoto = p
+			})
+		}
+	},
+	mounted() {
+		// Get caption height
+		const caption = document.getElementById(`photoCaption`)
+		this.captionHeight = caption?.offsetHeight
 	},
 	methods: {},
 })
 </script>
+
+<style>
+hr.style-two {
+	border: 0;
+	height: 1px;
+	background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+}
+hr.style-one {
+	border: 0;
+	height: 1px;
+	background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(255, 255, 255, 0.75), rgba(0, 0, 0, 0));
+}
+.content {
+	text-align: justify;
+	text-justify: inter-word;
+}
+.trigger-menu-wrapper {
+	transition: all 0.4s;
+	z-index: 50;
+}
+.page-header {
+	transition: all 0.3s ease-in-out;
+}
+.trigger-menu-wrapper {
+	transition: all 0.4s;
+}
+.scroll-down {
+	opacity: 0;
+	transform: translate3d(0, -20%, 0);
+}
+.scroll-up {
+	opacity: 1;
+	transform: none;
+}
+ol {
+	margin-left: 0;
+}
+ol ol {
+	margin-left: 8em;
+}
+ol li {
+	list-style-type: none;
+	counter-reset: list-1 list-2 list-3 list-4 list-5 list-6 list-7 list-8 list-9;
+	counter-increment: list-0;
+}
+ol li::before {
+	content: counter(list-0, decimal) '. ';
+}
+ol li.ql-indent-1 {
+	counter-increment: list-1;
+}
+ol li.ql-indent-1::before {
+	content: counter(list-1, lower-alpha) '. ';
+}
+ol li.ql-indent-1 {
+	counter-reset: list-2 list-3 list-4 list-5 list-6 list-7 list-8 list-9;
+}
+ol li.ql-indent-2 {
+	counter-increment: list-2;
+}
+ol li.ql-indent-2::before {
+	content: counter(list-2, lower-roman) '. ';
+}
+ol li.ql-indent-2 {
+	counter-reset: list-3 list-4 list-5 list-6 list-7 list-8 list-9;
+}
+ol li.ql-indent-3 {
+	counter-increment: list-3;
+}
+ol li.ql-indent-3::before {
+	content: counter(list-3, decimal) '. ';
+}
+ol li.ql-indent-3 {
+	counter-reset: list-4 list-5 list-6 list-7 list-8 list-9;
+}
+ol li.ql-indent-4 {
+	counter-increment: list-4;
+}
+ol li.ql-indent-4::before {
+	content: counter(list-4, lower-alpha) '. ';
+}
+ol li.ql-indent-4 {
+	counter-reset: list-5 list-6 list-7 list-8 list-9;
+}
+ol li.ql-indent-5 {
+	counter-increment: list-5;
+}
+ol li.ql-indent-5::before {
+	content: counter(list-5, lower-roman) '. ';
+}
+ol li.ql-indent-5 {
+	counter-reset: list-6 list-7 list-8 list-9;
+}
+ol li.ql-indent-6 {
+	counter-increment: list-6;
+}
+ol li.ql-indent-6::before {
+	content: counter(list-6, decimal) '. ';
+}
+ol li.ql-indent-6 {
+	counter-reset: list-7 list-8 list-9;
+}
+ol li.ql-indent-7 {
+	counter-increment: list-7;
+}
+ol li.ql-indent-7::before {
+	content: counter(list-7, lower-alpha) '. ';
+}
+ol li.ql-indent-7 {
+	counter-reset: list-8 list-9;
+}
+ol li.ql-indent-8 {
+	counter-increment: list-8;
+}
+ol li.ql-indent-8::before {
+	content: counter(list-8, lower-roman) '. ';
+}
+ol li.ql-indent-8 {
+	counter-reset: list-9;
+}
+ol li.ql-indent-9 {
+	counter-increment: list-9;
+}
+ol li.ql-indent-9::before {
+	content: counter(list-9, decimal) '. ';
+}
+.ql-indent-1 {
+	padding-left: 2em;
+}
+li.ql-indent-1 {
+	padding-left: 2em;
+	list-style-position: inside;
+}
+.ql-indent-2 {
+	padding-left: 4em;
+}
+li.ql-indent-2 {
+	padding-left: 4em;
+	list-style-position: inside;
+}
+.ql-indent-3 {
+	padding-left: 6em;
+}
+li.ql-indent-3 {
+	padding-left: 6em;
+	list-style-position: inside;
+}
+.ql-indent-4 {
+	padding-left: 8em;
+}
+li.ql-indent-4 {
+	padding-left: 8em;
+	list-style-position: inside;
+}
+.ql-indent-5 {
+	padding-left: 10em;
+}
+li.ql-indent-5 {
+	padding-left: 10em;
+	list-style-position: inside;
+}
+.ql-indent-6 {
+	padding-left: 12em;
+}
+li.ql-indent-6 {
+	padding-left: 12em;
+	list-style-position: inside;
+}
+.ql-indent-7 {
+	padding-left: 14em;
+}
+li.ql-indent-7 {
+	padding-left: 14em;
+	list-style-position: inside;
+}
+.ql-indent-8 {
+	padding-left: 16em;
+}
+li.ql-indent-8 {
+	padding-left: 16em;
+	list-style-position: inside;
+}
+.ql-indent-9 {
+	padding-left: 18em;
+}
+li.ql-indent-9 {
+	padding-left: 18em;
+	list-style-position: inside;
+}
+</style>

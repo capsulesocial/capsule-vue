@@ -188,7 +188,6 @@ export default Vue.extend({
 			this.showTiers = !this.showTiers
 		},
 		togglePreview() {
-			console.log(`togglePreview`)
 			this.showPreview = !this.showPreview
 		},
 	},
