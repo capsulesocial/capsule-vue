@@ -149,6 +149,7 @@
 					</h5>
 					<h5 class="text-gray5 dark:text-gray3 text-sm">Auto-save on close.</h5>
 				</div>
+				<button @click="$emit(`togglePreview`)"><PreviewIcon /></button>
 				<button
 					class="focus:outline-none bg-primary text-lightButtonText transform rounded-lg px-12 py-2 font-bold shadow-lg transition duration-500 ease-in-out hover:scale-105"
 					@click="confirmPost"
@@ -166,6 +167,7 @@ import XIcon from '@/components/icons/X.vue'
 import UploadIcon from '@/components/icons/Upload.vue'
 import ChevronUp from '@/components/icons/ChevronUp.vue'
 import ChevronDown from '@/components/icons/ChevronDown.vue'
+import PreviewIcon from '@/components/icons/Preview.vue'
 import PremiumSwitchEditor from '@/components/PremiumSwitchEditor.vue'
 
 import { preUploadPhoto, uploadPhoto } from '@/backend/photos'
@@ -191,6 +193,7 @@ export default Vue.extend({
 		ChevronUp,
 		ChevronDown,
 		PremiumSwitchEditor,
+		PreviewIcon,
 	},
 	props: {
 		wordCount: {
