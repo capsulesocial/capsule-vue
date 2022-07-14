@@ -9,12 +9,8 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import type { PropType } from 'vue'
 import DOMPurify from 'dompurify'
-import { marked } from 'marked'
-import { markedRenderer } from '../pages/post/readerExtensions'
 import ImagePopup from '@/components/popups/Image.vue'
-import { IPostImageKey } from '@/backend/post'
 
 const ALLOWED_TAGS = [
 	`pre`,
@@ -54,17 +50,6 @@ export default Vue.extend({
 			type: String,
 			required: true,
 		},
-		postImages: {
-			type: Array as PropType<string[] | undefined>,
-			default: () => [],
-		},
-		encrypted: { type: Boolean as PropType<boolean | undefined>, default: () => false },
-		postImageKeys: {
-			type: Array as PropType<Array<IPostImageKey>>,
-			default() {
-				return []
-			},
-		},
 	},
 	data(): IData {
 		return {
@@ -75,17 +60,14 @@ export default Vue.extend({
 	},
 	computed: {
 		htmlContent() {
-			const html = marked.parse(this.content)
-			const sanitizedHtml = DOMPurify.sanitize(html, {
+			const sanitizedHtml = DOMPurify.sanitize(this.content, {
 				ALLOWED_TAGS,
 				ALLOWED_ATTR,
 			})
 			return sanitizedHtml
-			// return transformPostToHTML(sanitizedHtml, this.postImages)
 		},
 	},
 	created() {
-		marked.use({ renderer: markedRenderer })
 		DOMPurify.addHook(`afterSanitizeAttributes`, (node: Element) => {
 			// set all elements owning target and all links to target=_blank
 			if (node.getAttribute(`target`) || node.tagName === `A`) {
