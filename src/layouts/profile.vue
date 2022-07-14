@@ -92,10 +92,9 @@
 								:text="`Back to Home`"
 							/>
 						</div>
-						<nuxt-img
-							src="/images/error.webp"
+						<img
+							:src="require(`@/assets/images/brand/error.webp`)"
 							alt="error image"
-							loading="lazy"
 							class="mt-10 self-center"
 							style="width: 500px"
 						/>

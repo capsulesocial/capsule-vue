@@ -12,12 +12,7 @@
 				:text="`Comment on a post`"
 				:action="toggleHomeFeed"
 			/>
-			<nuxt-img
-				v-if="this.$store.state.session.id === this.$route.params.id"
-				src="/images/post.webp"
-				loading="lazy"
-				class="top-0 hidden lg:block"
-			/>
+			<img :src="require(`@/assets/images/brand/post.webp`)" class="top-0 mt-52 xl:-mt-2" />
 		</article>
 		<article v-for="comment in comments" :key="comment._id">
 			<div class="pb-5">

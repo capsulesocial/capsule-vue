@@ -28,7 +28,7 @@
 			</a>
 		</div>
 		<section>
-			<nuxt-img src="/images/help-page.webp" alt="Image of help icons" loading="lazy" class="w-full" />
+			<img src="~/assets/images/brand/help-page.webp" alt="Image of help icons" class="w-full" />
 		</section>
 	</article>
 </template>

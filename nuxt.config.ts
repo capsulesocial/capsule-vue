@@ -129,7 +129,7 @@ const config: NuxtConfig = {
 	},
 
 	// Modules: https://go.nuxtjs.dev/config-modules
-	modules: [[`@nuxtjs/dotenv`, { path: `./` }], `portal-vue/nuxt`, `@nuxtjs/robots`, `@nuxt/image`],
+	modules: [[`@nuxtjs/dotenv`, { path: `./` }], `portal-vue/nuxt`, `@nuxtjs/robots`],
 	robots: [
 		{
 			UserAgent: `*`,
@@ -144,9 +144,6 @@ const config: NuxtConfig = {
 			Disallow: `/subscriptions`,
 		},
 	],
-
-	// Nuxt image configuration
-	image: {},
 
 	// Build Configuration: https://go.nuxtjs.dev/config-build
 	build: {

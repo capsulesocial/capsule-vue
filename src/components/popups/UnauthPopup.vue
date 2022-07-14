@@ -14,7 +14,7 @@
 				</button>
 			</div>
 			<article class="flex flex-col items-center text-center">
-				<nuxt-img loading="lazy" src="/images/protect-content.webp" class="mb-5 w-10/12" />
+				<img :src="require(`@/assets/images/brand/protect-content.webp`)" class="mb-5 w-10/12" />
 				<h6 class="mb-5 text-xl font-bold text-lightPrimaryText dark:text-darkPrimaryText">
 					You need an account to do that
 				</h6>

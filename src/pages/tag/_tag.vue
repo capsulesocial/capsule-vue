@@ -17,7 +17,7 @@
 					It seems there are no posts under this topic yet
 				</p>
 				<SecondaryButton :text="`Back home`" :action="toggleHomeFeed" />
-				<nuxt-img src="/images/tag.webp" loading="lazy" class="top-0 mt-64 xl:mt-10" />
+				<img :src="require(`@/assets/images/brand/tag.webp`)" class="top-0 mt-64 xl:mt-10" />
 			</article>
 			<article v-for="p in posts" :key="p.post._id">
 				<PostCard

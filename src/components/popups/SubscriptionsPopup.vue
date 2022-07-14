@@ -319,8 +319,11 @@
 						</div>
 					</div>
 					<nuxt-img
-						loading="lazy"
-						:src="$colorMode.dark ? `/images/dark/subscriptions.webp` : `/images/light/subscriptions.webp`"
+						:src="
+							$colorMode.dark
+								? require(`@/assets/images/brand/dark/subscriptions.webp`)
+								: require(`@/assets/images/brand/light/subscriptions.webp`)
+						"
 						class="h-auto rounded-lg"
 					/>
 				</article>

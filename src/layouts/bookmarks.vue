@@ -67,8 +67,8 @@
 								<img
 									:src="
 										$colorMode.dark
-											? `/images/category/` + c + `/dark/icon.webp`
-											: `/images/category/` + c + `/light/icon.webp`
+											? require(`@/assets/images/category/` + c + `/dark/icon.webp`)
+											: require(`@/assets/images/category/` + c + `/light/icon.webp`)
 									"
 									class="hotzone mr-1 h-8 w-8"
 								/>
