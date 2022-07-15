@@ -57,10 +57,7 @@
 							</h2>
 						</article>
 						<!-- Featured photo & caption -->
-						<article
-							v-if="post.featuredPhoto !== null"
-							class="relative mb-5 mt-5 flex cursor-pointer flex-col justify-end"
-						>
+						<article v-if="post.featuredPhoto !== null" class="relative mb-5 mt-5 flex flex-col justify-end">
 							<div
 								v-if="post && post.featuredPhotoCaption && captionHeight !== undefined"
 								class="absolute w-full rounded-b-lg"
