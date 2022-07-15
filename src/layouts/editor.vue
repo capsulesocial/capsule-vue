@@ -195,8 +195,11 @@ export default Vue.extend({
 			this.showTiers = !this.showTiers
 		},
 		togglePreview() {
-			this.previewContent = this.$refs.editor.getInputHTML()
-			this.showPreview = !this.showPreview
+			const validPost = this.$refs.editor.checkPost(true)
+			if (validPost) {
+				this.previewContent = this.$refs.editor.getInputHTML()
+				this.showPreview = !this.showPreview
+			}
 		},
 		checkPostPreview() {
 			this.showPreview = false
