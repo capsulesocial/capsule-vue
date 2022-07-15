@@ -118,13 +118,15 @@
 				:bookmarksCount="p.bookmarksCount"
 				:repostCount="p.repostCount"
 				:isDeleted="p.deleted"
-				@updateBookmarks="updateBookmarks"
-				@click.native="
-					$store.commit(`settings/setLastActivePost`, {
-						newLastActivePost: p.post._id,
-						offset: calculateOffset(posts.indexOf(p)),
-					})
+				:redirectEvent="
+					() => {
+						$store.commit(`settings/setLastActivePost`, {
+							newLastActivePost: p.post._id,
+							offset: calculateOffset(posts.indexOf(p)),
+						})
+					}
 				"
+				@updateBookmarks="updateBookmarks"
 			/>
 			<p v-if="noMorePosts" class="text-gray5 dark:text-gray3 py-5 text-center text-sm">No more posts</p>
 			<!-- Not loaded yet -->
