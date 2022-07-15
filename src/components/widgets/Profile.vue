@@ -17,9 +17,14 @@
 			</div>
 			<div v-if="website !== `` && location !== ``" class="mb-2"></div>
 			<div v-if="website !== ``" class="flex flex-row items-center dark:text-primary">
-				<LinkIcon class="text-primary mr-3 h-4 w-4" /><button @click="redirectWebsite">
+				<LinkIcon class="text-primary mr-3 h-4 w-4" /><a
+					class="cursor-pointer"
+					target="_blank"
+					rel="noopener noreferrer"
+					@click="redirectWebsite"
+				>
 					{{ website }}
-				</button>
+				</a>
 			</div>
 			<div v-if="email !== `` && (location !== `` || website !== ``)" class="mb-2"></div>
 			<div v-if="email !== ``" class="flex flex-row items-center dark:text-darkPrimaryText">
