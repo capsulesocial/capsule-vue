@@ -40,7 +40,7 @@
 							</div>
 						</div>
 					</header>
-					<section class="mb-5 p-5 pb-16 pt-2 md:pb-5">
+					<section class="mb-5 px-5 lg:px-0 pb-16 pt-2 md:pb-5">
 						<!-- Title, subtitle, category -->
 						<h6 class="text-primary capitalize my-5">{{ post.category.replace(`-`, ` `) }}</h6>
 						<article>
@@ -82,7 +82,12 @@
 						<!-- Content -->
 						<article class="mt-5">
 							<div class="text-lightPrimaryText dark:text-darkSecondaryText editable content max-w-none break-words">
-								<PostPreview :content="previewContent" />
+								<PostPreview
+									:content="previewContent"
+									:postImages="post.postImages"
+									:encrypted="false"
+									:postImageKeys="post.postImages"
+								/>
 							</div>
 						</article>
 						<!-- Tags -->
