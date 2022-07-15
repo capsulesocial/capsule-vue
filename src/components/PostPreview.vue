@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import DOMPurify from 'dompurify'
+import { afterSanitizeAttrsHook, sanitizeHtml } from '@/plugins/helpers'
 
 const ALLOWED_TAGS = [
 	`pre`,
@@ -40,21 +40,11 @@ export default Vue.extend({
 	},
 	computed: {
 		htmlContent() {
-			const sanitizedHtml = DOMPurify.sanitize(this.content, {
-				ALLOWED_TAGS,
-				ALLOWED_ATTR,
-			})
-			return sanitizedHtml
+			return sanitizeHtml(this.content, ALLOWED_TAGS, ALLOWED_ATTR)
 		},
 	},
 	created() {
-		DOMPurify.addHook(`afterSanitizeAttributes`, (node: Element) => {
-			// set all elements owning target and all links to target=_blank
-			if (node.getAttribute(`target`) || node.tagName === `A`) {
-				node.setAttribute(`target`, `_blank`)
-				node.setAttribute(`rel`, `noopener noreferrer`)
-			}
-		})
+		afterSanitizeAttrsHook()
 	},
 })
 </script>

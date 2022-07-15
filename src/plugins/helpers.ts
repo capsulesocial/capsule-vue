@@ -1,3 +1,4 @@
+import DOMPurify from 'dompurify'
 import { AxiosError } from 'axios'
 import type { Plugin } from '@nuxt/types'
 import { getBlobExtension } from '@/backend/utilities/helpers'
@@ -22,6 +23,19 @@ declare module 'vue/types/vue' {
 }
 
 const MONTH_NAMES = [`Jan`, `Feb`, `Mar`, `Apr`, `May`, `Jun`, `Jul`, `Aug`, `Sep`, `Oct`, `Nov`, `Dec`]
+
+export const sanitizeHtml = (content: string, ALLOWED_TAGS: string[], ALLOWED_ATTR: string[]) => {
+	return DOMPurify.sanitize(content, { ALLOWED_TAGS, ALLOWED_ATTR })
+}
+
+export const afterSanitizeAttrsHook = () => {
+	DOMPurify.addHook(`afterSanitizeAttributes`, (node) => {
+		if (node.getAttribute(`target`) || node.tagName === `A`) {
+			node.setAttribute(`target`, `_blank`)
+			node.setAttribute(`rel`, `noopener noreferrer`)
+		}
+	})
+}
 
 const getFormat: dateString = (date, hideYear = false, preformattedDate = null, onlyDate = false) => {
 	const day = date.getDate()
