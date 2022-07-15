@@ -82,12 +82,7 @@
 						<!-- Content -->
 						<article class="mt-5">
 							<div class="text-lightPrimaryText dark:text-darkSecondaryText editable content max-w-none break-words">
-								<PostPreview
-									:content="previewContent"
-									:postImages="post.postImages"
-									:encrypted="false"
-									:postImageKeys="post.postImages"
-								/>
+								<PostPreview :content="previewContent" />
 							</div>
 						</article>
 						<!-- Tags -->
