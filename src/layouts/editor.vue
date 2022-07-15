@@ -59,7 +59,12 @@
 		<DraftsPopup v-if="showDrafts" @close="closeDraftsPopup" />
 		<ConfirmPopup v-if="showConfirm" @close="showConfirmPopup" @post="sendPost" />
 		<TierAccessPopup v-if="showTiers" @close="toggleShowTiers" />
-		<PreviewPopup v-if="showPreview" :previewContent="previewContent" @close="togglePreview" />
+		<PreviewPopup
+			v-if="showPreview"
+			:previewContent="previewContent"
+			@close="togglePreview"
+			@confirm="checkPostPreview"
+		/>
 	</main>
 </template>
 
@@ -192,6 +197,10 @@ export default Vue.extend({
 		togglePreview() {
 			this.previewContent = this.$refs.editor.getInputHTML()
 			this.showPreview = !this.showPreview
+		},
+		checkPostPreview() {
+			this.showPreview = false
+			this.checkPost()
 		},
 	},
 })

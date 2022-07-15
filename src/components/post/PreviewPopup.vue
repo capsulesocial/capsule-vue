@@ -6,10 +6,11 @@
 		<!-- Container -->
 		<section class="popup w-full lg:w-11/12 xl:w-10/12 max-w-1220" style="margin-top: 88px">
 			<div
-				class="w-full max-h-90 h-full bg-lightBG dark:bg-darkBGStop card-animation z-10 overflow-y-auto rounded-lg shadow-lg flex justify-center"
+				id="post"
+				class="w-full h-full bg-lightBG dark:bg-darkBGStop card-animation z-10 overflow-y-auto rounded-t-lg shadow-lg flex justify-center"
 			>
 				<!-- Inner post area -->
-				<div class="w-full lg:w-760 lg:max-w-760">
+				<div class="w-full lg:w-760 lg:max-w-760 h-fit">
 					<!-- Magic header that disappears on scroll down -->
 					<header
 						id="header"
@@ -19,11 +20,16 @@
 							<div class="flex w-full justify-between xl:min-w-max xl:max-w-3xl">
 								<!-- Eyecon and preview mode text -->
 								<div class="flex items-center">
-									<PreviewIcon />
+									<PreviewIcon class="text-gray5 dark:text-gray3" />
 									<h6 class="text-xs lg:text-sm text-gray5 dark:text-gray3 ml-4">Preview Mode</h6>
 								</div>
 								<span class="flex items-center">
-									<BrandedButton :text="`Ready to publish?`" />
+									<button
+										class="focus:outline-none bg-primary text-lightButtonText transform rounded-lg px-8 py-2 font-bold shadow-lg transition duration-500 ease-in-out hover:scale-105"
+										@click="$emit(`confirm`)"
+									>
+										Ready to publish?
+									</button>
 									<button
 										class="bg-gray1 dark:bg-gray5 focus:outline-none rounded-full p-1 ml-4"
 										@click="$emit(`close`)"
@@ -34,7 +40,7 @@
 							</div>
 						</div>
 					</header>
-					<section class="mb-5 p-5 lg:p-0 pb-16 pt-2 md:pb-5">
+					<section class="mb-5 p-5 pb-16 pt-2 md:pb-5">
 						<!-- Title, subtitle, category -->
 						<h6 class="text-primary capitalize my-5">{{ post.category.replace(`-`, ` `) }}</h6>
 						<article>
@@ -88,6 +94,24 @@
 						<article class="mt-5 text-lg">
 							<TagCard v-for="t in post.tags" :key="t.name" class="mr-2 mb-2" :tag="t.name" />
 						</article>
+						<!-- Ready to post footer -->
+						<article class="my-5 border-t border-b py-5 dark:border-gray7">
+							<div class="flex w-full justify-between xl:min-w-max xl:max-w-3xl">
+								<!-- Eyecon and preview mode text -->
+								<div class="flex items-center">
+									<PreviewIcon class="text-gray5 dark:text-gray3" />
+									<h6 class="text-xs lg:text-sm text-gray5 dark:text-gray3 ml-4">Preview Mode</h6>
+								</div>
+								<span class="flex items-center">
+									<button
+										class="focus:outline-none bg-primary text-lightButtonText transform rounded-lg px-8 py-2 font-bold shadow-lg transition duration-500 ease-in-out hover:scale-105"
+										@click="$emit(`confirm`)"
+									>
+										Ready to publish?
+									</button>
+								</span>
+							</div>
+						</article>
 					</section>
 					<!-- {{ post }} -->
 				</div>
@@ -100,7 +124,6 @@
 import Vue from 'vue'
 import PreviewIcon from '@/components/icons/Preview.vue'
 import XIcon from '@/components/icons/X.vue'
-import BrandedButton from '@/components/BrandedButton.vue'
 import PostPreview from '@/components/PostPreview.vue'
 import TagCard from '@/components/Tag.vue'
 
@@ -111,10 +134,11 @@ interface IData {
 	post: Post
 	featuredPhoto: null | string
 	captionHeight?: number
+	lastScroll: number
 }
 
 export default Vue.extend({
-	components: { PreviewIcon, XIcon, BrandedButton, PostPreview, TagCard },
+	components: { PreviewIcon, XIcon, PostPreview, TagCard },
 	props: {
 		previewContent: {
 			type: String,
@@ -127,6 +151,7 @@ export default Vue.extend({
 			post: p,
 			featuredPhoto: null,
 			captionHeight: 0,
+			lastScroll: 0,
 		}
 	},
 	created() {
@@ -140,8 +165,40 @@ export default Vue.extend({
 		// Get caption height
 		const caption = document.getElementById(`photoCaption`)
 		this.captionHeight = caption?.offsetHeight
+		const container = document.getElementById(`post`)
+		if (container) {
+			container.addEventListener(`scroll`, this.handleScroll)
+		}
 	},
-	methods: {},
+	methods: {
+		handleScroll() {
+			const body = document.getElementById(`post`)
+			const header = document.getElementById(`header`)
+			const scrollUp = `scroll-up`
+			const scrollDown = `scroll-down`
+			if (!body) {
+				return
+			}
+			const currentScroll = body.scrollTop
+			if (!header) {
+				return
+			}
+			if (body.scrollTop <= 0) {
+				header.classList.remove(scrollUp)
+				return
+			}
+			if (currentScroll > this.lastScroll && !header.classList.contains(scrollDown)) {
+				// down
+				header.classList.remove(scrollUp)
+				header.classList.add(scrollDown)
+			} else if (currentScroll < this.lastScroll && header.classList.contains(scrollDown)) {
+				// up
+				header.classList.remove(scrollDown)
+				header.classList.add(scrollUp)
+			}
+			this.lastScroll = currentScroll
+		},
+	},
 })
 </script>
 
