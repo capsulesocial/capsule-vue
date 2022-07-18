@@ -105,22 +105,18 @@ export default Vue.extend({
 					this.isLoading = false
 					throw new ValidationError(idValidity.error)
 				}
-				console.log(`success!`)
 				const res = await hcaptcha.execute(undefined, { async: true })
 				if (!res) {
 					throw new Error(`Issue on captcha`)
 				}
-				console.log(res.response, this.accountId)
 				await requestOnboard(res.response, this.accountId)
 				const { balance } = await waitForFunds(this.accountId)
 				this.$emit(`setIsOnboarded`, true)
 				this.$emit(`updateFunds`, balance)
 				this.$emit(`verify`, this.id)
 			} catch (error) {
-				console.log(error)
 				this.$handleError(error)
 			} finally {
-				console.log(`test`)
 				this.isLoading = false
 			}
 		},
