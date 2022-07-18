@@ -3,12 +3,11 @@
 		class="bg-darkBG dark:bg-gray5 modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
 	>
 		<div
-			class="popup min-h-40 w-full lg:w-600 from-lightBGStart to-lightBGStop dark:from-darkBGStart dark:to-darkBGStop card-animation max-h-90 z-10 overflow-y-auto rounded-lg bg-gradient-to-r px-6 pt-4 pb-6 shadow-lg"
-			style="backdrop-filter: blur(10px)"
+			class="popup w-full lg:w-600 bg-lightBG dark:bg-darkBGStop card-animation max-h-90 z-10 overflow-y-auto rounded-lg px-6 pt-4 pb-6 shadow-lg"
 		>
 			<!-- Header and close icon -->
 			<div class="flex items-center justify-between pb-4">
-				<h4 class="text-xl font-semibold dark:text-darkPrimaryText">Configure newsletter</h4>
+				<h4 class="text-xl font-semibold dark:text-darkPrimaryText">Create newsletter</h4>
 				<button
 					class="focus:outline-none bg-gray1 dark:bg-gray5 rounded-full p-1"
 					@click="$emit(`toggleNewsletterPopup`)"
@@ -68,14 +67,14 @@
 				<div class="flex mb-6 items-center">
 					<Avatar :avatar="avatar" :authorID="profile.id" :noClick="true" :size="`w-12 h-12`" />
 					<p v-if="profile.name !== ``" class="text-lightPrimaryText dark:text-darkPrimaryText ml-4 w-10/12">
-						Create your personalised email newsletter from {{ profile.name }}'s posts and manage it here:
+						Create a new email newsletter from {{ profile.name }}'s posts and manage its destination here:
 					</p>
 					<p v-else class="text-lightPrimaryText dark:text-darkPrimaryText ml-4 w-10/12">
-						Create your personalised email newsletter from @{{ profile.id }}'s posts and manage it here:
+						Create a new email newsletter from @{{ profile.id }}'s posts and manage its destination here:
 					</p>
 				</div>
 				<!-- Topics -->
-				<div class="flex flex-row justify-between mb-3 mt-8">
+				<!-- <div class="flex flex-row justify-between mb-3 mt-8">
 					<label for="tagInput" class="font-semibold mr-20 text-lightPrimaryText dark:text-darkPrimaryText"
 						>Topics</label
 					>
@@ -97,9 +96,9 @@
 							</div>
 						</div>
 					</div>
-				</div>
+				</div> -->
 				<!-- frequency -->
-				<div class="flex flex-row mb-3 mt-8">
+				<!-- <div class="flex flex-row mb-3 mt-8">
 					<label for="tagInput" class="font-semibold mr-11 mt-4 text-lightPrimaryText dark:text-darkPrimaryText"
 						>Frequency</label
 					>
@@ -118,7 +117,7 @@
 							</button>
 						</div>
 					</div>
-				</div>
+				</div> -->
 				<!-- email Destination -->
 				<div class="flex flex-row justify-between mb-3 mt-10">
 					<label for="tagInput" class="font-semibold mr-9 text-lightPrimaryText dark:text-darkPrimaryText"
@@ -127,13 +126,29 @@
 					<div class="flex flex-col w-full">
 						<div class="col-span-4 flex flex-col">
 							<!-- For each active email -->
-							<div v-if="$store.state.session.email" class="flex flex-row items-center">
-								<label class="checkboxcontainer">
-									<input type="checkbox" checked="checked" />
-									<span class="checkmark"></span>
-								</label>
+							<button
+								v-if="$store.state.session.email"
+								class="flex flex-row items-center"
+								@click="selectedEmail = $store.state.session.email"
+							>
+								<CheckCircleIcon
+									:isChecked="selectedEmail === $store.state.session.email"
+									class="text-primary w-5 h-5 mr-2 flex items-center transition duration-500 ease-in-out"
+								/>
 								<p class="ml-2 text-lightPrimaryText dark:text-darkPrimaryText">{{ $store.state.session.email }}</p>
-							</div>
+							</button>
+							<button
+								v-for="email in userEmails"
+								:key="email.id"
+								class="flex flex-row items-center mt-2"
+								@click="selectedEmail = email.address"
+							>
+								<CheckCircleIcon
+									:isChecked="selectedEmail === email.address"
+									class="text-primary w-5 h-5 mr-2 flex items-center transition duration-500 ease-in-out"
+								/>
+								<p class="ml-2 text-lightPrimaryText dark:text-darkPrimaryText">{{ email.address }}</p>
+							</button>
 							<button
 								class="flex items-center text-primary text-sm focus:outline-none mt-3"
 								@click="toggleAddEmailPopup"
@@ -147,7 +162,7 @@
 				<!-- Submit or manage email newsletter -->
 				<div class="flex justify-end items-center mt-10">
 					<nuxt-link to="/settings/notifications" class="text-sm text-primary mr-6 flex flex-row items-center"
-						>Manage all my newsletter</nuxt-link
+						>Manage all my newsletters</nuxt-link
 					>
 					<!-- If no email or no topics selected, button must be opacity-50 and deactivated -->
 					<button
@@ -157,7 +172,7 @@
 						:disabled="false"
 						@click="createNewsletter"
 					>
-						<span class="font-sans" style="font-size: 0.95rem"> Save </span>
+						<span class="font-sans" style="font-size: 0.95rem"> Create </span>
 					</button>
 				</div>
 			</div>
@@ -170,13 +185,15 @@ import Vue from 'vue'
 import type { PropType } from 'vue'
 import CloseIcon from '@/components/icons/X.vue'
 import Avatar from '@/components/Avatar.vue'
-import BasicSwitch from '@/components/BasicSwitch.vue'
+// import BasicSwitch from '@/components/BasicSwitch.vue'
 import CheckCircleIcon from '@/components/icons/CheckCircle.vue'
 import PlusIcon from '@/components/icons/Plus.vue'
 import { Profile } from '@/backend/profile'
 
 interface IData {
 	allPosts: boolean
+	selectedEmail: string
+	userEmails: Array<Object>
 }
 
 export default Vue.extend({
@@ -184,7 +201,7 @@ export default Vue.extend({
 		CloseIcon,
 		Avatar,
 		PlusIcon,
-		BasicSwitch,
+		// BasicSwitch,
 		CheckCircleIcon,
 	},
 	props: {
@@ -200,11 +217,21 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			allPosts: true,
+			selectedEmail: this.$store.state.session.email ? this.$store.state.session.email : ``,
+			userEmails: [
+				{
+					Id: 1,
+					address: `jack@gmail.com`,
+				},
+			],
 		}
 	},
 	created() {},
 	mounted() {
 		window.addEventListener(`click`, this.handleClose, false)
+	},
+	destroyed() {
+		window.removeEventListener(`click`, this.handleClose, false)
 	},
 	methods: {
 		handleClose(e: any): void {
@@ -218,87 +245,20 @@ export default Vue.extend({
 		closePopup() {
 			this.$emit(`toggleNewsletterPopup`)
 		},
-		toggleAllPosts() {
-			this.allPosts = !this.allPosts
-		},
+		// toggleAllPosts() {
+		// 	this.allPosts = !this.allPosts
+		// },
 		toggleAddEmailPopup() {},
-		selectTag(tag: any) {
-			return tag
-		},
-		selectPeriod(period: any) {
-			return period
-		},
-		saveNewsletterTags() {},
+		// selectTag(tag: any) {
+		// 	return tag
+		// },
+		// selectPeriod(period: any) {
+		// 	return period
+		// },
+		// saveNewsletterTags() {},
 		createNewsletter() {
 			this.closePopup()
 		},
 	},
 })
 </script>
-<style scoped>
-/* The container */
-.checkboxcontainer {
-	display: block;
-	position: relative;
-	padding-left: 30px;
-	height: 80%;
-	cursor: pointer;
-	font-size: 22px;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-}
-/* Hide the browser's default checkbox */
-.checkboxcontainer input {
-	position: absolute;
-	opacity: 0;
-	cursor: pointer;
-	height: 0;
-	width: 0;
-}
-/* Create a custom checkbox */
-.checkmark {
-	position: absolute;
-	top: 0;
-	left: 0;
-	height: 20px;
-	width: 20px;
-	background-color: #dddddd;
-	border-radius: 5px;
-	-webkit-transition: 0.4s;
-	transition: 0.4s;
-}
-/* On mouse-over, add a grey background color */
-.checkboxcontainer:hover input ~ .checkmark {
-	background-color: #bbbbbb;
-}
-/* When the checkbox is checked, add a blue background */
-.checkboxcontainer input:checked ~ .checkmark {
-	background-color: #121212;
-	border-radius: 5px;
-}
-/* Create the checkmark/indicator (hidden when not checked) */
-.checkmark:after {
-	content: '';
-	position: absolute;
-	display: none;
-}
-/* Show the checkmark when checked */
-.checkboxcontainer input:checked ~ .checkmark:after {
-	display: block;
-}
-/* Style the checkmark/indicator */
-.checkboxcontainer .checkmark:after {
-	left: 9px;
-	top: -1px;
-	width: 7px;
-	height: 17px;
-	border: solid white;
-	border-width: 0 2px 2px 0;
-	-webkit-transform: rotate(45deg);
-	-ms-transform: rotate(45deg);
-	transform: rotate(45deg);
-}
-</style>
-</style>

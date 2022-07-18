@@ -111,7 +111,7 @@ import { IBackground, backgrounds } from '@/config/backgrounds'
 import ProfileIcon from '@/components/icons/Profile.vue'
 import BellIcon from '@/components/icons/Bell.vue'
 import BrushlIcon from '@/components/icons/Brush.vue'
-import ConfigureNewsletterPopup from '@/components/popups/ConfigureNewsletter.vue'
+import ConfigureNewsletterPopup from '@/components/popups/ConfigureNewsletterPopup.vue'
 
 interface IData {
 	profile: Profile | null
