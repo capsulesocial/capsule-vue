@@ -11,7 +11,6 @@
 			<!-- Step 3: Choose ID -->
 			<SelectID
 				:funds="funds"
-				:userInfo="userInfo"
 				:onboarded="onboarded"
 				:accountId="userInfo.accountId"
 				class="w-full h-full xl:w-1/2"

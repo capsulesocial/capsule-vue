@@ -26,7 +26,7 @@
 		<h6 v-show="isLoading" class="text-primary text-center">Checking ID...</h6>
 		<div v-show="!hasEnoughFunds()">
 			<p class="justify-between p-5 font-sans text-sm text-gray7 dark:text-gray3">
-				Ensure that the NEAR account with ID: "{{ userInfo.accountId }}" has sufficient funds before signing up.
+				Ensure that the NEAR account with ID: "{{ accountId }}" has sufficient funds before signing up.
 			</p>
 			<p class="justify-between p-5 font-sans text-sm text-gray7 dark:text-gray3">Available funds: {{ funds }} yN</p>
 			<BrandedButton :text="`Re-check funds`" class="w-full" :action="() => $emit(`checkFunds`)" />
@@ -63,10 +63,6 @@ export default Vue.extend({
 		},
 		funds: {
 			type: String,
-			required: true,
-		},
-		userInfo: {
-			type: Object as PropType<IWalletStatus>,
 			required: true,
 		},
 		accountId: {
