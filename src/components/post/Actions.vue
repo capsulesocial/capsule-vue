@@ -33,21 +33,13 @@
 						</div>
 					</div>
 				</div>
-				<div class="flex flex-col">
+				<div v-if="repostsCount > 0" class="flex flex-col">
 					<!-- Show reposters and quotes -->
-					<button v-if="profiles.length > 0" class="text-sm text-primary w-1/5 h-fit" @click="openReposters">
-						See reposters
-					</button>
-					<button v-else class="text-sm text-primary w-1/5 h-fit cursor-default" disabled style="opacity: 0">
-						See reposters
-					</button>
-					<!-- Show reposters and quotes -->
-					<button v-if="profiles.length > 0" class="text-sm text-primary w-1/5 h-fit" @click="$emit(`openQuotes`)">
-						See quotes
-					</button>
-					<button v-else class="text-sm text-primary w-1/5 h-fit cursor-default" disabled style="opacity: 0">
-						See quotes
-					</button>
+					<button class="text-sm text-primary w-1/5 h-fit" @click="openReposters">See reposters</button>
+					<button class="text-sm text-primary w-1/5 h-fit" @click="$emit(`openQuotes`)">See quotes</button>
+				</div>
+				<div v-else class="flex flex-grow">
+					<!-- Filler -->
 				</div>
 			</div>
 			<!-- Comments Activity -->
@@ -442,7 +434,6 @@ import {
 	getCommentsStats,
 	ICommentsStats,
 } from '@/backend/comment'
-import { getReposters, IGetRepostsOptions } from '@/backend/reposts'
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 import { getFollowersAndFollowing } from '@/backend/following'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
@@ -466,7 +457,6 @@ interface IData {
 	showDropdown: boolean
 	toggleStats: boolean
 	toggleReposters: boolean
-	reposters: Array<string>
 	quoteReposts: Array<any>
 	profiles: Array<Profile>
 	followers: Set<string>
@@ -533,7 +523,6 @@ export default Vue.extend({
 			showDropdown: false,
 			toggleStats: this.openStats,
 			toggleReposters: false,
-			reposters: [],
 			quoteReposts: [],
 			profiles: [],
 			followers: new Set(),
@@ -558,7 +547,6 @@ export default Vue.extend({
 	},
 	created() {
 		this.initComments()
-		this.initReposters()
 		this.isLoading = false
 	},
 	mounted() {
@@ -740,18 +728,11 @@ export default Vue.extend({
 			return new Promise((resolve) => setTimeout(resolve, ms))
 		},
 		openReposters() {
-			// this.toggleStats = false
-			// this.toggleReposters = true
 			this.$emit(`reposters`)
 		},
 		closeReposters() {
 			this.toggleStats = true
 			this.toggleReposters = false
-		},
-		async initReposters() {
-			const options: IGetRepostsOptions = { sort: `NEW`, offset: 0, limit: 1000 }
-			this.reposters = await getReposters(this.postCID, options)
-			this.reposters.forEach(this.getFollowers)
 		},
 		async getFollowers(p: string) {
 			let profile = createDefaultProfile(p)

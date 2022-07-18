@@ -1,6 +1,7 @@
 <template>
 	<div
 		class="bg-darkBG dark:bg-gray5 modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
+		@click.self="$emit(`close`)"
 	>
 		<!-- Container -->
 		<div
@@ -20,8 +21,20 @@
 				></div>
 			</div>
 			<article v-show="!isLoading">
-				<div v-for="p in profiles" :key="p.id">
-					<ProfilePreview :profile="p" class="pb-4" @updateFollowers="updateFollowers" />
+				<div v-for="p in quoteReposts" :key="p.authorID + p.timestamp" class="flex items-center">
+					<Avatar :avatar="p.avatar" :authorID="p.authorID" size="w-12 h-12" />
+					<div class="h-12 flex-grow px-4">
+						<nuxt-link :to="`/id/` + p.authorID" class="flex flex-col">
+							<span v-if="p.name != ``" class="text-base font-medium dark:text-darkPrimaryText">
+								{{ p.name }}
+							</span>
+							<span v-else class="text-gray5 dark:text-gray3 text-base font-medium"> {{ p.authorID }} </span>
+							<span class="text-gray5 dark:text-gray3 text-sm">@{{ p.authorID }}</span>
+						</nuxt-link>
+					</div>
+					<div>
+						{{ p.content }}
+					</div>
 				</div>
 			</article>
 		</div>
@@ -30,11 +43,13 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import ProfilePreview from '@/components/ProfilePreview.vue'
 import CloseIcon from '@/components/icons/X.vue'
-import { getReposters, getReposts, IGetRepostsOptions } from '@/backend/reposts'
+import Avatar from '@/components/Avatar.vue'
+import { getReposts, IGetRepostsOptions } from '@/backend/reposts'
+import { getRegularPost } from '@/backend/post'
 
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
+import { getPhotoFromIPFS } from '@/backend/getPhoto'
 
 interface IData {
 	isLoading: boolean
@@ -45,7 +60,7 @@ interface IData {
 }
 
 export default Vue.extend({
-	components: { ProfilePreview, CloseIcon },
+	components: { CloseIcon, Avatar },
 	props: {
 		postCID: {
 			type: String,
@@ -61,53 +76,47 @@ export default Vue.extend({
 			followers: new Set(),
 		}
 	},
-	mounted() {
-		this.initReposters()
+	created() {
 		this.getQuoteReposts()
-		window.addEventListener(`click`, this.handleCloseClick, true)
-	},
-	destroyed() {
-		window.removeEventListener(`click`, this.handleCloseClick, true)
 	},
 	methods: {
 		updateFollowers(): void {
 			this.$emit(`updateFollowers`)
 		},
-		handleCloseClick(e: any): void {
-			if (!e.target || e.target.parentNode === null || e.target.parentNode.classList === undefined) {
-				return
-			}
-			if (!e.target.firstChild?.classList) {
-				return
-			}
-			if (e.target.firstChild.classList.length < 1) {
-				return
-			}
-			if (e.target.firstChild.classList[0] === `popup`) {
-				this.closeDraftsPopup()
-			}
-		},
-		closeDraftsPopup(): void {
-			this.$emit(`close`)
-		},
-		async getFollowers(p: string) {
+
+		async getReposterProfile(p: string) {
 			let profile = createDefaultProfile(p)
-			const fetchedProfile = await getProfile(p)
-			if (fetchedProfile.profile) {
-				profile = fetchedProfile.profile
-			}
-			this.profiles.push(profile)
-		},
-		async initReposters() {
-			const options: IGetRepostsOptions = { sort: `NEW`, offset: 0, limit: 1000, type: `quote` }
-			this.quoteReposters = await getReposters(this.postCID, options)
-			this.quoteReposters.forEach(this.getFollowers)
-			this.isLoading = false
+			await getProfile(p).then((fetchedProfile) => {
+				if (fetchedProfile.profile) {
+					profile = fetchedProfile.profile
+				}
+				if (profile.avatar !== ``) {
+					getPhotoFromIPFS(profile.avatar).then((avatar) => {
+						profile.avatar = avatar
+					})
+				}
+			})
+			return profile
 		},
 		async getQuoteReposts() {
 			const options: IGetRepostsOptions = { sort: `NEW`, offset: 0, limit: 1000, type: `quote` }
-			this.quoteReposts = await getReposts({ postCID: this.postCID }, options)
-			console.log(`quote reposts>>>`, this.quoteReposts)
+			const reposts = await getReposts({ postCID: this.postCID }, options)
+			reposts.forEach((repost) => {
+				this.fetchQuote(repost.repost._id, repost.repost.authorID)
+			})
+			this.isLoading = false
+		},
+		async fetchQuote(cid: string, authorID: string) {
+			const { data: content } = await getRegularPost(cid)
+			const profile = await this.getReposterProfile(authorID)
+			const q = {
+				content: content.content,
+				timestamp: content.timestamp,
+				authorID: content.authorID,
+				name: profile.name,
+				avatar: profile.avatar,
+			}
+			this.quoteReposts.push(q)
 		},
 	},
 })
