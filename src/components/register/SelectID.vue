@@ -15,7 +15,7 @@
 		<button
 			v-show="!isLoading"
 			id="hcaptcha"
-			data-sitekey="eb37fbb9-2e3e-48b2-8ef6-995d3d93348d"
+			:data-sitekey="siteKey"
 			data-size="invisible"
 			style="padding: 0.6rem 1.7rem"
 			class="h-captcha w-full bg-primary text-lightButtonText focus:outline-none transform rounded-lg font-bold transition duration-500 ease-in-out hover:shadow-lg"
@@ -44,10 +44,12 @@ import { ValidationError } from '@/errors'
 import { IWalletStatus } from '@/backend/auth'
 import { hasSufficientFunds, requestOnboard, waitForFunds } from '@/backend/funder'
 import { validateUsernameNEAR } from '@/backend/near'
+import { hcaptchaSiteKey } from '@/backend/utilities/config'
 
 interface IData {
 	id: string
 	isLoading: boolean
+	siteKey: string
 }
 
 export default Vue.extend({
@@ -76,6 +78,7 @@ export default Vue.extend({
 		return {
 			id: ``,
 			isLoading: false,
+			siteKey: hcaptchaSiteKey,
 		}
 	},
 	head() {
@@ -107,6 +110,7 @@ export default Vue.extend({
 				if (!res) {
 					throw new Error(`Issue on captcha`)
 				}
+				console.log(res.response, this.accountId)
 				await requestOnboard(res.response, this.accountId)
 				const { balance } = await waitForFunds(this.accountId)
 				this.$emit(`setIsOnboarded`, true)
