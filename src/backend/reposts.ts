@@ -45,27 +45,33 @@ export interface IGetRepostsOptions {
 	offset?: number
 	limit?: number
 	following?: string
+	type?: `simple` | `quote`
 }
 
 export async function getReposts(
-	filter: { authorID: string; postCID?: string },
+	filter: { authorID?: string; postCID?: string },
 	options: IGetRepostsOptions,
 ): Promise<IRepostResponse[]> {
-	const { sort, offset = 0, limit = 10, following } = options
+	const { sort, offset = 0, limit = 10, following, type } = options
+
+	const params: Record<string, any> = {
+		...filter,
+		sort,
+		...(following && sort === `FOLLOWING` ? { following } : {}),
+		following,
+		offset,
+		limit,
+	}
+
+	if (type) {
+		params.type = type
+	}
+
 	if (sort === `FOLLOWING` && !following) {
 		throw new Error(`Following not specified`)
 	}
 
-	const { data } = await axios.get(`${nodeUrl()}/repost`, {
-		params: {
-			...filter,
-			sort,
-			...(following && sort === `FOLLOWING` ? { following } : {}),
-			following,
-			offset,
-			limit,
-		},
-	})
+	const { data } = await axios.get(`${nodeUrl()}/repost`, { params })
 
 	return data.data
 }
