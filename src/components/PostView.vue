@@ -16,30 +16,10 @@ import ImagePopup from '@/components/popups/Image.vue'
 import { decryptData } from '@/backend/crypto'
 import { IPostImageKey } from '@/backend/post'
 import { isValidPhoto, getPhotoFromIPFS } from '@/backend/getPhoto'
-import { afterSanitizeAttrsHook, sanitizeHtml } from '@/plugins/helpers'
+import { afterSanitizeAttrsHook, BASE_ALLOWED_ATTRS, BASE_ALLOWED_TAGS, sanitizeHtml } from '@/plugins/helpers'
 
-const ALLOWED_TAGS = [
-	`pre`,
-	`ipfsimage`,
-	`p`,
-	`code`,
-	`ol`,
-	`li`,
-	`strong`,
-	`em`,
-	`u`,
-	`del`,
-	`blockquote`,
-	`h1`,
-	`h2`,
-	`h3`,
-	`h4`,
-	`h5`,
-	`a`,
-	`span`,
-]
-
-const ALLOWED_ATTR = [`cid`, `alt`, `class`, `id`, `href`]
+const ALLOWED_TAGS = [...BASE_ALLOWED_TAGS, `ipfsimage`]
+const ALLOWED_ATTR = [...BASE_ALLOWED_ATTRS, `cid`, `alt`]
 
 interface IData {
 	clickedImage: null | string

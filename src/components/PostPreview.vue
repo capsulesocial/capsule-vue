@@ -6,30 +6,10 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { afterSanitizeAttrsHook, sanitizeHtml } from '@/plugins/helpers'
+import { afterSanitizeAttrsHook, BASE_ALLOWED_ATTRS, BASE_ALLOWED_TAGS, sanitizeHtml } from '@/plugins/helpers'
 
-const ALLOWED_TAGS = [
-	`pre`,
-	`img`,
-	`p`,
-	`code`,
-	`ol`,
-	`li`,
-	`strong`,
-	`em`,
-	`u`,
-	`del`,
-	`blockquote`,
-	`h1`,
-	`h2`,
-	`h3`,
-	`h4`,
-	`h5`,
-	`a`,
-	`span`,
-]
-
-const ALLOWED_ATTR = [`class`, `id`, `href`, `src`]
+const ALLOWED_TAGS = [...BASE_ALLOWED_TAGS, `img`]
+const ALLOWED_ATTR = [...BASE_ALLOWED_ATTRS, `src`]
 
 export default Vue.extend({
 	props: {
