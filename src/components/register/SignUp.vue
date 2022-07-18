@@ -1,20 +1,23 @@
 <template>
 	<div class="flex flex-row w-full items-center justify-center">
 		<article v-if="!downloadKey" class="flex flex-row w-full items-center justify-center">
-			<VerifyPhone
-				v-if="!hasEnoughFunds() || !onboarded"
+			<!-- v-if="!hasEnoughFunds() || !onboarded" -->
+			<!-- <VerifyPhone
 				:accountId="userInfo.accountId"
 				class="w-full h-full xl:w-1/2"
 				@updateFunds="updateFunds"
 				@setIsOnboarded="setIsOnboarded"
-			/>
+			/> -->
 			<!-- Step 3: Choose ID -->
 			<SelectID
-				v-else
 				:funds="funds"
 				:userInfo="userInfo"
+				:onboarded="onboarded"
+				:accountId="userInfo.accountId"
 				class="w-full h-full xl:w-1/2"
 				@checkFunds="checkFunds"
+				@updateFunds="updateFunds"
+				@setIsOnboarded="setIsOnboarded"
 				@verify="verify"
 			/>
 		</article>
@@ -33,7 +36,6 @@ import Vue from 'vue'
 import type { PropType } from 'vue'
 import { mapMutations } from 'vuex'
 
-import VerifyPhone from './VerifyPhone.vue'
 import SelectID from './SelectID.vue'
 import DownloadKey from './DownloadKey.vue'
 
@@ -60,7 +62,6 @@ interface IData {
 
 export default Vue.extend({
 	components: {
-		VerifyPhone,
 		DownloadKey,
 		SelectID,
 	},

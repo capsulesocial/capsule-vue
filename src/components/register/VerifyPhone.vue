@@ -4,33 +4,12 @@
 		<!-- Enter phone number -->
 		<div v-show="!otpSent">
 			<p class="text-gray7 dark:text-gray3 my-10 text-center">
-				Verify you’re a human with your phone number so that Blogchain can fund your wallet.
+				Verify you’re a human so that Blogchain can fund your wallet.
 			</p>
-			<label for="phoneNumber" class="text-gray5 dark:text-gray3 block pb-1 text-sm font-semibold">Phone Number</label>
-			<input
-				id="phoneNumber"
-				v-model="phoneNumber"
-				type="tel"
-				class="focus:outline-none focus:border-primary text-primary dark:text-darkPrimaryText bg-gray2 dark:bg-gray7 mt-1 mb-5 w-full rounded-lg px-3 py-2 font-sans text-sm"
-			/>
-			<div class="flex w-full justify-end mt-4">
-				<BrandedButton :text="otpSent ? `Re-send code` : `Send Code`" :action="sendOTP" />
-			</div>
-			<h6 v-show="isLoading" class="text-primary text-center">Sending SMS...</h6>
+			<BrandedButton class="h-captcha" :action="captchaTrigger" data-sitekey="eb37fbb9-2e3e-48b2-8ef6-995d3d93348d" />
 		</div>
 		<!-- Enter SMS code to complete verify -->
 		<div v-show="otpSent" class="mt-10">
-			<label for="otp" class="text-gray5 dark:text-gray3 block pb-1 text-sm font-semibold"
-				>Enter the one-time verification code sent to your phone number.</label
-			>
-			<input
-				id="otp"
-				v-model="otp"
-				type="text"
-				placeholder=""
-				class="focus:outline-none focus:border-primary text-primary dark:text-darkPrimaryText bg-gray2 dark:bg-gray7 mt-1 mb-5 w-full rounded-lg px-3 py-2 font-sans text-sm"
-			/>
-			<BrandedButton v-show="!isLoading && !waitingForFunds" :text="`Verify`" class="w-full" :action="validateOTP" />
 			<h6 v-show="isLoading" class="text-primary text-center">Verifying...</h6>
 			<h6 v-show="waitingForFunds" class="text-primary text-center">Executing smart contract...</h6>
 		</div>
@@ -45,17 +24,12 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import intlTelInput from 'intl-tel-input'
 import { AxiosError } from 'axios'
-
-import BrandedButton from '@/components/BrandedButton.vue'
 import { requestOTP, requestOnboard, waitForFunds } from '@/backend/funder'
-
+import BrandedButton from '@/components/BrandedButton.vue'
 interface IData {
 	otp: string
 	otpSent: boolean
-	iti: null | intlTelInput.Plugin
-	phoneNumber: string
 	inputCode: string
 	isLoading: boolean
 	waitingForFunds: boolean
@@ -75,34 +49,24 @@ export default Vue.extend({
 		return {
 			otp: ``,
 			otpSent: false,
-			iti: null,
-			phoneNumber: ``,
 			inputCode: ``,
 			isLoading: false,
 			waitingForFunds: false,
 		}
 	},
-	mounted() {
-		const input = document.querySelector(`#phoneNumber`)
-		if (input) {
-			this.iti = intlTelInput(input, {
-				utilsScript: require(`intl-tel-input/build/js/utils`),
-				// any initialisation options go here
-			})
-		}
-	},
 	methods: {
+		async captchaTrigger() {
+			try {
+				console.log(`success!`)
+				const res = await hcaptcha.execute(undefined, { async: true })
+				console.log(res)
+			} catch (err: any) {
+				console.log(err)
+			}
+		},
 		async sendOTP() {
-			if (this.iti === null) {
-				return
-			}
-			this.phoneNumber = this.iti.getNumber()
-			if (!this.iti.isValidNumber()) {
-				this.$toastError(`Invalid phone number`)
-				return
-			}
 			this.isLoading = true
-			await requestOTP(this.phoneNumber)
+			await requestOTP(`test`)
 			this.otpSent = true
 			this.$toastSuccess(
 				`If you haven't used this phone number before on Blogchain, you'll receive a code on your phone`,
@@ -119,7 +83,7 @@ export default Vue.extend({
 					return
 				}
 				this.isLoading = true
-				await requestOnboard(this.phoneNumber, this.otp, this.accountId)
+				await requestOnboard(`test`, this.otp, this.accountId)
 				this.isLoading = false
 				this.waitingForFunds = true
 				const { balance } = await waitForFunds(this.accountId)

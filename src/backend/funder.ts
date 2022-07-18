@@ -55,10 +55,9 @@ export function waitForFunds(accountId: string) {
 	})
 }
 
-export async function requestOnboard(phoneNumber: string, code: string, accountId: string) {
+export async function requestOnboard(captchaRes: string, accountId: string) {
 	const response = await axios.post(`${capsuleServer}/onboard`, {
-		phoneNumber,
-		code,
+		captchaRes,
 		accountId,
 	})
 	return response.data.data

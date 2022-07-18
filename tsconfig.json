@@ -18,7 +18,7 @@
 			"@/*": ["src/*"],
 			"~/*": ["src/*"]
 		},
-		"types": ["@nuxt/types", "@nuxt/image"]
+		"types": ["@nuxt/types", "@nuxt/image", "@hcaptcha/types"]
 	},
 	"include": ["./src/**/*", "vue-shim.d.ts"],
 	"exclude": ["node_modules"]
