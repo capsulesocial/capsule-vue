@@ -164,7 +164,7 @@
 							<img :src="featuredPhoto" class="w-full rounded-lg object-cover shadow-lg" />
 							<p
 								v-if="post && post.featuredPhotoCaption"
-								id="photoCaption"
+								ref="photoCaption"
 								class="text-lightOnPrimaryText absolute px-4 pb-3 text-sm drop-shadow-lg"
 								style="text-shadow: 0 0 10px #000"
 							>
@@ -795,10 +795,6 @@ export default Vue.extend({
 		// Get reading time
 		this.calculateReadingTime()
 
-		// Get caption height
-		const caption = document.getElementById(`photoCaption`)
-		this.captionHeight = caption?.offsetHeight
-
 		// Get featured photo
 		if (this.post.featuredPhotoCID) {
 			getPhotoFromIPFS(this.post.featuredPhotoCID).then((p) => {
@@ -827,6 +823,11 @@ export default Vue.extend({
 			this.myReposts = new Set(repostData.map((p) => p.repost.postCID))
 		})
 		this.initializeProfile()
+	},
+	updated() {
+		// Get caption height
+		const caption = this.$refs.photoCaption
+		this.captionHeight = caption?.offsetHeight
 	},
 	methods: {
 		getReposts,
