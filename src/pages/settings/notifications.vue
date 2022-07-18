@@ -8,7 +8,7 @@
 		<!-- Email newsletter -->
 		<h3 class="text-lightPrimaryText dark:text-darkPrimaryText pb-2 text-base font-semibold">Email newsletter</h3>
 		<p class="text-gray5 dark:text-gray3 text-sm">
-			You are currently receiving email newsletter from the following authors:
+			You are currently receiving email newsletters from the following authors:
 		</p>
 		<div v-if="!isLoading" class="flex flex-wrap mt-4">
 			<ProfilePreviewCard

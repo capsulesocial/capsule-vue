@@ -49,7 +49,11 @@
 								:email="visitProfile.email"
 								:website="visitProfile.website"
 							/>
-							<EmailNewsletterWidget :profile="visitProfile" @toggleNewsletterPopup="toggleNewsletterPopup" />
+							<EmailNewsletterWidget
+								v-if="$store.state.session.id !== $route.params.id"
+								:profile="visitProfile"
+								@toggleNewsletterPopup="toggleNewsletterPopup"
+							/>
 							<MutualFollowersWidget
 								v-if="this.$route.params.id !== this.$store.state.session.id"
 								:mutuals="mutuals"
@@ -146,7 +150,7 @@
 			@switchPopup="toggleChangeTierPopup"
 			@close="showSubscriptionInfo = false"
 		/>
-		<ConfigureNewsletterPopup
+		<AddNewsletterPopup
 			v-if="showNewsletterPopup"
 			:profile="visitProfile"
 			:avatar="visitAvatar"
@@ -176,7 +180,7 @@ import BrandedButton from '@/components/BrandedButton.vue'
 import UnauthPopup from '@/components/popups/UnauthPopup.vue'
 import SubInfosPopup from '@/components/popups/SubInfosPopup.vue'
 import unFollowWarningPopup from '@/components/popups/unFollowWarningPopup.vue'
-import ConfigureNewsletterPopup from '@/components/popups/ConfigureNewsletter.vue'
+import AddNewsletterPopup from '@/components/popups/AddNewsletter.vue'
 
 import { IBackground, backgrounds } from '@/config/backgrounds'
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
@@ -233,7 +237,7 @@ export default Vue.extend({
 		SubInfosPopup,
 		unFollowWarningPopup,
 		ChangeTierPopup,
-		ConfigureNewsletterPopup,
+		AddNewsletterPopup,
 	},
 	middleware: `auth`,
 	data(): IData {
