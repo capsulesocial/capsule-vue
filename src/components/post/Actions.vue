@@ -442,7 +442,7 @@ import {
 	getCommentsStats,
 	ICommentsStats,
 } from '@/backend/comment'
-import { getReposters, getReposts, IGetRepostsOptions } from '@/backend/reposts'
+import { getReposters, IGetRepostsOptions } from '@/backend/reposts'
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 import { getFollowersAndFollowing } from '@/backend/following'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
@@ -751,14 +751,7 @@ export default Vue.extend({
 		async initReposters() {
 			const options: IGetRepostsOptions = { sort: `NEW`, offset: 0, limit: 1000 }
 			this.reposters = await getReposters(this.postCID, options)
-			if (this.reposters.length > 0) {
-				await this.getQuoteReposts()
-			}
 			this.reposters.forEach(this.getFollowers)
-		},
-		async getQuoteReposts() {
-			const options: IGetRepostsOptions = { sort: `NEW`, offset: 0, limit: 1000, type: `quote` }
-			this.quoteReposts = await getReposts({ postCID: this.postCID }, options)
 		},
 		async getFollowers(p: string) {
 			let profile = createDefaultProfile(p)

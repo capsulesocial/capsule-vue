@@ -32,7 +32,7 @@
 import Vue from 'vue'
 import ProfilePreview from '@/components/ProfilePreview.vue'
 import CloseIcon from '@/components/icons/X.vue'
-import { getReposters, IGetRepostsOptions } from '@/backend/reposts'
+import { getReposters, getReposts, IGetRepostsOptions } from '@/backend/reposts'
 
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 
@@ -40,6 +40,7 @@ interface IData {
 	isLoading: boolean
 	profiles: Array<Profile>
 	quoteReposters: Array<string>
+	quoteReposts: Array<any>
 	followers: Set<string>
 }
 
@@ -56,11 +57,13 @@ export default Vue.extend({
 			isLoading: true,
 			profiles: [],
 			quoteReposters: [],
+			quoteReposts: [],
 			followers: new Set(),
 		}
 	},
 	mounted() {
 		this.initReposters()
+		this.getQuoteReposts()
 		window.addEventListener(`click`, this.handleCloseClick, true)
 	},
 	destroyed() {
@@ -100,6 +103,11 @@ export default Vue.extend({
 			this.quoteReposters = await getReposters(this.postCID, options)
 			this.quoteReposters.forEach(this.getFollowers)
 			this.isLoading = false
+		},
+		async getQuoteReposts() {
+			const options: IGetRepostsOptions = { sort: `NEW`, offset: 0, limit: 1000, type: `quote` }
+			this.quoteReposts = await getReposts({ postCID: this.postCID }, options)
+			console.log(`quote reposts>>>`, this.quoteReposts)
 		},
 	},
 })
