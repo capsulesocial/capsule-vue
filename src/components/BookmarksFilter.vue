@@ -7,8 +7,8 @@
 				class="toggle focus:outline-none ml-4 flex items-center justify-between rounded-lg border dark:border-gray3 px-4 text-sm shadow-lg dark:text-gray3"
 				@click="showFilter = !showFilter"
 			>
-				<span v-if="filter === `BOOKMARK_DESC`" class="toggle font-bold capitalize">Bookmarks date</span>
-				<span v-if="filter === `POST_DESC`" class="toggle font-bold capitalize">Posts date</span>
+				<span v-if="filter === `BOOKMARK_DESC`" class="toggle font-bold capitalize">Date bookmarked</span>
+				<span v-if="filter === `POST_DESC`" class="toggle font-bold capitalize">Date posted</span>
 				<ChevronUp v-if="showFilter" />
 				<ChevronDown v-else />
 			</button>
@@ -26,14 +26,14 @@
 					:class="filter === `BOOKMARK_DESC` ? `text-primary font-semibold` : `text-gray5 dark:text-gray3`"
 					@click="updateSort(`BOOKMARK_DESC`)"
 				>
-					Bookmarks date
+					Date bookmarked
 				</button>
 				<button
 					class="hotzone focus:outline-none"
 					:class="filter === `POST_DESC` ? ` text-primary font-semibold` : `text-gray5 dark:text-gray3`"
 					@click="updateSort(`POST_DESC`)"
 				>
-					Posts date
+					Date posted
 				</button>
 			</div>
 		</div>
