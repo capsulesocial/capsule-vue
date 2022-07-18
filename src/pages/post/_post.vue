@@ -357,6 +357,7 @@
 						:repostsCount="repostCount"
 						:postAuthor="authorID"
 						@reposters="toggleReposters"
+						@openQuotes="toggleQuotes"
 					/>
 				</article>
 			</section>
@@ -388,6 +389,7 @@
 			@close="showShare = false"
 		/>
 		<RepostersPopup v-if="showReposters" :postCID="$route.params.post" @close="toggleReposters" />
+		<QuotesPopup v-if="showQuotes" :postCID="$route.params.post" @close="toggleQuotes" />
 		<portal to="postPage">
 			<SubscriptionsPopup
 				v-if="showSubscriptions"
@@ -423,6 +425,7 @@ import SubscriptionsPopup from '@/components/popups/SubscriptionsPopup.vue'
 import CheckCircleStaticIcon from '@/components/icons/CheckCircleStatic.vue'
 import ChangeTierPopup from '@/components/popups/ChangeTierPopup.vue'
 import RepostersPopup from '@/components/popups/RepostersPopup.vue'
+import QuotesPopup from '@/components/popups/QuotesPopup.vue'
 
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
 import {
@@ -493,6 +496,7 @@ interface IData {
 	subscriptionProfile: Profile
 	hasFeaturedPhoto: boolean
 	showReposters: boolean
+	showQuotes: boolean
 	nodes: number
 	initNodes: boolean
 	loadingIPFS: boolean
@@ -521,6 +525,7 @@ export default Vue.extend({
 		CheckCircleStaticIcon,
 		ChangeTierPopup,
 		RepostersPopup,
+		QuotesPopup,
 	},
 	beforeRouteLeave(to, from, next) {
 		if (this.realURL !== `` && to.path !== from.path) {
@@ -578,6 +583,7 @@ export default Vue.extend({
 			subscriptionProfile: createDefaultProfile(this.$store.state.session.id),
 			hasFeaturedPhoto: false,
 			showReposters: false,
+			showQuotes: false,
 			nodes: 0,
 			initNodes: true,
 			startIPFS: false,
@@ -992,6 +998,9 @@ export default Vue.extend({
 		}),
 		toggleReposters() {
 			this.showReposters = !this.showReposters
+		},
+		toggleQuotes() {
+			this.showQuotes = !this.showQuotes
 		},
 		updateLoop() {
 			setTimeout(async () => {

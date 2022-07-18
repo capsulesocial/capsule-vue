@@ -33,12 +33,22 @@
 						</div>
 					</div>
 				</div>
-				<button v-if="profiles.length > 0" class="text-sm text-primary w-1/5 h-fit" @click="openReposters">
-					See reposters
-				</button>
-				<button v-else class="text-sm text-primary w-1/5 h-fit cursor-default" disabled style="opacity: 0">
-					See reposters
-				</button>
+				<div class="flex flex-col">
+					<!-- Show reposters and quotes -->
+					<button v-if="profiles.length > 0" class="text-sm text-primary w-1/5 h-fit" @click="openReposters">
+						See reposters
+					</button>
+					<button v-else class="text-sm text-primary w-1/5 h-fit cursor-default" disabled style="opacity: 0">
+						See reposters
+					</button>
+					<!-- Show reposters and quotes -->
+					<button v-if="profiles.length > 0" class="text-sm text-primary w-1/5 h-fit" @click="$emit(`openQuotes`)">
+						See quotes
+					</button>
+					<button v-else class="text-sm text-primary w-1/5 h-fit cursor-default" disabled style="opacity: 0">
+						See quotes
+					</button>
+				</div>
 			</div>
 			<!-- Comments Activity -->
 			<div class="flex h-44 justify-between">
