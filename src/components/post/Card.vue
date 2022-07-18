@@ -139,7 +139,7 @@
 							<div class="mt-4 hidden flex-col justify-between lg:flex lg:flex-row">
 								<!-- Left side: Title, subtitle / preview, tags -->
 								<div class="mr-4 w-full">
-									<nuxt-link :to="'/post/' + postCID">
+									<a class="cursor-pointer" @click="handleRedirect">
 										<div class="flex max-w-full flex-col overflow-hidden pr-4">
 											<h3 class="break-words pb-2 text-lg font-semibold dark:text-darkPrimaryText">
 												{{ post.title }}
@@ -157,7 +157,7 @@
 												{{ post.subtitle ? post.subtitle : postExcerpt() }}
 											</h6>
 										</div>
-									</nuxt-link>
+									</a>
 									<!-- Display tags (Desktop) -->
 									<div class="my-2 hidden overflow-x-auto lg:flex lg:flex-wrap text-lg">
 										<TagPill v-for="t in post.tags" :key="t.name" :tag="t.name" class="my-2 mr-4" />
@@ -169,9 +169,9 @@
 									class="w-full lg:w-56 h-48 lg:h-32 bg-gray1 animate-pulse rounded-lg flex-shrink-0 mt-2 lg:mt-0"
 								></div>
 								<div v-if="featuredPhoto !== ``" class="mt-2 w-full flex-shrink-0 lg:mt-0 lg:w-56">
-									<nuxt-link :to="'/post/' + postCID">
+									<a class="cursor-pointer" @click="handleRedirect">
 										<img :src="featuredPhoto" class="h-48 w-full flex-shrink-0 rounded-lg object-cover lg:h-32" />
-									</nuxt-link>
+									</a>
 								</div>
 							</div>
 						</div>
@@ -429,7 +429,7 @@
 						<div class="mt-4 flex flex-col justify-between xl:flex-row">
 							<!-- Left side: Title, subtitle / preview, tags -->
 							<div class="mr-4 flex w-full flex-col justify-between">
-								<nuxt-link :to="'/post/' + postCID">
+								<a class="cursor-pointer" @click="handleRedirect">
 									<div class="flex max-w-full flex-col overflow-hidden pr-4">
 										<div class="flex flex-row w-full justify-between">
 											<h3 class="break-words pb-2 text-lg font-semibold dark:text-darkPrimaryText">
@@ -441,7 +441,7 @@
 											{{ post.subtitle ? post.subtitle : postExcerpt() }}
 										</h6>
 									</div>
-								</nuxt-link>
+								</a>
 								<!-- Display tags (Desktop) -->
 								<div class="my-2 hidden overflow-x-auto xl:flex xl:flex-wrap text-lg">
 									<TagPill v-for="t in post.tags" :key="t.name" :tag="t.name" class="my-2 mr-4" />
@@ -486,9 +486,9 @@
 								class="w-full xl:w-56 h-48 xl:h-32 bg-gray1 dark:bg-gray7 flex-shrink-0 animate-pulse rounded-lg mt-4 xl:mt-0"
 							></div>
 							<div v-if="featuredPhoto !== ``" class="mt-4 w-full flex-shrink-0 xl:mt-0 xl:w-56 modal-animation">
-								<nuxt-link :to="'/post/' + postCID">
+								<a class="cursor-pointer" @click="handleRedirect">
 									<img :src="featuredPhoto" class="h-48 w-full flex-shrink-0 rounded-lg object-cover xl:h-32" />
-								</nuxt-link>
+								</a>
 							</div>
 						</div>
 						<!-- Display tags (Mobile) -->
@@ -693,6 +693,10 @@ export default Vue.extend({
 		userIsFollowed: {
 			type: Boolean,
 			default: false,
+		},
+		redirectEvent: {
+			type: Function,
+			default: () => {},
 		},
 	},
 	data(): IData {
@@ -995,6 +999,10 @@ export default Vue.extend({
 			this.showReposters = !this.showReposters
 			this.showPopup = !this.showPopup
 			this.showStats = true
+		},
+		handleRedirect() {
+			this.$props.redirectEvent()
+			this.$router.push(`/post/` + this.postCID)
 		},
 	},
 })
