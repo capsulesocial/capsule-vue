@@ -16,15 +16,26 @@
 				<PinIcon class="text-primary mr-3 h-4 w-4" /> {{ location }}
 			</div>
 			<div v-if="website !== `` && location !== ``" class="mb-2"></div>
-			<div v-if="website !== ``" class="flex flex-row items-center dark:text-primary">
-				<LinkIcon class="text-primary mr-3 h-4 w-4" /><button @click="redirectWebsite">
+			<button
+				v-if="website !== ``"
+				class="flex flex-row items-center text-lightPrimaryText dark:text-darkPrimaryText hover:text-primary transition duration-500 ease-in-out"
+				@click="redirectWebsite"
+			>
+				<LinkIcon class="text-primary mr-3 h-4 w-4 flex-shrink-0" />
+				<p class="text-left" target="_blank" rel="noopener noreferrer" @click="redirectWebsite">
 					{{ website }}
-				</button>
-			</div>
+				</p>
+			</button>
 			<div v-if="email !== `` && (location !== `` || website !== ``)" class="mb-2"></div>
-			<div v-if="email !== ``" class="flex flex-row items-center dark:text-darkPrimaryText">
-				<MailIcon class="text-primary mr-3 h-4 w-4" /><a :href="`mailto:` + email" target="_blank">{{ email }}</a>
-			</div>
+			<a
+				v-if="email !== ``"
+				class="flex flex-row items-center text-lightPrimaryText dark:text-darkPrimaryText hover:text-primary transition duration-500 ease-in-out"
+				:href="`mailto:` + email"
+				target="_blank"
+			>
+				<MailIcon class="text-primary mr-3 h-4 w-4" />
+				<p>{{ email }}</p>
+			</a>
 		</div>
 	</article>
 </template>
