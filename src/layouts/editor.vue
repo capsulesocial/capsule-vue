@@ -44,7 +44,12 @@
 							class="modal-animation w-5/12 -mr-5 -mt-4 overflow-y-auto p-4"
 							style="min-height: calc(100vh - 70px); height: calc(100vh - 70px)"
 						>
-							<EditorWidgets :wordCount="wordCount" @openTierAccess="toggleShowTiers" @confirm="checkPost" />
+							<EditorWidgets
+								:wordCount="wordCount"
+								@openTierAccess="toggleShowTiers"
+								@togglePreview="togglePreview"
+								@confirm="checkPost"
+							/>
 							<Footer />
 						</aside>
 					</section>
@@ -54,6 +59,12 @@
 		<DraftsPopup v-if="showDrafts" @close="closeDraftsPopup" />
 		<ConfirmPopup v-if="showConfirm" @close="showConfirmPopup" @post="sendPost" />
 		<TierAccessPopup v-if="showTiers" @close="toggleShowTiers" />
+		<PreviewPopup
+			v-if="showPreview"
+			:previewContent="previewContent"
+			@close="togglePreview"
+			@confirm="checkPostPreview"
+		/>
 	</main>
 </template>
 
@@ -66,6 +77,7 @@ import PencilIcon from '@/components/icons/Pencil.vue'
 import DraftsPopup from '@/components/popups/DraftsPopup.vue'
 import ConfirmPopup from '@/components/popups/ConfirmPopup.vue'
 import TierAccessPopup from '@/components/popups/TierAccess.vue'
+import PreviewPopup from '@/components/post/PreviewPopup.vue'
 import { getProfile, Profile } from '@/backend/profile'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
 import { IBackground, backgrounds } from '@/config/backgrounds'
@@ -79,6 +91,8 @@ interface IData {
 	buttonHidden: boolean
 	bgImage: IBackground
 	showTiers: boolean
+	showPreview: boolean
+	previewContent: string | null
 }
 
 export default Vue.extend({
@@ -91,6 +105,7 @@ export default Vue.extend({
 		ConfirmPopup,
 		PencilIcon,
 		TierAccessPopup,
+		PreviewPopup,
 	},
 	middleware: `auth`,
 	data(): IData {
@@ -103,6 +118,8 @@ export default Vue.extend({
 			bgImage: backgrounds[0],
 			avatar: undefined,
 			showTiers: false,
+			showPreview: false,
+			previewContent: null,
 		}
 	},
 	head() {
@@ -176,6 +193,17 @@ export default Vue.extend({
 		},
 		toggleShowTiers() {
 			this.showTiers = !this.showTiers
+		},
+		togglePreview() {
+			const validPost = this.$refs.editor.checkPost(true)
+			if (validPost) {
+				this.previewContent = this.$refs.editor.getInputHTML()
+				this.showPreview = !this.showPreview
+			}
+		},
+		checkPostPreview() {
+			this.showPreview = false
+			this.checkPost()
 		},
 	},
 })

@@ -149,12 +149,31 @@
 					</h5>
 					<h5 class="text-gray5 dark:text-gray3 text-sm">Auto-save on close.</h5>
 				</div>
-				<button
-					class="focus:outline-none bg-primary text-lightButtonText transform rounded-lg px-12 py-2 font-bold shadow-lg transition duration-500 ease-in-out hover:scale-105"
-					@click="confirmPost"
-				>
-					Publish
-				</button>
+				<div class="relative">
+					<button
+						class="mr-5 text-gray5 dark:text-gray3 transition duration-500 ease-in-out hover:text-primary"
+						@click="$emit(`togglePreview`)"
+						@mouseenter="hoverPreview = true"
+						@mouseleave="hoverPreview = false"
+					>
+						<PreviewIcon />
+					</button>
+					<!-- post preview tooltip -->
+					<div
+						v-show="hoverPreview"
+						class="absolute z-10 border-lightBorder modal-animation rounded-lg border bg-lightBG dark:bg-gray7 p-2 shadow-lg text-gray5 dark:text-gray1 self-center text-xs"
+						:class="$colorMode.dark ? `hoverPreviewDark` : `hoverPreview`"
+						style="top: 2px; right: 214px; width: 47%"
+					>
+						Preview post
+					</div>
+					<button
+						class="focus:outline-none bg-primary text-lightButtonText transform rounded-lg px-12 py-2 font-bold shadow-lg transition duration-500 ease-in-out hover:scale-105"
+						@click="confirmPost"
+					>
+						Publish
+					</button>
+				</div>
 			</div>
 		</article>
 	</div>
@@ -166,6 +185,7 @@ import XIcon from '@/components/icons/X.vue'
 import UploadIcon from '@/components/icons/Upload.vue'
 import ChevronUp from '@/components/icons/ChevronUp.vue'
 import ChevronDown from '@/components/icons/ChevronDown.vue'
+import PreviewIcon from '@/components/icons/Preview.vue'
 import PremiumSwitchEditor from '@/components/PremiumSwitchEditor.vue'
 
 import { preUploadPhoto, uploadPhoto } from '@/backend/photos'
@@ -182,6 +202,7 @@ interface IData {
 	showCategoryDropdown: boolean
 	featuredPhotoTarget: null | HTMLInputElement
 	waitingImage: boolean
+	hoverPreview: boolean
 }
 
 export default Vue.extend({
@@ -191,6 +212,7 @@ export default Vue.extend({
 		ChevronUp,
 		ChevronDown,
 		PremiumSwitchEditor,
+		PreviewIcon,
 	},
 	props: {
 		wordCount: {
@@ -208,6 +230,7 @@ export default Vue.extend({
 			showCategoryDropdown: false,
 			featuredPhotoTarget: null,
 			waitingImage: false,
+			hoverPreview: false,
 		}
 	},
 	watch: {
@@ -334,3 +357,29 @@ export default Vue.extend({
 	},
 })
 </script>
+<style>
+.hoverPreview::before {
+	content: '';
+	position: absolute;
+	top: 0.5rem;
+	right: -0.5rem;
+	transform: rotate(45deg);
+	width: 1rem;
+	height: 1rem;
+	background-color: #fff;
+	border-radius: 2px;
+	z-index: 1;
+}
+.hoverPreviewDark::before {
+	content: '';
+	position: absolute;
+	top: 0.5rem;
+	right: -0.5rem;
+	transform: rotate(45deg);
+	width: 1rem;
+	height: 1rem;
+	background-color: #686868;
+	border-radius: 2px;
+	z-index: 1;
+}
+</style>
