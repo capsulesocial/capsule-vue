@@ -54,24 +54,21 @@ export async function getReposts(
 ): Promise<IRepostResponse[]> {
 	const { sort, offset = 0, limit = 10, following, type } = options
 
-	const params: Record<string, any> = {
-		...filter,
-		sort,
-		...(following && sort === `FOLLOWING` ? { following } : {}),
-		following,
-		offset,
-		limit,
-	}
-
-	if (type) {
-		params.type = type
-	}
-
 	if (sort === `FOLLOWING` && !following) {
 		throw new Error(`Following not specified`)
 	}
 
-	const { data } = await axios.get(`${nodeUrl()}/repost`, { params })
+	const { data } = await axios.get(`${nodeUrl()}/repost`, {
+		params: {
+			...filter,
+			sort,
+			...(following && sort === `FOLLOWING` ? { following } : {}),
+			following,
+			offset,
+			limit,
+			...(type ? { type } : {}),
+		},
+	})
 
 	return data.data
 }
