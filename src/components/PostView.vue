@@ -10,36 +10,16 @@
 <script lang="ts">
 import Vue from 'vue'
 import type { PropType } from 'vue'
-import DOMPurify from 'dompurify'
 import { marked } from 'marked'
 import { markedRenderer, transformPostToHTML } from '../pages/post/readerExtensions'
 import ImagePopup from '@/components/popups/Image.vue'
 import { decryptData } from '@/backend/crypto'
 import { IPostImageKey } from '@/backend/post'
 import { isValidPhoto, getPhotoFromIPFS } from '@/backend/getPhoto'
+import { afterSanitizeAttrsHook, BASE_ALLOWED_ATTRS, BASE_ALLOWED_TAGS, sanitizeHtml } from '@/plugins/helpers'
 
-const ALLOWED_TAGS = [
-	`pre`,
-	`ipfsimage`,
-	`p`,
-	`code`,
-	`ol`,
-	`li`,
-	`strong`,
-	`em`,
-	`u`,
-	`del`,
-	`blockquote`,
-	`h1`,
-	`h2`,
-	`h3`,
-	`h4`,
-	`h5`,
-	`a`,
-	`span`,
-]
-
-const ALLOWED_ATTR = [`cid`, `alt`, `class`, `id`, `href`]
+const ALLOWED_TAGS = [...BASE_ALLOWED_TAGS, `ipfsimage`]
+const ALLOWED_ATTR = [...BASE_ALLOWED_ATTRS, `cid`, `alt`]
 
 interface IData {
 	clickedImage: null | string
@@ -78,22 +58,13 @@ export default Vue.extend({
 	computed: {
 		htmlContent() {
 			const html = marked.parse(this.content)
-			const sanitizedHtml = DOMPurify.sanitize(html, {
-				ALLOWED_TAGS,
-				ALLOWED_ATTR,
-			})
+			const sanitizedHtml = sanitizeHtml(html, ALLOWED_TAGS, ALLOWED_ATTR)
 			return transformPostToHTML(sanitizedHtml, this.postImages)
 		},
 	},
 	created() {
 		marked.use({ renderer: markedRenderer })
-		DOMPurify.addHook(`afterSanitizeAttributes`, (node: Element) => {
-			// set all elements owning target and all links to target=_blank
-			if (node.getAttribute(`target`) || node.tagName === `A`) {
-				node.setAttribute(`target`, `_blank`)
-				node.setAttribute(`rel`, `noopener noreferrer`)
-			}
-		})
+		afterSanitizeAttrsHook()
 	},
 	mounted() {
 		const images = this.$el.querySelectorAll(`img`)
