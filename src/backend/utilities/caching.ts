@@ -24,7 +24,10 @@ export default function cache<T>(fetchFunction: (key: string) => Promise<T>) {
 		if (!update) {
 			const cached = _cache.get(key)
 			if (cached !== undefined) {
-				return { ...cached }
+				if (typeof cached === `object`) {
+					return { ...cached }
+				}
+				return cached
 			}
 		}
 
@@ -33,6 +36,6 @@ export default function cache<T>(fetchFunction: (key: string) => Promise<T>) {
 		if (typeof result === `object`) {
 			return { ...result }
 		}
-		return { ...result }
+		return result
 	}
 }
