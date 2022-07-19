@@ -33,10 +33,16 @@
 						</div>
 					</div>
 				</div>
-				<div v-if="repostsCount > 0" class="flex flex-col">
+				<div v-if="repostsCount > 0" class="flex flex-col w-1/5">
 					<!-- Show reposters and quotes -->
-					<button class="text-sm text-primary w-1/5 h-fit" @click="openReposters">See reposters</button>
-					<button class="text-sm text-primary w-1/5 h-fit" @click="$emit(`openQuotes`)">See quotes</button>
+					<button class="text-sm text-primary h-fit flex items-center" @click="openReposters">
+						<RepostIcon :isActive="true" :shrink="true" class="mr-2 p-1" />
+						<p>See reposters</p>
+					</button>
+					<button class="text-sm text-primary h-fit flex items-center mt-2" @click="$emit(`openQuotes`)">
+						<QuoteIcon class="mr-2 p-1" />
+						<p>See quotes</p>
+					</button>
 				</div>
 				<div v-else class="flex flex-grow">
 					<!-- Filler -->
@@ -422,6 +428,8 @@ import CloseIcon from '@/components/icons/X.vue'
 import StatsIcon from '@/components/icons/Stats.vue'
 import ChevronLeft from '@/components/icons/ChevronLeft.vue'
 import ChevronRight from '@/components/icons/ChevronRight.vue'
+import RepostIcon from '@/components/icons/Repost.vue'
+import QuoteIcon from '@/components/icons/Quote.vue'
 import Avatar from '@/components/Avatar.vue'
 
 import { feelings } from '@/config/config'
@@ -485,6 +493,8 @@ export default Vue.extend({
 		ChevronLeft,
 		ChevronRight,
 		SendIcon,
+		RepostIcon,
+		QuoteIcon,
 	},
 	props: {
 		postCID: {

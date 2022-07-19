@@ -21,22 +21,30 @@
 				></div>
 			</div>
 			<article v-show="!isLoading">
-				<div v-for="p in quoteReposts" :key="p.authorID + p.timestamp" class="flex items-center">
-					<Avatar :avatar="p.avatar" :authorID="p.authorID" size="w-12 h-12" />
-					<div class="h-12 flex-grow px-4">
-						<nuxt-link :to="`/id/` + p.authorID" class="flex flex-col">
-							<span v-if="p.name != ``" class="text-base font-medium dark:text-darkPrimaryText">
-								{{ p.name }}
-							</span>
-							<span v-else class="text-gray5 dark:text-gray3 text-base font-medium"> {{ p.authorID }} </span>
-							<span class="text-gray5 dark:text-gray3 text-sm">@{{ p.authorID }}</span>
-						</nuxt-link>
+				<div v-for="p in quoteReposts" :key="p.authorID + p.timestamp" class="flex flex-col">
+					<div class="flex items-center">
+						<Avatar :avatar="p.avatar" :authorID="p.authorID" size="w-12 h-12" />
+						<div class="h-12 flex flex-col px-4">
+							<nuxt-link :to="`/id/` + p.authorID" class="flex items-center">
+								<span v-if="p.name != ``" class="text-base font-medium text-lightPrimaryText dark:text-darkPrimaryText">
+									{{ p.name }}
+								</span>
+								<span v-else class="text-gray5 dark:text-gray3 text-base font-medium"> {{ p.authorID }} </span>
+								<span class="text-gray5 dark:text-gray3 text-sm ml-2">@{{ p.authorID }}</span>
+							</nuxt-link>
+							<span class="mt-1 text-xs text-gray5 dark:text-gray3">{{ $formatDate(p.timestamp) }}</span>
+						</div>
 					</div>
-					<div>
+					<div
+						class="my-4 pb-4 border-b border-lightBorder dark:border-darkBorder text-lightPrimaryText dark:text-darkPrimaryText"
+					>
 						{{ p.content }}
 					</div>
 				</div>
 			</article>
+			<p v-if="!isLoading && quoteReposts.length === 0" class="text-sm text-gray5 dark:text-gray3 text-center mt-14">
+				None of the reposters quoted this post
+			</p>
 		</div>
 	</div>
 </template>
