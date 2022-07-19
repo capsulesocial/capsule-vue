@@ -30,6 +30,6 @@ export default function cache<T>(fetchFunction: (key: string) => Promise<T>) {
 
 		const result = await _promiseCache(key, fetchFunction)
 		_cache.set(key, result)
-		return result
+		return { ...result }
 	}
 }

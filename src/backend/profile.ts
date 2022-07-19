@@ -35,7 +35,7 @@ export function loadProfileFromIPFS(cid: string) {
 	return ipfs().getJSONData<Profile>(cid)
 }
 
-export const getProfile = cache(_getProfile)
+export const getProfile = async (key: string, update?: boolean) => ({ ...(await cache(_getProfile)(key, update)) })
 
 export async function setProfile(p: Profile) {
 	const [cid, { sig }] = await Promise.all([addProfileToIPFS(p), libsodium().signContent(p)])
