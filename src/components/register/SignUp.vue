@@ -1,14 +1,7 @@
 <template>
 	<div class="flex flex-row w-full items-center justify-center">
 		<article v-if="!downloadKey" class="flex flex-row w-full items-center justify-center">
-			<!-- v-if="!hasEnoughFunds() || !onboarded" -->
-			<!-- <VerifyPhone
-				:accountId="userInfo.accountId"
-				class="w-full h-full xl:w-1/2"
-				@updateFunds="updateFunds"
-				@setIsOnboarded="setIsOnboarded"
-			/> -->
-			<!-- Step 3: Choose ID -->
+			<!-- Step 2: Choose ID -->
 			<SelectID :funds="funds" :accountId="userInfo.accountId" class="w-full h-full xl:w-1/2" @verify="verify" />
 		</article>
 		<!-- Step 4: Download key -->
