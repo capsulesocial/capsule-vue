@@ -44,7 +44,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import { mapMutations } from 'vuex'
-import 'intl-tel-input/build/css/intlTelInput.css'
 import { AxiosError } from 'axios'
 import CustomAuth from '@toruslabs/customauth'
 
