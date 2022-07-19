@@ -45,13 +45,15 @@ export interface IGetRepostsOptions {
 	offset?: number
 	limit?: number
 	following?: string
+	type?: `simple` | `quote`
 }
 
 export async function getReposts(
-	filter: { authorID: string; postCID?: string },
+	filter: { authorID?: string; postCID?: string },
 	options: IGetRepostsOptions,
 ): Promise<IRepostResponse[]> {
-	const { sort, offset = 0, limit = 10, following } = options
+	const { sort, offset = 0, limit = 10, following, type } = options
+
 	if (sort === `FOLLOWING` && !following) {
 		throw new Error(`Following not specified`)
 	}
@@ -64,6 +66,7 @@ export async function getReposts(
 			following,
 			offset,
 			limit,
+			...(type ? { type } : {}),
 		},
 	})
 

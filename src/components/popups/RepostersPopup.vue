@@ -19,7 +19,7 @@
 					:style="`border-top: 2px solid` + $color.hex"
 				></div>
 			</div>
-			<article v-show="!isLoading">
+			<article v-if="!isLoading && profiles.length > 0">
 				<div v-for="p in profiles" :key="p.id">
 					<ProfilePreview :profile="p" class="pb-4" @updateFollowers="updateFollowers" />
 				</div>
@@ -59,8 +59,8 @@ export default Vue.extend({
 			followers: new Set(),
 		}
 	},
-	mounted() {
-		this.initReposters()
+	async mounted() {
+		await this.initReposters()
 		window.addEventListener(`click`, this.handleCloseClick, true)
 	},
 	destroyed() {
@@ -89,17 +89,26 @@ export default Vue.extend({
 		},
 		async getFollowers(p: string) {
 			let profile = createDefaultProfile(p)
-			const fetchedProfile = await getProfile(p)
-			if (fetchedProfile.profile) {
-				profile = fetchedProfile.profile
+			try {
+				const fetchedProfile = await getProfile(p)
+				if (fetchedProfile.profile) {
+					profile = fetchedProfile.profile
+				}
+				this.profiles.push(profile)
+			} catch (err) {
+				this.$toastError(err as string)
 			}
-			this.profiles.push(profile)
 		},
 		async initReposters() {
 			const options: IGetRepostsOptions = { sort: `NEW`, offset: 0, limit: 1000 }
-			this.reposters = await getReposters(this.postCID, options)
-			this.reposters.forEach(this.getFollowers)
-			this.isLoading = false
+			try {
+				this.reposters = await getReposters(this.postCID, options)
+				this.reposters.forEach(await this.getFollowers)
+			} catch (err) {
+				this.$toastError(err as string)
+			} finally {
+				this.isLoading = false
+			}
 		},
 	},
 })
