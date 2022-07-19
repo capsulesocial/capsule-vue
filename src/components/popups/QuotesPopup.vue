@@ -94,17 +94,18 @@ export default Vue.extend({
 
 		async getReposterProfile(p: string) {
 			let profile = createDefaultProfile(p)
+			let avatar = ``
 			await getProfile(p).then((fetchedProfile) => {
 				if (fetchedProfile.profile) {
 					profile = fetchedProfile.profile
 				}
 				if (profile.avatar !== ``) {
-					getPhotoFromIPFS(profile.avatar).then((avatar) => {
-						profile.avatar = avatar
+					getPhotoFromIPFS(profile.avatar).then((a) => {
+						avatar = a
 					})
 				}
 			})
-			return profile
+			return { profile, avatar }
 		},
 		async getQuoteReposts() {
 			const options: IGetRepostsOptions = { sort: `NEW`, offset: 0, limit: 1000, type: `quote` }
@@ -116,13 +117,13 @@ export default Vue.extend({
 		},
 		async fetchQuote(cid: string, authorID: string) {
 			const { data: content } = await getRegularPost(cid)
-			const profile = await this.getReposterProfile(authorID)
+			const { profile, avatar } = await this.getReposterProfile(authorID)
 			const q = {
 				content: content.content,
 				timestamp: content.timestamp,
 				authorID: content.authorID,
 				name: profile.name,
-				avatar: profile.avatar,
+				avatar,
 			}
 			this.quoteReposts.push(q)
 		},
