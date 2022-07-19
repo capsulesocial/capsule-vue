@@ -13,7 +13,7 @@
 		/>
 		<!-- This is basically a BrandedButton -->
 		<button
-			v-show="!loadingState"
+			v-if="loadingState === null"
 			id="hcaptcha"
 			:data-sitekey="siteKey"
 			data-size="invisible"
@@ -23,7 +23,7 @@
 		>
 			<span class="font-sans" style="font-size: 0.95rem"> Sign Up </span>
 		</button>
-		<h6 v-if="loadingState === 'checking_id'" class="text-primary text-center">Checking ID...</h6>
+		<h6 v-else-if="loadingState === 'checking_id'" class="text-primary text-center">Checking ID...</h6>
 		<h6 v-else-if="loadingState === 'hcaptcha_loading'" class="text-primary text-center">Verifying humanity...</h6>
 		<h6 v-else-if="loadingState === 'smart_contract'" class="text-primary text-center">Executing smart contract...</h6>
 		<h6 v-else-if="loadingState === 'transfer_funds'" class="text-primary text-center">Waiting for funds...</h6>
@@ -43,7 +43,7 @@ import { mapMutations } from 'vuex'
 
 import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
 import { ValidationError } from '@/errors'
-import { hasSufficientFunds, requestOnboard, waitForFunds } from '@/backend/funder'
+import { requestOnboard, waitForFunds } from '@/backend/funder'
 import { validateUsernameNEAR } from '@/backend/near'
 import { hcaptchaSiteKey } from '@/backend/utilities/config'
 
@@ -55,14 +55,6 @@ interface IData {
 
 export default Vue.extend({
 	props: {
-		onboarded: {
-			type: Boolean,
-			required: true,
-		},
-		funds: {
-			type: String,
-			required: true,
-		},
 		accountId: {
 			type: String,
 			required: true,
@@ -108,19 +100,14 @@ export default Vue.extend({
 				this.loadingState = `smart_contract`
 				await requestOnboard(res.response, this.accountId)
 				this.loadingState = `transfer_funds`
-				const { balance } = await waitForFunds(this.accountId)
+				await waitForFunds(this.accountId)
 				this.loadingState = null
-				this.$emit(`setIsOnboarded`, true)
-				this.$emit(`updateFunds`, balance)
 				this.$emit(`verify`, this.id)
 			} catch (error) {
 				this.$handleError(error)
 			} finally {
 				this.loadingState = null
 			}
-		},
-		hasEnoughFunds(): boolean {
-			return hasSufficientFunds(this.funds)
 		},
 	},
 })
