@@ -201,6 +201,7 @@
 						:openStats="showStats"
 						class="px-4 pb-4 xl:px-6 xl:pb-6"
 						@reposters="toggleReposters"
+						@openQuotes="toggleQuotes"
 					/>
 				</div>
 			</div>
@@ -215,6 +216,7 @@
 				@close="showShare = false"
 			/>
 			<RepostersPopup v-if="showReposters" :postCID="postCID" @close="toggleReposters" />
+			<QuotesPopup v-if="showQuotes" :postCID="postCID" @close="toggleQuotes" />
 		</portal>
 		<!-- Feed view -->
 		<div v-if="this.$route.name !== `post-post`">
@@ -565,6 +567,7 @@ import SharePopup from '@/components/popups/SharePopup.vue'
 import CardProfileHeader from '@/components/post/card/ProfileHeader.vue'
 import CrownIcon from '@/components/icons/Crown.vue'
 import RepostersPopup from '@/components/popups/RepostersPopup.vue'
+import QuotesPopup from '@/components/popups/QuotesPopup.vue'
 
 import { RetrievedPost, getRegularPost } from '@/backend/post'
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
@@ -610,6 +613,7 @@ interface IData {
 	featuredPhotoLoading: boolean
 	replyInputHeight: number
 	showReposters: boolean
+	showQuotes: boolean
 	avatarIsLoading: boolean
 }
 
@@ -635,6 +639,7 @@ export default Vue.extend({
 		CardProfileHeader,
 		CrownIcon,
 		RepostersPopup,
+		QuotesPopup,
 	},
 	props: {
 		repost: {
@@ -728,6 +733,7 @@ export default Vue.extend({
 			featuredPhotoLoading: false,
 			replyInputHeight: 64,
 			showReposters: false,
+			showQuotes: false,
 			avatarIsLoading: true,
 		}
 	},
@@ -1003,6 +1009,11 @@ export default Vue.extend({
 		handleRedirect() {
 			this.$props.redirectEvent()
 			this.$router.push(`/post/` + this.postCID)
+		},
+		toggleQuotes() {
+			this.showQuotes = !this.showQuotes
+			this.showPopup = !this.showPopup
+			this.showStats = true
 		},
 	},
 })
