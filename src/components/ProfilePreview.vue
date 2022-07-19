@@ -1,5 +1,5 @@
 <template>
-	<div class="flex items-center">
+	<div v-if="profile !== null" class="flex items-center">
 		<Avatar :authorID="profile.id" :avatar="avatar" size="w-12 h-12" />
 		<div class="h-12 flex-grow px-4">
 			<nuxt-link :to="`/id/` + profile.id" class="flex flex-col">
@@ -54,18 +54,22 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			isFollowing: false,
-			avatar: undefined,
+			avatar: ``,
 		}
 	},
 	async created() {
-		// fetch avatar
-		if (this.profile.avatar !== null && this.profile.avatar !== ``) {
-			this.avatar = await getPhotoFromIPFS(this.profile.avatar)
+		try {
+			// fetch avatar
+			if (this.profile.avatar !== null && this.profile.avatar !== ``) {
+				this.avatar = await getPhotoFromIPFS(this.profile.avatar)
+			}
+			// Check if I am following the listed person
+			getFollowersAndFollowing(this.profile.id, true).then(({ followers }) => {
+				this.isFollowing = followers.has(this.$store.state.session.id)
+			})
+		} catch (err) {
+			this.$toastError(err as string)
 		}
-		// Check if I am following the listed person
-		getFollowersAndFollowing(this.profile.id, true).then(({ followers }) => {
-			this.isFollowing = followers.has(this.$store.state.session.id)
-		})
 	},
 	methods: {
 		getPhotoFromIPFS,

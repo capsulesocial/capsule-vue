@@ -20,7 +20,7 @@
 					:style="`border-top: 2px solid` + $color.hex"
 				></div>
 			</div>
-			<article v-show="!isLoading">
+			<article v-if="!isLoading">
 				<div v-for="p in quoteReposts" :key="p.authorID + p.timestamp" class="flex flex-col">
 					<div class="flex items-center">
 						<Avatar :avatar="p.avatar" :authorID="p.authorID" size="w-12 h-12" />
