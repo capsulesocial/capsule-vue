@@ -108,8 +108,15 @@ export default Vue.extend({
 				this.loadingState = null
 				this.$emit(`verify`, this.id)
 			} catch (error) {
+				if (typeof error === `string`) {
+					if (error === `challenge-closed`) {
+						return
+					}
+					this.$handleError({ message: `Captcha error: ${error}` })
+					return
+				}
 				// eslint-disable-next-line no-console
-				console.log(error)
+				console.log(`error`, error)
 				this.$handleError(error)
 			} finally {
 				this.loadingState = null
