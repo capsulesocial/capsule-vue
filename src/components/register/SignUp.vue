@@ -1,22 +1,8 @@
 <template>
 	<div class="flex flex-row w-full items-center justify-center">
 		<article v-if="!downloadKey" class="flex flex-row w-full items-center justify-center">
-			<VerifyPhone
-				v-if="!hasEnoughFunds() || !onboarded"
-				:accountId="userInfo.accountId"
-				class="w-full h-full xl:w-1/2"
-				@updateFunds="updateFunds"
-				@setIsOnboarded="setIsOnboarded"
-			/>
-			<!-- Step 3: Choose ID -->
-			<SelectID
-				v-else
-				:funds="funds"
-				:userInfo="userInfo"
-				class="w-full h-full xl:w-1/2"
-				@checkFunds="checkFunds"
-				@verify="verify"
-			/>
+			<!-- Step 2: Choose ID -->
+			<SelectID :funds="funds" :accountId="userInfo.accountId" class="w-full h-full xl:w-1/2" @verify="verify" />
 		</article>
 		<!-- Step 4: Download key -->
 		<DownloadKey
@@ -33,18 +19,10 @@ import Vue from 'vue'
 import type { PropType } from 'vue'
 import { mapMutations } from 'vuex'
 
-import VerifyPhone from './VerifyPhone.vue'
 import SelectID from './SelectID.vue'
 import DownloadKey from './DownloadKey.vue'
 
-import { hasSufficientFunds } from '@/backend/funder'
-import {
-	checkAccountStatus,
-	getIsAccountIdOnboarded,
-	getUsernameNEAR,
-	removeNearPrivateKey,
-	walletLogout,
-} from '@/backend/near'
+import { getUsernameNEAR, removeNearPrivateKey, walletLogout } from '@/backend/near'
 
 import { MutationType, createSessionFromProfile, namespace as sessionStoreNamespace } from '~/store/session'
 import { setNearUserFromPrivateKey, login, register, IAuthResult, IWalletStatus } from '@/backend/auth'
@@ -52,7 +30,6 @@ import { ValidationError } from '@/errors'
 
 interface IData {
 	funds: string
-	onboarded: boolean
 	username: null | string
 	isLoading: boolean
 	downloadKey: boolean
@@ -60,7 +37,6 @@ interface IData {
 
 export default Vue.extend({
 	components: {
-		VerifyPhone,
 		DownloadKey,
 		SelectID,
 	},
@@ -76,7 +52,6 @@ export default Vue.extend({
 			username: null,
 			isLoading: true,
 			downloadKey: false,
-			onboarded: false,
 		}
 	},
 	async created() {
@@ -84,11 +59,6 @@ export default Vue.extend({
 		try {
 			const username = await getUsernameNEAR(this.userInfo.accountId)
 			if (!username) {
-				const [, onboarded] = await Promise.all([
-					this.checkFunds(),
-					await getIsAccountIdOnboarded(this.userInfo.accountId),
-				])
-				this.onboarded = onboarded
 				this.$emit(`setIsLoading`, false)
 				return
 			}
@@ -128,23 +98,6 @@ export default Vue.extend({
 			changeBio: MutationType.CHANGE_BIO,
 			changeLocation: MutationType.CHANGE_LOCATION,
 		}),
-		hasEnoughFunds(): boolean {
-			return hasSufficientFunds(this.funds)
-		},
-		async checkFunds() {
-			const accountId = this.userInfo.accountId
-			if (!accountId) {
-				return
-			}
-			const status = await checkAccountStatus(accountId)
-			this.funds = status.balance
-		},
-		updateFunds(balance: string) {
-			this.funds = balance
-		},
-		setIsOnboarded(onboarded: boolean) {
-			this.onboarded = onboarded
-		},
 		async verify(id: string) {
 			if (!this.userInfo) {
 				throw new Error(`Unexpected condition!`)

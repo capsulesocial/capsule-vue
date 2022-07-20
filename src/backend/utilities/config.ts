@@ -57,6 +57,10 @@ const torusEnv = {
 	},
 }
 
+export const hcaptchaSiteKey = process.env.HCAPTCHA_SITE_KEY
+	? process.env.HCAPTCHA_SITE_KEY
+	: `10000000-ffff-ffff-ffff-000000000001`
+
 export function getNearConfig(): INearConfig | ILocalNetNearConfig {
 	switch (nearNetwork) {
 		case `testnet`:
