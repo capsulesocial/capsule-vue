@@ -20,11 +20,71 @@
 		</div>
 		<!-- Export Private Key -->
 		<div class="mb-8 flex w-full flex-row items-center">
-			<label for="export" class="w-48 font-semibold text-gray5 dark:text-gray3 text-sm">Blogchain Private Key</label>
-			<button id="export" class="text-primary focus:outline-none" @click="downloadPrivateKey">
-				Export Blogchain Private Key
-			</button>
+			<h6 class="w-48 flex-shrink-0 font-semibold text-gray5 dark:text-gray3 text-sm">Blogchain private key</h6>
+			<div class="bg-gray2 dark:bg-gray7 my-10 rounded-lg p-4 w-full">
+				<!-- Optional encryption -->
+				<div class="flex flex-row justify-between my-4">
+					<label for="encryptButton" class="text-gray7 dark:text-gray3">Export my private key with a password</label>
+					<div
+						class="relative w-14 h-7 transition duration-500 ease-in-out rounded-full cursor-pointer"
+						:class="[encrypted ? 'bg-neutral' : 'bg-gray1 dark:bg-gray7']"
+						@click="toggleEncrypted"
+					>
+						<label
+							class="absolute left-0 w-7 h-7 mb-2 transition duration-300 ease-in-out transform bg-lightBG dark:bg-darkBG border-2 rounded-full flex justify-center items-center"
+							:class="[encrypted ? 'translate-x-full border-neutral' : 'translate-x-0 border-gray1 dark:border-gray7']"
+						>
+						</label>
+						<input id="encryptButton" type="checkbox" class="w-full h-full appearance-none focus:outline-none" />
+					</div>
+				</div>
+				<div class="flex flex-col sm:flex-row items-center justify-between">
+					<div class="flex flex-row items-center">
+						<FileDownloadIcon />
+						<div>
+							<h6 class="text-gray pl-4 text-lg font-semibold dark:text-darkPrimaryText">Blogchain Private Key</h6>
+							<p v-if="encrypted" class="text-xs text-primary pl-4">Encrypted</p>
+						</div>
+					</div>
+					<BrandedButton :text="`Download`" :action="downloadPrivateKey" />
+				</div>
+			</div>
 		</div>
+		<!-- Encrypt password popup -->
+		<portal v-if="showEncryptedInput" to="settingsLayout">
+			<div
+				class="popup bg-darkBG dark:bg-gray5 modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
+				@click.self="showEncryptedInput = false"
+			>
+				<!-- Container -->
+				<div
+					class="w-full lg:w-600 min-h-40 max-h-90 bg-lightBG dark:bg-darkBGStop card-animation z-10 overflow-y-auto rounded-lg p-6 pt-4 shadow-lg"
+				>
+					<div class="flex flex-row justify-between items-center">
+						<!-- title, close button -->
+						<h2 class="text-xl font-semibold">Encrypt your private key</h2>
+						<button
+							class="bg-gray1 dark:bg-gray5 focus:outline-none rounded-full p-1"
+							@click="showEncryptedInput = false"
+						>
+							<CloseIcon />
+						</button>
+					</div>
+					<p>
+						Add a password to encrypt your private key as an additional security precaution. Your password cannot be
+						changed or recovered and will be required on login. Once logged in, you can re-encrypt your private key with
+						a new password in the Settings page
+					</p>
+					<input
+						ref="encryptedPassword"
+						type="password"
+						class="w-full bg-gray2 dark:bg-gray7 my-10 rounded-lg p-4"
+						placeholder="Enter password"
+					/>
+					<BrandedButton :action="encryptKey" :text="`Encrypt`" />
+				</div>
+			</div>
+		</portal>
 		<!-- Account Profile -->
 		<h3 class="text-lightPrimaryText dark:text-darkPrimaryText pb-4 text-base font-semibold">Account Profile</h3>
 		<div class="mb-8 flex w-full flex-row items-center justify-between xl:justify-start">
@@ -55,20 +115,30 @@ import { setProfile } from '@/backend/profile'
 import { getNearPrivateKey } from '@/backend/near'
 import ChevronLeft from '@/components/icons/ChevronLeft.vue'
 import PencilIcon from '@/components/icons/Pencil.vue'
+import FileDownloadIcon from '@/components/icons/FileDownload.vue'
+import CloseIcon from '@/components/icons/X.vue'
 
 interface IData {
 	backgroundImage: null | string | ArrayBuffer
+	encrypted: boolean
+	showEncryptedInput: boolean
+	encryptionKey: string
 }
 
 export default Vue.extend({
 	components: {
 		ChevronLeft,
 		PencilIcon,
+		FileDownloadIcon,
+		CloseIcon,
 	},
 	layout: `settings`,
 	data(): IData {
 		return {
 			backgroundImage: null,
+			encrypted: false,
+			showEncryptedInput: false,
+			encryptionKey: ``,
 		}
 	},
 	head() {
@@ -85,12 +155,27 @@ export default Vue.extend({
 			changeBio: MutationType.CHANGE_BIO,
 			changeLocation: MutationType.CHANGE_LOCATION,
 		}),
+		toggleEncrypted() {
+			this.encrypted = !this.encrypted
+			if (this.encrypted) {
+				this.showEncryptedInput = true
+			}
+		},
+		encryptKey() {
+			const pw = this.$refs.encryptedPassword as HTMLInputElement
+			this.encryptionKey = pw.value
+			this.showEncryptedInput = false
+		},
 		async downloadPrivateKey(): Promise<void> {
 			try {
 				const accountId = window.localStorage.getItem(`accountId`)
 				if (!accountId) {
 					this.$toastError(`Account not found, are you signed in?`)
 					return
+				}
+				if (this.encrypted) {
+					// TODO: encrypt password
+					console.log(`encrypting with password: `, this.encryptionKey)
 				}
 				const privateKey = await getNearPrivateKey(accountId)
 				const blob = new Blob([JSON.stringify({ accountId, privateKey })], { type: `application/json` })

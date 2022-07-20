@@ -78,6 +78,7 @@
 				</div>
 			</div>
 		</div>
+		<portal-target name="settingsLayout"></portal-target>
 	</main>
 </template>
 
