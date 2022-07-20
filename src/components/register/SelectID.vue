@@ -93,7 +93,11 @@ export default Vue.extend({
 				}
 				this.loadingState = `hcaptcha_loading`
 				const res = await hcaptcha.execute(undefined, { async: true })
+				// eslint-disable-next-line no-console
+				console.log(res)
 				if (!res) {
+					// eslint-disable-next-line no-console
+					console.log(`captchares`, res)
 					this.loadingState = null
 					throw new Error(`Issue on captcha`)
 				}
@@ -104,6 +108,8 @@ export default Vue.extend({
 				this.loadingState = null
 				this.$emit(`verify`, this.id)
 			} catch (error) {
+				// eslint-disable-next-line no-console
+				console.log(error)
 				this.$handleError(error)
 			} finally {
 				this.loadingState = null
