@@ -15,10 +15,8 @@
 		<button
 			v-if="loadingState === null"
 			id="hcaptcha"
-			:data-sitekey="siteKey"
-			data-size="invisible"
 			style="padding: 0.6rem 1.7rem"
-			class="h-captcha w-full bg-primary text-lightButtonText focus:outline-none transform rounded-lg font-bold transition duration-500 ease-in-out hover:shadow-lg"
+			class="w-full bg-primary text-lightButtonText focus:outline-none transform rounded-lg font-bold transition duration-500 ease-in-out hover:shadow-lg"
 			@click="handleRegisterID"
 		>
 			<span class="font-sans" style="font-size: 0.95rem"> Sign Up </span>
@@ -51,6 +49,7 @@ interface IData {
 	id: string
 	siteKey: string
 	loadingState: `checking_id` | `hcaptcha_loading` | `smart_contract` | `transfer_funds` | null
+	captchaID: string | null
 }
 
 export default Vue.extend({
@@ -65,12 +64,29 @@ export default Vue.extend({
 			id: ``,
 			siteKey: hcaptchaSiteKey,
 			loadingState: null,
+			captchaID: null,
 		}
 	},
 	head() {
 		return {
-			script: [{ src: `https://js.hcaptcha.com/1/api.js`, defer: true, async: true }],
+			script: [{ src: `https://js.hcaptcha.com/1/api.js?explicit=true`, defer: true, async: true }],
 		}
+	},
+	async mounted() {
+		const doc = document.getElementById(`hcaptcha`)
+		if (!doc) {
+			throw new Error(`Impossible!`)
+		}
+		while (true) {
+			await Promise.resolve()
+			if (hcaptcha !== undefined && hcaptcha) {
+				break
+			}
+		}
+		this.captchaID = hcaptcha.render(doc, {
+			size: `invisible`,
+			sitekey: hcaptchaSiteKey,
+		})
 	},
 	methods: {
 		...mapMutations(sessionStoreNamespace, {
@@ -84,6 +100,9 @@ export default Vue.extend({
 		}),
 		async handleRegisterID() {
 			try {
+				if (!this.captchaID) {
+					return
+				}
 				this.loadingState = `checking_id`
 				this.id = this.id.toLowerCase()
 				const idValidity = await validateUsernameNEAR(this.id)
@@ -92,7 +111,7 @@ export default Vue.extend({
 					throw new ValidationError(idValidity.error)
 				}
 				this.loadingState = `hcaptcha_loading`
-				const res = await hcaptcha.execute(undefined, { async: true })
+				const res = await hcaptcha.execute(this.captchaID, { async: true })
 				// eslint-disable-next-line no-console
 				console.log(res)
 				if (!res) {
