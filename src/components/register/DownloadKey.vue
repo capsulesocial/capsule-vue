@@ -86,7 +86,7 @@ interface IData {
 	hasDownloadedKey: boolean
 	encrypted: boolean
 	showEncryptedInput: boolean
-	encryptedPassword: string
+	encryptionKey: string
 }
 
 export default Vue.extend({
@@ -110,7 +110,7 @@ export default Vue.extend({
 			hasDownloadedKey: false,
 			encrypted: false,
 			showEncryptedInput: false,
-			encryptedPassword: ``,
+			encryptionKey: ``,
 		}
 	},
 	methods: {
@@ -122,7 +122,7 @@ export default Vue.extend({
 		},
 		encryptKey() {
 			const pw = this.$refs.encryptedPassword as HTMLInputElement
-			this.encryptedPassword = pw.value
+			this.encryptionKey = pw.value
 			this.showEncryptedInput = false
 		},
 		async downloadPrivateKey(): Promise<void> {
@@ -132,7 +132,7 @@ export default Vue.extend({
 				}
 				if (this.encrypted) {
 					// TODO: encrypt password
-					console.log(`encrypting with password: `, this.encryptedPassword)
+					console.log(`encrypting with password: `, this.encryptionKey)
 				}
 				const privateKey = await getNearPrivateKey(this.accountId)
 				const blob = new Blob([JSON.stringify({ accountId: this.accountId, privateKey })], { type: `application/json` })
