@@ -38,6 +38,7 @@
 		>
 			<InfosPopup @close="showInfos = false" />
 		</div>
+		<portal-target name="registerPage"></portal-target>
 	</main>
 </template>
 
