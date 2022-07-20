@@ -75,6 +75,36 @@
 			</div>
 		</section>
 		<p class="text-gray5 dark:text-gray3 px-4 pl-10 text-sm">© {{ currentYear }} Capsule Social, Inc.</p>
+		<!-- Decrypt key popup -->
+		<div
+			v-if="showPasswordPopup"
+			class="popup bg-darkBG dark:bg-gray5 modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
+			@click.self="showPasswordPopup = false"
+		>
+			<!-- Container -->
+			<div
+				class="w-full lg:w-600 min-h-40 max-h-90 bg-lightBG dark:bg-darkBGStop card-animation z-10 overflow-y-auto rounded-lg p-6 pt-4 shadow-lg"
+			>
+				<div class="flex flex-row justify-between items-center">
+					<!-- title, close button -->
+					<h2 class="text-xl font-semibold">Private key protected</h2>
+					<button class="bg-gray1 dark:bg-gray5 focus:outline-none rounded-full p-1" @click="showPasswordPopup = false">
+						<CloseIcon />
+					</button>
+				</div>
+				<p>
+					This is a password-protected private key. To decrypt and login, please enter the password associated with this
+					account:
+				</p>
+				<input
+					ref="password"
+					type="password"
+					class="w-full bg-gray2 dark:bg-gray7 my-10 rounded-lg p-4"
+					placeholder="Enter password"
+				/>
+				<BrandedButton :action="decryptKey" :text="`Login`" />
+			</div>
+		</div>
 	</main>
 </template>
 
@@ -88,6 +118,7 @@ import DiscordIcon from '@/components/icons/brands/Discord.vue'
 import GoogleIcon from '@/components/icons/brands/Google.vue'
 import FileIcon from '@/components/icons/File.vue'
 import InfoIcon from '@/components/icons/Info.vue'
+import CloseIcon from '@/components/icons/X.vue'
 
 import { MutationType, createSessionFromProfile, namespace as sessionStoreNamespace } from '~/store/session'
 
@@ -114,6 +145,7 @@ interface IData {
 	currentYear: string
 	keyFileTarget: HTMLInputElement | null
 	showInfo: boolean
+	showPasswordPopup: boolean
 }
 
 export default Vue.extend({
@@ -123,6 +155,7 @@ export default Vue.extend({
 		GoogleIcon,
 		FileIcon,
 		InfoIcon,
+		CloseIcon,
 	},
 	layout: `unauth`,
 	data(): IData {
@@ -143,6 +176,7 @@ export default Vue.extend({
 			currentYear: ``,
 			keyFileTarget: null,
 			showInfo: false,
+			showPasswordPopup: false,
 		}
 	},
 	head() {
@@ -258,6 +292,12 @@ export default Vue.extend({
 							const key = JSON.parse(reader.result as string)
 							this.accountIdInput = key.accountId
 							this.privateKey = key.privateKey
+							// TODO: check if keyfile is encrypted
+							if (true) {
+								this.showPasswordPopup = true
+								return
+							}
+
 							this.walletLogin()
 						} catch (error) {
 							if (this.keyFileTarget) {
@@ -268,6 +308,12 @@ export default Vue.extend({
 					}
 				}
 			}
+		},
+		decryptKey() {
+			const pw = (this.$refs.password as HTMLInputElement).value
+			console.log(`Input pw: `, pw)
+			// TODO: check if password is correct, if not throw toastError
+			this.walletLogin()
 		},
 		async verify() {
 			try {

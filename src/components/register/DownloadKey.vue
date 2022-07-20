@@ -26,7 +26,10 @@
 			<div class="flex flex-col sm:flex-row items-center justify-between">
 				<div class="flex flex-row items-center">
 					<FileDownloadIcon />
-					<h6 class="text-gray pl-4 text-lg font-semibold dark:text-darkPrimaryText">Blogchain Private Key</h6>
+					<div>
+						<h6 class="text-gray pl-4 text-lg font-semibold dark:text-darkPrimaryText">Blogchain Private Key</h6>
+						<p v-if="encrypted" class="text-xs text-primary pl-4">Encrypted</p>
+					</div>
 				</div>
 				<BrandedButton :text="`Download`" :action="downloadPrivateKey" />
 			</div>
@@ -36,6 +39,7 @@
 		<portal v-if="showEncryptedInput" to="registerPage">
 			<div
 				class="popup bg-darkBG dark:bg-gray5 modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
+				@click.self="showEncryptedInput = false"
 			>
 				<!-- Container -->
 				<div
