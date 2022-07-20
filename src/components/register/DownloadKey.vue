@@ -19,7 +19,6 @@
 						class="absolute left-0 w-7 h-7 mb-2 transition duration-300 ease-in-out transform bg-lightBG dark:bg-darkBG border-2 rounded-full flex justify-center items-center"
 						:class="[encrypted ? 'translate-x-full border-neutral' : 'translate-x-0 border-gray1 dark:border-gray7']"
 					>
-						x
 					</label>
 					<input id="encryptButton" type="checkbox" class="w-full h-full appearance-none focus:outline-none" />
 				</div>
@@ -45,7 +44,10 @@
 					<div class="flex flex-row justify-between items-center">
 						<!-- title, close button -->
 						<h2 class="text-xl font-semibold">Encrypt your private key</h2>
-						<button class="bg-gray1 dark:bg-gray5 focus:outline-none rounded-full p-1" @click="toggleEncrypted">
+						<button
+							class="bg-gray1 dark:bg-gray5 focus:outline-none rounded-full p-1"
+							@click="showEncryptedInput = false"
+						>
 							<CloseIcon />
 						</button>
 					</div>
@@ -54,7 +56,13 @@
 						changed or recovered and will be required on login. Once logged in, you can re-encrypt your private key with
 						a new password in the Settings page
 					</p>
-					<input type="text" class="w-full bg-gray2 dark:bg-gray7 my-10 rounded-lg p-4" />
+					<input
+						ref="encryptedPassword"
+						type="password"
+						class="w-full bg-gray2 dark:bg-gray7 my-10 rounded-lg p-4"
+						placeholder="Enter password"
+					/>
+					<BrandedButton :action="encryptKey" :text="`Encrypt`" />
 				</div>
 			</div>
 		</portal>
@@ -74,6 +82,7 @@ interface IData {
 	hasDownloadedKey: boolean
 	encrypted: boolean
 	showEncryptedInput: boolean
+	encryptedPassword: string
 }
 
 export default Vue.extend({
@@ -97,6 +106,7 @@ export default Vue.extend({
 			hasDownloadedKey: false,
 			encrypted: false,
 			showEncryptedInput: false,
+			encryptedPassword: ``,
 		}
 	},
 	methods: {
@@ -106,10 +116,19 @@ export default Vue.extend({
 				this.showEncryptedInput = true
 			}
 		},
+		encryptKey() {
+			const pw = this.$refs.encryptedPassword as HTMLInputElement
+			this.encryptedPassword = pw.value
+			this.showEncryptedInput = false
+		},
 		async downloadPrivateKey(): Promise<void> {
 			try {
 				if (!this.accountId) {
 					throw new Error(`Unexpected condition!`)
+				}
+				if (this.encrypted) {
+					// TODO: encrypt password
+					console.log(`encrypting with password: `, this.encryptedPassword)
 				}
 				const privateKey = await getNearPrivateKey(this.accountId)
 				const blob = new Blob([JSON.stringify({ accountId: this.accountId, privateKey })], { type: `application/json` })
