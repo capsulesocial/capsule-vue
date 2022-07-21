@@ -19,28 +19,23 @@
 			/>
 		</div>
 		<!-- Export Private Key -->
-		<div class="mb-8 flex w-full flex-row items-center">
+		<div class="mb-8 flex w-full flex-row items-start">
 			<h6 class="w-48 flex-shrink-0 font-semibold text-gray5 dark:text-gray3 text-sm">Blogchain private key</h6>
-			<div class="bg-gray2 dark:bg-gray7 my-10 rounded-lg p-4 w-full">
+			<div class="bg-gray1 dark:bg-gray7 rounded-lg pt-4 pb-5 px-6 w-full">
 				<!-- Optional encryption -->
-				<div class="flex flex-row justify-between my-4">
-					<label for="encryptButton" class="text-gray7 dark:text-gray3">Export my private key with a password</label>
-					<div
-						class="relative w-14 h-7 transition duration-500 ease-in-out rounded-full cursor-pointer"
-						:class="[encrypted ? 'bg-neutral' : 'bg-gray1 dark:bg-gray7']"
-						@click="toggleEncrypted"
-					>
-						<label
-							class="absolute left-0 w-7 h-7 mb-2 transition duration-300 ease-in-out transform bg-lightBG dark:bg-darkBG border-2 rounded-full flex justify-center items-center"
-							:class="[encrypted ? 'translate-x-full border-neutral' : 'translate-x-0 border-gray1 dark:border-gray7']"
-						>
-						</label>
-						<input id="encryptButton" type="checkbox" class="w-full h-full appearance-none focus:outline-none" />
-					</div>
+				<div class="flex flex-row justify-between mb-6">
+					<label for="encryptButton" class="text-gray7 dark:text-gray3 w-4/5">
+						Export my private key with a password:
+					</label>
+					<BasicSwitch
+						:enabled="encrypted"
+						:class="[encrypted ? 'bg-primary' : 'bg-gray2 dark:bg-gray7']"
+						@toggle="toggleEncrypted"
+					/>
 				</div>
 				<div class="flex flex-col sm:flex-row items-center justify-between">
 					<div class="flex flex-row items-center">
-						<FileDownloadIcon />
+						<FileDownloadIcon class="text-primary" />
 						<div>
 							<h6 class="text-gray pl-4 text-lg font-semibold dark:text-darkPrimaryText">Blogchain Private Key</h6>
 							<p v-if="encrypted" class="text-xs text-primary pl-4">Encrypted</p>
@@ -58,7 +53,7 @@
 			>
 				<!-- Container -->
 				<div
-					class="w-full lg:w-600 min-h-40 max-h-90 bg-lightBG dark:bg-darkBGStop card-animation z-10 overflow-y-auto rounded-lg p-6 pt-4 shadow-lg"
+					class="w-full lg:w-600 max-h-90 bg-lightBG dark:bg-darkBGStop card-animation z-10 overflow-y-auto rounded-lg p-6 pt-4 shadow-lg"
 				>
 					<div class="flex flex-row justify-between items-center">
 						<!-- title, close button -->
@@ -70,18 +65,26 @@
 							<CloseIcon />
 						</button>
 					</div>
-					<p>
-						Add a password to encrypt your private key as an additional security precaution. Your password cannot be
-						changed or recovered and will be required on login. Once logged in, you can re-encrypt your private key with
-						a new password in the Settings page
+					<p class="mt-4 text-gray5 dark:text-gray3">
+						Add a password to encrypt your private key as an additional security precaution. Your private key password
+						cannot be changed or recovered and will be required on login. Once logged in, you can re-encrypt your
+						private key with a new password in the Settings page
 					</p>
 					<input
 						ref="encryptedPassword"
+						v-model="encryptedPassword"
 						type="password"
-						class="w-full bg-gray2 dark:bg-gray7 my-10 rounded-lg p-4"
+						class="w-full bg-gray2 dark:bg-gray7 mt-6 rounded-lg px-4 py-3 focus:outline-none"
 						placeholder="Enter password"
 					/>
-					<BrandedButton :action="encryptKey" :text="`Encrypt`" />
+					<div class="flex justify-end mt-8">
+						<BrandedButton
+							:action="encryptKey"
+							:text="`Encrypt`"
+							:class="encryptedPassword === `` ? `opacity-50 cursor-not-allowed` : ``"
+							:disabled="encryptedPassword === ``"
+						/>
+					</div>
 				</div>
 			</div>
 		</portal>
@@ -117,11 +120,13 @@ import ChevronLeft from '@/components/icons/ChevronLeft.vue'
 import PencilIcon from '@/components/icons/Pencil.vue'
 import FileDownloadIcon from '@/components/icons/FileDownload.vue'
 import CloseIcon from '@/components/icons/X.vue'
+import BasicSwitch from '@/components/BasicSwitch.vue'
 
 interface IData {
 	backgroundImage: null | string | ArrayBuffer
 	encrypted: boolean
 	showEncryptedInput: boolean
+	encryptedPassword: string
 	encryptionKey: string
 }
 
@@ -131,6 +136,7 @@ export default Vue.extend({
 		PencilIcon,
 		FileDownloadIcon,
 		CloseIcon,
+		BasicSwitch,
 	},
 	layout: `settings`,
 	data(): IData {
@@ -138,6 +144,7 @@ export default Vue.extend({
 			backgroundImage: null,
 			encrypted: false,
 			showEncryptedInput: false,
+			encryptedPassword: ``,
 			encryptionKey: ``,
 		}
 	},
@@ -156,15 +163,18 @@ export default Vue.extend({
 			changeLocation: MutationType.CHANGE_LOCATION,
 		}),
 		toggleEncrypted() {
-			this.encrypted = !this.encrypted
-			if (this.encrypted) {
-				this.showEncryptedInput = true
+			if (this.encryptionKey !== ``) {
+				this.encrypted = false
+				this.encryptedPassword = ``
+				this.encryptionKey = ``
+			} else {
+				this.showEncryptedInput = !this.showEncryptedInput
 			}
 		},
 		encryptKey() {
-			const pw = this.$refs.encryptedPassword as HTMLInputElement
-			this.encryptionKey = pw.value
+			this.encryptionKey = this.encryptedPassword
 			this.showEncryptedInput = false
+			this.encrypted = true
 		},
 		async downloadPrivateKey(): Promise<void> {
 			try {
