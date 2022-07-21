@@ -27,6 +27,7 @@ import { getUsernameNEAR, removeNearPrivateKey, walletLogout } from '@/backend/n
 import { MutationType, createSessionFromProfile, namespace as sessionStoreNamespace } from '~/store/session'
 import { setNearUserFromPrivateKey, login, register, IAuthResult, IWalletStatus } from '@/backend/auth'
 import { ValidationError } from '@/errors'
+import { nearNetwork } from '@/backend/utilities/config'
 
 interface IData {
 	funds: string
@@ -71,7 +72,7 @@ export default Vue.extend({
 			}
 			if (this.userInfo.type === `near`) {
 				// If the key exists we can login him
-				const pk = window.localStorage.getItem(`near-api-js:${this.userInfo.accountId}:testnet`)
+				const pk = window.localStorage.getItem(`near-api-js:${this.userInfo.accountId}:${nearNetwork}`)
 				if (pk) {
 					this.username = username
 					await this.verify(this.username)
