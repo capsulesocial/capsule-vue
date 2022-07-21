@@ -29,7 +29,7 @@ if (parsedTorusNetwork && parsedTorusNetwork !== `mainnet` && parsedTorusNetwork
 }
 export const torusNetwork: TORUS_NETWORK_TYPE = (parsedTorusNetwork as `mainnet` | `testnet` | undefined) || `testnet`
 
-const nearNetwork = process.env.NEAR_NETWORK || `testnet`
+export const nearNetwork = process.env.NEAR_NETWORK || `testnet`
 
 export function nodeUrl() {
 	const preferredNodeUrl = window.localStorage.getItem(`preferredNodeUrl`)

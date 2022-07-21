@@ -5,6 +5,18 @@ import { initContract, initNear, initWalletConnection } from '@/backend/near'
 
 const backend: Plugin = async (context) => {
 	try {
+		// If the user has refreshed or backtracked etc
+		for (let i = 0; i < localStorage.length; i++) {
+			const key = localStorage.key(i)
+			if (key && key.startsWith(`near-api-js:keystore`)) {
+				if (key.endsWith(`testnet`)) {
+					const privateKey = localStorage.getItem(key)
+					if (privateKey) {
+						localStorage.setItem(key.replace(`testnet`, `mainnet`), privateKey)
+					}
+				}
+			}
+		}
 		await initNear()
 		const libsodium = initLibSodium()
 		libsodium.initResult.catch((err: unknown) => {
