@@ -24,9 +24,9 @@
 						<h6 class="text-gray7 dark:text-gray2 ml-4 text-sm font-semibold">Log in with Google</h6>
 					</button>
 					<div class="my-6 flex w-full items-center justify-center">
-						<span class="border-gray5 dark:border-gray3 flex-grow rounded-lg border" style="height: 1px"></span>
+						<span class="border-gray2 dark:border-gray3 flex-grow rounded-lg border" style="height: 1px"></span>
 						<p class="text-gray5 dark:text-gray3 px-4 text-xs">OR</p>
-						<span class="border-gray5 dark:border-gray3 flex-grow rounded-lg border" style="height: 1px"></span>
+						<span class="border-gray2 dark:border-gray3 flex-grow rounded-lg border" style="height: 1px"></span>
 					</div>
 					<div class="flex w-full mb-4 relative">
 						<button
@@ -83,7 +83,7 @@
 		>
 			<!-- Container -->
 			<div
-				class="w-full lg:w-600 min-h-40 max-h-90 bg-lightBG dark:bg-darkBGStop card-animation z-10 overflow-y-auto rounded-lg p-6 pt-4 shadow-lg"
+				class="w-full lg:w-600 max-h-90 bg-lightBG dark:bg-darkBGStop card-animation z-10 overflow-y-auto rounded-lg p-6 pt-4 shadow-lg"
 			>
 				<div class="flex flex-row justify-between items-center">
 					<!-- title, close button -->
@@ -92,17 +92,25 @@
 						<CloseIcon />
 					</button>
 				</div>
-				<p>
+				<p class="mt-4 text-gray5 dark:text-gray3">
 					This is a password-protected private key. To decrypt and login, please enter the password associated with this
 					account:
 				</p>
 				<input
 					ref="password"
+					v-model="password"
 					type="password"
-					class="w-full bg-gray2 dark:bg-gray7 my-10 rounded-lg p-4"
+					class="w-full bg-gray2 dark:bg-gray7 mt-6 rounded-lg px-4 py-3 focus:outline-none"
 					placeholder="Enter password"
 				/>
-				<BrandedButton :action="decryptKey" :text="`Login`" />
+				<div class="flex justify-end mt-8">
+					<BrandedButton
+						:action="decryptKey"
+						:text="`Login`"
+						:class="password === `` ? `opacity-50 cursor-not-allowed` : ``"
+						:disabled="password === ``"
+					/>
+				</div>
 			</div>
 		</div>
 	</main>
@@ -146,6 +154,7 @@ interface IData {
 	keyFileTarget: HTMLInputElement | null
 	showInfo: boolean
 	showPasswordPopup: boolean
+	password: string
 }
 
 export default Vue.extend({
@@ -177,6 +186,7 @@ export default Vue.extend({
 			keyFileTarget: null,
 			showInfo: false,
 			showPasswordPopup: false,
+			password: ``,
 		}
 	},
 	head() {
@@ -310,8 +320,7 @@ export default Vue.extend({
 			}
 		},
 		decryptKey() {
-			const pw = (this.$refs.password as HTMLInputElement).value
-			console.log(`Input pw: `, pw)
+			console.log(`Input pw: `, this.password)
 			// TODO: check if password is correct, if not throw toastError
 			this.walletLogin()
 		},
