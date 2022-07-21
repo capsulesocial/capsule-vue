@@ -67,11 +67,6 @@ export default Vue.extend({
 			captchaID: null,
 		}
 	},
-	head() {
-		return {
-			script: [{ src: `https://js.hcaptcha.com/1/api.js?explicit=true`, defer: true, async: true }],
-		}
-	},
 	async mounted() {
 		const doc = document.getElementById(`hcaptcha`)
 		if (!doc) {

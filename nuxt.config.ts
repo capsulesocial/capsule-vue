@@ -92,7 +92,7 @@ const config: NuxtConfig = {
 			{ rel: `manifest`, href: `/site.webmanifest` },
 			{ rel: `mask-icon`, href: `/safari-pinned-tab.svg`, color: `#4a4a4a` },
 		],
-		script: [],
+		script: [{ src: `https://js.hcaptcha.com/1/api.js?explicit=true`, defer: true, async: true }],
 	},
 	loadingIndicator: {
 		name: `chasing-dots`,
