@@ -58,28 +58,28 @@
 				<div class="mb-10 self-center">
 					<button class="bg-primary focus:outline-none mx-1 rounded-full p-1" @click="setStep(0)"></button>
 					<button
-						:class="step >= 1 ? `bg-primary` : `bg-gray3`"
+						:class="step > 0 ? `bg-primary` : `bg-gray3`"
 						class="focus:outline-none mx-1 rounded-full p-1"
 						@click="setStep(1)"
 					></button>
 					<button
-						:class="step >= 2 ? `bg-primary` : `bg-gray3`"
+						:class="step > 1 ? `bg-primary` : `bg-gray3`"
 						class="focus:outline-none mx-1 rounded-full p-1"
 						@click="setStep(2)"
 					></button>
 					<button
-						:class="step >= 3 ? `bg-primary` : `bg-gray3`"
+						:class="step > 2 ? `bg-primary` : `bg-gray3`"
 						class="focus:outline-none mx-1 rounded-full p-1"
 						@click="setStep(3)"
 					></button>
 					<button
-						:class="step >= 4 ? `bg-primary` : `bg-gray3`"
+						:class="step > 3 ? `bg-primary` : `bg-gray3`"
 						class="focus:outline-none mx-1 rounded-full p-1"
 						@click="setStep(4)"
 					></button>
 					<button
 						v-if="this.$route.name != `help`"
-						:class="step >= 5 ? `bg-primary` : `bg-gray3`"
+						:class="step > 4 ? `bg-primary` : `bg-gray3`"
 						class="focus:outline-none mx-1 rounded-full p-1"
 						@click="setStep(5)"
 					></button>
@@ -160,37 +160,39 @@ export default Vue.extend({
 			}
 		},
 		getTitle(): string {
-			if (this.step === 0) {
-				return `Customize your homepage`
-			} else if (this.step === 1) {
-				return `Discover great content`
-			} else if (this.step === 2) {
-				return `Save and share bookmarks`
-			} else if (this.step === 3) {
-				return `Create content easily`
-			} else if (this.step === 4) {
-				return `Join the conversation`
-			} else if (this.step === 5) {
-				return `Start by editing your profile`
-			} else {
-				return `out of scope`
+			switch (this.step) {
+				case 0:
+					return `Customize your homepage`
+				case 1:
+					return `Discover great content`
+				case 2:
+					return `Save and share bookmarks`
+				case 3:
+					return `Create content easily `
+				case 4:
+					return `Join the conversation `
+				case 5:
+					return `Start by editing your profile`
+				default:
+					return `out of scope`
 			}
 		},
 		getText(): string {
-			if (this.step === 0) {
-				return `Make it truly your own by selecting your preferences for displaying content, editing tools, updating widgets, and customizing everything as you wish!`
-			} else if (this.step === 1) {
-				return `Here you can easily browse posts that suit your interests. Scroll through  various categories, trending tags, or trending topics to get started.`
-			} else if (this.step === 2) {
-				return `Sometimes a post or headline catches your attention, but you’re short of time. No worries. Blogchain makes it easy to save and share content for later.`
-			} else if (this.step === 3) {
-				return `Have an idea you’d like to share with the world? Blogchain’s simple editing tool makes it easy to craft and publish your post through an intuitive writing experience.`
-			} else if (this.step === 4) {
-				return `Agree or disagree with something you’ve read on Blogchain? Use our comment features to discuss with other readers. You can even include a custom reaction illustration to make your point.`
-			} else if (this.step === 5) {
-				return `You’ll be able to update your profile or add more information later!`
-			} else {
-				return `out of scope`
+			switch (this.step) {
+				case 0:
+					return `Make it truly your own by selecting your preferences for displaying content, editing tools, updating widgets, and customizing everything as you wish!`
+				case 1:
+					return `Here you can easily browse posts that suit your interests. Scroll through  various categories, trending tags, or trending topics to get started.`
+				case 2:
+					return `Sometimes a post or headline catches your attention, but you’re short of time. No worries. Blogchain makes it easy to save and share content for later.`
+				case 3:
+					return `Have an idea you’d like to share with the world? Blogchain’s simple editing tool makes it easy to craft and publish your post through an intuitive writing experience.`
+				case 4:
+					return `Agree or disagree with something you’ve read on Blogchain? Use our comment features to discuss with other readers. You can even include a custom reaction illustration to make your point.`
+				case 5:
+					return `You’ll be able to update your profile or add more information later!`
+				default:
+					return `out of scope`
 			}
 		},
 		handleClose(e: any): void {
