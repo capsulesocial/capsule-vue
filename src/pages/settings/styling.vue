@@ -89,9 +89,7 @@
 			class="popup bg-darkBG dark:bg-gray5 modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
 		>
 			<!-- Inner space -->
-			<div
-				class="popup w-full lg:w-600 min-h-40 max-h-90 bg-lightBG dark:bg-darkBGStop card-animation rounded-lg shadow-lg"
-			>
+			<div class="popup w-full lg:w-600 max-h-90 bg-lightBG dark:bg-darkBGStop card-animation rounded-lg shadow-lg">
 				<!-- Header and close icon -->
 				<div class="flex items-center justify-between p-6 pb-2 mb-4">
 					<h4 class="text-lightPrimaryText dark:text-darkPrimaryText text-xl font-semibold">
@@ -354,7 +352,7 @@ export default Vue.extend({
 			if (this.$store.state.settings.mode) {
 				this.toggleModeSelector()
 				if (this.currentmode !== this.$store.state.settings.mode) {
-					this.$toastSuccess(`Switched to ${this.currentmode === `Dark` ? `light` : `dark`} mode`)
+					this.$toastSuccess(`Switched to ${this.$store.state.settings.mode} mode`)
 				}
 			} else {
 				this.$toastError(`Unable to save your light mode`)
