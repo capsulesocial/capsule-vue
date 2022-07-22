@@ -89,7 +89,7 @@
 					<BrandedButton
 						:action="
 							() => {
-								setStep(step + 1)
+								closeWizard()
 							}
 						"
 						:text="`Let's start! 🚀`"
@@ -146,8 +146,8 @@ export default Vue.extend({
 		window.addEventListener(`click`, this.handleClose, false)
 	},
 	methods: {
-		setStep(i: number | null) {
-			i === null ? (this.step = this.step + 1) : (this.step = i)
+		setStep(i: number) {
+			this.step = i
 			if ((this.$route.name === `help` && this.step >= 5) || this.step >= 6) {
 				if (this.$route.name !== `help`) {
 					if (!(`settings` in this.$refs && this.$refs.settings)) {
