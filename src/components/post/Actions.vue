@@ -33,7 +33,7 @@
 						</div>
 					</div>
 				</div>
-				<div v-if="repostsCount > 0" class="flex flex-col w-1/5">
+				<div v-if="repostsCount > 0" class="flex flex-col w-2/5 lg:w-1/5">
 					<!-- Show reposters and quotes -->
 					<button class="text-sm text-primary h-fit flex items-center" @click="openReposters">
 						<RepostIcon :isActive="true" :shrink="true" class="mr-2 p-1" />
