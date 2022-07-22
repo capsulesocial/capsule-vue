@@ -354,7 +354,7 @@ export default Vue.extend({
 			if (this.$store.state.settings.mode) {
 				this.toggleModeSelector()
 				if (this.currentmode !== this.$store.state.settings.mode) {
-					this.$toastSuccess(`Your light mode has been updated`)
+					this.$toastSuccess(`Switched to ${this.currentmode === `Dark` ? `light` : `dark`} mode`)
 				}
 			} else {
 				this.$toastError(`Unable to save your light mode`)
