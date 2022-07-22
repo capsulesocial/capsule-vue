@@ -31,7 +31,9 @@
 		</div>
 		<!-- Name -->
 		<div class="mb-4 flex flex-col lg:flex-row">
-			<label for="newName" class="mb-2 w-32 font-semibold lg:mb-0 dark:text-darkPrimaryText">Display Name</label>
+			<label for="newName" class="mb-2 w-32 font-semibold lg:mb-0 dark:text-darkPrimaryText text-left"
+				>Display Name</label
+			>
 			<input
 				id="newName"
 				v-model="newName"
@@ -42,7 +44,7 @@
 		</div>
 		<!-- Bio -->
 		<div class="mb-6 flex flex-col lg:flex-row">
-			<label for="bio" class="mb-2 w-32 font-semibold lg:mb-0 dark:text-darkPrimaryText">Bio</label>
+			<label for="bio" class="mb-2 w-32 font-semibold lg:mb-0 dark:text-darkPrimaryText text-left">Bio</label>
 			<div class="flex-grow">
 				<textarea
 					id="bio"
