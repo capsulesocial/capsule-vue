@@ -18,16 +18,27 @@
 					:class="$route.params.id === $store.state.session.id ? `` : `ml-6`"
 				>
 					<div class="flex flex-row items-center">
-						<button class="focus:outline-none" @click="showAvatar">
+						<button
+							class="focus:outline-none"
+							:class="scrollingDown ? `cursor-pointer` : `cursor-default`"
+							:disabled="!scrollingDown"
+							@click="showAvatar"
+						>
 							<Avatar
 								:avatar="visitAvatar"
 								:authorID="$route.params.id"
 								:size="`w-8 h-8`"
 								:noClick="true"
 								class="rounded-base flex-shrink-0"
+								:class="!visitAvatar ? `cursor-default` : ``"
 							/>
 						</button>
-						<button class="focus:outline-none" @click="openHeader(true)">
+						<button
+							class="focus:outline-none"
+							:class="scrollingDown ? `cursor-pointer` : `cursor-default`"
+							:disabled="!scrollingDown"
+							@click="openHeader(true)"
+						>
 							<h6 v-if="visitProfile.name != ``" class="ml-2 font-sans font-semibold dark:text-darkPrimaryText">
 								{{ visitProfile.name }}
 							</h6>
@@ -36,18 +47,32 @@
 					</div>
 					<div class="flex items-center">
 						<span v-if="$store.state.session.id === $route.params.id">
-							<button class="bg-darkBG focus:outline-none block rounded-lg xl:hidden" @click="toggleSettings">
+							<button
+								class="bg-darkBG focus:outline-none block rounded-lg xl:hidden"
+								:class="scrollingDown ? `cursor-pointer` : `cursor-default`"
+								:disabled="!scrollingDown"
+								@click="toggleSettings"
+							>
 								<PencilIcon class="m-2 h-5 w-5 text-white" />
 							</button>
 							<SecondaryButton :text="`Edit Profile`" :action="toggleSettings" class="hidden xl:block" />
 						</span>
-						<FriendButton v-else :toggleFriend="toggleFriend" :userIsFollowed="userIsFollowed" class="header-profile" />
+						<FriendButton
+							v-else
+							:toggleFriend="toggleFriend"
+							:userIsFollowed="userIsFollowed"
+							class="header-profile"
+							:class="scrollingDown ? `cursor-pointer` : `cursor-default`"
+							:disabled="!scrollingDown"
+						/>
 						<!-- Subscription button -->
 						<SubscribeButton
 							v-if="$store.state.session.id !== $route.params.id && paymentsEnabled"
 							:toggleSubscription="toggleSubscription"
 							:userIsSubscribed="activeSubscription"
 							class="header-profile ml-2"
+							:class="scrollingDown ? `cursor-pointer` : `cursor-default`"
+							:disabled="!scrollingDown"
 						/>
 					</div>
 				</div>
@@ -66,6 +91,7 @@
 							:size="`w-20 h-20`"
 							:noClick="true"
 							class="flex-shrink-0 rounded-lg"
+							:class="!visitAvatar ? `cursor-default` : ``"
 						/>
 					</button>
 					<div class="ml-5 flex flex-grow flex-col">
