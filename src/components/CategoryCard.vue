@@ -4,16 +4,15 @@
 			v-if="bgImage !== ``"
 			:to="'/discover/' + text"
 			class="bg-primary flex w-full transform items-end overflow-hidden rounded-lg shadow-lg transition duration-500 ease-in-out hover:scale-105"
-			:style="{
-				height: '200px',
-			}"
+			style="height: 200px"
 		>
 			<nuxt-img
 				v-if="bgImage !== ``"
 				:src="bgImage"
 				:alt="text"
-				class="absolute left-0 top-0 object-contain w-full"
+				class="absolute left-0 top-0 object-cover w-full"
 				loading="lazy"
+				style="height: 200px"
 			/>
 			<div
 				class="absolute z-10 left-0 top-0 object-contain w-full h-full"
