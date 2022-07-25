@@ -47,15 +47,16 @@
 					</div>
 					<div class="flex items-center">
 						<span v-if="$store.state.session.id === $route.params.id">
-							<button
-								class="bg-darkBG focus:outline-none block rounded-lg xl:hidden"
-								:class="scrollingDown ? `cursor-pointer` : `cursor-default`"
-								:disabled="!scrollingDown"
-								@click="toggleSettings"
-							>
+							<button class="bg-darkBG focus:outline-none block rounded-lg xl:hidden" @click="toggleSettings">
 								<PencilIcon class="m-2 h-5 w-5 text-white" />
 							</button>
-							<SecondaryButton :text="`Edit Profile`" :action="toggleSettings" class="hidden xl:block" />
+							<SecondaryButton
+								:text="`Edit Profile`"
+								:action="toggleSettings"
+								class="hidden xl:block"
+								:class="scrollingDown ? `cursor-pointer` : `cursor-default`"
+								:disabled="!scrollingDown"
+							/>
 						</span>
 						<FriendButton
 							v-else
@@ -147,7 +148,13 @@
 						<button class="bg-darkBG focus:outline-none block rounded-lg xl:hidden" @click="toggleSettings">
 							<PencilIcon class="m-2 h-5 w-5 text-white" />
 						</button>
-						<SecondaryButton :text="`Edit Profile`" :action="toggleSettings" class="hidden xl:block" />
+						<SecondaryButton
+							:text="`Edit Profile`"
+							:action="toggleSettings"
+							class="hidden xl:block"
+							:class="!scrollingDown ? `cursor-pointer` : `cursor-default`"
+							:disabled="scrollingDown"
+						/>
 					</span>
 					<FriendButton
 						v-else
