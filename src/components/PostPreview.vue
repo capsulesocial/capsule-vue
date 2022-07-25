@@ -38,4 +38,18 @@ export default Vue.extend({
 	margin-bottom: 10px;
 	cursor: pointer;
 }
+
+pre {
+	white-space: pre-wrap;
+	margin-bottom: 5px;
+	margin-top: 5px;
+	padding: 5px 10px;
+	border-radius: 3px;
+}
+
+pre.ql-syntax {
+	background-color: rgb(35, 36, 31);
+	color: rgb(248, 248, 242);
+	overflow: visible;
+}
 </style>
