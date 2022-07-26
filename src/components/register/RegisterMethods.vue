@@ -32,7 +32,7 @@
 				@click="walletLoginComponent"
 			>
 				<NearIcon style="width: 22px; height: 22px" />
-				<h6 class="text-gray7 dark:text-gray2 ml-4 text-sm font-semibold">Signup with NEAR - 0.01 NEAR required</h6>
+				<h6 class="text-gray7 dark:text-gray2 ml-4 text-sm font-semibold">Signup with NEAR</h6>
 			</button>
 			<button
 				class="bg-gray2 dark:bg-gray7 focus:outline-none mb-4 flex w-full items-center justify-center rounded-lg py-3"
