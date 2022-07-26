@@ -10,12 +10,12 @@
 				v-if="bgImage !== ``"
 				:src="bgImage"
 				:alt="text"
-				class="absolute left-0 top-0 object-cover w-full"
+				class="absolute left-0 top-0 object-cover w-full rounded-lg"
 				loading="lazy"
 				style="height: 200px"
 			/>
 			<div
-				class="absolute z-10 left-0 top-0 object-contain w-full h-full"
+				class="absolute z-10 left-0 top-0 object-contain w-full h-full rounded-lg"
 				:style="{
 					background: `linear-gradient(180deg, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.8) 100%)`,
 					backgroundSize: 'cover',
