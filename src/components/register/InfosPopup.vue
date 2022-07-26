@@ -33,12 +33,12 @@
 						</p>
 					</div>
 					<div class="flex flex-col my-4">
-						<h4 class="text-lg font-semibold dark:text-darkPrimaryText">Sign up with NEAR - 0.01 NEAR required</h4>
+						<h4 class="text-lg font-semibold dark:text-darkPrimaryText">Sign up with NEAR</h4>
 						<p class="my-2 text-gray5 dark:text-gray3">
-							Create an account using your NEAR wallet. In case of insufficient funds, you will need to solve the
-							captcha and be sponsored with NEAR tokens enough for running the transaction on the smart contract and
-							registering your account on the blockchain. By signing up with NEAR, you need to download your Blogchain
-							private key and use it to log in under “Import private key”.
+							Create an account using your NEAR wallet. You will need to self-fund your account with NEAR tokens
+							sufficient for running the transaction on the smart contract and registering your account on the
+							blockchain. By signing up with NEAR, you need to download your Blogchain private key and use it to log in
+							under “Import private key”.
 						</p>
 					</div>
 					<div class="flex flex-col my-4">
