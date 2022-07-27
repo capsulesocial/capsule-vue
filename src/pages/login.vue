@@ -133,6 +133,7 @@ import { MutationType, createSessionFromProfile, namespace as sessionStoreNamesp
 import { getAccountIdFromPrivateKey, login, loginNearAccount } from '@/backend/auth'
 import { getUserInfoNEAR, getUsernameNEAR } from '@/backend/near'
 import { domain, torusNetwork, torusVerifiers, TorusVerifiers } from '@/backend/utilities/config'
+import { getDecryptedPrivateKey } from '@/backend/privateKey'
 import { revokeDiscordKey } from '@/backend/discordRevoke'
 import { HTMLInputEvent } from '@/interfaces/HTMLInputEvent'
 
@@ -302,12 +303,11 @@ export default Vue.extend({
 							const key = JSON.parse(reader.result as string)
 							this.accountIdInput = key.accountId
 							this.privateKey = key.privateKey
-							// TODO: check if keyfile is encrypted
-							if (true) {
+							if (key.privateKey.startsWith(`encrypted:`)) {
 								this.showPasswordPopup = true
 								return
 							}
-
+							// Login with non-encrypted key
 							this.walletLogin()
 						} catch (error) {
 							if (this.keyFileTarget) {
@@ -320,9 +320,14 @@ export default Vue.extend({
 			}
 		},
 		decryptKey() {
-			console.log(`Input pw: `, this.password)
-			// TODO: check if password is correct, if not throw toastError
-			this.walletLogin()
+			getDecryptedPrivateKey(this.password, this.accountIdInput, this.privateKey).then((pk) => {
+				if (!pk) {
+					this.$toastError(`Password incorrect!`)
+					return
+				}
+				this.privateKey = pk
+				this.walletLogin()
+			})
 		},
 		async verify() {
 			try {

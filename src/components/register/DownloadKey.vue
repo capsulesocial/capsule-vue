@@ -83,6 +83,7 @@ import CloseIcon from '@/components/icons/X.vue'
 import BasicSwitch from '@/components/BasicSwitch.vue'
 
 import { getNearPrivateKey } from '@/backend/near'
+import { getEncryptedPrivateKey } from '@/backend/privateKey'
 
 interface IData {
 	hasDownloadedKey: boolean
@@ -138,12 +139,12 @@ export default Vue.extend({
 				if (!this.accountId) {
 					throw new Error(`Unexpected condition!`)
 				}
-				if (this.encrypted) {
-					// TODO: encrypt password
-					console.log(`encrypting with password: `, this.encryptionKey)
-				}
-				const privateKey = await getNearPrivateKey(this.accountId)
-				const blob = new Blob([JSON.stringify({ accountId: this.accountId, privateKey })], { type: `application/json` })
+				const privateKey = this.encrypted
+					? await getEncryptedPrivateKey(this.encryptionKey)
+					: await getNearPrivateKey(this.accountId)
+				const blob = new Blob([JSON.stringify({ accountId: this.accountId, privateKey })], {
+					type: `application/json`,
+				})
 				const link = document.createElement(`a`)
 				link.href = URL.createObjectURL(blob)
 				link.download = `blogchain-priv-key-${this.username}.json`

@@ -116,6 +116,7 @@ import { mapMutations } from 'vuex'
 import { MutationType, getProfileFromSession, namespace as sessionStoreNamespace } from '~/store/session'
 import { setProfile } from '@/backend/profile'
 import { getNearPrivateKey } from '@/backend/near'
+import { getEncryptedPrivateKey } from '@/backend/privateKey'
 import ChevronLeft from '@/components/icons/ChevronLeft.vue'
 import PencilIcon from '@/components/icons/Pencil.vue'
 import FileDownloadIcon from '@/components/icons/FileDownload.vue'
@@ -183,11 +184,9 @@ export default Vue.extend({
 					this.$toastError(`Account not found, are you signed in?`)
 					return
 				}
-				if (this.encrypted) {
-					// TODO: encrypt password
-					console.log(`encrypting with password: `, this.encryptionKey)
-				}
-				const privateKey = await getNearPrivateKey(accountId)
+				const privateKey = this.encrypted
+					? await getEncryptedPrivateKey(this.encryptionKey)
+					: await getNearPrivateKey(accountId)
 				const blob = new Blob([JSON.stringify({ accountId, privateKey })], { type: `application/json` })
 				const link = document.createElement(`a`)
 				link.href = URL.createObjectURL(blob)
