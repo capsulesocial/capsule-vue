@@ -301,7 +301,6 @@ export default Vue.extend({
 					if (i.target !== null && reader.result !== null) {
 						try {
 							const key = JSON.parse(reader.result as string)
-							console.log(key)
 							this.accountIdInput = key.accountId
 							this.privateKey = key.privateKey
 							if (key.privateKey.startsWith(`encrypted:`)) {
@@ -321,12 +320,14 @@ export default Vue.extend({
 			}
 		},
 		decryptKey() {
-			console.log(`Input pw: `, this.password)
-			console.log(this.accountIdInput)
-			console.log(this.privateKey)
-			getDecryptedPrivateKey(this.password, this.accountIdInput)
-			// TODO: check if password is correct, if not throw toastError
-			this.walletLogin()
+			getDecryptedPrivateKey(this.password, this.accountIdInput, this.privateKey).then((pk) => {
+				if (!pk) {
+					this.$toastError(`Password incorrect!`)
+					return
+				}
+				this.privateKey = pk
+				this.walletLogin()
+			})
 		},
 		async verify() {
 			try {

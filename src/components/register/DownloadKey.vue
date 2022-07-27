@@ -139,7 +139,7 @@ export default Vue.extend({
 				if (!this.accountId) {
 					throw new Error(`Unexpected condition!`)
 				}
-				const privateKey = this.encryptionKey.startsWith(`encrypted:`)
+				const privateKey = this.encrypted
 					? await getEncryptedPrivateKey(this.encryptionKey)
 					: await getNearPrivateKey(this.accountId)
 				const blob = new Blob([JSON.stringify({ accountId: this.accountId, privateKey })], {

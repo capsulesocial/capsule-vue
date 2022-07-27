@@ -40,34 +40,44 @@ export async function getEncryptedPrivateKey(password: string) {
 	return encodedEncPrivateKey
 }
 
-export async function getDecryptedPrivateKey(password: string, accountId: string, encodedEncPrivateKey: string) {
+export async function getDecryptedPrivateKey(
+	password: string,
+	accountId: string,
+	encodedEncPrivateKey: string,
+): Promise<string | false> {
 	const encryptionPrefix = `encrypted:`
 	if (!encodedEncPrivateKey.startsWith(encryptionPrefix)) {
 		throw new ValidationError(`Private key not encrypted`)
 	}
+	try {
+		const encryptedPrivateKey = hexStringToUint8Array(encodedEncPrivateKey.slice(encryptionPrefix.length))
+		const key = await scrypt(
+			new Uint8Array(Buffer.from(password)),
+			new Uint8Array(Buffer.from(`CapsuleBlogchain-${accountId}`)),
+			32768,
+			8,
+			1,
+			32,
+		)
+		const decryptionKey = key.slice(0, 16)
+		const iv = key.slice(16, 32)
 
-	const encryptedPrivateKey = hexStringToUint8Array(encodedEncPrivateKey.slice(encryptionPrefix.length))
-	const key = await scrypt(
-		new Uint8Array(Buffer.from(password)),
-		new Uint8Array(Buffer.from(`CapsuleBlogchain-${accountId}`)),
-		32768,
-		8,
-		1,
-		32,
-	)
-	const decryptionKey = key.slice(0, 16)
-	const iv = key.slice(16, 32)
+		const derivedDecryptionKey = await window.crypto.subtle.importKey(
+			`raw`,
+			decryptionKey,
+			{ name: `AES-GCM` },
+			false,
+			[`encrypt`, `decrypt`],
+		)
+		const decryptedPrivateKey = await window.crypto.subtle.decrypt(
+			{ name: `AES-GCM`, iv, tagLength: 96 },
+			derivedDecryptionKey,
+			encryptedPrivateKey,
+		)
 
-	const derivedDecryptionKey = await window.crypto.subtle.importKey(`raw`, decryptionKey, { name: `AES-GCM` }, false, [
-		`encrypt`,
-		`decrypt`,
-	])
-	const decryptedPrivateKey = await window.crypto.subtle.decrypt(
-		{ name: `AES-GCM`, iv, tagLength: 96 },
-		derivedDecryptionKey,
-		encryptedPrivateKey,
-	)
-
-	const encodedPrivateKey = baseEncode(new Uint8Array(decryptedPrivateKey))
-	return encodedPrivateKey
+		const encodedPrivateKey = baseEncode(new Uint8Array(decryptedPrivateKey))
+		return encodedPrivateKey
+	} catch (err) {
+		return false
+	}
 }
