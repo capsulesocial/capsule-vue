@@ -75,7 +75,7 @@
 							ref="encryptedPassword"
 							v-model="encryptedPassword"
 							:type="seePassword ? `text` : `password`"
-							class="w-full focus:outline-none bg-transparent"
+							class="w-full focus:outline-none bg-transparent pr-6"
 							placeholder="Enter password"
 						/>
 						<button class="absolute" style="right: 1rem; top: 1.1rem" @click="seePassword = !seePassword">
