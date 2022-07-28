@@ -72,7 +72,7 @@
 			@close="showFollowers = false"
 		/>
 		<!-- Onboarding Wizard -->
-		<OnboardingWizard v-if="$store.state.recentlyJoined" />
+		<OnboardingWizard v-if="true" />
 		<UnauthPopup />
 		<portal-target name="card-popup"></portal-target>
 	</main>

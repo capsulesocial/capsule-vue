@@ -89,6 +89,7 @@
 					<BrandedButton
 						:action="
 							() => {
+								handleSettings()
 								closeWizard()
 							}
 						"
@@ -148,16 +149,6 @@ export default Vue.extend({
 	methods: {
 		setStep(i: number) {
 			this.step = i
-			if ((this.$route.name === `help` && this.step >= 5) || this.step >= 6) {
-				if (this.$route.name !== `help`) {
-					if (!(`settings` in this.$refs && this.$refs.settings)) {
-						throw new Error(`This shouldn't happen`)
-					}
-					const settings = this.$refs.settings as any
-					settings.updateSettings()
-				}
-				this.closeWizard()
-			}
 		},
 		getTitle(): string {
 			switch (this.step) {
@@ -188,7 +179,7 @@ export default Vue.extend({
 				case 3:
 					return `Have an idea you’d like to share with the world? Blogchain’s simple editing tool makes it easy to craft and publish your post through an intuitive writing experience.`
 				case 4:
-					return `Agree or disagree with something you’ve read on Blogchain? Use our comment features to discuss with other readers. You can even include a custom reaction illustration to make your point.`
+					return `Agree or disagree with something you’ve read on Blogchain? Use our comment features to discuss with other readers. You can even include a custom reaction to make your point.`
 				case 5:
 					return `You’ll be able to update your profile or add more information later!`
 				default:
@@ -215,6 +206,16 @@ export default Vue.extend({
 			if (this.$store.state.session.id !== `` && this.$store.state.session.id === this.$route.params.id) {
 				this.visitProfile = this.myProfile
 				this.visitAvatar = this.myAvatar
+			}
+		},
+		handleSettings(): void {
+			if (this.$route.name !== `help`) {
+				console.log(`updateSettings`)
+				if (!(`settings` in this.$refs && this.$refs.settings)) {
+					throw new Error(`This shouldn't happen`)
+				}
+				const settings = this.$refs.settings as any
+				settings.updateSettings()
 			}
 		},
 		closeWizard(): void {
