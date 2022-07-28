@@ -56,32 +56,32 @@
 				</p>
 				<!-- progress circles -->
 				<div class="mb-10 self-center">
-					<button class="bg-primary focus:outline-none mx-1 rounded-full p-1" @click="setStep(0)"></button>
+					<button class="bg-primary focus:outline-none mx-1 rounded-full p-1" @click="step = 0"></button>
 					<button
 						:class="step > 0 ? `bg-primary` : `bg-gray3`"
 						class="focus:outline-none mx-1 rounded-full p-1"
-						@click="setStep(1)"
+						@click="step = 1"
 					></button>
 					<button
 						:class="step > 1 ? `bg-primary` : `bg-gray3`"
 						class="focus:outline-none mx-1 rounded-full p-1"
-						@click="setStep(2)"
+						@click="step = 2"
 					></button>
 					<button
 						:class="step > 2 ? `bg-primary` : `bg-gray3`"
 						class="focus:outline-none mx-1 rounded-full p-1"
-						@click="setStep(3)"
+						@click="step = 3"
 					></button>
 					<button
 						:class="step > 3 ? `bg-primary` : `bg-gray3`"
 						class="focus:outline-none mx-1 rounded-full p-1"
-						@click="setStep(4)"
+						@click="step = 4"
 					></button>
 					<button
 						v-if="this.$route.name != `help`"
 						:class="step > 4 ? `bg-primary` : `bg-gray3`"
 						class="focus:outline-none mx-1 rounded-full p-1"
-						@click="setStep(5)"
+						@click="step = 5"
 					></button>
 				</div>
 				<!-- Next button -->
@@ -89,6 +89,7 @@
 					<BrandedButton
 						:action="
 							() => {
+								handleSettings()
 								closeWizard()
 							}
 						"
@@ -99,7 +100,7 @@
 					<BrandedButton
 						:action="
 							() => {
-								setStep(step + 1)
+								step = step + 1
 							}
 						"
 						:text="`Next`"
@@ -146,19 +147,6 @@ export default Vue.extend({
 		window.addEventListener(`click`, this.handleClose, false)
 	},
 	methods: {
-		setStep(i: number) {
-			this.step = i
-			if ((this.$route.name === `help` && this.step >= 5) || this.step >= 6) {
-				if (this.$route.name !== `help`) {
-					if (!(`settings` in this.$refs && this.$refs.settings)) {
-						throw new Error(`This shouldn't happen`)
-					}
-					const settings = this.$refs.settings as any
-					settings.updateSettings()
-				}
-				this.closeWizard()
-			}
-		},
 		getTitle(): string {
 			switch (this.step) {
 				case 0:
@@ -188,7 +176,7 @@ export default Vue.extend({
 				case 3:
 					return `Have an idea you’d like to share with the world? Blogchain’s simple editing tool makes it easy to craft and publish your post through an intuitive writing experience.`
 				case 4:
-					return `Agree or disagree with something you’ve read on Blogchain? Use our comment features to discuss with other readers. You can even include a custom reaction illustration to make your point.`
+					return `Agree or disagree with something you’ve read on Blogchain? Use our comment features to discuss with other readers. You can even include a custom reaction to make your point.`
 				case 5:
 					return `You’ll be able to update your profile or add more information later!`
 				default:
@@ -215,6 +203,15 @@ export default Vue.extend({
 			if (this.$store.state.session.id !== `` && this.$store.state.session.id === this.$route.params.id) {
 				this.visitProfile = this.myProfile
 				this.visitAvatar = this.myAvatar
+			}
+		},
+		handleSettings(): void {
+			if (this.$route.name !== `help`) {
+				if (!(`settings` in this.$refs && this.$refs.settings)) {
+					throw new Error(`This shouldn't happen`)
+				}
+				const settings = this.$refs.settings as any
+				settings.updateSettings()
 			}
 		},
 		closeWizard(): void {
