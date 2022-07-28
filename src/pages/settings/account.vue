@@ -65,18 +65,23 @@
 							<CloseIcon />
 						</button>
 					</div>
-					<p class="mt-4 text-gray5 dark:text-gray3">
+					<p class="mt-4 mb-6 text-gray5 dark:text-gray3">
 						Add a password to encrypt your private key as an additional security precaution. Your private key password
 						cannot be changed or recovered and will be required on login. Once logged in, you can re-encrypt your
 						private key with a new password in the Settings page
 					</p>
-					<input
-						ref="encryptedPassword"
-						v-model="encryptedPassword"
-						type="password"
-						class="w-full bg-gray2 dark:bg-gray7 mt-6 rounded-lg px-4 py-3 focus:outline-none"
-						placeholder="Enter password"
-					/>
+					<div class="relative w-full bg-gray2 dark:bg-gray7 rounded-lg px-4 py-3">
+						<input
+							ref="encryptedPassword"
+							v-model="encryptedPassword"
+							:type="seePassword ? `text` : `password`"
+							class="w-full focus:outline-none bg-transparent"
+							placeholder="Enter password"
+						/>
+						<button class="absolute" style="right: 1rem; top: 1.1rem" @click="seePassword = !seePassword">
+							<EyeIcon />
+						</button>
+					</div>
 					<div class="flex justify-end mt-8">
 						<BrandedButton
 							:action="encryptKey"
@@ -121,6 +126,7 @@ import ChevronLeft from '@/components/icons/ChevronLeft.vue'
 import PencilIcon from '@/components/icons/Pencil.vue'
 import FileDownloadIcon from '@/components/icons/FileDownload.vue'
 import CloseIcon from '@/components/icons/X.vue'
+import EyeIcon from '@/components/icons/Preview.vue'
 import BasicSwitch from '@/components/BasicSwitch.vue'
 
 interface IData {
@@ -129,6 +135,7 @@ interface IData {
 	showEncryptedInput: boolean
 	encryptedPassword: string
 	encryptionKey: string
+	seePassword: boolean
 }
 
 export default Vue.extend({
@@ -138,6 +145,7 @@ export default Vue.extend({
 		FileDownloadIcon,
 		CloseIcon,
 		BasicSwitch,
+		EyeIcon,
 	},
 	layout: `settings`,
 	data(): IData {
@@ -147,6 +155,7 @@ export default Vue.extend({
 			showEncryptedInput: false,
 			encryptedPassword: ``,
 			encryptionKey: ``,
+			seePassword: false,
 		}
 	},
 	head() {

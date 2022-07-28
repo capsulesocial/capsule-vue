@@ -92,17 +92,22 @@
 						<CloseIcon />
 					</button>
 				</div>
-				<p class="mt-4 text-gray5 dark:text-gray3">
+				<p class="mt-4 mb-6 text-gray5 dark:text-gray3">
 					This is a password-protected private key. To decrypt and login, please enter the password associated with this
 					account:
 				</p>
-				<input
-					ref="password"
-					v-model="password"
-					type="password"
-					class="w-full bg-gray2 dark:bg-gray7 mt-6 rounded-lg px-4 py-3 focus:outline-none"
-					placeholder="Enter password"
-				/>
+				<div class="relative w-full bg-gray2 dark:bg-gray7 rounded-lg px-4 py-3">
+					<input
+						ref="encryptedPassword"
+						v-model="encryptedPassword"
+						:type="seePassword ? `text` : `password`"
+						class="w-full focus:outline-none bg-transparent"
+						placeholder="Enter password"
+					/>
+					<button class="absolute" style="right: 1rem; top: 1.1rem" @click="seePassword = !seePassword">
+						<EyeIcon />
+					</button>
+				</div>
 				<div class="flex justify-end mt-8">
 					<BrandedButton
 						:action="decryptKey"
@@ -127,6 +132,7 @@ import GoogleIcon from '@/components/icons/brands/Google.vue'
 import FileIcon from '@/components/icons/File.vue'
 import InfoIcon from '@/components/icons/Info.vue'
 import CloseIcon from '@/components/icons/X.vue'
+import EyeIcon from '@/components/icons/Preview.vue'
 
 import { MutationType, createSessionFromProfile, namespace as sessionStoreNamespace } from '~/store/session'
 
@@ -156,6 +162,7 @@ interface IData {
 	showInfo: boolean
 	showPasswordPopup: boolean
 	password: string
+	seePassword: boolean
 }
 
 export default Vue.extend({
@@ -166,6 +173,7 @@ export default Vue.extend({
 		FileIcon,
 		InfoIcon,
 		CloseIcon,
+		EyeIcon,
 	},
 	layout: `unauth`,
 	data(): IData {
@@ -188,6 +196,7 @@ export default Vue.extend({
 			showInfo: false,
 			showPasswordPopup: false,
 			password: ``,
+			seePassword: false,
 		}
 	},
 	head() {
