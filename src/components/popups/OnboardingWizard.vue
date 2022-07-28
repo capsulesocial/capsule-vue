@@ -210,7 +210,6 @@ export default Vue.extend({
 		},
 		handleSettings(): void {
 			if (this.$route.name !== `help`) {
-				console.log(`updateSettings`)
 				if (!(`settings` in this.$refs && this.$refs.settings)) {
 					throw new Error(`This shouldn't happen`)
 				}
