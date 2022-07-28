@@ -1,6 +1,6 @@
 <template>
 	<article>
-		<h1 class="text-lightPrimaryText dark:text-gray1 text-4xl font-bold">Sign up</h1>
+		<h1 class="text-lightPrimaryText dark:text-gray1 text-4xl font-bold mb-10">Sign up</h1>
 		<label for="id" class="text-gray5 dark:text-gray3 block pb-1 text-sm font-semibold"
 			>Pick your Blogchain username</label
 		>
@@ -8,8 +8,8 @@
 			id="id"
 			v-model="id"
 			type="text"
-			placeholder=""
-			class="focus:outline-none focus:border-primary text-primary dark:text-darkPrimaryText bg-gray2 dark:bg-gray7 mt-1 mb-5 w-full rounded-lg px-3 py-2 font-sans text-sm"
+			placeholder="Enter a new @username"
+			class="focus:outline-none focus:border-primary text-primary dark:text-darkPrimaryText bg-gray2 dark:bg-gray7 mt-1 mb-5 w-full rounded-lg px-4 py-3 font-sans font-semibold text-base"
 		/>
 		<!-- This is basically a BrandedButton -->
 		<button

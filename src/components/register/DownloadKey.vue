@@ -1,17 +1,81 @@
 <template>
 	<article>
-		<p class="text-gray7 dark:text-gray3 text-center">
+		<p class="text-gray5 dark:text-gray3 text-center">
 			Here is your Blogchain private key file. Download this file in a safe spot. You will need it to access your
 			account. To download your Blogchain private key again, visit the Settings page
 		</p>
-		<div class="bg-gray2 dark:bg-gray7 my-10 flex flex-col sm:flex-row items-center justify-between rounded-lg p-4">
-			<div class="flex flex-row items-center">
-				<FileDownloadIcon />
-				<h6 class="text-gray pl-4 text-lg font-semibold dark:text-darkPrimaryText">Blogchain Private Key</h6>
+		<div class="bg-lightBorder dark:bg-gray7 my-10 rounded-lg pt-4 pb-5 px-6">
+			<!-- Optional encryption -->
+			<div class="flex flex-row justify-between items-center mb-6">
+				<label for="encryptButton" class="text-gray7 dark:text-gray3 w-4/5">
+					Add an optional password to encrypt your private key:
+				</label>
+				<BasicSwitch
+					:enabled="encrypted"
+					:class="[encrypted ? 'bg-primary' : 'bg-gray2 dark:bg-gray7']"
+					@toggle="toggleEncrypted"
+				/>
 			</div>
-			<BrandedButton :text="`Download`" :action="downloadPrivateKey" />
+			<div class="flex flex-col sm:flex-row items-center justify-between">
+				<div class="flex flex-row items-center">
+					<FileDownloadIcon class="text-primary" />
+					<div>
+						<h6 class="text-gray pl-4 text-lg font-semibold dark:text-darkPrimaryText">Blogchain Private Key</h6>
+						<p v-if="encrypted" class="text-xs text-primary pl-4">Encrypted</p>
+					</div>
+				</div>
+				<BrandedButton :text="`Download`" :action="downloadPrivateKey" />
+			</div>
 		</div>
 		<nuxt-link v-if="hasDownloadedKey" to="/home" class="text-primary text-center">Continue to Homepage</nuxt-link>
+		<!-- Encrypt password popup -->
+		<portal v-if="showEncryptedInput" to="registerPage">
+			<div
+				class="popup bg-darkBG dark:bg-gray5 modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
+				@click.self="showEncryptedInput = false"
+			>
+				<!-- Container -->
+				<div
+					class="w-full lg:w-600 max-h-90 bg-lightBG dark:bg-darkBGStop card-animation z-10 overflow-y-auto rounded-lg p-6 pt-4 shadow-lg"
+				>
+					<div class="flex flex-row justify-between items-center">
+						<!-- title, close button -->
+						<h2 class="text-xl font-semibold">Encrypt your private key</h2>
+						<button
+							class="bg-gray1 dark:bg-gray5 focus:outline-none rounded-full p-1"
+							@click="showEncryptedInput = false"
+						>
+							<CloseIcon />
+						</button>
+					</div>
+					<p class="mt-4 mb-6 text-gray5 dark:text-gray3">
+						Add a password to encrypt your private key as an additional security precaution. Your private key password
+						cannot be changed or recovered and will be required on login. Once logged in, you can re-encrypt your
+						private key with a new password in the Settings page
+					</p>
+					<div class="relative w-full bg-gray2 dark:bg-gray7 rounded-lg px-4 py-3">
+						<input
+							ref="encryptedPassword"
+							v-model="encryptedPassword"
+							:type="seePassword ? `text` : `password`"
+							class="w-full focus:outline-none bg-transparent pr-6"
+							placeholder="Enter password"
+						/>
+						<button class="absolute" style="right: 1rem; top: 1.1rem" @click="seePassword = !seePassword">
+							<EyeIcon />
+						</button>
+					</div>
+					<div class="flex justify-end mt-8">
+						<BrandedButton
+							:action="encryptKey"
+							:text="`Encrypt`"
+							:class="encryptedPassword === `` ? `opacity-50 cursor-not-allowed` : ``"
+							:disabled="encryptedPassword === ``"
+						/>
+					</div>
+				</div>
+			</div>
+		</portal>
 	</article>
 </template>
 
@@ -20,17 +84,29 @@ import Vue from 'vue'
 
 import FileDownloadIcon from '@/components/icons/FileDownload.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
+import CloseIcon from '@/components/icons/X.vue'
+import EyeIcon from '@/components/icons/Preview.vue'
+import BasicSwitch from '@/components/BasicSwitch.vue'
 
 import { getNearPrivateKey } from '@/backend/near'
+import { getEncryptedPrivateKey } from '@/backend/privateKey'
 
 interface IData {
 	hasDownloadedKey: boolean
+	encrypted: boolean
+	showEncryptedInput: boolean
+	encryptedPassword: string
+	encryptionKey: string
+	seePassword: boolean
 }
 
 export default Vue.extend({
 	components: {
 		FileDownloadIcon,
 		BrandedButton,
+		CloseIcon,
+		BasicSwitch,
+		EyeIcon,
 	},
 	props: {
 		accountId: {
@@ -45,16 +121,39 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			hasDownloadedKey: false,
+			encrypted: false,
+			showEncryptedInput: false,
+			encryptedPassword: ``,
+			encryptionKey: ``,
+			seePassword: false,
 		}
 	},
 	methods: {
+		toggleEncrypted() {
+			if (this.encryptionKey !== ``) {
+				this.encrypted = false
+				this.encryptedPassword = ``
+				this.encryptionKey = ``
+			} else {
+				this.showEncryptedInput = !this.showEncryptedInput
+			}
+		},
+		encryptKey() {
+			this.encryptionKey = this.encryptedPassword
+			this.showEncryptedInput = false
+			this.encrypted = true
+		},
 		async downloadPrivateKey(): Promise<void> {
 			try {
 				if (!this.accountId) {
 					throw new Error(`Unexpected condition!`)
 				}
-				const privateKey = await getNearPrivateKey(this.accountId)
-				const blob = new Blob([JSON.stringify({ accountId: this.accountId, privateKey })], { type: `application/json` })
+				const privateKey = this.encrypted
+					? await getEncryptedPrivateKey(this.encryptionKey)
+					: await getNearPrivateKey(this.accountId)
+				const blob = new Blob([JSON.stringify({ accountId: this.accountId, privateKey })], {
+					type: `application/json`,
+				})
 				const link = document.createElement(`a`)
 				link.href = URL.createObjectURL(blob)
 				link.download = `blogchain-priv-key-${this.username}.json`

@@ -24,9 +24,9 @@
 						<h6 class="text-gray7 dark:text-gray2 ml-4 text-sm font-semibold">Log in with Google</h6>
 					</button>
 					<div class="my-6 flex w-full items-center justify-center">
-						<span class="border-gray5 dark:border-gray3 flex-grow rounded-lg border" style="height: 1px"></span>
+						<span class="border-gray2 dark:border-gray3 flex-grow rounded-lg border" style="height: 1px"></span>
 						<p class="text-gray5 dark:text-gray3 px-4 text-xs">OR</p>
-						<span class="border-gray5 dark:border-gray3 flex-grow rounded-lg border" style="height: 1px"></span>
+						<span class="border-gray2 dark:border-gray3 flex-grow rounded-lg border" style="height: 1px"></span>
 					</div>
 					<div class="flex w-full mb-4 relative">
 						<button
@@ -75,6 +75,49 @@
 			</div>
 		</section>
 		<p class="text-gray5 dark:text-gray3 px-4 pl-10 text-sm">© {{ currentYear }} Capsule Social, Inc.</p>
+		<!-- Decrypt key popup -->
+		<div
+			v-if="showPasswordPopup"
+			class="popup bg-darkBG dark:bg-gray5 modal-animation fixed top-0 bottom-0 left-0 right-0 z-30 flex h-screen w-full items-center justify-center bg-opacity-50 dark:bg-opacity-50"
+			@click.self="showPasswordPopup = false"
+		>
+			<!-- Container -->
+			<div
+				class="w-full lg:w-600 max-h-90 bg-lightBG dark:bg-darkBGStop card-animation z-10 overflow-y-auto rounded-lg p-6 pt-4 shadow-lg"
+			>
+				<div class="flex flex-row justify-between items-center">
+					<!-- title, close button -->
+					<h2 class="text-xl font-semibold">Private key protected</h2>
+					<button class="bg-gray1 dark:bg-gray5 focus:outline-none rounded-full p-1" @click="showPasswordPopup = false">
+						<CloseIcon />
+					</button>
+				</div>
+				<p class="mt-4 mb-6 text-gray5 dark:text-gray3">
+					This is a password-protected private key. To decrypt and login, please enter the password associated with this
+					account:
+				</p>
+				<div class="relative w-full bg-gray2 dark:bg-gray7 rounded-lg px-4 py-3">
+					<input
+						ref="password"
+						v-model="password"
+						:type="seePassword ? `text` : `password`"
+						class="w-full focus:outline-none bg-transparent pr-6"
+						placeholder="Enter password"
+					/>
+					<button class="absolute" style="right: 1rem; top: 1.1rem" @click="seePassword = !seePassword">
+						<EyeIcon />
+					</button>
+				</div>
+				<div class="flex justify-end mt-8">
+					<BrandedButton
+						:action="decryptKey"
+						:text="`Login`"
+						:class="password === `` ? `opacity-50 cursor-not-allowed` : ``"
+						:disabled="password === ``"
+					/>
+				</div>
+			</div>
+		</div>
 	</main>
 </template>
 
@@ -88,12 +131,15 @@ import DiscordIcon from '@/components/icons/brands/Discord.vue'
 import GoogleIcon from '@/components/icons/brands/Google.vue'
 import FileIcon from '@/components/icons/File.vue'
 import InfoIcon from '@/components/icons/Info.vue'
+import CloseIcon from '@/components/icons/X.vue'
+import EyeIcon from '@/components/icons/Preview.vue'
 
 import { MutationType, createSessionFromProfile, namespace as sessionStoreNamespace } from '~/store/session'
 
 import { getAccountIdFromPrivateKey, login, loginNearAccount } from '@/backend/auth'
 import { getUserInfoNEAR, getUsernameNEAR } from '@/backend/near'
 import { domain, torusNetwork, torusVerifiers, TorusVerifiers } from '@/backend/utilities/config'
+import { getDecryptedPrivateKey } from '@/backend/privateKey'
 import { revokeDiscordKey } from '@/backend/discordRevoke'
 import { HTMLInputEvent } from '@/interfaces/HTMLInputEvent'
 
@@ -114,6 +160,9 @@ interface IData {
 	currentYear: string
 	keyFileTarget: HTMLInputElement | null
 	showInfo: boolean
+	showPasswordPopup: boolean
+	password: string
+	seePassword: boolean
 }
 
 export default Vue.extend({
@@ -123,6 +172,8 @@ export default Vue.extend({
 		GoogleIcon,
 		FileIcon,
 		InfoIcon,
+		CloseIcon,
+		EyeIcon,
 	},
 	layout: `unauth`,
 	data(): IData {
@@ -143,6 +194,9 @@ export default Vue.extend({
 			currentYear: ``,
 			keyFileTarget: null,
 			showInfo: false,
+			showPasswordPopup: false,
+			password: ``,
+			seePassword: false,
 		}
 	},
 	head() {
@@ -258,6 +312,11 @@ export default Vue.extend({
 							const key = JSON.parse(reader.result as string)
 							this.accountIdInput = key.accountId
 							this.privateKey = key.privateKey
+							if (key.privateKey.startsWith(`encrypted:`)) {
+								this.showPasswordPopup = true
+								return
+							}
+							// Login with non-encrypted key
 							this.walletLogin()
 						} catch (error) {
 							if (this.keyFileTarget) {
@@ -268,6 +327,16 @@ export default Vue.extend({
 					}
 				}
 			}
+		},
+		decryptKey() {
+			getDecryptedPrivateKey(this.password, this.accountIdInput, this.privateKey).then((pk) => {
+				if (!pk) {
+					this.$toastError(`Password incorrect!`)
+					return
+				}
+				this.privateKey = pk
+				this.walletLogin()
+			})
 		},
 		async verify() {
 			try {
