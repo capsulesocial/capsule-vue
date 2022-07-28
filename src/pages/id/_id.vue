@@ -46,9 +46,9 @@
 						</button>
 					</div>
 					<div class="flex items-center">
-						<span v-if="$store.state.session.id === $route.params.id">
-							<button class="bg-darkBG focus:outline-none block rounded-lg xl:hidden" @click="toggleSettings">
-								<PencilIcon class="m-2 h-5 w-5 text-white" />
+						<span v-if="$store.state.session.id === $route.params.id" class="w-full h-full">
+							<button class="bg-darkBG focus:outline-none rounded-lg xl:hidden" @click="toggleSettings">
+								<PencilIcon class="text-white" />
 							</button>
 							<SecondaryButton
 								:text="`Edit Profile`"
