@@ -98,8 +98,8 @@
 				</p>
 				<div class="relative w-full bg-gray2 dark:bg-gray7 rounded-lg px-4 py-3">
 					<input
-						ref="encryptedPassword"
-						v-model="encryptedPassword"
+						ref="password"
+						v-model="password"
 						:type="seePassword ? `text` : `password`"
 						class="w-full focus:outline-none bg-transparent"
 						placeholder="Enter password"
