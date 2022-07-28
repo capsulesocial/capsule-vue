@@ -56,32 +56,32 @@
 				</p>
 				<!-- progress circles -->
 				<div class="mb-10 self-center">
-					<button class="bg-primary focus:outline-none mx-1 rounded-full p-1" @click="setStep(0)"></button>
+					<button class="bg-primary focus:outline-none mx-1 rounded-full p-1" @click="step = 0"></button>
 					<button
 						:class="step > 0 ? `bg-primary` : `bg-gray3`"
 						class="focus:outline-none mx-1 rounded-full p-1"
-						@click="setStep(1)"
+						@click="step = 1"
 					></button>
 					<button
 						:class="step > 1 ? `bg-primary` : `bg-gray3`"
 						class="focus:outline-none mx-1 rounded-full p-1"
-						@click="setStep(2)"
+						@click="step = 2"
 					></button>
 					<button
 						:class="step > 2 ? `bg-primary` : `bg-gray3`"
 						class="focus:outline-none mx-1 rounded-full p-1"
-						@click="setStep(3)"
+						@click="step = 3"
 					></button>
 					<button
 						:class="step > 3 ? `bg-primary` : `bg-gray3`"
 						class="focus:outline-none mx-1 rounded-full p-1"
-						@click="setStep(4)"
+						@click="step = 4"
 					></button>
 					<button
 						v-if="this.$route.name != `help`"
 						:class="step > 4 ? `bg-primary` : `bg-gray3`"
 						class="focus:outline-none mx-1 rounded-full p-1"
-						@click="setStep(5)"
+						@click="step = 5"
 					></button>
 				</div>
 				<!-- Next button -->
@@ -100,7 +100,7 @@
 					<BrandedButton
 						:action="
 							() => {
-								setStep(step + 1)
+								step = step + 1
 							}
 						"
 						:text="`Next`"
@@ -147,9 +147,6 @@ export default Vue.extend({
 		window.addEventListener(`click`, this.handleClose, false)
 	},
 	methods: {
-		setStep(i: number) {
-			this.step = i
-		},
 		getTitle(): string {
 			switch (this.step) {
 				case 0:
