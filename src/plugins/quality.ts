@@ -51,8 +51,17 @@ const qualityID: StringInputCheck = (input) => {
 }
 
 const qualityEmail: StringInputCheck = (input) => {
+	const { min: minChars, max: maxChars } = textLimits.email
 	if (input === `` || input === null) {
 		return { error: `Missing Email!` }
+	}
+
+	if (input.length < minChars) {
+		return { error: `Email cannot be less than ${minChars} characters` }
+	}
+
+	if (input.length > maxChars) {
+		return { error: `Email cannot be more than ${maxChars} characters` }
 	}
 
 	const regex =
