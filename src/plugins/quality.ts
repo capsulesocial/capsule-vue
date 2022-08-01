@@ -36,7 +36,7 @@ const qualityID: StringInputCheck = (input) => {
 		return { error: `Username cannot be less than ${minChars} characters` }
 	}
 	if (input.length > maxChars) {
-		return { error: `Username cannot be more ${maxChars} characters` }
+		return { error: `Username cannot be more than ${maxChars} characters` }
 	}
 	if (!new RegExp(usernamePattern).test(input)) {
 		return { error: `Username must only contain numbers, letters, and underscores` }
