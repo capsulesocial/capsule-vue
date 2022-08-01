@@ -319,8 +319,10 @@
 										<button
 											v-for="face in row"
 											:key="face.label"
-											class="focus:outline-none outline-none rounded-lg border-2 border-transparent"
-											:class="selectedEmotion.label === face.label ? `border-2 border-` + selectedEmotionColor : ``"
+											class="focus:outline-none outline-none rounded-lg border-2"
+											:class="
+												selectedEmotion.label === face.label ? ` border-` + selectedEmotionColor : `border-transparent`
+											"
 											style="transition: all 0.3s ease-in-out"
 											@click="setEmotion($event, face)"
 										>
