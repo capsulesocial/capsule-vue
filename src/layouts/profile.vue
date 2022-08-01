@@ -443,9 +443,3 @@ export default Vue.extend({
 	},
 })
 </script>
-
-<style scoped>
-.border-negative {
-	border-color: #ee1f63;
-}
-</style>

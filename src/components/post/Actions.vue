@@ -776,8 +776,11 @@ export default Vue.extend({
 })
 </script>
 
-<style>
+<style scoped>
 .face-tag:last-child .separator {
 	display: none;
+}
+.border-negative {
+	border-color: #ee1f63;
 }
 </style>
