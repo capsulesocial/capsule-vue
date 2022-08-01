@@ -26,17 +26,19 @@ declare module 'vue/types/vue' {
 }
 
 const qualityID: StringInputCheck = (input) => {
+	const { min: minChars, max: maxChars } = textLimits.username
+	const usernamePattern = `^\\w{${minChars},${maxChars}}$`
 	const blockListed = new Set<string>([`root`, `support`, `admin`])
 	if (input === `` || input === null) {
 		return { error: `Missing ID!` }
 	}
-	if (input.length < 3) {
-		return { error: `ID must be longer than 3 characters` }
+	if (input.length < minChars) {
+		return { error: `ID cannot be less than ${minChars} characters` }
 	}
-	if (input.length > 16) {
-		return { error: `ID must be 16 characters or less` }
+	if (input.length > maxChars) {
+		return { error: `ID cannot be more than ${maxChars} characters` }
 	}
-	if (!/^\w{3,16}$/.test(input)) {
+	if (!new RegExp(usernamePattern).test(input)) {
 		return { error: `ID must only contain numbers, letters, and underscores` }
 	}
 	if (blockListed.has(input)) {
@@ -49,8 +51,17 @@ const qualityID: StringInputCheck = (input) => {
 }
 
 const qualityEmail: StringInputCheck = (input) => {
+	const { min: minChars, max: maxChars } = textLimits.email
 	if (input === `` || input === null) {
 		return { error: `Missing Email!` }
+	}
+
+	if (input.length < minChars) {
+		return { error: `Email cannot be less than ${minChars} characters` }
+	}
+
+	if (input.length > maxChars) {
+		return { error: `Email cannot be more than ${maxChars} characters` }
 	}
 
 	const regex =
