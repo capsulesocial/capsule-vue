@@ -33,19 +33,19 @@ const qualityID: StringInputCheck = (input) => {
 		return { error: `Missing ID!` }
 	}
 	if (input.length < minChars) {
-		return { error: `Username cannot be less than ${minChars} characters` }
+		return { error: `ID cannot be less than ${minChars} characters` }
 	}
 	if (input.length > maxChars) {
-		return { error: `Username cannot be more than ${maxChars} characters` }
+		return { error: `ID cannot be more than ${maxChars} characters` }
 	}
 	if (!new RegExp(usernamePattern).test(input)) {
-		return { error: `Username must only contain numbers, letters, and underscores` }
+		return { error: `ID must only contain numbers, letters, and underscores` }
 	}
 	if (blockListed.has(input)) {
-		return { error: `Username unavailable` }
+		return { error: `ID unavailable` }
 	}
 	if (input.includes(`capsule`)) {
-		return { error: `Username cannot contain capsule as a keyword` }
+		return { error: `ID cannot contain capsule as a keyword` }
 	}
 	return { success: true }
 }

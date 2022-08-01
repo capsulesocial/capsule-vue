@@ -8,7 +8,7 @@
 			id="id"
 			v-model="id"
 			type="text"
-			placeholder="Enter a new @username"
+			placeholder="Enter a new @id"
 			class="focus:outline-none focus:border-primary text-primary dark:text-darkPrimaryText bg-gray2 dark:bg-gray7 mt-1 mb-5 w-full rounded-lg px-4 py-3 font-sans font-semibold text-base"
 		/>
 		<!-- This is basically a BrandedButton -->
