@@ -26,24 +26,26 @@ declare module 'vue/types/vue' {
 }
 
 const qualityID: StringInputCheck = (input) => {
+	const { min: minChars, max: maxChars } = textLimits.username
+	const usernamePattern = `^\\w{${minChars},${maxChars}}$`
 	const blockListed = new Set<string>([`root`, `support`, `admin`])
 	if (input === `` || input === null) {
 		return { error: `Missing ID!` }
 	}
-	if (input.length < 3) {
-		return { error: `ID must be longer than 3 characters` }
+	if (input.length < minChars) {
+		return { error: `Username cannot be less than ${minChars} characters` }
 	}
-	if (input.length > 16) {
-		return { error: `ID must be 16 characters or less` }
+	if (input.length > maxChars) {
+		return { error: `Username cannot be more ${maxChars} characters` }
 	}
-	if (!/^\w{3,16}$/.test(input)) {
-		return { error: `ID must only contain numbers, letters, and underscores` }
+	if (!new RegExp(usernamePattern).test(input)) {
+		return { error: `Username must only contain numbers, letters, and underscores` }
 	}
 	if (blockListed.has(input)) {
-		return { error: `ID unavailable` }
+		return { error: `Username unavailable` }
 	}
 	if (input.includes(`capsule`)) {
-		return { error: `ID cannot contain capsule as a keyword` }
+		return { error: `Username cannot contain capsule as a keyword` }
 	}
 	return { success: true }
 }
