@@ -8,33 +8,31 @@
 		<!-- Account Security -->
 		<h3 class="text-lightPrimaryText dark:text-darkPrimaryText pb-4 text-base font-semibold">Account Security</h3>
 		<!-- ID -->
-		<div class="mb-4 flex w-full flex-row items-center">
-			<label for="id" class="w-48 font-semibold text-gray5 dark:text-gray3 text-sm">Identifier</label>
+		<div class="mb-4 flex w-full flex-col sm:flex-row items-start sm:items-center">
+			<label for="id" class="w-48 font-semibold text-gray5 dark:text-gray3 text-sm mb-2 sm:mb-0">Identifier</label>
 			<input
 				id="id"
 				type="text"
 				:placeholder="$store.state.session.id"
-				class="cursor-not-allowed bg-gray1 dark:bg-gray7 text-gray5 dark:text-gray3 placeholder-gray5 dark:placeholder-gray3 flex-grow rounded-lg px-2 py-1"
+				class="cursor-not-allowed bg-gray1 dark:bg-gray7 text-gray5 dark:text-gray2 placeholder-gray5 dark:placeholder-gray2 flex-grow w-full sm:w-min rounded-lg px-2 py-1"
 				disabled
 			/>
 		</div>
 		<!-- Export Private Key -->
-		<div class="mb-8 flex w-full flex-row items-start">
-			<h6 class="w-48 flex-shrink-0 font-semibold text-gray5 dark:text-gray3 text-sm">Blogchain private key</h6>
+		<div class="mb-8 flex w-full flex-col sm:flex-row items-start">
+			<h6 class="w-48 flex-shrink-0 font-semibold text-gray5 dark:text-gray3 text-sm mb-2 sm:mb-0">
+				Blogchain private key
+			</h6>
 			<div class="bg-gray1 dark:bg-gray7 rounded-lg pt-4 pb-5 px-6 w-full">
 				<!-- Optional encryption -->
 				<div class="flex flex-row justify-between mb-6">
-					<label for="encryptButton" class="text-gray7 dark:text-gray3 w-4/5">
+					<label for="encryptButton" class="text-gray7 dark:text-gray2 w-4/5">
 						Export my private key with a password:
 					</label>
-					<BasicSwitch
-						:enabled="encrypted"
-						:class="[encrypted ? 'bg-primary' : 'bg-gray2 dark:bg-gray7']"
-						@toggle="toggleEncrypted"
-					/>
+					<BasicSwitch :enabled="encrypted" :onBG="true" @toggle="toggleEncrypted" />
 				</div>
 				<div class="flex flex-col sm:flex-row items-center justify-between">
-					<div class="flex flex-row items-center">
+					<div class="flex flex-row items-center mb-6 sm:mb-0">
 						<FileDownloadIcon class="text-primary" />
 						<div>
 							<h6 class="text-gray pl-4 text-lg font-semibold dark:text-darkPrimaryText">Blogchain Private Key</h6>
@@ -57,7 +55,9 @@
 				>
 					<div class="flex flex-row justify-between items-center">
 						<!-- title, close button -->
-						<h2 class="text-xl font-semibold">Encrypt your private key</h2>
+						<h2 class="text-xl font-semibold text-lightPrimaryText dark:text-darkPrimaryText">
+							Encrypt your private key
+						</h2>
 						<button
 							class="bg-gray1 dark:bg-gray5 focus:outline-none rounded-full p-1"
 							@click="showEncryptedInput = false"
@@ -75,10 +75,14 @@
 							ref="encryptedPassword"
 							v-model="encryptedPassword"
 							:type="seePassword ? `text` : `password`"
-							class="w-full focus:outline-none bg-transparent pr-6"
+							class="w-full focus:outline-none bg-transparent pr-6 text-lightPrimaryText dark:text-darkPrimaryText"
 							placeholder="Enter password"
 						/>
-						<button class="absolute" style="right: 1rem; top: 1.1rem" @click="seePassword = !seePassword">
+						<button
+							class="absolute text-gray5 dark:text-gray3"
+							style="right: 1rem; top: 1.1rem"
+							@click="seePassword = !seePassword"
+						>
 							<EyeIcon />
 						</button>
 					</div>
