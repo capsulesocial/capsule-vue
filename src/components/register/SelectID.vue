@@ -1,5 +1,13 @@
 <template>
 	<article>
+		<button class="flex items-center mb-10" @click="back">
+			<div class="bg-gray2 dark:bg-gray5 focus:outline-none rounded-full">
+				<ChevronLeft />
+			</div>
+			<span class="pl-2 text-sm font-semibold dark:text-darkPrimaryText" style="margin-bottom: 2px">
+				Signup methods
+			</span>
+		</button>
 		<h1 class="text-lightPrimaryText dark:text-gray1 text-4xl font-bold mb-10">Sign up</h1>
 		<label for="id" class="text-gray5 dark:text-gray3 block pb-1 text-sm font-semibold"
 			>Pick your Blogchain username</label
@@ -44,6 +52,7 @@ import { ValidationError } from '@/errors'
 import { requestOnboard, waitForFunds } from '@/backend/funder'
 import { validateUsernameNEAR } from '@/backend/near'
 import { hcaptchaSiteKey } from '@/backend/utilities/config'
+import ChevronLeft from '@/components/icons/ChevronLeft.vue'
 
 interface IData {
 	id: string
@@ -53,6 +62,9 @@ interface IData {
 }
 
 export default Vue.extend({
+	components: {
+		ChevronLeft,
+	},
 	props: {
 		accountId: {
 			type: String,
@@ -93,6 +105,10 @@ export default Vue.extend({
 			changeBio: MutationType.CHANGE_BIO,
 			changeLocation: MutationType.CHANGE_LOCATION,
 		}),
+		back() {
+			localStorage.clear()
+			location.reload()
+		},
 		async handleRegisterID() {
 			try {
 				if (!this.captchaID) {
