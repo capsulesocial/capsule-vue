@@ -155,6 +155,7 @@
 			:profile="visitProfile"
 			:avatar="visitAvatar"
 			@toggleNewsletterPopup="toggleNewsletterPopup"
+			@newsletterStarted="refetchNewsletters"
 		/>
 		<portal-target name="card-popup"></portal-target>
 	</main>
@@ -438,6 +439,10 @@ export default Vue.extend({
 		},
 		toggleNewsletterPopup() {
 			this.showNewsletterPopup = !this.showNewsletterPopup
+		},
+		refetchNewsletters() {
+			// TODO: Refetch the newsletters here instead
+			location.reload()
 		},
 		async updateFollowers() {
 			const { followers, following } = await getFollowersAndFollowing(this.$route.params.id, true)
