@@ -12,11 +12,11 @@
 		</p>
 		<div v-if="!isLoading" class="flex flex-wrap mt-4">
 			<ProfilePreviewCard
-				v-for="profiles in 4"
-				:key="profiles.id"
-				:profile="author1"
+				v-for="profile in this.authorProfiles"
+				:key="profile.id"
+				:profile="profile"
 				class="pb-4 mx-1 mb-2"
-				@manageNewsletter="$emit(`manageNewsletter`, author1)"
+				@manageNewsletter="$emit(`manageNewsletter`, profile)"
 			/>
 		</div>
 	</main>
@@ -27,9 +27,11 @@ import Vue from 'vue'
 import ProfilePreviewCard from '@/components/ProfilePreviewCard.vue'
 import ChevronLeft from '@/components/icons/ChevronLeft.vue'
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
+import { listAllAuthors } from '@/backend/emails'
 
 interface IData {
-	author1: Profile | null
+	authorIDs: Array<string>
+	authorProfiles: Array<Profile>
 	isLoading: boolean
 }
 export default Vue.extend({
@@ -37,20 +39,21 @@ export default Vue.extend({
 	layout: `settings`,
 	data(): IData {
 		return {
-			author1: null,
+			authorIDs: [],
+			authorProfiles: [],
 			isLoading: true,
 		}
 	},
-	created() {
+	async created() {
 		// Get author profile
-		this.author1 = createDefaultProfile(`nairobi`)
-		getProfile(`nairobi`).then((p) => {
-			const { profile } = p
-			if (profile) {
-				this.author1 = profile
-			}
-			this.isLoading = false
-		})
+		this.authorIDs = await listAllAuthors(this.$store.state.session.id)
+		for (const authorID of this.authorIDs) {
+			getProfile(authorID).then((p) => {
+				const { profile } = p
+				this.authorProfiles.push(profile ?? createDefaultProfile(authorID))
+			})
+		}
+		this.isLoading = false
 	},
 })
 </script>
