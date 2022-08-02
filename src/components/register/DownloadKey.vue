@@ -10,11 +10,7 @@
 				<label for="encryptButton" class="text-gray7 dark:text-gray3 w-4/5">
 					Add an optional password to encrypt your private key:
 				</label>
-				<BasicSwitch
-					:enabled="encrypted"
-					:class="[encrypted ? 'bg-primary' : 'bg-gray2 dark:bg-gray7']"
-					@toggle="toggleEncrypted"
-				/>
+				<BasicSwitch :enabled="encrypted" onBG="true" @toggle="toggleEncrypted" />
 			</div>
 			<div class="flex flex-col sm:flex-row items-center justify-between">
 				<div class="flex flex-row items-center">
@@ -40,7 +36,9 @@
 				>
 					<div class="flex flex-row justify-between items-center">
 						<!-- title, close button -->
-						<h2 class="text-xl font-semibold">Encrypt your private key</h2>
+						<h2 class="text-xl font-semibold text-lightPrimaryText dark:text-darkPrimaryText">
+							Encrypt your private key
+						</h2>
 						<button
 							class="bg-gray1 dark:bg-gray5 focus:outline-none rounded-full p-1"
 							@click="showEncryptedInput = false"
@@ -58,10 +56,14 @@
 							ref="encryptedPassword"
 							v-model="encryptedPassword"
 							:type="seePassword ? `text` : `password`"
-							class="w-full focus:outline-none bg-transparent pr-6"
+							class="w-full focus:outline-none bg-transparent pr-6 text-lightPrimaryText dark:text-darkPrimaryText"
 							placeholder="Enter password"
 						/>
-						<button class="absolute" style="right: 1rem; top: 1.1rem" @click="seePassword = !seePassword">
+						<button
+							class="absolute text-gray5 dark:text-gray3"
+							style="right: 1rem; top: 1.1rem"
+							@click="seePassword = !seePassword"
+						>
 							<EyeIcon />
 						</button>
 					</div>

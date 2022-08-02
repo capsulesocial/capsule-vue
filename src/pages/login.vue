@@ -87,7 +87,7 @@
 			>
 				<div class="flex flex-row justify-between items-center">
 					<!-- title, close button -->
-					<h2 class="text-xl font-semibold">Private key protected</h2>
+					<h2 class="text-xl font-semibold text-lightPrimaryText dark:text-darkPrimaryText">Private key protected</h2>
 					<button class="bg-gray1 dark:bg-gray5 focus:outline-none rounded-full p-1" @click="showPasswordPopup = false">
 						<CloseIcon />
 					</button>
@@ -101,10 +101,14 @@
 						ref="password"
 						v-model="password"
 						:type="seePassword ? `text` : `password`"
-						class="w-full focus:outline-none bg-transparent pr-6"
+						class="w-full focus:outline-none bg-transparent pr-6 text-lightPrimaryText dark:text-darkPrimaryText"
 						placeholder="Enter password"
 					/>
-					<button class="absolute" style="right: 1rem; top: 1.1rem" @click="seePassword = !seePassword">
+					<button
+						class="absolute text-gray5 dark:text-gray3"
+						style="right: 1rem; top: 1.1rem"
+						@click="seePassword = !seePassword"
+					>
 						<EyeIcon />
 					</button>
 				</div>
