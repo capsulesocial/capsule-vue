@@ -1,6 +1,6 @@
 <template>
 	<article>
-		<button class="flex items-center mb-10" @click="previousStep">
+		<button class="flex items-center mb-10" @click="back">
 			<div class="bg-gray2 dark:bg-gray5 focus:outline-none rounded-full">
 				<ChevronLeft />
 			</div>
@@ -105,6 +105,10 @@ export default Vue.extend({
 			changeBio: MutationType.CHANGE_BIO,
 			changeLocation: MutationType.CHANGE_LOCATION,
 		}),
+		back() {
+			localStorage.clear()
+			location.reload()
+		},
 		async handleRegisterID() {
 			try {
 				if (!this.captchaID) {
