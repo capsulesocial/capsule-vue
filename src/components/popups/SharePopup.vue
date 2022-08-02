@@ -308,7 +308,8 @@ export default Vue.extend({
 			window.open(sanitizeUrl(`https://www.facebook.com/sharer/sharer.php?u=${this.generatedDirectLink}`))
 		},
 		whatsappShare() {
-			window.open(`https://api.whatsapp.com/send/?text=${this.generatedDirectLink}`)
+			const msg = encodeURIComponent(`Hey, I've found an interesting article on Blogchain. Read it here: `)
+			window.open(`https://api.whatsapp.com/send/?text=${msg}${this.generatedDirectLink}`)
 		},
 		redditShare() {
 			window.open(sanitizeUrl(`https://reddit.com/submit?url=${this.generatedDirectLink}&title=${this.title}`))
