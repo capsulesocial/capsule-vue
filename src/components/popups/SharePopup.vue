@@ -97,6 +97,7 @@
 							v-model="generatedDirectLink"
 							class="absolute w-4/5 ml-2 overflow-hidden dark:text-darkPrimaryText bg-transparent focus:outline-none"
 							style="text-overflow: ellipsis"
+							disabled
 							@focus="$event.target.select()"
 						/>
 						<button
@@ -137,6 +138,7 @@
 							v-model="generatedBlogchainLink"
 							class="absolute w-4/5 ml-2 overflow-hidden dark:text-darkPrimaryText bg-transparent focus:outline-none"
 							style="text-overflow: ellipsis"
+							disabled
 							@focus="$event.target.select()"
 						/>
 						<button
