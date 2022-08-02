@@ -4,7 +4,7 @@
 			<Avatar :avatar="avatar" :authorID="authorID" size="w-10 h-10" />
 		</div>
 		<div class="ml-2 flex-1 leading-relaxed">
-			<div class="flex flex-row items-center">
+			<div class="flex flex-col sm:flex-row items-start sm:items-center">
 				<strong v-if="name !== ``" class="bold mr-2 font-bold text-lightPrimaryText dark:text-darkPrimaryText">
 					{{ name }}
 				</strong>
