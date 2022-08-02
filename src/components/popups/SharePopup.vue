@@ -62,6 +62,12 @@
 						</button>
 						<button
 							class="bg-lightInput dark:bg-darkInput p-5 rounded-lg flex flex-row items-center mr-4 mb-2"
+							@click="whatsappShare"
+						>
+							<WhatsappIcon />
+						</button>
+						<button
+							class="bg-lightInput dark:bg-darkInput p-5 rounded-lg flex flex-row items-center mr-4 mb-2"
 							@click="redditShare"
 						>
 							<RedditIcon />
@@ -154,6 +160,7 @@ import { sanitizeUrl } from '@braintree/sanitize-url'
 import CloseIcon from '@/components/icons/X.vue'
 import TwitterIcon from '@/components/icons/brands/solid/Twitter.vue'
 import FacebookIcon from '@/components/icons/brands/solid/Facebook.vue'
+import WhatsappIcon from '@/components/icons/brands/solid/Whatsapp.vue'
 import RedditIcon from '@/components/icons/brands/solid/Reddit.vue'
 import LinkedinIcon from '@/components/icons/brands/solid/Linkedin.vue'
 import MailIcon from '@/components/icons/brands/solid/Mail.vue'
@@ -175,6 +182,7 @@ export default Vue.extend({
 		CloseIcon,
 		TwitterIcon,
 		FacebookIcon,
+		WhatsappIcon,
 		RedditIcon,
 		LinkedinIcon,
 		MailIcon,
@@ -298,6 +306,10 @@ export default Vue.extend({
 		},
 		facebookShare() {
 			window.open(sanitizeUrl(`https://www.facebook.com/sharer/sharer.php?u=${this.generatedDirectLink}`))
+		},
+		whatsappShare() {
+			const msg = encodeURIComponent(`Hey, I've found an interesting article on Blogchain. Read it here: `)
+			window.open(`https://api.whatsapp.com/send/?text=${msg}${this.generatedDirectLink}`)
 		},
 		redditShare() {
 			window.open(sanitizeUrl(`https://reddit.com/submit?url=${this.generatedDirectLink}&title=${this.title}`))
