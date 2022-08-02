@@ -4,6 +4,14 @@
 		<p class="flex items-center text-primary text-sm focus:outline-none mb-2">
 			{{ newsletter.email }}
 		</p>
+		<div
+			:class="
+				newsletter.verified ? 'border-positive text-positive bg-positive' : 'border-negative text-negative bg-negative'
+			"
+			class="bg-positive bg-opacity-10 border rounded-2xl px-1 py-1 text-xs"
+		>
+			{{ newsletter.verified ? 'Active' : 'Pending ' }}
+		</div>
 		<!-- delete -->
 		<div class="icon relative flex items-center">
 			<button class="focus:outline-none text-gray5 dark:text-gray3 ml-2" @click.stop="toggleDropdownDelete">
@@ -16,7 +24,7 @@
 				style="top: 35px; right: -5px"
 			>
 				<!-- Delete -->
-				<button class="focus:outline-none text-negative flex" @click="deleteNewsletter(newsletter)">
+				<button class="focus:outline-none text-negative flex" @click="deleteNewsletter(newsletter._id)">
 					<BinIcon class="p-1" />
 					<span class="text-negative ml-1 self-center text-sm pr-1">Delete</span>
 				</button>
@@ -30,6 +38,7 @@ import Vue from 'vue'
 
 import MoreIcon from '@/components/icons/More.vue'
 import BinIcon from '@/components/icons/Bin.vue'
+import { deleteSubscription } from '@/backend/emails'
 
 interface IData {
 	showDelete: boolean
@@ -61,7 +70,14 @@ export default Vue.extend({
 		toggleDropdownDelete() {
 			this.showDelete = !this.showDelete
 		},
-		deleteNewsletter() {},
+		async deleteNewsletter(id: string) {
+			if (!confirm(`Confirm deleting the newsletter subscription?`)) {
+				return
+			}
+			await deleteSubscription(this.$store.state.session.id, id)
+			this.$toastSuccess(`Newsletter deleted successfully`)
+			this.$emit(`subscriptionDeleted`)
+		},
 		handleDropdown(e: any): void {
 			if (!e.target || e.target.parentNode === null || e.target.parentNode.classList === undefined) {
 				return

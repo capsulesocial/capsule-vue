@@ -27,7 +27,12 @@
 					</p>
 				</div>
 				<!-- List of newsletters for this author -->
-				<NewsletterPreview v-for="n in newsletters" :key="n.email" :newsletter="n" />
+				<NewsletterPreview
+					v-for="n in newsletters"
+					:key="n.email"
+					:newsletter="n"
+					@subscriptionDeleted="fetchNewsletters"
+				/>
 				<!-- Submit or manage email newsletter -->
 				<div class="flex justify-end items-center mt-10">
 					<button
@@ -49,6 +54,7 @@ import type { PropType } from 'vue'
 import CloseIcon from '@/components/icons/X.vue'
 import Avatar from '@/components/Avatar.vue'
 import { Profile } from '@/backend/profile'
+import { listForAuthor } from '@/backend/emails'
 
 interface IData {
 	newsletters: Array<Object>
@@ -71,19 +77,13 @@ export default Vue.extend({
 	},
 	data(): IData {
 		return {
-			newsletters: [
-				{
-					email: `jack@capsule.social`,
-				},
-				{
-					email: `jack@gmail.com`,
-				},
-			],
+			newsletters: [],
 		}
 	},
 	created() {},
 	mounted() {
 		window.addEventListener(`click`, this.handleClose, false)
+		this.fetchNewsletters()
 	},
 	destroyed() {
 		window.removeEventListener(`click`, this.handleClose, false)
@@ -96,6 +96,9 @@ export default Vue.extend({
 			if (e.target.firstChild.classList[0] === `popup`) {
 				this.closePopup()
 			}
+		},
+		async fetchNewsletters() {
+			this.newsletters = await listForAuthor(this.profile.id, this.$store.state.session.id)
 		},
 		closePopup() {
 			this.$emit(`toggleNewsletterPopup`)

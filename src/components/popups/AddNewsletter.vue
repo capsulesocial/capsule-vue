@@ -129,27 +129,20 @@
 							<div class="col-span-4 flex flex-col">
 								<!-- For each active email -->
 								<button
-									v-if="$store.state.session.email"
-									class="flex flex-row items-center"
-									@click="selectedEmail = $store.state.session.email"
-								>
-									<CheckCircleIcon
-										:isChecked="selectedEmail === $store.state.session.email"
-										class="text-primary w-5 h-5 mr-2 flex items-center transition duration-500 ease-in-out"
-									/>
-									<p class="ml-2 text-lightPrimaryText dark:text-darkPrimaryText">{{ $store.state.session.email }}</p>
-								</button>
-								<button
-									v-for="email in userEmails"
-									:key="email.id"
+									v-for="e in userEmails"
+									:key="e.email"
 									class="flex flex-row items-center mt-2"
-									@click="selectedEmail = email.address"
+									:disabled="e.authorSubbed"
+									:class="e.authorSubbed ? `opacity-50` : ``"
+									@click="selectedEmail = e.email"
 								>
 									<CheckCircleIcon
-										:isChecked="selectedEmail === email.address"
+										:isChecked="selectedEmail === e.email"
 										class="text-primary w-5 h-5 mr-2 flex items-center transition duration-500 ease-in-out"
 									/>
-									<p class="ml-2 text-lightPrimaryText dark:text-darkPrimaryText">{{ email.address }}</p>
+									<p class="ml-2 text-lightPrimaryText dark:text-darkPrimaryText">
+										{{ e.email }}
+									</p>
 								</button>
 								<button
 									class="flex items-center text-primary text-sm focus:outline-none mt-3"
@@ -172,7 +165,7 @@
 							class="bg-darkBG text-lightButtonText focus:outline-none transform rounded-lg font-bold transition duration-500 ease-in-out hover:bg-opacity-75"
 							style="padding: 0.4rem 1.5rem"
 							:disabled="false"
-							@click="createNewsletter"
+							@click="createNewsletterFromSelected"
 						>
 							<span class="font-sans" style="font-size: 0.95rem"> Create </span>
 						</button>
@@ -207,7 +200,7 @@
 								class="bg-darkBG text-lightButtonText focus:outline-none transform rounded-lg font-bold transition duration-500 ease-in-out hover:bg-opacity-75"
 								style="padding: 0.4rem 1.5rem"
 								:disabled="newEmail === ``"
-								@click="sendComfirmEmail"
+								@click="createEmailSubscription"
 							>
 								<span class="font-sans" style="font-size: 0.95rem"> Send confirmation email </span>
 							</button>
@@ -225,7 +218,7 @@
 							</p>
 							<p class="text-sm text-center text-gray5 dark:text-gray3 w-3/5 mb-4">
 								Didn't get a confirmation email? Check your spam folder or
-								<button class="text-primary font-semibold" @click="sendComfirmEmail">send again</button>
+								<button class="text-primary font-semibold" @click="createEmailSubscription">send again</button>
 							</p>
 						</div>
 					</div>
@@ -245,11 +238,12 @@ import CheckCircleIcon from '@/components/icons/CheckCircle.vue'
 import ChevronLeft from '@/components/icons/ChevronLeft.vue'
 import PlusIcon from '@/components/icons/Plus.vue'
 import { Profile } from '@/backend/profile'
+import { EmailSubscriptionMode, listEmails, startEmailSubscription, UserEmail } from '@/backend/emails'
 
 interface IData {
 	allPosts: boolean
 	selectedEmail: string
-	userEmails: Array<Object>
+	userEmails: Array<UserEmail>
 	ShowAddEmail: boolean
 	newEmail: string
 	confirmEmailSent: boolean
@@ -277,21 +271,17 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			allPosts: true,
-			selectedEmail: this.$store.state.session.email ? this.$store.state.session.email : ``,
-			userEmails: [
-				{
-					Id: 1,
-					address: `jack@gmail.com`,
-				},
-			],
+			selectedEmail: ``,
+			userEmails: [],
 			ShowAddEmail: false,
 			newEmail: ``,
 			confirmEmailSent: false,
 		}
 	},
 	created() {},
-	mounted() {
+	async mounted() {
 		window.addEventListener(`click`, this.handleClose, false)
+		this.userEmails = await listEmails(this.$store.state.session.id, this.profile.id)
 	},
 	destroyed() {
 		window.removeEventListener(`click`, this.handleClose, false)
@@ -314,8 +304,20 @@ export default Vue.extend({
 		toggleAddEmailPopup() {
 			this.ShowAddEmail = !this.ShowAddEmail
 		},
-		sendComfirmEmail() {
-			this.confirmEmailSent = !this.confirmEmailSent
+		async createEmailSubscription() {
+			try {
+				await startEmailSubscription(
+					this.profile.id,
+					this.newEmail.toLowerCase(),
+					[],
+					EmailSubscriptionMode.AllPosts,
+					this.$store.state.session.id,
+				)
+				this.confirmEmailSent = true
+				this.$emit(`newsletterStarted`)
+			} catch (err) {
+				this.$handleError(err)
+			}
 		},
 		// selectTag(tag: any) {
 		// 	return tag
@@ -324,8 +326,21 @@ export default Vue.extend({
 		// 	return period
 		// },
 		// saveNewsletterTags() {},
-		createNewsletter() {
-			this.closePopup()
+		async createNewsletterFromSelected() {
+			try {
+				await startEmailSubscription(
+					this.profile.id,
+					this.selectedEmail,
+					[],
+					EmailSubscriptionMode.AllPosts,
+					this.$store.state.session.id,
+				)
+				this.$toastSuccess(`Started newsletter successfully`)
+				this.$emit(`newsletterStarted`)
+				this.closePopup()
+			} catch (err) {
+				this.$handleError(err)
+			}
 		},
 	},
 })
