@@ -440,8 +440,9 @@ export default Vue.extend({
 		toggleNewsletterPopup() {
 			this.showNewsletterPopup = !this.showNewsletterPopup
 		},
-		async refetchNewsletters() {
-			// TODO: Refetch the newsletters here.
+		refetchNewsletters() {
+			// TODO: Refetch the newsletters here instead
+			location.reload()
 		},
 		async updateFollowers() {
 			const { followers, following } = await getFollowersAndFollowing(this.$route.params.id, true)
