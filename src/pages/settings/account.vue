@@ -29,7 +29,7 @@
 					<label for="encryptButton" class="text-gray7 dark:text-gray2 w-4/5">
 						Export my private key with a password:
 					</label>
-					<BasicSwitch :enabled="encrypted" onBG="true" @toggle="toggleEncrypted" />
+					<BasicSwitch :enabled="encrypted" :onBG="true" @toggle="toggleEncrypted" />
 				</div>
 				<div class="flex flex-col sm:flex-row items-center justify-between">
 					<div class="flex flex-row items-center mb-6 sm:mb-0">

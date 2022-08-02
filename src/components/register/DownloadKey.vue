@@ -10,7 +10,7 @@
 				<label for="encryptButton" class="text-gray7 dark:text-gray3 w-4/5">
 					Add an optional password to encrypt your private key:
 				</label>
-				<BasicSwitch :enabled="encrypted" onBG="true" @toggle="toggleEncrypted" />
+				<BasicSwitch :enabled="encrypted" :onBG="true" @toggle="toggleEncrypted" />
 			</div>
 			<div class="flex flex-col sm:flex-row items-center justify-between">
 				<div class="flex flex-row items-center">
