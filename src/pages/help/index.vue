@@ -26,10 +26,10 @@
 					<div :class="isOpen1 ? `` : `is-closed`" class="message-body w-full xl:w-10/12">
 						<p class="message-content text-gray5 dark:text-gray3 py-2 text-sm">
 							You can <nuxt-link to="/login" class="text-primary">login</nuxt-link> using Google, Discord, your NEAR
-							wallet, or phone number. For the last two methods, importing a Blogchain private key is required. We
-							create a NEAR wallet for each new user (unless they already have one), which is required in order to
-							invoke a smart contract. Invoking smart contracts costs a small fee, but we are committed to keeping
-							Blogchain free and will front this cost for everyone.<br /><br />
+							wallet, or by generating Blogchain private key. For the last two methods, importing a Blogchain private
+							key is required. We create a NEAR wallet for each new user (unless they already have one), which is
+							required in order to invoke a smart contract. Invoking smart contracts costs a small fee, but we are
+							committed to keeping Blogchain free and will front this cost for everyone.<br /><br />
 							Users, therefore, do not have to ever interact with their NEAR wallet. Once logged in, an onboarding guide
 							will walk you through the main Blogchain features, as well as setting up your profile!
 						</p>
