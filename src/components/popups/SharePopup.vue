@@ -92,12 +92,11 @@
 					<p class="text-gray5 dark:text-gray3 mb-2">Social media friendly link that you can share on any platform</p>
 					<div class="relative flex w-full h-8 rounded-lg bg-gray1 dark:bg-gray7 items-center">
 						<input
-							id="id"
 							ref="DirectLink"
 							v-model="generatedDirectLink"
 							class="absolute w-4/5 ml-2 overflow-hidden dark:text-darkPrimaryText bg-transparent focus:outline-none"
 							style="text-overflow: ellipsis"
-							@focus="$event.target.select()"
+							disabled
 						/>
 						<button
 							class="text-primary flex items-center focus:outline-none absolute right-0 mr-3 text-xs"
@@ -132,12 +131,11 @@
 					<p class="text-gray5 dark:text-gray3 mb-2">IPFS decentralized permanent link</p>
 					<div class="relative flex w-full h-8 rounded-lg bg-gray1 dark:bg-gray7 items-center">
 						<input
-							id="id"
 							ref="BlogchainLink"
 							v-model="generatedBlogchainLink"
 							class="absolute w-4/5 ml-2 overflow-hidden dark:text-darkPrimaryText bg-transparent focus:outline-none"
 							style="text-overflow: ellipsis"
-							@focus="$event.target.select()"
+							disabled
 						/>
 						<button
 							class="text-primary flex items-center focus:outline-none absolute right-0 mr-3 text-xs"
@@ -266,19 +264,29 @@ export default Vue.extend({
 			if (this.generatedDirectLink === ``) {
 				return
 			}
-			const code = this.$refs.DirectLink as HTMLElement
-			code.focus()
-			document.execCommand(`copy`)
-			this.$toastSuccess(`Link copied to clipboard!`)
+			const code = this.$refs.DirectLink as HTMLInputElement
+			navigator.clipboard
+				.writeText(code.value)
+				.then(() => {
+					this.$toastSuccess(`Link copied to clipboard!`)
+				})
+				.catch(() => {
+					this.$toastError(`Could not copy link to clipboard`)
+				})
 		},
 		copyBlogchainLink(): void {
 			if (this.generatedBlogchainLink === ``) {
 				return
 			}
-			const code = this.$refs.BlogchainLink as HTMLElement
-			code.focus()
-			document.execCommand(`copy`)
-			this.$toastSuccess(`Link copied to clipboard!`)
+			const code = this.$refs.BlogchainLink as HTMLInputElement
+			navigator.clipboard
+				.writeText(code.value)
+				.then(() => {
+					this.$toastSuccess(`Link copied to clipboard!`)
+				})
+				.catch(() => {
+					this.$toastError(`Could not copy link to clipboard`)
+				})
 		},
 		toggleAccordion1() {
 			this.isOpen1 = !this.isOpen1
