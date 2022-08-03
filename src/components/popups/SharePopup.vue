@@ -92,7 +92,6 @@
 					<p class="text-gray5 dark:text-gray3 mb-2">Social media friendly link that you can share on any platform</p>
 					<div class="relative flex w-full h-8 rounded-lg bg-gray1 dark:bg-gray7 items-center">
 						<input
-							ref="DirectLink"
 							v-model="generatedDirectLink"
 							class="absolute w-4/5 ml-2 overflow-hidden dark:text-darkPrimaryText bg-transparent focus:outline-none"
 							style="text-overflow: ellipsis"
@@ -131,7 +130,6 @@
 					<p class="text-gray5 dark:text-gray3 mb-2">IPFS decentralized permanent link</p>
 					<div class="relative flex w-full h-8 rounded-lg bg-gray1 dark:bg-gray7 items-center">
 						<input
-							ref="BlogchainLink"
 							v-model="generatedBlogchainLink"
 							class="absolute w-4/5 ml-2 overflow-hidden dark:text-darkPrimaryText bg-transparent focus:outline-none"
 							style="text-overflow: ellipsis"
@@ -264,9 +262,8 @@ export default Vue.extend({
 			if (this.generatedDirectLink === ``) {
 				return
 			}
-			const code = this.$refs.DirectLink as HTMLInputElement
 			navigator.clipboard
-				.writeText(code.value)
+				.writeText(this.generatedDirectLink)
 				.then(() => {
 					this.$toastSuccess(`Link copied to clipboard!`)
 				})
@@ -278,9 +275,8 @@ export default Vue.extend({
 			if (this.generatedBlogchainLink === ``) {
 				return
 			}
-			const code = this.$refs.BlogchainLink as HTMLInputElement
 			navigator.clipboard
-				.writeText(code.value)
+				.writeText(this.generatedBlogchainLink)
 				.then(() => {
 					this.$toastSuccess(`Link copied to clipboard!`)
 				})
