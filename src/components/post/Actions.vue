@@ -405,7 +405,7 @@
 				:postAuthor="postAuthor"
 				:cid="c._id"
 				:timestamp="c.timestamp"
-				@updateComments="initComments()"
+				@updateComments="initComments(true)"
 			/>
 			<div v-if="comments.length === 0 && filter !== ``" class="text-gray5 dark:text-gray3 pt-5 text-sm text-center">
 				No comments under this filter
@@ -579,8 +579,12 @@ export default Vue.extend({
 			const postActions = document.getElementById(`post`) as HTMLElement
 			postActions.addEventListener(`scroll`, this.handleScroll)
 		},
-		async initComments() {
-			this.comments = await getCommentsOfPost(this.postCID, this.currentCommentsOffset, this.commentsLimit)
+		async initComments(refreshComments = false) {
+			this.comments = await getCommentsOfPost(
+				this.postCID,
+				refreshComments ? 0 : this.currentCommentsOffset,
+				this.commentsLimit,
+			)
 			if (this.comments.length < 10) {
 				this.noMoreComments = true
 				this.removeScrollListener()
