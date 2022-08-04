@@ -274,7 +274,8 @@
 									<button
 										class="bg-primary focus:outline-none block rounded-lg lg:hidden"
 										style="margin-right: 15.2px; margin-bottom: 12px"
-										:class="comment !== '' && activeEmotion.label !== '' ? '' : 'opacity-50'"
+										:disabled="comment === '' && activeEmotion.label === ''"
+										:class="comment !== '' && activeEmotion.label !== '' ? '' : 'opacity-50 cursor-not-allowed'"
 										@click="sendComment"
 									>
 										<SendIcon class="m-2 mb-3 ml-3 h-5 w-5 text-white transform rotate-45" />
@@ -285,7 +286,8 @@
 										class="hidden lg:block"
 										:action="sendComment"
 										:thin="true"
-										:class="comment !== '' && activeEmotion.label !== '' ? '' : 'opacity-50'"
+										:disabled="comment === '' && activeEmotion.label === ''"
+										:class="comment !== '' && activeEmotion.label !== '' ? '' : 'opacity-50 cursor-not-allowed'"
 									/>
 								</span>
 							</div>
