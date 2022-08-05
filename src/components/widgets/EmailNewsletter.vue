@@ -96,6 +96,9 @@ export default Vue.extend({
 		toggleNewsletterPopup() {
 			this.$emit(`toggleNewsletterPopup`)
 		},
+		fetchNewsletters() {
+			this.$emit(`fetchNewsletters`)
+		},
 	},
 })
 </script>
