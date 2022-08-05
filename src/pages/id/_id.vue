@@ -398,6 +398,9 @@ export default Vue.extend({
 	created() {
 		this.fetchProfile()
 		// Check if existing subscription
+		if (!this.$store.state.session.id) {
+			return
+		}
 		this.$store.dispatch(`subscriptions/fetchSubs`, this.$store.state.session.id)
 		this.$store.state.subscriptions.active.forEach((sub: ISubscriptionResponse) => {
 			if (sub.authorID === this.$route.params.id) {
