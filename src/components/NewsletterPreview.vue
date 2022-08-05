@@ -4,30 +4,57 @@
 		<p class="flex items-center text-primary text-sm focus:outline-none mb-2">
 			{{ newsletter.email }}
 		</p>
-		<div
+		<!-- <div
 			:class="
 				newsletter.verified ? 'border-positive text-positive bg-positive' : 'border-negative text-negative bg-negative'
 			"
 			class="bg-positive bg-opacity-10 border rounded-2xl px-1 py-1 text-xs"
 		>
 			{{ newsletter.verified ? 'Active' : 'Pending ' }}
-		</div>
-		<!-- delete -->
-		<div class="icon relative flex items-center">
-			<button class="focus:outline-none text-gray5 dark:text-gray3 ml-2" @click.stop="toggleDropdownDelete">
-				<MoreIcon />
-			</button>
-			<div
-				v-show="showDelete"
-				class="bg-lightBG dark:bg-darkBG dark:text-darkPrimaryText text-lightPrimaryText border-lightBorder modal-animation absolute z-10 flex w-min flex-col rounded-lg border p-2 shadow-lg"
-				:class="$colorMode.dark ? `dropdownDraftOpenDark` : `dropdownDraftOpen`"
-				style="top: 35px; right: -5px"
-			>
-				<!-- Delete -->
-				<button class="focus:outline-none text-negative flex" @click="deleteNewsletter(newsletter._id)">
-					<BinIcon class="p-1" />
-					<span class="text-negative ml-1 self-center text-sm pr-1">Delete</span>
+		</div> -->
+		<div class="flex items-center">
+			<div class="relative">
+				<span
+					class="ml-1 flex h-3 w-3 modal-animation mr-4"
+					@mouseenter="showStatus = true"
+					@mouseleave="showStatus = false"
+				>
+					<span
+						class="absolute inline-flex h-3 w-3 animate-ping rounded-full opacity-75"
+						:class="newsletter.verified ? `bg-positive` : `bg-neutral`"
+					></span>
+					<span
+						class="relative inline-flex h-3 w-3 rounded-full"
+						:class="newsletter.verified ? `bg-positive` : `bg-neutral`"
+					></span>
+				</span>
+				<!-- Info hover -->
+				<div
+					v-show="showStatus"
+					class="absolute z-10 border-lightBorder modal-animation rounded-lg border bg-lightBG dark:bg-gray7 p-2 shadow-lg text-gray5 dark:text-gray1 self-center text-xs"
+					:class="$colorMode.dark ? `NodesInfoOpenDark` : `NodesInfoOpen`"
+					style="top: -5px; right: 105px; width: 100%"
+				>
+					Number of hosts on Blogchain's public networking currently serving content
+				</div>
+			</div>
+			<!-- delete -->
+			<div class="icon relative flex items-center">
+				<button class="focus:outline-none text-gray5 dark:text-gray3 ml-2" @click.stop="toggleDropdownDelete">
+					<MoreIcon />
 				</button>
+				<div
+					v-show="showDelete"
+					class="bg-lightBG dark:bg-darkBG dark:text-darkPrimaryText text-lightPrimaryText border-lightBorder modal-animation absolute z-10 flex w-min flex-col rounded-lg border p-2 shadow-lg"
+					:class="$colorMode.dark ? `dropdownDraftOpenDark` : `dropdownDraftOpen`"
+					style="top: 35px; right: -5px"
+				>
+					<!-- Delete -->
+					<button class="focus:outline-none text-negative flex" @click="deleteNewsletter(newsletter._id)">
+						<BinIcon class="p-1" />
+						<span class="text-negative ml-1 self-center text-sm pr-1">Delete</span>
+					</button>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -42,6 +69,7 @@ import { deleteSubscription } from '@/backend/emails'
 
 interface IData {
 	showDelete: boolean
+	showStatus: boolean
 }
 
 export default Vue.extend({
@@ -58,6 +86,7 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			showDelete: false,
+			showStatus: false,
 		}
 	},
 	created() {
