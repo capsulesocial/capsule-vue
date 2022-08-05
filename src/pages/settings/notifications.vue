@@ -10,6 +10,12 @@
 		<p class="text-gray5 dark:text-gray3 text-sm">
 			You are currently receiving email newsletters from the following authors:
 		</p>
+		<div v-if="!isLoading && authorProfiles.length === 0" class="flex justify-center text-center px-20 mt-20">
+			<p class="text-gray5 dark:text-gray3 text-sm">
+				It seems you have not setup any email newsletters to Blogchain's authors. You can create one directly on their
+				profile
+			</p>
+		</div>
 		<div v-if="!isLoading" class="flex flex-wrap mt-4">
 			<ProfilePreviewCard
 				v-for="profile in this.authorProfiles"
