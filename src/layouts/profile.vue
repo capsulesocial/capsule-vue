@@ -52,6 +52,7 @@
 							<EmailNewsletterWidget
 								v-if="$store.state.session.id !== $route.params.id"
 								:profile="visitProfile"
+								:newsletters="newsletters"
 								@toggleNewsletterPopup="toggleNewsletterPopup"
 							/>
 							<MutualFollowersWidget
@@ -191,6 +192,7 @@ import { getUserInfoNEAR } from '@/backend/near'
 import { ActionType, namespace as paymentProfileNamespace } from '@/store/paymentProfile'
 import { ISubscriptionWithProfile } from '@/store/subscriptions'
 import type { ISubscriptionResponse } from '@/backend/subscription'
+import { IEmailSubscription, listForAuthor } from '@/backend/emails'
 
 interface IData {
 	myProfile: Profile
@@ -218,6 +220,7 @@ interface IData {
 	authorPaymentProfile: ISubscriptionWithProfile | undefined
 	showChangeTier: boolean
 	showNewsletterPopup: boolean
+	newsletters: Array<IEmailSubscription>
 }
 
 export default Vue.extend({
@@ -268,6 +271,7 @@ export default Vue.extend({
 			authorPaymentProfile: undefined,
 			showChangeTier: false,
 			showNewsletterPopup: false,
+			newsletters: [],
 		}
 	},
 	watch: {
@@ -315,6 +319,7 @@ export default Vue.extend({
 	async mounted() {
 		// Fetch visiting profile
 		this.getVisitingProfile()
+		this.fetchNewsletters()
 		try {
 			await this.fetchPaymentProfile({ username: this.$route.params.id })
 		} catch (err) {
@@ -383,6 +388,16 @@ export default Vue.extend({
 				})
 			}
 		},
+		async fetchNewsletters() {
+			if (this.$store.state.session.id === ``) {
+				return
+			}
+			try {
+				this.newsletters = await listForAuthor(this.$route.params.id, this.$store.state.session.id)
+			} catch (err) {
+				this.$handleError(err)
+			}
+		},
 		async toggleFriend() {
 			// Unauth
 			if (this.$store.state.session.id === ``) {
@@ -441,8 +456,7 @@ export default Vue.extend({
 			this.showNewsletterPopup = !this.showNewsletterPopup
 		},
 		refetchNewsletters() {
-			// TODO: Refetch the newsletters here instead
-			location.reload()
+			this.fetchNewsletters()
 		},
 		async updateFollowers() {
 			const { followers, following } = await getFollowersAndFollowing(this.$route.params.id, true)

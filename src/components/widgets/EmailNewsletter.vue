@@ -74,11 +74,8 @@ import type { PropType } from 'vue'
 // import PlusIcon from '@/components/icons/Plus.vue'
 import { Profile } from '@/backend/profile'
 import NewsletterPreview from '@/components/NewsletterPreview.vue'
-import { IEmailSubscription, listForAuthor } from '@/backend/emails'
+import { IEmailSubscription } from '@/backend/emails'
 
-interface IData {
-	newsletters: Array<IEmailSubscription>
-}
 export default Vue.extend({
 	components: {
 		// TagCard,
@@ -90,23 +87,12 @@ export default Vue.extend({
 			type: Object as PropType<Profile>,
 			default: null,
 		},
-	},
-	data(): IData {
-		return {
-			newsletters: [],
-		}
-	},
-	async mounted() {
-		await this.fetchNewsletters()
+		newsletters: {
+			type: Object as PropType<Array<IEmailSubscription>>,
+			required: true,
+		},
 	},
 	methods: {
-		async fetchNewsletters() {
-			try {
-				this.newsletters = await listForAuthor(this.$route.params.id, this.$store.state.session.id)
-			} catch (err) {
-				this.$handleError(err)
-			}
-		},
 		toggleNewsletterPopup() {
 			this.$emit(`toggleNewsletterPopup`)
 		},
