@@ -131,7 +131,7 @@
 								<button
 									v-for="e in userEmails"
 									:key="e.email"
-									class="flex flex-row items-center mt-2"
+									class="flex flex-row items-center mt-2 mb-3"
 									:disabled="e.authorSubbed"
 									:class="e.authorSubbed ? `opacity-50` : ``"
 									@click="selectedEmail = e.email"
@@ -144,10 +144,7 @@
 										{{ e.email }}
 									</p>
 								</button>
-								<button
-									class="flex items-center text-primary text-sm focus:outline-none mt-3"
-									@click="toggleAddEmailPopup"
-								>
+								<button class="flex items-center text-primary text-sm focus:outline-none" @click="toggleAddEmailPopup">
 									<PlusIcon class="p-1 mr-1" />
 									Add an email address
 								</button>
