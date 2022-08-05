@@ -50,7 +50,7 @@
 								:website="visitProfile.website"
 							/>
 							<EmailNewsletterWidget
-								v-if="$store.state.session.id !== $route.params.id"
+								v-if="this.$store.state.session.id !== `` && $store.state.session.id !== $route.params.id"
 								:profile="visitProfile"
 								:newsletters="newsletters"
 								@toggleNewsletterPopup="toggleNewsletterPopup"
