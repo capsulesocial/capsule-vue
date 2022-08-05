@@ -74,9 +74,13 @@ export default Vue.extend({
 			if (!confirm(`Confirm deleting the newsletter subscription?`)) {
 				return
 			}
-			await deleteSubscription(this.$store.state.session.id, id)
-			this.$toastSuccess(`Newsletter deleted successfully`)
-			this.$emit(`subscriptionDeleted`)
+			try {
+				await deleteSubscription(this.$store.state.session.id, id)
+				this.$toastSuccess(`Newsletter deleted successfully`)
+				this.$emit(`subscriptionDeleted`)
+			} catch (err) {
+				this.$handleError(err)
+			}
 		},
 		handleDropdown(e: any): void {
 			if (!e.target || e.target.parentNode === null || e.target.parentNode.classList === undefined) {

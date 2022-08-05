@@ -281,7 +281,11 @@ export default Vue.extend({
 	created() {},
 	async mounted() {
 		window.addEventListener(`click`, this.handleClose, false)
-		this.userEmails = await listEmails(this.$store.state.session.id, this.profile.id)
+		try {
+			this.userEmails = await listEmails(this.$store.state.session.id, this.profile.id)
+		} catch (err) {
+			this.$handleError(err)
+		}
 	},
 	destroyed() {
 		window.removeEventListener(`click`, this.handleClose, false)
