@@ -101,7 +101,11 @@ export default Vue.extend({
 	},
 	methods: {
 		async fetchNewsletters() {
-			this.newsletters = await listForAuthor(this.$route.params.id, this.$store.state.session.id)
+			try {
+				this.newsletters = await listForAuthor(this.$route.params.id, this.$store.state.session.id)
+			} catch (err) {
+				this.$handleError(err)
+			}
 		},
 		toggleNewsletterPopup() {
 			this.$emit(`toggleNewsletterPopup`)
