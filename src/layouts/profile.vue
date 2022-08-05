@@ -160,6 +160,7 @@
 			@newsletterStarted="refetchNewsletters"
 		/>
 		<portal-target name="card-popup"></portal-target>
+		<portal-target name="deleteEmail"></portal-target>
 	</main>
 </template>
 

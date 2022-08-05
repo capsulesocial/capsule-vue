@@ -12,8 +12,8 @@
 		>
 			{{ newsletter.verified ? 'Active' : 'Pending ' }}
 		</div> -->
-		<div class="flex items-center">
-			<div class="relative">
+		<div class="flex items-center relative">
+			<div class="">
 				<span
 					class="ml-1 flex h-3 w-3 modal-animation mr-4"
 					@mouseenter="showStatus = true"
@@ -31,11 +31,11 @@
 				<!-- Info hover -->
 				<div
 					v-show="showStatus"
-					class="absolute z-10 border-lightBorder modal-animation rounded-lg border bg-lightBG dark:bg-gray7 p-2 shadow-lg text-gray5 dark:text-gray1 self-center text-xs"
-					:class="$colorMode.dark ? `NodesInfoOpenDark` : `NodesInfoOpen`"
-					style="top: -5px; right: 105px; width: 100%"
+					class="absolute w-max z-10 border-lightBorder modal-animation rounded-lg border bg-lightBG dark:bg-gray7 p-2 pr-4 shadow-lg text-gray5 dark:text-gray1 self-center text-xs"
+					:class="$colorMode.dark ? `EmailInfoOpenDark` : `EmailInfoOpen`"
+					style="top: -5px; right: 80px"
 				>
-					Number of hosts on Blogchain's public networking currently serving content
+					{{ newsletter.verified ? 'Newsletter is active on this email' : 'Awaiting email verification' }}
 				</div>
 			</div>
 			<!-- delete -->
@@ -46,17 +46,24 @@
 				<div
 					v-show="showDelete"
 					class="bg-lightBG dark:bg-darkBG dark:text-darkPrimaryText text-lightPrimaryText border-lightBorder modal-animation absolute z-10 flex w-min flex-col rounded-lg border p-2 shadow-lg"
-					:class="$colorMode.dark ? `dropdownDraftOpenDark` : `dropdownDraftOpen`"
+					:class="$colorMode.dark ? `deleteEmailOpenDark` : `deleteEmailOpen`"
 					style="top: 35px; right: -5px"
 				>
 					<!-- Delete -->
-					<button class="focus:outline-none text-negative flex" @click="deleteNewsletter(newsletter._id)">
+					<button class="focus:outline-none text-negative flex" @click="toggleDeleteConfirm(newsletter._id)">
 						<BinIcon class="p-1" />
 						<span class="text-negative ml-1 self-center text-sm pr-1">Delete</span>
 					</button>
 				</div>
 			</div>
 		</div>
+		<portal v-if="showDeleteConfirm" to="deleteEmail">
+			<BasicConfirmAlert
+				:text="`Are you sure you want to cancel this email newsletter? You can still add it again later`"
+				@close="showDeleteConfirm = false"
+				@confirm="deleteNewsletter(newsletter._id)"
+			/>
+		</portal>
 	</div>
 </template>
 
@@ -66,9 +73,11 @@ import Vue from 'vue'
 import MoreIcon from '@/components/icons/More.vue'
 import BinIcon from '@/components/icons/Bin.vue'
 import { deleteSubscription } from '@/backend/emails'
+import BasicConfirmAlert from '@/components/popups/BasicConfirmAlert.vue'
 
 interface IData {
 	showDelete: boolean
+	showDeleteConfirm: boolean
 	showStatus: boolean
 }
 
@@ -76,6 +85,7 @@ export default Vue.extend({
 	components: {
 		BinIcon,
 		MoreIcon,
+		BasicConfirmAlert,
 	},
 	props: {
 		newsletter: {
@@ -86,6 +96,7 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			showDelete: false,
+			showDeleteConfirm: false,
 			showStatus: false,
 		}
 	},
@@ -99,10 +110,10 @@ export default Vue.extend({
 		toggleDropdownDelete() {
 			this.showDelete = !this.showDelete
 		},
+		toggleDeleteConfirm() {
+			this.showDeleteConfirm = !this.showDeleteConfirm
+		},
 		async deleteNewsletter(id: string) {
-			if (!confirm(`Confirm deleting the newsletter subscription?`)) {
-				return
-			}
 			try {
 				await deleteSubscription(this.$store.state.session.id, id)
 				this.$toastSuccess(`Newsletter deleted successfully`)
@@ -123,7 +134,7 @@ export default Vue.extend({
 })
 </script>
 <style>
-.dropdownDraftOpen::before {
+.deleteEmailOpen::before {
 	content: '';
 	position: absolute;
 	top: -0.5rem;
@@ -134,7 +145,7 @@ export default Vue.extend({
 	background-color: #fff;
 	border-radius: 2px;
 }
-.dropdownDraftOpenDark::before {
+.deleteEmailOpenDark::before {
 	content: '';
 	position: absolute;
 	top: -0.5rem;
@@ -144,5 +155,29 @@ export default Vue.extend({
 	height: 1rem;
 	background-color: #121212;
 	border-radius: 2px;
+}
+.EmailInfoOpen::before {
+	content: '';
+	position: absolute;
+	top: 0.5rem;
+	right: -0.5rem;
+	transform: rotate(45deg);
+	width: 1rem;
+	height: 1rem;
+	background-color: #fff;
+	border-radius: 2px;
+	z-index: 1;
+}
+.EmailInfoOpenDark::before {
+	content: '';
+	position: absolute;
+	top: 0.5rem;
+	right: -0.5rem;
+	transform: rotate(45deg);
+	width: 1rem;
+	height: 1rem;
+	background-color: #686868;
+	border-radius: 2px;
+	z-index: 1;
 }
 </style>
