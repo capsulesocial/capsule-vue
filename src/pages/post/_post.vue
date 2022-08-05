@@ -1208,4 +1208,11 @@ li.ql-indent-9 {
 	padding-left: 18em;
 	list-style-position: inside;
 }
+.editable code {
+	font-size: 85%;
+	padding: 2px 4px;
+	background-color: #f0f0f0;
+	border-radius: 3px;
+	color: black;
+}
 </style>
