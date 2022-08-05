@@ -54,6 +54,7 @@
 								:profile="visitProfile"
 								:newsletters="newsletters"
 								@toggleNewsletterPopup="toggleNewsletterPopup"
+								@fetchNewsletters="refetchNewsletters"
 							/>
 							<MutualFollowersWidget
 								v-if="this.$route.params.id !== this.$store.state.session.id"
