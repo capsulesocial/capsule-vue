@@ -88,7 +88,8 @@ export default Vue.extend({
 			default: null,
 		},
 		newsletters: {
-			type: Object as PropType<Array<IEmailSubscription>>,
+			type: Array as PropType<Array<IEmailSubscription>>,
+			default: null,
 			required: true,
 		},
 	},
