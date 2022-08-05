@@ -56,7 +56,7 @@
 		"@capsulesocial/capsule-config": "^1.2.6",
 		"@nuxtjs/dotenv": "^1.4.1",
 		"@nuxtjs/robots": "^2.5.0",
-		"@stripe/stripe-js": "^1.34.0",
+		"@stripe/stripe-js": "^1.35.0",
 		"@tailwindcss/typography": "^0.4.1",
 		"@toruslabs/customauth": "^10.1.0",
 		"@toruslabs/openlogin-ed25519": "^2.0.0",
