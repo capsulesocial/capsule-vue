@@ -46,12 +46,16 @@ export default Vue.extend({
 	},
 	async created() {
 		// Get author profile
-		this.authorIDs = await listAllAuthors(this.$store.state.session.id)
-		for (const authorID of this.authorIDs) {
-			getProfile(authorID).then((p) => {
-				const { profile } = p
-				this.authorProfiles.push(profile ?? createDefaultProfile(authorID))
-			})
+		try {
+			this.authorIDs = await listAllAuthors(this.$store.state.session.id)
+			for (const authorID of this.authorIDs) {
+				getProfile(authorID).then((p) => {
+					const { profile } = p
+					this.authorProfiles.push(profile ?? createDefaultProfile(authorID))
+				})
+			}
+		} catch (err) {
+			this.$handleError(err)
 		}
 		this.isLoading = false
 	},
