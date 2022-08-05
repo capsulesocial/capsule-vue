@@ -544,7 +544,7 @@ export default Vue.extend({
 			if (connectId) {
 				_stripe = await loadStripe(stripePublishableKey, {
 					stripeAccount: connectId,
-					apiVersion: `2020-08-27`,
+					apiVersion: `2022-08-01`,
 				})
 			}
 			// If stripe is still not initialized at this point, throw an error.
