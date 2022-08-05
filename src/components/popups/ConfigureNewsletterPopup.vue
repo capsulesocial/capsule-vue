@@ -20,10 +20,10 @@
 				<div class="flex mb-6 items-center">
 					<Avatar :avatar="avatar" :authorID="profile.id" :noClick="true" :size="`w-12 h-12`" />
 					<p v-if="profile.name !== ``" class="text-lightPrimaryText dark:text-darkPrimaryText ml-4 w-10/12">
-						Manage all you newsletter from {{ profile.name }} here:
+						Manage all your newsletters from {{ profile.name }} here:
 					</p>
 					<p v-else class="text-lightPrimaryText dark:text-darkPrimaryText ml-4 w-10/12">
-						Manage all you newsletter from @{{ profile.id }} here:
+						Manage all your newsletters from @{{ profile.id }} here:
 					</p>
 				</div>
 				<!-- List of newsletters for this author -->

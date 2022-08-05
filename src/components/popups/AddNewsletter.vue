@@ -131,13 +131,13 @@
 								<button
 									v-for="e in userEmails"
 									:key="e.email"
-									class="flex flex-row items-center mt-2 mb-3"
+									class="flex flex-row items-center mb-3"
 									:disabled="e.authorSubbed"
 									:class="e.authorSubbed ? `opacity-50` : ``"
 									@click="selectedEmail = e.email"
 								>
 									<CheckCircleIcon
-										:isChecked="selectedEmail === e.email"
+										:isChecked="selectedEmail === e.email || e.authorSubbed"
 										class="text-primary w-5 h-5 mr-2 flex items-center transition duration-500 ease-in-out"
 									/>
 									<p class="ml-2 text-lightPrimaryText dark:text-darkPrimaryText">
