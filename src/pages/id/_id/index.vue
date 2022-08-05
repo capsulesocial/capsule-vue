@@ -91,6 +91,9 @@ export default Vue.extend({
 	watch: {
 		async $route(n, o) {
 			if (n.params.id !== o.params.id) {
+				if (!this.$parent) {
+					return
+				}
 				this.currentOffset = 0
 				this.noMorePosts = false
 				this.posts = []
@@ -104,6 +107,9 @@ export default Vue.extend({
 		this.posts = await this.fetchPosts()
 	},
 	mounted() {
+		if (!this.$parent) {
+			return
+		}
 		const container = this.$parent.$refs.scrollContainer as HTMLElement
 		container.addEventListener(`scroll`, this.handleScroll)
 	},
@@ -119,6 +125,9 @@ export default Vue.extend({
 				following: id === `x` ? undefined : this.$store.state.session.id,
 			})
 			if (posts.length === 0) {
+				if (!this.$parent) {
+					throw new Error(`Impossible!`)
+				}
 				const container = this.$parent.$refs.scrollContainer as HTMLElement
 				container.removeEventListener(`scroll`, this.handleScroll)
 			}

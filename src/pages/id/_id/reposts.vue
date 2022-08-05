@@ -92,6 +92,9 @@ export default Vue.extend({
 		this.updateFollowers()
 	},
 	mounted() {
+		if (!this.$parent) {
+			return
+		}
 		const container = this.$parent.$refs.scrollContainer as HTMLElement
 		container.addEventListener(`scroll`, this.handleScroll)
 	},
@@ -109,13 +112,15 @@ export default Vue.extend({
 				)
 				// When no more posts
 				if (res.length < this.limit) {
+					if (!this.$parent) {
+						return
+					}
 					this.noMorePosts = true
 					const container = this.$parent.$refs.scrollContainer as HTMLElement
 					container.removeEventListener(`scroll`, this.handleScroll)
 				}
 				this.reposts = this.reposts.concat(res)
 				this.currentOffset += this.limit
-				this.isLoading = false
 			} catch (error) {
 				// TODO: handle error
 			} finally {
