@@ -165,7 +165,7 @@
 							<p
 								v-if="post && post.featuredPhotoCaption"
 								ref="photoCaption"
-								class="text-lightOnPrimaryText absolute px-4 pb-3 text-sm drop-shadow-lg"
+								class="text-lightOnPrimaryText absolute px-4 pb-3 text-sm drop-shadow-lg break-words max-w-full"
 								style="text-shadow: 0 0 10px #000"
 							>
 								{{ post.featuredPhotoCaption }}
