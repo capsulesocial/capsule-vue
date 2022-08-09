@@ -7,7 +7,7 @@
 		>
 			<!-- Header and close icon -->
 			<div class="flex items-center justify-between pb-4">
-				<h4 v-if="!ShowAddEmail" class="text-xl font-semibold dark:text-darkPrimaryText">Create newsletter</h4>
+				<h4 v-if="!ShowAddEmail" class="text-xl font-semibold dark:text-darkPrimaryText">Create email notification</h4>
 				<h4 v-else class="text-xl font-semibold dark:text-darkPrimaryText">Add a new email address</h4>
 				<button
 					class="focus:outline-none bg-gray1 dark:bg-gray5 rounded-full p-1"
@@ -19,8 +19,8 @@
 			<!-- Self-view view -->
 			<div v-if="$store.state.session.id === $route.params.id">
 				<p class="text-gray5 dark:text-gray3 mb-4">
-					Display highlighted tags on your profile for readers to enable email newsletter to receive your posts in their
-					inbox. You can highlight up to three different tags:
+					Display highlighted tags on your profile for readers to enable email notifications to receive your posts in
+					their inbox. You can highlight up to three different tags:
 				</p>
 				<div class="flex flex-row justify-between mb-3 mt-8">
 					<!-- Add tag input -->
@@ -69,10 +69,10 @@
 					<div class="flex mb-6 items-center">
 						<Avatar :avatar="avatar" :authorID="profile.id" :noClick="true" :size="`w-12 h-12`" />
 						<p v-if="profile.name !== ``" class="text-lightPrimaryText dark:text-darkPrimaryText ml-4 w-10/12">
-							Create a new email newsletter from {{ profile.name }}'s posts and manage its destination here:
+							Create a new email notification from {{ profile.name }}'s posts and manage its destination here:
 						</p>
 						<p v-else class="text-lightPrimaryText dark:text-darkPrimaryText ml-4 w-10/12">
-							Create a new email newsletter from @{{ profile.id }}'s posts and manage its destination here:
+							Create a new email notification from @{{ profile.id }}'s posts and manage its destination here:
 						</p>
 					</div>
 					<!-- Topics -->
@@ -154,7 +154,7 @@
 					<!-- Submit or manage email newsletter -->
 					<div class="flex justify-end items-center mt-10">
 						<nuxt-link to="/settings/notifications" class="text-sm text-primary mr-6 flex flex-row items-center"
-							>Manage all my newsletters</nuxt-link
+							>Manage all my notifications</nuxt-link
 						>
 						<!-- If no email or no topics selected, button must be opacity-50 and deactivated -->
 						<button

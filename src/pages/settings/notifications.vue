@@ -6,13 +6,13 @@
 			<h6 class="font-semibold dark:text-darkPrimaryText">All Settings</h6>
 		</nuxt-link>
 		<!-- Email newsletter -->
-		<h3 class="text-lightPrimaryText dark:text-darkPrimaryText pb-2 text-base font-semibold">Email newsletter</h3>
+		<h3 class="text-lightPrimaryText dark:text-darkPrimaryText pb-2 text-base font-semibold">Email notifications</h3>
 		<p class="text-gray5 dark:text-gray3 text-sm">
-			You are currently receiving email newsletters from the following authors:
+			You are currently receiving email notifications from the following authors:
 		</p>
 		<div v-if="!isLoading && authorProfiles.length === 0" class="flex justify-center text-center px-20 mt-20">
 			<p class="text-gray5 dark:text-gray3 text-sm">
-				It seems you have not setup any email newsletters to Blogchain's authors. You can create one directly on their
+				It seems you have not setup any email notifications to Blogchain's authors. You can create one directly on their
 				profile
 			</p>
 		</div>

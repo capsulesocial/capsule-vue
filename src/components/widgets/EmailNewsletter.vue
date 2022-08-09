@@ -5,9 +5,9 @@
 	>
 		<!-- Public view -->
 		<div v-if="$store.state.session.id !== $route.params.id">
-			<h6 class="text-lightPrimaryText dark:text-darkPrimaryText mb-3 font-semibold">Email newsletters</h6>
+			<h6 class="text-lightPrimaryText dark:text-darkPrimaryText mb-3 font-semibold">Email notifications</h6>
 			<p class="text-gray5 dark:text-gray3 text-sm mb-4">
-				Create email newsletters to be aware of <b>{{ profile.name ? profile.name : `@${profile.id}` }}</b
+				Create email notifications to be aware of <b>{{ profile.name ? profile.name : `@${profile.id}` }}</b
 				>'s new posts directly in your inbox:
 			</p>
 			<NewsletterPreview
@@ -27,14 +27,14 @@
 					class="rounded-lg px-3 py-2 bg-black text-white focus:outline-none text-sm font-semibold mt-2"
 					@click="toggleNewsletterPopup"
 				>
-					Create another Newsletter
+					Create another notification
 				</button>
 				<button
 					v-else
 					class="rounded-lg px-3 py-2 bg-black text-white focus:outline-none text-sm font-semibold mt-2"
 					@click="toggleNewsletterPopup"
 				>
-					Create Newsletter
+					Create notification
 				</button>
 			</div>
 		</div>
