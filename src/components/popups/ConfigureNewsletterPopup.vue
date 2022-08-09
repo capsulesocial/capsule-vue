@@ -7,7 +7,7 @@
 		>
 			<!-- Header and close icon -->
 			<div class="flex items-center justify-between pb-4">
-				<h4 class="text-xl font-semibold dark:text-darkPrimaryText">Configure newsletter</h4>
+				<h4 class="text-xl font-semibold dark:text-darkPrimaryText">Configure email notification</h4>
 				<button
 					class="focus:outline-none bg-gray1 dark:bg-gray5 rounded-full p-1"
 					@click="$emit(`toggleNewsletterPopup`)"
@@ -20,10 +20,10 @@
 				<div class="flex mb-6 items-center">
 					<Avatar :avatar="avatar" :authorID="profile.id" :noClick="true" :size="`w-12 h-12`" />
 					<p v-if="profile.name !== ``" class="text-lightPrimaryText dark:text-darkPrimaryText ml-4 w-10/12">
-						Manage all your newsletters from {{ profile.name }} here:
+						Manage all your email notifications from {{ profile.name }} here:
 					</p>
 					<p v-else class="text-lightPrimaryText dark:text-darkPrimaryText ml-4 w-10/12">
-						Manage all your newsletters from @{{ profile.id }} here:
+						Manage all your email notifications from @{{ profile.id }} here:
 					</p>
 				</div>
 				<!-- List of newsletters for this author -->

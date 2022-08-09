@@ -4,14 +4,6 @@
 		<p class="flex items-center text-primary text-sm focus:outline-none mb-2">
 			{{ newsletter.email }}
 		</p>
-		<!-- <div
-			:class="
-				newsletter.verified ? 'border-positive text-positive bg-positive' : 'border-negative text-negative bg-negative'
-			"
-			class="bg-positive bg-opacity-10 border rounded-2xl px-1 py-1 text-xs"
-		>
-			{{ newsletter.verified ? 'Active' : 'Pending ' }}
-		</div> -->
 		<div class="flex items-center relative">
 			<div class="">
 				<span
@@ -35,7 +27,7 @@
 					:class="$colorMode.dark ? `EmailInfoOpenDark` : `EmailInfoOpen`"
 					style="top: -5px; right: 80px"
 				>
-					{{ newsletter.verified ? 'Newsletter is active on this email' : 'Awaiting email verification' }}
+					{{ newsletter.verified ? 'Notification is active on this email' : 'Awaiting email verification' }}
 				</div>
 			</div>
 			<!-- delete -->
@@ -59,7 +51,7 @@
 		</div>
 		<portal v-if="showDeleteConfirm" to="deleteEmail">
 			<BasicConfirmAlert
-				:text="`Are you sure you want to cancel this email newsletter? You can still add it again later`"
+				:text="`Are you sure you want to cancel this email notification? You can still add it again later`"
 				@close="showDeleteConfirm = false"
 				@confirm="deleteNewsletter(newsletter._id)"
 			/>
