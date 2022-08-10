@@ -1,6 +1,6 @@
+import ipfs from '@capsulesocial/ipfs-wrapper'
 import cache from './utilities/caching'
 import { validFileTypes } from './utilities/helpers'
-import ipfs from './utilities/ipfs'
 
 function _getPhotoFromIPFS(cid: string) {
 	return ipfs().getData(cid)

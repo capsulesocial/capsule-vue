@@ -47,8 +47,8 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import ipfs from '@capsulesocial/ipfs-wrapper'
 import CapsuleIcon from '@/components/icons/CapsuleNew.vue'
-import ipfs from '@/backend/utilities/ipfs'
 
 export interface IData {
 	nodes: number

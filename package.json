@@ -64,7 +64,7 @@
 		"browser-image-compression": "^2.0.0",
 		"dompurify": "^2.3.10",
 		"highlight.js": "^11.6.0",
-		"ipfs-core": "0.14.3",
+		"@capsulesocial/ipfs-wrapper": "1.0.1",
 		"libsodium-wrappers": "^0.7.10",
 		"lodash": "^4.17.21",
 		"marked": "^4.0.18",

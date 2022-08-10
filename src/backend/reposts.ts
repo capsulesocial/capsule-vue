@@ -1,9 +1,9 @@
 import axios from 'axios'
+import ipfs from '@capsulesocial/ipfs-wrapper'
 import libsodium from './utilities/keys'
 import { Algorithm, IRepostResponse } from './post'
 import { nodeUrl } from './utilities/config'
 import { ISignedIPFSObject, uint8ArrayToHexString } from './utilities/helpers'
-import ipfs from './utilities/ipfs'
 
 export interface IRepost {
 	authorID: string
