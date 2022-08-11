@@ -3,8 +3,6 @@ on:
   release:
     types: [published]
 env:
-  GITHUB_USER: dgrisham
-  GITHUB_TOKEN: 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
   DEPLOY_ENV: production
 
 jobs:
@@ -103,7 +101,7 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           artifacts:    ${{ env.BUILD_NAME }}.tar.gz
-          token:        ${{ secrets.GITHUB_TOKEN }}
+          token:        ${{ secrets.GITREPO_TOKEN }}
           allowUpdates: true
 
   deploy:
@@ -135,6 +133,6 @@ jobs:
           DEPLOY_ENV:          ${{ env.DEPLOY_ENV }}
           RELEASE_ID:          ${{ env.RELEASE_ID }}
           RELEASE_TAG:         ${{ env.RELEASE_TAG }}
-          GITHUB_USER:         ${{ env.GITHUB_USER }}
-          GITHUB_TOKEN:        ${{ env.GITHUB_TOKEN }}
+          GITHUB_USER:         ${{ secrets.GITREPO_USER }}
+          GITHUB_TOKEN:        ${{ secrets.GITREPO_TOKEN }}
           ANSIBLE_PRIVATE_KEY: ${{ secrets.ANSIBLE_PRIVATE_KEY }}

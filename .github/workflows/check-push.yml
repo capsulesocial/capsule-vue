@@ -3,9 +3,6 @@ on:
   push:
     branches:
       - '**'
-env:
-  GITHUB_USER: dgrisham
-  GITHUB_TOKEN: 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
 
 jobs:
 
