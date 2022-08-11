@@ -2,14 +2,13 @@
 	"name": "capsule-vue",
 	"productName": "Blogchain Client",
 	"version": "1.0.0",
-	"description": "Electron application using Nuxt.js to serve the Capsule Social Application",
+	"description": "Blogchain Client",
 	"author": {
 		"name": "Capsule Social",
 		"email": "jack@capsule.social",
 		"url": "https://capsule.social"
 	},
 	"private": true,
-	"main": "main.js",
 	"license": "GNU GENERAL PUBLIC LICENSE",
 	"sideEffects": [
 		"*.css",
@@ -58,7 +57,7 @@
 		"@nuxtjs/robots": "^2.5.0",
 		"@stripe/stripe-js": "^1.35.0",
 		"@tailwindcss/typography": "^0.4.1",
-		"@toruslabs/customauth": "^10.1.0",
+		"@toruslabs/customauth": "^10.1.1",
 		"@toruslabs/openlogin-ed25519": "^2.0.0",
 		"axios": "^0.27.2",
 		"browser-image-compression": "^2.0.0",

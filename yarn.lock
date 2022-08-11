@@ -2212,10 +2212,10 @@
     socket.io-client "^4.5.1"
     unload "^2.3.1"
 
-"@toruslabs/customauth@^10.1.0":
-  version "10.1.0"
-  resolved "https://registry.yarnpkg.com/@toruslabs/customauth/-/customauth-10.1.0.tgz#d0f7a47e6c3d24fe2203f50eea3b0dbcf00d9d95"
-  integrity sha512-P2k3CeFizzrtLkuiaCt8rfeFfG980AOBYOKZg+YsiwwB9V9rxAWYDaTfEd89QglBGvdJiPq/N6MHf1ZoiV/Vxw==
+"@toruslabs/customauth@^10.1.1":
+  version "10.1.1"
+  resolved "https://registry.yarnpkg.com/@toruslabs/customauth/-/customauth-10.1.1.tgz#66c96d29fc9e04fe9ff923ef5000769d9f58a377"
+  integrity sha512-E6pfrOz6ZwgLK3w2nL8DIUiBUr/YU9V+lJ0S+qScb9fd04sRCTDmblvh0hmeM2kH3PCm7co9o4FxQ+7xp5vN+A==
   dependencies:
     "@chaitanyapotti/register-service-worker" "^1.7.3"
     "@toruslabs/broadcast-channel" "^6.1.0"
@@ -2229,7 +2229,7 @@
     jwt-decode "^3.1.2"
     lodash.merge "^4.6.2"
     loglevel "^1.8.0"
-    web3-utils "^1.7.4"
+    web3-utils "^1.7.5"
 
 "@toruslabs/eccrypto@^1.1.8":
   version "1.1.8"
@@ -11456,10 +11456,19 @@ postcss@7.x.x, postcss@^7.0.0, postcss@^7.0.1, postcss@^7.0.14, postcss@^7.0.17,
     picocolors "^0.2.1"
     source-map "^0.6.1"
 
-postcss@^8.1.10, postcss@^8.1.6, postcss@^8.2.15, postcss@^8.3.5, postcss@^8.4.14:
+postcss@^8.1.10, postcss@^8.2.15, postcss@^8.4.14:
   version "8.4.14"
   resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.4.14.tgz#ee9274d5622b4858c1007a74d76e42e56fd21caf"
   integrity sha512-E398TUmfAYFPBSdzgeieK2Y1+1cpdxJx8yXbK/m57nRhKSmk1GB2tO4lbLBtlkfPQTDKfe4Xqv1ASWPpayPEig==
+  dependencies:
+    nanoid "^3.3.4"
+    picocolors "^1.0.0"
+    source-map-js "^1.0.2"
+
+postcss@^8.1.6, postcss@^8.3.5:
+  version "8.4.16"
+  resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.4.16.tgz#33a1d675fac39941f5f445db0de4db2b6e01d43c"
+  integrity sha512-ipHE1XBvKzm5xI7hiHCZJCSugxvsdq2mPnsq5+UF+VHCjiBvtDrlxJfMBToWaP9D5XlgNmcFGqoHmUn0EYEaRQ==
   dependencies:
     nanoid "^3.3.4"
     picocolors "^1.0.0"
@@ -14133,7 +14142,7 @@ web3-providers-ws@1.7.5:
     web3-core-helpers "1.7.5"
     websocket "^1.0.32"
 
-web3-utils@1.7.5, web3-utils@^1.7.4:
+web3-utils@1.7.5, web3-utils@^1.7.4, web3-utils@^1.7.5:
   version "1.7.5"
   resolved "https://registry.yarnpkg.com/web3-utils/-/web3-utils-1.7.5.tgz#081a952ac6e0322e25ac97b37358a43c7372ef6a"
   integrity sha512-9AqNOziQky4wNQadEwEfHiBdOZqopIHzQQVzmvvv6fJwDSMhP+khqmAZC7YTiGjs0MboyZ8tWNivqSO1699XQw==
