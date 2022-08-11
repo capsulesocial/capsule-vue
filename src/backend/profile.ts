@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import ipfs from './utilities/ipfs'
+import ipfs from '@capsulesocial/ipfs-wrapper'
 import cache from './utilities/caching'
 import { nodeUrl } from './utilities/config'
 import libsodium from './utilities/keys'

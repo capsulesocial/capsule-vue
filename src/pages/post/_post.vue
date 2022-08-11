@@ -406,6 +406,7 @@
 import Vue from 'vue'
 import { mapActions, mapGetters } from 'vuex'
 import { AxiosError } from 'axios'
+import ipfs from '@capsulesocial/ipfs-wrapper'
 
 import PostView from '@/components/PostView.vue'
 import PostActions from '@/components/post/Actions.vue'
@@ -446,7 +447,6 @@ import { createShareableLink } from '@/backend/shareable_links'
 import { calculateReadingTime } from '@/backend/utilities/helpers'
 import { ActionType, namespace as paymentProfileNamespace, SubscriptionTier } from '@/store/paymentProfile'
 import { getUserSubscriptions, ISubscriptionResponse } from '@/backend/subscription'
-import ipfs from '@/backend/utilities/ipfs'
 
 interface IData {
 	post: Post | null

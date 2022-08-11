@@ -1,7 +1,7 @@
 import axios from 'axios'
+import ipfs from '@capsulesocial/ipfs-wrapper'
 
 import libsodium from './utilities/keys'
-import ipfs from './utilities/ipfs'
 import { hexStringToUint8Array, ISignedIPFSObject, uint8ArrayToHexString } from './utilities/helpers'
 import { nodeUrl } from './utilities/config'
 import { IRepost } from './reposts'
