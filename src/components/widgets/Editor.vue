@@ -4,7 +4,8 @@
 		<article class="bg-lightBG dark:bg-darkBGStop border-lightBorder mb-5 rounded-lg border px-6 py-4 shadow-lg">
 			<h6 class="text-lightPrimaryText dark:text-darkPrimaryText font-semibold">Featured Image</h6>
 			<button
-				class="border-gray5 dark:border-gray3 transition duration-500 ease-in-out hover:border-primary focus:outline-none mt-3 mb-2 flex h-40 w-full items-center justify-center overflow-hidden rounded-lg border border-dashed"
+				class="border-gray5 relative dark:border-gray3 transition duration-500 ease-in-out hover:border-primary focus:outline-none mt-3 mb-2 flex h-40 w-full items-center justify-center overflow-hidden rounded-lg border border-dashed"
+				:disabled="waitingImage"
 				@click="handleUploadImageClick"
 			>
 				<input
@@ -19,7 +20,7 @@
 				<!-- No Photo Uploaded -->
 				<div
 					v-if="waitingImage"
-					class="absolute w-11/12 h-44 bg-lightInput dark:bg-gray7 rounded-lg animate-pulse flex justify-center items-center"
+					class="absolute w-full h-full bg-lightInput dark:bg-gray7 rounded-lg animate-pulse flex justify-center items-center"
 				>
 					<p class="text-sm text-gray5 dark:text-gray3">Uploading image...</p>
 				</div>
