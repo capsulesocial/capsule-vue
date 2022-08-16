@@ -98,6 +98,7 @@
 			/>
 		</div>
 		<portal-target name="settingsLayout"></portal-target>
+		<portal-target name="deleteEmail"></portal-target>
 	</main>
 </template>
 

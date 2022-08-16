@@ -55,6 +55,7 @@ import CloseIcon from '@/components/icons/X.vue'
 import Avatar from '@/components/Avatar.vue'
 import { Profile } from '@/backend/profile'
 import { listForAuthor } from '@/backend/emails'
+import NewsletterPreview from '@/components/NewsletterPreview.vue'
 
 interface IData {
 	newsletters: Array<Object>
@@ -64,6 +65,7 @@ export default Vue.extend({
 	components: {
 		CloseIcon,
 		Avatar,
+		NewsletterPreview,
 	},
 	props: {
 		profile: {
