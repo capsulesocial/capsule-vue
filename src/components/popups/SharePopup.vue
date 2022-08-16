@@ -24,7 +24,7 @@
 					class="bg-lightInput dark:bg-darkInput p-4 rounded-lg w-full flex flex-col lg:flex-row items-start lg:items-center"
 				>
 					<img
-						v-if="image != ``"
+						v-if="image && image !== ``"
 						:src="image"
 						class="h-48 w-full lg:w-48 flex-shrink-0 rounded-lg object-cover lg:h-32 mb-4 lg:mb-0 lg:mr-4"
 					/>
