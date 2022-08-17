@@ -1,8 +1,8 @@
 <div align="center">
 
-<h1>Capsule-Vue</h1>
+<h1>capsule-vue</h1>
 
-Capsule-Vue is the Front-End powering Capsule Social's platform interface.
+[Blogchain](https://blogchain.app)'s frontend code
 
 </div>
 
