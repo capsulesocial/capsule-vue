@@ -1,6 +1,6 @@
 <div align="center">
 
-<h1>capsule-vue</h1>
+<h1>Blogchain</h1>
 
 [Blogchain](https://blogchain.app)'s frontend code
 
