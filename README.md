@@ -15,22 +15,18 @@ Capsule-Vue is the Front-End powering Capsule Social's platform interface.
 #### .env Setup
 
 ```bash
-CONTRACT_NAME=dev-1657702549987-47675900699610
-DOMAIN=http://localhost:3000
-
-# ORBIT_URL=https://test-node.capsule.social/orbit
-# ORBIT_URL=http://localhost:3001
-# CAPSULE_SERVER=http://localhost:3500
-CAPSULE_SERVER=https://alpha.capsule.social/server
-ORBIT_URL=https://alpha.capsule.social/orbit
-
-# Google
-TORUS_GOOGLE_VERIFIER="capsule-social-google-tester"
-TORUS_GOOGLE_CLIENTID="653379121360-j8t9ua763vfvd86d1qjguonhrgqvkigo.apps.googleusercontent.com"
-
-# Discord
-TORUS_DISCORD_VERIFIER="capsule-social-test-v2-discord"
-TORUS_DISCORD_CLIENTID="906210984396468275"
+CONTRACT_NAME=blogchain.near
+DOMAIN="https://blogchain.app"
+CAPSULE_SERVER="https://blogchain.app/server"
+ORBIT_URL="https://node1.blogchain.app"
+TORUS_GOOGLE_VERIFIER="blogchain-app-production"
+TORUS_GOOGLE_CLIENTID="367906518235-1gh9efo0518u43fnaj3qfgob64fv1o8p.apps.googleusercontent.com"
+TORUS_DISCORD_VERIFIER="blogchain-app-discord-production"
+TORUS_DISCORD_CLIENTID="947888768269033512"
+TORUS_NETWORK=mainnet
+STRIPE_PUBLISHABLE_KEY=pk_live_51I81pBCPCJ3FaYLGK7rT7mqLsvvFCAOOxdN2RDLt868Oc2Tvrp6MYuyOoPyT6GkZNXvbGY02T5q6IsB8Z6HpE1PN00aopEjYBi
+HCAPTCHA_SITE_KEY="4c2a59d5-cedc-4e81-a646-b769bf50e52c"
+NEAR_NETWORK=mainnet
 ```
 
 #### Commands
@@ -47,3 +43,8 @@ $ yarn build:web
 
 # Serve production build
 $ yarn start
+
+
+## License 
+
+[GNU GENERAL PUBLIC LICENSE 3](./LICENSE)
