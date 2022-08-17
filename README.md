@@ -12,9 +12,6 @@ Capsule-Vue is the Front-End powering Capsule Social's platform interface.
 
 ## Getting started
 
-
-### Run Web App
-
 #### .env Setup
 
 ```bash
@@ -36,6 +33,8 @@ TORUS_DISCORD_VERIFIER="capsule-social-test-v2-discord"
 TORUS_DISCORD_CLIENTID="906210984396468275"
 ```
 
+#### Commands
+
 ```bash
 # install dependencies
 $ `yarn install`
@@ -46,5 +45,5 @@ $ `yarn web`
 # Production build
 $ yarn build:web
 
-# Launch production Server
+# Serve production build
 $ yarn start
