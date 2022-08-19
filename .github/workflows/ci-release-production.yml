@@ -74,6 +74,14 @@ jobs:
       - name: Copy production.env
         run: cp ./.github/configs/production.env .env
 
+      - name: Validate tag
+        run: |
+          tag="${GITHUB_REF#refs/tags/}"
+          if [[ ! "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+-beta$ ]]; then
+              echo "Unsupported tag '$tag', skipping release and deploy jobs" >&2
+              exit 1
+          fi
+
       - name: Set deploy environment vars
         run: echo "RELEASE_ID=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
 
@@ -121,6 +129,14 @@ jobs:
 
       - name: install bash
         run: apk add --no-cache bash
+
+      - name: Validate tag
+        run: |
+          tag="${GITHUB_REF#refs/tags/}"
+          if [[ ! "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+-beta$ ]]; then
+              echo "Unsupported tag '$tag', skipping release and deploy jobs" >&2
+              exit 1
+          fi
 
       - name: Set deploy environment vars
         run: |
