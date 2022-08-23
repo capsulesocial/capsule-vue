@@ -261,6 +261,7 @@ import BioPopup from '@/components/popups/BioPopup.vue'
 import { getProfile, Profile } from '@/backend/profile'
 import { namespace as SubscriptionsNamespace } from '@/store/subscriptions'
 import type { ISubscriptionResponse } from '@/backend/subscription'
+import { getShareableProfileLink } from '@/backend/shareable_links'
 
 interface IData {
 	totalPostsCount: number
@@ -272,6 +273,9 @@ interface IData {
 	expandBio: boolean
 	fromExternalSite: boolean
 	activeSubscription: boolean
+	isLeaving: boolean
+	friendlyUrl: string | null
+	realUrl: string
 }
 
 export default Vue.extend({
@@ -293,6 +297,12 @@ export default Vue.extend({
 			}
 		})
 		return true
+	},
+	beforeRouteLeave(to, from, next) {
+		if (this.realUrl !== `` && to.path !== from.path) {
+			history.replaceState(null, ``, this.realUrl)
+		}
+		next()
 	},
 	layout: `profile`,
 	props: {
@@ -358,6 +368,9 @@ export default Vue.extend({
 			expandBio: false,
 			fromExternalSite: false,
 			activeSubscription: false,
+			isLeaving: false,
+			friendlyUrl: null,
+			realUrl: ``,
 		}
 	},
 	head() {
@@ -395,12 +408,27 @@ export default Vue.extend({
 			})
 		},
 	},
+	beforeDestroy() {
+		this.isLeaving = true
+	},
 	created() {
 		this.fetchProfile()
 		// Check if existing subscription
 		if (!this.$store.state.session.id) {
 			return
 		}
+		getShareableProfileLink(this.$route.params.id)
+			.then((friendlyUrl) => {
+				this.friendlyUrl = friendlyUrl
+				if (!this.isLeaving) {
+					this.realUrl = this.$route.fullPath
+					history.replaceState(null, ``, friendlyUrl)
+				}
+			})
+			.catch((err) => {
+				// eslint-disable-next-line no-console
+				console.log(`Cannot replace state to shareable profile link: ${err.message}`)
+			})
 		this.$store.dispatch(`subscriptions/fetchSubs`, this.$store.state.session.id)
 		this.$store.state.subscriptions.active.forEach((sub: ISubscriptionResponse) => {
 			if (sub.authorID === this.$route.params.id) {
