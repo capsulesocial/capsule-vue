@@ -323,10 +323,11 @@
 					:authorBio="author ? author.bio : ``"
 					:isFollowed="userIsFollowed"
 					:toggleFriend="toggleFriend"
+					:class="showPaywall ? `mb-10` : ``"
 				/>
 
 				<!-- Comments -->
-				<article v-if="post !== null" class="pt-5 pb-14">
+				<article v-if="post !== null && !showPaywall" class="pt-5 pb-14">
 					<!-- Choose reaction -->
 					<div class="flex flex-row justify-between">
 						<div class="flex items-center">
