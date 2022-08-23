@@ -43,7 +43,7 @@
 					style="margin-top: 40px"
 				>
 					<div
-						v-for="a in [`Today`, `This week`, `This month`, `This year`, `All time`]"
+						v-for="a in [`This week`, `This month`, `This year`, `All time`]"
 						:key="a"
 						class="hotzone flex justify-start items-start flex-col dark:text-gray3"
 					>
@@ -160,7 +160,7 @@ interface IData {
 	currentOffset: number
 	limit: number
 	noMorePosts: boolean
-	topAlgorithm: `Today` | `This week` | `This month` | `This year` | `All time`
+	topAlgorithm: `This week` | `This month` | `This year` | `All time`
 	showAlgorithmDropdown: boolean
 }
 
@@ -318,7 +318,7 @@ export default Vue.extend({
 				}
 			}
 		},
-		setTopAlgorithm(a: `Today` | `This week` | `This month` | `This year` | `All time`) {
+		setTopAlgorithm(a: `This week` | `This month` | `This year` | `All time`) {
 			this.topAlgorithm = a
 			this.showAlgorithmDropdown = false
 			this.$store.commit(`settings/setLastActiveTopAlgorithm`, this.topAlgorithm)
@@ -328,9 +328,6 @@ export default Vue.extend({
 		convertTimeframe() {
 			let timeframe: undefined | `1` | `7` | `30` | `365` = `1`
 			switch (this.topAlgorithm) {
-				case `Today`:
-					timeframe = `1`
-					break
 				case `This week`:
 					timeframe = `7`
 					break

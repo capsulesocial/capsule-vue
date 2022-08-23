@@ -11,7 +11,7 @@ export interface SettingState {
 	recentlyInSettings: boolean
 	lastActivePost: string
 	lastActivePostOffset: number
-	lastTopAlgorithm: `Today` | `This week` | `This month` | `This year` | `All time`
+	lastTopAlgorithm: `This week` | `This month` | `This year` | `All time`
 	showUnauthPopup: boolean
 }
 
@@ -45,7 +45,7 @@ export const mutations: MutationTree<SettingState> = {
 	},
 	[MutationType.SET_LAST_ACTIVE_TOP_ALGORITHM]: (
 		state,
-		algorithm: `Today` | `This week` | `This month` | `This year` | `All time`,
+		algorithm: `This week` | `This month` | `This year` | `All time`,
 	) => {
 		state.lastTopAlgorithm = algorithm
 	},
