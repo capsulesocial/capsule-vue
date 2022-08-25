@@ -49,6 +49,6 @@ $ yarn start
 
 New development is happening on the [blogchain-vue](https://github.com/capsulesocial/blogchain-vue) repository. Blogchain's code will eventually be substituted with the code on blogchain-vue.
 
-## License 
+## License
 
-[GNU GENERAL PUBLIC LICENSE 3](./LICENSE)
+[GNU AFFERO GENERAL PUBLIC LICENSE 3](./LICENSE)
