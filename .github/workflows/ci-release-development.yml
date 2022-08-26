@@ -4,15 +4,12 @@ on:
     tags:
       - alpha
       - payments
-
 jobs:
-
   install-dependencies:
     runs-on: ubuntu-latest
     container:
       image: node:16-alpine
     steps:
-
       - uses: actions/checkout@v1
 
       - name: install tar (for actions/cache)
@@ -44,7 +41,6 @@ jobs:
     container:
       image: node:16-alpine
     steps:
-
       - uses: actions/checkout@v1
 
       - uses: actions/download-artifact@v2
@@ -62,7 +58,6 @@ jobs:
     container:
       image: node:16-alpine
     steps:
-
       - name: install git
         run: apk add --no-cache git
 
@@ -104,8 +99,8 @@ jobs:
       - name: Upload build as release asset
         uses: ncipollo/release-action@v1
         with:
-          artifacts:    ${{ env.BUILD_NAME }}.tar.gz
-          token:        ${{ secrets.GITREPO_TOKEN }}
+          artifacts: ${{ env.BUILD_NAME }}.tar.gz
+          token: ${{ secrets.GITREPO_TOKEN }}
           allowUpdates: true
 
   deploy:
@@ -114,7 +109,6 @@ jobs:
     container:
       image: lexauw/ansible-alpine:latest
     steps:
-
       - name: install git
         run: apk add --no-cache git
 
@@ -135,9 +129,9 @@ jobs:
       - name: Deploy updated images
         run: ./.github/scripts/deploy.sh
         env:
-          DEPLOY_ENV:          ${{ env.DEPLOY_ENV }}
-          RELEASE_ID:          ${{ env.RELEASE_ID }}
-          RELEASE_TAG:         ${{ env.RELEASE_TAG }}
-          GITHUB_USER:         ${{ secrets.GITREPO_USER }}
-          GITHUB_TOKEN:        ${{ secrets.GITREPO_TOKEN }}
+          DEPLOY_ENV: ${{ env.DEPLOY_ENV }}
+          RELEASE_ID: ${{ env.RELEASE_ID }}
+          RELEASE_TAG: ${{ env.RELEASE_TAG }}
+          GITHUB_USER: ${{ secrets.GITREPO_USER }}
+          GITHUB_TOKEN: ${{ secrets.GITREPO_TOKEN }}
           ANSIBLE_PRIVATE_KEY: ${{ secrets.ANSIBLE_PRIVATE_KEY }}
