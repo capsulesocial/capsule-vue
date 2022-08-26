@@ -323,7 +323,7 @@ export default Vue.extend({
 			}
 		},
 		filterReplies(): ICommentData[] {
-			return this.replies.slice().sort((p0, p1) => p1.timestamp - p0.timestamp)
+			return this.replies.sort((p0, p1) => p0.timestamp - p1.timestamp)
 		},
 		async removeComment() {
 			try {
