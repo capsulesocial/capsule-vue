@@ -44,21 +44,21 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { PropType } from 'vue'
 import { mapMutations } from 'vuex'
-
 import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
 import { ValidationError } from '@/errors'
-import { requestOnboard, waitForFunds } from '@/backend/funder'
+import { requestOnboard, waitForFunds, hasSufficientFunds } from '@/backend/funder'
 import { validateUsernameNEAR } from '@/backend/near'
 import { hcaptchaSiteKey } from '@/backend/utilities/config'
 import ChevronLeft from '@/components/icons/ChevronLeft.vue'
-
+import { IWalletStatus } from '@/backend/auth'
 interface IData {
 	id: string
 	siteKey: string
 	loadingState: `checking_id` | `hcaptcha_loading` | `smart_contract` | `transfer_funds` | null
 	captchaID: string | null
+	isLoading: boolean
 }
 
 export default Vue.extend({
@@ -70,6 +70,10 @@ export default Vue.extend({
 			type: String,
 			required: true,
 		},
+		userInfo: {
+			type: Object as PropType<IWalletStatus>,
+			required: true,
+		},
 	},
 	data(): IData {
 		return {
@@ -77,6 +81,7 @@ export default Vue.extend({
 			siteKey: hcaptchaSiteKey,
 			loadingState: null,
 			captchaID: null,
+			isLoading: false,
 		}
 	},
 	async mounted() {
@@ -110,6 +115,7 @@ export default Vue.extend({
 			location.reload()
 		},
 		async handleRegisterID() {
+			this.isLoading = true
 			try {
 				if (!this.captchaID) {
 					return
@@ -119,6 +125,7 @@ export default Vue.extend({
 				const idValidity = await validateUsernameNEAR(this.id)
 				if (idValidity.error) {
 					this.loadingState = null
+					this.isLoading = false
 					throw new ValidationError(idValidity.error)
 				}
 				this.loadingState = `hcaptcha_loading`
@@ -150,7 +157,11 @@ export default Vue.extend({
 				this.$handleError(error)
 			} finally {
 				this.loadingState = null
+				this.isLoading = false
 			}
+		},
+		hasEnoughFunds(): boolean {
+			return hasSufficientFunds(this.accountId)
 		},
 	},
 })

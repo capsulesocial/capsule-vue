@@ -47,21 +47,19 @@ import Vue from 'vue'
 import { mapMutations } from 'vuex'
 import { AxiosError } from 'axios'
 import CustomAuth from '@toruslabs/customauth'
-
 import RegisterMethods from '@/components/register/RegisterMethods.vue'
-
 import InfosPopup from '@/components/register/InfosPopup.vue'
 import SignUp from '@/components/register/SignUp.vue'
-
 import CapsuleIcon from '@/components/icons/CapsuleNew.vue'
 
 import { MutationType, namespace as sessionStoreNamespace } from '~/store/session'
-
 import { removeNearPrivateKey, walletLogout } from '@/backend/near'
 import { ValidationError } from '@/errors'
 import { getAccountIdFromPrivateKey, getUserInfo, IWalletStatus } from '@/backend/auth'
 import { domain, torusNetwork } from '@/backend/utilities/config'
 import { revokeDiscordKey } from '@/backend/discordRevoke'
+
+import 'intl-tel-input/build/css/intlTelInput.css'
 
 interface IData {
 	userInfo: null | IWalletStatus
