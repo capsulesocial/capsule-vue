@@ -92,3 +92,11 @@ dist
 main.js
 main.dev.js
 main.dev.js.map
+
+.yarn/*
+!.yarn/cache
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
