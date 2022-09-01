@@ -51,6 +51,7 @@
 					<div class="w-full flex justify-center mt-1">
 						<SwitchPeriod :period="this.selectedPeriod" @toggle="switchPeriod" />
 					</div>
+					<div v-if="!canSwitchTier">You are not allowed to switch tiers</div>
 					<!-- Subscriptions list -->
 					<div v-for="tier in paymentProfile.tiers" :key="tier._id">
 						<button
@@ -59,7 +60,7 @@
 							"
 							class="flex flex-row items-center justify-between m-5 p-4 border shadow-sm rounded-lg bg-lightBG dark:bg-darkBG transition duration-500 ease-in-out"
 							:class="getStyles(tier)"
-							:disabled="s.tier.id === tier._id || !enabledTiers.includes(tier._id)"
+							:disabled="s.tier.id === tier._id || (enabledTiers.length > 0 && !enabledTiers.includes(tier._id))"
 							@click="selectTier(tier)"
 						>
 							<!-- Check mark -->
@@ -220,7 +221,7 @@ import {
 	PaymentProfile,
 	SubscriptionTier,
 } from '@/store/paymentProfile'
-import { getCurrencySymbol, switchSubscriptionTier } from '@/backend/payment'
+import { canSwitchSubscription, getCurrencySymbol, switchSubscriptionTier } from '@/backend/payment'
 import { ISubscriptionWithProfile } from '@/store/subscriptions'
 
 interface IData {
@@ -229,6 +230,7 @@ interface IData {
 	selectedTier: SubscriptionTier | null
 	selectedPeriod: string
 	isLoading: boolean
+	canSwitchTier: boolean
 }
 
 export default Vue.extend({
@@ -272,6 +274,7 @@ export default Vue.extend({
 			selectedPeriod: `month`,
 			paymentProfile: createDefaultPaymentProfile(this.author.id),
 			isLoading: false,
+			canSwitchTier: false,
 		}
 	},
 	computed: {
@@ -280,13 +283,20 @@ export default Vue.extend({
 	created() {
 		this.initializeProfile()
 	},
-	mounted() {
+	async mounted() {
 		window.addEventListener(`click`, this.handleCloseClick, false)
 		// Get my followers
 		this.$store.dispatch(`paymentProfile/fetchProfile`, { username: this.author.id })
 		// prefill selected tier
 		if (this.toPreSelectTier) {
 			this.selectedTier = this.toPreSelectTier
+		}
+
+		try {
+			const canSwitchResponse = await canSwitchSubscription(this.$route.params.id, this.s.subscriptionId)
+			this.canSwitchTier = canSwitchResponse
+		} catch (err) {
+			this.$handleError(err)
 		}
 	},
 	methods: {
@@ -376,7 +386,7 @@ export default Vue.extend({
 			if (this.s.tier.id === DisplayedTier._id) {
 				// current tier
 				res = `opacity-75 cursor-not-allowed border-gray5`
-			} else if (!this.enabledTiers.includes(DisplayedTier._id)) {
+			} else if (this.enabledTiers.length > 0 && !this.enabledTiers.includes(DisplayedTier._id)) {
 				// not in enabled tiers for this post
 				res = `opacity-75 cursor-not-allowed border-lightBorder dark:border-darkBorder`
 			} else if (this.selectedTier?._id === DisplayedTier._id) {
