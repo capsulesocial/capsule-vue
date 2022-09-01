@@ -93,8 +93,8 @@ main.js
 main.dev.js
 main.dev.js.map
 
+.pnp.*
 .yarn/*
-!.yarn/cache
 !.yarn/patches
 !.yarn/plugins
 !.yarn/releases
