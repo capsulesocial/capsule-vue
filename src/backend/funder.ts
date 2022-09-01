@@ -56,7 +56,7 @@ export function waitForFunds(accountId: string) {
 }
 
 export async function requestOnboard(captchaRes: string, accountId: string) {
-	const response = await axios.post(`${capsuleServer}/onboard`, {
+	const response = await axios.post(`${capsuleServer}/onboard/captcha`, {
 		captchaRes,
 		accountId,
 	})
@@ -64,7 +64,7 @@ export async function requestOnboard(captchaRes: string, accountId: string) {
 }
 
 export async function requestPhoneOnboard(phoneNumber: string, code: string, accountId: string) {
-	const response = await axios.post(`${capsuleServer}/onboard`, {
+	const response = await axios.post(`${capsuleServer}/onboard/phone`, {
 		phoneNumber,
 		code,
 		accountId,
