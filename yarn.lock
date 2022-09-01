@@ -2484,6 +2484,20 @@
     "@types/relateurl" "*"
     "@types/uglify-js" "*"
 
+"@types/intl-tel-input@^17.0.5":
+  version "17.0.5"
+  resolved "https://registry.yarnpkg.com/@types/intl-tel-input/-/intl-tel-input-17.0.5.tgz#eaf9d0ce32c20e3ba590317b68509cb6c193edbb"
+  integrity sha512-Fy78eswLvfx82vZ/N5/gsC9Cping2PNSU28VIcs4frmVwH2rnoyiRhwEMrMrUeZ1NiuvDxHrsTMwz6CDpngbBg==
+  dependencies:
+    "@types/jquery" "*"
+
+"@types/jquery@*":
+  version "3.5.14"
+  resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-3.5.14.tgz#ac8e11ee591e94d4d58da602cb3a5a8320dee577"
+  integrity sha512-X1gtMRMbziVQkErhTQmSe2jFwwENA/Zr+PprCkF63vFq+Yt5PZ4AlKqgmeNlwgn7dhsXEK888eIW2520EpC+xg==
+  dependencies:
+    "@types/sizzle" "*"
+
 "@types/json-schema@^7.0.4", "@types/json-schema@^7.0.5", "@types/json-schema@^7.0.8", "@types/json-schema@^7.0.9":
   version "7.0.11"
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.11.tgz#d421b6c527a3037f7c84433fd2c4229e016863d3"
@@ -2671,6 +2685,11 @@
   dependencies:
     "@types/mime" "^1"
     "@types/node" "*"
+
+"@types/sizzle@*":
+  version "2.3.3"
+  resolved "https://registry.yarnpkg.com/@types/sizzle/-/sizzle-2.3.3.tgz#ff5e2f1902969d305225a047c8a0fd5c915cebef"
+  integrity sha512-JYM8x9EGF163bEyhdJBpR2QX1R5naCJHC8ucJylJ3w9/CVBaskdQ8WqBf8MmQrd1kRvp/a4TS8HJ+bxzR7ZJYQ==
 
 "@types/source-list-map@*":
   version "0.1.2"
@@ -7317,6 +7336,11 @@ internal-slot@^1.0.3:
     get-intrinsic "^1.1.0"
     has "^1.0.3"
     side-channel "^1.0.4"
+
+intl-tel-input@^17.0.18:
+  version "17.0.18"
+  resolved "https://registry.yarnpkg.com/intl-tel-input/-/intl-tel-input-17.0.18.tgz#dd6eeefc5b33bfbea32cbba770270ac138c5cda3"
+  integrity sha512-U+ugXhOrYO/6ggIWKccsXcfAEWzjnTBLXK8c/71zvatjSPNz3TgVnXH8KhotaPh+4mBxXy4SlNOgsbXiecfPSA==
 
 ip-address@^8.0.0:
   version "8.1.0"
