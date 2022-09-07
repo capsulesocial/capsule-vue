@@ -1,11 +1,12 @@
 /* eslint-disable camelcase */
+import stringify from 'json-stable-stringify'
 import type { crypto_sign_verify_detached, crypto_sign_detached } from 'libsodium-wrappers'
 import { keyStores } from 'near-api-js'
 import { KeyPairEd25519 } from 'near-api-js/lib/utils'
 import { base_decode as baseDecode } from 'near-api-js/lib/utils/serialize'
 
 import { getNearConfig } from './config'
-import { stableOrderObj, uint8ArrayToHexString } from './helpers'
+import { uint8ArrayToHexString } from './helpers'
 
 export interface LibsodiumInterface {
 	signContent: <T>(content: T) => Promise<{ sig: Uint8Array; publicKey: string }>
@@ -84,7 +85,7 @@ function createLibSodium() {
 		}
 		const { sk, pk } = await getNearPrivateKey()
 		const ec = new TextEncoder()
-		const message = ec.encode(JSON.stringify(stableOrderObj(content)))
+		const message = ec.encode(stringify(content))
 		return { sig: cryptoSign(message, sk), publicKey: pk }
 	}
 
@@ -93,7 +94,7 @@ function createLibSodium() {
 			throw new Error(`Not initialised!`)
 		}
 		const ec = new TextEncoder()
-		const message = ec.encode(JSON.stringify(stableOrderObj(content)))
+		const message = ec.encode(stringify(content))
 		const res = cryptoSignVerify(signature, message, publicKey)
 		return Promise.resolve(res)
 	}
