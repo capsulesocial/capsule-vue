@@ -6,7 +6,7 @@
 		<section class="popup">
 			<div
 				v-if="author !== null"
-				class="min-h-40 w-full lg:w-600 bg-lightBG dark:bg-darkBGStop card-animation max-h-90 z-10 overflow-y-auto rounded-lg px-6 pt-4 pb-6 shadow-lg"
+				class="w-full lg:w-600 bg-lightBG dark:bg-darkBGStop card-animation max-h-90 z-10 overflow-y-auto rounded-lg px-6 pt-4 pb-6 shadow-lg"
 			>
 				<div class="sticky flex items-center justify-between mb-6">
 					<!-- avatar, name, id -->
@@ -38,7 +38,7 @@
 					<div class="w-full flex flex-col justify-center text-center px-10">
 						<CrownIcon class="text-neutral stroke-neutral self-center w-12 h-12 mb-2" />
 						<h6 class="font-semibold text-neutral text-xl mb-2">Change Tier</h6>
-						<p class="text-base text-center text-gray5 dark:text-gray3 mb-4">
+						<p v-if="canSwitchTier" class="text-base text-center text-gray5 dark:text-gray3 mb-4">
 							Easily change your Tier access to
 							<span v-if="author.name !== ``" class="font-semibold text-primary dark:text-secondary">{{
 								author.name
@@ -47,69 +47,87 @@
 							to access new content
 						</p>
 					</div>
-					<!-- Period switch -->
-					<div class="w-full flex justify-center mt-1">
-						<SwitchPeriod :period="this.selectedPeriod" @toggle="switchPeriod" />
+					<div v-if="!canSwitchTier">
+						<p class="text-base text-center text-gray5 dark:text-gray3 mb-10 mt-2">
+							You already switched Tiers for this author within the last 30 days. <br />
+							You must wait for your next payment to process before changing the subscription tier again.
+						</p>
+						<div class="flex flex-row-reverse">
+							<button
+								class="bg-darkBG text-lightButtonText focus:outline-none transform rounded-lg font-bold transition duration-500 ease-in-out hover:bg-opacity-75"
+								style="padding: 0.4rem 1.5rem"
+								@click="$emit(`close`)"
+							>
+								<span class="font-sans" style="font-size: 0.95rem"> Close </span>
+							</button>
+						</div>
 					</div>
-					<!-- Subscriptions list -->
-					<div v-for="tier in paymentProfile.tiers" :key="tier._id">
-						<button
-							v-if="
-								(tier.monthlyEnabled && selectedPeriod === `month`) || (tier.yearlyEnabled && selectedPeriod === `year`)
-							"
-							class="flex flex-row items-center justify-between m-5 p-4 border shadow-sm rounded-lg bg-lightBG dark:bg-darkBG transition duration-500 ease-in-out"
-							:class="getStyles(tier)"
-							:disabled="s.tier.id === tier._id || !enabledTiers.includes(tier._id)"
-							@click="selectTier(tier)"
-						>
-							<!-- Check mark -->
-							<div class="w-12 flex justify-center">
-								<CheckCircleIcon
-									v-if="s.tier.id !== tier._id"
-									:isChecked="selectedTier !== null && selectedTier._id === tier._id"
-									class="text-neutral w-6 h-6 flex items-center transition duration-500 ease-in-out"
-								/>
-								<CheckCircleIcon
-									v-else
-									:isChecked="true"
-									class="text-gray5 w-6 h-6 flex items-center transition duration-500 ease-in-out"
-								/>
-							</div>
-							<div class="flex flex-grow flex-col items-start ml-4 mr-2 w-2/5">
-								<h3 class="text-xl font-semibold dark:text-darkPrimaryText">{{ tier.name }}</h3>
-								<p class="text-gray5 dark:text-gray3 text-left text-sm pr-2">
-									Get access to exclusive articles by subscribing to {{ tier.name }}
-								</p>
-							</div>
-							<div v-if="s.tier.id !== tier._id">
-								<div
-									v-if="tier.monthlyEnabled && selectedPeriod === `month`"
-									class="font-semibold text-lg mr-2 dark:text-darkPrimaryText"
-								>
-									{{ displayCurrency(paymentProfile.currency) }}{{ tier.monthlyPrice }}
-									<span class="text-gray5 dark:text-gray3">/month</span>
+					<div v-else>
+						<!-- Period switch -->
+						<div class="w-full flex justify-center mt-1">
+							<SwitchPeriod :period="this.selectedPeriod" @toggle="switchPeriod" />
+						</div>
+						<!-- Subscriptions list -->
+						<div v-for="tier in paymentProfile.tiers" :key="tier._id">
+							<button
+								v-if="
+									(tier.monthlyEnabled && selectedPeriod === `month`) ||
+									(tier.yearlyEnabled && selectedPeriod === `year`)
+								"
+								class="flex flex-row items-center justify-between m-5 p-4 border shadow-sm rounded-lg bg-lightBG dark:bg-darkBG transition duration-500 ease-in-out"
+								:class="getStyles(tier)"
+								:disabled="s.tier.id === tier._id || (enabledTiers.length > 0 && !enabledTiers.includes(tier._id))"
+								@click="selectTier(tier)"
+							>
+								<!-- Check mark -->
+								<div class="w-12 flex justify-center">
+									<CheckCircleIcon
+										v-if="s.tier.id !== tier._id"
+										:isChecked="selectedTier !== null && selectedTier._id === tier._id"
+										class="text-neutral w-6 h-6 flex items-center transition duration-500 ease-in-out"
+									/>
+									<CheckCircleIcon
+										v-else
+										:isChecked="true"
+										class="text-gray5 w-6 h-6 flex items-center transition duration-500 ease-in-out"
+									/>
 								</div>
-								<div
-									v-if="tier.yearlyEnabled && selectedPeriod === `year`"
-									class="font-semibold text-lg mr-2 dark:text-darkPrimaryText"
-								>
-									{{ displayCurrency(paymentProfile.currency) }}{{ tier.yearlyPrice }}
-									<span class="text-gray5 dark:text-gray3">/year</span>
+								<div class="flex flex-grow flex-col items-start ml-4 mr-2 w-2/5">
+									<h3 class="text-xl font-semibold dark:text-darkPrimaryText">{{ tier.name }}</h3>
+									<p class="text-gray5 dark:text-gray3 text-left text-sm pr-2">
+										Get access to exclusive articles by subscribing to {{ tier.name }}
+									</p>
 								</div>
-							</div>
-							<div v-else class="font-semibold text-lg mr-2 text-gray5">Current tier</div>
-						</button>
-					</div>
-					<div class="flex flex-row-reverse">
-						<button
-							:class="selectedTier !== null ? `` : `opacity-50 cursor-not-allowed`"
-							class="bg-darkBG text-lightButtonText focus:outline-none transform rounded-lg font-bold transition duration-500 ease-in-out hover:bg-opacity-75"
-							style="padding: 0.4rem 1.5rem"
-							:disabled="this.selectedTier === null"
-							@click="nextStep"
-						>
-							<span class="font-sans" style="font-size: 0.95rem"> Next </span>
-						</button>
+								<div v-if="s.tier.id !== tier._id">
+									<div
+										v-if="tier.monthlyEnabled && selectedPeriod === `month`"
+										class="font-semibold text-lg mr-2 dark:text-darkPrimaryText"
+									>
+										{{ displayCurrency(paymentProfile.currency) }}{{ tier.monthlyPrice }}
+										<span class="text-gray5 dark:text-gray3">/month</span>
+									</div>
+									<div
+										v-if="tier.yearlyEnabled && selectedPeriod === `year`"
+										class="font-semibold text-lg mr-2 dark:text-darkPrimaryText"
+									>
+										{{ displayCurrency(paymentProfile.currency) }}{{ tier.yearlyPrice }}
+										<span class="text-gray5 dark:text-gray3">/year</span>
+									</div>
+								</div>
+								<div v-else class="font-semibold text-lg mr-2 text-gray5">Current tier</div>
+							</button>
+						</div>
+						<div class="flex flex-row-reverse">
+							<button
+								:class="selectedTier !== null ? `` : `opacity-50 cursor-not-allowed`"
+								class="bg-darkBG text-lightButtonText focus:outline-none transform rounded-lg font-bold transition duration-500 ease-in-out hover:bg-opacity-75"
+								style="padding: 0.4rem 1.5rem"
+								:disabled="this.selectedTier === null"
+								@click="nextStep"
+							>
+								<span class="font-sans" style="font-size: 0.95rem"> Next </span>
+							</button>
+						</div>
 					</div>
 				</article>
 				<!-- Step 1: Confirmation page -->
@@ -220,7 +238,7 @@ import {
 	PaymentProfile,
 	SubscriptionTier,
 } from '@/store/paymentProfile'
-import { getCurrencySymbol, switchSubscriptionTier } from '@/backend/payment'
+import { canSwitchSubscription, getCurrencySymbol, switchSubscriptionTier } from '@/backend/payment'
 import { ISubscriptionWithProfile } from '@/store/subscriptions'
 
 interface IData {
@@ -229,6 +247,7 @@ interface IData {
 	selectedTier: SubscriptionTier | null
 	selectedPeriod: string
 	isLoading: boolean
+	canSwitchTier: boolean
 }
 
 export default Vue.extend({
@@ -272,6 +291,7 @@ export default Vue.extend({
 			selectedPeriod: `month`,
 			paymentProfile: createDefaultPaymentProfile(this.author.id),
 			isLoading: false,
+			canSwitchTier: false,
 		}
 	},
 	computed: {
@@ -280,13 +300,20 @@ export default Vue.extend({
 	created() {
 		this.initializeProfile()
 	},
-	mounted() {
+	async mounted() {
 		window.addEventListener(`click`, this.handleCloseClick, false)
 		// Get my followers
 		this.$store.dispatch(`paymentProfile/fetchProfile`, { username: this.author.id })
 		// prefill selected tier
 		if (this.toPreSelectTier) {
 			this.selectedTier = this.toPreSelectTier
+		}
+
+		try {
+			const canSwitchResponse = await canSwitchSubscription(this.$route.params.id, this.s.subscriptionId)
+			this.canSwitchTier = canSwitchResponse
+		} catch (err) {
+			this.$handleError(err)
 		}
 	},
 	methods: {
@@ -376,7 +403,7 @@ export default Vue.extend({
 			if (this.s.tier.id === DisplayedTier._id) {
 				// current tier
 				res = `opacity-75 cursor-not-allowed border-gray5`
-			} else if (!this.enabledTiers.includes(DisplayedTier._id)) {
+			} else if (this.enabledTiers.length > 0 && !this.enabledTiers.includes(DisplayedTier._id)) {
 				// not in enabled tiers for this post
 				res = `opacity-75 cursor-not-allowed border-lightBorder dark:border-darkBorder`
 			} else if (this.selectedTier?._id === DisplayedTier._id) {

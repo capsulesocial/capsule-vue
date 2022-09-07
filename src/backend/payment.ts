@@ -62,6 +62,27 @@ export async function confirmSubscriptionPayment(username: string, paymentAttemp
 	}
 }
 
+export async function canSwitchSubscription(username: string, subscriptionId: string): Promise<boolean> {
+	if (!subscriptionId) {
+		return false
+	}
+	try {
+		const body = { subscriptionId }
+		const response = await genericRequest<{ subscriptionId: string }, { switchable: boolean; lastSwitched?: Date }>({
+			method: `post`,
+			path: `/pay/stripe/subscribe/switch/check`,
+			username,
+			body,
+		})
+		return response.switchable
+	} catch (err) {
+		if (err instanceof AxiosError && err.response) {
+			throw new Error(err.response.data?.error ?? err.message)
+		}
+		throw new Error(`Network error: ${err}`)
+	}
+}
+
 export async function switchSubscriptionTier(
 	username: string,
 	subscriptionId: string,
