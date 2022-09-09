@@ -604,7 +604,7 @@ export default Vue.extend({
 			const stats: Record<string, FaceStat> = {}
 
 			for (const face in faceStats) {
-				if (!(face in faces)) {
+				if (!Object.prototype.hasOwnProperty.call(faces, face)) {
 					continue
 				}
 				const f = faces[face]
