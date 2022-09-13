@@ -305,7 +305,7 @@
 						<!-- IPFS CID -->
 						<div class="mt-3">
 							<a
-								:href="`https://ipfs.io/api/v0/dag/get?arg=` + $route.params.post"
+								:href="`https://ipfs.io/api/v0/dag/get?arg=${encodeURIComponent($route.params.post)}`"
 								target="_blank"
 								class="bg-gray1 dark:bg-gray7 text-gray5 dark:text-gray1 flex flex-row justify-between rounded-lg px-3 py-1"
 							>
