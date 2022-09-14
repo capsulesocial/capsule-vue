@@ -447,7 +447,6 @@ export default Vue.extend({
 		},
 		async handleHtml(pastedContent: string) {
 			const contentImgs = this.$getContentImages(pastedContent)
-			const imgSrcRegex = /src="([^\s|"]*)"/
 			if (contentImgs.length > textLimits.post_images.max) {
 				this.waitingImage = false
 				this.$toastError(`Cannot add more than ${textLimits.post_images.max} images in a post`)
@@ -456,15 +455,10 @@ export default Vue.extend({
 			for (const img of contentImgs) {
 				this.waitingImage = true
 				this.toggleAddContent = false
-				const imgSrc = imgSrcRegex.exec(img[0])
-				if (!imgSrc) {
-					continue
-				}
-				const src = imgSrc[1]
-				const f = await this.$urlToFile(src)
+				const f = await this.$urlToFile(img.src)
 				if (this.$isError(f)) {
 					this.$toastError(f.error)
-					pastedContent = pastedContent.replace(img[0], ``)
+					img.outerHTML = ``
 					continue
 				}
 				try {
@@ -480,7 +474,7 @@ export default Vue.extend({
 						this.$toastError(updatedPostImages.error)
 						return null
 					}
-					pastedContent = pastedContent.replace(img[0], `<img alt="${cid}" src="${url}">`)
+					img.outerHTML = `<img alt="${cid}" src="${url}">`
 				} catch (err: unknown) {
 					this.waitingImage = false
 					this.$handleError(err)
