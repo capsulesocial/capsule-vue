@@ -40,8 +40,12 @@ export const BASE_ALLOWED_TAGS = [
 	`h3`,
 	`h4`,
 	`h5`,
+	`h6`,
 	`a`,
 	`span`,
+	`img`,
+	`ul`,
+	`s`,
 ]
 export const BASE_ALLOWED_ATTRS = [`class`, `id`, `href`]
 

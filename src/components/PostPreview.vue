@@ -8,7 +8,7 @@
 import Vue from 'vue'
 import { afterSanitizeAttrsHook, BASE_ALLOWED_ATTRS, BASE_ALLOWED_TAGS, sanitizeHtml } from '@/plugins/helpers'
 
-const ALLOWED_TAGS = [...BASE_ALLOWED_TAGS, `img`]
+const ALLOWED_TAGS = BASE_ALLOWED_TAGS
 const ALLOWED_ATTR = [...BASE_ALLOWED_ATTRS, `src`]
 
 export default Vue.extend({
