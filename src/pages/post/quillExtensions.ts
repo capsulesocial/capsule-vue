@@ -55,9 +55,7 @@ export const ipfsImageRule: TurndownService.Rule = {
 	filter: [`img`],
 	replacement: (_, node) => {
 		if (`getAttribute` in node) {
-			return `<ipfsimage alt="${node.getAttribute(`alt`)}" class="ipfs_img" cid="${node.getAttribute(
-				`alt`,
-			)}"></ipfsimage>`
+			return `<ipfsimage alt="${node.getAttribute(`alt`)}" cid="${node.getAttribute(`alt`)}"></ipfsimage>`
 		}
 
 		throw new Error(`getAttributes does not exist on node`)
@@ -77,10 +75,7 @@ export const listRule: TurndownService.Rule = {
 // Misc
 
 const imgRegexp = (cid: string) =>
-	new RegExp(
-		`<ipfsimage ((alt="${cid}")|(cid="${cid}")|(class="ipfs_img"))\\s+((alt="${cid}")|(class="ipfs_img")|(cid="${cid}"))\\s+((alt="${cid}")|(class="ipfs_img")|(cid="${cid}"))></ipfsimage>`,
-		`g`,
-	)
+	new RegExp(`<ipfsimage ((alt="${cid}" cid="${cid}")|(cid="${cid}" alt="${cid}"))></ipfsimage>`, `g`)
 
 export function createPostImagesSet(content: string, uploadedImages: Map<string, { key?: string; counter?: string }>) {
 	const usedImages: Map<string, { key?: string; counter?: string }> = new Map()

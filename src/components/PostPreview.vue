@@ -29,7 +29,7 @@ export default Vue.extend({
 })
 </script>
 <style>
-.ipfs_img {
+.editable img {
 	display: block;
 	margin-left: auto;
 	margin-right: auto;

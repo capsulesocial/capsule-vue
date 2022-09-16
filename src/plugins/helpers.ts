@@ -47,7 +47,7 @@ export const BASE_ALLOWED_TAGS = [
 	`ul`,
 	`s`,
 ]
-export const BASE_ALLOWED_ATTRS = [`class`, `id`, `href`]
+export const BASE_ALLOWED_ATTRS = [`href`]
 
 export const sanitizeHtml = (content: string, ALLOWED_TAGS: string[], ALLOWED_ATTR: string[]) => {
 	return DOMPurify.sanitize(content, { ALLOWED_TAGS, ALLOWED_ATTR })
