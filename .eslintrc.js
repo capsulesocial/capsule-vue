@@ -11,6 +11,7 @@ module.exports = {
 		'prettier', // Uses eslint-config-prettier to disable ESLint rules from @typescript-eslint/eslint-plugin that would conflict with prettier
 	],
 	"rules": {
+		"vue/no-reserved-component-names": 0,
 		"no-shadow": 0,
 		"vue/attribute-hyphenation": 0,
 		"vue/no-v-html": 0,
