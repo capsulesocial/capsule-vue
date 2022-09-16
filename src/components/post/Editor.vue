@@ -447,8 +447,9 @@ export default Vue.extend({
 			setTimeout(() => this.qeditor?.setSelection(range.index + pastedText.length, 0, `user`), 0)
 		},
 		async handleHtml(pastedContent: string) {
-			const contentImgs = this.$getContentImages(pastedContent)
-			const imgSrcRegex = /src="([^\s|"]*)"/
+			const domParser = new DOMParser()
+			const content = domParser.parseFromString(pastedContent, `text/html`)
+			const contentImgs = content.getElementsByTagName(`img`)
 			if (contentImgs.length > textLimits.post_images.max) {
 				this.waitingImage = false
 				this.$toastError(`Cannot add more than ${textLimits.post_images.max} images in a post`)
@@ -457,15 +458,10 @@ export default Vue.extend({
 			for (const img of contentImgs) {
 				this.waitingImage = true
 				this.toggleAddContent = false
-				const imgSrc = imgSrcRegex.exec(img[0])
-				if (!imgSrc) {
-					continue
-				}
-				const src = imgSrc[1]
-				const f = await this.$urlToFile(src)
+				const f = await this.$urlToFile(img.src)
 				if (this.$isError(f)) {
 					this.$toastError(f.error)
-					pastedContent = pastedContent.replace(img[0], ``)
+					img.remove()
 					continue
 				}
 				try {
@@ -481,7 +477,10 @@ export default Vue.extend({
 						this.$toastError(updatedPostImages.error)
 						return null
 					}
-					pastedContent = pastedContent.replace(img[0], `<img alt="${cid}" src="${url}">`)
+					const newImg = document.createElement(`img`)
+					newImg.setAttribute(`src`, url.toString())
+					newImg.setAttribute(`alt`, cid)
+					img.replaceWith(newImg)
 				} catch (err: unknown) {
 					this.waitingImage = false
 					this.$handleError(err)
@@ -489,7 +488,7 @@ export default Vue.extend({
 				}
 			}
 			this.waitingImage = false
-			return pastedContent
+			return content.body.innerHTML
 		},
 		async handleFile(file: File) {
 			if (!validMimeTypes.includes(file.type)) {

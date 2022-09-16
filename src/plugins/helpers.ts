@@ -6,7 +6,7 @@ import { getBlobExtension } from '@/backend/utilities/helpers'
 type dateString = (date: Date, hideYear?: boolean, preformattedDate?: string | null, onlyDate?: boolean) => string
 type dateFormat = (input: string | Date | number, dateOnly?: boolean) => string
 type isErrorFormat = (obj: Record<string, unknown>) => obj is { error: string }
-type contentImgs = (content: string) => RegExpMatchArray[]
+type contentImgs = (content: string) => HTMLCollectionOf<HTMLImageElement>
 type urlToFileFormat = (url: string) => Promise<{ file: File } | { error: string }>
 type handleErrorFormat = (error: unknown) => void
 
@@ -136,9 +136,10 @@ const isError = (obj: Record<string, unknown>) => {
 }
 
 const getContentImages = (content: string) => {
-	const imgTagRegex = /<img [^>]*>/g
-	const imgs = Array.from(content.matchAll(imgTagRegex))
-	return imgs
+	const domParser = new DOMParser()
+	const htmlDoc = domParser.parseFromString(content, `text/html`)
+
+	return htmlDoc.getElementsByTagName(`img`)
 }
 
 const urlToFile = async (url: string) => {
