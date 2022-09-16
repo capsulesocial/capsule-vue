@@ -115,6 +115,7 @@ import {
 import { preUploadPhoto, uploadPhoto } from '@/backend/photos'
 import { validMimeTypes } from '@/backend/utilities/helpers'
 import textLimits from '@/backend/utilities/text_limits'
+import { BASE_ALLOWED_TAGS } from '@/plugins/helpers'
 
 interface IData {
 	title: string
@@ -662,8 +663,7 @@ export default Vue.extend({
 		},
 		sanitize(html: string): string {
 			return DOMPurify.sanitize(html, {
-				USE_PROFILES: { html: true, svg: true },
-				ALLOWED_TAGS: [`pre`],
+				ALLOWED_TAGS: BASE_ALLOWED_TAGS,
 			})
 		},
 		getInputHTML(): string {
