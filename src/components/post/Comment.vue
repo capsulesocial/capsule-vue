@@ -160,9 +160,9 @@
 					to reply to this comment and be part of the debate
 				</div>
 				<!-- List replies -->
-				<div v-if="filterReplies().length > 0" class="pl-5 mt-2">
+				<div v-if="replies.length > 0" class="pl-5 mt-2">
 					<Reply
-						v-for="r in filterReplies()"
+						v-for="r in sortReplies()"
 						:key="r._id"
 						:commenterID="authorID"
 						:authorID="r.authorID"
@@ -316,14 +316,14 @@ export default Vue.extend({
 				const c = createComment(this.$store.state.session.id, this.reply, `no-emotion`, this.cid)
 				const _id = await sendComment(c, `reply`)
 				this.replies.push({ _id, ...c })
-				this.filterReplies()
+				this.replies = this.sortReplies()
 				this.reply = ``
 			} catch (err: unknown) {
 				this.$handleError(err)
 			}
 		},
-		filterReplies(): ICommentData[] {
-			return this.replies.sort((p0, p1) => p0.timestamp - p1.timestamp)
+		sortReplies(): ICommentData[] {
+			return [...this.replies].sort((p0, p1) => p0.timestamp - p1.timestamp)
 		},
 		async removeComment() {
 			try {
