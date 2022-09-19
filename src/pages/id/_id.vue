@@ -47,7 +47,7 @@
 					</div>
 					<div class="flex items-center">
 						<span v-if="$store.state.session.id === $route.params.id" class="w-full h-full">
-							<button class="bg-darkBG focus:outline-none rounded-lg xl:hidden" @click="toggleSettings">
+							<button class="bg-darkBG focus:outline-none rounded-lg xl:hidden p-1" @click="toggleSettings">
 								<PencilIcon class="text-white" />
 							</button>
 							<SecondaryButton
