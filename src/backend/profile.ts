@@ -6,6 +6,13 @@ import { nodeUrl } from './utilities/config'
 import libsodium from './utilities/keys'
 import { uint8ArrayToHexString } from './utilities/helpers'
 
+export type TSocialLink = `facebook` | `github` | `instagram` | `linkedin` | `medium` | `reddit` | `twitter`
+
+export interface ISocialLink {
+	type: TSocialLink
+	url: string
+}
+
 export interface Profile {
 	id: string
 	name: string
@@ -13,7 +20,7 @@ export interface Profile {
 	bio: string
 	location: string
 	avatar: string
-	socials: string[]
+	socials: ISocialLink[]
 	website?: string
 	background?: string
 }
