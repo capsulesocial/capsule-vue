@@ -78,7 +78,7 @@ export async function getIsAccountIdOnboarded(accountId: string): Promise<boolea
 }
 
 export async function initNear() {
-	_near = await connect({ deps: { keyStore: new keyStores.BrowserLocalStorageKeyStore() }, headers: {}, ...nearConfig })
+	_near = await connect({ headers: {}, keyStore: new keyStores.BrowserLocalStorageKeyStore(), ...nearConfig })
 }
 
 export function initWalletConnection() {
@@ -101,7 +101,7 @@ export async function walletLogin() {
 	if (!walletConnection.isSignedIn()) {
 		// Redirects to wallet login page
 		const redirectURL = new URL(`/register`, domain)
-		await walletConnection.requestSignIn(nearConfig.contractName, undefined, redirectURL.toString())
+		await walletConnection.requestSignIn({ contractId: nearConfig.contractName, successUrl: redirectURL.toString() })
 	}
 }
 
