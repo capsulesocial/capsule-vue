@@ -795,17 +795,17 @@ export default Vue.extend({
 				)
 				try {
 					const cid: string = await sendRegularPost(p)
+					this.hasPosted = true
+					this.title = ``
+					this.subtitle = ``
+					this.input = ``
+					this.$store.commit(`draft/reset`)
+					this.$store.commit(`settings/setRecentlyPosted`, true)
 					this.$router.push(`/post/` + cid)
 				} catch (err: unknown) {
 					this.$handleError(err)
 				}
 			}
-			this.hasPosted = true
-			this.title = ``
-			this.subtitle = ``
-			this.input = ``
-			this.$store.commit(`draft/reset`)
-			this.$store.commit(`settings/setRecentlyPosted`, true)
 		},
 		handleTitle(e: any) {
 			if (!e) {
