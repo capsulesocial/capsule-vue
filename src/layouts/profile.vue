@@ -49,6 +49,13 @@
 								:email="visitProfile.email"
 								:website="visitProfile.website"
 							/>
+							<EmailNewsletterWidget
+								v-if="this.$store.state.session.id !== `` && $store.state.session.id !== $route.params.id"
+								:profile="visitProfile"
+								:newsletters="newsletters"
+								@toggleNewsletterPopup="toggleNewsletterPopup"
+								@fetchNewsletters="refetchNewsletters"
+							/>
 							<MutualFollowersWidget
 								v-if="this.$route.params.id !== this.$store.state.session.id"
 								:mutuals="mutuals"
@@ -145,7 +152,15 @@
 			@switchPopup="toggleChangeTierPopup"
 			@close="showSubscriptionInfo = false"
 		/>
+		<AddNewsletterPopup
+			v-if="showNewsletterPopup"
+			:profile="visitProfile"
+			:avatar="visitAvatar"
+			@toggleNewsletterPopup="toggleNewsletterPopup"
+			@newsletterStarted="refetchNewsletters"
+		/>
 		<portal-target name="card-popup"></portal-target>
+		<portal-target name="deleteEmail"></portal-target>
 	</main>
 </template>
 
@@ -156,6 +171,7 @@ import { AxiosError } from 'axios'
 import ProfileWidget from '@/components/widgets/Profile.vue'
 import FollowersWidget from '@/components/widgets/Followers.vue'
 import MutualFollowersWidget from '@/components/widgets/MutualFollowers.vue'
+import EmailNewsletterWidget from '@/components/widgets/EmailNewsletter.vue'
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 import FollowersPopup from '@/components/popups/FollowersPopup.vue'
@@ -168,6 +184,7 @@ import BrandedButton from '@/components/BrandedButton.vue'
 import UnauthPopup from '@/components/popups/UnauthPopup.vue'
 import SubInfosPopup from '@/components/popups/SubInfosPopup.vue'
 import unFollowWarningPopup from '@/components/popups/unFollowWarningPopup.vue'
+import AddNewsletterPopup from '@/components/popups/AddNewsletter.vue'
 
 import { IBackground, backgrounds } from '@/config/backgrounds'
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
@@ -177,6 +194,7 @@ import { getUserInfoNEAR } from '@/backend/near'
 import { ActionType, namespace as paymentProfileNamespace } from '@/store/paymentProfile'
 import { ISubscriptionWithProfile } from '@/store/subscriptions'
 import type { ISubscriptionResponse } from '@/backend/subscription'
+import { IEmailSubscription, listForAuthor } from '@/backend/emails'
 
 interface IData {
 	myProfile: Profile
@@ -203,6 +221,8 @@ interface IData {
 	showUnfollowWarning: boolean
 	authorPaymentProfile: ISubscriptionWithProfile | undefined
 	showChangeTier: boolean
+	showNewsletterPopup: boolean
+	newsletters: Array<IEmailSubscription>
 }
 
 export default Vue.extend({
@@ -212,6 +232,7 @@ export default Vue.extend({
 		Header,
 		Footer,
 		MutualFollowersWidget,
+		EmailNewsletterWidget,
 		BrandedButton,
 		UnauthPopup,
 		FollowersPopup,
@@ -222,6 +243,7 @@ export default Vue.extend({
 		SubInfosPopup,
 		unFollowWarningPopup,
 		ChangeTierPopup,
+		AddNewsletterPopup,
 	},
 	middleware: `auth`,
 	data(): IData {
@@ -250,6 +272,8 @@ export default Vue.extend({
 			showUnfollowWarning: false,
 			authorPaymentProfile: undefined,
 			showChangeTier: false,
+			showNewsletterPopup: false,
+			newsletters: [],
 		}
 	},
 	watch: {
@@ -297,6 +321,7 @@ export default Vue.extend({
 	async mounted() {
 		// Fetch visiting profile
 		this.getVisitingProfile()
+		this.fetchNewsletters()
 		try {
 			await this.fetchPaymentProfile({ username: this.$route.params.id })
 		} catch (err) {
@@ -365,6 +390,16 @@ export default Vue.extend({
 				})
 			}
 		},
+		async fetchNewsletters() {
+			if (this.$store.state.session.id === ``) {
+				return
+			}
+			try {
+				this.newsletters = await listForAuthor(this.$route.params.id, this.$store.state.session.id)
+			} catch (err) {
+				this.$handleError(err)
+			}
+		},
 		async toggleFriend() {
 			// Unauth
 			if (this.$store.state.session.id === ``) {
@@ -418,6 +453,12 @@ export default Vue.extend({
 					this.showSubscriptions = !this.showSubscriptions
 				}
 			}
+		},
+		toggleNewsletterPopup() {
+			this.showNewsletterPopup = !this.showNewsletterPopup
+		},
+		refetchNewsletters() {
+			this.fetchNewsletters()
 		},
 		async updateFollowers() {
 			const { followers, following } = await getFollowersAndFollowing(this.$route.params.id, true)
