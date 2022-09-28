@@ -794,8 +794,8 @@ export default Vue.extend({
 					postImages,
 				)
 				try {
-					const cid: string = await sendRegularPost(p)
 					this.hasPosted = true
+					const cid: string = await sendRegularPost(p)
 					this.title = ``
 					this.subtitle = ``
 					this.input = ``
@@ -803,6 +803,7 @@ export default Vue.extend({
 					this.$store.commit(`settings/setRecentlyPosted`, true)
 					this.$router.push(`/post/` + cid)
 				} catch (err: unknown) {
+					this.hasPosted = false
 					this.$handleError(err)
 				}
 			}
