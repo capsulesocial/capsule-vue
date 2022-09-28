@@ -1,17 +1,3 @@
-// Turndown
-
-import hljs from 'highlight.js/lib/common'
-import { marked } from 'marked'
-
-// Marked
-
-export const markedRenderer: marked.RendererObject = {
-	code(src: string) {
-		const highlightedCode = hljs.highlightAuto(src).value
-		return `<pre><code class="hljs">${highlightedCode}</code></pre>`
-	},
-}
-
 // Misc
 
 const imgRegexp = (cid: string) =>
