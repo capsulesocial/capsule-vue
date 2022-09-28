@@ -11,7 +11,8 @@
 import Vue from 'vue'
 import type { PropType } from 'vue'
 import { marked } from 'marked'
-import { markedRenderer, transformPostToHTML } from '../pages/post/readerExtensions'
+import hljs from 'highlight.js'
+import { transformPostToHTML } from '../pages/post/readerExtensions'
 import ImagePopup from '@/components/popups/Image.vue'
 import { decryptData } from '@/backend/crypto'
 import { IPostImageKey } from '@/backend/post'
@@ -63,13 +64,15 @@ export default Vue.extend({
 		},
 	},
 	created() {
-		marked.use({ renderer: markedRenderer })
 		afterSanitizeAttrsHook()
 	},
 	mounted() {
 		const images = this.$el.querySelectorAll(`img`)
 		images.forEach((image) => {
 			this.lazyLoad(image)
+		})
+		document.querySelectorAll(`pre`).forEach((block) => {
+			hljs.highlightBlock(block)
 		})
 	},
 	methods: {
@@ -115,6 +118,7 @@ export default Vue.extend({
 })
 </script>
 <style>
+@import 'https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.6.0/build/styles/monokai-sublime.min.css';
 .editable img {
 	display: block;
 	margin-left: auto;

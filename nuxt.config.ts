@@ -100,7 +100,7 @@ const config: NuxtConfig = {
 		background: `white`,
 	},
 	// Global CSS: https://go.nuxtjs.dev/config-css
-	css: [`@/assets/css/quill.css`, `@/assets/css/hljs-monokai-sublime.css`],
+	css: [`@/assets/css/quill.css`],
 
 	// Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
 	plugins: [
