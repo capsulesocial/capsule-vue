@@ -157,24 +157,8 @@
 	.editable ol {
 		@apply text-p font-normal leading-relaxed my-3 pl-6 list-decimal list-inside;
 	}
-	.editable code {
-		font-size: 85%;
-		padding: 2px 4px;
-		background-color: #f0f0f0;
-		border-radius: 3px;
-	}
 	.editable u {
 		text-decoration: underline;
-	}
-	.editable pre code {
-		background-color: #23241f;
-		color: #f8f8f2;
-		overflow: visible;
-		white-space: pre-wrap;
-		margin-bottom: 5px;
-		margin-top: 5px;
-		padding: 5px 10px;
-		border-radius: 3px;
 	}
 	blockquote {
 		border-left: 4px solid #ccc;
