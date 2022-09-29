@@ -89,6 +89,7 @@ import Vue from 'vue'
 import DOMPurify from 'dompurify'
 import Turndown from 'turndown'
 import { strikethrough } from 'turndown-plugin-gfm'
+import hljs from 'highlight.js'
 import type { RangeStatic, Quill } from 'quill'
 import QuillMarkdown from 'quilljs-markdown'
 import XIcon from '@/components/icons/X.vue'
@@ -155,6 +156,9 @@ const options = {
 	bounds: `#editor`,
 	scrollingContainer: `#editor`,
 	modules: {
+		syntax: {
+			highlight: (code: string) => hljs.highlightAuto(code).value,
+		},
 		counter: true,
 		toolbar: {
 			container: toolbarOptions,
