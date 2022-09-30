@@ -31,6 +31,17 @@
 				<span class="bg-gray1 rounded-full p-1"><ChevronRight /></span>
 			</nuxt-link> -->
 			<nuxt-link
+				to="/settings/notifications"
+				:class="$route.name === `settings-notifications` ? `bg-lightInput font-semibold` : ``"
+				class="text-gray5 dark:text-gray3 focus:outline-none mb-2 flex w-full items-center justify-between rounded-lg py-2 text-left"
+			>
+				<div class="flex flex-row items-center">
+					<BellIcon class="w-4 h-4" />
+					<h6 class="ml-4">Notifications</h6>
+				</div>
+				<span class="bg-gray1 dark:bg-gray5 rounded-full p-1"><ChevronRight /></span>
+			</nuxt-link>
+			<nuxt-link
 				to="/settings/styling"
 				:class="$route.name === `settings-styling` ? `bg-lightInput font-semibold` : ``"
 				class="text-gray5 dark:text-gray3 focus:outline-none mb-2 flex w-full items-center justify-between rounded-lg py-2 text-left"
@@ -50,12 +61,14 @@ import Vue from 'vue'
 import ChevronRight from '@/components/icons/ChevronRight.vue'
 import ProfileIcon from '@/components/icons/Profile.vue'
 import BrushlIcon from '@/components/icons/Brush.vue'
+import BellIcon from '@/components/icons/Bell.vue'
 
 export default Vue.extend({
 	components: {
 		ChevronRight,
 		ProfileIcon,
 		BrushlIcon,
+		BellIcon,
 	},
 	layout: `settings`,
 	head() {
