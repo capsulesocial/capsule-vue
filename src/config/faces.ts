@@ -1,10 +1,16 @@
+import { Emotions } from './config'
+
 export interface IFace {
-	label: string
+	label: Exclude<Emotions, `no-emotion`> | `default`
 	light: any
 	dark: any
 }
 
-export const faces: { [key: string]: IFace } = {
+export interface IFaceWithoutDefault extends IFace {
+	label: Exclude<Emotions, `no-emotion`>
+}
+
+export const faces: Record<string, IFace> = {
 	default: {
 		label: `default`,
 		light: require(`@/assets/images/reactions/light/confident.webp`),
@@ -169,11 +175,6 @@ export const faces: { [key: string]: IFace } = {
 		label: `hush`,
 		light: require(`@/assets/images/reactions/light/hush.webp`),
 		dark: require(`@/assets/images/reactions/dark/hush.webp`),
-	},
-	incognito: {
-		label: `incognito`,
-		light: require(`@/assets/images/reactions/light/incognito.webp`),
-		dark: require(`@/assets/images/reactions/dark/incognito.webp`),
 	},
 	incredulous: {
 		label: `incredulous`,

@@ -3,10 +3,11 @@ import ipfs from '@capsulesocial/ipfs-wrapper'
 import { nodeUrl } from './utilities/config'
 import libsodium from './utilities/keys'
 import { ISignedIPFSObject, uint8ArrayToHexString } from './utilities/helpers'
+import { EmotionCategories, Emotions } from '@/config/config'
 
 export interface INewCommentData {
 	content: string
-	emotion: string
+	emotion: Emotions
 	timestamp: number
 	parentCID: string
 	authorID: string
@@ -17,7 +18,7 @@ export interface ICommentData {
 	_id: string
 	timestamp: number
 	parentCID: string
-	emotion: string
+	emotion: Emotions
 }
 
 export interface ICommentsStats {
@@ -25,10 +26,15 @@ export interface ICommentsStats {
 	positive: number
 	neutral: number
 	negative: number
-	faceStats: Record<string, number>
+	faceStats: Record<Emotions, number> | null
 }
 
-export function createComment(authorID: string, content: string, emotion: string, parentCID: string): INewCommentData {
+export function createComment(
+	authorID: string,
+	content: string,
+	emotion: Emotions,
+	parentCID: string,
+): INewCommentData {
 	return {
 		authorID,
 		content,
@@ -73,8 +79,8 @@ export async function getCommentsOfPost(
 	parentCID: string,
 	offset: number,
 	limit: number,
-	emotion?: string,
-	emotionCategory?: `negative` | `neutral` | `positive`,
+	emotion?: Emotions,
+	emotionCategory?: EmotionCategories,
 ): Promise<ICommentData[]> {
 	const res = await axios.get(`${nodeUrl()}/content/${parentCID}/comments`, {
 		params: { ...(emotion ? { emotion } : {}), ...(emotionCategory ? { emotionCategory } : {}), offset, limit },

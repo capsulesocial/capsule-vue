@@ -75,13 +75,13 @@
 import Vue from 'vue'
 import ChevronUp from '@/components/icons/ChevronUp.vue'
 import ChevronDown from '@/components/icons/ChevronDown.vue'
-import { feelings } from '@/config/config'
+import { emotionCategories, EmotionCategories } from '@/config/config'
 import { faces, IFace } from '@/config/faces'
 
 interface IData {
 	reactionList: Record<string, IFace>
-	feelingList: { positive: Set<string>; negative: Set<string>; neutral: Set<string> }
-	feeling: `positive` | `negative` | `neutral`
+	feelingList: typeof emotionCategories
+	feeling: EmotionCategories
 	showFilter: boolean
 }
 
@@ -100,7 +100,7 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			reactionList: faces,
-			feelingList: feelings,
+			feelingList: emotionCategories,
 			feeling: `positive`,
 			showFilter: false,
 		}
@@ -124,7 +124,7 @@ export default Vue.extend({
 				this.showFilter = true
 			}
 		},
-		setCommentFilterFeeling(feeling: `positive` | `negative` | `neutral`) {
+		setCommentFilterFeeling(feeling: EmotionCategories) {
 			this.feeling = feeling
 			this.$emit(`clicked`, feeling)
 			this.showFilter = true

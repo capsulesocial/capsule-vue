@@ -186,7 +186,7 @@ import More from '@/components/icons/More.vue'
 import BinIcon from '@/components/icons/Bin.vue'
 
 import { createDefaultProfile, getProfile, Profile } from '@/backend/profile'
-import { feelings } from '@/config/config'
+import { emotionCategories, Emotions } from '@/config/config'
 import { faces, IFace } from '@/config/faces'
 import { createComment, getComment, getCommentsOfPost, ICommentData, sendComment } from '@/backend/comment'
 import { getPhotoFromIPFS } from '@/backend/getPhoto'
@@ -200,7 +200,7 @@ interface IData {
 	avatar: string
 	name: string
 	emotion: IFace
-	emotionType: string
+	emotionType: Emotions | null
 	content: string
 	showLabel: boolean
 	commentDeleted: boolean
@@ -237,7 +237,7 @@ export default Vue.extend({
 			avatar: ``,
 			name: ``,
 			emotion: faces.default,
-			emotionType: ``,
+			emotionType: null,
 			content: ``,
 			showLabel: false,
 			commentDeleted: false,
@@ -296,9 +296,12 @@ export default Vue.extend({
 			} else if (prefix === `bg-`) {
 				res = `background-color: `
 			}
-			if (feelings.positive.has(this.emotionType)) {
+			if (!this.emotionType) {
+				return (res += `#F0B785`)
+			}
+			if (emotionCategories.positive.has(this.emotionType)) {
 				res += `#1F7DAD`
-			} else if (feelings.negative.has(this.emotionType)) {
+			} else if (emotionCategories.negative.has(this.emotionType)) {
 				res += `#EE1F63`
 			} else {
 				res += `#F0B785`
