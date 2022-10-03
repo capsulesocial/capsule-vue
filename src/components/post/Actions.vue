@@ -187,7 +187,7 @@
 						@click="
 							showEmotions = false
 							selectedEmotionColor = `neutralLightest`
-							selectedEmotion = { label: ``, light: null, dark: null }
+							selectedEmotion = null
 						"
 					>
 						<CloseIcon />
@@ -223,7 +223,7 @@
 							: (selectedEmotionColor === `positive` ||
 									selectedEmotionColor === `neutral` ||
 									selectedEmotionColor === `negative`) &&
-							  selectedEmotion.label !== ``
+							  selectedEmotion
 							? `border p-2 bg-` + selectedEmotionColor
 							: `p-2 bg-lightBG dark:bg-darkBG`
 					"
@@ -236,7 +236,7 @@
 							<!-- Front side: Type comment -->
 							<div v-show="!showEmotions" class="flex w-full bg-lightBG dark:bg-darkBG">
 								<button class="focus:outline-none h-auto flex-shrink-0" @click="toggleShowEmotions">
-									<span v-if="activeEmotion.label !== ``">
+									<span v-if="activeEmotion">
 										<img
 											:src="$colorMode.dark ? activeEmotion.dark : activeEmotion.light"
 											:alt="activeEmotion.label"
@@ -274,8 +274,8 @@
 									<button
 										class="bg-primary focus:outline-none block rounded-lg lg:hidden"
 										style="margin-right: 15.2px; margin-bottom: 12px"
-										:disabled="comment === '' && activeEmotion.label === ''"
-										:class="comment !== '' && activeEmotion.label !== '' ? '' : 'opacity-50 cursor-not-allowed'"
+										:disabled="comment === '' && !activeEmotion"
+										:class="comment !== '' && activeEmotion ? '' : 'opacity-50 cursor-not-allowed'"
 										@click="sendComment"
 									>
 										<SendIcon class="m-2 mb-3 ml-3 h-5 w-5 text-white transform rotate-45" />
@@ -286,8 +286,8 @@
 										class="hidden lg:block"
 										:action="sendComment"
 										:thin="true"
-										:disabled="comment === '' && activeEmotion.label === ''"
-										:class="comment !== '' && activeEmotion.label !== '' ? '' : 'opacity-50 cursor-not-allowed'"
+										:disabled="comment === '' && !activeEmotion"
+										:class="comment !== '' && activeEmotion ? '' : 'opacity-50 cursor-not-allowed'"
 									/>
 								</span>
 							</div>
@@ -323,7 +323,7 @@
 											:key="face.label"
 											class="focus:outline-none outline-none rounded-lg border-2"
 											:class="
-												selectedEmotion.label === face.label ? `border-` + selectedEmotionColor : `border-transparent`
+												selectedEmotion?.label === face.label ? `border-` + selectedEmotionColor : `border-transparent`
 											"
 											style="transition: all 0.3s ease-in-out"
 											@click="setEmotion($event, face)"
@@ -337,7 +337,7 @@
 											<p
 												class="capitalize lg:hidden mt-1"
 												:class="
-													selectedEmotion.label === face.label
+													selectedEmotion?.label === face.label
 														? `font-bold text-` + selectedEmotionColor
 														: `text-gray7 dark:text-gray3`
 												"
@@ -353,7 +353,7 @@
 											<button
 												class="focus:outline-none outline-none flex flex-grow items-center justify-center"
 												:class="
-													selectedEmotion.label === face.label
+													selectedEmotion?.label === face.label
 														? `font-bold text-` + selectedEmotionColor
 														: `text-gray7 dark:text-gray3`
 												"
@@ -436,8 +436,8 @@ import RepostIcon from '@/components/icons/Repost.vue'
 import QuoteIcon from '@/components/icons/Quote.vue'
 import Avatar from '@/components/Avatar.vue'
 
-import { feelings } from '@/config/config'
-import { faces, faceGroupings, IFace } from '@/config/faces'
+import { EmotionCategories, emotionCategories, Emotions } from '@/config/config'
+import { faces, faceGroupings, IFace, IFaceWithoutDefault } from '@/config/faces'
 import {
 	createComment,
 	sendComment,
@@ -458,12 +458,12 @@ interface FaceStat {
 interface IData {
 	faceGroupings: Array<[IFace, IFace, IFace]>
 	feelingList: { negative: Set<string>; positive: Set<string>; neutral: Set<string> }
-	activeEmotion: IFace
-	selectedEmotion: IFace
+	activeEmotion: IFaceWithoutDefault | null
+	selectedEmotion: IFaceWithoutDefault | null
 	comments: ICommentData[]
 	avatar: string
 	comment: string
-	emotion: string
+	emotion: Emotions | null
 	showEmotions: boolean
 	filter: string
 	showDropdown: boolean
@@ -476,7 +476,7 @@ interface IData {
 	userIsFollowed: boolean
 	faceStats: FaceStat[]
 	page: number
-	selectedEmotionColor: `positive` | `neutral` | `negative` | `neutralLightest`
+	selectedEmotionColor: EmotionCategories | `neutralLightest`
 	sendingComment: boolean
 	currentCommentsOffset: number
 	commentsLimit: number
@@ -525,13 +525,13 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			faceGroupings,
-			feelingList: feelings,
+			feelingList: emotionCategories,
 			avatar: ``,
-			activeEmotion: { label: ``, light: null, dark: null },
-			selectedEmotion: { label: ``, light: null, dark: null },
+			activeEmotion: null,
+			selectedEmotion: null,
 			comment: ``,
 			comments: [],
-			emotion: ``,
+			emotion: null,
 			showEmotions: false,
 			filter: ``,
 			showDropdown: false,
@@ -555,7 +555,7 @@ export default Vue.extend({
 				positive: 0,
 				neutral: 0,
 				negative: 0,
-				faceStats: {},
+				faceStats: null,
 			},
 		}
 	},
@@ -608,7 +608,7 @@ export default Vue.extend({
 					continue
 				}
 				const f = faces[face]
-				stats[f.label] = { face: f, count: faceStats[face] }
+				stats[f.label] = { face: f, count: faceStats[face as Emotions] }
 			}
 			this.faceStats = sortBy(Object.values(stats), `count`)
 		},
@@ -631,18 +631,18 @@ export default Vue.extend({
 			this.addScrollHandler()
 			this.filterComments()
 		},
-		setEmotion(e: PointerEvent, r: { label: string; light: any; dark: any }) {
+		setEmotion(e: PointerEvent, r: IFaceWithoutDefault) {
 			if (!e.target) {
 				return
 			}
 			const target = e.target as HTMLElement
 			target.scrollIntoView({ behavior: `smooth`, block: `center` })
 			this.selectedEmotion = r
-			if (feelings.positive.has(r.label)) {
+			if (emotionCategories.positive.has(r.label)) {
 				this.selectedEmotionColor = `positive`
 				return
 			}
-			if (feelings.negative.has(r.label)) {
+			if (emotionCategories.negative.has(r.label)) {
 				this.selectedEmotionColor = `negative`
 				return
 			}
@@ -650,7 +650,7 @@ export default Vue.extend({
 			this.selectedEmotionColor = `neutral`
 		},
 		confirmEmotion() {
-			if (this.selectedEmotion.label === ``) {
+			if (!this.selectedEmotion) {
 				this.$toastWarning(`No face selected!`)
 				return
 			}
@@ -658,7 +658,7 @@ export default Vue.extend({
 			this.showEmotions = false
 		},
 		async sendComment() {
-			if (this.activeEmotion.label === ``) {
+			if (!this.activeEmotion) {
 				this.$toastError(`You must select a reaction before posting`)
 				return
 			}
@@ -679,9 +679,9 @@ export default Vue.extend({
 				const _id = await sendComment(c, `comment`)
 				this.comments.unshift({ _id, ...c })
 				this.comment = ``
-				this.selectedEmotion = { label: ``, light: null, dark: null }
-				this.activeEmotion = { label: ``, light: null, dark: null }
-				this.emotion = ``
+				this.selectedEmotion = null
+				this.activeEmotion = null
+				this.emotion = null
 				this.filter = ``
 				this.selectedEmotionColor = `neutralLightest`
 				this.updateCommentsStats()
@@ -716,7 +716,7 @@ export default Vue.extend({
 						this.postCID,
 						this.currentCommentsOffset,
 						this.commentsLimit,
-						this.filter.charAt(0).toLowerCase() + this.filter.replace(/\s/g, ``).substring(1),
+						(this.filter.charAt(0).toLowerCase() + this.filter.replace(/\s/g, ``).substring(1)) as Emotions,
 					)
 				}
 			} catch (err) {
@@ -732,11 +732,11 @@ export default Vue.extend({
 				}
 			}
 		},
-		getStyle(emotionType: string): string {
-			if (feelings.positive.has(emotionType)) {
+		getStyle(emotionType: Emotions): string {
+			if (emotionCategories.positive.has(emotionType)) {
 				return `positive`
 			}
-			if (feelings.negative.has(emotionType)) {
+			if (emotionCategories.negative.has(emotionType)) {
 				return `negative`
 			}
 
