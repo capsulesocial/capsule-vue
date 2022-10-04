@@ -1,35 +1,39 @@
 <template>
 	<article class="w-full">
-		<div class="flex flex-row items-center justify-between p-6 pt-4 pb-2">
-			<h3 class="text-lightPrimaryText dark:text-darkPrimaryText text-base font-semibold">Trending tags</h3>
-			<!-- <div class="flex flex-row justify-end">
-				<h3 v-if="$route.name === `discover`" class="self-center text-sm text-gray5">Top of</h3>
-				<div v-if="$route.name === `discover`" class="relative inline">
+		<div class="flex items-center relative modal-animation lg:pr-6">
+			<h3 class="text-lightPrimaryText dark:text-darkPrimaryText text-base font-semibold mb-2 px-6 pt-4">
+				Trending topics
+			</h3>
+			<button
+				id="filter"
+				class="toggle focus:outline-none lg:ml-4 flex items-center justify-between rounded-lg border dark:border-gray3 text-sm shadow-lg dark:text-gray3"
+				@click.stop="showAlgorithmDropdown = !showAlgorithmDropdown"
+			>
+				<span class="toggle font-bold capitalize pl-4">
+					{{ readableTimeframe(selectedTimeframe) }}
+				</span>
+				<ChevronUp v-if="showAlgorithmDropdown" class="toggle pr-4" />
+				<ChevronDown v-else class="toggle pr-4" />
+			</button>
+			<div
+				v-if="showAlgorithmDropdown"
+				class="hotzone border-lightBorder modal-animation absolute top-0 right-20 z-20 rounded-lg border bg-lightBG dark:bg-darkBG px-4 py-3 shadow-lg mr-0 lg:mr-6"
+				style="margin-top: 40px"
+			>
+				<div
+					v-for="timeframe in timeFrames"
+					:key="timeframe"
+					class="hotzone flex justify-start items-start flex-col dark:text-gray3"
+				>
 					<button
-						class="flex justify-between items-center toggle rounded-lg focus:outline-none self-center capitalize text-gray5 font-bold text-sm text-mr-2 px-2"
-						style="width: 6rem"
-						@click.stop="showFilter = !showFilter"
+						:class="selectedTimeframe === timeframe ? ` text-primary font-semibold` : `text-gray5 dark:text-gray3`"
+						class="hotzone focus:outline-none my-1 px-2 whitespace-nowrap"
+						@click="handleTagFeed(timeframe)"
 					>
-						{{ tagFilter }}
-						<ChevronUp v-if="showFilter" />
-						<ChevronDown v-else />
+						{{ readableTimeframe(timeframe) }}
 					</button>
-					<div
-						v-show="showFilter"
-						class="absolute z-10 top-0 bg-white rounded-lg shadow-lg p-2 mt-10 w-full text-sm modal-animation"
-					>
-						<button class="w-full text-left text-gray7 focus:outline-none p-2" @click="setTagFilter(`Today`)">
-							Today
-						</button>
-						<button class="w-full text-left text-gray7 focus:outline-none p-2" @click="setTagFilter(`This Week`)">
-							This Week
-						</button>
-						<button class="w-full text-left text-gray7 focus:outline-none p-2" @click="setTagFilter(`All Time`)">
-							All Time
-						</button>
-					</div>
 				</div>
-			</div> -->
+			</div>
 		</div>
 		<div class="px-6 pb-4">
 			<article v-if="tags.length == 0">
@@ -50,28 +54,43 @@
 <script lang="ts">
 import Vue from 'vue'
 import TagCard from '@/components/Tag.vue'
-// import ChevronUp from '@/components/icons/ChevronUp.vue'
-// import ChevronDown from '@/components/icons/ChevronDown.vue'
+import ChevronUp from '@/components/icons/ChevronUp.vue'
+import ChevronDown from '@/components/icons/ChevronDown.vue'
 
 import { getTags } from '@/backend/post'
+
+enum Timeframe {
+	// DAY = `1`,
+	WEEK = `7`,
+	MONTH = `30`,
+	YEAR = `365`,
+	ALL_TIME = `ALL_TIME`,
+}
 
 interface IData {
 	tags: string[]
 	tagFilter: string
 	showFilter: boolean
+	showAlgorithmDropdown: boolean
+	timeFrames: [Timeframe.WEEK, Timeframe.MONTH, Timeframe.YEAR, Timeframe.ALL_TIME]
+	selectedTimeframe: Timeframe
+	readableTime: string
 }
-
 export default Vue.extend({
 	components: {
 		TagCard,
-		// ChevronUp,
-		// ChevronDown,
+		ChevronUp,
+		ChevronDown,
 	},
 	data(): IData {
 		return {
 			tags: [],
 			tagFilter: `Today`,
 			showFilter: false,
+			showAlgorithmDropdown: false,
+			timeFrames: [Timeframe.WEEK, Timeframe.MONTH, Timeframe.YEAR, Timeframe.ALL_TIME],
+			selectedTimeframe: Timeframe.MONTH,
+			readableTime: Timeframe.MONTH,
 		}
 	},
 	async created() {
@@ -87,17 +106,41 @@ export default Vue.extend({
 		checkRoute(): boolean {
 			return this.$route.name?.substr(0, 8) === `discover`
 		},
-		handleDropdown(e: any): void {
-			if (!e.target || e.target.parentNode === null || e.target.parentNode.classList === undefined) {
+		handleTagFeed(timeframe?: Timeframe) {
+			if (!timeframe) {
 				return
 			}
-			if (!e.target.parentNode.classList.contains(`toggle`)) {
-				this.showFilter = false
-			}
+			this.readableTime = timeframe
+			this.selectedTimeframe = timeframe
+			// todo: fetch trending tags and update here
+			// this.tags=
 		},
-		setTagFilter(f: string): void {
-			this.tagFilter = f
-			this.showFilter = false
+		handleDropdown() {
+			window.addEventListener(`click`, (event: Event): void => {
+				if (!event) {
+					return
+				}
+				if (!this.showAlgorithmDropdown) {
+					return
+				}
+				this.showAlgorithmDropdown = false
+			})
+		},
+		readableTimeframe(timeframe: Timeframe) {
+			switch (timeframe) {
+				// case Timeframe.DAY:
+				// 	return `Today`;
+				case Timeframe.WEEK:
+					return `This week`
+				case Timeframe.MONTH:
+					return `This month`
+				case Timeframe.YEAR:
+					return `This year`
+				case Timeframe.ALL_TIME:
+					return `All time`
+				default:
+					return `All time`
+			}
 		},
 	},
 })
