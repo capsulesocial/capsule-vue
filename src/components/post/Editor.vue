@@ -87,22 +87,14 @@
 <script lang="ts">
 import Vue from 'vue'
 import DOMPurify from 'dompurify'
-import Turndown from 'turndown'
-import { strikethrough } from 'turndown-plugin-gfm'
 import hljs from 'highlight.js'
 import type { RangeStatic, Quill } from 'quill'
 import QuillMarkdown from 'quilljs-markdown'
+import TurndownService from '../editor/TurndownService'
 import XIcon from '@/components/icons/X.vue'
 import PencilIcon from '@/components/icons/Pencil.vue'
 import AddContent from '@/components/post/EditorActions.vue'
-import {
-	preRule,
-	ipfsImageRule,
-	createPostImagesSet,
-	counterModuleFactory,
-	listRule,
-	ImageBlotFactory,
-} from '@/pages/post/quillExtensions'
+import { createPostImagesSet, counterModuleFactory, ImageBlotFactory } from '@/pages/post/quillExtensions'
 import {
 	createEncryptedPost,
 	createRegularPost,
@@ -165,13 +157,6 @@ const options = {
 		},
 	},
 }
-
-const turndownService = new Turndown()
-turndownService.keep([`u`])
-turndownService.addRule(`codeblock`, preRule)
-turndownService.addRule(`ipfsimage`, ipfsImageRule)
-turndownService.addRule(`listRule`, listRule)
-turndownService.use(strikethrough)
 
 const allPostImages = new Map()
 
@@ -280,7 +265,7 @@ export default Vue.extend({
 					const imageInCurrentContent = currentContent.ops.find((op: any) => op.insert && op.insert.image)
 					const imageInDiff = diff.ops.find((op: any) => op.insert && op.insert.image)
 					if (imageInCurrentContent || imageInDiff) {
-						const clean = turndownService.turndown(this.getInputHTML())
+						const clean = TurndownService.turndown(this.getInputHTML())
 						this.postImages = createPostImagesSet(clean, this.postImages)
 						this.updateDraftPostImages()
 					}
@@ -739,7 +724,7 @@ export default Vue.extend({
 				}
 			}
 
-			const clean = turndownService.turndown(this.getInputHTML())
+			const clean = TurndownService.turndown(this.getInputHTML())
 			// Check content quality
 			const contentQualityCheck = this.$qualityContent(clean)
 			if (this.$isError(contentQualityCheck)) {

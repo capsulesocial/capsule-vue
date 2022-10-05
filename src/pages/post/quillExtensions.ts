@@ -1,5 +1,4 @@
 import type { RangeStatic, Quill } from 'quill'
-import TurndownService from 'turndown'
 
 // Quill
 export function counterModuleFactory(
@@ -39,37 +38,6 @@ export function ImageBlotFactory(QuillClass: typeof Quill) {
 			}
 		}
 	}
-}
-
-// Turndown
-
-export const preRule: TurndownService.Rule = {
-	filter: [`pre`],
-	replacement: (_, node) => {
-		// eslint-disable-next-line quotes
-		return '```\n' + node.textContent + '```'
-	},
-}
-
-export const ipfsImageRule: TurndownService.Rule = {
-	filter: [`img`],
-	replacement: (_, node) => {
-		if (`getAttribute` in node) {
-			return `<ipfsimage alt="${node.getAttribute(`alt`)}" cid="${node.getAttribute(`alt`)}"></ipfsimage>`
-		}
-
-		throw new Error(`getAttributes does not exist on node`)
-	},
-}
-
-export const listRule: TurndownService.Rule = {
-	filter: [`ul`, `ol`, `li`],
-	replacement: (_, node) => {
-		if (`outerHTML` in node) {
-			return node.outerHTML
-		}
-		throw new Error(`outerHTML does not exist on node`)
-	},
 }
 
 // Misc
