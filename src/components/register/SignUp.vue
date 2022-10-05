@@ -72,7 +72,7 @@ export default Vue.extend({
 			}
 			if (this.userInfo.type === `near`) {
 				// If the key exists we can login him
-				const pk = window.localStorage.getItem(`near-api-js:${this.userInfo.accountId}:${nearNetwork}`)
+				const pk = window.localStorage.getItem(`near-api-js:keystore:${this.userInfo.accountId}:${nearNetwork}`)
 				if (pk) {
 					this.username = username
 					await this.verify(this.username)
