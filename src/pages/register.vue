@@ -136,14 +136,13 @@ export default Vue.extend({
 		walletLogout()
 		return false
 	},
-	async created() {
-		await this.stepForward()
-	},
-	mounted() {
+	async mounted() {
 		const accountId = window.localStorage.getItem(`accountId`)
 		if (this.$store.state.session.id !== `` && accountId) {
 			this.$router.push(`/home`)
+			return
 		}
+		await this.stepForward()
 	},
 	methods: {
 		...mapMutations(sessionStoreNamespace, {
