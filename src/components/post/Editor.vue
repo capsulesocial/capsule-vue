@@ -79,7 +79,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import type { Quill } from 'quill'
 import TurndownService from '../editor/TurndownService'
 import Qeditor from '@/components/editor/QEditor.vue'
 import XIcon from '@/components/icons/X.vue'
@@ -104,8 +103,6 @@ interface IData {
 	title: string
 	subtitle: string
 	input: string
-	editor: Quill | null
-	qeditor: Quill | null
 	wordCount: number
 	titleError: string
 	subtitleError: string
@@ -151,8 +148,6 @@ export default Vue.extend({
 			isX: false,
 			isCollapsed: false,
 			postImages: new Map(),
-			qeditor: null,
-			editor: null,
 			toggleAddContent: false,
 			addContentPosTop: 0,
 			addContentPosLeft: 0,
