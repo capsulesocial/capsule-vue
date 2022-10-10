@@ -198,7 +198,7 @@ export default Vue.extend({
 		togglePreview() {
 			const validPost = this.$refs.editor.checkPost(true)
 			if (validPost) {
-				this.previewContent = this.$refs.editor.getInputHTML()
+				this.previewContent = this.$refs.editor.editorHtml()
 				this.showPreview = !this.showPreview
 			}
 		},
