@@ -45,7 +45,7 @@ export function ImageBlotFactory(QuillClass: typeof Quill) {
 const imgRegexp = (cid: string) =>
 	new RegExp(`<ipfsimage ((alt="${cid}" cid="${cid}")|(cid="${cid}" alt="${cid}"))></ipfsimage>`, `g`)
 
-export function createPostImagesSet(content: string, uploadedImages: Map<string, { key?: string; counter?: string }>) {
+export function createEditorImageSet(content: string, uploadedImages: Map<string, { key?: string; counter?: string }>) {
 	const usedImages: Map<string, { key?: string; counter?: string }> = new Map()
 	uploadedImages.forEach((val, cid) => {
 		if (!content.match(imgRegexp(cid))) {

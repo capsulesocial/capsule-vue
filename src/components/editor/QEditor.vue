@@ -19,15 +19,6 @@
 		>
 			<p class="text-sm text-gray5 dark:text-gray3">Uploading image...</p>
 		</div>
-		<div
-			v-if="isPrimaryWidget && this.$route.name === `home`"
-			id="metaButton"
-			class="bg-lightBG dark:bg-darkBGStop border-lightBorder text-gray5 dark:text-gray3 modal-animation card-animation-delay1 animatedraftButton absolute bottom-0 right-0 z-10 m-4 mb-8 flex rounded-lg px-5 py-3 shadow-lg"
-		>
-			<p v-if="!isCollapsed">Time to publish?</p>
-			<PencilIcon v-else class="fill-current p-1" @close="$router.push(`/post`)" />
-			<button class="text-primary focus:outline-none ml-2" @click="$router.push(`/post`)">Add meta</button>
-		</div>
 	</div>
 </template>
 
@@ -39,10 +30,8 @@ import type { PropType } from 'vue'
 import QuillMarkdown from 'quilljs-markdown'
 import hljs from 'highlight.js'
 import turndownService from './TurndownService'
-import { BASE_ALLOWED_TAGS } from '@/plugins/helpers'
-import { createPostImagesSet, counterModuleFactory, ImageBlotFactory } from '@/pages/post/quillExtensions'
+import { createEditorImageSet, counterModuleFactory, ImageBlotFactory } from '@/pages/post/quillExtensions'
 import AddContent from '@/components/post/EditorActions.vue'
-import PencilIcon from '@/components/icons/Pencil.vue'
 
 interface IData {
 	toggleAddContent: boolean
@@ -50,9 +39,8 @@ interface IData {
 	waitingImage: boolean
 	qeditor: Quill | null
 	editor: Quill | null
-	isCollapsed: boolean
 	addContentPosLeft: number
-	postImages: Map<string, { key: string; counter: string } | {}>
+	editorImages: Map<string, { key: string; counter: string } | {}>
 }
 
 const toolbarOptions = [
@@ -80,14 +68,15 @@ const options = {
 }
 
 export default Vue.extend({
-	components: {
-		AddContent,
-		PencilIcon,
-	},
+	components: { AddContent },
 	props: {
 		initialContent: {
 			type: String,
 			required: true,
+		},
+		initialEditorImages: {
+			type: Map as PropType<Map<string, { key: string; counter: string } | {}>>,
+			default: {},
 		},
 		validImageTypes: {
 			type: Array as PropType<string[] | undefined>,
@@ -121,9 +110,8 @@ export default Vue.extend({
 			waitingImage: false,
 			qeditor: null,
 			editor: null,
-			isCollapsed: false,
 			addContentPosLeft: 0,
-			postImages: new Map(),
+			editorImages: new Map(),
 		}
 	},
 	mounted() {
@@ -132,19 +120,19 @@ export default Vue.extend({
 	methods: {
 		sanitize(html: string): string {
 			return DOMPurify.sanitize(html, {
-				ALLOWED_TAGS: BASE_ALLOWED_TAGS,
+				ALLOWED_TAGS: this.allowedTags,
 			})
 		},
 		actionsUpload() {
 			document.getElementById(`getFile`)?.click()
 		},
 		getInputHTML(): string {
-			const input = document.getElementsByClassName(`ql-editor`)[0]
+			const input = this.qeditor?.root.innerHTML
 			if (!input) {
 				return ``
 			}
 			// Sanitize HTML
-			return this.sanitize(input.innerHTML)
+			return this.sanitize(input)
 		},
 		calculateAddPos(index: number) {
 			if (!this.qeditor) {
@@ -179,7 +167,6 @@ export default Vue.extend({
 				}
 				return builtInFunc.call(this, val) // retain the built-in logic
 			}
-			const metaButton = document.getElementById(`metaButton`)
 			// Handle updates to body
 			const onTextChange = (_delta?: any, oldDelta?: any, source?: string) => {
 				if (this.qeditor && source === `user`) {
@@ -189,15 +176,11 @@ export default Vue.extend({
 					const imageInDiff = diff.ops.find((op: any) => op.insert && op.insert.image)
 					if (imageInCurrentContent || imageInDiff) {
 						const clean = turndownService.turndown(this.getInputHTML())
-						this.postImages = createPostImagesSet(clean, this.postImages)
-						this.$emit(`editorImageUpdates`, this.postImages)
+						this.editorImages = createEditorImageSet(clean, this.editorImages)
+						this.$emit(`editorImageUpdates`, { editorImages: this.editorImages })
 					}
 				}
 				this.$emit(`isWriting`, true)
-				if (metaButton) {
-					metaButton.classList.add(`hidemetaButton`)
-				}
-				this.isCollapsed = true
 				const text = this.getInputHTML().replace(/(<([^>]+)>)/gi, ` `)
 				const n = text.split(/\s+/).length
 				this.$emit(`updateWordCount`, n)
@@ -206,10 +189,6 @@ export default Vue.extend({
 			const onSelectionChange = (range: RangeStatic) => {
 				if (!range) {
 					this.$emit(`isWriting`, false)
-					if (metaButton) {
-						metaButton.classList.remove(`hidemetaButton`)
-					}
-					this.isCollapsed = false
 				}
 			}
 			// Handles add content button
@@ -252,17 +231,23 @@ export default Vue.extend({
 		},
 		updatePostImages(
 			cid: string,
+			image: Blob,
+			imageName: string,
 			encryptionData?: { key: string; counter: string },
 		): { error: string } | { success: boolean } {
 			// If we have already added this image in the past, we don't need to reupload it to the server
-			if (this.postImages.has(cid)) {
+			if (this.editorImages.has(cid)) {
 				return { success: true }
 			}
-			if (this.postImages.size === this.maxPostImages) {
+			if (this.editorImages.size === this.maxPostImages) {
 				this.waitingImage = false
 				return { error: `Cannot add more than ${this.maxPostImages} images in a post` }
 			}
-			this.postImages.set(cid, encryptionData ?? {})
+			this.editorImages.set(cid, encryptionData ?? {})
+			this.$emit(`editorImageUpdates`, {
+				editorImages: this.editorImages,
+				newImage: { cid, image, imageName },
+			})
 			return { success: true }
 		},
 		async handleHtml(pastedContent: string) {
@@ -271,7 +256,7 @@ export default Vue.extend({
 			const contentImgs = content.getElementsByTagName(`img`)
 			if (contentImgs.length > this.maxPostImages) {
 				this.waitingImage = false
-				this.$toastError(`Cannot add more than ${this.maxPostImages} images in a post`)
+				this.$emit(`onError`, `Cannot add more than ${this.maxPostImages} images in a post`)
 				return null
 			}
 			for (const img of contentImgs) {
@@ -279,25 +264,25 @@ export default Vue.extend({
 				this.toggleAddContent = false
 				const f = await this.$urlToFile(img.src)
 				if (this.$isError(f)) {
-					this.$toastError(f.error)
+					this.$emit(`onError`, f.error)
 					img.remove()
 					continue
 				}
 				try {
 					const res = await this.imageUploader(f.file, this.encryptedContent)
-					const { cid, url, image } = res
-					const updatedPostImages = await this.updatePostImages(cid, image)
+					const { cid, url, image, imageName } = res
+					const updatedPostImages = this.updatePostImages(cid, image, imageName)
 					if (this.$isError(updatedPostImages)) {
-						this.$toastError(updatedPostImages.error)
+						this.$emit(`onError`, updatedPostImages.error)
 						return null
 					}
 					const newImg = document.createElement(`img`)
 					newImg.setAttribute(`src`, url.toString())
 					newImg.setAttribute(`alt`, cid)
 					img.replaceWith(newImg)
-				} catch (err: unknown) {
+				} catch (err: any) {
 					this.waitingImage = false
-					this.$handleError(err)
+					this.$emit(`onError`, err.message)
 					return null
 				}
 			}
@@ -353,22 +338,22 @@ export default Vue.extend({
 					this.calculateAddPos(contentLength)
 				}, 0)
 			} catch (error: any) {
-				this.$toastError(error.message)
+				this.$emit(`onError`, error.message)
 			}
 		},
 		async handleFile(file: File) {
 			if (this.validImageTypes && !this.validImageTypes.includes(file.type)) {
-				this.$toastError(`image of type ${file.type} is invalid`)
+				this.$emit(`onError`, `image of type ${file.type} is invalid`)
 				return
 			}
 			try {
 				this.waitingImage = true
 				this.toggleAddContent = false
 				const res = await this.imageUploader(file, this.encryptedContent)
-				const { cid, url, image } = res
-				const updatedPostImages = this.updatePostImages(cid, image)
+				const { cid, url, image, imageName } = res
+				const updatedPostImages = this.updatePostImages(cid, image, imageName)
 				if (this.$isError(updatedPostImages)) {
-					this.$toastError(updatedPostImages.error)
+					this.$emit(`onError`, updatedPostImages.error)
 					this.waitingImage = false
 					return
 				}
@@ -414,8 +399,8 @@ export default Vue.extend({
 			setTimeout(() => this.qeditor?.setSelection(range.index + pastedText.length, 0, `user`), 0)
 		},
 		scrollToBottom(e: ClipboardEvent) {
-			const scrollContainer = this.$refs.scrollContainer as HTMLElement
-			if (e && e.target) {
+			const scrollContainer = document.getElementById(`editor`)
+			if (e && e.target && scrollContainer) {
 				const target = e.target as HTMLElement
 				if (target.outerHTML === `<br>`) {
 					scrollContainer.scrollTop = this.addContentPosTop
@@ -430,7 +415,7 @@ export default Vue.extend({
 			e.preventDefault()
 
 			if (!this.qeditor) {
-				this.$toastError(`Something went wrong while pasting the content`)
+				this.$emit(`onError`, `Something went wrong while pasting the content`)
 				return
 			}
 			if (!e.clipboardData) {
@@ -473,3 +458,10 @@ export default Vue.extend({
 	},
 })
 </script>
+
+<style>
+.content {
+	text-align: justify;
+	text-justify: inter-word;
+}
+</style>

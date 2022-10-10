@@ -164,7 +164,7 @@ export default Vue.extend({
 		},
 		updateWordCount(num: number) {
 			this.wordCount = num - 2
-			this.$emit(`update`, this.wordCount)
+			this.$emit(`updateWordCount`, this.wordCount)
 		},
 		hideDraftButton(value: boolean) {
 			const draftButton = document.getElementById(`draftButton`)
