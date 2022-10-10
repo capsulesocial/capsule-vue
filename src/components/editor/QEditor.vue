@@ -30,7 +30,12 @@ import type { PropType } from 'vue'
 import QuillMarkdown from 'quilljs-markdown'
 import hljs from 'highlight.js'
 import turndownService from './TurndownService'
-import { createEditorImageSet, counterModuleFactory, ImageBlotFactory } from '@/pages/post/quillExtensions'
+import {
+	createEditorImageSet,
+	counterModuleFactory,
+	ImageBlotFactory,
+	EditorImages,
+} from '@/pages/post/quillExtensions'
 import AddContent from '@/components/post/EditorActions.vue'
 
 interface IData {
@@ -40,7 +45,7 @@ interface IData {
 	qeditor: Quill | null
 	editor: Quill | null
 	addContentPosLeft: number
-	editorImages: Map<string, { key: string; counter: string } | {}>
+	editorImages: EditorImages | null
 }
 
 const toolbarOptions = [
@@ -115,6 +120,9 @@ export default Vue.extend({
 		}
 	},
 	mounted() {
+		if (this.initialEditorImages) {
+			this.editorImages = this.initialEditorImages as any
+		}
 		this.setupEditor()
 	},
 	methods: {
@@ -217,7 +225,7 @@ export default Vue.extend({
 					const diff = currentContent.diff(oldDelta)
 					const imageInCurrentContent = currentContent.ops.find((op: any) => op.insert && op.insert.image)
 					const imageInDiff = diff.ops.find((op: any) => op.insert && op.insert.image)
-					if (imageInCurrentContent || imageInDiff) {
+					if ((imageInCurrentContent || imageInDiff) && this.editorImages) {
 						const clean = turndownService.turndown(this.getInputHTML())
 						this.editorImages = createEditorImageSet(clean, this.editorImages)
 						this.$emit(`editorImageUpdates`, { editorImages: this.editorImages })
@@ -278,6 +286,9 @@ export default Vue.extend({
 			imageName: string,
 			encryptionData?: { key: string; counter: string },
 		): { error: string } | { success: boolean } {
+			if (!this.editorImages) {
+				return { error: `no images in the editor` }
+			}
 			// If we have already added this image in the past, we don't need to reupload it to the server
 			if (this.editorImages.has(cid)) {
 				return { success: true }

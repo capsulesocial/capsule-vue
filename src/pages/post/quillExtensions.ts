@@ -1,5 +1,7 @@
 import type { RangeStatic, Quill } from 'quill'
 
+export type EditorImages = Map<string, { key: string; counter: string } | {}>
+
 // Quill
 export function counterModuleFactory(
 	QuillClass: typeof Quill,
@@ -45,8 +47,8 @@ export function ImageBlotFactory(QuillClass: typeof Quill) {
 const imgRegexp = (cid: string) =>
 	new RegExp(`<ipfsimage ((alt="${cid}" cid="${cid}")|(cid="${cid}" alt="${cid}"))></ipfsimage>`, `g`)
 
-export function createEditorImageSet(content: string, uploadedImages: Map<string, { key?: string; counter?: string }>) {
-	const usedImages: Map<string, { key?: string; counter?: string }> = new Map()
+export function createEditorImageSet(content: string, uploadedImages: EditorImages) {
+	const usedImages: EditorImages = new Map()
 	uploadedImages.forEach((val, cid) => {
 		if (!content.match(imgRegexp(cid))) {
 			return
