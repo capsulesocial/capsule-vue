@@ -31,6 +31,7 @@ import QuillMarkdown from 'quilljs-markdown'
 import hljs from 'highlight.js'
 import turndownService from './TurndownService'
 import EditorActions from './EditorActions.vue'
+import { getBlobExtension, getContentImages, InsertContent, isError } from './helpers'
 import {
 	createEditorImageSet,
 	counterModuleFactory,
@@ -80,8 +81,8 @@ export default Vue.extend({
 			required: true,
 		},
 		initialEditorImages: {
-			type: Map as PropType<Map<string, { key: string; counter: string } | {}>>,
-			default: {},
+			type: Map as PropType<EditorImages>,
+			default: new Map(),
 		},
 		validImageTypes: {
 			type: Array as PropType<string[] | undefined>,
@@ -121,33 +122,11 @@ export default Vue.extend({
 	},
 	mounted() {
 		if (this.initialEditorImages) {
-			this.editorImages = this.initialEditorImages as any
+			this.editorImages = this.initialEditorImages
 		}
 		this.setupEditor()
 	},
 	methods: {
-		getContentImages(content: string) {
-			const domParser = new DOMParser()
-			const htmlDoc = domParser.parseFromString(content, `text/html`)
-
-			return htmlDoc.getElementsByTagName(`img`)
-		},
-		getBlobExtension(blob: Blob) {
-			switch (blob.type) {
-				case `image/png`:
-					return `.png`
-				case `image/jpeg`:
-					return `.jpeg`
-				case `image/jpg`:
-					return `.jpg`
-				case `image/avif`:
-					return `.avif`
-				case `image/webp`:
-					return `.webp`
-				default:
-					return null
-			}
-		},
 		async urlToFile(url: string): Promise<{ file: File } | { error: string }> {
 			try {
 				const response = await fetch(url, { mode: `cors` })
@@ -155,7 +134,7 @@ export default Vue.extend({
 					return { error: `Could not fetch image` }
 				}
 				const blob = await response.blob()
-				const blobExtension = this.getBlobExtension(blob)
+				const blobExtension = getBlobExtension(blob)
 				if (!blobExtension) {
 					return { error: `Invalid image type` }
 				}
@@ -165,9 +144,6 @@ export default Vue.extend({
 				this.$emit(`onError`, error)
 				return { error: error.message }
 			}
-		},
-		isError(obj: Record<string, unknown>): obj is { error: string } {
-			return `error` in obj
 		},
 		sanitize(html: string): string {
 			return DOMPurify.sanitize(html, {
@@ -317,7 +293,7 @@ export default Vue.extend({
 				this.waitingImage = true
 				this.toggleAddContent = false
 				const f = await this.urlToFile(img.src)
-				if (this.isError(f)) {
+				if (isError(f)) {
 					this.$emit(`onError`, new Error(f.error))
 					img.remove()
 					continue
@@ -326,7 +302,7 @@ export default Vue.extend({
 					const res = await this.imageUploader(f.file, this.encryptedContent)
 					const { cid, url, image, imageName } = res
 					const updatedPostImages = this.updatePostImages(cid, image, imageName)
-					if (this.isError(updatedPostImages)) {
+					if (isError(updatedPostImages)) {
 						this.$emit(`onError`, new Error(updatedPostImages.error))
 						return null
 					}
@@ -361,16 +337,7 @@ export default Vue.extend({
 			await this.handleFile(files[0])
 			target.value = ``
 		},
-		insertContent(
-			content:
-				| string
-				| {
-						cid: string
-						url: string | ArrayBuffer
-				  }
-				| null,
-			plainText = false,
-		) {
+		insertContent(content: InsertContent | null, plainText = false) {
 			try {
 				if (!this.qeditor || !content) {
 					return
@@ -406,7 +373,7 @@ export default Vue.extend({
 				const res = await this.imageUploader(file, this.encryptedContent)
 				const { cid, url, image, imageName } = res
 				const updatedPostImages = this.updatePostImages(cid, image, imageName)
-				if (this.isError(updatedPostImages)) {
+				if (isError(updatedPostImages)) {
 					this.$emit(`onError`, new Error(updatedPostImages.error))
 					this.waitingImage = false
 					return
@@ -480,7 +447,7 @@ export default Vue.extend({
 			const pastedContent = this.sanitize(clipboard.getData(`text/html`))
 			const pastedText = this.sanitize(clipboard.getData(`text/plain`))
 			const pastedFile = items.length > 0 ? items[0].getAsFile() : null
-			const contentImgs = this.getContentImages(pastedContent)
+			const contentImgs = getContentImages(pastedContent)
 			const range = this.qeditor.getSelection(true)
 
 			// handle cut and paste
