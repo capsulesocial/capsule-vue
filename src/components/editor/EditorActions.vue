@@ -2,15 +2,15 @@
 	<div class="flex items-end">
 		<button
 			class="focus:outline-none hover:text-primary toggle flex items-end"
-			:class="showSocialShares ? 'text-primary' : ''"
+			:class="showActionButtons ? 'text-primary' : ''"
 			@click.stop="toggleDropdown"
 		>
 			<div class="text-gray3 hover:text-primary hover:fill-primary flex">
-				<PlusIcon :isActive="showSocialShares" style="transform: scale(1.2); margin-top: -1px" />
+				<PlusIcon :isActive="showActionButtons" style="transform: scale(1.2); margin-top: -1px" />
 			</div>
 		</button>
 		<div
-			v-show="showSocialShares"
+			v-show="showActionButtons"
 			class="bg-lightBG text-lightPrimaryText border-lightBorder modal-animation dropdownActionsOpen absolute z-10 flex flex-col rounded-lg border p-3 shadow-lg"
 			style="left: 50px; top: -12px"
 		>
@@ -28,7 +28,7 @@ import PlusIcon from '@/components/icons/Plus.vue'
 import ImageIcon from '@/components/icons/Image.vue'
 
 interface IData {
-	showSocialShares: boolean
+	showActionButtons: boolean
 }
 
 export default Vue.extend({
@@ -38,7 +38,7 @@ export default Vue.extend({
 	},
 	data(): IData {
 		return {
-			showSocialShares: false,
+			showActionButtons: false,
 		}
 	},
 	created() {
@@ -53,7 +53,7 @@ export default Vue.extend({
 					e.target.parentNode.classList === undefined ||
 					!e.target.parentNode.classList.contains(`toggle`)
 				) {
-					this.showSocialShares = false
+					this.showActionButtons = false
 				}
 			},
 			false,
@@ -61,7 +61,7 @@ export default Vue.extend({
 	},
 	methods: {
 		toggleDropdown() {
-			this.showSocialShares = !this.showSocialShares
+			this.showActionButtons = !this.showActionButtons
 		},
 	},
 })

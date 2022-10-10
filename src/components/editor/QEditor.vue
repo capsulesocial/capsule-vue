@@ -6,7 +6,7 @@
 			class="editable focus:outline-none content max-w-none p-2 dark:placeholder-gray2 dark:text-darkPrimaryText w-full"
 			v-html="sanitize(initialContent)"
 		></div>
-		<AddContent
+		<EditorActions
 			v-show="toggleAddContent"
 			class="absolute modal-animation"
 			:style="`top:` + this.addContentPosTop + `px;` + `left:` + this.addContentPosLeft + `px`"
@@ -30,13 +30,13 @@ import type { PropType } from 'vue'
 import QuillMarkdown from 'quilljs-markdown'
 import hljs from 'highlight.js'
 import turndownService from './TurndownService'
+import EditorActions from './EditorActions.vue'
 import {
 	createEditorImageSet,
 	counterModuleFactory,
 	ImageBlotFactory,
 	EditorImages,
 } from '@/pages/post/quillExtensions'
-import AddContent from '@/components/post/EditorActions.vue'
 
 interface IData {
 	toggleAddContent: boolean
@@ -73,7 +73,7 @@ const options = {
 }
 
 export default Vue.extend({
-	components: { AddContent },
+	components: { EditorActions },
 	props: {
 		initialContent: {
 			type: String,
