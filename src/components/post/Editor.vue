@@ -237,8 +237,8 @@ export default Vue.extend({
 				}
 			}
 		},
-		handleEditorError(error: string) {
-			this.$toastError(error)
+		handleEditorError(error: unknown) {
+			this.$handleError(error)
 		},
 		editorHtml() {
 			const editor = this.$refs.editor as any

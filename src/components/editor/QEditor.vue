@@ -118,6 +118,49 @@ export default Vue.extend({
 		this.setupEditor()
 	},
 	methods: {
+		getContentImages(content: string) {
+			const domParser = new DOMParser()
+			const htmlDoc = domParser.parseFromString(content, `text/html`)
+
+			return htmlDoc.getElementsByTagName(`img`)
+		},
+		getBlobExtension(blob: Blob) {
+			switch (blob.type) {
+				case `image/png`:
+					return `.png`
+				case `image/jpeg`:
+					return `.jpeg`
+				case `image/jpg`:
+					return `.jpg`
+				case `image/avif`:
+					return `.avif`
+				case `image/webp`:
+					return `.webp`
+				default:
+					return null
+			}
+		},
+		async urlToFile(url: string): Promise<{ file: File } | { error: string }> {
+			try {
+				const response = await fetch(url, { mode: `cors` })
+				if (!response.ok) {
+					return { error: `Could not fetch image` }
+				}
+				const blob = await response.blob()
+				const blobExtension = this.getBlobExtension(blob)
+				if (!blobExtension) {
+					return { error: `Invalid image type` }
+				}
+				const file = new File([blob], `image${Date.now()}${blobExtension}`, { type: blob.type })
+				return { file }
+			} catch (error: any) {
+				this.$emit(`onError`, error)
+				return { error: error.message }
+			}
+		},
+		isError(obj: Record<string, unknown>): obj is { error: string } {
+			return `error` in obj
+		},
 		sanitize(html: string): string {
 			return DOMPurify.sanitize(html, {
 				ALLOWED_TAGS: this.allowedTags,
@@ -256,15 +299,15 @@ export default Vue.extend({
 			const contentImgs = content.getElementsByTagName(`img`)
 			if (contentImgs.length > this.maxPostImages) {
 				this.waitingImage = false
-				this.$emit(`onError`, `Cannot add more than ${this.maxPostImages} images in a post`)
+				this.$emit(`onError`, new Error(`Cannot add more than ${this.maxPostImages} images in a post`))
 				return null
 			}
 			for (const img of contentImgs) {
 				this.waitingImage = true
 				this.toggleAddContent = false
-				const f = await this.$urlToFile(img.src)
-				if (this.$isError(f)) {
-					this.$emit(`onError`, f.error)
+				const f = await this.urlToFile(img.src)
+				if (this.isError(f)) {
+					this.$emit(`onError`, new Error(f.error))
 					img.remove()
 					continue
 				}
@@ -272,8 +315,8 @@ export default Vue.extend({
 					const res = await this.imageUploader(f.file, this.encryptedContent)
 					const { cid, url, image, imageName } = res
 					const updatedPostImages = this.updatePostImages(cid, image, imageName)
-					if (this.$isError(updatedPostImages)) {
-						this.$emit(`onError`, updatedPostImages.error)
+					if (this.isError(updatedPostImages)) {
+						this.$emit(`onError`, new Error(updatedPostImages.error))
 						return null
 					}
 					const newImg = document.createElement(`img`)
@@ -282,7 +325,7 @@ export default Vue.extend({
 					img.replaceWith(newImg)
 				} catch (err: any) {
 					this.waitingImage = false
-					this.$emit(`onError`, err.message)
+					this.$emit(`onError`, err)
 					return null
 				}
 			}
@@ -338,12 +381,12 @@ export default Vue.extend({
 					this.calculateAddPos(contentLength)
 				}, 0)
 			} catch (error: any) {
-				this.$emit(`onError`, error.message)
+				this.$emit(`onError`, error)
 			}
 		},
 		async handleFile(file: File) {
 			if (this.validImageTypes && !this.validImageTypes.includes(file.type)) {
-				this.$emit(`onError`, `image of type ${file.type} is invalid`)
+				this.$emit(`onError`, new Error(`image of type ${file.type} is invalid`))
 				return
 			}
 			try {
@@ -352,8 +395,8 @@ export default Vue.extend({
 				const res = await this.imageUploader(file, this.encryptedContent)
 				const { cid, url, image, imageName } = res
 				const updatedPostImages = this.updatePostImages(cid, image, imageName)
-				if (this.$isError(updatedPostImages)) {
-					this.$emit(`onError`, updatedPostImages.error)
+				if (this.isError(updatedPostImages)) {
+					this.$emit(`onError`, new Error(updatedPostImages.error))
 					this.waitingImage = false
 					return
 				}
@@ -415,7 +458,7 @@ export default Vue.extend({
 			e.preventDefault()
 
 			if (!this.qeditor) {
-				this.$emit(`onError`, `Something went wrong while pasting the content`)
+				this.$emit(`onError`, new Error(`Something went wrong while pasting the content`))
 				return
 			}
 			if (!e.clipboardData) {
@@ -426,7 +469,7 @@ export default Vue.extend({
 			const pastedContent = this.sanitize(clipboard.getData(`text/html`))
 			const pastedText = this.sanitize(clipboard.getData(`text/plain`))
 			const pastedFile = items.length > 0 ? items[0].getAsFile() : null
-			const contentImgs = this.$getContentImages(pastedContent)
+			const contentImgs = this.getContentImages(pastedContent)
 			const range = this.qeditor.getSelection(true)
 
 			// handle cut and paste

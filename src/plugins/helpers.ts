@@ -1,13 +1,10 @@
 import DOMPurify from 'dompurify'
 import { AxiosError } from 'axios'
 import type { Plugin } from '@nuxt/types'
-import { getBlobExtension } from '@/backend/utilities/helpers'
 
 type dateString = (date: Date, hideYear?: boolean, preformattedDate?: string | null, onlyDate?: boolean) => string
 type dateFormat = (input: string | Date | number, dateOnly?: boolean) => string
 type isErrorFormat = (obj: Record<string, unknown>) => obj is { error: string }
-type contentImgs = (content: string) => HTMLCollectionOf<HTMLImageElement>
-type urlToFileFormat = (url: string) => Promise<{ file: File } | { error: string }>
 type handleErrorFormat = (error: unknown) => void
 
 // eslint-disable-next-line quotes
@@ -16,8 +13,6 @@ declare module 'vue/types/vue' {
 		$getFormat: dateString
 		$formatDate: dateFormat
 		$isError: isErrorFormat
-		$getContentImages: contentImgs
-		$urlToFile: urlToFileFormat
 		$handleError: handleErrorFormat
 	}
 }
@@ -135,31 +130,6 @@ const isError = (obj: Record<string, unknown>) => {
 	return `error` in obj
 }
 
-const getContentImages = (content: string) => {
-	const domParser = new DOMParser()
-	const htmlDoc = domParser.parseFromString(content, `text/html`)
-
-	return htmlDoc.getElementsByTagName(`img`)
-}
-
-const urlToFile = async (url: string) => {
-	try {
-		const response = await fetch(url, { mode: `cors` })
-		if (!response.ok) {
-			return { error: `Could not fetch image` }
-		}
-		const blob = await response.blob()
-		const blobExtension = getBlobExtension(blob)
-		if (!blobExtension) {
-			return { error: `Invalid image type` }
-		}
-		const file = new File([blob], `image${Date.now()}${blobExtension}`, { type: blob.type })
-		return { file }
-	} catch (error: any) {
-		return { error: error.message }
-	}
-}
-
 const helperPlugin: Plugin = (context, inject) => {
 	const handleError = (err: unknown) => {
 		if (err instanceof AxiosError) {
@@ -183,8 +153,6 @@ const helperPlugin: Plugin = (context, inject) => {
 	inject(`getFormat`, getFormat)
 	inject(`formatDate`, formatDate)
 	inject(`isError`, isError)
-	inject(`getContentImages`, getContentImages)
-	inject(`urlToFile`, urlToFile)
 	inject(`handleError`, handleError)
 }
 
