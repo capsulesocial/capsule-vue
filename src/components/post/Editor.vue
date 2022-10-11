@@ -208,11 +208,15 @@ export default Vue.extend({
 			const i: number = this.$store.state.draft.activeIndex
 			this.$store.commit(`draft/deleteDraft`, i)
 		}
+		allPostImages.clear()
 	},
 	methods: {
 		uploadPhoto,
 		editorImageUpdated(updates: any) {
 			this.postImages = updates.editorImages
+			this.postImages.forEach((value, key) => {
+				allPostImages.set(key, value)
+			})
 			this.updateDraftPostImages()
 			if (updates.newImage) {
 				const { cid, image, imageName } = updates.newImage
