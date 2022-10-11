@@ -173,6 +173,8 @@ turndownService.addRule(`ipfsimage`, ipfsImageRule)
 turndownService.addRule(`listRule`, listRule)
 turndownService.use(strikethrough)
 
+const allPostImages = new Map()
+
 export default Vue.extend({
 	components: {
 		XIcon,
@@ -232,6 +234,7 @@ export default Vue.extend({
 			if (`imageCID` in pI) {
 				const item = encrypted ? { key: pI.key, counter: pI.counter } : {}
 				this.postImages.set(pI.imageCID, item)
+				allPostImages.set(pI.imageCID, item)
 			}
 		})
 	},
@@ -387,6 +390,7 @@ export default Vue.extend({
 				return { error: `Cannot add more than ${textLimits.post_images.max} images in a post` }
 			}
 			this.postImages.set(cid, encryptionData ?? {})
+			allPostImages.set(cid, encryptionData ?? {})
 			this.updateDraftPostImages()
 			await preUploadPhoto(cid, compressedImage, imageName, this.$store.state.session.id, this.encrypted)
 			return { success: true }
@@ -745,7 +749,7 @@ export default Vue.extend({
 			if (this.hasPosted) {
 				return false
 			}
-			const postImages = Array.from(createPostImagesSet(clean, this.postImages).keys())
+			const postImages = Array.from(createPostImagesSet(clean, allPostImages).keys())
 			if (postImages.length > textLimits.post_images.max) {
 				this.$toastError(`Cannot add more than ${textLimits.post_images.max} images in a post`)
 				return false
@@ -781,6 +785,8 @@ export default Vue.extend({
 				try {
 					const tiers: string[] = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].accessTiers
 					const cid: string = await sendEncryptedPost(p, tiers, this.postImages)
+					this.postImages.clear()
+					allPostImages.clear()
 					this.$router.push(`/post/` + cid)
 				} catch (err: unknown) {
 					this.$handleError(err)
@@ -803,6 +809,8 @@ export default Vue.extend({
 					this.title = ``
 					this.subtitle = ``
 					this.input = ``
+					this.postImages.clear()
+					allPostImages.clear()
 					this.$store.commit(`draft/reset`)
 					this.$store.commit(`settings/setRecentlyPosted`, true)
 					this.$router.push(`/post/` + cid)
