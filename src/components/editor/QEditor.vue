@@ -31,13 +31,16 @@ import QuillMarkdown from 'quilljs-markdown'
 import hljs from 'highlight.js'
 import turndownService from './TurndownService'
 import EditorActions from './EditorActions.vue'
-import { getBlobExtension, getContentImages, InsertContent, isError } from './helpers'
 import {
+	getBlobExtension,
+	getContentImages,
+	InsertContent,
+	isError,
 	createEditorImageSet,
 	counterModuleFactory,
 	ImageBlotFactory,
 	EditorImages,
-} from '@/pages/post/quillExtensions'
+} from './helpers'
 
 interface IData {
 	toggleAddContent: boolean

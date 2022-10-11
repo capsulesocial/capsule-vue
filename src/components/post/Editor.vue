@@ -79,8 +79,9 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import TurndownService from '../editor/TurndownService'
+import TurndownService from '@/components/editor/TurndownService'
 import Qeditor from '@/components/editor/QEditor.vue'
+import { createEditorImageSet } from '@/components/editor/helpers'
 import XIcon from '@/components/icons/X.vue'
 import PencilIcon from '@/components/icons/Pencil.vue'
 import {
@@ -97,7 +98,6 @@ import { preUploadPhoto, uploadPhoto } from '@/backend/photos'
 import { validMimeTypes } from '@/backend/utilities/helpers'
 import textLimits from '@/backend/utilities/text_limits'
 import { BASE_ALLOWED_TAGS } from '@/plugins/helpers'
-import { createEditorImageSet } from '@/pages/post/quillExtensions'
 
 interface IData {
 	title: string
