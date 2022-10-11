@@ -269,7 +269,7 @@ export default Vue.extend({
 			if (this.editorImages.has(cid)) {
 				return { success: true }
 			}
-			if (this.editorImages.size === this.maxPostImages) {
+			if (this.editorImages.size > this.maxPostImages) {
 				this.waitingImage = false
 				return { error: `Cannot add more than ${this.maxPostImages} images in a post` }
 			}
