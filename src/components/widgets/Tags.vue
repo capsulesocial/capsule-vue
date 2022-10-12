@@ -1,12 +1,12 @@
 <template>
-	<article class="w-full">
+	<article class="w-full h-56">
 		<div class="flex items-center relative modal-animation lg:pr-6">
 			<h3 class="text-lightPrimaryText dark:text-darkPrimaryText text-base font-semibold mb-2 px-6 pt-4">
 				Trending topics
 			</h3>
 			<button
 				id="filter"
-				class="toggle focus:outline-none lg:ml-4 flex items-center justify-between rounded-lg border dark:border-gray3 text-sm shadow-lg dark:text-gray3"
+				class="toggle focus:outline-none lg:ml-4 flex items-center justify-between rounded-lg border dark:border-gray3 text-sm shadow-lg dark:text-gray3 mt-2"
 				@click.stop="showAlgorithmDropdown = !showAlgorithmDropdown"
 			>
 				<span class="toggle font-bold capitalize pl-4">
