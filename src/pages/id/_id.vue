@@ -461,7 +461,7 @@ export default Vue.extend({
 				container.addEventListener(`scroll`, this.handleScrollHeader)
 			}
 			// handle long bios
-			if (this.visitProfile && this.visitProfile.bio.length > 200) {
+			if (this.visitProfile && this.visitProfile.bio.trim().length > 200) {
 				this.longBio = true
 			}
 		},
