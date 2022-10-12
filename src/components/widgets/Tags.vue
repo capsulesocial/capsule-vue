@@ -57,23 +57,15 @@ import TagCard from '@/components/Tag.vue'
 import ChevronUp from '@/components/icons/ChevronUp.vue'
 import ChevronDown from '@/components/icons/ChevronDown.vue'
 
-import { getTags } from '@/backend/post'
-
-enum Timeframe {
-	// DAY = `1`,
-	WEEK = `7`,
-	MONTH = `30`,
-	YEAR = `365`,
-	ALL_TIME = `ALL_TIME`,
-}
+import { getTags, TagTimeframe } from '@/backend/post'
 
 interface IData {
 	tags: string[]
 	tagFilter: string
 	showFilter: boolean
 	showAlgorithmDropdown: boolean
-	timeFrames: [Timeframe.WEEK, Timeframe.MONTH, Timeframe.YEAR, Timeframe.ALL_TIME]
-	selectedTimeframe: Timeframe
+	timeFrames: [TagTimeframe.WEEK, TagTimeframe.MONTH, TagTimeframe.YEAR, TagTimeframe.ALL_TIME]
+	selectedTimeframe: TagTimeframe
 	readableTime: string
 }
 export default Vue.extend({
@@ -88,9 +80,9 @@ export default Vue.extend({
 			tagFilter: `Today`,
 			showFilter: false,
 			showAlgorithmDropdown: false,
-			timeFrames: [Timeframe.WEEK, Timeframe.MONTH, Timeframe.YEAR, Timeframe.ALL_TIME],
-			selectedTimeframe: Timeframe.MONTH,
-			readableTime: Timeframe.MONTH,
+			timeFrames: [TagTimeframe.WEEK, TagTimeframe.MONTH, TagTimeframe.YEAR, TagTimeframe.ALL_TIME],
+			selectedTimeframe: TagTimeframe.WEEK,
+			readableTime: TagTimeframe.WEEK,
 		}
 	},
 	async created() {
@@ -106,14 +98,13 @@ export default Vue.extend({
 		checkRoute(): boolean {
 			return this.$route.name?.substr(0, 8) === `discover`
 		},
-		handleTagFeed(timeframe?: Timeframe) {
+		async handleTagFeed(timeframe?: TagTimeframe) {
 			if (!timeframe) {
 				return
 			}
 			this.readableTime = timeframe
 			this.selectedTimeframe = timeframe
-			// todo: fetch trending tags and update here
-			// this.tags=
+			this.tags = await getTags(timeframe)
 		},
 		handleDropdown() {
 			window.addEventListener(`click`, (event: Event): void => {
@@ -126,17 +117,17 @@ export default Vue.extend({
 				this.showAlgorithmDropdown = false
 			})
 		},
-		readableTimeframe(timeframe: Timeframe) {
+		readableTimeframe(timeframe: TagTimeframe) {
 			switch (timeframe) {
 				// case Timeframe.DAY:
 				// 	return `Today`;
-				case Timeframe.WEEK:
+				case TagTimeframe.WEEK:
 					return `This week`
-				case Timeframe.MONTH:
+				case TagTimeframe.MONTH:
 					return `This month`
-				case Timeframe.YEAR:
+				case TagTimeframe.YEAR:
 					return `This year`
-				case Timeframe.ALL_TIME:
+				case TagTimeframe.ALL_TIME:
 					return `All time`
 				default:
 					return `All time`

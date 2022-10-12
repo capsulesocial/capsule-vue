@@ -12,6 +12,14 @@ export interface Tag {
 	name: string
 }
 
+export enum TagTimeframe {
+	// DAY = `1`,
+	WEEK = `7`,
+	MONTH = `30`,
+	YEAR = `365`,
+	ALL_TIME = `ALL_TIME`,
+}
+
 export interface Post {
 	authorID: string
 	title: string
@@ -269,8 +277,12 @@ export async function getPosts(
 	return res.data.data
 }
 
-export async function getTags(): Promise<string[]> {
-	const res = await axios.get(`${nodeUrl()}/content/tags`)
+export async function getTags(timeframe = TagTimeframe.WEEK): Promise<string[]> {
+	const url =
+		timeframe === TagTimeframe.ALL_TIME
+			? `${nodeUrl()}/content/tags`
+			: `${nodeUrl()}/content/tags?timeframe=${timeframe}`
+	const res = await axios.get(url)
 	return res.data.data
 }
 
