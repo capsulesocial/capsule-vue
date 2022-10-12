@@ -61,12 +61,9 @@ import { getTags, TagTimeframe } from '@/backend/post'
 
 interface IData {
 	tags: string[]
-	tagFilter: string
-	showFilter: boolean
 	showAlgorithmDropdown: boolean
 	timeFrames: [TagTimeframe.WEEK, TagTimeframe.MONTH, TagTimeframe.YEAR, TagTimeframe.ALL_TIME]
 	selectedTimeframe: TagTimeframe
-	readableTime: string
 }
 export default Vue.extend({
 	components: {
@@ -77,17 +74,13 @@ export default Vue.extend({
 	data(): IData {
 		return {
 			tags: [],
-			tagFilter: `Today`,
-			showFilter: false,
 			showAlgorithmDropdown: false,
 			timeFrames: [TagTimeframe.WEEK, TagTimeframe.MONTH, TagTimeframe.YEAR, TagTimeframe.ALL_TIME],
 			selectedTimeframe: TagTimeframe.WEEK,
-			readableTime: TagTimeframe.WEEK,
 		}
 	},
 	async created() {
-		const content = await getTags()
-		this.tags = content.slice(0, 14)
+		this.tags = await getTags()
 		// Tag dropdown event listener
 		window.addEventListener(`click`, this.handleDropdown, false)
 	},
@@ -102,7 +95,6 @@ export default Vue.extend({
 			if (!timeframe) {
 				return
 			}
-			this.readableTime = timeframe
 			this.selectedTimeframe = timeframe
 			this.tags = await getTags(timeframe)
 		},
