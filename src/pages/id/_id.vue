@@ -179,7 +179,7 @@
 				class="header-profile px-1 pt-4 dark:text-darkPrimaryText"
 				:style="expandBio ? `` : `max-height: 5.5rem; overflow: hidden`"
 			>
-				<p>{{ visitProfile.bio.slice(0, 200) + (visitProfile.bio.length > 200 ? '...' : '') }}<br /></p>
+				<p>{{ visitProfile.bio.trim().slice(0, 200) + (visitProfile.bio.trim().length > 200 ? '...' : '') }}<br /></p>
 			</div>
 			<button
 				v-show="longBio"
@@ -461,7 +461,7 @@ export default Vue.extend({
 				container.addEventListener(`scroll`, this.handleScrollHeader)
 			}
 			// handle long bios
-			if (this.visitProfile && this.visitProfile.bio.length > 150) {
+			if (this.visitProfile && this.visitProfile.bio.length > 200) {
 				this.longBio = true
 			}
 		},
