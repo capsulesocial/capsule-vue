@@ -749,8 +749,8 @@ export default Vue.extend({
 			if (this.hasPosted) {
 				return false
 			}
-			const postImages = Array.from(createPostImagesSet(clean, allPostImages).keys())
-			if (postImages.length > textLimits.post_images.max) {
+			const postImages = createPostImagesSet(clean, allPostImages)
+			if (postImages.size > textLimits.post_images.max) {
 				this.$toastError(`Cannot add more than ${textLimits.post_images.max} images in a post`)
 				return false
 			}
@@ -766,10 +766,10 @@ export default Vue.extend({
 			tags: Tag[],
 			featuredPhotoCID?: string | null,
 			featuredPhotoCaption?: string | null,
-			postImages?: Array<string>,
+			postImages?: Map<string, IKeyData | {}>,
 		): Promise<void> {
 			const isEncrypted = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].encrypted
-			// let p: IEncryptedPost | IRegularPost
+			const images = postImages ? Array.from(postImages.keys()) : undefined
 			if (isEncrypted) {
 				const p: IEncryptedPost = createEncryptedPost(
 					this.title,
@@ -780,11 +780,11 @@ export default Vue.extend({
 					this.$store.state.session.id,
 					featuredPhotoCID,
 					featuredPhotoCaption,
-					postImages,
+					images,
 				)
 				try {
 					const tiers: string[] = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex].accessTiers
-					const cid: string = await sendEncryptedPost(p, tiers, this.postImages)
+					const cid: string = await sendEncryptedPost(p, tiers, postImages)
 					this.postImages.clear()
 					allPostImages.clear()
 					this.$router.push(`/post/` + cid)
@@ -801,7 +801,7 @@ export default Vue.extend({
 					this.$store.state.session.id,
 					featuredPhotoCID,
 					featuredPhotoCaption,
-					postImages,
+					images,
 				)
 				try {
 					this.hasPosted = true
