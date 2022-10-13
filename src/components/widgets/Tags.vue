@@ -1,6 +1,6 @@
 <template>
-	<article class="w-full h-56">
-		<div class="flex items-center relative modal-animation lg:pr-6">
+	<div class="w-full tag">
+		<div class="flex justify-between items-center relative modal-animation lg:pr-6">
 			<h3 class="text-lightPrimaryText dark:text-darkPrimaryText text-base font-semibold mb-2 px-6 pt-4">
 				Trending topics
 			</h3>
@@ -17,8 +17,8 @@
 			</button>
 			<div
 				v-if="showAlgorithmDropdown"
-				class="hotzone border-lightBorder modal-animation absolute top-0 right-20 z-20 rounded-lg border bg-lightBG dark:bg-darkBG px-4 py-3 shadow-lg mr-0 lg:mr-6"
-				style="margin-top: 40px"
+				class="hotzone border-lightBorder modal-animation absolute top-0 right-0 z-20 rounded-lg border bg-lightBG dark:bg-darkBG px-4 py-3 shadow-lg mr-0 lg:mr-6"
+				style="margin-top: 42px"
 			>
 				<div
 					v-for="timeframe in timeFrames"
@@ -48,7 +48,7 @@
 			loading="lazy"
 			:src="$colorMode.dark ? `/images/dark/discover.webp` : `/images/light/discover.webp`"
 		/>
-	</article>
+	</div>
 </template>
 
 <script lang="ts">
@@ -128,3 +128,8 @@ export default Vue.extend({
 	},
 })
 </script>
+<style>
+.tag {
+	min-height: 200px;
+}
+</style>
