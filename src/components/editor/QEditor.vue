@@ -303,8 +303,13 @@ export default Vue.extend({
 				}
 				try {
 					const res = await this.imageUploader(f.file, this.encryptedContent)
-					const { cid, url, image, imageName } = res
-					const updatedPostImages = this.updatePostImages(cid, image, imageName)
+					const { cid, url, image, imageName, key, counter } = res
+					const updatedPostImages = this.updatePostImages(
+						cid,
+						image,
+						imageName,
+						this.encryptedContent ? { key, counter } : undefined,
+					)
 					if (isError(updatedPostImages)) {
 						this.$emit(`onError`, new Error(updatedPostImages.error))
 						return null
