@@ -119,7 +119,7 @@ interface IData {
 	BASE_ALLOWED_TAGS: string[]
 }
 
-const allPostImages = new Map()
+let allPostImages = new Map()
 
 export default Vue.extend({
 	components: {
@@ -167,7 +167,14 @@ export default Vue.extend({
 		},
 	},
 	created() {
-		const { postImages, encrypted } = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex]
+		const {
+			postImages,
+			encrypted,
+			allPostImages: images,
+		} = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex]
+		if (images) {
+			allPostImages = images
+		}
 		if (!Array.isArray(postImages)) {
 			return
 		}
@@ -180,7 +187,6 @@ export default Vue.extend({
 			if (`imageCID` in pI) {
 				const item = encrypted ? { key: pI.key, counter: pI.counter } : {}
 				this.postImages.set(pI.imageCID, item)
-				allPostImages.set(pI.imageCID, item)
 			}
 		})
 	},
@@ -265,6 +271,7 @@ export default Vue.extend({
 					return { imageCID: k }
 				}),
 			)
+			this.$store.commit(`draft/updateAllPostImages`, allPostImages)
 		},
 		doSave() {
 			const titleInput = this.$refs.title as HTMLInputElement

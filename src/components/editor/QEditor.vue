@@ -263,7 +263,7 @@ export default Vue.extend({
 			cid: string,
 			image: Blob,
 			imageName: string,
-			encryptionData?: { key: string; counter: string },
+			encryptionData: { key: string; counter: string } | {},
 		): { error: string } | { success: boolean } {
 			if (!this.editorImages) {
 				return { error: `no images in the editor` }
@@ -276,7 +276,7 @@ export default Vue.extend({
 				this.waitingImage = false
 				return { error: `Cannot add more than ${this.maxPostImages} images in a post` }
 			}
-			this.editorImages.set(cid, encryptionData ?? {})
+			this.editorImages.set(cid, encryptionData)
 			this.$emit(`editorImageUpdates`, {
 				editorImages: this.editorImages,
 				newImage: { cid, image, imageName },
@@ -308,7 +308,7 @@ export default Vue.extend({
 						cid,
 						image,
 						imageName,
-						this.encryptedContent ? { key, counter } : undefined,
+						this.encryptedContent ? { key, counter } : {},
 					)
 					if (isError(updatedPostImages)) {
 						this.$emit(`onError`, new Error(updatedPostImages.error))
@@ -379,8 +379,13 @@ export default Vue.extend({
 				this.waitingImage = true
 				this.toggleAddContent = false
 				const res = await this.imageUploader(file, this.encryptedContent)
-				const { cid, url, image, imageName } = res
-				const updatedPostImages = this.updatePostImages(cid, image, imageName)
+				const { cid, url, image, imageName, key, counter } = res
+				const updatedPostImages = this.updatePostImages(
+					cid,
+					image,
+					imageName,
+					this.encryptedContent ? { key, counter } : {},
+				)
 				if (isError(updatedPostImages)) {
 					this.$emit(`onError`, new Error(updatedPostImages.error))
 					this.waitingImage = false
