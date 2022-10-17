@@ -24,7 +24,7 @@
 							ref="editor"
 							style="overflow-y: auto; overflow-x: hidden"
 							class="lg:w-7.5 min-h-61 h-61 xl:min-h-80 xl:h-80 bg-lightBG dark:bg-darkBGStop border-lightBorder modal-animation fixed z-10 rounded-t-lg border p-8 shadow-lg"
-							@update="updateWordCount"
+							@updateWordCount="updateWordCount"
 							@isWriting="hideDraftButton"
 						/>
 						<div
@@ -163,7 +163,8 @@ export default Vue.extend({
 			this.$refs.editor.checkPost()
 		},
 		updateWordCount(num: number) {
-			this.wordCount = num
+			this.wordCount = num - 2
+			this.$emit(`updateWordCount`, this.wordCount)
 		},
 		hideDraftButton(value: boolean) {
 			const draftButton = document.getElementById(`draftButton`)
@@ -197,7 +198,7 @@ export default Vue.extend({
 		togglePreview() {
 			const validPost = this.$refs.editor.checkPost(true)
 			if (validPost) {
-				this.previewContent = this.$refs.editor.getInputHTML()
+				this.previewContent = this.$refs.editor.editorHtml()
 				this.showPreview = !this.showPreview
 			}
 		},

@@ -1,7 +1,36 @@
 import type { RangeStatic, Quill } from 'quill'
-import TurndownService from 'turndown'
 
-// Quill
+export type InsertContent = string | { cid: string; url: string | ArrayBuffer }
+export type EditorImages = Map<string, { key: string; counter: string } | {}>
+
+export function getContentImages(content: string) {
+	const domParser = new DOMParser()
+	const htmlDoc = domParser.parseFromString(content, `text/html`)
+
+	return htmlDoc.getElementsByTagName(`img`)
+}
+
+export function getBlobExtension(blob: Blob) {
+	switch (blob.type) {
+		case `image/png`:
+			return `.png`
+		case `image/jpeg`:
+			return `.jpeg`
+		case `image/jpg`:
+			return `.jpg`
+		case `image/avif`:
+			return `.avif`
+		case `image/webp`:
+			return `.webp`
+		default:
+			return null
+	}
+}
+
+export function isError(obj: Record<string, unknown>): obj is { error: string } {
+	return `error` in obj
+}
+
 export function counterModuleFactory(
 	QuillClass: typeof Quill,
 	onTextChange: () => void,
@@ -41,44 +70,11 @@ export function ImageBlotFactory(QuillClass: typeof Quill) {
 	}
 }
 
-// Turndown
-
-export const preRule: TurndownService.Rule = {
-	filter: [`pre`],
-	replacement: (_, node) => {
-		// eslint-disable-next-line quotes
-		return '```\n' + node.textContent + '```'
-	},
-}
-
-export const ipfsImageRule: TurndownService.Rule = {
-	filter: [`img`],
-	replacement: (_, node) => {
-		if (`getAttribute` in node) {
-			return `<ipfsimage alt="${node.getAttribute(`alt`)}" cid="${node.getAttribute(`alt`)}"></ipfsimage>`
-		}
-
-		throw new Error(`getAttributes does not exist on node`)
-	},
-}
-
-export const listRule: TurndownService.Rule = {
-	filter: [`ul`, `ol`, `li`],
-	replacement: (_, node) => {
-		if (`outerHTML` in node) {
-			return node.outerHTML
-		}
-		throw new Error(`outerHTML does not exist on node`)
-	},
-}
-
-// Misc
-
 const imgRegexp = (cid: string) =>
 	new RegExp(`<ipfsimage ((alt="${cid}" cid="${cid}")|(cid="${cid}" alt="${cid}"))></ipfsimage>`, `g`)
 
-export function createPostImagesSet(content: string, uploadedImages: Map<string, { key?: string; counter?: string }>) {
-	const usedImages: Map<string, { key?: string; counter?: string }> = new Map()
+export function createEditorImageSet(content: string, uploadedImages: EditorImages) {
+	const usedImages: EditorImages = new Map()
 	uploadedImages.forEach((val, cid) => {
 		if (!content.match(imgRegexp(cid))) {
 			return

@@ -48,28 +48,21 @@
 				</article>
 
 				<!-- WYSIWYG -->
-				<input v-show="false" id="getFile" accept="image/png, image/jpeg" type="file" @change="handleImage($event)" />
-				<div class="relative flex justify-center">
-					<div
-						id="editor"
-						ref="editor"
-						class="editable focus:outline-none content max-w-none p-2 dark:placeholder-gray2 dark:text-darkPrimaryText w-full"
-						v-html="sanitize($store.state.draft.drafts[$store.state.draft.activeIndex].content)"
-					></div>
-					<AddContent
-						v-show="toggleAddContent"
-						class="absolute modal-animation"
-						:style="`top:` + this.addContentPosTop + `px;` + `left:` + this.addContentPosLeft + `px`"
-						@image="actionsUpload"
-					/>
-					<div
-						v-if="waitingImage"
-						class="absolute w-11/12 h-44 bg-lightInput dark:bg-gray7 rounded-lg animate-pulse flex justify-center items-center"
-						:style="`top:` + this.addContentPosTop + `px`"
-					>
-						<p class="text-sm text-gray5 dark:text-gray3">Uploading image...</p>
-					</div>
-				</div>
+				<qeditor
+					ref="editor"
+					:initialContent="$store.state.draft.drafts[$store.state.draft.activeIndex].content"
+					:initialEditorImages="postImages"
+					:validImageTypes="validMimeTypes"
+					:imageUploader="uploadPhoto"
+					:isPrimaryWidget="this.$store.state.widgets.primary === `editor`"
+					:allowedTags="BASE_ALLOWED_TAGS"
+					:maxPostImages="10"
+					:encryptedContent="encrypted"
+					@editorImageUpdates="editorImageUpdated"
+					@updateWordCount="updateWordCount"
+					@isWriting="isWriting"
+					@onError="handleEditorError"
+				/>
 				<div
 					v-if="this.$store.state.widgets.primary === `editor` && this.$route.name === `home`"
 					id="metaButton"
@@ -86,23 +79,11 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import DOMPurify from 'dompurify'
-import Turndown from 'turndown'
-import { strikethrough } from 'turndown-plugin-gfm'
-import hljs from 'highlight.js'
-import type { RangeStatic, Quill } from 'quill'
-import QuillMarkdown from 'quilljs-markdown'
+import TurndownService from '@/components/editor/TurndownService'
+import Qeditor from '@/components/editor/QEditor.vue'
+import { createEditorImageSet } from '@/components/editor/helpers'
 import XIcon from '@/components/icons/X.vue'
 import PencilIcon from '@/components/icons/Pencil.vue'
-import AddContent from '@/components/post/EditorActions.vue'
-import {
-	preRule,
-	ipfsImageRule,
-	createPostImagesSet,
-	counterModuleFactory,
-	listRule,
-	ImageBlotFactory,
-} from '@/pages/post/quillExtensions'
 import {
 	createEncryptedPost,
 	createRegularPost,
@@ -122,8 +103,6 @@ interface IData {
 	title: string
 	subtitle: string
 	input: string
-	editor: Quill | null
-	qeditor: Quill | null
 	wordCount: number
 	titleError: string
 	subtitleError: string
@@ -136,55 +115,22 @@ interface IData {
 	addContentPosTop: number
 	addContentPosLeft: number
 	waitingImage: boolean
+	validMimeTypes: string[]
+	BASE_ALLOWED_TAGS: string[]
 }
 
-interface IImageData {
-	cid: string
-	url: string | ArrayBuffer
-}
-
-const toolbarOptions = [
-	[`bold`, `italic`, `underline`, `strike`],
-	[`blockquote`, `code-block`, `link`],
-	[{ header: 2 }],
-	[{ list: `ordered` }, { list: `bullet` }],
-]
-const options = {
-	placeholder: `Start typing here...`,
-	readOnly: false,
-	theme: `bubble`,
-	bounds: `#editor`,
-	scrollingContainer: `#editor`,
-	modules: {
-		syntax: {
-			highlight: (code: string) => hljs.highlightAuto(code).value,
-		},
-		counter: true,
-		toolbar: {
-			container: toolbarOptions,
-		},
-	},
-}
-
-const turndownService = new Turndown()
-turndownService.keep([`u`])
-turndownService.addRule(`codeblock`, preRule)
-turndownService.addRule(`ipfsimage`, ipfsImageRule)
-turndownService.addRule(`listRule`, listRule)
-turndownService.use(strikethrough)
-
-const allPostImages = new Map()
+let allPostImages = new Map()
 
 export default Vue.extend({
 	components: {
 		XIcon,
 		PencilIcon,
-		AddContent,
+		Qeditor,
 	},
 	data(): IData {
 		let input: string = ``
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		const { content, title, subtitle, postImages } = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex]
+		const { content, title, subtitle } = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex]
 		if (content !== ``) {
 			input = content
 		} else {
@@ -202,12 +148,12 @@ export default Vue.extend({
 			isX: false,
 			isCollapsed: false,
 			postImages: new Map(),
-			qeditor: null,
-			editor: null,
 			toggleAddContent: false,
 			addContentPosTop: 0,
 			addContentPosLeft: 0,
 			waitingImage: false,
+			validMimeTypes,
+			BASE_ALLOWED_TAGS,
 		}
 	},
 	computed: {
@@ -221,7 +167,14 @@ export default Vue.extend({
 		},
 	},
 	created() {
-		const { postImages, encrypted } = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex]
+		const {
+			postImages,
+			encrypted,
+			allPostImages: images,
+		} = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex]
+		if (images) {
+			allPostImages = images
+		}
 		if (!Array.isArray(postImages)) {
 			return
 		}
@@ -234,9 +187,19 @@ export default Vue.extend({
 			if (`imageCID` in pI) {
 				const item = encrypted ? { key: pI.key, counter: pI.counter } : {}
 				this.postImages.set(pI.imageCID, item)
-				allPostImages.set(pI.imageCID, item)
 			}
 		})
+	},
+	mounted() {
+		const titleInput = this.$refs.title as HTMLInputElement
+		const subtitleInput = this.$refs.subtitle as HTMLInputElement
+		const { title, subtitle } = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex]
+		titleInput.value = title
+		subtitleInput.value = subtitle
+		this.handleTitle(true)
+		this.updateTitle(false)
+		this.handleSubtitle(true)
+		this.updateSubtitle(false)
 	},
 	beforeDestroy() {
 		if (this.isX || this.$store.state.settings.recentlyPosted) {
@@ -244,116 +207,50 @@ export default Vue.extend({
 		}
 		const titleInput = this.$refs.title as HTMLInputElement
 		const subtitleInput = this.$refs.subtitle as HTMLInputElement
-		const input = this.getInputHTML()
+		const input = this.editorHtml()
 		if (input.length > 11 || titleInput.value.trim() !== `` || subtitleInput.value.trim() !== ``) {
 			this.doSave()
 		} else {
 			const i: number = this.$store.state.draft.activeIndex
 			this.$store.commit(`draft/deleteDraft`, i)
 		}
-	},
-	mounted() {
-		this.setupEditor()
+		allPostImages.clear()
 	},
 	methods: {
-		// Quilljs Editor init
-		async setupEditor() {
-			// Handle link validation
-			const { default: QuillClass } = await import(`quill`)
-			const Link = QuillClass.import(`formats/link`)
-			const builtInFunc = Link.sanitize
-			Link.sanitize = function customSanitizeLinkInput(linkValueInput: string) {
-				let val = linkValueInput
-				if (/^\w+:/.test(val)) {
-					// do nothing, since this implies user's already using a custom protocol
-				} else if (!/^https?:/.test(val)) {
-					val = `https://` + val
-				}
-				return builtInFunc.call(this, val) // retain the built-in logic
+		uploadPhoto,
+		editorImageUpdated(updates: any) {
+			this.postImages = updates.editorImages
+			this.postImages.forEach((value, key) => {
+				allPostImages.set(key, value)
+			})
+			this.updateDraftPostImages()
+			if (updates.newImage) {
+				const { cid, image, imageName } = updates.newImage
+				preUploadPhoto(cid, image, imageName, this.$store.state.session.id, this.encrypted)
 			}
+		},
+		isWriting(changed: boolean) {
+			this.$emit(`isWriting`, changed)
 			const metaButton = document.getElementById(`metaButton`)
-			// Handle updates to body
-			const onTextChange = (_delta?: any, oldDelta?: any, source?: string) => {
-				if (this.qeditor && source === `user`) {
-					const currentContent = this.qeditor.getContents()
-					const diff = currentContent.diff(oldDelta)
-					const imageInCurrentContent = currentContent.ops.find((op: any) => op.insert && op.insert.image)
-					const imageInDiff = diff.ops.find((op: any) => op.insert && op.insert.image)
-					if (imageInCurrentContent || imageInDiff) {
-						const clean = turndownService.turndown(this.getInputHTML())
-						this.postImages = createPostImagesSet(clean, this.postImages)
-						this.updateDraftPostImages()
-					}
-				}
-				this.$emit(`isWriting`, true)
-				if (metaButton) {
+			if (metaButton) {
+				if (changed) {
 					metaButton.classList.add(`hidemetaButton`)
-				}
-				this.isCollapsed = true
-				const text = this.getInputHTML().replace(/(<([^>]+)>)/gi, ` `)
-				const n = text.split(/\s+/).length
-				this.updateWordCount(n)
-			}
-			// Handles draft overlay
-			const onSelectionChange = (range: RangeStatic) => {
-				if (!range) {
-					this.$emit(`isWriting`, false)
-					if (metaButton) {
-						metaButton.classList.remove(`hidemetaButton`)
-					}
+					this.isCollapsed = true
+				} else {
+					metaButton.classList.remove(`hidemetaButton`)
 					this.isCollapsed = false
 				}
 			}
-			// Handles add content button
-			const onEditorChange = (eventName: string, ...args: any[]) => {
-				if (eventName === `selection-change`) {
-					if (!args[0]) {
-						this.toggleAddContent = false
-						return
-					}
-					this.calculateAddPos(args[0].index)
-				}
-			}
-
-			QuillClass.register(ImageBlotFactory(QuillClass), true)
-			QuillClass.register(
-				`modules/counter`,
-				counterModuleFactory(
-					QuillClass,
-					onTextChange.bind(this),
-					onSelectionChange.bind(this),
-					onEditorChange.bind(this),
-				),
-				true,
-			)
-			const editor = new QuillClass(`#editor`, options)
-			this.qeditor = editor
-			this.qeditor.root.addEventListener(`drop`, (ev: DragEvent) => {
-				this.handleDroppedContent(ev)
-			})
-			this.qeditor.root.addEventListener(`paste`, (ev: ClipboardEvent) => {
-				this.handlePastedContent(ev)
-			})
-			this.qeditor.focus()
-			// Set link placeholder
-			const qe: HTMLElement | null = document.querySelector(`.ql-tooltip-editor input`)
-			if (qe) {
-				qe.setAttribute(`data-link`, `https://capsule.social`)
-			}
-			this.editor = new QuillMarkdown(editor, {})
-			const titleInput = this.$refs.title as HTMLInputElement
-			const subtitleInput = this.$refs.subtitle as HTMLInputElement
-
-			const { title, subtitle } = this.$store.state.draft.drafts[this.$store.state.draft.activeIndex]
-			titleInput.value = title
-			subtitleInput.value = subtitle
-			this.handleTitle(true)
-			this.updateTitle(false)
-			this.handleSubtitle(true)
-			this.updateSubtitle(false)
 		},
-		actionsUpload() {
-			document.getElementById(`getFile`)?.click()
+		handleEditorError(error: unknown) {
+			this.$handleError(error)
+		},
+		editorHtml() {
+			const editor = this.$refs.editor as any
+			if (!editor) {
+				return ``
+			}
+			return editor.getInputHTML()
 		},
 		updateDraftPostImages() {
 			this.$store.commit(
@@ -374,259 +271,15 @@ export default Vue.extend({
 					return { imageCID: k }
 				}),
 			)
-		},
-		async updatePostImages(
-			cid: string,
-			compressedImage: Blob,
-			imageName: string,
-			encryptionData?: IKeyData,
-		): Promise<{ error: string } | { success: boolean }> {
-			// If we have already added this image in the past, we don't need to reupload it to the server
-			if (this.postImages.has(cid)) {
-				return { success: true }
-			}
-			if (this.postImages.size === textLimits.post_images.max) {
-				this.waitingImage = false
-				return { error: `Cannot add more than ${textLimits.post_images.max} images in a post` }
-			}
-			this.postImages.set(cid, encryptionData ?? {})
-			allPostImages.set(cid, encryptionData ?? {})
-			this.updateDraftPostImages()
-			await preUploadPhoto(cid, compressedImage, imageName, this.$store.state.session.id, this.encrypted)
-			return { success: true }
-		},
-		insertContent(content: string | IImageData | null, plainText = false) {
-			try {
-				if (!this.qeditor || !content) {
-					return
-				}
-				const range = this.qeditor.getSelection(true)
-				if (typeof content === `string`) {
-					if (plainText) {
-						this.qeditor.insertText(range.index, content, `user`)
-					} else {
-						this.qeditor.clipboard.dangerouslyPasteHTML(range.index, content, `user`)
-					}
-				} else {
-					const { cid, url } = content
-					this.qeditor.insertEmbed(range.index, `image`, { alt: cid.toString(), url }, `user`)
-				}
-				const contentLength = this.qeditor.getContents().length()
-				setTimeout(() => {
-					this.qeditor?.setSelection(contentLength, 0, `user`)
-					this.calculateAddPos(contentLength)
-				}, 0)
-			} catch (error: any) {
-				this.$toastError(error.message)
-			}
-		},
-		async handleDroppedContent(e: DragEvent) {
-			e.stopPropagation()
-			e.preventDefault()
-			if (!e.dataTransfer) {
-				return
-			}
-			const droppedHtml = this.sanitize(e.dataTransfer.getData(`text/html`))
-			const droppedText = this.sanitize(e.dataTransfer.getData(`text/plain`))
-			const { files } = e.dataTransfer
-			const file = files[0]
-
-			// handle dropped file
-			if (file) {
-				await this.handleFile(file)
-				return
-			}
-
-			if (!file && (droppedHtml || droppedHtml !== ``)) {
-				const content = await this.handleHtml(droppedHtml)
-				this.insertContent(content)
-				return
-			}
-
-			if (!file && !droppedHtml) {
-				this.insertContent(droppedText, true)
-			}
-		},
-		async handleCutPaste(range: RangeStatic, pastedText: string) {
-			const { default: QuillClass } = await import(`quill`)
-			const Delta = QuillClass.import(`delta`)
-			const delta = new Delta().compose(new Delta().retain(range.index + range.length).insert(pastedText))
-			this.qeditor?.updateContents(delta)
-			setTimeout(() => this.qeditor?.setSelection(range.index + pastedText.length, 0, `user`), 0)
-		},
-		async handleHtml(pastedContent: string) {
-			const domParser = new DOMParser()
-			const content = domParser.parseFromString(pastedContent, `text/html`)
-			const contentImgs = content.getElementsByTagName(`img`)
-			if (contentImgs.length > textLimits.post_images.max) {
-				this.waitingImage = false
-				this.$toastError(`Cannot add more than ${textLimits.post_images.max} images in a post`)
-				return null
-			}
-			for (const img of contentImgs) {
-				this.waitingImage = true
-				this.toggleAddContent = false
-				const f = await this.$urlToFile(img.src)
-				if (this.$isError(f)) {
-					this.$toastError(f.error)
-					img.remove()
-					continue
-				}
-				try {
-					const res = await uploadPhoto(f.file, this.encrypted)
-					const { cid, url, image, imageName } = res
-					const updatedPostImages = await this.updatePostImages(
-						cid,
-						image,
-						imageName,
-						this.encrypted ? { key: res.key, counter: res.counter } : undefined,
-					)
-					if (this.$isError(updatedPostImages)) {
-						this.$toastError(updatedPostImages.error)
-						return null
-					}
-					const newImg = document.createElement(`img`)
-					newImg.setAttribute(`src`, url.toString())
-					newImg.setAttribute(`alt`, cid)
-					img.replaceWith(newImg)
-				} catch (err: unknown) {
-					this.waitingImage = false
-					this.$handleError(err)
-					return null
-				}
-			}
-			this.waitingImage = false
-			return content.body.innerHTML
-		},
-		async handleFile(file: File) {
-			if (!validMimeTypes.includes(file.type)) {
-				this.$toastError(`image of type ${file.type} is invalid`)
-				return
-			}
-			try {
-				this.waitingImage = true
-				this.toggleAddContent = false
-				const res = await uploadPhoto(file, this.encrypted)
-				const { cid, url, image, imageName } = res
-				const updatedPostImages = await this.updatePostImages(
-					cid,
-					image,
-					imageName,
-					this.encrypted ? { key: res.key, counter: res.counter } : undefined,
-				)
-				if (this.$isError(updatedPostImages)) {
-					this.$toastError(updatedPostImages.error)
-					this.waitingImage = false
-					return
-				}
-				this.insertContent({ cid, url })
-				this.waitingImage = false
-			} catch (err: unknown) {
-				this.waitingImage = false
-				this.$handleError(err)
-			}
-		},
-		async handlePastedContent(e: ClipboardEvent) {
-			e.stopPropagation()
-			e.preventDefault()
-
-			if (!this.qeditor) {
-				this.$toastError(`Something went wrong while pasting the content`)
-				return
-			}
-			if (!e.clipboardData) {
-				return
-			}
-			const clipboard = e.clipboardData
-			const items = Array.from(clipboard.items)
-			const pastedContent = this.sanitize(clipboard.getData(`text/html`))
-			const pastedText = this.sanitize(clipboard.getData(`text/plain`))
-			const pastedFile = items.length > 0 ? items[0].getAsFile() : null
-			const contentImgs = this.$getContentImages(pastedContent)
-			const range = this.qeditor.getSelection(true)
-
-			// handle cut and paste
-			if (this.qeditor.getLength() !== range.index + 1 && contentImgs.length === 0 && !pastedFile) {
-				this.handleCutPaste(range, pastedText)
-				this.scrollToBottom(e)
-				return
-			}
-
-			// handle pasted content
-			if (pastedContent || pastedContent !== ``) {
-				const content = await this.handleHtml(pastedContent)
-				this.insertContent(content)
-				this.scrollToBottom(e)
-				return
-			}
-
-			// handle pasted file
-			if (pastedFile) {
-				await this.handleFile(pastedFile)
-				return
-			}
-			// handle if text only
-			if (!pastedFile && (!pastedContent || pastedContent === ``)) {
-				this.insertContent(pastedText, true)
-			}
-			this.scrollToBottom(e)
-		},
-		scrollToBottom(e: ClipboardEvent) {
-			const scrollContainer = this.$refs.scrollContainer as HTMLElement
-			if (e && e.target) {
-				const target = e.target as HTMLElement
-				if (target.outerHTML === `<br>`) {
-					scrollContainer.scrollTop = this.addContentPosTop
-					return
-				}
-
-				target.scrollIntoView()
-			}
-		},
-		async handleImage(e: Event) {
-			e.stopPropagation()
-			e.preventDefault()
-			const eventTarget = e.target
-			if (!eventTarget) {
-				return
-			}
-
-			const target = eventTarget as HTMLInputElement
-
-			const { files } = target
-			if (!files || files.length !== 1) {
-				return
-			}
-
-			await this.handleFile(files[0])
-			target.value = ``
-		},
-		calculateAddPos(index: number) {
-			if (!this.qeditor) {
-				return
-			}
-			const line = this.qeditor.getLine(index)
-			const pos = this.qeditor.getBounds(index)
-			if (line[1] === 0 && line[0].domNode.innerHTML === `<br>` && !this.waitingImage) {
-				if (index === 0) {
-					this.addContentPosTop = pos.top + 50
-					this.addContentPosLeft = pos.left
-				} else {
-					this.addContentPosTop = pos.top
-					this.addContentPosLeft = pos.left + 20
-				}
-				this.toggleAddContent = true
-			} else {
-				this.toggleAddContent = false
-			}
+			this.$store.commit(`draft/updateAllPostImages`, allPostImages)
 		},
 		doSave() {
 			const titleInput = this.$refs.title as HTMLInputElement
 			const titleInputValue = titleInput.value.trim()
 			const subtitleInput = this.$refs.subtitle as HTMLInputElement
 			const subtitleInputValue = subtitleInput.value.trim()
-			const input = this.getInputHTML()
-			this.$store.commit(`draft/updateContent`, input)
+			const editorHtml = this.editorHtml()
+			this.$store.commit(`draft/updateContent`, editorHtml)
 			this.$store.commit(`draft/setTimestamp`, new Date())
 			if (titleInputValue !== ``) {
 				this.$store.commit(`draft/updateTitle`, titleInputValue)
@@ -640,17 +293,17 @@ export default Vue.extend({
 			}
 		},
 		updateContent() {
-			const input = this.getInputHTML()
-			if (input !== ``) {
-				this.$store.commit(`draft/updateContent`, input)
+			const editorHtml = this.editorHtml()
+			if (editorHtml !== ``) {
+				this.$store.commit(`draft/updateContent`, editorHtml)
 			}
 		},
 		async saveContent(): Promise<void> {
 			this.isX = true
 			const titleInput = this.$refs.title as HTMLInputElement
 			const subtitleInput = this.$refs.subtitle as HTMLInputElement
-			const input = this.getInputHTML()
-			if (input.length > 11 || titleInput.value.trim() !== `` || subtitleInput.value.trim() !== ``) {
+			const editorHtml = this.editorHtml()
+			if (editorHtml.length > 11 || titleInput.value.trim() !== `` || subtitleInput.value.trim() !== ``) {
 				this.isSaving = `true`
 				this.doSave()
 				await this.sleep(600)
@@ -665,21 +318,8 @@ export default Vue.extend({
 			}
 		},
 		updateWordCount(n: number) {
-			this.wordCount = n - 2
-			this.$emit(`update`, this.wordCount)
-		},
-		sanitize(html: string): string {
-			return DOMPurify.sanitize(html, {
-				ALLOWED_TAGS: BASE_ALLOWED_TAGS,
-			})
-		},
-		getInputHTML(): string {
-			const input = document.getElementsByClassName(`ql-editor`)[0]
-			if (!input) {
-				return ``
-			}
-			// Sanitize HTML
-			return this.sanitize(input.innerHTML)
+			this.wordCount = n
+			this.$emit(`updateWordCount`, this.wordCount)
 		},
 		checkPost(checksOnly: boolean = false): boolean {
 			const title = this.$refs.title as HTMLInputElement
@@ -739,7 +379,7 @@ export default Vue.extend({
 				}
 			}
 
-			const clean = turndownService.turndown(this.getInputHTML())
+			const clean = TurndownService.turndown(this.editorHtml())
 			// Check content quality
 			const contentQualityCheck = this.$qualityContent(clean)
 			if (this.$isError(contentQualityCheck)) {
@@ -749,7 +389,7 @@ export default Vue.extend({
 			if (this.hasPosted) {
 				return false
 			}
-			const postImages = createPostImagesSet(clean, allPostImages)
+			const postImages = createEditorImageSet(clean, allPostImages)
 			if (postImages.size > textLimits.post_images.max) {
 				this.$toastError(`Cannot add more than ${textLimits.post_images.max} images in a post`)
 				return false
@@ -887,7 +527,8 @@ export default Vue.extend({
 			this.isSaving = `done`
 			await this.sleep(800)
 			this.isSaving = `false`
-			this.setupEditor()
+			const editor = this.$refs.editor as any
+			editor?.setupEditor()
 		},
 		sleep(ms: any) {
 			return new Promise((resolve) => setTimeout(resolve, ms))
@@ -914,9 +555,5 @@ textarea#subtitle {
 .hidemetaButton {
 	transform: translateX(6.25rem);
 	padding: 0.7rem;
-}
-.content {
-	text-align: justify;
-	text-justify: inter-word;
 }
 </style>

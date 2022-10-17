@@ -1,6 +1,6 @@
 import type { GetterTree, MutationTree } from 'vuex'
 import type { RootState } from './index'
-import { Tag, Post } from '@/backend/post'
+import { Tag, Post, IKeyData } from '@/backend/post'
 
 export const namespace = `draft`
 
@@ -8,6 +8,7 @@ type DraftPost = Omit<Post, `authorID`>
 
 interface DraftPostState extends DraftPost {
 	accessTiers: Array<string>
+	allPostImages?: Map<string, {} | IKeyData>
 }
 
 interface DraftState {
@@ -45,6 +46,7 @@ export const MutationType = {
 	UPDATE_FEATURED_PHOTO_CID: `updateFeaturedPhotoCID`,
 	UPDATE_FEATURED_PHOTO_CAPTION: `updateFeaturedPhotoCaption`,
 	UPDATE_POST_IMAGES: `updatePostImages`,
+	UPDATE_ALL_POST_IMAGES: `updateAllPostImages`,
 	ADD_TAG: `addTag`,
 	REMOVE_TAG: `removeTag`,
 	UPDATE_CATEGORY: `updateCategory`,
@@ -78,6 +80,9 @@ export const mutations: MutationTree<DraftState> = {
 	},
 	[MutationType.UPDATE_POST_IMAGES]: (state, newPostImages) => {
 		state.drafts[state.activeIndex].postImages = newPostImages
+	},
+	[MutationType.UPDATE_ALL_POST_IMAGES]: (state, allPostImages) => {
+		state.drafts[state.activeIndex].allPostImages = allPostImages
 	},
 	[MutationType.ADD_TAG]: (state, newTag: Tag) => {
 		state.drafts[state.activeIndex].tags.push(newTag)

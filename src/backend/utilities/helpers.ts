@@ -15,23 +15,6 @@ export function hexStringToUint8Array(hexString: string): Uint8Array {
 	return new Uint8Array(Buffer.from(hexString, `hex`))
 }
 
-export function getBlobExtension(blob: Blob): string | null {
-	switch (blob.type) {
-		case `image/png`:
-			return `.png`
-		case `image/jpeg`:
-			return `.jpeg`
-		case `image/jpg`:
-			return `.jpg`
-		case `image/avif`:
-			return `.avif`
-		case `image/webp`:
-			return `.webp`
-		default:
-			return null
-	}
-}
-
 export function calculateReadingTime(wordCount?: number, postImagesLength: number = 0) {
 	if (!wordCount) {
 		return null
