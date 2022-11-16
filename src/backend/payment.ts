@@ -41,6 +41,45 @@ export async function startSubscriptionPayment(
 	}
 }
 
+export async function startStripeDonationPayment(
+	username: string,
+	authorID: string,
+	amount: number,
+	paymentMethodId: string,
+) {
+	try {
+		const body = {
+			authorID,
+			amount,
+			paymentMethodId,
+		}
+		const response = await genericRequest<
+			{
+				authorID: string
+				amount: number
+				paymentMethodId: string
+			},
+			{
+				error: { message: string }
+				clientSecret: string
+				paymentAttemptId: string
+				status: string
+			}
+		>({
+			method: `post`,
+			path: `/pay/stripe/donation/start`,
+			username,
+			body,
+		})
+		return response
+	} catch (err) {
+		if (err instanceof AxiosError && err.response) {
+			throw new Error(err.response.data?.error ?? err.message)
+		}
+		throw new Error(`Network error: ${err}`)
+	}
+}
+
 export async function confirmSubscriptionPayment(username: string, paymentAttemptId: string, paymentIntentId: string) {
 	try {
 		const body = {
@@ -50,6 +89,27 @@ export async function confirmSubscriptionPayment(username: string, paymentAttemp
 		const response = await genericRequest({
 			method: `post`,
 			path: `/pay/stripe/subscribe/confirm`,
+			username,
+			body,
+		})
+		return response
+	} catch (err) {
+		if (err instanceof AxiosError && err.response) {
+			throw new Error(err.response.data?.error ?? err.message)
+		}
+		throw new Error(`Network error: ${err}`)
+	}
+}
+
+export async function confirmDonationPayment(username: string, paymentAttemptId: string, paymentIntentId: string) {
+	try {
+		const body = {
+			paymentAttemptId,
+			paymentIntentId,
+		}
+		const response = await genericRequest({
+			method: `post`,
+			path: `/pay/stripe/donation/confirm`,
 			username,
 			body,
 		})

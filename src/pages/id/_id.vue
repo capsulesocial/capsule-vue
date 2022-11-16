@@ -169,6 +169,13 @@
 						:userIsSubscribed="activeSubscription"
 						class="header-profile flex-shrink-0 ml-2"
 					/>
+					<button
+						v-if="$store.state.session.id !== $route.params.id && paymentsEnabled"
+						class="focus:outline-none block rounded-lg bg-neutral hover:bg-opacity-75 rounded-lg px-5 text-sm font-semibold text-white shadow-sm border border-lightBorder transition duration-300 ease-in-out xl:flex flex-row items-center"
+						@click="toggleDonation"
+					>
+						Donate
+					</button>
 				</div>
 			</div>
 			<!-- Bio -->
@@ -327,6 +334,10 @@ export default Vue.extend({
 			required: true,
 		},
 		toggleSubscription: {
+			type: Function as PropType<() => void>,
+			required: true,
+		},
+		toggleDonation: {
 			type: Function as PropType<() => void>,
 			required: true,
 		},
