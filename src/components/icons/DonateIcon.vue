@@ -1,15 +1,17 @@
 <template>
-	<svg width="24" height="24" viewBox="0 0 24.000000 24.000000" preserveAspectRatio="xMidYMid meet">
-		<g transform="translate(0.000000,24.000000) scale(0.100000,-0.100000)" fill="currentColor" stroke="currentColor">
-			<path
-				d="M95 200 c-4 -6 -22 -17 -41 -25 -33 -14 -34 -15 -34 -74 0 -34 4 -61
+	<div>
+		<svg width="24" height="24" viewBox="0 0 24.000000 24.000000" preserveAspectRatio="xMidYMid meet">
+			<g transform="translate(0.000000,24.000000) scale(0.100000,-0.100000)" fill="currentColor" stroke="currentColor">
+				<path
+					d="M95 200 c-4 -6 -22 -17 -41 -25 -33 -14 -34 -15 -34 -74 0 -34 4 -61
 10 -61 6 0 10 15 10 34 l0 33 40 -10 c28 -8 52 -8 80 0 l40 10 0 -33 c0 -19 5
 -34 10 -34 6 0 10 27 10 61 0 59 -1 60 -34 74 -19 8 -37 19 -41 25 -3 5 -15
 10 -25 10 -10 0 -22 -5 -25 -10z m41 -21 c10 -17 -13 -36 -27 -22 -12 12 -4
 33 11 33 5 0 12 -5 16 -11z m-62 -34 c-5 -12 4 -15 46 -15 43 0 51 3 46 16 -4
 11 -1 14 11 12 28 -5 26 -27 -4 -39 -32 -12 -109 -7 -125 9 -13 13 -2 32 17
 32 9 0 12 -6 9 -15z"
-			/>
-		</g>
-	</svg>
+				/>
+			</g>
+		</svg>
+	</div>
 </template>
