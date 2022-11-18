@@ -36,14 +36,18 @@
 				<!-- Step 0: Enter amount -->
 				<article v-show="step === 0" class="modal-animation">
 					<div class="w-full flex flex-col justify-center text-center px-10">
-						<input v-model.number="payAmount" type="number" min="1" max="10000" placeholder="Enter amount" />
-					</div>
-
-					<div class="flex flex-row-reverse">
+						<input
+							v-model.number="payAmount"
+							type="number"
+							min="1"
+							max="10000"
+							placeholder="Enter amount"
+							class="bg-gray1 dark:bg-gray7 dark:text-darkPrimaryText placeholder-gray5 dark:placeholder-gray3 focus:outline-none flex-grow rounded-lg px-2 py-2 text-black"
+						/>
 						<button
 							:class="payAmount !== null ? `` : `opacity-50 cursor-not-allowed`"
-							class="bg-darkBG text-lightButtonText focus:outline-none transform rounded-lg font-bold transition duration-500 ease-in-out hover:bg-opacity-75"
-							style="padding: 0.4rem 1.5rem"
+							class="bg-primary text-lightButtonText focus:outline-none transform rounded-lg font-bold transition duration-500 ease-in-out hover:shadow-lg mt-6"
+							style="padding: 0.6rem 1.7rem"
 							@click="showPaymentButtons()"
 						>
 							<span class="font-sans" style="font-size: 0.95rem"> Next </span>
