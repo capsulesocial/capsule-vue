@@ -29,6 +29,7 @@
 							:following="following"
 							:toggleFriend="toggleFriend"
 							:toggleSubscription="toggleSubscription"
+							:toggleDonation="toggleDonation"
 							:updateFollowers="updateFollowers"
 							:userIsFollowed="userIsFollowed"
 							:mutuals="mutuals"
@@ -138,6 +139,12 @@
 			:authorAvatar="visitAvatar"
 			@close="showSubscriptions = false"
 		/>
+		<DonationsPopup
+			v-if="showDonations"
+			:author="visitProfile"
+			:authorAvatar="visitAvatar"
+			@close="showDonations = false"
+		/>
 		<ChangeTierPopup
 			v-if="showChangeTier"
 			:author="visitProfile"
@@ -178,6 +185,7 @@ import FollowersPopup from '@/components/popups/FollowersPopup.vue'
 import FollowingPopup from '@/components/popups/FollowingPopup.vue'
 import MutualFollowersPopup from '@/components/popups/MutualFollowersPopup.vue'
 import SubscriptionsPopup from '@/components/popups/SubscriptionsPopup.vue'
+import DonationsPopup from '@/components/popups/DonationsPopup.vue'
 import ChangeTierPopup from '@/components/popups/ChangeTierPopup.vue'
 import ImagePopup from '@/components/popups/Image.vue'
 import BrandedButton from '@/components/BrandedButton.vue'
@@ -215,6 +223,7 @@ interface IData {
 	showMutuals: boolean
 	showAvatar: boolean
 	showSubscriptions: boolean
+	showDonations: boolean
 	showSubscriptionInfo: boolean
 	subInfo: ISubscriptionWithProfile | undefined
 	activeSubscription: boolean
@@ -240,6 +249,7 @@ export default Vue.extend({
 		MutualFollowersPopup,
 		ImagePopup,
 		SubscriptionsPopup,
+		DonationsPopup,
 		SubInfosPopup,
 		unFollowWarningPopup,
 		ChangeTierPopup,
@@ -266,6 +276,7 @@ export default Vue.extend({
 			myAvatar: undefined,
 			visitAvatar: undefined,
 			showSubscriptions: false,
+			showDonations: false,
 			showSubscriptionInfo: false,
 			subInfo: undefined,
 			activeSubscription: false,
@@ -453,6 +464,17 @@ export default Vue.extend({
 					this.showSubscriptions = !this.showSubscriptions
 				}
 			}
+		},
+		toggleDonation(authorID: string) {
+			if (this.$store.state.session.id === ``) {
+				this.$store.commit(`settings/toggleUnauthPopup`)
+				return
+			}
+			if (authorID === this.$store.state.session.id) {
+				this.$toastError(`You cannot donate to yourself`)
+				return
+			}
+			this.showDonations = !this.showDonations
 		},
 		toggleNewsletterPopup() {
 			this.showNewsletterPopup = !this.showNewsletterPopup
